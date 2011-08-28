@@ -1,0 +1,74 @@
+----------------------------------------
+----------- 	  ToDo      ------------
+----------------------------------------
+
+##### Umstieg auf Smarty #####
+- erstmal crash course angucken: http://www.smarty.net/crash_course
+- jeweils in der index.php der frontends wird smarty initialisiert (init_smarty.php)
+- es sollen am Ende alle templates im order code/smarty/templates liegen. Damit die da nicht alle total durcheinander sind
+wird es dort die selbe ordnerstruktur wie im code verzeichnis geben, also administrator und web + jeweilige unterordner.
+- bitte dann dort tpl dateien anlegen in denen imprinzip dasselbe angezeigt wird wie jetzt und diese dann im skript einbinden
+  -> da die template dateien dann schon vorhanden sind, wissen die grafiker welche variable es in ihren webseiten geben muss 
+     und können die templates einfach austauschen
+	 
+	 
+##### Allgemein #####
+Alle fehlermeldungen, egal ob im Skript oder in Konstanten sollen von dem Tag <p class="error"></p> umgeben werden
+dadurch können sie später einheitlich formatiert werden
+
+
+##### Datum Europäisch Formatieren #####
+Alle Datumsanzeigen auf Europäisches Format bringen, dazu die Funktion formatDate() aus functions.php aufrufen um nur das Datum
+zu erhalten oder Funkction formatDateTime() umd Datum und Uhrzeit zu erhalten. Parameter: entweder timestamp oder Mysql-datum ('Y-m-d')
+
+
+Samuel:
+	- Installation
+	- Admin + Web Frontend Framework
+	- Module:
+		- Logs
+		
+Freddy:
+	- Web Frontend
+		- Bestellungen
+			- Mahlzeiten in einer Tabelle Darstellen
+			- mit Pascal schnacken ob seine Funktionen fürs menu Modul wiederverwendet werden können
+		- Abbestellungen
+			- wenn Essen nicht abgeholt wurde min bis Ende des Tages "Bestellung wurde nicht abgeholt" anzeigen
+			
+		- Änderung des Erstpasswortes (bei erster anmeldung gucken ob feld firs_passwd in users gesetzt ist und zur änderung auffordern)
+		- Doppelten HTML header entfernen
+		- Maximale Bestellungen beachten - wenn maximale Bestellzahl erreicht ist, Menü ausgegraut darstellen
+		
+		- Code aufräumen!!! Einheitliche Variablen Bezeichnunngen, Kommentare, wiederholt verwendeten Code auslagern etc.
+		
+		- Mahleziten Beschreibung anzeigen wenn mit Maus über Link in order modul
+
+
+
+Pascal:
+
+	- Module
+		- ||Übersicht||
+			- mod_register
+			- mod_meals
+			- mod_priceclass
+		sowie alle zugehörigen Smarty-Templates, aber keine CSS-Files
+		
+		- ToDo: Refactoren von access-files und den zugeschriebenen modules
+			- Exception-System einführen
+		
+	- Datumsanzeigen in allen Modulen auf Europäisches Format umstellen (siehe oben)
+
+		
+Cedric:
+	- code aufräumen
+	- mit diversen Browsern System testen
+	
+	
+Design:
+	- Einloggbildschrim Web näher zusammenrücken (unteres Bild nicht mehr sichtbar bei 1366 x 768)
+	- Grafik (Nudeln + Tomaten) als Hintergrund und etwas transparent (Schrift muss gut lesbar sein)
+	- Grafiken verkleinern!
+	
+

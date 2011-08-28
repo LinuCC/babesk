@@ -1,0 +1,14 @@
+----------------------------------------
+---------- 	   Termine      ------------
+----------------------------------------
+
+23. 5:      Treffen für die Schülergenossenschaft
+31.5 14:30: Vorbereitungstreffen für den Probelauf
+6 – 10. 6:  Vorbereitung des Probelaufs
+15 – 24.6:  Probelauf
+24.6 13:15: Auswertung des Probelaufs
+
+
+
+Bis zum 31.5 muss das System funktionsfähig sein, die Graphische Oberfläche muss dann aber noch nicht vollständig sein.
+Das Web-Frontend sollte jedoch schon halbwegs gut aussehen.

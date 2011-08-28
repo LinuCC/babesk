@@ -1,0 +1,22 @@
+<?php
+    //defines the path's for the application
+    
+    //cut off the filename and go up one directory to the base directory
+    $rootPath = dirname(dirname(__FILE__));
+
+    define('DS', DIRECTORY_SEPARATOR);
+    //realPath() makes sure we use the right seperator for the platform
+    define('PATH_SITE', $rootPath);
+    define('PATH_ADMIN', realPath($rootPath."/administrator"));
+    define('PATH_WEB', realPath($rootPath."/web"));
+    define('PATH_INCLUDE', realPath($rootPath."/include"));
+	define('PATH_SMARTY', realPath($rootPath."/smarty"));
+	
+	define('PATH_WEBROOT', $_SERVER['DOCUMENT_ROOT']);
+	
+	$smartypath = $rootPath."/smarty";     //I <3 verschiedene Ordnertrennzeichen der OS's etc.
+	$smartypath = str_replace(realPath(PATH_WEBROOT).DS, '', $smartypath);
+	
+	define('REL_PATH_SMARTY', '/'.$smartypath);    //the relative path to /smarty starting at the webroot 
+
+?>
