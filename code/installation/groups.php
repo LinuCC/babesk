@@ -17,7 +17,7 @@
 		addGroup($groupname, $max_credit);
 	
         //next step
-	   require "price_classes.tpl"
+	   require "price_classes.tpl";
 	}
 	else {
         require "groups.tpl";
