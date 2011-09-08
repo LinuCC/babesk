@@ -103,11 +103,15 @@ function group_init_smarty_vars() {
 	$group_manager = new GroupManager;
 	global $smarty;
 
+	$arr_group_id = array();
+	$arr_group_name = array();
+
 	$sql_groups = $group_manager->getAllGroups();
-	
-	foreach($sql_groups as $group) {
-		$arr_group_id[] = $group["ID"];
-		$arr_group_name[] = $group["name"];
+	if(!empty($sql_groups)){
+		foreach($sql_groups as $group) {
+			$arr_group_id[] = $group["ID"];
+			$arr_group_name[] = $group["name"];
+		}
 	}
 	$smarty->assign('gid', $arr_group_id);
 	$smarty->assign('g_names', $arr_group_name);

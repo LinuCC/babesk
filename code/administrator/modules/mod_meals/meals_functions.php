@@ -113,6 +113,10 @@
 			}
 		else if(preg_match('/\A[0-9]{1,}\z/',$search_date))
 			$search_timestamp = $search_date;
+		else if(empty($search_date)){
+			print 'keine Mahlzeiten wurden gelöscht.<br>';
+			return ;
+		}
 		else {
 			var_dump($search_date);
 			$logger->log(ADMIN,MODERATE,'MEAL_F_ERROR_DATE_FORMAT');
@@ -274,17 +278,16 @@
 		global $smarty;
 		
 		if(!isset($_POST['day']) or !isset($_POST['month']) or !isset($_POST['year'])) {
-		
+			$today = array('day'=>date('d'),'month'=>date('m'),'year'=>date('Y'));
+			$smarty->assign('today',$today);
+			$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/delete_old_select_date.tpl');
+		}
+		else {
 			if($timestamp = strtotime($_POST['year'].'-'.$_POST['month'].'-'.$_POST['day']) == -1)
 				die(MEAL_ERROR_DATE);
 			$order_access = new OrderManager;
 			remove_old_meals($timestamp);
 			$order_access->RemoveOldOrders($timestamp);
-		}
-		else {
-			$today = array('day'=>date('d'),'month'=>date('m'),'year'=>date('Y'));
-			$smarty->assign('today',$today);
-			$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/delete_old_select_date.tpl');
 		}
 	}
 ?>

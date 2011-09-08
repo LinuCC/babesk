@@ -89,6 +89,7 @@
 				echo DB_QUERY_ERROR.$this->db->error."<br />".$query;
 				return false;
 			}
+			$res_array = array();
 			while($buffer = $result->fetch_assoc())$res_array[] = $buffer;
 			return $res_array;
 		}

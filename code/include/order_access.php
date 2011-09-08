@@ -93,6 +93,7 @@
                 echo DB_CONNECT_ERROR.mysqli_error();
                 exit;
             }
+            $orders = array();
             while($order = $result->fetch_assoc())
         		$orders[] = $order;
             return $orders;
@@ -129,6 +130,10 @@
 			}
 		else if(preg_match('/\A[0-9]{1,}\z/',$search_date))
 			$search_timestamp = $search_date;
+		else if(empty($search_date)) {
+			print 'keine Bestellungen wurden gelöscht.<br>';
+			return;
+		}
 		else {
 			var_dump($search_date);
 			$logger->log(ADMIN,MODERATE,'ORDER_F_ERROR_DATE_FORMAT');
