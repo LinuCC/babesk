@@ -9,6 +9,7 @@
     define('SEV_NOTICE', 'Notiz');
     define('SEV_MODERATE', 'Moderat');
     define('SEV_CRITICAL', 'Kritisch');
-
-
+    
+    //Error messages
+    define('ERROR_FORM', '<p class="error">Bitte füllen sie das Formular vollständig aus.</p>');
 ?>

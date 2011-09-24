@@ -15,7 +15,11 @@
 		$result OR exit('ERROR');
 		if('POST' == $_SERVER['REQUEST_METHOD']) {
 		    //"Pay", substract the price for the menu from the users account
-            if(!$userManager->changeBalance($_SESSION['uid'], -$priceClassManager->getPrice($_SESSION['uid'], $_GET['order']))) {
+		    $payment = $priceClassManager->getPrice($_SESSION['uid'], $_GET['order']);
+		    if(!$payment){//error-checking
+		    	$smarty->display('web/modules/mod_order/failed.tpl'); die();
+		    }
+            if(!$userManager->changeBalance($_SESSION['uid'], -$payment)) {
                 $smarty->display('web/modules/mod_order/failed.tpl');
                 die();
             }
@@ -63,9 +67,9 @@
 	    $smarty->display('web/modules/mod_order/order.tpl');
 	}
     //gerichte werden angezeigt
-    //gerichte können per klick bestellt werden incl. variabler anzahl dann werden gerichte angezeigt und ob andere Preisklasse (Standartmï¿½ï¿½ig GID angewï¿½hlt aus mysql datenbank[radio buttons])
-    //hinweisen, dass gerichte für eltern mehr kosten
-    //für geringere Preisklasse bestellen zulässig??? oder neues feld wodrin festgehalten ist, für welche preisklassen man bestellen kann
+    //gerichte kï¿½nnen per klick bestellt werden incl. variabler anzahl dann werden gerichte angezeigt und ob andere Preisklasse (Standartmï¿½ï¿½ig GID angewï¿½hlt aus mysql datenbank[radio buttons])
+    //hinweisen, dass gerichte fï¿½r eltern mehr kosten
+    //fï¿½r geringere Preisklasse bestellen zulï¿½ssig??? oder neues feld wodrin festgehalten ist, fï¿½r welche preisklassen man bestellen kann
     //bestellung in datenbank eintragen
 	
 ?>

@@ -16,7 +16,7 @@
             if ('POST' == $_SERVER['REQUEST_METHOD']) {
         	    // Überprüfung des POST
         	    if (!isset($_POST['Category'], $_POST['Severity'])) {
-        		   die(INVALID_FORM);
+        		   die(EMPTY_FORM);
         	    }
         	    $category = trim($_POST['Category']);
                 $severity = trim($_POST['Severity']);

@@ -21,41 +21,98 @@
          *
          * The Function takes a variable amount of parameters, the first being the price class id
          * the other parameters are interpreted as being the fieldnames in the price_class table.
-         * The data will be returned in an array with the fieldnames being the keys.
+         * In addition to that the function allows no parameters at all, too.
+         * Then all data in the table will be returned.
          *
          * @return false if error
          */
-        function getPriceClassData() {
-            //at least 2 arguments needed
-            $num_args = func_num_args(); 
-            if ($num_args < 2) {
-                return false;
-            }
-            $id = func_get_arg(0);
-            $fields = "";
+        function getPriceClassDataByID() {
+			$num_args = func_num_args(); 
+			
+			if($num_args == 0){//get all data
+				$query = 'SELECT * FROM price_classes';
+			}
+			else if($num_args > 2){//get specific data
+				$id = func_get_arg(0);
+				$fields = "";
+				
+				for($i = 1; $i < $num_args - 1; $i++) {
+					$fields .= func_get_arg($i).', ';
+				}
+				$fields .= func_get_arg($num_args - 1);  //query must not contain an ',' after the last field name
+				
+				$query = 'SELECT
+				    		'.$fields.'
+						FROM
+	    					price_classes
+	    				WHERE
+	    					ID = '.$id.'';
+			}
+			else {//wrong arguments
+				return false;
+			}
+			
+			if (!($result = $this->db->query($query))) {
+				echo DB_QUERY_ERROR.$this->db->error."<br />".$query;
+				return false;
+			}
+			
+			///@TODO this conversion into an array has to be in the other functions, too!
+			$res_array = array();
+			while($buffer = $result->fetch_assoc())$res_array[] = $buffer;
+			return $res_array;
+			
+// 			////////////////////////////////////////////////////////////
+			
+			
+// 			//get all data from the table
+// 			if($num_args == 1 && func_get_arg(0) == '*'){
+// 				$query = 'SELECT 
+// 							*
+// 						FROM
+// 							price_classes';
+// 				$result = $this->db->query($query);
+// 				if (!$result) {
+// 					echo DB_QUERY_ERROR.$this->db->error."<br />".$query;
+// 					return false;
+// 				}
+
+// 			}
+			
+//             //at least 2 arguments needed, get some specific data
+//             if ($num_args < 2) {
+//                 return false;
+//             }
+//             $id = func_get_arg(0);
+//             $fields = "";
             
-            for($i = 1; $i < $num_args - 1; $i++) {
-                $fields .= func_get_arg($i).', ';
-            }
-            $fields .= func_get_arg($num_args - 1);  //query must not contain an ',' after the last field name 
+//             for($i = 1; $i < $num_args - 1; $i++) {
+//                 $fields .= func_get_arg($i).', ';
+//             }
+//             $fields .= func_get_arg($num_args - 1);  //query must not contain an ',' after the last field name 
             
-            $query = 'SELECT
-    					'.$fields.'
-    				FROM
-    					price_classes
-    				WHERE
-    					ID = '.$id.'';
-    	    $result = $this->db->query($query);
-        	if (!$result) {
-            	echo DB_QUERY_ERROR.$this->db->error."<br />".$query;
-            	return false;
-        	}
-            return $result;
+//             $query = 'SELECT
+//     					'.$fields.'
+//     				FROM
+//     					price_classes
+//     				WHERE
+//     					ID = '.$id.'';
+//     	    $result = $this->db->query($query);
+//         	if (!$result) {
+//             	echo DB_QUERY_ERROR.$this->db->error."<br />".$query;
+//             	return false;
+//         	}
+//             return $result;
         }
         
-        
+        /**
+          *Returns the requested pricefield on the based on the User-ID and the Meal-ID
+          *
+          *@return: returns false if nothing found, else the priceData
+          */
         function getPrice($uid, $mid) {
-            require_once "managers.php";
+            require_once 'managers.php';
+            require_once 'constants.php';
             $userManager = new UserManager();
             $mealManager = new MealManager();
             
@@ -63,36 +120,23 @@
 		    $gid = $gid['GID'];
 		    $priceClass = $mealManager->getMealData($mid, 'price_class');
 		    $priceClass = $priceClass['price_class'];
-		    $priceData = $this->getPriceClassData($priceClass, 'price', 'GID');
-		    while ($row = $priceData->fetch_assoc()) {
-                if($row['GID'] == $gid) {
-                    return $row['price'];
-                }
-            }
+		    $priceData = $this->getPriceClassDataByID($priceClass, 'price', 'GID');
+// 		    while ($row = $priceData->fetch_assoc()) {
+//                 if($row['GID'] == $gid) {
+//                     return $row['price'];
+//                 }
+//             }
+		    if(!$priceData){
+		    	die(PRICECLASS_INVALID_GID);
+		    }
+		    foreach($priceData as $price){
+		    	if($price['GID'] == $gid){
+		    		return $price['price'];
+		    	}
+		    	
+		    }
+		    return false;
         }
-        
-		/**
-		*Returns all priceclasses
-		*
-		*The function reads the entire priceclass table and returns it as objects.
-		*
-		*@param return returns false if error occurred
-		*/
-		function getAllEntries() {
-			require_once "constants.php";
-			$query = 'SELECT
-						*
-					FROM
-						price_classes';
-			$result = $this->db->query($query);
-			if (!$result) {
-				echo DB_QUERY_ERROR.$this->db->error."<br />".$query;
-				return false;
-			}
-			$res_array = array();
-			while($buffer = $result->fetch_assoc())$res_array[] = $buffer;
-			return $res_array;
-		}
 		
          /**
          * Adds a Price Class to the System

@@ -11,22 +11,23 @@
 		if (!isset($_POST['Host'], $_POST['Username'], $_POST['Password'], $_POST['Database'])) {
 			die(INVALID_FORM);
 		} //save values and check for empty fields
+		$password = trim($_POST['Password']);
 		if (($host = trim($_POST['Host'])) == '' OR
             ($username = trim($_POST['Username'])) == '' OR
-            ($password = trim($_POST['Password'])) == '' OR
+            #() == '' OR
             ($database = trim($_POST['Database'])) == '') {
         		die(EMPTY_FORM);
    		}
 
 		//try to connect to database, oppress warnings
-		$db = @new mysqli($host, $username, $password, $database);
+		$db = new mysqli($host, $username, $password, $database);
 		if (mysqli_connect_errno()) {
 			die('Verbindung mit der Datenbank konnte nicht hergestellt werden, bitte Verbindungsdaten erneut eingeben');
 		}
 
 		//create database.php file with supplied data
 		$outFile = '../include/dbconnect.php';
-		$fh = @fopen($outFile, 'w') or die('Datei konnte nicht gespeichert werden, bitte Benutzerrechte Ã¼berprÃ¼fen');
+		$fh = fopen($outFile, 'w') or die('Datei konnte nicht gespeichert werden, bitte Benutzerrechte überprüfen');
 		$stringData = "<?php
     require_once 'constants.php';
     
@@ -58,6 +59,7 @@
                         `price_class` smallint(6) NOT NULL,
                         `date` date NOT NULL,
                         `max_orders` int(11) NOT NULL,
+                        `is_vegetarian` boolean NOT NULL,
                         PRIMARY KEY  (`ID`)
                     ) AUTO_INCREMENT=1 ;';
 		//Table 'users'
@@ -97,10 +99,11 @@
                         `date` date NOT NULL,
                         `IP` binary(16) NOT NULL,
                         `ordertime` timestamp NOT NULL,
-                        `fetched` boolean NOT NULL
+                        `fetched` boolean NOT NULL,
+                        PRIMARY KEY (`ID`)
                     )';
         //Table 'cards'
-		$sql[5] = 'CREATE TABLE IF NOT EXISTS `cards` (                       <a href="../administrator/modules/mod_fill/fill.php"></a>
+		$sql[5] = 'CREATE TABLE IF NOT EXISTS `cards` (
                         `ID` bigint(20) unsigned NOT NULL auto_increment,
                         `cardnumber` varchar(10) NOT NULL,
                         `UID` bigint(11) unsigned NOT NULL,
@@ -139,10 +142,12 @@
                     );';
 
         // ========== Execute Queries ========== \\
+		$counter = 0;
 		foreach ($sql as $query) {
+			$counter += 1;
 	    	$result = $db->query($query);
 			if (!$result) {
-	    		die (DB_QUERY_ERROR.$db->error."<br \>Bitte Datenbank leeren");
+	    		die (DB_QURY_ERROR.$db->error."<br \>Bitte Datenbank leeren, Schritte gemacht:".$counter);
 			}
 		}
 		

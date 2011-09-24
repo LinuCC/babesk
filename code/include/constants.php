@@ -26,8 +26,9 @@
     //Card
     define('CARD_READ_ERROR', '<p class="error">Die Karte konnte nicht gelesen werden, bitte versuchen sie es ernuet</p>');
     define('INVALID_CARD_ID', '<p class="error">Die Karten-ID ist fehlerhaft</p>');
+    define('PRICECLASS_INVALID_GID', '<p class="error">Die gesuchte GID der Preisklasse wurde nicht gefunden!</p>');
     
     //Orders
-    define('ORDER_F_ERROR_DATE_FORMAT', 'Falsches Datumsformat für $search_date in delOldOrders!');
-    define('ORDER_ERROR_DELETE', 'Ein Fehler ist beim löschen einer Bestellung aufgetreten!')
+    define('ORDER_F_ERROR_DATE_FORMAT', '<p class="error">Falsches Datumsformat für $search_date in delOldOrders!</p>');
+    define('ORDER_ERROR_DELETE', '<p class="error">Ein Fehler ist beim löschen einer Bestellung aufgetreten!</p>');
 ?>
