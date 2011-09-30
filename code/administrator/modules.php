@@ -28,6 +28,7 @@
     //$modules[] = "clear";
     //$modules[] = "dummy";
     $modules[] = "menu";
+    $modules[] = "groups";
     
     
 ?>

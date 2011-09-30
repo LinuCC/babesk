@@ -21,60 +21,46 @@
          *
          * The Function takes a variable amount of parameters, the first being the group id
          * the other parameters are interpreted as being the fieldnames in the groups table.
+         * In addition, if no parameters are given, the function will return all
+         * stuff in the database.
          * The data will be returned in an array with the fieldnames being the keys.
          *
          * @return false if error
          */
         function getGroupData() {
-            //at least 2 arguments needed
-            $num_args = func_num_args(); 
-            if ($num_args < 2) {
-                return false;
-            }
-            $id = func_get_arg(0);
-            $fields = "";
-            
-            for($i = 1; $i < $num_args - 1; $i++) {
-                $fields .= func_get_arg($i).', ';
-            }
-            $fields .= func_get_arg($num_args - 1);  //query must not contain an ',' after the last field name 
-            
-            $query = 'SELECT
-    					'.$fields.'
-    				FROM
-    					groups
-    				WHERE
-    					ID = '.$id.'';
+        	$num_args = func_num_args();
+        	if($num_args == 0){
+        		$query = 'SELECT * FROM groups';
+        	}
+        	else if($num_args > 1){
+        		$query = 'SELECT
+ 		   					'.$fields.'
+           				FROM
+           					groups
+           				WHERE
+           					ID = '.$id.'';
+        		$id = func_get_arg(0);
+        		$fields = "";
+        		
+        		for($i = 1; $i < $num_args - 1; $i++) {
+        			$fields .= func_get_arg($i).', ';
+        		}
+        		//query must not contain an ',' after the last field name
+        		$fields .= func_get_arg($num_args - 1);
+        	}
+        	else {
+        		return false;
+        	}
+        	
     	    $result = $this->db->query($query);
         	if (!$result) {
             	echo DB_QUERY_ERROR.$this->db->error."<br />".$query;
             	return false;
         	}
-            return $result->fetch_assoc();
+            $res_array = array();
+            while($buffer = $result->fetch_assoc())$res_array[] = $buffer;
+            return $res_array;
         }
-        
-		/**
-		  *Returns all Groups
-		  *
-		  *The function reads the entire groups table and returns it as objects.
-		  *
-		  *\param return returns false if error occurred
-		  */
-		function getAllGroups() {
-			require_once "constants.php";
-			$query = 'SELECT
-						ID,name,max_credit
-					FROM
-						groups';
-			$result = $this->db->query($query);
-			if (!$result) {
-				echo DB_QUERY_ERROR.$this->db->error."<br />".$query;
-				return false;
-			}
-			$res_array = array();
-			while($buffer = $result->fetch_assoc())$res_array[] = $buffer;
-			return $res_array;
-		}
 		
          /**
          * Adds a Group to the System

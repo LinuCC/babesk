@@ -23,38 +23,47 @@
          *
          * The Function takes a variable amount of parameters, the first being the meal id
          * the other parameters are interpreted as being the fieldnames in the meals table.
+         * In addition to that, if you give no parameters the function will return 
+         * all entries found in the Meal-Database.
          * The data will be returned in an array with the fieldnames being the keys.
          *
          * @return false if error
          */
         function getMealData() {
-            //at least 2 arguments needed
+        	
             $num_args = func_num_args(); 
-            if ($num_args < 2) {
-                return false;
+        	
+            if($num_args == 0){//all Meals
+            	$query = 'SELECT * FROM meals';
             }
-            $id = func_get_arg(0);
-            $fields = "";
-            
-            for($i = 1; $i < $num_args - 1; $i++) {
-                $fields .= func_get_arg($i).', ';
+            else if($num_args > 1){//specific MealData
+	            $id = func_get_arg(0);
+	            $fields = "";
+	            
+	            for($i = 1; $i < $num_args - 1; $i++) {
+	                $fields .= func_get_arg($i).', ';
+	            }
+	            $fields .= func_get_arg($num_args - 1);  //query must not contain an ',' after the last field name 
+	            
+	            $query = 'SELECT
+	    					'.$fields.'
+	    				FROM
+	    					meals
+	    				WHERE
+	    					ID = '.$id.'';
             }
-            $fields .= func_get_arg($num_args - 1);  //query must not contain an ',' after the last field name 
-            
-            $query = 'SELECT
-    					'.$fields.'
-    				FROM
-    					meals
-    				WHERE
-    					ID = '.$id.'';
+            else{//wrong arguments
+            	return false;
+            }
     	    $result = $this->db->query($query);
         	if (!$result) {
             	echo DB_QUERY_ERROR.$this->db->error."<br />".$query;
             	return false;
         	}
-            return $result->fetch_assoc();
+        	while($buffer = $result->fetch_assoc())$res_array[] = $buffer;
+        	return $res_array;
         }
-        
+
 		 /**
          * Returns all Meals of today and after it(names and id's)
          *
@@ -157,23 +166,6 @@
 				return $result->fetch_assoc();
     	    }
         }
-        
-        /**returns all meal entries from the database*/
-        function getMeals() {
-    	    include 'dbconnect.php';
-    	    $res_array = array();
-    	    $query = 'SELECT
-    	    				*
-    	    			FROM
-    	    				meals';
-    	    $result = $this->db->query($query);
-    	    if(!$result) {
-    	   		echo DB_CONNECT_ERROR.$this->db->error;
-    	   		exit;
-    	   	}
-    	   	while($buffer = $result->fetch_assoc())$res_array[] = $buffer;
-    	   	return $res_array;
-    	}
     	
     	/**returns all entries between date1 and date2
     	  *@param date1 the first date (earlier)

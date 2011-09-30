@@ -14,7 +14,7 @@
 	
 //---SAFETY---
 	if ('POST' == $_SERVER['REQUEST_METHOD']) {
-	    // Überprüfung des POST
+	    // ï¿½berprï¿½fung des POST
 	    if (!isset($_POST['name']) and !isset($_POST['passwd']) and !isset($_POST['id'])) {
 		  die(INVALID_FORM);
 		}
@@ -40,11 +40,11 @@
 			$GID = $_POST['gid'];
 			$credits = correct_credits_input($_POST['credits']);
 			unset($_SESSION['CARD_ID']); 
+			
 //---METHODS---
 			register_process($forename,$name,$username,$passwd,$passwd_repeat,$ID,$birthday,$GID,$credits);
 		}
     }
-
 	else {//show register-form
 		$smarty->display(PATH_TEMPLATE_CARD);
 	}

@@ -84,7 +84,6 @@
             
             $groupData = $groupManager->getGroupData($gid, 'max_credit');
             $max_credit = $groupData['max_credit'];
-            
             return $max_credit - $credit;
         }
         

@@ -106,7 +106,7 @@ function group_init_smarty_vars() {
 	$arr_group_id = array();
 	$arr_group_name = array();
 
-	$sql_groups = $group_manager->getAllGroups();
+	$sql_groups = $group_manager->getGroupData();
 	if(!empty($sql_groups)){
 		foreach($sql_groups as $group) {
 			$arr_group_id[] = $group["ID"];

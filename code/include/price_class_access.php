@@ -32,7 +32,7 @@
 			if($num_args == 0){//get all data
 				$query = 'SELECT * FROM price_classes';
 			}
-			else if($num_args > 2){//get specific data
+			else if($num_args > 1){//get specific data
 				$id = func_get_arg(0);
 				$fields = "";
 				

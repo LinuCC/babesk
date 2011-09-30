@@ -10,10 +10,12 @@
     function create_meal(){
 	//---INCLUDE---
 		require_once "meals_constants.php";
-		require_once PATH_INCLUDE."/logs.php";
+		require_once PATH_INCLUDE.'/logs.php';
 		require_once PATH_INCLUDE.'/meal_access.php';
 		
 		global $smarty;
+		global $logger;
+		
 		define('PATH_TEMPLATE_MEAL',MEAL_SMARTY_TEMPLATE_PATH.'/add_meal.tpl');
 	//---INIT---
 		$severity = NOTICE;
@@ -55,6 +57,7 @@
 			if($date_ar['day'] > 31 or $date_ar['month'] > 12 or $date_ar['year'] < 2000 or $date_ar['year'] > 3000) {
 				echo MEAL_ERROR_DATE.'<br>';
 				$logger->log($categorie, $severity, 'MEAL_ERROR_DATE');
+				return false;
 			}
 			//convert the date for MySQL-Server
 			$date_conv = $date_ar["year"]."-".$date_ar["month"]."-".$date_ar["day"];
@@ -105,7 +108,7 @@
 		
 		global $logger;
 		$mealmanager = new MealManager;
-		$meals = $mealmanager->getMeals();
+		$meals = $mealmanager->getMealData();
 
 		if(preg_match('/\A[0-9]{2,4}-[0-9]{2}-[0-9]{2}\z/',$search_date)) {
 			$search_array = explode('-', $search_date);
@@ -146,7 +149,7 @@
 		
 		global $smarty;
 		$mealManager = new MealManager();
-		$meals = $mealManager->getMeals();
+		$meals = $mealManager->getMealData();
 		foreach($meals as &$meal) {
 			$meal['date'] = formatDate($meal['date']);
 		}
