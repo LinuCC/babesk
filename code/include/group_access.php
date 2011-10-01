@@ -33,20 +33,22 @@
         		$query = 'SELECT * FROM groups';
         	}
         	else if($num_args > 1){
+        		
+        		$id = func_get_arg(0);
+        		$fields = '';
+        		for($i = 1; $i < $num_args - 1; $i++) {
+        			$fields .= func_get_arg($i).', ';
+        		}
+        		//query must not contain an ',' after the last field name
+        		$fields .= func_get_arg($num_args - 1);
+        		
         		$query = 'SELECT
  		   					'.$fields.'
            				FROM
            					groups
            				WHERE
            					ID = '.$id.'';
-        		$id = func_get_arg(0);
-        		$fields = "";
         		
-        		for($i = 1; $i < $num_args - 1; $i++) {
-        			$fields .= func_get_arg($i).', ';
-        		}
-        		//query must not contain an ',' after the last field name
-        		$fields .= func_get_arg($num_args - 1);
         	}
         	else {
         		return false;
@@ -70,14 +72,25 @@
          *
          * @param name The name of the group
          * @param max_credit The maximal credit a user belonging to the group can have
+         * @param ID The function also accepts 3 parameters, the last one for ID, if Autoincrement of MySQL should not be used
          * @return false if error
          */
         function addGroup($name, $max_credit) {
-        	$query = 'INSERT INTO
-        	               groups(name, max_credit)
-                      VALUES
-                            ("'.$name.'", '.$max_credit.');';
-    
+        	if(func_num_args() == 3) {
+        		$name = func_get_arg(0);
+        		$max_credit = func_get_arg(1);
+        		$ID = func_get_arg(2);
+        		$query = 'INSERT INTO
+        		               groups(ID, name, max_credit)
+							VALUES
+	                            ('.$ID.',"'.$name.'", '.$max_credit.');';
+        	}
+        	else {
+	        	$query = 'INSERT INTO
+	        	               groups(name, max_credit)
+	                      VALUES
+	                            ("'.$name.'", '.$max_credit.');';
+        	}
            $result = $this->db->query($query);
         	if (!$result) {
             	echo "Table Groups: ".DB_QUERY_ERROR.$this->db->error."<br />".$query;
@@ -96,7 +109,7 @@
          */
         function delGroup($ID) {
         	$query = 'DELETE FROM
-        	               groups(ID, name, max_credit)
+        	               groups
                       WHERE ID = '.$ID.';';
             $result = $this->db->query($query);
             if (!$result) {

@@ -15,6 +15,7 @@
     $module_names['clear'] = "Datenbank Leeren";
     $module_names['dummy'] = "Dummy";
     $module_names['menu'] = "Speiseplan";
+    $module_names['groups'] = "Gruppen Verwaltung";
     
     
     //---------------------------------

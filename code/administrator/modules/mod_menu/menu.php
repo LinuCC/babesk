@@ -39,5 +39,5 @@
 	$smarty->assign('meallistweeksorted',$meallistweeksorted);
 	$smarty->assign('meallistweeksorted_veg',$meallistweeksorted_veg);
 	$smarty->assign('weekdate',$weekdate);
-	$smarty->display(PATH_SMARTY.'/templates/administrator/modules/mod_menu/menu_table.tpl');
+	$smarty->display(PATH_SMARTY_ADMIN_MOD.'/mod_menu/menu_table.tpl');
 ?><a href="../mod_fill"></a>

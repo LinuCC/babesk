@@ -7,6 +7,7 @@
  * This list is also used in the menu.php an other parts.
  * 
  * All new modules have to be named here to become part of the system!
+ * In addition to that, you have to add an entry in locales.php for the modul to be actually shown
  * 
  */
     //No direct access
