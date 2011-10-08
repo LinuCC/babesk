@@ -78,7 +78,7 @@
 		require_once PATH_INCLUDE.'/price_class_access.php';
 		global $smarty;
 		$priceclassmanager = new PriceClassManager;
-		$sql_price_classes = $priceclassmanager->getPriceClassDataByID();
+		$sql_price_classes = $priceclassmanager->getPriceClassData();
 		$price_class_id = array();
 		$price_class_name = array();
 		$old_ID = -1;

@@ -30,6 +30,7 @@
     //$modules[] = "dummy";
     $modules[] = "menu";
     $modules[] = "groups";
+    $modules[] = "priceclass";
     
     
 ?>

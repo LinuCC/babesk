@@ -6,8 +6,6 @@
 	 * auto-incrementing id.
 	 * 
 	 * @see GroupManager
-	 * 
-	 * @todo POSTS can be given as funcion-Parameters, no need to use POSTS in this function
 	 */
 	function new_group() {
 		require_once PATH_INCLUDE.'/group_access.php';
@@ -72,7 +70,6 @@
 		//form is filled out
 		if(isset($_GET['where'], $_POST['ID'],$_POST['name'],$_POST['max_credit'])){
 			$groupManager = new GroupManager();
-			global $smarty;
 			$old_ID = $_GET['where'];//if group moved to new ID, delete the old one
 			$ID = $_POST['ID'];
 			$name = $_POST['name'];

@@ -41,7 +41,7 @@
         		}
         		//query must not contain an ',' after the last field name
         		$fields .= func_get_arg($num_args - 1);
-        		
+
         		$query = 'SELECT
  		   					'.$fields.'
            				FROM
@@ -53,7 +53,6 @@
         	else {
         		return false;
         	}
-        	
     	    $result = $this->db->query($query);
         	if (!$result) {
             	echo DB_QUERY_ERROR.$this->db->error."<br />".$query;

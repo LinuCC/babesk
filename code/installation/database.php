@@ -79,11 +79,12 @@
                     );';
 		//Table 'price_classes'
 		$sql[2] = 'CREATE TABLE IF NOT EXISTS `price_classes` (
-                        `ID` smallint(5) unsigned NOT NULL,
+                        `ID` smallint(5) unsigned NOT NULL auto_increment,
                         `name` varchar(255) NOT NULL,
                         `GID` smallint(5) NOT NULL,
-                        `price` decimal(4,2) NOT NULL
-                    );';
+                        `price` decimal(4,2) NOT NULL,
+                        PRIMARY KEY (`ID`)
+                    )AUTO_INCREMENT=1;';
 		//Table 'groups'
 		$sql[3] = 'CREATE TABLE IF NOT EXISTS `groups` (
                         `ID` smallint(5) unsigned NOT NULL auto_increment,

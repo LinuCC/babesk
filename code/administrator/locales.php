@@ -16,6 +16,7 @@
     $module_names['dummy'] = "Dummy";
     $module_names['menu'] = "Speiseplan";
     $module_names['groups'] = "Gruppen Verwaltung";
+    $module_names['priceclass'] = "Preisklassen Verwaltung";
     
     
     //---------------------------------

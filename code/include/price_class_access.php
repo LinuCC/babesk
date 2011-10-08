@@ -26,7 +26,7 @@
          *
          * @return false if error
          */
-        function getPriceClassDataByID() {
+        function getPriceClassData() {
 			$num_args = func_num_args(); 
 			
 			if($num_args == 0){//get all data
@@ -56,7 +56,6 @@
 				echo DB_QUERY_ERROR.$this->db->error."<br />".$query;
 				return false;
 			}
-			
 			///@TODO this conversion into an array has to be in the other functions, too!
 			$res_array = array();
 			while($buffer = $result->fetch_assoc())$res_array[] = $buffer;
@@ -120,7 +119,7 @@
 		    $gid = $gid['GID'];
 		    $priceClass = $mealManager->getMealData($mid, 'price_class');
 		    $priceClass = $priceClass['price_class'];
-		    $priceData = $this->getPriceClassDataByID($priceClass, 'price', 'GID');
+		    $priceData = $this->getPriceClassData($priceClass, 'price', 'GID');
 // 		    while ($row = $priceData->fetch_assoc()) {
 //                 if($row['GID'] == $gid) {
 //                     return $row['price'];
@@ -144,21 +143,31 @@
          * The Function creates a new entry in the price_class Table
          * consisting of the given Data
          *
+         * If 4 Params ar given, the ID will not be automatically incremented, but
+         * will be the 4th param given
+         *
          * @param name The name of the meal
          * @param date The date the meal will be available
          * @param price_class_ID The ID of the price class this meal is in
-         * @param max_orders The maximum number of orders possible for this meal
          * @return false if error
          */
-        function addPriceClass($ID, $name, $GID, $price) {
-        	$query = 'INSERT INTO
-        	               price_classes(ID, name, GID, price)
-                      VALUES
-                           ('.$ID.', "'.$name.'", '.$GID.', '.$price.');';
-    
+        function addPriceClass($name, $GID, $price) {
+        	if(func_num_args() == 4){
+        		$ID = func_get_arg(3);
+        		$query = 'INSERT INTO
+        		        	 price_classes(ID, name, GID, price)
+        		          VALUES
+                             ('.$ID.', "'.$name.'", '.$GID.', '.$price.');';
+        	}
+        	else {
+        		$query = 'INSERT INTO
+        	    	           price_classes(name, GID, price)
+                    	  VALUES
+                        	   ("'.$name.'", '.$GID.', '.$price.');';
+        	}
            $result = $this->db->query($query);
         	if (!$result) {
-            	echo "Table Price_Classes: ".DB_QUERY_ERROR.$this->db->error;
+            	echo "Table Price_Classes: ".DB_QUERY_ERROR.$this->db->error.'<br>';
             	return false;
         	}
         	return true;

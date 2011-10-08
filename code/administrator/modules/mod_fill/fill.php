@@ -91,28 +91,24 @@
         $price_classes[$i] = array();
     }
         //price class 1: menu
-    $price_classes[0]["ID"] = "1";
     $price_classes[0]["name"] = "menue";
     $price_classes[0]["gid"] = 1;
     $price_classes[0]["price"] = 3.0;
     
-    $price_classes[1]["ID"] = "1";
     $price_classes[1]["name"] = "menue";
     $price_classes[1]["gid"] = 2;
     $price_classes[1]["price"] = 3.5;
         //price class 2: menu vegetarian
-    $price_classes[2]["ID"] = "2";
     $price_classes[2]["name"] = "menue vegetarisch";
     $price_classes[2]["gid"] = 1;
     $price_classes[2]["price"] = 2.7;
 
-    $price_classes[3]["ID"] = "2";
     $price_classes[3]["name"] = "menue vegetarisch";
     $price_classes[3]["gid"] = 2;
     $price_classes[3]["price"] = 3.2;
 
     foreach($price_classes as $class) {
-        $priceClassManager->addPriceClass($class['ID'], $class['name'], $class['gid'], $class['price']);
+        $priceClassManager->addPriceClass($class['name'], $class['gid'], $class['price']);
     }
 	
 	

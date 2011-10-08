@@ -72,7 +72,7 @@
     	
     			$gid = 1;
                 foreach ($_POST['Price'] as $price) { 
-    	         	addPriceClass($_SESSION['nr_price_classes'], $pc_name, $gid, $price); 
+    	         	addPriceClass($pc_name, $gid, $price); 
     			  	$gid++;
     			}
     		}
