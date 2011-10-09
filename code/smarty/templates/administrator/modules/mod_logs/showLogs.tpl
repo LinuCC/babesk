@@ -11,7 +11,7 @@
         <legend>Gewichtung</legend>
         <select name="Severity" size="1">
         {section name=severity loop=$severity_levels}
-            <option>{$severit_levels[severity]}</option>
+            <option>{$severity_levels[severity]}</option>
         {/section}
         </select>
 	</fieldset>
