@@ -13,6 +13,9 @@
 	define('MEAL_F_ERROR_DATE_FORMAT','<p class="error">Ein falsches Format wurde der Funktion remove_old_meals übergeben.<br></p>');
 	define('MEAL_DATABASE_PROB_ENTRY','<p class="error"><br>---------------------------------<br>ein Datenbankeintrag enthält fehlerhafte Informationen.<br></p>');
 	define('MEAL_DATABASE_PROB_ENTRY_END','<p class="error"><br>---------------------------------<br></p>');
+	define('MEAL_ERROR_PARAM','<p class="error">Ein falsches Argument wurde einer Funktion übergeben!</p>');
+	define('MEAL_NO_ORDERS_FOUND','<p class="error">Es wurden keine Bestellungen für den angegebenen Zeitraum gefunden</p>');
+	define('MEAL_NO_MEALS_FOUND','<p class="error">Es wurden keine Mahlzeiten gefunden</p>');
 	
 	define('MEAL_ADDED','Mahlzeit wurde erfolgreich hinzugefügt');
 	

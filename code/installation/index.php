@@ -5,7 +5,7 @@
 
     error_reporting(E_ALL);
 	ini_set('display_errors', 1);
-	
+	ini_set("default_charset", "utf-8");
 	//if this value is not set, the modules will not execute
     define('_AEXEC', 1);
 
@@ -17,13 +17,21 @@
 		$row = $result->fetch_assoc();
 		var_dump($row);    
     }*/ 
-    
+    /**
+     * @TODO: Die templates in installation in smarty/templates packen
+     */
 
     include 'header.tpl';
 
     require_once '../include/constants.php';		
 	require_once '../include/functions.php';
+	require_once "../include/path.php";
 	
+	require '../smarty/smarty_init.php';
+	
+	$smarty->assign('smarty_path', REL_PATH_SMARTY);
+    $smarty->assign('status', '');
+		
 	if(isset($_GET['step'])) {
                                      
         //------------------------------------------
@@ -55,29 +63,8 @@
     	// ======= Setup the Price Classes (Step 4) =======
     	//-------------------------------------------------
     	
-    	if($_GET['step'] == '4') {		
-    	   	if ('POST' == $_SERVER['REQUEST_METHOD'] AND !$_SESSION['processed_POST']) {
-    			if (!isset($_POST['Name'], $_POST['Price'])) {
-    				die(INVALID_FORM);
-    			}  //save values and check for empty fields
-    			if (($pc_name = trim($_POST['Name'])) == '') {
-    	        	die(EMPTY_FORM);
-    	   		}
-    	   		foreach ($_POST['Price'] as $price) {
-    	   			if (trim($price) == '') {
-    	   				die(EMPTY_FORM);
-    	   			}
-    	   		} 
-    	   		//TODO check for correct form
-    	
-    			$gid = 1;
-                foreach ($_POST['Price'] as $price) { 
-    	         	addPriceClass($pc_name, $gid, $price); 
-    			  	$gid++;
-    			}
-    		}
-    			
-    		include "step4.tpl";
+    	if($_GET['step'] == '4') {
+    		require "price_classes.php";
     	}
     	
     	

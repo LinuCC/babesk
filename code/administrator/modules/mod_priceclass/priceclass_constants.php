@@ -12,3 +12,4 @@
 	define('PRICECLASS_ADDED','Die Preisklasse wurde erfolgreich hinzugefügt!<br>');
 	define('PRICECLASS_DELETED','Die Preisklasse wurde erfolgreich gelöscht<br>');
 ?>
+

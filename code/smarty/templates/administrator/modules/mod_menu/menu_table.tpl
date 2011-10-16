@@ -1,5 +1,5 @@
 <body>
-	<table>
+	<table cellspacing='10' cellpadding='10'>
 		<thead>
 			<tr>
 				<th>Tag:</th>

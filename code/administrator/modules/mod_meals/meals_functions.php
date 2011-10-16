@@ -117,7 +117,7 @@
 		else if(preg_match('/\A[0-9]{1,}\z/',$search_date))
 			$search_timestamp = $search_date;
 		else if(empty($search_date)){
-			print 'keine Mahlzeiten wurden gelöscht.<br>';
+			echo MEAL_ERROR_PARAM.' Funktion: '.__FUNCTION__.'<br>';
 			return ;
 		}
 		else {
@@ -150,6 +150,7 @@
 		global $smarty;
 		$mealManager = new MealManager();
 		$meals = $mealManager->getMealData();
+		if(!$meals) die(MEAL_NO_MEALS_FOUND);
 		foreach($meals as &$meal) {
 			$meal['date'] = formatDate($meal['date']);
 		}
@@ -161,10 +162,12 @@
 	
 	/**
 	  *sorts the orders for show_orders()
-	  *first it sorts by meal, then by username / Real Name (its the same anyway)
+	  *first it sorts by meal, then by username / Real Name
 	  */
 	function sort_orders($orders) {
 		//sorting by meals
+		if(!count($orders))
+			echo MEAL_ERROR_PARAM.' Funktion: '.__FUNCTION__;
 		foreach($orders as $order) {
 			if(empty($order)){
 				echo MEAL_DATABASE_PROB_ENTRY; var_dump($order); echo MEAL_DATABASE_PROB_ENTRY_END;
@@ -220,7 +223,7 @@
 			$orders = array();
 			$mysql_orders = array();
 			$order = array();
-			///@todo temporary solution, there are better ways than multiple loops
+			///@todo temporary solution, there are better ways than multiple loops. // Are there?
 			foreach($orders_object as $order_object) {
 				if (!count($meal_ID = $meal_manager->getMealData($order_object['MID'],'name')) or
 					!count($user_forename = $user_manager->getUserData($order_object['UID'],'forename')) or
@@ -236,6 +239,8 @@
 					$orders[] = $order;
 				}
 			}
+			if(!count($orders))
+				die(MEAL_NO_ORDERS_FOUND);
 			//for showing the number of orders for one meal
 			$num_orders = array(array());
 			$already_there = 0;
@@ -286,9 +291,11 @@
 			$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/delete_old_select_date.tpl');
 		}
 		else {
-			if($timestamp = strtotime($_POST['year'].'-'.$_POST['month'].'-'.$_POST['day']) == -1)
+			$timestamp = strtotime($_POST['year'].'-'.$_POST['month'].'-'.$_POST['day']);
+			if($timestamp == -1)
 				die(MEAL_ERROR_DATE);
 			$order_access = new OrderManager;
+			var_dump($timestamp);
 			remove_old_meals($timestamp);
 			$order_access->RemoveOldOrders($timestamp);
 		}

@@ -1,4 +1,4 @@
-<table>
+<table cellpadding='10' cellspacing='10'>
 	<thead> 
 		<tr> 
 			<th align="center">ID</th>

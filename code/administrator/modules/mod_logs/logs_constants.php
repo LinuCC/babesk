@@ -12,4 +12,6 @@
     
     //Error messages
     define('ERROR_FORM', '<p class="error">Bitte füllen sie das Formular vollständig aus.</p>');
+    
+    define('NO_LOGS', '<p class="error">Es sind keine Logs vorhanden.</p>');
 ?>

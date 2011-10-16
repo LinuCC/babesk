@@ -3,19 +3,24 @@
     //no direct access
     defined('_AEXEC') or die("Access denied");
 
-	require_once PATH_SITE."/include/logs.php";
+	require_once PATH_INCLUDE."/logs.php";
+	require_once 'logs_constants.php';
 	
 	global $smarty;
 	global $logger;
 	
+	$logs = $logger->getLogData();
+	if(!count($logs)) {
+		die(NO_LOGS);
+	}
 	//the different actions the module can do
 	$_showLogs = 'show';
 	$_delLogs  = 'delete';
-
+	
+	
     if(isset($_GET['action'])) {
         if($_GET['action'] == $_showLogs) {
             if ('POST' == $_SERVER['REQUEST_METHOD']) {
-        	    // �berpr�fung des POST
         	    if (!isset($_POST['Category'], $_POST['Severity'])) {
         		   die(EMPTY_FORM);
         	    }

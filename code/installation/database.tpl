@@ -3,14 +3,14 @@
 <legend>Bitte Datenbankverbindung eingeben!</legend>
 <form action="index.php?step=1" method="post">
     <fieldset>
-		<legend>Database</legend>
-		<label>Host Name</label>
+		<legend>MySQL-Database</legend>
+		<label>Hostname (IP-Adresse/Domainname)</label>
 			<input type="text" name="Host" /><br />
-		<label>Username</label>
+		<label>vorhandener MySQL-Username</label>
 			<input type="text" name="Username" /><br />
-		<label>Password</label>
+		<label>vorhandenes MySQL-Password</label>
 			<input type="password" name="Password" /><br />
-		<label>Database Name</label>
+		<label>vorhandener MySQLDatenbankname</label>
 			<input type="text" name="Database" /><br />
 	</fieldset>
 	<input type="submit" value="Submit" />

@@ -11,14 +11,12 @@
 		if (!isset($_POST['Host'], $_POST['Username'], $_POST['Password'], $_POST['Database'])) {
 			die(INVALID_FORM);
 		} //save values and check for empty fields
-		$password = trim($_POST['Password']);
+		$password = trim($_POST['Password']);//it is not neccessary to have a password
 		if (($host = trim($_POST['Host'])) == '' OR
             ($username = trim($_POST['Username'])) == '' OR
-            #() == '' OR
             ($database = trim($_POST['Database'])) == '') {
         		die(EMPTY_FORM);
    		}
-
 		//try to connect to database, oppress warnings
 		$db = new mysqli($host, $username, $password, $database);
 		if (mysqli_connect_errno()) {

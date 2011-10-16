@@ -61,7 +61,10 @@
             	return false;
         	}
         	while($buffer = $result->fetch_assoc())$res_array[] = $buffer;
-        	return $res_array;
+        	if(isset($res_array))
+        		return $res_array;
+        	else
+        		return false;
         }
 
 		 /**
