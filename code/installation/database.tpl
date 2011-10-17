@@ -12,6 +12,6 @@
 			<input type="password" name="Password" /><br />
 		<label>vorhandener MySQLDatenbankname</label>
 			<input type="text" name="Database" /><br />
-	</fieldset>
 	<input type="submit" value="Submit" />
+	</fieldset>
 </form>

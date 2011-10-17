@@ -6,11 +6,11 @@
 <legend>Bitte Daten für eine Gruppe angeben</legend>
 <form action="index.php?step=3" method="post">
 	<fieldset>
-		<legend>Gruppe</legend>
-		<label>Gruppenname</label> <input type="text" name="Name" /><br /> <label>Maximales
-			Guthaben</label> <input type="text" name="Max_Credit" /> Euro<br />
-	</fieldset>
+		<legend>Gruppe:</legend>
+		<label>Gruppenname:</label> <input type="text" name="Name" /><br /> <label>Maximales
+			Guthaben:</label> <input type="text" name="Max_Credit" />Euro<br />
 	<input type="submit" name="add_another"
 		value="weiteren Datensatz hinzufügen" /> <input type="submit"
 		name="go_on" value="Fortfahren" />
+	</fieldset>
 </form>
