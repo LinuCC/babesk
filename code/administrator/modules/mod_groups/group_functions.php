@@ -12,7 +12,7 @@
 		require_once 'group_constants.php';
 		
 		global $smarty;
-		$groupManager = new GroupManager(); 
+		$groupManager = new GroupManager('groups'); 
 		
 		
 		if(isset($_POST['groupname'], $_POST['max_credit'])){
@@ -24,7 +24,7 @@
 			}
 			$max_credit = str_replace(',', '.', $max_credit);
 			
-			$groupManager->addGroup($groupname,$max_credit);
+			$groupManager->addEntry('name', $groupname, 'max_credit', $max_credit);
 			echo 'Gruppe "'.$groupname.'", maximales Guthaben:"'.$max_credit
 				.'", wurde hinzugefügt';
 		}
@@ -45,10 +45,10 @@
 		require_once PATH_INCLUDE.'/group_access.php';
 		require_once 'group_constants.php';
 		
-		$groupManager = new GroupManager();
+		$groupManager = new GroupManager('groups');
 		if(!is_numeric($ID))die(ERR_INP_ID);
 		
-		$is_deleted = $groupManager->delGroup($ID);
+		$is_deleted = $groupManager->delEntry($ID);
 		if(!$is_deleted)echo ERR_DEL_GROUP;
 		else echo GROUP_DELETED;
 	}
@@ -69,7 +69,7 @@
 		
 		//form is filled out
 		if(isset($_GET['where'], $_POST['ID'],$_POST['name'],$_POST['max_credit'])){
-			$groupManager = new GroupManager();
+			$groupManager = new GroupManager('groups');
 			$old_ID = $_GET['where'];//if group moved to new ID, delete the old one
 			$ID = $_POST['ID'];
 			$name = $_POST['name'];
@@ -81,26 +81,28 @@
 				die(ERR_INP_ID);
 			
 			if($old_ID == $ID) {//only delete entry first if the ID is identical
-				$is_deleted = $groupManager->delGroup($old_ID);
+				$is_deleted = $groupManager->delEntry($old_ID);
 				if(!$is_deleted)die(ERR_DEL_GROUP);
+				$is_added = $groupManager->addEntry('name', $name, 'max_credit', $max_credit, 'ID', $ID);
+				if(!$is_added)die(ERR_ADD_GROUP);
 			}
 			else {//otherwise it could be a duplicated ID in MySQL, be save and DONT delete entry first
-				$is_added = $groupManager->addGroup($name, $max_credit, $ID);
+				$is_added = $groupManager->addEntry('name', $name, 'max_credit', $max_credit, 'ID', $ID);
 				if(!$is_added)die(ERR_ADD_GROUP);
-				$is_deleted = $groupManager->delGroup($old_ID);
+				$is_deleted = $groupManager->delEntry($old_ID);
 				if(!$is_deleted)die(ERR_DEL_GROUP);
 			}
 			
 			echo GROUP_CHANGED;
 		}
 		else { //show form
-			$groupManager = new GroupManager();
+			$groupManager = new GroupManager('groups');
 			global $smarty;
 			if(!is_numeric($ID))die(ERR_INP_ID);
 			
-			$groups = $groupManager->getGroupData($ID, 'ID', 'name','max_credit');
+			$groups = $groupManager->getTableData($ID, 'ID', 'name','max_credit');
 			if(!$groups)die(ERR_GET_DATA_GROUP);
-			//getGroupData gives in every case nto more then one group back, no need for array
+			//getTableData gives in every case nto more then one group back, no need for array
 			foreach($groups as $group)$group_data = $group;
 			
 			$smarty->assign('ID', $group_data['ID']);
@@ -119,11 +121,11 @@
 	function show_groups() {
 		require_once PATH_INCLUDE.'/group_access.php';
 		
-		$groupManager = new GroupManager();
+		$groupManager = new GroupManager('groups');
 		global $smarty;
 		
 		$groups = array();
-		$groups = $groupManager->getGroupData();
+		$groups = $groupManager->getTableData();
 		
 		$smarty->assign('groups', $groups);
 		$smarty->display(PATH_SMARTY.'/templates/administrator/modules/mod_groups/show_groups.tpl');

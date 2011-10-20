@@ -17,8 +17,8 @@ if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['go_on'])) { //go on to
 			die(EMPTY_FORM);
 		}
 		$max_credit = str_replace(',', '.', $max_credit);//Kommata bad for MySQL
-		$groupManager = new GroupManager();
-		$groupManager->addGroup($groupname, $max_credit);
+		$groupManager = new GroupManager('groups');
+		$groupManager->addEntry('name', $groupname, 'max_credit', $max_credit);
 	}
 	require "price_classes.php";
 }
@@ -31,8 +31,8 @@ else if('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['add_another'])) {
 	($max_credit = trim($_POST['Max_Credit'])) == '') {
 		die(EMPTY_FORM);
 	}
-	$groupManager = new GroupManager();
-	$groupManager->addGroup($groupname, $max_credit);
+	$groupManager = new GroupManager('groups');
+	$groupManager->addEntry('name', $groupname, 'max_credit', $max_credit);
 
 	require "groups.tpl";
 }

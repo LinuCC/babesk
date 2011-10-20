@@ -113,11 +113,11 @@
             require_once 'managers.php';
             require_once 'constants.php';
             $userManager = new UserManager();
-            $mealManager = new MealManager();
+            $mealManager = new MealManager('meals');
             
             $gid = $userManager->getUserData($uid, 'GID');
 		    $gid = $gid['GID'];
-		    $priceClass = $mealManager->getMealData($mid, 'price_class');
+		    $priceClass = $mealManager->getTableData($mid, 'price_class');
 		    $priceClass = $priceClass['price_class'];
 		    $priceData = $this->getPriceClassData($priceClass, 'price', 'GID');
 // 		    while ($row = $priceData->fetch_assoc()) {

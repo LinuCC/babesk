@@ -12,6 +12,8 @@
     $num_admin_groups = 2;
     $num_admins = 3;
     
+    die('Some functions the file tries to execute are not available anymore!');
+    
     //-----------------------------------
 	// ======= Create user groups =======
 	//-----------------------------------
@@ -248,6 +250,11 @@
 	// ======= Create logs =======
 	//----------------------------
 	echo "<p>Filling Logs Table</p>";
+	
+	/**
+	 *  @TODO: siehe echo
+	 */
+	echo 'VERALTET: severitys und categories werden jetzt direkt als text gespeichert!';
 	
 	require_once PATH_INCLUDE."/logs.php";
 	

@@ -80,9 +80,9 @@
             $gid = $userData['GID'];
             
             //require 'group_access.php';
-            $groupManager = new GroupManager();
+            $groupManager = new GroupManager('groups');
             
-            $groupData = $groupManager->getGroupData($gid, 'max_credit');
+            $groupData = $groupManager->getTableData($gid, 'max_credit');
             $max_credit = $groupData['max_credit'];
             return $max_credit - $credit;
         }

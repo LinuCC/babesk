@@ -16,12 +16,15 @@
 	define('MEAL_ERROR_PARAM','<p class="error">Ein falsches Argument wurde einer Funktion übergeben!</p>');
 	define('MEAL_NO_ORDERS_FOUND','<p class="error">Es wurden keine Bestellungen für den angegebenen Zeitraum gefunden</p>');
 	define('MEAL_NO_MEALS_FOUND','<p class="error">Es wurden keine Mahlzeiten gefunden</p>');
+	define('MEAL_ERROR_ADD', '<p class="error">Die Mahlzeit konnte nicht hinzugefügt werden!</p>');
+	define('MEAL_ERROR_DELETE','Konnte eine Mahlzeit nicht löschen!');
 	
-	define('MEAL_ADDED','Mahlzeit wurde erfolgreich hinzugefügt');
+	define('MEAL_ADDED','Mahlzeit wurde erfolgreich hinzugefügt.');
+	define('MEAL_DELETED','Mahlzeit wurde erfolgreich geläscht.');
 	
 	//Messages who are getting logged, so english
-	define('MEAL_ERROR_DELETE','Could not delete an old meal');
-	define('MEAL_DELETED','meal deleted');
+	define('MEAL_ERROR_DELETE_LOG','Could not delete an old meal');
+	define('MEAL_DELETED_LOG','meal deleted');
 		
 	//paths
 	define('MEAL_SMARTY_TEMPLATE_PATH',PATH_SMARTY.'/templates/administrator/modules/mod_meals');

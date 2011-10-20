@@ -1,4 +1,10 @@
 <?php
+	
+	/**
+	 *  @file logs.php
+	 *  handles the modul logs, which is an interface for the admin to get easy access to
+	 *  the MySQL-table
+	 */
 
     //no direct access
     defined('_AEXEC') or die("Access denied");
@@ -35,8 +41,7 @@
             	$severitys = array();
             	$categories = array();
             	$is_existing = false;
-            	//add severitys and categories to display them with smarty
-            	/*
+            	/* add severitys and categories to display them with smarty
             	 * This method has the advantage that unused severities or categories
             	 * cannot be choosen by the user
             	 */

@@ -5,7 +5,7 @@
 	$meal = array();
 	$result = $orderManager->getAllOrdersOfUser($_SESSION['uid'], strtotime(date('Y-m-d')));
 	while ($row = $result->fetch_assoc()) {
-		$mealname = $mealManager->getMealData($row['MID'], 'name');
+		$mealname = $mealManager->getTableData($row['MID'], 'name');
 		$meal[] = array('date' => $row["date"], 'name' => $mealname["name"]);
 	}
 	$smarty->assign('meal', $meal);

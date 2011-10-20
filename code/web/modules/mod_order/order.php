@@ -4,14 +4,14 @@
     global $smarty;
     
 	if(isset($_GET['order'])) {
-	    $mealManager = new MealManager();
+	    $mealManager = new MealManager('meals');
         $userManager = new UserManager();
         $orderManager = new OrderManager();
         $priceClassManager = new PriceClassManager();
     	                                            
 		is_numeric($_GET['order']) OR exit('Error: ID not Numerical!');
-		$result['name'] = implode($mealManager->getMealData($_GET['order'],'name'));
-		$result['date'] = implode($mealManager->getMealData($_GET['order'],'date'));
+		$result['name'] = implode($mealManager->getTableData($_GET['order'],'name'));
+		$result['date'] = implode($mealManager->getTableData($_GET['order'],'date'));
 		$result OR exit('ERROR');
 		if('POST' == $_SERVER['REQUEST_METHOD']) {
 		    //"Pay", substract the price for the menu from the users account
@@ -46,7 +46,7 @@
 		}
 	} 
     else {
-        $mealManager = new MealManager();
+        $mealManager = new MealManager('meals');
 
         //Ordering only possible until 8AM
         $hour = date('H', time());

@@ -13,7 +13,7 @@
 	global $smarty;
 	if(!$from_modul)$smarty->display(PATH_SMARTY.'/templates/administrator/modules/mod_menu/menu_header.tpl');
 	
-	$mealmanager = new MealManager;
+	$mealmanager = new MealManager('meals');
 
 	$meallist = array();
 	$meallist = $mealmanager->get_meals_between_two_dates(get_weekday(1), get_weekday(5));

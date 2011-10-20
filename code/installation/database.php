@@ -68,7 +68,7 @@
                         `username` varchar(255) NOT NULL,
                         `password` varchar(32) NOT NULL,
                         `birthday` date NOT NULL,
-                        `credit` decimal(4,2) NOT NULL,
+                        `credit` decimal(6,2) NOT NULL,
                         `GID` smallint(5) unsigned NOT NULL,
                         `last_login` timestamp NOT NULL,
                         `login_tries` smallint(5),
@@ -80,7 +80,7 @@
                         `ID` smallint(5) unsigned NOT NULL auto_increment,
                         `name` varchar(255) NOT NULL,
                         `GID` smallint(5) NOT NULL,
-                        `price` decimal(4,2) NOT NULL,
+                        `price` decimal(6,2) NOT NULL,
                         PRIMARY KEY (`ID`)
                     )AUTO_INCREMENT=1;';
 		//Table 'groups'
@@ -112,7 +112,7 @@
 		$sql[6] = 'CREATE TABLE IF NOT EXISTS `logs` (
                         `ID` bigint(20) unsigned NOT NULL auto_increment,
                         `category` smallint(5) NOT NULL,
-                        `severity` smallint(5) NOT NULL,
+                        `severity` varchar(255) NOT NULL,
                         `time` timestamp NOT NULL,
                         `message` varchar(255) NOT NULL,
                         PRIMARY KEY  (`ID`)

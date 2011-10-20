@@ -25,8 +25,8 @@
 	   	$meal_names = array();
 		for ($i = 0; $i < $orders->num_rows; $i++) {
             $row = $orders->fetch_assoc();
-            $meal_name = $mealManager->getMealData($row['MID'], 'name');
-            // Abfrage des feldes 'name' aus der Tabelle 'meals' mit der ID '$row['MID'], anschließend Ausgabe des Namens
+            $meal_name = $mealManager->getTableData($row['MID'], 'name');
+            // Abfrage des feldes 'name' aus der Tabelle 'meals' mit der ID '$row['MID'], anschlieï¿½end Ausgabe des Namens
             if(!$meal_name) {
                 die(MEAL_NOT_FOUND);
             }

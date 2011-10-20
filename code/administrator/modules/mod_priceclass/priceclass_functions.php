@@ -13,8 +13,8 @@ function new_priceclass() {
 		$pc_name = $_POST['name']; 
 		$pc_group_id = $_POST['group_id'];
 		$pc_price =  $_POST['price'];
-		$groupManager = new GroupManager();
-		$groups = $groupManager->getGroupData();
+		$groupManager = new GroupManager('groups');
+		$groups = $groupManager->getTableData();
 		$priceclassManager = new PriceClassManager();
 		
 		if(!preg_match('/\A^[0-9]{0,2}((,|\.)[0-9]{2})?\z/', $pc_price)) {
@@ -38,8 +38,8 @@ function new_priceclass() {
 	else {	//form was not filled, show it
 		include PATH_INCLUDE.'/group_access.php';
 		
-		$groupManager = new GroupManager();
-		$groups = $groupManager->getGroupData();
+		$groupManager = new GroupManager('groups');
+		$groups = $groupManager->getTableData();
 		
 		if(!isset($groups)) {
 			die(ERR_NO_GROUPS);
@@ -109,15 +109,15 @@ function change_priceclass($priceclass_id) {
 		global $smarty;
 		
 		$priceclassManager = new PriceClassManager();
-		$groupManager = new GroupManager();
+		$groupManager = new GroupManager('groups');
 		
 		$ar_priceclass = $priceclassManager->getPriceClassData($priceclass_id, '*');
 		if(!count($ar_priceclass))
 			die(ERR_GET_MYSQL_PRICECLASS);
 		$priceclass = $ar_priceclass[0];//Theres just one priceclass
-		$ar_current_group_name = $groupManager->getGroupData($priceclass['GID'], 'name');
+		$ar_current_group_name = $groupManager->getTableData($priceclass['GID'], 'name');
 		$current_group_name = $ar_current_group_name[0]['name'];
-		$groups = $groupManager->getGroupData();
+		$groups = $groupManager->getTableData();
 		
 		foreach($groups as &$group) {
 			if($group['ID'] == $priceclass['GID']) {
@@ -144,11 +144,11 @@ function show_priceclasses() {
 	
 	global $smarty;
 	$priceclassManager = new PriceClassManager();
-	$groupManager = new GroupManager();
+	$groupManager = new GroupManager('groups');
 	
 	$priceclasses = $priceclassManager->getPriceClassData();
 	foreach($priceclasses as &$priceclass) {
-		$group = $groupManager->getGroupData($priceclass['GID'], 'name');
+		$group = $groupManager->getTableData($priceclass['GID'], 'name');
 		foreach($group as $group_name) {//$group is an array(array()), first array has only one entry
 			$priceclass['group_name'] = $group_name['name'];
 		}

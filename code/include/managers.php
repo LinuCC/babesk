@@ -7,8 +7,8 @@
     require "admin_access.php";
     
     $userManager = new UserManager();
-    $groupManager = new GroupManager();
-    $mealManager = new MealManager();
+    $groupManager = new GroupManager('groups');
+    $mealManager = new MealManager('meals');
     $orderManager = new OrderManager();
     $priceClassManager = new PriceClassManager();
     $adminManager = new AdminManager();

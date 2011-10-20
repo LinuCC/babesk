@@ -67,6 +67,7 @@
                     $allowedModules[] = $module;
                 }
             } 
+            
             $smarty->assign('modules', $allowedModules);
             $smarty->assign('module_names', $module_names);
             $smarty->display('administrator/menu.tpl');   

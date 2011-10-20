@@ -100,13 +100,13 @@ function correct_credits_input($str){
 function group_init_smarty_vars() {
 	require_once PATH_INCLUDE."/group_access.php";
 	
-	$group_manager = new GroupManager;
+	$group_manager = new GroupManager('groups');
 	global $smarty;
 
 	$arr_group_id = array();
 	$arr_group_name = array();
 
-	$sql_groups = $group_manager->getGroupData();
+	$sql_groups = $group_manager->getTableData();
 	if(!empty($sql_groups)){
 		foreach($sql_groups as $group) {
 			$arr_group_id[] = $group["ID"];

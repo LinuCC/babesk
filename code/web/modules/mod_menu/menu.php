@@ -5,14 +5,14 @@
     //global OrderManager; //etc. geht auch (glaub ich)
     
     $orderManager = new OrderManager();
-    $mealManager = new MealManager();
+    $mealManager = new MealManager('meals');
 	
 	$meal = array();
 	$result = $orderManager->getAllOrdersOfUser($_SESSION['uid'], strtotime(date('Y-m-d')));
 	$today = date('Y-m-d');
 	$hour = date('H', time());
 	while ($row = $result->fetch_assoc()) {
-		$mealname = $mealManager->getMealData($row['MID'], 'name');
+		$mealname = $mealManager->getTableData($row['MID'], 'name');
 		if(!$row['fetched'] AND $row['date'] >= $today) {
 		    if ($row['date'] == $today AND $hour > 8) {
                 $meal[] = array('date' => formatDate($row["date"]), 'name' => $mealname["name"], 'orderID' => $row['ID'], 'cancel' => false);

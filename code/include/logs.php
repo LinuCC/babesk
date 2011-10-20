@@ -1,14 +1,14 @@
 <?php
     
     // The log categories
-    define('ADMIN', 0);     // everything happening in the admin area
-    define('WEB', 1);       // everything happening in the web frontend 
-    define('USERS', 2);     // everything dealing with the users (registration, etc)                                 
+    define('ADMIN', 'ADMIN');     // everything happening in the admin area
+    define('WEB', 'WEB');       // everything happening in the web frontend 
+    define('USERS', 'USERS');     // everything dealing with the users (registration, etc)                                 
     
     // The log severity
-    define('NOTICE', 0);     // just a notice, no error
-    define('MODERATE', 1);   // moderate errors, the system is still functional
-    define('CRITICAL', 2);   // critical errors, the system or a part of it can't function correctly
+    define('NOTICE', 'NOTICE');     // just a notice, no error
+    define('MODERATE', 'MODERATE');   // moderate errors, the system is still functional
+    define('CRITICAL', 'CRITICAL');   // critical errors, the system or a part of it can't function correctly
     
        
     class Logger {
@@ -33,7 +33,7 @@
             $query = 'INSERT INTO
                 	    logs(category, severity, time, message)
                       VALUES
-                        ('.$category.', '.$severity.', CURRENT_TIMESTAMP, "'.$msg.'");';
+                        ("'.$category.'", "'.$severity.'", CURRENT_TIMESTAMP, "'.$msg.'");';
             $result = $this->db->query($query);
             if (!$result) {
         	   echo DB_QUERY_ERROR.$this->db->error;

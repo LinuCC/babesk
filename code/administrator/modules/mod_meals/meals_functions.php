@@ -20,7 +20,7 @@
 	//---INIT---
 		$severity = NOTICE;
 		$categorie = ADMIN;
-		$meal_db = new MealManager();
+		$meal_db = new MealManager('meals');
 		
 	//---METHODS---
 		//safety-checks
@@ -62,8 +62,11 @@
 			//convert the date for MySQL-Server
 			$date_conv = $date_ar["year"]."-".$date_ar["month"]."-".$date_ar["day"];
 			//and add the meal
-			if($meal_db->addMeal($name, $description, $date_conv, $price_class, $max_orders, $is_vegetarian))
+			if($meal_db->addEntry('name', $name,'description', $description, 'date', $date_conv, 'price_class', $price_class, 'max_orders', $max_orders, 'is_vegetarian', $is_vegetarian))
 				echo MEAL_ADDED;
+			else {
+				die(MEAL_ERROR_ADD);
+			}
 		}
 		else {//if Formular isnt filled yet or the link was wrong
 			price_class_init_smarty_vars();
@@ -107,8 +110,8 @@
 		require_once PATH_INCLUDE."/meal_access.php";
 		
 		global $logger;
-		$mealmanager = new MealManager;
-		$meals = $mealmanager->getMealData();
+		$mealmanager = new MealManager('meals');
+		$meals = $mealmanager->getTableData();
 
 		if(preg_match('/\A[0-9]{2,4}-[0-9]{2}-[0-9]{2}\z/',$search_date)) {
 			$search_array = explode('-', $search_date);
@@ -130,10 +133,13 @@
 			$m_timearray = explode("-", $meal["date"]);
 			$m_timestamp = mktime(0, 0, 1, $m_timearray[1], $m_timearray[2], $m_timearray[0]);
 			if($m_timestamp < $search_timestamp) {
-				if($mealmanager->delMeal($meal['ID']))
-					$logger->log(ADMIN,NOTICE,MEAL_DELETED.', name:'.$meal['name']);
+				if($mealmanager->delEntry($meal['ID'])) {
+					$logger->log(ADMIN,NOTICE,MEAL_DELETED_LOG.', name:'.$meal['name']);
+					echo MEAL_DELETED.', name:'.$meal['name'].'<br>';
+				}
 				else
-					$logger->log(ADMIN,MODERATE,MEAL_ERROR_DELETE.' : ID='.$meal["ID"]);
+					echo MEAL_ERROR_DELETE.' : ID='.$meal["ID"].', name:'.$meal['name'];
+					$logger->log(ADMIN,MODERATE,MEAL_ERROR_DELETE_LOG.' : ID='.$meal["ID"].', name:'.$meal['name']);
 			}
 		}
 	}
@@ -148,8 +154,8 @@
 		require_once PATH_INCLUDE."/functions.php";
 		
 		global $smarty;
-		$mealManager = new MealManager();
-		$meals = $mealManager->getMealData();
+		$mealManager = new MealManager('meals');
+		$meals = $mealManager->getTableData();
 		if(!$meals) die(MEAL_NO_MEALS_FOUND);
 		foreach($meals as &$meal) {
 			$meal['date'] = formatDate($meal['date']);
@@ -213,7 +219,7 @@
 		}
 		else {
 			$order_manager = new OrderManager;
-			$meal_manager = new MealManager;
+			$meal_manager = new MealManager('meals');
 			$user_manager = new UserManager;
 			if($_POST['ordering_day'] > 31 or $_POST['ordering_month'] > 12 or $_POST['ordering_year'] < 2000 or $_POST['ordering_year'] > 3000) {
 				die(MEAL_ERROR_DATE);
@@ -225,7 +231,7 @@
 			$order = array();
 			///@todo temporary solution, there are better ways than multiple loops. // Are there?
 			foreach($orders_object as $order_object) {
-				if (!count($meal_ID = $meal_manager->getMealData($order_object['MID'],'name')) or
+				if (!count($meal_ID = $meal_manager->getTableData($order_object['MID'],'name')) or
 					!count($user_forename = $user_manager->getUserData($order_object['UID'],'forename')) or
 					!count($user_name = $user_manager->getUserData($order_object['UID'],'name'))) {
 					echo MEAL_DATABASE_PROB_ENTRY;
@@ -295,7 +301,6 @@
 			if($timestamp == -1)
 				die(MEAL_ERROR_DATE);
 			$order_access = new OrderManager;
-			var_dump($timestamp);
 			remove_old_meals($timestamp);
 			$order_access->RemoveOldOrders($timestamp);
 		}

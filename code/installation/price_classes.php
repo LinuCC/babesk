@@ -28,8 +28,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['group_id'],$_POST['pric
 	}
 	if(isset($_POST['add_another'])){
 		global $smarty;
-		$groupManager = new GroupManager();
-		if(!($groups = $groupManager->getGroupData())) {
+		$groupManager = new GroupManager('groups');
+		if(!($groups = $groupManager->getTableData())) {
 			die(ERR_GET_DATA_GROUP);
 		}
 		$smarty->assign('groups', $groups);
@@ -41,8 +41,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['group_id'],$_POST['pric
 }
 else {
 // 	global $smarty;
-	$groupManager = new GroupManager();
-	if(!($groups = $groupManager->getGroupData())) {
+	$groupManager = new GroupManager('groups');
+	if(!($groups = $groupManager->getTableData())) {
 		die(ERR_GET_DATA_GROUP);
 	}
 	$smarty->assign('groups', $groups);
