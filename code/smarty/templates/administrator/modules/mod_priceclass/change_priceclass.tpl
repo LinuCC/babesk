@@ -1,4 +1,6 @@
 <form action='index.php?section=priceclass&action=4&where={$ID}' method='post'>
+	<b>Ändern sie die ID der Preisklasse nur, wenn sie sich wirklich sicher sind! Ansonsten könnten
+	wichtige Daten in der Tabelle unbenutzbar machen!<br></b>
 	<label>ID der Preisklasse: <input type='text' value="{$ID}" name="ID" /> </label><br>
 	<label>Name der Preisklasse: <input type='text' value="{$name}" name="name" /> </label><br>
 	<label>zugehörige Gruppe: </label>

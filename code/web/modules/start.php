@@ -4,9 +4,14 @@
 	
 	$meal = array();
 	$result = $orderManager->getAllOrdersOfUser($_SESSION['uid'], strtotime(date('Y-m-d')));
-	while ($row = $result->fetch_assoc()) {
-		$mealname = $mealManager->getTableData($row['MID'], 'name');
-		$meal[] = array('date' => $row["date"], 'name' => $mealname["name"]);
+	if(!$result) {
+		
+	}
+	else {
+		foreach($result as $order) {
+			$mealname = $mealManager->getEntryData($order['MID'], 'name');
+			$meal[] = array('date' => $order["date"], 'name' => $mealname["name"]);
+		}
 	}
 	$smarty->assign('meal', $meal);
 	$smarty->display('web/menu.tpl');

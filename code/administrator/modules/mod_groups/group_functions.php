@@ -100,10 +100,8 @@
 			global $smarty;
 			if(!is_numeric($ID))die(ERR_INP_ID);
 			
-			$groups = $groupManager->getTableData($ID, 'ID', 'name','max_credit');
+			$group_data = $groupManager->getEntryData($ID, 'ID', 'name','max_credit');
 			if(!$groups)die(ERR_GET_DATA_GROUP);
-			//getTableData gives in every case nto more then one group back, no need for array
-			foreach($groups as $group)$group_data = $group;
 			
 			$smarty->assign('ID', $group_data['ID']);
 			$smarty->assign('name', $group_data['name']);

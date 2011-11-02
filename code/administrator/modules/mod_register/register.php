@@ -19,13 +19,16 @@
 		  die(INVALID_FORM);
 		}
 		else if(isset($_POST['id'])){
-		$_SESSION['CARD_ID'] = $_POST['id'];
-		if(!preg_match('/\A[0-9a-zA-Z]{10}\z/',$_POST['id']))die(REG_ERROR_ID);
-		group_init_smarty_vars();
-		$smarty->display(PATH_TEMPLATE_REG);
+			$_SESSION['CARD_ID'] = $_POST['id'];
+			if(!preg_match('/\A[0-9a-zA-Z]{10}\z/',$_POST['id']))die(REG_ERROR_ID);
+			group_init_smarty_vars();
+			$smarty->display(PATH_TEMPLATE_REG);
 		}
 		else if (($name = trim($_POST['name'])) == '') {
 	        die(EMPTY_FORM);
+	    }
+	    else if(!isset($_SESSION['CARD_ID'])) {
+	    	die(REG_PLEASE_REPEAT_CARD_ID);
 	    }
 	    else {
 
@@ -39,10 +42,11 @@
 			$birthday = date( 'Y-m-d', strtotime( merge_birthday($_POST["b_day"],$_POST["b_month"],$_POST["b_year"]) ) );
 			$GID = $_POST['gid'];
 			$credits = correct_credits_input($_POST['credits']);
-			unset($_SESSION['CARD_ID']); 
 			
 //---METHODS---
-			register_process($forename,$name,$username,$passwd,$passwd_repeat,$ID,$birthday,$GID,$credits);
+			if(register_process($forename,$name,$username,$passwd,$passwd_repeat,$ID,$birthday,$GID,$credits)) {
+				unset($_SESSION['CARD_ID']); 
+			}
 		}
     }
 	else {//show register-form

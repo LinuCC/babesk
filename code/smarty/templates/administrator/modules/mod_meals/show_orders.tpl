@@ -4,11 +4,12 @@ Bestellungen für den {$ordering_date}:<br><br>
 {$num_order.name} hat {$num_order.number} Bestellungen.<br>
 {/foreach}
 
-<table>
+<table style="text-align: center;">
 	<thead>
 		<tr>
 			<th>Men&uuml;</th>
 			<th>Person</th>
+			<th>Wurde abgeholt</th>
 		</tr>
 	</thead>
 	
@@ -17,6 +18,7 @@ Bestellungen für den {$ordering_date}:<br><br>
 		<tr>
 			<td>{$order.meal_name}</td>
 			<td>{$order.user_name}</td>
+			<td style="text-align: center;">{$order.is_fetched}</td>
 		</tr>
 	{/foreach}
 	</tbody>

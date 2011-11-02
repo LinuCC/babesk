@@ -25,18 +25,17 @@
 	
 	
     if(isset($_GET['action'])) {
-        if($_GET['action'] == $_showLogs) {
+        if($_GET['action'] == $_showLogs) { //show Logs
             if ('POST' == $_SERVER['REQUEST_METHOD']) {
         	    if (!isset($_POST['Category'], $_POST['Severity'])) {
         		   die(EMPTY_FORM);
         	    }
-        	    $category = trim($_POST['Category']);
-                $severity = trim($_POST['Severity']);
-
+        	    $category = (string) trim($_POST['Category']);
+                $severity = (string) trim($_POST['Severity']);
+                
                 $logger->printLogs($category, $severity);                      
-        
             }
-            else {
+            else { //show form for log-selection
             	$logs = $logger->getLogData();
             	$severitys = array();
             	$categories = array();

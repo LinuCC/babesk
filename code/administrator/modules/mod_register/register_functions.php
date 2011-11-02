@@ -13,22 +13,25 @@ function register_process($forename,$name,$username,$passwd,$passwd_repeat,$ID,$
 	
 	$user_access = new UserManager();
 	$logger= new Logger;
-
+	
 	//checks the input for wrong Characters etc
 	if(inputcheck($forename,$name,$username,$passwd,$passwd_repeat,$ID,$birthday,$GID,$credits)) {
 		if($user_access->addUser($ID, $name, $forename, $username, $passwd, $birthday, $credits, $GID)) {
 			echo "<br><b>Hallo ".$name."!</b><br>";
 			echo '<a href="index.php?'.htmlspecialchars(SID).'">Zur&uuml;ck zum Admin Bereich</a>';
-			$logger->log(ADMIN,NOTICE,"REG_ADDED_USER-ID:".$ID."-PASSWORD:".$passwd."-NAME:".$name."-FORENAME:".$forename."-BIRTHDAY:".
+			$logger->log(USERS,NOTICE,"REG_ADDED_USER-ID:".$ID."-PASSWORD:".$passwd."-NAME:".$name."-FORENAME:".$forename."-BIRTHDAY:".
 										$birthday."-CREDITS:".$credits."-GID:".$GID."-");
 		}
 		else {
 			echo "<br>".REG_ERROR_MYSQL."<br>";
+			return false;
 		}
 	}
 	else {
 		echo REG_PLEASE_REPEAT.'<br>';
+		return false;
 	}
+	return true;
 }
 
 

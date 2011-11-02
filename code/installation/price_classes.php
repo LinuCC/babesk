@@ -22,8 +22,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['group_id'],$_POST['pric
 	}
 	if($group_id != '' && $price != '' && $name != '') {
 		$pcManager = new PriceClassManager();
-		if(!$pcManager->addPriceClass($name, $group_id, $price)){
-			die(ERR_ADD_PRICECLASS);
+		try {
+			$pcManager->addPriceClass($name, $group_id, $price);
+		} catch (Exception $e) {
+			die('Exception: '.$e);
 		}
 	}
 	if(isset($_POST['add_another'])){

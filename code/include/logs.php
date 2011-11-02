@@ -96,10 +96,10 @@
          */
         function printLogs($category = "", $severity = "") {
             //if not set, use wildcards in sql query
-            if(!empty($category)) $category = 'WHERE category = '.$category;    
-            if(!empty($severity)) $severity = ' AND severity = '.$severity;    
+            $category = 'category = "'.$category.'"';    
+            $severity = 'severity = "'.$severity.'"';    
             
-            $query = "SELECT * FROM logs ".$category.$severity.";";
+            $query = 'SELECT * FROM logs WHERE '.$category.' AND '.$severity.';';
             $result = $this->db->query($query);
             if (!$result) {
                die(DB_QUERY_ERROR.$this->db->error);

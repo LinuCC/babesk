@@ -111,7 +111,7 @@
         //Table 'logs'
 		$sql[6] = 'CREATE TABLE IF NOT EXISTS `logs` (
                         `ID` bigint(20) unsigned NOT NULL auto_increment,
-                        `category` smallint(5) NOT NULL,
+                        `category` varchar(255) NOT NULL,
                         `severity` varchar(255) NOT NULL,
                         `time` timestamp NOT NULL,
                         `message` varchar(255) NOT NULL,

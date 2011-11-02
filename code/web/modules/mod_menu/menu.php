@@ -4,21 +4,21 @@
     global $smarty;
     //global OrderManager; //etc. geht auch (glaub ich)
     
-    $orderManager = new OrderManager();
+    $orderManager = new OrderManager('orders');
     $mealManager = new MealManager('meals');
 	
 	$meal = array();
 	$result = $orderManager->getAllOrdersOfUser($_SESSION['uid'], strtotime(date('Y-m-d')));
 	$today = date('Y-m-d');
 	$hour = date('H', time());
-	while ($row = $result->fetch_assoc()) {
-		$mealname = $mealManager->getTableData($row['MID'], 'name');
-		if(!$row['fetched'] AND $row['date'] >= $today) {
-		    if ($row['date'] == $today AND $hour > 8) {
-                $meal[] = array('date' => formatDate($row["date"]), 'name' => $mealname["name"], 'orderID' => $row['ID'], 'cancel' => false);
+	foreach($result as $order) {
+		$mealname = $mealManager->getEntryData($order['MID'], 'name');
+		if(!$order['fetched'] AND $order['date'] >= $today) {
+		    if ($order['date'] == $today AND $hour > 8) {
+                $meal[] = array('date' => formatDate($order["date"]), 'name' => $mealname["name"], 'orderID' => $order['ID'], 'cancel' => false);
             }
             else {
-                $meal[] = array('date' => formatDate($row["date"]), 'name' => $mealname["name"], 'orderID' => $row['ID'], 'cancel' => true);    
+                $meal[] = array('date' => formatDate($order["date"]), 'name' => $mealname["name"], 'orderID' => $order['ID'], 'cancel' => true);    
             }  
         }	
 	}

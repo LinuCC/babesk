@@ -2,12 +2,12 @@
     error_reporting(E_ALL);
     global $smarty;
     
-    $orderManager = new OrderManager();
+    $orderManager = new OrderManager('orders');
     $priceClassManager = new PriceClassManager();
     $userManager = new UserManager();
     
 		
-	$orderData = $orderManager->getOrderData($_GET['id'], 'MID');
+	$orderData = $orderManager->getEntryData($_GET['id'], 'MID');
 	$mid = $orderData['MID'];
 	$price = $priceClassManager->getPrice($_SESSION['uid'], $mid);
 	
@@ -17,7 +17,7 @@
         die();    
     }
     
-    $orderManager->delOrder($_GET['id']);
+    $orderManager->delEntry($_GET['id']);
 	
 	$smarty->display("web/modules/mod_cancel/cancel.tpl");
 ?>

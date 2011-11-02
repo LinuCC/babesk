@@ -27,13 +27,12 @@ function new_priceclass() {
 			}
 		}
 		
-		if(!$priceclassManager->addPriceClass($pc_name, $pc_group_id, $pc_price)) {
+		try {
+			$priceclassManager->addPriceClass($pc_name, $pc_group_id, $pc_price);
+		} catch (Exception $e) {
 			die(ERR_ADD_PRICECLASS);
-		}
-		else {
-			echo PRICECLASS_ADDED;
-		}
-		
+		} 
+		echo PRICECLASS_ADDED;
 	}
 	else {	//form was not filled, show it
 		include PATH_INCLUDE.'/group_access.php';
@@ -55,7 +54,7 @@ function delete_priceclass($priceclass_id) {
 	include PATH_INCLUDE.'/price_class_access.php';
 	
 	$priceclassManager = new PriceClassManager();
-	$is_deleted = $priceclassManager->delPriceClass($priceclass_id);
+	$is_deleted = $priceclassManager->delEntry($priceclass_id);
 	
 	if(!$is_deleted) {
 		die(ERR_DEL_PRICECLASS);
@@ -87,18 +86,20 @@ function change_priceclass($priceclass_id) {
 			die(ERR_GET);
 		
 		if($pc_old_ID == $pc_ID) { //only delete priceclass first if entry is already in DB
-			if(!$priceclassManager->delPriceClass($pc_ID))
+			if(!$priceclassManager->delEntry($pc_ID))
 				die(ERR_DEL_PRICECLASS);
 			else {
 				$priceclassManager->addPriceClass($pc_name, $pc_GID, $pc_price, $pc_ID);
 			}
 		}
 		else {//otherwise it could be a duplicated ID in MySQL, be save and DONT delete entry first
-			if(!$priceclassManager->addPriceClass($pc_name, $pc_GID, $pc_price, $pc_ID))
-				die(ERR_ADD_PRICECLASS);
-			else {
-				if(!$priceclassManager->delPriceClass($pc_old_ID))
-					die(ERR_DEL_PRICECLASS);
+			try {
+				$priceclassManager->addPriceClass($pc_name, $pc_GID, $pc_price, $pc_ID);
+			} catch (Exception $e) {
+				die(ERR_CHANGE_PRICECLASS.$e->getMessage());
+			}
+			if(!$priceclassManager->delEntry($pc_old_ID)) {
+				die(ERR_DEL_PRICECLASS);
 			}
 		}
 		echo PRICECLASS_CHANGED;
@@ -111,12 +112,8 @@ function change_priceclass($priceclass_id) {
 		$priceclassManager = new PriceClassManager();
 		$groupManager = new GroupManager('groups');
 		
-		$ar_priceclass = $priceclassManager->getPriceClassData($priceclass_id, '*');
-		if(!count($ar_priceclass))
-			die(ERR_GET_MYSQL_PRICECLASS);
-		$priceclass = $ar_priceclass[0];//Theres just one priceclass
-		$ar_current_group_name = $groupManager->getTableData($priceclass['GID'], 'name');
-		$current_group_name = $ar_current_group_name[0]['name'];
+		$priceclass = $priceclassManager->getEntryData($priceclass_id, '*');
+		$current_group_name = $groupManager->getEntryData($priceclass['GID'], 'name');
 		$groups = $groupManager->getTableData();
 		
 		foreach($groups as &$group) {
@@ -132,7 +129,7 @@ function change_priceclass($priceclass_id) {
 		$smarty->assign('name', $priceclass['name']);
 		$smarty->assign('price', $priceclass['price']);
 		$smarty->assign('groups', $groups);
-		$smarty->assign('current_group_name', $current_group_name);
+		$smarty->assign('current_group_name', $current_group_name ['name']);
 		$smarty->display(PATH_SMARTY_ADMIN_MOD.'/mod_priceclass/change_priceclass.tpl');
 	}
 }
@@ -146,11 +143,14 @@ function show_priceclasses() {
 	$priceclassManager = new PriceClassManager();
 	$groupManager = new GroupManager('groups');
 	
-	$priceclasses = $priceclassManager->getPriceClassData();
+	$priceclasses = $priceclassManager->getTableData();
 	foreach($priceclasses as &$priceclass) {
-		$group = $groupManager->getTableData($priceclass['GID'], 'name');
-		foreach($group as $group_name) {//$group is an array(array()), first array has only one entry
-			$priceclass['group_name'] = $group_name['name'];
+		$group = $groupManager->getEntryData($priceclass['GID'], 'name');
+		if(!$group) { 
+			$priceclass['group_name'] = ERR;
+		}
+		else {
+			$priceclass['group_name'] = $group['name'];
 		}
 	}
 	

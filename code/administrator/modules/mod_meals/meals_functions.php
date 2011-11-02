@@ -80,8 +80,8 @@
 	function price_class_init_smarty_vars() {
 		require_once PATH_INCLUDE.'/price_class_access.php';
 		global $smarty;
-		$priceclassmanager = new PriceClassManager;
-		$sql_price_classes = $priceclassmanager->getPriceClassData();
+		$priceclassmanager = new Priceclassmanager('price_classes');
+		$sql_price_classes = $priceclassmanager->getTableData();
 		$price_class_id = array();
 		$price_class_name = array();
 		$old_ID = -1;
@@ -218,35 +218,36 @@
 			$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/show_orders_select_date.tpl');
 		}
 		else {
-			$order_manager = new OrderManager;
+			$order_manager = new OrderManager('orders');
 			$meal_manager = new MealManager('meals');
 			$user_manager = new UserManager;
 			if($_POST['ordering_day'] > 31 or $_POST['ordering_month'] > 12 or $_POST['ordering_year'] < 2000 or $_POST['ordering_year'] > 3000) {
 				die(MEAL_ERROR_DATE);
 			}
 			$date = $_POST['ordering_year'].'-'.$_POST['ordering_month'].'-'.$_POST['ordering_day'];
-			$orders_object = $order_manager->getAllOrdersAt($date);
-			$orders = array();
+			$orders = $order_manager->getAllOrdersAt($date);
 			$mysql_orders = array();
 			$order = array();
-			///@todo temporary solution, there are better ways than multiple loops. // Are there?
-			foreach($orders_object as $order_object) {
-				if (!count($meal_ID = $meal_manager->getTableData($order_object['MID'],'name')) or
-					!count($user_forename = $user_manager->getUserData($order_object['UID'],'forename')) or
-					!count($user_name = $user_manager->getUserData($order_object['UID'],'name'))) {
+			foreach($orders as &$order) {
+				if (!count($meal_data = $meal_manager->getEntryData($order['MID'],'name')) or
+					!count($user_data = $user_manager->getUserData($order['UID'],'name', 'forename'))) {
 					echo MEAL_DATABASE_PROB_ENTRY;
-					var_dump($order_object);
+					var_dump($order);
 					echo MEAL_DATABASE_PROB_ENTRY_END;
 				}
 				else {
-					$order['meal_name'] = implode($meal_ID);
-					$order['user_name'] = implode($user_forename).' '.
-											implode($user_name);
-					$orders[] = $order;
+					$order['meal_name'] = $meal_data['name'];
+					$order['user_name'] = $user_data['forename'].' '.$user_data['name'];
+					$order['is_fetched'] = $order['fetched'];
 				}
 			}
-			if(!count($orders))
+			if(!count($orders)) {
 				die(MEAL_NO_ORDERS_FOUND);
+			}
+			//////////////////////////////////////////////////
+			/**
+			 * @todo refactor this part, some things are deprecated
+			 */
 			//for showing the number of orders for one meal
 			$num_orders = array(array());
 			$already_there = 0;
@@ -265,8 +266,8 @@
 				}
 				$already_there = false;
 			}
-			
 			$orders = sort_orders($orders);
+			//////////////////////////////////////////////////
 			
 			if(isset($num_orders[0]) && $counter) {
 				$smarty->assign('num_orders',$num_orders);
@@ -281,8 +282,7 @@
 	}
 	
 	/**
-	  *deletes the old meals and old orders, At the moment all entries which are older than yesterday
-	  *will be deleted
+	  *deletes the old meals and old orders.
 	  */
 	function delete_old_meals_and_orders() {
 		require_once PATH_INCLUDE.'/meal_access.php';
@@ -290,6 +290,9 @@
 		require_once 'meals_constants.php';
 		
 		global $smarty;
+		global $logger;
+		
+		$orderManager = new OrderManager('orders');
 		
 		if(!isset($_POST['day']) or !isset($_POST['month']) or !isset($_POST['year'])) {
 			$today = array('day'=>date('d'),'month'=>date('m'),'year'=>date('Y'));
@@ -298,11 +301,32 @@
 		}
 		else {
 			$timestamp = strtotime($_POST['year'].'-'.$_POST['month'].'-'.$_POST['day']);
-			if($timestamp == -1)
+			if($timestamp == -1) {
 				die(MEAL_ERROR_DATE);
-			$order_access = new OrderManager;
+			}
 			remove_old_meals($timestamp);
-			$order_access->RemoveOldOrders($timestamp);
+			
+			//////////////////////////////////////////////////
+			//Remove old Orders
+			//////////////////////////////////////////////////
+			$orders = $orderManager->getTableData();
+			if(!preg_match('/\A[0-9]{1,}\z/', $timestamp)) {
+				die(MEAL_ERROR_DATE);
+			}
+			
+			foreach($orders as $order) {
+				$o_timearray = explode("-", $order["date"]);
+				$o_timestamp = mktime(0, 0, 1, $o_timearray[1], $o_timearray[2], $o_timearray[0]);
+				if($o_timestamp < $timestamp) {
+					if($orderManager->delEntry($order['ID'])) {
+						echo ORDER_DELETED.' ID:'.$order['ID'].'<br>';
+						//$logger->log(ADMIN,NOTICE,ORDER_DELETED);
+					}
+					else {
+						$logger->log(ADMIN,MODERATE,ORDER_ERROR_DELETE.'dump:'.var_dump($order));
+					}
+				}
+			}
 		}
 	}
 ?>

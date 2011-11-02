@@ -12,8 +12,4 @@
     
     	//nothing here at the moment. all covered by TableManager
     }    
-
-
-
-
 ?>

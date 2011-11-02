@@ -16,6 +16,7 @@
 	define('REG_ERROR_USERNAME','<p class="error">Fehlerhafte Eingabe des Benutzernamen</p>');
 	
 	define('REG_PLEASE_REPEAT','Bitte wiederholen sie den Vorgang');
+	define('REG_PLEASE_REPEAT_CARD_ID','Bitte wiederholen sie den Vorgang von Anfang an (die Karte nochmal neu einlesen)');
 	
 	define('PATH_TEMPLATE_REG',PATH_SMARTY.'/templates/administrator/modules/mod_register/register.tpl');
 	define('PATH_TEMPLATE_CARD',PATH_SMARTY.'/templates/administrator/modules/mod_register/register_input_id.tpl');

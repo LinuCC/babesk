@@ -28,23 +28,18 @@ class TableManager {
 	*
 	* The Function takes a variable amount of parameters, the first being the element id,
 	* the other parameters are interpreted as being the fieldnames in the table.
-	* In addition to that, if you give no parameters the function will return
-	* all entries found in the table.
 	* The data will be returned in an array with the fieldnames being the keys.
 	*
 	* @param variable amount, see description
 	* @return false if error
 	*/
-	public function getTableData() {
+	public function getEntryData() {
 		
 		require_once 'constants.php';
 		
 		$num_args = func_num_args();
 		 
-		if($num_args == 0){ //all elements of the table
-			$query = 'SELECT * FROM '.$this->tablename;
-		}
-		else if($num_args > 1){ //specific TableData
+		if($num_args > 1){ //specific TableData
 			$id = func_get_arg(0);
 			$fields = "";
 			 
@@ -68,13 +63,57 @@ class TableManager {
 			echo DB_QUERY_ERROR.$this->db->error."<br />".$query;
 			return false;
 		}
-		while($buffer = $result->fetch_assoc())$res_array[] = $buffer;
-		if(isset($res_array)) {
-			return $res_array;
+		if($res_var = $result->fetch_assoc()) {
+			return $res_var;
 		}
+// 		while($buffer = $result->fetch_assoc())$res_array[] = $buffer;
+// 		if(isset($res_array)) {
+// 			return $res_array;
+// 		}
 		else {
 			return false;
 		}
+	}
+	
+	
+	/** 
+	 * Its function is to get several entries from the MySQL-Server, selected by the given Parameter
+	 * getTableData() accepts zero or one Parameter. If zero Parameters are given, the function will return
+	 * all of the data in the table. If one Parameter is given, it will interpreted as being the string behind
+	 * the WHERE-command of the MySQL-query-string.
+	 *  
+	 *  @param func_get_arg(0) The mySQL-query-string behind the WHERE-command. Example: ID = 46
+	 *  
+	 *  @return twodimensional-array: $return_var[EntryArray[FieldnameArray]]
+	 * 
+	 * @todo größergleich/kleinergleich/gleichheits-zeichen als Variable übergeben für bessere Kontrolle??
+	 */
+	function getTableData() {
+		require_once 'constants.php';
+		
+		$num_args = func_num_args();
+		$args = func_get_args();
+		
+		if($num_args == 0){
+			//all elements of the table
+			$query = 'SELECT * FROM '.$this->tablename;
+		}
+		else if($num_args == 1){
+			$arg = func_get_arg(0);
+			$query = 'SELECT * FROM '.$this->tablename.' WHERE '.$arg;
+		}
+		else {
+			throw new Exception('Wrong number of arguments in '.__METHOD__);
+		}
+		$result = $this->db->query($query);
+		if (!$result) {
+			throw new Exception(DB_QUERY_ERROR.$this->db->error."<br />".$query);
+		}
+		while($buffer = $result->fetch_assoc())$res_array[] = $buffer;
+		if(!isset($res_array)) {
+			throw new Exception('Some data from the MySQL-Server were void!'.__METHOD__);
+		}
+		return $res_array;
 	}
 	
 	/**
@@ -97,8 +136,7 @@ class TableManager {
 		$num_args = func_num_args();
 
 		if(($num_args % 2 == 1)) { 
-			echo ERR_NUMBER_PARAM;
-			return false;
+			throw new Exception(ERR_NUMBER_PARAM);	 
 		}
 		
 		for($i = 1; $i <= $num_args; $i++) {
@@ -107,7 +145,7 @@ class TableManager {
 				$column_identifier_str .= func_get_arg($i - 1).',';
 			}
 			else { //value
-				if(is_string(func_get_arg($i - 1))) { //MySQL needs quotation marks for strings
+				if(!is_numeric(func_get_arg($i - 1))) { //MySQL needs quotation marks for strings
 					$column_value_str .= '"'.func_get_arg($i - 1).'",';
 				}
 				else {
@@ -115,6 +153,7 @@ class TableManager {
 				}
 			}
 		}
+		
 		
 		//no need for kommata after last entry because of MySQL
 		$column_value_str = substr($column_value_str,0,-1);
@@ -126,8 +165,7 @@ class TableManager {
 		
 		$result = $this->db->query($query);
 		if(!$result) {
-			echo DB_QUERY_ERROR.$this->db->error;
-			return false;
+			throw new Exception(DB_QUERY_ERROR.$this->db->error);
 		}
 		return true;
 	}

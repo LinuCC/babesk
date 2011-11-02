@@ -22,6 +22,8 @@
 	define('MEAL_ADDED','Mahlzeit wurde erfolgreich hinzugefügt.');
 	define('MEAL_DELETED','Mahlzeit wurde erfolgreich geläscht.');
 	
+	define('ORDER_DELETED','Bestellung wurde erfolgreich geläscht.');
+
 	//Messages who are getting logged, so english
 	define('MEAL_ERROR_DELETE_LOG','Could not delete an old meal');
 	define('MEAL_DELETED_LOG','meal deleted');

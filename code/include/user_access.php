@@ -82,20 +82,22 @@
             //require 'group_access.php';
             $groupManager = new GroupManager('groups');
             
-            $groupData = $groupManager->getTableData($gid, 'max_credit');
-            $max_credit = $groupData['max_credit'];
+            $groupData = $groupManager->getEntryData($gid, 'max_credit');
+            if(!$groupData)die('Error in getMaxRechargeAmount');
+	        $max_credit = $groupData['max_credit'];
             return $max_credit - $credit;
         }
         
         function changeBalance($id, $amount) {
             if($amount > $this->getMaxRechargeAmount($id)) {    //check whether the amount isn't to big
-                return false;
+            	return false;
             }
                         
             $userData = $this->getUserData($id, 'credit');
             $oldCredit = $userData['credit'];
+            
             if($oldCredit + $amount < 0) {          //credit can't be negative
-                return false;
+            	return false;
             }
             $credit = $oldCredit + $amount;
 
@@ -339,9 +341,9 @@
         	}
         	//add the entry in the users table
         	$query = 'INSERT INTO
-        	               users(name, forename, username, password, birthday, credit, GID, last_login, login_tries, first_passwd)
+        	               users(ID, name, forename, username, password, birthday, credit, GID, last_login, login_tries, first_passwd)
                       VALUES
-                           ("'.$name.'", "'.$forename.'", "'.$username.'", "'.md5($passwd).'", "'.$birthday.'", '.$credit.', '.$GID.', CURRENT_TIMESTAMP, 0, 1);';
+                           ('.$cardID.',"'.$name.'", "'.$forename.'", "'.$username.'", "'.md5($passwd).'", "'.$birthday.'", '.$credit.', '.$GID.', CURRENT_TIMESTAMP, 0, 1);';
             $result = $this->db->query($query);
             if (!$result) {
             	echo "Table Users
