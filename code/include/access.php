@@ -107,11 +107,11 @@ class TableManager {
 		}
 		$result = $this->db->query($query);
 		if (!$result) {
-			throw new Exception(DB_QUERY_ERROR.$this->db->error."<br />".$query);
+			throw new MySQLConnectionException(DB_QUERY_ERROR.$this->db->error."<br />".$query);
 		}
 		while($buffer = $result->fetch_assoc())$res_array[] = $buffer;
 		if(!isset($res_array)) {
-			throw new Exception('Some data from the MySQL-Server were void!'.__METHOD__);
+			throw new MySQLVoidDataException('MySQL returned no data!');
 		}
 		return $res_array;
 	}

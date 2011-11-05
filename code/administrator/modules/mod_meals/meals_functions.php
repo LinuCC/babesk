@@ -200,6 +200,16 @@
 		return $sorted_orders;
 	}
 	
+	function translate_fetched($is_fetched) {
+		switch ($is_fetched){
+			case 0:
+				return ORDER_NOT_FETCHED;
+			case 1:
+				return ORDER_FETCHED;
+		}
+		throw Exception('Wrong argument');
+	}
+	
 	/**
 	  *shows the orders in a table
 	  */
@@ -225,7 +235,13 @@
 				die(MEAL_ERROR_DATE);
 			}
 			$date = $_POST['ordering_year'].'-'.$_POST['ordering_month'].'-'.$_POST['ordering_day'];
-			$orders = $order_manager->getAllOrdersAt($date);
+			try {
+				$orders = $order_manager->getAllOrdersAt($date);
+			} catch (MySQLVoidDataException $e) {
+				die(MEAL_NO_ORDERS_FOUND);
+			} catch (MySQLConnectionException $e) {
+				die($e);
+			}
 			$mysql_orders = array();
 			$order = array();
 			foreach($orders as &$order) {
@@ -238,7 +254,7 @@
 				else {
 					$order['meal_name'] = $meal_data['name'];
 					$order['user_name'] = $user_data['forename'].' '.$user_data['name'];
-					$order['is_fetched'] = $order['fetched'];
+					$order['is_fetched'] = translate_fetched($order['fetched']);
 				}
 			}
 			if(!count($orders)) {

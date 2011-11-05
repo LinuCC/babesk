@@ -23,7 +23,9 @@
 	define('MEAL_DELETED','Mahlzeit wurde erfolgreich geläscht.');
 	
 	define('ORDER_DELETED','Bestellung wurde erfolgreich geläscht.');
-
+	define('ORDER_FETCHED','Bestellung abgeholt.');
+	define('ORDER_NOT_FETCHED','Bestellung nicht abgeholt.');
+	
 	//Messages who are getting logged, so english
 	define('MEAL_ERROR_DELETE_LOG','Could not delete an old meal');
 	define('MEAL_DELETED_LOG','meal deleted');

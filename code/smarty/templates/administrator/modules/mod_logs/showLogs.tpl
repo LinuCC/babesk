@@ -1,20 +1,20 @@
-<h3>Logs</h3>
-<p>Bitte Kategorie und Gewichtung der Logs ausw&auml;hlen:</p>
-<form action="index.php?section=logs&action=show&{$sid}" method="post">
-	<fieldset>
-		<legend>Kategorie</legend>
-		<select name="Category" size="1">
-		{section name=category loop=$categories}
-            <option>{$categories[category]}</option>
-        {/section}
-        </select>
-        <legend>Gewichtung</legend>
-        <select name="Severity" size="1">
-        {section name=severity loop=$severity_levels}
-            <option>{$severity_levels[severity]}</option>
-        {/section}
-        </select>
-	</fieldset>
-	<input type="submit" value="Submit" />
-</form>
-
+<h3 align="center">Log-Anzeige</h3>
+            
+<table>
+	<tr bgcolor='#33CFF'>
+		<th>LogID</th>
+		<th>Category</th>
+		<th>Severity</th>
+		<th>Date</th>
+		<th>Message</th>
+	</tr>
+	{foreach $logs as $log}
+	<tr bgcolor="#FFC33">
+		<td align="center">{$log['ID']}</td>
+		<td align="center">{$log['category']}</td>
+		<td align="center">{$log['severity']}</td>
+		<td align="center">{$log['time']}</td>
+		<td align="center">{$log['message']}</td>
+	</tr>	
+	{/foreach}
+</table>

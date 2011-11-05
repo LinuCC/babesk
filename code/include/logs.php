@@ -1,5 +1,7 @@
 <?php
-    
+	
+	require_once PATH_INCLUDE.'/access.php';
+
     // The log categories
     define('ADMIN', 'ADMIN');     // everything happening in the admin area
     define('WEB', 'WEB');       // everything happening in the web frontend 
@@ -11,13 +13,10 @@
     define('CRITICAL', 'CRITICAL');   // critical errors, the system or a part of it can't function correctly
     
        
-    class Logger {
+    class Logger extends TableManager{
     
-        private $db;
-        
         public function __construct() {
-            require "dbconnect.php";
-            $this->db = $db;
+        	TableManager::__construct('logs');
         }
     
         /**
@@ -84,42 +83,6 @@
         	$res_array = array();
         	while($buffer = $result->fetch_assoc())$res_array[] = $buffer;
         	return $res_array;
-        }
-        
-        /**
-         * Creates HTMl output containing the log messages
-         *
-         * @param area Print only logs that are in this area
-         * @param severity Print only logs with this severity
-         *
-         * @return false if error occured
-         */
-        function printLogs($category = "", $severity = "") {
-            //if not set, use wildcards in sql query
-            $category = 'category = "'.$category.'"';    
-            $severity = 'severity = "'.$severity.'"';    
-            
-            $query = 'SELECT * FROM logs WHERE '.$category.' AND '.$severity.';';
-            $result = $this->db->query($query);
-            if (!$result) {
-               die(DB_QUERY_ERROR.$this->db->error);
-        	}
-        	echo "<table>
-                    <tr>
-                        <th>Log ID</th>
-                        <th>Category</th>
-                        <th>Severity</th>
-                        <th>Date</th>
-                        <th>Message</th>
-                    </tr>";
-        	for ($i = 0; $i < $result->num_rows; $i++) {
-                $row = $result->fetch_assoc();
-                // Output logs in HTML Table
-                echo "<tr>";
-                echo "<td>".$row["ID"]."</td><td>".$row["category"]."</td><td>".$row["severity"]."</td><td>".$row["time"]."</td><td>".$row["message"]."</td>";
-                echo "</tr>";
-        	}
-            echo "</table>";    
         }
         
         /**

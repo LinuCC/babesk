@@ -33,7 +33,9 @@
         	    $category = (string) trim($_POST['Category']);
                 $severity = (string) trim($_POST['Severity']);
                 
-                $logger->printLogs($category, $severity);                      
+                $logs = $logger->getTableData('category = "'.$category.'" AND severity = "'.$severity.'"');
+                $smarty->assign('logs',$logs);
+                $smarty->display(PATH_SMARTY_ADMIN_MOD.'/mod_logs/showLogs.tpl');
             }
             else { //show form for log-selection
             	$logs = $logger->getLogData();
@@ -61,7 +63,7 @@
             	}
             	$smarty->assign('categories', $categories);
             	$smarty->assign('severity_levels', $severitys);
-                $smarty->display('administrator/modules/mod_logs/showLogs.tpl');
+                $smarty->display('administrator/modules/mod_logs/chooseLogs.tpl');
             }
         }
         if($_GET['action'] == $_delLogs) {

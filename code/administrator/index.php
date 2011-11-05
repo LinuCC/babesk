@@ -16,6 +16,7 @@
 	require_once PATH_SMARTY."/smarty_init.php";
     require_once PATH_INCLUDE."/logs.php";
     require_once PATH_INCLUDE."/functions.php";
+    require_once PATH_INCLUDE.'/exception_def.php';
     require PATH_INCLUDE.'/moduleManager.php';
     require 'modules.php';
     require 'locales.php';
