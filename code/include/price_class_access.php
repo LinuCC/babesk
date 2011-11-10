@@ -28,7 +28,7 @@
             $userManager = new UserManager();
             $mealManager = new MealManager('meals');
             
-            $gid = $userManager->getUserData($uid, 'GID');
+            $gid = $userManager->getEntryData($uid, 'GID');
 		    $gid = $gid['GID'];
 		    $priceclass_ID = $mealManager->getEntryData($mid, 'price_class');
 		    if(!$priceclass_ID){

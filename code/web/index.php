@@ -50,7 +50,7 @@
          //general user data for header etc
         if ($_SESSION['login_tries'] > 3) {
             $smarty->assign('login_tries', $_SESSION['login_tries']);
-            $_SESSION['login_tries'] = 0;           //????? musste schon in der DB zurücksetzen
+            $_SESSION['login_tries'] = 0;           //????? musste schon in der DB zurï¿½cksetzen
         }
     	$smarty->assign('uid', $_SESSION['uid']);
     	$smarty->assign('last_login', $_SESSION['last_login']);
@@ -63,8 +63,10 @@
             $modManager->executeWeb('change_password');
         }
         
-        //Ändern! Unnötig viele Daten, aktualisiert werden muss nur immer das Guthaben (glaub ich)
-        $userData = $userManager->getAllUserData($_SESSION['uid']);
+        //ï¿½ndern! Unnï¿½tig viele Daten, aktualisiert werden muss nur immer das Guthaben (glaub ich)
+        //$userData = $userManager->getAllUserData($_SESSION['uid']);
+        
+        $userData = $userManager->getEntryData($_SESSION['uid'], '*');
 
         $_SESSION['last_login'] = formatDateTime($userData['last_login']);
         $_SESSION['credit'] = $userData['credit'];

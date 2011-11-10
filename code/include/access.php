@@ -9,6 +9,8 @@
  *
  */
 
+require_once 'exception_def.php';
+
 class TableManager {
 	
 	/**
@@ -44,7 +46,7 @@ class TableManager {
 			$fields = "";
 			 
 			for($i = 1; $i < $num_args - 1; $i++) {
-				$fields .= func_get_arg($i).', ';
+				$fields .= func_get_arg($i).',';
 			}
 			$fields .= func_get_arg($num_args - 1);  //query must not contain an ',' after the last field name
 			 
@@ -56,22 +58,17 @@ class TableManager {
     					ID = '.$id.'';
 		}
 		else{//wrong arguments
-			return false;
+			throw new BadMethodCallException('wrong arguments'); 
 		}
 		$result = $this->db->query($query);
 		if (!$result) {
-			echo DB_QUERY_ERROR.$this->db->error."<br />".$query;
-			return false;
+			throw new MySQLConnectionException(DB_QUERY_ERROR.$this->db->error."<br />".$query); 
 		}
 		if($res_var = $result->fetch_assoc()) {
 			return $res_var;
 		}
-// 		while($buffer = $result->fetch_assoc())$res_array[] = $buffer;
-// 		if(isset($res_array)) {
-// 			return $res_array;
-// 		}
 		else {
-			return false;
+			throw new MySQLVoidDataException(DB_QUERY_ERROR.$this->db->error."<br />".$query); 
 		}
 	}
 	
@@ -82,7 +79,8 @@ class TableManager {
 	 * all of the data in the table. If one Parameter is given, it will interpreted as being the string behind
 	 * the WHERE-command of the MySQL-query-string.
 	 *  
-	 *  @param func_get_arg(0) The mySQL-query-string behind the WHERE-command. Example: ID = 46
+	 *  @param func_get_arg(0) The mySQL-query-string behind the WHERE-command. Example: ID = 46.
+	 *  		If the values are strings, do not forget the quotation-marks.
 	 *  
 	 *  @return twodimensional-array: $return_var[EntryArray[FieldnameArray]]
 	 * 
@@ -145,7 +143,10 @@ class TableManager {
 				$column_identifier_str .= func_get_arg($i - 1).',';
 			}
 			else { //value
-				if(!is_numeric(func_get_arg($i - 1))) { //MySQL needs quotation marks for strings
+				if (func_get_arg($i - 1) == 'CURRENT_TIMESTAMP'){ // some mysql-constants, that shouldnt need quotation marks
+					$column_value_str .= func_get_arg($i - 1).',';
+				}
+				else if(!is_numeric(func_get_arg($i - 1))) { //MySQL needs quotation marks for strings
 					$column_value_str .= '"'.func_get_arg($i - 1).'",';
 				}
 				else {
@@ -167,7 +168,7 @@ class TableManager {
 		if(!$result) {
 			throw new Exception(DB_QUERY_ERROR.$this->db->error);
 		}
-		return true;
+		return true; ///@todo some calls do need this, but its deprecated (see Exceptions). Remove it
 	}
 	
 	/**
@@ -181,17 +182,15 @@ class TableManager {
 		require_once 'constants.php';
 		
 		if(!is_numeric($ID)){ //parameter-checking
-			die(ERR_TYPE_PARAM_ID);
+			throw new UnexpectedValueException(ERR_TYPE_PARAM_ID); 
 		}
 		$query = 'DELETE FROM
 		               '.$this->tablename.'
                   WHERE ID = '.$ID.';';
 		$result = $this->db->query($query);
 		if (!$result) {
-			echo DB_QUERY_ERROR.$this->db->error;
-			return false;
+			throw new Exception(DB_QUERY_ERROR.$this->db->error); 
 		}
-		return true;		
 	}
 	
 	/**

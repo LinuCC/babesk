@@ -14,7 +14,11 @@
           *Returns all Orders for given User which are newer than the given date
           */
         function getAllOrdersOfUser($uid, $date) {
-        	$result = TableManager::getTableData('UID = "'.$uid.'" AND date >= "'.$date.'" ORDER BY date');
+        	try {
+        		$result = TableManager::getTableData('UID = "'.$uid.'" AND date >= "'.$date.'" ORDER BY date');
+        	} catch (MySQLVoidDataException $e) {
+        		$result = NULL;
+        	}
             return $result;
         }
 
@@ -22,7 +26,11 @@
           * returns all orders for the given date
           */
         function getAllOrdersAt($date) {
-        	$orders = TableManager::getTableData('date = "'.$date.'"');
+        	try {
+        		$orders = TableManager::getTableData('date = "'.$date.'"');
+        	} catch (MySQLVoidDataException $e) {
+        		$orders = NULL;
+        	}
         	return $orders;
         }
         

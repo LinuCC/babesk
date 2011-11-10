@@ -246,7 +246,7 @@
 			$order = array();
 			foreach($orders as &$order) {
 				if (!count($meal_data = $meal_manager->getEntryData($order['MID'],'name')) or
-					!count($user_data = $user_manager->getUserData($order['UID'],'name', 'forename'))) {
+					!count($user_data = $user_manager->getEntryData($order['UID'],'name', 'forename'))) {
 					echo MEAL_DATABASE_PROB_ENTRY;
 					var_dump($order);
 					echo MEAL_DATABASE_PROB_ENTRY_END;

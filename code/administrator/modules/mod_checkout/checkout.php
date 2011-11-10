@@ -9,6 +9,8 @@
 	require PATH_INCLUDE.'/card_access.php';
     require "checkout_constants.php"; 
 
+    
+    
 	if ('POST' == $_SERVER['REQUEST_METHOD']) {
 	   if (!isset($_POST['card_ID'])) {
 		  die(INVALID_FORM);
@@ -17,7 +19,7 @@
 	        die(EMPTY_FORM);
 	   	}
 	   	
-	   	$uid = $userManager->getCardOwner($card_id);
+	   	$uid = $card_id;//the userID is the ID of the card
 	   	
 	   	$date = date("Y-m-d");
 	   	

@@ -8,18 +8,25 @@
     if ('POST' == $_SERVER['REQUEST_METHOD']) {
         if(empty($_POST['login']) OR empty($_POST['password'])) {
 			$smarty->assign('error', EMPTY_FORM);
-			$smarty->display('web/index.tpl');
+			$smarty->display('web/login.tpl');
             exit();
         }
 
         $username = $_POST['login'];
         $formpass = $_POST['password'];
 
-		$result = $userManager->getUserID($username);
-
+		try {
+			$result = $userManager->getUserID($username);
+		} catch (MySQLVoidDataException $e) {
+            $smarty->assign('error', INVALID_LOGIN.'user');
+			$smarty->display('web/login.tpl');
+			die();
+		} catch (Exception $e) {
+			die($e);
+		}
         if (!$result) {
-            $smarty->assign('error', INVALID_USER);
-			$smarty->display('web/index.tpl');
+            $smarty->assign('error', INVALID_LOGIN.'user');
+			$smarty->display('web/login.tpl');
             exit();
         } else {
 			$uid = $result;
@@ -33,7 +40,8 @@
             exit();
 		}
         
-		$userData = $userManager->getAllUserData($uid);
+		//$userData = $userManager->getAllUserData($uid);
+		$userData = $userManager->getEntryData($uid, '*');
 
         $_SESSION['last_login'] = formatDateTime($userData['last_login']);
         $_SESSION['credit'] = $userData['credit'];
