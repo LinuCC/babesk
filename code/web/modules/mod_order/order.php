@@ -64,10 +64,15 @@
             $result = $mealManager->getMealAfter();    
         }
 		
+        $tage = array("Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"); 
 		$meals = array();
 		while ($meal = $result->fetch_assoc()) {
-		    $meal['date'] = formatDate($meal['date']);
-            $meals[] = $meal;
+			
+			$tag = date("w",strtotime($meal['date'])); 
+			$meal['date'] = formatDate($meal['date']);
+			$meal['wochentag'] = $tage[$tag];
+			$meal['kalenderwoche'] = date("W",strtotime($meal['date']));
+			$meals[] = $meal;
 		} 
 		$smarty->assign('meals', $meals);
 	    $smarty->display('web/modules/mod_order/order.tpl');
