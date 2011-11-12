@@ -191,6 +191,7 @@ class TableManager {
 		if (!$result) {
 			throw new Exception(DB_QUERY_ERROR.$this->db->error); 
 		}
+		return true; ///@todo some calls do need this, but its deprecated (see Exceptions). Remove it
 	}
 	
 	/**
@@ -204,6 +205,7 @@ class TableManager {
 	 * @var MySQLi-Object 
 	 */
 	protected $db;
+
 }
 
 ?>
