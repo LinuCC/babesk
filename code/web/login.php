@@ -1,62 +1,53 @@
 <?php
-    //No direct access
-    defined('_WEXEC') or die("Access denied");
-    
-    require_once PATH_INCLUDE.'/functions.php';
-    
-    
-    if ('POST' == $_SERVER['REQUEST_METHOD']) {
-        if(empty($_POST['login']) OR empty($_POST['password'])) {
-			$smarty->assign('error', EMPTY_FORM);
-			$smarty->display('web/login.tpl');
-            exit();
-        }
+/**
+ * login-function
+ * handles the login. It shows the login-form, then checks the input and, if successful,
+ * it returns the ID of the User.
+ * @param string $username
+ * @param string $formpass
+ * @return true if successfuly logged in
+ */
+function login() {
+	defined('_WEXEC') or die("Access denied");
+	global $smarty;
+	
+	if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['login'], $_POST['password'])) {
+		require_once PATH_INCLUDE.'/constants.php';
+		require_once PATH_INCLUDE.'/user_access.php';
+		$userManager = new UserManager();
+		$username = $_POST['login'];
+		$formpass = $_POST['password'];
+		if(!preg_match('/\A^[a-zA-Z]{1}[a-zA-Z0-9_-]{2,20}\z/', $username) OR !preg_match('/\A^[a-zA-Z0-9 _-]{4,20}\z/', $formpass)){
+			$smarty->assign('error', INVALID_LOGIN);
+		}
 
-        $username = $_POST['login'];
-        $formpass = $_POST['password'];
-
+		//get the userID by the username
 		try {
-			$result = $userManager->getUserID($username);
+			$uid = $userManager->getUserID($username);
 		} catch (MySQLVoidDataException $e) {
-            $smarty->assign('error', INVALID_LOGIN.'user');
+			$smarty->assign('error', INVALID_LOGIN);
 			$smarty->display('web/login.tpl');
 			die();
 		} catch (Exception $e) {
-			die($e);
+			die('ERROR:'.$e);
 		}
-        if (!$result) {
-            $smarty->assign('error', INVALID_LOGIN.'user');
-			$smarty->display('web/login.tpl');
-            exit();
-        } else {
-			$uid = $result;
-		}
+		$is_pw_correct = $userManager->checkPassword($uid, $formpass);
 
-		$result = $userManager->checkPassword($uid, $formpass);
-
-		if (!$result) {
+		if (!$is_pw_correct) {
 			$smarty->assign('error', INVALID_LOGIN);
+			$userManager->AddLoginTry($uid);
 			$smarty->display('web/login.tpl');
-            exit();
+			exit();
 		}
-        
-		//$userData = $userManager->getAllUserData($uid);
-		$userData = $userManager->getEntryData($uid, '*');
+		else {
+			$_SESSION['uid'] = $uid;
+			return true;
+		}
+	}
+	else {
+		$smarty->display('web/login.tpl');
+	}
+}
 
-        $_SESSION['last_login'] = formatDateTime($userData['last_login']);
-        $_SESSION['credit'] = $userData['credit'];
-        $_SESSION['username'] = $userData['forename'].' '.$userData['name'];
-        $_SESSION['login_tries'] = $userData['login_tries'];
-		$_SESSION['uid'] = $uid;
-        $_SESSION['last_action'] = time();
-        $_SESSION['IP'] = $_SERVER['REMOTE_ADDR'];
-        $_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
-
-        //Successfully logged in
-        $login = True;
-    }
-    else {
-        $smarty->display('web/login.tpl'); 
-    }
 
 ?>

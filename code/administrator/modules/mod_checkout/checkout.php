@@ -9,21 +9,25 @@
 	require PATH_INCLUDE.'/card_access.php';
     require "checkout_constants.php"; 
 
-    
+    $cardManager = new CardManager();
     
 	if ('POST' == $_SERVER['REQUEST_METHOD']) {
 	   if (!isset($_POST['card_ID'])) {
 		  die(INVALID_FORM);
 		}  //save values and check for empty fields
-		if (($card_id = trim($_POST['card_ID'])) == '' OR !valid_card_ID($card_id)) {
+		if (($card_id = trim($_POST['card_ID'])) == '' OR !$cardManager->valid_card_ID($card_id)) {
 	        die(EMPTY_FORM);
 	   	}
 	   	
 	   	$uid = $card_id;//the userID is the ID of the card
 	   	
 	   	$date = date("Y-m-d");
-	   	
-	   	$orders = $orderManager->getAllOrdersOfUser($uid, $date);
+	   	try {
+	   		$orders = $orderManager->getAllOrdersOfUser($uid, $date);
+	   	} catch (MySQLVoidDataException $e) {
+	   		$smarty->display(PATH_SMARTY_CHECKOUT.'/checkout_no_orders.tpl');
+	   		exit();
+	   	}
 	   	$meal_names = array();
 		for ($i = 0; $i < $orders->num_rows; $i++) {
             $row = $orders->fetch_assoc();

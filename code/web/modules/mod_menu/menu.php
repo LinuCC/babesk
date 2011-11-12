@@ -8,11 +8,20 @@ $orderManager = new OrderManager('orders');
 $mealManager = new MealManager('meals');
 
 $meal = array();
-$result = $orderManager->getAllOrdersOfUser($_SESSION['uid'], strtotime(date('Y-m-d')));
-if($result) {
+$orders_existing = true;
+
+try {
+	$orders = $orderManager->getAllOrdersOfUser($_SESSION['uid'], strtotime(date('Y-m-d')));
+} catch (MySQLVoidDataException $e) {
+	$smarty->assign('error', 'Keine Bestellungen vorhanden.');
+	$orders_existing = false;
+} catch (Exception $e) {
+	die('Error: '.$e);
+}
+if($orders_existing) {
 	$today = date('Y-m-d');
 	$hour = date('H', time());
-	foreach($result as $order) {
+	foreach($orders as $order) {
 		$mealname = $mealManager->getEntryData($order['MID'], 'name');
 		if(!$order['fetched'] AND $order['date'] >= $today) {
 			if ($order['date'] == $today AND $hour > 8) {
@@ -23,6 +32,10 @@ if($result) {
 			}
 		}
 	}
+}
+if(!count($meal)) {
+	//no new meals there
+	$smarty->assign('error', 'Keine Bestellungen vorhanden.');
 }
 $smarty->assign('meal', $meal);
 $smarty->display('web/modules/mod_menu/menu.tpl');

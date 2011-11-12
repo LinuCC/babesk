@@ -1,4 +1,4 @@
-</div>
+<div>
     <p id="last_login">Letzter Login: {$last_login}</p>
 </div>
 <div id="footer">

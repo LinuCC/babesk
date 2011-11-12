@@ -9,7 +9,11 @@
      * Manages the orders, provides methods to add/modify orders or to get order data
      */
     class OrderManager extends TableManager {
-    
+    	
+    	function __construct () {
+    		parent::__construct('orders');
+    	}
+    	
         /**
           *Returns all Orders for given User which are newer than the given date
           */
@@ -17,7 +21,9 @@
         	try {
         		$result = TableManager::getTableData('UID = "'.$uid.'" AND date >= "'.$date.'" ORDER BY date');
         	} catch (MySQLVoidDataException $e) {
-        		$result = NULL;
+        		throw new MySQLVoidDataException($e->getMessage()); 
+        	} catch (Exception $e) {
+        		throw new Exception($e->getMessage());
         	}
             return $result;
         }
@@ -67,7 +73,15 @@
                 return false;
             }
         }
-    }    
+        
+        function addOrder($MID, $UID, $IP, $date) {
+        	parent::addEntry('MID', $MID,
+        					'UID', $UID, 
+        					'IP', $IP, 
+        					'ordertime', time(), 
+        					'date', $date);
+        }
+    }   
 
 
 ?>

@@ -19,6 +19,7 @@
 				<td align="center">{$meal.price_class}</td>
 				<td align="center">{$meal.date}</td>
 				<td align="center">{$meal.max_orders}</td>
+				<td align="center"><form action="index.php?section=meals&action=5&id={$meal.ID}" method="POST"><input type="submit" value="löschen"></form></td>
 			</tr>
 			{/foreach}
 		</tbody>

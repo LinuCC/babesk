@@ -10,32 +10,41 @@
      * Manages the meals, provides methods to add/modify meals or to get meal data
      */
     class MealManager extends TableManager {
-    
+    	
+    	function __construct() {
+    		parent::__construct('meals');
+    	}
+    	
 		 /**
-         * Returns all Meals of today and after it(names and id's)
+         * Returns all Meals which are dated after the given timestamp
          *
          * @return false if error
          */
         function getMealAfter($timestamp = 0) {
+        	$res_array = array();
             if($timestamp == 0) {
                 $timestamp = time();
             }
 			$date = date('Y-m-d', $timestamp);
-        	$query = 'SELECT
-						ID,
-    			        name,
-						date
+        	$query = 'SELECT *
     				FROM
     					meals
     				WHERE
     					date >= "'.$date.'"
 					ORDER BY
 						date';
-    	    $result = $this->db->query($query);
+        	mysql_real_escape_string($query);
+        	$result = $this->db->query($query);
         	if (!$result) {
-            	exit(DB_QUERY_ERROR.$this->db->error."<br />".$query);
+        		throw new MySQLConnectionException('Problem connecting to MySQL: '.$this->db->error); 
         	}
-        	return $result;
+        	while($res_buffer = $result->fetch_assoc()) {
+        		$res_array [] = $res_buffer;
+        	}
+        	if(!count($res_array)) {
+        		throw new MySQLVoidDataException('MySQL returned void data'); 
+        	}
+        	return $res_array;
 		}
     	
     	/**returns all entries between date1 and date2
