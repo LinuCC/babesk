@@ -26,6 +26,9 @@
 		else if($action == '4'){
 			change_priceclass($_GET['where']);
 		}
+		else if($action == '5') {
+			new_priceclass_all_groups();
+		}
 		else {
 			echo 'Da ist etwas mit der GET-Variable action schiefgelaufen!';
 		}

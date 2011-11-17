@@ -1,7 +1,8 @@
 <?php 
 	//errors
 	define('ERR_NO_GROUPS','<p class="error">Es wurden keine Gruppen gefunden. Sie müssen zuerst eine Gruppe erstellen.</p>');
-	define('ERR_ADD_PRICECLASS','<p class="error">Ein Fehler ist beim hinzufügen der Preisklassen aufgetreten.</p>');
+	define('ERR_ADD_PRICECLASS','<p class="error">Ein Fehler ist beim hinzufügen der Preisklasse aufgetreten.</p>');
+	define('ERR_ADD_PRICECLASS_FOR_GROUP','<p class="error">Ein Fehler ist beim hinzufügen der Preisklasse aufgetreten. Gruppe: </p>');
 	define('ERR_CHANGE_PRICECLASS','<p class="error">Ein Fehler ist beim ändern der Preisklassen aufgetreten.</p>');
 	define('ERR_INP_PRICE','<p class="error">Ein falscher Preis wurde eingegeben</p>');
 	define('ERR_DEL_PRICECLASS','<p class="error">Ein Fehler ist beim löschen der Preisklasse aufgetreten!</p>');

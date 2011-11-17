@@ -26,10 +26,9 @@ class UserManager extends TableManager{
 	}
 
 	function updatePassword($uid, $new_passwd) {
-		$query = 'UPDATE users
-                                SET first_passwd = 0,
-                                    password = "'.md5($new_passwd).'"
-                              WHERE ID = '.$uid.';';
+		$query = sprintf( 'UPDATE users SET first_passwd = 0, password = "%s" WHERE ID = %s;',
+							md5($new_passwd),
+							mysql_real_escape_string($uid));
 		$result = $this->db->query($query);
 		if (!$result) {
 			echo DB_QUERY_ERROR.$this->db->error;
@@ -138,7 +137,7 @@ class UserManager extends TableManager{
 			//username does not exist
 			parent::addEntry('name', $name, 'forename', $forename, 'username', $username, 'password', md5($passwd),
         					 'birthday', $birthday, 'credit', $credit, 'GID', $GID, 'last_login', 'CURRENT_TIMESTAMP', 'login_tries', 0, 'first_passwd', 1);
-			
+				
 			return;
 		}
 		//username exists
@@ -150,7 +149,7 @@ class UserManager extends TableManager{
 		$user_data = parent::getEntryData($ID, 'first_passwd');
 		return $user_data['first_passwd'];
 	}
-	
+
 	/**
 	 * ResetLoginTries Resets the login tries of one specific user
 	 * Resets the login tries of one specific user
@@ -163,7 +162,7 @@ class UserManager extends TableManager{
 			throw new MySQLConnectionException('failed to reset login tries!');
 		}
 	}
-	
+
 	function AddLoginTry($ID) {
 		$query = mysql_real_escape_string('UPDATE '.$this->tablename.' SET login_tries = login_tries + 1 WHERE ID = '.$ID);
 		if(!$this->db->query($query)) {
