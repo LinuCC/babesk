@@ -81,6 +81,7 @@
                         `name` varchar(255) NOT NULL,
                         `GID` smallint(5) NOT NULL,
                         `price` decimal(6,2) NOT NULL,
+                        `pc_ID` smallint(5) NOT NULL,
                         PRIMARY KEY (`ID`)
                     )AUTO_INCREMENT=1;';
 		//Table 'groups'

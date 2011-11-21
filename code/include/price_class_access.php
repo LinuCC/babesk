@@ -28,14 +28,21 @@
             $userManager = new UserManager();
             $mealManager = new MealManager('meals');
             
+            
             $gid = $userManager->getEntryData($uid, 'GID');
 		    $gid = $gid['GID'];
+		    //this is pc_ID in the table, not ID!
 		    $priceclass_ID = $mealManager->getEntryData($mid, 'price_class');
+		    $priceclass_ID = $priceclass_ID['price_class'];
 		    if(!$priceclass_ID){
 		    	echo 'priceclasses in getPrice returned false!';
 		    	return false;
 		    }
-		    $priceData = $this->getEntryData($priceclass_ID['price_class'], 'price', 'GID');
+		    $priceData = $this->getTableData('GID = '.$gid.' AND pc_ID = '.$priceclass_ID);
+		    if(count($priceData) > 1) {
+		    	throw Exception('PriceData returned more than one value! duplicated entries!');
+		    }
+// 		    $priceData = $this->getEntryData($priceclass_ID['price_class'], 'price', 'GID');
 // 		    while ($row = $priceData->fetch_assoc()) {
 //                 if($row['GID'] == $gid) {
 //                     return $row['price'];
@@ -46,13 +53,16 @@
 		    }
 		    foreach($priceData as $price){
 		    	if($price['GID'] == $gid){
+		    		var_dump($price);
 		    		return $price['price'];
 		    	}
 		    }
-		    echo 'Die GID fehlt!';
-		    return false;
         }
 		
+        function changePriceClass($old_ID, $name, $GID, $price, $ID) {
+        	TableManager::alterEntry($old_ID, 'name', $name, 'GID', $GID, 'price', $price, 'ID', $ID);
+        }
+        
          /**
          * Adds a Price Class to the System
          *
@@ -67,12 +77,12 @@
          * @param price The price
          * @param ID The ID of the price class, this one is optional (else MySQL will autoincrement)
          */
-        function addPriceClass($name, $GID, $price, $ID = '') {
+        function addPriceClass($name, $GID, $price, $pc_ID, $ID = '') {
         	try {
         		if(!$ID) {//nothing for ID given
-        			TableManager::addEntry('name', $name,'GID', $GID,'price', $price);
+        			TableManager::addEntry('name', $name,'GID', $GID,'price', $price, 'pc_ID', $pc_ID);
         		} else {
-        			TableManager::addEntry('name', $name,'GID', $GID,'price', $price, 'ID', $ID);
+        			TableManager::addEntry('name', $name,'GID', $GID,'price', $price, 'pc_ID', $pc_ID ,'ID', $ID);
         		}
         	} catch (Exception $e) {
         		echo ERR_ADD_PRICECLASS;

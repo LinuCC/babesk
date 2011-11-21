@@ -7,6 +7,7 @@
 	
 	require_once 'meals_functions.php';
 	require_once 'meals_constants.php';
+	require_once PATH_INCLUDE.'/meal_access.php';
 	
 	global $smarty;
 	

@@ -20,7 +20,7 @@ function create_meal(){
 	//---INIT---
 	$severity = NOTICE;
 	$categorie = ADMIN;
-	$meal_db = new MealManager('meals');
+	$meal_db = new MealManager();
 
 	//---METHODS---
 	//safety-checks
@@ -62,11 +62,12 @@ function create_meal(){
 		//convert the date for MySQL-Server
 		$date_conv = $date_ar["year"]."-".$date_ar["month"]."-".$date_ar["day"];
 		//and add the meal
-		if($meal_db->addEntry('name', $name,'description', $description, 'date', $date_conv, 'price_class', $price_class, 'max_orders', $max_orders, 'is_vegetarian', $is_vegetarian))
-		echo MEAL_ADDED;
-		else {
-			die(MEAL_ERROR_ADD);
+		try {
+			$meal_db->addMeal($name, $description, $date_conv, $price_class, $max_orders, $is_vegetarian);
+		}catch (Exception $e) {
+			die(MEAL_ERROR_ADD.$e->getMessage());
 		}
+		echo MEAL_ADDED;
 	}
 	else {//if Formular isnt filled yet or the link was wrong
 		price_class_init_smarty_vars();
@@ -84,19 +85,23 @@ function price_class_init_smarty_vars() {
 	$sql_price_classes = $priceclassmanager->getTableData();
 	$price_class_id = array();
 	$price_class_name = array();
-	$old_ID = -1;
-	for($i = 0; isset($sql_price_classes[$i]); $i++) {
-		$priceclass = $sql_price_classes[$i];
-		if($priceclass['ID'] == $old_ID){
-			//priceclasses may have multiple entries cause of GID, we need to cut them to one entry
-		}
-		else {
-			$price_class_id[$i] = $priceclass['ID'];
-			$price_class_name[$i] = $priceclass['name'];
 
-			$old_ID = $priceclass['ID'];
+	$used_pc_IDs = array();
+	foreach($sql_price_classes as $pc) {
+		$is_id_existing = false;
+		foreach($used_pc_IDs as $id) {
+			if($pc['pc_ID'] == $id) {
+				$is_id_existing = true;
+				break;
+			}
+		}
+		if(!$is_id_existing) {
+			$used_pc_IDs[] = $pc['pc_ID'];
+			$price_class_id[] = $pc['pc_ID'];
+			$price_class_name[] = $pc['name'];
 		}
 	}
+
 	$smarty->assign('price_class_id', $price_class_id);
 	$smarty->assign('price_class_name', $price_class_name);
 }
@@ -134,11 +139,15 @@ function remove_old_meals($search_date) {
 		$m_timearray = explode("-", $meal["date"]);
 		$m_timestamp = mktime(0, 0, 1, $m_timearray[1], $m_timearray[2], $m_timearray[0]);
 		if($m_timestamp < $search_timestamp) {
-			if($mealmanager->delEntry($meal['ID'])) {
-				$logger->log(ADMIN,NOTICE,MEAL_DELETED_LOG.', name:'.$meal['name']);
-				echo MEAL_DELETED.', name:'.$meal['name'].'<br>';
+			try {
+				$mealmanager->delEntry($meal['ID']);
+			} catch (Exception $e) {
+				die(MEAL_ERROR_DELETE.$e->getMessage().' '.__FUNCTION__);
 			}
-			else
+			$logger->log(ADMIN,NOTICE,MEAL_DELETED_LOG.', name:'.$meal['name']);
+			echo MEAL_DELETED.', name:'.$meal['name'].'<br>';
+		}
+		else {
 			echo MEAL_ERROR_DELETE.' : ID='.$meal["ID"].', name:'.$meal['name'];
 			$logger->log(ADMIN,MODERATE,MEAL_ERROR_DELETE_LOG.' : ID='.$meal["ID"].', name:'.$meal['name']);
 		}

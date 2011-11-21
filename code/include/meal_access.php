@@ -20,7 +20,7 @@
          *
          * @return false if error
          */
-        function getMealAfter($timestamp = 0) {
+        public function getMealAfter($timestamp = 0) {
         	$res_array = array();
             if($timestamp == 0) {
                 $timestamp = time();
@@ -33,7 +33,7 @@
     					date >= "'.$date.'"
 					ORDER BY
 						date';
-        	mysql_real_escape_string($query);
+        	$db->real_escape_string($query);
         	$result = $this->db->query($query);
         	if (!$result) {
         		throw new MySQLConnectionException('Problem connecting to MySQL: '.$this->db->error); 
@@ -51,7 +51,7 @@
     	  *@param date1 the first date (earlier)
     	  *@param date2 the second date (later)
     	  */
-    	function get_meals_between_two_dates($date1, $date2) {
+    	public function get_meals_between_two_dates($date1, $date2) {
     		if(!$date1 or !$date2){return false;}
     		include 'dbconnect.php';
     		$res_array = NULL;
@@ -64,6 +64,20 @@
     	   	}
     	   	while($buffer = $result->fetch_assoc())$res_array[] = $buffer;
     	   	return $res_array;
+    	}
+    	
+    	/**
+    	 * Adds a Meal
+    	 * Adds a meal into the MySQL-meal-table based on the given parameters...
+    	 * @param string $name
+    	 * @param string $description
+    	 * @param YYYY-MM-DD $date_conv
+    	 * @param int $price_class
+    	 * @param int $max_orders
+    	 * @param numeric_bool $is_vegetarian
+    	 */
+    	public function addMeal($name, $description, $date_conv, $price_class, $max_orders, $is_vegetarian) {
+    		parent::addEntry('name', $name,'description', $description, 'date', $date_conv, 'price_class', $price_class, 'max_orders', $max_orders, 'is_vegetarian', $is_vegetarian);
     	}
     }
 

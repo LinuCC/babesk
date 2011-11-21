@@ -1,78 +1,52 @@
 <?php
 
+/**
+ * Creates a new priceclassgroup
+ * This function creates a new priceclass-group by showing the user an interface to add
+ * priceclasses and evaluating it.
+ */
 function new_priceclass() {
-	include 'priceclass_constants.php';
-
-	global $smarty;
-
-	if(isset($_POST['name'], $_POST['group_id'], $_POST['price'])) {
-		//form was filled
-		include PATH_INCLUDE.'/group_access.php';
-		include PATH_INCLUDE.'/price_class_access.php';
-
-		$pc_name = $_POST['name'];
-		$pc_group_id = $_POST['group_id'];
-		$pc_price =  $_POST['price'];
-		$groupManager = new GroupManager('groups');
-		$groups = $groupManager->getTableData();
-		$priceclassManager = new PriceClassManager();
-
-		if(!preg_match('/\A^[0-9]{0,2}((,|\.)[0-9]{2})?\z/', $pc_price)) {
-			die(ERR_INP_PRICE);
-		}
-		$pc_price = str_replace(',', '.', $pc_price);//Kommata bad for MySQL
-
-		foreach($groups as $temp_group) {
-			if($temp_group['ID'] == $pc_group_id) {
-				$group = $temp_group;
-			}
-		}
-
-		try {
-			$priceclassManager->addPriceClass($pc_name, $pc_group_id, $pc_price);
-		} catch (Exception $e) {
-			die(ERR_ADD_PRICECLASS);
-		}
-		echo PRICECLASS_ADDED;
-	}
-	else {	//form was not filled, show it
-		include PATH_INCLUDE.'/group_access.php';
-
-		$groupManager = new GroupManager('groups');
-		$groups = $groupManager->getTableData();
-
-		if(!isset($groups)) {
-			die(ERR_NO_GROUPS);
-		}
-
-		$smarty->assign('groups', $groups);
-		$smarty->display(PATH_SMARTY_ADMIN_MOD.'/mod_priceclass/new_priceclass.tpl');
-	}
-}
-
-function new_priceclass_all_groups() {
 	require_once 'priceclass_constants.php';
 	require_once PATH_INCLUDE.'/group_access.php';
 	require_once PATH_INCLUDE.'/price_class_access.php';
 	global $smarty;
 	$groupManager = new GroupManager();
 	$pcManager = new PriceClassManager();
-	var_dump($_POST);
-	if(isset($_POST['name'])) {
+	$priceclasses = array();
+	try {
+		$priceclasses = $pcManager->getTableData();
+	} catch (MySQLVoidDataException$e) {
+	} catch (Exception $e) {
+		die('Error while getting PriceclassData:'.$e->getMessage());
+	}
+
+	$highest_pc_ID = 0;
+	foreach($priceclasses as $priceclass) {
+		if($priceclass['pc_ID'] > $highest_pc_ID) {
+			$highest_pc_ID = $priceclass['pc_ID'];
+		}
+	}
+
+	if(isset($_POST['name'], $_POST['n_price'])) {
 		$groups = $groupManager->getTableData();
 		$pc_name = $_POST['name'];
+		$normal_price = $_POST['n_price'];
+		if(!preg_match('/\A^[0-9]{1,2}((,|\.)[0-9]{2})?\z/', $normal_price)) {
+			die(ERR_INP_N_PRICE);
+		}
 		foreach($groups as $group) {
 			$price = $_POST['group_price'.$group['ID']];
 			if(!$price) {
-				die('Some squirky errormessage');
+				$price = $normal_price;
 			}
-			if(!preg_match('/\A^[0-9]{0,2}((,|\.)[0-9]{2})?\z/', $price)) {
+			else if(!preg_match('/\A^[0-9]{0,2}((,|\.)[0-9]{2})?\z/', $price)) {
 				die(ERR_INP_PRICE);
 			}
-			try {
-				$pcManager->addPriceClass($pc_name, $group['ID'], $price);
+			$price = str_replace(',', '.', $price);//Comma bad for MySQL
+			try {//add the group
+				$pcManager->addPriceClass($pc_name, $group['ID'], $price, $highest_pc_ID + 1);
 			} catch (Exception $e) {
-				echo ERR_ADD_PRICECLASS_FOR_GROUP.$group['name'];
+				echo ERR_ADD_PRICECLASS_FOR_GROUP.$group['name'].' '.$e->getMessage();
 			}
 		}
 	} else {
@@ -87,14 +61,12 @@ function delete_priceclass($priceclass_id) {
 	include PATH_INCLUDE.'/price_class_access.php';
 
 	$priceclassManager = new PriceClassManager();
-	$is_deleted = $priceclassManager->delEntry($priceclass_id);
-
-	if(!$is_deleted) {
+	try {
+		$priceclassManager->delEntry($priceclass_id);
+	} catch (Exception $e) {
 		die(ERR_DEL_PRICECLASS);
 	}
-	else {
-		echo PRICECLASS_DELETED;
-	}
+	echo PRICECLASS_DELETED;
 }
 
 function change_priceclass($priceclass_id) {
@@ -118,24 +90,30 @@ function change_priceclass($priceclass_id) {
 		else if(!preg_match('/\A^[0-9]{1,5}\z/', $pc_old_ID))
 		die(ERR_GET);
 
-		if($pc_old_ID == $pc_ID) {
-			//only delete priceclass first if entry is already in DB
-			if(!$priceclassManager->delEntry($pc_ID))
-			die(ERR_DEL_PRICECLASS);
-			else {
-				$priceclassManager->addPriceClass($pc_name, $pc_GID, $pc_price, $pc_ID);
-			}
+		try {
+			$priceclassManager->changePriceClass($pc_old_ID, $pc_name, $pc_GID, $pc_price, $pc_ID);
+		} catch (Exception $e) {
+			die(ERR_DEL_PRICECLASS.$e->getMessage());
 		}
-		else {//otherwise it could be a duplicated ID in MySQL, be save and DONT delete entry first
-			try {
-				$priceclassManager->addPriceClass($pc_name, $pc_GID, $pc_price, $pc_ID);
-			} catch (Exception $e) {
-				die(ERR_CHANGE_PRICECLASS.$e->getMessage());
-			}
-			if(!$priceclassManager->delEntry($pc_old_ID)) {
-				die(ERR_DEL_PRICECLASS);
-			}
-		}
+
+		// 		if($pc_old_ID == $pc_ID) {
+		// 			//only delete priceclass first if entry is already in DB
+		// 			if(!$priceclassManager->delEntry($pc_ID))
+		// 			die(ERR_DEL_PRICECLASS);
+		// 			else {
+		// 				$priceclassManager->addPriceClass($pc_name, $pc_GID, $pc_price, $pc_ID);
+		// 			}
+		// 		}
+		// 		else {//otherwise it could be a duplicated ID in MySQL, be save and DONT delete entry first
+		// 			try {
+		// 				$priceclassManager->addPriceClass($pc_name, $pc_GID, $pc_price, $pc_ID);
+		// 			} catch (Exception $e) {
+		// 				die(ERR_CHANGE_PRICECLASS.$e->getMessage());
+		// 			}
+		// 			if(!$priceclassManager->delEntry($pc_old_ID)) {
+		// 				die(ERR_DEL_PRICECLASS);
+		// 			}
+		// 		}
 		echo PRICECLASS_CHANGED;
 	}
 	else {
@@ -176,10 +154,15 @@ function show_priceclasses() {
 	global $smarty;
 	$priceclassManager = new PriceClassManager();
 	$groupManager = new GroupManager('groups');
-
 	$priceclasses = $priceclassManager->getTableData();
 	foreach($priceclasses as &$priceclass) {
-		$group = $groupManager->getEntryData($priceclass['GID'], 'name');
+		try {
+			$group = $groupManager->getEntryData($priceclass['GID'], 'name');
+		} catch (MySQLVoidDataException $e) {
+			$priceclass['group_name'] = ERR;
+		} catch (Exception $e) {
+			die(ERR.$e->getMessage());
+		}
 		if(!$group) {
 			$priceclass['group_name'] = ERR;
 		}

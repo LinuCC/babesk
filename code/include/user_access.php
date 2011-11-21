@@ -28,7 +28,7 @@ class UserManager extends TableManager{
 	function updatePassword($uid, $new_passwd) {
 		$query = sprintf( 'UPDATE users SET first_passwd = 0, password = "%s" WHERE ID = %s;',
 							md5($new_passwd),
-							mysql_real_escape_string($uid));
+							$db->real_escape_string($uid));
 		$result = $this->db->query($query);
 		if (!$result) {
 			echo DB_QUERY_ERROR.$this->db->error;
@@ -52,11 +52,11 @@ class UserManager extends TableManager{
 	}
 
 	function changeBalance($id, $amount) {
+		var_dump($amount);
 		if($amount > $this->getMaxRechargeAmount($id)) {
-			//check whether the amount isn't to big
+			echo 'Amount ofyour money too big!';
 			return false;
 		}
-
 		$userData = parent::getEntryData($id, 'credit');
 		$oldCredit = $userData['credit'];
 
@@ -66,7 +66,7 @@ class UserManager extends TableManager{
 		}
 		$credit = $oldCredit + $amount;
 
-		$query = mysql_real_escape_string('UPDATE users SET credit = '.$credit.' WHERE ID = '.$id.';');
+		$query = $this->db->real_escape_string('UPDATE users SET credit = '.$credit.' WHERE ID = '.$id.';');
 		$result = $this->db->query($query);
 		if (!$result) {
 			echo DB_QUERY_ERROR.$this->db->error;
@@ -81,7 +81,7 @@ class UserManager extends TableManager{
 	 * @return true if password is correct
 	 */
 	function checkPassword($uid, $password) {
-		$sql = mysql_real_escape_string('SELECT password FROM users WHERE ID = ?');
+		$sql = $db->real_escape_string('SELECT password FROM users WHERE ID = ?');
 		$stmt = $this->db->prepare($sql);
 
 		if (!$stmt) {
@@ -157,14 +157,14 @@ class UserManager extends TableManager{
 	 * @throws MySQLConnectionException if it failed to reset the login tries
 	 */
 	function ResetLoginTries($ID) {
-		$query = mysql_real_escape_string('UPDATE '.$this->tablename.' SET login_tries = 0 WHERE ID = '.$ID);
+		$query = $db->real_escape_string('UPDATE '.$this->tablename.' SET login_tries = 0 WHERE ID = '.$ID);
 		if(!$this->db->query($query)) {
 			throw new MySQLConnectionException('failed to reset login tries!');
 		}
 	}
 
 	function AddLoginTry($ID) {
-		$query = mysql_real_escape_string('UPDATE '.$this->tablename.' SET login_tries = login_tries + 1 WHERE ID = '.$ID);
+		$query = $db->real_escape_string('UPDATE '.$this->tablename.' SET login_tries = login_tries + 1 WHERE ID = '.$ID);
 		if(!$this->db->query($query)) {
 			throw new MySQLConnectionException('failed to add a login try!');
 		}

@@ -1,6 +1,7 @@
 <?php
 //No direct access
 defined('_WEXEC') or die("Access denied");
+require_once 'order_constants.php';
 global $smarty;
 
 if(isset($_GET['order'])) {
@@ -59,6 +60,7 @@ else {
 	$hour = date('H', time());
 	$date = time();
 	$result = array(array());
+	$is_void = false;
 	//Ordering only possible until 8AM
 	if ($hour > 8) {
 		$date += 86400;
@@ -66,21 +68,25 @@ else {
 	try {
 		$result = $mealManager->getMealAfter($date);
 	} catch (MySQLVoidDataException $e) {
-			
+		$is_void = true;
+		$smarty->assign('message', NO_MEALS_EXISTING);
+		$smarty->assign('meals', '');
+		$smarty->display('web/modules/mod_order/order.tpl');
 	}
-
-	$tage = array("Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag");
-	$meals = array();
-	// 		while ($meal = $result->fetch_assoc()) {
-	foreach($result as $meal) {
-		$tag = date("w",strtotime($meal['date']));
-		$meal['date'] = formatDate($meal['date']);
-		$meal['wochentag'] = $tage[$tag];
-		$meal['kalenderwoche'] = date("W",strtotime($meal['date']));
-		$meals[] = $meal;
+	if(!$is_void) {
+		$tage = array("Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag");
+		$meals = array();
+		foreach($result as $meal) {
+			$tag = date("w",strtotime($meal['date']));
+			$meal['date'] = formatDate($meal['date']);
+			$meal['wochentag'] = $tage[$tag];
+			$meal['kalenderwoche'] = date("W",strtotime($meal['date']));
+			$meals[] = $meal;
+		}
+		$smarty->assign('meals', $meals);
+		$smarty->assign('message', '');
+		$smarty->display('web/modules/mod_order/order.tpl');
 	}
-	$smarty->assign('meals', $meals);
-	$smarty->display('web/modules/mod_order/order.tpl');
 }
 //gerichte werden angezeigt
 //gerichte k�nnen per klick bestellt werden incl. variabler anzahl dann werden gerichte angezeigt und ob andere Preisklasse (Standartm��ig GID angew�hlt aus mysql datenbank[radio buttons])

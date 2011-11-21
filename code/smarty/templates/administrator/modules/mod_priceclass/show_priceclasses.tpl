@@ -2,6 +2,7 @@
 	<thead> 
 		<tr> 
 			<th align="center">ID</th>
+			<th align="center">pc_ID</th>
 			<th align="center">Preisklassenname</th>
 			<th align="center">zugehörige Gruppe</th>
 			<th align="center">Preis</th>
@@ -12,6 +13,7 @@
 	{foreach $priceclasses as $priceclass}
 		<tr>
 			<td align="center">{$priceclass['ID']}</td>
+			<td align="center">{$priceclass['pc_ID']}</td>
 			<td align="center">{$priceclass['name']}</td>
 			<td align="center">{$priceclass['group_name']}</td>
 			<td align="center">{$priceclass['price']} Euro</td>
