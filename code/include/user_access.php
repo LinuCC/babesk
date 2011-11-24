@@ -26,6 +26,7 @@ class UserManager extends TableManager{
 	}
 
 	function updatePassword($uid, $new_passwd) {
+		require 'dbconnect.php';
 		$query = sprintf( 'UPDATE users SET first_passwd = 0, password = "%s" WHERE ID = %s;',
 							md5($new_passwd),
 							$db->real_escape_string($uid));
@@ -52,9 +53,8 @@ class UserManager extends TableManager{
 	}
 
 	function changeBalance($id, $amount) {
-		var_dump($amount);
 		if($amount > $this->getMaxRechargeAmount($id)) {
-			echo 'Amount ofyour money too big!';
+			echo 'Amount of your money too big!';
 			return false;
 		}
 		$userData = parent::getEntryData($id, 'credit');
@@ -81,7 +81,7 @@ class UserManager extends TableManager{
 	 * @return true if password is correct
 	 */
 	function checkPassword($uid, $password) {
-		$sql = $db->real_escape_string('SELECT password FROM users WHERE ID = ?');
+		$sql = ('SELECT password FROM users WHERE ID = ?');
 		$stmt = $this->db->prepare($sql);
 
 		if (!$stmt) {
@@ -157,6 +157,7 @@ class UserManager extends TableManager{
 	 * @throws MySQLConnectionException if it failed to reset the login tries
 	 */
 	function ResetLoginTries($ID) {
+		require 'dbconnect.php';
 		$query = $db->real_escape_string('UPDATE '.$this->tablename.' SET login_tries = 0 WHERE ID = '.$ID);
 		if(!$this->db->query($query)) {
 			throw new MySQLConnectionException('failed to reset login tries!');
@@ -164,6 +165,7 @@ class UserManager extends TableManager{
 	}
 
 	function AddLoginTry($ID) {
+		require "dbconnect.php";
 		$query = $db->real_escape_string('UPDATE '.$this->tablename.' SET login_tries = login_tries + 1 WHERE ID = '.$ID);
 		if(!$this->db->query($query)) {
 			throw new MySQLConnectionException('failed to add a login try!');

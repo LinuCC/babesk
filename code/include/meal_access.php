@@ -21,6 +21,7 @@
          * @return false if error
          */
         public function getMealAfter($timestamp = 0) {
+        	require 'dbconnect.php';
         	$res_array = array();
             if($timestamp == 0) {
                 $timestamp = time();

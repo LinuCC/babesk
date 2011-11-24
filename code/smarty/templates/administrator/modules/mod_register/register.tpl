@@ -12,12 +12,13 @@
 		<label for="passwd">Passwort wiederholen:</label>
         <input type="password" name="passwd_repeat" /><br><br>
         Geburtstag :
-        <label for="b_day">Tag:</label>
-        <input type="int" name="b_day" size="2" maxlength="2" />
-        <label for="b_month">Monat:</label>
-        <input type="int" name="b_month" size="2" maxlength="2" />
-        <label for="b_year">Jahr:</label>
-        <input type="int" name="b_year" size="4" maxlength="4" />
+        {html_select_date start_year="-100"}
+<!--         <label for="b_day">Tag:</label> -->
+<!--         <input type="int" name="b_day" size="2" maxlength="2" /> -->
+<!--         <label for="b_month">Monat:</label> -->
+<!--         <input type="int" name="b_month" size="2" maxlength="2" /> -->
+<!--         <label for="b_year">Jahr:</label> -->
+<!--         <input type="int" name="b_year" size="4" maxlength="4" /> -->
     </fieldset>
     <br>
     <fieldset>

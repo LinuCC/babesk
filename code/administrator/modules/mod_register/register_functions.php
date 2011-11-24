@@ -18,7 +18,6 @@ function register_process($forename,$name,$username,$passwd,$passwd_repeat,$card
 
 	//checks the input for wrong Characters etc
 	if(inputcheck($forename,$name,$username,$passwd,$passwd_repeat,$cardID,$birthday,$GID,$credits)) {
-
 		try {
 			$userManager->addUser($name, $forename, $username, $passwd, $birthday, $credits, $GID);
 			try {
@@ -27,7 +26,7 @@ function register_process($forename,$name,$username,$passwd,$passwd_repeat,$card
 				echo 'Could not add the CardID!!';
 			}
 		} catch (Exception $e) {
-			echo "<br>".REG_ERROR_MYSQL."<br>";
+			echo "<br>".REG_ERROR_MYSQL.$e->getMessage()."<br>";
 			return false;
 		}
 		echo "<br><b>Hallo ".$name."!</b><br>";

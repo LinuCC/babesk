@@ -39,7 +39,8 @@
 			$ID = $_SESSION['CARD_ID'];
 			$passwd = $_POST['passwd'];
 			$passwd_repeat = $_POST['passwd_repeat'];
-			$birthday = date( 'Y-m-d', strtotime( merge_birthday($_POST["b_day"],$_POST["b_month"],$_POST["b_year"]) ) );
+			$birthday = $_POST["Date_Year"].'-'.$_POST["Date_Month"].'-'.$_POST["Date_Day"];
+// 			$birthday = date( 'Y-m-d', strtotime( merge_birthday($_POST["Date_Day"],$_POST["Date_Month"],$_POST["Date_Year"]) ) );
 			$GID = $_POST['gid'];
 			$credits = correct_credits_input($_POST['credits']);
 			

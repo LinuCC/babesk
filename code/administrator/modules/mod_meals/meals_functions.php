@@ -30,9 +30,9 @@ function create_meal(){
 		$price_class = $_POST['price_class'];
 		$max_orders = $_POST['max_orders'];
 		(isset($_POST['is_vegetarian'])) ? $is_vegetarian = 1 : $is_vegetarian = 0;
-		$date_ar = array("day" => $_POST['day'],
-						"month" => $_POST['month'],
-	 					"year"  => $_POST['year']);
+		$date_ar = array("day" => $_POST['Date_Day'],
+						"month" => $_POST['Date_Month'],
+	 					"year"  => $_POST['Date_Year']);
 
 		if(strlen($name) > 255) {
 			echo MEAL_ERROR_NAME."<br>";
