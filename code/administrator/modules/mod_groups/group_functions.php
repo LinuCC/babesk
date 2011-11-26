@@ -62,8 +62,6 @@ function delete_group($ID) {
  * @param integer/long $ID
  *
  * @see GroupManager
- *
- * @todo there should be a MySQL-change-function, deleting and adding is not data-save
  */
 function change_group($ID) {
 	require_once PATH_INCLUDE.'/group_access.php';
@@ -71,7 +69,7 @@ function change_group($ID) {
 
 	//form is filled out
 	if(isset($_GET['where'], $_POST['ID'],$_POST['name'],$_POST['max_credit'])){
-		$groupManager = new GroupManager('groups');
+		$groupManager = new GroupManager();
 		$old_ID = $_GET['where'];//if group moved to new ID, delete the old one
 		$ID = $_POST['ID'];
 		$name = $_POST['name'];

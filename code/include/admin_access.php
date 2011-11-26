@@ -70,6 +70,7 @@
          * @return true if password is correct
          */
         function checkPassword($aid, $password) {
+        	require_once PATH_INCLUDE.'/functions.php';
             $query = 'SELECT
     					password
     				FROM
@@ -82,7 +83,7 @@
             	return false;
         	}
         	$row = $result->fetch_assoc();
-            if(md5($password) == $row["password"]) {
+            if(hash_password($password) == $row["password"]) {
             	return true;
             }
             else {
@@ -195,6 +196,7 @@
          * @return false if error
          */
         function addAdmin($name, $password, $gid) {
+        	require_once PATH_INCLUDE.'/functions.php';
             if ($this->getAdminID($name) != -1) {
                 echo USERNAME_EXISTS;
                 return false;
@@ -202,7 +204,7 @@
         	$query = 'INSERT INTO
                             administrators(name, password, GID)
                       VALUES
-                            ("'.$name.'", "'.md5($password).'", '.$gid.');';
+                            ("'.$name.'", "'.hash_function($password).'", '.$gid.');';
     
            $result = $this->db->query($query);
         	if (!$result) {

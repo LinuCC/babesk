@@ -17,9 +17,6 @@
 		$row = $result->fetch_assoc();
 		var_dump($row);    
     }*/ 
-    /**
-     * @TODO: Die templates in installation in smarty/templates packen
-     */
 
     include 'header.tpl';
 

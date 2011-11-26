@@ -2,7 +2,7 @@
 //No direct access
 defined('_WEXEC') or die("Access denied");
 require_once 'change_password_constants.php';
-
+require_once PATH_INCLUDE.'/functions.php';
 global $smarty;
 
 $userManager = new UserManager();
@@ -26,7 +26,7 @@ if(isset($_POST['passwd'])) {
 		$smarty->display('web/modules/mod_change_password/change_password.tpl');
 		exit();
 	}
-	else if($userData['password'] == md5($passwd)) {
+	else if($userData['password'] == hash_password($passwd)) {
 		$smarty->assign('status', CH_P_OLD_PW);
 		$smarty->display('web/modules/mod_change_password/change_password.tpl');
 		exit();

@@ -10,14 +10,19 @@ function register_process($forename,$name,$username,$passwd,$passwd_repeat,$card
 
 	require_once PATH_INCLUDE."/user_access.php";
 	require_once PATH_INCLUDE.'/card_access.php';
+	require_once PATH_INCLUDE.'/group_access.php';
 	require_once PATH_INCLUDE."/logs.php";
 
 	$userManager = new UserManager();
 	$cardManager = new CardManager();
+	$groupManager = new GroupManager();
 	$logger= new Logger;
 
 	//checks the input for wrong Characters etc
 	if(inputcheck($forename,$name,$username,$passwd,$passwd_repeat,$cardID,$birthday,$GID,$credits)) {
+		if($credits > $groupManager->getMaxCredit($GID)) {
+			die(REG_ERROR_MAX_CREDITS.'maximales Guthaben der Gruppe:'.$groupManager->getMaxCredit($GID).'€');
+		}	
 		try {
 			$userManager->addUser($name, $forename, $username, $passwd, $birthday, $credits, $GID);
 			try {

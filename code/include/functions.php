@@ -43,4 +43,18 @@
             return date('d.m.Y H:i', strtotime($date));
         }
     }
+    
+    function sql_prev_inj($str) {
+    	require 'dbconnect.php';
+    	if(!is_string($str)) {
+    		throw new BadFunctionCallException('Wrong parameter-format for $str in '.__FUNCTION__); 
+    	}
+    	$db->real_escape_string($str);
+    	return $str;
+    }
+    
+    ///@todo Replace md5 with this function
+    function hash_password($pw_str) {
+    	return md5($pw_str);
+    }
 ?>

@@ -13,6 +13,15 @@
     	function __construct() {
     		parent::__construct('groups');
     	}
-    	//nothing here at the moment. all covered by TableManager
+    	
+    	/**
+    	 * Returns the max_credit for the given group
+    	 * @param $ID the ID of the group
+    	 * @return float the max_credit
+    	 */
+    	function getMaxCredit($ID) {
+    		$group = parent::getEntryData($ID, 'max_credit');
+    		return $group['max_credit'];
+    	}
     }    
 ?>

@@ -10,9 +10,6 @@
      */
     class PriceClassManager extends TableManager{
         
-    	/**
-    	 * @todo add such a void construct-function to all access-classes.
-    	 */
     	function __construct() {
     		TableManager::__construct('price_classes');
     	}

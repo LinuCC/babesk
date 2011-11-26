@@ -27,9 +27,10 @@ class UserManager extends TableManager{
 
 	function updatePassword($uid, $new_passwd) {
 		require 'dbconnect.php';
+		require_once PATH_INCLUDE.'/functions.php';
 		$query = sprintf( 'UPDATE users SET first_passwd = 0, password = "%s" WHERE ID = %s;',
-							md5($new_passwd),
-							$db->real_escape_string($uid));
+							hash_password($new_passwd),
+							sql_prev_inj($uid));
 		$result = $this->db->query($query);
 		if (!$result) {
 			echo DB_QUERY_ERROR.$this->db->error;
@@ -81,6 +82,7 @@ class UserManager extends TableManager{
 	 * @return true if password is correct
 	 */
 	function checkPassword($uid, $password) {
+		require_once PATH_INCLUDE.'/functions.php';
 		$sql = ('SELECT password FROM users WHERE ID = ?');
 		$stmt = $this->db->prepare($sql);
 
@@ -97,7 +99,7 @@ class UserManager extends TableManager{
 			return false;
 		}
 		$stmt->close();
-		if (md5($password) == $result) {
+		if (hash_password($password) == $result) {
 			return true;
 		} else {
 			$sql = 'UPDATE users SET login_tries = login_tries + 1 WHERE ID = ?';
@@ -131,6 +133,7 @@ class UserManager extends TableManager{
 	 * @return false if error
 	 */
 	function addUser($name, $forename, $username, $passwd, $birthday, $credit, $GID) {
+		
 		try { //test if username already exists
 			parent::getTableData('username = "'.$username.'"');
 		} catch (MySQLVoidDataException $e) {
@@ -158,7 +161,8 @@ class UserManager extends TableManager{
 	 */
 	function ResetLoginTries($ID) {
 		require 'dbconnect.php';
-		$query = $db->real_escape_string('UPDATE '.$this->tablename.' SET login_tries = 0 WHERE ID = '.$ID);
+		$query = sql_prev_inj(sprintf('UPDATE %s SET login_tries = 0 WHERE ID = %s', $this->tablename, $ID));
+// 		$query = $db->real_escape_string('UPDATE '.$this->tablename.' SET login_tries = 0 WHERE ID = '.$ID);
 		if(!$this->db->query($query)) {
 			throw new MySQLConnectionException('failed to reset login tries!');
 		}
@@ -166,7 +170,8 @@ class UserManager extends TableManager{
 
 	function AddLoginTry($ID) {
 		require "dbconnect.php";
-		$query = $db->real_escape_string('UPDATE '.$this->tablename.' SET login_tries = login_tries + 1 WHERE ID = '.$ID);
+		$query = sql_prev_inj(sprintf('UPDATE %s SET login_tries = login_tries + 1 WHERE ID = %s', $this->tablename, $ID));
+// 		$query = $db->real_escape_string('UPDATE '.$this->tablename.' SET login_tries = login_tries + 1 WHERE ID = '.$ID);
 		if(!$this->db->query($query)) {
 			throw new MySQLConnectionException('failed to add a login try!');
 		}

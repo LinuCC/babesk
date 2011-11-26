@@ -34,7 +34,7 @@
     					date >= "'.$date.'"
 					ORDER BY
 						date';
-        	$db->real_escape_string($query);
+        	sql_prev_inj($query);
         	$result = $this->db->query($query);
         	if (!$result) {
         		throw new MySQLConnectionException('Problem connecting to MySQL: '.$this->db->error); 

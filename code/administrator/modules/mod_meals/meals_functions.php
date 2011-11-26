@@ -345,13 +345,13 @@ function delete_old_meals_and_orders() {
 			$o_timearray = explode("-", $order["date"]);
 			$o_timestamp = mktime(0, 0, 1, $o_timearray[1], $o_timearray[2], $o_timearray[0]);
 			if($o_timestamp < $timestamp) {
-				if($orderManager->delEntry($order['ID'])) {
-					echo ORDER_DELETED.' ID:'.$order['ID'].'<br>';
-					//$logger->log(ADMIN,NOTICE,ORDER_DELETED);
-				}
-				else {
+				try {
+					$orderManager->delEntry($order['ID']);
+				} catch (Exception $e) {
 					$logger->log(ADMIN,MODERATE,ORDER_ERROR_DELETE.'dump:'.var_dump($order));
+					die(ORDER_ERROR_DELETE);
 				}
+				echo ORDER_DELETED.' ID:'.$order['ID'].'<br>';
 			}
 		}
 	}

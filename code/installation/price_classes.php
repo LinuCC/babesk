@@ -8,7 +8,7 @@ require_once 'installation_constants.php';
 if(!_AEXEC){
 	die(ERR_INP_EXEC);
 }
-die('This has yet to be changed');
+die('Die Installation ist abgeschlossen, ausgenommen Preisklassen. Das Hinzufügen von Preisklassen in der Installation wurde noch nicht fertiggestellt. Sie können die Preisklassen im Administrator-Menü manuell hinzufügen.');
 
 if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['group_id'],$_POST['price'],$_POST['name'])) {
 	$group_id = trim($_POST['group_id']);

@@ -84,8 +84,6 @@ class TableManager {
 	 *  		If the values are strings, do not forget the quotation-marks.
 	 *
 	 *  @return twodimensional-array: $return_var[EntryArray[FieldnameArray]]
-	 *
-	 * @todo größergleich/kleinergleich/gleichheits-zeichen als Variable übergeben für bessere Kontrolle??
 	 */
 	function getTableData() {
 		require_once 'constants.php';
@@ -123,8 +121,6 @@ class TableManager {
 	 * the third one the second column-Identifier, the fourth the value of it and so on.
 	 *
 	 * @param variable amount, even number. see description.
-	 *
-	 * @todo should everytime one wants to add an entry the complete identifiers of the table be given?
 	 */
 	public function addEntry() {
 		require_once 'constants.php';
@@ -219,7 +215,6 @@ class TableManager {
 	 * Delete the entry from the table which owns the given ID
 	 *
 	 * @param ID The ID of the entry to delete
-	 * @return false if error, true if finished successfully
 	 */
 	public function delEntry($ID) {
 		require_once 'constants.php';
@@ -235,7 +230,6 @@ class TableManager {
 		if (!$result) {
 			throw new Exception(DB_QUERY_ERROR.$this->db->error);
 		}
-		return true; ///@todo some calls do need this, but its deprecated (see Exceptions). Remove it
 	}
 
 	/**

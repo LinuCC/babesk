@@ -3,7 +3,8 @@
 	ini_set('display_errors', 1);
     
     require "../include/dbconnect.php";
-    
+    require_once '../include/functions.php';
+
     if ('POST' == $_SERVER['REQUEST_METHOD']) {
 		if (!isset($_POST['Schoolname'], $_POST['Password'])) {
 			die(INVALID_FORM);
@@ -31,7 +32,7 @@
                 	    administrators(name, password, GID)
                    VALUES
                         ("admin",
-                         "'.md5($password).'",
+                         "'.hash_password($password).'",
                          1);'; 
 
 	    foreach ($sql as $query) {

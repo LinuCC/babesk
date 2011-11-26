@@ -12,6 +12,7 @@
 	define('REG_ERROR_PASSWORD','<p class="error">Inkorrekte Passwort-Eingabe. Erlaubt sind Minimal 4 Zeichen und maximal 20 Zeichen, normale Buchstaben und Zahlen</p>');
 	define('REG_ERROR_BIRTHDAY','<p class="error">Fehlerhafte Eingabe des Geburtsdatums</p>');
 	define('REG_ERROR_CREDITS','<p class="error">Fehlerhafte Eingabe des Guthabens. Maximalwert betr&auml;gt 100 Euro, nur Zahlen erlaubt</p>');
+	define('REG_ERROR_MAX_CREDITS','<p class="error">Das Guthaben ist größer als das Maximalguthaben der Gruppe.</p>');
 	define('REG_ERROR_MYSQL','<p class="error">Problem beim Versuch, den neuen Benutzer in den MySQL-Server einzutragen</p>');
 	define('REG_ERROR_USERNAME','<p class="error">Fehlerhafte Eingabe des Benutzernamen</p>');
 	
