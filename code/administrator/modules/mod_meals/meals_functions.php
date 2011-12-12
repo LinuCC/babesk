@@ -186,7 +186,7 @@ function sort_orders($orders) {
 	echo MEAL_ERROR_PARAM.' Funktion: '.__FUNCTION__;
 	foreach($orders as $order) {
 		if(empty($order)){
-			echo MEAL_DATABASE_PROB_ENTRY; var_dump($order); echo MEAL_DATABASE_PROB_ENTRY_END;
+			echo MEAL_DATABASE_PROB_ENTRY; echo MEAL_DATABASE_PROB_ENTRY_END;
 			continue;
 		}
 		$meals[$order['meal_name']] [] = $order;

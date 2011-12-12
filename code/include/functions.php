@@ -24,7 +24,7 @@
             return true;
         }
     }
-    
+
     
     function formatDate($date) {
         if (is_numeric($date)) {        //a Unix timestamp
@@ -49,12 +49,55 @@
     	if(!is_string($str)) {
     		throw new BadFunctionCallException('Wrong parameter-format for $str in '.__FUNCTION__); 
     	}
-    	$db->real_escape_string($str);
+    	$db->real_escape_string($str);	
     	return $str;
     }
     
     ///@todo Replace md5 with this function
     function hash_password($pw_str) {
     	return md5($pw_str);
+    }
+    /**
+     * Checks the string with the given regex or string
+     * inputcheck takes the string and checks if it matches with a regex. The Regex can be 
+     * given by the parameter $regex_str, $regex_str can also have a string (for more information see param)
+     * @param string $str the string to check
+     * @param string $regex_str either the regex_str which should check the string or one of the
+     * following:
+     *  name - normal string for name : /\A^[a-zA-Z]{1}[a-zA-ZßäÄüÜöÖ -]{2,30}\z/
+     *  password - Checks if it matches general pw-conditions: /\A^[a-zA-ZßäÄüÜöÖ -]{2,30}\z/
+     *  card_id - specific conditions for the card_id: /\A^[0-9]{11}\z/
+     *  id - just a number: /\A^[0-9]\z/
+     *  birthday - the YYYY-MM-DD format of birthday: /\A\d{4}-\d{1,2}-\d{1,2}\z/
+     *  credits - credits-field: /\A\d{1,5}(.\d{2})?\z/
+     * @return boolean
+     */
+    function inputcheck($str, $regex_str) {
+    	switch($regex_str) {
+    		case 'name':
+    			$regex_str = '/\A^[a-zA-Z]{1}[a-zA-ZßäÄüÜöÖ -_]{2,30}\z/';
+    			break;
+    		case 'password':
+    			$regex_str = '/\A^[a-zA-Z0-9 _-]{4,20}\z/';
+    			break;
+    		case 'card_id':
+    			$regex_str = '/\A^[0-9]{10}\z/';
+    			break;
+    		case 'id':
+    			$regex_str = '/\A^[0-9]\z/';
+    			break;
+    		case 'birthday':
+    			$regex_str = '/\A\d{4}-\d{1,2}-\d{1,2}\z/';
+    			break;
+    		case 'credits':
+    			$regex_str = '/\A\d{1,5}(.\d{2})?\z/';
+    			break;
+    	}
+    	if(!preg_match($regex_str, $str)){
+    		throw new Exception($str); 
+    	} else {
+    		return true;
+    	}
+    	break;
     }
 ?>

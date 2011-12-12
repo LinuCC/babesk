@@ -5,7 +5,6 @@
     //---------------------------------
     //      Names of the Modules
     //---------------------------------
-    $module_names['register'] = "Registrieren";
     $module_names['recharge'] = "Geld Aufladen";
     $module_names['checkout'] = "Kasse";
     $module_names['admins'] = "Admin Verwaltung";
@@ -17,7 +16,7 @@
     $module_names['menu'] = "Speiseplan";
     $module_names['groups'] = "Gruppen Verwaltung";
     $module_names['priceclass'] = "Preisklassen Verwaltung";
-    
+    $module_names['user'] = "Benutzerverwaltung";
     
     //---------------------------------
     //      Logs

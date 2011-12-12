@@ -50,7 +50,6 @@
 		    }
 		    foreach($priceData as $price){
 		    	if($price['GID'] == $gid){
-		    		var_dump($price);
 		    		return $price['price'];
 		    	}
 		    }

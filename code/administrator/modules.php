@@ -19,7 +19,7 @@
     //---------------------------------
     //      Available Modules
     //---------------------------------    
-    $modules[] = "register";
+    $modules[] = "user";
     $modules[] = "recharge";
     $modules[] = "checkout";
     $modules[] = "logs";

@@ -95,25 +95,6 @@ function change_priceclass($priceclass_id) {
 		} catch (Exception $e) {
 			die(ERR_DEL_PRICECLASS.$e->getMessage());
 		}
-
-		// 		if($pc_old_ID == $pc_ID) {
-		// 			//only delete priceclass first if entry is already in DB
-		// 			if(!$priceclassManager->delEntry($pc_ID))
-		// 			die(ERR_DEL_PRICECLASS);
-		// 			else {
-		// 				$priceclassManager->addPriceClass($pc_name, $pc_GID, $pc_price, $pc_ID);
-		// 			}
-		// 		}
-		// 		else {//otherwise it could be a duplicated ID in MySQL, be save and DONT delete entry first
-		// 			try {
-		// 				$priceclassManager->addPriceClass($pc_name, $pc_GID, $pc_price, $pc_ID);
-		// 			} catch (Exception $e) {
-		// 				die(ERR_CHANGE_PRICECLASS.$e->getMessage());
-		// 			}
-		// 			if(!$priceclassManager->delEntry($pc_old_ID)) {
-		// 				die(ERR_DEL_PRICECLASS);
-		// 			}
-		// 		}
 		echo PRICECLASS_CHANGED;
 	}
 	else {

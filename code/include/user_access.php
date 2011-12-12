@@ -55,7 +55,6 @@ class UserManager extends TableManager{
 
 	function changeBalance($id, $amount) {
 		if($amount > $this->getMaxRechargeAmount($id)) {
-			echo 'Amount of your money too big!';
 			return false;
 		}
 		$userData = parent::getEntryData($id, 'credit');

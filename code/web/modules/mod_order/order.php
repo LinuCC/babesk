@@ -32,8 +32,9 @@ if(isset($_GET['order'])) {
 			die(DB_QUERY_ERROR.$this->db->error);
 		}
 
-		//add the Entry, errorchecking
-		if (!$orderManager->addEntry('MID', $_GET['order'], 'UID', $_SESSION['uid'], 'IP', $_SERVER['REMOTE_ADDR'], 'ordertime',  time(), 'date', $meal_date ['date'])) {
+		try {
+			$orderManager->addEntry('MID', $_GET['order'], 'UID', $_SESSION['uid'], 'IP', $_SERVER['REMOTE_ADDR'], 'ordertime',  time(), 'date', $meal_date ['date']);
+		} catch (Exception $e) {
 			$userManager->changeBalance($_SESSION['uid'], $priceClassManager->getPrice($_SESSION['uid'], $_GET['order']));   //meal couldn't be ordered so give the user his money back
 			$smarty->display('web/header.tpl');
 			echo "Bestellung nicht erfolgreich";
@@ -43,6 +44,7 @@ if(isset($_GET['order'])) {
 		$smarty->display('web/header.tpl');
 		echo 'Am '.formatDate($result['date']).' das Men&uuml; '.$result['name'].' erfolgreich bestellt. <a href="index.php">Weiter</a>';
 		$smarty->display('web/footer.tpl');
+
 	}
 	else {//show order-form
 		$smarty->display('web/header.tpl');
