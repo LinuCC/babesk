@@ -1,22 +1,22 @@
-    <form action="index.php?section=user&action=3" method="post">
+    <form action="index.php?section=user&action=4&ID={$user.ID}" method="post">
     <fieldset>
         <legend>Persönliche Daten</legend>
-        <label><input type="text" name="id" maxlength="10" width="10" value={$user.ID}>ID des Users:</label>
-        <label><input type="text" name="forename" value={$user.forename}/>Vorname:</label><br><br>
-        <label><input type="text" name="name" value={$user.name}/>Name:</label><br><br>
-        <label><input type="text" name="username" value={$user.username}/>Benutzername:</label><br><br>
-        <label><input type="password" name="passwd" />Passwort ändern:</label><br><br>
-        <label><input type="password" name="passwd_repeat"/>Passwortänderung wiederholen:</label><br><br>
+        <label>ID des Users:<input type="text" name="id" maxlength="10" width="10" value={$user.ID}></label><br><br>
+        <label>Vorname:<input type="text" name="forename" value="{$user.forename}"/></label><br><br>
+        <label>Name:<input type="text" name="name" value="{$user.name}"/></label><br><br>
+        <label>Benutzername:<input type="text" name="username" value="{$user.username}"/></label><br><br>
+        <label>Passwort ändern:<input type="password" name="passwd" /></label><br><br>
+        <label>Passwortänderung wiederholen:<input type="password" name="passwd_repeat"/></label><br><br>
         Geburtstag :
-        {html_select_date start_year="-100"}
+        {html_select_date time="{$user.birthday}" start_year="-100"}
     </fieldset>
     <br>
     <fieldset>
         <legend>Identitätsinformationen</legend><br><br>
         <select name="gid">
-			{html_options values=$gid output=$g_names selected="1"}
+			{html_options values=$gid output=$g_names selected="{$user.GID}"}
 		</select>
-        <label><input type="int" name="credits" size="5" maxlength="5" value={$user.credit}/>Guthaben:</label>
+        <label>Guthaben:<input type="text" name="credits" size="5" maxlength="5" value="{$user.credit}"/></label>
     </fieldset><br>
     <input type="submit" value="Submit" />
   </form>

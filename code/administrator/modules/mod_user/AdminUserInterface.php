@@ -67,7 +67,8 @@ class AdminUserInterface {
 	function ShowChangeUser($user, $ar_gid, $ar_g_names) {
 		$this->smarty->assign('user', $user);
 		$this->smarty->assign('g_names', $ar_g_names);
-		$this->smarty->display($this->PathUserTemplates.'show_priceclasses.tpl');
+		$this->smarty->assign('gid', $ar_gid);
+		$this->smarty->display($this->PathUserTemplates.'change_user.tpl');
 	}
 	
 	private $smarty;

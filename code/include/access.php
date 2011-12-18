@@ -41,7 +41,13 @@ class TableManager {
 
 		$num_args = func_num_args();
 			
-		if($num_args > 1){
+		if($num_args == 1) {
+			//all data of the specific entry
+			$id = func_get_arg(0);
+			$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE ID=%s', 
+											$this->tablename, $id));
+		}
+		else if($num_args > 1){
 			//specific TableData
 			$id = func_get_arg(0);
 			$fields = "";

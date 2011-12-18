@@ -11,9 +11,12 @@ class AdminUserProcessing {
 									'input1' => 'Ein Feld wurde falsch mit ',
 									'input2' => ' ausgefüllt',
 									'uid_get_param' => 'Die Benutzer-ID (UID) vom GET-Parameter ist falsch: Der Benutzer ist nicht vorhanden!',
+									'groups_get_param' => 'Ein Fehler ist beim holen der Gruppen aufgetreten.'
 									'delete' => 'Ein Fehler ist beim löschen des Benutzers aufgetreten:',
 									'add_cardid' => 'Konnte die Karten-ID nicht hinzufügen. Vorgang abgebrochen.',
-									'register' => 'Konnte den Benutzer nicht hinzufügen'),
+									'register' => 'Konnte den Benutzer nicht hinzufügen',
+									'change' => 'Konnte den Benutzer nicht ändern!'),
+									'passwd_repeat' => 'das Passwort und das wiederholte Passwort stimmen nicht überein',
 								'notice' => array(
 									'please_repeat' => 'Bitte wiederholen sie den Vorgang.'));
 	}
@@ -173,15 +176,78 @@ class AdminUserProcessing {
 		}
 		$this->userInterface->ShowDeleteFin();
 	}
-	
-	function ChangeUserForm() {
+
+	/**
+	 * This function prepares and shows the ChangeUser-Form
+	 * Enter description here ...
+	 * @param string (numeric) $uid The ID of the User
+	 */
+	function ChangeUserForm($uid) {
 		require_once PATH_INCLUDE.'/user_access.php';
 		require_once PATH_INCLUDE.'/group_access.php';
-		
-		
+
+		$userManager = new UserManager();
+		$groupManager = new GroupManager();
+		try {
+			$user = $userManager->getEntryData($uid);
+		} catch (Exception $e) {
+			$this->userInterface->ShowError($this->messages['error']['uid_get_param'].$e->getMessage());
+		}
+		try {
+			$groups = $this->getGroups();
+		} catch (Exception $e) {
+			$this->userInterface->ShowError($this->messages['error']['groups_get_param'].$e->getMessage());
+		}
+
+		$this->userInterface->ShowChangeUser($user, $groups['arr_gid'], $groups['arr_group_name']);
 	}
-	function ChangeUser() {
-		
+
+	/**
+	 * This function changes the user by the given parameters.
+	 * This function just alters the entries of the table, so if
+	 * unchanged arguments are given these will be not changed.
+	 * @param numeric string $old_id The ID of the object to change
+	 * @param numeric string $id The new ID of the object
+	 * @param string $forename The new forename of the object
+	 * @param string $name The new name of the object
+	 * @param string $username The new username of the object
+	 * @param string $passwd The new password of the object
+	 * @param string $passwd_repeat The repition of the password
+	 * @param string $birthday The new birthday of the object. Format YYYY-MM-DD
+	 * @param numeric string $GID The new Group-ID for the object
+	 * @param unknown_type $credits
+	 * @throws Exception
+	 */
+	function ChangeUser($old_id, $id, $forename,$name,$username,$passwd,$passwd_repeat,$birthday,$GID,$credits) {
+		require_once PATH_INCLUDE.'/user_access.php';
+		$userManager = new UserManager();
+		try {
+			inputcheck($forename, 'name');
+			inputcheck($name, 'name');
+			inputcheck($username, 'name');
+			inputcheck($birthday, 'birthday');
+			inputcheck($GID, 'id');
+			inputcheck($credits, 'credits');
+		} catch (Exception $e) {
+			$this->userInterface->ShowError($this->messages['error']['input1'].'"'.$e->getMessage().'"'.
+			$this->messages['error']['input2']);
+			throw new Exception($this->messages['error']['change']);
+		}
+		if(isset($passwd, $passwd_repeat)) {
+			if($passwd != $passwd_repeat) {
+				try {
+					inputcheck($passwd, 'password');
+					inputcheck($passwd_repeat, 'password');
+				} catch (Exception $e) {
+					$this->userInterface->ShowError($this->messages['error']['passwd_repeat']);
+				}
+			}
+		}
+		try {
+			$userManager->alterUser($old_id, $id, $name, $forename, $username, $passwd, $birthday, $credits, $GID);
+		} catch (Exception $e) {
+			$this->userInterface->ShowError($this->messages['error']['change'].$e->getMessage());
+		}
 	}
 
 	var $messages = array();

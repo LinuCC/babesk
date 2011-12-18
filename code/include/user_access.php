@@ -145,6 +145,17 @@ class UserManager extends TableManager{
 		//username exists
 		throw new Exception(USERNAME_EXISTS);
 	}
+	
+	function alterUser($old_id, $id, $name, $forename, $username, $passwd, $birthday, $credit, $GID) {
+		if(isset($passwd)) {
+		parent::alterEntry($old_id, 'ID', $id, 'forename', $forename, 'name', $name, 'username',
+							$username, 'password', $passwd, 'birthday', $birthday, 'credit', $credit, 'GID', $GID);
+		}
+		else {
+			parent::alterEntry($old_id, 'ID', $id, 'forename', $forename, 'name', $name, 'username',
+								$username, 'birthday', $birthday, 'credit', $credit, 'GID', $GID);
+		}
+	}
 
 	// check for first password
 	function firstPassword($ID) {
