@@ -166,9 +166,8 @@ class TableManager {
 		$column_identifier_str = substr($column_identifier_str,0,-1);
 
 		$query = 'INSERT INTO '.$this->tablename.'('
-		.$column_identifier_str.')'.
+						.$column_identifier_str.')'.
 					'VALUES ('.$column_value_str.');';
-
 		$result = $this->db->query($query);
 		if(!$result) {
 			throw new Exception(DB_QUERY_ERROR.$this->db->error);

@@ -11,7 +11,7 @@ class AdminUserProcessing {
 									'input1' => 'Ein Feld wurde falsch mit ',
 									'input2' => ' ausgefüllt',
 									'uid_get_param' => 'Die Benutzer-ID (UID) vom GET-Parameter ist falsch: Der Benutzer ist nicht vorhanden!',
-									'groups_get_param' => 'Ein Fehler ist beim holen der Gruppen aufgetreten.'
+									'groups_get_param' => 'Ein Fehler ist beim holen der Gruppen aufgetreten.',
 									'delete' => 'Ein Fehler ist beim löschen des Benutzers aufgetreten:',
 									'add_cardid' => 'Konnte die Karten-ID nicht hinzufügen. Vorgang abgebrochen.',
 									'register' => 'Konnte den Benutzer nicht hinzufügen',
@@ -74,15 +74,16 @@ class AdminUserProcessing {
 			throw new Exception($this->messages['error']['register']);
 		}
 		try {
-			$cardManager->addCard($cardID, $userManager->getUserID($username));
-			try {
-		 	$userManager->addUser($name, $forename, $username, $passwd, $birthday, $credits, $GID);
-			} catch (Exception $e) {
-				$this->userInterface->ShowError("<br>".$this->messages['error']['mysql_register'] .$e->getMessage()."<br>");
-				$cardManager->delEntry($cardID);
-				throw new Exception($this->messages['error']['register'].$e->getMessage());
-			}
+			$userManager->addUser($name, $forename, $username, $passwd, $birthday, $credits, $GID);
 		} catch (Exception $e) {
+			$this->userInterface->ShowError("<br>".$this->messages['error']['mysql_register'] .$e->getMessage()."<br>");
+			$cardManager->delEntry($cardID);
+			throw new Exception($this->messages['error']['register'].$e->getMessage());
+		}
+		try {
+			$cardManager->addCard($cardID, $userManager->getUserID($username));
+		} catch (Exception $e) {
+			$userManager->delEntry($userManager->getUserID($username));//user has no cardID, delete him
 			throw new Exception($this->messages['error']['add_cardid'].$e->getMessage());
 		}
 			

@@ -38,9 +38,15 @@ class UserManager extends TableManager{
 		}
 		return true;
 	}
-
-	function getMaxRechargeAmount($id) {
-		$userData = $this->getEntryData($id, 'credit', 'GID');
+	
+	/**
+	 * Looks if the Amount of Credits the user has exeeds the maximum Amount of the group of the user
+	 * Enter description here ...
+	 * @param numeric string $uid the userID 
+	 * @return number
+	 */
+	function getMaxRechargeAmount($uid) {
+		$userData = $this->getEntryData($uid, 'credit', 'GID');
 		$credit = $userData['credit'];
 		$gid = $userData['GID'];
 

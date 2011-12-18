@@ -2,7 +2,7 @@
 <form action="index.php?section=recharge&{$sid}" method="post">
 	<fieldset>
 		<label>Karten ID</label>
-			<input type="text" name="card_ID" /><br />
+			<input type="text" name="card_ID" maxlength="10"/><br />
 	</fieldset>
 	<input type="submit" value="Submit" />
 </form>

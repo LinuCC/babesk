@@ -5,6 +5,8 @@ defined('_AEXEC') or die("Access denied");
 global $smarty;
 
 require PATH_INCLUDE.'/managers.php';
+require_once PATH_INCLUDE.'/card_access.php';
+require_once 'recharge_constants.php';
 
 if ('POST' == $_SERVER['REQUEST_METHOD']) {
 	if (isset($_POST['card_ID'])) {
@@ -15,10 +17,19 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 		die(EMPTY_FORM);
 		}*/
 		$card_id = $_POST['card_ID'];
-
-		$uid = $card_id;//the userID is the ID of the card
+		try {
+			$cardManager = new CardManager();
+			$uid = $cardManager->getUserID($card_id);
+		} catch (Exception $e) {
+			die(ERR_GET_UID.$e->getMessage());
+		}
 		$_SESSION['module_data']['recharge_user'] = $uid;
-		$smarty->assign('max_amount', $userManager->getMaxRechargeAmount($uid));
+		
+		try {
+			$smarty->assign('max_amount', $userManager->getMaxRechargeAmount($uid));
+		} catch (Exception $e) {
+			die(ERR_MAX_RECHARGE.$e->getMessage());
+		}
 		$smarty->display('administrator/modules/mod_recharge/form2.tpl');
 	}
 
