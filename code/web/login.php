@@ -32,10 +32,15 @@ function login() {
 			die('ERROR:'.$e);
 		}
 		$is_pw_correct = $userManager->checkPassword($uid, $formpass);
-
+		$account_locked = $userManager->checkAccount($uid);		//check if account is locked
 		if (!$is_pw_correct) {
 			$smarty->assign('error', INVALID_LOGIN);
 			$userManager->AddLoginTry($uid);
+			$smarty->display('web/login.tpl');
+			exit();
+		}
+		elseif ($account_locked) {
+			$smarty->assign('error', ACCOUNT_LOCKED);
 			$smarty->display('web/login.tpl');
 			exit();
 		}

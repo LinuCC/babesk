@@ -68,7 +68,9 @@ class AdminUserInterface {
 		$this->smarty->assign('user', $user);
 		$this->smarty->assign('g_names', $ar_g_names);
 		$this->smarty->assign('gid', $ar_gid);
+	    
 		$this->smarty->display($this->PathUserTemplates.'change_user.tpl');
+		
 	}
 	
 	private $smarty;

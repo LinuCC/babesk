@@ -123,6 +123,43 @@ class UserManager extends TableManager{
 	}
 
 	/**
+	* Check whether the account for the given user is locked
+	*
+	* @return true if account is locked
+	*/
+	function checkAccount($uid) {
+		require_once PATH_INCLUDE.'/functions.php';
+		$sql = ('SELECT locked FROM users WHERE ID = ?');
+		$stmt = $this->db->prepare($sql);
+	
+		if (!$stmt) {
+			exit($this->db->error);
+		}
+		$stmt->bind_param('i', $uid);
+		if (!$stmt->execute()) {
+			exit($stmt->error);
+		}
+	
+		$stmt->bind_result($result);
+		if (!$stmt->fetch()) {
+			return false;
+		}
+		$stmt->close();
+		return $result;
+	}
+
+	/**
+	* Locks an account
+	*
+	* @return true if account is locked
+	*/
+	function lockAccount($uid) {
+	if(isset($uid)) {
+		parent::alterEntry($uid, 'locked', '1');
+		}
+	}
+	
+	/**
 	 * Adds a User to the System
 	 *
 	 * The Function creates a new entry in the users Table
@@ -152,14 +189,16 @@ class UserManager extends TableManager{
 		throw new Exception(USERNAME_EXISTS);
 	}
 	
-	function alterUser($old_id, $id, $name, $forename, $username, $passwd, $birthday, $credit, $GID) {
-		if(isset($passwd)) {
+	function alterUser($old_id, $id, $name, $forename, $username, $passwd, $birthday, $credit, $GID, $locked) {
+		if(isset($passwd) && $passwd != "") {
+			
 		parent::alterEntry($old_id, 'ID', $id, 'forename', $forename, 'name', $name, 'username',
-							$username, 'password', $passwd, 'birthday', $birthday, 'credit', $credit, 'GID', $GID);
+							$username, 'password', $passwd, 'birthday', $birthday, 'credit', $credit, 'GID', $GID,'locked', $locked);
 		}
 		else {
+			
 			parent::alterEntry($old_id, 'ID', $id, 'forename', $forename, 'name', $name, 'username',
-								$username, 'birthday', $birthday, 'credit', $credit, 'GID', $GID);
+								$username, 'birthday', $birthday, 'credit', $credit, 'GID', $GID,'locked',$locked);
 		}
 	}
 

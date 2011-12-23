@@ -217,9 +217,10 @@ class AdminUserProcessing {
 	 * @param string $birthday The new birthday of the object. Format YYYY-MM-DD
 	 * @param numeric string $GID The new Group-ID for the object
 	 * @param unknown_type $credits
+	 * @param boolean $locked is 1 if account is locked
 	 * @throws Exception
 	 */
-	function ChangeUser($old_id, $id, $forename,$name,$username,$passwd,$passwd_repeat,$birthday,$GID,$credits) {
+	function ChangeUser($old_id, $id, $forename,$name,$username,$passwd,$passwd_repeat,$birthday,$GID,$credits,$locked) {
 		require_once PATH_INCLUDE.'/user_access.php';
 		$userManager = new UserManager();
 		try {
@@ -245,7 +246,7 @@ class AdminUserProcessing {
 			}
 		}
 		try {
-			$userManager->alterUser($old_id, $id, $name, $forename, $username, $passwd, $birthday, $credits, $GID);
+			$userManager->alterUser($old_id, $id, $name, $forename, $username, $passwd, $birthday, $credits, $GID, $locked);
 		} catch (Exception $e) {
 			$this->userInterface->ShowError($this->messages['error']['change'].$e->getMessage());
 		}

@@ -11,7 +11,7 @@
     <div id="top_left">
        <p>Name: {$username}</p>
        <p>Guthaben: {$credit} Euro</p>
-       <!-- <a href="index.php?section=account">Konto Einstellungen</a> -->
+       <a href="index.php?section=account">Karte sperren</a>
     </div>
     <div id="top_right">
        <a href="index.php?section=help">Hilfe</a><br />

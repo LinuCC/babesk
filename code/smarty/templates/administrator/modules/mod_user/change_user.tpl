@@ -8,7 +8,8 @@
         <label>Passwort ändern:<input type="password" name="passwd" /></label><br><br>
         <label>Passwortänderung wiederholen:<input type="password" name="passwd_repeat"/></label><br><br>
         Geburtstag :
-        {html_select_date time="{$user.birthday}" start_year="-100"}
+        {html_select_date time="{$user.birthday}" start_year="-100"}<br><br>
+         <label>Konto sperren:<input type="checkbox" name="lockAccount" value="1" {if $user.locked}checked{/if}/></label>
     </fieldset>
     <br>
     <fieldset>

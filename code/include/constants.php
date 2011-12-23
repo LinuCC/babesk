@@ -11,6 +11,7 @@
     define('INVALID_LOGIN', '<p class="error">Der Benutzer wurde nicht gefunden oder das Passwort ist falsch.</p>');
     define('MAX_LOGIN_TIME', '300');
     define('UNMATCHED_PASSWORDS', '<p class="error">Die Passw&ouml;rter stimmen nicht &uuml;berein!</p>');
+    define('ACCOUNT_LOCKED','<p class="error">Kennung gesperrt!</p>');
     
     //Registration
     define('USERNAME_EXISTS', '<p class="error">Der angegebene Benutzername existiert bereits, bitte einen anderen w&auml;hlen</p>');
