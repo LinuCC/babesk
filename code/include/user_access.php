@@ -18,13 +18,17 @@ class UserManager extends TableManager{
 	 * Returns the id of the user with the given username
 	 *
 	 * @param   $username The name of the user
-	 * @return  the user id or false if error
+	 * @return  the user id
+	 * @throws MySQLVoidDataException if the username is not found
 	 */
 	function getUserID($username) {
 		$user = parent::getTableData('username="'.$username.'"');
 		return $user[0]['ID'];
 	}
 
+	/**
+	 *  @todo this function is not necessary anymore, functionality is alredy in alterUser(), replace getUserID
+	 */
 	function updatePassword($uid, $new_passwd) {
 		require 'dbconnect.php';
 		require_once PATH_INCLUDE.'/functions.php';
@@ -36,6 +40,28 @@ class UserManager extends TableManager{
 			echo DB_QUERY_ERROR.$this->db->error;
 			return false;
 		}
+		return true;
+	}
+	
+	/**
+	 * Checks if the Username or the complete name (forename + name) are already existing
+	 * Enter description here ...
+	 * @param string $forename
+	 * @param string $name
+	 * @param string $username
+	 * @return boolean true if User is existing, false if not
+	 */
+	///@todo mach datt hier fertig! beim registrieren erlaubt er den user zu registern, obwohl schon einer mit gleichem Namen vorhanden sit
+	function isUserExisting($forename, $name, $username) {
+		try {
+			$this->getTableData(sprintf('username="%s"', $username));
+		} catch (MySQLVoidDataException $e) {
+			try {
+				$this->getTableData(sprintf('forename="%s" AND name="%s"', $forename, $name));
+			} catch (MySQLVoidDataException $e) {
+				return false;
+			}
+		} 
 		return true;
 	}
 	
@@ -188,7 +214,20 @@ class UserManager extends TableManager{
 		//username exists
 		throw new Exception(USERNAME_EXISTS);
 	}
-	
+	/**
+	 * Alters the Userdata of a given User
+	 * Enter description here ...
+	 * @param unknown_type $old_id The "old" ID, the ID of the user he has before the change
+	 * @param unknown_type $id The new ID
+	 * @param unknown_type $name The new Name
+	 * @param unknown_type $forename
+	 * @param unknown_type $username
+	 * @param unknown_type $passwd The (already hashed!) password
+	 * @param unknown_type $birthday The birthday (format YYYY-MM-DD)
+	 * @param unknown_type $credit
+	 * @param unknown_type $GID
+	 * @param unknown_type $locked
+	 */
 	function alterUser($old_id, $id, $name, $forename, $username, $passwd, $birthday, $credit, $GID, $locked) {
 		if(isset($passwd) && $passwd != "") {
 			
@@ -217,7 +256,6 @@ class UserManager extends TableManager{
 	function ResetLoginTries($ID) {
 		require 'dbconnect.php';
 		$query = sql_prev_inj(sprintf('UPDATE %s SET login_tries = 0 WHERE ID = %s', $this->tablename, $ID));
-// 		$query = $db->real_escape_string('UPDATE '.$this->tablename.' SET login_tries = 0 WHERE ID = '.$ID);
 		if(!$this->db->query($query)) {
 			throw new MySQLConnectionException('failed to reset login tries!');
 		}
@@ -226,7 +264,6 @@ class UserManager extends TableManager{
 	function AddLoginTry($ID) {
 		require "dbconnect.php";
 		$query = sql_prev_inj(sprintf('UPDATE %s SET login_tries = login_tries + 1 WHERE ID = %s', $this->tablename, $ID));
-// 		$query = $db->real_escape_string('UPDATE '.$this->tablename.' SET login_tries = login_tries + 1 WHERE ID = '.$ID);
 		if(!$this->db->query($query)) {
 			throw new MySQLConnectionException('failed to add a login try!');
 		}

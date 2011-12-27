@@ -57,12 +57,8 @@ class TableManager {
 			}
 			$fields .= func_get_arg($num_args - 1);  //query must not contain an ',' after the last field name
 
-			$query = 'SELECT
-    					'.$fields.'
-    				FROM
-    					'.$this->tablename.'
-    				WHERE
-    					ID = '.$id.'';
+			$query = sql_prev_inj(sprintf('SELECT %s FROM %s WHERE ID = %s',
+											$fields, $this->tablename, $id));
 		}
 		else{//wrong arguments
 			throw new BadMethodCallException('wrong arguments');
@@ -87,7 +83,7 @@ class TableManager {
 	 * the WHERE-command of the MySQL-query-string.
 	 *
 	 *  @param func_get_arg(0) The mySQL-query-string behind the WHERE-command. Example: ID = 46.
-	 *  		If the values are strings, do not forget the quotation-marks.
+	 *  		If the values are strings, do not forget the quotation-marks!.
 	 *
 	 *  @return twodimensional-array: $return_var[EntryArray[FieldnameArray]]
 	 */
@@ -99,11 +95,13 @@ class TableManager {
 
 		if($num_args == 0){
 			//all elements of the table
-			$query = 'SELECT * FROM '.$this->tablename;
+			$query = sql_prev_inj(sprintf('SELECT * FROM %s',
+											$this->tablename));
 		}
 		else if($num_args == 1){
 			$arg = func_get_arg(0);
-			$query = 'SELECT * FROM '.$this->tablename.' WHERE '.$arg;
+			$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE %s',
+											$this->tablename, $arg));
 		}
 		else {
 			throw new Exception('Wrong number of arguments in '.__METHOD__);
@@ -165,9 +163,11 @@ class TableManager {
 		$column_value_str = substr($column_value_str,0,-1);
 		$column_identifier_str = substr($column_identifier_str,0,-1);
 
-		$query = 'INSERT INTO '.$this->tablename.'('
-						.$column_identifier_str.')'.
-					'VALUES ('.$column_value_str.');';
+// 		$query = 'INSERT INTO '.$this->tablename.'('
+// 						.$column_identifier_str.')'.
+// 					'VALUES ('.$column_value_str.');';
+		$query = sql_prev_inj(sprintf('INSERT INTO %s (%s) VALUES (%s);',
+										$this->tablename, $column_identifier_str, $column_value_str));
 		$result = $this->db->query($query);
 		if(!$result) {
 			throw new Exception(DB_QUERY_ERROR.$this->db->error);
@@ -208,7 +208,8 @@ class TableManager {
 			}
 		}
 		$set_str = substr($set_str, 0, -1);
-		$query = 'UPDATE '.$this->tablename.' SET '.$set_str.' WHERE ID='.$ID;
+		$query = sql_prev_inj(sprintf('UPDATE %s SET %s WHERE ID = %s',
+										$this->tablename, $set_str, $ID));
 		$result = $this->db->query($query);
 		if(!$result) {
 			throw new MySQLConnectionException(DB_QUERY_ERROR.$this->db->error);
@@ -228,9 +229,8 @@ class TableManager {
 			//parameter-checking
 			throw new UnexpectedValueException(ERR_TYPE_PARAM_ID);
 		}
-		$query = 'DELETE FROM
-		               '.$this->tablename.'
-                  WHERE ID = '.$ID.';';
+		$query = sql_prev_inj(sprintf('DELETE FROM %s WHERE ID=%s;',
+									$this->tablename,$ID));
 		$result = $this->db->query($query);
 		if (!$result) {
 			throw new Exception(DB_QUERY_ERROR.$this->db->error);

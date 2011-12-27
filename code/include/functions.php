@@ -53,7 +53,12 @@
     	return $str;
     }
     
-    ///@todo Replace md5 with this function
+    /**
+     * hash_password returns the md5-hash of the string
+     * Enter description here ...
+     * @param $pw_str the string to hash 
+     * @return string
+     */
     function hash_password($pw_str) {
     	return md5($pw_str);
     }
@@ -78,7 +83,7 @@
     			$regex_str = '/\A^[a-zA-Z]{1}[a-zA-ZßäÄüÜöÖ -_]{2,30}\z/';
     			break;
     		case 'password':
-    			$regex_str = '/\A^[a-zA-Z0-9 _-]{4,20}\z/';
+    			$regex_str = '/\A^[a-zA-Z0-9 _\-\.]{4,20}\z/';
     			break;
     		case 'card_id':
     			$regex_str = '/\A^[0-9]{10}\z/';
@@ -90,7 +95,7 @@
     			$regex_str = '/\A\d{4}-\d{1,2}-\d{1,2}\z/';
     			break;
     		case 'credits':
-    			$regex_str = '/\A\d{1,5}(.\d{2})?\z/';
+    			$regex_str = '/\A\d{1,5}(.,\d{2})?\z/';
     			break;
     	}
     	if(!preg_match($regex_str, $str)){

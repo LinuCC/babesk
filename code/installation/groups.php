@@ -16,6 +16,7 @@ if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['go_on'])) { //go on to
 		($max_credit = trim($_POST['Max_Credit'])) == '') {
 			die(EMPTY_FORM);
 		}
+		if(!preg_match('/\A\d{1,5}(.\d{2})?\z/', $subject))
 		$max_credit = str_replace(',', '.', $max_credit);//Kommata bad for MySQL
 		$groupManager = new GroupManager('groups');
 		$groupManager->addEntry('name', $groupname, 'max_credit', $max_credit);

@@ -134,8 +134,15 @@ function show_priceclasses() {
 
 	global $smarty;
 	$priceclassManager = new PriceClassManager();
-	$groupManager = new GroupManager('groups');
-	$priceclasses = $priceclassManager->getTableData();
+	try {
+		$groupManager = new GroupManager('groups');
+		$priceclasses = $priceclassManager->getTableData();
+	} catch (MySQLVoidDataException $e) {
+		die(ERR_GET_PRICECLASS_GROUPS);
+	} catch (Exception $e) {
+		die(ERR_GET_PRICECLASS_GROUPS.$e->getMessage());
+	}
+		 
 	foreach($priceclasses as &$priceclass) {
 		try {
 			$group = $groupManager->getEntryData($priceclass['GID'], 'name');

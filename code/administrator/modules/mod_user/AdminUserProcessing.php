@@ -14,9 +14,10 @@ class AdminUserProcessing {
 									'groups_get_param' => 'Ein Fehler ist beim holen der Gruppen aufgetreten.',
 									'delete' => 'Ein Fehler ist beim löschen des Benutzers aufgetreten:',
 									'add_cardid' => 'Konnte die Karten-ID nicht hinzufügen. Vorgang abgebrochen.',
-									'register' => 'Konnte den Benutzer nicht hinzufügen',
-									'change' => 'Konnte den Benutzer nicht ändern!'),
+									'register' => 'Konnte den Benutzer nicht hinzufügen!',
+									'change' => 'Konnte den Benutzer nicht ändern!',
 									'passwd_repeat' => 'das Passwort und das wiederholte Passwort stimmen nicht überein',
+									'user_existing' => ' der Benutzer ist schon vorhanden.'),
 								'notice' => array(
 									'please_repeat' => 'Bitte wiederholen sie den Vorgang.'));
 	}
@@ -48,9 +49,6 @@ class AdminUserProcessing {
 		$groupManager = new GroupManager();
 		$logger= new Logger;
 
-		/**
-		 * @todo: deprecated return false /return true? better or not with exceptions?
-		 */
 		//checks the input for wrong Characters etc
 		try {
 			inputcheck($forename, 'name');
@@ -62,11 +60,15 @@ class AdminUserProcessing {
 			inputcheck($birthday, 'birthday');
 			inputcheck($GID, 'id');
 			inputcheck($credits, 'credits');
+			
 		} catch (Exception $e) {
 			$this->userInterface->ShowError($this->messages['error']['input1'].'"'.$e->getMessage().'"'.
 			$this->messages['error']['input2']);
 			$this->userInterface->ShowRepeatRegister();
 			throw new Exception($this->messages['error']['register']);
+		}
+		if($cardManager->is_card_existing($cardID) || $userManager->isUserExisting($forename, $name, $username)) {
+			throw new Exception($this->messages['error']['register'].$this->messages['error']['user_existing']);
 		}
 		//check max amount of credits of the group
 		if($credits > $groupManager->getMaxCredit($GID)) {
@@ -86,7 +88,6 @@ class AdminUserProcessing {
 			$userManager->delEntry($userManager->getUserID($username));//user has no cardID, delete him
 			throw new Exception($this->messages['error']['add_cardid'].$e->getMessage());
 		}
-			
 		$this->userInterface->ShowRegisterFin($name, $forename);
 			
 		$_SESSION['CARD_ID'] = NULL;
@@ -242,14 +243,17 @@ class AdminUserProcessing {
 					inputcheck($passwd_repeat, 'password');
 				} catch (Exception $e) {
 					$this->userInterface->ShowError($this->messages['error']['passwd_repeat']);
+					die();
 				}
 			}
 		}
 		try {
-			$userManager->alterUser($old_id, $id, $name, $forename, $username, $passwd, $birthday, $credits, $GID, $locked);
+			$userManager->alterUser($old_id, $id, $name, $forename, $username, hash_password($passwd), $birthday, $credits, $GID, $locked);
 		} catch (Exception $e) {
 			$this->userInterface->ShowError($this->messages['error']['change'].$e->getMessage());
+			die();
 		}
+		$this->userInterface->ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID);
 	}
 
 	var $messages = array();

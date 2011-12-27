@@ -10,6 +10,7 @@
 	define('ERR_DEL_PRICECLASS','<p class="error">Ein Fehler ist beim löschen der Preisklasse aufgetreten!</p>');
 	define('ERR_GET','<p class="error">Ein Fehler ist beim auswerten von Variablen aufgetreten!</p>');
 	define('ERR_GET_MYSQL_PRICECLASS','<p class="error">Konnte die Preisklasse(n) nicht vom MySQl holen</p>');
+	define('ERR_GET_PRICECLASS_GROUPS','<p class="error">Es sind entweder keine Preisklassen oder keine Gruppen vorhanden. Sie müssen erst welche erstellen!<p>');
 	define('ERR','<p class="error">Fehler</p>');
 	define('','');
 	
