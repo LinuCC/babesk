@@ -253,7 +253,7 @@ class AdminUserProcessing {
 			$this->userInterface->ShowError($this->messages['error']['change'].$e->getMessage());
 			die();
 		}
-		$this->userInterface->ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID);
+		$this->userInterface->ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID, $locked);
 	}
 
 	var $messages = array();

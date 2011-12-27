@@ -229,8 +229,7 @@ class UserManager extends TableManager{
 	 * @param unknown_type $locked
 	 */
 	function alterUser($old_id, $id, $name, $forename, $username, $passwd, $birthday, $credit, $GID, $locked) {
-		if(isset($passwd) && $passwd != "") {
-			
+		if(isset($passwd) && $passwd != "d41d8cd98f00b204e9800998ecf8427e") {	
 		parent::alterEntry($old_id, 'ID', $id, 'forename', $forename, 'name', $name, 'username',
 							$username, 'password', $passwd, 'birthday', $birthday, 'credit', $credit, 'GID', $GID,'locked', $locked);
 		}

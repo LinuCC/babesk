@@ -72,7 +72,7 @@ class AdminUserInterface {
 		$this->smarty->display($this->PathUserTemplates.'change_user.tpl');
 		
 	}
-	function ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID) {
+	function ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID, $locked) {
 		$this->smarty->assign('id', $id);
 		$this->smarty->assign('name', $name);
 		$this->smarty->assign('forename', $forename);
@@ -80,6 +80,7 @@ class AdminUserInterface {
 		$this->smarty->assign('birthday', $birthday);
 		$this->smarty->assign('credits', $credits);
 		$this->smarty->assign('gid', $GID);
+		$this->smarty->assign('locked', $locked);
 		$this->smarty->display($this->PathUserTemplates.'change_user_fin.tpl');
 	}
 	

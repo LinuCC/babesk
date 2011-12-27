@@ -95,7 +95,7 @@
     			$regex_str = '/\A\d{4}-\d{1,2}-\d{1,2}\z/';
     			break;
     		case 'credits':
-    			$regex_str = '/\A\d{1,5}(.,\d{2})?\z/';
+    			$regex_str = '/\A\d{1,5}([.,]\d{2})?\z/';
     			break;
     	}
     	if(!preg_match($regex_str, $str)){
