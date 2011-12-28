@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>BaBeSK Login</title>
-	<link rel="stylesheet" href="{$smarty_path}/templates/administrator/css/general.css" type="text/css" />
+	<link rel="stylesheet" href="../smarty/templates/administrator/css/general.css" type="text/css" />
 </head>
 
 <body onload="x = document.getElementsByTagName('input')[0];if (x.value == '') x.focus();">

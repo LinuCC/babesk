@@ -24,7 +24,7 @@
     $log_category_names = array();
     $log_category_names[ADMIN] = 'Admin Frontend';
     $log_category_names[WEB] = 'Web Frontend';
-    $log_category_names[USERS] = 'Beutzer';
+    $log_category_names[USERS] = 'Benutzer';
     
     
     $log_severity_names = array();

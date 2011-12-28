@@ -17,9 +17,9 @@
     require_once PATH_INCLUDE."/logs.php";
     require_once PATH_INCLUDE."/functions.php";
     require_once PATH_INCLUDE.'/exception_def.php';
-    require PATH_INCLUDE.'/moduleManager.php';
-    require 'modules.php';
-    require 'locales.php';
+    require_once PATH_INCLUDE.'/moduleManager.php';
+    require_once 'modules.php';
+    require_once 'locales.php';
     
     $smarty->assign('smarty_path', REL_PATH_SMARTY);
     $smarty->assign('status', '');
@@ -45,7 +45,7 @@
     }
     //login   
     if(!$login) {
-        require "login.php";    
+        require_once "login.php";    
     }
     
     //login.php sets $login to true so this is executed after a successful log-in
@@ -53,7 +53,6 @@
         $smarty->assign('username', $_SESSION['username']);
         $smarty->assign('sid', htmlspecialchars(SID));
         $smarty->display('administrator/header.tpl');
-
         //include a module if selected
         if (isset($_GET['section'])) {
             $modManager->execute($_GET['section']);

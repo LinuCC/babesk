@@ -64,18 +64,6 @@ class CardManager extends TableManager {
 		if(!$card) {
 			throw new MySQLVoidDataException('MySQL returned no data!'); 
 		}
-		$card = $result->fetch_assoc();
-		if(!$card) {
-			throw new MySQLVoidDataException('MySQL returned no data!'); 
-		}
-		$card = $result->fetch_assoc();
-		if(!$card) {
-			throw new MySQLVoidDataException('MySQL returned no data!'); 
-		}
-		$card = $result->fetch_assoc();
-		if(!$card) {
-			throw new MySQLVoidDataException('MySQL returned no data!'); 
-		}
 		$user = parent::getEntryData($card['UID'], 'UID');
 		return $user['UID'];
 	}

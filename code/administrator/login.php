@@ -48,7 +48,7 @@
         }
         //any regular admin
         else {
-            $allowed_modules_array = explode(' ', $module_string);
+            $allowed_modules_array = explode(', ', $module_string);
             foreach($modules as $module) {
                 foreach ($allowed_modules_array as $mod_name) {
                     if($mod_name == $module) {

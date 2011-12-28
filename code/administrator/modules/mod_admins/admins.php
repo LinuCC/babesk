@@ -9,6 +9,9 @@
 	global $smarty;
 	global $module_names;
 	
+	require 'modules.php';
+	
+	
 	//the different actions the module can do
 	$_addAdmin = 'addAdmin';
 	$_delAdmin  = 'delAdmin';

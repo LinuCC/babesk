@@ -7,6 +7,7 @@
      * Manages the admins and admin groups, provides methods to add/modify admins/admin groups
      * or to get data
      */
+
     class AdminManager {
     
         private $db;
@@ -196,6 +197,7 @@
          * @return false if error
          */
         function addAdmin($name, $password, $gid) {
+        	
         	require_once PATH_INCLUDE.'/functions.php';
             if ($this->getAdminID($name) != -1) {
                 echo USERNAME_EXISTS;
@@ -204,7 +206,7 @@
         	$query = 'INSERT INTO
                             administrators(name, password, GID)
                       VALUES
-                            ("'.$name.'", "'.hash_function($password).'", '.$gid.');';
+                            ("'.$name.'", "'.md5($password).'", '.$gid.');';
     
            $result = $this->db->query($query);
         	if (!$result) {
