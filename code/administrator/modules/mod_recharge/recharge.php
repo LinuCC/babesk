@@ -8,6 +8,9 @@ require PATH_INCLUDE.'/managers.php';
 require_once PATH_INCLUDE.'/card_access.php';
 require_once 'recharge_constants.php';
 
+require_once PATH_INCLUDE."/logs.php";
+$logger= new Logger;
+
 if ('POST' == $_SERVER['REQUEST_METHOD']) {
 	if (isset($_POST['card_ID'])) {
 		//save values and check for empty fields
@@ -38,9 +41,11 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 		$amount = floatval($amount);
 
 		if($userManager->changeBalance($_SESSION['module_data']['recharge_user'], $amount)) {
-			$smarty->assign('amount', $amount);
 			$userdata = $userManager->getEntryData($_SESSION['module_data']['recharge_user'], 'username');
 			$smarty->assign('username', $userdata['username']);
+			$logger->log(USERS,NOTICE,"USERNAME:".$userdata['username']."-AMOUNT:".$amount."-");
+			$smarty->assign('amount', $amount);
+			
 			$smarty->display('administrator/modules/mod_recharge/recharge_success.tpl');
 		}
 		else {

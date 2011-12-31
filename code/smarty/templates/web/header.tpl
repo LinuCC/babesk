@@ -3,7 +3,7 @@
 <head>
     <title>{$title|default:'BaBeSK'}</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<link rel="stylesheet" href="{$smarty_path}/templates/web/css/general.css" type="text/css" />
+	<link rel="stylesheet" href="../smarty/templates/web/css/general.css" type="text/css" />
 </head>
 <body>
 <div id="header">

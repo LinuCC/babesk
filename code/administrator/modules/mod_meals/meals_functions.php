@@ -255,11 +255,13 @@ function show_orders() {
 		}
 		$mysql_orders = array();
 		$order = array();
+	if(!count($orders)) {
+			die(MEAL_NO_ORDERS_FOUND);
+		}
 		foreach($orders as &$order) {
 			if (!count($meal_data = $meal_manager->getEntryData($order['MID'],'name')) or
 			!count($user_data = $user_manager->getEntryData($order['UID'],'name', 'forename'))) {
 				echo MEAL_DATABASE_PROB_ENTRY;
-				var_dump($order);
 				echo MEAL_DATABASE_PROB_ENTRY_END;
 			}
 			else {
@@ -268,9 +270,8 @@ function show_orders() {
 				$order['is_fetched'] = translate_fetched($order['fetched']);
 			}
 		}
-		if(!count($orders)) {
-			die(MEAL_NO_ORDERS_FOUND);
-		}
+		
+		
 		//////////////////////////////////////////////////
 		/**
 		* @todo refactor this part, some things are deprecated
