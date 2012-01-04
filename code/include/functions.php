@@ -75,7 +75,8 @@
      *  id - just a number: /\A^[0-9]\z/
      *  birthday - the YYYY-MM-DD format of birthday: /\A\d{4}-\d{1,2}-\d{1,2}\z/
      *  credits - credits-field: /\A\d{1,5}(.\d{2})?\z/
-     * @return boolean
+     * @return boolean only when no error found
+     * @throws Exception if string does not match the regex
      */
     function inputcheck($str, $regex_str) {
     	switch($regex_str) {
