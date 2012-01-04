@@ -7,7 +7,7 @@
     //---------------------------------
     $module_names['recharge'] = "Geld Aufladen";
     $module_names['checkout'] = "Kasse";
-    $module_names['admins'] = "Admin Verwaltung";
+    $module_names['admin'] = "Administratorverwaltung";
     $module_names['logs'] = "Logs";
     $module_names['meals'] = "Mahlzeiten Verwaltung";
     $module_names['fill'] = "Datenbank Auff&uuml;llen";

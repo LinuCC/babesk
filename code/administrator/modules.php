@@ -24,7 +24,7 @@
     $modules[] = "checkout";
     $modules[] = "logs";
     $modules[] = "meals";
-    $modules[] = "admins";
+    $modules[] = "admin";
     //$modules[] = "fill";
     //$modules[] = "clear";
     //$modules[] = "dummy";

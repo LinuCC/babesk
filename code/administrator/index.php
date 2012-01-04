@@ -20,6 +20,7 @@
     require_once PATH_INCLUDE.'/moduleManager.php';
     require_once 'modules.php';
     require_once 'locales.php';
+    require_once 'AdminInterface.php';
     
     $smarty->assign('smarty_path', REL_PATH_SMARTY);
     $smarty->assign('status', '');
@@ -29,7 +30,6 @@
     
     //check for valid session and save the ip address
     validSession() or die(INVALID_SESSION);
-    
     
     //logged in before if the user ID is set
     if(isset($_SESSION['UID'])) {
@@ -45,6 +45,7 @@
     }
     //login   
     if(!$login) {
+    	///@todo the variable modules is used in login.php, but is declared in modules.php, thus very confusing. Refactor needed!
         require_once "login.php";    
     }
     

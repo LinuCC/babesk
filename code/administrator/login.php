@@ -3,8 +3,10 @@
     defined('_AEXEC') or die("Access denied");
     
     require_once PATH_INCLUDE."/admin_access.php";
+    require_once PATH_INCLUDE."/admin_group_access.php";
     $adminManager = new AdminManager();
-
+    $admingroupManager = new AdminGroupManager();
+    
     if ('POST' == $_SERVER['REQUEST_METHOD']) {
         if (!isset($_POST['Username'], $_POST['Password'])) {
             die(INVALID_FORM);
@@ -14,7 +16,7 @@
             die(EMPTY_FORM);
         }
         $aid = $adminManager->getAdminID($adminname);
-        $gid = $adminManager->getAdminGroup($adminname);
+        $gid = $admingroupManager->getAdminGroup($adminname);
         
         if(!$adminManager->checkPassword($aid, $password)) {
             $smarty->assign('status', INVALID_LOGIN);
@@ -31,7 +33,7 @@
         $_SESSION['module_data'] = array();
         
         //Get the available modules
-        $groupData = $adminManager->getAdminGroupData($gid, 'modules');
+        $groupData = $admingroupManager->getAdminGroupData($gid, 'modules');
         $module_string = $groupData['modules'];
         
         //copy the module mask
