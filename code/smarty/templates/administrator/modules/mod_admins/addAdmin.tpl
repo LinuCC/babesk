@@ -1,17 +1,14 @@
 <h3>Administrator hinzuf&uuml;gen</h3>
 <p>Bitte den Namen des Administrators sowie ein Passwort und die Gruppe eingeben</p>
-<form action="index.php?section=admins&action=addAdmin&{$sid}" method="post">
+<form action="index.php?section=admin&action=1" method="post">
 	<fieldset>
 		<label>Benutzername:</label>
-        <input type="text" name="adminname" /><br><br>
+        <input type="text" name="adminname" /><br>
         <label>Passwort:</label>
-        <input type="password" name="password" /><br><br>
-		<select name="group" size="1">
- 			{section name=group loop=$admin_groups}
-                <option>{$admin_groups[group]}</option>
-			{/section}     
-        </select>
-        
+        <input type="password" name="password" /><br>
+    </fieldset>
+    <fieldset><legend>Gruppe des Administrators:</legend>    
+				{html_radios name="admin_groups" options=$admin_groups separator="<br>"}</label>
 	</fieldset>
 	<input type="submit" value="Submit" />
 </form>
