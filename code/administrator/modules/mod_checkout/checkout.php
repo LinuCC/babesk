@@ -18,8 +18,11 @@
 		if (($card_id = trim($_POST['card_ID'])) == '' OR !$cardManager->valid_card_ID($card_id)) {
 	        die(EMPTY_FORM);
 	   	}
-	   	
-	   	$uid = $card_id;//the userID is the ID of the card
+	   	try {
+	   		$uid = $cardManager->getUserID($card_id);
+	   	} catch (Exception $e) {
+	   		die(ERR_GET_USER_BY_CARD.' Error:'.$e->getMessage());
+	   	}
 	   	
 	   	$date = date("Y-m-d");
 	   	try {
