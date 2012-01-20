@@ -47,9 +47,9 @@
          * @return boolean true if everything has gone right
          */
         function setOrderFetched($ID) {
-            $query = 'UPDATE orders
+            $query = sql_prev_inj(sprintf('UPDATE orders
                         SET fetched = 1
-                      WHERE ID = '.$ID.';';
+                      WHERE ID = %s;'),$ID);
             $result = $this->db->query($query);
             if (!$result) {
                 echo DB_QUERY_ERROR.$this->db->error;

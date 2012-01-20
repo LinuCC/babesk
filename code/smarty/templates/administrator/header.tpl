@@ -7,23 +7,6 @@
 
 	<link rel="stylesheet" href="../smarty/templates/administrator/css/general.css" type="text/css" />	 
 	
-	
-	<script type="text/javascript" src="../js/prototype.js"></script>
-<script type="text/javascript" src="../js/effects.js"></script>
-<script type="text/javascript" src="../js/stereotabs.js"></script>
-    
-
-
-<script type="text/javascript">
-//<![CDATA[
-Event.observe(window, 'load', loadTabs, false);
-function loadTabs() {
-var tabs = new tabset('container'); // name of div to crawl for tabs and panels
-tabs.autoActivate($('tab_first')); // name of tab to auto-select if none exists in the url
-}
-//]]>
-</script>
-    
 </head>
 
 <body onload="x = document.getElementsByTagName('input')[0];if (x.value == '') x.focus();">
