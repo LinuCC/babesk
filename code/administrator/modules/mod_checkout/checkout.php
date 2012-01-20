@@ -25,16 +25,16 @@
 	   	}
 	   	
 	   	$date = date("Y-m-d");
+	   	$orders = array();
 	   	try {
 	   		$orders = $orderManager->getAllOrdersOfUser($uid, $date);
-
 	   	} catch (MySQLVoidDataException $e) {
 	   		$smarty->display(PATH_SMARTY_CHECKOUT.'/checkout_no_orders.tpl');
 	   		exit();
 	   	}
 	   	$meal_names = array();
-		for ($i = 0; $i < $orders->num_rows; $i++) {
-            $row = $orders->fetch_assoc();
+		for ($i = 0; $i < count($orders); $i++) {
+            $row = $orders[$i];
             $meal_name = $mealManager->getEntryData($row['MID'], 'name');
             // Abfrage des feldes 'name' aus der Tabelle 'meals' mit der ID '$row['MID'], anschlie�end Ausgabe des Namens
             if(!$meal_name) {
