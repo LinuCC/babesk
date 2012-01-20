@@ -75,10 +75,9 @@
     	 * @param YYYY-MM-DD $date_conv
     	 * @param int $price_class
     	 * @param int $max_orders
-    	 * @param numeric_bool $is_vegetarian
     	 */
-    	public function addMeal($name, $description, $date_conv, $price_class, $max_orders, $is_vegetarian) {
-    		parent::addEntry('name', $name,'description', $description, 'date', $date_conv, 'price_class', $price_class, 'max_orders', $max_orders, 'is_vegetarian', $is_vegetarian);
+    	public function addMeal($name, $description, $date_conv, $price_class, $max_orders) {
+    		parent::addEntry('name', $name,'description', $description, 'date', $date_conv, 'price_class', $price_class, 'max_orders', $max_orders);
     	}
     }
 

@@ -57,7 +57,6 @@
                         `price_class` smallint(6) NOT NULL,
                         `date` date NOT NULL,
                         `max_orders` int(11) NOT NULL,
-                        `is_vegetarian` boolean NOT NULL,
                         PRIMARY KEY  (`ID`)
                     ) AUTO_INCREMENT=1 ;';
 		//Table 'users'

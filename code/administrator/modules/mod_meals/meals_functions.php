@@ -29,7 +29,6 @@ function create_meal(){
 		$description = $_POST['description'];
 		$price_class = $_POST['price_class'];
 		$max_orders = $_POST['max_orders'];
-		(isset($_POST['is_vegetarian'])) ? $is_vegetarian = 1 : $is_vegetarian = 0;
 		$date_ar = array("day" => $_POST['Date_Day'],
 						"month" => $_POST['Date_Month'],
 	 					"year"  => $_POST['Date_Year']);
@@ -63,7 +62,7 @@ function create_meal(){
 		$date_conv = $date_ar["year"]."-".$date_ar["month"]."-".$date_ar["day"];
 		//and add the meal
 		try {
-			$meal_db->addMeal($name, $description, $date_conv, $price_class, $max_orders, $is_vegetarian);
+			$meal_db->addMeal($name, $description, $date_conv, $price_class, $max_orders);
 		}catch (Exception $e) {
 			die(MEAL_ERROR_ADD.$e->getMessage());
 		}

@@ -20,24 +20,17 @@
 	$weekdate = array();
 	for($i = 0; $i < 5; $i++)
 		$weekdate[] = date_to_european_date(get_weekday($i));
-	$meallist_veg = array();
 	$meallist_notveg = array();
 	if($meallist) {
 		foreach($meallist as $meal) {
-			if($meal['is_vegetarian'])
-				$meallist_veg[] = $meal;
-			else
-				$meallist_notveg[] = $meal;
+			$meallist_notveg[] = $meal;
 		}
 		$meallistweeksorted = sort_meallist($meallist_notveg);
-		$meallistweeksorted_veg = sort_meallist($meallist_veg);
 	}
 	else {
 		$meallistweeksorted = NULL;
-		$meallistweeksorted_veg = NULL;
 	}
 	$smarty->assign('meallistweeksorted',$meallistweeksorted);
-	$smarty->assign('meallistweeksorted_veg',$meallistweeksorted_veg);
 	$smarty->assign('weekdate',$weekdate);
 	$smarty->display(PATH_SMARTY_ADMIN_MOD.'/mod_menu/menu_table.tpl');
 ?><a href="../mod_fill"></a>
