@@ -187,9 +187,11 @@ class AdminUserProcessing {
 	function ChangeUserForm($uid) {
 		require_once PATH_INCLUDE.'/user_access.php';
 		require_once PATH_INCLUDE.'/group_access.php';
-
+		require_once PATH_INCLUDE.'/card_access.php';
+		$cardManager = new CardManager();
 		$userManager = new UserManager();
 		$groupManager = new GroupManager();
+		$cardnumber = $cardManager->getCardnumberByUserID($_GET['ID']);
 		try {
 			$user = $userManager->getEntryData($uid);
 		} catch (Exception $e) {
@@ -201,7 +203,7 @@ class AdminUserProcessing {
 			$this->userInterface->ShowError($this->messages['error']['groups_get_param'].$e->getMessage());
 		}
 
-		$this->userInterface->ShowChangeUser($user, $groups['arr_gid'], $groups['arr_group_name']);
+		$this->userInterface->ShowChangeUser($user, $groups['arr_gid'], $groups['arr_group_name'], $cardnumber);
 	}
 
 	/**
@@ -221,9 +223,11 @@ class AdminUserProcessing {
 	 * @param boolean $locked is 1 if account is locked
 	 * @throws Exception
 	 */
-	function ChangeUser($old_id, $id, $forename,$name,$username,$passwd,$passwd_repeat,$birthday,$GID,$credits,$locked) {
+	function ChangeUser($old_id, $id, $forename,$name,$username,$passwd,$passwd_repeat,$birthday,$GID,$credits,$locked, $cardnumber) {
 		require_once PATH_INCLUDE.'/user_access.php';
+		require_once PATH_INCLUDE.'/card_access.php';
 		$userManager = new UserManager();
+		$cardManager = new CardManager();
 		try {
 			inputcheck($forename, 'name');
 			inputcheck($name, 'name');
@@ -231,10 +235,13 @@ class AdminUserProcessing {
 			inputcheck($birthday, 'birthday');
 			inputcheck($GID, 'id');
 			inputcheck($credits, 'credits');
+			if($cardnumber)
+				inputcheck($cardnumber, 'card_id');
 		} catch (Exception $e) {
 			$this->userInterface->ShowError($this->messages['error']['input1'].'"'.$e->getMessage().'"'.
 			$this->messages['error']['input2']);
-			throw new Exception($this->messages['error']['change']);
+			die();
+			//throw new Exception($this->messages['error']['change']);
 		}
 		if(isset($passwd, $passwd_repeat)) {
 			if($passwd != $passwd_repeat) {
@@ -249,6 +256,7 @@ class AdminUserProcessing {
 		}
 		try {
 			$userManager->alterUser($old_id, $id, $name, $forename, $username, hash_password($passwd), $birthday, $credits, $GID, $locked);
+			if($cardnumber)$cardManager->changeCardnumber($cardManager->getIDByUserID($id), $cardnumber);
 		} catch (Exception $e) {
 			$this->userInterface->ShowError($this->messages['error']['change'].$e->getMessage());
 			die();

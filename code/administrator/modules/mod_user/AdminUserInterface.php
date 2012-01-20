@@ -1,11 +1,12 @@
 <?php
+require_once PATH_ADMIN.'/AdminInterface.php';
 /**
  * AdminUserInterface is to output the Interface
  * Enter description here ...
  * @author voelkerball
  *
  */
-class AdminUserInterface {
+class AdminUserInterface extends AdminInterface{
 	function __construct() {
 		// 		require_once PATH_INCLUDE.'';
 		global $smarty;
@@ -53,9 +54,10 @@ class AdminUserInterface {
 		$this->smarty->display($this->PathUserTemplates.'deletion_finished.tpl');
 	}
 	
-	function ShowChangeUser($user, $ar_gid, $ar_g_names) {
+	function ShowChangeUser($user, $ar_gid, $ar_g_names, $cardnumber) {
 		$this->smarty->assign('user', $user);
 		$this->smarty->assign('g_names', $ar_g_names);
+		$this->smarty->assign('cardnumber', $cardnumber);
 		$this->smarty->assign('gid', $ar_gid);
 	    
 		$this->smarty->display($this->PathUserTemplates.'change_user.tpl');
@@ -73,10 +75,9 @@ class AdminUserInterface {
 		$this->smarty->display($this->PathUserTemplates.'change_user_fin.tpl');
 	}
 	
-	private $smarty;
 	/**
 	 * file in which the Smarty-templates are
 	 */
-	private $PathUserTemplates;
+	protected $PathUserTemplates;
 }
 ?>

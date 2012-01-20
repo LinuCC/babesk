@@ -90,7 +90,7 @@
     			$regex_str = '/\A^[0-9]{10}\z/';
     			break;
     		case 'id':
-    			$regex_str = '/\A^[0-9]\z/';
+    			$regex_str = '/\A^[0-9]{1,20}\z/';
     			break;
     		case 'birthday':
     			$regex_str = '/\A\d{4}-\d{1,2}-\d{1,2}\z/';

@@ -18,6 +18,7 @@
 	define('MEAL_NO_MEALS_FOUND','<p class="error">Es wurden keine Mahlzeiten gefunden</p>');
 	define('MEAL_ERROR_ADD', '<p class="error">Die Mahlzeit konnte nicht hinzugefügt werden!</p>');
 	define('MEAL_ERROR_DELETE','Konnte eine Mahlzeit nicht löschen!');
+	define('MEAL_ERROR_PC', '<p class="error">Es wurde keine Preisklasse erstellt. Bitte erstellen sie zuerst Preisklassen</p>');
 	
 	define('MEAL_ADDED','Mahlzeit wurde erfolgreich hinzugefügt.');
 	define('MEAL_DELETED','Mahlzeit wurde erfolgreich geläscht.');

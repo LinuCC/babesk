@@ -70,7 +70,11 @@ function create_meal(){
 		echo MEAL_ADDED;
 	}
 	else {//if Formular isnt filled yet or the link was wrong
-		price_class_init_smarty_vars();
+		try {
+			price_class_init_smarty_vars();
+		} catch (Exception $e) {
+			die(MEAL_ERROR_PC.$e->getMessage());
+		}
 		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/add_meal.tpl');
 	}
 }
@@ -82,7 +86,13 @@ function price_class_init_smarty_vars() {
 	require_once PATH_INCLUDE.'/price_class_access.php';
 	global $smarty;
 	$priceclassmanager = new Priceclassmanager('price_classes');
-	$sql_price_classes = $priceclassmanager->getTableData();
+	try {
+		$sql_price_classes = $priceclassmanager->getTableData();		
+	} catch (MySQLVoidDataException $e) {
+		die(MEAL_ERROR_PC);
+	} catch (Exception $e) {
+		die("Error:".$e->getMessage());
+		}
 	$price_class_id = array();
 	$price_class_name = array();
 

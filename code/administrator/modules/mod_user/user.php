@@ -46,18 +46,17 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 			}
 			break;
 		case 4:
-			
 			if(!isset($_POST['id'], $_POST['forename'], $_POST['name'], $_POST['username'], $_POST['credits'], $_POST['gid'])) {
 				$user_processing->ChangeUserForm($_GET['ID']);
 			}
 			else {
-			if(isset ($_POST['lockAccount'])) {
-				$user_processing->ChangeUser($_GET['ID'], $_POST['id'], $_POST['forename'], $_POST['name'],
-				$_POST['username'], $_POST['passwd'], $_POST['passwd_repeat'], $_POST['Date_Year'].'-'.$_POST['Date_Month'].'-'.$_POST['Date_Day'], $_POST['gid'], $_POST['credits'],1);
-			} else {	
-				$user_processing->ChangeUser($_GET['ID'], $_POST['id'], $_POST['forename'], $_POST['name'], 
-				$_POST['username'], $_POST['passwd'], $_POST['passwd_repeat'], $_POST['Date_Year'].'-'.$_POST['Date_Month'].'-'.$_POST['Date_Day'], $_POST['gid'], $_POST['credits'],0);
-			}
+				if(isset ($_POST['lockAccount'])) {
+					$user_processing->ChangeUser($_GET['ID'], $_POST['id'], $_POST['forename'], $_POST['name'],
+					$_POST['username'], $_POST['passwd'], $_POST['passwd_repeat'], $_POST['Date_Year'].'-'.$_POST['Date_Month'].'-'.$_POST['Date_Day'], $_POST['gid'], $_POST['credits'],1, @$_POST['cardnumber']);
+				} else {
+					$user_processing->ChangeUser($_GET['ID'], $_POST['id'], $_POST['forename'], $_POST['name'],
+					$_POST['username'], $_POST['passwd'], $_POST['passwd_repeat'], $_POST['Date_Year'].'-'.$_POST['Date_Month'].'-'.$_POST['Date_Day'], $_POST['gid'], $_POST['credits'],0, @$_POST['cardnumber']);
+				}
 			}
 			break;
 	}

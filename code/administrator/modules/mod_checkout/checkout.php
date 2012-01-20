@@ -31,6 +31,8 @@
 	   	} catch (MySQLVoidDataException $e) {
 	   		$smarty->display(PATH_SMARTY_CHECKOUT.'/checkout_no_orders.tpl');
 	   		exit();
+	   	} catch(Exception $e) {
+	   		die('An Error ocurred:'.$e->getMessage());
 	   	}
 	   	$meal_names = array();
 		for ($i = 0; $i < count($orders); $i++) {
