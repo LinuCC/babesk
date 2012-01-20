@@ -1,8 +1,6 @@
 {literal}<!-- No Smarty-Variables wanted in JavaScript -->
 <script type="text/javascript">
 
-alert("SCHINKEN!");
-
 function displayChangeCardId() {
 	document.getElementById("cardnumber").disabled = false;
 	document.getElementById("cardnumber").focus();
