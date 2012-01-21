@@ -85,5 +85,15 @@
         		throw $e;
         	}
         }
+        
+        function getPriceClassName($pc_ID) {
+        	try {
+        		$pcn = TableManager::getTableData(sprintf("pc_ID=%s LIMIT 1",$pc_ID));
+        	} catch (Exception $e) {
+        		echo "Fehler";
+        		throw $e;
+        	}
+        	return $pcn;
+        }
     }
 ?>

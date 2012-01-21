@@ -10,13 +10,15 @@
   */
 function get_weekday($day) {
 	include_once 'menu_constants.php';
-	if($day < 0 OR $day > 6){echo F_ARGUMENT_GET_WEEKDAY; return false;}
+	//if($day < 0 OR $day > 6){echo F_ARGUMENT_GET_WEEKDAY; return false;}
 	$weekdaynow = date('w');
 	$timestampnow = time();
-	if($weekdaynow != 6)
+	//if($weekdaynow != 6)
+	//if($day <= 6)
 		$weekday = $timestampnow - (($weekdaynow - $day - 1) * 60 * 60 * 24);
-	else if($weekdaynow == 6)//weekend, so show next week
-		$weekday = $timestampnow - (($weekdaynow - $day - 7 - 1) * 60 * 60 * 24);
+	//else if($weekdaynow == 6)//weekend, so show next week
+	//else if($day > 6)
+		//$weekday = $timestampnow - (($weekdaynow - $day - 7 - 1) * 60 * 60 * 24);
 	$dateday = date("Y-m-d",$weekday);
 	return $dateday;
 }
@@ -27,20 +29,28 @@ function get_weekday($day) {
   *@return returns the reorganized mealnamelist
   */
 function sort_meallist($meallist) {
+	require_once PATH_INCLUDE.'/price_class_access.php';
+	$priceclassmanager = new PriceClassManager();
 	if(!$meallist)return false;
-	$weekday_name = array(0 => 'monday','tuesday','wednesday','thursday','friday');
+	$weekday_name = array('monday','tuesday','wednesday','thursday','friday','saturday','sunday','monday2','tuesday2','wednesday2','thursday2','friday2');
 	$weekday_date = array();//at which day which date is, 0 is Monday, 1 Tuesday...
-	for($i = 0; $i < 5; $i++) {
+	for($i = 0; $i < 12; $i++) {
+		if ($i <> 5 && $i <> 6)
 		$weekday_date [$i] = get_weekday($i);
 	}
-	$meallistweeksorted = array(array());
+	$meallistweeksorted = array(array(array()));
 	$counter = 0;
 	foreach($meallist as $meal) {
-		for($i = 0; $i < 5; $i++) {
+		for($i = 0; $i < 12; $i++) {
+			if ($i <> 5 && $i <> 6) {
 			if($meal["date"] == $weekday_date[$i]) {
-				while(isset($meallistweeksorted[$counter][$weekday_name[$i]]))$counter++;
-				$meallistweeksorted[$counter][$weekday_name[$i]] = $meal["name"];
+				while(isset($meallistweeksorted[$counter][$weekday_name[$i]]["title"]))$counter++;
+				$meallistweeksorted[$counter][$weekday_name[$i]]["title"] = $meal["name"];
+				$meallistweeksorted[$counter][$weekday_name[$i]]["description"] = $meal["description"];
+				$pcn = $priceclassmanager->getPriceClassName($meal["price_class"]);
+				$meallistweeksorted[$counter][$weekday_name[$i]]["priceclass"] = $pcn[0]["name"];
 			}
+		}
 			$counter = 0;
 		}
 	}

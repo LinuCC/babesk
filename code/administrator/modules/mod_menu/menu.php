@@ -16,10 +16,12 @@
 	$mealmanager = new MealManager('meals');
 
 	$meallist = array();
-	$meallist = $mealmanager->get_meals_between_two_dates(get_weekday(1), get_weekday(5));
+	$meallist = $mealmanager->get_meals_between_two_dates(get_weekday(1), get_weekday(14));
 	$weekdate = array();
-	for($i = 0; $i < 5; $i++)
+	for($i = 0; $i < 12; $i++) {
+	if ($i <> 5 && $i <> 6)
 		$weekdate[] = date_to_european_date(get_weekday($i));
+	}
 	$meallist_notveg = array();
 	if($meallist) {
 		foreach($meallist as $meal) {
