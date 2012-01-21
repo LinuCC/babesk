@@ -9,6 +9,7 @@
  *
  */
 
+require_once 'functions.php';
 require_once 'exception_def.php';
 
 class TableManager {
