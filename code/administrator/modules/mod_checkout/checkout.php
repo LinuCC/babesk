@@ -46,6 +46,9 @@
                 $meal_names[] = $meal_name['name'];
                 $orderManager->setOrderFetched($row['ID']);    
             } 
+            else {
+                $meal_names[] = $meal_name['name'].'; '.ORDER_ALREADY_FETCHED;
+            }
 		}
         $smarty->assign('meal_names', $meal_names);
         $smarty->display('administrator/modules/mod_checkout/checkout.tpl');	
