@@ -35,6 +35,18 @@
                          "'.hash_password($password).'",
                          1);'; 
 
+	    $sql[2] = 'INSERT INTO
+	                    	    global_settings(name, value)
+	                       VALUES
+	                            ("menu_text1",
+	                             "infotext 1");'; 
+	    
+	    $sql[3] = 'INSERT INTO
+	    	                    	    global_settings(name, value)
+	    	                       VALUES
+	    	                            ("menu_text2",
+	    	                             "infotext 2");';
+	     
 	    foreach ($sql as $query) {
 	    	$result = $db->query($query);
 			if (!$result) {

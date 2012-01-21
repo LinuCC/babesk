@@ -32,6 +32,14 @@
 	else {
 		$meallistweeksorted = NULL;
 	}
+	
+	require_once PATH_INCLUDE.'/access.php';
+	$temp = new TableManager('global_settings');	
+	$infotext1 = $temp->getTableData('name="menu_text1"');
+	$infotext2 = $temp->getTableData('name="menu_text2"');
+	$smarty->assign('menu_text1',$infotext1[0]["value"]);
+	$smarty->assign('menu_text2',$infotext2[0]["value"]);
+	
 	$smarty->assign('meallistweeksorted',$meallistweeksorted);
 	$smarty->assign('weekdate',$weekdate);
 	$smarty->display(PATH_SMARTY_ADMIN_MOD.'/mod_menu/menu_table.tpl');

@@ -15,3 +15,7 @@
 	<input type="submit" value="Alte Mahlzeiten und Bestellungen löschen" />
 	</form>
 	<br><br>
+	<form action="index.php?section=meals&action=6" method="post">
+	<input type="submit" value="Infotexte f&uuml;r Speiseplan editieren" />
+	</form>
+	<br><br>

@@ -68,4 +68,8 @@
 		</tbody>
 	
 	</table>
+	<hr>
+	{$menu_text1}
+	<hr>
+{$menu_text2}
 </body>

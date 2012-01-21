@@ -32,6 +32,9 @@
 			}
 			$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/meal_deleted.tpl');
 		}
+		else if ($_GET['action'] == 6) {
+			edit_infotext();
+		}
 	}
 	else {//User selects what he want to do
 		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/meals_initial_menu.tpl');

@@ -230,6 +230,38 @@ function translate_fetched($is_fetched) {
 	throw Exception('Wrong argument');
 }
 
+
+
+function edit_infotext(){
+	require_once PATH_INCLUDE.'/access.php';
+	
+	global $smarty;
+	
+	$temp = new TableManager('global_settings');
+	
+	$infotext1 = $temp->getTableData('name="menu_text1"');
+	$infotext2 = $temp->getTableData('name="menu_text2"');
+	
+	if('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['infotext1'], $_POST['infotext2'])) {
+		
+		
+		$infotext1neu = $_POST['infotext1'];
+		$infotext2neu = $_POST['infotext2'];
+		try {
+			$temp->alterEntry($infotext1[0]["id"],'value',$infotext1neu);
+			$temp->alterEntry($infotext2[0]["id"],'value',$infotext2neu);
+		} catch (MySQLVoidDataException $e) {
+			die();
+		}
+	}
+	else {
+   
+    $smarty->assign('infotext1',$infotext1[0]["value"]);
+	$smarty->assign('infotext2',$infotext2[0]["value"]);
+	$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/edit_infotext.tpl');
+	}
+}
+
 /**
  *shows the orders in a table
  */
