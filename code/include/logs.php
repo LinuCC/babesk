@@ -29,10 +29,9 @@
          * @return false if error occured
          */
         function log($category, $severity, $msg) {
-            $query = 'INSERT INTO
-                	    logs(category, severity, time, message)
-                      VALUES
-                        ("'.$category.'", "'.$severity.'", CURRENT_TIMESTAMP, "'.$msg.'");';
+            $query = sql_prev_inj(sprintf('INSERT INTO logs(category, severity, time, message) 
+            			VALUES ("%s", "%s", CURRENT_TIMESTAMP, "%s");', $category, $severity, $msg));
+            
             $result = $this->db->query($query);
             if (!$result) {
         	   echo DB_QUERY_ERROR.$this->db->error;
@@ -54,7 +53,7 @@
         function getLogData() {
         	$num_args = func_num_args();
         	if($num_args == 0){
-        		$query = 'SELECT * FROM logs';
+        		$query = sql_prev_inj(sprintf('SELECT * FROM logs'));
         	}
         	else if($num_args > 1){
         		$id = func_get_arg(0);
@@ -64,13 +63,7 @@
         		}
         		//query must not contain an ',' after the last field name
         		$fields .= func_get_arg($num_args - 1);
-        	
-        		$query = 'SELECT
-		   					'.$fields.'
-           				FROM
-           					logs
-           				WHERE
-           					ID = '.$id.'';
+        		$query = sql_prev_inj(sprintf('SELECT %s FROM logs WHERE ID = %s', $fields, $id));
         	}
         	else {
         		return false;
@@ -109,6 +102,7 @@
          */
         function clearLogsBefore($timestamp) {
             $query = 'DELETE FROM logs WHERE date < '.$timestamp.';';
+            $query = sql_prev_inj(sprintf('DELETE FROM logs WHERE date < %s;', $timestamp));
             $result = $this->db->query($query);
             if (!$result) {
         	   echo DB_QUERY_ERROR.$this->db->error;

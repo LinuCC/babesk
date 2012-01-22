@@ -56,9 +56,8 @@
     		if(!$date1 or !$date2){return false;}
     		include 'dbconnect.php';
     		$res_array = NULL;
-    		$query= 'SELECT * 
-    				 FROM meals
-    				 WHERE date between "'.$date1.'" and "'.$date2.'"';
+    		$query = sql_prev_inj(sprintf('SELECT *  FROM meals
+    				 WHERE date between "%s" and "%s"', $date1, $date2));
     		$result = $this->db->query($query);
     		if(!$result) {
     	   		echo DB_CONNECT_ERROR.$this->db->error; exit;

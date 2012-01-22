@@ -31,12 +31,7 @@ class AdminGroupManager extends TableManager{
 	 * @return false if error otherwise the group id
 	 */
 	function getAdminGroup($adminname) {
-		$query = 'SELECT
-	    					GID
-	    				FROM
-	    					administrators
-	    				WHERE
-	    					name = "'.$adminname.'"';
+		$query = sql_prev_inj(sprintf('SELECT GID FROM administrators WHERE name = "%s"', $adminname));
 		$result = $this->db->query($query);
 		if (!$result) {
 			echo DB_QUERY_ERROR.$this->db->error."<br />".$query;
@@ -47,10 +42,7 @@ class AdminGroupManager extends TableManager{
 	}
 
 	function getAdminGroups() {
-		$query = 'SELECT
-	    					name
-	    				  FROM
-	    					admin_groups';
+		$query = sql_prev_inj(sprintf('SELECT name FROM admin_groups'));
 		$result = $this->db->query($query);
 		if (!$result) {
 			echo DB_QUERY_ERROR.$this->db->error."<br />".$query;
@@ -86,12 +78,7 @@ class AdminGroupManager extends TableManager{
 		}
 		$fields .= func_get_arg($num_args - 1);  //query must not contain an ',' after the last field name
 
-		$query = 'SELECT
-	    					'.$fields.'
-	    				FROM
-	    					admin_groups
-	    				WHERE
-	    					ID = '.$id.'';
+		$query = sql_prev_inj(sprintf('SELECT %s FROM admin_groups WHERE ID = %s', $fields, $id));
 		$result = $this->db->query($query);
 		if (!$result) {
 			echo DB_QUERY_ERROR.$this->db->error."<br />".$query;
@@ -115,11 +102,8 @@ class AdminGroupManager extends TableManager{
 			echo GROUP_EXISTS;
 			return false;
 		}
-		$query = 'INSERT INTO
-	                            admin_groups(name, modules)
-	                      VALUES
-	                            ("'.$name.'", "'.$modules.'");';
-
+		$query = sql_prev_inj(sprintf('INSERT INTO admin_groups(name, modules)
+	                      VALUES ("%s", "%s");', $name, $modules));
 		$result = $this->db->query($query);
 		if (!$result) {
 			echo DB_QUERY_ERROR.$this->db->error;
@@ -138,9 +122,7 @@ class AdminGroupManager extends TableManager{
 	 * @return false if error
 	 */
 	function delAdminGroup($ID) {
-		$query = 'DELETE FROM
-	        	               admin_groups
-	                      WHERE ID = '.$ID.';';
+		$query = sql_prev_inj(sprintf('DELETE FROM admin_groups WHERE ID = %s;', $ID));
 		$result = $this->db->query($query);
 		if (!$result) {
 			echo DB_QUERY_ERROR.$this->db->error;

@@ -25,12 +25,7 @@ class AdminManager extends TableManager{
 	 * @return false if error otherwise the admin id
 	 */
 	function getAdminID($adminname) {
-		$query = 'SELECT
-    					ID
-    				FROM
-    					administrators
-    				WHERE
-    					name = "'.$adminname.'"';
+		$query = sql_prev_inj(sprintf('SELECT ID FROM administrators WHERE name = "%s"', $adminname));
 		$result = $this->db->query($query);
 		if (!$result) {
 			echo DB_QUERY_ERROR.$this->db->error."<br />".$query;
@@ -60,12 +55,7 @@ class AdminManager extends TableManager{
 	 */
 	function checkPassword($aid, $password) {
 		require_once PATH_INCLUDE.'/functions.php';
-		$query = 'SELECT
-    					password
-    				FROM
-    					administrators
-    				WHERE
-    					ID = '.$aid.'';
+		$query = sql_prev_inj(sprintf('SELECT password FROM administrators WHERE ID = %s', $aid));
 		$result = $this->db->query($query);
 		if (!$result) {
 			echo DB_QUERY_ERROR.$this->db->error."<br />".$query;
@@ -81,10 +71,7 @@ class AdminManager extends TableManager{
 	}
 
 	function getAdmins() {
-		$query = 'SELECT
-    					name
-    				  FROM
-    					administrators';
+		$query = sql_prev_inj(sprintf('SELECT name FROM administrators'));
 		$result = $this->db->query($query);
 		if (!$result) {
 			echo DB_QUERY_ERROR.$this->db->error."<br />".$query;
@@ -107,6 +94,8 @@ class AdminManager extends TableManager{
 	 * @param password His password
 	 * @param gid His Group ID
 	 * @return false if error
+	 * 
+	 * @todo Use addEntry instead!
 	 */
 	function addAdmin($name, $password, $gid) {
 		 
@@ -115,11 +104,8 @@ class AdminManager extends TableManager{
 			echo USERNAME_EXISTS;
 			return false;
 		}
-		$query = 'INSERT INTO
-                            administrators(name, password, GID)
-                      VALUES
-                            ("'.$name.'", "'.$password.'", '.$gid.');';
-
+		$query = sql_prev_inj(sprintf('INSERT INTO administrators(name, password, GID)
+                      VALUES ("%s", "%s", %s);', $name, $password, $gid));
 		$result = $this->db->query($query);
 		if (!$result) {
 			echo DB_QUERY_ERROR.$this->db->error;
@@ -137,17 +123,8 @@ class AdminManager extends TableManager{
 	 * @return false if error
 	 */
 	function delAdmin($ID) {
-		$query = 'DELETE FROM
-        	               administrators
-                      WHERE ID = '.$ID.';';
-		$result = $this->db->query($query);
-		if (!$result) {
-			echo DB_QUERY_ERROR.$this->db->error;
-			return false;
-		}
-		return true;
+		parent::delEntry($ID);
 	}
-
 }
 
 ?>

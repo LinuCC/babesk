@@ -98,7 +98,7 @@ class UserManager extends TableManager{
 		}
 		$credit = $oldCredit + $amount;
 
-		$query = $this->db->real_escape_string('UPDATE users SET credit = '.$credit.' WHERE ID = '.$id.';');
+		$query = sql_prev_inj(sprintf('UPDATE users SET credit = %s WHERE ID = %s;', $credit, $id));
 		$result = $this->db->query($query);
 		if (!$result) {
 			echo DB_QUERY_ERROR.$this->db->error;
