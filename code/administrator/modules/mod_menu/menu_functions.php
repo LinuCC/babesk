@@ -15,7 +15,7 @@ function get_weekday($day) {
 	$timestampnow = time();
 	//if($weekdaynow != 6)
 	//if($day <= 6)
-		$weekday = $timestampnow - (($weekdaynow - $day - 1) * 60 * 60 * 24);
+		$weekday = $timestampnow - (($weekdaynow - $day -1) * 60 * 60 * 24);
 	//else if($weekdaynow == 6)//weekend, so show next week
 	//else if($day > 6)
 		//$weekday = $timestampnow - (($weekdaynow - $day - 7 - 1) * 60 * 60 * 24);
