@@ -5,6 +5,7 @@ require_once 'AdminUserInterface.php';
 class AdminUserProcessing {
 	function __construct() {
 		$this->userInterface = new AdminUserInterface();
+		global $logger; $this->logs = $logger;
 		$this->messages = array('error' => array(
 									'max_credits' => 'Maximales Guthaben der Gruppe überschritten.',
 									'mysql_register' => 'Problem bei dem Versuch, den neuen Benutzer in MySQL einzutragen.',
@@ -17,6 +18,7 @@ class AdminUserProcessing {
 									'register' => 'Konnte den Benutzer nicht hinzufügen!',
 									'change' => 'Konnte den Benutzer nicht ändern!',
 									'passwd_repeat' => 'das Passwort und das wiederholte Passwort stimmen nicht überein',
+									'card_id_change' => 'Warnung: Konnte den Zähler der Karten-ID nicht erhöhen.',
 									'user_existing' => ' der Benutzer ist schon vorhanden.'),
 								'notice' => array(
 									'please_repeat' => 'Bitte wiederholen sie den Vorgang.'));
@@ -256,7 +258,16 @@ class AdminUserProcessing {
 		}
 		try {
 			$userManager->alterUser($old_id, $id, $name, $forename, $username, hash_password($passwd), $birthday, $credits, $GID, $locked);
-			if($cardnumber)$cardManager->changeCardnumber($cardManager->getIDByUserID($id), $cardnumber);
+			if($cardnumber) {
+				$cardManager->changeCardnumber($cardManager->getIDByUserID($id), $cardnumber);
+				try {
+					$cardManager->addCardIdChange($cardManager->getIDByUserID($id));
+				} catch (Exception $e) {
+					$this->userInterface->ShowError($this->messages['error']['card_id_change']);
+					$this->logs->log(ADMIN, MODERATE, 'Error: Could not finish addCardIdChange() in '.
+									__METHOD__.'; CardID: '.$cardManager->getIDByUserID($id));
+				}
+			}
 		} catch (Exception $e) {
 			$this->userInterface->ShowError($this->messages['error']['change'].$e->getMessage());
 			die();
@@ -266,6 +277,11 @@ class AdminUserProcessing {
 
 	var $messages = array();
 	private $userInterface;
+	
+	/**
+	 *@var Logger
+	 */
+	protected $logs;
 }
 
 

@@ -81,6 +81,41 @@ class CardManager extends TableManager {
 		parent::alterEntry($ID, 'cardnumber', $cardnumber);
 	}
 	
+	/**
+	 * If CardID was changed, this function adds 1 to changed_cardID on the MySQL-Server
+	 * Enter description here ...
+	 * 
+	 * @param $ID The ID of the object in the cards-table, which cardnumber was changed
+	 */
+	function addCardIdChange($ID) {
+		$card = parent::getEntryData($ID);
+		if($card != NULL) {
+			try {
+				parent::alterEntry($ID, 'changed_cardID', $card);
+			} catch (Exception $e) {
+				throw new Exception('could not alter the card-entry:'.$e->getMessage()); 
+			}
+		} else {
+			throw new Exception('could not get the card!');
+		}
+	}
+	
+	/**
+	 * Returns the number of CardID-changes
+	 * Enter description here ...
+	 * @param numeric_string $ID
+	 * @return numeric value of changed_cardID for the given object
+	 * @throws Exception if something has gone wrong
+	 */
+	function getCardIDChanges($ID) {
+		$card = parent::getEntryData($ID);
+		if(isset($card ['changed_cardID'])) {
+			return $card ['changed_cardID'];
+		} else {
+			throw new Exception('could not get the value changed_cardID');
+		}
+	}
+	
 	function getCardnumberByUserID($ID) {
 		require_once PATH_INCLUDE.'/dbconnect.php';
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE UID=%s',$this->tablename, $ID));

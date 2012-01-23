@@ -106,6 +106,7 @@
                         `ID` bigint(20) unsigned NOT NULL auto_increment,
                         `cardnumber` varchar(10) NOT NULL,
                         `UID` bigint(11) unsigned NOT NULL,
+                        `changed_cardID` int(11) unsigned,
                         PRIMARY KEY  (`ID`)
                     )AUTO_INCREMENT=1;';
         //Table 'logs'

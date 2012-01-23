@@ -246,6 +246,12 @@ class TableManager {
 	 * @var MySQLi-Object
 	 */
 	protected $db;
+	
+	/**
+	 * A logs-object to get things logged in the MySQL-Server
+	 * @var Logger-Object (@see logs.php)
+	 */
+	protected $logs;
 
 }
 
