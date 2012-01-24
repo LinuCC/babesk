@@ -23,12 +23,17 @@
 		else if($_GET['action'] == 4)//delete old orders
 			delete_old_meals_and_orders();
 		else if($_GET['action'] == 5) {//delete specific meal
-			require_once PATH_INCLUDE.'/meal_access.php';
-			$mealManager = new MealManager();
+// 			require_once PATH_INCLUDE.'/meal_access.php';
+// 			$mealManager = new MealManager();
+// 			try {
+// 				$mealManager->delEntry($_GET['id']);
+// 			} catch (Exception $e) {
+// 				die('Could not delete meal: '.$e->getMessage());
+// 			}
 			try {
-				$mealManager->delEntry($_GET['id']);
+				delete_meal($_GET['id'], TRUE);
 			} catch (Exception $e) {
-				die('Could not delete meal: '.$e->getMessage());
+				die($e->getMessage());
 			}
 			$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/meal_deleted.tpl');
 		}

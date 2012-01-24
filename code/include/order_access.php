@@ -74,12 +74,30 @@
             }
         }
         
+        /**
+         * Adds an order to the MySQL-orders-table
+         * Enter description here ...
+         * @param unknown_type $MID
+         * @param unknown_type $UID
+         * @param unknown_type $IP
+         * @param unknown_type $date
+         */
         function addOrder($MID, $UID, $IP, $date) {
         	parent::addEntry('MID', $MID,
         					'UID', $UID, 
         					'IP', $IP, 
         					'ordertime', time(), 
         					'date', $date);
+        }
+        
+        /**
+         * returns all orders of a meal
+         * Enter description here ...
+         * @param numberic_string $ID the ID of the meal whose orders to return
+         * @return array of orders
+         */
+        function getAllOrdersOfMeal($ID) {
+        	return parent::getTableData(sprintf('MID = %s', $ID));
         }
     }   
 

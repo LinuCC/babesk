@@ -1,6 +1,6 @@
 <?php
 /**
- *@file meals_functions.php some outsourced functions of the meals-module
+  *@file meals_functions.php some outsourced functions of the meals-module
  **/
 
 /**
@@ -398,4 +398,38 @@ function delete_old_meals_and_orders() {
 		}
 	}
 }
+
+/**
+ * deletes a meal
+ * This function deletes a meal. If linked_orders is set to true, it will also delete the 
+ * orders linked to it.
+ * @param numeric_string $ID the ID of the meal to delete
+ * @param boolean $linked_orders If set to true, all orders linked to the meal to delete will also be deleted
+ */
+function delete_meal($ID, $linked_orders) {
+	require_once PATH_INCLUDE.'/meal_access.php';
+	require_once PATH_INCLUDE.'/order_access.php';
+	require_once 'meals_constants.php';
+	
+	$mealManager = new MealManager();
+	$orderManager = new OrderManager();
+	
+	try {
+		$mealManager->delEntry($ID);
+	} catch (Exception $e) {
+		throw MEAL_ERROR_DELETE.':'.$e->getMessage();
+	}
+	if($linked_orders) {
+		$orders = $orderManager->getAllOrdersOfMeal($ID);
+		foreach($orders as $order) {
+			try {
+				$orderManager->delEntry($order['ID']);
+			} catch (Exception $e) {
+				echo MEAL_ERROR_DEL_ORDER.': BestellungsID:'.$order['ID'].'Gemeldetes Problem:'
+															.$e->getMessage().'<br>';
+			}
+		}
+	}
+}
+
 ?>

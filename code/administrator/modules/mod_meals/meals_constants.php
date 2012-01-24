@@ -15,6 +15,7 @@
 	define('MEAL_DATABASE_PROB_ENTRY_END','<p class="error"><br>---------------------------------<br></p>');
 	define('MEAL_ERROR_PARAM','<p class="error">Ein falsches Argument wurde einer Funktion übergeben!</p>');
 	define('MEAL_NO_ORDERS_FOUND','<p class="error">Es wurden keine Bestellungen für den angegebenen Zeitraum gefunden</p>');
+	define('MEAL_ERROR_DEL_ORDER', '<p class="error">Die angegebene Bestellung konnte nicht gelöscht werden</p>');
 	define('MEAL_NO_MEALS_FOUND','<p class="error">Es wurden keine Mahlzeiten gefunden</p>');
 	define('MEAL_ERROR_ADD', '<p class="error">Die Mahlzeit konnte nicht hinzugefügt werden!</p>');
 	define('MEAL_ERROR_DELETE','Konnte eine Mahlzeit nicht löschen!');
