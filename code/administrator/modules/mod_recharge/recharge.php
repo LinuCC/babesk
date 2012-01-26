@@ -7,6 +7,7 @@ global $smarty;
 require PATH_INCLUDE.'/managers.php';
 require_once PATH_INCLUDE.'/card_access.php';
 require_once 'recharge_constants.php';
+require_once PATH_INCLUDE.'/user_access.php';
 
 require_once PATH_INCLUDE."/logs.php";
 $logger= new Logger;
@@ -22,7 +23,13 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 		$card_id = $_POST['card_ID'];
 		try {
 			$cardManager = new CardManager();
+			$userManager = new UserManager();
 			$uid = $cardManager->getUserID($card_id);
+			if ($userManager->checkAccount($uid)) {
+				$smarty->display('administrator/modules/mod_recharge/error_locked.tpl');
+				exit();
+			}
+			
 		} catch (Exception $e) {
 			die(ERR_GET_UID.$e->getMessage());
 		}

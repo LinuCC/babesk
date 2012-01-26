@@ -7,9 +7,12 @@
 	require PATH_INCLUDE.'/dbconnect.php';
 	require PATH_INCLUDE.'/managers.php';
 	require PATH_INCLUDE.'/card_access.php';
+	require_once PATH_INCLUDE.'/user_access.php';
     require "checkout_constants.php"; 
 
     $cardManager = new CardManager();
+    
+    $userManager = new UserManager();
     
 	if ('POST' == $_SERVER['REQUEST_METHOD']) {
 	   if (!isset($_POST['card_ID'])) {
@@ -20,9 +23,14 @@
 	   	}
 	   	try {
 	   		$uid = $cardManager->getUserID($card_id);
+	   		if ($userManager->checkAccount($uid)) {
+	   			$smarty->display(PATH_SMARTY_CHECKOUT.'/checkout_locked.tpl');
+	   			exit();
+	   		}
 	   	} catch (Exception $e) {
 	   		die(ERR_GET_USER_BY_CARD.' Error:'.$e->getMessage());
 	   	}
+	   
 	   	
 	   	$date = date("Y-m-d");
 	   	$orders = array();
