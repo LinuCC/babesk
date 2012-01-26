@@ -72,6 +72,7 @@
                         `last_login` timestamp NOT NULL,
                         `login_tries` smallint(5),
                         `first_passwd` boolean NOT NULL,
+                        `locked` boolean NOT NULL,
                         PRIMARY KEY  (`ID`)
                     );';
 		//Table 'price_classes'
@@ -144,7 +145,7 @@
         $sql[10] = 'CREATE TABLE IF NOT EXISTS `global_settings` (
                                 `id` smallint(5) unsigned NOT NULL auto_increment,
                                 `name` varchar(255) NOT NULL,
-                                `vlaue` varchar(1024) NOT NULL,
+                                `value` varchar(1024) NOT NULL,
                                 PRIMARY KEY (`id`)
                             )AUTO_INCREMENT=1;';
 
