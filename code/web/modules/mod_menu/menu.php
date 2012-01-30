@@ -2,7 +2,7 @@
 //No direct access
 defined('_WEXEC') or die("Access denied");
 global $smarty;
-//global OrderManager; //etc. geht auch (glaub ich)
+global $logger;
 
 $orderManager = new OrderManager('orders');
 $mealManager = new MealManager('meals');
@@ -22,7 +22,14 @@ if($orders_existing) {
 	$today = date('Y-m-d');
 	$hour = date('H', time());
 	foreach($orders as $order) {
-		$mealname = $mealManager->getEntryData($order['MID'], 'name');
+		try {
+			$mealname = $mealManager->getEntryData($order['MID'], 'name');
+		} catch (Exception $e) {
+			$smarty->assign('error', 'Zu bestimmten Bestellung(-en) fehlen Daten einer Mahlzeit!');
+			$logger->log(WEB, CRITICAL, sprintf('Order does not point on correct Meal! Exception in %s: %s', 
+												__FILE__,$e->getMessage()));
+			continue;
+		}
 		if(!$order['fetched'] AND $order['date'] >= $today) {
 			if ($order['date'] == $today AND $hour > 8) {
 				$meal[] = array('date' => formatDate($order["date"]), 'name' => $mealname["name"], 'orderID' => $order['ID'], 'cancel' => false);

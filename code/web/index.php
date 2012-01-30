@@ -14,6 +14,7 @@ require_once "../include/path.php";
 require_once PATH_INCLUDE.'/managers.php';
 require_once PATH_INCLUDE.'/moduleManager.php';
 require_once PATH_INCLUDE.'/functions.php';
+require_once PATH_INCLUDE.'/logs.php';
 require_once PATH_SMARTY."/smarty_init.php";
 require_once 'login.php';
 require 'modules.php';
