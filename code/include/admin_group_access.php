@@ -98,7 +98,13 @@ class AdminGroupManager extends TableManager{
 	 * @return false if error
 	 */
 	function addAdminGroup($name, $modules) {
-		if ($this->getAdminGroupIdByName($name) != -1) {
+		$query = sql_prev_inj(sprintf('SELECT COUNT(*) AS anzahl FROM admin_groups WHERE name="%s";', $name));
+		$result = $this->db->query($query);
+		$buffer = $result->fetch_assoc();
+
+		
+		
+		if ($buffer["anzahl"] == "1") {
 			echo GROUP_EXISTS;
 			return false;
 		}

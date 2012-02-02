@@ -1,0 +1,1 @@
+<p align="center">Administratorgruppe {$name} erfolgreich angelegt!</p>

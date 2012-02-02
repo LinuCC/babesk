@@ -45,6 +45,13 @@ class AdminAdminInterface extends AdminInterface{
 		$this->smarty->display($this->PTPL.'confirm_delete_admingroup.tpl');
 	}
 	
+	function ConfirmAddAdmingroup($admingroup_name) {
+		
+		$this->smarty->assign('name', $admingroup_name);
+		$this->smarty->display($this->PTPL.'confirm_add_admingroup.tpl');
+	}
+	
+	
 	function SelectionMenu($arr_action) {
 		$this->smarty->assign('action', $arr_action);
 		$this->smarty->display($this->PTPL.'index.tpl');

@@ -69,11 +69,14 @@ class AdminAdminProcessing {
 			try {
 				inputcheck($name, 'name');
 			} catch (Exception $e) {
-				$this->adminInterface->ShowError($message['err_inp_game']);
+				$this->adminInterface->ShowError($message['err_inp_gname']);
 				die();
 			}
-			$module_str = implode(' ', $allowed_modules);
-			$this->admingroupManager->addAdminGroup($name, $module_str);
+			$module_str = implode(', ', $allowed_modules);
+			if($this->admingroupManager->addAdminGroup($name, $module_str)) {
+				$this->adminInterface->ConfirmAddAdminGroup($name);
+			
+			}
 		}
 	}
 	
