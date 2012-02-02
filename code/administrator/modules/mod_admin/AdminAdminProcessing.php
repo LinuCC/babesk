@@ -45,7 +45,6 @@ class AdminAdminProcessing {
 		}
 		else {
 			$admin_groups = $this->admingroupManager->getTableData();
-			var_dump($admin_groups);
 			$smarty_admin_groups = array();
 			foreach($admin_groups as $a_group) {
 				$smarty_admin_groups[$a_group['ID']] = $a_group['name'];
