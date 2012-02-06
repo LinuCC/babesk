@@ -23,7 +23,8 @@ if(isset($_GET['order'])) {
 		}
 		
 		$soli = $userManager->getEntryData($_SESSION['uid'],'soli');
-		if ($soli=1) {
+	
+		if ($soli['soli']=="1") {
 			$payment = 1;
 		}
 		if(!$userManager->changeBalance($_SESSION['uid'], -$payment)) {
