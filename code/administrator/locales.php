@@ -17,6 +17,7 @@
     $module_names['groups'] = "Gruppen Verwaltung";
     $module_names['priceclass'] = "Preisklassen Verwaltung";
     $module_names['user'] = "Benutzerverwaltung";
+    $module_names['soli'] = "Teilhabepaket";
     
     //---------------------------------
     //      Logs

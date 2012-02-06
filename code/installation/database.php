@@ -73,6 +73,7 @@
                         `login_tries` smallint(5),
                         `first_passwd` boolean NOT NULL,
                         `locked` boolean NOT NULL,
+                        `soli` boolean NOT NULL,
                         PRIMARY KEY  (`ID`)
                     );';
 		//Table 'price_classes'

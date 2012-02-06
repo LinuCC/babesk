@@ -21,6 +21,11 @@ if(isset($_GET['order'])) {
 			//error-checking
 			die('Etwas lief falsch mit Payment! Sorry');
 		}
+		
+		$soli = $userManager->getEntryData($_SESSION['uid'],'soli');
+		if ($soli=1) {
+			$payment = 1;
+		}
 		if(!$userManager->changeBalance($_SESSION['uid'], -$payment)) {
 			$smarty->display('web/modules/mod_order/failed.tpl');
 			die();

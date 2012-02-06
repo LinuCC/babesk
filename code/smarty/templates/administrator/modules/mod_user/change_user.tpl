@@ -55,6 +55,7 @@ function checkCardId() {
 		</label><br> <br> Geburtstag : {html_select_date
 		time="{$user.birthday}" start_year="-100"}<br> <br> <label>Konto
 			sperren:<input type="checkbox" name="lockAccount" value="1" {if $user.locked}checked{/if}/>
+		</label><br> <br> <label>Teilhabepaket:<input type="checkbox" name="soliAccount" value="1" {if $user.soli}checked{/if}/>
 		</label>
 	</fieldset>
 	<br>

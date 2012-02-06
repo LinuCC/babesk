@@ -225,7 +225,7 @@ class AdminUserProcessing {
 	 * @param boolean $locked is 1 if account is locked
 	 * @throws Exception
 	 */
-	function ChangeUser($old_id, $id, $forename,$name,$username,$passwd,$passwd_repeat,$birthday,$GID,$credits,$locked, $cardnumber) {
+	function ChangeUser($old_id, $id, $forename,$name,$username,$passwd,$passwd_repeat,$birthday,$GID,$credits,$locked, $cardnumber,$soli) {
 		require_once PATH_INCLUDE.'/user_access.php';
 		require_once PATH_INCLUDE.'/card_access.php';
 		$userManager = new UserManager();
@@ -257,7 +257,7 @@ class AdminUserProcessing {
 			}
 		}
 		try {
-			$userManager->alterUser($old_id, $id, $name, $forename, $username, hash_password($passwd), $birthday, $credits, $GID, $locked);
+			$userManager->alterUser($old_id, $id, $name, $forename, $username, hash_password($passwd), $birthday, $credits, $GID, $locked,$soli);
 			if($cardnumber) {
 				$cardManager->changeCardnumber($cardManager->getIDByUserID($id), $cardnumber);
 				try {
@@ -272,7 +272,7 @@ class AdminUserProcessing {
 			$this->userInterface->ShowError($this->messages['error']['change'].$e->getMessage());
 			die();
 		}
-		$this->userInterface->ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID, $locked);
+		$this->userInterface->ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID, $locked,$soli);
 	}
 
 	var $messages = array();

@@ -31,6 +31,7 @@
     $modules[] = "menu";
     $modules[] = "groups";
     $modules[] = "priceclass";
+    $modules[] = "soli";
     
     
 ?>
