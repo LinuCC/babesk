@@ -57,15 +57,16 @@ class CardManager extends TableManager {
 
 	function getUserID($cardnumber) {
 		require_once PATH_INCLUDE.'/dbconnect.php';
-		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE cardnumber=%s',
+		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE cardnumber="%s"',
 		$this->tablename, $cardnumber));
 		$result = $this->db->query($query);
 		$card = $result->fetch_assoc();
 		if(!$card) {
 			throw new MySQLVoidDataException('MySQL returned no data!');
 		}
-		$user = parent::getEntryData($card['UID'], 'UID');//test if user exists
-		return $user['UID'];
+		//$user = parent::getEntryData($card['UID'], 'UID');//test if user exists
+		//return $user['UID'];
+		return $card['UID'];
 	}
 
 	/**
