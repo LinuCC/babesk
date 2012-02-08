@@ -32,6 +32,20 @@ class AdminAdminInterface extends AdminInterface{
 		$this->smarty->display($this->PTPL.'create_admin_fin.tpl');
 	}
 	
+	function ChangeAdmin($ID, $name, $groups) {
+		$this->smarty->assign('ID', $ID);
+		$this->smarty->assign('name', $name);
+		$this->smarty->assign('groups', $groups);
+		$this->smarty->display($this->PTPL.'change_admin.tpl');
+	}
+	
+	function ChangeAdminFin($ID, $name, $GID) {
+		$this->smarty->assign('ID', $ID);
+		$this->smarty->assign('name', $name);
+		$this->smarty->assign('GID', $GID);
+		$this->smarty->display($this->PTPL.'change_admin_fin.tpl');
+	}
+	
 	function ConfirmDeleteAdmin($ID, $adminname) {
 		$this->smarty->assign('ID', $ID);
 		$this->smarty->assign('name', $adminname);

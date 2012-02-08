@@ -52,7 +52,11 @@ if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_GET['action'])) {
 			}
 			break;
 		case $action['alter_admin']:
-			die('Not implemented yet!');
+			if(isset($_GET['where'], $_POST['ID'], $_POST['name'])){
+				$adminProcessing->ChangeAdmin($_GET['where'], $_POST['ID'], $_POST['name'], @$_POST['password'], $_POST['admingroup']);
+			} else {
+				$adminProcessing->ChangeAdmin($_GET['ID'], NULL, NULL, NULL, NULL);
+			}
 			break;
 		case $action['alter_admingroup']:
 			die('Not implemented yet!');

@@ -28,12 +28,12 @@
                          "_ALL");';
         
         // Create global administrator
-	    $sql[1] = 'INSERT INTO
+	    $sql[1] = sql_prev_inj('INSERT INTO
                 	    administrators(name, password, GID)
                    VALUES
                         ("admin",
                          "'.hash_password($password).'",
-                         1);'; 
+                         1);'); 
 
 	    $sql[2] = 'INSERT INTO
 	                    	    global_settings(name, value)
