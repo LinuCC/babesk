@@ -81,7 +81,7 @@
     function inputcheck($str, $regex_str) {
     	switch($regex_str) {
     		case 'name':
-    			$regex_str = '/\A^[a-zA-Z]{1}[a-zA-ZßäÄüÜöÖ -_]{2,30}\z/';
+    			$regex_str = '/\A^[^\.\,\;\+\~]{2,30}\z/';
     			break;
     		case 'password':
     			$regex_str = '/\A^[a-zA-Z0-9 _\-\.]{4,20}\z/';
