@@ -39,6 +39,7 @@ function sort_meallist($meallist) {
 		$weekday_date [$i] = get_weekday($i);
 	}
 	$meallistweeksorted = array(array(array()));
+	
 	$counter = 0;
 	foreach($meallist as $meal) {
 		for($i = 0; $i < 12; $i++) {

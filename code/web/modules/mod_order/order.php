@@ -93,6 +93,26 @@ else {
 		}
 		$smarty->assign('meals', $meals);
 		$smarty->assign('message', '');
+		
+		
+		$year = date("Y");
+		$week_number = date("W");
+		$smarty->assign('thisMonday',date('d.m.Y', strtotime($year."W".$week_number."1")));
+		$smarty->assign('thisTuesday',date('d.m.Y', strtotime($year."W".$week_number."2")));
+		$smarty->assign('thisWednesday',date('d.m.Y', strtotime($year."W".$week_number."3")));
+		$smarty->assign('thisThursday',date('d.m.Y', strtotime($year."W".$week_number."4")));
+		$smarty->assign('thisFriday',date('d.m.Y', strtotime($year."W".$week_number."5")));
+		
+		$nextkw = (string)(date("W")+1);
+		if (strlen($nextkw)==1) $nextkw = "0".$nextkw;
+		$week_number = $nextkw;
+		$smarty->assign('nextMonday',date('d.m.Y', strtotime($year."W".$week_number."1")));
+		$smarty->assign('nextTuesday',date('d.m.Y', strtotime($year."W".$week_number."2")));
+		$smarty->assign('nextWednesday',date('d.m.Y', strtotime($year."W".$week_number."3")));
+		$smarty->assign('nextThursday',date('d.m.Y', strtotime($year."W".$week_number."4")));
+		$smarty->assign('nextFriday',date('d.m.Y', strtotime($year."W".$week_number."5")));
+		
+		
 		$smarty->display('web/modules/mod_order/order.tpl');
 	}
 }
@@ -101,5 +121,4 @@ else {
 //hinweisen, dass gerichte f�r eltern mehr kosten
 //f�r geringere Preisklasse bestellen zul�ssig??? oder neues feld wodrin festgehalten ist, f�r welche preisklassen man bestellen kann
 //bestellung in datenbank eintragen
-
 ?>
