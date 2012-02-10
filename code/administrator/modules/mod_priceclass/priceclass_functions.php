@@ -49,6 +49,7 @@ function new_priceclass() {
 				echo ERR_ADD_PRICECLASS_FOR_GROUP.$group['name'].' '.$e->getMessage();
 			}
 		}
+		echo PRICECLASS_ADDED;
 	} else {
 		$groups = $groupManager->getTableData();
 		$smarty->assign('groups', $groups);

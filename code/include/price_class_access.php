@@ -90,8 +90,8 @@
         	try {
         		$pcn = TableManager::getTableData(sprintf("pc_ID=%s LIMIT 1",$pc_ID));
         	} catch (Exception $e) {
-        		echo "Fehler";
-        		throw $e;
+        		echo "Error getting priceclass: ".$e->getMessage();
+        		die();
         	}
         	return $pcn;
         }

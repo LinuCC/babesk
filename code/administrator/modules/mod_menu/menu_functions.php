@@ -30,29 +30,37 @@ function get_weekday($day) {
   */
 function sort_meallist($meallist) {
 	require_once PATH_INCLUDE.'/price_class_access.php';
+	require_once PATH_INCLUDE.'/logs.php';
+	global $logger;
 	$priceclassmanager = new PriceClassManager();
 	if(!$meallist)return false;
 	$weekday_name = array('monday','tuesday','wednesday','thursday','friday','saturday','sunday','monday2','tuesday2','wednesday2','thursday2','friday2');
 	$weekday_date = array();//at which day which date is, 0 is Monday, 1 Tuesday...
+	//initialize weekdays
 	for($i = 0; $i < 12; $i++) {
 		if ($i <> 5 && $i <> 6)
 		$weekday_date [$i] = get_weekday($i);
 	}
+	//[A Row of meals(One week)] [day] [specific variable]
 	$meallistweeksorted = array(array(array()));
 	
-	$counter = 0;
 	foreach($meallist as $meal) {
 		for($i = 0; $i < 12; $i++) {
-			if ($i <> 5 && $i <> 6) {
-			if($meal["date"] == $weekday_date[$i]) {
-				while(isset($meallistweeksorted[$counter][$weekday_name[$i]]["title"]))$counter++;
-				$meallistweeksorted[$counter][$weekday_name[$i]]["title"] = $meal["name"];
-				$meallistweeksorted[$counter][$weekday_name[$i]]["description"] = $meal["description"];
+			//Saturday and Sunday shall not be shown
+			if ($i <> 5 && $i <> 6 && $meal["date"] == $weekday_date[$i]) {
+				if(isset($meallistweeksorted[$meal["price_class"]][$weekday_name[$i]]["title"])) {
+					echo '<p class="error">Ein Fehler ist aufgetreten (siehe Logdatei); Der Speiseplan kann nicht vollständig angezeigt werden</p>';
+					$logger->log('SHOW_MENU', 'MODERATE', sprintf(
+									'Error: Entry with same Priceclass (%s) and day (%s[%s]) already existing',
+									$meal["price_class"], $weekday_name[$i], $weekday_date[$i]));
+					///@FIXME: Better handling of multiple entries with same priceclass and date
+					continue;
+				}
+				$meallistweeksorted[$meal["price_class"]][$weekday_name[$i]]["title"] = $meal["name"];
+				$meallistweeksorted[$meal["price_class"]][$weekday_name[$i]]["description"] = $meal["description"];
 				$pcn = $priceclassmanager->getPriceClassName($meal["price_class"]);
-				$meallistweeksorted[$counter][$weekday_name[$i]]["priceclass"] = $pcn[0]["name"];
+				$meallistweeksorted[$meal["price_class"]][$weekday_name[$i]]["priceclass"] = $pcn[0]["name"];
 			}
-		}
-			$counter = 0;
 		}
 	}
 	return $meallistweeksorted;

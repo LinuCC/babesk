@@ -32,8 +32,11 @@
         	    }
         	    $category = (string) trim($_POST['Category']);
                 $severity = (string) trim($_POST['Severity']);
-                
-                $logs = $logger->getTableData('category = "'.$category.'" AND severity = "'.$severity.'"');
+                try {
+                	$logs = $logger->getTableData('category = "'.$category.'" AND severity = "'.$severity.'"');
+                } catch (Exception $e) {
+                	die(NO_LOGS.'; Error:'.$e->getMessage());
+                }
                 $smarty->assign('logs',$logs);
                 $smarty->display(PATH_SMARTY_ADMIN_MOD.'/mod_logs/showLogs.tpl');
             }
