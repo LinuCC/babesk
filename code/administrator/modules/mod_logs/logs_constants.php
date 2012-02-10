@@ -12,6 +12,7 @@
     
     //Error messages
     define('ERROR_FORM', '<p class="error">Bitte füllen sie das Formular vollständig aus.</p>');
+    define('ERROR_CAT', '<p class="error">Es wurde keine Kategorie vom vorherigen Formular übergeben</p>');
+    define('ERROR_LOGS', '<p class="error">Es konnten keine dazugehörigen Logs abgerufen werden</p>');
     
-    define('NO_LOGS', '<p class="error">Es sind keine Logs vorhanden.</p>');
 ?>

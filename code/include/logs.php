@@ -79,6 +79,32 @@
         }
         
         /**
+         * returns the logs which have the given Category
+         * Enter description here ...
+         * @param $category a string
+         */
+        function getLogDataByCategory($category) {
+        	if(!isset($category) || !is_string($category)) {
+        		throw new BadMethodCallException('Wrong argument given in '.__METHOD__);
+        	}
+        	$query = sql_prev_inj(sprintf('SELECT * FROM logs WHERE category = "%s"', $category));
+        	$result = $this->db->query($query);
+        	if(!$result) {
+        		throw new MySQLConnectionException('Problem with getting data from MySQL:'.mysql_error());
+        	}
+        	$logs = array();
+        	try {
+        		while($buffer = $result->fetch_assoc())$logs[] = $buffer;
+        	} catch (Exception $e) {
+        		throw new MySQLConnectionException('Problem with getting data from MySQL:'.mysql_error());
+        	}
+        	if(!$logs) {
+        		throw new MySQLVoidDataException('MySQL returned no data');
+        	}
+        	return $logs;
+        }
+        
+        /**
          * Clears the log table
          *
          * @return false if error occured
