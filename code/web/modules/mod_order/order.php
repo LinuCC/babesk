@@ -92,11 +92,11 @@ else {
 	$result = array(array());
 	$is_void = false;
 	//Ordering only possible until 8AM
-	if ($hour > 8) {
+	if ($hour > $last_order_time) {
 		$date += 86400;
 	}
 	try {
-		$result = $mealManager->getMealAfter($date);
+		$result = $mealManager->getMealAfterDateSortedPcID($date);
 	} catch (MySQLVoidDataException $e) {
 		$is_void = true;
 		$smarty->assign('message', NO_MEALS_EXISTING);
@@ -138,9 +138,4 @@ else {
 		$smarty->display('web/modules/mod_order/order.tpl');
 	}
 }
-//gerichte werden angezeigt
-//gerichte k�nnen per klick bestellt werden incl. variabler anzahl dann werden gerichte angezeigt und ob andere Preisklasse (Standartm��ig GID angew�hlt aus mysql datenbank[radio buttons])
-//hinweisen, dass gerichte f�r eltern mehr kosten
-//f�r geringere Preisklasse bestellen zul�ssig??? oder neues feld wodrin festgehalten ist, f�r welche preisklassen man bestellen kann
-//bestellung in datenbank eintragen
 ?>

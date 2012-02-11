@@ -16,11 +16,11 @@
     	}
     	
 		 /**
-         * Returns all Meals which are dated after the given timestamp
+         * Returns all Meals which are dated after the given timestamp and sorts date first and then priceclass
          *
          * @return false if error
          */
-        public function getMealAfter($timestamp = 0) {
+        public function getMealAfterDateSortedPcID($timestamp = 0) {
         	require 'dbconnect.php';
         	$res_array = array();
             if($timestamp == 0) {
@@ -33,7 +33,7 @@
     				WHERE
     					date >= "'.$date.'"
 					ORDER BY
-						date';
+						date, price_class';
         	sql_prev_inj($query);
         	$result = $this->db->query($query);
         	if (!$result) {
