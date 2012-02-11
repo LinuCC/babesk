@@ -46,7 +46,7 @@
 //                 }
 //             }
 		    if(!$priceData){
-		    	die(PRICECLASS_INVALID_GID);
+		    	throw new Exception(PRICECLASS_INVALID_GID); 
 		    }
 		    foreach($priceData as $price){
 		    	if($price['GID'] == $gid){

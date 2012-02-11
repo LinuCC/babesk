@@ -3,6 +3,7 @@
 defined('_WEXEC') or die("Access denied");
 require_once 'order_constants.php';
 global $smarty;
+global $logger;
 
 if(isset($_GET['order'])) {
 	$mealManager = new MealManager('meals');
@@ -15,44 +16,63 @@ if(isset($_GET['order'])) {
 	$result OR exit('ERROR');
 
 	if('POST' == $_SERVER['REQUEST_METHOD']) {
-		//"Pay", substract the price for the menu from the users account
-		$payment = $priceClassManager->getPrice($_SESSION['uid'], $_GET['order']);
-		if(!$payment){
-			//error-checking
-			die('Etwas lief falsch mit Payment! Sorry');
-		}
-		
-		$soli = $userManager->getEntryData($_SESSION['uid'],'soli');
-	
-		if ($soli['soli']=="1") {
-			$payment = 1;
-		}
-		if(!$userManager->changeBalance($_SESSION['uid'], -$payment)) {
-			$smarty->display('web/modules/mod_order/failed.tpl');
+		////////////////////////////////////////////////////
+		//Pay for meal
+		try {
+			//"Pay", substract the price for the menu from the users account
+			$payment = $priceClassManager->getPrice($_SESSION['uid'], $_GET['order']);
+			if(!$payment){
+				//error-checking
+				die('Etwas lief falsch mit Payment! Sorry');
+			}
+
+			$soli = $userManager->getEntryData($_SESSION['uid'],'soli');
+
+			if ($soli['soli']=="1") {
+				$payment = 1;
+			}
+			if(!$userManager->changeBalance($_SESSION['uid'], -$payment)) {
+				$smarty->display('web/modules/mod_order/failed.tpl');
+				die();
+			}
+		} catch (Exception $e) {
+			$logger->log('WEB|ORDER', 'MODERATE', sprintf('Error while handling the order for '
+						.'UID %s; Order: %s; Error: %s', $_SESSION['uid'],$_GET['order'],$e->getMessage()));
+			$smarty->display('web/header.tpl');
+			echo ERR_ORDER;
+			$smarty->display('web/footer.tpl');
 			die();
 		}
-
-		//get the date of the meal which is ordered
-		if (!$meal_date = $mealManager->getEntryData($_GET['order'], 'date')) {
-			#$this->db->query('SELECT date FROM meals WHERE ID = '.$_GET['order'].';')) {
-			die(DB_QUERY_ERROR.$this->db->error);
-		}
-
+		//////////////////////////////////////////////////
+		//add meal
 		try {
-			$orderManager->addEntry('MID', $_GET['order'], 'UID', $_SESSION['uid'], 'IP', $_SERVER['REMOTE_ADDR'], 'ordertime',  time(), 'date', $meal_date ['date']);
-		} catch (Exception $e) {
-			$userManager->changeBalance($_SESSION['uid'], $priceClassManager->getPrice($_SESSION['uid'], $_GET['order']));   //meal couldn't be ordered so give the user his money back
-			$smarty->display('web/header.tpl');
-			echo "Bestellung nicht erfolgreich";
-			$smarty->display('web/footer.tpl');
-		}
+			//get the date of the meal which is ordered
+			if (!$meal_date = $mealManager->getEntryData($_GET['order'], 'date')) {
+				die(DB_QUERY_ERROR.$this->db->error);
+			}
 
+			$orderManager->addEntry('MID', $_GET['order'], 'UID', $_SESSION['uid'], 'IP', 
+						$_SERVER['REMOTE_ADDR'], 'ordertime',  time(), 'date', $meal_date ['date']);
+		} catch (Exception $e) {
+			//meal couldn't be ordered so give the user his money back
+			$userManager->changeBalance($_SESSION['uid'], 
+									$priceClassManager->getPrice($_SESSION['uid'], $_GET['order']));   
+			$logger->log('WEB|ORDER', 'MODERATE', sprintf('Error while handling the order for '
+						.'UID %s; Order: %s; Error: %s', $_SESSION['uid'],$_GET['order'],$e->getMessage()));
+			$smarty->display('web/header.tpl');
+			echo ERR_ORDER;
+			$smarty->display('web/footer.tpl');
+			die();
+		}
+		//////////////////////////////////////////////////
+		//finished
 		$smarty->display('web/header.tpl');
 		echo 'Am '.formatDate($result['date']).' das Men&uuml; '.$result['name'].' erfolgreich bestellt. <a href="index.php">Weiter</a>';
 		$smarty->display('web/footer.tpl');
-
 	}
-	else {//show order-form
+	else {
+		//////////////////////////////////////////////////
+		//show confirm-order-form
 		$smarty->display('web/header.tpl');
 		if (strtotime($result['date']) < strtotime(date('Y-m-d'))) exit('Error: Fehlerhaftes Datum');
 		echo 'Am '.formatDate($result['date']).' das Men&uuml; '.$result['name'].' bestellen?<br />';
@@ -63,6 +83,8 @@ if(isset($_GET['order'])) {
 	}
 }
 else {
+	//////////////////////////////////////////////////
+	//show order-overview
 	$mealManager = new MealManager('meals');
 
 	$hour = date('H', time());

@@ -4,9 +4,15 @@ defined('_WEXEC') or die("Access denied");
 require_once 'change_password_constants.php';
 require_once PATH_INCLUDE.'/functions.php';
 global $smarty;
-
+global $logger;
 $userManager = new UserManager();
-$userData = $userManager->getEntryData($_SESSION['uid'], '*');
+try {
+	$userData = $userManager->getEntryData($_SESSION['uid'], '*');
+} catch (Exception $e) {
+	$logger->log('WEB|change_password', 'MODERATE', sprintf('Unable to get Entry Data; UID:%s; %s', 
+					$_SESSION['uid'], $e->getMessage()));
+	die(ERR);
+}
 $smarty->assign('username', $userData['username']);
 $smarty->assign('credit', $userData['credit']);
 $smarty->assign('last_login', $userData['last_login']);

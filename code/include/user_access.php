@@ -101,8 +101,7 @@ class UserManager extends TableManager{
 		$query = sql_prev_inj(sprintf('UPDATE users SET credit = %s WHERE ID = %s;', $credit, $id));
 		$result = $this->db->query($query);
 		if (!$result) {
-			echo DB_QUERY_ERROR.$this->db->error;
-			return false;
+			throw new MySQLConnectionException(DB_QUERY_ERROR.$this->db->error);
 		}
 		return true;
 	}
@@ -177,7 +176,7 @@ class UserManager extends TableManager{
 	/**
 	* Locks an account
 	*
-	* @return true if account is locked
+	*@throws MySQLConnectionException if a problem with MySQL happened
 	*/
 	function lockAccount($uid) {
 	if(isset($uid)) {
