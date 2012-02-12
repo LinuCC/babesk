@@ -87,12 +87,19 @@ else {
 	//show order-overview
 	$mealManager = new MealManager('meals');
 
-	$hour = date('H', time());
+	$hour = date('H:i', time());
 	$date = time();
 	$result = array(array());
 	$is_void = false;
-	//Ordering only possible until 8AM
-	if ($hour > $last_order_time) {
+	if (strlen($last_order_time) <> 5 || !strpos($last_order_time,":"))
+	{
+		$smarty->display('web/header.tpl');
+		echo TIMEFORMAT_ERROR;
+		$smarty->display('web/footer.tpl');
+		die();
+	}
+	//Ordering only possible until $last_order_time
+	if (str_replace(":","",$hour) > str_replace(":","",$last_order_time)) {
 		$date += 86400;
 	}
 	try {

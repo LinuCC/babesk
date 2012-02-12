@@ -8,5 +8,8 @@
 	$smarty->setCacheDir(PATH_SMARTY.'/cache');
 	$smarty->setConfigDir(PATH_SMARTY.'/config');
 	
+	$smarty->error_reporting = E_ALL & ~E_NOTICE;
+	
+	
 	//$smarty->testInstall();
 ?>

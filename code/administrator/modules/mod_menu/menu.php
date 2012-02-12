@@ -22,12 +22,10 @@
 	if ($i <> 5 && $i <> 6)
 		$weekdate[] = date_to_european_date(get_weekday($i));
 	}
-	$meallist_notveg = array();
+
 	if($meallist) {
-		foreach($meallist as $meal) {
-			$meallist_notveg[] = $meal;
-		}
-		$meallistweeksorted = sort_meallist($meallist_notveg);
+		
+		$meallistweeksorted = sort_meallist($meallist);
 	}
 	else {
 		$meallistweeksorted = NULL;
