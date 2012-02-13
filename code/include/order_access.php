@@ -127,6 +127,17 @@
         function getAllOrdersOfMeal($ID) {
         	return parent::getTableData(sprintf('MID = %s', $ID));
         }
+        
+        /**
+        * returns all orders of a meal at givne date
+        * @param numberic_string $ID the ID of the meal whose orders to return
+        * @param date the date
+        * @return array of orders
+        */
+        function getAllOrdersOfMealAtDate($ID,$date) {
+        	return parent::getTableData(sprintf('MID = "%s" AND date = "'.$date.'" ORDER BY date', $ID,$date));
+        }
+       
     }   
 
 

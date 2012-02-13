@@ -48,10 +48,11 @@
         	return $res_array;
 		}
     	
-    	/**returns all entries between date1 and date2
-    	  *@param date1 the first date (earlier)
-    	  *@param date2 the second date (later)
-    	  */
+    	/**
+    	 * returns all entries between date1 and date2
+    	 * @param date1 the first date (earlier)
+    	 * @param date2 the second date (later)
+    	 */
     	public function get_meals_between_two_dates($date1, $date2) {
     		if(!$date1 or !$date2){return false;}
     		include 'dbconnect.php';
@@ -65,6 +66,51 @@
     	   	while($buffer = $result->fetch_assoc())$res_array[] = $buffer;
     	   	return $res_array;
     	}
+
+    	/**
+    	* returns all menu ids (unique) at given date
+    	* @param date the date
+    	*/
+    	public function GetMealIdsAtDate($date) {
+    		if(!$date){
+    			return false;
+    		}
+    		include 'dbconnect.php';
+    		$res_array = NULL;
+    		$query = sql_prev_inj(sprintf('SELECT DISTINCT MID FROM
+						orders WHERE date="%s";',$date));
+    		$result = $this->db->query($query);
+    		if(!$result) {
+    			echo DB_CONNECT_ERROR.$this->db->error; exit;
+    		}
+    		while($buffer = $result->fetch_assoc())$res_array[] = $buffer;
+    		return $res_array;
+    	}
+    	
+    	
+    	/**
+    	* returns name of given menu id
+    	* @param id the menu id
+    	*/
+    	public function GetMealName($id) {
+    		if(!$id){
+    			return false;
+    		}
+    		include 'dbconnect.php';
+    		$res_array = NULL;
+    		$query = sql_prev_inj(sprintf('SELECT name FROM
+    							meals WHERE id="%s";',$id));
+    		$result = $this->db->query($query);
+    		if(!$result) {
+    			echo DB_CONNECT_ERROR.$this->db->error; exit;
+    		}
+    		while($buffer = $result->fetch_assoc())$res_array[] = $buffer;
+    		return $res_array[0]['name'];
+;    	
+    		
+    	}
+    	
+    	
     	
     	/**
     	 * Adds a Meal

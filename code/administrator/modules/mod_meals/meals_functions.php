@@ -12,6 +12,8 @@ function create_meal(){
 	require_once "meals_constants.php";
 	require_once PATH_INCLUDE.'/logs.php';
 	require_once PATH_INCLUDE.'/meal_access.php';
+	
+	require_once PATH_INCLUDE.'/access.php'; //for ordercount workaround
 
 	global $smarty;
 	global $logger;
@@ -198,6 +200,7 @@ function sort_orders($orders) {
 			echo MEAL_DATABASE_PROB_ENTRY; echo MEAL_DATABASE_PROB_ENTRY_END;
 			continue;
 		}
+		//$meals[$order['meal_name']] [] = $order;
 		$meals[$order['meal_name']] [] = $order;
 	}
 
@@ -289,6 +292,7 @@ function show_orders() {
 		$date = $_POST['ordering_year'].'-'.$_POST['ordering_month'].'-'.$_POST['ordering_day'];
 		try {
 			$orders = $order_manager->getAllOrdersAt($date);
+			
 		} catch (MySQLVoidDataException $e) {
 			die(MEAL_NO_ORDERS_FOUND);
 		} catch (MySQLConnectionException $e) {
@@ -299,6 +303,7 @@ function show_orders() {
 	if(!count($orders)) {
 			die(MEAL_NO_ORDERS_FOUND);
 		}
+	
 		foreach($orders as &$order) {
 			if (!count($meal_data = $meal_manager->getEntryData($order['MID'],'name')) or
 			!count($user_data = $user_manager->getEntryData($order['UID'],'name', 'forename'))) {
@@ -306,9 +311,11 @@ function show_orders() {
 				echo MEAL_DATABASE_PROB_ENTRY_END;
 			}
 			else {
+				 
 				$order['meal_name'] = $meal_data['name'];
 				$order['user_name'] = $user_data['forename'].' '.$user_data['name'];
 				$order['is_fetched'] = translate_fetched($order['fetched']);
+				
 			}
 		}
 		
@@ -318,7 +325,10 @@ function show_orders() {
 		* @todo refactor this part, some things are deprecated
 		*/
 		//for showing the number of orders for one meal
+		
+		
 		$num_orders = array(array());
+		/**
 		$already_there = 0;
 		$counter = 0;
 		foreach($orders as $order) {
@@ -335,7 +345,26 @@ function show_orders() {
 			}
 			$already_there = false;
 		}
+		*/ //removed by infchem 
+		$counter=0;
+		$mealIdArray = $meal_manager->GetMealIdsAtDate($date);
+
+		foreach($mealIdArray as $mealIdEntry) {
+			
+			foreach($num_orders as &$num_order) {
+				$num_orders[$counter]['name'] = $meal_manager->GetMealName(($mealIdEntry['MID']));
+				$num_orders[$counter]['number'] = count($order_manager->getAllOrdersOfMealAtDate($mealIdEntry['MID'], $date));
+				$counter ++;
+			}
+		}
+		
+		
+		
+		
+		
+		
 		$orders = sort_orders($orders);
+		
 		//////////////////////////////////////////////////
 			
 		if(isset($num_orders[0]) && $counter) {
