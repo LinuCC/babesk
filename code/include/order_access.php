@@ -27,6 +27,20 @@
         	}
             return $result;
         }
+        
+        /**
+        *Returns all Orders for given User at the given date
+        */
+        function getAllOrdersOfUserAtDate($uid, $date) {
+        	try {
+        		$result = TableManager::getTableData('UID = "'.$uid.'" AND date = "'.$date.'" ORDER BY date');
+        	} catch (MySQLVoidDataException $e) {
+        		throw new MySQLVoidDataException($e->getMessage());
+        	} catch (Exception $e) {
+        		throw new Exception($e->getMessage());
+        	}
+        	return $result;
+        }
 
         /**
           * returns all orders for the given date
@@ -38,6 +52,20 @@
         		$orders = NULL;
         	}
         	return $orders;
+        }
+        
+    /**
+          *Returns all Orders for given User which are between the given dates
+          */
+        function getAllOrdersOfUserBetween($uid, $date_start, $date_end) {
+        	try {
+        		$result = TableManager::getTableData('UID = "'.$uid.'" AND date >= "'.$date_start.'" AND date <= "'.$date_end.'"  ORDER BY date');
+        	} catch (MySQLVoidDataException $e) {
+        		throw new MySQLVoidDataException($e->getMessage()); 
+        	} catch (Exception $e) {
+        		throw new Exception($e->getMessage());
+        	}
+            return $result;
         }
         
         /**

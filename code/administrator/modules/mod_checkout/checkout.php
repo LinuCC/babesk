@@ -35,7 +35,7 @@
 	   	$date = date("Y-m-d");
 	   	$orders = array();
 	   	try {
-	   		$orders = $orderManager->getAllOrdersOfUser($uid, $date);
+	   		$orders = $orderManager->getAllOrdersOfUserAtDate($uid, $date);
 	   	} catch (MySQLVoidDataException $e) {
 	   		$smarty->display(PATH_SMARTY_CHECKOUT.'/checkout_no_orders.tpl');
 	   		exit();

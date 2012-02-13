@@ -14,7 +14,7 @@
     {$error}
     {/if}
         <form method="POST" action="index.php">
-          <p>Login: <input name="login" type="text" size="30" /></p>
+          <p>Benutzername: <input name="login" type="text" size="30" /></p>
           <p>Passwort: <input name="password" type="password" size="30" /></p>
           <input type="submit" value="Login" />
         </form>
