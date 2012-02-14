@@ -17,8 +17,13 @@ function login() {
 		$userManager = new UserManager();
 		$username = $_POST['login'];
 		$formpass = $_POST['password'];
-		if(!preg_match('/\A^[a-zA-Z]{1}[a-zA-Z0-9_-]{2,20}\z/', $username) OR !preg_match('/\A^[a-zA-Z0-9 _-]{4,20}\z/', $formpass)){
-			$smarty->assign('error', INVALID_LOGIN);
+		try {
+			inputcheck($username, 'name');
+			inputcheck($formpass, 'password');
+		} catch (Exception $e) {
+ 			$smarty->assign('error', INVALID_CHARS.':"'.$e->getMessage().'"');
+			$smarty->display('web/login.tpl');
+			die();
 		}
 
 		//get the userID by the username

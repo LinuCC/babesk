@@ -9,6 +9,7 @@
     
     //Login
     define('INVALID_LOGIN', '<p class="error">Der Benutzer wurde nicht gefunden oder das Passwort ist falsch.</p>');
+    define('INVALID_CHARS', '<p class="error">Eingegebene Daten wurden falsch eingegeben</p>');
     define('MAX_LOGIN_TIME', '300');
     define('UNMATCHED_PASSWORDS', '<p class="error">Die Passw&ouml;rter stimmen nicht &uuml;berein!</p>');
     define('ACCOUNT_LOCKED','<p class="error">Kennung gesperrt!</p>');
@@ -27,7 +28,6 @@
     //Card
     define('CARD_READ_ERROR', '<p class="error">Die Karte konnte nicht gelesen werden, bitte versuchen sie es ernuet</p>');
     define('INVALID_CARD_ID', '<p class="error">Die Karten-ID ist fehlerhaft</p>');
-    define('PRICECLASS_INVALID_GID', '<p class="error">Die gesuchte GID der Preisklasse wurde nicht gefunden!</p>');
     
     //Orders
     define('ORDER_F_ERROR_DATE_FORMAT', '<p class="error">Falsches Datumsformat für $search_date in delOldOrders!</p>');

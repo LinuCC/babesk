@@ -12,5 +12,6 @@
 //Deadline to order meals. MUST BE in the format hh:mm !!!
 {
 	$last_order_time = date("08:30");
+	$day_in_secs = 84000;
 }
 ?>

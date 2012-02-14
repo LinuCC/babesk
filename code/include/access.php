@@ -173,6 +173,23 @@ class TableManager {
 	}
 	
 	/**
+	 * Searches for an entry.
+	 * the function will return the first item it found
+	 * @param string $search_str The string of the MySQL-query behind "WHERE"
+	 * @throws UnexpectedValueException When one of the parameters has the wrong typ
+	 * @return array()
+	 */
+	function searchEntry($search_str) {
+		//this function is for getting a single value
+		if(!is_string($search_str))
+			throw new UnexpectedValueException('One of the Parameters has the wrong format!');
+		
+		$result_arr = $this->getTableData($search_str);
+		$result = $result_arr[0];
+		return $result;
+	}
+	
+	/**
 	 * Alters a table-entry of MySQL
 	 * This function takes a variable amount of parameters, the first being the ID of the object to
 	 * change, the second one the name of the value to change nad the third one the value.

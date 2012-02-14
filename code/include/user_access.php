@@ -37,10 +37,26 @@ class UserManager extends TableManager{
 							sql_prev_inj($uid));
 		$result = $this->db->query($query);
 		if (!$result) {
-			echo DB_QUERY_ERROR.$this->db->error;
-			return false;
+			throw DB_QUERY_ERROR.$this->db->error;
 		}
 		return true;
+	}
+	
+	/**
+	 * Sorts the users it gets from MySQL-table and returns them
+	 * Enter description here ...
+	 */
+	function getUsersSorted() {
+		require_once 'dbconnect.php';
+		$res_array = array();
+		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY name', $this->tablename));
+		$result = $this->db->query($query);
+		if (!$result) {
+			throw DB_QUERY_ERROR.$this->db->error;
+		}
+		while($buffer = $result->fetch_assoc())
+			$res_array[] = $buffer;
+		return $res_array;
 	}
 	
 	/**

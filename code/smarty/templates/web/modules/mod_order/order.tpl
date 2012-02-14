@@ -3,6 +3,46 @@
 <p>
 	<u>Speiseplan:</u>
 </p>
+<!-- 
+{literal}
+//////////////////////////////////////////////////
+
+ #This Code is a placeholder for a refactor of order.tpl and order.php 
+
+<table>
+	<tr>
+		<td><p>
+				Montag<br>{$thisMonday}
+			</p></td>
+		<td><p>
+				Dienstag<br>{$thisTuesday}
+			</p></td>
+		<td><p>
+				Mittwoch<br>{$thisWednesday}
+			</p></td>
+		<td><p>
+				Donnerstag<br>{$thisThursday}
+			</p></td>
+		<td><p>
+				Freitag<br>{$thisFriday}
+			</p></td>
+	</tr>
+	
+	{foreach $mealweek as $meals} 
+		<tr>
+			{foreach $meals as $meal}
+				<td>
+					<a href="index.php?section=order&order={$meal.ID}">{$meal.name}</a>
+				</td>
+			{/foreach}
+		</tr>
+	{/foreach}
+
+</table>
+
+{/literal}
+//////////////////////////////////////////////////-->
+
 <center><p>Diese Woche</p>{$message}</center>
 <table>
 		

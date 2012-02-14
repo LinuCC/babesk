@@ -18,10 +18,23 @@ require_once PATH_INCLUDE.'/logs.php';
 require_once PATH_SMARTY."/smarty_init.php";
 require_once 'login.php';
 require 'modules.php';
+
+
+
 //relative smarty path for css files
 $smarty->assign('smarty_path', REL_PATH_SMARTY);
 
 $smarty->assign('error', '');
+
+/**
+ * Shows an error to the user. Makes sure that the site is correctly shown
+ */
+function show_error($string) {
+	global $smarty;
+	$smarty->display('web/header.tpl');
+	echo $string;
+	$smarty->display('web/footer.tpl');
+}
 
 $modManager = new ModuleManager($modules);
 

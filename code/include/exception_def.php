@@ -16,6 +16,17 @@
 	}
 	
 	/**
+	 * MySQLException
+	 * This Exception is thrown when a general Error with MySQL-Data occured
+	 * @author voelkerball
+	 */
+	class MySQLException extends Exception{
+		function __construct($strMessage) {
+			parent::__construct($strMessage);
+		}		
+	}
+	
+	/**
 	 * MySQLVoidDataException
 	 * This Exception is thrown when MySQL has returned no entry
 	 * @author voelkerball

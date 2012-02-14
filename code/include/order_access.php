@@ -72,6 +72,7 @@
          * sets the order possessing the given ID to fetched
          * Enter description here ...
          * @param long/string $ID
+         * @throws MySQLException
          * @return boolean true if everything has gone right
          */
         function setOrderFetched($ID) {
@@ -80,8 +81,7 @@
                       WHERE ID = %s;',$ID));
             $result = $this->db->query($query);
             if (!$result) {
-                echo DB_QUERY_ERROR.$this->db->error;
-                return false;
+                throw new MySQLException(sprintf('MySQL failed to execute the query; %s', $this->db->error));
             }
             return true;
         }
