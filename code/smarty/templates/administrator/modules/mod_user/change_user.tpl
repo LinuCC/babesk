@@ -19,7 +19,7 @@ function resetCardId() {
 }
 
 function checkCardId() {
-	is_okay = document.getElementById("cardnumber").value.search(/[0-9]{10}/);
+	is_okay = document.getElementById("cardnumber").value.search(/[a-z0-9]{10}/);
 	if(is_okay != -1) {
 		document.getElementById("cardiderror").hidden = true;
 	}

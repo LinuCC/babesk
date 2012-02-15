@@ -45,9 +45,11 @@ class CardManager extends TableManager {
 	 * @param unknown_type $cardnumber
 	 */
 	function is_card_existing($cardnumber) {
-		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE cardnumber=%s',
+		require_once PATH_INCLUDE.'/dbconnect.php';
+		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE cardnumber="%s"',
 									$this->tablename, $cardnumber));
 		$result = $this->db->query($query);
+		
 		$card = $result->fetch_assoc();
 		if(!$card) {
 			return false;
