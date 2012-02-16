@@ -333,7 +333,7 @@ function show_orders() {
 		$counter = 0;
 		foreach($orders as $order) {
 			foreach($num_orders as &$num_order) {
-				if(count($num_order) and $order['meal_name'] == $num_order['name']){
+				if(count($num_order) and ($order['meal_name'] == $num_order['name'])){
 					$num_order['number'] += 1;
 					$already_there = true;
 				}
@@ -346,16 +346,17 @@ function show_orders() {
 			$already_there = false;
 		}
 		*/ //removed by infchem 
+		
 		$counter=0;
 		$mealIdArray = $meal_manager->GetMealIdsAtDate($date);
-
+		
 		foreach($mealIdArray as $mealIdEntry) {
 			
-			foreach($num_orders as &$num_order) {
+			//foreach($num_orders as &$num_order) {
 				$num_orders[$counter]['name'] = $meal_manager->GetMealName(($mealIdEntry['MID']));
 				$num_orders[$counter]['number'] = count($order_manager->getAllOrdersOfMealAtDate($mealIdEntry['MID'], $date));
 				$counter ++;
-			}
+			//} //verursachte teilw. endlosschleifen...
 		}
 		
 		
