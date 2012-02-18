@@ -32,6 +32,7 @@
     $modules[] = "groups";
     $modules[] = "priceclass";
     $modules[] = "soli";
+    $modules[] = "help";
     
     
 ?>

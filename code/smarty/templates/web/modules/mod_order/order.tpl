@@ -6,8 +6,8 @@
 
 {literal}
 <style type="text/css">
-td {width:20%; background-color:#33CCFF; text-align: center;}
-tr {width:20%; background-color:#FFCC33; text-align: center;}
+th {width:20%; background-color:#84ff00; text-align: center;}
+td {width:20%; background-color:#f8f187; text-align: center;}
 table{width:100%;}
 </style>
 {/literal}
@@ -15,9 +15,9 @@ table{width:100%;}
 <center><h3>Diese Woche</h3>{$message}</center>
 <table width="100%">
 		
-		<tr><td><p>Montag<br>{$thisMonday}</td><td ><p>Dienstag<br>{$thisTuesday}</td>
-	<td ><p>Mittwoch<br>{$thisWednesday}</td><td ><p>Donnerstag<br>{$thisThursday}</td>
-			<td ><p>Freitag<br>{$thisFriday}</td></tr>	
+		<tr><th><p>Montag<br>{$thisMonday}</th><th ><p>Dienstag<br>{$thisTuesday}</th>
+	<th ><p>Mittwoch<br>{$thisWednesday}</th><th ><p>Donnerstag<br>{$thisThursday}</th>
+			<th ><p>Freitag<br>{$thisFriday}</th></tr>	
 	<!-- montag -->
 		<tr>
 		<td>
@@ -78,9 +78,9 @@ table{width:100%;}
 	<center><h3>N&auml;chste Woche</h3>{$message}</center>
 	<table>
 	
-	<tr><td><p>Montag<br>{$nextMonday}</td><td><p>Dienstag<br>{$nextTuesday}</td>
-	<td><p>Mittwoch<br>{$nextWednesday}</td><td><p>Donnerstag<br>{$nextThursday}</td>
-			<td><p>Freitag<br>{$nextFriday}</td></tr>
+	<tr><th><p>Montag<br>{$nextMonday}</th><th><p>Dienstag<br>{$nextTuesday}</th>
+	<th><p>Mittwoch<br>{$nextWednesday}</th><th><p>Donnerstag<br>{$nextThursday}</th>
+			<th><p>Freitag<br>{$nextFriday}</th></tr>
 		
 <!-- montag -->
 		<tr>

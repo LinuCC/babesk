@@ -10,7 +10,7 @@ class AdminInterface {
 	function __construct() {
 		global $smarty;
 		$this->smarty = $smarty;
-		///@todo DEATH! Get the error.tpl to another, better place!
+		///@todo Get the error.tpl to another, better place!
 		$this->PathUserTemplates = PATH_SMARTY_ADMIN_MOD."/mod_user/";
 	}
 	

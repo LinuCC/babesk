@@ -18,10 +18,12 @@
     $module_names['priceclass'] = "Preisklassen Verwaltung";
     $module_names['user'] = "Benutzerverwaltung";
     $module_names['soli'] = "Teilhabepaket";
+    $module_names['help'] = "Hilfetext";
     
     //---------------------------------
     //      Logs
     //---------------------------------
+    ///@todo needless, because logs has bariable names now
     $log_category_names = array();
     $log_category_names[ADMIN] = 'Admin Frontend';
     $log_category_names[WEB] = 'Web Frontend';

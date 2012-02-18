@@ -1,5 +1,5 @@
 {include file='web/header.tpl' title='Bestellen'}
 
-<h3>Die Hilfe ist noch in Arbeit</h3> 
-                                                                          
+<h3>Hilfe:</h3> 
+{$help_str}
 {include file='web/footer.tpl'}
