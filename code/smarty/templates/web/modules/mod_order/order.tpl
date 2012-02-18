@@ -1,54 +1,23 @@
 {include file='web/header.tpl' title='Bestellen'}
 
-<p>
+<h2>
 	<u>Speiseplan:</u>
-</p>
-<!-- 
+</h2>
+
 {literal}
-//////////////////////////////////////////////////
-
- #This Code is a placeholder for a refactor of order.tpl and order.php 
-
-<table>
-	<tr>
-		<td><p>
-				Montag<br>{$thisMonday}
-			</p></td>
-		<td><p>
-				Dienstag<br>{$thisTuesday}
-			</p></td>
-		<td><p>
-				Mittwoch<br>{$thisWednesday}
-			</p></td>
-		<td><p>
-				Donnerstag<br>{$thisThursday}
-			</p></td>
-		<td><p>
-				Freitag<br>{$thisFriday}
-			</p></td>
-	</tr>
-	
-	{foreach $mealweek as $meals} 
-		<tr>
-			{foreach $meals as $meal}
-				<td>
-					<a href="index.php?section=order&order={$meal.ID}">{$meal.name}</a>
-				</td>
-			{/foreach}
-		</tr>
-	{/foreach}
-
-</table>
-
+<style type="text/css">
+td {width:20%; background-color:#33CCFF; text-align: center;}
+tr {width:20%; background-color:#FFCC33; text-align: center;}
+table{width:100%;}
+</style>
 {/literal}
-//////////////////////////////////////////////////-->
 
-<center><p>Diese Woche</p>{$message}</center>
-<table>
+<center><h3>Diese Woche</h3>{$message}</center>
+<table width="100%">
 		
-		<tr><td><p>Montag<br>{$thisMonday}</td><td><p>Dienstag<br>{$thisTuesday}</td>
-	<td><p>Mittwoch<br>{$thisWednesday}</td><td><p>Donnerstag<br>{$thisThursday}</td>
-			<td><p>Freitag<br>{$thisFriday}</td></tr>	
+		<tr><td><p>Montag<br>{$thisMonday}</td><td ><p>Dienstag<br>{$thisTuesday}</td>
+	<td ><p>Mittwoch<br>{$thisWednesday}</td><td ><p>Donnerstag<br>{$thisThursday}</td>
+			<td ><p>Freitag<br>{$thisFriday}</td></tr>	
 	<!-- montag -->
 		<tr>
 		<td>
@@ -105,8 +74,8 @@
 		{/foreach}
 		</p></td>
 	</tr>
-</table>
-	<center><p>N&auml;chste Woche</p>{$message}</center>
+</table><br><br>
+	<center><h3>N&auml;chste Woche</h3>{$message}</center>
 	<table>
 	
 	<tr><td><p>Montag<br>{$nextMonday}</td><td><p>Dienstag<br>{$nextTuesday}</td>
