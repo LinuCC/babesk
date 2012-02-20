@@ -62,7 +62,7 @@ if (isset($_GET['order'])) {
 			}
 			
 			$orderManager->addEntry('MID', $_GET['order'], 'UID', $_SESSION['uid'], 'IP', $_SERVER['REMOTE_ADDR'],
-									'ordertime', time(), 'date', $meal_date['date']);
+									 'date', $meal_date['date']);
 		} catch (Exception $e) {
 			//meal couldn't be ordered so give the user his money back
 			$userManager->changeBalance($_SESSION['uid'],

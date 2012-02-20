@@ -134,6 +134,18 @@ function show_orders() {
 	if(!isset($_POST['ordering_day']) or !isset($_POST['ordering_month']) or !isset($_POST['ordering_year']) ) {
 		$today = array('day' => date('d'),'month' => date('m'),'year' => date('Y'));
 		$smarty->assign('today', $today);
+		$user_manager = new UserManager;
+		 
+		$soliUsers = array();
+		$usersWithSoli = $user_manager->checkSoliAccounts();
+		$counter = 0;
+		foreach($usersWithSoli as &$userWithSoli) {
+			$soliUsers[$counter]['forename'] = $userWithSoli['forename'];
+			$soliUsers[$counter]['name'] = $userWithSoli["name"];
+			$counter++;
+		}
+		$smarty->assign('$soli_users',$soliUsers);
+		
 		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/show_orders_select_date.tpl');
 	}
 	else {
@@ -148,6 +160,7 @@ function show_orders() {
 		$date = $_POST['ordering_year'].'-'.$_POST['ordering_month'].'-'.$_POST['ordering_day'];
 		try {
 			$orders = $order_manager->getAllOrdersAt($date);
+		
 		} catch (MySQLVoidDataException $e) {
 			die(MEAL_NO_ORDERS_FOUND);
 		} catch (MySQLConnectionException $e) {

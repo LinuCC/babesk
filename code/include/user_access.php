@@ -190,6 +190,33 @@ class UserManager extends TableManager{
 	}
 
 	/**
+	* Check who doesn't need to pay the full price
+	*
+	* @return array with user_ids from users who don't need to pay full price
+	*/
+	function checkSoliAccounts() {
+		/**
+		require_once PATH_INCLUDE.'/functions.php';
+		$sql = sql_prev_inj(sprintf('SELECT ID FROM users WHERE soli = 1'));
+		
+		$result = $this->db->query($sql);
+		if (!$result) {
+			throw new MySQLConnectionException(DB_QUERY_ERROR.$this->db->error);
+		}
+	
+		return $result;
+		*/
+		try {
+			$users = TableManager::getTableData('soli = "1"');
+		} catch (MySQLVoidDataException $e) {
+			$orders = NULL;
+		}
+		
+		return $users;
+	}
+	
+	
+	/**
 	* Locks an account
 	*
 	*@throws MySQLConnectionException if a problem with MySQL happened
