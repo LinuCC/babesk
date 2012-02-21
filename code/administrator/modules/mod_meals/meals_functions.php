@@ -356,6 +356,7 @@ function show_orders() {
 		$mealIdArray = $meal_manager->GetMealIdsAtDate($date);
 		$counter = 0;
 		foreach($mealIdArray as $mealIdEntry) {
+			$gone_through = false;//Ckecks if a new group-element should be created
 			$groups = array();//to show how many from different groups ordered something
 			$counter ++;
 			$sp_orders = $order_manager->getAllOrdersOfMealAtDate($mealIdEntry['MID'], $date);
@@ -368,17 +369,15 @@ function show_orders() {
 				$user = $user_manager->getEntryData($sp_order['UID'], 'GID');
 				$sql_group = $groupManager->getEntryData($user['GID'], 'name');
 				$group_name = $sql_group['name'];
-				$gone_through = false;
 				foreach($groups as &$group) {
+					$gone_through = true;
 					if(isset($group['name'])) {
 						if($group['name'] == $group_name) {
 							$group ['counter'] += 1;
 						} else {
-							$group_arr = array('name' => $group_name, 'counter' => 1);
-							$groups[] = $group_arr;
+							$gone_through = false;
 						}
 					}
-					$gone_through = true;
 				}
 				if(!$gone_through) {
 					$group_arr = array('name' => $group_name, 'counter' => 1);
