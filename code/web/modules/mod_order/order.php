@@ -191,28 +191,28 @@ if (isset($_GET['order'])) {
 		$meal_day = date('N', strtotime($meal['date']));
 		$meal_weeknum = date('W', strtotime($meal['date']));
 		$meallist[$meal_weeknum][$meal_day][] = $meal;
-		//The date of the beginning of the week (monday)
+		//The date of the beginning of the week (here monday). +7 because of negative meal_day setting the date 1 week behind
 		$meallist[$meal_weeknum]['date'][1] = date('d.m.Y',
-												   strtotime(sprintf('+%s day', -$meal_day + 1),
+												   strtotime(sprintf('+%s day', -$meal_day + 1 + 7),
 															 strtotime($meal['date'])));
 		$meallist[$meal_weeknum]['date'][2] = date('d.m.Y',
-												   strtotime(sprintf('+%s day', -$meal_day + 2),
+												   strtotime(sprintf('+%s day', -$meal_day + 2 + 7),
 															 strtotime($meal['date'])));
 		$meallist[$meal_weeknum]['date'][3] = date('d.m.Y',
-												   strtotime(sprintf('+%s day', -$meal_day + 3),
+												   strtotime(sprintf('+%s day', -$meal_day + 3 + 7),
 															 strtotime($meal['date'])));
 		$meallist[$meal_weeknum]['date'][4] = date('d.m.Y',
-												   strtotime(sprintf('+%s day', -$meal_day + 4),
+												   strtotime(sprintf('+%s day', -$meal_day + 4 + 7),
 															 strtotime($meal['date'])));
 		$meallist[$meal_weeknum]['date'][5] = date('d.m.Y',
-												   strtotime(sprintf('+%s day', -$meal_day + 5),
+												   strtotime(sprintf('+%s day', -$meal_day + 5 + 7),
 															 strtotime($meal['date'])));
 		//Saturday and Sunday may be important in the future?
 		$meallist[$meal_weeknum]['date'][6] = date('d.m.Y',
-												   strtotime(sprintf('+%s day', -$meal_day + 6),
+												   strtotime(sprintf('+%s day', -$meal_day + 6 + 7),
 															 strtotime($meal['date'])));
 		$meallist[$meal_weeknum]['date'][7] = date('d.m.Y',
-												   strtotime(sprintf('+%s day', -$meal_day + 7),
+												   strtotime(sprintf('+%s day', -$meal_day + 7 + 7),
 															 strtotime($meal['date'])));
 	}
 	
