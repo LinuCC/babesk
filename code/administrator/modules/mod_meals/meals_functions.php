@@ -272,6 +272,7 @@ function show_orders() {
 	require_once PATH_INCLUDE.'/order_access.php';
 	require_once PATH_INCLUDE.'/meal_access.php';
 	require_once PATH_INCLUDE.'/user_access.php';
+	require_once PATH_INCLUDE.'/group_access.php';
 	require_once PATH_INCLUDE.'/functions.php';
 	require_once "meals_constants.php";
 
@@ -283,9 +284,14 @@ function show_orders() {
 		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/show_orders_select_date.tpl');
 	}
 	else {
-		$order_manager = new OrderManager('orders');
-		$meal_manager = new MealManager('meals');
-		$user_manager = new UserManager;
+		$order_manager = new OrderManager();
+		$meal_manager = new MealManager();
+		$user_manager = new UserManager();
+		$groupManager = new GroupManager();
+		
+		$mysql_orders = array();
+		$order = array();
+		
 		if($_POST['ordering_day'] > 31 or $_POST['ordering_month'] > 12 or $_POST['ordering_year'] < 2000 or $_POST['ordering_year'] > 3000) {
 			die(MEAL_ERROR_DATE);
 		}
@@ -298,15 +304,15 @@ function show_orders() {
 		} catch (MySQLConnectionException $e) {
 			die($e);
 		}
-		$mysql_orders = array();
-		$order = array();
+		
+		
 	if(!count($orders)) {
 			die(MEAL_NO_ORDERS_FOUND);
 		}
 	
 		foreach($orders as &$order) {
 			if (!count($meal_data = $meal_manager->getEntryData($order['MID'],'name')) or
-			!count($user_data = $user_manager->getEntryData($order['UID'],'name', 'forename'))) {
+			!count($user_data = $user_manager->getEntryData($order['UID'],'name', 'forename', 'GID'))) {
 				echo MEAL_DATABASE_PROB_ENTRY;
 				echo MEAL_DATABASE_PROB_ENTRY_END;
 			}
@@ -315,7 +321,6 @@ function show_orders() {
 				$order['meal_name'] = $meal_data['name'];
 				$order['user_name'] = $user_data['forename'].' '.$user_data['name'];
 				$order['is_fetched'] = translate_fetched($order['fetched']);
-				
 			}
 		}
 		
@@ -327,7 +332,6 @@ function show_orders() {
 		//for showing the number of orders for one meal
 		
 		
-		$num_orders = array(array());
 		/**
 		$already_there = 0;
 		$counter = 0;
@@ -347,16 +351,43 @@ function show_orders() {
 		}
 		*/ //removed by infchem 
 		
-		$counter=0;
-		$mealIdArray = $meal_manager->GetMealIdsAtDate($date);
 		
+		$num_orders = array(array());
+		$mealIdArray = $meal_manager->GetMealIdsAtDate($date);
+		$counter = 0;
 		foreach($mealIdArray as $mealIdEntry) {
+			$groups = array();//to show how many from different groups ordered something
+			$counter ++;
+			$sp_orders = $order_manager->getAllOrdersOfMealAtDate($mealIdEntry['MID'], $date);
+			$num_orders[$counter]['name'] = $meal_manager->GetMealName(($mealIdEntry['MID']));
+			$num_orders[$counter]['number'] = count($sp_orders);
 			
-			//foreach($num_orders as &$num_order) {
-				$num_orders[$counter]['name'] = $meal_manager->GetMealName(($mealIdEntry['MID']));
-				$num_orders[$counter]['number'] = count($order_manager->getAllOrdersOfMealAtDate($mealIdEntry['MID'], $date));
-				$counter ++;
-			//} //verursachte teilw. endlosschleifen...
+			//--------------------
+			//Get specific Usergroups for Interface
+			foreach($sp_orders as $sp_order) {
+				$user = $user_manager->getEntryData($sp_order['UID'], 'GID');
+				$sql_group = $groupManager->getEntryData($user['GID'], 'name');
+				$group_name = $sql_group['name'];
+				$gone_through = false;
+				foreach($groups as &$group) {
+					if(isset($group['name'])) {
+						if($group['name'] == $group_name) {
+							$group ['counter'] += 1;
+						} else {
+							$group_arr = array('name' => $group_name, 'counter' => 1);
+							$groups[] = $group_arr;
+						}
+					}
+					$gone_through = true;
+				}
+				if(!$gone_through) {
+					$group_arr = array('name' => $group_name, 'counter' => 1);
+					$groups[] = $group_arr;		
+				}
+			}
+			//--------------------
+			
+			$num_orders[$counter]['user_groups'] = $groups;
 		}
 		
 		

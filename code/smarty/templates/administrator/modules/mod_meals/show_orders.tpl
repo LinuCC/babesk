@@ -1,7 +1,14 @@
-Bestellungen für den {$ordering_date}:<br><br>
+Bestellungen für den {$ordering_date}:
+<br>
+<br>
 
-{foreach $num_orders as $num_order}
-{$num_order.name} hat {$num_order.number} Bestellungen.<br>
+{foreach $num_orders as $num_order} {$num_order.name} hat
+{$num_order.number} Bestellungen. (
+	{foreach $num_order.user_groups as $group} 
+Gruppe {$group.name} hat {$group.counter} mal bestellt.
+	{/foreach}
+	)
+<br>
 {/foreach}
 
 <table style="text-align: center;">
@@ -12,14 +19,14 @@ Bestellungen für den {$ordering_date}:<br><br>
 			<th>Wurde abgeholt</th>
 		</tr>
 	</thead>
-	
+
 	<tbody>
-	{foreach $orders as $order}
+		{foreach $orders as $order}
 		<tr bgcolor="#FFC33">
 			<td>{$order.meal_name}</td>
 			<td>{$order.user_name}</td>
 			<td style="text-align: center;">{$order.is_fetched}</td>
 		</tr>
-	{/foreach}
+		{/foreach}
 	</tbody>
 </table>

@@ -1,3 +1,19 @@
+{literal}
+<script type="text/javascript">
+function ShowHideDiv(divName){
+	 //Gibt es das Objekt mit dem Namen der in divName übergeben wurde?
+	 if(document.getElementById(divName)){
+	  /*"Sichtbarkeit" des Divs umschalten. 
+	  Wenn es sichtbar war, unsichtbar machen und umgedreht.*/
+	  document.getElementById(divName).style.display = 
+	   (document.getElementById(divName).style.display == 'none') ? 'inline' : 'none';
+	 }
+}
+
+</script>
+{/literal}
+
+
 {include file='web/header.tpl' title='Bestellen'}
 
 <h2>
@@ -11,7 +27,6 @@ td {width:20%; background-color:#f8f187; text-align: center;}
 table{width:100%;}
 </style>
 {/literal}
-
 <center><h3>Diese Woche</h3>{$message}</center>
 <table width="100%">
 		
@@ -24,7 +39,7 @@ table{width:100%;}
 		{foreach $meals as $meal}
 			{if {$meal.kalenderwoche} eq {$smarty.now|date_format:"%W"}}
 				{if {$meal.date} eq {$thisMonday}} 
-					<ul><a href="index.php?section=order&order={$meal.ID}">{$meal.name}</a></ul>
+					<ul><a href="index.php?section=order&order={$meal.ID}" onmouseover="javascript:ShowHideDiv('thisMondayDiv')">{$meal.name}</a></ul>
 				{/if}
 			{/if}
 		{/foreach}
@@ -88,7 +103,8 @@ table{width:100%;}
 		{foreach $meals as $meal}
 			{if {$meal.kalenderwoche} eq {$smarty.now|date_format:"%W"+1}}
 				{if {$meal.date} eq {$nextMonday}} 
-					<ul><a href="index.php?section=order&order={$meal.ID}">{$meal.name}</a></ul>
+					<ul><a href="index.php?section=order&order={$meal.ID}" onmouseover="javascript:ShowHideDiv('thisMondayDiv')">{$meal.name}</a></ul>
+					 <div  id="thisMondayDiv" style="display:none;">ICH MAG SCHINKEN</div
 				{/if}
 			{/if}
 		{/foreach}

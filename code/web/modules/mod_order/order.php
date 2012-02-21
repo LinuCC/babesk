@@ -92,66 +92,131 @@ if (isset($_GET['order'])) {
     		    </form>';
 		$smarty->display('web/footer.tpl');
 	}
-} else {
-	//////////////////////////////////////////////////
-	//show order-overview
-	$mealManager = new MealManager('meals');
+}/*
+ else {
+     //////////////////////////////////////////////////
+     //show order-overview
+     $mealManager = new MealManager('meals');
+     
+     $hour = date('H:i', time());
+     $date = time();
+     $result = array(array());
+     $is_void = false;
+     //Ordering only possible until $last_order_time
+     if (str_replace(":","",$hour) > str_replace(":","",$last_order_time)) {
+         $date += $day_in_secs;
+     }
+     try {
+         $result = $mealManager->getMealAfterDateSortedPcID($date);
+     } catch (MySQLVoidDataException $e) {
+         $is_void = true;
+         $smarty->assign('message', NO_MEALS_EXISTING);
+         $smarty->assign('meals', '');
+         $smarty->display('web/modules/mod_order/order.tpl');
+     }
+     if (!$is_void) {
+         $tage = array("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag");
+         $meals = array();
+         foreach ($result as $meal) {
+             $tag = date("w", strtotime($meal['date']));
+             $meal['date'] = formatDate($meal['date']);
+             $meal['wochentag'] = $tage[$tag];
+             $meal['kalenderwoche'] = date("W", strtotime($meal['date']));
+             $meals[] = $meal;
+         }
+         $smarty->assign('meals', $meals);
+         $smarty->assign('message', '');
+         
+         $year = date("Y");
+         $week_number = date("W");
+         $smarty->assign('thisMonday', date('d.m.Y', strtotime($year . "W" . $week_number . "1")));
+         $smarty->assign('thisTuesday', date('d.m.Y', strtotime($year . "W" . $week_number . "2")));
+         $smarty->assign('thisWednesday', date('d.m.Y', strtotime($year . "W" . $week_number . "3")));
+         $smarty->assign('thisThursday', date('d.m.Y', strtotime($year . "W" . $week_number . "4")));
+         $smarty->assign('thisFriday', date('d.m.Y', strtotime($year . "W" . $week_number . "5")));
+         
+         $nextkw = (string) (date("W") + 1);
+         if (strlen($nextkw) == 1)
+             $nextkw = "0" . $nextkw;
+         $week_number = $nextkw;
+         $smarty->assign('nextMonday', date('d.m.Y', strtotime($year . "W" . $week_number . "1")));
+         $smarty->assign('nextTuesday', date('d.m.Y', strtotime($year . "W" . $week_number . "2")));
+         $smarty->assign('nextWednesday', date('d.m.Y', strtotime($year . "W" . $week_number . "3")));
+         $smarty->assign('nextThursday', date('d.m.Y', strtotime($year . "W" . $week_number . "4")));
+         $smarty->assign('nextFriday', date('d.m.Y', strtotime($year . "W" . $week_number . "5")));
+         
+         $smarty->display('web/modules/mod_order/order.tpl');
+     }
+ } */
+
+ else {
+	$mealManager = new MealManager();
+	$pcManager = new PriceClassManager();
 	
 	$hour = date('H:i', time());
+	// To change the timewindow the orders can be ordered, just change $enddate (and $last_order_time)
+	//first date to show the meals
 	$date = time();
-	$result = array(array());
-	$is_void = false;
-	if (strlen($last_order_time) <> 5 || !strpos($last_order_time,":"))
-	{
-		$smarty->display('web/header.tpl');
-		echo TIMEFORMAT_ERROR;
-		$smarty->display('web/footer.tpl');
-		die();
-	}
+	//last date where meals are shown
+	$enddate = strtotime('+2 week', strtotime('last Sunday'));
+	/*
+	 * $meallist consists of multiple arrays:
+	 * 1. The weeks (The weeknumber of the week in the year; -> Compatible only when beginning of date and end of date 
+	 * 		is not more than 1 year (which is a pretty damn long time).
+	 * 2. Every week consists of days (Here: 1 = Monday, 2 = Tuesday, ... 7 = Sunday.)
+	 * 		Additionaly, there is an index named "date", which lists the dates for each individual day
+	 * 3. Every day has meals
+	 * 4. Every meal has mealdata (like ID, description, name, ...)
+	 * 
+	 *    when meallist is declared like this
+	 *    $meallist = array(array(array(array())));
+	 *    in the code, it will generate a void element (dunno why), so let this be here in the comments
+	 */
+	
 	//Ordering only possible until $last_order_time
-	if (str_replace(":","",$hour) > str_replace(":","",$last_order_time)) {
+	if (str_replace(":", "", $hour) > str_replace(":", "", $last_order_time)) {
 		$date += $day_in_secs;
 	}
 	try {
-		$result = $mealManager->getMealAfterDateSortedPcID($date);
-	} catch (MySQLVoidDataException $e) {
-		$is_void = true;
-		$smarty->assign('message', NO_MEALS_EXISTING);
-		$smarty->assign('meals', '');
-		$smarty->display('web/modules/mod_order/order.tpl');
+		$sql_meals = $mealManager->get_meals_between_two_dates(date('Y-m-d', $date), date('Y-m-d', $enddate),
+															   'date, price_class');
+	} catch (Exception $e) {
+		$smarty->assign('message', ERR_MYSQL.'<br>'.$e->getMessage());
 	}
-	if (!$is_void) {
-		$tage = array("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag");
-		$meals = array();
-		foreach ($result as $meal) {
-			$tag = date("w", strtotime($meal['date']));
-			$meal['date'] = formatDate($meal['date']);
-			$meal['wochentag'] = $tage[$tag];
-			$meal['kalenderwoche'] = date("W", strtotime($meal['date']));
-			$meals[] = $meal;
-		}
-		$smarty->assign('meals', $meals);
-		$smarty->assign('message', '');
-		
-		$year = date("Y");
-		$week_number = date("W");
-		$smarty->assign('thisMonday', date('d.m.Y', strtotime($year . "W" . $week_number . "1")));
-		$smarty->assign('thisTuesday', date('d.m.Y', strtotime($year . "W" . $week_number . "2")));
-		$smarty->assign('thisWednesday', date('d.m.Y', strtotime($year . "W" . $week_number . "3")));
-		$smarty->assign('thisThursday', date('d.m.Y', strtotime($year . "W" . $week_number . "4")));
-		$smarty->assign('thisFriday', date('d.m.Y', strtotime($year . "W" . $week_number . "5")));
-		
-		$nextkw = (string) (date("W") + 1);
-		if (strlen($nextkw) == 1)
-			$nextkw = "0" . $nextkw;
-		$week_number = $nextkw;
-		$smarty->assign('nextMonday', date('d.m.Y', strtotime($year . "W" . $week_number . "1")));
-		$smarty->assign('nextTuesday', date('d.m.Y', strtotime($year . "W" . $week_number . "2")));
-		$smarty->assign('nextWednesday', date('d.m.Y', strtotime($year . "W" . $week_number . "3")));
-		$smarty->assign('nextThursday', date('d.m.Y', strtotime($year . "W" . $week_number . "4")));
-		$smarty->assign('nextFriday', date('d.m.Y', strtotime($year . "W" . $week_number . "5")));
-		
-		$smarty->display('web/modules/mod_order/order.tpl');
+	
+	//////////////////////////////////////////////////
+	//Sort the meals
+	
+	foreach ($sql_meals as $meal) {
+		$meal_day = date('N', strtotime($meal['date']));
+		$meal_weeknum = date('W', strtotime($meal['date']));
+		$meallist[$meal_weeknum][$meal_day][] = $meal;
+		//The date of the beginning of the week (monday)
+		$meallist[$meal_weeknum]['date'][1] = date('d.m.Y',
+												   strtotime(sprintf('+%s day', -$meal_day + 1),
+															 strtotime($meal['date'])));
+		$meallist[$meal_weeknum]['date'][2] = date('d.m.Y',
+												   strtotime(sprintf('+%s day', -$meal_day + 2),
+															 strtotime($meal['date'])));
+		$meallist[$meal_weeknum]['date'][3] = date('d.m.Y',
+												   strtotime(sprintf('+%s day', -$meal_day + 3),
+															 strtotime($meal['date'])));
+		$meallist[$meal_weeknum]['date'][4] = date('d.m.Y',
+												   strtotime(sprintf('+%s day', -$meal_day + 4),
+															 strtotime($meal['date'])));
+		$meallist[$meal_weeknum]['date'][5] = date('d.m.Y',
+												   strtotime(sprintf('+%s day', -$meal_day + 5),
+															 strtotime($meal['date'])));
+		//Saturday and Sunday may be important in the future?
+		$meallist[$meal_weeknum]['date'][6] = date('d.m.Y',
+												   strtotime(sprintf('+%s day', -$meal_day + 6),
+															 strtotime($meal['date'])));
+		$meallist[$meal_weeknum]['date'][7] = date('d.m.Y',
+												   strtotime(sprintf('+%s day', -$meal_day + 7),
+															 strtotime($meal['date'])));
 	}
+	
+	$smarty->assign('meallist', $meallist);
+	$smarty->display('web/modules/mod_order/order2.tpl');
 }
 ?>
