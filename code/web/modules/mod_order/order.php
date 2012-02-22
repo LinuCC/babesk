@@ -220,7 +220,6 @@ if (isset($_GET['order'])) {
 	}
 	try {
 		$itxt_arr = $gsManager->getInfoTexts();
-		var_dump($itxt_arr);
 	} catch (Exception $e) {
 		show_error('Error getting infotexts:'.$e->getMessage());
 	}

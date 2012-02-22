@@ -31,12 +31,12 @@
 		$meallistweeksorted = NULL;
 	}
 	
-	require_once PATH_INCLUDE.'/access.php';
-	$temp = new TableManager('global_settings');	
-	$infotext1 = $temp->getTableData('name="menu_text1"');
-	$infotext2 = $temp->getTableData('name="menu_text2"');
-	$smarty->assign('menu_text1',$infotext1[0]["value"]);
-	$smarty->assign('menu_text2',$infotext2[0]["value"]);
+	require_once PATH_INCLUDE.'/global_settings_access.php';
+	$gsManager = new globalSettingsManager();
+	//get the Information-texts
+	$itxt_arr = $gsManager->getInfoTexts();
+	$smarty->assign('menu_text1',$itxt_arr[0]);
+	$smarty->assign('menu_text2',$itxt_arr[1]);
 	
 	$smarty->assign('meallistweeksorted',$meallistweeksorted);
 	$smarty->assign('weekdate',$weekdate);
