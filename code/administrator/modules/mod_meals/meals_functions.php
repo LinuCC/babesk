@@ -265,6 +265,7 @@ function show_orders() {
 	require_once PATH_INCLUDE . '/meal_access.php';
 	require_once PATH_INCLUDE . '/user_access.php';
 	require_once PATH_INCLUDE . '/group_access.php';
+	require_once PATH_INCLUDE . '/global_settings_access.php';
 	require_once PATH_INCLUDE . '/functions.php';
 	require_once "meals_constants.php";
 	
@@ -314,31 +315,8 @@ function show_orders() {
 			}
 		}
 		
-		//////////////////////////////////////////////////
-		/**
-		 * @todo refactor this part, some things are deprecated
-		 */
-		//for showing the number of orders for one meal
-		
-		/**
-		$already_there = 0;
-		$counter = 0;
-		foreach($orders as $order) {
-		    foreach($num_orders as &$num_order) {
-		        if(count($num_order) and ($order['meal_name'] == $num_order['name'])){
-		            $num_order['number'] += 1;
-		            $already_there = true;
-		        }
-		    }
-		    if(!$already_there) {
-		        $num_orders[$counter]['name'] = $order['meal_name'];
-		        $num_orders[$counter]['number'] = 1;
-		        $counter ++;
-		    }
-		    $already_there = false;
-		}
-		 */ //removed by infchem 
-		
+		//--------------------
+		//Count all Orders
 		$num_orders = array();
 		$mealIdArray = $meal_manager->GetMealIdsAtDate($date);
 		$counter = 0;
@@ -381,8 +359,6 @@ function show_orders() {
 		}
 		
 		$orders = sort_orders($orders);
-		
-		//////////////////////////////////////////////////
 		
 		if (isset($num_orders[0]) && $counter) {
 			$smarty->assign('num_orders', $num_orders);

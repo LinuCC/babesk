@@ -1,16 +1,16 @@
 Bestellungen für den {$ordering_date}:
 <br>
 <br>
-{foreach $num_orders as $num_order} {$num_order.name} hat
-{$num_order.number} Bestellungen. (
+{foreach $num_orders as $num_order} <h4>{$num_order.name} hat
+{$num_order.number} Bestellungen:</h4>
 	{foreach $num_order.user_groups as $group} 
-Gruppe {$group.name} hat {$group.counter} mal bestellt.
+<p style="margin-left:10%">Gruppe <b>{$group.name}</b> hat <b>{$group.counter}</b> mal bestellt.</p>
 	{/foreach}
-	)
+	
 <br>
 {/foreach}
 
-<table style="text-align: center;">
+<table style="text-align: center;width:100%">
 	<thead>
 		<tr bgcolor="#33CFF">
 			<th>Men&uuml;</th>

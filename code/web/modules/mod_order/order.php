@@ -2,6 +2,7 @@
 //No direct access
 defined('_WEXEC') or die("Access denied");
 require_once 'order_constants.php';
+require_once PATH_INCLUDE.'/global_settings_access.php';
 global $smarty;
 global $logger;
 
@@ -152,6 +153,7 @@ if (isset($_GET['order'])) {
  else {
 	$mealManager = new MealManager();
 	$pcManager = new PriceClassManager();
+	$gsManager = new globalSettingsManager();
 	
 	$hour = date('H:i', time());
 	// To change the timewindow the orders can be ordered, just change $enddate (and $last_order_time)
@@ -216,8 +218,14 @@ if (isset($_GET['order'])) {
 												   strtotime(sprintf('+%s day', -$meal_day + 7 + 7),
 															 strtotime($meal['date'])));
 	}
-	
+	try {
+		$itxt_arr = $gsManager->getInfoTexts();
+		var_dump($itxt_arr);
+	} catch (Exception $e) {
+		show_error('Error getting infotexts:'.$e->getMessage());
+	}
 	$smarty->assign('meallist', $meallist);
-	$smarty->display('web/modules/mod_order/order2.tpl');
+	$smarty->assign('infotext', $itxt_arr);
+	$smarty->display('web/modules/mod_order/order.tpl');
 }
 ?>

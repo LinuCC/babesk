@@ -1,18 +1,21 @@
 {literal}
 <script type="text/javascript">
-function ShowHideDiv(divName){
-	 //Gibt es das Objekt mit dem Namen der in divName übergeben wurde?
-	 if(document.getElementById(divName)){
-	  /*"Sichtbarkeit" des Divs umschalten. 
-	  Wenn es sichtbar war, unsichtbar machen und umgedreht.*/
-	  document.getElementById(divName).style.display = 
-	   (document.getElementById(divName).style.display == 'none') ? 'inline' : 'none';
-	 }
+var oldDiv = '';
+
+function switchInfo(divName) {
+	
+	document.getElementById(divName).style.display = 'inline';
+	if(oldDiv != '') {
+		document.getElementById(oldDiv).style.display = 'none';
+	}
+	oldDiv = divName;
 }
 
 </script>
 {/literal}
-
+<!-- ------------------------------------------------------------ -->
+<!-- --------------------JAVASCRIPT ENDS HERE-------------------- -->
+<!-- ------------------------------------------------------------ -->
 
 {include file='web/header.tpl' title='Bestellen'}
 
@@ -22,138 +25,100 @@ function ShowHideDiv(divName){
 
 {literal}
 <style type="text/css">
-th {width:20%; background-color:#84ff00; text-align: center;}
-td {width:20%; background-color:#f8f187; text-align: center;}
-table{width:100%;}
+th {
+	width: 20%;
+	background-color: #84ff00;
+	text-align: center;
+}
+
+td {
+	width: 20%;
+	background-color: #f8f187;
+	text-align: center;
+}
+
+.div-info {
+	background-color: #f8f187;
+}
+
+.div-info-hideall {
+	display: inline;
+	float: right;
+}
+
+.div-info-submit {
+	display: inline;
+	float: left;
+}
+
+table {
+	width: 100%;
+}
 </style>
-{/literal}
-<center><h3>Diese Woche</h3>{$message}</center>
+
+{/literal} {foreach $meallist as $mealweek}
 <table width="100%">
-		
-		<tr><th><p>Montag<br>{$thisMonday}</th><th ><p>Dienstag<br>{$thisTuesday}</th>
-	<th ><p>Mittwoch<br>{$thisWednesday}</th><th ><p>Donnerstag<br>{$thisThursday}</th>
-			<th ><p>Freitag<br>{$thisFriday}</th></tr>	
-	<!-- montag -->
-		<tr>
-		<td>
-		{foreach $meals as $meal}
-			{if {$meal.kalenderwoche} eq {$smarty.now|date_format:"%W"}}
-				{if {$meal.date} eq {$thisMonday}} 
-					<ul><a href="index.php?section=order&order={$meal.ID}" onmouseover="javascript:ShowHideDiv('thisMondayDiv')">{$meal.name}</a></ul>
-				{/if}
-			{/if}
-		{/foreach}
-		</p></td>
-		
-<!-- dienstag -->	
-<td>	
-		{foreach $meals as $meal}
-			{if {$meal.kalenderwoche} eq {$smarty.now|date_format:"%W"}}
-				{if {$meal.date} eq {$thisTuesday}} 
-					<ul><a href="index.php?section=order&order={$meal.ID}">{$meal.name}</a></ul>
-				{/if}
-			{/if}
-		{/foreach}
-		</p></td>
-		
-<!-- mittwoch -->
-<td>		
-		{foreach $meals as $meal}
-			{if {$meal.kalenderwoche} eq {$smarty.now|date_format:"%W"}}
-				{if {$meal.date} eq {$thisWednesday}} 
-					<ul><a href="index.php?section=order&order={$meal.ID}">{$meal.name}</a></ul>
-				{/if}
-			{/if}
-		{/foreach}
-		</p></td>
-		
-<!-- donnerstag -->
-<td>
-		{foreach $meals as $meal}
-			{if {$meal.kalenderwoche} eq {$smarty.now|date_format:"%W"}}
-				{if {$meal.date} eq {$thisThursday}} 
-					<ul><a href="index.php?section=order&order={$meal.ID}">{$meal.name}</a></ul>
-				{/if}
-			{/if}
-		{/foreach}
-		</p></td>
-		
-<!-- freitag -->
-<td>
-		{foreach $meals as $meal}
-			{if {$meal.kalenderwoche} eq {$smarty.now|date_format:"%W"}}
-				{if {$meal.date} eq {$thisFriday}} 
-					<ul><a href="index.php?section=order&order={$meal.ID}">{$meal.name}</a></ul>
-				{/if}
-			{/if}
-		{/foreach}
-		</p></td>
+	<tr>
+		<th>Montag<br>{$mealweek.date.1}
+		</th>
+		<th>Dienstag<br>{$mealweek.date.2}
+		</th>
+		<th>Mittwoch<br>{$mealweek.date.3}
+		</th>
+		<th>Donnerstag<br>{$mealweek.date.4}
+		</th>
+		<th>Freitag<br>{$mealweek.date.5}
+		</th>
 	</tr>
-</table><br><br>
-	<center><h3>N&auml;chste Woche</h3>{$message}</center>
-	<table>
-	
-	<tr><th><p>Montag<br>{$nextMonday}</th><th><p>Dienstag<br>{$nextTuesday}</th>
-	<th><p>Mittwoch<br>{$nextWednesday}</th><th><p>Donnerstag<br>{$nextThursday}</th>
-			<th><p>Freitag<br>{$nextFriday}</th></tr>
-		
-<!-- montag -->
+	<tr>
+		<td>{foreach $mealweek.1 as $meal}
+			<ul>
+				<a href="javascript:switchInfo('MealDiv{$meal.ID}')">{$meal.name}</a>
+			</ul> {/foreach} {foreach $mealweek.2 as $meal}
+			<ul>
+				<a href="javascript:switchInfo('MealDiv{$meal.ID}')">{$meal.name}</a>
+			</ul> {/foreach} {foreach $mealweek.3 as $meal}
+			<ul>
+				<a href="javascript:switchInfo('MealDiv{$meal.ID}')">{$meal.name}</a>
+			</ul> {/foreach} {foreach $mealweek.4 as $meal}
+			<ul>
+				<a href="javascript:switchInfo('MealDiv{$meal.ID}')">{$meal.name}</a>
+			</ul> {/foreach} {foreach $mealweek.5 as $meal}
+			<ul>
+				<a href="javascript:switchInfo('MealDiv{$meal.ID}')">{$meal.name}</a>
+			</ul> {/foreach}
+
 		<tr>
-		<td>
-		{foreach $meals as $meal}
-			{if {$meal.kalenderwoche} eq {$smarty.now|date_format:"%W"+1}}
-				{if {$meal.date} eq {$nextMonday}} 
-					<ul><a href="index.php?section=order&order={$meal.ID}" onmouseover="javascript:ShowHideDiv('thisMondayDiv')">{$meal.name}</a></ul>
-					 <div  id="thisMondayDiv" style="display:none;">ICH MAG SCHINKEN</div>
-				{/if}
-			{/if}
-		{/foreach}
-		</p></td>
-		
-<!-- dienstag -->	
-<td>	
-		{foreach $meals as $meal}
-			{if {$meal.kalenderwoche} eq {$smarty.now|date_format:"%W"+1}}
-				{if {$meal.date} eq {$nextTuesday}} 
-					<ul><a href="index.php?section=order&order={$meal.ID}">{$meal.name}</a></ul>
-				{/if}
-			{/if}
-		{/foreach}
-		</p></td>
-		
-<!-- mittwoch -->
-<td>		
-		{foreach $meals as $meal}
-			{if {$meal.kalenderwoche} eq {$smarty.now|date_format:"%W"+1}}
-				{if {$meal.date} eq {$nextWednesday}} 
-					<ul><a href="index.php?section=order&order={$meal.ID}">{$meal.name}</a></ul>
-				{/if}
-			{/if}
-		{/foreach}
-		</p></td>
-		
-<!-- donnerstag -->
-<td>
-		{foreach $meals as $meal}
-			{if {$meal.kalenderwoche} eq {$smarty.now|date_format:"%W"+1}}
-				{if {$meal.date} eq {$nextThursday}} 
-					<ul><a href="index.php?section=order&order={$meal.ID}">{$meal.name}</a></ul>
-				{/if}
-			{/if}
-		{/foreach}
-		</p></td>
-		
-<!-- freitag -->
-<td>
-		{foreach $meals as $meal}
-			{if {$meal.kalenderwoche} eq {$smarty.now|date_format:"%W"+1}}
-				{if {$meal.date} eq {$nextFriday}} 
-					<ul><a href="index.php?section=order&order={$meal.ID}">{$meal.name}</a></ul>
-				{/if}
-			{/if}
-		{/foreach}
-		</p></td>
-	</tr>
-</table>
-<!-- oben die Wochentage, links men� 1, men� 2     -->
-{include file='web/footer.tpl'}
+</td></table>
+
+{/foreach}
+
+<!-- for every meal-element -->
+{foreach $meallist as $mealweek} {foreach $mealweek as $mealday} {if
+count($mealday)} {foreach $mealday as $meal} {if isset($meal.ID)}
+<div class="div-info" id="MealDiv{$meal.ID}" style="display:none;">
+	<fieldset class="div-info">
+		<legend>
+			<b>Informationen zu {$meal.name}:</b>
+		</legend>
+		{$meal.description}
+		<p><b>Preis:</b> {$meal.price} €</p>
+	</fieldset>
+	<fieldset class="div-info">
+		<form class="div-info-submit"
+			action="index.php?section=order&order={$meal.ID}" method="post">
+			<input type="submit" value="{$meal.name} Bestellen">
+		</form>
+	</fieldset>
+</div>
+{/if} {/foreach} {/if} {/foreach} {/foreach}
+
+<p>
+<hr>
+{$infotext.0}
+<hr>
+</p>
+<p>
+{$infotext.1}
+</p>
+
