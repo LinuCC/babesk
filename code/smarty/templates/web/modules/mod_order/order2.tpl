@@ -111,8 +111,6 @@ count($mealday)} {foreach $mealday as $meal} {if isset($meal.ID)}
 			action="index.php?section=order&order={$meal.ID}" method="post">
 			<input type="submit" value="{$meal.name} Bestellen">
 		</form>
-		<a class="div-info-hideall" href="javascript:HideAllDivInfo();">Alle
-			verstecken</a>
 	</fieldset>
 </div>
 {/if} {/foreach} {/if} {/foreach} {/foreach}
