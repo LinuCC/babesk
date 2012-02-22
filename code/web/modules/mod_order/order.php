@@ -187,9 +187,10 @@ if (isset($_GET['order'])) {
 	//////////////////////////////////////////////////
 	//Sort the meals
 	
-	foreach ($sql_meals as $meal) {
+	foreach ($sql_meals as &$meal) {
 		$meal_day = date('N', strtotime($meal['date']));
 		$meal_weeknum = date('W', strtotime($meal['date']));
+		$meal['price'] = $pcManager->getPrice($_SESSION['uid'], $meal['ID']);
 		$meallist[$meal_weeknum][$meal_day][] = $meal;
 		//The date of the beginning of the week (here monday). +7 because of negative meal_day setting the date 1 week behind
 		$meallist[$meal_weeknum]['date'][1] = date('d.m.Y',

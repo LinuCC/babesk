@@ -104,7 +104,7 @@ table{width:100%;}
 			{if {$meal.kalenderwoche} eq {$smarty.now|date_format:"%W"+1}}
 				{if {$meal.date} eq {$nextMonday}} 
 					<ul><a href="index.php?section=order&order={$meal.ID}" onmouseover="javascript:ShowHideDiv('thisMondayDiv')">{$meal.name}</a></ul>
-					 <div  id="thisMondayDiv" style="display:none;">ICH MAG SCHINKEN</div
+					 <div  id="thisMondayDiv" style="display:none;">ICH MAG SCHINKEN</div>
 				{/if}
 			{/if}
 		{/foreach}
