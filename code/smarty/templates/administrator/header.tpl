@@ -9,7 +9,7 @@
 	
 </head>
 
-<body onload="x = document.getElementsByTagName('input')[0];if (x.value == '') x.focus();">
+<body onload="x = document.getElementsByTagName('input')[0];if(x)if (x.value == '') x.focus();">
 <div id="header">
     <div id="top">
         <h3><a href="index.php?{$sid}">BaBeSK Admin Bereich</a></h3>
