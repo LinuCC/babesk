@@ -3,10 +3,18 @@
 var oldDiv = '';
 
 function switchInfo(divName) {
-	
-	document.getElementById(divName).style.display = 'inline';
-	if(oldDiv != '') {
-		document.getElementById(oldDiv).style.display = 'none';
+
+	if(oldDiv == divName) {
+		if(document.getElementById(divName).style.display == 'inline')
+			document.getElementById(divName).style.display = 'none';
+		else
+			document.getElementById(divName).style.display = 'inline';
+	}
+	else {
+		document.getElementById(divName).style.display = 'inline';
+		if(oldDiv != '') {
+			document.getElementById(oldDiv).style.display = 'none';
+		}
 	}
 	oldDiv = divName;
 }
@@ -87,22 +95,24 @@ table {
 			<ul>
 				<a href="javascript:switchInfo('MealDiv{$meal.ID}')">{$meal.name}</a>
 			</ul> {/foreach}
-
-		<tr>
-</td></table>
+	<tr>
+		</td>
+</table>
 
 {/foreach}
 
 <!-- for every meal-element -->
 {foreach $meallist as $mealweek} {foreach $mealweek as $mealday} {if
 count($mealday)} {foreach $mealday as $meal} {if isset($meal.ID)}
-<div class="div-info" id="MealDiv{$meal.ID}" style="display:none;">
+<div class="div-info" id="MealDiv{$meal.ID}" style="display: none;">
 	<fieldset class="div-info">
 		<legend>
 			<b>Informationen zu {$meal.name}:</b>
 		</legend>
 		{$meal.description}
-		<p><b>Preis:</b> {$meal.price} €</p>
+		<p>
+			<b>Preis:</b> {$meal.price} €
+		</p>
 	</fieldset>
 	<fieldset class="div-info">
 		<form class="div-info-submit"
@@ -118,7 +128,4 @@ count($mealday)} {foreach $mealday as $meal} {if isset($meal.ID)}
 {$infotext.0}
 <hr>
 </p>
-<p>
-{$infotext.1}
-</p>
-
+<p>{$infotext.1}</p>
