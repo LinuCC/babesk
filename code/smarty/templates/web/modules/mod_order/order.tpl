@@ -111,7 +111,7 @@ count($mealday)} {foreach $mealday as $meal} {if isset($meal.ID)}
 		</legend>
 		{$meal.description}
 		<p>
-			<b>Preis:</b> {$meal.price} €
+			<b>Preis:</b> {$meal.price} &euro;
 		</p>
 	</fieldset>
 	<fieldset class="div-info">
