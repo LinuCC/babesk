@@ -53,7 +53,7 @@
     if($login) {
         $smarty->assign('username', $_SESSION['username']);
         $smarty->assign('sid', htmlspecialchars(SID));
-        $smarty->display('administrator/header.tpl');
+        $smarty->assign('base_path', PATH_SMARTY.'/templates/administrator/base_layout.tpl');
         //include a module if selected
         if (isset($_GET['section'])) {
             $modManager->execute($_GET['section']);
@@ -69,14 +69,11 @@
                 }
             } 
             
+        	$smarty->assign('is_mainmenu', true);
             $smarty->assign('modules', $allowedModules);
             $smarty->assign('module_names', $module_names);
             $smarty->display('administrator/menu.tpl');   
         }
-        if (isset($_GET['section'])) {
-            echo '<br /><br /><a href="index.php">Zur&uuml;ck zum Hauptmen&uuml;</a>';
-        }
-        $smarty->display('administrator/footer.tpl');
     }
 
 ?>

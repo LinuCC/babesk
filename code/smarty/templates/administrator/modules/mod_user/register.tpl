@@ -1,3 +1,4 @@
+    {extends file=$base_path}{block name=content}
     <form action="index.php?section=user&action=1" method="post">
     <fieldset>
         <legend>Persönliche Daten</legend>
@@ -25,3 +26,5 @@
     </fieldset><br>
     <input type="submit" value="Submit" />
   </form>
+
+  {/block}

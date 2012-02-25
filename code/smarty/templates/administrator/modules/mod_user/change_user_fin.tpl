@@ -1,3 +1,4 @@
+{extends file=$base_path}{block name=content}
 Der Benutzer wurde verändert:<br><br>
 ID: {$id}<br>
 Gruppen-ID: {$gid}<br>
@@ -8,3 +9,4 @@ Geburtstag: {$birthday}<br>
 Guthaben: {$credits}<br>
 Gesperrt: {if $locked}ja{else}nein{/if}<br>
 Teilhabepaket: {if $soli}ja{else}nein{/if}
+{/block}

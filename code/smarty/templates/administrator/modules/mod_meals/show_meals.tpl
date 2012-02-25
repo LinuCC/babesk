@@ -1,3 +1,4 @@
+{extends file=$base_path}{block name=content}
 
 <table>
 		<thead>
@@ -24,3 +25,4 @@
 			{/foreach}
 		</tbody>
 </table>
+{/block}

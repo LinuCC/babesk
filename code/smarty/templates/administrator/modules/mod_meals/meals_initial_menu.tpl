@@ -1,3 +1,4 @@
+	{extends file=$base_path}{block name=content}
 	<!-- the initial menu-->
 	<form action="index.php?section=meals&action=1" method="post">
 		<input type="submit" value="Eine neue Mahlzeit erstellen" />
@@ -19,3 +20,4 @@
 	<input type="submit" value="Infotexte f&uuml;r Speiseplan editieren" />
 	</form>
 	<br><br>
+	{/block}

@@ -1,3 +1,4 @@
+{extends file=$base_path}{block name=content}
 bitte geben sie das Datum ein, vor welchem ältere Mahlzeiten gelöscht werden sollen:<br><br>
 <form action="index.php?section=meals&amp;action=4" method="post">
 	<label>Tag:<input type="text" name="day" maxlength="2" size="2" value={$today.day} /></label>
@@ -5,3 +6,5 @@ bitte geben sie das Datum ein, vor welchem ältere Mahlzeiten gelöscht werden s
 	<label>Jahr:<input type="text" name="year" maxlength="4" value={$today.year} size="4" /></label><br>
 	<input type="submit" value="Löschen" />
 </form>
+
+{/block}

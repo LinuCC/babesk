@@ -1,3 +1,4 @@
+{extends file=$base_path}{block name=content}
 Was wollen sie tun?<br>
 
 <form action="index.php?section=admin&action={$action['add_admin']}" method="post">
@@ -15,3 +16,4 @@ Was wollen sie tun?<br>
 <form action="index.php?section=admin&action={$action['show_admin_groups']}" method="post">
 	<input type="submit" value="Die Administratorgruppen anzeigen">
 </form><br>
+{/block}

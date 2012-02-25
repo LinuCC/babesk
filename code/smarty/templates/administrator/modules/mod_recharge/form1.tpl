@@ -1,3 +1,4 @@
+{extends file=$base_path}{block name=content}
 <h3>Bitte Karte Scannen</h3>
 <form action="index.php?section=recharge&{$sid}" method="post">
 	<fieldset>
@@ -6,3 +7,5 @@
 	</fieldset>
 	<input type="submit" value="Submit" />
 </form>
+
+{/block}

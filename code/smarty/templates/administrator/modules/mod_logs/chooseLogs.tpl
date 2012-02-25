@@ -1,3 +1,4 @@
+{extends file=$base_path}{block name=content}
 <h3>Logs</h3>
 <p>Bitte Kategorie der Logs ausw&auml;hlen:</p>
 <!-- seems like sid is not used anymore, throw it out -->
@@ -13,3 +14,5 @@
 	<input type="submit" value="Submit" />
 </form>
 
+
+{/block}

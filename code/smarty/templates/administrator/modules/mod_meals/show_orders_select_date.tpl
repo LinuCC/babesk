@@ -1,3 +1,4 @@
+{extends file=$base_path}{block name=content}
 geben sie bitte das Datum ein, wofür sie die bisher eingegangenen Bestellungen angezeigt haben möchten:<br>
 
 <form action="index.php?section=meals&amp;action=3" method="post">
@@ -6,3 +7,5 @@ geben sie bitte das Datum ein, wofür sie die bisher eingegangenen Bestellungen 
 	<label>Jahr:<input type="text" name="ordering_year" maxlength="4" value={$today.year} size="4" /></label><br>
 	<input type="submit" value="Anzeigen" />
 </form>
+
+{/block}

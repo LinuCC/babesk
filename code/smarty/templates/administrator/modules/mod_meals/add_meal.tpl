@@ -1,3 +1,4 @@
+    {extends file=$base_path}{block name=content}
     <form action="index.php?section=meals&amp;action=1" method="post">
 		<label>Name der Mahlzeit:<br><input type="text" name="name" size="40"/></label><br><br>
 		<label>Beschreibung<br><textarea name="description" cols="40" rows="10"></textarea></label><br><br>
@@ -12,3 +13,5 @@
 <!-- 		<label><input type="text" name="year" maxlength="4" size="4" />  Jahr</label><br><br> -->
 		<input type="submit" value="Hinzuf&uuml;gen" />
 	</form>
+
+	{/block}

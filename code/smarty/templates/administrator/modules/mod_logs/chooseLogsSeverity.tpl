@@ -1,3 +1,4 @@
+{extends file=$base_path}{block name=content}
 Bitte Gewichtung der Logs ausw&auml;hlen.
 
 <form action="index.php?section=logs&action=show&Category={$category}"
@@ -8,3 +9,5 @@ Bitte Gewichtung der Logs ausw&auml;hlen.
 	</select><br><br>
 	<input type='submit' value='Logs anzeigen'>
 </form>
+
+{/block}

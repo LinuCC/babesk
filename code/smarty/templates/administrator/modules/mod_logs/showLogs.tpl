@@ -1,3 +1,4 @@
+{extends file=$base_path}{block name=content}
 <h3 align="center">Log-Anzeige</h3>
             
 <table>
@@ -18,3 +19,4 @@
 	</tr>	
 	{/foreach}
 </table>
+{/block}

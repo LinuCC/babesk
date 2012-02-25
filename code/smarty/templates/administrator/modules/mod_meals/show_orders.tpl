@@ -1,3 +1,4 @@
+{extends file=$base_path}{block name=content}
 Bestellungen für den {$ordering_date}:
 <br>
 <br>
@@ -29,3 +30,4 @@ Bestellungen für den {$ordering_date}:
 		{/foreach}
 	</tbody>
 </table>
+{/block}

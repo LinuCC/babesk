@@ -1,3 +1,4 @@
+{extends file=$base_path}{block name=content}
 {literal}<!-- No Smarty-Variables wanted in JavaScript -->
 <script type="text/javascript">
 
@@ -69,3 +70,5 @@ function checkCardId() {
 	</fieldset>
 	<br> <input id="submit" onclick="submit()" type="submit" value="Submit" />
 </form>
+
+{/block}
