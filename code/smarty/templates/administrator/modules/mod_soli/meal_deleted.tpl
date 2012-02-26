@@ -1,1 +1,0 @@
-Die Mahlzeit wurde gelöscht.

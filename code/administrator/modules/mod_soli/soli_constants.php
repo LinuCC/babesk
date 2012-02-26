@@ -21,8 +21,8 @@
 	define('MEAL_ERROR_DELETE','Konnte eine Mahlzeit nicht löschen!');
 	define('MEAL_ERROR_PC', '<p class="error">Es wurde keine Preisklasse erstellt. Bitte erstellen sie zuerst Preisklassen</p>');
 	
-	define('MEAL_ADDED','Mahlzeit wurde erfolgreich hinzugefügt.');
-	define('MEAL_DELETED','Mahlzeit wurde erfolgreich geläscht.');
+	define('COUPON_ADDED','Gutschein wurde erfolgreich hinzugefügt.');
+	define('SETTINGS_CHANGED','Einstellungen wurden erfolgreich ge&auml;ndert.');
 	
 	define('ORDER_DELETED','Bestellung wurde erfolgreich geläscht.');
 	define('ORDER_FETCHED','Bestellung abgeholt.');

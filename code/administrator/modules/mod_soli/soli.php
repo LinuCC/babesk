@@ -16,8 +16,12 @@
 	if(isset($_GET["action"])) {
 		if($_GET['action'] == 1)//show orders
 			show_orders();
+		if($_GET['action'] == 2)//show coupons
+			show_coupons();
+		if($_GET['action'] == 3)//show settings
+			show_settings();
 		}
 	else {//User selects what he want to do
-		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/meals_initial_menu.tpl');
+		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/soli_initial_menu.tpl');
 	}
 ?>

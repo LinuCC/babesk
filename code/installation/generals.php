@@ -46,7 +46,12 @@
 	    	                       VALUES
 	    	                            ("menu_text2",
 	    	                             "infotext 2");';
-	     
+	    
+	    $sql[4] = 'INSERT INTO
+	 		                    	    global_settings(name, value)
+	    	                       VALUES
+	    	                            ("soli_price",
+	    	                             "1");';
 	    foreach ($sql as $query) {
 	    	$result = $db->query($query);
 			if (!$result) {

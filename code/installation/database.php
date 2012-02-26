@@ -149,6 +149,12 @@
                                 `value` varchar(1024) NOT NULL,
                                 PRIMARY KEY (`id`)
                             )AUTO_INCREMENT=1;';
+        //Table 'soli_coupons'
+        $sql[11] = 'CREAT TABLE IF NOT EXISTS `soli_coupons` (
+        						`ID` smallint(5) unsigned NOT NULL auto_increment,
+        						`UID` int(11) NOT NULL,
+        						`enddate` date
+        						)AUTO_INCREMENT=1;';
 
         // ========== Execute Queries ========== \\
 		$counter = 0;

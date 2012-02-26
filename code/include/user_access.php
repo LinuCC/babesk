@@ -188,6 +188,37 @@ class UserManager extends TableManager{
 		$stmt->close();
 		return $result;
 	}
+	
+	/**
+	returns username of all users, where soli = 1
+	*/
+	function checkSoliAccounts() {
+		try {
+			$users = TableManager::getTableData('soli = "1"');
+		} catch (MySQLVoidDataException $e) {
+			$orders = NULL;
+		}
+		
+		return $users;
+	}
+	
+	/**
+	 * returns ID of all users, whose have a coupon
+	 */
+	function checkCouponAccounts() {
+		$date = date('Y').'-'.date('m').'-'.date('d');
+		$id = array();
+		$query = "enddate > '".$date."'";
+		try {
+			$table_coupons = new TableManager('soli_coupons');
+			$users = $table_coupons->getTableData($query);
+			foreach ($users as $user) {
+				array_push($id, $user['UID']);
+			}
+		} catch (MySQLVoidDataException $e) {
+		};
+		return $id;
+	}
 
 	/**
 	* Check who doesn't need to pay the full price
