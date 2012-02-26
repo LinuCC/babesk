@@ -5,7 +5,7 @@ require_once 'AdminHelpProcessing.php';
 require_once 'AdminHelpInterface.php';
 require_once PATH_INCLUDE . '/global_settings_access.php';
 
-$gbManager = new globalSettingsManager();
+$gbManager = new GlobalSettingsManager();
 $helpInterface = new AdminHelpInterface();
 $helpProcessing = new AdminHelpProcessing();
 

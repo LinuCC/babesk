@@ -5,7 +5,7 @@ global $smarty;
 
 require_once PATH_INCLUDE . '/global_settings_access.php';
 
-$gsManager = new globalSettingsManager();
+$gsManager = new GlobalSettingsManager();
 try {
 	$help_str = $gsManager->getHelpText();
 } catch (Exception $e) {

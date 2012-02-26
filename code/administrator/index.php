@@ -1,4 +1,6 @@
 <?php
+
+
     ini_set('session.use_cookies', 1);
     ini_set('session.use_only_cookies', 0);
     
@@ -25,6 +27,12 @@
     $smarty->assign('smarty_path', REL_PATH_SMARTY);
     $smarty->assign('status', '');
     
+function show_error($string) {
+	global $smarty;
+	$smarty->assign('message', $string);
+	$smarty->display(PATH_SMARTY.'/templates/administrator/error.tpl');
+}
+
     //the module manager
     $modManager = new ModuleManager($modules);
     

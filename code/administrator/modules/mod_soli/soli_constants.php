@@ -1,4 +1,7 @@
 <?php
+
+	//@todo having fun with these copied code. nogo, needs to get cleaned (whe are in mod_soli, not mod_meal!)
+
 	/**
 	 *\file meals_constants.php saves some constants needed for the meals-module, for example Error-messages
 	*/
@@ -34,4 +37,13 @@
 		
 	//paths
 	define('MEAL_SMARTY_TEMPLATE_PATH',PATH_SMARTY.'/templates/administrator/modules/mod_soli');
+	
+	
+	//////////////////////////////////////////////////
+	
+	//messageoutput in browser
+	define('SOLI_ERR_PRICE' ,'Konnte den Preis für das Teilhabepaket nicht abrufen!');
+	define('SOLI_ERR_INP_PRICE' ,'Der Preis für das Teilhabepaket wurde nicht korrekt eingegeben.');
+	define('SOLI_ERR_CHANGE_PRICE' ,'Konnte den Preis für das Teilhabepaket nicht ändern!');
+	
 ?>

@@ -34,7 +34,7 @@ class TableManager {
 	 * The data will be returned in an array with the fieldnames being the keys.
 	 *
 	 * @param variable amount, see description
-	 * @return false if error
+	 * @return false if error, else array
 	 */
 	public function getEntryData() {
 		
@@ -167,7 +167,7 @@ class TableManager {
 	 * @throws UnexpectedValueException When one of the parameters has the wrong typ
 	 * @return array()
 	 */
-	function searchEntry($search_str) {
+	public function searchEntry($search_str) {
 		//this function is for getting a single value
 		if (!is_string($search_str))
 			throw new UnexpectedValueException('One of the Parameters has the wrong format!');
@@ -178,6 +178,25 @@ class TableManager {
 		}
 		$result = $result_arr[0];
 		return $result;
+	}
+	
+	/**
+	 * Returns exactly one value for a specific key from MySQL
+	 * This function needs the ID of the object and the key to the value it is supposed to return
+	 * @param numeric_string $id
+	 * @param string $key
+	 */
+	public function getEntryValue($id, $key) {
+		$query = sql_prev_inj(sprintf('SELECT %s FROM %s WHERE ID=%s', $key, $this->tablename, $id));
+		$result = $this->db->query($query);
+		if (!$result) {
+			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error . "<br />" . $query);
+		}
+		if ($res_var = $result->fetch_assoc()) {
+			return $res_var[$key];
+		} else {
+			throw new MySQLVoidDataException(DB_QUERY_ERROR . $this->db->error . "<br />" . $query);
+		}
 	}
 	
 	/**

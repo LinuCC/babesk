@@ -1,3 +1,4 @@
+{extends file=$base_path}{block name=content}
 <h3 align=center>{$name} - Essenszuschuss</h3><h3 align=right>KW {$ordering_date}</h3><br>
 
 <table style="text-align: center;">
@@ -33,3 +34,4 @@
 	</tr>
 	</tbody>
 </table>
+{/block}

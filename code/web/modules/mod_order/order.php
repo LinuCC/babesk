@@ -93,67 +93,13 @@ if (isset($_GET['order'])) {
     		    </form>';
 		$smarty->display('web/footer.tpl');
 	}
-}/*
- else {
-     //////////////////////////////////////////////////
-     //show order-overview
-     $mealManager = new MealManager('meals');
-     
-     $hour = date('H:i', time());
-     $date = time();
-     $result = array(array());
-     $is_void = false;
-     //Ordering only possible until $last_order_time
-     if (str_replace(":","",$hour) > str_replace(":","",$last_order_time)) {
-         $date += $day_in_secs;
-     }
-     try {
-         $result = $mealManager->getMealAfterDateSortedPcID($date);
-     } catch (MySQLVoidDataException $e) {
-         $is_void = true;
-         $smarty->assign('message', NO_MEALS_EXISTING);
-         $smarty->assign('meals', '');
-         $smarty->display('web/modules/mod_order/order.tpl');
-     }
-     if (!$is_void) {
-         $tage = array("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag");
-         $meals = array();
-         foreach ($result as $meal) {
-             $tag = date("w", strtotime($meal['date']));
-             $meal['date'] = formatDate($meal['date']);
-             $meal['wochentag'] = $tage[$tag];
-             $meal['kalenderwoche'] = date("W", strtotime($meal['date']));
-             $meals[] = $meal;
-         }
-         $smarty->assign('meals', $meals);
-         $smarty->assign('message', '');
-         
-         $year = date("Y");
-         $week_number = date("W");
-         $smarty->assign('thisMonday', date('d.m.Y', strtotime($year . "W" . $week_number . "1")));
-         $smarty->assign('thisTuesday', date('d.m.Y', strtotime($year . "W" . $week_number . "2")));
-         $smarty->assign('thisWednesday', date('d.m.Y', strtotime($year . "W" . $week_number . "3")));
-         $smarty->assign('thisThursday', date('d.m.Y', strtotime($year . "W" . $week_number . "4")));
-         $smarty->assign('thisFriday', date('d.m.Y', strtotime($year . "W" . $week_number . "5")));
-         
-         $nextkw = (string) (date("W") + 1);
-         if (strlen($nextkw) == 1)
-             $nextkw = "0" . $nextkw;
-         $week_number = $nextkw;
-         $smarty->assign('nextMonday', date('d.m.Y', strtotime($year . "W" . $week_number . "1")));
-         $smarty->assign('nextTuesday', date('d.m.Y', strtotime($year . "W" . $week_number . "2")));
-         $smarty->assign('nextWednesday', date('d.m.Y', strtotime($year . "W" . $week_number . "3")));
-         $smarty->assign('nextThursday', date('d.m.Y', strtotime($year . "W" . $week_number . "4")));
-         $smarty->assign('nextFriday', date('d.m.Y', strtotime($year . "W" . $week_number . "5")));
-         
-         $smarty->display('web/modules/mod_order/order.tpl');
-     }
- } */
-
+}
+//Show list of meals that can be ordered
  else {
 	$mealManager = new MealManager();
 	$pcManager = new PriceClassManager();
-	$gsManager = new globalSettingsManager();
+	$gsManager = new GlobalSettingsManager();
+	$userManager = new UserManager();
 	
 	$hour = date('H:i', time());
 	// To change the timewindow the orders can be ordered, just change $enddate (and $last_order_time)
@@ -192,7 +138,11 @@ if (isset($_GET['order'])) {
 	foreach ($sql_meals as &$meal) {
 		$meal_day = date('N', strtotime($meal['date']));
 		$meal_weeknum = date('W', strtotime($meal['date']));
-		$meal['price'] = $pcManager->getPrice($_SESSION['uid'], $meal['ID']);
+		if($userManager->isSoli($_SESSION['uid']))
+			$meal['price'] = $gsManager->getSoliPrice();
+		else
+			$meal['price'] = $pcManager->getPrice($_SESSION['uid'], $meal['ID']);
+		
 		$meallist[$meal_weeknum][$meal_day][] = $meal;
 		//The date of the beginning of the week (here monday). +7 because of negative meal_day setting the date 1 week behind
 		$meallist[$meal_weeknum]['date'][1] = date('d.m.Y',

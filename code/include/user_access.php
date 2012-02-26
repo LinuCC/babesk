@@ -190,19 +190,6 @@ class UserManager extends TableManager{
 	}
 	
 	/**
-	returns username of all users, where soli = 1
-	*/
-	function checkSoliAccounts() {
-		try {
-			$users = TableManager::getTableData('soli = "1"');
-		} catch (MySQLVoidDataException $e) {
-			$orders = NULL;
-		}
-		
-		return $users;
-	}
-	
-	/**
 	 * returns ID of all users, whose have a coupon
 	 */
 	function checkCouponAccounts() {
@@ -226,24 +213,16 @@ class UserManager extends TableManager{
 	* @return array with user_ids from users who don't need to pay full price
 	*/
 	function checkSoliAccounts() {
-		/**
-		require_once PATH_INCLUDE.'/functions.php';
-		$sql = sql_prev_inj(sprintf('SELECT ID FROM users WHERE soli = 1'));
-		
-		$result = $this->db->query($sql);
-		if (!$result) {
-			throw new MySQLConnectionException(DB_QUERY_ERROR.$this->db->error);
-		}
-	
-		return $result;
-		*/
-		try {
-			$users = TableManager::getTableData('soli = "1"');
-		} catch (MySQLVoidDataException $e) {
-			$orders = NULL;
-		}
-		
+		$users = TableManager::getTableData('soli = "1"');
 		return $users;
+	}
+	
+	/**
+	 * checks if user of given UID does not need to pay full price
+	 */
+	function isSoli($UID) {
+		$is_soli = parent::getEntryData($UID, 'soli');
+		return $is_soli['soli'];
 	}
 	
 	

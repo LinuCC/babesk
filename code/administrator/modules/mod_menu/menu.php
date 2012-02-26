@@ -32,7 +32,7 @@
 	}
 	
 	require_once PATH_INCLUDE.'/global_settings_access.php';
-	$gsManager = new globalSettingsManager();
+	$gsManager = new GlobalSettingsManager();
 	//get the Information-texts
 	$itxt_arr = $gsManager->getInfoTexts();
 	$smarty->assign('menu_text1',$itxt_arr[0]);

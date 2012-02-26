@@ -1,7 +1,7 @@
 <?php
 require_once PATH_INCLUDE . '/access.php';
 
-class globalSettingsManager extends TableManager {
+class GlobalSettingsManager extends TableManager {
 	function __construct() {
 		parent::__construct('global_settings');
 	}
@@ -51,6 +51,29 @@ class globalSettingsManager extends TableManager {
 			throw new MySQLVoidDataException('MySQL returned a void element!');
 		}
 		return $it_arr;
+	}
+	
+	/**
+	 * returns the value of soli_price
+	 * @throws UnexpectedValueException when soli_price is NULL
+	 * @throws something else when MySQL has problems
+	 * @return string the soli_price
+	 */
+	function getSoliPrice() {
+		$pid = parent::searchEntry("name = 'soli_price'");
+		$soli_price = parent::getEntryValue($pid['id'], 'value');
+		if($soli_price === NULL)
+			throw new UnexpectedValueException('soli_price has no value!');
+		return $soli_price;
+	}
+	
+	/**
+	 * Changes the value of "soli_price" to the given value
+	 * @throws something if something has gone wrong
+	 */
+	function changeSoliPrice($value) {
+		$pid = parent::searchEntry("name = 'soli_price'");
+		parent::alterEntry($pid['id'], 'value', $value);
 	}
 }
 ?>

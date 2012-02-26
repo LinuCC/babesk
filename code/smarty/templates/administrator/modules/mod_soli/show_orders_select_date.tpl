@@ -1,3 +1,4 @@
+{extends file=$base_path}{block name=content}
 Geben sie bitte das Datum ein, wofür sie die bisher eingegangenen Bestellungen mit Teilhabepaket angezeigt haben möchten:<br>
 
 <form action="index.php?section=soli&amp;action=1" method="post">
@@ -26,3 +27,5 @@ Teilhabeberechtigt:
 	
 	<input type="submit" value="Anzeigen" />
 </form>
+
+{/block}

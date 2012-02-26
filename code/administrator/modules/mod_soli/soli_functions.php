@@ -142,7 +142,11 @@ function show_orders() {
 
 	if(!isset($_POST['ordering_kw']) ) {
 		$solis = array();
-		$accounts = $user_manager->checkSoliAccounts();
+		try {
+			$accounts = $user_manager->checkSoliAccounts();
+		} catch (Exception $e) {
+			///@todo was falschgelaufen
+		}
 		foreach ($accounts as $account) {
 			array_push($solis, $account['username']);
 		}
@@ -151,7 +155,11 @@ function show_orders() {
 		$user_manager = new UserManager;
 		 
 		$soliUsers = array();
-		$usersWithSoli = $user_manager->checkSoliAccounts();
+		try {
+			$usersWithSoli = $user_manager->checkSoliAccounts();
+		} catch (Exception $e) {
+			//@todo was falschgelaufen
+		}
 		$counter = 0;
 		foreach($usersWithSoli as &$userWithSoli) {
 			$soliUsers[$counter]['forename'] = $userWithSoli['forename'];
@@ -280,7 +288,11 @@ function show_coupons() {
 	
 	if(!isset($_POST['name'])) {
 		$solis = array();
-		$accounts = $user_manager->checkSoliAccounts();
+		try {
+			$accounts = $user_manager->checkSoliAccounts();
+		} catch (Exception $e) {
+			//@todo was falschgelaufen
+		}
 		foreach ($accounts as $account) {
 			array_push($solis, $account['username']);
 		}
@@ -309,14 +321,37 @@ function show_settings() {
 	require_once PATH_INCLUDE.'/order_access.php';
 	require_once PATH_INCLUDE.'/meal_access.php';
 	require_once PATH_INCLUDE.'/user_access.php';
+	require_once PATH_INCLUDE.'/global_settings_access.php';
 	require_once PATH_INCLUDE.'/functions.php';
 	require_once PATH_INCLUDE.'/price_class_access.php';
 	require_once "soli_constants.php";
 	
 	global $smarty;
+	$gbManager = new GlobalSettingsManager();
+	if(!isset($_POST['soli_price']) ) {
+		try {
+			$smarty->assign('old_price', $gbManager->getSoliPrice());
+		} catch (Exception $e) {
+			show_error(SOLI_ERR_PRICE.':'.$e->getMessage());die();
+		}
+		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/show_settings.tpl');	
+	} else {
+		try {
+			try {//inputcheck
+				inputcheck($_POST['soli_price'], 'credits');
+			} catch (Exception $e) {
+				show_error(SOLI_ERR_INP_PRICE);die();
+			}
+			$gbManager->changeSoliPrice($_POST['soli_price']);
+		} catch (Exception $e) {
+			show_error(SOLI_ERR_CHANGE_PRICE.':'.$e->getMessage());
+		}
+	}
+	
+	//////////////////////////////////////////////////
+	/* Documentation
 	$table_access = new TableManager('global_settings');
 	$price_id = $table_access->searchEntry("name = 'soli_price'");
-	
 	if(!isset($_POST['soli_price']) ) {
 		$query = 'id ='.$price_id['id'];
 		$old_soli_price_arr = $table_access->getTableData($query);
@@ -330,6 +365,7 @@ function show_settings() {
 		} catch (MEAL_DATABASE_PROB_ENTRY $e) {
 		}echo SETTINGS_CHANGED;
 	}
+	*/
 	
 }
 

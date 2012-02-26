@@ -4,7 +4,7 @@ require_once PATH_INCLUDE . '/global_settings_access.php';
 class AdminHelpProcessing {
 	function __construct() {
 		$this->msg = array('ERR_CHANGE' => 'Ein Fehler ist beim ändern des Textes aufgetreten');
-		$this->helpManager = new globalSettingsManager();
+		$this->helpManager = new GlobalSettingsManager();
 		$this->helpInterface = new AdminHelpInterface();
 	}
 	
