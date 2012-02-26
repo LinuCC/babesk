@@ -11,6 +11,7 @@ if (isset($_GET['order'])) {
 	$userManager = new UserManager();
 	$orderManager = new OrderManager('orders');
 	$priceClassManager = new PriceClassManager();
+	$gbManager = new GlobalSettingsManager();
 	
 	is_numeric($_GET['order']) OR exit('Error: ID not Numerical!');
 	try {
@@ -38,10 +39,8 @@ if (isset($_GET['order'])) {
 				die();
 			}
 			
-			$soli = $userManager->getEntryData($_SESSION['uid'], 'soli');
-			
-			if ($soli['soli'] == "1") {
-				$payment = 1;
+			if ($userManager->isSoli($_SESSION['uid'])) {
+				$payment = $gbManager->getSoliPrice();
 			}
 			if (!$userManager->changeBalance($_SESSION['uid'], -$payment)) {
 				$smarty->display('web/modules/mod_order/failed.tpl');
