@@ -11,7 +11,9 @@
 	require_once PATH_SMARTY."/smarty_init.php";
 	
 	global $smarty;
-	if(!$from_modul)$smarty->display(PATH_SMARTY.'/templates/administrator/modules/mod_menu/menu_header.tpl');
+	if(!$from_modul){
+		$smarty->display(PATH_SMARTY.'/templates/administrator/modules/mod_menu/menu_header.tpl');
+	}
 	
 	$mealmanager = new MealManager('meals');
 
@@ -39,6 +41,10 @@
 	$smarty->assign('menu_text2',$itxt_arr[1]);
 	$smarty->assign('meallistweeksorted',$meallistweeksorted);
 	$smarty->assign('weekdate',$weekdate);
-	$smarty->assign('menu_table', $smarty->fetch(PATH_SMARTY_ADMIN_MOD.'/mod_menu/menu_table.tpl'));
-	$smarty->display(PATH_SMARTY_ADMIN_MOD.'/mod_menu/formatted_menu_table.tpl');
+	if($from_modul) {
+		$smarty->assign('menu_table', $smarty->fetch(PATH_SMARTY_ADMIN_MOD.'/mod_menu/menu_table.tpl'));
+		$smarty->display(PATH_SMARTY_ADMIN_MOD.'/mod_menu/formatted_menu_table.tpl');
+	} else {
+		$smarty->display(PATH_SMARTY_ADMIN_MOD.'/mod_menu/menu_table.tpl');
+	}
 ?><a href="../mod_fill"></a>
