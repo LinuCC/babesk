@@ -37,8 +37,8 @@
 	$itxt_arr = $gsManager->getInfoTexts();
 	$smarty->assign('menu_text1',$itxt_arr[0]);
 	$smarty->assign('menu_text2',$itxt_arr[1]);
-	
 	$smarty->assign('meallistweeksorted',$meallistweeksorted);
 	$smarty->assign('weekdate',$weekdate);
-	$smarty->display(PATH_SMARTY_ADMIN_MOD.'/mod_menu/menu_table.tpl');
+	$smarty->assign('menu_table', $smarty->fetch(PATH_SMARTY_ADMIN_MOD.'/mod_menu/menu_table.tpl'));
+	$smarty->display(PATH_SMARTY_ADMIN_MOD.'/mod_menu/formatted_menu_table.tpl');
 ?><a href="../mod_fill"></a>

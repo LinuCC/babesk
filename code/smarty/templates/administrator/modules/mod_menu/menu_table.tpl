@@ -1,4 +1,3 @@
-{extends file=$base_path}{block name=content}
 <body>
 <center><h2>Speiseplan</h2></center>
 	<table cellspacing='10' cellpadding='10'>
@@ -74,4 +73,3 @@
 	<hr>
 {$menu_text2}
 </body>
-{/block}
