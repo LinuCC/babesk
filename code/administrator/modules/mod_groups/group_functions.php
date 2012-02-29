@@ -8,28 +8,26 @@
  * @see GroupManager
  */
 function new_group() {
-	require_once PATH_INCLUDE.'/group_access.php';
+	
+	require_once PATH_INCLUDE . '/group_access.php';
 	require_once 'group_constants.php';
-
+	
 	global $smarty;
 	$groupManager = new GroupManager('groups');
-
-
-	if(isset($_POST['groupname'], $_POST['max_credit'])){
+	
+	if (isset($_POST['groupname'], $_POST['max_credit'])) {
 		$groupname = $_POST['groupname'];
 		$max_credit = $_POST['max_credit'];
-			
-		if(!preg_match('/\A^[0-9]{0,2}((,|\.)[0-9]{2})?\z/', $max_credit)) {
-			die(ERR_INP_MAX_CREDIT.' '.$max_credit);
+		
+		if (!preg_match('/\A^[0-9]{0,2}((,|\.)[0-9]{2})?\z/', $max_credit)) {
+			die(ERR_INP_MAX_CREDIT . ' ' . $max_credit);
 		}
 		$max_credit = str_replace(',', '.', $max_credit);
-			
+		
 		$groupManager->addEntry('name', $groupname, 'max_credit', $max_credit);
-		echo 'Gruppe "'.$groupname.'", maximales Guthaben:"'.$max_credit
-		.'", wurde hinzugefügt';
-	}
-	else {
-		$smarty->display(PATH_SMARTY.'/templates/administrator/modules/mod_groups/form_new_group.tpl');
+		echo 'Gruppe "' . $groupname . '", maximales Guthaben:"' . $max_credit . '", wurde hinzugefügt';
+	} else {
+		$smarty->display(PATH_SMARTY . '/templates/administrator/modules/mod_groups/form_new_group.tpl');
 	}
 }
 
@@ -42,17 +40,20 @@ function new_group() {
  * @param integer/long $ID the ID of the Group to delete
  */
 function delete_group($ID) {
-	require_once PATH_INCLUDE.'/group_access.php';
+	
+	require_once PATH_INCLUDE . '/group_access.php';
 	require_once 'group_constants.php';
-
+	global $smarty;
+	
 	$groupManager = new GroupManager('groups');
-	if(!is_numeric($ID))die(ERR_INP_ID);
+	if (!is_numeric($ID))
+		die(ERR_INP_ID);
 	try {
 		$groupManager->delEntry($ID);
 	} catch (Exception $e) {
-		die(ERR_DEL_GROUP.' :'.$e->getMessage());
+		die(ERR_DEL_GROUP . ' :' . $e->getMessage());
 	}
-	echo GROUP_DELETED;
+	$smarty->display(PATH_SMARTY_ADMIN_MOD . '/mod_groups/delete_group_fin.tpl');
 }
 
 /**
@@ -64,40 +65,49 @@ function delete_group($ID) {
  * @see GroupManager
  */
 function change_group($ID) {
-	require_once PATH_INCLUDE.'/group_access.php';
+	
+	require_once PATH_INCLUDE . '/group_access.php';
 	require_once 'group_constants.php';
-
+	global $smarty;
+	
 	//form is filled out
-	if(isset($_GET['where'], $_POST['ID'],$_POST['name'],$_POST['max_credit'])){
+	if (isset($_GET['where'], $_POST['ID'], $_POST['name'], $_POST['max_credit'])) {
+		
 		$groupManager = new GroupManager();
 		$old_ID = $_GET['where'];//if group moved to new ID, delete the old one
 		$ID = $_POST['ID'];
 		$name = $_POST['name'];
 		$max_credit = $_POST['max_credit'];
-			
-		if(!preg_match('/\A^[0-9]{0,2}((,|\.)[0-9]{2})?\z/', $max_credit))
-		die(ERR_INP_MAX_CREDIT.' '.$max_credit);
-		if(!is_numeric($ID)) {
-			die(ERR_INP_ID);
+		
+		if (!preg_match('/\A^[0-9]{0,2}((,|\.)[0-9]{2})?\z/', $max_credit)) {
+			show_error(ERR_INP_MAX_CREDIT. ' ' . $max_credit); die();
 		}
-		$groupManager->alterEntry($old_ID, 'name', $name, 'max_credit', $max_credit, 'ID', $ID);
-		echo GROUP_CHANGED;
-	}
-	else { //show form
+		if (!is_numeric($ID)) {
+			show_error(ERR_INP_ID);die();
+		}
+		try {
+			$groupManager->alterEntry($old_ID, 'name', $name, 'max_credit', $max_credit, 'ID', $ID);
+		} catch (Exception $e) {
+			show_error(ERR_CHANGE_GROUP);die();
+		}
+		$smarty->display(PATH_SMARTY_ADMIN_MOD . '/mod_groups/change_group_fin.tpl');
+	} else { //show form
+	
 		$groupManager = new GroupManager('groups');
 		global $smarty;
-		if(!is_numeric($ID))die(ERR_INP_ID);
-			
+		if (!is_numeric($ID))
+			show_error(ERR_INP_ID);die();
+		
 		try {
-			$group_data = $groupManager->getEntryData($ID, 'ID', 'name','max_credit');
+			$group_data = $groupManager->getEntryData($ID, 'ID', 'name', 'max_credit');
 		} catch (MySQLVoidDataException $e) {
-			die(ERR_GET_DATA_GROUP);
+			show_error(ERR_GET_DATA_GROUP);
 		}
-			
+		
 		$smarty->assign('ID', $group_data['ID']);
 		$smarty->assign('name', $group_data['name']);
 		$smarty->assign('max_credit', $group_data['max_credit']);
-		$smarty->display(PATH_SMARTY_ADMIN_MOD.'/mod_groups/change_group.tpl');
+		$smarty->display(PATH_SMARTY_ADMIN_MOD . '/mod_groups/change_group.tpl');
 	}
 }
 
@@ -108,16 +118,17 @@ function change_group($ID) {
  * @see GroupManager
  */
 function show_groups() {
-	require_once PATH_INCLUDE.'/group_access.php';
-
+	
+	require_once PATH_INCLUDE . '/group_access.php';
+	
 	$groupManager = new GroupManager('groups');
 	global $smarty;
-
+	
 	$groups = array();
 	$groups = $groupManager->getTableData();
-
+	
 	$smarty->assign('groups', $groups);
-	$smarty->display(PATH_SMARTY.'/templates/administrator/modules/mod_groups/show_groups.tpl');
+	$smarty->display(PATH_SMARTY . '/templates/administrator/modules/mod_groups/show_groups.tpl');
 }
 
 ?>

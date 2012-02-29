@@ -4,9 +4,9 @@
 	define('ERR_DEL_GROUP', '<p class="error">konnte die Gruppe nicht löschen</p>');
 	define('ERR_ADD_GROUP', '<p class="error">konnte die Gruppe nicht hinzufügen</p>');
 	define('ERR_GET_DATA_GROUP', '<p class="error">Fehler beim fetchen der Gruppendaten aus dem MySQL-Server</p>');
+	define('ERR_CHANGE_GROUP', 'Fehler beim ändern der Gruppendaten');
 	
 	define('GROUP_DELETED', 'Gruppe erfolgreich gelöscht');
-	define('GROUP_CHANGED', 'Gruppe erfolgreich geändert');
 	
 
 ?>

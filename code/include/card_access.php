@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 /**
  * Provides functions for the RFID Cards
@@ -127,7 +127,7 @@ class CardManager extends TableManager {
 		if(!$card) {
 			throw new MySQLVoidDataException('MySQL returned no data!');
 		}
-		if($result->fetch_assoc()) {
+		if($result->fetch_assoc() && $result != NULL) {
 			//MySQL found two entries with the same user. Bad!
 			throw new UnexpectedValueException('The User has two or more cardnumbers! fix it first!');
 		}
@@ -142,7 +142,7 @@ class CardManager extends TableManager {
 		if(!$card) {
 			throw new MySQLVoidDataException('MySQL returned no data!');
 		}
-		if($result->fetch_assoc()) {
+		if($result->fetch_assoc() && $result != NULL) {
 			//MySQL found two entries with the same user. Bad!
 			throw new UnexpectedValueException('The User has two or more cardnumbers! fix it first!');
 		}
