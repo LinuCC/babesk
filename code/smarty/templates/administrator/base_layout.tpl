@@ -12,17 +12,17 @@
 
 <body
 	onload="x = document.getElementsByTagName('input')[0];if(x)if (x.value == '') x.focus();">
-	{block name=header}
 	<div id="header">
 		<div id="top">
+	{block name=header}
 			<h3>
 				<a href="index.php?{$sid}">BaBeSK Admin Bereich</a>
 			</h3>
 			<p>Sie sind eingeloggt als {$username}</p>
 			<a href="index.php?action=logout">Ausloggen</a>
+	{/block}
 		</div>
 	</div>
-	{/block}
 	<div id="main">
 		<div id="content">{block name=content}{/block}</div>
 	</div>

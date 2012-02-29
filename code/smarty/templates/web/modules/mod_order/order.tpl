@@ -26,7 +26,6 @@ function switchInfo(divName) {
 <!-- ------------------------------------------------------------ -->
 
 {include file='web/header.tpl' title='Bestellen'}
-
 <h2>
 	<u>Speiseplan:</u>
 </h2>
@@ -82,21 +81,29 @@ table {
 		<td>{foreach $mealweek.1 as $meal}
 			<ul>
 				<a href="javascript:switchInfo('MealDiv{$meal.ID}')">{$meal.name}</a>
-			</ul> {/foreach} {foreach $mealweek.2 as $meal}
-			<ul>
-				<a href="javascript:switchInfo('MealDiv{$meal.ID}')">{$meal.name}</a>
-			</ul> {/foreach} {foreach $mealweek.3 as $meal}
-			<ul>
-				<a href="javascript:switchInfo('MealDiv{$meal.ID}')">{$meal.name}</a>
-			</ul> {/foreach} {foreach $mealweek.4 as $meal}
-			<ul>
-				<a href="javascript:switchInfo('MealDiv{$meal.ID}')">{$meal.name}</a>
-			</ul> {/foreach} {foreach $mealweek.5 as $meal}
+			</ul> {/foreach}
+		</td>
+		<td>{foreach $mealweek.2 as $meal}
 			<ul>
 				<a href="javascript:switchInfo('MealDiv{$meal.ID}')">{$meal.name}</a>
 			</ul> {/foreach}
-	<tr>
 		</td>
+		<td>{foreach $mealweek.3 as $meal}
+			<ul>
+				<a href="javascript:switchInfo('MealDiv{$meal.ID}')">{$meal.name}</a>
+			</ul> {/foreach}
+		</td>
+		<td>{foreach $mealweek.4 as $meal}
+			<ul>
+				<a href="javascript:switchInfo('MealDiv{$meal.ID}')">{$meal.name}</a>
+			</ul> {/foreach}
+		</td>
+		<td>{foreach $mealweek.5 as $meal}
+			<ul>
+				<a href="javascript:switchInfo('MealDiv{$meal.ID}')">{$meal.name}</a>
+			</ul> {/foreach}
+		</td>
+	<tr>
 </table>
 
 {/foreach}

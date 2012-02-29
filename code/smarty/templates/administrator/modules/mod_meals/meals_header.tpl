@@ -1,5 +1,6 @@
-	{extends file=$base_path}{block name=content}
+{extends file=$base_path}{block name=header append}
 	<!-- shows the Header, which can be seen everywhere in the meals-module-->
-	<h3>Mahlzeiten-Modul</h3><br>
-	<a href="index.php?section=meals">Zur&uuml;ck zur Mahlzeiten Verwaltung</a><br><br>
-	{/block}
+	<br><br>
+	<h3>Mahlzeiten-Modul</h3>
+	<a href="index.php?section=meals">Zur&uuml;ck zur Mahlzeiten Verwaltung</a>
+{/block}

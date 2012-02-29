@@ -26,7 +26,6 @@
 	}
 
 	if($meallist) {
-		
 		$meallistweeksorted = sort_meallist($meallist);
 	}
 	else {

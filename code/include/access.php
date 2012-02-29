@@ -23,6 +23,7 @@ class TableManager {
 	public function __construct($tablename) {
 		require "dbconnect.php";
 		$this->db = $db;
+		$this->db->query('set names "utf8";');
 		$this->tablename = $tablename;
 	}
 	
@@ -233,7 +234,6 @@ class TableManager {
 			}
 		}
 		$set_str = substr($set_str, 0, -1);
-		var_dump($set_str);
 		$query = sql_prev_inj(sprintf('UPDATE %s SET %s WHERE ID = %s', $this->tablename, $set_str, $ID));
 		$result = $this->db->query($query);
 		if (!$result) {

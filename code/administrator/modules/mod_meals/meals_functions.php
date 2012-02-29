@@ -246,9 +246,13 @@ function edit_infotext() {
 		try {
 			$temp->alterEntry($infotext1[0]["id"], 'value', $infotext1neu);
 			$temp->alterEntry($infotext2[0]["id"], 'value', $infotext2neu);
-		} catch (MySQLVoidDataException $e) {
-			die();
+		} catch (Exception $e) {
+			show_error(MEAL_ERROR_EDIT_INFOTEXT.$e->getMessage());
 		}
+		$smarty->assign('infotext1', $infotext1neu);
+		$smarty->assign('infotext2', $infotext2neu);
+		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/edit_infotext_fin.tpl');
+		
 	} else {
 		
 		$smarty->assign('infotext1', $infotext1[0]["value"]);
@@ -299,7 +303,8 @@ function show_orders() {
 		}
 		
 		if (!count($orders)) {
-			die(MEAL_NO_ORDERS_FOUND);
+			show_error(MEAL_NO_ORDERS_FOUND);
+			die();
 		}
 		
 		foreach ($orders as &$order) {

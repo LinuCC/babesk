@@ -11,7 +11,9 @@
 	
 	global $smarty;
 	
-	$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/meals_header.tpl');
+	$smarty->assign('mealParent', MEAL_SMARTY_TEMPLATE_PATH.'/meals_header.tpl');
+	
+	//$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/meals_header.tpl');
 	
 	if(isset($_GET["action"])) {
 		if($_GET["action"] == 1)//show form for creating a meal

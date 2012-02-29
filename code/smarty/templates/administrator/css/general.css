@@ -79,7 +79,6 @@ body {
 #header {
     background-color: #e6e6e6;
     border: 1px solid #333333;
-    height: 80px;
     color: #2e6132;
     margin-bottom: 30px;
 
@@ -91,7 +90,6 @@ body {
 
 #top {
     width: 750px;
-    height: 70px;
     margin: 10px auto 0;
     text-align: center;
 }
