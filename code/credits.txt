@@ -1,40 +1,41 @@
-		     ===========================================================
-                        BaBeSK - Bargeldloses Bestellsystem für SchulKantinen
-                     ===========================================================
+		     =======================
+   BaBeSK - Bargeldloses Bestellsystem f&uuml;r SchulKantinen
+             ========================
 
-					Released under the GNU/GPL
+			Released under the GNU/GPL
 
-
+--
 Credits 2011/2012:
-------------------
+--
 
-Programming:
-	Pascal Ernst
-	Mirek Hancl
+Programming/Testing/Design:
+	- Pascal Ernst
+	- Mirek Hancl
+	- Jan Feuchter
 
-
+--
 Credits 2010/2011:
-------------------
+--
 
 Lead Development:
-	Samuel Groß
-	
+	- Samuel Gro&szlig;
+--	
 Programming:
-	Samuel Groß
-	Pascal Ernst
-	Jan Frederic Elsner-Murawa
-	Cedric Schröder
-	
+	- Samuel Gro&szlig;
+	- Pascal Ernst
+	- Jan Frederic Elsner-Murawa
+	- Cedric Schr&ouml;der
+--	
 Design:
-	Paul Heinrich
-	Jonathan Dierks
-	Gabriel Dierks
-	Timo Kitzelmann
-	
+	- Paul Heinrich
+	- Jonathan Dierks
+	- Gabriel Dierks
+	- Timo Kitzelmann
+--	
 Testing:
-	Cedric Schröder
-
+	- Cedric Schr&ouml;der
+--
 Special Thanks to:
-	Mirek Hancl
-	Lessing Gymnasium Uelzen
+	- Mirek Hancl
+	 (Lessing -Gymnasium Uelzen)
 	
