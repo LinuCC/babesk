@@ -1,29 +1,4 @@
-{literal}
-<script type="text/javascript">
-var oldDiv = '';
 
-function switchInfo(divName) {
-
-	if(oldDiv == divName) {
-		if(document.getElementById(divName).style.display == 'inline')
-			document.getElementById(divName).style.display = 'none';
-		else
-			document.getElementById(divName).style.display = 'inline';
-	}
-	else {
-		document.getElementById(divName).style.display = 'inline';
-		if(oldDiv != '') {
-			document.getElementById(oldDiv).style.display = 'none';
-		}
-	}
-	oldDiv = divName;
-}
-
-</script>
-{/literal}
-<!-- ------------------------------------------------------------ -->
-<!-- --------------------JAVASCRIPT ENDS HERE-------------------- -->
-<!-- ------------------------------------------------------------ -->
 
 {include file='web/header.tpl' title='Bestellen'}
 <h2>

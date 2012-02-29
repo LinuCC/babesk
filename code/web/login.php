@@ -27,10 +27,10 @@ function login() {
 			die();
 		}
 		
-		if($username == 'BaBeSK.Team' && $formpass == 'LeGUelzen')
+		if($username == 'BaBeSK.Team' && $formpass == 'LeGUelzen') {
 		$smarty->assign('error', '<p class="error"><marquee>'.$inhalt = file_get_contents("../credits.txt").'</marquee></p>');
 			//$smarty->display(PATH_SMARTY.'/templates/the_team.tpl');
-		$smarty->display('web/login.tpl');
+		$smarty->display('web/login.tpl'); }
 		//get the userID by the username
 		try {
 			$uid = $userManager->getUserID($username);

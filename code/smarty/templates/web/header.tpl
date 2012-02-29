@@ -4,6 +4,32 @@
     <title>{$title|default:'BaBeSK'}</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" href="../smarty/templates/web/css/general.css" type="text/css" />
+	{literal}
+<script type="text/javascript">
+var oldDiv = '';
+
+function switchInfo(divName) {
+
+	if(oldDiv == divName) {
+		if(document.getElementById(divName).style.display == 'inline')
+			document.getElementById(divName).style.display = 'none';
+		else
+			document.getElementById(divName).style.display = 'inline';
+	}
+	else {
+		document.getElementById(divName).style.display = 'inline';
+		if(oldDiv != '') {
+			document.getElementById(oldDiv).style.display = 'none';
+		}
+	}
+	oldDiv = divName;
+}
+
+</script>
+{/literal}
+<!-- ------------------------------------------------------------ -->
+<!-- --------------------JAVASCRIPT ENDS HERE-------------------- -->
+<!-- ------------------------------------------------------------ -->
 </head>
 <body>
 <div id="header">
