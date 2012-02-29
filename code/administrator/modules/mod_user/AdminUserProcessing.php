@@ -4,6 +4,7 @@ require_once 'AdminUserInterface.php';
 
 class AdminUserProcessing {
 	function __construct() {
+		
 		$this->userInterface = new AdminUserInterface();
 		global $logger;
 		$this->logs = $logger;
@@ -19,7 +20,7 @@ class AdminUserProcessing {
 						'change' => 'Konnte den Benutzer nicht ändern!',
 						'passwd_repeat' => 'das Passwort und das wiederholte Passwort stimmen nicht überein',
 						'card_id_change' => 'Warnung: Konnte den Zähler der Karten-ID nicht erhöhen.',
-						'user_existing' => ' der Benutzer ist schon vorhanden.'),
+						'user_existing' => ' der Benutzer ist schon vorhanden oder die Kartennummer wird schon benutzt.'),
 				'get_data_failed' => 'Ein Fehler ist beim fetchen der Daten aufgetreten',
 				'notice' => array('please_repeat' => 'Bitte wiederholen sie den Vorgang.'));
 	}
@@ -41,6 +42,7 @@ class AdminUserProcessing {
 	 * @throws Exception if something gone wrong
 	 */
 	function RegisterUser($forename, $name, $username, $passwd, $passwd_repeat, $cardID, $birthday, $GID, $credits) {
+		
 		require_once PATH_INCLUDE . "/user_access.php";
 		require_once PATH_INCLUDE . '/card_access.php';
 		require_once PATH_INCLUDE . '/group_access.php';
@@ -64,15 +66,27 @@ class AdminUserProcessing {
 			
 		} catch (Exception $e) {
 			$this->userInterface->ShowRepeatRegister();
-			throw new Exception($this->messages['error']['input1'] . '"' . $e->getMessage() . '"'
-							. $this->messages['error']['input2'].'<br><br>'.$this->messages['error']['register']);
+			throw new Exception(
+					$this->messages['error']['input1'] . '"' . $e->getMessage() . '"'
+							. $this->messages['error']['input2'] . '<br><br>' . $this->messages['error']['register']);
 		}
 		
 		if ($cardManager->is_card_existing($cardID) || $userManager->isUserExisting($forename, $name, $username)) {
 			throw new Exception($this->messages['error']['register'] . $this->messages['error']['user_existing']);
 		}
-		if($credits == '') 
+		if ($credits == '')
 			$credits = '0';
+		else {
+			try {
+				inputcheck($name, 'name');
+			} catch (Exception $e) {
+				$this->userInterface->ShowRepeatRegister();
+				throw new Exception(
+						$this->messages['error']['input1'] . '"' . $e->getMessage() . '"'
+								. $this->messages['error']['input2'] . '<br><br>'
+								. $this->messages['error']['register']);
+			}
+		}
 		//check max amount of credits of the group
 		if ($credits > $groupManager->getMaxCredit($GID)) {
 			$this->userInterface->ShowError(
@@ -108,6 +122,7 @@ class AdminUserProcessing {
 	}
 	
 	function getGroups() {
+		
 		require_once PATH_INCLUDE . "/group_access.php";
 		
 		$group_manager = new GroupManager('groups');
@@ -130,6 +145,7 @@ class AdminUserProcessing {
 	//--------------------Show Users--------------------
 	//////////////////////////////////////////////////
 	function ShowUsers($filter) {
+		
 		require_once PATH_INCLUDE . '/user_access.php';
 		require_once PATH_INCLUDE . '/group_access.php';
 		
@@ -170,6 +186,7 @@ class AdminUserProcessing {
 	 * @param number $uid the UserID
 	 */
 	function DeleteConfirmation($uid) {
+		
 		require_once PATH_INCLUDE . '/user_access.php';
 		
 		$userManager = new UserManager();
@@ -187,6 +204,7 @@ class AdminUserProcessing {
 	}
 	
 	function DeleteUser($uid) {
+		
 		require_once PATH_INCLUDE . '/user_access.php';
 		$userManager = new UserManager();
 		try {
@@ -203,6 +221,7 @@ class AdminUserProcessing {
 	 * @param string (numeric) $uid The ID of the User
 	 */
 	function ChangeUserForm($uid) {
+		
 		require_once PATH_INCLUDE . '/user_access.php';
 		require_once PATH_INCLUDE . '/group_access.php';
 		require_once PATH_INCLUDE . '/card_access.php';
@@ -243,6 +262,7 @@ class AdminUserProcessing {
 	 */
 	function ChangeUser($old_id, $id, $forename, $name, $username, $passwd, $passwd_repeat, $birthday, $GID, $credits,
 						$locked, $cardnumber, $soli) {
+		
 		require_once PATH_INCLUDE . '/user_access.php';
 		require_once PATH_INCLUDE . '/card_access.php';
 		$userManager = new UserManager();

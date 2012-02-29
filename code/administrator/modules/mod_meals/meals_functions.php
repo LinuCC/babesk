@@ -326,6 +326,7 @@ function show_orders() {
 			
 			$groups = array();//to show how many from different groups ordered something
 			$sp_orders = $order_manager->getAllOrdersOfMealAtDate($mealIdEntry['MID'], $date);
+			$num_orders[$counter]['MID'] = $mealIdEntry['MID'];
 			$num_orders[$counter]['name'] = $meal_manager->GetMealName(($mealIdEntry['MID']));
 			$num_orders[$counter]['number'] = count($sp_orders);
 			//--------------------

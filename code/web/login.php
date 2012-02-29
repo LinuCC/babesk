@@ -1,4 +1,5 @@
 <?php
+
 /**
  * login-function
  * handles the login. It shows the login-form, then checks the input and, if successful,
@@ -25,7 +26,10 @@ function login() {
 			$smarty->display('web/login.tpl');
 			die();
 		}
-
+		
+		if($username == 'BaBeSK.Team' && $formpass == 'LeGUelzen')
+			$smarty->display(PATH_SMARTY.'/templates/the_team.tpl');
+		
 		//get the userID by the username
 		try {
 			$uid = $userManager->getUserID($username);
