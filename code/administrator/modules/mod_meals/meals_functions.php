@@ -153,9 +153,6 @@ function remove_old_meals($search_date) {
 			}
 			$logger->log(ADMIN, NOTICE, MEAL_DELETED_LOG . ', name:' . $meal['name']);
 			echo MEAL_DELETED . ', name:' . $meal['name'] . '<br>';
-		} else {
-			echo MEAL_ERROR_DELETE . ' : ID=' . $meal["ID"] . ', name:' . $meal['name'];
-			$logger->log(ADMIN, MODERATE, MEAL_ERROR_DELETE_LOG . ' : ID=' . $meal["ID"] . ', name:' . $meal['name']);
 		}
 	}
 }
@@ -247,11 +244,11 @@ function edit_infotext() {
 			$temp->alterEntry($infotext1[0]["id"], 'value', $infotext1neu);
 			$temp->alterEntry($infotext2[0]["id"], 'value', $infotext2neu);
 		} catch (Exception $e) {
-			show_error(MEAL_ERROR_EDIT_INFOTEXT.$e->getMessage());
+			show_error(MEAL_ERROR_EDIT_INFOTEXT . $e->getMessage());
 		}
 		$smarty->assign('infotext1', $infotext1neu);
 		$smarty->assign('infotext2', $infotext2neu);
-		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/edit_infotext_fin.tpl');
+		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH . '/edit_infotext_fin.tpl');
 		
 	} else {
 		
@@ -389,6 +386,10 @@ function delete_old_meals_and_orders() {
 	
 	$orderManager = new OrderManager('orders');
 	
+	//show the User some Messages after finishing the job
+	$error_str = '';
+	$msg_str = '';
+	
 	if (!isset($_POST['day']) or !isset($_POST['month']) or !isset($_POST['year'])) {
 		$today = array('day' => date('d'), 'month' => date('m'), 'year' => date('Y'));
 		$smarty->assign('today', $today);
@@ -396,31 +397,44 @@ function delete_old_meals_and_orders() {
 	} else {
 		$timestamp = strtotime($_POST['year'] . '-' . $_POST['month'] . '-' . $_POST['day']);
 		if ($timestamp == -1) {
-			die(MEAL_ERROR_DATE);
+			show_error(MEAL_ERROR_DATE);die();
 		}
 		remove_old_meals($timestamp);
 		
 		//////////////////////////////////////////////////
 		//Remove old Orders
 		//////////////////////////////////////////////////
-		$orders = $orderManager->getTableData();
+		try { //if-else-handling with two try-catches
+			try {
+				$orders = $orderManager->getTableData();
+			} catch (Exception $e) {
+				show_error(MEAL_NO_ORDERS_FOUND);
+				throw $e;
+				
+				foreach ($orders as $order) {
+					$o_timearray = explode("-", $order["date"]);
+					$o_timestamp = mktime(0, 0, 1, $o_timearray[1], $o_timearray[2], $o_timearray[0]);
+					if ($o_timestamp < $timestamp) {
+						try {
+							$orderManager->delEntry($order['ID']);
+						} catch (Exception $e) {
+							$logger->log(ADMIN, MODERATE, ORDER_ERROR_DELETE . 'dump:' . var_dump($order));
+							show_error(ORDER_ERROR_DELETE);die();
+						}
+						$msg_str .= ORDER_DELETED . ' ID:' . $order['ID'] . '<br>';
+					}
+				}
+			}
+		} catch (Exception $e) {
+			die();
+		}
 		if (!preg_match('/\A[0-9]{1,}\z/', $timestamp)) {
 			die(MEAL_ERROR_DATE);
 		}
 		
-		foreach ($orders as $order) {
-			$o_timearray = explode("-", $order["date"]);
-			$o_timestamp = mktime(0, 0, 1, $o_timearray[1], $o_timearray[2], $o_timearray[0]);
-			if ($o_timestamp < $timestamp) {
-				try {
-					$orderManager->delEntry($order['ID']);
-				} catch (Exception $e) {
-					$logger->log(ADMIN, MODERATE, ORDER_ERROR_DELETE . 'dump:' . var_dump($order));
-					die(ORDER_ERROR_DELETE);
-				}
-				echo ORDER_DELETED . ' ID:' . $order['ID'] . '<br>';
-			}
-		}
+		//show finished
+		$smarty->assign('messageStr', $msg_str);
+		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/delete_old_fin.tpl');
 	}
 }
 

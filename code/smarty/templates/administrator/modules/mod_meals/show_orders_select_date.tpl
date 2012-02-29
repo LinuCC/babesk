@@ -1,4 +1,4 @@
-{extends file=$base_path}{block name=content}
+{extends file=$mealParent}{block name=content}
 geben sie bitte das Datum ein, wofür sie die bisher eingegangenen Bestellungen angezeigt haben möchten:<br>
 
 <form action="index.php?section=meals&amp;action=3" method="post">

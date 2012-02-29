@@ -1,4 +1,4 @@
-{extends file=$base_path}{block name=content}
+{extends file=$mealParent}{block name=content}
 bitte geben sie das Datum ein, vor welchem ältere Mahlzeiten gelöscht werden sollen:<br><br>
 <form action="index.php?section=meals&amp;action=4" method="post">
 	<label>Tag:<input type="text" name="day" maxlength="2" size="2" value={$today.day} /></label>

@@ -1,4 +1,4 @@
-{extends file=$base_path}{block name=content}
+{extends file=$mealParent}{block name=content}
 <script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
 <center><h3>Speiseplan Infotexte</h3></center>
 <form action="index.php?section=meals&action=6"

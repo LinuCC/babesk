@@ -1,4 +1,4 @@
-{extends file=$base_path}{block name=content}
+{extends file=$mealParent}{block name=content}
 Die Infotexte wurden verändert:
 <h3>Infotext 1:</h3>
 {$infotext1}

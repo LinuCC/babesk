@@ -1,3 +1,3 @@
-{extends file=$base_path}{block name=content}
+{extends file=$mealParent}{block name=content}
 Die Mahlzeit wurde gelöscht.
 {/block}

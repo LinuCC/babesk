@@ -61,19 +61,18 @@ class AdminUserProcessing {
 			inputcheck($cardID, 'card_id');
 			inputcheck($birthday, 'birthday');
 			inputcheck($GID, 'id');
-			inputcheck($credits, 'credits');
 			
 		} catch (Exception $e) {
-			$this->userInterface->ShowError(
-					$this->messages['error']['input1'] . '"' . $e->getMessage() . '"'
-							. $this->messages['error']['input2']);
 			$this->userInterface->ShowRepeatRegister();
-			throw new Exception($this->messages['error']['register']);
+			throw new Exception($this->messages['error']['input1'] . '"' . $e->getMessage() . '"'
+							. $this->messages['error']['input2'].'<br><br>'.$this->messages['error']['register']);
 		}
 		
 		if ($cardManager->is_card_existing($cardID) || $userManager->isUserExisting($forename, $name, $username)) {
 			throw new Exception($this->messages['error']['register'] . $this->messages['error']['user_existing']);
 		}
+		if($credits == '') 
+			$credits = '0';
 		//check max amount of credits of the group
 		if ($credits > $groupManager->getMaxCredit($GID)) {
 			$this->userInterface->ShowError(
