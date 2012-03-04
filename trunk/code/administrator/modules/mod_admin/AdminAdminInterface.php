@@ -4,6 +4,8 @@ class AdminAdminInterface extends AdminInterface{
 	function __construct() {
 		parent::__construct();
 		$this->PTPL = PATH_SMARTY_ADMIN_MOD.'/mod_admin/';
+		$this->MOD_HEADING = $this->PTPL.'mod_admin_header.tpl';
+		$this->smarty->assign('adminParent', $this->MOD_HEADING);
 	}
 	
 	function CreateAdmin($admin_group_arr) {
@@ -76,6 +78,13 @@ class AdminAdminInterface extends AdminInterface{
 	 * @var string
 	 */
 	private $PTPL;
+	
+	/**
+	 * The Path to the heading of the module (all template-files of this module should inherit from this)
+	 * Enter description here ...
+	 * @var unknown_type
+	 */
+	private $MOD_HEADING;
 }
 
 ?>

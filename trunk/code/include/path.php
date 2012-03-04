@@ -11,6 +11,7 @@
     define('PATH_WEB', realPath($rootPath."/web"));
     define('PATH_INCLUDE', realPath($rootPath."/include"));
 	define('PATH_SMARTY', realPath($rootPath."/smarty"));
+	define('PATH_SMARTY_INH_PARENT', realPath($rootPath.'/smarty/templates/administrator/base_layout.tpl'));
 	define('PATH_SMARTY_ADMIN_MOD', realPath($rootPath.'/smarty/templates/administrator/modules'));
 	
 	define('PATH_WEBROOT', $_SERVER['DOCUMENT_ROOT']);

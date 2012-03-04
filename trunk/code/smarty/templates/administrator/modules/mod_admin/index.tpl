@@ -1,4 +1,4 @@
-{extends file=$base_path}{block name=content}
+{extends file=$adminParent}{block name=content}
 Was wollen sie tun?<br>
 
 <form action="index.php?section=admin&action={$action['add_admin']}" method="post">

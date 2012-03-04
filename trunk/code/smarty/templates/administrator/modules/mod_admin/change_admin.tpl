@@ -1,4 +1,4 @@
-{extends file=$base_path}{block name=content}
+{extends file=$adminParent}{block name=content}
 <form action="index.php?section=admin&action=7&where={$ID}" method="post">
 	<label>ID des Admins:<input type="text" value='{$ID}' name='ID'></label><br><br>
 	<label>Name des Admins:<input type="text" value='{$name}' name='name'></label><br><br>

@@ -1,4 +1,4 @@
-{extends file=$base_path}{block name=content}
+{extends file=$adminParent}{block name=content}
 <h3>Administrator Managment</h3>
 <p>Bitte W&auml;hlen Sie:</p>
 <a href="index.php?section=admins&action=addAdmin&{$sid}">Einen Administrator hinzuf&uuml;gen</a><br />

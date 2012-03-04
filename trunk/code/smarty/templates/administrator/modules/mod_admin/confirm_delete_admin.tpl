@@ -1,4 +1,4 @@
-{extends file=$base_path}{block name=content}
+{extends file=$adminParent}{block name=content}
 <p align="center">Wollen sie den Administrator {$name} wirklich löschen?</p>
 <form align="center" action="index.php?section=admin&action=5&ID={$ID}" method="post">
 	<input type="submit" value="Ja, ich möchte Den Administrator löschen" name="delete">

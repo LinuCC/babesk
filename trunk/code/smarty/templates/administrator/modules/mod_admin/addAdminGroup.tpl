@@ -1,4 +1,4 @@
-{extends file=$base_path}{block name=content}
+{extends file=$adminParent}{block name=content}
 <h3>Administrator Gruppe hinzuf&uuml;gen</h3>
 <p>Bitte den Namen der Administrator Gruppe sowie die erlaubten Module eingeben</p>
 <form action="index.php?section=admin&action=3" method="post">

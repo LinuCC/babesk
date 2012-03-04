@@ -1,4 +1,4 @@
-{extends file=$base_path}{block name=content}
+{extends file=$checkoutParent}{block name=content}
 <h3>Bitte Karte Scannen</h3>
 <form action="index.php?section=checkout&{$sid}" method="post">
 	<fieldset>

@@ -11,8 +11,8 @@
     require "checkout_constants.php"; 
 
     $cardManager = new CardManager();
-    
     $userManager = new UserManager();
+    $smarty->assign('checkoutParent', PATH_SMARTY_ADMIN_MOD.'/mod_checkout/mod_checkout_header.tpl');
     
 	if ('POST' == $_SERVER['REQUEST_METHOD']) {
 	   if (!isset($_POST['card_ID'])) {
@@ -28,7 +28,7 @@
 	   			exit();
 	   		}
 	   	} catch (Exception $e) {
-	   		die(ERR_GET_USER_BY_CARD.' Error:'.$e->getMessage());
+	   		show_error(ERR_GET_USER_BY_CARD.' Error:'.$e->getMessage());die();
 	   	}
 	   
 	   	

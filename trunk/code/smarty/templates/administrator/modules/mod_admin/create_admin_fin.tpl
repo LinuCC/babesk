@@ -1,4 +1,4 @@
-{extends file=$base_path}{block name=content}
+{extends file=$adminParent}{block name=content}
 Der Administrator {$adminname}, der zu der Gruppe {$admingroup} gehört, 
 wurde erfolgreich hinzugefügt.
 
