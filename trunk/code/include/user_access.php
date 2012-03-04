@@ -286,7 +286,6 @@ class UserManager extends TableManager{
 							$username, 'password', $passwd, 'birthday', $birthday, 'credit', $credit, 'GID', $GID,'locked', $locked,'soli',$soli);
 		}
 		else {
-			
 			parent::alterEntry($old_id, 'ID', $id, 'forename', $forename, 'name', $name, 'username',
 								$username, 'birthday', $birthday, 'credit', $credit, 'GID', $GID,'locked',$locked,'soli',$soli);
 		}

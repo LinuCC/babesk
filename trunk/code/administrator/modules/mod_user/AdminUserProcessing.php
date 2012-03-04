@@ -70,7 +70,6 @@ class AdminUserProcessing {
 					$this->messages['error']['input1'] . '"' . $e->getMessage() . '"'
 							. $this->messages['error']['input2'] . '<br><br>' . $this->messages['error']['register']);
 		}
-		
 		if ($cardManager->is_card_existing($cardID) || $userManager->isUserExisting($forename, $name, $username)) {
 			throw new Exception($this->messages['error']['register'] . $this->messages['error']['user_existing']);
 		}

@@ -240,6 +240,10 @@ function edit_infotext() {
 		
 		$infotext1neu = $_POST['infotext1'];
 		$infotext2neu = $_POST['infotext2'];
+		if($infotext1neu == '') 
+			$infotext1neu = '&nbsp;';
+		if($infotext2neu == '') 
+			$infotext2neu = '&nbsp;';
 		try {
 			$temp->alterEntry($infotext1[0]["id"], 'value', $infotext1neu);
 			$temp->alterEntry($infotext2[0]["id"], 'value', $infotext2neu);

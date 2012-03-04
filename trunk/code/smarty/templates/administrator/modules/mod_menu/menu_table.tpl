@@ -1,6 +1,24 @@
+{literal}
+<style type="text/css">
+table {
+	width: 100%;
+}
+th {
+	width: 16,6%;
+	background-color: #84ff00;
+	text-align: center;
+}
+
+td {
+	width: 16,6%;
+	background-color: #f8f187;
+	text-align: center;
+}
+</style>
+{/literal}
 <body>
 <center><h2>Speiseplan</h2></center>
-	<table cellspacing='10' cellpadding='10'>
+	<table >
 		<thead>
 			<tr>
 				<th>Tag:</th>

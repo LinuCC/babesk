@@ -1,6 +1,7 @@
 {extends file=$base_path}{block name=content}
 <h3 align="center">Log-Anzeige</h3>
-            
+<h5>Die Logs sind bisher nur teilweise in das Projekt eingebaut worden. <br>
+Sie bieten noch keine vollständige Übersicht über die Fehler und Hinweise des Programms.</h5>            
 <table>
 	<tr bgcolor='#33CFF'>
 		<th>LogID</th>
