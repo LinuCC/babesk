@@ -1,6 +1,6 @@
 {include file='web/header.tpl' title='Passwort &Auml;ndern'}
 
-<p>Dies ist das erste Mal, dass du dich anmeldest. Zun&auml;chst musst du dein Passwort &auml;ndern</p>
+<p>Bitte neues Passwort eingeben und zur Sicherheit wiederholen.</p>
 <form action="index.php" method="post">
     <fieldset>
       <label for="passwd">Neues Passwort:</label>

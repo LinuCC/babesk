@@ -37,7 +37,21 @@ function switchInfo(divName) {
     <div id="top_left">
        <p>Name: {$username}</p>
        <p>Guthaben: {$credit} Euro</p>
-       <a href="index.php?section=account">Karte sperren</a>
+       
+       <a href="javascript:switchInfo('account')">Kontoeinstellungen</a><br />
+    
+    <div id="account" style="display: none;">
+	
+		
+			<a href="index.php?section=account">Karte sperren</a>
+			<br>
+			<a href="index.php?section=change_password">Passwort &auml;ndern</a>
+	
+	
+	</div>   
+       
+    
+    
     </div>
     <div id="top_right">
        <a href="index.php?section=help">Hilfe</a><br />

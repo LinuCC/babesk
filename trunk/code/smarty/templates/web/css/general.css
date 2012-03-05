@@ -172,14 +172,28 @@ a #header_link {
     background-color: #2e6132;
     text-align: center;
     height: 30px;
-    overflow: hidden;
+    overflow: visible;
     padding-top: 10px; 
-    margin: 0 auto 30px;   
+    margin: 0 auto 30px; 
+  
+  
+      -webkit-border-radius: 20px;
+    -khtml-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+      
+    z-index: 6;  
 }
 
 #info p {
-    display:inline;
+	width:400px; 
+	left:0; 
+	right:0;
+	margin-left:auto; 
+	margin-right:auto; 
+	position:fixed;
 }
+
 #info a {
     display:inline;
 }
@@ -208,4 +222,20 @@ a #header_link {
     height:100%;
 }
 
+#account {
+	width: 200px;
+    padding-top: 10px;
+    float: left;
+	  background-color: #f8f187;
+    height: 55px;
+    padding-left: 15px; 
+    
+    -webkit-border-radius: 20px;
+    -khtml-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    
+    z-index: 7;
+    overflow:visible;
+}
 

@@ -13,7 +13,7 @@ try {
 					$_SESSION['uid'], $e->getMessage()));
 	die(ERR);
 }
-$smarty->assign('username', $userData['username']);
+$smarty->assign('username', $userData['forename'].' '.$userData['name']);
 $smarty->assign('credit', $userData['credit']);
 $smarty->assign('last_login', $userData['last_login']);
 
