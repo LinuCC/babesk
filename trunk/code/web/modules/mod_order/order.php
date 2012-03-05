@@ -121,6 +121,8 @@ if (isset($_GET['order'])) {
 	 */
 	
 	//Ordering only possible until $last_order_time
+	
+	$last_order_time = $gsManager->getLastOrderTime();
 	if (str_replace(":", "", $hour) > str_replace(":", "", $last_order_time)) {
 		$date += $day_in_secs;
 	}

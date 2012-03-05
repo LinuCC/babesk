@@ -42,6 +42,9 @@
 		else if ($_GET['action'] == 6) {
 			edit_infotext();
 		}
+		else if ($_GET['action'] == 7) {
+			editLastOrderTime();
+		}
 	}
 	else {//User selects what he want to do
 		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/meals_initial_menu.tpl');

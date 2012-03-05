@@ -262,6 +262,35 @@ function edit_infotext() {
 	}
 }
 
+
+function editLastOrderTime() {
+	require_once PATH_INCLUDE . '/access.php';
+
+	global $smarty;
+
+	$temp = new TableManager('global_settings');
+
+	$lastOrderTime = $temp->getTableData('name="last_order_time"');
+	
+
+	if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['Time_Hour'],$_POST['Time_Minute'])) {
+
+		try {
+			$temp->alterEntry($lastOrderTime[0]["id"], 'value', $_POST['Time_Hour'].':'.$_POST['Time_Minute']);
+		} catch (Exception $e) {
+			show_error(MEAL_ERROR_EDIT_DEADLINE . $e->getMessage());
+		}
+		$smarty->assign('lastOrderTime', $_POST['Time_Hour'].':'.$_POST['Time_Minute']);
+		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH . '/edit_deadline_fin.tpl');
+
+	} else {
+
+		$smarty->assign('lastOrderTime', $lastOrderTime[0]["value"]);;
+		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH . '/edit_deadline.tpl');
+	}
+}
+
+
 /**
  *shows the orders in a table
  */

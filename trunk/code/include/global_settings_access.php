@@ -75,5 +75,19 @@ class GlobalSettingsManager extends TableManager {
 		$pid = parent::searchEntry("name = 'soli_price'");
 		parent::alterEntry($pid['id'], 'value', $value);
 	}
+	
+	/**
+	* returns the value of last_order_time
+	* @throws UnexpectedValueException when last_order_time is NULL
+	* @throws something else when MySQL has problems
+	* @return string the last_order_time
+	*/
+	function getLastOrderTime() {
+		$pid = parent::searchEntry("name = 'last_order_time'");
+		$lastOrderTime = parent::getEntryValue($pid['id'], 'value');
+		if($lastOrderTime === NULL)
+		throw new UnexpectedValueException('last_order_time has no value!');
+		return $lastOrderTime;
+	}
 }
 ?>

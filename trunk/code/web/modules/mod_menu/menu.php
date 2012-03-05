@@ -1,8 +1,11 @@
 <?php
 //No direct access
 defined('_WEXEC') or die("Access denied");
+require_once PATH_INCLUDE.'/global_settings_access.php';
 global $smarty;
 global $logger;
+
+
 
 $orderManager = new OrderManager('orders');
 $mealManager = new MealManager('meals');
@@ -31,7 +34,13 @@ if($orders_existing) {
 			continue;
 		}
 		if(!$order['fetched'] AND $order['date'] >= $today) {
-			if ($order['date'] == $today AND $hour > 8) {
+			
+			//fetch last_order_time from database and compare with actual time
+			$gsManager = new GlobalSettingsManager();
+			$hour = date('H:i', time());
+			$last_order_time = $gsManager->getLastOrderTime();
+			if ((str_replace(":", "", $hour) > str_replace(":", "", $last_order_time)) AND ($order['date'] == $today)) {
+			
 				$meal[] = array('date' => formatDate($order["date"]), 'name' => $mealname["name"], 'orderID' => $order['ID'], 'cancel' => false);
 			}
 			else {

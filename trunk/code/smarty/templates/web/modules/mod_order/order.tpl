@@ -38,7 +38,30 @@ table {
 }
 </style>
 
-{/literal} {foreach $meallist as $mealweek}
+{/literal} 
+<!-- for every meal-element -->
+{foreach $meallist as $mealweek} {foreach $mealweek as $mealday} {if
+count($mealday)} {foreach $mealday as $meal} {if isset($meal.ID)}
+<div class="div-info" id="MealDiv{$meal.ID}" style="display: none;">
+	<fieldset class="div-info">
+		<legend>
+			<b>Informationen zu {$meal.name}:</b>
+		</legend>
+		{$meal.description}
+		<p>
+			<b>Preis:</b> {$meal.price} &euro;
+		</p>
+	</fieldset>
+	<fieldset class="div-info">
+		<form class="div-info-submit"
+			action="index.php?section=order&order={$meal.ID}" method="post">
+			<input type="submit" value="{$meal.name} bestellen">
+		</form>
+	</fieldset>
+</div>
+{/if} {/foreach} {/if} {/foreach} {/foreach}
+
+{foreach $meallist as $mealweek}
 <table width="100%">
 	<tr>
 		<th>Montag<br>{$mealweek.date.1}
@@ -83,27 +106,7 @@ table {
 
 {/foreach}
 
-<!-- for every meal-element -->
-{foreach $meallist as $mealweek} {foreach $mealweek as $mealday} {if
-count($mealday)} {foreach $mealday as $meal} {if isset($meal.ID)}
-<div class="div-info" id="MealDiv{$meal.ID}" style="display: none;">
-	<fieldset class="div-info">
-		<legend>
-			<b>Informationen zu {$meal.name}:</b>
-		</legend>
-		{$meal.description}
-		<p>
-			<b>Preis:</b> {$meal.price} &euro;
-		</p>
-	</fieldset>
-	<fieldset class="div-info">
-		<form class="div-info-submit"
-			action="index.php?section=order&order={$meal.ID}" method="post">
-			<input type="submit" value="{$meal.name} Bestellen">
-		</form>
-	</fieldset>
-</div>
-{/if} {/foreach} {/if} {/foreach} {/foreach}
+
 
 <p>
 <hr>

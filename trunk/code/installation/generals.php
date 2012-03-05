@@ -52,6 +52,12 @@
 	    	                       VALUES
 	    	                            ("soli_price",
 	    	                             "1");';
+	    
+	    $sql[5] = 'INSERT INTO
+	    	 		                    	    global_settings(name, value)
+	    	    	                       VALUES
+	    	    	                            ("last_order_time",
+	    	    	                             "09:30");';
 	    foreach ($sql as $query) {
 	    	$result = $db->query($query);
 			if (!$result) {

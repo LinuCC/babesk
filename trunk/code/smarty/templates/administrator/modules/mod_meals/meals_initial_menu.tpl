@@ -20,4 +20,7 @@
 	<input type="submit" value="Infotexte f&uuml;r Speiseplan editieren" />
 	</form>
 	<br><br>
+	<form action="index.php?section=meals&action=7" method="post">
+	<input type="submit" value="Uhrzeit f&uuml;r letzte Bestellm&ouml;glichkeit" />
+	</form>
 	{/block}
