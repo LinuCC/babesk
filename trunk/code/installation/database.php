@@ -150,10 +150,11 @@
                                 PRIMARY KEY (`id`)
                             )AUTO_INCREMENT=1;';
         //Table 'soli_coupons'
-        $sql[11] = 'CREAT TABLE IF NOT EXISTS `soli_coupons` (
+        $sql[11] = 'CREATE TABLE IF NOT EXISTS `soli_coupons` (
         						`ID` smallint(5) unsigned NOT NULL auto_increment,
         						`UID` int(11) NOT NULL,
-        						`enddate` date
+        						`enddate` date,
+        						PRIMARY KEY (`ID`)
         						)AUTO_INCREMENT=1;';
 
         // ========== Execute Queries ========== \\
@@ -162,7 +163,7 @@
 			$counter += 1;
 	    	$result = $db->query($query);
 			if (!$result) {
-	    		die (DB_QURY_ERROR.$db->error."<br \>Bitte Datenbank leeren, Schritte gemacht:".$counter);
+	    		die (DB_QUERY_ERROR.$db->error."<br \>Bitte Datenbank leeren, Schritte gemacht:".$counter);
 			}
 		}
 		
