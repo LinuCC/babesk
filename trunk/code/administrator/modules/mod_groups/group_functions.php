@@ -80,15 +80,15 @@ function change_group($ID) {
 		$max_credit = $_POST['max_credit'];
 		
 		if (!preg_match('/\A^[0-9]{0,2}((,|\.)[0-9]{2})?\z/', $max_credit)) {
-			show_error(ERR_INP_MAX_CREDIT. ' ' . $max_credit); die();
+			die_error(ERR_INP_MAX_CREDIT. ' ' . $max_credit); die();
 		}
 		if (!is_numeric($ID)) {
-			show_error(ERR_INP_ID);die();
+			die_error(ERR_INP_ID);die();
 		}
 		try {
 			$groupManager->alterEntry($old_ID, 'name', $name, 'max_credit', $max_credit, 'ID', $ID);
 		} catch (Exception $e) {
-			show_error(ERR_CHANGE_GROUP);die();
+			die_error(ERR_CHANGE_GROUP);die();
 		}
 		$smarty->display(PATH_SMARTY_ADMIN_MOD . '/mod_groups/change_group_fin.tpl');
 	} else { //show form
@@ -96,12 +96,12 @@ function change_group($ID) {
 		$groupManager = new GroupManager('groups');
 		global $smarty;
 		if (!is_numeric($ID))
-			show_error(ERR_INP_ID);die();
+			die_error(ERR_INP_ID);die();
 		
 		try {
 			$group_data = $groupManager->getEntryData($ID, 'ID', 'name', 'max_credit');
 		} catch (MySQLVoidDataException $e) {
-			show_error(ERR_GET_DATA_GROUP);
+			die_error(ERR_GET_DATA_GROUP);
 		}
 		
 		$smarty->assign('ID', $group_data['ID']);

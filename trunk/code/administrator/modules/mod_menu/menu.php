@@ -38,7 +38,7 @@
 	$gsManager = new GlobalSettingsManager();
 	$itxt_arr = $gsManager->getInfoTexts();
 	} catch (Exception $e) {
-		show_error(ERR_MENU_GET_INFOTEXT);die();
+		die_error(ERR_MENU_GET_INFOTEXT);die();
 	}
 	$smarty->assign('menu_text1',$itxt_arr[0]);
 	$smarty->assign('menu_text2',$itxt_arr[1]);

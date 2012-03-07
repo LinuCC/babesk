@@ -28,7 +28,7 @@
 	   			exit();
 	   		}
 	   	} catch (Exception $e) {
-	   		show_error(ERR_GET_USER_BY_CARD.' Error:'.$e->getMessage());die();
+	   		die_error(ERR_GET_USER_BY_CARD.' Error:'.$e->getMessage());die();
 	   	}
 	   
 	   	

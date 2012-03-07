@@ -248,7 +248,7 @@ function edit_infotext() {
 			$temp->alterEntry($infotext1[0]["id"], 'value', $infotext1neu);
 			$temp->alterEntry($infotext2[0]["id"], 'value', $infotext2neu);
 		} catch (Exception $e) {
-			show_error(MEAL_ERROR_EDIT_INFOTEXT . $e->getMessage());
+			die_error(MEAL_ERROR_EDIT_INFOTEXT . $e->getMessage());
 		}
 		$smarty->assign('infotext1', $infotext1neu);
 		$smarty->assign('infotext2', $infotext2neu);
@@ -278,7 +278,7 @@ function editLastOrderTime() {
 		try {
 			$temp->alterEntry($lastOrderTime[0]["id"], 'value', $_POST['Time_Hour'].':'.$_POST['Time_Minute']);
 		} catch (Exception $e) {
-			show_error(MEAL_ERROR_EDIT_DEADLINE . $e->getMessage());
+			die_error(MEAL_ERROR_EDIT_DEADLINE . $e->getMessage());
 		}
 		$smarty->assign('lastOrderTime', $_POST['Time_Hour'].':'.$_POST['Time_Minute']);
 		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH . '/edit_deadline_fin.tpl');
@@ -333,7 +333,7 @@ function show_orders() {
 		}
 		
 		if (!count($orders)) {
-			show_error(MEAL_NO_ORDERS_FOUND);
+			die_error(MEAL_NO_ORDERS_FOUND);
 			die();
 		}
 		
@@ -431,7 +431,7 @@ function delete_old_meals_and_orders() {
 	} else {
 		$timestamp = strtotime($_POST['year'] . '-' . $_POST['month'] . '-' . $_POST['day']);
 		if ($timestamp == -1) {
-			show_error(MEAL_ERROR_DATE);die();
+			die_error(MEAL_ERROR_DATE);die();
 		}
 		remove_old_meals($timestamp);
 		
@@ -442,7 +442,7 @@ function delete_old_meals_and_orders() {
 			try {
 				$orders = $orderManager->getTableData();
 			} catch (Exception $e) {
-				show_error(MEAL_NO_ORDERS_FOUND);
+				die_error(MEAL_NO_ORDERS_FOUND);
 				throw $e;
 				
 				foreach ($orders as $order) {
@@ -453,7 +453,7 @@ function delete_old_meals_and_orders() {
 							$orderManager->delEntry($order['ID']);
 						} catch (Exception $e) {
 							$logger->log(ADMIN, MODERATE, ORDER_ERROR_DELETE . 'dump:' . var_dump($order));
-							show_error(ORDER_ERROR_DELETE);die();
+							die_error(ORDER_ERROR_DELETE);die();
 						}
 						$msg_str .= ORDER_DELETED . ' ID:' . $order['ID'] . '<br>';
 					}

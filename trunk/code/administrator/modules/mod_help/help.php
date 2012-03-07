@@ -27,7 +27,7 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 				break;
 		}
 	} catch (Exception $e) {
-		show_error('Fehler:' . $e->getMessage());die();
+		die_error($e->getMessage());
 	}
 } else {
 	$helpInterface->IndexMenu();

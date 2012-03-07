@@ -332,7 +332,7 @@ function show_settings() {
 		try {
 			$smarty->assign('old_price', $gbManager->getSoliPrice());
 		} catch (Exception $e) {
-			show_error(SOLI_ERR_PRICE.':'.$e->getMessage());die();
+			die_error(SOLI_ERR_PRICE.':'.$e->getMessage());die();
 		}
 		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/show_settings.tpl');	
 	} else {
@@ -340,11 +340,11 @@ function show_settings() {
 			try {//inputcheck
 				inputcheck($_POST['soli_price'], 'credits');
 			} catch (Exception $e) {
-				show_error(SOLI_ERR_INP_PRICE);die();
+				die_error(SOLI_ERR_INP_PRICE);die();
 			}
 			$gbManager->changeSoliPrice($_POST['soli_price']);
 		} catch (Exception $e) {
-			show_error(SOLI_ERR_CHANGE_PRICE.':'.$e->getMessage());
+			die_error(SOLI_ERR_CHANGE_PRICE.':'.$e->getMessage());
 		}
 	}
 	
