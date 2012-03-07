@@ -15,7 +15,7 @@ class AdminHelpProcessing {
 	 * @param string $str
 	 */
 	function change_help($str) {
-		if ($str = '')
+		if ($str == '')
 			$str = '&nbsp;';
 
 		try {
