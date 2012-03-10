@@ -1,4 +1,4 @@
-{extends file=$base_path}{block name=content}
+{extends file=$UserParent}{block name=content}
 {literal}<!-- No Smarty-Variables wanted in JavaScript -->
 <script type="text/javascript">
 

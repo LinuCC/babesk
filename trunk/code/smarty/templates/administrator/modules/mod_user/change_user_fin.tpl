@@ -1,4 +1,4 @@
-{extends file=$base_path}{block name=content}
+{extends file=$UserParent}{block name=content}
 Der Benutzer wurde verändert:<br><br>
 ID: {$id}<br>
 Gruppen-ID: {$gid}<br>

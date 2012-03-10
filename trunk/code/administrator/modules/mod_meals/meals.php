@@ -35,7 +35,7 @@
 			try {
 				delete_meal($_GET['id'], TRUE);
 			} catch (Exception $e) {
-				die($e->getMessage());
+				die_error($e->getMessage());
 			}
 			$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/meal_deleted.tpl');
 		}

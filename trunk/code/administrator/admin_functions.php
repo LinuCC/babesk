@@ -7,6 +7,9 @@
 /**
  * die_error shows an error to the user and then die()'s the process
  * accepts one or two parameter. If one, Smarty will inherit from the standard-file.
+ * if two parameter are given, Smarty will inherit from the given string.
+ * @param string $string The error-message 
+ * @param string $inh_path The Path to the template-file for Smarty to inherit from
  */
 function die_error($string, $inh_path = BASE_PATH) {
 	global $smarty;
@@ -20,7 +23,8 @@ function die_error($string, $inh_path = BASE_PATH) {
  * die_msg shows a message to the user and then die()'s the process
  * accepts one or two parameter. If one, Smarty will inherit from the standard-file.
  * if two parameter are given, Smarty will inherit from the given string.
- * @param string The Path to the template-file for Smarty to inherit from
+ * @param string $string The message 
+ * @param string $inh_path The Path to the template-file for Smarty to inherit from
  */
 function die_msg($string, $inh_path = BASE_PATH) {
 	global $smarty;

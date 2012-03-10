@@ -1,4 +1,4 @@
-{extends file=$base_path}{block name=content}
+{extends file=$UserParent}{block name=content}
 <table>
 	<thead>
 		<tr bgcolor='#33CFF'>

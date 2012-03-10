@@ -12,19 +12,29 @@ $helpProcessing = new AdminHelpProcessing();
 if ('POST' == $_SERVER['REQUEST_METHOD']) {
 	try {
 		switch ($_GET['action']) {
-			case 1:
-			//show the Help-Text
-				$helpInterface->ShowHelp($gbManager->getHelpText());
-				break;
-			
-			case 2:
-			//edit the Help-Text
-				if (isset($_POST['helptext'])) {
-					$helpProcessing->change_help($_POST['helptext']);
-				} else {
-					$helpInterface->EditHelp($gbManager->getHelpText());
+		case 1:
+		//show the Help-Text
+			try {
+				$helptext = $gbManager->getHelpText();
+			} catch (MySQLVoidDataException $e) {
+				$helptext = '&nbsp;';
+			}
+			$helpInterface->ShowHelp($helptext);
+			break;
+
+		case 2:
+		//edit the Help-Text
+			if (isset($_POST['helptext'])) {
+				$helpProcessing->change_help($_POST['helptext']);
+			} else {
+				try {
+					$helptext = $gbManager->getHelpText();
+				} catch (MySQLVoidDataException $e) {
+					$helptext = '&nbsp;';
 				}
-				break;
+				$helpInterface->EditHelp($helptext);
+			}
+			break;
 		}
 	} catch (Exception $e) {
 		die_error($e->getMessage());

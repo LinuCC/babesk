@@ -27,7 +27,7 @@
 			change_priceclass($_GET['where']);
 		}
 		else {
-			echo 'Da ist etwas mit der GET-Variable action schiefgelaufen!';
+			die_error(ERR_VAR_GET);
 		}
 	}
 	else {

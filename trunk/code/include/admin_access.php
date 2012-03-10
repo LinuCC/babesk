@@ -101,8 +101,7 @@ class AdminManager extends TableManager{
 		 
 		require_once PATH_INCLUDE.'/functions.php';
 		if ($this->getAdminID($name) != -1) {
-			echo USERNAME_EXISTS;
-			return false;
+			throw new Exception(USERNAME_EXISTS);
 		}
 		$query = sql_prev_inj(sprintf('INSERT INTO administrators(name, password, GID)
                       VALUES ("%s", "%s", %s);', $name, $password, $gid));

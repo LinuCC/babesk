@@ -129,7 +129,10 @@ if (isset($_GET['order'])) {
 	try {
 		$sql_meals = $mealManager->get_meals_between_two_dates(date('Y-m-d', $date), date('Y-m-d', $enddate),
 															   'date, price_class');
-	} catch (Exception $e) {
+	} catch (MySQLVoidDataException $e) {
+		show_error(ERR_NO_ORDERS); die();
+	}
+	catch (Exception $e) {
 		$smarty->assign('message', ERR_MYSQL.'<br>'.$e->getMessage());
 	}
 	

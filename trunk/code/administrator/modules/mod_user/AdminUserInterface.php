@@ -12,6 +12,8 @@ class AdminUserInterface extends AdminInterface{
 		global $smarty;
 		$this->smarty = $smarty;
 		$this->PathUserTemplates = PATH_SMARTY_ADMIN_MOD.'/mod_user/';
+		$this->MOD_HEADING = $this->PathUserTemplates.'mod_user_header.tpl';
+		$this->smarty->assign('UserParent', $this->MOD_HEADING);
 	}
 
 	function ShowSelectionFunctionality() {
@@ -80,5 +82,10 @@ class AdminUserInterface extends AdminInterface{
 	 * file in which the Smarty-templates are
 	 */
 	protected $PathUserTemplates;
+	
+	/**
+	 * The Path to the Smarty-Parent-Templatefile
+	 */
+	protected $MOD_HEADING;
 }
 ?>

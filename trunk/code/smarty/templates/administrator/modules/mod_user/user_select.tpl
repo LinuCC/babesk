@@ -1,4 +1,4 @@
-{extends file=$base_path}{block name=content}
+{extends file=$UserParent}{block name=content}
 <p>Bitte wählen sie aus, was sie tun möchten:</p><br>
 <form action="index.php?section=user&action=1" method="post">
 	<input type="submit" value="Einen Benutzer registrieren">

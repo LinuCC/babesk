@@ -1,4 +1,4 @@
-{extends file=$base_path}{block name=content}
+{extends file=$UserParent}{block name=content}
 Der Benutzer {$forename} {$name} wurde hinzugefügt. <br><br>
 <form action="index.php?section=user&action=1" method="post">
 	<input type ="submit" value="einen weiteren Benutzer hinzufügen">

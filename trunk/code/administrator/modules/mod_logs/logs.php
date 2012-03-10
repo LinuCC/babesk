@@ -17,7 +17,7 @@ global $logger;
 
 $logs = $logger->getLogData();
 if(!count($logs)) {
-	die(NO_LOGS);
+	die_error(NO_LOGS);
 }
 //the different actions the module can do
 $_chooseSev = 'choose_sev';
@@ -30,28 +30,28 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 	if($_GET['action'] == $_showLogs) {
 		//show Logs
 		if (!isset($_GET['Category'], $_POST['Severity'])) {
-			die(EMPTY_FORM);
+			die_error(EMPTY_FORM);
 		}
 		$category = (string) trim($_GET['Category']);
 		$severity = (string) trim($_POST['Severity']);
 		try {
 			$logs = $logger->getTableData('category = "'.$category.'" AND severity = "'.$severity.'"');
 		} catch (Exception $e) {
-			die(ERROR_LOGS.'; Fehler:'.$e->getMessage());
+			die_error(ERROR_LOGS.'; Fehler:'.$e->getMessage());
 		}
 		$smarty->assign('logs',$logs);
 		$smarty->display(PATH_SMARTY_ADMIN_MOD.'/mod_logs/showLogs.tpl');
 	}
 	else if ($_GET['action'] == $_chooseSev) {
 		if(!isset($_POST['Category'])) {
-			die(ERROR_CAT);
+			die_error(ERROR_CAT);
 		}
 		$severitys = array();
 		$category = $_POST['Category'];
 		try {
 			$logs = $logger->getLogDataByCategory($category);
 		} catch (Exception $e) {
-			die(ERROR_LOGS.':'.$e->getMessage());
+			die_error(ERROR_LOGS.':'.$e->getMessage());
 		}
 		$is_existing = false;
 		foreach($logs as $log) {

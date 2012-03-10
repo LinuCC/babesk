@@ -65,14 +65,14 @@ function create_meal() {
 		try {
 			$meal_db->addMeal($name, $description, $date_conv, $price_class, $max_orders);
 		} catch (Exception $e) {
-			die(MEAL_ERROR_ADD . $e->getMessage());
+			die_error(MEAL_ERROR_ADD . $e->getMessage());
 		}
 		echo MEAL_ADDED;
 	} else {//if Formular isnt filled yet or the link was wrong
 		try {
 			price_class_init_smarty_vars();
 		} catch (Exception $e) {
-			die(MEAL_ERROR_PC . $e->getMessage());
+			die_error(MEAL_ERROR_PC . $e->getMessage());
 		}
 		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH . '/add_meal.tpl');
 	}
@@ -88,9 +88,9 @@ function price_class_init_smarty_vars() {
 	try {
 		$sql_price_classes = $priceclassmanager->getTableData();
 	} catch (MySQLVoidDataException $e) {
-		die(MEAL_ERROR_PC);
+		die_error(MEAL_ERROR_PC);
 	} catch (Exception $e) {
-		die("Error:" . $e->getMessage());
+		die_error("Error:" . $e->getMessage());
 	}
 	$price_class_id = array();
 	$price_class_name = array();
@@ -139,7 +139,7 @@ function remove_old_meals($search_date) {
 	} else {
 		var_dump($search_date);
 		$logger->log(ADMIN, MODERATE, 'MEAL_F_ERROR_DATE_FORMAT');
-		die(MEAL_F_ERROR_DATE_FORMAT);
+		die_error(MEAL_F_ERROR_DATE_FORMAT);
 	}
 	
 	foreach ($meals as $meal) {
@@ -149,10 +149,10 @@ function remove_old_meals($search_date) {
 			try {
 				$mealmanager->delEntry($meal['ID']);
 			} catch (Exception $e) {
-				die(MEAL_ERROR_DELETE . $e->getMessage() . ' ' . __FUNCTION__);
+				die_error(MEAL_ERROR_DELETE . $e->getMessage() . ' ' . __FUNCTION__);
 			}
 			$logger->log(ADMIN, NOTICE, MEAL_DELETED_LOG . ', name:' . $meal['name']);
-			echo MEAL_DELETED . ', name:' . $meal['name'] . '<br>';
+			die_msg(sprintf('%s, name:%s <br>', MEAL_DELETED, $meal['name']));
 		}
 	}
 }
@@ -168,9 +168,11 @@ function show_meals() {
 	
 	global $smarty;
 	$mealManager = new MealManager('meals');
-	$meals = $mealManager->getTableData();
-	if (!$meals)
-		die(MEAL_NO_MEALS_FOUND);
+	try {
+		$meals = $mealManager->getTableData();
+	} catch (MySQLVoidDataException $e) {
+		die_error(MEAL_NO_MEALS_FOUND);
+	}
 	foreach ($meals as &$meal) {
 		$meal['date'] = formatDate($meal['date']);
 	}
@@ -281,7 +283,7 @@ function editLastOrderTime() {
 			die_error(MEAL_ERROR_EDIT_DEADLINE . $e->getMessage());
 		}
 		$smarty->assign('lastOrderTime', $_POST['Time_Hour'].':'.$_POST['Time_Minute']);
-		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH . '/edit_deadline_fin.tpl');
+		die_msg(MEAL_SMARTY_TEMPLATE_PATH . '/edit_deadline_fin.tpl');
 
 	} else {
 
@@ -320,22 +322,20 @@ function show_orders() {
 		
 		if ($_POST['ordering_day'] > 31 or $_POST['ordering_month'] > 12 or $_POST['ordering_year'] < 2000
 				or $_POST['ordering_year'] > 3000) {
-			die(MEAL_ERROR_DATE);
+			die_error(MEAL_ERROR_DATE);
 		}
 		$date = $_POST['ordering_year'] . '-' . $_POST['ordering_month'] . '-' . $_POST['ordering_day'];
 		try {
 			$orders = $order_manager->getAllOrdersAt($date);
 			
 		} catch (MySQLVoidDataException $e) {
-			die(MEAL_NO_ORDERS_FOUND);
+			die_error(MEAL_NO_ORDERS_FOUND);
 		} catch (MySQLConnectionException $e) {
-			die($e);
+			die_error($e);
 		}
 		
-		if (!count($orders)) {
+		if (!count($orders))
 			die_error(MEAL_NO_ORDERS_FOUND);
-			die();
-		}
 		
 		foreach ($orders as &$order) {
 			if (!count($meal_data = $meal_manager->getEntryData($order['MID'], 'name'))
@@ -402,7 +402,7 @@ function show_orders() {
 			$smarty->assign('ordering_date', formatDate($date));
 			$smarty->display(MEAL_SMARTY_TEMPLATE_PATH . '/show_orders.tpl');
 		} else {
-			die('für den ' . formatDate($date) . ' sind keine Bestellungen vorhanden');
+			die_error('für den ' . formatDate($date) . ' sind keine Bestellungen vorhanden');
 		}
 	}
 }
@@ -430,9 +430,8 @@ function delete_old_meals_and_orders() {
 		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH . '/delete_old_select_date.tpl');
 	} else {
 		$timestamp = strtotime($_POST['year'] . '-' . $_POST['month'] . '-' . $_POST['day']);
-		if ($timestamp == -1) {
-			die_error(MEAL_ERROR_DATE);die();
-		}
+		if ($timestamp == -1) 
+			die_error(MEAL_ERROR_DATE);
 		remove_old_meals($timestamp);
 		
 		//////////////////////////////////////////////////
@@ -453,22 +452,22 @@ function delete_old_meals_and_orders() {
 							$orderManager->delEntry($order['ID']);
 						} catch (Exception $e) {
 							$logger->log(ADMIN, MODERATE, ORDER_ERROR_DELETE . 'dump:' . var_dump($order));
-							die_error(ORDER_ERROR_DELETE);die();
+							die_error(ORDER_ERROR_DELETE);
 						}
 						$msg_str .= ORDER_DELETED . ' ID:' . $order['ID'] . '<br>';
 					}
 				}
 			}
 		} catch (Exception $e) {
-			die();
+			die_error($e->getMessage());
 		}
 		if (!preg_match('/\A[0-9]{1,}\z/', $timestamp)) {
-			die(MEAL_ERROR_DATE);
+			die_error(MEAL_ERROR_DATE);
 		}
 		
 		//show finished
 		$smarty->assign('messageStr', $msg_str);
-		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/delete_old_fin.tpl');
+		die_msg(MEAL_SMARTY_TEMPLATE_PATH.'/delete_old_fin.tpl');
 	}
 }
 

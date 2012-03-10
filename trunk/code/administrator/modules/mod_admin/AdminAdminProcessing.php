@@ -15,7 +15,7 @@ class AdminAdminProcessing {
 		$this->adminManager = new AdminManager();
 		$this->admingroupManager = new AdminGroupManager();
 		$this->messages = array('err_inp_gname' => 'Der Gruppenname wurde falsch eingegeben.',
-								'err_inp' => 'Ein Wert wurde falsche eingegeben',
+								'err_inp' => 'Ein Wert wurde falsch eingegeben',
 								'err_add_admin' => 'Der Administrator konnte nicht hinzugefügt werden!',
 								'err_get_groupname' => 'Der ID konnte kein Gruppenname zugeordnet werden.',
 								'err_mysql' => 'Konnte die Daten nicht vom MySQL-Server holen',
@@ -43,7 +43,7 @@ class AdminAdminProcessing {
 
 			} catch (Exception $e) {
 				//wrong input!!
-				die('blubb');
+				die_error($this->messages['err_inp'].':'.$e->getMessage());
 			}
 			try {
 				$this->adminManager->addAdmin($name, hash_password($password), $agid);

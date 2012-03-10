@@ -34,7 +34,7 @@ class AdminHelpInterface extends AdminInterface {
 	}
 	
 	function EditHelpFin() {
-		$this->smarty->display($this->smPath.'edit_helptext_fin.tpl');
+		die_msg('Der Hilfetext wurde erfolgreich bearbeitet.');
 	}
 	
 	/**

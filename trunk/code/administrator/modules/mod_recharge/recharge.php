@@ -31,14 +31,14 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 			}
 			
 		} catch (Exception $e) {
-			die(ERR_GET_UID.$e->getMessage());
+			die_error(ERR_GET_UID.$e->getMessage());
 		}
 		$_SESSION['module_data']['recharge_user'] = $uid;
 		
 		try {
 			$smarty->assign('max_amount', $userManager->getMaxRechargeAmount($uid));
 		} catch (Exception $e) {
-			die(ERR_MAX_RECHARGE.$e->getMessage());
+			die_error(ERR_MAX_RECHARGE.$e->getMessage());
 		}
 		$smarty->display('administrator/modules/mod_recharge/form2.tpl');
 	}

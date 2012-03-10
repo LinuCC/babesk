@@ -77,8 +77,13 @@ class MealManager extends TableManager {
 			echo DB_CONNECT_ERROR . $this->db->error;
 			exit;
 		}
-		while ($buffer = $result->fetch_assoc())
+		$is_void = true;
+		while ($buffer = $result->fetch_assoc()) {
 			$res_array[] = $buffer;
+			$is_void = false;
+		}
+		if($is_void)
+		  throw new MySQLVoidDataException('MySQL returned no data');
 		return $res_array;
 	}
 	

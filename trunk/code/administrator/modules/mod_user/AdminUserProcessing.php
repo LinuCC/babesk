@@ -113,8 +113,6 @@ class AdminUserProcessing {
 		$this->userInterface->ShowRegisterFin($name, $forename);
 		
 		$_SESSION['CARD_ID'] = NULL;
-		// 		echo "<br><b>Hallo ".$name."!</b><br>";
-		// 		echo '<a href="index.php?'.htmlspecialchars(SID).'">Zur&uuml;ck zum Admin Bereich</a>';
 		$logger->log(USERS, NOTICE,
 					 "REG_ADDED_USER-ID:" . $cardID . "-NAME:" . $name . "-FORENAME:" . $forename . "-BIRTHDAY:"
 						. $birthday . "-CREDITS:" . $credits . "-GID:" . $GID . "-");
@@ -159,7 +157,6 @@ class AdminUserProcessing {
 			$this->logs->log('ADMIN', 'MODERATE',
 							 sprintf('Error while getting Data from MySQL:%s in %s', $e->getMessage(), __METHOD__));
 			$this->userInterface->ShowError($this->messages['error']['get_data_failed']);
-			die();
 		}
 		
 		foreach ($users as &$user) {
@@ -196,7 +193,6 @@ class AdminUserProcessing {
 			var_dump($uid);
 			$this->userInterface->ShowError(
 					$this->messages['error']['uid_get_param'] . ';<br>ExceptionMessage:' . $e->getMessage());
-			die();
 		}
 		
 		$this->userInterface->ShowDeleteConfirmation($uid, $user['forename'], $user['name']);
@@ -279,7 +275,6 @@ class AdminUserProcessing {
 			$this->userInterface->ShowError(
 					$this->messages['error']['input1'] . '"' . $e->getMessage() . '"'
 							. $this->messages['error']['input2']);
-			die();
 			//throw new Exception($this->messages['error']['change']);
 		}
 		if (isset($passwd, $passwd_repeat)) {
@@ -289,7 +284,6 @@ class AdminUserProcessing {
 					inputcheck($passwd_repeat, 'password');
 				} catch (Exception $e) {
 					$this->userInterface->ShowError($this->messages['error']['passwd_repeat']);
-					die();
 				}
 			}
 		}
@@ -309,7 +303,6 @@ class AdminUserProcessing {
 			}
 		} catch (Exception $e) {
 			$this->userInterface->ShowError($this->messages['error']['change'] . $e->getMessage());
-			die();
 		}
 		$this->userInterface->ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID, $locked,
 												$soli);
