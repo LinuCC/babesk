@@ -58,6 +58,12 @@
 	    	    	                       VALUES
 	    	    	                            ("last_order_time",
 	    	    	                             "09:30");';
+	    $sql[6] = 'INSERT INTO
+	    	    	 		                    	    global_settings(name, value)
+	    	    	    	                       VALUES
+	    	    	    	                            ("helptext",
+	    	    	    	                             "&nbsp;");';
+	    
 	    foreach ($sql as $query) {
 	    	$result = $db->query($query);
 			if (!$result) {
