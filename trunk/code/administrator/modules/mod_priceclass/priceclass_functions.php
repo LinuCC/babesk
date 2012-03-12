@@ -36,7 +36,7 @@ function new_priceclass() {
 		}
 		foreach ($groups as $group) {
 			$price = $_POST['group_price' . $group['ID']];
-			if (!$price) {
+			if (!$price || trim($price) = '') {
 				$price = $normal_price;
 			} else if (!preg_match('/\A^[0-9]{0,2}((,|\.)[0-9]{2})?\z/', $price)) {
 				die_error(ERR_INP_PRICE);
