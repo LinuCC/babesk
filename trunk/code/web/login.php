@@ -19,10 +19,13 @@ function login() {
 		$username = $_POST['login'];
 		$formpass = $_POST['password'];
 		try {
-			inputcheck($username, 'name');
-			inputcheck($formpass, 'password');
-		} catch (Exception $e) {
- 			$smarty->assign('error', INVALID_CHARS.':"'.$e->getMessage().'"');
+			inputcheck($username, 'name', 'Name');
+			inputcheck($formpass, 'password', 'Passwort');
+		} catch (WrongInputException $e) {
+			if($e->getFieldName() != 'Passwort')
+ 				$smarty->assign('error', sprintf('%s in %s: "%s"', INVALID_CHARS, $e->getFieldName(), $e->getMessage()));
+			else
+ 				$smarty->assign('error', sprintf('%s in %s', INVALID_CHARS, $e->getFieldName()));
 			$smarty->display('web/login.tpl');
 			die();
 		}

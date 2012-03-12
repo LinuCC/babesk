@@ -62,6 +62,7 @@
     function hash_password($pw_str) {
     	return md5($pw_str);
     }
+    
     /**
      * Checks the string with the given regex or string
      * inputcheck takes the string and checks if it matches with a regex. The Regex can be 
@@ -75,10 +76,12 @@
      *  id - just a number: /\A^[0-9]\z/
      *  birthday - the YYYY-MM-DD format of birthday: /\A\d{4}-\d{1,2}-\d{1,2}\z/
      *  credits - credits-field: /\A\d{1,5}([.,]\d{2})?\z/
+     * @param string $name_str the name of the Field the Value was entered in
+     * (is used for throwing a WrongInputException, handling the name-string not necessary)
      * @return boolean only when no error found
      * @throws Exception if string does not match the regex
      */
-    function inputcheck($str, $regex_str) {
+    function inputcheck($str, $regex_str, $name_str = 'Input') {
     	switch($regex_str) {
     		case 'name':
     			$regex_str = '/\A^[^\,\;\+\~]{2,30}\z/';
@@ -100,10 +103,7 @@
     			break;
     	}
     	if(!preg_match($regex_str, $str)){
-    		throw new Exception($str); 
-    	} else {
-    		return true;
+    		throw new WrongInputException($str, $name_str); 
     	}
-    	break;
     }
 ?>

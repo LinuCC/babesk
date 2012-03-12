@@ -11,7 +11,7 @@
     </div>
 <div id="login">
     {if $error != ''}
-    {$error}
+    <p class="error">{$error}</p>
     {/if}
         <form method="POST" action="index.php">
           <p>Benutzername: <input name="login" type="text" size="30" /></p>

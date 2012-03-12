@@ -1,3 +1,4 @@
+{extends file=$base_path}{block name=content}
 <table cellpadding='10' cellspacing='10'>
 	<thead> 
 		<tr> 
@@ -28,3 +29,4 @@
 	</tbody>
 
 </table>
+{/block}

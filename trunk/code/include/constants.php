@@ -9,7 +9,7 @@
     
     //Login
     define('INVALID_LOGIN', '<p class="error">Der Benutzer wurde nicht gefunden oder das Passwort ist falsch.</p>');
-    define('INVALID_CHARS', '<p class="error">Eingegebene Daten wurden falsch eingegeben</p>');
+    define('INVALID_CHARS', 'Eingegebene Daten wurden falsch eingegeben');
     define('MAX_LOGIN_TIME', '300');
     define('UNMATCHED_PASSWORDS', '<p class="error">Die Passw&ouml;rter stimmen nicht &uuml;berein!</p>');
     define('ACCOUNT_LOCKED','<p class="error">Kennung gesperrt!</p>');

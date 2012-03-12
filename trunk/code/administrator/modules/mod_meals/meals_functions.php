@@ -67,7 +67,7 @@ function create_meal() {
 		} catch (Exception $e) {
 			die_error(MEAL_ERROR_ADD . $e->getMessage());
 		}
-		echo MEAL_ADDED;
+		die_msg(MEAL_ADDED);
 	} else {//if Formular isnt filled yet or the link was wrong
 		try {
 			price_class_init_smarty_vars();

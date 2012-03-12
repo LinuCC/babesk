@@ -49,4 +49,18 @@
 			parent::__construct($strMessage);
 		}
 	}
+	
+	class WrongInputException extends Exception{
+		function __construct($strMessage, $strFieldName = 'Input') {
+			parent::__construct($strMessage);
+			$this->strFieldName = $strFieldName;
+		}
+		function getFieldName (){
+			return $this->strFieldName;
+		}
+		/**
+		 * The name of the Field the value was entered
+		 */
+		protected $strFieldName;
+	}
 ?>
