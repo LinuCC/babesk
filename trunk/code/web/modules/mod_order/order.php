@@ -3,13 +3,17 @@
 defined('_WEXEC') or die("Access denied");
 require_once 'order_constants.php';
 require_once PATH_INCLUDE.'/global_settings_access.php';
+require_once PATH_INCLUDE.'/soli_order_access.php';
+require_once PATH_INCLUDE.'/soli_coupon_access.php';
 global $smarty;
 global $logger;
 
 if (isset($_GET['order'])) {
-	$mealManager = new MealManager('meals');
+	$mealManager = new MealManager();
 	$userManager = new UserManager();
-	$orderManager = new OrderManager('orders');
+	$orderManager = new OrderManager();
+	$soliOrderManager = new SoliOrderManager();
+	$soliCouponManager = new SoliCouponsManager();
 	$priceClassManager = new PriceClassManager();
 	$gbManager = new GlobalSettingsManager();
 	
@@ -23,6 +27,8 @@ if (isset($_GET['order'])) {
 		die();
 	}
 	$result OR exit('ERROR');
+	
+	$payment = NULL;
 	
 	if ('POST' == $_SERVER['REQUEST_METHOD']) {
 		////////////////////////////////////////////////////
@@ -60,13 +66,17 @@ if (isset($_GET['order'])) {
 			if (!$meal_date = $mealManager->getEntryData($_GET['order'], 'date')) {
 				die(DB_QUERY_ERROR . $this->db->error);
 			}
-			
-			$orderManager->addEntry('MID', $_GET['order'], 'UID', $_SESSION['uid'], 'IP', $_SERVER['REMOTE_ADDR'],
-									 'date', $meal_date['date']);
+			if($soliCouponManager->HasValidCoupon($_SESSION['uid'])) {
+				$soliOrderManager->addSoliOrder($_GET['order'], $_SESSION['uid'], $_SERVER['REMOTE_ADDR'], $meal_date['date']);
+			}
+			else {
+				$orderManager->addOrder($_GET['order'], $_SESSION['uid'], $_SERVER['REMOTE_ADDR'], $meal_date['date']);
+// 				$orderManager->addEntry('MID', $_GET['order'], 'UID', $_SESSION['uid'], 'IP', $_SERVER['REMOTE_ADDR'],
+// 									 'date', $meal_date['date']);
+			}
 		} catch (Exception $e) {
 			//meal couldn't be ordered so give the user his money back
-			$userManager->changeBalance($_SESSION['uid'],
-										$priceClassManager->getPrice($_SESSION['uid'], $_GET['order']));
+			$userManager->changeBalance($_SESSION['uid'], $payment);
 			$logger->log('WEB|ORDER', 'MODERATE',
 						 sprintf('Error while handling the order for ' . 'UID %s; Order: %s; Error: %s',
 								 $_SESSION['uid'], $_GET['order'], $e->getMessage()));

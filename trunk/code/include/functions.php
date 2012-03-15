@@ -79,7 +79,7 @@
      * @param string $name_str the name of the Field the Value was entered in
      * (is used for throwing a WrongInputException, handling the name-string not necessary)
      * @return boolean only when no error found
-     * @throws Exception if string does not match the regex
+     * @throws WrongInputException if string does not match the regex
      */
     function inputcheck($str, $regex_str, $name_str = 'Input') {
     	switch($regex_str) {

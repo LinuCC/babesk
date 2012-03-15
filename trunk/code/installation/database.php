@@ -100,7 +100,7 @@
                         `date` date NOT NULL,
                         `IP` binary(16) NOT NULL,
                         `ordertime` timestamp NOT NULL,
-                        `fetched` boolean NOT NULL,
+                        `fetched` boolean NOT NULL default 0,
                         PRIMARY KEY (`ID`)
                     )';
         //Table 'cards'
@@ -153,9 +153,21 @@
         $sql[11] = 'CREATE TABLE IF NOT EXISTS `soli_coupons` (
         						`ID` smallint(5) unsigned NOT NULL auto_increment,
         						`UID` int(11) NOT NULL,
+        						`startdate` date,
         						`enddate` date,
         						PRIMARY KEY (`ID`)
         						)AUTO_INCREMENT=1;';
+	    //Table 'soli_orders'
+		$sql[12] = 'CREATE TABLE IF NOT EXISTS `soli_orders` (
+		                `ID` int(11) unsigned NOT NULL auto_increment,
+                        `MID` int(11) unsigned NOT NULL,
+                        `UID` bigint(11) unsigned NOT NULL,
+                        `date` date NOT NULL,
+                        `IP` binary(16) NOT NULL,
+                        `ordertime` timestamp NOT NULL,
+                        `fetched` boolean NOT NULL default 0,
+                        PRIMARY KEY (`ID`)
+                    )';
 
         // ========== Execute Queries ========== \\
 		$counter = 0;
