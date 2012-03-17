@@ -30,7 +30,17 @@ function die_msg($string, $inh_path = BASE_PATH) {
 	global $smarty;
 	$smarty->assign('inh_path', $inh_path);
 	$smarty->assign('message', $string);
+	$smarty->getTemplateVars();
 	$smarty->display(PATH_SMARTY.'/templates/administrator/message.tpl');
 	die();
+}
+
+function show_error($str) {
+	///@todo add .tpl where you  can append the error to the body-block
+	///or a new message-block
+}
+
+function show_msg($str) {
+	///@todo add .tpl where you  can append the message to the body-block
 }
 ?>

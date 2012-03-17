@@ -12,18 +12,18 @@ function create_meal() {
 	require_once "meals_constants.php";
 	require_once PATH_INCLUDE . '/logs.php';
 	require_once PATH_INCLUDE . '/meal_access.php';
-	
+
 	require_once PATH_INCLUDE . '/access.php'; //for ordercount workaround
-	
+
 	global $smarty;
 	global $logger;
-	
+
 	define('PATH_TEMPLATE_MEAL', MEAL_SMARTY_TEMPLATE_PATH . '/add_meal.tpl');
 	//---INIT---
 	$severity = NOTICE;
 	$categorie = ADMIN;
 	$meal_db = new MealManager();
-	
+
 	//---METHODS---
 	//safety-checks
 	if ('POST' == $_SERVER['REQUEST_METHOD']
@@ -33,7 +33,7 @@ function create_meal() {
 		$price_class = $_POST['price_class'];
 		$max_orders = $_POST['max_orders'];
 		$date_ar = array("day" => $_POST['Date_Day'], "month" => $_POST['Date_Month'], "year" => $_POST['Date_Year']);
-		
+
 		if (strlen($name) > 255) {
 			echo MEAL_ERROR_NAME . "<br>";
 			$logger->log($categorie, $severity, "MEAL_ERROR_NAME");
@@ -67,7 +67,7 @@ function create_meal() {
 		} catch (Exception $e) {
 			die_error(MEAL_ERROR_ADD . $e->getMessage());
 		}
-		die_msg(MEAL_ADDED);
+		die_msg(MEAL_ADDED, MEAL_SMARTY_PARENT);
 	} else {//if Formular isnt filled yet or the link was wrong
 		try {
 			price_class_init_smarty_vars();
@@ -94,7 +94,7 @@ function price_class_init_smarty_vars() {
 	}
 	$price_class_id = array();
 	$price_class_name = array();
-	
+
 	$used_pc_IDs = array();
 	foreach ($sql_price_classes as $pc) {
 		$is_id_existing = false;
@@ -110,7 +110,7 @@ function price_class_init_smarty_vars() {
 			$price_class_name[] = $pc['name'];
 		}
 	}
-	
+
 	$smarty->assign('price_class_id', $price_class_id);
 	$smarty->assign('price_class_name', $price_class_name);
 }
@@ -123,11 +123,11 @@ function remove_old_meals($search_date) {
 	require_once "meals_constants.php";
 	require_once PATH_INCLUDE . "/logs.php";
 	require_once PATH_INCLUDE . "/meal_access.php";
-	
+
 	global $logger;
 	$mealmanager = new MealManager('meals');
 	$meals = $mealmanager->getTableData();
-	
+
 	if (preg_match('/\A[0-9]{2,4}-[0-9]{2}-[0-9]{2}\z/', $search_date)) {
 		$search_array = explode('-', $search_date);
 		$search_timestamp = mktime(0, 0, 1, $search_array[1], $search_array[2], $search_array[0]);
@@ -141,7 +141,7 @@ function remove_old_meals($search_date) {
 		$logger->log(ADMIN, MODERATE, 'MEAL_F_ERROR_DATE_FORMAT');
 		die_error(MEAL_F_ERROR_DATE_FORMAT);
 	}
-	
+
 	foreach ($meals as $meal) {
 		$m_timearray = explode("-", $meal["date"]);
 		$m_timestamp = mktime(0, 0, 1, $m_timearray[1], $m_timearray[2], $m_timearray[0]);
@@ -161,11 +161,11 @@ function remove_old_meals($search_date) {
  *shows the meals
  */
 function show_meals() {
-	
+
 	require_once PATH_INCLUDE . "/meal_access.php";
 	require_once "meals_constants.php";
 	require_once PATH_INCLUDE . "/functions.php";
-	
+
 	global $smarty;
 	$mealManager = new MealManager('meals');
 	try {
@@ -176,7 +176,7 @@ function show_meals() {
 	foreach ($meals as &$meal) {
 		$meal['date'] = formatDate($meal['date']);
 	}
-	
+
 	$smarty->assign('meals', $meals);
 	$smarty->display(MEAL_SMARTY_TEMPLATE_PATH . '/show_meals.tpl');
 }
@@ -198,7 +198,7 @@ function sort_orders($orders) {
 		//$meals[$order['meal_name']] [] = $order;
 		$meals[$order['meal_name']][] = $order;
 	}
-	
+
 	//sorting by usernames
 	foreach ($meals as $meal) {
 		foreach ($meal as $order) {
@@ -220,31 +220,31 @@ function sort_orders($orders) {
 
 function translate_fetched($is_fetched) {
 	switch ($is_fetched) {
-		case 0:
-			return ORDER_NOT_FETCHED;
-		case 1:
-			return ORDER_FETCHED;
+	case 0:
+		return ORDER_NOT_FETCHED;
+	case 1:
+		return ORDER_FETCHED;
 	}
 	throw Exception('Wrong argument');
 }
 
 function edit_infotext() {
 	require_once PATH_INCLUDE . '/access.php';
-	
+
 	global $smarty;
-	
+
 	$temp = new TableManager('global_settings');
-	
+
 	$infotext1 = $temp->getTableData('name="menu_text1"');
 	$infotext2 = $temp->getTableData('name="menu_text2"');
-	
+
 	if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['infotext1'], $_POST['infotext2'])) {
-		
+
 		$infotext1neu = $_POST['infotext1'];
 		$infotext2neu = $_POST['infotext2'];
-		if($infotext1neu == '') 
+		if ($infotext1neu == '')
 			$infotext1neu = '&nbsp;';
-		if($infotext2neu == '') 
+		if ($infotext2neu == '')
 			$infotext2neu = '&nbsp;';
 		try {
 			$temp->alterEntry($infotext1[0]["id"], 'value', $infotext1neu);
@@ -255,15 +255,14 @@ function edit_infotext() {
 		$smarty->assign('infotext1', $infotext1neu);
 		$smarty->assign('infotext2', $infotext2neu);
 		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH . '/edit_infotext_fin.tpl');
-		
+
 	} else {
-		
+
 		$smarty->assign('infotext1', $infotext1[0]["value"]);
 		$smarty->assign('infotext2', $infotext2[0]["value"]);
 		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH . '/edit_infotext.tpl');
 	}
 }
-
 
 function editLastOrderTime() {
 	require_once PATH_INCLUDE . '/access.php';
@@ -273,25 +272,24 @@ function editLastOrderTime() {
 	$temp = new TableManager('global_settings');
 
 	$lastOrderTime = $temp->getTableData('name="last_order_time"');
-	
 
-	if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['Time_Hour'],$_POST['Time_Minute'])) {
+	if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['Time_Hour'], $_POST['Time_Minute'])) {
 
 		try {
-			$temp->alterEntry($lastOrderTime[0]["id"], 'value', $_POST['Time_Hour'].':'.$_POST['Time_Minute']);
+			$temp->alterEntry($lastOrderTime[0]["id"], 'value', $_POST['Time_Hour'] . ':' . $_POST['Time_Minute']);
 		} catch (Exception $e) {
 			die_error(MEAL_ERROR_EDIT_DEADLINE . $e->getMessage());
 		}
-		$smarty->assign('lastOrderTime', $_POST['Time_Hour'].':'.$_POST['Time_Minute']);
+		$smarty->assign('lastOrderTime', $_POST['Time_Hour'] . ':' . $_POST['Time_Minute']);
 		die_msg(MEAL_SMARTY_TEMPLATE_PATH . '/edit_deadline_fin.tpl');
 
 	} else {
 
-		$smarty->assign('lastOrderTime', $lastOrderTime[0]["value"]);;
+		$smarty->assign('lastOrderTime', $lastOrderTime[0]["value"]);
+		;
 		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH . '/edit_deadline.tpl');
 	}
 }
-
 
 /**
  *shows the orders in a table
@@ -304,9 +302,9 @@ function show_orders() {
 	require_once PATH_INCLUDE . '/global_settings_access.php';
 	require_once PATH_INCLUDE . '/functions.php';
 	require_once "meals_constants.php";
-	
+
 	global $smarty;
-	
+
 	if (!isset($_POST['ordering_day']) or !isset($_POST['ordering_month']) or !isset($_POST['ordering_year'])) {
 		$today = array('day' => date('d'), 'month' => date('m'), 'year' => date('Y'));
 		$smarty->assign('today', $today);
@@ -316,10 +314,10 @@ function show_orders() {
 		$meal_manager = new MealManager();
 		$user_manager = new UserManager();
 		$groupManager = new GroupManager();
-		
+
 		$mysql_orders = array();
 		$order = array();
-		
+
 		if ($_POST['ordering_day'] > 31 or $_POST['ordering_month'] > 12 or $_POST['ordering_year'] < 2000
 				or $_POST['ordering_year'] > 3000) {
 			die_error(MEAL_ERROR_DATE);
@@ -327,36 +325,36 @@ function show_orders() {
 		$date = $_POST['ordering_year'] . '-' . $_POST['ordering_month'] . '-' . $_POST['ordering_day'];
 		try {
 			$orders = $order_manager->getAllOrdersAt($date);
-			
+
 		} catch (MySQLVoidDataException $e) {
 			die_error(MEAL_NO_ORDERS_FOUND);
 		} catch (MySQLConnectionException $e) {
 			die_error($e);
 		}
-		
+
 		if (!count($orders))
 			die_error(MEAL_NO_ORDERS_FOUND);
-		
+
 		foreach ($orders as &$order) {
 			if (!count($meal_data = $meal_manager->getEntryData($order['MID'], 'name'))
 					or !count($user_data = $user_manager->getEntryData($order['UID'], 'name', 'forename', 'GID'))) {
 				echo MEAL_DATABASE_PROB_ENTRY;
 				echo MEAL_DATABASE_PROB_ENTRY_END;
 			} else {
-				
+
 				$order['meal_name'] = $meal_data['name'];
 				$order['user_name'] = $user_data['forename'] . ' ' . $user_data['name'];
 				$order['is_fetched'] = translate_fetched($order['fetched']);
 			}
 		}
-		
+
 		//--------------------
 		//Count all Orders
 		$num_orders = array();
 		$mealIdArray = $meal_manager->GetMealIdsAtDate($date);
 		$counter = 0;
 		foreach ($mealIdArray as $mealIdEntry) {
-			
+
 			$groups = array();//to show how many from different groups ordered something
 			$sp_orders = $order_manager->getAllOrdersOfMealAtDate($mealIdEntry['MID'], $date);
 			$num_orders[$counter]['MID'] = $mealIdEntry['MID'];
@@ -365,7 +363,7 @@ function show_orders() {
 			//--------------------
 			//Get specific Usergroups for Interface
 			foreach ($sp_orders as $sp_order) {
-				
+
 				$user = $user_manager->getEntryData($sp_order['UID'], 'GID');
 				$sql_group = $groupManager->getEntryData($user['GID'], 'name');
 				$group_name = $sql_group['name'];
@@ -389,13 +387,13 @@ function show_orders() {
 				}
 			}
 			//--------------------
-			
+
 			$num_orders[$counter]['user_groups'] = $groups;
 			$counter++;
 		}
-		
+
 		$orders = sort_orders($orders);
-		
+
 		if (isset($num_orders[0]) && $counter) {
 			$smarty->assign('num_orders', $num_orders);
 			$smarty->assign('orders', $orders);
@@ -414,60 +412,52 @@ function delete_old_meals_and_orders() {
 	require_once PATH_INCLUDE . '/meal_access.php';
 	require_once PATH_INCLUDE . '/order_access.php';
 	require_once 'meals_constants.php';
-	
+
 	global $smarty;
 	global $logger;
-	
+
 	$orderManager = new OrderManager('orders');
-	
+
 	//show the User some Messages after finishing the job
 	$error_str = '';
 	$msg_str = '';
-	
+
 	if (!isset($_POST['day']) or !isset($_POST['month']) or !isset($_POST['year'])) {
 		$today = array('day' => date('d'), 'month' => date('m'), 'year' => date('Y'));
 		$smarty->assign('today', $today);
 		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH . '/delete_old_select_date.tpl');
 	} else {
 		$timestamp = strtotime($_POST['year'] . '-' . $_POST['month'] . '-' . $_POST['day']);
-		if ($timestamp == -1) 
+		if ($timestamp == -1 || !!preg_match('/\A[0-9]{1,}\z/', $timestamp)) {
 			die_error(MEAL_ERROR_DATE);
+		}
 		remove_old_meals($timestamp);
-		
+
 		//////////////////////////////////////////////////
 		//Remove old Orders
 		//////////////////////////////////////////////////
-		try { //if-else-handling with two try-catches
-			try {
-				$orders = $orderManager->getTableData();
-			} catch (Exception $e) {
-				die_error(MEAL_NO_ORDERS_FOUND);
-				throw $e;
-				
-				foreach ($orders as $order) {
-					$o_timearray = explode("-", $order["date"]);
-					$o_timestamp = mktime(0, 0, 1, $o_timearray[1], $o_timearray[2], $o_timearray[0]);
-					if ($o_timestamp < $timestamp) {
-						try {
-							$orderManager->delEntry($order['ID']);
-						} catch (Exception $e) {
-							$logger->log(ADMIN, MODERATE, ORDER_ERROR_DELETE . 'dump:' . var_dump($order));
-							die_error(ORDER_ERROR_DELETE);
-						}
-						$msg_str .= ORDER_DELETED . ' ID:' . $order['ID'] . '<br>';
+		try {
+			$orders = $orderManager->getTableData();
+			foreach ($orders as $order) {
+				$o_timearray = explode("-", $order["date"]);
+				$o_timestamp = mktime(0, 0, 1, $o_timearray[1], $o_timearray[2], $o_timearray[0]);
+				if ($o_timestamp < $timestamp) {
+					try {
+						$orderManager->delEntry($order['ID']);
+					} catch (Exception $e) {
+						$logger->log(ADMIN, MODERATE, ORDER_ERROR_DELETE . 'dump:' . var_dump($order));
+						die_error(ORDER_ERROR_DELETE);
 					}
+					$msg_str .= ORDER_DELETED . ' ID:' . $order['ID'] . '<br>';
 				}
 			}
+
 		} catch (Exception $e) {
 			die_error($e->getMessage());
 		}
-		if (!preg_match('/\A[0-9]{1,}\z/', $timestamp)) {
-			die_error(MEAL_ERROR_DATE);
-		}
-		
+
 		//show finished
-		$smarty->assign('messageStr', $msg_str);
-		die_msg(MEAL_SMARTY_TEMPLATE_PATH.'/delete_old_fin.tpl');
+		die_msg($msg_str);
 	}
 }
 
@@ -482,10 +472,10 @@ function delete_meal($ID, $linked_orders) {
 	require_once PATH_INCLUDE . '/meal_access.php';
 	require_once PATH_INCLUDE . '/order_access.php';
 	require_once 'meals_constants.php';
-	
+
 	$mealManager = new MealManager();
 	$orderManager = new OrderManager();
-	
+
 	try {
 		$mealManager->delEntry($ID);
 	} catch (Exception $e) {
@@ -502,6 +492,21 @@ function delete_meal($ID, $linked_orders) {
 			}
 		}
 	}
+}
+
+/**
+ * This function duplicates a meal by creating some Smarty-Variables and calling create_meal()
+ */
+function duplicate_meal($name, $description, $pc_ID, $date, $max_orders) {
+	global $smarty;
+	
+	$smarty->assign('name_str', $name);
+	$smarty->assign('descr_str', $description);
+	$smarty->assign('pc_str', $pc_ID);
+	$smarty->assign('max_order_str', $max_orders);
+	$smarty->assign('date_str', $date);
+	
+	create_meal();
 }
 
 ?>

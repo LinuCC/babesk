@@ -11,9 +11,8 @@
 	
 	global $smarty;
 	
-	$smarty->assign('mealParent', MEAL_SMARTY_TEMPLATE_PATH.'/meals_header.tpl');
-	
-	//$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/meals_header.tpl');
+	define('MEAL_SMARTY_PARENT', MEAL_SMARTY_TEMPLATE_PATH.'/meals_header.tpl');
+	$smarty->assign('mealParent', MEAL_SMARTY_PARENT);
 	
 	if(isset($_GET["action"])) {
 		if($_GET["action"] == 1)//show form for creating a meal
@@ -45,6 +44,8 @@
 		else if ($_GET['action'] == 7) {
 			editLastOrderTime();
 		}
+		else if($_GET['action'] == 8)
+			duplicate_meal($_POST['name'], $_POST['description'], $_POST['pcID'], $_POST['date'], $_POST['max_orders']);
 	}
 	else {//User selects what he want to do
 		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/meals_initial_menu.tpl');

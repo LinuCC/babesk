@@ -9,7 +9,9 @@
 	defined('_AEXEC') or die("Access denied");
 	
 	require_once 'group_functions.php';
+	require_once 'group_constants.php';
 	global $smarty;
+	$smarty->assign('groupsParent', GROUP_SMARTY_PARENT);
 	
 	if ('POST' == $_SERVER['REQUEST_METHOD']) {
 
@@ -26,9 +28,8 @@
 		else if($action == '4'){
 			change_group($_GET['where']);
 		}
-		else {
-			echo 'Da ist etwas mit der GET-Variable action schiefgelaufen!';
-		}
+		else 
+			die_error('Wrong value of GET-variable action!');
 	}
 	else {
 		$smarty->display(PATH_SMARTY.'/templates/administrator/modules/mod_groups/group_menu.tpl');

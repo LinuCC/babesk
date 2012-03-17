@@ -134,6 +134,29 @@ class CardManager extends TableManager {
 		return $card['cardnumber'];
 	}
 	
+	/**
+	 * This function returns the ID of the Card which has the given UserID
+	 * Enter description here ...
+	 * @param numeric_string $ID The ID of the User
+	 * @throws MySQLVoidDataException If there is no card with this UserID
+	 * @throws UnexpectedValueException If MySQL found a User with multiple Cardnumbers
+	 * @return numeric_string the CardID
+	 */
+	function getCardIDByUserID($ID) {
+		require_once PATH_INCLUDE.'/dbconnect.php';
+		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE UID=%s',$this->tablename, $ID));
+		$result = $this->db->query($query);
+		$card = $result->fetch_assoc();
+		if(!$card) {
+			throw new MySQLVoidDataException('MySQL returned no data!');
+		}
+		if($result->fetch_assoc() && $result != NULL) {
+			//MySQL found two entries with the same user. Bad!
+			throw new UnexpectedValueException('The User has two or more cardnumbers! fix it first!');
+		}
+		return $card['ID'];
+	}
+	
 	function getIDByUserID($uid) {
 		require_once PATH_INCLUDE.'/dbconnect.php';
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE UID=%s',$this->tablename, $uid));

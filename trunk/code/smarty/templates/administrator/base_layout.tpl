@@ -14,6 +14,7 @@
 	onload="x = document.getElementsByTagName('input')[0];if(x)if (x.value == '') x.focus();">
 	<div id="header">
 		<div id="top">
+	{nocache}
 	{block name=header}
 			<h3>
 				<a href="index.php?{$sid}">BaBeSK Admin Bereich</a>
@@ -21,6 +22,7 @@
 			<p>Sie sind eingeloggt als {$username}</p>
 			<a href="index.php?action=logout">Ausloggen</a>
 	{/block}
+	{/nocache}
 		</div>
 	</div>
 	<div id="main">

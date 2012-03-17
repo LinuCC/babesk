@@ -21,6 +21,16 @@
 				<td align="center">{$meal.date}</td>
 				<td align="center">{$meal.max_orders}</td>
 				<td align="center"><form action="index.php?section=meals&action=5&id={$meal.ID}" method="POST"><input type="submit" value="löschen"></form></td>
+				<td align="center">
+				<form action="index.php?section=meals&action=8&id={$meal.ID}" method="POST">
+					<input type="hidden" value="{$meal.name}" name="name">
+					<input type="hidden" value="{$meal.description}" name="description">
+					<input type="hidden" value="{$meal.date}" name="date">
+					<input type="hidden" value="{$meal.max_orders}" name="max_orders">
+					<input type="hidden" value="{$meal.price_class}" name="pcID">
+					<input type="submit" value="duplizieren">
+				</form>
+				</td>
 			</tr>
 			{/foreach}
 		</tbody>

@@ -4,7 +4,7 @@ require_once 'AdminUserInterface.php';
 
 class AdminUserProcessing {
 	function __construct() {
-		
+
 		$this->userInterface = new AdminUserInterface();
 		global $logger;
 		$this->logs = $logger;
@@ -42,17 +42,17 @@ class AdminUserProcessing {
 	 * @throws Exception if something gone wrong
 	 */
 	function RegisterUser($forename, $name, $username, $passwd, $passwd_repeat, $cardID, $birthday, $GID, $credits) {
-		
+
 		require_once PATH_INCLUDE . "/user_access.php";
 		require_once PATH_INCLUDE . '/card_access.php';
 		require_once PATH_INCLUDE . '/group_access.php';
 		require_once PATH_INCLUDE . "/logs.php";
-		
+
 		$userManager = new UserManager();
 		$cardManager = new CardManager();
 		$groupManager = new GroupManager();
 		$logger = new Logger;
-		
+
 		//checks the input for wrong Characters etc
 		try {
 			inputcheck($forename, 'name');
@@ -63,7 +63,7 @@ class AdminUserProcessing {
 			inputcheck($cardID, 'card_id');
 			inputcheck($birthday, 'birthday');
 			inputcheck($GID, 'id');
-			
+
 		} catch (Exception $e) {
 			$this->userInterface->ShowRepeatRegister();
 			throw new Exception(
@@ -88,45 +88,47 @@ class AdminUserProcessing {
 		}
 		//check max amount of credits of the group
 		if ($credits > $groupManager->getMaxCredit($GID)) {
-			$this->userInterface->ShowError(
-					$this->messages['error']['max_credits'] . 'maximales Guthaben der Gruppe:'
-							. $groupManager->getMaxCredit($GID) . '€');
+			$this->userInterface
+					->ShowError(
+							$this->messages['error']['max_credits'] . 'maximales Guthaben der Gruppe:'
+									. $groupManager->getMaxCredit($GID) . '€');
 			throw new Exception($this->messages['error']['register']);
 		}
-		
+
 		try {
 			$userManager->addUser($name, $forename, $username, $passwd, $birthday, $credits, $GID);
 		} catch (Exception $e) {
-			$this->userInterface->ShowError(
-					"<br>" . $this->messages['error']['mysql_register'] . $e->getMessage() . "<br>");
+			$this->userInterface
+					->ShowError("<br>" . $this->messages['error']['mysql_register'] . $e->getMessage() . "<br>");
 			$cardManager->delEntry($cardID);
 			throw new Exception($this->messages['error']['register'] . $e->getMessage());
 		}
-		
+
 		try {
 			$cardManager->addCard($cardID, $userManager->getUserID($username));
 		} catch (Exception $e) {
 			$userManager->delEntry($userManager->getUserID($username));//user has no cardID, delete him
 			throw new Exception($this->messages['error']['add_cardid'] . $e->getMessage());
 		}
-		
+
 		$this->userInterface->ShowRegisterFin($name, $forename);
-		
+
 		$_SESSION['CARD_ID'] = NULL;
-		$logger->log(USERS, NOTICE,
-					 "REG_ADDED_USER-ID:" . $cardID . "-NAME:" . $name . "-FORENAME:" . $forename . "-BIRTHDAY:"
-						. $birthday . "-CREDITS:" . $credits . "-GID:" . $GID . "-");
+		$logger
+				->log(USERS, NOTICE,
+						"REG_ADDED_USER-ID:" . $cardID . "-NAME:" . $name . "-FORENAME:" . $forename . "-BIRTHDAY:"
+								. $birthday . "-CREDITS:" . $credits . "-GID:" . $GID . "-");
 	}
-	
+
 	function getGroups() {
-		
+
 		require_once PATH_INCLUDE . "/group_access.php";
-		
+
 		$group_manager = new GroupManager('groups');
-		
+
 		$arr_group_id = array();
 		$arr_group_name = array();
-		
+
 		$sql_groups = $group_manager->getTableData();
 		if (!empty($sql_groups)) {
 			foreach ($sql_groups as $group) {
@@ -142,23 +144,24 @@ class AdminUserProcessing {
 	//--------------------Show Users--------------------
 	//////////////////////////////////////////////////
 	function ShowUsers($filter) {
-		
+
 		require_once PATH_INCLUDE . '/user_access.php';
 		require_once PATH_INCLUDE . '/group_access.php';
-		
+
 		$userManager = new UserManager();
 		$groupManager = new GroupManager();
-		
+
 		try {
 			$groups = $groupManager->getTableData();
 			//$users = $userManager->getTableData();
 			$users = $userManager->getUsersSorted();
 		} catch (Exception $e) {
-			$this->logs->log('ADMIN', 'MODERATE',
-							 sprintf('Error while getting Data from MySQL:%s in %s', $e->getMessage(), __METHOD__));
+			$this->logs
+					->log('ADMIN', 'MODERATE',
+							sprintf('Error while getting Data from MySQL:%s in %s', $e->getMessage(), __METHOD__));
 			$this->userInterface->ShowError($this->messages['error']['get_data_failed']);
 		}
-		
+
 		foreach ($users as &$user) {
 			$is_named = false;
 			foreach ($groups as $gn) {
@@ -170,7 +173,7 @@ class AdminUserProcessing {
 			}
 			$is_named or $user['groupname'] = 'Error: This group is non-existent!';
 		}
-		
+
 		$this->userInterface->ShowUsers($users);
 	}
 	//////////////////////////////////////////////////
@@ -182,41 +185,45 @@ class AdminUserProcessing {
 	 * @param number $uid the UserID
 	 */
 	function DeleteConfirmation($uid) {
-		
+
 		require_once PATH_INCLUDE . '/user_access.php';
-		
+
 		$userManager = new UserManager();
-		
+
 		try {
 			$user = $userManager->getEntryData($uid, 'forename', 'name');
 		} catch (Exception $e) {
 			var_dump($uid);
-			$this->userInterface->ShowError(
-					$this->messages['error']['uid_get_param'] . ';<br>ExceptionMessage:' . $e->getMessage());
+			$this->userInterface
+					->ShowError($this->messages['error']['uid_get_param'] . ';<br>ExceptionMessage:' . $e->getMessage());
 		}
-		
+
 		$this->userInterface->ShowDeleteConfirmation($uid, $user['forename'], $user['name']);
 	}
-	
+
 	function DeleteUser($uid) {
-		
+
 		require_once PATH_INCLUDE . '/user_access.php';
+		require_once PATH_INCLUDE . '/card_access.php';
 		$userManager = new UserManager();
+		$cardManager = new CardManager();
+
 		try {
 			$userManager->delEntry($uid);
+			$cardManager->delEntry($cardManager->getCardIDByUserID($uid));
 		} catch (Exception $e) {
 			$this->userInterface->ShowError($this->messages['error']['delete'] . $e->getMessage());
 		}
 		$this->userInterface->ShowDeleteFin();
 	}
-	
+
 	/**
 	 * This function prepares and shows the ChangeUser-Form
 	 * Enter description here ...
 	 * @param string (numeric) $uid The ID of the User
 	 */
 	function ChangeUserForm($uid) {
-		
+
 		require_once PATH_INCLUDE . '/user_access.php';
 		require_once PATH_INCLUDE . '/group_access.php';
 		require_once PATH_INCLUDE . '/card_access.php';
@@ -234,10 +241,10 @@ class AdminUserProcessing {
 		} catch (Exception $e) {
 			$this->userInterface->ShowError($this->messages['error']['groups_get_param'] . $e->getMessage());
 		}
-		
+
 		$this->userInterface->ShowChangeUser($user, $groups['arr_gid'], $groups['arr_group_name'], $cardnumber);
 	}
-	
+
 	/**
 	 * This function changes the user by the given parameters.
 	 * This function just alters the entries of the table, so if
@@ -256,8 +263,8 @@ class AdminUserProcessing {
 	 * @throws Exception
 	 */
 	function ChangeUser($old_id, $id, $forename, $name, $username, $passwd, $passwd_repeat, $birthday, $GID, $credits,
-						$locked, $cardnumber, $soli) {
-		
+			$locked, $cardnumber, $soli) {
+
 		require_once PATH_INCLUDE . '/user_access.php';
 		require_once PATH_INCLUDE . '/card_access.php';
 		$userManager = new UserManager();
@@ -272,9 +279,10 @@ class AdminUserProcessing {
 			if ($cardnumber)
 				inputcheck($cardnumber, 'card_id');
 		} catch (Exception $e) {
-			$this->userInterface->ShowError(
-					$this->messages['error']['input1'] . '"' . $e->getMessage() . '"'
-							. $this->messages['error']['input2']);
+			$this->userInterface
+					->ShowError(
+							$this->messages['error']['input1'] . '"' . $e->getMessage() . '"'
+									. $this->messages['error']['input2']);
 			//throw new Exception($this->messages['error']['change']);
 		}
 		if (isset($passwd, $passwd_repeat)) {
@@ -288,29 +296,31 @@ class AdminUserProcessing {
 			}
 		}
 		try {
-			$userManager->alterUser($old_id, $id, $name, $forename, $username, hash_password($passwd), $birthday,
-									$credits, $GID, $locked, $soli);
+			$userManager
+					->alterUser($old_id, $id, $name, $forename, $username, hash_password($passwd), $birthday, $credits,
+								$GID, $locked, $soli);
 			if ($cardnumber) {
 				$cardManager->changeCardnumber($cardManager->getIDByUserID($id), $cardnumber);
 				try {
 					$cardManager->addCardIdChange($cardManager->getIDByUserID($id));
 				} catch (Exception $e) {
 					$this->userInterface->ShowError($this->messages['error']['card_id_change']);
-					$this->logs->log(ADMIN, MODERATE,
-									 'Error: Could not finish addCardIdChange() in ' . __METHOD__ . '; CardID: '
-									 . $cardManager->getIDByUserID($id));
+					$this->logs
+							->log(ADMIN, MODERATE,
+									'Error: Could not finish addCardIdChange() in ' . __METHOD__ . '; CardID: '
+											. $cardManager->getIDByUserID($id));
 				}
 			}
 		} catch (Exception $e) {
 			$this->userInterface->ShowError($this->messages['error']['change'] . $e->getMessage());
 		}
-		$this->userInterface->ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID, $locked,
-												$soli);
+		$this->userInterface
+				->ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID, $locked, $soli);
 	}
-	
+
 	var $messages = array();
 	private $userInterface;
-	
+
 	/**
 	 *@var Logger
 	 */
