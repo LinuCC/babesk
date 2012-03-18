@@ -24,9 +24,9 @@
 	define('MEAL_ERROR_EDIT_DEADLINE', 'Ein Fehler ist beim ändern der Deadline aufgetreten!');
 	
 	define('MEAL_ADDED','Mahlzeit wurde erfolgreich hinzugefügt.');
-	define('MEAL_DELETED','Mahlzeit wurde erfolgreich geläscht.');
+	define('MEAL_DELETED','Mahlzeit wurde erfolgreich gelöscht.');
 	
-	define('ORDER_DELETED','Bestellung wurde erfolgreich geläscht.');
+	define('ORDER_DELETED','Bestellung wurde erfolgreich gelöscht.');
 	define('ORDER_FETCHED','Bestellung abgeholt.');
 	define('ORDER_NOT_FETCHED','Bestellung nicht abgeholt.');
 	

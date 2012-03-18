@@ -30,17 +30,34 @@ function die_msg($string, $inh_path = BASE_PATH) {
 	global $smarty;
 	$smarty->assign('inh_path', $inh_path);
 	$smarty->assign('message', $string);
-	$smarty->getTemplateVars();
 	$smarty->display(PATH_SMARTY.'/templates/administrator/message.tpl');
 	die();
 }
-
-function show_error($str) {
-	///@todo add .tpl where you  can append the error to the body-block
-	///or a new message-block
+/**
+ * show_error shows an error to the user.
+ * accepts one or two parameter. If one, Smarty will inherit from the standard-file.
+ * if two parameter are given, Smarty will inherit from the given string.
+ * @param string $string The message
+ * @param string $inh_path The Path to the template-file for Smarty to inherit from
+ */
+function show_error($str, $inh_path = BASE_PATH) {
+	global $smarty;
+	$smarty->assign('inh_path', $inh_path);
+	$smarty->assign('error', $string);
+	$smarty->display(PATH_SMARTY.'/templates/administrator/message.tpl');
 }
 
-function show_msg($str) {
-	///@todo add .tpl where you  can append the message to the body-block
+/**
+ * show_msg shows a message to the user.
+ * accepts one or two parameter. If one, Smarty will inherit from the standard-file.
+ * if two parameter are given, Smarty will inherit from the given string.
+ * @param string $string The message 
+ * @param string $inh_path The Path to the template-file for Smarty to inherit from
+ */
+function show_msg($str, $inh_path = BASE_PATH) {
+	global $smarty;
+	$smarty->assign('inh_path', $inh_path);
+	$smarty->assign('message', $string);
+	$smarty->display(PATH_SMARTY.'/templates/administrator/message.tpl');
 }
 ?>

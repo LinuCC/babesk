@@ -152,7 +152,7 @@ function remove_old_meals($search_date) {
 				die_error(MEAL_ERROR_DELETE . $e->getMessage() . ' ' . __FUNCTION__);
 			}
 			$logger->log(ADMIN, NOTICE, MEAL_DELETED_LOG . ', name:' . $meal['name']);
-			die_msg(sprintf('%s, name:%s <br>', MEAL_DELETED, $meal['name']));
+			show_msg(sprintf('%s, name:%s <br>', MEAL_DELETED, $meal['name']));
 		}
 	}
 }
