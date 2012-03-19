@@ -1,4 +1,4 @@
-{extends file=$base_path}{block name=content}
+{extends file=$groupsParent}{block name=content}
 <table>
 	<thead> 
 		<tr> 

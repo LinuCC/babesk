@@ -29,9 +29,9 @@
          * @return false if error occured
          */
         function log($category, $severity, $msg) {
+        	$msg = str_replace('"', '\'', $msg);
             $query = sql_prev_inj(sprintf('INSERT INTO logs(category, severity, time, message) 
             			VALUES ("%s", "%s", CURRENT_TIMESTAMP, "%s");', $category, $severity, $msg));
-            
             $result = $this->db->query($query);
             if (!$result) {
         	   echo DB_QUERY_ERROR.$this->db->error;

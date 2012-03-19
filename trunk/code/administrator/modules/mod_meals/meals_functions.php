@@ -35,28 +35,28 @@ function create_meal() {
 		$date_ar = array("day" => $_POST['Date_Day'], "month" => $_POST['Date_Month'], "year" => $_POST['Date_Year']);
 
 		if (strlen($name) > 255) {
-			echo MEAL_ERROR_NAME . "<br>";
 			$logger->log($categorie, $severity, "MEAL_ERROR_NAME");
+			die_error(MEAL_ERROR_NAME . "<br>");
 			return false;
 		}
 		if (strlen($description) > 1000) {
-			echo MEAL_ERROR_DESCRIPTION . "<br>";
 			$logger->log($categorie, $severity, "MEAL_ERROR_DESCRIPTION");
+			die_error(MEAL_ERROR_DESCRIPTION . "<br>");
 			return false;
 		}
 		if (!preg_match('/\A^[0-9]{1,6}\z/', $price_class)) {
-			echo MEAL_ERROR_PRICE_CLASS . "<br>";
 			$logger->log($categorie, $severity, "MEAL_ERROR_PRICE_CLASS");
+			die_error(MEAL_ERROR_PRICE_CLASS . "<br>");
 			return false;
 		}
 		if (!preg_match('/\A^[0-9]{1,}\z/', $max_orders)) {
-			echo MEAL_ERROR_MAX_ORDERS . "<br>";
 			$logger->log($categorie, $severity, "MEAL_ERROR_MAX_ORDERS");
+			die_error(MEAL_ERROR_MAX_ORDERS . "<br>");
 			return false;
 		}
 		if ($date_ar['day'] > 31 or $date_ar['month'] > 12 or $date_ar['year'] < 2000 or $date_ar['year'] > 3000) {
-			echo MEAL_ERROR_DATE . '<br>';
 			$logger->log($categorie, $severity, 'MEAL_ERROR_DATE');
+			die_error(MEAL_ERROR_DATE . '<br>');
 			return false;
 		}
 		//convert the date for MySQL-Server
@@ -126,8 +126,12 @@ function remove_old_meals($search_date) {
 
 	global $logger;
 	$mealmanager = new MealManager('meals');
-	$meals = $mealmanager->getTableData();
-
+	try {
+		$meals = $mealmanager->getTableData();
+	} catch (Exception $e) {
+		return;
+	}
+	
 	if (preg_match('/\A[0-9]{2,4}-[0-9]{2}-[0-9]{2}\z/', $search_date)) {
 		$search_array = explode('-', $search_date);
 		$search_timestamp = mktime(0, 0, 1, $search_array[1], $search_array[2], $search_array[0]);
@@ -137,7 +141,6 @@ function remove_old_meals($search_date) {
 		echo MEAL_ERROR_PARAM . ' Funktion: ' . __FUNCTION__ . '<br>';
 		return;
 	} else {
-		var_dump($search_date);
 		$logger->log(ADMIN, MODERATE, 'MEAL_F_ERROR_DATE_FORMAT');
 		die_error(MEAL_F_ERROR_DATE_FORMAT);
 	}
@@ -152,7 +155,6 @@ function remove_old_meals($search_date) {
 				die_error(MEAL_ERROR_DELETE . $e->getMessage() . ' ' . __FUNCTION__);
 			}
 			$logger->log(ADMIN, NOTICE, MEAL_DELETED_LOG . ', name:' . $meal['name']);
-			show_msg(sprintf('%s, name:%s <br>', MEAL_DELETED, $meal['name']));
 		}
 	}
 }
@@ -428,7 +430,7 @@ function delete_old_meals_and_orders() {
 		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH . '/delete_old_select_date.tpl');
 	} else {
 		$timestamp = strtotime($_POST['year'] . '-' . $_POST['month'] . '-' . $_POST['day']);
-		if ($timestamp == -1 || !!preg_match('/\A[0-9]{1,}\z/', $timestamp)) {
+		if ($timestamp == -1 || !preg_match('/\A[0-9]{1,}\z/', $timestamp)) {
 			die_error(MEAL_ERROR_DATE);
 		}
 		remove_old_meals($timestamp);
@@ -482,7 +484,11 @@ function delete_meal($ID, $linked_orders) {
 		throw MEAL_ERROR_DELETE . ':' . $e->getMessage();
 	}
 	if ($linked_orders) {
-		$orders = $orderManager->getAllOrdersOfMeal($ID);
+		try {
+			$orders = $orderManager->getAllOrdersOfMeal($ID);
+		} catch (MySQLVoidDataException $e) {
+			return; //no need to go through foreach
+		}
 		foreach ($orders as $order) {
 			try {
 				$orderManager->delEntry($order['ID']);
