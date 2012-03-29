@@ -116,4 +116,18 @@
     		throw new WrongInputException($str, $name_str); 
     	}
     }
+    
+    /**
+     * returns the first day of the week weeknr in the year $year
+     * @param unknown_type The year in which the week is
+     * @param unknown_type The weeknumber
+     */
+    function getFirstDayOfWeek($year, $weeknr)
+    {
+    	$offset = date('w', mktime(0,0,0,1,1,$year));
+    	$offset = ($offset < 5) ? 1-$offset : 8-$offset;
+    	$monday = mktime(0,0,0,1,1+$offset,$year);
+    
+    	return strtotime('+' . ($weeknr - 1) . ' weeks', $monday);
+    }
 ?>

@@ -22,15 +22,18 @@ class SoliCouponsManager extends TableManager {
 	/**
 	 * Checks if the User of the given UserID has a valid Coupon-Activation
 	 * @param numeric_string $UID
+	 * @param $date the date the Coupon has to be valid (timestamp or YYYY-MM-DD)
 	 */
-	function HasValidCoupon($UID) {
+	function HasValidCoupon($UID, $date) {
 		try {
 			$coupons = $this->getTableData(sprintf('UID = %s', $UID));
 		} catch (MySQLVoidDataException $e) {
 			return false;
 		}
-		
-		$now = time();
+		if(is_numeric($date))
+			$now = $date;
+		else
+			$now = strtotime($date);
 		foreach($coupons as $coupon) {
 			$start = strtotime($coupon['startdate']);
 			$end = strtotime($coupon['enddate']);

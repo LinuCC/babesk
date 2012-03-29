@@ -160,7 +160,6 @@
 	    //Table 'soli_orders'
 		$sql[12] = 'CREATE TABLE IF NOT EXISTS `soli_orders` (
 		                `ID` int(11) unsigned NOT NULL auto_increment,
-                        `MID` int(11) unsigned NOT NULL,
                         `UID` bigint(11) unsigned NOT NULL,
                         `date` date NOT NULL,
                         `IP` binary(16) NOT NULL,

@@ -19,7 +19,7 @@
 			<h3>
 				<a href="index.php?{$sid}">BaBeSK Admin Bereich</a>
 			</h3>
-			<p>Sie sind eingeloggt als {$username}</p>
+			<p>Sie sind eingeloggt als {$_ADMIN_USERNAME}</p>
 			<a href="index.php?action=logout">Ausloggen</a>
 	{/block}
 	{/nocache}

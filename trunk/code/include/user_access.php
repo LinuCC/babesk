@@ -49,7 +49,7 @@ class UserManager extends TableManager{
 	function getUsername($uid) {
 		return $this->getEntryValue($uid, 'username');
 	}
-
+	
 	/**
 	 *  @todo this function is not necessary anymore, functionality is alredy in alterUser(), replace getUserID
 	 */

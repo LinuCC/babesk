@@ -114,7 +114,7 @@
         	parent::addEntry('MID', $MID,
         					'UID', $UID, 
         					'IP', $IP, 
-        					'ordertime', time(), 
+        					'ordertime', date("Y-m-d h:i:s"), 
         					'date', $date);
         }
         

@@ -16,7 +16,7 @@
 			<td align="center">{$coupon['username']}</td>
 			<td align="center">{$coupon['startdate']}</td>
 			<td align="center">{$coupon['enddate']}</td>
-			<td align="center"><form action='index.php?section=' method='post'>
+			<td align="center"><form action='index.php?section=soli&action=5&ID={$coupon["ID"]}' method='post'>
 				<input type="submit" value='löschen'>
 			</form></td>
 		</tr>

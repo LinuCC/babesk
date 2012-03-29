@@ -53,7 +53,7 @@ if (!$login) {
 
 //login.php sets $login to true so this is executed after a successful log-in
 if ($login) {
-	$smarty->assign('username', $_SESSION['username']);
+	$smarty->assign('_ADMIN_USERNAME', $_SESSION['username']);
 	$smarty->assign('sid', htmlspecialchars(SID));
 	$smarty->assign('base_path', BASE_PATH);
 	//include a module if selected

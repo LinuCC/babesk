@@ -8,14 +8,15 @@ require_once PATH_INCLUDE . '/soli_coupons_access.php';
 global $smarty;
 global $logger;
 
+$mealManager = new MealManager();
+$userManager = new UserManager();
+$orderManager = new OrderManager();
+$soliOrderManager = new SoliOrderManager();
+$soliCouponManager = new SoliCouponsManager();
+$priceClassManager = new PriceClassManager();
+$gbManager = new GlobalSettingsManager();
+
 if (isset($_GET['order'])) {
-	$mealManager = new MealManager();
-	$userManager = new UserManager();
-	$orderManager = new OrderManager();
-	$soliOrderManager = new SoliOrderManager();
-	$soliCouponManager = new SoliCouponsManager();
-	$priceClassManager = new PriceClassManager();
-	$gbManager = new GlobalSettingsManager();
 
 	$payment = NULL;
 
@@ -46,7 +47,7 @@ if (isset($_GET['order'])) {
 				die();
 			}
 
-			if ($soliCouponManager->HasValidCoupon($_SESSION['uid'])) {
+			if ($soliCouponManager->HasValidCoupon($_SESSION['uid'], $meal['date'])) {
 				$payment = $gbManager->getSoliPrice();
 			}
 
@@ -66,12 +67,12 @@ if (isset($_GET['order'])) {
 			die();
 		}
 		//////////////////////////////////////////////////
-		//add meal
+		//add order
 		try {
-
+			$orderID = $orderManager->getNextAutoIncrementID();
 			$orderManager->addOrder($_GET['order'], $_SESSION['uid'], $_SERVER['REMOTE_ADDR'], $meal['date']);
-			if ($soliCouponManager->HasValidCoupon($_SESSION['uid']))
-				$soliOrderManager->addSoliOrder($_SESSION['uid'], $_SERVER['REMOTE_ADDR'], $meal['date'],
+			if ($soliCouponManager->HasValidCoupon($_SESSION['uid'], $meal['date']))
+				$soliOrderManager->addSoliOrder($orderID, $_SESSION['uid'], $_SERVER['REMOTE_ADDR'], $meal['date'],
 												$meal['name'], $meal['price'], $meal['date'],
 												$gbManager->getSoliPrice());
 		} catch (Exception $e) {
@@ -153,7 +154,7 @@ if (isset($_GET['order'])) {
 	foreach ($sql_meals as &$meal) {
 		$meal_day = date('N', strtotime($meal['date']));
 		$meal_weeknum = date('W', strtotime($meal['date']));
-		if ($userManager->isSoli($_SESSION['uid']))
+		if ($soliCouponManager->HasValidCoupon($_SESSION['uid'], $meal['date']))
 			$meal['price'] = $gsManager->getSoliPrice();
 		else
 			$meal['price'] = $pcManager->getPrice($_SESSION['uid'], $meal['ID']);
