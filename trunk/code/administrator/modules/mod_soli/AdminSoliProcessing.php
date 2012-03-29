@@ -13,6 +13,7 @@ class AdminSoliProcessing {
 		$this->msg = array('ERR_SQL_NO_DATA' => 'fehlerhafter ID-Eintrag',
 				'ERR_SQL' => 'Ein Fehler ist bei der Verbindung zum SQL-Server aufgetreten',
 				'ERR_SQL_NO_ORDERS' => 'Es wurden keine Bestellungen aufgegeben',
+				'ERR_ORDERS_NOT_FOUND' => 'Es wurden keine Bestellungen für den angegebenen Zeitraum gefunden',
 				'ERR_USER_NO_SOLI' => 'Der angegebene Benutzer ist nicht Soli-berechtigt',
 				'ERR_USER_NO_SOLI_FOUND' => 'Es konnten keine Soli-Benutzer gefunden werden',
 				'ERR_ADD_COUPON' => 'Ein Fehler ist beim Hinzufügen eines Coupons aufgetreten',
@@ -211,26 +212,37 @@ class AdminSoliProcessing {
 	 * @param $uid the UserID of the soli-user who ordered meals
 	 */
 	function ShowSoliOrdersByDate($weeknum, $uid) {
+		require_once PATH_INCLUDE . '/user_access.php';
+		$userManager = new UserManager();
 		if ($weeknum && $uid) {
+			
 			$orders = array();
 			$monday = getFirstDayOfWeek(date('Y'), $weeknum);
+			$sum_pricediff = 0.00;
+			
 			for ($i = 0; $i < 5; $i++) {
 				$buffer = array();
 				try {
 					$buffer = $this->soliOrderManager->getOrdersByUserandMealdate($uid,
 																				  date('Y-m-d', $monday + ($i * 86400)));
-				} catch (MySQLVoidDataException $e) {
-
-				}
-				foreach($buffer as $order)
-					$orders [] = $order;
+				} catch (MySQLVoidDataException $e) {}
+				foreach ($buffer as $order)
+					$orders[] = $order;
 			}
-			var_dump($orders);
-			die();
+			if(!count($orders))
+				$this->soliInterface->ShowError($this->msg['ERR_ORDERS_NOT_FOUND']);
+			
+			
+			foreach ($orders as &$order) {
+				$sum_pricediff += $order['mealprice'] - $order['soliprice'];
+			}
+			
+			$username = $userManager->getForename($uid).' '.$userManager->getName($uid);
+			$this->soliInterface->ShowSpecOrders($orders, $weeknum, $username, $sum_pricediff);
+
 		} else {
+			
 			//Show Form to fill out Weeknumber and Soli
-			require_once PATH_INCLUDE . '/user_access.php';
-			$userManager = new UserManager();
 			$solis = $userManager->getAllSoli();
 			$this->soliInterface->AskShowSoliUser($solis);
 		}
@@ -253,6 +265,5 @@ class AdminSoliProcessing {
 	 */
 	protected $msg = array();
 }
-
 
 ?>

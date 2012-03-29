@@ -29,6 +29,14 @@ class AdminSoliInterface extends AdminInterface {
 		$this->smarty->display($this->soliPath.'conf_del_coupon.tpl');
 	}
 	
+	function ShowSpecOrders($orders, $weeknum, $username, $sum_pricediff) {
+		$this->smarty->assign('orders', $orders);
+		$this->smarty->assign('ordering_date', $weeknum);
+		$this->smarty->assign('name', $username);
+		$this->smarty->assign('sum', $sum_pricediff);
+		$this->smarty->display($this->soliPath.'show_orders.tpl');
+	}
+	
 	function AskShowSoliUser($solis) {
 		$this->smarty->assign('solis', $solis);
 		$this->smarty->display($this->soliPath.'show_orders_select_date.tpl');

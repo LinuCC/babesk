@@ -2,7 +2,7 @@
 
 <table>
 		<thead>
-			<tr>
+			<tr bgcolor="#33CFF">
 				<th>ID</th>
 				<th>Name</th>
 				<th>Beschreibung</th>
@@ -13,15 +13,14 @@
 		</thead>
 		<tbody>
 			{foreach $meals as $meal}
-			<tr>
+			<tr bgcolor="#FFC33">
 				<td align="center">{$meal.ID}</td>
 				<td align="center">{$meal.name}</td>
 				<td align="center">{$meal.description}</td>
 				<td align="center">{$meal.price_class}</td>
 				<td align="center">{$meal.date}</td>
 				<td align="center">{$meal.max_orders}</td>
-				<td align="center"><form action="index.php?section=meals&action=5&id={$meal.ID}" method="POST"><input type="submit" value="löschen"></form></td>
-				<td align="center">
+				<td align="center"><form action="index.php?section=meals&action=5&id={$meal.ID}" method="POST"><input type="submit" value="löschen"></form>
 				<form action="index.php?section=meals&action=8&id={$meal.ID}" method="POST">
 					<input type="hidden" value="{$meal.name}" name="name">
 					<input type="hidden" value="{$meal.description}" name="description">
