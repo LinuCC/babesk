@@ -1,13 +1,27 @@
-{extends file=$base_path}{block name=content}
-<form action="index.php?section=soli&action=2" method="post">
-Name:
-	<select name="name">
-	{foreach item=x from=$solis}
-	<option value='{$x}'> {$x}</option>
+{extends file=$soliParent}{block name=content}
+<table cellpadding='10' cellspacing='10'>
+	<thead> 
+		<tr> 
+			<th align="center">ID</th>
+			<th align="center">Benutzername</th>
+			<th align="center">Startdatum</th>
+			<th align="center">Enddatum</th>
+		</tr>
+	</thead>
+	
+	<tbody>
+	{foreach $coupons as $coupon}
+		<tr>
+			<td align="center">{$coupon['ID']}</td>
+			<td align="center">{$coupon['username']}</td>
+			<td align="center">{$coupon['startdate']}</td>
+			<td align="center">{$coupon['enddate']}</td>
+			<td align="center"><form action='index.php?section=' method='post'>
+				<input type="submit" value='löschen'>
+			</form></td>
+		</tr>
 	{/foreach}
-	</select><br>
-Verfallsdatum:
-{html_select_date end_year="+1"}<br>
-	<input type="submit" value="Absenden" />
-</form>
+	</tbody>
+
+</table>
 {/block}

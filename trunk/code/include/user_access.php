@@ -25,6 +25,30 @@ class UserManager extends TableManager{
 		$user = parent::getTableData('username="'.$username.'"');
 		return $user[0]['ID'];
 	}
+	
+	/**
+	 * returns the forename of the given ID of the user
+	 * @param numeric_string $uid The ID of the User
+	 */
+	function getForename($uid) {
+		return $this->getEntryValue($uid, 'forename');
+	}
+	
+	/**
+	 * returns the name of the given ID of the user
+	 * @param numeric_string $uid The ID of the User
+	 */
+	function getName($uid) {
+		return $this->getEntryValue($uid, 'name');
+	}
+	
+	/**
+	 * returns the username of the given ID of the user
+	 * @param numeric_string $uid The ID of the User
+	 */
+	function getUsername($uid) {
+		return $this->getEntryValue($uid, 'username');
+	}
 
 	/**
 	 *  @todo this function is not necessary anymore, functionality is alredy in alterUser(), replace getUserID
@@ -225,6 +249,13 @@ class UserManager extends TableManager{
 		return $is_soli['soli'];
 	}
 	
+	/**
+	 * returns all User with Soli-Status
+	 */
+	function getAllSoli() {
+		$solis = $this->getTableData('soli = 1');
+		return $solis;
+	}
 	
 	/**
 	* Locks an account

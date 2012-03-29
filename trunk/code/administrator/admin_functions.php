@@ -15,7 +15,7 @@ function die_error($string, $inh_path = BASE_PATH) {
 	global $smarty;
 	$smarty->assign('inh_path', $inh_path);
 	$smarty->assign('error', $string);
-	$smarty->display(PATH_SMARTY.'/templates/administrator/message.tpl');
+	$smarty->display(PATH_SMARTY.'/templates/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5($_SERVER['REQUEST_URI']));
 	die();
 }
 
@@ -30,6 +30,6 @@ function die_msg($string, $inh_path = BASE_PATH) {
 	global $smarty;
 	$smarty->assign('inh_path', $inh_path);
 	$smarty->assign('message', $string);
-	$smarty->display(PATH_SMARTY.'/templates/administrator/message.tpl');
+	$smarty->display(PATH_SMARTY.'/templates/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5($_SERVER['REQUEST_URI']));
 	die();
 }

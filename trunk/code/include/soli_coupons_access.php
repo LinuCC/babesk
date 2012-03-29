@@ -8,6 +8,18 @@ class SoliCouponsManager extends TableManager {
 	}
 	
 	/**
+	 * returns all Coupons of soli_coupons that are in the Table
+	 */
+	function getAllCoupons() {
+		$coupons = $this->getTableData();
+		return $coupons;
+	}
+	
+	function addCoupon($startdate, $enddate, $uid) {
+		$this->addEntry('startdate', $startdate, 'enddate', $enddate, 'UID', $uid);
+	}
+	
+	/**
 	 * Checks if the User of the given UserID has a valid Coupon-Activation
 	 * @param numeric_string $UID
 	 */
@@ -29,6 +41,7 @@ class SoliCouponsManager extends TableManager {
 		}
 		return false;
 	}
+	
 }
 
 

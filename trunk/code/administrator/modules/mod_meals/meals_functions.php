@@ -34,30 +34,27 @@ function create_meal() {
 		$max_orders = $_POST['max_orders'];
 		$date_ar = array("day" => $_POST['Date_Day'], "month" => $_POST['Date_Month'], "year" => $_POST['Date_Year']);
 
+		try {
+			inputcheck($price_class, 'id', 'pc');
+			inputcheck($max_orders, 'id', 'maxorders');
+		} catch (WrongInputException $e) {
+			if ($e->getFieldName() == 'pc')
+				die_error(MEAL_ERROR_PRICE_CLASS);
+			else if ($e->getFieldName() == 'maxorders')
+				die_error(MEAL_ERROR_MAX_ORDERS . "<br>");
+		}
+
 		if (strlen($name) > 255) {
 			$logger->log($categorie, $severity, "MEAL_ERROR_NAME");
 			die_error(MEAL_ERROR_NAME . "<br>");
-			return false;
 		}
 		if (strlen($description) > 1000) {
 			$logger->log($categorie, $severity, "MEAL_ERROR_DESCRIPTION");
 			die_error(MEAL_ERROR_DESCRIPTION . "<br>");
-			return false;
-		}
-		if (!preg_match('/\A^[0-9]{1,6}\z/', $price_class)) {
-			$logger->log($categorie, $severity, "MEAL_ERROR_PRICE_CLASS");
-			die_error(MEAL_ERROR_PRICE_CLASS . "<br>");
-			return false;
-		}
-		if (!preg_match('/\A^[0-9]{1,}\z/', $max_orders)) {
-			$logger->log($categorie, $severity, "MEAL_ERROR_MAX_ORDERS");
-			die_error(MEAL_ERROR_MAX_ORDERS . "<br>");
-			return false;
 		}
 		if ($date_ar['day'] > 31 or $date_ar['month'] > 12 or $date_ar['year'] < 2000 or $date_ar['year'] > 3000) {
 			$logger->log($categorie, $severity, 'MEAL_ERROR_DATE');
 			die_error(MEAL_ERROR_DATE . '<br>');
-			return false;
 		}
 		//convert the date for MySQL-Server
 		$date_conv = $date_ar["year"] . "-" . $date_ar["month"] . "-" . $date_ar["day"];
@@ -131,7 +128,7 @@ function remove_old_meals($search_date) {
 	} catch (Exception $e) {
 		return;
 	}
-	
+
 	if (preg_match('/\A[0-9]{2,4}-[0-9]{2}-[0-9]{2}\z/', $search_date)) {
 		$search_array = explode('-', $search_date);
 		$search_timestamp = mktime(0, 0, 1, $search_array[1], $search_array[2], $search_array[0]);
@@ -493,8 +490,9 @@ function delete_meal($ID, $linked_orders) {
 			try {
 				$orderManager->delEntry($order['ID']);
 			} catch (Exception $e) {
-				echo MEAL_ERROR_DEL_ORDER . ': BestellungsID:' . $order['ID'] . 'Gemeldetes Problem:'
-						. $e->getMessage() . '<br>';
+				die_error(
+						MEAL_ERROR_DEL_ORDER . ': BestellungsID:' . $order['ID'] . 'Gemeldetes Problem:'
+								. $e->getMessage() . '<br>');
 			}
 		}
 	}
@@ -505,13 +503,13 @@ function delete_meal($ID, $linked_orders) {
  */
 function duplicate_meal($name, $description, $pc_ID, $date, $max_orders) {
 	global $smarty;
-	
+
 	$smarty->assign('name_str', $name);
 	$smarty->assign('descr_str', $description);
 	$smarty->assign('pc_str', $pc_ID);
 	$smarty->assign('max_order_str', $max_orders);
 	$smarty->assign('date_str', $date);
-	
+
 	create_meal();
 }
 

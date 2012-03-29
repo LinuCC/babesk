@@ -36,7 +36,7 @@
 			} catch (Exception $e) {
 				die_error($e->getMessage());
 			}
-			die_msg(MEAL_DELETED);
+			die_msg(MEAL_DELETED, MEAL_SMARTY_PARENT);
 		}
 		else if ($_GET['action'] == 6) {
 			edit_infotext();

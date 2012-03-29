@@ -25,7 +25,12 @@
         }
     }
 
-    
+    /**
+     * Formats a dateformat to d.m.Y
+     * This function formats the parameter $date to d.m.Y using strtotime (if the Parameter is a datestring) and date()
+     * @param $date The datestring; UnixTimestamp or date string 
+     * @return string
+     */
     function formatDate($date) {
         if (is_numeric($date)) {        //a Unix timestamp
             return date('d.m.Y', $date);
@@ -35,6 +40,11 @@
         }
     }
     
+    /**
+     * Formats a dateformat to d.m.Y H:i
+     * @param $date UnixTimestamp or date string 
+     * @return string
+     */
     function formatDateTime($date) {
         if (is_numeric($date)) {        //a Unix timestamp
             return date('d.m.Y H:i', $date);
