@@ -20,15 +20,15 @@
 			<td>{$order.meal_name}</td>
 			<td>{$order.price} EURO</td>
 			<td>{$soli_price} EURO</td>
-			<td>{$from_bank} EURO</td>
-			<td style="text-align: center;">{$order.is_fetched}</td>
+			<td>{$order.price - $soli_price} EURO</td>
+			<td>{$order.is_fetched}</td>
 		</tr>
 	{/foreach}
 	<tr bgcolor="FFC33">
 		<td></td>
 		<td></td>
 		<td></td>
-		<td><b><u>Summe:</u></b></td>
+		<td><b><u>Differenz zwischen normaler Preis und Soli-Preis:</u></b></td>
 		<td>{$sum} EURO</td>
 		<td></td>
 	</tr>

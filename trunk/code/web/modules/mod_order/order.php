@@ -2,9 +2,9 @@
 //No direct access
 defined('_WEXEC') or die("Access denied");
 require_once 'order_constants.php';
-require_once PATH_INCLUDE.'/global_settings_access.php';
-require_once PATH_INCLUDE.'/soli_order_access.php';
-require_once PATH_INCLUDE.'/soli_coupons_access.php';
+require_once PATH_INCLUDE . '/global_settings_access.php';
+require_once PATH_INCLUDE . '/soli_order_access.php';
+require_once PATH_INCLUDE . '/soli_coupons_access.php';
 global $smarty;
 global $logger;
 
@@ -16,20 +16,21 @@ if (isset($_GET['order'])) {
 	$soliCouponManager = new SoliCouponsManager();
 	$priceClassManager = new PriceClassManager();
 	$gbManager = new GlobalSettingsManager();
-	
-	is_numeric($_GET['order']) OR exit('Error: ID not Numerical!');
-	try {
-		$result = $mealManager->getEntryData($_GET['order'], 'name', 'date');
+
+	$payment = NULL;
+
+	try {//checking mealdata
+		inputcheck($_GET['order'], 'id');
+		$meal = $mealManager->getEntryData($_GET['order']);
+	} catch (WrongInputException $e) {
+		show_error(ERR_INP_MID);
 	} catch (Exception $e) {
 		$logger->log('WEB|order', 'MODERATE',
-					 sprintf('getEntryData failed with order %s; %s', $_GET['order'], $e->getMessage()));
+					 sprintf('failed fetchign data with MID %s; %s', $_GET['order'], $e->getMessage()));
 		show_error(ERR_ORDER);
-		die();
 	}
-	$result OR exit('ERROR');
-	
-	$payment = NULL;
-	
+	$meal['price'] = $priceClassManager->getPrice($_SESSION['uid'], $meal['ID']);
+
 	if ('POST' == $_SERVER['REQUEST_METHOD']) {
 		////////////////////////////////////////////////////
 		//Pay for meal
@@ -44,10 +45,15 @@ if (isset($_GET['order'])) {
 				show_error(ERR_ORDER);
 				die();
 			}
-			
-			if ($userManager->isSoli($_SESSION['uid'])) {
+
+			if ($soliCouponManager->HasValidCoupon($_SESSION['uid'])) {
 				$payment = $gbManager->getSoliPrice();
 			}
+
+			// 			if ($userManager->isSoli($_SESSION['uid'])) {
+			// 				$payment = $gbManager->getSoliPrice();
+			// 			}
+
 			if (!$userManager->changeBalance($_SESSION['uid'], -$payment)) {
 				$smarty->display('web/modules/mod_order/failed.tpl');
 				die();
@@ -62,19 +68,14 @@ if (isset($_GET['order'])) {
 		//////////////////////////////////////////////////
 		//add meal
 		try {
-			//get the date of the meal which is ordered
-			if (!$meal_date = $mealManager->getEntryData($_GET['order'], 'date')) {
-				die(DB_QUERY_ERROR . $this->db->error);
-			}
-			if($soliCouponManager->HasValidCoupon($_SESSION['uid'])) {
-				$soliOrderManager->addSoliOrder($_GET['order'], $_SESSION['uid'], $_SERVER['REMOTE_ADDR'], $meal_date['date']);
-			}
-			else {
-				$orderManager->addOrder($_GET['order'], $_SESSION['uid'], $_SERVER['REMOTE_ADDR'], $meal_date['date']);
-// 				$orderManager->addEntry('MID', $_GET['order'], 'UID', $_SESSION['uid'], 'IP', $_SERVER['REMOTE_ADDR'],
-// 									 'date', $meal_date['date']);
-			}
+
+			$orderManager->addOrder($_GET['order'], $_SESSION['uid'], $_SERVER['REMOTE_ADDR'], $meal['date']);
+			if ($soliCouponManager->HasValidCoupon($_SESSION['uid']))
+				$soliOrderManager->addSoliOrder($_SESSION['uid'], $_SERVER['REMOTE_ADDR'], $meal['date'],
+												$meal['name'], $meal['price'], $meal['date'],
+												$gbManager->getSoliPrice());
 		} catch (Exception $e) {
+
 			//meal couldn't be ordered so give the user his money back
 			$userManager->changeBalance($_SESSION['uid'], $payment);
 			$logger->log('WEB|ORDER', 'MODERATE',
@@ -86,7 +87,7 @@ if (isset($_GET['order'])) {
 		//////////////////////////////////////////////////
 		//finished
 		$smarty->display('web/header.tpl');
-		echo 'Am ' . formatDate($result['date']) . ' das Men&uuml; ' . $result['name']
+		echo 'Am ' . formatDate($meal['date']) . ' das Men&uuml; ' . $meal['name']
 				. ' erfolgreich bestellt. <a href="index.php">Weiter</a>';
 		$smarty->display('web/footer.tpl');
 	} else {
@@ -109,7 +110,7 @@ if (isset($_GET['order'])) {
 	$pcManager = new PriceClassManager();
 	$gsManager = new GlobalSettingsManager();
 	$userManager = new UserManager();
-	
+
 	$hour = date('H:i', time());
 	// To change the timewindow the orders can be ordered, just change $enddate (and $last_order_time)
 	//first date to show the meals
@@ -129,9 +130,9 @@ if (isset($_GET['order'])) {
 	 *    $meallist = array(array(array(array())));
 	 *    in the code, it will generate a void element (dunno why), so let this be here in the comments
 	 */
-	
+
 	//Ordering only possible until $last_order_time
-	
+
 	$last_order_time = $gsManager->getLastOrderTime();
 	if (str_replace(":", "", $hour) > str_replace(":", "", $last_order_time)) {
 		$date += $day_in_secs;
@@ -140,23 +141,23 @@ if (isset($_GET['order'])) {
 		$sql_meals = $mealManager->get_meals_between_two_dates(date('Y-m-d', $date), date('Y-m-d', $enddate),
 															   'date, price_class');
 	} catch (MySQLVoidDataException $e) {
-		show_error(ERR_NO_ORDERS); die();
+		show_error(ERR_NO_ORDERS);
+		die();
+	} catch (Exception $e) {
+		$smarty->assign('message', ERR_MYSQL . '<br>' . $e->getMessage());
 	}
-	catch (Exception $e) {
-		$smarty->assign('message', ERR_MYSQL.'<br>'.$e->getMessage());
-	}
-	
+
 	//////////////////////////////////////////////////
 	//Sort the meals
-	
+
 	foreach ($sql_meals as &$meal) {
 		$meal_day = date('N', strtotime($meal['date']));
 		$meal_weeknum = date('W', strtotime($meal['date']));
-		if($userManager->isSoli($_SESSION['uid']))
+		if ($userManager->isSoli($_SESSION['uid']))
 			$meal['price'] = $gsManager->getSoliPrice();
 		else
 			$meal['price'] = $pcManager->getPrice($_SESSION['uid'], $meal['ID']);
-		
+
 		$meallist[$meal_weeknum][$meal_day][] = $meal;
 		//The date of the beginning of the week (here monday). +7 because of negative meal_day setting the date 1 week behind
 		$meallist[$meal_weeknum]['date'][1] = date('d.m.Y',
@@ -185,7 +186,7 @@ if (isset($_GET['order'])) {
 	try {
 		$itxt_arr = $gsManager->getInfoTexts();
 	} catch (Exception $e) {
-		show_error('Error getting infotexts:'.$e->getMessage());
+		show_error('Error getting infotexts:' . $e->getMessage());
 	}
 	$smarty->assign('meallist', $meallist);
 	$smarty->assign('infotext', $itxt_arr);

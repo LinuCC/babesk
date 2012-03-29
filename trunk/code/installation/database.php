@@ -166,6 +166,10 @@
                         `IP` binary(16) NOT NULL,
                         `ordertime` timestamp NOT NULL,
                         `fetched` boolean NOT NULL default 0,
+                        `mealname` varchar(255) NOT NULL ,
+						`mealprice` DECIMAL( 6, 2 ) NOT NULL ,
+						`mealdate` DATE NOT NULL, 
+						`soliprice` DECIMAL( 6, 2 ) NOT NULL
                         PRIMARY KEY (`ID`)
                     )';
 

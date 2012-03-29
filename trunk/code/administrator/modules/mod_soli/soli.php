@@ -24,6 +24,8 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 	case 3://show Soliusers
 		$soliProcessing->ShowUsers();
 		break;
+	case 4://show SoliOrders
+		$soliProcessing->ShowSoliOrders();
 	}
 
 } else

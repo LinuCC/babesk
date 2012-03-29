@@ -4,6 +4,7 @@
 {
 	define('NO_MEALS_EXISTING', '<p class="error">Es sind keine Mahlzeiten vorhanden</p>');
 	define('ERR_ORDER', '<p class="error">Ein Fehler ist beim bestellen aufgetreten</p>');
+	define('ERR_INP_MID', '<p class="error">Die MahlzeitenID wurde falsch eingegeben</p>');
 	define('TIMEFORMAT_ERROR', '<p class="error">Uhrzeit falsch angegeben. Administrator informieren!</p>');
 	define('LOG_ERR_ORDER', 'Error in mod_order</p>');
 	define('ERR_MYSQL', '<p class="error">Ein Fehler ist beim abrufen der Daten aufgetreten!</p>');

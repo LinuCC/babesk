@@ -15,6 +15,9 @@
 	<form action="index.php?section=soli&action=3" method="post">
 		<input type="submit" value="Soli-Benutzer anzeigen" />
 	</form>
+	<form action="index.php?section=soli&action=4" method="post">
+		<input type="submit" value="Soli-Bestellungen anzeigen" />
+	</form>
 	</fieldset>
 	<br><br>
 	{/block}

@@ -7,8 +7,10 @@ class SoliOrderManager extends TableManager {
 		parent::__construct('soli_orders');
 	}
 
-	function addSoliOrder($MID, $UID, $IP, $date) {
-		parent::addEntry('MID', $MID, 'UID', $UID, 'IP', $IP, 'ordertime', time(), 'date', $date);
+	function addSoliOrder($UID, $IP, $date, $mealname, $mealprice, $mealdate, $soliprice) {
+		str_replace(',', '.', $soliprice);
+		parent::addEntry('UID', $UID, 'IP', $IP, 'ordertime', time(), 'date', $date, 'mealname', $mealname,
+						 'mealprice', $mealprice, 'mealdate', $mealdate, 'soliprice', $soliprice);
 	}
 
 	/**
@@ -26,6 +28,7 @@ class SoliOrderManager extends TableManager {
 		if (!$orders || !count($orders)) {
 			throw new MySQLVoidDataException('No Orders found in getSortedOrers');
 		}
+		return $orders;
 	}
 }
 
