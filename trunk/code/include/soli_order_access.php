@@ -7,14 +7,39 @@ class SoliOrderManager extends TableManager {
 	function __construct() {
 		parent::__construct('soli_orders');
 	}
-
+	
+	/**
+	 * Adds a order to the soli_order-table
+	 * Enter description here ...
+	 * @param unknown_type $orderID
+	 * @param unknown_type $UID
+	 * @param unknown_type $IP
+	 * @param unknown_type $date
+	 * @param unknown_type $mealname
+	 * @param unknown_type $mealprice
+	 * @param unknown_type $mealdate
+	 * @param unknown_type $soliprice
+	 */
 	function addSoliOrder($orderID, $UID, $IP, $date, $mealname, $mealprice, $mealdate, $soliprice) {
 		str_replace(',', '.', $soliprice);
 		parent::addEntry('ID', $orderID, 'UID', $UID, 'IP', $IP, 'ordertime', date("Y-m-d h:i:s"), 'date', $date,
 						 'mealname', $mealname, 'mealprice', $mealprice, 'mealdate', $mealdate, 'soliprice',
 						 $soliprice);
 	}
-
+	
+	/**
+	 * Checks if an order with the given ID is existing
+	 * @param numeric_string $ID The ID of the order
+	 */
+	function isExisting($ID) {
+		try {
+			$this->searchEntry('ID='.$ID);
+		} catch (MySQLVoidDataException $e) {
+			return false;
+		}
+		return true;
+	}
+	
 	/**
 	 * Returns all Orders of soli_orders sorted by date
 	 */

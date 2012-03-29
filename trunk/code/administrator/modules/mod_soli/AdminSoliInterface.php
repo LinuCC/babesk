@@ -29,6 +29,16 @@ class AdminSoliInterface extends AdminInterface {
 		$this->smarty->display($this->soliPath.'conf_del_coupon.tpl');
 	}
 	
+	/**
+	 * This function shows specific orders of soli-Users
+	 * 
+	 * @param Array $orders The orders-array. it has 2 dimensions; the first dimension is every single order, the second
+	 * the specific order-data (@see show_orders.tpl)
+	 * @param integer $weeknum the number of the week
+	 * @param string $username The Username whose orders should be displayed
+	 * @param float $sum_pricediff The overall Pricedifference of all orders (difference between soli_price and standard-
+	 * mealprice
+	 */
 	function ShowSpecOrders($orders, $weeknum, $username, $sum_pricediff) {
 		$this->smarty->assign('orders', $orders);
 		$this->smarty->assign('ordering_date', $weeknum);

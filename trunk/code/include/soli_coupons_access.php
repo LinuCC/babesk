@@ -37,7 +37,7 @@ class SoliCouponsManager extends TableManager {
 		foreach($coupons as $coupon) {
 			$start = strtotime($coupon['startdate']);
 			$end = strtotime($coupon['enddate']);
-			if($now > $start && $now < $end) {
+			if($now >= $start && $now <= $end) {
 				return true;
 			}
 		}

@@ -215,33 +215,35 @@ class AdminSoliProcessing {
 		require_once PATH_INCLUDE . '/user_access.php';
 		$userManager = new UserManager();
 		if ($weeknum && $uid) {
-			
+
 			$orders = array();
 			$monday = getFirstDayOfWeek(date('Y'), $weeknum);
 			$sum_pricediff = 0.00;
-			
+			$secs_per_day = 86400;
+
 			for ($i = 0; $i < 5; $i++) {
 				$buffer = array();
 				try {
 					$buffer = $this->soliOrderManager->getOrdersByUserandMealdate($uid,
-																				  date('Y-m-d', $monday + ($i * 86400)));
-				} catch (MySQLVoidDataException $e) {}
+																				  date('Y-m-d',
+																					   $monday + ($i * $secs_per_day)));
+				} catch (MySQLVoidDataException $e) {
+				}
 				foreach ($buffer as $order)
 					$orders[] = $order;
 			}
-			if(!count($orders))
+			if (!count($orders))
 				$this->soliInterface->ShowError($this->msg['ERR_ORDERS_NOT_FOUND']);
-			
-			
+
 			foreach ($orders as &$order) {
 				$sum_pricediff += $order['mealprice'] - $order['soliprice'];
 			}
-			
-			$username = $userManager->getForename($uid).' '.$userManager->getName($uid);
+
+			$username = $userManager->getForename($uid) . ' ' . $userManager->getName($uid);
 			$this->soliInterface->ShowSpecOrders($orders, $weeknum, $username, $sum_pricediff);
 
 		} else {
-			
+
 			//Show Form to fill out Weeknumber and Soli
 			$solis = $userManager->getAllSoli();
 			$this->soliInterface->AskShowSoliUser($solis);
