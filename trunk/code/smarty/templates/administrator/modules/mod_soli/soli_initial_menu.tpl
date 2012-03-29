@@ -7,13 +7,13 @@
 		<input type="submit" value="Ein neuen Coupon für einen Benutzer hinzufügen." />
 	</form>
 	<form action="index.php?section=soli&action=2" method="post">
-		<input type="submit" value="Gutscheinverwaltung" />
+		<input type="submit" value="Gutscheine Anzeigen" />
 	</form>
 	</fieldset>
 	<fieldset>
-	<legend><b>Anderes Zeuch</b></legend>
+	<legend><b>Benutzer</b></legend>
 	<form action="index.php?section=soli&action=3" method="post">
-		<input type="submit" value="Einstellungen" />
+		<input type="submit" value="Soli-Benutzer anzeigen" />
 	</form>
 	</fieldset>
 	<br><br>
