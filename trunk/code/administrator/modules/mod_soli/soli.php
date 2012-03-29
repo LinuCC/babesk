@@ -25,8 +25,11 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 		case 3: //show Soliusers
 			$soliProcessing->ShowUsers();
 			break;
-		case 4: //show SoliOrders
-			$soliProcessing->ShowSoliOrders();
+		case 4: //show SoliOrders for specific User and Week
+			if(isset($_POST['ordering_kw']) && isset($_POST['user_id']))
+				$soliProcessing->ShowSoliOrdersByDate($_POST['ordering_kw'], $_POST['user_id']);
+			else 
+				$soliProcessing->ShowSoliOrdersByDate(false, false);
 			break;
 		case 5: //delete coupon
 			if (isset($_POST['delete']))
@@ -36,14 +39,6 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 			else
 				$soliProcessing->DeleteCoupon($_GET['ID'], false);
 			break;
-		case 6: //show SoliOrders for specific User and Week
-			if(isset($_POST['ordering_kw']) && isset($_POST['user_id']))
-				$soliProcessing->ShowSoliOrdersByDate($_POST['ordering_kw'], $_POST['user_id']);
-			else 
-				$soliProcessing->ShowSoliOrdersByDate(false, false);
-			break;
-			
-
 	}
 
 } else

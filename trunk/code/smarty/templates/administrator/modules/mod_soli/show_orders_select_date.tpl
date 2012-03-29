@@ -1,7 +1,7 @@
 {extends file=$base_path}{block name=content}
 Geben sie bitte das Datum ein, wofür sie die bisher eingegangenen Bestellungen mit Teilhabepaket angezeigt haben möchten:<br>
 
-<form action="index.php?section=soli&amp;action=6" method="post">
+<form action="index.php?section=soli&amp;action=4" method="post">
 	Kalenderwoche:<select name="ordering_kw">
 	{section name=i loop=52}
 	<option value="{{$smarty.section.i.index}+1}"> {{$smarty.section.i.index}+1}</option>
