@@ -23,6 +23,11 @@ class AdminSoliInterface extends AdminInterface {
 		$this->smarty->display($this->soliPath.'show_coupons.tpl');
 	}
 	
+	function ShowSoliUser($solis) {
+		$this->smarty->assign('users', $solis);
+		$this->smarty->display($this->soliPath.'show_soli.tpl');
+	}
+	
 	/**
 	 * Contains the Path to the mod_soli-folder
 	 * @var string

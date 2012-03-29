@@ -21,6 +21,9 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 	case 2: //show coupons
 		$soliProcessing->ShowCoupons();
 		break;
+	case 3://show Soliusers
+		$soliProcessing->ShowUsers();
+		break;
 	}
 
 } else

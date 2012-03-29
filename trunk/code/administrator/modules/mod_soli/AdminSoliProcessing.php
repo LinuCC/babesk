@@ -10,6 +10,7 @@ class AdminSoliProcessing {
 		$this->soliCouponManager = new SoliCouponsManager();
 		$this->soliOrderManager = new SoliOrderManager();
 		$this->msg = array('ERR_SQL_NO_DATA' => 'fehlerhafter ID-Eintrag',
+				'ERR_SQL' => 'Ein Fehler ist bei der Verbindung zum SQL-Server aufgetreten',
 				'ERR_SQL_NO_ORDERS' => 'Es wurden keine Bestellungen aufgegeben',
 				'ERR_USER_NO_SOLI' => 'Es konnten keine Soli-Benutzer gefunden werden',
 				'ERR_ADD_COUPON' => 'Ein Fehler ist beim Hinzufügen eines Coupons aufgetreten',
@@ -66,8 +67,24 @@ class AdminSoliProcessing {
 			$coupon['startdate'] = formatDate($coupon['startdate']);
 			$coupon['enddate'] = formatDate($coupon['enddate']);
 		}
-		
+
 		$this->soliInterface->ShowCoupon($coupons);
+	}
+
+	function ShowUsers() {
+
+		require_once PATH_INCLUDE . '/user_access.php';
+
+		$userManager = new UserManager();
+		try {
+			$soli_user = $userManager->getAllSoli();
+		} catch (MySQLVoidDataException $e) {
+			$this->soliInterface->ShowError($this->msg['ERRUSER_NO_SOLI']);
+		} catch (Exception $e) {
+			$this->soliInterface->ShowError($this->msg['ERR_SQL'].':'.$e->getMessage());
+		}
+
+		$this->soliInterface->ShowSoliUser($soli_user);
 	}
 	/*
 	function ShowSoliOrders() {
