@@ -57,6 +57,11 @@ class AdminSoliInterface extends AdminInterface {
 		$this->smarty->display($this->soliPath.'show_soli.tpl');
 	}
 	
+	function ChangeSettings($soli_price) {
+		$this->smarty->assign('old_price', $soli_price);
+		$this->smarty->display($this->soliPath.'show_settings.tpl');
+	}
+	
 	/**
 	 * Contains the Path to the mod_soli-folder
 	 * @var string

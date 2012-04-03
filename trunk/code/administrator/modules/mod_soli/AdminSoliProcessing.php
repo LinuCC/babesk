@@ -20,7 +20,11 @@ class AdminSoliProcessing {
 				'ERR_DEL_COUPON' => 'Ein Fehler ist beim löschen des Coupons aufgetreten',
 				'FIN_DEL_COUPON' => 'Der Coupon wurde erfolgreich gelöscht',
 				'ERR_FETCH_COUPON_INF' => 'Ein Fehler ist beim abholen der Daten aufgetreten',
-				'ERR_INP' => 'Ein falscher Wert wurde eingegeben', 'COUPON_ADDED' => 'Der Coupon wurde hinzugefügt',);
+				'ERR_INP' => 'Ein falscher Wert wurde eingegeben', 'COUPON_ADDED' => 'Der Coupon wurde hinzugefügt',
+				'SOLI_ERR_PRICE' => 'Konnte den Preis für das Teilhabepaket nicht abrufen!',
+				'SOLI_ERR_INP_PRICE' => 'Der Preis für das Teilhabepaket wurde nicht korrekt eingegeben.',
+				'SOLI_ERR_CHANGE_PRICE' => 'Konnte den Preis für das Teilhabepaket nicht ändern!',
+				'SOLI_FIN_CHANGE' => 'Der Soli-Preis wurde erfolgreich verändert',);
 	}
 
 	/**
@@ -249,6 +253,41 @@ class AdminSoliProcessing {
 			$this->soliInterface->AskShowSoliUser($solis);
 		}
 
+	}
+
+	/**
+	 * Change Settings for Solis
+	 * Enter description here ...
+	 */
+	function ChangeSettings($soli_price) {
+
+		require_once PATH_INCLUDE . '/global_settings_access.php';
+
+		global $smarty;
+		$gbManager = new GlobalSettingsManager();
+
+		if ($soli_price !== NULL) {
+			try {
+				try {//inputcheck
+					inputcheck($_POST['soli_price'], 'credits');
+				} catch (Exception $e) {
+					die_error(SOLI_ERR_INP_PRICE);
+					$this->soliInterface->ShowError($this->msg['SOLI_ERR_INP_PRICE']);
+				}
+				$gbManager->changeSoliPrice($_POST['soli_price']);
+			} catch (Exception $e) {
+				die_error(SOLI_ERR_CHANGE_PRICE . ':' . $e->getMessage());
+				$this->soliInterface->ShowError($this->msg['SOLI_ERR_CHANGE_PRICE '] . ':' . $e->getMessage());
+			}
+			$this->soliInterface->ShowMsg($this->msg['SOLI_FIN_CHANGE']);
+		} else {
+			try {
+				$soli_price = $gbManager->getSoliPrice();
+			} catch (Exception $e) {
+				$this->soliInterface->ShowError($this->msg['SOLI_ERR_PRICE']);
+			}
+			$this->soliInterface->ChangeSettings($soli_price);
+		}
 	}
 
 	/**

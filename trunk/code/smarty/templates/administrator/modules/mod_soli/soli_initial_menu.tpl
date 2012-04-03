@@ -19,5 +19,11 @@
 		<input type="submit" value="Bestellungen eines Benutzers für eine Bestimmte Woche anzeigen" />
 	</form>
 	</fieldset>
+	<fieldset>
+	<legend><b>Einstellungen</b></legend>
+	<form action="index.php?section=soli&action=6" method="post">
+		<input type="submit" value="Die Soli-Einstellungen verändern" />
+	</form>
+	</fieldset>
 	<br><br>
 	{/block}
