@@ -1,5 +1,5 @@
 <?php
-require_once PATH_INCLUDE . '/access.php';
+require_once PATH_ACCESS . '/access.php';
 
 class GlobalSettingsManager extends TableManager {
 	function __construct() {

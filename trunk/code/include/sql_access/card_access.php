@@ -4,7 +4,7 @@
  * Provides functions for the RFID Cards
  */
 
-require_once PATH_INCLUDE.'/access.php';
+require_once PATH_ACCESS . '/access.php';
 
 class CardManager extends TableManager {
 	function __construct() {
@@ -20,7 +20,7 @@ class CardManager extends TableManager {
 		/**
 		 * @todo rename this function. this valids the cardnumber not the cardid
 		 */
-		require_once 'constants.php';
+		require_once PATH_INCLUDE . '/constants.php';
 
 		if(!preg_match('/\A[0-9a-zA-Z]{10}\z/',$card_ID)){
 			echo INVALID_CARD_ID."<br>";
@@ -45,7 +45,7 @@ class CardManager extends TableManager {
 	 * @param unknown_type $cardnumber
 	 */
 	function is_card_existing($cardnumber) {
-		require_once PATH_INCLUDE.'/dbconnect.php';
+		require_once PATH_ACCESS . '/dbconnect.php';
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE cardnumber="%s"',
 									$this->tablename, $cardnumber));
 		$result = $this->db->query($query);
@@ -58,7 +58,7 @@ class CardManager extends TableManager {
 	}
 
 	function getUserID($cardnumber) {
-		require_once PATH_INCLUDE.'/dbconnect.php';
+		require_once PATH_ACCESS . '/dbconnect.php';
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE cardnumber="%s"',
 		$this->tablename, $cardnumber));
 		$result = $this->db->query($query);
@@ -120,7 +120,7 @@ class CardManager extends TableManager {
 	}
 	
 	function getCardnumberByUserID($ID) {
-		require_once PATH_INCLUDE.'/dbconnect.php';
+		require_once PATH_ACCESS . '/dbconnect.php';
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE UID=%s',$this->tablename, $ID));
 		$result = $this->db->query($query);
 		$card = $result->fetch_assoc();
@@ -143,7 +143,7 @@ class CardManager extends TableManager {
 	 * @return numeric_string the CardID
 	 */
 	function getCardIDByUserID($ID) {
-		require_once PATH_INCLUDE.'/dbconnect.php';
+		require_once PATH_ACCESS . '/dbconnect.php';
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE UID=%s',$this->tablename, $ID));
 		$result = $this->db->query($query);
 		$card = $result->fetch_assoc();
@@ -158,7 +158,7 @@ class CardManager extends TableManager {
 	}
 	
 	function getIDByUserID($uid) {
-		require_once PATH_INCLUDE.'/dbconnect.php';
+		require_once PATH_ACCESS . '/dbconnect.php';
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE UID=%s',$this->tablename, $uid));
 		$result = $this->db->query($query);
 		$card = $result->fetch_assoc();

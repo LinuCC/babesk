@@ -32,7 +32,7 @@
 		$meallistweeksorted = NULL;
 	}
 	
-	require_once PATH_INCLUDE.'/global_settings_access.php';
+	require_once PATH_ACCESS . '/global_settings_access.php';
 	//get the Information-texts
 	try {
 	$gsManager = new GlobalSettingsManager();

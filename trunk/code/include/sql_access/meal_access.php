@@ -3,8 +3,8 @@
  * Provides a class to manage the meals of the system
  */
 
-require_once 'constants.php';
-require_once 'access.php';
+require_once PATH_INCLUDE . '/constants.php';
+require_once PATH_ACCESS . '/access.php';
 
 /**
  * Manages the meals, provides methods to add/modify meals or to get meal data

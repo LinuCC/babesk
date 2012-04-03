@@ -4,10 +4,10 @@
     defined('_AEXEC') or die("Access denied");
     global $smarty;
 
-	require PATH_INCLUDE.'/dbconnect.php';
+	require_once PATH_ACCESS . '/dbconnect.php';
 	require PATH_INCLUDE.'/managers.php';
-	require PATH_INCLUDE.'/card_access.php';
-	require_once PATH_INCLUDE.'/user_access.php';
+	require_once PATH_ACCESS . '/card_access.php';
+	require_once PATH_ACCESS . '/user_access.php';
     require "checkout_constants.php"; 
 
     $cardManager = new CardManager();

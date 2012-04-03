@@ -3,7 +3,7 @@
  * Provides a class to manage the users of the system
  */
 
-require_once 'access.php';
+require_once PATH_ACCESS . '/access.php';
 
 /**
  * Manages the users, provides methods to add/modify users or to get user data
@@ -71,7 +71,7 @@ class UserManager extends TableManager{
 	 * Enter description here ...
 	 */
 	function getUsersSorted() {
-		require_once 'dbconnect.php';
+		require_once PATH_ACCESS . '/dbconnect.php';
 		$res_array = array();
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY name', $this->tablename));
 		$result = $this->db->query($query);
@@ -116,7 +116,7 @@ class UserManager extends TableManager{
 		$credit = $userData['credit'];
 		$gid = $userData['GID'];
 
-		//require 'group_access.php';
+		//require_once PATH_ACCESS . '/group_access.php';
 		$groupManager = new GroupManager('groups');
 
 		$groupData = $groupManager->getEntryData($gid, 'max_credit');

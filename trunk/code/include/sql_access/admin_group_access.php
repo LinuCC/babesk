@@ -1,6 +1,6 @@
 <?php
 
-require_once PATH_INCLUDE.'/access.php';
+require_once PATH_ACCESS . '/access.php';
 
 class AdminGroupManager extends TableManager{
 	function __construct() {

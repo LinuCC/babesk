@@ -31,7 +31,7 @@ function get_weekday($day) {
  */
 function sort_meallist($meallist) {
 	
-	require_once PATH_INCLUDE . '/price_class_access.php';
+	require_once PATH_ACCESS . '/price_class_access.php';
 	require_once PATH_INCLUDE . '/logs.php';
 	global $logger;
 	$priceclassmanager = new PriceClassManager();

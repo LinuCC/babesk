@@ -1,12 +1,12 @@
 <?php
-require_once PATH_INCLUDE . '/global_settings_access.php';
+require_once PATH_ACCESS . '/global_settings_access.php';
 error_reporting(E_ALL);
 global $smarty;
 global $logger;
 
-require_once PATH_INCLUDE.'/soli_coupons_access.php';
-require_once PATH_INCLUDE.'/soli_order_access.php';
-require_once PATH_INCLUDE.'/meal_access.php';
+require_once PATH_ACCESS . '/soli_coupons_access.php';
+require_once PATH_ACCESS . '/soli_order_access.php';
+require_once PATH_ACCESS . '/meal_access.php';
 
 $orderManager = new OrderManager('orders');
 $priceClassManager = new PriceClassManager();

@@ -3,7 +3,7 @@
      * Provides a class to manage the orders of the system
      */
     
-	require_once 'access.php';
+	require_once PATH_ACCESS . '/access.php';
 
     /**
      * Manages the orders, provides methods to add/modify orders or to get order data

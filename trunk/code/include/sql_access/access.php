@@ -9,8 +9,8 @@
  *
  */
 
-require_once 'functions.php';
-require_once 'exception_def.php';
+require_once PATH_INCLUDE . '/functions.php';
+require_once PATH_INCLUDE . '/exception_def.php';
 
 class TableManager {
 
@@ -39,7 +39,7 @@ class TableManager {
 	 */
 	public function getEntryData() {
 
-		require_once 'constants.php';
+		require_once PATH_INCLUDE . '/constants.php';
 
 		$num_args = func_num_args();
 
@@ -84,7 +84,7 @@ class TableManager {
 	 *  @return twodimensional-array: $return_var[EntryArray[FieldnameArray]]
 	 */
 	function getTableData() {
-		require_once 'constants.php';
+		require_once PATH_INCLUDE . '/constants.php';
 
 		$num_args = func_num_args();
 		$args = func_get_args();
@@ -120,7 +120,7 @@ class TableManager {
 	 * @param variable amount, even number. see description.
 	 */
 	public function addEntry() {
-		require_once 'constants.php';
+		require_once PATH_INCLUDE . '/constants.php';
 
 		$column_identifier_str = '';
 		$column_value_str = '';
@@ -248,7 +248,7 @@ class TableManager {
 	 * @param ID The ID of the entry to delete
 	 */
 	public function delEntry($ID) {
-		require_once 'constants.php';
+		require_once PATH_INCLUDE . '/constants.php';
 
 		if (!is_numeric($ID)) {
 			//parameter-checking

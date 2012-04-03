@@ -1,7 +1,7 @@
 <?php
 //No direct access
 defined('_WEXEC') or die("Access denied");
-require_once PATH_INCLUDE . '/global_settings_access.php';
+require_once PATH_ACCESS . '/global_settings_access.php';
 global $smarty;
 global $logger;
 

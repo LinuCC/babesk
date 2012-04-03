@@ -11,9 +11,9 @@ function create_meal() {
 	//---INCLUDE---
 	require_once "meals_constants.php";
 	require_once PATH_INCLUDE . '/logs.php';
-	require_once PATH_INCLUDE . '/meal_access.php';
+	require_once PATH_ACCESS . '/meal_access.php';
 
-	require_once PATH_INCLUDE . '/access.php'; //for ordercount workaround
+	require_once PATH_ACCESS . '/access.php'; //for ordercount workaround
 
 	global $smarty;
 	global $logger;
@@ -79,7 +79,7 @@ function create_meal() {
  *Prepare Smarty-variables with the price_class to use them in add_meal.tpl
  */
 function price_class_init_smarty_vars() {
-	require_once PATH_INCLUDE . '/price_class_access.php';
+	require_once PATH_ACCESS . '/price_class_access.php';
 	global $smarty;
 	$priceclassmanager = new Priceclassmanager('price_classes');
 	try {
@@ -228,7 +228,7 @@ function translate_fetched($is_fetched) {
 }
 
 function edit_infotext() {
-	require_once PATH_INCLUDE . '/access.php';
+	require_once PATH_ACCESS . '/access.php';
 
 	global $smarty;
 
@@ -264,7 +264,7 @@ function edit_infotext() {
 }
 
 function editLastOrderTime() {
-	require_once PATH_INCLUDE . '/access.php';
+	require_once PATH_ACCESS . '/access.php';
 
 	global $smarty;
 
@@ -294,11 +294,11 @@ function editLastOrderTime() {
  *shows the orders in a table
  */
 function show_orders() {
-	require_once PATH_INCLUDE . '/order_access.php';
-	require_once PATH_INCLUDE . '/meal_access.php';
-	require_once PATH_INCLUDE . '/user_access.php';
-	require_once PATH_INCLUDE . '/group_access.php';
-	require_once PATH_INCLUDE . '/global_settings_access.php';
+	require_once PATH_ACCESS . '/order_access.php';
+	require_once PATH_ACCESS . '/meal_access.php';
+	require_once PATH_ACCESS . '/user_access.php';
+	require_once PATH_ACCESS . '/group_access.php';
+	require_once PATH_ACCESS . '/global_settings_access.php';
 	require_once PATH_INCLUDE . '/functions.php';
 	require_once "meals_constants.php";
 
@@ -408,8 +408,8 @@ function show_orders() {
  *deletes the old meals and old orders.
  */
 function delete_old_meals_and_orders() {
-	require_once PATH_INCLUDE . '/meal_access.php';
-	require_once PATH_INCLUDE . '/order_access.php';
+	require_once PATH_ACCESS . '/meal_access.php';
+	require_once PATH_ACCESS . '/order_access.php';
 	require_once 'meals_constants.php';
 
 	global $smarty;
@@ -468,8 +468,8 @@ function delete_old_meals_and_orders() {
  * @param boolean $linked_orders If set to true, all orders linked to the meal to delete will also be deleted
  */
 function delete_meal($ID, $linked_orders) {
-	require_once PATH_INCLUDE . '/meal_access.php';
-	require_once PATH_INCLUDE . '/order_access.php';
+	require_once PATH_ACCESS . '/meal_access.php';
+	require_once PATH_ACCESS . '/order_access.php';
 	require_once 'meals_constants.php';
 
 	$mealManager = new MealManager();

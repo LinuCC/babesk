@@ -7,8 +7,8 @@
  */
 function new_priceclass() {
 	require_once 'priceclass_constants.php';
-	require_once PATH_INCLUDE . '/group_access.php';
-	require_once PATH_INCLUDE . '/price_class_access.php';
+	require_once PATH_ACCESS . '/group_access.php';
+	require_once PATH_ACCESS . '/price_class_access.php';
 	global $smarty;
 	$groupManager = new GroupManager();
 	$pcManager = new PriceClassManager();
