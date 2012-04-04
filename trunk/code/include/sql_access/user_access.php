@@ -112,6 +112,7 @@ class UserManager extends TableManager{
 	 * @return number
 	 */
 	function getMaxRechargeAmount($uid) {
+		require_once PATH_ACCESS . '/group_access.php';
 		$userData = $this->getEntryData($uid, 'credit', 'GID');
 		$credit = $userData['credit'];
 		$gid = $userData['GID'];

@@ -12,6 +12,8 @@ require_once PATH_INCLUDE."/logs.php";
 $logger= new Logger;
 
 if ('POST' == $_SERVER['REQUEST_METHOD']) {
+	$cardManager = new CardManager();
+	$userManager = new UserManager();
 	if (isset($_POST['card_ID'])) {
 		//save values and check for empty fields
 
@@ -21,8 +23,6 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 		}*/
 		$card_id = $_POST['card_ID'];
 		try {
-			$cardManager = new CardManager();
-			$userManager = new UserManager();
 			$uid = $cardManager->getUserID($card_id);
 			if ($userManager->checkAccount($uid)) {
 				$smarty->display('administrator/modules/mod_recharge/error_locked.tpl');
