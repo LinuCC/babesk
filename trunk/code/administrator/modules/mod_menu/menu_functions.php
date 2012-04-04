@@ -47,7 +47,6 @@ function sort_meallist($meallist) {
 	}
 	//[A Row of meals(One week)] [day] [specific variable]
 	$meallistweeksorted = array();
-	
 	foreach ($meallist as $meal) {
 		for ($i = 0; $i < 12; $i++) {
 			//Saturday and Sunday shall not be shown

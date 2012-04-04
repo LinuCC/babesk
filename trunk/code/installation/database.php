@@ -24,7 +24,7 @@
 		}
 
 		//create database.php file with supplied data
-		$outFile = '../include/dbconnect.php';
+		$outFile = '../include/sql_access/dbconnect.php';
 		$fh = fopen($outFile, 'w') or die('Datei konnte nicht gespeichert werden, bitte Benutzerrechte überprüfen');
 		$stringData = "<?php
     require_once 'constants.php';

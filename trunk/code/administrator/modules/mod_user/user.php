@@ -19,7 +19,7 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 					$_POST["Date_Year"].'-'.$_POST["Date_Month"].'-'.$_POST["Date_Day"],
 					$_POST["gid"], $_POST["credits"]);
 				} catch (Exception $e) {
-					$user_interface->ShowError($e->getMessage()); die();
+					$user_interface->ShowError($e->getMessage());
 				}
 			} else if(isset($_POST['id'])) {
 				//id is already filled out, show register-form

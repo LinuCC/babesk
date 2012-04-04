@@ -8,9 +8,7 @@ require_once PATH_ADMIN.'/AdminInterface.php';
  */
 class AdminUserInterface extends AdminInterface{
 	function __construct() {
-		// 		require_once PATH_INCLUDE.'';
-		global $smarty;
-		$this->smarty = $smarty;
+		parent::__construct();
 		$this->PathUserTemplates = PATH_SMARTY_ADMIN_MOD.'/mod_user/';
 		$this->MOD_HEADING = $this->PathUserTemplates.'mod_user_header.tpl';
 		$this->smarty->assign('UserParent', $this->MOD_HEADING);
@@ -42,7 +40,8 @@ class AdminUserInterface extends AdminInterface{
 	}
 	
 	function ShowRepeatRegister() {
-		echo '<p><a href="index.php?section=user&action=1">Bitte wiederholen sie den Vorgang</a></p>';
+		///@todo: No Constant
+		die_error('<p><a href="index.php?section=user&action=1">Bitte wiederholen sie den Vorgang</a></p>');
 	}
 	
 	function ShowDeleteConfirmation($uid, $forename, $name) {
