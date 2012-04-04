@@ -20,8 +20,10 @@ class PriceClassManager extends TableManager {
 	 *@return: returns false if nothing found, else the priceData
 	 */
 	function getPrice($uid, $mid) {
-		require_once PATH_INCLUDE . '/managers.php';
 		require_once PATH_INCLUDE . '/constants.php';
+		require_once PATH_ACCESS . '/user_access.php';		
+		require_once PATH_ACCESS . '/meal_access.php';
+		
 		$userManager = new UserManager();
 		$mealManager = new MealManager('meals');
 		

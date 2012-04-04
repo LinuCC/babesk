@@ -119,7 +119,7 @@ function price_class_init_smarty_vars() {
 function remove_old_meals($search_date) {
 	require_once "meals_constants.php";
 	require_once PATH_INCLUDE . "/logs.php";
-	require_once PATH_INCLUDE . "/meal_access.php";
+	require_once PATH_ACCESS . '/meal_access.php';
 
 	global $logger;
 	$mealmanager = new MealManager('meals');
@@ -161,7 +161,7 @@ function remove_old_meals($search_date) {
  */
 function show_meals() {
 
-	require_once PATH_INCLUDE . "/meal_access.php";
+	require_once PATH_ACCESS . '/meal_access.php';
 	require_once "meals_constants.php";
 	require_once PATH_INCLUDE . "/functions.php";
 

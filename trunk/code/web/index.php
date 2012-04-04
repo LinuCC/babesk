@@ -11,7 +11,6 @@ session_start();
 define('_WEXEC', 1);
 
 require_once "../include/path.php";
-require_once PATH_INCLUDE.'/managers.php';
 require_once PATH_INCLUDE.'/moduleManager.php';
 require_once PATH_INCLUDE.'/functions.php';
 require_once PATH_INCLUDE.'/logs.php';
@@ -59,6 +58,8 @@ if(!$login) {
 	}
 }
 if($login){ 
+	require_once PATH_ACCESS . '/user_access.php';
+	$userManager = new UserManager();
 	//seems like something that Smarty itself needs
 	$smarty->assign('status', ''); //???
 	 
@@ -79,7 +80,7 @@ if($login){
 	if ($_SESSION['login_tries'] > 3) {
 		$smarty->assign('login_tries', $_SESSION['login_tries']);
 		$userManager->ResetLoginTries($userData['ID']);
-		$_SESSION['login_tries'] = 0;          //????? musste schon in der DB zur�cksetzen
+		$_SESSION['login_tries'] = 0;
 	}
 
 	$smarty->assign('uid', $_SESSION['uid']);

@@ -5,6 +5,10 @@ require_once 'order_constants.php';
 require_once PATH_ACCESS . '/global_settings_access.php';
 require_once PATH_ACCESS . '/soli_order_access.php';
 require_once PATH_ACCESS . '/soli_coupons_access.php';
+require_once PATH_ACCESS . '/meal_access.php';
+require_once PATH_ACCESS . '/user_access.php';
+require_once PATH_ACCESS . '/order_access.php';
+require_once PATH_ACCESS . '/price_class_access.php';
 global $smarty;
 global $logger;
 

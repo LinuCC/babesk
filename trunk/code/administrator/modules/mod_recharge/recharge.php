@@ -4,9 +4,8 @@
 defined('_AEXEC') or die("Access denied");
 global $smarty;
 
-require PATH_INCLUDE.'/managers.php';
-require_once PATH_ACCESS . '/card_access.php';
 require_once 'recharge_constants.php';
+require_once PATH_ACCESS . '/card_access.php';
 require_once PATH_ACCESS . '/user_access.php';
 
 require_once PATH_INCLUDE."/logs.php";

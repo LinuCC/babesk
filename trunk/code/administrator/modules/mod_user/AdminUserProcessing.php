@@ -43,7 +43,7 @@ class AdminUserProcessing {
 	 */
 	function RegisterUser($forename, $name, $username, $passwd, $passwd_repeat, $cardID, $birthday, $GID, $credits) {
 
-		require_once PATH_INCLUDE . "/user_access.php";
+		require_once PATH_ACCESS . '/user_access.php';
 		require_once PATH_ACCESS . '/card_access.php';
 		require_once PATH_ACCESS . '/group_access.php';
 		require_once PATH_INCLUDE . "/logs.php";
@@ -122,7 +122,7 @@ class AdminUserProcessing {
 
 	function getGroups() {
 
-		require_once PATH_INCLUDE . "/group_access.php";
+		require_once PATH_ACCESS . '/group_access.php';
 
 		$group_manager = new GroupManager('groups');
 

@@ -1,6 +1,6 @@
 <?php
 
-    require PATH_INCLUDE."/dbconnect.php";
+    require PATH_ACCESS . "/dbconnect.php";
     
     //get the password of the global admin
     $query = 'SELECT

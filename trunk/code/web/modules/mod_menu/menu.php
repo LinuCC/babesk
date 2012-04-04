@@ -1,7 +1,11 @@
 <?php
 //No direct access
 defined('_WEXEC') or die("Access denied");
+
 require_once PATH_ACCESS . '/global_settings_access.php';
+require_once PATH_ACCESS . '/order_access.php';
+require_once PATH_ACCESS . '/meal_access.php';
+
 global $smarty;
 global $logger;
 
@@ -11,6 +15,7 @@ $mealManager = new MealManager('meals');
 $meal = array();
 $orders_existing = true;
 $meal_problems = false;
+
 try {
 	$orders = $orderManager->getAllOrdersOfUser($_SESSION['uid'], strtotime(date('Y-m-d')));
 } catch (MySQLVoidDataException $e) {

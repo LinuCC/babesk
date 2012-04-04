@@ -58,7 +58,7 @@ function new_priceclass() {
 
 function delete_priceclass($priceclass_id) {
 	include 'priceclass_constants.php';
-	include PATH_INCLUDE . '/price_class_access.php';
+	require_once PATH_ACCESS . '/price_class_access.php';
 
 	$priceclassManager = new PriceClassManager();
 	try {
@@ -73,7 +73,7 @@ function change_priceclass($priceclass_id) {
 	include 'priceclass_constants.php';
 
 	if (isset($_GET['where'], $_POST['ID'], $_POST['name'], $_POST['price'], $_POST['group_id'])) {
-		include PATH_INCLUDE . '/price_class_access.php';
+		require_once PATH_ACCESS . '/price_class_access.php';
 
 		$priceclassManager = new PriceClassManager();
 
@@ -97,8 +97,8 @@ function change_priceclass($priceclass_id) {
 		}
 		die_msg(PRICECLASS_CHANGED);
 	} else {
-		include PATH_INCLUDE . '/group_access.php';
-		include PATH_INCLUDE . '/price_class_access.php';
+		require_once PATH_ACCESS . '/group_access.php';
+		require_once PATH_ACCESS . '/price_class_access.php';
 		global $smarty;
 
 		$priceclassManager = new PriceClassManager();
@@ -127,8 +127,8 @@ function change_priceclass($priceclass_id) {
 
 function show_priceclasses() {
 	include 'priceclass_constants.php';
-	include PATH_INCLUDE . '/group_access.php';
-	include PATH_INCLUDE . '/price_class_access.php';
+	require_once PATH_ACCESS . '/group_access.php';
+	require_once PATH_ACCESS . '/price_class_access.php';
 
 	global $smarty;
 	$priceclassManager = new PriceClassManager();

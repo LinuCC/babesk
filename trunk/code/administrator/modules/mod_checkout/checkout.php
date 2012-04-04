@@ -5,13 +5,14 @@
     global $smarty;
 
 	require_once PATH_ACCESS . '/dbconnect.php';
-	require PATH_INCLUDE.'/managers.php';
 	require_once PATH_ACCESS . '/card_access.php';
 	require_once PATH_ACCESS . '/user_access.php';
+	require_once PATH_ACCESS . '/order_access.php';
     require "checkout_constants.php"; 
 
     $cardManager = new CardManager();
     $userManager = new UserManager();
+    $orderManager = new OrderManager();
     $smarty->assign('checkoutParent', PATH_SMARTY_ADMIN_MOD.'/mod_checkout/mod_checkout_header.tpl');
     
 	if ('POST' == $_SERVER['REQUEST_METHOD']) {
