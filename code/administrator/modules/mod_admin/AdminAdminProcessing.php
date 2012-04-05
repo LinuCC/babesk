@@ -8,8 +8,8 @@
  */
 class AdminAdminProcessing {
 	function __construct() {
-		require_once PATH_ACCESS . '/admin_access.php';
-		require_once PATH_ACCESS . '/admin_group_access.php';
+		require_once PATH_ACCESS . '/AdminManager.php';
+		require_once PATH_ACCESS . '/AdminGroupManager.php';
 		require_once 'AdminAdminInterface.php';
 		$this->adminInterface = new AdminAdminInterface();
 		$this->adminManager = new AdminManager();

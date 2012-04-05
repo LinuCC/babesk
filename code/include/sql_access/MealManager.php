@@ -4,7 +4,7 @@
  */
 
 require_once PATH_INCLUDE . '/constants.php';
-require_once PATH_ACCESS . '/access.php';
+require_once PATH_ACCESS . '/TableManager.php';
 
 /**
  * Manages the meals, provides methods to add/modify meals or to get meal data

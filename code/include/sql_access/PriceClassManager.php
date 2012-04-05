@@ -3,7 +3,7 @@
  * Provides Functions to manage the price classes of the system
  */
 
-require_once PATH_ACCESS . '/access.php';
+require_once PATH_ACCESS . '/TableManager.php';
 
 /**
  * Manages the price classes, provides methods to add/modify price classes or to get price class data
@@ -21,8 +21,8 @@ class PriceClassManager extends TableManager {
 	 */
 	function getPrice($uid, $mid) {
 		require_once PATH_INCLUDE . '/constants.php';
-		require_once PATH_ACCESS . '/user_access.php';		
-		require_once PATH_ACCESS . '/meal_access.php';
+		require_once PATH_ACCESS . '/UserManager.php';		
+		require_once PATH_ACCESS . '/MealManager.php';
 		
 		$userManager = new UserManager();
 		$mealManager = new MealManager('meals');

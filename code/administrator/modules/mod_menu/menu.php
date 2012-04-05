@@ -6,7 +6,7 @@
  */
 
 $from_modul = defined('PATH_INCLUDE') or require_once("../../../include/path.php");
-require_once PATH_ACCESS . '/meal_access.php';
+require_once PATH_ACCESS . '/MealManager.php';
 require_once "menu_functions.php";
 require_once PATH_SMARTY . "/smarty_init.php";
 
@@ -31,7 +31,7 @@ if ($meallist) {
 	$meallistweeksorted = NULL;
 }
 
-require_once PATH_ACCESS . '/global_settings_access.php';
+require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 //get the Information-texts
 try {
 	$gsManager = new GlobalSettingsManager();

@@ -58,7 +58,7 @@ if(!$login) {
 	}
 }
 if($login){ 
-	require_once PATH_ACCESS . '/user_access.php';
+	require_once PATH_ACCESS . '/UserManager.php';
 	$userManager = new UserManager();
 	//seems like something that Smarty itself needs
 	$smarty->assign('status', ''); //???

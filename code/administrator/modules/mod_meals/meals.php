@@ -7,7 +7,7 @@
 	
 	require_once 'meals_functions.php';
 	require_once 'meals_constants.php';
-	require_once PATH_ACCESS . '/meal_access.php';
+	require_once PATH_ACCESS . '/MealManager.php';
 	
 	global $smarty;
 	
@@ -24,7 +24,7 @@
 		else if($_GET['action'] == 4)//delete old orders
 			delete_old_meals_and_orders();
 		else if($_GET['action'] == 5) {//delete specific meal
-// 			require_once PATH_ACCESS . '/meal_access.php';
+// 			require_once PATH_ACCESS . '/MealManager.php';
 // 			$mealManager = new MealManager();
 // 			try {
 // 				$mealManager->delEntry($_GET['id']);

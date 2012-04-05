@@ -2,8 +2,8 @@
     //No direct access
     defined('_AEXEC') or die("Access denied");
     
-    require_once PATH_ACCESS . '/admin_access.php';
-    require_once PATH_ACCESS . '/admin_group_access.php';
+    require_once PATH_ACCESS . '/AdminManager.php';
+    require_once PATH_ACCESS . '/AdminGroupManager.php';
     $adminManager = new AdminManager();
     $admingroupManager = new AdminGroupManager();
     

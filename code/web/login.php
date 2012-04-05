@@ -14,7 +14,7 @@ function login() {
 	
 	if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['login'], $_POST['password'])) {
 		require_once PATH_INCLUDE.'/constants.php';
-		require_once PATH_ACCESS . '/user_access.php';
+		require_once PATH_ACCESS . '/UserManager.php';
 		$userManager = new UserManager();
 		$username = $_POST['login'];
 		$formpass = $_POST['password'];

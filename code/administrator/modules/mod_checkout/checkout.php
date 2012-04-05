@@ -5,9 +5,9 @@
     global $smarty;
 
 	require_once PATH_ACCESS . '/dbconnect.php';
-	require_once PATH_ACCESS . '/card_access.php';
-	require_once PATH_ACCESS . '/user_access.php';
-	require_once PATH_ACCESS . '/order_access.php';
+	require_once PATH_ACCESS . '/CardManager.php';
+	require_once PATH_ACCESS . '/UserManager.php';
+	require_once PATH_ACCESS . '/OrderManager.php';
     require "checkout_constants.php"; 
 
     $cardManager = new CardManager();

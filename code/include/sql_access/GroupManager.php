@@ -3,7 +3,7 @@
  * Provides a class to manage the groups of the system
  */
 
-require_once PATH_ACCESS . '/access.php';
+require_once PATH_ACCESS . '/TableManager.php';
 
 /**
  * Manages the groups, provides methods to add/modify groups or to get group data

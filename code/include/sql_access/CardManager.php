@@ -4,7 +4,7 @@
  * Provides functions for the RFID Cards
  */
 
-require_once PATH_ACCESS . '/access.php';
+require_once PATH_ACCESS . '/TableManager.php';
 
 class CardManager extends TableManager {
 	function __construct() {

@@ -3,7 +3,7 @@
 defined('_WEXEC') or die("Access denied");
 global $smarty;
 
-require_once PATH_ACCESS . '/global_settings_access.php';
+require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 
 $gsManager = new GlobalSettingsManager();
 try {

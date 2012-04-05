@@ -1,8 +1,8 @@
 <?php
 
 require_once 'AdminSoliInterface.php';
-require_once PATH_ACCESS . '/soli_coupons_access.php';
-require_once PATH_ACCESS . '/soli_order_access.php';
+require_once PATH_ACCESS . '/SoliCouponsManager.php';
+require_once PATH_ACCESS . '/SoliOrderManager.php';
 
 class AdminSoliProcessing {
 
@@ -37,7 +37,7 @@ class AdminSoliProcessing {
 	 */
 	function AddCoupon($beg_date, $end_date, $uid) {
 
-		require_once PATH_ACCESS . '/user_access.php';
+		require_once PATH_ACCESS . '/UserManager.php';
 		$userManager = new UserManager();
 
 		if ($beg_date && $end_date && $uid) {
@@ -64,7 +64,7 @@ class AdminSoliProcessing {
 			/*
 			 *Show Add-Coupon-Interface
 			 */
-			require_once PATH_ACCESS . '/user_access.php';
+			require_once PATH_ACCESS . '/UserManager.php';
 
 			$userManager = new UserManager();
 
@@ -83,7 +83,7 @@ class AdminSoliProcessing {
 	 */
 	function ShowCoupons() {
 
-		require_once PATH_ACCESS . '/user_access.php';
+		require_once PATH_ACCESS . '/UserManager.php';
 
 		$coupons = $this->soliCouponManager->getAllCoupons();
 		$userManager = new UserManager();
@@ -116,7 +116,7 @@ class AdminSoliProcessing {
 		} else {
 
 			//Show Confirmation-Dialog
-			require_once PATH_ACCESS . '/user_access.php';
+			require_once PATH_ACCESS . '/UserManager.php';
 			try {
 				$userManager = new UserManager();
 				$uid = $this->soliCouponManager->getEntryValue($id, 'UID');
@@ -134,7 +134,7 @@ class AdminSoliProcessing {
 	 */
 	function ShowUsers() {
 
-		require_once PATH_ACCESS . '/user_access.php';
+		require_once PATH_ACCESS . '/UserManager.php';
 
 		$userManager = new UserManager();
 		try {
@@ -153,10 +153,10 @@ class AdminSoliProcessing {
 	 * Enter description here ...
 	 */
 	function ShowAllSoliOrders() {
-		require_once PATH_ACCESS . '/user_access.php';
-		require_once PATH_ACCESS . '/meal_access.php';
-		require_once PATH_ACCESS . '/global_settings_access.php';
-		require_once PATH_ACCESS . '/price_class_access.php';
+		require_once PATH_ACCESS . '/UserManager.php';
+		require_once PATH_ACCESS . '/MealManager.php';
+		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
+		require_once PATH_ACCESS . '/PriceClassManager.php';
 
 		$soliOrderManager = $this->soliOrderManager;
 		$soliCouponManager = $this->soliCouponManager;
@@ -216,7 +216,7 @@ class AdminSoliProcessing {
 	 * @param $uid the UserID of the soli-user who ordered meals
 	 */
 	function ShowSoliOrdersByDate($weeknum, $uid) {
-		require_once PATH_ACCESS . '/user_access.php';
+		require_once PATH_ACCESS . '/UserManager.php';
 		$userManager = new UserManager();
 		if ($weeknum && $uid) {
 
@@ -261,7 +261,7 @@ class AdminSoliProcessing {
 	 */
 	function ChangeSettings($soli_price) {
 
-		require_once PATH_ACCESS . '/global_settings_access.php';
+		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 
 		global $smarty;
 		$gbManager = new GlobalSettingsManager();

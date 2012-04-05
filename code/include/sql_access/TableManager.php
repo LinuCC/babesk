@@ -20,6 +20,7 @@ class TableManager {
 	 *
 	 * @param the name of the table in MySQL
 	 */
+
 	public function __construct($tablename) {
 		require "dbconnect.php";
 		$this->db = $db;
@@ -37,6 +38,7 @@ class TableManager {
 	 * @param variable amount, see description
 	 * @return false if error, else array
 	 */
+
 	public function getEntryData() {
 
 		require_once PATH_INCLUDE . '/constants.php';
@@ -119,6 +121,7 @@ class TableManager {
 	 *
 	 * @param variable amount, even number. see description.
 	 */
+
 	public function addEntry() {
 		require_once PATH_INCLUDE . '/constants.php';
 
@@ -168,6 +171,7 @@ class TableManager {
 	 * @throws UnexpectedValueException When one of the parameters has the wrong typ
 	 * @return array()
 	 */
+
 	public function searchEntry($search_str) {
 		//this function is for getting a single value
 		if (!is_string($search_str))
@@ -187,6 +191,7 @@ class TableManager {
 	 * @param numeric_string $id
 	 * @param string $key
 	 */
+
 	public function getEntryValue($id, $key) {
 		$query = sql_prev_inj(sprintf('SELECT %s FROM %s WHERE ID=%s', $key, $this->tablename, $id));
 		$result = $this->db->query($query);
@@ -212,6 +217,7 @@ class TableManager {
 	 * 
 	 * @param a variable amount, see description
 	 */
+
 	public function alterEntry() {
 		$args = func_get_args();
 		if (count($args) < 1 || count($args) % 2 != 1) {
@@ -222,15 +228,15 @@ class TableManager {
 		//starts with one cause arg[0] is the ID
 		for ($i = 1; isset($args[$i]); $i += 1) {
 			switch ($i % 2) {
-			case 0: // A value
-				if (!is_numeric($args[$i])) {
-					$args[$i] = '"' . $args[$i] . '"';
-				}
-				$set_str .= $args[$i] . ',';
-				break;
-			case 1: // A string describing what value should be set
-				$set_str .= $args[$i] . '=';
-				break;
+				case 0: // A value
+					if (!is_numeric($args[$i])) {
+						$args[$i] = '"' . $args[$i] . '"';
+					}
+					$set_str .= $args[$i] . ',';
+					break;
+				case 1: // A string describing what value should be set
+					$set_str .= $args[$i] . '=';
+					break;
 			}
 		}
 		$set_str = substr($set_str, 0, -1);
@@ -247,6 +253,7 @@ class TableManager {
 	 *
 	 * @param ID The ID of the entry to delete
 	 */
+
 	public function delEntry($ID) {
 		require_once PATH_INCLUDE . '/constants.php';
 
@@ -265,12 +272,13 @@ class TableManager {
 	 * returns the ID of the next object that would be added (MySQL's Autoincrement)
 	 */
 	function getNextAutoIncrementID() {
-		$query = sql_prev_inj(sprintf('SELECT Auto_increment FROM information_schema.tables WHERE table_name="%s";', $this->tablename));
+		$query = sql_prev_inj(
+				sprintf('SELECT Auto_increment FROM information_schema.tables WHERE table_name="%s";', $this->tablename));
 		$result = $this->db->query($query);
-		if(!$result) 
+		if (!$result)
 			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error);
-		$nextID = $result->fetch_assoc(); 
-		if(!$nextID || $nextID == '')
+		$nextID = $result->fetch_assoc();
+		if (!$nextID || $nextID == '')
 			throw new MySQLVoidDataException('MySQL returned no data for last autoincrementID');
 		return $nextID['Auto_increment'];
 	}

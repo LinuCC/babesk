@@ -2,9 +2,9 @@
 //No direct access
 defined('_WEXEC') or die("Access denied");
 
-require_once PATH_ACCESS . '/global_settings_access.php';
-require_once PATH_ACCESS . '/order_access.php';
-require_once PATH_ACCESS . '/meal_access.php';
+require_once PATH_ACCESS . '/GlobalSettingsManager.php';
+require_once PATH_ACCESS . '/OrderManager.php';
+require_once PATH_ACCESS . '/MealManager.php';
 
 global $smarty;
 global $logger;

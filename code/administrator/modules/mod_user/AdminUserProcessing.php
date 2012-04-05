@@ -43,9 +43,9 @@ class AdminUserProcessing {
 	 */
 	function RegisterUser($forename, $name, $username, $passwd, $passwd_repeat, $cardID, $birthday, $GID, $credits) {
 
-		require_once PATH_ACCESS . '/user_access.php';
-		require_once PATH_ACCESS . '/card_access.php';
-		require_once PATH_ACCESS . '/group_access.php';
+		require_once PATH_ACCESS . '/UserManager.php';
+		require_once PATH_ACCESS . '/CardManager.php';
+		require_once PATH_ACCESS . '/GroupManager.php';
 		require_once PATH_INCLUDE . "/logs.php";
 
 		$userManager = new UserManager();
@@ -122,7 +122,7 @@ class AdminUserProcessing {
 
 	function getGroups() {
 
-		require_once PATH_ACCESS . '/group_access.php';
+		require_once PATH_ACCESS . '/GroupManager.php';
 
 		$group_manager = new GroupManager('groups');
 
@@ -145,8 +145,8 @@ class AdminUserProcessing {
 	//////////////////////////////////////////////////
 	function ShowUsers($filter) {
 
-		require_once PATH_ACCESS . '/user_access.php';
-		require_once PATH_ACCESS . '/group_access.php';
+		require_once PATH_ACCESS . '/UserManager.php';
+		require_once PATH_ACCESS . '/GroupManager.php';
 
 		$userManager = new UserManager();
 		$groupManager = new GroupManager();
@@ -186,7 +186,7 @@ class AdminUserProcessing {
 	 */
 	function DeleteConfirmation($uid) {
 
-		require_once PATH_ACCESS . '/user_access.php';
+		require_once PATH_ACCESS . '/UserManager.php';
 
 		$userManager = new UserManager();
 
@@ -203,8 +203,8 @@ class AdminUserProcessing {
 
 	function DeleteUser($uid) {
 
-		require_once PATH_ACCESS . '/user_access.php';
-		require_once PATH_ACCESS . '/card_access.php';
+		require_once PATH_ACCESS . '/UserManager.php';
+		require_once PATH_ACCESS . '/CardManager.php';
 		$userManager = new UserManager();
 		$cardManager = new CardManager();
 
@@ -224,9 +224,9 @@ class AdminUserProcessing {
 	 */
 	function ChangeUserForm($uid) {
 
-		require_once PATH_ACCESS . '/user_access.php';
-		require_once PATH_ACCESS . '/group_access.php';
-		require_once PATH_ACCESS . '/card_access.php';
+		require_once PATH_ACCESS . '/UserManager.php';
+		require_once PATH_ACCESS . '/GroupManager.php';
+		require_once PATH_ACCESS . '/CardManager.php';
 		$cardManager = new CardManager();
 		$userManager = new UserManager();
 		$groupManager = new GroupManager();
@@ -265,8 +265,8 @@ class AdminUserProcessing {
 	function ChangeUser($old_id, $id, $forename, $name, $username, $passwd, $passwd_repeat, $birthday, $GID, $credits,
 			$locked, $cardnumber, $soli) {
 
-		require_once PATH_ACCESS . '/user_access.php';
-		require_once PATH_ACCESS . '/card_access.php';
+		require_once PATH_ACCESS . '/UserManager.php';
+		require_once PATH_ACCESS . '/CardManager.php';
 		$userManager = new UserManager();
 		$cardManager = new CardManager();
 		try {

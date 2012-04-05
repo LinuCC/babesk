@@ -3,7 +3,7 @@
  * Provides a class to manage the users of the system
  */
 
-require_once PATH_ACCESS . '/access.php';
+require_once PATH_ACCESS . '/TableManager.php';
 
 /**
  * Manages the users, provides methods to add/modify users or to get user data
@@ -112,12 +112,12 @@ class UserManager extends TableManager{
 	 * @return number
 	 */
 	function getMaxRechargeAmount($uid) {
-		require_once PATH_ACCESS . '/group_access.php';
+		require_once PATH_ACCESS . '/GroupManager.php';
 		$userData = $this->getEntryData($uid, 'credit', 'GID');
 		$credit = $userData['credit'];
 		$gid = $userData['GID'];
 
-		//require_once PATH_ACCESS . '/group_access.php';
+		//require_once PATH_ACCESS . '/GroupManager.php';
 		$groupManager = new GroupManager('groups');
 
 		$groupData = $groupManager->getEntryData($gid, 'max_credit');

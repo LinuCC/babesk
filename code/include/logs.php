@@ -1,6 +1,6 @@
 <?php
 	
-	require_once PATH_ACCESS . '/access.php';
+	require_once PATH_ACCESS . '/TableManager.php';
 
     // The log categories
     define('ADMIN', 'ADMIN');     // everything happening in the admin area

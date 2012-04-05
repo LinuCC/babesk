@@ -2,7 +2,7 @@
 /**
  * Provides a class to manage the administrators and their groups
  */
-require_once PATH_ACCESS . '/access.php';
+require_once PATH_ACCESS . '/TableManager.php';
 /**
  * Manages the admins and admin groups, provides methods to add/modify admins/admin groups
  * or to get data

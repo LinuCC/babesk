@@ -1,5 +1,5 @@
 <?php
-require_once PATH_ACCESS . '/global_settings_access.php';
+require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 
 class AdminHelpProcessing {
 	function __construct() {

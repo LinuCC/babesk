@@ -2,13 +2,13 @@
 //No direct access
 defined('_WEXEC') or die("Access denied");
 require_once 'order_constants.php';
-require_once PATH_ACCESS . '/global_settings_access.php';
-require_once PATH_ACCESS . '/soli_order_access.php';
-require_once PATH_ACCESS . '/soli_coupons_access.php';
-require_once PATH_ACCESS . '/meal_access.php';
-require_once PATH_ACCESS . '/user_access.php';
-require_once PATH_ACCESS . '/order_access.php';
-require_once PATH_ACCESS . '/price_class_access.php';
+require_once PATH_ACCESS . '/GlobalSettingsManager.php';
+require_once PATH_ACCESS . '/SoliOrderManager.php';
+require_once PATH_ACCESS . '/SoliCouponsManager.php';
+require_once PATH_ACCESS . '/MealManager.php';
+require_once PATH_ACCESS . '/UserManager.php';
+require_once PATH_ACCESS . '/OrderManager.php';
+require_once PATH_ACCESS . '/PriceClassManager.php';
 global $smarty;
 global $logger;
 

@@ -9,8 +9,8 @@
  */
 function new_group() {
 
-	require_once PATH_ACCESS . '/group_access.php';
-	require_once PATH_ACCESS . '/price_class_access.php';
+	require_once PATH_ACCESS . '/GroupManager.php';
+	require_once PATH_ACCESS . '/PriceClassManager.php';
 	require_once 'group_constants.php';
 
 	global $smarty;
@@ -170,8 +170,8 @@ function new_group() {
  */
 function delete_group($ID) {
 
-	require_once PATH_ACCESS . '/group_access.php';
-	require_once PATH_ACCESS . '/price_class_access.php';
+	require_once PATH_ACCESS . '/GroupManager.php';
+	require_once PATH_ACCESS . '/PriceClassManager.php';
 	require_once 'group_constants.php';
 	global $smarty;
 
@@ -208,7 +208,7 @@ function delete_group($ID) {
  */
 function change_group($ID) {
 
-	require_once PATH_ACCESS . '/group_access.php';
+	require_once PATH_ACCESS . '/GroupManager.php';
 	require_once 'group_constants.php';
 	global $smarty;
 
@@ -259,7 +259,7 @@ function change_group($ID) {
  */
 function show_groups() {
 
-	require_once PATH_ACCESS . '/group_access.php';
+	require_once PATH_ACCESS . '/GroupManager.php';
 
 	$groupManager = new GroupManager('groups');
 	global $smarty;

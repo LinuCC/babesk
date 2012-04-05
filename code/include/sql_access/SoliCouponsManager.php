@@ -1,6 +1,6 @@
 <?php
 
-require_once PATH_ACCESS . '/access.php';
+require_once PATH_ACCESS . '/TableManager.php';
 
 class SoliCouponsManager extends TableManager {
 	function __construct() {
