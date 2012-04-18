@@ -1,0 +1,25 @@
+<--------------------------------BaBeSK-README-------------------------------->
+
+BaBeSK: "Bargeldloses Bestellsystem für Schulkantinen"
+
+#### WARNING: ####
+
+This Program is still in an Alpha-Phase, which means that some things can
+go unexpected or even terribly wrong. It comes with absolute no warranty.
+Have fun!
+
+----------------------------------
+Requirements:
+
+BaBeSK needs a Server running 
+ * PHP Version 5.1 or higher
+ * A MySQL-Server (3.3 or higher)
+ * More to be added
+
+
+----------------------------------
+Installation:
+
+Copy the Sourcode to your Server, then open 
+babesk/trunk/code/installation/index.php with your favourite webbrowser.
+After that, follow the instructions displayed.
