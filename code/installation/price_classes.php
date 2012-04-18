@@ -1,8 +1,8 @@
 <?php
 error_reporting(E_ALL);
 
-require_once '../include/PriceClassManager.php';
-require_once '../include/GroupManager.php';
+require_once '../include/sql_access/PriceClassManager.php';
+require_once '../include/sql_access/GroupManager.php';
 require_once 'installation_constants.php';
 
 if(!_AEXEC){
