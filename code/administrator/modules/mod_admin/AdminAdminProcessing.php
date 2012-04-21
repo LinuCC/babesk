@@ -117,7 +117,7 @@ class AdminAdminProcessing {
 				$this->adminInterface->ShowError($this->messages['err_del_admin'] . ':' . $e->getMessage());
 				die();
 			}
-			echo $this->messages['del_admin_fin'];
+			$this->adminInterface->ShowMsg($this->messages['del_admin_fin']);
 		} else {
 			try {
 				$name = $this->adminManager->getAdminName($ID);
