@@ -17,7 +17,8 @@ class PriceClassManager extends TableManager {
 	/**
 	 *Returns the requested pricefield on the based on the User-ID and the Meal-ID
 	 *
-	 *@return: returns false if nothing found, else the priceData
+	 *@return: string
+	 *returns false if nothing found, else the priceData
 	 */
 	function getPrice($uid, $mid) {
 		require_once PATH_INCLUDE . '/constants.php';

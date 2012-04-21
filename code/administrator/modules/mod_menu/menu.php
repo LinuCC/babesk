@@ -18,7 +18,11 @@ if (!$from_modul) {
 $mealmanager = new MealManager('meals');
 
 $meallist = array();
-$meallist = $mealmanager->get_meals_between_two_dates(get_weekday(0), get_weekday(14));
+try {
+	$meallist = $mealmanager->get_meals_between_two_dates(get_weekday(0), get_weekday(14));
+} catch (MySQLVoidDataException $e) {
+	die('<b>Es wurden keine Mahlzeiten gefunden</b>');
+}
 $weekdate = array();
 for ($i = 0; $i < 12; $i++) {
 	if ($i <> 5 && $i <> 6)
