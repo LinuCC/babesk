@@ -37,10 +37,8 @@ class AdminSoliProcessing {
 	 * @param numeric_string $uid The ID of the User to whom the card belongs to
 	 */
 	function AddCoupon($beg_date, $end_date, $uid) {
-
 		require_once PATH_ACCESS . '/UserManager.php';
 		$userManager = new UserManager();
-
 		if ($beg_date && $end_date && $uid) {
 			/*
 			 * add Coupon to table
@@ -237,6 +235,7 @@ class AdminSoliProcessing {
 																				  date('Y-m-d',
 																					   $monday + ($i * $secs_per_day)));
 				} catch (MySQLVoidDataException $e) {
+					$this->soliInterface->ShowError($this->msg['ERR_USER_NO_SOLI_FOUND']);
 				}
 				foreach ($buffer as $order)
 					$orders[] = $order;
@@ -252,9 +251,12 @@ class AdminSoliProcessing {
 			$this->soliInterface->ShowSpecOrders($orders, $weeknum, $username, $sum_pricediff);
 
 		} else {
-
-			//Show Form to fill out Weeknumber and Soli
-			$solis = $userManager->getAllSoli();
+			try {
+				//Show Form to fill out Weeknumber and Soli
+				$solis = $userManager->getAllSoli();
+			} catch (Exception $e) {
+				$this->soliInterface->ShowError($this->msg['ERR_USER_NO_SOLI_FOUND']);
+			}
 			$this->soliInterface->AskShowSoliUser($solis);
 		}
 
