@@ -1,6 +1,6 @@
 <h3>Schritt 2</h3>
-<p>Im ersten Schritt geben sie bitte den Namen der Schule sowie ein Passwort für den Systemadministratoren (admin) ein</p>
-<legend>Bitte Name der Schule sowie Passwort für den Administrator eingeben</legend>
+<p>Im ersten Schritt geben sie bitte den Namen der Schule sowie ein Passwort fÃ¼r den Systemadministratoren (admin) ein</p>
+<legend>Bitte Name der Schule sowie Passwort fÃ¼r den Administrator eingeben</legend>
 <form action="index.php?step=2" method="post">
     <fieldset>
         <legend>Allgemeines</legend>

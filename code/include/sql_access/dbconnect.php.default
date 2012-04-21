@@ -1,15 +1,16 @@
 <?php
-    require_once PATH_INCLUDE . '/constants.php';
-    
-    $host = '';
-    $username = '';
-    $password = '';
-    $database = '';
-    
-    $db = @new MySQLi($host, $username, $password, $database);
-    $db->set_charset('utf8');
-    if (mysqli_connect_errno()) {
-        exit(DB_CONNECT_ERROR.mysqli_connect_error());
-    }
+//dbconnect gets included from various sources, thus making include-Paths different. Fix with __DIR__
+require_once __DIR__ . '/../constants.php';
+
+$host = '';
+$username = '';
+$password = '';
+$database = '';
+
+$db = @new MySQLi($host, $username, $password, $database);
+
+if (mysqli_connect_errno()) {
+	exit(DB_CONNECT_ERROR . mysqli_connect_error());
+}
 
 ?>

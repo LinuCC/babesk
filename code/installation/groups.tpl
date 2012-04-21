@@ -9,8 +9,7 @@
 		<legend>Gruppe:</legend>
 		<label>Gruppenname:</label> <input type="text" name="Name" /><br /> <label>Maximales
 			Guthaben:</label> <input type="text" name="Max_Credit" />Euro<br />
-	<input type="submit" name="add_another"
-		value="weiteren Datensatz hinzufügen" /> <input type="submit"
-		name="go_on" value="Fortfahren" />
+	<input type="submit" name="add_another" value="weiteren Datensatz hinzufügen" />
+	<input type="submit" name="go_on" value="Fortfahren" />
 	</fieldset>
 </form>
