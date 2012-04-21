@@ -145,7 +145,7 @@ class AdminSoliProcessing {
 		try {
 			$soli_user = $userManager->getAllSoli();
 		} catch (MySQLVoidDataException $e) {
-			$this->soliInterface->ShowError($this->msg['ERRUSER_NO_SOLI']);
+			$this->soliInterface->ShowError($this->msg['ERR_USER_NO_SOLI_FOUND']);
 		} catch (Exception $e) {
 			$this->soliInterface->ShowError($this->msg['ERR_SQL'] . ':' . $e->getMessage());
 		}
