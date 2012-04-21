@@ -1,0 +1,24 @@
+####
+#author: Pascal Ernst
+#pascal.cc.ernst@googlemail.com
+#
+#Feel free to add and commit any other options
+####
+
+#Eclipse-specific settings#
+###########################
+.buildpath
+.project
+.settings
+
+#OS-specific files we do not want#
+##################################
+.directory
+
+#installation-specific generated code#
+######################################
+dbconnect.php
+
+#third-party-programs#
+######################
+templates_c
