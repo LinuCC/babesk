@@ -242,7 +242,7 @@ class AdminSoliProcessing {
 																				  date('Y-m-d',
 																					   $monday + ($i * $secs_per_day)));
 				} catch (MySQLVoidDataException $e) {
-					$this->soliInterface->ShowError($this->msg['ERR_USER_NO_SOLI_FOUND']);
+					$this->soliInterface->ShowError($this->msg['ERR_ORDERS_NOT_FOUND']);
 				}
 				foreach ($buffer as $order)
 					$orders[] = $order;
