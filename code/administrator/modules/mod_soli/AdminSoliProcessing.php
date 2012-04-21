@@ -17,6 +17,7 @@ class AdminSoliProcessing {
 				'ERR_USER_NO_SOLI' => 'Der angegebene Benutzer ist nicht Soli-berechtigt',
 				'ERR_USER_NO_SOLI_FOUND' => 'Es konnten keine Soli-Benutzer gefunden werden',
 				'ERR_ADD_COUPON' => 'Ein Fehler ist beim Hinzufügen eines Coupons aufgetreten',
+				'ERR_GET_COUPON' => 'Es wurden keine Coupons gefunden',
 				'ERR_DEL_COUPON' => 'Ein Fehler ist beim löschen des Coupons aufgetreten',
 				'FIN_DEL_COUPON' => 'Der Coupon wurde erfolgreich gelöscht',
 				'ERR_FETCH_COUPON_INF' => 'Ein Fehler ist beim abholen der Daten aufgetreten',
@@ -85,7 +86,11 @@ class AdminSoliProcessing {
 
 		require_once PATH_ACCESS . '/UserManager.php';
 
-		$coupons = $this->soliCouponManager->getAllCoupons();
+		try {
+			$coupons = $this->soliCouponManager->getAllCoupons();
+		} catch (Exception $e) {
+			$this->soliInterface->ShowError($this->msg['ERR_GET_COUPON']);
+		}
 		$userManager = new UserManager();
 
 		foreach ($coupons as &$coupon) {
