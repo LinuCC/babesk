@@ -4,8 +4,8 @@ class AdminAdminInterface extends AdminInterface {
 	function __construct() {
 		parent::__construct();
 		$this->PTPL = PATH_SMARTY_ADMIN_MOD . '/mod_admin/';
-		$this->MOD_HEADING = $this->PTPL . 'mod_admin_header.tpl';
-		$this->smarty->assign('adminParent', $this->MOD_HEADING);
+		$this->parentPath = $this->PTPL . 'mod_admin_header.tpl';
+		$this->smarty->assign('adminParent', $this->parentPath);
 	}
 
 	function CreateAdmin($admin_group_arr) {
@@ -31,7 +31,7 @@ class AdminAdminInterface extends AdminInterface {
 	function CreateAdminFin($adminname, $str_admingroup) {
 		$msg = sprintf('Der Administrator %s, der zu der Gruppe %s gehört, wurde erfolgreich hinzugefügt.', $adminname,
 					   $str_admingroup);
-		die_msg($msg);
+		$this->ShowMsg($msg);
 	}
 
 	function ChangeAdmin($ID, $name, $groups) {
@@ -44,7 +44,7 @@ class AdminAdminInterface extends AdminInterface {
 	function ChangeAdminFin($ID, $name, $GID) {
 		$msg = sprintf('Der Administrator %s mit der ID %s und der GID %s wurde erfolgreich geändert.', $name, $ID,
 					   $GID);
-		die_msg();
+		$this->ShowMsg($msg);
 	}
 
 	function ConfirmDeleteAdmin($ID, $adminname) {
@@ -75,13 +75,6 @@ class AdminAdminInterface extends AdminInterface {
 	 * @var string
 	 */
 	private $PTPL;
-
-	/**
-	 * The Path to the heading of the module (all template-files of this module should inherit from this)
-	 * Enter description here ...
-	 * @var unknown_type
-	 */
-	private $MOD_HEADING;
 }
 
 ?>

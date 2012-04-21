@@ -33,8 +33,6 @@ class AdminInterface {
 	
 	protected $smarty;
 	
-	protected $PathUserTemplates;
-	
 	protected $parentPath;
 	
 }

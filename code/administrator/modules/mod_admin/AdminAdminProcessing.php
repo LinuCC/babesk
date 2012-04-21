@@ -43,7 +43,7 @@ class AdminAdminProcessing {
 
 			} catch (Exception $e) {
 				//wrong input!!
-				die_error($this->messages['err_inp'].':'.$e->getMessage());
+				$this->adminInterface->ShowError($this->messages['err_inp'].':'.$e->getMessage());
 			}
 			try {
 				$this->adminManager->addAdmin($name, hash_password($password), $agid);
