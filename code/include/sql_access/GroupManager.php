@@ -33,6 +33,16 @@ class GroupManager extends TableManager {
 		$group = parent::searchEntry(sprintf('name = "%s"', $str));
 		return $group['ID'];
 	}
+	
+	/**
+	 * getGroupName returns the name of a group
+	 * @param numeric_string $ID
+	 * @return string
+	 */
+	function getGroupName($ID) {
+		$name = $this->getEntryValue($ID, 'name');
+		return $name;
+	}
 
 	function addGroup($groupname, $max_credit) {
 		parent::addEntry('name', $groupname, 'max_credit', $max_credit);

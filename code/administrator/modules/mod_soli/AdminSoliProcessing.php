@@ -138,17 +138,24 @@ class AdminSoliProcessing {
 	function ShowUsers() {
 
 		require_once PATH_ACCESS . '/UserManager.php';
-
+		require_once PATH_ACCESS.'/GroupManager.php';
+		
+		$groupManager = new GroupManager();
 		$userManager = new UserManager();
+		
 		try {
-			$soli_user = $userManager->getAllSoli();
+			$soli_users = $userManager->getAllSoli();
 		} catch (MySQLVoidDataException $e) {
 			$this->soliInterface->ShowError($this->msg['ERR_USER_NO_SOLI_FOUND']);
 		} catch (Exception $e) {
 			$this->soliInterface->ShowError($this->msg['ERR_SQL'] . ':' . $e->getMessage());
 		}
-
-		$this->soliInterface->ShowSoliUser($soli_user);
+		
+		foreach ($soli_users as &$soli_user) {
+			$soli_user ['groupname'] = $groupManager->getGroupName($soli_user['GID']);
+		}
+		
+		$this->soliInterface->ShowSoliUser($soli_users);
 	}
 
 	/**
