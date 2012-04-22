@@ -7,7 +7,7 @@ require_once 'AdminSoliProcessing.php';
 $soliProcessing = new AdminSoliProcessing();
 $soliInterface = new AdminSoliInterface();
 
-if ('POST' == $_SERVER['REQUEST_METHOD']) {
+if (('POST' == $_SERVER['REQUEST_METHOD']) && isset($_GET['action'])) {
 	$action = $_GET['action'];
 	switch ($action) {
 		case 1: //add coupon
