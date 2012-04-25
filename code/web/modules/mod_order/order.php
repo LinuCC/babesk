@@ -20,6 +20,8 @@ $soliCouponManager = new SoliCouponsManager();
 $priceClassManager = new PriceClassManager();
 $gbManager = new GlobalSettingsManager();
 
+$smarty->assign('babesk_version', file_get_contents("../version.txt"));
+
 if (isset($_GET['order'])) {
 
 	$payment = NULL;

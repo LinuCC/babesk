@@ -7,6 +7,8 @@
     $adminManager = new AdminManager();
     $admingroupManager = new AdminGroupManager();
     
+    $smarty->assign('babesk_version', file_get_contents("../version.txt"));
+    
     if ('POST' == $_SERVER['REQUEST_METHOD']) {
         if (!isset($_POST['Username'], $_POST['Password'])) {
             die(INVALID_FORM);
@@ -63,6 +65,7 @@
         $login = True;
     }
     else {
+    
         $smarty->display('administrator/login.tpl'); 
     }
 

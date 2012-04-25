@@ -22,7 +22,7 @@ require 'modules.php';
 
 //relative smarty path for css files
 $smarty->assign('smarty_path', REL_PATH_SMARTY);
-
+$smarty->assign('babesk_version', file_get_contents("../version.txt"));
 $smarty->assign('error', '');
 
 /**

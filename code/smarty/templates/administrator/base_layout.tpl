@@ -29,7 +29,9 @@
 		<div id="content">{block name=content}{/block}</div>
 	</div>
 	<div id="footer">
-		<p>{block name=signature}BaBeSK LeG Uelzen{/block}</p>
+		<p>{block name=signature}<div id="footer">
+    <p>BaBeSK {$babesk_version} &copy; 2011 Lessing Gymnasium Uelzen</p>
+</div>{/block}</p>
 		{block name=footer}{/block}
 		{block name=links}<br /><br /><a style="font-size:120%" href="index.php">Zur&uuml;ck zum Hauptmen&uuml;</a>{/block}
 	</div>

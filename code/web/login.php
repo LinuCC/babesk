@@ -11,6 +11,7 @@
 function login() {
 	defined('_WEXEC') or die("Access denied");
 	global $smarty;
+	$smarty->assign('babesk_version', file_get_contents("../version.txt"));
 	
 	if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['login'], $_POST['password'])) {
 		require_once PATH_INCLUDE.'/constants.php';

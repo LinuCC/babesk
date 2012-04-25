@@ -24,7 +24,7 @@ require_once 'locales.php';
 require_once 'AdminInterface.php';
 $smarty->assign('smarty_path', REL_PATH_SMARTY);
 $smarty->assign('status', '');
-
+$smarty->assign('babesk_version', file_get_contents("../version.txt"));
 define('BASE_PATH', PATH_SMARTY . '/templates/administrator/base_layout.tpl');
 require_once PATH_ADMIN . '/admin_functions.php';
 
