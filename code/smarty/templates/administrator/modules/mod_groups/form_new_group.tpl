@@ -15,8 +15,8 @@
 	
 	{foreach $priceclasses as $priceclass}
 		<h4>Preis f&uuml;r {$priceclass.name}:</h4>
-		<label><input type="text" name="pc_price{$priceclass.ID}" size="5">Euro</label><br>
-		<input type="hidden" name="pc_name{$priceclass.ID}" value='{$priceclass.name}'>
+		<label><input type="text" name="pc_price{$priceclass.pc_ID}" size="5">Euro</label><br>
+		<input type="hidden" name="pc_name{$priceclass.pc_ID}" value='{$priceclass.name}'>
 	{/foreach}
 	</fieldset>
 	

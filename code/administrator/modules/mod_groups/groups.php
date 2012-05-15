@@ -7,31 +7,35 @@
 	 */
 	//no direct access
 	defined('_AEXEC') or die("Access denied");
+
+	require_once 'AdminGroupProcessing.php';
+	require_once 'AdminGroupInterface.php';
 	
-	require_once 'group_functions.php';
-	require_once 'group_constants.php';
-	global $smarty;
-	$smarty->assign('groupsParent', GROUP_SMARTY_PARENT);
+	$groupProcessing = new AdminGroupProcessing();
+	$groupInterface = new AdminGroupInterface();
 	
 	if ('POST' == $_SERVER['REQUEST_METHOD']) {
 
 		$action = $_GET['action'];
-		if($action == '1'){
-			new_group();
+		switch ($action) {
+			case '1':
+				$groupProcessing->NewGroup();
+				break;
+			case '2':
+				$groupProcessing->ShowGroups();
+				break;
+			case '3':
+				$groupProcessing->DeleteGroup($_GET['where']);
+				break;
+			case '4':
+				$groupProcessing->ChangeGroup($_GET['where']);
+				break;
+			default:
+				$groupInterface->ShowError('Wrong value of GET-variable action!');
+				break;
 		}
-		else if($action == '2'){
-			show_groups();
-		}
-		else if($action == '3'){
-			delete_group($_GET['where']);
-		}
-		else if($action == '4'){
-			change_group($_GET['where']);
-		}
-		else 
-			die_error('Wrong value of GET-variable action!');
 	}
 	else {
-		$smarty->display(PATH_SMARTY.'/templates/administrator/modules/mod_groups/group_menu.tpl');
+		$groupInterface->Menu();
 	}
 ?>
