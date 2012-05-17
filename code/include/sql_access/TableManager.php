@@ -48,6 +48,26 @@ class TableManager {
 	}
 	
 	/**
+	 * returns the ID of the first entry found with the value $value of the key $key
+	 * @param string $key
+	 * @param string $value
+	 */
+	public function getIDByValue($key, $value) {
+		$result = $this->searchEntry(sprintf('%s="%s"', $key, $value));
+		if(!$result)
+			throw new MySQLVoidDataException('MySQL returned no Data to retrieve the ID from!');
+		if(array_key_exists('ID', $result))
+			return $result ['ID'];
+		else if(array_key_exists('Id', $result))
+			return $result ['Id'];
+		else if(array_key_exists('id', $result))
+			return $result ['id'];
+		else
+			throw new Exception('No ID-Key found!');
+			
+	}
+	 
+	/**
 	 * Returns the value of the requested fields for the given id or all entries in database.
 	 *
 	 * The Function takes a variable amount of parameters, the first being the element id,

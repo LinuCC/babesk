@@ -54,6 +54,8 @@ class MealManager extends TableManager {
 	 * @param string date2 the second date (later) Format: Y-m-d
 	 * @param string order_str The string after MySQL's ORDER BY if something should be sorted. Leave String blank
 	 * 				if no sortation is needed.
+	 * 
+	 * @todo: Refactor Name! needs CamelCase
 	 */
 	public function get_meals_between_two_dates($date1, $date2, $order_str = '') {
 		if (!$date1 or !$date2) {
@@ -145,6 +147,18 @@ class MealManager extends TableManager {
 	public function addMeal($name, $description, $date_conv, $price_class, $max_orders) {
 		parent::addEntry('name', $name, 'description', $description, 'date', $date_conv, 'price_class', $price_class,
 						 'max_orders', $max_orders);
+	}
+	
+	/**
+	 * Deletes all meals which are before the given date
+	 * @param string $timestamp
+	 * @throws MySQLConnectionException
+	 */
+	public function deleteMealsBeforeDate($timestamp) {
+		$query = sql_prev_inj(sprintf('DELETE FROM %s WHERE date < "%s"', $this->tablename, date('Y-m-d',$timestamp)));
+		$result = $this->db->query($query);
+		if(!$result)
+			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error);
 	}
 }
 

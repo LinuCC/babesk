@@ -54,6 +54,22 @@ class GlobalSettingsManager extends TableManager {
 	}
 	
 	/**
+	 * Changes infotext1 and infotext2 based on the arguments given
+	 */
+	function setInfoTexts($infotext1, $infotext2) {
+		$this->alterEntry($this->getIDByValue('name', 'menu_text1'), 'value', $infotext1);
+		$this->alterEntry($this->getIDByValue('name', 'menu_text2'), 'value', $infotext2);
+	}
+	
+	/**
+	 * changes the Last Order Time
+	 * @param unknown_type $time
+	 */
+	function setLastOrderTime($time) {
+		$this->alterEntry($this->getIDByValue('name', 'last_order_time'), 'value', $time);
+	}
+	
+	/**
 	 * returns the value of soli_price
 	 * @throws UnexpectedValueException when soli_price is NULL
 	 * @throws something else when MySQL has problems
