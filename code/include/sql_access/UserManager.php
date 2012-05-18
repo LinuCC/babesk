@@ -135,7 +135,7 @@ class UserManager extends TableManager{
 
 		if($oldCredit + $amount < 0) {
 			//credit can't be negative
-			return false;
+			throw new BadMethodCallException('Final Amount of money is negative!');
 		}
 		$credit = $oldCredit + $amount;
 
