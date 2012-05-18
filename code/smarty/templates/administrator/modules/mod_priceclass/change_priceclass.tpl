@@ -1,4 +1,4 @@
-{extends file=$base_path}{block name=content}
+{extends file=$pcParent}{block name=content}
 <form action='index.php?section=priceclass&action=4&where={$ID}' method='post'>
 	<b>Ändern sie die ID der Preisklasse nur, wenn sie sich wirklich sicher sind! Ansonsten könnten
 	wichtige Daten in der Tabelle unbenutzbar machen!<br></b>
