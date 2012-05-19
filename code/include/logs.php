@@ -83,7 +83,7 @@
          * Enter description here ...
          * @param $category a string
          */
-        function getLogDataByCategory($category) {
+        public function getLogDataByCategory($category) {
         	if(!isset($category) || !is_string($category)) {
         		throw new BadMethodCallException('Wrong argument given in '.__METHOD__);
         	}
@@ -101,6 +101,18 @@
         	if(!$logs) {
         		throw new MySQLVoidDataException('MySQL returned no data');
         	}
+        	return $logs;
+        }
+        
+        /**
+         * Fetches all Logs from the MySQL-Table which are from the given category and severity
+         * @param string $category The Category of the logs
+         * @param string $severity The Severity of the logs
+         * @return array() an array of logs
+         */
+        public function getLogDataByCategoryAndSeverity ($category, $severity) {
+        	
+        	$logs = $this->getTableData('category = "'.$category.'" AND severity = "'.$severity.'"');
         	return $logs;
         }
         
