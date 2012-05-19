@@ -1,14 +1,18 @@
 <?php
-require_once PATH_ACCESS . '/GlobalSettingsManager.php';
+
 error_reporting(E_ALL);
 global $smarty;
 global $logger;
 
+require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 require_once PATH_ACCESS . '/SoliCouponsManager.php';
 require_once PATH_ACCESS . '/SoliOrderManager.php';
 require_once PATH_ACCESS . '/MealManager.php';
+require_once PATH_ACCESS . '/UserManager.php';
+require_once PATH_ACCESS . '/OrderManager.php';
+require_once PATH_ACCESS . '/PriceClassManager.php';
 
-$orderManager = new OrderManager('orders');
+$orderManager = new OrderManager();
 $priceClassManager = new PriceClassManager();
 $gbManager = new GlobalSettingsManager();
 $userManager = new UserManager();
@@ -52,4 +56,5 @@ try {
 
 $orderManager->delEntry($_GET['id']);
 $smarty->display("web/modules/mod_cancel/cancel.tpl");
+
 ?>
