@@ -24,11 +24,13 @@ class AdminAdminProcessing {
 			'err_get_admingroups'	 =>
 				'Die Administratorgruppe konnte nicht abgerufen werden, der Administrator wurde aber hinzugefügt.',
 			'err_mysql'				 => 'Konnte die Daten nicht vom MySQL-Server holen',
+			'err_add_admingroup'	 => 'Konnte die Administratorgruppe nicht hinzufügen',
 			'err_del_admingroup'	 => 'Konnte die Admingruppe nicht löschen',
 			'err_init_admingroup'	 => 'Ein Fehler ist beim initialisieren der AdminGruppen aufgetreten',
 			'err_del_admin'			 => 'Konnte den Administrator nicht löschen',
 			'err_change_admin'		 => 'Ein Fehler ist beim ändern des Administrators aufgetreten',
 			'del_admingroup_fin'	 => 'Die Administratorgruppe wurde erfolgreich gelöscht.',
+			'err_get_modules'		 => 'Ein Fehler ist beim Abrufen der Module aufgetreten.',
 			'del_admin_fin'			 => 'Der Administrator wurde erfolgreich gelöscht.');
 	}
 
@@ -41,11 +43,11 @@ class AdminAdminProcessing {
 	 * @param string $password The admin-Password
 	 * @param numeric_string $agid The adminGroup-ID, to which the admin belongs to
 	 */
-	function addAdmin ($name, $password, $agid) {
+	public function addAdmin ($name, $password, $agid) {
 
 		if ($name && $password && $agid) {
 
-			$this->AddAdminUserInputTest($name, $password, $agid);
+			$this->CheckInputAddUser($name, $password, $agid);
 			$this->AddAdminToServer($name, $password, $agid);
 			$admingroupname = $this->GetAdminGroupName($agid);
 			$this->adminInterface->CreateAdminFin($name, $admingroupname);
@@ -62,28 +64,20 @@ class AdminAdminProcessing {
 	 * @param string $name The name of the Group
 	 * @param array[numeric_string] $module_ids
 	 */
-	function addAdminGroup ($name, $module_ids) {
+	public function addAdminGroup ($name, $module_ids) {
+
 		if (!$name || !$module_ids) {
-			global $modManager;
-			$modules = $modManager->getModules();
+
+			$modules = $this->GetModules();
 			$this->adminInterface->CreateAdminGroup($modules);
 		} else {
-			global $modManager;
-			$allowed_modules = array();
-			foreach ($module_ids as $m_id) {
-				$allowed_modules[] = $modManager->getModuleName($m_id);
-			}
-			try {
-				inputcheck($name, 'name');
-			} catch (Exception $e) {
-				$this->adminInterface->ShowError($message['err_inp_gname']);
-				die();
-			}
-			$module_str = implode(', ', $allowed_modules);
-			if ($this->admingroupManager->addAdminGroup($name, $module_str)) {
-				$this->adminInterface->ConfirmAddAdminGroup($name);
 
-			}
+			$allowed_modules = $this->GetAllowedModules($module_ids);
+			$module_str = implode(', ', $allowed_modules);
+			$this->CheckInputGroupname($name);
+			
+			$this->AddAdminGroupToServer($name, $module_str);
+			$this->adminInterface->ConfirmAddAdminGroup($name);
 		}
 	}
 
@@ -93,7 +87,7 @@ class AdminAdminProcessing {
 	 * @param numeric_string $ID The ID of the Administrator to delete
 	 * @param boolean $confirm If false, it will show an deletion-confirmation first
 	 */
-	function deleteAdmin ($ID, $confirm) {
+	public function deleteAdmin ($ID, $confirm) {
 		if ($confirm) {
 			try {
 				$this->adminManager->delEntry($ID);
@@ -118,7 +112,7 @@ class AdminAdminProcessing {
 	 * by the given ID.
 	 * @param numeric $ID The ID of the AdminGroup to delete (or zero)
 	 */
-	function deleteAdminGroup ($ID, $confirm) {
+	public function deleteAdminGroup ($ID, $confirm) {
 		if ($confirm) {
 			try {
 				$this->admingroupManager->delEntry($ID);
@@ -141,7 +135,7 @@ class AdminAdminProcessing {
 	 * Handels the needed information to let the adminInterface show the admins
 	 * Enter description here ...
 	 */
-	function ShowAdmins () {
+	public function ShowAdmins () {
 		try {
 			$admins = $this->adminManager->getTableData();
 		} catch (Exception $e) {
@@ -161,7 +155,7 @@ class AdminAdminProcessing {
 	 * Handles the needed information to let the adminInterface Show the admingroups
 	 * Enter description here ...
 	 */
-	function ShowAdminGroups () {
+	public function ShowAdminGroups () {
 		try {
 			$admingroups = $this->admingroupManager->getTableData();
 		} catch (Exception $e) {
@@ -175,7 +169,7 @@ class AdminAdminProcessing {
 	 * Changes Data of an Admin
 	 * Enter description here ...
 	 */
-	function ChangeAdmin ($old_ID, $ID, $name, $password, $gid) {
+	public function ChangeAdmin ($old_ID, $ID, $name, $password, $gid) {
 		if (isset($old_ID, $ID, $name, $gid)) {
 			try {
 				inputcheck($old_ID, 'id');
@@ -213,7 +207,7 @@ class AdminAdminProcessing {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
-	private function AddAdminUserInputTest ($name, $password, $agid) {
+	private function CheckInputAddUser ($name, $password, $agid) {
 		try {
 			inputcheck($name, 'name');
 			inputcheck($password, 'password');
@@ -238,14 +232,24 @@ class AdminAdminProcessing {
 	}
 
 	private function AddAdminToServer ($name, $password, $agid) {
+
 		try {
 			$this->adminManager->addAdmin($name, hash_password($password), $agid);
 		} catch (Exception $e) {
 			$this->adminInterface->ShowError($this->messages['err_add_admin'] . ':' . $e->getMessage());
 		}
 	}
+	
+	private function AddAdminGroupToServer($name, $module_str) {
+		try {
+			$this->admingroupManager->addAdminGroup($name, $module_str);
+		} catch (Exception $e) {
+			$this->adminInterface->ShowError($this->msg['err_add_admingroup']);
+		}
+	}
 
 	private function GetAdminGroupName ($agid) {
+
 		try {
 			$admingroupname = $this->admingroupManager->getAdminGroupName($agid);
 		} catch (Exception $e) {
@@ -255,12 +259,44 @@ class AdminAdminProcessing {
 	}
 
 	private function GetAdminGroups () {
+
 		try {
 			$admin_groups = $this->admingroupManager->getTableData();
 		} catch (Exception $e) {
 			$this->adminInterface->ShowError($this->messages['err_mysql'] . ':' . $e->getMessage());
 		}
 		return $admin_groups;
+	}
+
+	private function GetModules () {
+
+		global $modManager;
+
+		try {
+			$modules = $modManager->getModules();
+		} catch (Exception $e) {
+			$this->adminInterface->ShowError($this->msg['err_get_modules']);
+		}
+		return $modules;
+	}
+
+	private function GetAllowedModules ($module_ids) {
+
+		global $modManager;
+		$allowed_modules = array();
+
+		foreach ($module_ids as $m_id) {
+			$allowed_modules[] = $modManager->getModuleName($m_id);
+		}
+		return $allowed_modules;
+	}
+
+	private function CheckInputGroupname ($name) {
+		try {
+			inputcheck($name, 'name');
+		} catch (Exception $e) {
+			$this->adminInterface->ShowError($message['err_inp_gname']);
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////

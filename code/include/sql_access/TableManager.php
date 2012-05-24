@@ -158,6 +158,7 @@ class TableManager {
 	 * the third one the second column-Identifier, the fourth the value of it and so on.
 	 *
 	 * @param variable amount, even number. see description.
+	 * @throws Exception
 	 */
 
 	public function addEntry() {

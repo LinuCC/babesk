@@ -95,24 +95,24 @@ class AdminGroupManager extends TableManager{
 	 *
 	 * @param name The name of the new admin group
 	 * @param modules A space separated list of the modules that are allowed for members of the new group
-	 * @return false if error
+	 * @throws MySQLConnectionException
+	 * @throws Exception
 	 */
 	function addAdminGroup($name, $modules) {
-		$query = sql_prev_inj(sprintf('SELECT COUNT(*) AS anzahl FROM admin_groups WHERE name="%s";', $name));
-		$result = $this->db->query($query);
-		$buffer = $result->fetch_assoc();
-
 		
+		$this->isAdminGroupNameExisting($name);
+		$this->addEntry('name', $name, 'modules', $modules);
+	}
+	
+	/**
+	 * @param string $name
+	 * @return boolean
+	 */
+	function isAdminGroupNameExisting($name) {
 		
-		if ($buffer["anzahl"] == "1") {
-			echo GROUP_EXISTS;
-			return false;
-		}
-		$query = sql_prev_inj(sprintf('INSERT INTO admin_groups(name, modules)
-	                      VALUES ("%s", "%s");', $name, $modules));
-		$result = $this->db->query($query);
-		if (!$result) {
-			echo DB_QUERY_ERROR.$this->db->error;
+		try {
+			$this->searchEntry(sprintf('name = "%s"', $name));
+		} catch (Exception $e) {
 			return false;
 		}
 		return true;
