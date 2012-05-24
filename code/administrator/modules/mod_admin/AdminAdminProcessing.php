@@ -7,67 +7,52 @@
  *
  */
 class AdminAdminProcessing {
-	function __construct() {
+
+	////////////////////////////////////////////////////////////////////////////////
+	//Constructor
+	function __construct () {
 		require_once PATH_ACCESS . '/AdminManager.php';
 		require_once PATH_ACCESS . '/AdminGroupManager.php';
 		require_once 'AdminAdminInterface.php';
 		$this->adminInterface = new AdminAdminInterface();
 		$this->adminManager = new AdminManager();
 		$this->admingroupManager = new AdminGroupManager();
-		$this->messages = array('err_inp_gname' => 'Der Gruppenname wurde falsch eingegeben.',
-								'err_inp' => 'Ein Wert wurde falsch eingegeben',
-								'err_add_admin' => 'Der Administrator konnte nicht hinzugefügt werden!',
-								'err_get_groupname' => 'Der ID konnte kein Gruppenname zugeordnet werden.',
-								'err_mysql' => 'Konnte die Daten nicht vom MySQL-Server holen',
-								'err_del_admingroup' => 'Konnte die Admingruppe nicht löschen',
-								'err_init_admingroup' => 'Ein Fehler ist beim initialisieren der AdminGruppen aufgetreten',
-								'err_del_admin' => 'Konnte den Administrator nicht löschen',
-								'err_change_admin' => 'Ein Fehler ist beim ändern des Administrators aufgetreten',
-								'del_admingroup_fin' => 'Die Administratorgruppe wurde erfolgreich gelöscht.',
-								'del_admin_fin' => 'Der Administrator wurde erfolgreich gelöscht.');
+		$this->messages = array('err_inp_gname'			 => 'Der Gruppenname wurde falsch eingegeben.',
+			'err_inp'				 => 'Ein Wert wurde falsch eingegeben',
+			'err_add_admin'			 => 'Der Administrator konnte nicht hinzugefügt werden!',
+			'err_get_groupname'		 => 'Der ID konnte kein Gruppenname zugeordnet werden.',
+			'err_get_admingroups'	 =>
+				'Die Administratorgruppe konnte nicht abgerufen werden, der Administrator wurde aber hinzugefügt.',
+			'err_mysql'				 => 'Konnte die Daten nicht vom MySQL-Server holen',
+			'err_del_admingroup'	 => 'Konnte die Admingruppe nicht löschen',
+			'err_init_admingroup'	 => 'Ein Fehler ist beim initialisieren der AdminGruppen aufgetreten',
+			'err_del_admin'			 => 'Konnte den Administrator nicht löschen',
+			'err_change_admin'		 => 'Ein Fehler ist beim ändern des Administrators aufgetreten',
+			'del_admingroup_fin'	 => 'Die Administratorgruppe wurde erfolgreich gelöscht.',
+			'del_admin_fin'			 => 'Der Administrator wurde erfolgreich gelöscht.');
 	}
-	
+
+	////////////////////////////////////////////////////////////////////////////////
+	//Methods
 	/**
 	 * The function adds an entry to the MySQL-AdminTable
-	 * 
-	 * @param string $name The name of the admin 
+	 *
+	 * @param string $name The name of the admin
 	 * @param string $password The admin-Password
 	 * @param numeric_string $agid The adminGroup-ID, to which the admin belongs to
 	 */
-	function addAdmin($name, $password, $agid) {
-		if($name && $password && $agid) {
-			try {
-				inputcheck($name, 'name');
-				inputcheck($password, 'password');
-				inputcheck($agid, 'id');
+	function addAdmin ($name, $password, $agid) {
 
-			} catch (Exception $e) {
-				//wrong input!!
-				$this->adminInterface->ShowError($this->messages['err_inp'].':'.$e->getMessage());
-			}
-			try {
-				$this->adminManager->addAdmin($name, hash_password($password), $agid);
-			} catch (Exception $e) {
-				$this->adminInterface->ShowError($this->messages['err_add_admin'].':'.$e->getMessage());
-			}
-			$admingroupname = $this->admingroupManager->getEntryData($agid);
-			$this->adminInterface->CreateAdminFin($name, $admingroupname['name']);
-		}
-		else {
-			try {
-				$admin_groups = $this->admingroupManager->getTableData();
-			} catch (Exception $e) {
-				$this->adminInterface->ShowError($this->messages['err_mysql'].':'.$e->getMessage());
-			}
-			$smarty_admin_groups = array();
-			foreach($admin_groups as $a_group) {
-				if(!isset($a_group['name'])) {
-					$this->adminInterface->ShowError($this->messages['err_init_admingroup']);
-					continue;
-				}
-				$smarty_admin_groups[$a_group['ID']] = $a_group['name'];
-			}
-			$this->adminInterface->CreateAdmin($smarty_admin_groups);
+		if ($name && $password && $agid) {
+
+			$this->AddAdminUserInputTest($name, $password, $agid);
+			$this->AddAdminToServer($name, $password, $agid);
+			$admingroupname = $this->GetAdminGroupName($agid);
+			$this->adminInterface->CreateAdminFin($name, $admingroupname);
+		} else {
+
+			$admin_groups = $this->GetAdminGroups();
+			$this->adminInterface->CreateAdmin($this->ProcessAdminGroupsForSmarty($admin_groups));
 		}
 	}
 
@@ -75,18 +60,17 @@ class AdminAdminProcessing {
 	 * adds an AdministratorGroup to the MySQL-table
 	 * Enter description here ...
 	 * @param string $name The name of the Group
-	 * @param array[numeric_string] $module_ids 
+	 * @param array[numeric_string] $module_ids
 	 */
-	function addAdminGroup($name, $module_ids) {
-		if(!$name || !$module_ids) {
+	function addAdminGroup ($name, $module_ids) {
+		if (!$name || !$module_ids) {
 			global $modManager;
 			$modules = $modManager->getModules();
 			$this->adminInterface->CreateAdminGroup($modules);
-		}
-		else {
+		} else {
 			global $modManager;
 			$allowed_modules = array();
-			foreach($module_ids as $m_id) {
+			foreach ($module_ids as $m_id) {
 				$allowed_modules[] = $modManager->getModuleName($m_id);
 			}
 			try {
@@ -96,21 +80,21 @@ class AdminAdminProcessing {
 				die();
 			}
 			$module_str = implode(', ', $allowed_modules);
-			if($this->admingroupManager->addAdminGroup($name, $module_str)) {
+			if ($this->admingroupManager->addAdminGroup($name, $module_str)) {
 				$this->adminInterface->ConfirmAddAdminGroup($name);
-			
+
 			}
 		}
 	}
-	
+
 	/**
 	 * deletes an Administrator-entry from the MySQL-table
 	 * Enter description here ...
 	 * @param numeric_string $ID The ID of the Administrator to delete
 	 * @param boolean $confirm If false, it will show an deletion-confirmation first
 	 */
-	function deleteAdmin($ID, $confirm) {
-		if($confirm) {
+	function deleteAdmin ($ID, $confirm) {
+		if ($confirm) {
 			try {
 				$this->adminManager->delEntry($ID);
 			} catch (Exception $e) {
@@ -127,15 +111,15 @@ class AdminAdminProcessing {
 			$this->adminInterface->ConfirmDeleteAdmin($ID, $name);
 		}
 	}
-	
+
 	/**
 	 * Handels the deletion of AdminGroups
 	 * If $confirm is zero, it will show a confirmation-dialog. Else it will delete the AdminGroup
 	 * by the given ID.
 	 * @param numeric $ID The ID of the AdminGroup to delete (or zero)
 	 */
-	function deleteAdminGroup($ID, $confirm) {
-		if($confirm) {
+	function deleteAdminGroup ($ID, $confirm) {
+		if ($confirm) {
 			try {
 				$this->admingroupManager->delEntry($ID);
 			} catch (Exception $e) {
@@ -152,19 +136,19 @@ class AdminAdminProcessing {
 			$this->adminInterface->ConfirmDeleteAdminGroup($ID, $name);
 		}
 	}
-	
+
 	/**
 	 * Handels the needed information to let the adminInterface show the admins
 	 * Enter description here ...
 	 */
-	function ShowAdmins() {
+	function ShowAdmins () {
 		try {
 			$admins = $this->adminManager->getTableData();
 		} catch (Exception $e) {
 			$this->adminInterface->ShowError($this->messages['err_mysql']);
 			die();
 		}
-		foreach($admins as &$admin) {
+		foreach ($admins as & $admin) {
 			try {
 				$admin['groupname'] = $this->admingroupManager->getAdminGroupName($admin['GID']);
 			} catch (Exception $e) {
@@ -177,7 +161,7 @@ class AdminAdminProcessing {
 	 * Handles the needed information to let the adminInterface Show the admingroups
 	 * Enter description here ...
 	 */
-	function ShowAdminGroups() {
+	function ShowAdminGroups () {
 		try {
 			$admingroups = $this->admingroupManager->getTableData();
 		} catch (Exception $e) {
@@ -186,61 +170,113 @@ class AdminAdminProcessing {
 		}
 		$this->adminInterface->ShowAdminGroup($admingroups);
 	}
-	
+
 	/**
 	 * Changes Data of an Admin
 	 * Enter description here ...
 	 */
-	function ChangeAdmin($old_ID, $ID, $name, $password, $gid) {
-		if(isset($old_ID, $ID, $name, $gid)) {
+	function ChangeAdmin ($old_ID, $ID, $name, $password, $gid) {
+		if (isset($old_ID, $ID, $name, $gid)) {
 			try {
 				inputcheck($old_ID, 'id');
 				inputcheck($ID, 'id');
 				inputcheck($name, 'name');
 				inputcheck($gid, 'id');
 			} catch (Exception $e) {
-				$this->adminInterface->ShowError($this->messages['err_inp'].' - Eingabe:'.$e->getMessage());
+				$this->adminInterface->ShowError($this->messages['err_inp'] . ' - Eingabe:' . $e->getMessage());
 				die();
 			}
 			try {
-				if(isset($password) && $password != '') {
+				if (isset($password) && $password != '') {
 					try {
 						inputcheck($password, 'password');
 					} catch (Exception $e) {
-						$this->adminInterface->ShowError($this->messages['err_inp'].' - Eingabe:'.$e->getMessage());
+						$this->adminInterface->ShowError($this->messages['err_inp'] . ' - Eingabe:' . $e->getMessage());
 						die();
 					}
-					$this->adminManager->alterEntry($old_ID, 'ID', $ID, 'name', $name, 
-													'password', hash_password($password), 'GID', $gid);			
+					$this->adminManager->alterEntry($old_ID, 'ID', $ID, 'name', $name, 'password', hash_password(
+						$password), 'GID', $gid);
 				} else {
-					$this->adminManager->alterEntry($old_ID, 'ID', $ID, 'name', $name, 
-													'GID', $gid);			
+					$this->adminManager->alterEntry($old_ID, 'ID', $ID, 'name', $name, 'GID', $gid);
 				}
 				$this->adminInterface->ChangeAdminFin($ID, $name, $gid);
 			} catch (Exception $e) {
-				$this->adminInterface->ShowError($this->messages['err_change_admin'].':'.$e->getMessage());
+				$this->adminInterface->ShowError($this->messages['err_change_admin'] . ':' . $e->getMessage());
 				///@todo log the error
-			}
-		} 
-		else if(isset($old_ID)){
+				}
+		} else if (isset($old_ID)) {
 			$admingroups = $this->admingroupManager->getTableData();
 			$admin = $this->adminManager->getEntryData($old_ID);
 			$this->adminInterface->ChangeAdmin($old_ID, $admin['name'], $admingroups);
 		}
 	}
-	
+
+	////////////////////////////////////////////////////////////////////////////////
+	//Implementations
+	private function AddAdminUserInputTest ($name, $password, $agid) {
+		try {
+			inputcheck($name, 'name');
+			inputcheck($password, 'password');
+			inputcheck($agid, 'id');
+
+		} catch (Exception $e) {
+			$this->adminInterface->ShowError($this->messages['err_inp'] . ':' . $e->getMessage());
+		}
+	}
+
+	private function ProcessAdminGroupsForSmarty ($admin_groups) {
+
+		$smarty_admin_groups = array();
+		foreach ($admin_groups as $a_group) {
+			if (!isset($a_group['name'])) {
+				$this->adminInterface->ShowError($this->messages['err_init_admingroup']);
+				continue;
+			}
+			$smarty_admin_groups[$a_group['ID']] = $a_group['name'];
+		}
+		return $smarty_admin_groups;
+	}
+
+	private function AddAdminToServer ($name, $password, $agid) {
+		try {
+			$this->adminManager->addAdmin($name, hash_password($password), $agid);
+		} catch (Exception $e) {
+			$this->adminInterface->ShowError($this->messages['err_add_admin'] . ':' . $e->getMessage());
+		}
+	}
+
+	private function GetAdminGroupName ($agid) {
+		try {
+			$admingroupname = $this->admingroupManager->getAdminGroupName($agid);
+		} catch (Exception $e) {
+			$this->adminInterface->ShowError($this->msg['err_get_admingroups'] . ':' . $e->getMessage());
+		}
+		return $admingroupname;
+	}
+
+	private function GetAdminGroups () {
+		try {
+			$admin_groups = $this->admingroupManager->getTableData();
+		} catch (Exception $e) {
+			$this->adminInterface->ShowError($this->messages['err_mysql'] . ':' . $e->getMessage());
+		}
+		return $admin_groups;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////
+	//Attributes
 	private $adminInterface;
-	
+
 	/**
 	 * An object of the AdminManager-class, to handle MySQL
 	 */
 	private $adminManager;
-	
+
 	/**
 	 * An object of the AdminGroupManager-class, to handle MySQL
 	 */
 	private $admingroupManager;
-	
+
 	/**
 	 * Some constant strings showed to the user
 	 * @var array[string]
