@@ -13,7 +13,14 @@ class GroupManager extends TableManager {
 	function __construct() {
 		parent::__construct('groups');
 	}
-
+	
+	/**
+	 * This function looks up if the given groupname already exists
+	 */
+	function existsGroupName($groupname) {
+		return $this->existsEntry('name', $groupname);
+	}
+	
 	/**
 	 * Returns the max_credit for the given group
 	 * @param $ID the ID of the group

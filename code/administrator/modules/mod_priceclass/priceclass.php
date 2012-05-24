@@ -8,29 +8,32 @@
 	//no direct access
 	defined('_AEXEC') or die("Access denied");
 	
-	require_once 'priceclass_functions.php';
-	global $smarty;
+	require_once 'AdminPriceclassInterface.php';
+	require_once 'AdminPriceclassProcessing.php';
+	
+	$pcProcessing = new AdminPriceclassProcessing();
+	$pcInterface = new AdminPriceclassInterface();
 	
 	if ('POST' == $_SERVER['REQUEST_METHOD']) {
 
-		$action = $_GET['action'];
-		if($action == '1'){
-			new_priceclass();
-		}
-		else if($action == '2'){
-			show_priceclasses();
-		}
-		else if($action == '3'){
-			delete_priceclass($_GET['where']);
-		}
-		else if($action == '4'){
-			change_priceclass($_GET['where']);
-		}
-		else {
-			die_error(ERR_VAR_GET);
+		switch($_GET['action']) {
+			case 1:
+				$pcProcessing->NewPriceclass();
+				break;
+			case 2:
+				$pcProcessing->ShowPriceclasses();
+				break;
+			case 3:
+				$pcProcessing->DeletePriceclass($_GET['where']);
+				break;
+			case 4:
+				$pcProcessing->ChangePriceclass($_GET['where']);
+				break;
+			default:
+				$pcInterface->ShowError('Wrong value of action');
 		}
 	}
 	else {
-		$smarty->display(PATH_SMARTY_ADMIN_MOD.'/mod_priceclass/priceclass_menu.tpl');
+		$pcInterface->Menu();
 	}
 ?>

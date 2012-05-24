@@ -1,4 +1,4 @@
-{extends file=$base_path}{block name=content}
+{extends file=$logsParent}{block name=content}
 <h3>Logs</h3>
 <p>Bitte W&auml;hlen Sie:</p>
 <a href="index.php?section=logs&action=show&{$sid}">Logs Anzeigen</a><br />

@@ -33,6 +33,9 @@ class AdminInterface {
 	
 	protected $smarty;
 	
+	/**
+	 * The Path to the Parent-Smartyfile to inherit from
+	 */
 	protected $parentPath;
 	
 }

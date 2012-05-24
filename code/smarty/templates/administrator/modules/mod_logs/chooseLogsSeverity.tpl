@@ -1,4 +1,4 @@
-{extends file=$base_path}{block name=content}
+{extends file=$logsParent}{block name=content}
 Bitte Gewichtung der Logs ausw&auml;hlen.
 
 <form action="index.php?section=logs&action=show&Category={$category}"

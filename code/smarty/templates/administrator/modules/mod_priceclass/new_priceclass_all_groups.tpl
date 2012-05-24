@@ -1,4 +1,4 @@
-{extends file=$base_path}{block name=content}
+{extends file=$pcParent}{block name=content}
 <h3>Neue Preisklasse erstellen</h3>
 <form action="index.php?section=priceclass&action=1" method="post">
 <label>Standard-Preis: <input type="text" name="n_price"></label>

@@ -1,53 +1,46 @@
 <?php
-	/**
-	 *@file meals.php handles all parts of the mealsmodule and combines them with the needed sourcefiles outside (like Database-functions)
-	*/
-    // No direct access
-    defined('_AEXEC') or die("Access denied");
-	
-	require_once 'meals_functions.php';
-	require_once 'meals_constants.php';
-	require_once PATH_ACCESS . '/MealManager.php';
-	
-	global $smarty;
-	
-	define('MEAL_SMARTY_PARENT', MEAL_SMARTY_TEMPLATE_PATH.'/meals_header.tpl');
-	$smarty->assign('mealParent', MEAL_SMARTY_PARENT);
-	
-	if(isset($_GET["action"])) {
-		if($_GET["action"] == 1)//show form for creating a meal
-			create_meal();
-		else if($_GET["action"] == 2)//show table of meals in Database
-			show_meals();
-		else if($_GET['action'] == 3)//show orders
-			show_orders();
-		else if($_GET['action'] == 4)//delete old orders
-			delete_old_meals_and_orders();
-		else if($_GET['action'] == 5) {//delete specific meal
-// 			require_once PATH_ACCESS . '/MealManager.php';
-// 			$mealManager = new MealManager();
-// 			try {
-// 				$mealManager->delEntry($_GET['id']);
-// 			} catch (Exception $e) {
-// 				die('Could not delete meal: '.$e->getMessage());
-// 			}
-			try {
-				delete_meal($_GET['id'], TRUE);
-			} catch (Exception $e) {
-				die_error($e->getMessage());
-			}
-			die_msg(MEAL_DELETED, MEAL_SMARTY_PARENT);
-		}
-		else if ($_GET['action'] == 6) {
-			edit_infotext();
-		}
-		else if ($_GET['action'] == 7) {
-			editLastOrderTime();
-		}
-		else if($_GET['action'] == 8)
-			duplicate_meal($_POST['name'], $_POST['description'], $_POST['pcID'], $_POST['date'], $_POST['max_orders']);
+/**
+ *@file meals.php handles all parts of the mealsmodule and combines them with the needed sourcefiles outside (like Database-functions)
+ */
+// No direct access
+defined('_AEXEC') or die("Access denied");
+
+require_once 'AdminMealProcessing.php';
+require_once 'AdminMealInterface.php';
+
+$mealProcessing = new AdminMealProcessing();
+$mealInterface = new AdminMealInterface();
+
+if (isset($_GET["action"])) {
+
+	switch ($_GET["action"]) {
+		case 1:
+			$mealProcessing->CreateMeal();
+			break;
+		case 2:
+			$mealProcessing->ShowMeals();
+			break;
+		case 3:
+			$mealProcessing->ShowOrders();
+			break;
+		case 4:
+			$mealProcessing->DeleteOldMealsAndOrders();
+			break;
+		case 5:
+			$mealProcessing->DeleteMeal($_GET['id'], true);
+			break;
+		case 6:
+			$mealProcessing->EditInfotext();
+			break;
+		case 7:
+			$mealProcessing->EditLastOrderTime();
+			break;
+		case 8:
+			$mealProcessing->DuplicateMeal($_POST['name'], $_POST['description'], $_POST['pcID'], $_POST['date'], $_POST['max_orders']);
+			break;
 	}
-	else {//User selects what he want to do
-		$smarty->display(MEAL_SMARTY_TEMPLATE_PATH.'/meals_initial_menu.tpl');
-	}
+} else {
+	
+	$mealInterface->Menu();
+}
 ?>

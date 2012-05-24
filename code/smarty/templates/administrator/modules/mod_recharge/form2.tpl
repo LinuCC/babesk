@@ -6,6 +6,7 @@
 		<label>Betrag</label>
 			<input type="text" name="amount" /><br />
 	</fieldset>
+	<input type="hidden" value="{$uid}" name="uid">
 	<input type="submit" value="Submit" />
 </form>
 
