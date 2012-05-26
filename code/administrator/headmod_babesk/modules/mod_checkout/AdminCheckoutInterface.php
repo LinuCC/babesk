@@ -8,11 +8,11 @@ class AdminCheckoutInterface extends AdminInterface {
 	
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
-	public function __construct() {
+	public function __construct($folder_path) {
 		
 		parent::__construct();
 		
-		$this->folderPath = PATH_SMARTY_ADMIN_MOD . '/mod_checkout/';
+		$this->folderPath = $folder_path;
 		$this->parentPath = $this->folderPath . 'mod_checkout_header.tpl';
 		$this->smarty->assign('checkoutParent', $this->parentPath);
 	}

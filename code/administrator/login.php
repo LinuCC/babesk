@@ -4,8 +4,11 @@
     
     require_once PATH_ACCESS . '/AdminManager.php';
     require_once PATH_ACCESS . '/AdminGroupManager.php';
+    require_once PATH_INCLUDE . '/moduleManager.php';
+    
     $adminManager = new AdminManager();
     $admingroupManager = new AdminGroupManager();
+    $moduleManager = new ModuleManager();
     
     $smarty->assign('babesk_version', file_get_contents("../version.txt"));
     
@@ -37,17 +40,18 @@
         //Get the available modules
         $groupData = $admingroupManager->getAdminGroupData($gid, 'modules');
         $module_string = $groupData['modules'];
+        $modules = $moduleManager->getModules();
         
         //copy the module mask
         $_SESSION['modules'] = array();
         foreach($modules as $module) {
-                $_SESSION['modules'][$module] = False;      //set all modules to disallow
+                $_SESSION['modules'][$module->getName()] = False;      //set all modules to disallow
         }
 
         //global admin
         if($module_string == '_ALL') {
             foreach($modules as $module) {
-                $_SESSION['modules'][$module] = True;
+                $_SESSION['modules'][$module->getName()] = True;
             }
         }
         //any regular admin
@@ -56,7 +60,7 @@
             foreach($modules as $module) {
                 foreach ($allowed_modules_array as $mod_name) {
                     if($mod_name == $module) {
-                        $_SESSION['modules'][$module] = True;           //allow module
+                        $_SESSION['modules'][$module->getName()] = True;           //allow module
                     }
                 }
             }

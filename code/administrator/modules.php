@@ -14,25 +14,25 @@
     defined('_AEXEC') or die("Access denied");
     
     
-    $modules = array();
+//     $modules = array();
     
-    //---------------------------------
-    //      Available Modules
-    //---------------------------------    
-    $modules[] = "user";
-    $modules[] = "recharge";
-    $modules[] = "checkout";
-    $modules[] = "logs";
-    $modules[] = "meals";
-    $modules[] = "admin";
-    //$modules[] = "fill";
-    //$modules[] = "clear";
-    //$modules[] = "dummy";
-    $modules[] = "menu";
-    $modules[] = "groups";
-    $modules[] = "priceclass";
-    $modules[] = "soli";
-    $modules[] = "help";
+//     //---------------------------------
+//     //      Available Modules
+//     //---------------------------------    
+//     $modules[] = "user";
+//     $modules[] = "recharge";
+//     $modules[] = "checkout";
+//     $modules[] = "logs";
+//     $modules[] = "meals";
+//     $modules[] = "admin";
+//     //$modules[] = "fill";
+//     //$modules[] = "clear";
+//     //$modules[] = "dummy";
+//     $modules[] = "menu";
+//     $modules[] = "groups";
+//     $modules[] = "priceclass";
+//     $modules[] = "soli";
+//     $modules[] = "help";
     
     
 ?>

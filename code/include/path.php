@@ -13,7 +13,7 @@
     define('PATH_ACCESS', realPath($rootPath."/include/sql_access"));
 	define('PATH_SMARTY', realPath($rootPath."/smarty"));
 	define('PATH_SMARTY_INH_PARENT', realPath($rootPath.'/smarty/templates/administrator/base_layout.tpl'));
-	define('PATH_SMARTY_ADMIN_MOD', realPath($rootPath.'/smarty/templates/administrator/modules'));
+	//define('PATH_SMARTY_ADMIN_MOD', realPath($rootPath.'/smarty/templates/administrator/modules'));
 	
 	define('PATH_WEBROOT', $_SERVER['DOCUMENT_ROOT']);
 	

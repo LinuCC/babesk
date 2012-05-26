@@ -19,7 +19,7 @@ require_once PATH_INCLUDE . "/logs.php";
 require_once PATH_INCLUDE . "/functions.php";
 require_once PATH_INCLUDE . '/exception_def.php';
 require_once PATH_INCLUDE . '/moduleManager.php';
-require_once 'modules.php';
+//require_once 'modules.php';
 require_once 'locales.php';
 require_once 'AdminInterface.php';
 $smarty->assign('smarty_path', REL_PATH_SMARTY);
@@ -29,7 +29,7 @@ define('BASE_PATH', PATH_SMARTY . '/templates/administrator/base_layout.tpl');
 require_once PATH_ADMIN . '/admin_functions.php';
 
 //the module manager
-$modManager = new ModuleManager($modules);
+$modManager = new ModuleManager();
 
 //check for valid session and save the ip address
 validSession() or die(INVALID_SESSION);
@@ -60,17 +60,10 @@ if ($login) {
 	if (isset($_GET['section'])) {
 		$modManager->execute($_GET['section']);
 	}
-	//if the user only has access to one module, include that 
- elseif ($modManager->checkForSingleModule()) {
-	}
 	//or include the menu
  else {
-		$allowedModules = array();
-		foreach ($modules as $module) {
-			if ($_SESSION['modules'][$module]) {
-				$allowedModules[] = $module;
-			}
-		}
+ 		
+ 		$allowedModules = $modManager->getAllowedModules();
 
 		$smarty->assign('is_mainmenu', true);
 		$smarty->assign('modules', $allowedModules);
