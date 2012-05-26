@@ -31,6 +31,10 @@ class AdminAdminProcessing {
 			'err_change_admin'		 => 'Ein Fehler ist beim ändern des Administrators aufgetreten',
 			'del_admingroup_fin'	 => 'Die Administratorgruppe wurde erfolgreich gelöscht.',
 			'err_get_modules'		 => 'Ein Fehler ist beim Abrufen der Module aufgetreten.',
+			'field_password'		 => 'Passwort',
+			'field_groupid'			 => 'Gruppen-ID',
+			'field_name'			 => 'Name',
+			'field_id'				 => 'ID',
 			'del_admin_fin'			 => 'Der Administrator wurde erfolgreich gelöscht.');
 	}
 
@@ -51,7 +55,8 @@ class AdminAdminProcessing {
 			$this->AddAdminToServer($name, $password, $agid);
 			$admingroupname = $this->GetAdminGroupName($agid);
 			$this->adminInterface->CreateAdminFin($name, $admingroupname);
-		} else {
+		}
+		else {
 
 			$admin_groups = $this->GetAdminGroups();
 			$this->adminInterface->CreateAdmin($this->ProcessAdminGroupsForSmarty($admin_groups));
@@ -70,12 +75,13 @@ class AdminAdminProcessing {
 
 			$modules = $this->GetModules();
 			$this->adminInterface->CreateAdminGroup($modules);
-		} else {
+		}
+		else {
 
 			$allowed_modules = $this->GetAllowedModules($module_ids);
 			$module_str = implode(', ', $allowed_modules);
 			$this->CheckInputGroupname($name);
-			
+
 			$this->AddAdminGroupToServer($name, $module_str);
 			$this->adminInterface->ConfirmAddAdminGroup($name);
 		}
@@ -96,7 +102,8 @@ class AdminAdminProcessing {
 				die();
 			}
 			$this->adminInterface->ShowMsg($this->messages['del_admin_fin']);
-		} else {
+		}
+		else {
 			try {
 				$name = $this->adminManager->getAdminName($ID);
 			} catch (Exception $e) {
@@ -121,7 +128,8 @@ class AdminAdminProcessing {
 				die();
 			}
 			echo $this->messages['del_admingroup_fin'];
-		} else {
+		}
+		else {
 			try {
 				$name = $this->admingroupManager->getAdminGroupName($ID);
 			} catch (Exception $e) {
@@ -151,11 +159,13 @@ class AdminAdminProcessing {
 		}
 		$this->adminInterface->ShowAdmin($admins);
 	}
+
 	/**
 	 * Handles the needed information to let the adminInterface Show the admingroups
 	 * Enter description here ...
 	 */
 	public function ShowAdminGroups () {
+
 		try {
 			$admingroups = $this->admingroupManager->getTableData();
 		} catch (Exception $e) {
@@ -170,35 +180,30 @@ class AdminAdminProcessing {
 	 * Enter description here ...
 	 */
 	public function ChangeAdmin ($old_ID, $ID, $name, $password, $gid) {
+
 		if (isset($old_ID, $ID, $name, $gid)) {
-			try {
-				inputcheck($old_ID, 'id');
-				inputcheck($ID, 'id');
-				inputcheck($name, 'name');
-				inputcheck($gid, 'id');
-			} catch (Exception $e) {
-				$this->adminInterface->ShowError($this->messages['err_inp'] . ' - Eingabe:' . $e->getMessage());
-				die();
-			}
+
+			$this->CheckInputChangeAdmin($old_ID, $ID, $name, $gid);
+
 			try {
 				if (isset($password) && $password != '') {
-					try {
-						inputcheck($password, 'password');
-					} catch (Exception $e) {
-						$this->adminInterface->ShowError($this->messages['err_inp'] . ' - Eingabe:' . $e->getMessage());
-						die();
-					}
+
+					$this->CheckInputPasswordChangeAmin($password);
 					$this->adminManager->alterEntry($old_ID, 'ID', $ID, 'name', $name, 'password', hash_password(
 						$password), 'GID', $gid);
-				} else {
+				}
+				else {
+
 					$this->adminManager->alterEntry($old_ID, 'ID', $ID, 'name', $name, 'GID', $gid);
 				}
 				$this->adminInterface->ChangeAdminFin($ID, $name, $gid);
 			} catch (Exception $e) {
+				
 				$this->adminInterface->ShowError($this->messages['err_change_admin'] . ':' . $e->getMessage());
 				///@todo log the error
 				}
-		} else if (isset($old_ID)) {
+		}
+		else if (isset($old_ID)) {
 			$admingroups = $this->admingroupManager->getTableData();
 			$admin = $this->adminManager->getEntryData($old_ID);
 			$this->adminInterface->ChangeAdmin($old_ID, $admin['name'], $admingroups);
@@ -239,8 +244,8 @@ class AdminAdminProcessing {
 			$this->adminInterface->ShowError($this->messages['err_add_admin'] . ':' . $e->getMessage());
 		}
 	}
-	
-	private function AddAdminGroupToServer($name, $module_str) {
+
+	private function AddAdminGroupToServer ($name, $module_str) {
 		try {
 			$this->admingroupManager->addAdminGroup($name, $module_str);
 		} catch (Exception $e) {
@@ -296,6 +301,27 @@ class AdminAdminProcessing {
 			inputcheck($name, 'name');
 		} catch (Exception $e) {
 			$this->adminInterface->ShowError($message['err_inp_gname']);
+		}
+	}
+
+	private function CheckInputChangeAdmin ($old_ID, $ID, $name, $gid) {
+
+		try {
+			inputcheck($old_ID, 'id');
+			inputcheck($ID, 'id', $this->messages['field_id']);
+			inputcheck($name, 'name', $this->messages['field_name']);
+			inputcheck($gid, 'id', $this->messages['field_groupid']);
+		} catch (WrongInputException $e) {
+			$this->adminInterface->ShowError($this->messages['err_inp'] . ' - ' . $e->getFieldName());
+		}
+	}
+
+	private function CheckInputPasswordChangeAmin ($password) {
+
+		try {
+			inputcheck($password, 'password', $this->messages['field_password']);
+		} catch (Exception $e) {
+			$this->adminInterface->ShowError($this->messages['err_inp'] . ' - ' . $e->getFieldName());
 		}
 	}
 
