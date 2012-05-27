@@ -67,15 +67,21 @@ if ($login) {
  else {
  		
  		$allowedModules = $moduleManager->getAllowedModules();
- 		$module_identifiers = array();
+ 		$head_mod_arr = array();
  		
  		foreach($allowedModules as $module) {
- 			$module_identifiers [$module] = $moduleManager->getModuleIdentifier($module);
+ 			$mod_arr = explode('|', $module);
+ 			$head_mod_name = $mod_arr[0];
+ 			foreach($head_mod_arr as $head_mod) {
+ 				if($head_mod == $head_mod_name)
+ 					continue 2;
+ 			}
+ 			$head_mod_arr [] = $head_mod_name;
  		}
  		
 		$smarty->assign('is_mainmenu', true);
 		$smarty->assign('modules', $allowedModules);
-		$smarty->assign('mod_identifiers', $module_identifiers);
+		$smarty->assign('head_modules', $head_mod_arr);
 		$smarty->assign('module_names', $moduleManager->getModuleDisplayNames());
 		$smarty->display('administrator/menu.tpl');
 	}

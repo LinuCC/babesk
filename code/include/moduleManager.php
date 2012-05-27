@@ -56,7 +56,7 @@ class ModuleManager {
 			foreach ($modules as $module) {
 				foreach ($allowed_modules_array as $mod_name) {
 					if ($mod_name == $module) {
-						$_SESSION['modules'][$module->getName()] = True; //allow module
+						$_SESSION['modules'][$head_mod->getName() . '|' . $module->getName()] = True; //allow module
 					}
 				}
 			}
@@ -67,7 +67,7 @@ class ModuleManager {
 		foreach ($this->headModules as $head_mod) {
 			$modules = $head_mod->getModules();
 			foreach ($modules as $module) {
-				$_SESSION['modules'][$module->getName()] = True;
+				$_SESSION['modules'][$head_mod->getName() . '|' . $module->getName()] = True;
 			}
 		}
 	}
@@ -78,7 +78,7 @@ class ModuleManager {
 		foreach ($this->headModules as $head_mod) {
 			$modules = $head_mod->getModules();
 			foreach ($modules as $module) {
-				if ($_SESSION['modules'][$module->getName()])
+				if ($_SESSION['modules'][$head_mod->getName() . '|' . $module->getName()])
 					$allowedModules[] = $head_mod->getName() . '|' . $module->getName();
 			}
 		}

@@ -53,6 +53,14 @@
 				<name>User</name>
 			</module>
 		</head_module>
+		<head_module>
+			<ger_name>Schinken!</ger_name>
+			<name>kurs</name>
+			<module>
+				<ger_name>Lecker Schinken! - Einstellungen ohne "h"</ger_name>
+				<name>Schinken</name>
+			</module>
+		</head_module>
 	</administrator>
 	<web>
 		<path>web/</path>
