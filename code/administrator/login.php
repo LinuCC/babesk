@@ -8,7 +8,7 @@
     
     $adminManager = new AdminManager();
     $admingroupManager = new AdminGroupManager();
-    $moduleManager = new ModuleManager();
+    $moduleManager = new ModuleManager('administrator');
     
     $smarty->assign('babesk_version', file_get_contents("../version.txt"));
     
@@ -50,20 +50,11 @@
 
         //global admin
         if($module_string == '_ALL') {
-            foreach($modules as $module) {
-                $_SESSION['modules'][$module->getName()] = True;
-            }
+            $moduleManager->allowAllModules();
         }
         //any regular admin
         else {
-            $allowed_modules_array = explode(', ', $module_string);
-            foreach($modules as $module) {
-                foreach ($allowed_modules_array as $mod_name) {
-                    if($mod_name == $module) {
-                        $_SESSION['modules'][$module->getName()] = True;           //allow module
-                    }
-                }
-            }
+        	$moduleManager->allowModules(explode(', ', $module_string));
         }
         //Successfully logged in
         $login = True;

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modules>
+	<administrator>
+		<path>administrator/</path>
+		<head_module>
+			<ger_name>Bargeldloses Bestellsystem für Kantinen</ger_name>
+			<name>babesk</name>
+			<module>
+				<ger_name>Administratorverwaltung</ger_name>
+				<name>Admin</name>
+			</module>
+			<module>
+				<ger_name>Kasse</ger_name>
+				<name>Checkout</name>
+			</module>
+			<!-- <module> <ger_name>Datenbank löschen D:</ger_name> <name>clear</name> 
+				</module> <module> <ger_name>Dummy_macht_keinen_Sinn</ger_name> <name>dummy</name> 
+				</module> -->
+			<module>
+				<ger_name>Gruppenverwaltung</ger_name>
+				<name>Groups</name>
+			</module>
+			<module>
+				<ger_name>Hilfetexteinstellung</ger_name>
+				<name>Help</name>
+			</module>
+			<module>
+				<ger_name>Logverwaltung</ger_name>
+				<name>Logs</name>
+			</module>
+			<module>
+				<ger_name>Mahlzeitenverwaltung</ger_name>
+				<name>Meals</name>
+			</module>
+			<module>
+				<ger_name>Speiseplan anzeigen</ger_name>
+				<name>Menu</name>
+			</module>
+			<module>
+				<ger_name>Preisklassenverwaltung</ger_name>
+				<name>Priceclass</name>
+			</module>
+			<module>
+				<ger_name>Karte aufladen</ger_name>
+				<name>Recharge</name>
+			</module>
+			<module>
+				<ger_name>Teilhabepaket</ger_name>
+				<name>Soli</name>
+			</module>
+			<module>
+				<ger_name>Benutzerverwaltung</ger_name>
+				<name>User</name>
+			</module>
+		</head_module>
+	</administrator>
+	<web>
+		<path>web/</path>
+		<head_module>
+			<ger_name>Bargeldloses Bestellsystem für Kantinen</ger_name>
+			<name>babesk</name>
+			<name>babesk</name>
+			<module>
+				<ger_name>Account</ger_name>
+				<name>Account</name>
+			</module>
+			<module>
+				<ger_name>Abbrechen</ger_name>
+				<name>Cancel</name>
+			</module>
+			<module>
+				<ger_name>Passwort verändern</ger_name>
+				<name>ChangePassword</name>
+			</module>
+			<module>
+				<ger_name>Hilfe</ger_name>
+				<name>Help</name>
+			</module>
+			<module>
+				<ger_name>Menü</ger_name>
+				<name>Menu</name>
+			</module>
+			<module>
+				<ger_name>Bestellen</ger_name>
+				<name>Order</name>
+			</module>
+		</head_module>
+	</web>
+</modules>

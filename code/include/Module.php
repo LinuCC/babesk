@@ -3,16 +3,16 @@
 class Module {
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
-	private $name;
-	private $path;
-	private $displayName;
+	protected $name;
+	protected $relPath;
+	protected $displayName;
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	public function __construct ($name, $display_name, $path) {
 		$this->name = $name;
-		$this->path = $path;
-		//$this->executablePath = $path . $this->name . '.php';
+		$this->relPath = $path;
+		$this->executablePath = $path . $this->name . '.php';
 		$this->displayName = $display_name;
 	}
 

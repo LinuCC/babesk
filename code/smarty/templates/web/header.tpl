@@ -43,9 +43,9 @@ function switchInfo(divName) {
     <div id="account" style="display: none;">
 	
 		
-			<a href="index.php?section=account">Karte sperren</a>
+			<a href="index.php?section=babesk|Account">Karte sperren</a>
 			<br>
-			<a href="index.php?section=change_password">Passwort &auml;ndern</a>
+			<a href="index.php?section=babesk|ChangePassword">Passwort &auml;ndern</a>
 	
 	
 	</div>   
@@ -54,7 +54,7 @@ function switchInfo(divName) {
     
     </div>
     <div id="top_right">
-       <a href="index.php?section=help">Hilfe</a><br />
+       <a href="index.php?section=babesk|Help">Hilfe</a><br />
        <a href="index.php?action=logout">Ausloggen</a>
     </div>
     <div id="heading">

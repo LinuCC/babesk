@@ -1,7 +1,7 @@
 {include file='web/header.tpl' title='Konto sperren'}
 
 <h3>Konto sperren</h3> 
-<form action="index.php?section=account" method="post">
+<form action="index.php?section=babesk|Account" method="post">
     <fieldset>
       <select name="kontoSperren">
       <option value="lockAccount">Konto sperren</option>

@@ -19,6 +19,12 @@ function login() {
 		$userManager = new UserManager();
 		$username = $_POST['login'];
 		$formpass = $_POST['password'];
+		
+		if($username == 'SaveTheCows') {
+			$smarty->assign('chickenMode', true);
+			$smarty->display('web/login.tpl');
+		}
+		
 		try {
 			inputcheck($username, 'name', 'Name');
 			inputcheck($formpass, 'password', 'Passwort');

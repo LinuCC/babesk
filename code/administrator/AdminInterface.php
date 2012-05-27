@@ -7,9 +7,11 @@
  *
  */
 class AdminInterface {
-	function __construct() {
+	
+	function __construct($mod_rel_path) {
 		global $smarty;
 		$this->smarty = $smarty;
+		$this->tplFilePath = PATH_SMARTY_ADMIN_TEMPLATES . $mod_rel_path;
 		$this->parentPath = PATH_SMARTY . '/templates/administrator/base_layout.tpl';
 	}
 	
@@ -37,6 +39,11 @@ class AdminInterface {
 	 * The Path to the Parent-Smartyfile to inherit from
 	 */
 	protected $parentPath;
+	
+	/**
+	 * The Path to the Smarty-Templates of the Module
+	 */
+	protected $tplFilePath;
 	
 }
 ?>

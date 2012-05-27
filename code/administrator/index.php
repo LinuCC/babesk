@@ -25,11 +25,14 @@ require_once 'AdminInterface.php';
 $smarty->assign('smarty_path', REL_PATH_SMARTY);
 $smarty->assign('status', '');
 $smarty->assign('babesk_version', file_get_contents("../version.txt"));
+
+//@todo: following line should not be here
 define('BASE_PATH', PATH_SMARTY . '/templates/administrator/base_layout.tpl');
+
 require_once PATH_ADMIN . '/admin_functions.php';
 
 //the module manager
-$modManager = new ModuleManager();
+$moduleManager = new ModuleManager('administrator');
 
 //check for valid session and save the ip address
 validSession() or die(INVALID_SESSION);
@@ -58,16 +61,22 @@ if ($login) {
 	$smarty->assign('base_path', BASE_PATH);
 	//include a module if selected
 	if (isset($_GET['section'])) {
-		$modManager->execute($_GET['section']);
+		$moduleManager->execute($_GET['section']);
 	}
 	//or include the menu
  else {
  		
- 		$allowedModules = $modManager->getAllowedModules();
-
+ 		$allowedModules = $moduleManager->getAllowedModules();
+ 		$module_identifiers = array();
+ 		
+ 		foreach($allowedModules as $module) {
+ 			$module_identifiers [$module] = $moduleManager->getModuleIdentifier($module);
+ 		}
+ 		
 		$smarty->assign('is_mainmenu', true);
 		$smarty->assign('modules', $allowedModules);
-		$smarty->assign('module_names', $module_names);
+		$smarty->assign('mod_identifiers', $module_identifiers);
+		$smarty->assign('module_names', $moduleManager->getModuleDisplayNames());
 		$smarty->display('administrator/menu.tpl');
 	}
 }

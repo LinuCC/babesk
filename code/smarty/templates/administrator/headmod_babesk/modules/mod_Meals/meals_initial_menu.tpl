@@ -1,0 +1,26 @@
+	{extends file=$mealParent}{block name=content}
+	<!-- the initial menu-->
+	<form action="index.php?section=babesk|Meals&action=1" method="post">
+		<input type="submit" value="Eine neue Mahlzeit erstellen" />
+	</form>
+	<br><br>	
+	<form action="index.php?section=babesk|Meals&action=2" method="post">
+		<input type="submit" value="Die Mahlzeiten anzeigen" />
+	</form>
+	<br><br>
+	<form action="index.php?section=babesk|Meals&action=3" method="post">
+		<input type="submit" value="Die Bestellungen anzeigen" />
+	</form>
+	<br><br>
+	<form action="index.php?section=babesk|Meals&action=4" method="post">
+	<input type="submit" value="Alte Mahlzeiten und Bestellungen löschen" />
+	</form>
+	<br><br>
+	<form action="index.php?section=babesk|Meals&action=6" method="post">
+	<input type="submit" value="Infotexte f&uuml;r Speiseplan editieren" />
+	</form>
+	<br><br>
+	<form action="index.php?section=babesk|Meals&action=7" method="post">
+	<input type="submit" value="Uhrzeit f&uuml;r letzte Bestellm&ouml;glichkeit" />
+	</form>
+	{/block}

@@ -18,8 +18,6 @@ require_once PATH_SMARTY."/smarty_init.php";
 require_once 'login.php';
 require 'modules.php';
 
-
-
 //relative smarty path for css files
 $smarty->assign('smarty_path', REL_PATH_SMARTY);
 $smarty->assign('babesk_version', file_get_contents("../version.txt"));
@@ -35,7 +33,8 @@ function show_error($string) {
 	$smarty->display('web/footer.tpl');
 }
 
-$modManager = new ModuleManager($modules);
+$modManager = new ModuleManager('web');
+$modManager->allowAllModules();
 
 //verhindert, dass module nicht von der index.php aufgerufen werden
 //$load_modules = 1;
@@ -65,7 +64,7 @@ if($login){
 	 
 	// check for first password
 	if($userManager->firstPassword($_SESSION['uid'])) {
-		$modManager->executeWeb('change_password');
+		$modManager->execute('babesk|ChangePassword');
 	}
 	$userData = $userManager->getEntryData($_SESSION['uid'], '*');
 
@@ -91,11 +90,11 @@ if($login){
 	 
 	//include the module specified in GET['section']
 	if (isset($_GET['section'])) {
-		$modManager->executeWeb($_GET['section']);
+		$modManager->execute($_GET['section']);
 	}
 	//or include the main menu
 	else {
-		$modManager->executeWeb("menu");
+		$modManager->execute("babesk|Menu");
 	}
 
 	//MAX_LOGIN_TIME
