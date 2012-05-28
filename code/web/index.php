@@ -11,12 +11,11 @@ session_start();
 define('_WEXEC', 1);
 
 require_once "../include/path.php";
-require_once PATH_INCLUDE.'/moduleManager.php';
-require_once PATH_INCLUDE.'/functions.php';
-require_once PATH_INCLUDE.'/logs.php';
-require_once PATH_SMARTY."/smarty_init.php";
+require_once PATH_INCLUDE . '/moduleManager.php';
+require_once PATH_INCLUDE . '/functions.php';
+require_once PATH_INCLUDE . '/logs.php';
+require_once PATH_SMARTY . "/smarty_init.php";
 require_once 'login.php';
-require 'modules.php';
 
 //relative smarty path for css files
 $smarty->assign('smarty_path', REL_PATH_SMARTY);
@@ -26,7 +25,7 @@ $smarty->assign('error', '');
 /**
  * Shows an error to the user. Makes sure that the site is correctly shown
  */
-function show_error($string) {
+function show_error ($string) {
 	global $smarty;
 	$smarty->display('web/header.tpl');
 	echo $string;
@@ -39,38 +38,38 @@ $modManager->allowAllModules();
 //verhindert, dass module nicht von der index.php aufgerufen werden
 //$load_modules = 1;
 //logged in before if the user ID is set
-if(isset($_SESSION['uid'])) {
+if (isset($_SESSION['uid'])) {
 	$login = True;
 }
-else {     //not logged in yet
+else { //not logged in yet
 	$login = False;
 }
 //logout
-if (isset($_GET['action']) AND  $_GET['action'] == 'logout') {
+if (isset($_GET['action']) AND $_GET['action'] == 'logout') {
 	$login = False;
 	session_destroy();
 }
 //login
-if(!$login) {
-	if(login()) {
+if (!$login) {
+	if (login()) {
 		$login = true;
 	}
 }
-if($login){ 
+if ($login) {
 	require_once PATH_ACCESS . '/UserManager.php';
 	$userManager = new UserManager();
 	//seems like something that Smarty itself needs
 	$smarty->assign('status', ''); //???
-	 
+
 	// check for first password
-	if($userManager->firstPassword($_SESSION['uid'])) {
-		$modManager->execute('babesk|ChangePassword');
+	if ($userManager->firstPassword($_SESSION['uid'])) {
+		$modManager->execute('Babesk|ChangePassword');
 	}
 	$userData = $userManager->getEntryData($_SESSION['uid'], '*');
 
 	$_SESSION['last_login'] = formatDateTime($userData['last_login']);
 	$_SESSION['credit'] = $userData['credit'];
-	$_SESSION['username'] = $userData['forename'].' '.$userData['name'];
+	$_SESSION['username'] = $userData['forename'] . ' ' . $userData['name'];
 	$_SESSION['login_tries'] = $userData['login_tries'];
 	$_SESSION['IP'] = $_SERVER['REMOTE_ADDR'];
 	$_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
@@ -86,24 +85,23 @@ if($login){
 	$smarty->assign('username', $_SESSION['username']);
 	$smarty->assign('credit', $_SESSION['credit']);
 	$smarty->assign('last_login', $_SESSION['last_login']);
-	 
-	 
+
 	//include the module specified in GET['section']
 	if (isset($_GET['section'])) {
 		$modManager->execute($_GET['section']);
 	}
 	//or include the main menu
 	else {
-		$modManager->execute("babesk|Menu");
+		$modManager->execute("Babesk|Menu");
 	}
 
 	//MAX_LOGIN_TIME
 	/*if ((isset($_SESSION['uid'])) AND (time() < ($_SESSION['last_action'] + MAX_LOGIN_TIME)) AND ($_SESSION['IP'] == $_SERVER['REMOTE_ADDR']) AND ($_SESSION['HTTP_USER_AGENT'] == $_SERVER['HTTP_USER_AGENT'])) {
 	 $_SESSION['lastaction'] = time();
-	require_once('modules.php');
-	} else {
-	$_SESSION['IP'] = '';
-	$smarty->display('web/index.tpl');
-	}*/
+	 require_once('modules.php');
+	 } else {
+	 $_SESSION['IP'] = '';
+	 $smarty->display('web/index.tpl');
+	 }*/
 }
 ?>

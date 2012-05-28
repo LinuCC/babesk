@@ -49,18 +49,22 @@ function changeHeadModule(headMod) {
 {literal}
 <style type='text/css'>
 .HeadItem {
+	width: 500px;
+	margin: 5px;
+	line-height: 200%;
+	padding: 5px;
+	border: 5px double #006699;
+	background-color: #dbecd2;
+
+	-webkit-border-radius: 20px;
+	-khtml-border-radius: 20px;
+	-moz-border-radius: 20px;
+	border-radius: 20px;
 	display: inline;
 }
-.HeadItemForm {
+.HeadItemText {
+	color: #0a2800;
 	display: inline;
-}
-.HeadItemButton {
-	width:100px;
-	height:60px;
-/* 	padding-left:20px; */
-/* 	padding-right:20px; */
-/* 	padding-top:10px; */
-/* 	padding-bottom:10px; */
 }
 .menu_item {
 	display: none;
@@ -68,7 +72,7 @@ function changeHeadModule(headMod) {
 }
 
 .HeadItemContainer {
-	margin-left:{/literal}{400 - ((count($head_modules) + 1) * 50)}{literal}px;
+/* 	margin-left:{/literal}{400 - ((count($head_modules) + 1) * 50)}{literal}px; */
 	margin-bottom:20px;
 }
 </style>
@@ -76,12 +80,11 @@ function changeHeadModule(headMod) {
 
 <!-- ACTUAL HTML -->
 
+
 <div class="HeadItemContainer">
 {foreach $head_modules as $headmod}
-<div class="HeadItem" id="head_module">
-	<form name="head_mod" action="" class="HeadItemForm">
-		<input class="HeadItemButton" type="button" value="{$headmod}" onclick="changeHeadModule('{$headmod}')">
-	</form>
+<div class="HeadItem" id="head_module{$headmod.name}">
+	<a class="HeadItemText" href="javascript:changeHeadModule('{$headmod.name}')">{$headmod.display_name}</a>
 </div>
 {/foreach}
 </div>

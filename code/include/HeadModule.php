@@ -3,20 +3,16 @@
 class HeadModule {
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
-	private $smartyModPath;
-	private $adminModPath;
-	private $webModPath;
 	private $modules;
 	private $name;
+	private $displayName;
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
-	public function __construct ($name) {
+	public function __construct ($name, $display_name) {
 
 		$this->name = $name;
-		$this->webModPath = PATH_WEB . '';
-		$this->adminModPath = PATH_ADMIN . '/headmod_babesk/modules/';
-		$this->smartyModPath = PATH_SMARTY . '/templates/';
+		$this->displayName = $display_name;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -27,6 +23,10 @@ class HeadModule {
 	
 	public function getName() {
 		return $this->name;
+	}
+	
+	public function getDisplayName() {
+		return $this->displayName;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////
@@ -62,6 +62,10 @@ class HeadModule {
 			}
 		}
 		die('ChildModule not found!');
+	}
+	
+	public function execute() {
+		die('No entrypoint of this Headmodule given');
 	}
 	
 }

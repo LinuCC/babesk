@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Please restrain from using specialcharacters like ", it can break some functions in the programm -->
 <modules>
 	<administrator>
 		<path>administrator/</path>
 		<head_module>
 			<ger_name>Bargeldloses Bestellsystem für Kantinen</ger_name>
-			<name>babesk</name>
+			<name>Babesk</name>
 			<module>
 				<ger_name>Administratorverwaltung</ger_name>
 				<name>Admin</name>
@@ -55,9 +56,9 @@
 		</head_module>
 		<head_module>
 			<ger_name>Schinken!</ger_name>
-			<name>kurs</name>
+			<name>Kurs</name>
 			<module>
-				<ger_name>Lecker Schinken! - Einstellungen ohne "h"</ger_name>
+				<ger_name>Lecker Schinken! - Einstellungen ohne h</ger_name>
 				<name>Schinken</name>
 			</module>
 		</head_module>
@@ -66,8 +67,7 @@
 		<path>web/</path>
 		<head_module>
 			<ger_name>Bargeldloses Bestellsystem für Kantinen</ger_name>
-			<name>babesk</name>
-			<name>babesk</name>
+			<name>Babesk</name>
 			<module>
 				<ger_name>Account</ger_name>
 				<name>Account</name>
