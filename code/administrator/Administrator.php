@@ -77,7 +77,7 @@ class Administrator {
 	public function executeModule($moduleName) {
 		
 		$smarty = $this->_smarty;
-		$this->_moduleManager->execute($moduleName);
+		$this->_moduleManager->execute($moduleName, false);
 	}
 	
 	public function MainMenu() {

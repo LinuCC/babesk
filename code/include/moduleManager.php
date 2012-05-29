@@ -159,13 +159,17 @@ class ModuleManager {
 		}
 		return false;
 	}
-
-	public function execute ($mod_name) {
+	
+	/**
+	 * @param Class $dataContainer a Class which contains data for the Module to use. if no dataContainer is used,
+	 * just use the value false
+	 */
+	public function execute ($mod_name, $dataContainer) {
 
 		$name_arr = explode('|', $mod_name);
 
 		if (count($name_arr) < 2) {
-			$this->executeHeadModul($name_arr[0]);
+			$this->executeHeadModul($name_arr[0], $dataContainer);
 			return;
 		}
 
@@ -174,17 +178,17 @@ class ModuleManager {
 
 		foreach ($this->headModules as $head_module) {
 			if ($head_module->getName() == $head_mod_name) {
-				$head_module->executeModule($child_mod_name);
+				$head_module->executeModule($child_mod_name, $dataContainer);
 				return;
 			}
 		}
 		die('Headmodule not found! Modulename:' . $mod_name);
 	}
 
-	public function executeHeadModul ($headmod_name) {
+	public function executeHeadModul ($headmod_name, $dataContainer) {
 		foreach ($this->headModules as $head_module) {
 			if ($head_module->getName() == $headmod_name) {
-				$head_module->execute($this);
+				$head_module->execute($this, $dataContainer);
 				return;
 			}
 		}

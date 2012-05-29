@@ -86,6 +86,9 @@ a #header_link {
 }
 
 #header {
+	width: 750px;
+	margin-left: auto;
+	margin-right: auto;
     background-color: #f8f187;
     height: 80px;
     margin-bottom: 30px; 
@@ -110,6 +113,7 @@ a #header_link {
 #top_left {
     width: 200px;
     padding-top: 10px;
+    padding-left: 5px;
     float: left;
 }
 
@@ -118,6 +122,7 @@ a #header_link {
     float: right;
     text-align: right;
     padding-top: 10px;
+    padding-right: 5px;
 }
 
 #heading {

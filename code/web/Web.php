@@ -23,7 +23,6 @@ class Web {
 			require_once PATH_INCLUDE . '/moduleManager.php';
 			require_once PATH_INCLUDE . '/functions.php';
 			require_once PATH_INCLUDE . '/logs.php';
-			require_once 'web_functions.php';
 
 		}
 		$this->_moduleManager = new ModuleManager('web');
@@ -68,7 +67,7 @@ class Web {
 
 		// check for first password
 		if ($userManager->firstPassword($_SESSION['uid'])) {
-			$this->_modManager->execute('Babesk|ChangePassword');
+			$this->_modManager->execute('Babesk|ChangePassword', false);
 		}
 		$userData = $userManager->getEntryData($_SESSION['uid'], '*');
 
@@ -102,7 +101,7 @@ class Web {
 
 		//include the module specified in GET['section']
 		if ($mod_str) {
-			$this->_moduleManager->execute($mod_str);
+			$this->_moduleManager->execute($mod_str, false);
 		}
 		//or include the main menu
 		else {

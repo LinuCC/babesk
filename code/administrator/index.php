@@ -105,7 +105,7 @@ if ($adminManager->testLogin()) {
 	$adminManager->initUserInterface();
 	
 	if (isset($_GET['section'])) {
-		$adminManager->executeModule($_GET['section']);
+		$adminManager->executeModule($_GET['section'], false);
 	}
 	else {
 		$adminManager->MainMenu();
