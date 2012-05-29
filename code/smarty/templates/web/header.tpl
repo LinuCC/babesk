@@ -66,6 +66,7 @@ function switchInfo(divName) {
 <div id="info">
     <p>Wilkommen auf der Seite der LeGeria! :)</p>
 </div>
+{include file='web/module_selector.tpl' title='Modul Wählen'}
 <div id="main">
 <div id="content">
 {if $status != ''}

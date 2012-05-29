@@ -18,69 +18,31 @@ require_once 'HeadModule.php';
  *
  */
 class ModuleManager {
+
+	////////////////////////////////////////////////////////////////////////////////
+	//Constructor
+	////////////////////////////////////////////////////////////////////////////////
 	/**
 	 * @param string $program_part The Part of the Program ('administrator' or 'web') as seen in modules.xml
 	 */
 	function __construct ($program_part) {
-
-		$mod_xml = simplexml_load_file(PATH_INCLUDE . '/modules.xml');
-		$this->programPartPath = $mod_xml->$program_part->path;
-		foreach ($mod_xml->$program_part->head_module as $head_mod) {
-
-			/**
-			 * HeadModules
-			 */
-			$headmod_path = PATH_SITE . '/' . $this->programPartPath . sprintf('headmod_%s/%s.php', (string) $head_mod->
-				name, (string) $head_mod->name);
-
-			if (file_exists($headmod_path))
-				include_once $headmod_path;
-
-			if (class_exists((string) $head_mod->name)) {
-				$headmod_classname = (string) $head_mod->name;
-				$headModule = new $headmod_classname((string) $head_mod->name, (string) $head_mod->ger_name);
-			}
-			else {
-				echo 'No file or class does exist for the HeadModule ' . $head_mod->name .
-					', falling back to the StandardClass! P.S.: If you see this, then the Log-Modul isnt finished yet<br>';
-				$headModule = new HeadModule((string) $head_mod->name, (string) $head_mod->ger_name);
-			}
-			$this->headModules [] = $headModule;
-
-			/**
-			 * Modules
-			 */
-			foreach ($head_mod->module as $module) {
-				$include_path = sprintf(PATH_SITE . '/' . $this->programPartPath . 'headmod_%s/modules/mod_%s/%s.php',
-					(string) $head_mod->name, $module->name, $module->name);
-				if (!(file_exists($include_path))) {
-					echo '<br>Could not load file for Module ' . $module->name;
-				}
-				else {
-					include_once $include_path;
-					if (!class_exists($classname = (string) $module->name)) {
-						echo '<br>Could not load the class ' . $classname . '!<br>';
-					}
-					else {
-						$new_module = new $classname((string) $module->name, (string) $module->ger_name, sprintf(
-							'/headmod_%s/modules/mod_%s/', (string) $head_mod->name, $module->name));
-						$headModule->addModule($new_module);
-					}
-				}
-			}
-		}
+		
+		$this->parseModuleXML($program_part);
 	}
 
-	function getAllModules () {
-		
+	////////////////////////////////////////////////////////////////////////////////
+	//Methods
+	////////////////////////////////////////////////////////////////////////////////
+	public function getAllModules () {
+
 		$module_arr = array();
 		foreach ($this->headModules as $head_mod) {
 			$modules = $head_mod->getModules();
 			foreach ($modules as $module) {
-				$module_arr [] = $module;
+				$module_arr[] = $module;
 			}
 		}
-		if(count($module_arr) < 1)
+		if (count($module_arr) < 1)
 			throw new Exception('Es sind keine Module vorhanden!');
 		return $module_arr;
 	}
@@ -102,13 +64,15 @@ class ModuleManager {
 	public function allowAllModules () {
 		foreach ($this->headModules as $head_mod) {
 			$modules = $head_mod->getModules();
+			if(count($modules) < 1)
+				return;
 			foreach ($modules as $module) {
 				$_SESSION['modules'][$head_mod->getName() . '|' . $module->getName()] = True;
 			}
 		}
 	}
 
-	function getAllowedModules () {
+	public function getAllowedModules () {
 
 		$allowedModules = array();
 		foreach ($this->headModules as $head_mod) {
@@ -129,11 +93,11 @@ class ModuleManager {
 	/**
 	 * @return array(HeadModule)
 	 */
-	function getHeadModules () {
+	public function getHeadModules () {
 		return $this->headModules;
 	}
 
-	function getHeadModulesOfModules ($modules) {
+	public function getHeadModulesOfModules ($modules) {
 
 		$head_mod_arr = array();
 		$headModules = $this->getHeadModules();
@@ -159,7 +123,7 @@ class ModuleManager {
 	/**
 	 * returns something like 'babesk|Admin'
 	 */
-	function getModuleIdentifier ($module_name) {
+	public function getModuleIdentifier ($module_name) {
 
 		foreach ($this->headModules as $head_mod) {
 			$modules = $head_mod->getModules();
@@ -172,7 +136,7 @@ class ModuleManager {
 		throw new InvalidArgumentException('There is no modul with this name:' . $module_name);
 	}
 
-	function getModuleDisplayNames () {
+	public function getModuleDisplayNames () {
 
 		$module_names = array();
 		foreach ($this->headModules as $head_mod) {
@@ -183,25 +147,27 @@ class ModuleManager {
 		}
 		return $module_names;
 	}
-	
-	function getModuleDisplayName($module_name) {
-		
+
+	public function getModuleDisplayName ($module_name) {
+
 		foreach ($this->headModules as $head_mod) {
 			$modules = $head_mod->getModules();
 			foreach ($modules as $module) {
-				if($module->getName() == $module_name)
+				if ($module->getName() == $module_name)
 					return $module->getDisplayName();
 			}
 		}
 		return false;
 	}
 
-	function execute ($mod_name) {
+	public function execute ($mod_name) {
 
 		$name_arr = explode('|', $mod_name);
 
-		if (count($name_arr) < 2)
+		if (count($name_arr) < 2) {
 			$this->executeHeadModul($name_arr[0]);
+			return;
+		}
 
 		$head_mod_name = $name_arr[0];
 		$child_mod_name = $name_arr[1];
@@ -218,16 +184,97 @@ class ModuleManager {
 	public function executeHeadModul ($headmod_name) {
 		foreach ($this->headModules as $head_module) {
 			if ($head_module->getName() == $headmod_name) {
-				$head_module->execute();
+				$head_module->execute($this);
 				return;
 			}
 		}
 	}
-	/**
-	 * $modules is an array, the key being the "id's" of the modules and the values the names
-	 * Enter description here ...
-	 * @var array
-	 */
+
+	////////////////////////////////////////////////////////////////////////////////
+	//Implementations
+	////////////////////////////////////////////////////////////////////////////////
+	private function parseModuleXML($program_part) {
+		
+		$mod_xml = simplexml_load_file(PATH_INCLUDE . '/modules.xml');
+		$this->programPartPath = $mod_xml->$program_part->path;
+		
+		foreach ($mod_xml->$program_part->head_module as $head_mod) {
+			
+			if(!isset($head_mod->active) || $head_mod->active != true) {
+				echo 'A headmodule is not active; it will not be used.';
+				continue;
+			}
+			$headModule = $this->extractHeadModule($head_mod);
+			
+			foreach ($head_mod->module as $module) {
+				
+				if(!isset($module->active) || $module->active != true) {
+					echo 'A module is not active; it will not be used.';
+					continue;
+				}
+				
+				$this->extractModule($module, $headModule);
+			}
+		}
+	}
+	
+	private function extractHeadModule($head_mod) {
+		
+		$headmod_path = PATH_SITE . '/' . $this->programPartPath . sprintf('headmod_%s/%s.php', (string) $head_mod->
+				name, (string) $head_mod->name);
+		$headModule = $this->createHeadModule($headmod_path, $head_mod);
+		$this->headModules [] = $headModule;
+		return $headModule;
+	}
+	
+	private function createHeadModule($headmod_path, $head_mod) {
+		
+		if (file_exists($headmod_path))
+			include_once $headmod_path;
+		
+		if (class_exists((string) $head_mod->name)) {
+			$headmod_classname = (string) $head_mod->name;
+			$headModule = new $headmod_classname((string) $head_mod->name, (string) $head_mod->ger_name);
+		}
+		else {
+			echo 'No file or class does exist for the HeadModule ' . $head_mod->name .
+			', falling back to the StandardClass! P.S.: If you see this, then the Log-Modul isnt finished yet<br>';
+			$headModule = new HeadModule((string) $head_mod->name, (string) $head_mod->ger_name);
+		}
+		
+		return $headModule;
+	}
+	
+	private function extractModule($module, $headModule) {
+		
+		$include_path = sprintf(PATH_SITE . '/' . $this->programPartPath . 'headmod_%s/modules/mod_%s/%s.php',
+				(string) $headModule->getName(), $module->name, $module->name);
+		
+		$this->createModule($include_path, $module, $headModule);
+		
+	}
+	
+	private function createModule($include_path, $module, $headModule) {
+		
+		if (!(file_exists($include_path))) {
+			echo '<br>Could not load file for Module ' . $module->name . '<br>';
+		}
+		else {
+			include_once $include_path;
+			if (!class_exists($classname = (string) $module->name)) {
+				echo '<br>Could not load the class ' . $classname . '!<br>';
+			}
+			else {
+				$new_module = new $classname((string) $module->name, (string) $module->ger_name, sprintf(
+						'/headmod_%s/modules/mod_%s/', (string) $headModule->getName(), $module->name));
+				$headModule->addModule($new_module);
+			}
+		}
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////
+	//Attributes
+	////////////////////////////////////////////////////////////////////////////////
 	private $headModules;
 
 	private $programPartPath;

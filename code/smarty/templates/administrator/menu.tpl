@@ -67,8 +67,14 @@ function changeHeadModule(headMod) {
 	display: inline;
 }
 .menu_item {
+/* if only one headModule, show all Modules instantly without having to click the option*/
+	{if count($head_modules) == 1}
 	display: none;
 	visibility: hidden;
+	{else}
+	display: inline;
+	visibility: visible;
+	{/if}
 }
 
 .HeadItemContainer {
@@ -100,9 +106,11 @@ function changeHeadModule(headMod) {
 </div>
 {/section}
 
+{if count($head_modules) != 1}
 <div id="ToolTip" style="text-align:center">
 <b>Bitte wählen sie ein Modul aus</b>
 </div>
+{/if}
 
 <div id="close"></div>
 {/block}

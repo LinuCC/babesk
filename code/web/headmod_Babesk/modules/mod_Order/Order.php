@@ -7,12 +7,16 @@ class Order extends Module {
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
 	private $smartyPath;
+	private $modulePath;
+	private $webInterface;
 	
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
+		$this->modulePath = $path;
 		$this->smartyPath = PATH_SMARTY . '/templates/web' . $path;
+		require_once PATH_SITE . '/web/WebInterface.php';
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////
@@ -30,6 +34,8 @@ class Order extends Module {
 		require_once PATH_ACCESS . '/PriceClassManager.php';
 		global $smarty;
 		global $logger;
+
+		$this->webInterface = new WebInterface($smarty);
 		
 		$mealManager = new MealManager();
 		$userManager = new UserManager();
@@ -49,11 +55,11 @@ class Order extends Module {
 				inputcheck($_GET['order'], 'id');
 				$meal = $mealManager->getEntryData($_GET['order']);
 			} catch (WrongInputException $e) {
-				show_error(ERR_INP_MID);
+				$this->webInterface->dieError(ERR_INP_MID);
 			} catch (Exception $e) {
 				$logger->log('WEB|order', 'MODERATE',
 						sprintf('failed fetchign data with MID %s; %s', $_GET['order'], $e->getMessage()));
-				show_error(ERR_ORDER);
+				$this->webInterface->dieError(ERR_ORDER);
 			}
 			$meal['price'] = $priceClassManager->getPrice($_SESSION['uid'], $meal['ID']);
 		
@@ -68,7 +74,7 @@ class Order extends Module {
 						$logger->log('WEB|order', 'MODERATE',
 								sprintf('The function getPrice failed with UID %s and order %s; %s', $_SESSION['uid'],
 										$_GET['order'], $e->getMessage()));
-						show_error(ERR_ORDER);
+						$this->webInterface->dieError(ERR_ORDER);
 						die();
 					}
 		
@@ -88,7 +94,7 @@ class Order extends Module {
 					$logger->log('WEB|order', 'MODERATE',
 							sprintf('Error while handling the order for ' . 'UID %s; Order: %s; Error: %s',
 									$_SESSION['uid'], $_GET['order'], $e->getMessage()));
-					show_error(ERR_ORDER);
+					$this->webInterface->dieError(ERR_ORDER);
 					die();
 				}
 				//////////////////////////////////////////////////
@@ -107,7 +113,7 @@ class Order extends Module {
 					$logger->log('WEB|ORDER', 'MODERATE',
 							sprintf('Error while handling the order for ' . 'UID %s; Order: %s; Error: %s',
 									$_SESSION['uid'], $_GET['order'], $e->getMessage()));
-					show_error(ERR_ORDER);
+					$this->webInterface->dieError(ERR_ORDER);
 					die();
 				}
 				//////////////////////////////////////////////////
@@ -151,12 +157,7 @@ class Order extends Module {
 					* 		Additionaly, there is an index named "date", which lists the dates for each individual day
 					* 3. Every day has meals
 					* 4. Every meal has mealdata (like ID, description, name, ...)
-					*
-					*    when meallist is declared like this
-					*    $meallist = array(array(array(array())));
-					*    in the code, it will generate a void element (dunno why), so let this be here in the comments
 					*/
-		
 			//Ordering only possible until $last_order_time
 		
 			$last_order_time = $gsManager->getLastOrderTime();
@@ -167,8 +168,7 @@ class Order extends Module {
 				$sql_meals = $mealManager->get_meals_between_two_dates(date('Y-m-d', $date), date('Y-m-d', $enddate),
 						'date, price_class');
 			} catch (MySQLVoidDataException $e) {
-				show_error(ERR_NO_ORDERS);
-				die();
+				$this->webInterface->dieError(ERR_NO_ORDERS);
 			} catch (Exception $e) {
 				$smarty->assign('message', ERR_MYSQL . '<br>' . $e->getMessage());
 			}
@@ -212,7 +212,7 @@ class Order extends Module {
 			try {
 				$itxt_arr = $gsManager->getInfoTexts();
 			} catch (Exception $e) {
-				show_error('Error getting infotexts:' . $e->getMessage());
+				$this->webInterface->dieError('Error getting infotexts:' . $e->getMessage());
 			}
 			$smarty->assign('meallist', $meallist);
 			$smarty->assign('infotext', $itxt_arr);

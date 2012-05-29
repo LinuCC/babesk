@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Please restrain from using specialcharacters like ", it can break some functions in the programm -->
+<!-- Please restrain from using specialcharacters like ", it can break some 
+	functions in the programm -->
 <modules>
 	<administrator>
 		<path>administrator/</path>
 		<head_module>
 			<ger_name>Bargeldloses Bestellsystem für Kantinen</ger_name>
 			<name>Babesk</name>
+			<active>true</active>
 			<module>
 				<ger_name>Administratorverwaltung</ger_name>
 				<name>Admin</name>
+				<active>true</active>
 			</module>
 			<module>
 				<ger_name>Kasse</ger_name>
 				<name>Checkout</name>
+				<active>true</active>
 			</module>
 			<!-- <module> <ger_name>Datenbank löschen D:</ger_name> <name>clear</name> 
 				</module> <module> <ger_name>Dummy_macht_keinen_Sinn</ger_name> <name>dummy</name> 
@@ -20,46 +24,47 @@
 			<module>
 				<ger_name>Gruppenverwaltung</ger_name>
 				<name>Groups</name>
+				<active>true</active>
 			</module>
 			<module>
 				<ger_name>Hilfetexteinstellung</ger_name>
 				<name>Help</name>
+				<active>true</active>
 			</module>
 			<module>
 				<ger_name>Logverwaltung</ger_name>
 				<name>Logs</name>
+				<active>true</active>
 			</module>
 			<module>
 				<ger_name>Mahlzeitenverwaltung</ger_name>
 				<name>Meals</name>
+				<active>true</active>
 			</module>
 			<module>
 				<ger_name>Speiseplan anzeigen</ger_name>
 				<name>Menu</name>
+				<active>true</active>
 			</module>
 			<module>
 				<ger_name>Preisklassenverwaltung</ger_name>
 				<name>Priceclass</name>
+				<active>true</active>
 			</module>
 			<module>
 				<ger_name>Karte aufladen</ger_name>
 				<name>Recharge</name>
+				<active>true</active>
 			</module>
 			<module>
 				<ger_name>Teilhabepaket</ger_name>
 				<name>Soli</name>
+				<active>true</active>
 			</module>
 			<module>
 				<ger_name>Benutzerverwaltung</ger_name>
 				<name>User</name>
-			</module>
-		</head_module>
-		<head_module>
-			<ger_name>Schinken!</ger_name>
-			<name>Kurs</name>
-			<module>
-				<ger_name>Lecker Schinken! - Einstellungen ohne h</ger_name>
-				<name>Schinken</name>
+				<active>true</active>
 			</module>
 		</head_module>
 	</administrator>
@@ -68,29 +73,36 @@
 		<head_module>
 			<ger_name>Bargeldloses Bestellsystem für Kantinen</ger_name>
 			<name>Babesk</name>
+			<active>true</active>
 			<module>
 				<ger_name>Account</ger_name>
 				<name>Account</name>
+				<active>true</active>
 			</module>
 			<module>
 				<ger_name>Abbrechen</ger_name>
 				<name>Cancel</name>
+				<active>true</active>
 			</module>
 			<module>
 				<ger_name>Passwort verändern</ger_name>
 				<name>ChangePassword</name>
+				<active>true</active>
 			</module>
 			<module>
 				<ger_name>Hilfe</ger_name>
 				<name>Help</name>
+				<active>true</active>
 			</module>
 			<module>
 				<ger_name>Menü</ger_name>
 				<name>Menu</name>
+				<active>true</active>
 			</module>
 			<module>
 				<ger_name>Bestellen</ger_name>
 				<name>Order</name>
+				<active>true</active>
 			</module>
 		</head_module>
 	</web>

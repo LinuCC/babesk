@@ -20,8 +20,8 @@ class Babesk extends HeadModule {
 	
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute() {
-		require "index.php";
+	public function execute($moduleManager) {
+		$moduleManager->execute("Babesk|Menu");
 	}
 }
 ?>

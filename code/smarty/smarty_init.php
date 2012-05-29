@@ -1,5 +1,5 @@
 <?php
-	require "Smarty/Smarty.class.php";
+	require_once "Smarty/Smarty.class.php";
 	
 	$smarty = new Smarty;
 	

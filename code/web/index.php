@@ -1,39 +1,31 @@
 <?php
 
-ini_set('session.use_cookies', 1);
-ini_set('session.use_only_cookies', 0);
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+require_once 'Web.php';
 
-session_start();
+$smarty;
 
-//if this value is not set, the modules will not execute
-define('_WEXEC', 1);
+$webManager = new Web();
 
-require_once "../include/path.php";
-require_once PATH_INCLUDE . '/moduleManager.php';
-require_once PATH_INCLUDE . '/functions.php';
-require_once PATH_INCLUDE . '/logs.php';
-require_once PATH_SMARTY . "/smarty_init.php";
-require_once 'login.php';
-
-//relative smarty path for css files
-$smarty->assign('smarty_path', REL_PATH_SMARTY);
-$smarty->assign('babesk_version', file_get_contents("../version.txt"));
-$smarty->assign('error', '');
-
-/**
- * Shows an error to the user. Makes sure that the site is correctly shown
- */
-function show_error ($string) {
-	global $smarty;
-	$smarty->display('web/header.tpl');
-	echo $string;
-	$smarty->display('web/footer.tpl');
+if (isset($_GET['action']) AND $_GET['action'] == 'logout') {
+	$webManager->logOut();
 }
 
-$modManager = new ModuleManager('web');
-$modManager->allowAllModules();
+$smarty = $webManager->getSmarty();
+
+if (isset($_GET['section'])) {
+	$webManager->mainRoutine($_GET['section']);
+}
+else {
+	$webManager->mainRoutine(false);
+}
+
+die();
+
+
+
+
+
+//relative smarty path for css files
 
 //verhindert, dass module nicht von der index.php aufgerufen werden
 //$load_modules = 1;
@@ -45,10 +37,6 @@ else { //not logged in yet
 	$login = False;
 }
 //logout
-if (isset($_GET['action']) AND $_GET['action'] == 'logout') {
-	$login = False;
-	session_destroy();
-}
 //login
 if (!$login) {
 	if (login()) {
@@ -85,6 +73,15 @@ if ($login) {
 	$smarty->assign('username', $_SESSION['username']);
 	$smarty->assign('credit', $_SESSION['credit']);
 	$smarty->assign('last_login', $_SESSION['last_login']);
+
+	$head_modules = $modManager->getHeadModules();
+	$head_mod_arr = array();
+
+	foreach ($head_modules as $head_module) {
+		$head_mod_arr[$head_module->getName()] = array('name' => $head_module->getName(), 'display_name' => $head_module
+			->getDisplayName());
+	}
+	$smarty->assign('head_modules', $head_mod_arr);
 
 	//include the module specified in GET['section']
 	if (isset($_GET['section'])) {

@@ -41,7 +41,7 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 	//Get the available modules
 	$groupData = $admingroupManager->getAdminGroupData($gid, 'modules');
 	$module_string = $groupData['modules'];
-	$modules = $moduleManager->getModules();
+	$modules = $moduleManager->getAllModules();
 
 	//copy the module mask
 	$_SESSION['modules'] = array();
