@@ -24,7 +24,7 @@ class WebInterface {
 		public function DieError($messageString) {
 			
 			$this->_smarty->display('web/header.tpl');
-			echo '<p class="error">' . $string . '</p>';
+			echo '<p class="error">' . $messageString . '</p>';
 			$this->_smarty->display('web/footer.tpl');
 			die();
 		}

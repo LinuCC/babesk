@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mysqli>
+	<database>
+		<name>babesk</name>
+		<host>localhost</host>
+		<password></password>
+		<username>root</username>
+	</database>
+</mysqli>

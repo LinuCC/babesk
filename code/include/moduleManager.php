@@ -25,11 +25,22 @@ class ModuleManager {
 	/**
 	 * @param string $program_part The Part of the Program ('administrator' or 'web') as seen in modules.xml
 	 */
-	function __construct ($program_part) {
+	function __construct ($program_part = NULL) {
 		
-		$this->parseModuleXML($program_part);
+		if(isset($program_part)) {
+			$this->parseModuleXML($program_part);
+		}
+		$this->moduleXMLPath = PATH_INCLUDE . '/modules.xml';
 	}
 
+	////////////////////////////////////////////////////////////////////////////////
+	//Getters and Setters
+	////////////////////////////////////////////////////////////////////////////////
+	public function setModuleXMLPath($path) {
+		
+		$this->moduleXMLPath = $path;
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
@@ -193,13 +204,14 @@ class ModuleManager {
 			}
 		}
 	}
-
-	////////////////////////////////////////////////////////////////////////////////
-	//Implementations
-	////////////////////////////////////////////////////////////////////////////////
-	private function parseModuleXML($program_part) {
+	
+	public function parseModuleXML($program_part) {
 		
-		$mod_xml = simplexml_load_file(PATH_INCLUDE . '/modules.xml');
+		/**
+		 * @todo: Use functional Errorhandling in this function
+		 */
+		libxml_use_internal_errors(true);
+		$mod_xml = simplexml_load_file($this->moduleXMLPath);
 		$this->programPartPath = $mod_xml->$program_part->path;
 		
 		foreach ($mod_xml->$program_part->head_module as $head_mod) {
@@ -220,7 +232,12 @@ class ModuleManager {
 				$this->extractModule($module, $headModule);
 			}
 		}
+		libxml_use_internal_errors(false);
 	}
+
+	////////////////////////////////////////////////////////////////////////////////
+	//Implementations
+	////////////////////////////////////////////////////////////////////////////////
 	
 	private function extractHeadModule($head_mod) {
 		
@@ -280,8 +297,8 @@ class ModuleManager {
 	//Attributes
 	////////////////////////////////////////////////////////////////////////////////
 	private $headModules;
-
 	private $programPartPath;
+	private $moduleXMLPath;
 }
 
 ?>

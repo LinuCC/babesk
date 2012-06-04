@@ -14,9 +14,7 @@ require_once PATH_ACCESS . '/TableManager.php';
 class AdminManager extends TableManager{
 
 	function __construct() {
-		require "dbconnect.php";
 		parent::__construct('administrators');
-		$this->db = $db;
 	}
 
 	/**
@@ -25,10 +23,12 @@ class AdminManager extends TableManager{
 	 * @return false if error otherwise the admin id
 	 */
 	function getAdminID($adminname) {
+		
 		$query = sql_prev_inj(sprintf('SELECT ID FROM administrators WHERE name = "%s"', $adminname));
 		$result = $this->db->query($query);
 		if (!$result) {
 			echo DB_QUERY_ERROR.$this->db->error."<br />".$query;
+			echo "schinken";
 			return false;
 		}
 		$row = $result->fetch_assoc();

@@ -261,9 +261,7 @@ a #header_link {
 
 #background {
 	
-	width: 100%;
-	height: auto;
-/*     position: absolute;  */
+	background-size:100% auto;
 	margin:0px;
 	padding: 0px;
     left: 0px; 
