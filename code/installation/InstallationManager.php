@@ -1,0 +1,61 @@
+<?php
+
+require_once 'InstallationComponentManager.php';
+require_once 'InstallationComponent.php';
+
+class InstallationManager {
+
+	////////////////////////////////////////////////////////////////////////////////
+	//Attributes
+	////////////////////////////////////////////////////////////////////////////////
+	private $_installationComponentManager;
+	private $_smarty;
+
+	////////////////////////////////////////////////////////////////////////////////
+	//Constructor
+	////////////////////////////////////////////////////////////////////////////////
+	public function __construct() {
+		
+		require '../smarty/smarty_init.php';
+		$this->_smarty = $smarty;
+		
+		$this->_installationComponentManager = new InstallationComponentManager();
+		$this->_installationComponentManager->loadComponentsFromXML();
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////
+	//Getters and Setters
+	////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////
+	//Methods
+	////////////////////////////////////////////////////////////////////////////////
+	public function ShowMenu() {
+		
+		$components = $this->_installationComponentManager->getComponents();
+		$componentsSmartyArr = array();
+		
+ 		foreach($components as $component) {
+			
+			$componentsSmartyArr [] = array(
+					'name' => $component->getName(),
+					'nameDisplay' => $component->getNameDisplay(),
+					);
+		}
+		
+		$this->_smarty->assign('components', $componentsSmartyArr);
+		$this->_smarty->display('SelectComponentToInstallMenu.tpl');
+	}
+	
+	public function executeComponentInstallation($componentName) {
+		
+		$this->_installationComponentManager->executeComponent($componentName);
+	}
+	
+	////////////////////////////////////////////////////////////////////////////////
+	//Implementations
+	////////////////////////////////////////////////////////////////////////////////
+
+}
+
+?>

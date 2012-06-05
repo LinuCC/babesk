@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<InstallationComponents>
+	<Component>
+		<name>Babesk</name>
+		<nameDisplay>Bargeldloses Bestellsystem für die Legeria</nameDisplay>
+		<path>components/Babesk/InstallBabesk.php</path>
+		<className>InstallBabesk</className>
+	</Component>
+</InstallationComponents>
