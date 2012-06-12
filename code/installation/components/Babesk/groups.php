@@ -4,7 +4,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set("default_charset", "utf-8");
 
-require_once "../include/sql_access/GroupManager.php";
+require_once PATH_CODE . '/include/sql_access/GroupManager.php';
 
 if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['go_on'])) { //go on to next step of installation
 	if (!isset($_POST['Name'], $_POST['Max_Credit'])) 

@@ -27,10 +27,11 @@ class ModuleManager {
 	 */
 	function __construct ($program_part = NULL) {
 		
+		$this->moduleXMLPath = PATH_INCLUDE . '/modules.xml';
+		
 		if(isset($program_part)) {
 			$this->parseModuleXML($program_part);
 		}
-		$this->moduleXMLPath = PATH_INCLUDE . '/modules.xml';
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -210,9 +211,12 @@ class ModuleManager {
 		/**
 		 * @todo: Use functional Errorhandling in this function
 		 */
-		libxml_use_internal_errors(true);
 		$mod_xml = simplexml_load_file($this->moduleXMLPath);
-		$this->programPartPath = $mod_xml->$program_part->path;
+		
+		if(!$mod_xml) {
+			die("Could not parse the ModuleXML");
+		}
+		$this->programPartPath = (string) $mod_xml->$program_part->path;
 		
 		foreach ($mod_xml->$program_part->head_module as $head_mod) {
 			
@@ -232,7 +236,6 @@ class ModuleManager {
 				$this->extractModule($module, $headModule);
 			}
 		}
-		libxml_use_internal_errors(false);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////

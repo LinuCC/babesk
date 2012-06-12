@@ -1,5 +1,14 @@
 <?php
 
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set("default_charset", "utf-8");
+//if this value is not set, the modules will not execute
+define('_AEXEC', 1);
+
+define('PATH_CODE', realpath(__DIR__ . '/..'));
+
 require_once 'InstallationManager.php';
 
 $installationManager = new InstallationManager();

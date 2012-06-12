@@ -3,9 +3,6 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-//the modules for the admin groups
-require "../administrator/modules.php";
-
 //check if all elements exist
 if ('POST' == $_SERVER['REQUEST_METHOD']) {
 	if (!isset($_POST['Host'], $_POST['Username'], $_POST['Password'], $_POST['Database'])) {
@@ -22,7 +19,7 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 	}
 
 	//create database.php file with supplied data
-	$outFile = '../include/sql_access/dbconnect.php';
+	$outFile = PATH_CODE . '/include/sql_access/dbconnect.php';
 	$fh = fopen($outFile, 'w') or die('Datei konnte nicht gespeichert werden, bitte Benutzerrechte überprüfen');
 	$stringData = "<?php
 		    //dbconnect gets included from various sources, thus making include-Paths different. Fix with __DIR__

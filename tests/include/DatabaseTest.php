@@ -11,7 +11,7 @@ class DBConnectTest extends PHPUnit_Framework_TestCase {
 		$this->_dbConnect = new DBConnect();
 	}
 	
-	public function testCreateDatabase() {
+	public function testInitDatabase() {
 		
 	}
 	

@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../constants.php';
 
 /**
- *
+ * Handles the connection to the Database
  * @author voelkerball
  *
  */
@@ -28,7 +28,7 @@ class DBConnect {
 		$this->_databaseXMLPath = __DIR__ . '/databaseValues.xml';
 
 		if (isset($host, $username, $password, $databaseName)) {
-			$this->createDatabase($host, $username, $password, $databaseName);
+			$this->initDatabase($host, $username, $password, $databaseName);
 		}
 	}
 
@@ -36,7 +36,7 @@ class DBConnect {
 	//Getters and Setters
 	////////////////////////////////////////////////////////////////////////////////
 	public function getDatabase () {
-		
+
 		return $this->_database;
 	}
 
@@ -47,22 +47,22 @@ class DBConnect {
 		$this->_password = $password;
 		$this->_databaseName = $databaseName;
 	}
-	
-	public function setDatabaseXMLPath($path) {
-		
+
+	public function setDatabaseXMLPath ($path) {
+
 		$this->_databaseXMLPath = $path;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
-	public function createDatabaseFromXML () {
-		
+	public function initDatabaseFromXML () {
+
 		$this->loadDatabaseXML();
-		$this->createDatabase($this->_host, $this->_username, $this->_password, $this->_databaseName);
+		$this->initDatabase($this->_host, $this->_username, $this->_password, $this->_databaseName);
 	}
 
-	public function createDatabase ($host, $username, $password, $databaseName) {
+	public function initDatabase ($host, $username, $password, $databaseName) {
 
 		$this->setDatabaseValues($host, $username, $password, $databaseName);
 
@@ -70,6 +70,9 @@ class DBConnect {
 
 		if (mysqli_connect_errno()) {
 			throw new MySQLConnectionException(mysqli_connect_error());
+		}
+		if (!$this->_database) {
+			throw new MySQLConnectionException('Error connecting to the MySQL-Server');
 		}
 	}
 
@@ -113,11 +116,11 @@ class DBConnect {
 		} catch (Exception $e) {
 			return false;
 		}
-		
-// 		if (empty($dbObj->name) || empty($dbObj->host) || empty($dbObj->password) || empty($dbObj->username)) {
-// 			echo 'blubb';
-// 			return false;
-// 		}
+
+		// 		if (empty($dbObj->name) || empty($dbObj->host) || empty($dbObj->password) || empty($dbObj->username)) {
+		// 			echo 'blubb';
+		// 			return false;
+		// 		}
 		return true;
 	}
 
@@ -147,5 +150,4 @@ class DBConnect {
 		}
 	}
 }
-
 ?>

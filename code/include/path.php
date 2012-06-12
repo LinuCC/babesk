@@ -4,7 +4,7 @@
     //cut off the filename and go up one directory to the base directory
     $rootPath = dirname(dirname(__FILE__));
 
-    define('DS', DIRECTORY_SEPARATOR);
+    defined('DS') or define('DS', DIRECTORY_SEPARATOR); //smarty defines DS the same way
     //realPath() makes sure we use the right seperator for the platform
     define('PATH_SITE', $rootPath);
     define('PATH_ADMIN', realPath($rootPath."/administrator"));

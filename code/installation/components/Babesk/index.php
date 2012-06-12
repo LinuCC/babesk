@@ -3,15 +3,9 @@
 * Installations Skript - Richtet die Datenbank ein                             *
 *******************************************************************************/
 
-    error_reporting(E_ALL);
-	ini_set('display_errors', 1);
-	ini_set("default_charset", "utf-8");
-	//if this value is not set, the modules will not execute
-    define('_AEXEC', 1);
-
     //check if setup was previously done
-    /*if(file_exists("../include/dbconnect.php")) {
-        include '../include/dbconnect.php';
+    /*if(file_exists("../../../include/dbconnect.php")) {
+        include '../../../include/dbconnect.php';
         $sql = 'SHOW TABLES';
         $result = $db->query($query);
 		$row = $result->fetch_assoc();
@@ -20,11 +14,11 @@
 
     include 'header.tpl';
 
-    require_once '../include/constants.php';		
-	require_once '../include/functions.php';
-	require_once "../include/path.php";
+    require_once PATH_CODE . '/include/constants.php';		
+	require_once PATH_CODE . '/include/functions.php';
+	require_once PATH_CODE . "/include/path.php";
 	
-	require '../smarty/smarty_init.php';
+	require PATH_CODE . '/smarty/smarty_init.php';
 	
 	$smarty->assign('smarty_path', REL_PATH_SMARTY);
     $smarty->assign('status', '');

@@ -2,8 +2,8 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-require "../include/sql_access/dbconnect.php";
-require_once '../include/functions.php';
+require PATH_CODE . '/include/sql_access/dbconnect.php';
+require_once PATH_CODE . '/include/functions.php';
 
 if ('POST' == $_SERVER['REQUEST_METHOD']) {
 	if (!isset($_POST['Schoolname'], $_POST['Password'])) {
@@ -19,6 +19,9 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 		die(EMPTY_FORM);
 	}
 
+	/**
+	 * @todo: Outsource these Information into a XML
+	 */
 	// Create global administrator group
 	$sql[0] = 'INSERT INTO
 		admin_groups(name, modules)

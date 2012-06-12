@@ -1,7 +1,7 @@
 <h2>Wilkommen zur Installation des BaBeSK!</h2>
 <h3>Schritt 1</h3>
 <legend>Bitte Datenbankverbindung eingeben!</legend>
-<form action="index.php?step=1" method="post">
+<form action="index.php?module=Babesk&action=dbSetup" method="post">
     <fieldset>
 		<legend>MySQL-Database</legend>
 		<label>Hostname (IP-Adresse/Domainname)</label>
