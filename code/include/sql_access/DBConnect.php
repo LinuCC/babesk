@@ -36,7 +36,10 @@ class DBConnect {
 	//Getters and Setters
 	////////////////////////////////////////////////////////////////////////////////
 	public function getDatabase () {
-
+		
+		if(!$this->_database) {
+			throw new Exception('Database was not initialized correctly by now'); 
+		}
 		return $this->_database;
 	}
 
