@@ -9,6 +9,7 @@ define('_AEXEC', 1);
 
 define('PATH_CODE', realpath(__DIR__ . '/..'));
 
+require_once PATH_CODE . '/include/path.php';
 require_once 'InstallationManager.php';
 
 $installationManager = new InstallationManager();

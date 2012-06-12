@@ -49,11 +49,11 @@ class InstallBabesk extends InstallationComponent {
 	public function execute () {
 
 		if (isset($_GET['action'])) {
-			
-			if($_GET['action'] != 'dbSetup') {
+
+			if ($_GET['action'] != 'dbSetup') {
 				$this->initDatabase();
 			}
-			
+
 			switch ($_GET['action']) {
 				case 'dbSetup':
 					$this->setUpDBInformation();
@@ -62,6 +62,11 @@ class InstallBabesk extends InstallationComponent {
 					break;
 				case 'tableValueSetup':
 					$this->addTableValues();
+					$this->inputGroup();
+					break;
+				case 'addGroup':
+					$this->addGroup();
+					
 					break;
 			}
 		}
@@ -86,12 +91,13 @@ class InstallBabesk extends InstallationComponent {
 		$dbConnection->initDatabaseFromXML();
 		$this->_db = $dbConnection->getDatabase();
 	}
-	
-	private function createDatabase() {
-		
+
+	private function createDatabase () {
+
 		$dbArr = $this->_dbInformation;
 		$dbConnection = new DBConnect();
-		$dbConnection->setDatabaseValues ($dbArr['host'], $dbArr['username'], $dbArr['password'], $dbArr['databaseName']);
+		$dbConnection->setDatabaseValues ($dbArr['host'], $dbArr['username'], $dbArr['password'], $dbArr['databaseName']
+			);
 		$dbConnection->createDatabaseXML(true);
 		$this->initDatabase();
 	}
@@ -185,6 +191,38 @@ class InstallBabesk extends InstallationComponent {
 				}
 			}
 
+		}
+	}
+ 
+	private function inputGroup () {
+
+		$this->_smarty->display($this->_templatePath . '/groups.tpl');
+	}
+
+	private function addGroup () {
+		
+		require PATH_CODE . '/include/sql_access/GroupManager.php';
+		
+		$groupManager = new GroupManager();
+		$groupName = $_POST['name'];
+		$groupMaxCredit = $_POST['maxCredit'];
+		
+		if(isset($_POST['goOn']) && $groupName == '') {
+			return;
+		}
+		
+		if(!preg_match('/\A[A-Za-z0-9öäü]{3,30}\z/', $groupName)) {
+			die('Der Gruppenname wurde inkorrekt eingegeben');
+		}
+		if(!preg_match('/\A\d{1,5}([.,]\d{2})?\z/', $groupMaxCredit)) {
+			die('Das Maximale Guthaben der Gruppe wurde inkorrekt eingegeben');
+		}
+		
+		$groupManager->addGroup($groupName, $groupMaxCredit);
+		
+		if(isset($_POST['addAnother'])) {
+			$this->inputGroup();
+			die();
 		}
 	}
 }
