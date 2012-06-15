@@ -9,11 +9,12 @@
 class AdminInterface {
 
 	function __construct ($mod_rel_path) {
+
 		global $smarty;
 		$this->smarty = $smarty;
 		$this->tplFilePath = PATH_SMARTY_ADMIN_TEMPLATES . $mod_rel_path;
 		$this->parentPath = PATH_SMARTY . '/templates/administrator/base_layout.tpl';
-		$this->smarty->assign('inh_path', BASE_PATH);
+		$this->smarty->assign('inh_path', $this->parentPath);
 	}
 
 	/**
