@@ -50,14 +50,7 @@ class AdminPriceclassProcessing {
 			$this->pcInterface->ShowError('Error while getting PriceclassData:' . $e->getMessage());
 		}
 
-		$highest_pc_ID = 0;
-		if ($priceclasses) {
-			foreach ($priceclasses as $priceclass) {
-				if ($priceclass['pc_ID'] > $highest_pc_ID) {
-					$highest_pc_ID = $priceclass['pc_ID'];
-				}
-			}
-		}
+		$highest_pc_ID = $this->pcManager->getHighestPriceclassID();
 
 		if (isset($_POST['name'], $_POST['n_price'])) {
 			try {

@@ -66,7 +66,10 @@ class InstallBabesk extends InstallationComponent {
 					break;
 				case 'addGroup':
 					$this->addGroup();
-					
+					$this->inputPriceclass();
+					break;
+				case 'addPriceclass':
+					$this->addPriceclass();
 					break;
 			}
 		}
@@ -193,37 +196,110 @@ class InstallBabesk extends InstallationComponent {
 
 		}
 	}
- 
+
 	private function inputGroup () {
 
 		$this->_smarty->display($this->_templatePath . '/groups.tpl');
 	}
 
 	private function addGroup () {
-		
-		require PATH_CODE . '/include/sql_access/GroupManager.php';
-		
+
+		require_once PATH_CODE . '/include/sql_access/GroupManager.php';
+
 		$groupManager = new GroupManager();
-		$groupName = $_POST['name'];
-		$groupMaxCredit = $_POST['maxCredit'];
-		
-		if(isset($_POST['goOn']) && $groupName == '') {
+		$groupName = @$_POST['name'];
+		$groupMaxCredit = @$_POST['maxCredit'];
+
+		if (isset($_POST['goOn']) && $groupName == '') {
 			return;
 		}
-		
-		if(!preg_match('/\A[A-Za-z0-9öäü]{3,30}\z/', $groupName)) {
+
+		if (!preg_match('/\A[A-Za-z0-9öäü]{3,30}\z/', $groupName)) {
 			die('Der Gruppenname wurde inkorrekt eingegeben');
 		}
-		if(!preg_match('/\A\d{1,5}([.,]\d{2})?\z/', $groupMaxCredit)) {
+		if (!preg_match('/\A\d{1,5}([.,]\d{2})?\z/', $groupMaxCredit)) {
 			die('Das Maximale Guthaben der Gruppe wurde inkorrekt eingegeben');
 		}
-		
+
 		$groupManager->addGroup($groupName, $groupMaxCredit);
-		
-		if(isset($_POST['addAnother'])) {
+
+		if (isset($_POST['addAnother'])) {
 			$this->inputGroup();
 			die();
 		}
+	}
+
+	private function inputPriceclass () {
+
+		$groups = $this->retrieveGroups();
+
+		$this->_smarty->assign('groups', $groups);
+		$this->_smarty->display($this->_templatePath . '/newPriceclass.tpl');
+	}
+
+	private function addPriceclass () {
+
+		require_once PATH_CODE . '/include/sql_access/PriceClassManager.php';
+		$pcManager = new PriceClassManager();
+		
+		$pc_name = $_POST['name'];
+		$normal_price = $_POST['n_price'];
+		$groups = $this->retrieveGroups();
+		$highestPriceclassID = $pcManager->getHighestPriceclassID();
+		
+		if(isset($_POST['goOn']) && trim($_POST['name']) == '') {
+			$this->showInstallationFinished();
+			return;
+		}
+		if (!preg_match('/\A^[0-9]{1,2}((,|\.)[0-9]{2})?\z/', $normal_price)) {
+			die('Der StandardPreis wurde falsch eingegeben');
+		}
+
+		foreach ($groups as $group) {
+			$price = $_POST['group_price' . $group['ID']];
+			if (!$price || trim($price) == '') {
+				$price = $normal_price;
+			}
+			else if (!preg_match('/\A^[0-9]{0,2}((,|\.)[0-9]{2})?\z/', $price)) {
+				die('der Preis "' . $price . '" wurde falsch eingegeben');
+			}
+			$price = str_replace(',', '.', $price); //Comma bad for MySQL
+			try { //add the group
+				$pcManager->addPriceClass($pc_name, $group['ID'], $price, $highestPriceclassID + 1);
+			} catch (Exception $e) {
+				echo 'Ein Fehler ist beim Hinzufügen der Preisklasse "' . $pc_name . '" für die GruppenID "' . $group[
+					'ID'] . '" aufgetreten.';
+			}
+		}
+		
+		if(isset($_POST['addAnother'])) {
+			$this->inputPriceclass();
+		}
+		else {
+			$this->showInstallationFinished();
+		}
+	}
+	
+	private function retrieveGroups() {
+		
+		require_once PATH_CODE . '/include/sql_access/GroupManager.php';
+		$groupManager = new GroupManager();
+		
+		try {
+			$groups = $groupManager->getTableData();
+		} catch (MySQLVoidDataException $e) {
+			echo 'Es sind keine Gruppen vorhanden, somit konnten keine Preisklassen erstellt werden';
+			return;
+		} catch (Exception $e) {
+			die('Could not fetch the Groups');
+		}
+		
+		return $groups;
+	}
+	
+	private function showInstallationFinished () {
+		
+		$this->_smarty->display($this->_templatePath . '/finished.tpl');
 	}
 }
 

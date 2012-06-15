@@ -83,7 +83,8 @@ class PriceClassManager extends TableManager {
 		try {
 			if (!$ID) { //nothing for ID given
 				TableManager::addEntry('name', $name, 'GID', $GID, 'price', $price, 'pc_ID', $pc_ID);
-			} else {
+			}
+			else {
 				TableManager::addEntry('name', $name, 'GID', $GID, 'price', $price, 'pc_ID', $pc_ID, 'ID', $ID);
 			}
 		} catch (Exception $e) {
@@ -100,6 +101,25 @@ class PriceClassManager extends TableManager {
 			die();
 		}
 		return $pcn;
+	}
+
+	public function getHighestPriceclassID () {
+
+		$highest_pc_ID = 0;
+		
+		try {
+			$priceclasses = $this->getTableData();
+		} catch (MySQLVoidDataException $e) {
+			return $highest_pc_ID;
+		}
+
+		foreach ($priceclasses as $priceclass) {
+			if ($priceclass['pc_ID'] > $highest_pc_ID) {
+				$highest_pc_ID = $priceclass['pc_ID'];
+			}
+		}
+		
+		return $highest_pc_ID;
 	}
 }
 ?>
