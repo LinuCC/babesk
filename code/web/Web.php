@@ -67,7 +67,7 @@ class Web {
 
 		// check for first password
 		if ($userManager->firstPassword($_SESSION['uid'])) {
-			$this->_modManager->execute('Babesk|ChangePassword', false);
+			$this->_moduleManager->execute('Babesk|ChangePassword', false);
 		}
 		$userData = $userManager->getEntryData($_SESSION['uid'], '*');
 

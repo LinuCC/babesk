@@ -101,7 +101,6 @@ class AdminGroupManager extends TableManager{
 	function addAdminGroup($name, $modules) {
 		
 		$this->isAdminGroupNameExisting($name);
-		var_dump($modules);
 		$this->addEntry('name', $name, 'modules', $modules);
 	}
 	

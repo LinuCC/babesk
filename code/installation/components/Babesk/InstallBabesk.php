@@ -173,7 +173,7 @@ class InstallBabesk extends InstallationComponent {
 			die('Die Passwörter stimmen nicht überein');
 		}
 
-		$queryStr = sql_prev_inj(sprintf($simpleXmlElement->sqlString, $pw));
+		$queryStr = sql_prev_inj(sprintf($simpleXmlElement->sqlString, hash_password($pw)));
 		$this->_db->query($queryStr);
 	}
 
