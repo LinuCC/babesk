@@ -47,7 +47,7 @@ class AdminPriceclassProcessing {
 			$priceclasses = false;
 		}
 		catch (Exception $e) {
-			$this->pcInterface->ShowError('Error while getting PriceclassData:' . $e->getMessage());
+			$this->pcInterface->dieError('Error while getting PriceclassData:' . $e->getMessage());
 		}
 
 		$highest_pc_ID = $this->pcManager->getHighestPriceclassID();
@@ -56,12 +56,12 @@ class AdminPriceclassProcessing {
 			try {
 				$groups = $groupManager->getTableData();
 			} catch (Exception $e) {
-				$this->pcInterface->ShowError($this->msg['err_fetch_groups'] . $e->getMessage());
+				$this->pcInterface->dieError($this->msg['err_fetch_groups'] . $e->getMessage());
 			}
 			$pc_name = $_POST['name'];
 			$normal_price = $_POST['n_price'];
 			if (!preg_match('/\A^[0-9]{1,2}((,|\.)[0-9]{2})?\z/', $normal_price)) {
-				$this->pcInterface->ShowError($this->msg['err_inp_nprice']);
+				$this->pcInterface->dieError($this->msg['err_inp_nprice']);
 			}
 			foreach ($groups as $group) {
 				$price = $_POST['group_price' . $group['ID']];
@@ -69,24 +69,24 @@ class AdminPriceclassProcessing {
 					$price = $normal_price;
 				}
 				else if (!preg_match('/\A^[0-9]{0,2}((,|\.)[0-9]{2})?\z/', $price)) {
-					$this->pcInterface->ShowError($this->msg['err_input_price']);
+					$this->pcInterface->dieError($this->msg['err_input_price']);
 				}
 				$price = str_replace(',', '.', $price); //Comma bad for MySQL
 				try { //add the group
 					$this->pcManager->addPriceClass($pc_name, $group['ID'], $price, $highest_pc_ID + 1);
 				} catch (Exception $e) {
-					$this->pcInterface->ShowError(sprintf($this->msg['err_add_priceclass_for_group'] . $e->getMessage()),
+					$this->pcInterface->dieError(sprintf($this->msg['err_add_priceclass_for_group'] . $e->getMessage()),
 						$group['name']);
 				}
 			}
-			$this->pcInterface->ShowMsg($this->msg['fin_add_priceclass']);
+			$this->pcInterface->dieMsg($this->msg['fin_add_priceclass']);
 		}
 		else {
 
 			try {
 				$groups = $groupManager->getTableData();
 			} catch (Exception $e) {
-				$this->pcInterface->ShowError($this->msg['err_fetch_groups'] . $e->getMessage());
+				$this->pcInterface->dieError($this->msg['err_fetch_groups'] . $e->getMessage());
 			}
 			$this->pcInterface->NewPriceclass($groups);
 		}
@@ -101,9 +101,9 @@ class AdminPriceclassProcessing {
 		try {
 			$this->pcManager->delEntry($priceclass_id);
 		} catch (Exception $e) {
-			$this->pcInterface->ShowError($this->msg['err_del_priceclass']);
+			$this->pcInterface->dieError($this->msg['err_del_priceclass']);
 		}
-		$this->pcInterface->ShowMsg($this->msg['fin_del_priceclass']);
+		$this->pcInterface->dieMsg($this->msg['fin_del_priceclass']);
 	}
 
 	/**
@@ -121,18 +121,18 @@ class AdminPriceclassProcessing {
 			$pc_GID = $_POST['group_id'];
 
 			if (!preg_match('/\A^[0-9]{0,2}((,|\.)[0-9]{2})?\z/', $pc_price))
-				$this->pcInterface->ShowError($this->msg['err_inp_price']);
+				$this->pcInterface->dieError($this->msg['err_inp_price']);
 			else if (!preg_match('/\A^[0-9]{1,5}\z/', $pc_ID))
-				$this->pcInterface->ShowError($this->msg['err_inp_id']);
+				$this->pcInterface->dieError($this->msg['err_inp_id']);
 			else if (!preg_match('/\A^[0-9]{1,5}\z/', $pc_old_ID))
-				$this->pcInterface->ShowError($this->msg['err_get']);
+				$this->pcInterface->dieError($this->msg['err_get']);
 
 			try {
 				$this->pcManager->changePriceClass($pc_old_ID, $pc_name, $pc_GID, $pc_price, $pc_ID);
 			} catch (Exception $e) {
-				$this->pcInterface->ShowError($this->msg['err_change_priceclass'] . $e->getMessage());
+				$this->pcInterface->dieError($this->msg['err_change_priceclass'] . $e->getMessage());
 			}
-			$this->pcInterface->ShowMsg($this->msg['fin_change_priceclass']);
+			$this->pcInterface->dieMsg($this->msg['fin_change_priceclass']);
 		}
 		else {
 
@@ -169,13 +169,13 @@ class AdminPriceclassProcessing {
 		try {
 			$groupManager = new GroupManager('groups');
 		} catch (Exception $e) {
-			$this->pcInterface->ShowError($this->msg['err_fetch_groups'] . $e->getMessage());
+			$this->pcInterface->dieError($this->msg['err_fetch_groups'] . $e->getMessage());
 		}
 
 		try {
 			$priceclasses = $this->pcManager->getTableData();
 		} catch (Exception $e) {
-			$this->pcInterface->ShowError($this->msg['err_fetch_priceclass'] . $e->getMessage());
+			$this->pcInterface->dieError($this->msg['err_fetch_priceclass'] . $e->getMessage());
 		}
 
 		foreach ($priceclasses as & $priceclass) {
@@ -185,7 +185,7 @@ class AdminPriceclassProcessing {
 				$priceclass['group_name'] = $this->msg['err'];
 			}
 			catch (Exception $e) {
-				$this->pcInterface->ShowError($this->msg['err_fetch_groups'] . $e->getMessage());
+				$this->pcInterface->dieError($this->msg['err_fetch_groups'] . $e->getMessage());
 			}
 			if (!$group) {
 				$priceclass['group_name'] = $this->msg['err'];

@@ -36,7 +36,7 @@ class User extends Module {
 									'passwd'], $_POST['passwd_repeat'], $_SESSION['CARD_ID'], $_POST["Date_Year"] . '-' . $_POST[
 									"Date_Month"] . '-' . $_POST["Date_Day"], $_POST["gid"], $_POST["credits"]);
 						} catch (Exception $e) {
-							$userInterface->ShowError($e->getMessage());
+							$userInterface->dieError($e->getMessage());
 						}
 					} else if (isset($_POST['id'])) {
 						//id is already filled out, show register-form

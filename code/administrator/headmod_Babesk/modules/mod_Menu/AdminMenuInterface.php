@@ -14,16 +14,16 @@ class AdminMenuInterface extends AdminInterface {
 		$this->smarty->display(PATH_SMARTY . '/templates/administrator/modules/mod_menu/menu_header.tpl');
 	}
 	
-	public function ShowError($msg){
+	public function dieError($msg){
 		if($this->isFromModule)
-			parent::ShowError($msg);
+			parent::dieError($msg);
 		else
 			die('Fehler:' . $msg);
 	}
 	
-	public function ShowMsg($msg){
+	public function dieMsg($msg){
 		if($isFromModule)
-			parent::ShowMsg($msg);
+			parent::dieMsg($msg);
 		else
 			die($msg);
 	}

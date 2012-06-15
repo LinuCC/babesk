@@ -25,6 +25,19 @@
 	{/nocache}
 		</div>
 	</div>
+	{if $_userMsgOutput or $_userErrorOutput}
+	<div id="main">
+		<div id="content">
+		{foreach $_userMsgOutput as $msg}
+		<p>$msg</p>
+		{/foreach}
+		{foreach $_userErrorOutput as $error}
+		<p class="error">{$error}</p>
+		{/foreach}
+		
+		</div>
+	</div>
+	{/if}
 	<div id="main">
 		<div id="content">{block name=content}{/block}</div>
 	</div>

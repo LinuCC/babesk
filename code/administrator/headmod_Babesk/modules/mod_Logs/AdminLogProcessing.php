@@ -59,7 +59,7 @@ class AdminLogProcessing {
 	public function ChooseSeverity($category) {
 		
 		if(!isset($category) || !$category) {
-			$this->logInterface->ShowError($this->msg['err_category']);
+			$this->logInterface->dieError($this->msg['err_category']);
 		}
 		
 		$logs = $this->GetLogDataByCategory($category);
@@ -87,9 +87,9 @@ class AdminLogProcessing {
 		try {
 			$logs = $this->logger->getLogDataByCategoryAndSeverity($category, $severity);
 		} catch (MySQLVoidDataException $e) {
-			$this->logInterface->ShowError($this->msg['err_no_logs']);
+			$this->logInterface->dieError($this->msg['err_no_logs']);
 		} catch (Exception $e) {
-			$this->logInterface->ShowError($this->msg['err_logs'] . $e->getMessage());
+			$this->logInterface->dieError($this->msg['err_logs'] . $e->getMessage());
 		}
 		return $logs;
 	}
@@ -140,9 +140,9 @@ class AdminLogProcessing {
 		try {
 			$logs = $this->logger->getLogData();
 		} catch (MySQLVoidDataException $e) {
-			$this->logInterface->ShowError($this->msg['err_no_logs']);
+			$this->logInterface->dieError($this->msg['err_no_logs']);
 		} catch (Exception $e) {
-			$this->logInterface->ShowError($this->msg['err_logs']);
+			$this->logInterface->dieError($this->msg['err_logs']);
 		}
 		return $logs;
 	}
@@ -156,10 +156,10 @@ class AdminLogProcessing {
 		try {
 			$logs = $this->logger->getLogDataByCategory($category);
 		} catch (MySQLVoidDataException $e) {
-			$this->logInterface->ShowError($this->msg['err_no_logs']);
+			$this->logInterface->dieError($this->msg['err_no_logs']);
 		}
 		catch (Exception $e) {
-			$this->logInterface->ShowError($this->msg['err_logs'] . $e->getMessage());
+			$this->logInterface->dieError($this->msg['err_logs'] . $e->getMessage());
 		}
 		return $logs;
 	}

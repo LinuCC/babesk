@@ -49,16 +49,16 @@ class AdminSoliProcessing {
 				inputcheck($end_date, 'birthday', 'Datum');
 				inputcheck($uid, 'id', 'BenutzerID');
 			} catch (WrongInputException $e) {
-				$this->soliInterface->ShowError($this->msg['ERR_INP'] . ': ' . $e->getFieldName());
+				$this->soliInterface->dieError($this->msg['ERR_INP'] . ': ' . $e->getFieldName());
 			}
 			if (!$userManager->isSoli($uid))//is the user soli?
-				$this->soliInterface->ShowError($this->msg['ERR_USER_NO_SOLI']);
+				$this->soliInterface->dieError($this->msg['ERR_USER_NO_SOLI']);
 			try {
 				$this->soliCouponManager->addCoupon($beg_date, $end_date, $uid);
 			} catch (Exception $e) {
-				$this->soliInterface->ShowError($this->msg['ERR_ADD_COUPON']);
+				$this->soliInterface->dieError($this->msg['ERR_ADD_COUPON']);
 			}
-			$this->soliInterface->ShowMsg($this->msg['COUPON_ADDED']);
+			$this->soliInterface->dieMsg($this->msg['COUPON_ADDED']);
 		} else {
 			/*
 			 *Show Add-Coupon-Interface
@@ -70,7 +70,7 @@ class AdminSoliProcessing {
 			try {
 				$solis_arr = $userManager->getAllSoli();
 			} catch (MySQLVoidDataException $e) {
-				$this->soliInterface->ShowError($this->msg['ERR_USER_NO_SOLI_FOUND']);
+				$this->soliInterface->dieError($this->msg['ERR_USER_NO_SOLI_FOUND']);
 			}
 			$this->soliInterface->AddCoupon($solis_arr);
 		}
@@ -87,7 +87,7 @@ class AdminSoliProcessing {
 		try {
 			$coupons = $this->soliCouponManager->getAllCoupons();
 		} catch (Exception $e) {
-			$this->soliInterface->ShowError($this->msg['ERR_GET_COUPON']);
+			$this->soliInterface->dieError($this->msg['ERR_GET_COUPON']);
 		}
 		$userManager = new UserManager();
 
@@ -113,9 +113,9 @@ class AdminSoliProcessing {
 			try {
 				$this->soliCouponManager->delEntry($id);
 			} catch (Exception $e) {
-				$this->soliInterface->ShowError($this->msg['ERR_DEL_COUPON']);
+				$this->soliInterface->dieError($this->msg['ERR_DEL_COUPON']);
 			}
-			$this->soliInterface->ShowMsg($this->msg['FIN_DEL_COUPON']);
+			$this->soliInterface->dieMsg($this->msg['FIN_DEL_COUPON']);
 		} else {
 
 			//Show Confirmation-Dialog
@@ -125,7 +125,7 @@ class AdminSoliProcessing {
 				$uid = $this->soliCouponManager->getEntryValue($id, 'UID');
 				$username = $userManager->getForename($uid) . '.' . $userManager->getName($uid);
 			} catch (Exception $e) {
-				$this->soliInterface->ShowError(ERR_FETCH_COUPON_INF);
+				$this->soliInterface->dieError(ERR_FETCH_COUPON_INF);
 			}
 			$this->soliInterface->ConfirmDelCoupon($id, $username);
 		}
@@ -146,9 +146,9 @@ class AdminSoliProcessing {
 		try {
 			$soli_users = $userManager->getAllSoli();
 		} catch (MySQLVoidDataException $e) {
-			$this->soliInterface->ShowError($this->msg['ERR_USER_NO_SOLI_FOUND']);
+			$this->soliInterface->dieError($this->msg['ERR_USER_NO_SOLI_FOUND']);
 		} catch (Exception $e) {
-			$this->soliInterface->ShowError($this->msg['ERR_SQL'] . ':' . $e->getMessage());
+			$this->soliInterface->dieError($this->msg['ERR_SQL'] . ':' . $e->getMessage());
 		}
 		
 		foreach ($soli_users as &$soli_user) {
@@ -178,7 +178,7 @@ class AdminSoliProcessing {
 		try {
 			$soli_orders = $soliOrderManager->getSortedOrders();
 		} catch (MySQLVoidDataException $e) {
-			$this->soliInterface->ShowError($this->msg['ERR_SQL_NO_ORDERS']);
+			$this->soliInterface->dieError($this->msg['ERR_SQL_NO_ORDERS']);
 		}
 
 		$orders = array();
@@ -242,13 +242,13 @@ class AdminSoliProcessing {
 																				  date('Y-m-d',
 																					   $monday + ($i * $secs_per_day)));
 				} catch (MySQLVoidDataException $e) {
-					$this->soliInterface->ShowError($this->msg['ERR_ORDERS_NOT_FOUND']);
+					$this->soliInterface->dieError($this->msg['ERR_ORDERS_NOT_FOUND']);
 				}
 				foreach ($buffer as $order)
 					$orders[] = $order;
 			}
 			if (!count($orders))
-				$this->soliInterface->ShowError($this->msg['ERR_ORDERS_NOT_FOUND']);
+				$this->soliInterface->dieError($this->msg['ERR_ORDERS_NOT_FOUND']);
 
 			foreach ($orders as &$order) {
 				$sum_pricediff += $order['mealprice'] - $order['soliprice'];
@@ -262,7 +262,7 @@ class AdminSoliProcessing {
 				//Show Form to fill out Weeknumber and Soli
 				$solis = $userManager->getAllSoli();
 			} catch (Exception $e) {
-				$this->soliInterface->ShowError($this->msg['ERR_USER_NO_SOLI_FOUND']);
+				$this->soliInterface->dieError($this->msg['ERR_USER_NO_SOLI_FOUND']);
 			}
 			$this->soliInterface->AskShowSoliUser($solis);
 		}
@@ -286,19 +286,19 @@ class AdminSoliProcessing {
 					inputcheck($_POST['soli_price'], 'credits');
 				} catch (Exception $e) {
 					die_error(SOLI_ERR_INP_PRICE);
-					$this->soliInterface->ShowError($this->msg['SOLI_ERR_INP_PRICE']);
+					$this->soliInterface->dieError($this->msg['SOLI_ERR_INP_PRICE']);
 				}
 				$gbManager->changeSoliPrice($_POST['soli_price']);
 			} catch (Exception $e) {
 				die_error(SOLI_ERR_CHANGE_PRICE . ':' . $e->getMessage());
-				$this->soliInterface->ShowError($this->msg['SOLI_ERR_CHANGE_PRICE '] . ':' . $e->getMessage());
+				$this->soliInterface->dieError($this->msg['SOLI_ERR_CHANGE_PRICE '] . ':' . $e->getMessage());
 			}
-			$this->soliInterface->ShowMsg($this->msg['SOLI_FIN_CHANGE']);
+			$this->soliInterface->dieMsg($this->msg['SOLI_FIN_CHANGE']);
 		} else {
 			try {
 				$soli_price = $gbManager->getSoliPrice();
 			} catch (Exception $e) {
-				$this->soliInterface->ShowError($this->msg['SOLI_ERR_PRICE']);
+				$this->soliInterface->dieError($this->msg['SOLI_ERR_PRICE']);
 			}
 			$this->soliInterface->ChangeSettings($soli_price);
 		}

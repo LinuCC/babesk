@@ -45,7 +45,7 @@ class AdminMenuProcessing {
 		try {
 			$meallist = $this->mealManager->get_meals_between_two_dates($this->GetWeekday(0), $this->GetWeekday(14));
 		} catch (MySQLVoidDataException $e) {
-			$this->menuInterface->ShowError($this->msg['err_no_meals']);
+			$this->menuInterface->dieError($this->msg['err_no_meals']);
 		}
 		return $meallist;
 	}
@@ -101,7 +101,7 @@ class AdminMenuProcessing {
 		try {
 			$itxt_arr = $this->gsManager->getInfoTexts();
 		} catch (Exception $e) {
-			$this->menuInterface->ShowError($this->msg['err_infotext']);
+			$this->menuInterface->dieError($this->msg['err_infotext']);
 		}
 		return $itxt_arr;
 	}

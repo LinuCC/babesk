@@ -72,7 +72,7 @@ class AdminMealProcessing {
 				inputcheck($name, '/\A^.{0,255}\z/', $this->msg['field_name']);
 				inputcheck($description, '/\A^.{0,1000}\z/', $this->msg['field_description']);
 			} catch (WrongInputException $e) {
-				$this->mealInterface->ShowError(sprintf($this->msg['err_inp'], $e->getFieldName()));
+				$this->mealInterface->dieError(sprintf($this->msg['err_inp'], $e->getFieldName()));
 			}
 
 			//convert the date for MySQL-Server
@@ -83,16 +83,16 @@ class AdminMealProcessing {
 
 				$this->mealManager->addMeal($name, $description, $date_conv, $price_class, $max_orders);
 			} catch (Exception $e) {
-				$this->groupInterface->ShowError($this->msg['err_add_meal'] . $e->getMessage());
+				$this->groupInterface->dieError($this->msg['err_add_meal'] . $e->getMessage());
 			}
-			$this->mealInterface->ShowMsg($this->msg['fin_add_meal']);
+			$this->mealInterface->dieMsg($this->msg['fin_add_meal']);
 		} else {
 
 			//if Formular isnt filled yet or the link was wrong
 			try {
 				$pc_arr = $pcManager->getAllPriceClassesPooled();
 			} catch (Exception $e) {
-				$this->groupInterface->ShowError($this->msg['err_no_pc'] . $e->getMessage());
+				$this->groupInterface->dieError($this->msg['err_no_pc'] . $e->getMessage());
 			}
 			$pc_ids = array();
 			$pc_names = array();
@@ -112,7 +112,7 @@ class AdminMealProcessing {
 		try {
 			$meals = $this->mealManager->getTableData();
 		} catch (MySQLVoidDataException $e) {
-			$this->mealInterface->ShowError($this->msg['err_no_meals']);
+			$this->mealInterface->dieError($this->msg['err_no_meals']);
 		}
 		foreach ($meals as & $meal) {
 			$meal['date'] = formatDate($meal['date']);
@@ -129,7 +129,7 @@ class AdminMealProcessing {
 		$gsManager = new GlobalSettingsManager();
 		$infotexts = $gsManager->getInfoTexts();
 		if (count($infotexts) != 2)
-			$this->mealInterface->ShowError($this->msg['err_get_infotexts']);
+			$this->mealInterface->dieError($this->msg['err_get_infotexts']);
 
 		if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['infotext1'], $_POST['infotext2'])) {
 
@@ -142,7 +142,7 @@ class AdminMealProcessing {
 			try {
 				$gsManager->setInfoTexts($infotext1new, $infotext2new);
 			} catch (Exception $e) {
-				$this->groupInterface->ShowError($this->msg['err_edit_infotexts'] . $e->getMessage());
+				$this->groupInterface->dieError($this->msg['err_edit_infotexts'] . $e->getMessage());
 			}
 			$this->mealInterface->FinEditInfotexts($infotext1new, $infotext2new);
 
@@ -172,9 +172,9 @@ class AdminMealProcessing {
 			try {
 				$gsManager->setLastOrderTime($n_last_order_time);
 			} catch (Exception $e) {
-				$this->mealInterface->ShowError($this->msg['err_edit_lot'] . $e->getMessage());
+				$this->mealInterface->dieError($this->msg['err_edit_lot'] . $e->getMessage());
 			}
-			$this->mealInterface->ShowMsg(sprintf($this->msg['fin_edit_lot'], $n_last_order_time));
+			$this->mealInterface->dieMsg(sprintf($this->msg['fin_edit_lot'], $n_last_order_time));
 		} else {
 
 			$this->mealInterface->EditLastOrderTime($last_order_time);
@@ -209,25 +209,25 @@ class AdminMealProcessing {
 			$order = array();
 
 			if ($_POST['ordering_day'] > 31 or $_POST['ordering_month'] > 12 or $_POST['ordering_year'] < 2000 or $_POST['ordering_year'] > 3000) {
-				$this->groupInterface->ShowError($this->msg['err_inp_date']);
+				$this->groupInterface->dieError($this->msg['err_inp_date']);
 			}
 			$date = $_POST['ordering_year'] . '-' . $_POST['ordering_month'] . '-' . $_POST['ordering_day'];
 			try {
 				$orders = $this->orderManager->getAllOrdersAt($date);
 
 			} catch (MySQLVoidDataException $e) {
-				$this->groupInterface->ShowError($this->msg['err_no_orders']);
+				$this->groupInterface->dieError($this->msg['err_no_orders']);
 			}
 			catch (MySQLConnectionException $e) {
-				$this->groupInterface->ShowError($e->getMessage());
+				$this->groupInterface->dieError($e->getMessage());
 			}
 
 			if (!count($orders))
-				$this->groupInterface->ShowError($this->msg['err_no_orders']);
+				$this->groupInterface->dieError($this->msg['err_no_orders']);
 
 			foreach ($orders as & $order) {
 				if (!count($meal_data = $this->mealManager->getEntryData($order['MID'], 'name')) or !count($user_data = $user_manager->getEntryData($order['UID'], 'name', 'forename', 'GID'))) {
-					$this->mealInterface->ShowError($this->msg['err_order_database']);
+					$this->mealInterface->dieError($this->msg['err_order_database']);
 				} else {
 
 					$order['meal_name'] = $meal_data['name'];
@@ -313,7 +313,7 @@ class AdminMealProcessing {
 			if (isset($num_orders[0]) && $counter) {
 				$this->mealInterface->ShowOrders($num_orders, $sorted_orders, formatDate($date));
 			} else {
-				$this->groupInterface->ShowError(sprintf($this->msg['err_no_orders_at_date'], formatDateTime($date)));
+				$this->groupInterface->dieError(sprintf($this->msg['err_no_orders_at_date'], formatDateTime($date)));
 			}
 		}
 	}
@@ -332,12 +332,12 @@ class AdminMealProcessing {
 			$this->mealManager->deleteMealsBeforeDate($timestamp);
 			$orderManager->deleteOrdersBeforeDate($timestamp);
 		} catch (MySQLConnectionException $e) {
-			$this->mealInterface->ShowError($this->msg['err_conn_mysql']);
+			$this->mealInterface->dieError($this->msg['err_conn_mysql']);
 		}
 		catch (Exception $e) {
-			$this->mealInterface->ShowError($e->getMessage());
+			$this->mealInterface->dieError($e->getMessage());
 		}
-		$this->mealInterface->ShowMsg($this->msg['fin_del_meals_orders']);
+		$this->mealInterface->dieMsg($this->msg['fin_del_meals_orders']);
 	}
 
 	/**
@@ -352,24 +352,24 @@ class AdminMealProcessing {
 		try {
 			$this->mealManager->delEntry($ID);
 		} catch (Exception $e) {
-			$this->mealInterface->ShowError($this->msg['err_del_meal'] . $e->getMessage());
+			$this->mealInterface->dieError($this->msg['err_del_meal'] . $e->getMessage());
 		}
 		if ($linked_orders) {
 			try {
 				$orders = $this->orderManager->getAllOrdersOfMeal($ID);
 			} catch (MySQLVoidDataException $e) {
 				//no orders to delete, finished
-				$this->mealInterface->ShowMsg(sprintf($this->msg['fin_del_meal'], $ID));
+				$this->mealInterface->dieMsg(sprintf($this->msg['fin_del_meal'], $ID));
 			}
 			foreach ($orders as $order) {
 				try {
 					$this->orderManager->delEntry($order['ID']);
 				} catch (Exception $e) {
-					$this->mealInterface->ShowError(sprintf($this->msg['err_del_order'], $order['ID']) . $e->getMessage());
+					$this->mealInterface->dieError(sprintf($this->msg['err_del_order'], $order['ID']) . $e->getMessage());
 				}
 			}
 		}
-		$this->mealInterface->ShowMsg(sprintf($this->msg['fin_del_meal'], $ID));
+		$this->mealInterface->dieMsg(sprintf($this->msg['fin_del_meal'], $ID));
 	}
 
 	/**
@@ -382,7 +382,7 @@ class AdminMealProcessing {
 		try {
 			$pc_arr = $pcManager->getAllPriceClassesPooled();
 		} catch (Exception $e) {
-			$this->groupInterface->ShowError($this->msg['err_no_pc'] . $e->getMessage());
+			$this->groupInterface->dieError($this->msg['err_no_pc'] . $e->getMessage());
 		}
 		$pc_ids = array();
 		$pc_names = array();

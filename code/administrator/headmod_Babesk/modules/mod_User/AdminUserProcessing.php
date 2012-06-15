@@ -87,7 +87,7 @@ class AdminUserProcessing {
 		//check max amount of credits of the group
 		if ($credits > $groupManager->getMaxCredit($GID)) {
 			$this->userInterface
-					->ShowError(
+					->dieError(
 							$this->messages['error']['max_credits'] . 'maximales Guthaben der Gruppe:'
 									. $groupManager->getMaxCredit($GID) . '€');
 			throw new Exception($this->messages['error']['register']);
@@ -97,7 +97,7 @@ class AdminUserProcessing {
 			$userManager->addUser($name, $forename, $username, $passwd, $birthday, $credits, $GID);
 		} catch (Exception $e) {
 			$this->userInterface
-					->ShowError("<br>" . $this->messages['error']['mysql_register'] . $e->getMessage() . "<br>");
+					->dieError("<br>" . $this->messages['error']['mysql_register'] . $e->getMessage() . "<br>");
 			$cardManager->delEntry($cardID);
 			throw new Exception($this->messages['error']['register'] . $e->getMessage());
 		}
@@ -130,7 +130,7 @@ class AdminUserProcessing {
 		try {
 			$sql_groups = $group_manager->getTableData();
 		} catch (MySQLVoidDataException $e) {
-			$this->userInterface->ShowError($this->messages['error']['no_groups']);
+			$this->userInterface->dieError($this->messages['error']['no_groups']);
 		}
 		if (!empty($sql_groups)) {
 			foreach ($sql_groups as $group) {
@@ -161,7 +161,7 @@ class AdminUserProcessing {
 			$this->logs
 					->log('ADMIN', 'MODERATE',
 							sprintf('Error while getting Data from MySQL:%s in %s', $e->getMessage(), __METHOD__));
-			$this->userInterface->ShowError($this->messages['error']['get_data_failed']);
+			$this->userInterface->dieError($this->messages['error']['get_data_failed']);
 		}
 
 		foreach ($users as &$user) {
@@ -197,7 +197,7 @@ class AdminUserProcessing {
 		} catch (Exception $e) {
 			var_dump($uid);
 			$this->userInterface
-					->ShowError($this->messages['error']['uid_get_param'] . ';<br>ExceptionMessage:' . $e->getMessage());
+					->dieError($this->messages['error']['uid_get_param'] . ';<br>ExceptionMessage:' . $e->getMessage());
 		}
 
 		$this->userInterface->ShowDeleteConfirmation($uid, $user['forename'], $user['name']);
@@ -214,7 +214,7 @@ class AdminUserProcessing {
 			$userManager->delEntry($uid);
 			$cardManager->delEntry($cardManager->getCardIDByUserID($uid));
 		} catch (Exception $e) {
-			$this->userInterface->ShowError($this->messages['error']['delete'] . $e->getMessage());
+			$this->userInterface->dieError($this->messages['error']['delete'] . $e->getMessage());
 		}
 		$this->userInterface->ShowDeleteFin();
 	}
@@ -236,12 +236,12 @@ class AdminUserProcessing {
 		try {
 			$user = $userManager->getEntryData($uid);
 		} catch (Exception $e) {
-			$this->userInterface->ShowError($this->messages['error']['uid_get_param'] . $e->getMessage());
+			$this->userInterface->dieError($this->messages['error']['uid_get_param'] . $e->getMessage());
 		}
 		try {
 			$groups = $this->getGroups();
 		} catch (Exception $e) {
-			$this->userInterface->ShowError($this->messages['error']['groups_get_param'] . $e->getMessage());
+			$this->userInterface->dieError($this->messages['error']['groups_get_param'] . $e->getMessage());
 		}
 
 		$this->userInterface->ShowChangeUser($user, $groups['arr_gid'], $groups['arr_group_name'], $cardnumber);
@@ -282,7 +282,7 @@ class AdminUserProcessing {
 				inputcheck($cardnumber, 'card_id');
 		} catch (Exception $e) {
 			$this->userInterface
-					->ShowError(
+					->dieError(
 							$this->messages['error']['input1'] . '"' . $e->getMessage() . '"'
 									. $this->messages['error']['input2']);
 			//throw new Exception($this->messages['error']['change']);
@@ -293,7 +293,7 @@ class AdminUserProcessing {
 					inputcheck($passwd, 'password');
 					inputcheck($passwd_repeat, 'password');
 				} catch (Exception $e) {
-					$this->userInterface->ShowError($this->messages['error']['passwd_repeat']);
+					$this->userInterface->dieError($this->messages['error']['passwd_repeat']);
 				}
 			}
 		}
@@ -306,7 +306,7 @@ class AdminUserProcessing {
 				try {
 					$cardManager->addCardIdChange($cardManager->getIDByUserID($id));
 				} catch (Exception $e) {
-					$this->userInterface->ShowError($this->messages['error']['card_id_change']);
+					$this->userInterface->dieError($this->messages['error']['card_id_change']);
 					$this->logs
 							->log(ADMIN, MODERATE,
 									'Error: Could not finish addCardIdChange() in ' . __METHOD__ . '; CardID: '
@@ -314,7 +314,7 @@ class AdminUserProcessing {
 				}
 			}
 		} catch (Exception $e) {
-			$this->userInterface->ShowError($this->messages['error']['change'] . $e->getMessage());
+			$this->userInterface->dieError($this->messages['error']['change'] . $e->getMessage());
 		}
 		$this->userInterface
 				->ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID, $locked, $soli);

@@ -45,7 +45,7 @@ class AdminCheckoutProcessing {
 	public function Checkout ($card_id) {
 
 		if (!$this->cardManager->valid_card_ID($card_id))
-			$this->checkoutInterface->ShowError(sprintf($this->msg['err_card_id'], $card_id));
+			$this->checkoutInterface->dieError(sprintf($this->msg['err_card_id'], $card_id));
 
 		$uid = $this->GetUser($card_id);
 		$orders = $this->GetOrders($uid);
@@ -74,7 +74,7 @@ class AdminCheckoutProcessing {
 				$this->checkoutInterface->CardLocked();
 			}
 		} catch (Exception $e) {
-			$this->checkoutInterface->ShowError($this->msg['err_get_user_by_card'] . ' Error:' . $e->getMessage());
+			$this->checkoutInterface->dieError($this->msg['err_get_user_by_card'] . ' Error:' . $e->getMessage());
 		}
 		return $uid;
 	}
@@ -90,10 +90,10 @@ class AdminCheckoutProcessing {
 		try {
 			$orders = $this->orderManager->getAllOrdersOfUserAtDate($uid, $date);
 		} catch (MySQLVoidDataException $e) {
-			$this->checkoutInterface->ShowError($this->msg['err_no_orders']);
+			$this->checkoutInterface->dieError($this->msg['err_no_orders']);
 		}
 		catch (Exception $e) {
-			$this->checkoutInterface->ShowError($e->getMessage);
+			$this->checkoutInterface->dieError($e->getMessage);
 		}
 		return $orders;
 	}
@@ -111,10 +111,10 @@ class AdminCheckoutProcessing {
 			/**
 			 * @FIXME Error should not kill whole Process, just one Menu couldnt be fetched!
 			 */
-			$this->checkoutInterface->ShowError($this->msg['err_meal_not_found']);
+			$this->checkoutInterface->dieError($this->msg['err_meal_not_found']);
 		}
 		catch (Exception $e) {
-			$this->checkoutInterface->ShowError($this->msg['err_connection'] . '<br>' . $e->getMessage());
+			$this->checkoutInterface->dieError($this->msg['err_connection'] . '<br>' . $e->getMessage());
 		}
 		return $mealname;
 	}

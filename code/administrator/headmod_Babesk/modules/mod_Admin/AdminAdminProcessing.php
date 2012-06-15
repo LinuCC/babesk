@@ -76,7 +76,7 @@ class AdminAdminProcessing {
 
 			$modules = $this->GetModules();
 			if (count($modules) < 1)
-				$this->adminInterface->ShowError($this->messages['err_no_modules']);
+				$this->adminInterface->dieError($this->messages['err_no_modules']);
 				$this->adminInterface->CreateAdminGroup($modules);
 		}
 		else {
@@ -101,10 +101,10 @@ class AdminAdminProcessing {
 			try {
 				$this->adminManager->delEntry($ID);
 			} catch (Exception $e) {
-				$this->adminInterface->ShowError($this->messages['err_del_admin'] . ':' . $e->getMessage());
+				$this->adminInterface->dieError($this->messages['err_del_admin'] . ':' . $e->getMessage());
 				die();
 			}
-			$this->adminInterface->ShowMsg($this->messages['del_admin_fin']);
+			$this->adminInterface->dieMsg($this->messages['del_admin_fin']);
 		}
 		else {
 			try {
@@ -127,7 +127,7 @@ class AdminAdminProcessing {
 			try {
 				$this->admingroupManager->delEntry($ID);
 			} catch (Exception $e) {
-				$this->adminInterface->ShowError($this->messages['err_del_admingroup'] . ':' . $e->getMessage());
+				$this->adminInterface->dieError($this->messages['err_del_admingroup'] . ':' . $e->getMessage());
 				die();
 			}
 			echo $this->messages['del_admingroup_fin'];
@@ -150,7 +150,7 @@ class AdminAdminProcessing {
 		try {
 			$admins = $this->adminManager->getTableData();
 		} catch (Exception $e) {
-			$this->adminInterface->ShowError($this->messages['err_mysql']);
+			$this->adminInterface->dieError($this->messages['err_mysql']);
 			die();
 		}
 		foreach ($admins as & $admin) {
@@ -172,7 +172,7 @@ class AdminAdminProcessing {
 		try {
 			$admingroups = $this->admingroupManager->getTableData();
 		} catch (Exception $e) {
-			$this->adminInterface->ShowError($this->messages['err_mysql']);
+			$this->adminInterface->dieError($this->messages['err_mysql']);
 			die();
 		}
 		$this->adminInterface->ShowAdminGroup($admingroups);
@@ -202,7 +202,7 @@ class AdminAdminProcessing {
 				$this->adminInterface->ChangeAdminFin($ID, $name, $gid);
 			} catch (Exception $e) {
 
-				$this->adminInterface->ShowError($this->messages['err_change_admin'] . ':' . $e->getMessage());
+				$this->adminInterface->dieError($this->messages['err_change_admin'] . ':' . $e->getMessage());
 				///@todo log the error
 				}
 		}
@@ -222,7 +222,7 @@ class AdminAdminProcessing {
 			inputcheck($agid, 'id');
 
 		} catch (Exception $e) {
-			$this->adminInterface->ShowError($this->messages['err_inp'] . ':' . $e->getMessage());
+			$this->adminInterface->dieError($this->messages['err_inp'] . ':' . $e->getMessage());
 		}
 	}
 
@@ -231,7 +231,7 @@ class AdminAdminProcessing {
 		$smarty_admin_groups = array();
 		foreach ($admin_groups as $a_group) {
 			if (!isset($a_group['name'])) {
-				$this->adminInterface->ShowError($this->messages['err_init_admingroup']);
+				$this->adminInterface->dieError($this->messages['err_init_admingroup']);
 				continue;
 			}
 			$smarty_admin_groups[$a_group['ID']] = $a_group['name'];
@@ -244,7 +244,7 @@ class AdminAdminProcessing {
 		try {
 			$this->adminManager->addAdmin($name, hash_password($password), $agid);
 		} catch (Exception $e) {
-			$this->adminInterface->ShowError($this->messages['err_add_admin'] . ':' . $e->getMessage());
+			$this->adminInterface->dieError($this->messages['err_add_admin'] . ':' . $e->getMessage());
 		}
 	}
 
@@ -252,7 +252,7 @@ class AdminAdminProcessing {
 		try {
 			$this->admingroupManager->addAdminGroup($name, $module_str);
 		} catch (Exception $e) {
-			$this->adminInterface->ShowError($this->messages['err_add_admingroup'] . $e->getMessage());
+			$this->adminInterface->dieError($this->messages['err_add_admingroup'] . $e->getMessage());
 		}
 	}
 
@@ -261,7 +261,7 @@ class AdminAdminProcessing {
 		try {
 			$admingroupname = $this->admingroupManager->getAdminGroupName($agid);
 		} catch (Exception $e) {
-			$this->adminInterface->ShowError($this->msg['err_get_admingroups'] . ':' . $e->getMessage());
+			$this->adminInterface->dieError($this->msg['err_get_admingroups'] . ':' . $e->getMessage());
 		}
 		return $admingroupname;
 	}
@@ -271,7 +271,7 @@ class AdminAdminProcessing {
 		try {
 			$admin_groups = $this->admingroupManager->getTableData();
 		} catch (Exception $e) {
-			$this->adminInterface->ShowError($this->messages['err_mysql'] . ':' . $e->getMessage());
+			$this->adminInterface->dieError($this->messages['err_mysql'] . ':' . $e->getMessage());
 		}
 		return $admin_groups;
 	}
@@ -283,7 +283,7 @@ class AdminAdminProcessing {
 		try {
 			$module_arr = $modManager->getAllModules();
 		} catch (Exception $e) {
-			$this->adminInterface->ShowError($this->msg['err_get_modules']);
+			$this->adminInterface->dieError($this->msg['err_get_modules']);
 		}
 		
 		foreach($module_arr as $module) {
@@ -308,7 +308,7 @@ class AdminAdminProcessing {
 		try {
 			inputcheck($name, 'name');
 		} catch (Exception $e) {
-			$this->adminInterface->ShowError($message['err_inp_gname']);
+			$this->adminInterface->dieError($message['err_inp_gname']);
 		}
 	}
 
@@ -320,7 +320,7 @@ class AdminAdminProcessing {
 			inputcheck($name, 'name', $this->messages['field_name']);
 			inputcheck($gid, 'id', $this->messages['field_groupid']);
 		} catch (WrongInputException $e) {
-			$this->adminInterface->ShowError($this->messages['err_inp'] . ' - ' . $e->getFieldName());
+			$this->adminInterface->dieError($this->messages['err_inp'] . ' - ' . $e->getFieldName());
 		}
 	}
 
@@ -329,7 +329,7 @@ class AdminAdminProcessing {
 		try {
 			inputcheck($password, 'password', $this->messages['field_password']);
 		} catch (Exception $e) {
-			$this->adminInterface->ShowError($this->messages['err_inp'] . ' - ' . $e->getFieldName());
+			$this->adminInterface->dieError($this->messages['err_inp'] . ' - ' . $e->getFieldName());
 		}
 	}
 

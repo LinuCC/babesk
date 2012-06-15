@@ -22,7 +22,6 @@ class Administrator {
 		$this->initEnvironment();
 		
 		require_once PATH_ADMIN . '/admin_functions.php';
-		require_once 'AdminInterface.php';
 		require_once PATH_INCLUDE . "/logs.php";
 		require_once PATH_INCLUDE . "/functions.php";
 		require_once PATH_INCLUDE . '/exception_def.php';
@@ -32,8 +31,8 @@ class Administrator {
 		validSession() or die(INVALID_SESSION);
 		$this->initSmarty();
 		$this->_logger = $logger; //from logs.php (Its Bullshit btw, remove the Object in logs.php)
-		
 		$this->_moduleManager = new ModuleManager('administrator');
+		
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////

@@ -30,7 +30,7 @@ class AdminAdminInterface extends AdminInterface {
 	function CreateAdminFin($adminname, $str_admingroup) {
 		$msg = sprintf('Der Administrator %s, der zu der Gruppe %s gehört, wurde erfolgreich hinzugefügt.', $adminname,
 					   $str_admingroup);
-		$this->ShowMsg($msg);
+		$this->dieMsg($msg);
 	}
 
 	function ChangeAdmin($ID, $name, $groups) {
@@ -43,7 +43,7 @@ class AdminAdminInterface extends AdminInterface {
 	function ChangeAdminFin($ID, $name, $GID) {
 		$msg = sprintf('Der Administrator %s mit der ID %s und der GID %s wurde erfolgreich geändert.', $name, $ID,
 					   $GID);
-		$this->ShowMsg($msg);
+		$this->dieMsg($msg);
 	}
 
 	function ConfirmDeleteAdmin($ID, $adminname) {

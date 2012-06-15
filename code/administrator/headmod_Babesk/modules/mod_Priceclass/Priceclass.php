@@ -47,7 +47,7 @@ class Priceclass extends Module {
 					$pcProcessing->ChangePriceclass($_GET['where']);
 					break;
 				default:
-					$pcInterface->ShowError('Wrong value of action');
+					$pcInterface->dieError('Wrong value of action');
 			}
 		}
 		else {

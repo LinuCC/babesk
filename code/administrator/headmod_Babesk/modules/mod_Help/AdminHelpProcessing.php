@@ -21,7 +21,7 @@ class AdminHelpProcessing {
 			$this->helpManager->changeHelpText(mysql_escape_string($str));
 		} catch (Exception $e) {
 			$this->helpInterface
-					->ShowError($this->msg['ERR_CHANGE'] . '<br>Fehlermeldung:' . $e->getMessage());
+					->dieError($this->msg['ERR_CHANGE'] . '<br>Fehlermeldung:' . $e->getMessage());
 			die();
 		}
 		$this->helpInterface->EditHelpFin();

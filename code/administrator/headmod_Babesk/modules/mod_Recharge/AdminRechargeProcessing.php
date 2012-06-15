@@ -27,16 +27,16 @@ class AdminRechargeProcessing {
 		try {
 			$uid = $this->cardManager->getUserID($card_id);
 			if($this->userManager->checkAccount($uid))
-				$this->rechargeInterface->ShowError($this->msg['err_card_locked']);
+				$this->rechargeInterface->dieError($this->msg['err_card_locked']);
 		} catch (Exception $e) {
-			$this->rechargeInterface->ShowError($this->msg['err_user_not_found']);
+			$this->rechargeInterface->dieError($this->msg['err_user_not_found']);
 		}
 		
 		try {
 			$max_amount = $this->userManager->getMaxRechargeAmount($uid);
 			$max_amount = sprintf('%01.2f', $max_amount);
 		} catch (Exception $e) {
-			$this->rechargeInterface->ShowError($this->msg['err_fetch_max_credit']);
+			$this->rechargeInterface->dieError($this->msg['err_fetch_max_credit']);
 		}
 		
 		$this->rechargeInterface->ChangeAmount($max_amount, $uid);
@@ -54,7 +54,7 @@ class AdminRechargeProcessing {
 		try {
 			$this->userManager->changeBalance($uid, $recharge_amount);
 		} catch (Exception $e) {
-			$this->rechargeInterface->ShowError($this->msg['err_change_balance']);
+			$this->rechargeInterface->dieError($this->msg['err_change_balance']);
 		}
 		try {
 			$username = $this->userManager->getUsername($uid);

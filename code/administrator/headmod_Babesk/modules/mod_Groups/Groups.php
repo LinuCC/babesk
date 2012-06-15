@@ -47,7 +47,7 @@ class Groups extends Module {
 					$groupProcessing->ChangeGroup($_GET['where']);
 					break;
 				default:
-					$groupInterface->ShowError('Wrong value of GET-variable action!');
+					$groupInterface->dieError('Wrong value of GET-variable action!');
 					break;
 			}
 		}

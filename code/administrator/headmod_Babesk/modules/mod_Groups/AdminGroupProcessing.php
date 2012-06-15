@@ -58,14 +58,14 @@ class AdminGroupProcessing {
 
 			//error-checking
 			if (!isset($groupname) || $groupname == '')
-				$this->groupInterface->ShowError($this->msg['err_inp_groupname']);
+				$this->groupInterface->dieError($this->msg['err_inp_groupname']);
 
 			if ($this->groupManager->existsGroupName($groupname))
-				$this->groupInterface->ShowError($this->msg['err_group_exists']);
+				$this->groupInterface->dieError($this->msg['err_group_exists']);
 
 			if (!isset($max_credit) || $max_credit == '' || !preg_match('/\A^[0-9]{0,2}((,|\.)[0-9]{2})?\z/',
 				$max_credit))
-				$this->groupInterface->ShowError($this->msg['err_inp_max_credit'] . ' ' . $max_credit);
+				$this->groupInterface->dieError($this->msg['err_inp_max_credit'] . ' ' . $max_credit);
 
 			$max_credit = str_replace(',', '.', $max_credit);
 
@@ -80,10 +80,10 @@ class AdminGroupProcessing {
 				try {
 					$priceclasses = $pcManager->getAllPriceClassesPooled();
 				} catch (MySQLVoidDataException $e) {
-					$this->groupInterface->ShowMsg(sprintf($this->msg['fin_add_group_wo_pc'], $groupname, $max_credit));
+					$this->groupInterface->dieMsg(sprintf($this->msg['fin_add_group_wo_pc'], $groupname, $max_credit));
 				}
 				catch (Exception $e) {
-					$this->groupInterface->ShowError($this->msg['err_fetch_pc']);
+					$this->groupInterface->dieError($this->msg['err_fetch_pc']);
 				}
 
 				//pc_to_add_arr: If a problem happens during the adding-loop, we need to be safe that no entries are added yet
@@ -94,7 +94,7 @@ class AdminGroupProcessing {
 				try {
 					inputcheck($standard_price, 'credits', 'StandardPreis');
 				} catch (Exception $e) {
-					$this->groupInterface->ShowError($this->msg['err_inp_price'] . ' in:' . $e->getFieldName());
+					$this->groupInterface->dieError($this->msg['err_inp_price'] . ' in:' . $e->getFieldName());
 				}
 
 				//add the priceclasses
@@ -113,7 +113,7 @@ class AdminGroupProcessing {
 							//check for correct input of price
 							inputcheck($pc_price, 'credits', $pc_name);
 						} catch (WrongInputException $e) {
-							$this->groupInterface->ShowError($this->msg['err_inp_price'] . ' in:' . $e->getFieldName());
+							$this->groupInterface->dieError($this->msg['err_inp_price'] . ' in:' . $e->getFieldName());
 						}
 
 						$pc_to_add_arr[] = array(
@@ -122,7 +122,7 @@ class AdminGroupProcessing {
 							'pc_price'	 => $pc_price,
 							'pid'		 => $pc_id);
 					} catch (Exception $e) {
-						$this->groupInterface->ShowError('A Priceclass with the ID ' . $pc_id . ' could not be added: '
+						$this->groupInterface->dieError('A Priceclass with the ID ' . $pc_id . ' could not be added: '
 							. $e->getMessage());
 					}
 				}
@@ -134,7 +134,7 @@ class AdminGroupProcessing {
 			try {
 				$this->groupManager->addGroup($groupname, $max_credit);
 			} catch (Exception $e) {
-				$this->groupInterface->ShowError($this->msg['err_add_group']);
+				$this->groupInterface->dieError($this->msg['err_add_group']);
 			}
 			
 			if (isset($_POST['n_price'])) {
@@ -143,12 +143,12 @@ class AdminGroupProcessing {
 						$pcManager->addPriceClass($pc_to_add['name'], $pc_to_add['gid'], $pc_to_add['pc_price'],
 							$pc_to_add['pid']);
 					} catch (Exception $e) {
-						$this->groupInterface->ShowError($this->msg['err_add_pc']);
+						$this->groupInterface->dieError($this->msg['err_add_pc']);
 					}
 				}
 			}
 
-			$this->groupInterface->ShowMsg(sprintf($this->msg['fin_add_group'], $groupname, $max_credit));
+			$this->groupInterface->dieMsg(sprintf($this->msg['fin_add_group'], $groupname, $max_credit));
 		}
 		/**
 		 * Show a form to create a new group
@@ -175,22 +175,22 @@ class AdminGroupProcessing {
 			try { //delete the priceclass
 				$this->groupManager->delEntry($ID);
 			} catch (Exception $e) {
-				$this->groupInterface->ShowError($this->msg['err_del_group'] . ' :' . $e->getMessage());
+				$this->groupInterface->dieError($this->msg['err_del_group'] . ' :' . $e->getMessage());
 			}
 			try { //delete priceclasses which are connected to the groups
 				$priceclasses = $pcManager->getTableData(sprintf('GID = %s', $ID));
 			} catch (Exception $e) {
-				$this->groupInterface->ShowError($this->msg['err_del_pc'] . ' :' . $e->getMessage());
+				$this->groupInterface->dieError($this->msg['err_del_pc'] . ' :' . $e->getMessage());
 			}
 			foreach ($priceclasses as $priceclass) {
 				try {
 					$pcManager->delEntry($priceclass['ID']);
 				} catch (Exception $e) {
-					$this->groupInterface->ShowError($this->msg['err_del_pc'] . ' :' . $e->getMessage());
+					$this->groupInterface->dieError($this->msg['err_del_pc'] . ' :' . $e->getMessage());
 				}
 			}
 
-			$this->groupInterface->ShowMsg($this->msg['fin_del_group']);
+			$this->groupInterface->dieMsg($this->msg['fin_del_group']);
 		}
 
 		/**
@@ -212,25 +212,25 @@ class AdminGroupProcessing {
 				$max_credit = $_POST['max_credit'];
 
 				if (!preg_match('/\A^[0-9]{0,2}((,|\.)[0-9]{2})?\z/', $max_credit))
-					$this->groupInterface->ShowError($this->msg['err_inp_max_credit'] . ' ' . $max_credit);
+					$this->groupInterface->dieError($this->msg['err_inp_max_credit'] . ' ' . $max_credit);
 				if (!is_numeric($ID))
-					$this->groupInterface->ShowError($this->msg['err_inp_id']);
+					$this->groupInterface->dieError($this->msg['err_inp_id']);
 				try {
 					$this->groupManager->alterEntry($old_ID, 'name', $name, 'max_credit', $max_credit, 'ID', $ID);
 				} catch (Exception $e) {
-					$this->groupInterface->ShowError($this->msg['err_change_group']);
+					$this->groupInterface->dieError($this->msg['err_change_group']);
 				}
-				$this->groupInterface->ShowMsg($this->msg['fin_change_group']);
+				$this->groupInterface->dieMsg($this->msg['fin_change_group']);
 			}
 			else { //show form
 
 				if (!is_numeric($ID))
-					$this->groupInterface->ShowError($this->msg['err_inp_id']);
+					$this->groupInterface->dieError($this->msg['err_inp_id']);
 
 				try {
 					$group_data = $this->groupManager->getEntryData($ID, 'ID', 'name', 'max_credit');
 				} catch (MySQLVoidDataException $e) {
-					$this->groupInterface->ShowError($this->msg['err_get_data_group']);
+					$this->groupInterface->dieError($this->msg['err_get_data_group']);
 				}
 				$this->groupInterface->ChangeGroup($group_data['ID'], $group_data['name'], $group_data['max_credit']);
 			}
@@ -248,7 +248,7 @@ class AdminGroupProcessing {
 			try {
 				$groups = $this->groupManager->getTableData();
 			} catch (Exception $e) {
-				$this->groupInterface->ShowError($this->msg['err_get_data_group']);
+				$this->groupInterface->dieError($this->msg['err_get_data_group']);
 			}
 			$this->groupInterface->ShowGroups($groups);
 		}
