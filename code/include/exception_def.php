@@ -50,6 +50,25 @@
 		}
 	}
 	
+	class ModuleException extends Exception {
+		function __construct($msg) {
+			parent::__construct($msg);
+		}
+	}
+	
+	class ModuleNotFoundException extends ModuleException {
+		function __construct($msg) {
+			parent::__construct($msg);
+		}
+	}
+	
+	class HeadModuleNotFoundException extends ModuleException {
+		function __construct($msg) {
+			parent::__construct($msg);
+		}
+	}
+	
+	
 	class WrongInputException extends Exception{
 		function __construct($strMessage, $strFieldName = 'Input') {
 			parent::__construct($strMessage);

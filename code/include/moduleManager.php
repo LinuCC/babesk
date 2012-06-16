@@ -11,6 +11,7 @@
 //require_once PATH_ADMIN . '/modules.php';
 require_once 'Module.php';
 require_once 'HeadModule.php';
+require_once 'exception_def.php';
 
 /**
  *
@@ -194,7 +195,7 @@ class ModuleManager {
 				return;
 			}
 		}
-		die('Headmodule not found! Modulename:' . $mod_name);
+		throw new HeadModuleNotFoundException('Headmodule not found! Modulename:' . $mod_name);
 	}
 
 	public function executeHeadModul ($headmod_name, $dataContainer) {

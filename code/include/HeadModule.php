@@ -61,7 +61,7 @@ class HeadModule {
 				return;
 			}
 		}
-		die('ChildModule not found!');
+		throw new ModuleNotFoundException('ChildModule not found: "' . $mod_name . '"!');
 	}
 	
 	public function execute() {
