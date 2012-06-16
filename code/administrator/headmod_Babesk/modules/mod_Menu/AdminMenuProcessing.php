@@ -12,7 +12,6 @@ class AdminMenuProcessing {
 		$this->mealManager = new MealManager();
 		$this->menuInterface = $menuInterface;
 
-
 		if (!$this->isFromModule)
 			$this->menuInterface->AdditionalHeader();
 
@@ -21,19 +20,19 @@ class AdminMenuProcessing {
 			'err_infotext'	 => 'Ein Fehler ist beim abrufen der Infotexte entstanden.',
 		);
 	}
-	
+
 	/**
 	 * Shows the Meal-Menu
 	 */
 	public function ShowMenu () {
-		
+
 		$meallist = $this->FetchMeallist();
 		$meallist_sorted = $this->SortMeallist($meallist);
 		$weekdates = $this->InitWeekdayArray();
 		$infotexts = $this->FetchInfoTexts();
-		
+
 		$this->menuInterface->Menu($infotexts[0], $infotexts[1], $meallist_sorted, $weekdates);
-		
+
 	}
 
 	/**
@@ -91,12 +90,12 @@ class AdminMenuProcessing {
 		$dateday = date("Y-m-d", $weekday);
 		return $dateday;
 	}
-	
+
 	/**
 	 * Fetches the Infotexts for the menu from the MySQLtable and returns it
 	 * @return array(0 => infotext1, 1 => infotext2)
 	 */
-	private function FetchInfoTexts() {
+	private function FetchInfoTexts () {
 		//get the Information-texts
 		try {
 			$itxt_arr = $this->gsManager->getInfoTexts();
@@ -131,24 +130,39 @@ class AdminMenuProcessing {
 		}
 		//[A Row of meals(One week)] [day] [specific variable]
 		$meallistweeksorted = array();
-		foreach ($meallist as $meal) {
+		foreach ($meallist as & $meal) {
 			for ($i = 0; $i < 12; $i++) {
 				//Saturday and Sunday shall not be shown
 				if ($i <> 5 && $i <> 6 && $meal["date"] == $weekday_date[$i]) {
-					if (isset($meallistweeksorted[$meal["price_class"]][$weekday_name[$i]]["title"])) {
-						
-						echo '<p class="error">Ein Fehler ist aufgetreten; Der Speiseplan kann nicht vollständig angezeigt werden</p>';
-						///@FIXME: Better handling of multiple entries with same priceclass and date
-						continue;
-					}
-					$meallistweeksorted[$meal["price_class"]][$weekday_name[$i]]["title"] = $meal["name"];
-					$meallistweeksorted[$meal["price_class"]][$weekday_name[$i]]["description"] = $meal["description"];
+
 					$pcn = $priceclassmanager->getPriceClassName($meal["price_class"]);
-					$meallistweeksorted[$meal["price_class"]][$weekday_name[$i]]["priceclass"] = $pcn[0]["name"];
+					$counter = 0;
+
+					$countedPriceclassName = $this->addCounterToPriceclassName($meal["price_class"], $meallistweeksorted,
+						$i, $weekday_name);
+					$meallistweeksorted[$countedPriceclassName][$weekday_name[$i]]["description"] = $meal["description"];
+					$meallistweeksorted[$countedPriceclassName][$weekday_name[$i]]["title"] = $meal["name"];
+					$meallistweeksorted[$countedPriceclassName][$weekday_name[$i]]["priceclass"] = $pcn[0]["name"];
 				}
 			}
 		}
 		return $meallistweeksorted;
+	}
+
+	/**
+	 * prevents a bug when mutliple Priceclasses at the same day should be shown; Counter makes it possible to distinguish between them
+	 * @param unknown_type $priceClassName
+	 * @param unknown_type $meallistweeksorted
+	 */
+	private function addCounterToPriceclassName ($priceClassName, $meallistweeksorted, $dayCounter, $weekdayName) {
+
+		$counter = 0;
+		while (isset($meallistweeksorted[$priceClassName . '(' . $counter . ')'][$weekdayName[$dayCounter]]["title"])) {
+			$counter++;
+		}
+
+		$priceClassName = $priceClassName . '(' . $counter . ')';
+		return $priceClassName;
 	}
 
 	protected $gsManager;

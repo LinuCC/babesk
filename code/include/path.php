@@ -6,7 +6,7 @@
 
     defined('DS') or define('DS', DIRECTORY_SEPARATOR); //smarty defines DS the same way
     //realPath() makes sure we use the right seperator for the platform
-    define('PATH_CODE', $rootPath);
+    defined('PATH_CODE') or define('PATH_CODE', $rootPath);
     define('PATH_ADMIN', realPath($rootPath."/administrator"));
     define('PATH_WEB', realPath($rootPath."/web"));
     define('PATH_INCLUDE', realPath($rootPath."/include"));
