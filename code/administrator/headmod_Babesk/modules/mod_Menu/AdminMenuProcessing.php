@@ -160,7 +160,6 @@ class AdminMenuProcessing {
 		while (isset($meallistweeksorted[$priceClassName . '(' . $counter . ')'][$weekdayName[$dayCounter]]["title"])) {
 			$counter++;
 		}
-
 		$priceClassName = $priceClassName . '(' . $counter . ')';
 		return $priceClassName;
 	}
