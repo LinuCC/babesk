@@ -5,6 +5,7 @@ class AdminMealInterface extends AdminInterface {
 		parent::__construct($mod_path);
 		$this->parentPath = $this->tplFilePath . 'meals_header.tpl';
 		$this->smarty->assign('mealParent', $this->parentPath);
+		$this->smarty->assign('inh_path', $this->parentPath);
 	}
 	
 	public function Menu() {

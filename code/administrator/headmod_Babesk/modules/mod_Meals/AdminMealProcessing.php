@@ -38,7 +38,8 @@ class AdminMealProcessing {
 			'err_conn_mysql'		 => 'Ein Problem ist beim verbinden mit dem MySQL-Server entstanden.',
 			'fin_del_meals_orders'	 => 'Das löschen der alten Bestellungen und Mahlzeiten ist abgeschlossen',
 			//DeleteMeal
-			'err_del_order'			 => 'Ein Fehler ist beim löschen einer Bestellung aufgetreten. BestellungsID: "%s"<br>',
+			'err_del_order'			 =>
+				'Ein Fehler ist beim löschen einer Bestellung aufgetreten. BestellungsID: "%s"<br>',
 			'err_del_meal'			 => 'Ein Fehler ist beim löschen der Mahlzeit aufgetreten: ',
 			'fin_del_meal'			 => 'Die Mahlzeit mit der ID "%s" wurde gelöscht.',
 		);
@@ -57,13 +58,16 @@ class AdminMealProcessing {
 
 		//---ROUTINES---
 		//safety-checks
-		if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['name'], $_POST['description'], $_POST['price_class'], $_POST['max_orders'])) {
+		if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['name'], $_POST['description'], $_POST['price_class'],
+			$_POST['max_orders'])) {
 
 			$name = $_POST['name'];
 			$description = $_POST['description'];
 			$price_class = $_POST['price_class'];
 			$max_orders = $_POST['max_orders'];
-			$date_ar = array("day" => $_POST['Date_Day'], "month" => $_POST['Date_Month'], "year" => $_POST['Date_Year']);
+			$date_ar = array("day"	 => $_POST['Date_Day'], "month"	 => $_POST['Date_Month'], "year"	 => $_POST[
+				'Date_Year']
+			);
 
 			try {
 
@@ -86,7 +90,8 @@ class AdminMealProcessing {
 				$this->groupInterface->dieError($this->msg['err_add_meal'] . $e->getMessage());
 			}
 			$this->mealInterface->dieMsg($this->msg['fin_add_meal']);
-		} else {
+		}
+		else {
 
 			//if Formular isnt filled yet or the link was wrong
 			try {
@@ -146,7 +151,8 @@ class AdminMealProcessing {
 			}
 			$this->mealInterface->FinEditInfotexts($infotext1new, $infotext2new);
 
-		} else {
+		}
+		else {
 			$it1 = 'da';
 			$it2 = 'bu';
 			$it1 = $infotexts[0];
@@ -175,7 +181,8 @@ class AdminMealProcessing {
 				$this->mealInterface->dieError($this->msg['err_edit_lot'] . $e->getMessage());
 			}
 			$this->mealInterface->dieMsg(sprintf($this->msg['fin_edit_lot'], $n_last_order_time));
-		} else {
+		}
+		else {
 
 			$this->mealInterface->EditLastOrderTime($last_order_time);
 		}
@@ -199,7 +206,8 @@ class AdminMealProcessing {
 				'month'	 => date('m'),
 				'year'	 => date('Y'), );
 			$this->mealInterface->ShowOrdersSelectDate($today);
-		} else {
+		}
+		else {
 
 			//Show the Orders
 			$user_manager = new UserManager();
@@ -208,7 +216,8 @@ class AdminMealProcessing {
 			$mysql_orders = array();
 			$order = array();
 
-			if ($_POST['ordering_day'] > 31 or $_POST['ordering_month'] > 12 or $_POST['ordering_year'] < 2000 or $_POST['ordering_year'] > 3000) {
+			if ($_POST['ordering_day'] > 31 or $_POST['ordering_month'] > 12 or $_POST['ordering_year'] < 2000 or $_POST
+				['ordering_year'] > 3000) {
 				$this->groupInterface->dieError($this->msg['err_inp_date']);
 			}
 			$date = $_POST['ordering_year'] . '-' . $_POST['ordering_month'] . '-' . $_POST['ordering_day'];
@@ -226,9 +235,11 @@ class AdminMealProcessing {
 				$this->groupInterface->dieError($this->msg['err_no_orders']);
 
 			foreach ($orders as & $order) {
-				if (!count($meal_data = $this->mealManager->getEntryData($order['MID'], 'name')) or !count($user_data = $user_manager->getEntryData($order['UID'], 'name', 'forename', 'GID'))) {
+				if (!count($meal_data = $this->mealManager->getEntryData($order['MID'], 'name')) or !count($user_data =
+					$user_manager->getEntryData($order['UID'], 'name', 'forename', 'GID'))) {
 					$this->mealInterface->dieError($this->msg['err_order_database']);
-				} else {
+				}
+				else {
 
 					$order['meal_name'] = $meal_data['name'];
 					$order['user_name'] = $user_data['forename'] . ' ' . $user_data['name'];
@@ -272,7 +283,8 @@ class AdminMealProcessing {
 							$group_arr = array('name' => $group_name, 'counter' => 1);
 							$groups[] = $group_arr;
 						}
-					} else {
+					}
+					else {
 						//no group defined yet
 						$group_arr = array('name' => $group_name, 'counter' => 1);
 						$groups[] = $group_arr;
@@ -312,7 +324,8 @@ class AdminMealProcessing {
 			 */
 			if (isset($num_orders[0]) && $counter) {
 				$this->mealInterface->ShowOrders($num_orders, $sorted_orders, formatDate($date));
-			} else {
+			}
+			else {
 				$this->groupInterface->dieError(sprintf($this->msg['err_no_orders_at_date'], formatDateTime($date)));
 			}
 		}
@@ -322,22 +335,32 @@ class AdminMealProcessing {
 	 */
 	public function DeleteOldMealsAndOrders () {
 
-		require_once PATH_ACCESS . '/MealManager.php';
-		require_once PATH_ACCESS . '/OrderManager.php';
+		if (isset($_POST['dialogConfirmed'])) {
+			require_once PATH_ACCESS . '/MealManager.php';
+			require_once PATH_ACCESS . '/OrderManager.php';
 
-		$timestamp = time();
-		$orderManager = new OrderManager();
+			$timestamp = time();
+			$orderManager = new OrderManager();
 
-		try {
-			$this->mealManager->deleteMealsBeforeDate($timestamp);
-			$orderManager->deleteOrdersBeforeDate($timestamp);
-		} catch (MySQLConnectionException $e) {
-			$this->mealInterface->dieError($this->msg['err_conn_mysql']);
+			try {
+				$this->mealManager->deleteMealsBeforeDate($timestamp);
+				$orderManager->deleteOrdersBeforeDate($timestamp);
+			} catch (MySQLConnectionException $e) {
+				$this->mealInterface->dieError($this->msg['err_conn_mysql']);
+			}
+			catch (Exception $e) {
+				$this->mealInterface->dieError($e->getMessage());
+			}
+			$this->mealInterface->dieMsg($this->msg['fin_del_meals_orders']);
 		}
-		catch (Exception $e) {
-			$this->mealInterface->dieError($e->getMessage());
+		else if (isset($_POST['dialogNotConfirmed'])) {
+			$this->mealInterface->Menu();
 		}
-		$this->mealInterface->dieMsg($this->msg['fin_del_meals_orders']);
+		else {
+			$this->mealInterface->confirmationDialog(
+				'Wollen sie die alten Mahlzeiten und Bestellungen wirklich löschen?', 'Babesk|Meals', '4',
+				'Ja', 'Nein');
+		}
 	}
 
 	/**
@@ -365,7 +388,8 @@ class AdminMealProcessing {
 				try {
 					$this->orderManager->delEntry($order['ID']);
 				} catch (Exception $e) {
-					$this->mealInterface->dieError(sprintf($this->msg['err_del_order'], $order['ID']) . $e->getMessage());
+					$this->mealInterface->dieError(sprintf($this->msg['err_del_order'], $order['ID']) . $e->getMessage()
+						);
 				}
 			}
 		}
