@@ -1,17 +1,24 @@
 <?php
 
+require_once PATH_CODE . '/include/GeneralInterface.php';
+
 /**
  * The class the Interface-classes in the modules base on
  * Enter description here ...
  * @author Pascal Ernst
  *
  */
-class AdminInterface {
+class AdminInterface extends GeneralInterface {
 
-	function __construct ($mod_rel_path) {
+	function __construct ($mod_rel_path, $smarty = NULL) {
 
-		global $smarty;
-		$this->smarty = $smarty;
+		if ($smarty) {
+			$this->smarty = $smarty;
+		}
+		else {
+			global $smarty;
+			$this->smarty = $smarty;
+		}
 		$this->tplFilePath = PATH_SMARTY_ADMIN_TEMPLATES . $mod_rel_path;
 		$this->parentPath = PATH_SMARTY . '/templates/administrator/base_layout.tpl';
 		$this->smarty->assign('inh_path', $this->parentPath);

@@ -16,7 +16,7 @@ class Order extends Module {
 		parent::__construct($name, $display_name, $path);
 		$this->modulePath = $path;
 		$this->smartyPath = PATH_SMARTY . '/templates/web' . $path;
-		require_once PATH_SITE . '/web/WebInterface.php';
+		require_once PATH_CODE . '/web/WebInterface.php';
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////
