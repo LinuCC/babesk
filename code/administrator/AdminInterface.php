@@ -56,6 +56,24 @@ class AdminInterface extends GeneralInterface {
 	function showMsg ($msg) {
 		$this->smarty->append('_userMsgOutput', $msg);
 	}
+	
+	/**
+	 * 
+	 * @param string $promptMessage The Message shown to the User
+	 * @param string $sectionString The String of the GET-Parameter section, used for Module-execution
+	 * @param string $actionString The String of the GET-Parameter action, used for Function-execution in Modules
+	 * @param string $confirmedString The String of the "confirmed"-Button
+	 * @param string $notConfirmedString The String of the "notConfirmed"-Button
+	 */
+	function confirmationDialog($promptMessage, $sectionString, $actionString, $confirmedString, $notConfirmedString) {
+		
+		$this->smarty->assign('promptStr', $promptMessage);
+		$this->smarty->assign('sectionStr', $sectionString);
+		$this->smarty->assign('actionStr', $actionString);
+		$this->smarty->assign('confirmedStr', $confirmedString);
+		$this->smarty->assign('notConfirmedStr', $notConfirmedString);
+		$this->smarty->display(PATH_SMARTY_ADMIN_TEMPLATES . '/confirmationDialog.tpl');
+	}
 
 	protected $smarty;
 
