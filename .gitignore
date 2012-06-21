@@ -15,10 +15,6 @@
 ##################################
 .directory
 
-#installation-specific generated code#
-######################################
-dbconnect.php
-
 #third-party-programs#
 ######################
 templates_c
