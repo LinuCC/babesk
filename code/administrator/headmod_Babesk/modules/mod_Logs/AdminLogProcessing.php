@@ -4,26 +4,22 @@ class AdminLogProcessing {
 	
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
-	private $logManager;
 	private $msg;
 	private $logInterface;
-	/**
-	 * @var Logger
-	 */
-	private $logger;
+	private $logManager;
 	
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	public function __construct($adminInterface) {
 		
-		require_once PATH_INCLUDE . '/logs.php';
+		require_once PATH_ACCESS . '/LogManager.php';
 		
 		//$logger comes from logs.php
-		global $logger;
-		$this->logger = $logger;
+		$this->logManager = new LogManager();
 		$this->logInterface = $adminInterface;
 		$this->msg = array(
-				'err_no_logs' => 'Es konnten keine Logs mit den angegebenen Eigenschaften gefunden werden.',
+				'err_no_logs' => 'Es konnten keine Logs abgerufen werden.',
+				'err_no_logs_of' => 'Es konnten keine Logs mit den angegebenen Eigenschaften gefunden werden.',
 				'err_logs' => 'Ein Fehler ist beim Abrufen der Logs aufgetreten.',
 				'err_category' => 'Es wurde keine oder eine falsche Log-Kategorie eingegeben.',
 				);
@@ -49,6 +45,9 @@ class AdminLogProcessing {
 		
 		$logs = $this->GetLogs();
 		$categories = $this->PoolCategories($logs);
+		if(!$categories) {
+			$this->logInterface->dieError($this->msg['err_no_logs']);
+		}
 		$this->logInterface->ChooseCategory($categories);
 	}
 	
@@ -71,7 +70,7 @@ class AdminLogProcessing {
 	 * Deletes all Logs
 	 */
 	public function DeleteLogs() {
-		$this->logger->clearLogs();
+		$this->logManager->clearLogs();
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////
@@ -85,9 +84,9 @@ class AdminLogProcessing {
 	function getLogDataByCategoryAndSeverity($category, $severity) {
 		
 		try {
-			$logs = $this->logger->getLogDataByCategoryAndSeverity($category, $severity);
+			$logs = $this->logManager->getLogDataByCategoryAndSeverity($category, $severity);
 		} catch (MySQLVoidDataException $e) {
-			$this->logInterface->dieError($this->msg['err_no_logs']);
+			$this->logInterface->dieError($this->msg['err_no_logs_of']);
 		} catch (Exception $e) {
 			$this->logInterface->dieError($this->msg['err_logs'] . $e->getMessage());
 		}
@@ -138,7 +137,7 @@ class AdminLogProcessing {
 	function GetLogs() {
 		
 		try {
-			$logs = $this->logger->getLogData();
+			$logs = $this->logManager->getLogData();
 		} catch (MySQLVoidDataException $e) {
 			$this->logInterface->dieError($this->msg['err_no_logs']);
 		} catch (Exception $e) {
@@ -154,7 +153,7 @@ class AdminLogProcessing {
 	 */
 	function GetLogDataByCategory($category) {
 		try {
-			$logs = $this->logger->getLogDataByCategory($category);
+			$logs = $this->logManager->getLogDataByCategory($category);
 		} catch (MySQLVoidDataException $e) {
 			$this->logInterface->dieError($this->msg['err_no_logs']);
 		}
