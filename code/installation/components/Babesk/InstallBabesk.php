@@ -85,7 +85,7 @@ class InstallBabesk extends InstallationComponent {
 
 		require PATH_CODE . '/smarty/smarty_init.php';
 		$this->_smarty = $smarty;
-		$this->_templatePath = __DIR__ . '/templates';
+		$this->_templatePath = dirname(__FILE__) . '/templates';
 	}
 
 	private function initDatabase () {
@@ -140,7 +140,7 @@ class InstallBabesk extends InstallationComponent {
 
 	private function installDatabaseTables () {
 
-		$dbTableInstallInformationXML = simplexml_load_file(__DIR__ . '/tablesToInstall.xml');
+		$dbTableInstallInformationXML = simplexml_load_file(dirname(__FILE__) . '/tablesToInstall.xml');
 		foreach ($dbTableInstallInformationXML->table as $table) {
 			$this->installTable($table);
 		}
@@ -179,7 +179,7 @@ class InstallBabesk extends InstallationComponent {
 
 	private function addTableValues () {
 
-		$dbCommand = simplexml_load_file(__DIR__ . '/sqlAlterTableCommands.xml');
+		$dbCommand = simplexml_load_file(dirname(__FILE__) . '/sqlAlterTableCommands.xml');
 		foreach ($dbCommand->command as $command) {
 			if ($command->name == 'AddAdmin') {
 				$this->addAdminToSQL($command);

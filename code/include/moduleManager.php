@@ -8,7 +8,6 @@
 
 ///@todo comments!
 
-//require_once PATH_ADMIN . '/modules.php';
 require_once 'Module.php';
 require_once 'HeadModule.php';
 require_once 'exception_def.php';

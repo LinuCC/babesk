@@ -32,9 +32,9 @@ class DBConnectTest extends PHPUnit_Framework_TestCase {
 		$dbClassArr = array();
 		
 		$dbClassArr [1] = new DBConnect();
-		$dbClassArr [1] -> setDatabaseXMLPath(__DIR__ . '/testXML/testDatabaseValues1.xml');
+		$dbClassArr [1] -> setDatabaseXMLPath(dirname(__FILE__) . '/testXML/testDatabaseValues1.xml');
 		$dbClassArr [2] = new DBConnect();
-		$dbClassArr [2] -> setDatabaseXMLPath(__DIR__ . '/testXML/testDatabaseValues2.xml');
+		$dbClassArr [2] -> setDatabaseXMLPath(dirname(__FILE__) . '/testXML/testDatabaseValues2.xml');
 		$dbClassArr [3] = new DBConnect();
 		$dbClassArr [3] -> setDatabaseXMLPath('Definetly a wrong path');
 		

@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../constants.php';
+require_once dirname(__FILE__) . '/../constants.php';
 
 /**
  * Handles the connection to the Database
@@ -25,7 +25,7 @@ class DBConnect {
 	////////////////////////////////////////////////////////////////////////////////
 	public function __construct ($host = NULL, $username = NULL, $password = NULL, $databaseName = NULL) {
 
-		$this->_databaseXMLPath = __DIR__ . '/databaseValues.xml';
+		$this->_databaseXMLPath = dirname(__FILE__) . '/databaseValues.xml';
 
 		if (isset($host, $username, $password, $databaseName)) {
 			$this->initDatabase($host, $username, $password, $databaseName);

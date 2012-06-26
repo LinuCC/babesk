@@ -7,7 +7,7 @@ ini_set("default_charset", "utf-8");
 //if this value is not set, the modules will not execute
 define('_AEXEC', 1);
 
-define('PATH_CODE', realpath(__DIR__ . '/..'));
+define('PATH_CODE', realpath(dirname(__FILE__) . '/..'));
 
 require_once PATH_CODE . '/include/path.php';
 require_once 'InstallationManager.php';

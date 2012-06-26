@@ -20,7 +20,9 @@ class Administrator {
 	//Constructor
 	public function __construct () {
 
-		$this->initEnvironment();
+		if(!isset($_SESSION)) {
+			$this->initEnvironment();
+		}
 
 		require_once PATH_ADMIN . '/admin_functions.php';
 		require_once PATH_INCLUDE . "/logs.php";

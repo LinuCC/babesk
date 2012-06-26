@@ -14,7 +14,7 @@ class InstallationComponentManager {
 	////////////////////////////////////////////////////////////////////////////////
 	public function __construct () {
 
-		$this->_xmlPath = __DIR__ . '/InstallationComponents.xml';
+		$this->_xmlPath = dirname(__FILE__) . '/InstallationComponents.xml';
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ class InstallationComponentManager {
 
 		foreach ($xmlComponents->Component as $xmlComponent) {
 
-			if (file_exists(__DIR__ . '/' . $xmlComponent->path)) {
+			if (file_exists(dirname(__FILE__) . '/' . $xmlComponent->path)) {
 				include_once $xmlComponent->path;
 				$className = (string) $xmlComponent->className;
 				if (class_exists($className)) {

@@ -3,10 +3,10 @@ require_once "Smarty/Smarty.class.php";
 
 $smarty = new Smarty;
 
-$smarty->setTemplateDir(__DIR__ . '/templates');
-$smarty->setCompileDir(__DIR__ . '/templates_c');
-$smarty->setCacheDir(__DIR__ . '/cache');
-$smarty->setConfigDir(__DIR__ . '/config');
+$smarty->setTemplateDir(dirname(__FILE__) . '/templates');
+$smarty->setCompileDir(dirname(__FILE__) . '/templates_c');
+$smarty->setCacheDir(dirname(__FILE__) . '/cache');
+$smarty->setConfigDir(dirname(__FILE__) . '/config');
 
 $smarty->error_reporting = E_ALL & ~E_NOTICE;
 
