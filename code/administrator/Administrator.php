@@ -23,7 +23,7 @@ class Administrator {
 		$this->initEnvironment();
 
 		require_once PATH_ADMIN . '/admin_functions.php';
-		require_once PATH_INCLUDE . "/logs.php";
+		require_once PATH_ACCESS . "/LogManager.php";
 		require_once PATH_INCLUDE . "/functions.php";
 		require_once PATH_INCLUDE . '/exception_def.php';
 		require_once PATH_INCLUDE . '/moduleManager.php';
@@ -35,7 +35,7 @@ class Administrator {
 		
 		$this->_adminInterface = new AdminInterface(NULL, $this->_smarty);
 
-		$this->_logger = $logger; //from logs.php (Its Bullshit btw, remove the Object in logs.php)
+		$this->_logger = new LogManager();
 		$this->_moduleManager = new ModuleManager('administrator', $this->_adminInterface);
 
 	}
