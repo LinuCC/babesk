@@ -45,7 +45,7 @@ class CardManager extends TableManager {
 	 * @param unknown_type $cardnumber
 	 */
 	function is_card_existing($cardnumber) {
-		require_once PATH_ACCESS . '/databaseDistributor.php';
+		require PATH_ACCESS . '/databaseDistributor.php';
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE cardnumber="%s"',
 									$this->tablename, $cardnumber));
 		$result = $this->db->query($query);
@@ -58,7 +58,7 @@ class CardManager extends TableManager {
 	}
 
 	function getUserID($cardnumber) {
-		require_once PATH_ACCESS . '/databaseDistributor.php';
+		require PATH_ACCESS . '/databaseDistributor.php';
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE cardnumber="%s"',
 		$this->tablename, $cardnumber));
 		$result = $this->db->query($query);
@@ -120,7 +120,7 @@ class CardManager extends TableManager {
 	}
 	
 	function getCardnumberByUserID($ID) {
-		require_once PATH_ACCESS . '/databaseDistributor.php';
+		require PATH_ACCESS . '/databaseDistributor.php';
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE UID=%s',$this->tablename, $ID));
 		$result = $this->db->query($query);
 		$card = $result->fetch_assoc();
@@ -143,7 +143,7 @@ class CardManager extends TableManager {
 	 * @return numeric_string the CardID
 	 */
 	function getCardIDByUserID($ID) {
-		require_once PATH_ACCESS . '/databaseDistributor.php';
+		require PATH_ACCESS . '/databaseDistributor.php';
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE UID=%s',$this->tablename, $ID));
 		$result = $this->db->query($query);
 		$card = $result->fetch_assoc();
@@ -158,7 +158,7 @@ class CardManager extends TableManager {
 	}
 	
 	function getIDByUserID($uid) {
-		require_once PATH_ACCESS . '/databaseDistributor.php';
+		require PATH_ACCESS . '/databaseDistributor.php';
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE UID=%s',$this->tablename, $uid));
 		$result = $this->db->query($query);
 		$card = $result->fetch_assoc();
