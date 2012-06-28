@@ -19,13 +19,17 @@ class DBConnect {
 	private $_database;
 	private $_databaseXML;
 	private $_databaseXMLPath;
+	private $_databaseXMLSafetyStringBeginning;
+	private $_databaseXMLSafetyStringEnd;
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	////////////////////////////////////////////////////////////////////////////////
 	public function __construct ($host = NULL, $username = NULL, $password = NULL, $databaseName = NULL) {
 
-		$this->_databaseXMLPath = dirname(__FILE__) . '/databaseValues.xml';
+		$this->_databaseXMLPath = dirname(__FILE__) . '/databaseValues.php';
+		$this->_databaseXMLSafetyStringBeginning = '<?php die("NO ACCESS");/**';
+		$this->_databaseXMLSafetyStringEnd = '*/?>';
 
 		if (isset($host, $username, $password, $databaseName)) {
 			$this->initDatabase($host, $username, $password, $databaseName);
@@ -36,9 +40,9 @@ class DBConnect {
 	//Getters and Setters
 	////////////////////////////////////////////////////////////////////////////////
 	public function getDatabase () {
-		
-		if(!$this->_database) {
-			throw new Exception('Database was not initialized correctly by now'); 
+
+		if (!$this->_database) {
+			throw new Exception('Database was not initialized correctly by now');
 		}
 		return $this->_database;
 	}
@@ -95,7 +99,10 @@ class DBConnect {
 			$xmlObjDatabase->addChild('username', $this->_username);
 			$xmlObjDatabase->addChild('password', $this->_password);
 
-			$this->_databaseXML->asXML($this->_databaseXMLPath);
+			$xmlStr = $this->_databaseXML->asXML();
+
+			file_put_contents($this->_databaseXMLPath, $this->_databaseXMLSafetyStringBeginning . $xmlStr . $this->
+				_databaseXMLSafetyStringEnd);
 
 			return true;
 		}
@@ -110,7 +117,7 @@ class DBConnect {
 			return false;
 		}
 
-		if (!$databaseXML = simplexml_load_file($this->_databaseXMLPath)) {
+		if (!$databaseXML = new SimpleXMLElement($this->adaptXmlString())) {
 			return false;
 		}
 
@@ -135,12 +142,24 @@ class DBConnect {
 		if (!$this->validateDatabaseXML()) {
 			throw new Exception('Could not use the Database-XML-file');
 		}
-		$this->_databaseXML = simplexml_load_file($this->_databaseXMLPath);
+
+		$this->_databaseXML = new SimpleXMLElement($this->adaptXmlString());
 
 		$xmlObjDatabase = $this->getXMLObjDatabase();
 
 		$this->setDatabaseValues($xmlObjDatabase->host, $xmlObjDatabase->username, $xmlObjDatabase->password,
 			$xmlObjDatabase->name);
+	}
+
+	private function adaptXmlString () {
+		$fileString = file_get_contents($this->_databaseXMLPath);
+		if (!$fileString) {
+			die('Could not load the databaseXML!');
+		}
+		$fileString = str_replace($this->_databaseXMLSafetyStringBeginning, '', $fileString);
+		$fileString = str_replace($this->_databaseXMLSafetyStringEnd, '', $fileString);
+		$fileString = trim($fileString);
+		return $fileString;
 	}
 
 	private function getXMLObjDatabase ($databaseXML = NULL) {
