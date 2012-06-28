@@ -18,4 +18,4 @@ $dbObject = new DBConnect();
 $dbObject->initDatabaseFromXML();
 $db = $dbObject->getDatabase();
 
-?>;
+?>
