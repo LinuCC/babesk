@@ -10,7 +10,7 @@ require_once dirname(__FILE__) . '/DBConnect.php';
 
 $host = 'localhost';
 $username = 'root';
-$password = '';;
+$password = '';
 $database = 'babesk';
 
 // $dbObject = new DBConnect($host, $username, $password, $database);
