@@ -4,8 +4,8 @@
 *******************************************************************************/
 
     //check if setup was previously done
-    /*if(file_exists("../../../include/dbconnect.php")) {
-        include '../../../include/dbconnect.php';
+    /*if(file_exists("../../../include/databaseDistributor.php")) {
+        include '../../../include/databaseDistributor.php';
         $sql = 'SHOW TABLES';
         $result = $db->query($query);
 		$row = $result->fetch_assoc();

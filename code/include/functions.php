@@ -52,7 +52,7 @@ function formatDateTime($date) {
 }
 
 function sql_prev_inj($str) {
-	require 'sql_access/dbconnect.php';
+	require 'sql_access/databaseDistributor.php';
 	if (!is_string($str)) {
 		throw new BadFunctionCallException('Wrong parameter-format for $str in ' . __FUNCTION__);
 	}

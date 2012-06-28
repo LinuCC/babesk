@@ -21,7 +21,7 @@ class MealManager extends TableManager {
 	 * @return false if error
 	 */
 	public function getMealAfterDateSortedPcID ($timestamp = 0) {
-		require 'dbconnect.php';
+		require 'databaseDistributor.php';
 		$res_array = array();
 		if ($timestamp == 0) {
 			$timestamp = time();
@@ -63,7 +63,7 @@ class MealManager extends TableManager {
 		if (!$date1 or !$date2) {
 			return false;
 		}
-		include 'dbconnect.php';
+		include 'databaseDistributor.php';
 		$res_array = NULL;
 		if (!$order_str) {
 			$query = sql_prev_inj(sprintf('SELECT *  FROM meals
@@ -99,7 +99,7 @@ class MealManager extends TableManager {
 		if (!$date) {
 			return false;
 		}
-		include 'dbconnect.php';
+		include 'databaseDistributor.php';
 		$res_array = NULL;
 		$query = sql_prev_inj(sprintf('SELECT DISTINCT MID FROM orders WHERE date="%s";', $date)
 			);

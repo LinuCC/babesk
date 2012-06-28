@@ -1,6 +1,8 @@
 <?php
 
 /**
+ * This file is outdated, but still needed by parts of the program
+ * They use "global $db" to get access to the database
  * @todo: Remove this file and replace the occurences with DBConnect.php and the Class DBConnect
  */
 
@@ -16,4 +18,4 @@ $dbObject = new DBConnect();
 $dbObject->initDatabaseFromXML();
 $db = $dbObject->getDatabase();
 
-?>
+?>;

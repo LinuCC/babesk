@@ -1,6 +1,6 @@
 <?php
 
-    require PATH_ACCESS . "/dbconnect.php";
+    require PATH_ACCESS . "/databaseDistributor.php";
     
     //get the password of the global admin
     $query = 'SELECT

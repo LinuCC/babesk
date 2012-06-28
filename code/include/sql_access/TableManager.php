@@ -16,13 +16,13 @@ class TableManager {
 
 	/**
 	 * ClassConstructor, sets up connection to database
-	 * It connects with the database. The Information for that is given in dbconnect.php.
+	 * It connects with the database. The Information for that is given in databaseDistributor.php.
 	 *
 	 * @param the name of the table in MySQL
 	 */
 
 	public function __construct($tablename) {
-		require "dbconnect.php";
+		require "databaseDistributor.php";
 		$this->db = $db;
 		$this->db->query('set names "utf8";');
 		$this->tablename = $tablename;

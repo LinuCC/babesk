@@ -54,7 +54,7 @@ class UserManager extends TableManager{
 	 *  @todo this function is not necessary anymore, functionality is alredy in alterUser(), replace getUserID
 	 */
 	function updatePassword($uid, $new_passwd) {
-		require 'dbconnect.php';
+		require 'databaseDistributor.php';
 		require_once PATH_INCLUDE.'/functions.php';
 		$query = sprintf( 'UPDATE users SET first_passwd = 0, password = "%s" WHERE ID = %s;',
 							hash_password($new_passwd),
@@ -71,7 +71,7 @@ class UserManager extends TableManager{
 	 * Enter description here ...
 	 */
 	function getUsersSorted() {
-		require_once PATH_ACCESS . '/dbconnect.php';
+		require_once PATH_ACCESS . '/databaseDistributor.php';
 		$res_array = array();
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY name', $this->tablename));
 		$result = $this->db->query($query);
@@ -336,7 +336,7 @@ class UserManager extends TableManager{
 	 * @throws MySQLConnectionException if it failed to reset the login tries
 	 */
 	function ResetLoginTries($ID) {
-		require 'dbconnect.php';
+		require 'databaseDistributor.php';
 		$query = sql_prev_inj(sprintf('UPDATE %s SET login_tries = 0 WHERE ID = %s', $this->tablename, $ID));
 		if(!$this->db->query($query)) {
 			throw new MySQLConnectionException('failed to reset login tries!');
@@ -344,7 +344,7 @@ class UserManager extends TableManager{
 	}
 
 	function AddLoginTry($ID) {
-		require "dbconnect.php";
+		require "databaseDistributor.php";
 		$query = sql_prev_inj(sprintf('UPDATE %s SET login_tries = login_tries + 1 WHERE ID = %s', $this->tablename, $ID));
 		if(!$this->db->query($query)) {
 			throw new MySQLConnectionException('failed to add a login try!');
