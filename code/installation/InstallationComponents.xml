@@ -6,4 +6,10 @@
 		<path>components/Babesk/InstallBabesk.php</path>
 		<className>InstallBabesk</className>
 	</Component>
+	<Component>
+		<name>Kuwasys</name>
+		<nameDisplay>KurswahlSystem</nameDisplay>
+		<path>components/Kuwasys/InstallKuwasys.php</path>
+		<className>InstallKuwasys</className>
+	</Component>
 </InstallationComponents>

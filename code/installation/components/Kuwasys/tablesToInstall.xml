@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+	<table>
+		<name>class</name>
+		<sqlCommand>
+		CREATE TABLE IF NOT EXISTS `class` (
+		`ID` int(11) unsigned NOT NULL auto_increment,
+		`label` varchar(255) NOT NULL,
+		Primary Key (`ID`)
+		);
+		</sqlCommand>
+	</table>
+	<table>
+		<name>grade</name>
+		<sqlCommand>
+		CREATE TABLE IF NOT EXISTS `grade` (
+		`ID` int(11) unsigned NOT NULL auto_increment,
+		`label` varchar(255) NOT NULL,
+		`gradeValue` int(2) unsigned NOT NULL,
+		Primary Key (`ID`)
+		);
+		</sqlCommand>
+	</table>
+	<table>
+		<name>schoolYear</name>
+		<sqlCommand>
+		CREATE TABLE IF NOT EXISTS `schoolYear` (
+		`ID` int(11) unsigned NOT NULL auto_increment,
+		`label` varchar(255) NOT NULL,
+		`activ` boolean NOT NULL,
+		Primary Key (`ID`)
+		);
+		</sqlCommand>
+	</table>
+	<table>
+		<name>classTeacher</name>
+		<sqlCommand>
+		CREATE TABLE IF NOT EXISTS `classTeacher` (
+		`ID` int(11) unsigned NOT NULL auto_increment,
+		`name` varchar(64) NOT NULL,
+		`forename` varchar(64) NOT NULL,
+		`adress` varchar(255) NOT NULL,
+		`telephone` varchar(64) NOT NULL,
+		Primary Key (`ID`)
+		);
+		</sqlCommand>
+	</table>
+	<table>
+		<name>administrator</name>
+		<sqlCommand>
+		CREATE TABLE IF NOT EXISTS `administrator` (
+		`ID` int(11) unsigned NOT NULL auto_increment,
+		Primary Key (`ID`)
+		);
+		</sqlCommand>
+		<alternateSqlCommand>
+		
+		</alternateSqlCommand>
+	</table>
+	<table>
+		<name>users</name>
+		<sqlCommand>
+		CREATE TABLE IF NOT EXISTS `users` (
+		`ID` int(11) unsigned NOT NULL auto_increment,
+		`name` varchar(64) NOT NULL,
+		`forename` varchar(64) NOT NULL,
+		`adress` varchar(255) NOT NULL,
+		`telephone` varchar(64) NOT NULL,
+		Primary Key (`ID`)
+		);
+		</sqlCommand>
+		<alternateSqlCommand></alternateSqlCommand>
+	</table>
+</database>

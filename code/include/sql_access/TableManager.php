@@ -21,13 +21,44 @@ class TableManager {
 	 * @param the name of the table in MySQL
 	 */
 
-	public function __construct($tablename) {
+	public function __construct ($tablename) {
+
 		require "databaseDistributor.php";
 		$this->db = $db;
 		$this->db->query('set names "utf8";');
 		$this->tablename = $tablename;
 	}
-	
+
+	/**
+	 * looks up if the table does exist
+	 */
+	public function existsTable () {
+
+		$query = sql_prev_inj('SHOW TABLES LIKE "' . $this->tablename . '"');
+		if (!mysql_num_rows($this->db->query($query))) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
+	/**
+	 * Checks if the Key $key of the table exists
+	 * @param unknown_type $key
+	 */
+	public function existsKey ($columnName) {
+		
+		$query = sql_prev_inj('SHOW COLUMNS FROM `' . $this->tablename . '`  LIKE "'. $columnName . '";');
+		$result = $this->db->query($query);
+		if(count($result->fetch_assoc()) != 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	/**
 	 * Checks if the Entry with the value $value of the key $key exists.
 	 * @param string $key
@@ -35,38 +66,39 @@ class TableManager {
 	 * @throws MySQLConnectionException
 	 * @return boolean true if an Entry exists, false if not
 	 */
-	public function existsEntry($key, $value) {
+	public function existsEntry ($key, $value) {
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE %s="%s"', $this->tablename, $key, $value));
 		$result = $this->db->query($query);
-		if (!$result) 
+		if (!$result)
 			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error . "<br />" . $query);
 		if ($res_var = $result->fetch_assoc()) {
 			return true;
-		} else {
+		}
+		else {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * returns the ID of the first entry found with the value $value of the key $key
 	 * @param string $key
 	 * @param string $value
 	 */
-	public function getIDByValue($key, $value) {
+	public function getIDByValue ($key, $value) {
 		$result = $this->searchEntry(sprintf('%s="%s"', $key, $value));
-		if(!$result)
+		if (!$result)
 			throw new MySQLVoidDataException('MySQL returned no Data to retrieve the ID from!');
-		if(array_key_exists('ID', $result))
-			return $result ['ID'];
-		else if(array_key_exists('Id', $result))
-			return $result ['Id'];
-		else if(array_key_exists('id', $result))
-			return $result ['id'];
+		if (array_key_exists('ID', $result))
+			return $result['ID'];
+		else if (array_key_exists('Id', $result))
+			return $result['Id'];
+		else if (array_key_exists('id', $result))
+			return $result['id'];
 		else
 			throw new Exception('No ID-Key found!');
-			
+
 	}
-	 
+
 	/**
 	 * Returns the value of the requested fields for the given id or all entries in database.
 	 *
@@ -77,7 +109,7 @@ class TableManager {
 	 * @param variable amount, see description
 	 * @return false if error, else array
 	 */
-	public function getEntryData() {
+	public function getEntryData () {
 
 		require_once PATH_INCLUDE . '/constants.php';
 
@@ -87,7 +119,8 @@ class TableManager {
 			//all data of the specific entry
 			$id = func_get_arg(0);
 			$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE ID=%s', $this->tablename, $id));
-		} else if ($num_args > 1) {
+		}
+		else if ($num_args > 1) {
 			//specific TableData
 			$id = func_get_arg(0);
 			$fields = "";
@@ -98,7 +131,8 @@ class TableManager {
 			$fields .= func_get_arg($num_args - 1); //query must not contain an ',' after the last field name
 
 			$query = sql_prev_inj(sprintf('SELECT %s FROM %s WHERE ID = %s', $fields, $this->tablename, $id));
-		} else {//wrong arguments
+		}
+		else { //wrong arguments
 			throw new BadMethodCallException('wrong arguments');
 		}
 		$result = $this->db->query($query);
@@ -107,7 +141,8 @@ class TableManager {
 		}
 		if ($res_var = $result->fetch_assoc()) {
 			return $res_var;
-		} else {
+		}
+		else {
 			throw new MySQLVoidDataException(DB_QUERY_ERROR . $this->db->error . "<br />" . $query);
 		}
 	}
@@ -123,7 +158,7 @@ class TableManager {
 	 *
 	 *  @return twodimensional-array: $return_var[EntryArray[FieldnameArray]]
 	 */
-	function getTableData() {
+	function getTableData () {
 		require_once PATH_INCLUDE . '/constants.php';
 
 		$num_args = func_num_args();
@@ -132,10 +167,12 @@ class TableManager {
 		if ($num_args == 0) {
 			//all elements of the table
 			$query = sql_prev_inj(sprintf('SELECT * FROM %s', $this->tablename));
-		} else if ($num_args == 1) {
+		}
+		else if ($num_args == 1) {
 			$arg = func_get_arg(0);
 			$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE %s', $this->tablename, $arg));
-		} else {
+		}
+		else {
 			throw new Exception('Wrong number of arguments in ' . __METHOD__);
 		}
 		$result = $this->db->query($query);
@@ -161,7 +198,7 @@ class TableManager {
 	 * @throws Exception
 	 */
 
-	public function addEntry() {
+	public function addEntry () {
 		require_once PATH_INCLUDE . '/constants.php';
 
 		$column_identifier_str = '';
@@ -178,14 +215,17 @@ class TableManager {
 				//identifier
 
 				$column_identifier_str .= func_get_arg($i - 1) . ',';
-			} else { //value
+			}
+			else { //value
 				if (func_get_arg($i - 1) == 'CURRENT_TIMESTAMP') {
 					// some mysql-constants, that shouldnt need quotation marks
 					$column_value_str .= func_get_arg($i - 1) . ',';
-				} else if (!is_numeric(func_get_arg($i - 1))) {
+				}
+				else if (!is_numeric(func_get_arg($i - 1))) {
 					//MySQL needs quotation marks for strings
 					$column_value_str .= '"' . func_get_arg($i - 1) . '",';
-				} else {
+				}
+				else {
 					$column_value_str .= func_get_arg($i - 1) . ',';
 				}
 			}
@@ -195,8 +235,8 @@ class TableManager {
 		$column_value_str = substr($column_value_str, 0, -1);
 		$column_identifier_str = substr($column_identifier_str, 0, -1);
 
-		$query = sql_prev_inj(
-				sprintf('INSERT INTO %s (%s) VALUES (%s);', $this->tablename, $column_identifier_str, $column_value_str));
+		$query = sql_prev_inj(sprintf('INSERT INTO %s (%s) VALUES (%s);', $this->tablename, $column_identifier_str,
+			$column_value_str));
 		$result = $this->db->query($query);
 		if (!$result) {
 			throw new Exception(DB_QUERY_ERROR . $this->db->error);
@@ -211,7 +251,7 @@ class TableManager {
 	 * @return array()
 	 */
 
-	public function searchEntry($search_str) {
+	public function searchEntry ($search_str) {
 		//this function is for getting a single value
 		if (!is_string($search_str))
 			throw new UnexpectedValueException('One of the Parameters has the wrong format!');
@@ -231,7 +271,7 @@ class TableManager {
 	 * @param string $key
 	 */
 
-	public function getEntryValue($id, $key) {
+	public function getEntryValue ($id, $key) {
 		$query = sql_prev_inj(sprintf('SELECT %s FROM %s WHERE ID=%s', $key, $this->tablename, $id));
 		$result = $this->db->query($query);
 		if (!$result) {
@@ -239,7 +279,8 @@ class TableManager {
 		}
 		if ($res_var = $result->fetch_assoc()) {
 			return $res_var[$key];
-		} else {
+		}
+		else {
 			throw new MySQLVoidDataException(DB_QUERY_ERROR . $this->db->error . "<br />" . $query);
 		}
 	}
@@ -250,14 +291,14 @@ class TableManager {
 	 * change, the second one the name of the value to change nad the third one the value.
 	 * You can update more than one value, you then add another two parameters;
 	 * the name of the value and then the value itself.
-	 * 
+	 *
 	 * @throws MySQLVoidDataException if it could not connect to MySQL or some error was produced by MySQL
 	 * @throws BadMethodCallException if the number of parameters are not correct
-	 * 
+	 *
 	 * @param a variable amount, see description
 	 */
 
-	public function alterEntry() {
+	public function alterEntry () {
 		$args = func_get_args();
 		if (count($args) < 1 || count($args) % 2 != 1) {
 			throw new BadMethodCallException('Wrong number of Parameters for Function ' . __FUNCTION__);
@@ -293,7 +334,7 @@ class TableManager {
 	 * @param ID The ID of the entry to delete
 	 */
 
-	public function delEntry($ID) {
+	public function delEntry ($ID) {
 		require_once PATH_INCLUDE . '/constants.php';
 
 		if (!is_numeric($ID)) {
@@ -310,9 +351,9 @@ class TableManager {
 	/**
 	 * returns the ID of the next object that would be added (MySQL's Autoincrement)
 	 */
-	function getNextAutoIncrementID() {
-		$query = sql_prev_inj(
-				sprintf('SELECT Auto_increment FROM information_schema.tables WHERE table_name="%s";', $this->tablename));
+	function getNextAutoIncrementID () {
+		$query = sql_prev_inj(sprintf('SELECT Auto_increment FROM information_schema.tables WHERE table_name="%s";',
+			$this->tablename));
 		$result = $this->db->query($query);
 		if (!$result)
 			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error);
