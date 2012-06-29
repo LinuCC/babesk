@@ -9,6 +9,4 @@ $smarty->setCacheDir(dirname(__FILE__) . '/cache');
 $smarty->setConfigDir(dirname(__FILE__) . '/config');
 
 $smarty->error_reporting = E_ALL & ~E_NOTICE;
-
-//$smarty->testInstall();
 ?>

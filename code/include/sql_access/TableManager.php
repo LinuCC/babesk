@@ -35,7 +35,8 @@ class TableManager {
 	public function existsTable () {
 
 		$query = sql_prev_inj('SHOW TABLES LIKE "' . $this->tablename . '"');
-		if (!mysql_num_rows($this->db->query($query))) {
+		$result = $this->db->query($query);
+		if (!count($result->fetch_assoc())) {
 			return false;
 		}
 		else {
@@ -51,7 +52,7 @@ class TableManager {
 		
 		$query = sql_prev_inj('SHOW COLUMNS FROM `' . $this->tablename . '`  LIKE "'. $columnName . '";');
 		$result = $this->db->query($query);
-		if(count($result->fetch_assoc()) != 0) {
+		if(count($result->fetch_assoc())) {
 			return true;
 		}
 		else {

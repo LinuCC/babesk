@@ -53,9 +53,6 @@
 		Primary Key (`ID`)
 		);
 		</sqlCommand>
-		<alternateSqlCommand>
-		
-		</alternateSqlCommand>
 	</table>
 	<table>
 		<name>users</name>
@@ -64,11 +61,84 @@
 		`ID` int(11) unsigned NOT NULL auto_increment,
 		`name` varchar(64) NOT NULL,
 		`forename` varchar(64) NOT NULL,
-		`adress` varchar(255) NOT NULL,
-		`telephone` varchar(64) NOT NULL,
+		`username` varchar (64) NOT NULL,
+		`password` varchar(64) NOT NULL,
+		`email` varchar (64) NOT NULL,
+		`telephon` varchar (64) NOT NULL,
 		Primary Key (`ID`)
 		);
 		</sqlCommand>
-		<alternateSqlCommand></alternateSqlCommand>
+		<alternateSqlCommandForBabesk>
+		ALTER TABLE users 
+		ADD
+		(`email` varchar(64) NOT NULL,
+		`telephon` varchar (64) NOT NULL);
+		</alternateSqlCommandForBabesk>
+	</table>
+	<table>
+		<name>jointUsersInSchoolYear</name>
+		<sqlCommand>
+		CREATE TABLE IF NOT EXISTS `jointUsersInSchoolYear` (
+		`ID` int(11) unsigned NOT NULL auto_increment,
+		`UserID` int(11) unsigned NOT NULL,
+		`SchoolYearID` int(11) unsigned NOT NULL,
+		Primary Key (`ID`)
+		);
+		</sqlCommand>
+	</table>
+	<table>
+		<name>jointUsersInGrade</name>
+		<sqlCommand>
+		CREATE TABLE IF NOT EXISTS `jointUsersInGrade` (
+		`ID` int(11) unsigned NOT NULL auto_increment,
+		`UserID` int(11) unsigned NOT NULL,
+		`GradeID` int(11) unsigned NOT NULL,
+		Primary Key (`ID`)
+		);
+		</sqlCommand>
+	</table>
+	<table>
+		<name>jointUsersInClass</name>
+		<sqlCommand>
+		CREATE TABLE IF NOT EXISTS `jointUsersInClass` (
+		`ID` int(11) unsigned NOT NULL auto_increment,
+		`UserID` int(11) unsigned NOT NULL,
+		`ClassID` int(11) unsigned NOT NULL,
+		Primary Key (`ID`)
+		);
+		</sqlCommand>
+	</table>
+	<table>
+		<name>jointClassInSchoolYear</name>
+		<sqlCommand>
+		CREATE TABLE IF NOT EXISTS `jointClassInSchoolYear` (
+		`ID` int(11) unsigned NOT NULL auto_increment,
+		`ClassID` int(11) unsigned NOT NULL,
+		`SchoolYearID` int(11) unsigned NOT NULL,
+		Primary Key (`ID`)
+		);
+		</sqlCommand>
+	</table>
+	<table>
+		<name>jointClassTeacherInClass</name>
+		<sqlCommand>
+		CREATE TABLE IF NOT EXISTS `jointClassTeacherInClass` (
+		`ID` int(11) unsigned NOT NULL auto_increment,
+		`ClassTeacherID` int(11) unsigned NOT NULL,
+		`ClassID` int(11) unsigned NOT NULL,
+		Primary Key (`ID`)
+		);
+		</sqlCommand>
+	</table>
+	<table>
+		<name>jointGradeInSchoolYear</name>
+		<sqlCommand>
+		CREATE TABLE IF NOT EXISTS `jointGradeInSchoolYear` (
+		`ID` int(11) unsigned NOT NULL auto_increment,
+		`GradeID` int(11) unsigned NOT NULL,
+		`SchoolYearID` int(11) unsigned NOT NULL,
+		Primary Key (`ID`)
+		);
+		</sqlCommand>
 	</table>
 </database>
