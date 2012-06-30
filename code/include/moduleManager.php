@@ -186,12 +186,12 @@ class ModuleManager {
 	 * @param Class $dataContainer a Class which contains data for the Module to use. if no dataContainer is used,
 	 * just use the value false
 	 */
-	public function execute ($mod_name, $dataContainer) {
+	public function execute ($mod_name) {
 
 		$name_arr = explode('|', $mod_name);
 
 		if (count($name_arr) < 2) {
-			$this->executeHeadModul($name_arr[0], $dataContainer);
+			$this->executeHeadModul($name_arr[0]);
 			return;
 		}
 
@@ -200,22 +200,22 @@ class ModuleManager {
 
 		foreach ($this->headModules as $head_module) {
 			if ($head_module->getName() == $head_mod_name) {
-				$head_module->executeModule($child_mod_name, $dataContainer);
+				$head_module->executeModule($child_mod_name);
 				return;
 			}
 		}
 		throw new HeadModuleNotFoundException('Headmodule not found! Modulename:' . $mod_name);
 	}
 
-	public function executeHeadModul ($headmod_name, $dataContainer) {
+	public function executeHeadModul ($headmod_name) {
 		foreach ($this->headModules as $head_module) {
 			if ($head_module->getName() == $headmod_name) {
-				$head_module->execute($this, $dataContainer);
+				$head_module->execute($this);
 				return;
 			}
 		}
 	}
-
+	
 	public function parseModuleXML ($program_part) {
 
 		/**

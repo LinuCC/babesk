@@ -38,6 +38,7 @@ class Administrator {
 		$this->_adminInterface = new AdminInterface(NULL, $this->_smarty);
 
 		$this->_logger = new LogManager();
+		$this->_dataContainer = false;
 		$this->_moduleManager = new ModuleManager('administrator', $this->_adminInterface);
 
 	}
@@ -63,6 +64,10 @@ class Administrator {
 	public function getModuleManager () {
 		return $this->_moduleManager;
 	}
+	
+	public function setDataContainer($dataContainer) {
+		$this->_dataContainer = $dataContainer;
+	}
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
@@ -83,7 +88,7 @@ class Administrator {
 	public function executeModule ($moduleName) {
 
 		$smarty = $this->_smarty;
-		$this->_moduleManager->execute($moduleName, false);
+		$this->_moduleManager->execute($moduleName);
 	}
 
 	public function MainMenu () {

@@ -67,6 +67,16 @@
 				<active>true</active>
 			</module>
 		</head_module>
+		<head_module>
+			<ger_name>KurswahlSystem</ger_name>
+			<name>Kuwasys</name>
+			<active>true</active>
+			<module>
+				<ger_name>Benutzerverwaltung</ger_name>
+				<name>Users</name>
+				<active>true</active>
+			</module>
+		</head_module>
 	</administrator>
 	<web>
 		<path>web/</path>

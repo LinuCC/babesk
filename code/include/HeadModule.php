@@ -28,7 +28,6 @@ class HeadModule {
 	public function getDisplayName() {
 		return $this->displayName;
 	}
-	
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	/**
@@ -49,7 +48,7 @@ class HeadModule {
 	/**
 	 * @param string $mod_name
 	 */
-	public function executeModule($mod_name, $dataContainer) {
+	public function executeModule($mod_name) {
 		
 		foreach($this->modules as $module) {
 			
@@ -57,7 +56,7 @@ class HeadModule {
 				if (!$_SESSION['modules'][$this->name . '|' . $module->getName()])
 					die('Module forbidden');
 				
-				$module->execute($dataContainer);
+				$module->execute();
 				return;
 			}
 		}

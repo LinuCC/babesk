@@ -35,7 +35,6 @@ class InstallKuwasys extends InstallationComponent {
 			switch ($_GET['action']) {
 				case 'addAdmin':
 					$this->addAdmin($_POST['adminPassword'], $_POST['adminPasswordRepeat']);
-					break;
 				case "finish":
 					$this->finishInstallation();
 					break;
@@ -83,8 +82,10 @@ class InstallKuwasys extends InstallationComponent {
 	private function entryInstallation () {
 
 		$this->_flagAddAdmin = false;
-		$this->addNotice('<h4>Wenn sie das Bargeldlose Bestellsystem auch installieren wollen:</h4>
-		Bitte stellen sie sicher, dass sie zuerst BaBeSK installieren, da es sonst zu Fehlern führt.<br><br>');
+		$this->addNotice(
+			'<h4>Wenn sie das Bargeldlose Bestellsystem auch installieren wollen:</h4>
+		Bitte stellen sie sicher, dass sie zuerst BaBeSK installieren, da es sonst zu Fehlern führt.<br><br>'
+			);
 		$this->initDatabase();
 		$this->installDatabaseTables();
 		$this->showAddAdminForm();
@@ -125,9 +126,9 @@ class InstallKuwasys extends InstallationComponent {
 				break;
 			case 'administrators':
 				if (!$this->isTableExisting('administrators')) {
+					$this->tableSpecialTreatmentAdministrators($table);
 					return false;
 				}
-				return $this->tableSpecialTreatmentAdministrators($table);
 				break;
 			default:
 				return false;
@@ -179,17 +180,32 @@ class InstallKuwasys extends InstallationComponent {
 			$this->addError('das Passwort wurde falsch eingegeben');
 			$this->displayAndDie();
 		}
-		if ($pw != $passwordRepeat) {
+		if ($password != $passwordRepeat) {
 			$this->addError('Die Passwörter stimmen nicht überein');
 			$this->displayAndDie();
 		}
-
-		$queryStr = sql_prev_inj(sprintf($simpleXmlElement->sqlString, hash_password($pw)));
+		
+		$this->initDatabase();
+		$queryStr = sql_prev_inj(sprintf('INSERT INTO administrators(name, password, GID) VALUES ("admin", "%s", 1);',
+			hash_password($password)));
 		$this->_db->query($queryStr);
+		
+		$this->addAdminGroupGlobal();
 	}
 	
-	private function finishInstallation () {
+	private function addAdminGroupGlobal () {
 		
+		$queryStr = 'INSERT INTO admin_groups(name, modules) VALUES ("global", "_ALL");';
+		$result = $this->_db->query($queryStr);
+		
+		if(!$result) {
+			$this->addError('Konnte die globale Administratorgruppe nicht hinzufügen!');
+			$this->displayAndDie();
+		}
+	}
+
+	private function finishInstallation () {
+
 		$this->_smarty->display($this->_templatePath . '/finishedInstallation.tpl');
 	}
 

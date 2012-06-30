@@ -46,12 +46,26 @@
 		</sqlCommand>
 	</table>
 	<table>
-		<name>administrator</name>
+		<name>administrators</name>
 		<sqlCommand>
-		CREATE TABLE IF NOT EXISTS `administrator` (
-		`ID` int(11) unsigned NOT NULL auto_increment,
-		Primary Key (`ID`)
-		);
+		CREATE TABLE IF NOT EXISTS `administrators` (
+            `ID` smallint(11) unsigned NOT NULL auto_increment,
+            `name` varchar(255) NOT NULL,
+            `password` varchar(32) NOT NULL,
+            `GID` smallint(11) NOT NULL,
+            PRIMARY KEY  (`ID`)
+        )AUTO_INCREMENT=1;
+		</sqlCommand>
+	</table>
+	<table>
+		<name>admin_groups</name>
+		<sqlCommand>
+		CREATE TABLE IF NOT EXISTS `admin_groups` (
+                        `ID` smallint(11) unsigned NOT NULL auto_increment,
+                        `name` varchar(255) NOT NULL,
+                        `modules` varchar(1024) NOT NULL,
+                        PRIMARY KEY  (`ID`)
+                    )AUTO_INCREMENT=1;
 		</sqlCommand>
 	</table>
 	<table>

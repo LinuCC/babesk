@@ -6,6 +6,7 @@ class Module {
 	protected $name;
 	protected $relPath;
 	protected $displayName;
+	protected $executablePath;
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
