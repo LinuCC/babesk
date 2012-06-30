@@ -67,6 +67,26 @@
 				<active>true</active>
 			</module>
 		</head_module>
+		<head_module>
+			<ger_name>Führerschein für IT-Systeme</ger_name>
+			<name>Fits</name>
+			<active>true</active>
+			<module>
+				<ger_name>Führerschein anerkennen</ger_name>
+				<name>Activate</name>
+				<active>true</active>
+			</module>
+		</head_module>
+		<head_module>
+			<ger_name>Schulbuchausleihsystem</ger_name>
+			<name>Schbas</name>
+			<active>true</active>
+			<module>
+				<ger_name>Bücherliste</ger_name>
+				<name>Booklist</name>
+				<active>true</active>
+			</module>
+		</head_module>
 	</administrator>
 	<web>
 		<path>web/</path>
