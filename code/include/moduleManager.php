@@ -12,6 +12,7 @@ require_once 'Module.php';
 require_once 'HeadModule.php';
 require_once 'exception_def.php';
 require_once 'GeneralInterface.php';
+require_once 'DataContainer.php';
 
 /**
  *
@@ -48,10 +49,17 @@ class ModuleManager {
 	//Getters and Setters
 	////////////////////////////////////////////////////////////////////////////////
 	public function setModuleXMLPath ($path) {
-
 		$this->moduleXMLPath = $path;
 	}
-
+	
+	public function setDataContainer ($dC) {
+		$this->dataContainer = $dC;
+	}
+	
+	public function getDataContainer () {
+		return $this->dataContainer;
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
@@ -200,7 +208,7 @@ class ModuleManager {
 
 		foreach ($this->headModules as $head_module) {
 			if ($head_module->getName() == $head_mod_name) {
-				$head_module->executeModule($child_mod_name);
+				$head_module->executeModule($child_mod_name, $this->dataContainer);
 				return;
 			}
 		}
@@ -312,6 +320,7 @@ class ModuleManager {
 	private $programPartPath;
 	private $moduleXMLPath;
 	private $generalInterface;
+	private $dataContainer;
 }
 
 ?>

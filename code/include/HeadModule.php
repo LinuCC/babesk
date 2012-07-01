@@ -48,7 +48,7 @@ class HeadModule {
 	/**
 	 * @param string $mod_name
 	 */
-	public function executeModule($mod_name) {
+	public function executeModule($mod_name, $dataContainer) {
 		
 		foreach($this->modules as $module) {
 			
@@ -56,7 +56,7 @@ class HeadModule {
 				if (!$_SESSION['modules'][$this->name . '|' . $module->getName()])
 					die('Module forbidden');
 				
-				$module->execute();
+				$module->execute($dataContainer);
 				return;
 			}
 		}

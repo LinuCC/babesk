@@ -49,6 +49,11 @@ class GeneralInterface {
 		
 		echo $msg . '<br>';
 	}
+	
+	function dieDisplay () {
+		
+		die();
+	}
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations

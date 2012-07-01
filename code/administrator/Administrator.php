@@ -29,6 +29,7 @@ class Administrator {
 		require_once PATH_INCLUDE . "/functions.php";
 		require_once PATH_INCLUDE . '/exception_def.php';
 		require_once PATH_INCLUDE . '/moduleManager.php';
+		require_once PATH_INCLUDE . '/DataContainer.php';
 		require_once 'AdminInterface.php';
 		require_once 'locales.php';
 
@@ -38,8 +39,8 @@ class Administrator {
 		$this->_adminInterface = new AdminInterface(NULL, $this->_smarty);
 
 		$this->_logger = new LogManager();
-		$this->_dataContainer = false;
 		$this->_moduleManager = new ModuleManager('administrator', $this->_adminInterface);
+		$this->_moduleManager->setDataContainer(new DataContainer($this->_smarty, $this->_adminInterface));
 
 	}
 
@@ -65,10 +66,6 @@ class Administrator {
 		return $this->_moduleManager;
 	}
 	
-	public function setDataContainer($dataContainer) {
-		$this->_dataContainer = $dataContainer;
-	}
-
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	public function initUserInterface () {

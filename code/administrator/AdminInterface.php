@@ -58,15 +58,24 @@ class AdminInterface extends GeneralInterface {
 	}
 	
 	/**
-	 * 
+	 * dies and displays all messages which were used by showError and showMsg
+	 */
+	function dieDisplay() {
+		
+		$this->smarty->display(PATH_SMARTY . '/templates/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5(
+				$_SERVER['REQUEST_URI']));
+	}
+
+	/**
+	 *
 	 * @param string $promptMessage The Message shown to the User
 	 * @param string $sectionString The String of the GET-Parameter section, used for Module-execution
 	 * @param string $actionString The String of the GET-Parameter action, used for Function-execution in Modules
 	 * @param string $confirmedString The String of the "confirmed"-Button
 	 * @param string $notConfirmedString The String of the "notConfirmed"-Button
 	 */
-	function confirmationDialog($promptMessage, $sectionString, $actionString, $confirmedString, $notConfirmedString) {
-		
+	function confirmationDialog ($promptMessage, $sectionString, $actionString, $confirmedString, $notConfirmedString) {
+
 		$this->smarty->assign('promptStr', $promptMessage);
 		$this->smarty->assign('sectionStr', $sectionString);
 		$this->smarty->assign('actionStr', $actionString);

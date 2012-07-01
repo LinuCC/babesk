@@ -1,6 +1,6 @@
 <?php
 
-require_once PATH_ACCESS . 'TableManager.php';
+require_once PATH_ACCESS . '/TableManager.php';
 
 class KuwasysGradeManager extends TableManager {
 	
