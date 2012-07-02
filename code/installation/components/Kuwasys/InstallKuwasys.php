@@ -31,6 +31,7 @@ class InstallKuwasys extends InstallationComponent {
 	////////////////////////////////////////////////////////////////////////////////
 	public function execute () {
 
+// 		die('Database muss noch angegeben werden können! OMG noob...');
 		if (isset($_GET['action'])) {
 			switch ($_GET['action']) {
 				case 'addAdmin':

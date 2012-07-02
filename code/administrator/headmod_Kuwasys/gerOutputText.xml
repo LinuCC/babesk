@@ -3,9 +3,11 @@
 	<module>
 		<name>Users</name>
 		<text>
-			<actionValueWrong>Der Wert der Get-Variable Action ist falsch!</actionValueWrong>
+			<actionValueWrong>Der Wert der Get-Variable Action ist falsch! Möglicherweise wurde diese Funktion noch nicht implementiert.</actionValueWrong>
 			<errorAddUserConnectDatabase>Der Benutzer konnte nicht hinzugefügt werden, da nicht zu der Datenbank verbunden werden konnte.</errorAddUserConnectDatabase>
 			<errorAddUser>Der Benutzer konnte nicht hinzugefügt werden: %s</errorAddUser>
+			<errorFetchAllUsers>Konnte die Benutzer nicht von der Datenbank abrufen!</errorFetchAllUsers>
+			<errorConnectDatabase>Konnte nicht zur MySQL-Datenbank verbinden.</errorConnectDatabase>
 			<formName>Name</formName>
 			<formUsername>Benutzername</formUsername>
 			<formForename>Vorname</formForename>
@@ -15,6 +17,15 @@
 			<formEmail>Email-Adresse</formEmail>
 			<formWrongInput>Falsche Eingabe des Feldes "%s"!</formWrongInput>
 			<formWrongPasswordRepetition>Das Passwort stimmt nicht mit der Wiederholung überein!</formWrongPasswordRepetition>
+			<finishedAddUser>Der Benutzer %s %s wurde erfolgreich hinzugefügt.</finishedAddUser>
+			<errorNoUsers>Es konnten keine Benutzer angezeigt werden, da die Datenbank leer ist und somit keine Benutzer vorhanden sind.</errorNoUsers>
+			<confirmDeleteUser>Wollen Sie wirklich den Benutzer %s %s löschen?</confirmDeleteUser>
+			<confirmDeleteUserYes>JA, ich möchte den Benutzer wirklich löschen</confirmDeleteUserYes>
+			<confirmDeleteUserNo>NEIN, ich möchte den Benutzer NICHT löschen</confirmDeleteUserNo>
+			<deleteUserNotComfirmed>Der Benutzer wurde nicht gelöscht.</deleteUserNotComfirmed>
+			<errorDeleteUser>Konnte den Benutzer nicht löschen: %s</errorDeleteUser>
+			<finDeleteUser>Der Benutzer wurde erfolgreich gelöscht.</finDeleteUser>
+			<errorGetUser>Die Informationen des Benutzers konnten nicht abgerufen werden.</errorGetUser>
 			</text>
 	</module>
 </gerOutputText>

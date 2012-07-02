@@ -33,6 +33,22 @@ class UsersInterface extends AdminInterface {
 		
 		$this->smarty->display($this->tplFilePath . 'addUser.tpl');
 	}
+	
+	public function showAllUsers ($users) {
+		
+		$this->smarty->assign('users', $users);
+		$this->smarty->display($this->tplFilePath . 'showUsers.tpl');
+	}
+	
+	public function showDeleteUserConfirmation ( $ID, $userForename, $userName, $languageManager) {
+		
+		$promptMessage = sprintf($languageManager->getText('confirmDeleteUser'), $userForename, $userName);
+		$sectionString = 'Kuwasys|Users';
+		$actionString = 'deleteUser&ID=' . $ID;
+		$confirmedString = $languageManager->getText('confirmDeleteUserYes');
+		$notConfirmedString = $languageManager->getText('confirmDeleteUserNo');
+		$this->confirmationDialog($promptMessage, $sectionString, $actionString, $confirmedString, $notConfirmedString);
+	}
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations

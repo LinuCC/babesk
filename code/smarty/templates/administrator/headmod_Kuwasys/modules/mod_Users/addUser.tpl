@@ -23,6 +23,7 @@ input.moduleFormulars {
 	<label>Passwort widerholen:<input type='password' name='passwordRepeat' class='moduleFormulars'></label> <br><br>
 	<label>Email-Adresse:<input type='text' name='email' class='moduleFormulars'></label> <br><br>
 	<label>Telefonnummer:<input type='text' name='telephone' class='moduleFormulars'></label> <br><br>
+	<label>Geburtstag:{html_select_date start_year="-100"} <br><br>
 	<input type='submit' value='Hinzufügen'>
 </form>
 </div>

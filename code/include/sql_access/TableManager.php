@@ -222,7 +222,8 @@ class TableManager {
 					// some mysql-constants, that shouldnt need quotation marks
 					$column_value_str .= func_get_arg($i - 1) . ',';
 				}
-				else if (!is_numeric(func_get_arg($i - 1))) {
+				//is_numeric killed the zeros leading numbers, problem with telephonenumber. (0581/642 etc. ftw)
+				else if (/*!is_numeric*/(func_get_arg($i - 1))) {
 					//MySQL needs quotation marks for strings
 					$column_value_str .= '"' . func_get_arg($i - 1) . '",';
 				}
