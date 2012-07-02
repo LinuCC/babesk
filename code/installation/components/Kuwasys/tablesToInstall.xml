@@ -78,7 +78,7 @@
 		`username` varchar (64) NOT NULL,
 		`password` varchar(64) NOT NULL,
 		`email` varchar (64) NOT NULL,
-		`telephon` varchar (64) NOT NULL,
+		`telephone` varchar (64) NOT NULL,
 		Primary Key (`ID`)
 		);
 		</sqlCommand>

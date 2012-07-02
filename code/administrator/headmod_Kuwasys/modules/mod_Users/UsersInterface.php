@@ -11,7 +11,7 @@ class UsersInterface extends AdminInterface {
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	////////////////////////////////////////////////////////////////////////////////
-	public function __construct ($modPath) {
+	public function __construct ($modPath, $smarty) {
 		
 		parent::__construct($modPath);
 		$this->parentPath = $this->tplFilePath . 'header.tpl';
@@ -27,6 +27,11 @@ class UsersInterface extends AdminInterface {
 	public function showMainMenu () {
 		
 		$this->smarty->display($this->tplFilePath . 'mainMenu.tpl');
+	}
+	
+	public function showAddUser() {
+		
+		$this->smarty->display($this->tplFilePath . 'addUser.tpl');
 	}
 
 	////////////////////////////////////////////////////////////////////////////////

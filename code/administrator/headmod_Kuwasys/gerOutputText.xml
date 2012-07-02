@@ -4,6 +4,17 @@
 		<name>Users</name>
 		<text>
 			<actionValueWrong>Der Wert der Get-Variable Action ist falsch!</actionValueWrong>
-		</text>
+			<errorAddUserConnectDatabase>Der Benutzer konnte nicht hinzugefügt werden, da nicht zu der Datenbank verbunden werden konnte.</errorAddUserConnectDatabase>
+			<errorAddUser>Der Benutzer konnte nicht hinzugefügt werden: %s</errorAddUser>
+			<formName>Name</formName>
+			<formUsername>Benutzername</formUsername>
+			<formForename>Vorname</formForename>
+			<formPassword>Passwort</formPassword>
+			<formPasswordRepeat>wiederholtes Passwort</formPasswordRepeat>
+			<formTelephone>Telefon</formTelephone>
+			<formEmail>Email-Adresse</formEmail>
+			<formWrongInput>Falsche Eingabe des Feldes "%s"!</formWrongInput>
+			<formWrongPasswordRepetition>Das Passwort stimmt nicht mit der Wiederholung überein!</formWrongPasswordRepetition>
+			</text>
 	</module>
 </gerOutputText>

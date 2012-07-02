@@ -34,6 +34,14 @@ class DataContainer {
 	public function getInterface () {
 		return $this->_interface;
 	}
+	
+	public function getDatabase () {
+		return $this->_db;
+	}
+	
+	public function setDatabase ($db) {
+		$this->_db = $db;
+	}
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
@@ -53,6 +61,7 @@ class DataContainer {
 	 */
 	protected $_smarty;
 	protected $_interface;
+	protected $_db;
 }
 
 ?>

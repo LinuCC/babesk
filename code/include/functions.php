@@ -77,12 +77,13 @@ function hash_password($pw_str) {
  * @param string $str the string to check
  * @param string $regex_str either the regex_str which should check the string or one of the
  * following:
- *  name - normal string for name : /\A^[a-zA-Z]{1}[a-zA-ZßäÄüÜöÖ -]{2,30}\z/
- *  password - Checks if it matches general pw-conditions: /\A^[a-zA-ZßäÄüÜöÖ -]{2,30}\z/
- *  card_id - specific conditions for the card_id: /\A^[0-9]{11}\z/
- *  id - just a number: /\A^[0-9]\z/
- *  birthday - the YYYY-MM-DD format of birthday: /\A\d{4}-\d{1,2}-\d{1,2}\z/
- *  credits - credits-field: /\A\d{1,5}([.,]\d{2})?\z/
+ *  name - normal string for name : /\A^[a-zA-Z]{1}[a-zA-ZßäÄüÜöÖ -]{2,30}\z/ ||
+ *  password - Checks if it matches general pw-conditions: /\A^[a-zA-ZßäÄüÜöÖ -]{2,30}\z/ ||
+ *  card_id - specific conditions for the card_id: /\A^[0-9]{11}\z/ ||
+ *  id - just a number, maximum 20 Chars: /\A^[0-9]{1,20}\z/ ||
+ *  number - a number with min 1 char and no maximum limit: /\A\d{1,}\z/ ||
+ *  birthday - the YYYY-MM-DD format of birthday: /\A\d{4}-\d{1,2}-\d{1,2}\z/ ||
+ *  credits - credits-field: /\A\d{1,5}([.,]\d{2})?\z/ ||
  * @param string $name_str the name of the Field the Value was entered in
  * (is used for throwing a WrongInputException, handling the name-string not necessary)
  * @return boolean only when no error found
@@ -107,6 +108,12 @@ function inputcheck($str, $regex_str, $name_str = 'Input') {
 			break;
 		case 'credits':
 			$regex_str = '/\A\d{1,5}([.,]\d{2})?\z/';
+			break;
+		case 'number':
+			$regex_str = '/\A\d{1,}\z/';
+			break;
+		case 'email':
+			$regex_str = '/\A[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}\z/';
 			break;
 	}
 	if (!preg_match($regex_str, $str)) {
