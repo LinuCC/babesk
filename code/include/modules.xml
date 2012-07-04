@@ -86,6 +86,11 @@
 				<name>Booklist</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Inventarliste</ger_name>
+				<name>Inventory</name>
+				<active>true</active>
+			</module>
 		</head_module>
 	</administrator>
 	<web>
