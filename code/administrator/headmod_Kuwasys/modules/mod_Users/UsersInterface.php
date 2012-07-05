@@ -40,6 +40,13 @@ class UsersInterface extends AdminInterface {
 		$this->smarty->display($this->tplFilePath . 'showUsers.tpl');
 	}
 	
+	public function showChangeUser ($userData) {
+		
+		$this->smarty->assign('user', $userData);
+		$this->smarty->assign('pathToJavascript', $this->tplFilePath . 'showUsers.js');
+		$this->smarty->display($this->tplFilePath . 'changeUser.tpl');
+	}
+	
 	public function showDeleteUserConfirmation ( $ID, $userForename, $userName, $languageManager) {
 		
 		$promptMessage = sprintf($languageManager->getText('confirmDeleteUser'), $userForename, $userName);

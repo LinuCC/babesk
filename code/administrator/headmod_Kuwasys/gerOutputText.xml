@@ -26,6 +26,7 @@
 			<errorDeleteUser>Konnte den Benutzer nicht löschen: %s</errorDeleteUser>
 			<finDeleteUser>Der Benutzer wurde erfolgreich gelöscht.</finDeleteUser>
 			<errorGetUser>Die Informationen des Benutzers konnten nicht abgerufen werden.</errorGetUser>
+			<finChangeUser>Der Benutzer wurde erfolgreich geändert.</finChangeUser>
 			</text>
 	</module>
 </gerOutputText>

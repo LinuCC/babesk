@@ -46,6 +46,9 @@ class Users extends Module {
 				case 'deleteUser':
 					$this->deleteUser();
 					break;
+				case 'changeUser':
+					$this->changeUserData();
+					break;
 				default:
 					$this->_interface->dieError($this->_languageManager->getText('actionValueWrong'));
 			}
@@ -115,6 +118,7 @@ class Users extends Module {
 
 	/**
 	 * @used-by Users::addUser
+	 * @used-by Users:changeUser
 	 */
 	private function checkPasswordRepetition () {
 
@@ -161,7 +165,7 @@ class Users extends Module {
 		}
 		return $users;
 	}
-	
+
 	/**
 	 * @used-by Users::addUserToDatabase
 	 * @param int(2) $day
@@ -225,5 +229,61 @@ class Users extends Module {
 		$this->_interface->dieMsg($this->_languageManager->getText('finDeleteUser'));
 	}
 
+	private function changeUserData () {
+
+		if (isset($_POST['forename'], $_POST['name'], $_POST['email'])) {
+			
+			$this->checkInputChangeUserData();
+			$this->ChangeUserDataToDatabase();
+			$this->_interface->dieMsg($this->_languageManager->getText('finChangeUser'));
+		}
+		else {
+			$this->showChangeUserData();
+		}
+	}
+
+	private function showChangeUserData () {
+
+		$userData = $this->getUserData($_GET['ID']);
+		$this->_interface->showChangeUser($userData);
+	}
+
+	private function checkInputChangeUserData () {
+
+		try {
+			inputcheck($_POST['forename'], 'name', $this->_languageManager->getText('formForename'));
+			inputcheck($_POST['name'], 'name', $this->_languageManager->getText('formName'));
+			inputcheck($_POST['username'], 'name', $this->_languageManager->getText('formUsername'));
+			inputcheck($_POST['email'], 'email', $this->_languageManager->getText('formEmail'));
+			inputcheck($_POST['telephone'], 'number', $this->_languageManager->getText('formTelephone'));
+		} catch (WrongInputException $e) {
+			$this->_interface->dieError(sprintf($this->_languageManager->getText('formWrongInput'), $e->getFieldName()));
+		}
+		if ($_POST['password'] != '' && $_POST['password'] != NULL) {
+			try {
+				inputcheck($_POST['password'], 'password', $this->_languageManager->getText('formPassword'));
+				inputcheck($_POST['passwordRepeat'], 'password', $this->_languageManager->getText('formPasswordRepeat'));
+			} catch (WrongInputException $e) {
+				$this->_interface->dieError(sprintf($this->_languageManager->getText('formWrongInput'), $e->getFieldName
+				()));
+			}
+			$this->checkPasswordRepetition();
+		}
+	}
+
+	private function ChangeUserDataToDatabase () {
+
+		if ($_POST['password'] != '' && $_POST['password'] != NULL) {
+
+			$this->_usersManager->changeUserWithoutPassword($_POST['ID'], $_POST['forename'], $_POST['name'], $_POST[
+				'username'], $_POST['email'], $_POST['telephone']);
+		}
+		else {
+			
+			$this->_usersManager->changeUserWithoutPassword($_GET['ID'], $_POST['forename'], $_POST['name'], $_POST[
+				'username'], $_POST['email'], $_POST['telephone'], hash_password($_POST['password']));
+		}
+
+	}
 }
 ?>
