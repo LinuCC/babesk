@@ -22,7 +22,31 @@ class KuwasysClassManager extends TableManager {
 		////////////////////////////////////////////////////////////////////////////////
 		//Methods
 		////////////////////////////////////////////////////////////////////////////////
+		public function addClass ($label, $maxRegistration) {
+			$this->addEntry('label', $label, 'maxRegistration', $maxRegistration);
+		}
 		
+		public function deleteClass ($ID) {
+			$this->delEntry($ID);
+		}
+		
+		public function alterClass ($ID, $label, $maxRegistration) {
+			$this->alterEntry($ID, 'label', $label, 'maxRegistration', $maxRegistration);
+		}
+		
+		public function getAllClasses () {
+			return $this->getTableData();
+		}
+		
+		public function getLabelOfClass ($ID) {
+			$label = $this->getEntryValue($ID, 'label');
+			return $label;
+		}
+		
+		public function getClass ($ID) {
+			$class = $this->searchEntry('ID =' . $ID);
+			return $class;
+		}
 		////////////////////////////////////////////////////////////////////////////////
 		//Implementations
 		////////////////////////////////////////////////////////////////////////////////

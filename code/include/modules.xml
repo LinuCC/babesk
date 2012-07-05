@@ -76,6 +76,11 @@
 				<name>Users</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Kursverwaltung</ger_name>
+				<name>Classes</name>
+				<active>true</active>
+			</module>
 		</head_module>
 	</administrator>
 	<web>

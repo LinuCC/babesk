@@ -1,6 +1,6 @@
 {extends file=$inh_path} {block name='content'}
 
-<script type="text/javascript" src="../smarty/templates/administrator/headmod_Kuwasys/modules/mod_Users/showUsers.js">
+<script type="text/javascript" src="../smarty/templates/administrator/headmod_Kuwasys/modules/mod_Users/changeUser.js">
 </script>
 
 <style type='text/css'  media='all'>
@@ -15,7 +15,7 @@ fieldset {
 	<label>Vorname: <input type='text' value="{$user.forename}" name='forename'></label><br><br>
 	<label>Name: <input type='text' value="{$user.name}" name='name'></label><br><br>
 	<label>Benutzername: <input type='text' value="{$user.username}" name='username'></label><br><br>
-	<!-- Hide Passwords with JavaScript, make a button for show/hide -->
+	<!-- Show/Hide Passwords with JavaScript-->
 	<div id='showPw'><button type='button' onclick='displayChangePassword()'>Passwort verändern</button></div>
 	<div id='hidePw' hidden><button type='button' onclick='hideChangePassword()'>Passwort doch nicht verändern</button></div>
 	<fieldset id='pwF' hidden>

@@ -1,0 +1,59 @@
+<?php
+
+require_once PATH_ADMIN . '/AdminInterface.php';
+
+class ClassesInterface extends AdminInterface {
+
+	////////////////////////////////////////////////////////////////////////////////
+	//Constructor
+	////////////////////////////////////////////////////////////////////////////////
+	public function __construct ($modPath, $smarty) {
+
+		parent::__construct($modPath, $smarty);
+		$this->parentPath = $this->tplFilePath . 'header.tpl';
+		$this->smarty->assign('inh_path', $this->parentPath);
+	}
+
+	////////////////////////////////////////////////////////////////////////////////
+	//Getters and Setters
+	////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////
+	//Methods
+	////////////////////////////////////////////////////////////////////////////////
+	public function showMainMenu () {
+
+		$this->smarty->display($this->tplFilePath . 'mainMenu.tpl');
+	}
+
+	public function showAddClass () {
+
+		$this->smarty->display($this->tplFilePath . 'addClass.tpl');
+	}
+
+	public function showClasses ($classes) {
+
+		$this->smarty->assign('classes', $classes);
+		$this->smarty->display($this->tplFilePath . 'showClasses.tpl');
+	}
+
+	public function showDeleteClassConfirmation ($ID, $promptMessage, $confirmedString, $notConfirmedString) {
+		
+		$this->confirmationDialog($promptMessage, 'Kuwasys|Classes', 'deleteClass&ID=' . $ID, $confirmedString, $notConfirmedString);
+	}
+	
+	public function showChangeClass ($class) {
+		
+		$this->smarty->assign('class', $class);
+		$this->smarty->display($this->tplFilePath . 'changeClass.tpl');
+	}
+	////////////////////////////////////////////////////////////////////////////////
+	//Implementations
+	////////////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////////////
+	//Attributes
+	////////////////////////////////////////////////////////////////////////////////
+}
+
+?>

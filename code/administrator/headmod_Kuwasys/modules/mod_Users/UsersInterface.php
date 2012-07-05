@@ -13,7 +13,7 @@ class UsersInterface extends AdminInterface {
 	////////////////////////////////////////////////////////////////////////////////
 	public function __construct ($modPath, $smarty) {
 		
-		parent::__construct($modPath);
+		parent::__construct($modPath, $smarty);
 		$this->parentPath = $this->tplFilePath . 'header.tpl';
 		$this->smarty->assign('inh_path', $this->parentPath);
 	}

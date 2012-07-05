@@ -29,4 +29,26 @@
 			<finChangeUser>Der Benutzer wurde erfolgreich geändert.</finChangeUser>
 			</text>
 	</module>
+	<module>
+		<name>Classes</name>
+		<text>
+			<errorWrongActionValue>Action Value besitzt einen falschen Wert! Möglicherweise wurde diese Funktion noch nicht implementiert</errorWrongActionValue>
+			<errorWrongInput>Sie haben den Wert im Feld "%s" nicht richtig eingegeben!</errorWrongInput>
+			<errorNoClasses>Es sind keine Kurse vorhanden</errorNoClasses>
+			<errorFetchClassesFromDatabase>Konnte die Kurse nicht von der Datenbank abrufen: %s</errorFetchClassesFromDatabase>
+			<formLabel>Name des Kurses</formLabel>
+			<formMaxRegistration>Maximale Registrierungen</formMaxRegistration>
+			<finishedAddClass>Der Kurs wurde erfolgreich hinzugefügt.</finishedAddClass>
+			<confirmDeleteClass>Wollen sie den Kurs "%s" wirklich löschen?</confirmDeleteClass>
+			<confirmDeleteClassYes>JA, ich möchte den Kurs löschen</confirmDeleteClassYes>
+			<confirmDeleteClassNo>NEIN, ich möchte den Kurs NICHT löschen</confirmDeleteClassNo>
+			<deleteClassNotConfirmed>Der Kurs wurde nicht gelöscht. </deleteClassNotConfirmed>
+			<errorDeleteClass>Der Kurs konnte nicht gelöscht werden!</errorDeleteClass>
+			<finishedDeleteClass>Der Kurs wurde erfolgreich gelöscht.</finishedDeleteClass>
+			<errorFetchLabel>Konnte den Namen des Kurses nicht von der Datenbank abrufen!</errorFetchLabel>
+			<errorFetchClass>Konnte den Kurs nicht von der Datenbank abrufen!</errorFetchClass>
+			<errorChangeClass>Konnte den Kurs nicht verändern.</errorChangeClass>
+			<finishedChangeClass>Der Kurs wurde erfolgreich verändert.</finishedChangeClass>
+		</text>
+	</module>
 </gerOutputText>
