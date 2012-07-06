@@ -53,4 +53,31 @@
 			<finishedChangeClass>Der Kurs wurde erfolgreich verändert.</finishedChangeClass>
 		</text>
 	</module>
+	<module>
+		<name>Grade</name>
+		<text>
+			<errorWrongActionValue>Der Wert der Get-Variable Action ist falsch! Möglicherweise wurde diese Funktion noch nicht implementiert.</errorWrongActionValue>
+			<formLabel>Bezeichner der Klasse</formLabel>
+			<formYear>Jahrgangsstufe</formYear>
+			<formAddGradeHeader>Klasse hinzufügen</formAddGradeHeader>
+			<formAddGradeSubmit>die Klasse hinzufügen</formAddGradeSubmit>
+			<errorAddGradeInput>Das Feld "%s" wurde nicht korrekt ausgefüllt. Bitte versuchen sie es erneut.</errorAddGradeInput>
+			<errorAddGrade>Die Klasse konnte nicht hinzugefügt werden!</errorAddGrade>
+			<finishedAddGrade>Die Klasse wurde erfolgreich hinzugefügt.</finishedAddGrade>
+			<errorNoGrades>Es sind keine KLassen vorhanden!</errorNoGrades>
+			<errorShowGrades>Aufgrund eines Fehlers können die KLassen nicht angezeigt werden</errorShowGrades>
+			<deleteGradeConfirmationString>Wollen sie die Klasse %s %s wirklich löschen?</deleteGradeConfirmationString>
+			<deleteGradeConfirmationYes>JA, ich möchte die Klasse löschen</deleteGradeConfirmationYes>
+			<deleteGradeConfirmationNo>NEIN, ich möchte die Klasse NICHT löschen</deleteGradeConfirmationNo>
+			<errorFetchGrade>Konnte die Klasse nicht von der Datenbank abrufen,</errorFetchGrade>
+			<gradeNotDeleted>Die Klasse wurde nicht gelöscht.</gradeNotDeleted>
+			<errorDeleteGrade>Die Klasse konnte nicht gelöscht werden!</errorDeleteGrade>
+			<errorNoGrade>Die Klasse ist nicht vorhanden!</errorNoGrade>
+			<finishedDeleteGrade>Die Klasse wurde erfolgreich gelöscht.</finishedDeleteGrade>
+			<changeGradeHeader>Eine Klasse verändern</changeGradeHeader>
+			<changeGradeSubmit>Klasse verändern</changeGradeSubmit>
+			<errorChangeGrade>Die Klasse konnte nicht verändert werden.</errorChangeGrade>
+			<finishedChangeGrade>Die Klasse wurde erfolgreich verändert.</finishedChangeGrade>
+		</text>
+	</module>
 </gerOutputText>

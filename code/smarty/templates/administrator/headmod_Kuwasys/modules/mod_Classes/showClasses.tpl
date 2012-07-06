@@ -7,8 +7,8 @@
 		<tr bgcolor='#33CFF'>
 			<th align='center'>ID</th>
 			<th align='center'>Name</th>
-			<th align='center'>Bestellungen</th>
-			<th align='center'>Maximale Bestellungen</th>
+			<th align='center'>Registrierungen</th>
+			<th align='center'>Maximale Registrierungen</th>
 		</tr>
 	</thead>
 	<tbody>

@@ -81,6 +81,11 @@
 				<name>Classes</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Klassenverwaltung</ger_name>
+				<name>Grade</name>
+				<active>true</active>
+			</module>
 		</head_module>
 	</administrator>
 	<web>

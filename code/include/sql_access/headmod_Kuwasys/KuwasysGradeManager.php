@@ -22,7 +22,32 @@ class KuwasysGradeManager extends TableManager {
 		////////////////////////////////////////////////////////////////////////////////
 		//Methods
 		////////////////////////////////////////////////////////////////////////////////
+		public function addGrade ($label, $year) {
+			
+			parent::addEntry('label', $label, 'gradeValue', $year);
+		}
 		
+		public function deleteGrade ($ID) {
+			
+			parent::delEntry($ID);
+		}
+		
+		public function alterGrade ($ID, $label, $year) {
+			
+			parent::alterEntry($ID, 'label', $label, 'gradeValue', $year);
+		}
+		
+		public function getAllGrades () {
+			
+			$grades = parent::getTableData();
+			return $grades;
+		}
+		
+		public function getGrade ($ID) {
+			
+			$grade = parent::searchEntry('ID=' . $ID);
+			return $grade;
+		}
 		////////////////////////////////////////////////////////////////////////////////
 		//Implementations
 		////////////////////////////////////////////////////////////////////////////////
