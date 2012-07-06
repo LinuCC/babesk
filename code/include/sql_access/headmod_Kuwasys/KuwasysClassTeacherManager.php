@@ -22,7 +22,32 @@ class KuwasysClassTeacherManager extends TableManager {
 		////////////////////////////////////////////////////////////////////////////////
 		//Methods
 		////////////////////////////////////////////////////////////////////////////////
+		public function addClassTeacher ($name, $forename, $address, $telephone) {
+			
+			parent::addEntry('name', $name, 'forename', $forename, 'address', $address, 'telephone', $telephone);
+		}
 		
+		public function deleteClassTeacher ($ID) {
+			
+			parent::delEntry($ID);
+		}
+		
+		public function alterClassTeacher ($ID, $name, $forename, $address, $telephone) {
+			
+			parent::alterEntry($ID, 'name', $name, 'forename', $forename, 'address', $address, 'telephone', $telephone);
+		}
+		
+		public function getAllClassTeachers () {
+			
+			$classTeachers = parent::getTableData();
+			return $classTeachers;
+		}
+		
+		public function getClassTeacher ($ID) {
+			
+			$classTeacher = parent::searchEntry('ID=' . $ID);
+			return $classTeacher;
+		}
 		////////////////////////////////////////////////////////////////////////////////
 		//Implementations
 		////////////////////////////////////////////////////////////////////////////////

@@ -80,4 +80,33 @@
 			<finishedChangeGrade>Die Klasse wurde erfolgreich verändert.</finishedChangeGrade>
 		</text>
 	</module>
+	<module>
+		<name>ClassTeacher</name>
+		<text>
+			<errorWrongActionValue>Der Wert der Get-Variable Action ist falsch! Möglicherweise wurde diese Funktion noch nicht implementiert.</errorWrongActionValue>
+			<formName>Name</formName>
+			<formForename>Vorname</formForename>
+			<formAddress>Adresse</formAddress>
+			<formTelephone>Telefonnummer</formTelephone>
+			<formAddClassTeacherSubmit>Kursleiter hinzufügen</formAddClassTeacherSubmit>
+			<formAddClassTeacherHead>Einen Kursleiter hinzufügen</formAddClassTeacherHead>
+			<errorInput>Das Feld '%s' wurde nicht korrekt ausgefüllt</errorInput>
+			<errorAddClassTeacher>Konnte den Kursleiter nicht hinzufügen</errorAddClassTeacher>
+			<finishedAddClassTeacher>Der Kursleiter wurde erfolgreich hinzugefügt</finishedAddClassTeacher>
+			<errorNoClassTeachers>Es sind keine Kursleiter vorhanden.</errorNoClassTeachers>
+			<errorFetchClassTeachers>Ein Fehler ist beim Abrufen der Kursleiter aufgetreten.</errorFetchClassTeachers>
+			<deleteClassTeacherPrompt>Wollen sie den Kursleiter %s %s wirklich löschen?</deleteClassTeacherPrompt>
+			<deleteClassTeacherConfirmed>JA, ich möchte den Kursleiter löschen</deleteClassTeacherConfirmed>
+			<deleteClassTeacherNotConfirmed>NEIN, ich möchte den Kursleiter NICHT löschen</deleteClassTeacherNotConfirmed>
+			<classTeacherNotDeleted>Der Kursleiter wurde nicht gelöscht </classTeacherNotDeleted>
+			<errorFetchClassTeacher>Der Kursleiter konnte nicht abgerufen werden.</errorFetchClassTeacher>
+			<errorNoClassTeacher>Der Kursleiter konnte nicht gefunden werden.</errorNoClassTeacher>
+			<errorDeleteClassTeacher>Konnte den Kursleiter nicht löschen!</errorDeleteClassTeacher>
+			<finishedDeleteClassTeacher>Der Kursleiter wurde erfolgreich gelöscht.</finishedDeleteClassTeacher>
+			<changeClassTeacherHead>Verändern der Daten eines Kursleiters</changeClassTeacherHead>
+			<changeClassTeacherSubmit>Daten verändern</changeClassTeacherSubmit>
+			<errorChangeClassTeacher>Der Kursleiter konnte nicht verändert werden.</errorChangeClassTeacher>
+			<finishedChangeClassTeacher>Der Kursleiter wurde erfolgreich verändert.</finishedChangeClassTeacher>
+		</text>
+	</module>
 </gerOutputText>
