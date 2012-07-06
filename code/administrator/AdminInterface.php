@@ -83,6 +83,33 @@ class AdminInterface extends GeneralInterface {
 		$this->smarty->assign('notConfirmedStr', $notConfirmedString);
 		$this->smarty->display(PATH_SMARTY_ADMIN_TEMPLATES . '/confirmationDialog.tpl');
 	}
+	
+	/**
+	 * This function generates a general Form based on the Parameters given and shows it.
+	 * It does not make sure if the Variables are right, so use it correctly!
+	 * @param string $headString The Headline of the Form displayed to the User, something like "Add User"
+	 * @param string $sectionString The Parameter of the $_GET-Variable 'section', containing information what module
+	 * 	to use when form is send
+	 * @param string $actionString The Parameter of the $_GET-Variable 'action', usually containing information about
+	 * 	what action the module should do.
+	 * 	If additional parameters are needed, attach them to this variable like this: 'actionStr&keyStr=varStr'
+	 * @param array(array(string)) $inputContainer an array of an array of strings. For each array of strings the form
+	 *  adds an 'input'-field which needs the following informations:
+	 *  type: the type of the input-field - like text or password
+	 *  displayName: The label that describes the inputfield
+	 *  name: The name of the input-field, needed for Postprocessing the Variables
+	 *  value: This variable is optional. if set, it sets the Value of the input-field to the String given.
+	 * @param string $submitString The content of the Submit-Button 
+	 */
+	public function generalForm($headString, $sectionString, $actionString, $inputContainer, $submitString) {
+		
+		$this->smarty->assign('headString', $headString);
+		$this->smarty->assign('sectionString', $sectionString);
+		$this->smarty->assign('actionString', $actionString);
+		$this->smarty->assign('inputContainer', $inputContainer);
+		$this->smarty->assign('submitString', $submitString);
+		$this->smarty->display(PATH_SMARTY_ADMIN_TEMPLATES . '/generalForm.tpl');
+	}
 
 	protected $smarty;
 
