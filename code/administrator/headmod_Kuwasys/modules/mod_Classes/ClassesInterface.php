@@ -12,6 +12,7 @@ class ClassesInterface extends AdminInterface {
 		parent::__construct($modPath, $smarty);
 		$this->parentPath = $this->tplFilePath . 'header.tpl';
 		$this->smarty->assign('inh_path', $this->parentPath);
+		$this->sectionString = 'Kuwasys|Classes';
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -26,9 +27,26 @@ class ClassesInterface extends AdminInterface {
 		$this->smarty->display($this->tplFilePath . 'mainMenu.tpl');
 	}
 
-	public function showAddClass () {
+	public function showAddClass ($languageManager) {
 
-		$this->smarty->display($this->tplFilePath . 'addClass.tpl');
+		$inputContainer = array(
+				array(
+						'name' => 'label',
+						'displayName' => $languageManager->getText('formLabel'),
+						'type' => 'text',
+						),
+				array(
+						'name' => 'maxRegistration',
+						'displayName' => $languageManager->getText('formMaxRegistration'),
+						'type' => 'text',
+						),
+				);
+		$actionString = 'addClass';
+		$submitString = $languageManager->getText('formAddClassSubmit');
+		$headString = $languageManager->getText('formAddClassHeader');
+		
+		$this->generalForm($headString, $this->sectionString, $actionString, $inputContainer, $submitString);
+		//$this->smarty->display($this->tplFilePath . 'addClass.tpl');
 	}
 
 	public function showClasses ($classes) {
@@ -39,7 +57,7 @@ class ClassesInterface extends AdminInterface {
 
 	public function showDeleteClassConfirmation ($ID, $promptMessage, $confirmedString, $notConfirmedString) {
 		
-		$this->confirmationDialog($promptMessage, 'Kuwasys|Classes', 'deleteClass&ID=' . $ID, $confirmedString, $notConfirmedString);
+		$this->confirmationDialog($promptMessage, $this->sectionString, 'deleteClass&ID=' . $ID, $confirmedString, $notConfirmedString);
 	}
 	
 	public function showChangeClass ($class) {
@@ -54,6 +72,7 @@ class ClassesInterface extends AdminInterface {
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
 	////////////////////////////////////////////////////////////////////////////////
+	private $sectionString;
 }
 
 ?>

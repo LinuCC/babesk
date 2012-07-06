@@ -1,4 +1,4 @@
-{extends file=$inh_path} {block='content'}
+{extends file=$inh_path} {block name='content'}
 
 <!-- Template-File for those pesky repeating Forms needed for the modules in Admininstrator 
 	If you need more GET-Variables, just extend the action-string with whatever you feel like-->

@@ -78,7 +78,7 @@ class Classes extends Module {
 
 	private function showAddClass () {
 
-		$this->_interface->showAddClass();
+		$this->_interface->showAddClass($this->_languageManager);
 	}
 
 	private function checkClassInput () {

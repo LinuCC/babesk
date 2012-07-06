@@ -38,6 +38,8 @@
 			<errorFetchClassesFromDatabase>Konnte die Kurse nicht von der Datenbank abrufen: %s</errorFetchClassesFromDatabase>
 			<formLabel>Name des Kurses</formLabel>
 			<formMaxRegistration>Maximale Registrierungen</formMaxRegistration>
+			<formAddClassSubmit>Den Kurs hinzufügen</formAddClassSubmit>
+			<formAddClassHeader>Kurs hinzufügen</formAddClassHeader>
 			<finishedAddClass>Der Kurs wurde erfolgreich hinzugefügt.</finishedAddClass>
 			<confirmDeleteClass>Wollen sie den Kurs "%s" wirklich löschen?</confirmDeleteClass>
 			<confirmDeleteClassYes>JA, ich möchte den Kurs löschen</confirmDeleteClassYes>
