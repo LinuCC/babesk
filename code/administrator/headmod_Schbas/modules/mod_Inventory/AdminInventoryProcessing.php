@@ -14,7 +14,7 @@ class AdminInventoryProcessing {
 	//--------------------Show inventory--------------------
 	//////////////////////////////////////////////////
 	function ShowInventory($filter) {
-
+		
 		require_once PATH_ACCESS . '/InventoryManager.php';
 
 		$inventoryManager = new InventoryManager();
@@ -27,8 +27,8 @@ class AdminInventoryProcessing {
 							sprintf('Error while getting Data from MySQL:%s in %s', $e->getMessage(), __METHOD__));
 			$this->inventoryInterface->dieError($this->messages['error']['get_data_failed']);
 		}
-
-		$this->inventoryInterface->ShowInventory($inventorys);
+		$bookcodes = $inventoryManager->getBookCodes($inventorys);
+		$this->inventoryInterface->ShowInventory($bookcodes);
 	}
 
 	var $messages = array();

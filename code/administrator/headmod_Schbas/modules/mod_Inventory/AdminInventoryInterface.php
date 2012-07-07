@@ -21,8 +21,8 @@ class AdminInventoryInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath.'index.tpl');
 	}
 	
-	function ShowInventory($inventory) {
-		$this->smarty->assign('inventory', $inventory);
+	function ShowInventory($bookcodes) {
+		$this->smarty->assign('bookcodes', $bookcodes);
 		$this->smarty->display($this->tplFilePath.'show_inventory.tpl');
 	}
 	
