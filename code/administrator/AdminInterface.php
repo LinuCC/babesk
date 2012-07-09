@@ -56,14 +56,14 @@ class AdminInterface extends GeneralInterface {
 	function showMsg ($msg) {
 		$this->smarty->append('_userMsgOutput', $msg);
 	}
-	
+
 	/**
 	 * dies and displays all messages which were used by showError and showMsg
 	 */
-	function dieDisplay() {
-		
+	function dieDisplay () {
+
 		$this->smarty->display(PATH_SMARTY . '/templates/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5(
-				$_SERVER['REQUEST_URI']));
+			$_SERVER['REQUEST_URI']));
 	}
 
 	/**
@@ -83,7 +83,7 @@ class AdminInterface extends GeneralInterface {
 		$this->smarty->assign('notConfirmedStr', $notConfirmedString);
 		$this->smarty->display(PATH_SMARTY_ADMIN_TEMPLATES . '/confirmationDialog.tpl');
 	}
-	
+
 	/**
 	 * This function generates a general Form based on the Parameters given and shows it.
 	 * It does not make sure if the Variables are right, so use it correctly!
@@ -99,10 +99,12 @@ class AdminInterface extends GeneralInterface {
 	 *  displayName: The label that describes the inputfield
 	 *  name: The name of the input-field, needed for Postprocessing the Variables
 	 *  value: This variable is optional. if set, it sets the Value of the input-field to the String given.
-	 * @param string $submitString The content of the Submit-Button 
+	 *  optionString : This variable is optional. optionString is used for additional information like "checked" for 
+	 *   checkboxes.This string will be placed in the <input> field if set.
+	 * @param string $submitString The content of the Submit-Button
 	 */
-	public function generalForm($headString, $sectionString, $actionString, $inputContainer, $submitString) {
-		
+	public function generalForm ($headString, $sectionString, $actionString, $inputContainer, $submitString) {
+
 		$this->smarty->assign('headString', $headString);
 		$this->smarty->assign('sectionString', $sectionString);
 		$this->smarty->assign('actionString', $actionString);

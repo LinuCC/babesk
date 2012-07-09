@@ -91,6 +91,11 @@
 				<name>ClassTeacher</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Schuljahrverwaltung</ger_name>
+				<name>SchoolYear</name>
+				<active>true</active>
+			</module>
 		</head_module>
 	</administrator>
 	<web>

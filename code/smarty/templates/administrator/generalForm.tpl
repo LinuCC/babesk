@@ -15,6 +15,9 @@
 				{if isset($input.value)}
 					value='{$input.value}'
 				{/if}
+				{if isset($input.optionString)}
+					{$input.optionString}
+				{/if}
 			>
 		</label><br><br>
 	{/foreach}

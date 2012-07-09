@@ -64,7 +64,7 @@
 			<errorAddGradeInput>Das Feld "%s" wurde nicht korrekt ausgefüllt. Bitte versuchen sie es erneut.</errorAddGradeInput>
 			<errorAddGrade>Die Klasse konnte nicht hinzugefügt werden!</errorAddGrade>
 			<finishedAddGrade>Die Klasse wurde erfolgreich hinzugefügt.</finishedAddGrade>
-			<errorNoGrades>Es sind keine KLassen vorhanden!</errorNoGrades>
+			<errorNoGrades>Es sind keine Klassen vorhanden!</errorNoGrades>
 			<errorShowGrades>Aufgrund eines Fehlers können die KLassen nicht angezeigt werden</errorShowGrades>
 			<deleteGradeConfirmationString>Wollen sie die Klasse %s %s wirklich löschen?</deleteGradeConfirmationString>
 			<deleteGradeConfirmationYes>JA, ich möchte die Klasse löschen</deleteGradeConfirmationYes>
@@ -107,6 +107,38 @@
 			<changeClassTeacherSubmit>Daten verändern</changeClassTeacherSubmit>
 			<errorChangeClassTeacher>Der Kursleiter konnte nicht verändert werden.</errorChangeClassTeacher>
 			<finishedChangeClassTeacher>Der Kursleiter wurde erfolgreich verändert.</finishedChangeClassTeacher>
+		</text>
+	</module>
+	<module>
+		<name>SchoolYear</name>
+		<text>
+			<errorWrongActionValue>Der Wert der Get-Variable Action ist falsch! Möglicherweise wurde diese Funktion noch nicht implementiert.</errorWrongActionValue>
+			<formActive>Aktiviert</formActive>
+			<formLabel>Bezeichnung</formLabel>
+			<errorInput>Das Feld "%s" wurde nicht korrekt ausgefüllt.</errorInput>
+			<formAddSchoolYearHead>Ein Schuljahr hinzufügen</formAddSchoolYearHead>
+			<formAddSchoolYearSubmit>Schuljahr hinzufügen</formAddSchoolYearSubmit>
+			<errorAddSchoolYear>Das Schuljahr konnte nicht hinzugefügt werden!</errorAddSchoolYear>
+			<finishedAddSchoolYear>Das Schuljahr wurde erfolgreich hinzugefügt</finishedAddSchoolYear>
+			<errorNoSchoolYears>Es sind keine Schuljahre vorhanden!</errorNoSchoolYears>
+			<errorFetchSchoolYears>Die Schuljahre konnten nicht von der Datenbank abgerufen werden!</errorFetchSchoolYears>
+			<confirmActivateSchoolYear>Wollen sie das Schuljahr "%s" wirklich aktivieren? Das bisher aktivierte Schuljahr wird damit deaktiviert.</confirmActivateSchoolYear>
+			<confirmActivateSchoolYearConfirmed>JA, ich will dieses Schuljahr aktivieren</confirmActivateSchoolYearConfirmed>
+			<confirmActivateSchoolYearNotConfirmed>NEIN, ich will dieses Schuljahr NICHT aktivieren</confirmActivateSchoolYearNotConfirmed>
+			<finishedActivateSchoolYear>Das Schuljahr wurde erfolgreich aktiviert.</finishedActivateSchoolYear>
+			<notActivateSchoolYear>Das Schuljahr wurde nicht aktiviert.</notActivateSchoolYear>
+			<errorFetchSchoolYear>Das Schuljahr konnte nicht von der Datenbank abgerufen werden!</errorFetchSchoolYear>
+			<errorNoSchoolYear>Das Schuljahr ist nicht vorhanden!</errorNoSchoolYear>
+			<errorChangeSchoolYear>Ein Fehler ist beim Verändern des Schuljahres aufgetreten.</errorChangeSchoolYear>
+			<changeSchoolYearHead>Ein Schuljahr verändern</changeSchoolYearHead>
+			<changeSchoolYearSubmit>Schuljahr verändern</changeSchoolYearSubmit>
+			<finishedChangeSchoolYear>Das Schuljahr wurde erfolgreich verändert</finishedChangeSchoolYear>
+			<deleteSchoolYearPrompt>Wollen sie das Schuljahr "%s" wirklich löschen?</deleteSchoolYearPrompt>
+			<deleteSchoolYearConfirm>JA, ich möchte das Schuljahr löschen</deleteSchoolYearConfirm>
+			<deleteSchoolYearNotConfirm>NEIN, ich möchte das Schuljahr nicht löschen</deleteSchoolYearNotConfirm>
+			<deleteSchoolYearDeclined>Das Schuljahr wurde nicht gelöscht</deleteSchoolYearDeclined>
+			<errorDeleteSchoolYear>Konnte das Schuljahr nicht löschen!</errorDeleteSchoolYear>
+			<finishedDeleteSchoolYear>Das Schuljahr wurde erfolgreich gelöscht.</finishedDeleteSchoolYear>
 		</text>
 	</module>
 </gerOutputText>

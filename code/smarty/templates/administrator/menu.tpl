@@ -99,7 +99,7 @@ function changeHeadModule(headMod) {
 <h2 id="menu_header">Hauptmen&uuml;</h2>
 
 {section name=module loop=$modules}
-<div class="menu_item" id="{$modules[module]}">
+<div class="menu_item" id="{$modules[module]}" hidden>
 	<h4>
 		<a href="index.php?section={$modules[module]}&{$sid}">{$module_names[$modules[module]]}</a>
 	</h4>
