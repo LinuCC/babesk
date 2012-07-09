@@ -11,6 +11,10 @@
 		<tr bgcolor='#FFC33'>
 			<td align="center">{$bookcode.id}</td>
 			<td align="center">{$bookcode.code}</td>
+			<td align="center" bgcolor='#FFD99'>
+			<form action="index.php?section=Schbas|Inventory&action=2&ID={$bookcode.id}" method="post"><input type='submit' value='bearbeiten'></form>
+			<form action="index.php?section=Schbas|Inventory&action=3&ID={$bookcode.id}" method="post"><input type='submit' value='löschen'></form>
+			</td>
 		</tr>
 	{/foreach}
 	</tbody>

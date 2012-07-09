@@ -36,7 +36,7 @@ class BookManager extends TableManager{
 	 * 
 	 * 
 	 */
-	function getBookByID($id) {
+	function getBookDataByID($id) {
 		require_once PATH_ACCESS . '/dbconnect.php';
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE id = %s', $this->tablename, $id));
 		$result = $this->db->query($query);
@@ -44,7 +44,7 @@ class BookManager extends TableManager{
 			throw DB_QUERY_ERROR.$this->db->error;
 		}
 		while($buffer = $result->fetch_assoc())
-			$res_array[] = $buffer;
+			$res_array = $buffer;
 		return $res_array;
 	}
 	

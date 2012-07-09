@@ -33,6 +33,18 @@ class Inventory extends Module {
 				case 1: //show the inventory
 					$inventoryProcessing->ShowInventory(false);
 					break;
+				
+				case 2: //edit an entry
+					if (!isset ($_POST['id'], $_POST['purchase'], $_POST['exemplar'])){
+						$inventoryProcessing->editEntry($_GET['ID']);
+					}else{
+						$inventoryProcessing->changeUser($_GET['ID'], $_POST['id'], $_POST['purchase'], $_POST['exemplar']);
+					}
+					break;
+				
+				case 3: //delete an entry
+					$inventoryProcessing->deleteEntry($_GET['ID']);
+					break;
 			}
 		} else {
 			$inventoryInterface->ShowSelectionFunctionality($action);

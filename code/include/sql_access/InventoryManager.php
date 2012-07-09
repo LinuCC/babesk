@@ -37,20 +37,44 @@ class InventoryManager extends TableManager{
 	 * 
 	 */
 	
-	function getBookCodes($inventory) {
+	function getBookCodesByInvData($inventory) {
 		$bookmanager = new BookManager;
 		require_once PATH_ACCESS . '/dbconnect.php';
 		foreach ($inventory as &$inventor) {
-			$bookinfos[] = $bookmanager->getBookById($inventor['id']);
+			$bookinfos[] = $bookmanager->getBookDataById($inventor['id']);
 		}
-		$zaehler = 0;
+		$counter = 0;
 		foreach ($bookinfos as &$bookinfo) {
-			$bookcode[$zaehler]['code']=$bookinfo[0]['subject'].' '.$inventory[$zaehler]['year_of_purchase'].' '.$bookinfo[0]['class'].' '.$bookinfo[0]['bundle'].'-'.$inventory[$zaehler]['exemplar'];
-			$bookcode[$zaehler]['id']=$inventory[$zaehler]['id'];
-			$zaehler++;
+			$bookcode[$counter]['id']=$inventory[$counter]['id'];
+			$bookcode[$counter]['code']=$bookinfo['subject'].' '.$inventory[$counter]['year_of_purchase'].' '.$bookinfo['class'].' '.$bookinfo['bundle'].'-'.$inventory[$counter]['exemplar'];
+			$counter++;
 		}
 		return $bookcode;
 		}
 		
+		/**
+		 * 
+		 * 
+		 */
+		
+	function getInvDataByID($id) {
+		require_once PATH_ACCESS . '/dbconnect.php';
+		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE id=%s', $this->tablename, $id));
+		$result = $this->db->query($query);
+		if (!$result) {
+			throw DB_QUERY_ERROR.$this->db->error;
+		}
+		while($buffer = $result->fetch_assoc())
+			$res_array = $buffer;
+		return $res_array;
+	}
+	
+	function editUser($old_id, $id, $purchase, $exemplar){
+		var_dump($old_id);
+		var_dump($id);
+		var_dump($purchase);
+		var_dump($exemplar);
+		parent::alterEntry($old_id, 'id', $id, 'year_of_purchase', $purchase, 'exemplar', $exemplar);
+	}
 }
 ?>
