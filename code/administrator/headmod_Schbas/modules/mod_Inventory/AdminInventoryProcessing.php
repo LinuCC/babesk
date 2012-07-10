@@ -8,7 +8,8 @@ class AdminInventoryProcessing {
 		$this->messages = array(
 				'error' => array('get_data_failed' => 'Ein Fehler ist beim fetchen der Daten aufgetreten',
 								'input1' => 'Ein Feld wurde falsch mit ', 'input2' => ' ausgefüllt',
-								'change' => 'Konnte den Benutzer nicht ändern!'),
+								'change' => 'Konnte das Inventar nicht ändern!',
+								'delete' => 'Ein Fehler ist beim löschen des Inventars aufgetreten:'),
 				'notice' => array());
 	}
 	
@@ -47,7 +48,7 @@ class AdminInventoryProcessing {
 	 * Function to show the template.
 	 */
 	
-	function editEntry($id) {
+	function editInventory($id) {
 		
 		require_once PATH_ACCESS . '/InventoryManager.php';
 		require_once PATH_ACCESS . '/BookManager.php';
@@ -55,13 +56,12 @@ class AdminInventoryProcessing {
 		$inventoryManager = new InventoryManager();
 		$bookManager = new BookManager();
 		
-		$bookdata = $bookManager->getBookDataByID($_GET['ID']);
 		try {
 			$invData = $inventoryManager->getInvDataByID($_GET['ID']);
 		} catch (Exception $e) {
 			$this->userInterface->dieError($this->messages['error']['uid_get_param'] . $e->getMessage());
 		}
-		var_dump ($invData);
+		$bookdata = $bookManager->getBookDataByID($invData['book_id']);
 
 		$this->inventoryInterface->ShowChangeInv($bookdata, $invData);
 	}
@@ -71,7 +71,7 @@ class AdminInventoryProcessing {
 	 * Changes the MySQL entry
 	 */
 	
-	function changeUser($old_id, $id, $purchase, $exemplar) {
+	function changeInventory($old_id, $id, $purchase, $exemplar) {
 		require_once PATH_ACCESS . '/InventoryManager.php';
 		$inventoryManager = new InventoryManager();
 		
@@ -84,18 +84,28 @@ class AdminInventoryProcessing {
 									. $this->messages['error']['input2']);
 		}
 	try {
-		$inventoryManager->editUser($old_id, $id, $purchase, $exemplar);
+		$inventoryManager->editInv($old_id, $id, $purchase, $exemplar);
 	} catch (Exception $e) {
 		$this->inventoryInterface->dieError($this->messages['error']['change'] . $e->getMessage());
 	}
+	$this->inventoryInterface->ShowChangeInvFin($id, $purchase, $exemplar);
+	
 	}
-	/**
-	 * 
-	 * @var unknown_type
-	 */
+	
+	function DeleteConfirmation($id) {
+		$this->inventoryInterface->ShowDeleteConfirmation($id);
+	}
 
-	function deleteEntry($id) {
-		echo 'Whats up?';
+	function DeleteEntry($id) {
+		require_once PATH_ACCESS . '/InventoryManager.php';
+		$inventoryManager = new InventoryManager();
+		
+		try {
+			$inventoryManager->delEntry($id);
+		} catch (Exception $e) {
+			$this->inventoryInterface->dieError($this->messages['error']['delete'] . $e->getMessage());
+		}
+		$this->inventoryInterface->ShowDeleteFin();
 	}
 	
 	var $messages = array();

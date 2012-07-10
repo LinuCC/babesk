@@ -31,6 +31,22 @@ class AdminInventoryInterface extends AdminInterface{
 		$this->smarty->assign('invdata', $invdata);
 		$this->smarty->display($this->tplFilePath.'change_inv.tpl');
 	}
+	
+	function ShowChangeInvFin($id, $purchase, $exemplar) {
+		$this->smarty->assign('id', $id);
+		$this->smarty->assign('purchase', $purchase);
+		$this->smarty->assign('exemplar', $exemplar);
+		$this->smarty->display($this->tplFilePath.'change_inv_fin.tpl');
+	}
+	
+	function ShowDeleteConfirmation($id) {
+		$this->smarty->assign('id', $id);
+		$this->smarty->display($this->tplFilePath.'deletion_confirm.tpl');
+	}
+	
+	function ShowDeleteFin() {
+		$this->smarty->display($this->tplFilePath.'deletion_finished.tpl');
+	}
 	/**
 	 * The Path to the Smarty-Parent-Templatefile
 	 */

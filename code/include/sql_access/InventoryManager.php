@@ -41,7 +41,7 @@ class InventoryManager extends TableManager{
 		$bookmanager = new BookManager;
 		require_once PATH_ACCESS . '/dbconnect.php';
 		foreach ($inventory as &$inventor) {
-			$bookinfos[] = $bookmanager->getBookDataById($inventor['id']);
+			$bookinfos[] = $bookmanager->getBookDataById($inventor['book_id']);
 		}
 		$counter = 0;
 		foreach ($bookinfos as &$bookinfo) {
@@ -69,12 +69,12 @@ class InventoryManager extends TableManager{
 		return $res_array;
 	}
 	
-	function editUser($old_id, $id, $purchase, $exemplar){
-		var_dump($old_id);
-		var_dump($id);
-		var_dump($purchase);
-		var_dump($exemplar);
+	function editInv($old_id, $id, $purchase, $exemplar){
 		parent::alterEntry($old_id, 'id', $id, 'year_of_purchase', $purchase, 'exemplar', $exemplar);
+	}
+	
+	function deleteInv($id) {
+		;
 	}
 }
 ?>
