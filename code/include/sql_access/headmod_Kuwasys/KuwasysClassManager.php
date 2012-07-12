@@ -47,6 +47,11 @@ class KuwasysClassManager extends TableManager {
 			$class = $this->searchEntry('ID =' . $ID);
 			return $class;
 		}
+		
+		public function getLastClassID () {
+			$lastID = $this->getLastInsertedID();
+			return $lastID;
+		}
 		////////////////////////////////////////////////////////////////////////////////
 		//Implementations
 		////////////////////////////////////////////////////////////////////////////////

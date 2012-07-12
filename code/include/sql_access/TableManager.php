@@ -363,6 +363,28 @@ class TableManager {
 			throw new MySQLVoidDataException('MySQL returned no data for last autoincrementID');
 		return $nextID['Auto_increment'];
 	}
+	
+	/**
+	 * returns the ID of the last inserted Object (only if using Auto_increment either in SQL or manually. If an
+	 * entry with an ID lower than the highest ID is added, this function will not work properly for this entry.
+	 * 
+	 * @param string $idKeyName The name if the ID-Key. If nothing given, the function will assume the name "ID"
+	 */
+	function getLastInsertedID ($idKeyName = 'ID') {
+		
+		$query = sql_prev_inj(sprintf('SELECT MAX(%s) AS LastID FROM %s', $idKeyName, $this->tablename));
+		$result = $this->db->query($query);
+		
+		if(!$result) {
+			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error);
+		}
+		$valueRes = $result->fetch_assoc();
+		$lastID = $valueRes ['LastID'];
+		if(!$lastID || $lastID == '') {
+			throw new MySQLVoidDataException('MySQL returned no data for ID of last row added');
+		}
+		return $lastID;
+	}
 
 	/**
 	 * Contains the MySQL-tablename

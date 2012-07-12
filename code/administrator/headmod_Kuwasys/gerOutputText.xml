@@ -36,6 +36,14 @@
 			<errorWrongInput>Sie haben den Wert im Feld "%s" nicht richtig eingegeben!</errorWrongInput>
 			<errorNoClasses>Es sind keine Kurse vorhanden</errorNoClasses>
 			<errorFetchClassesFromDatabase>Konnte die Kurse nicht von der Datenbank abrufen: %s</errorFetchClassesFromDatabase>
+			<errorNoSchoolYears>Es sind keine Schuljahre vorhanden! Bitte fügen sie zuerst Schuljahre hinzu.</errorNoSchoolYears>
+			<errorFetchSchoolYears>Ein Fehler ist beim abrufen der SchuljahresDaten aufgetreten.</errorFetchSchoolYears>
+			<errorFetchLastID>Ein Fehler ist beim Abrufen der Daten des letzten hinzugefügten Kurses aufgetreten.</errorFetchLastID>
+			<errorLinkSchoolYear>Ein Fehler ist beim verlinken des Kurses mit dem Schuljahr aufgetreten. 
+			    Bitte bearbeiten sie den Kurs nochmal und wählen sie das korrekte Schuljahr aus, um den Fehler zu beheben.</errorLinkSchoolYear>
+			<errorInputSchoolYear>Ein falsches Schuljahr wurde eingegeben!</errorInputSchoolYear>
+			<errorMissSchoolYear>Dieses Schuljahr ist nicht vorhanden!</errorMissSchoolYear>
+			<errorFetchSchoolYear>Das Schuljahr konnte nicht von der Datenbank abgerufen werden</errorFetchSchoolYear>
 			<formLabel>Name des Kurses</formLabel>
 			<formMaxRegistration>Maximale Registrierungen</formMaxRegistration>
 			<formAddClassSubmit>Den Kurs hinzufügen</formAddClassSubmit>
@@ -44,6 +52,8 @@
 			<confirmDeleteClass>Wollen sie den Kurs "%s" wirklich löschen?</confirmDeleteClass>
 			<confirmDeleteClassYes>JA, ich möchte den Kurs löschen</confirmDeleteClassYes>
 			<confirmDeleteClassNo>NEIN, ich möchte den Kurs NICHT löschen</confirmDeleteClassNo>
+			<warningNoJointToSchoolyearFound>Warnung: Die Klasse gehörte nicht zu einem Schuljahr.</warningNoJointToSchoolyearFound>
+			<errorDeleteJointSchoolyear>Die Verbindung zum Schuljahr konnte nicht gelöscht werden!</errorDeleteJointSchoolyear>
 			<deleteClassNotConfirmed>Der Kurs wurde nicht gelöscht. </deleteClassNotConfirmed>
 			<errorDeleteClass>Der Kurs konnte nicht gelöscht werden!</errorDeleteClass>
 			<finishedDeleteClass>Der Kurs wurde erfolgreich gelöscht.</finishedDeleteClass>
@@ -51,6 +61,10 @@
 			<errorFetchClass>Konnte den Kurs nicht von der Datenbank abrufen!</errorFetchClass>
 			<errorChangeClass>Konnte den Kurs nicht verändern.</errorChangeClass>
 			<finishedChangeClass>Der Kurs wurde erfolgreich verändert.</finishedChangeClass>
+			<errorNoLinkSchoolYear>Der Kurs mit der ID "%s" gehört zu keinem Schuljahr!</errorNoLinkSchoolYear>
+			<errorNoSchoolYearInLink>Das verlinkte Schuljahr ist nicht vorhanden.</errorNoSchoolYearInLink>
+			<errorFetchLinkSchoolYear>Ein Fehler ist beim Abrufen des Links zum Schuljahr aufgetreten!</errorFetchLinkSchoolYear>
+			<errorChangeLinkSchoolYear>Ein Fehler ist beim Verändern des Schuljahres des Kurses aufgetreten!</errorChangeLinkSchoolYear>
 		</text>
 	</module>
 	<module>
@@ -123,8 +137,8 @@
 			<errorNoSchoolYears>Es sind keine Schuljahre vorhanden!</errorNoSchoolYears>
 			<errorFetchSchoolYears>Die Schuljahre konnten nicht von der Datenbank abgerufen werden!</errorFetchSchoolYears>
 			<confirmActivateSchoolYear>Wollen sie das Schuljahr "%s" wirklich aktivieren? Das bisher aktivierte Schuljahr wird damit deaktiviert.</confirmActivateSchoolYear>
-			<confirmActivateSchoolYearConfirmed>JA, ich will dieses Schuljahr aktivieren</confirmActivateSchoolYearConfirmed>
-			<confirmActivateSchoolYearNotConfirmed>NEIN, ich will dieses Schuljahr NICHT aktivieren</confirmActivateSchoolYearNotConfirmed>
+			<confirmActivateSchoolYearConfirmed>JA, ich möchte dieses Schuljahr aktivieren</confirmActivateSchoolYearConfirmed>
+			<confirmActivateSchoolYearNotConfirmed>NEIN, ich möchte dieses Schuljahr NICHT aktivieren</confirmActivateSchoolYearNotConfirmed>
 			<finishedActivateSchoolYear>Das Schuljahr wurde erfolgreich aktiviert.</finishedActivateSchoolYear>
 			<notActivateSchoolYear>Das Schuljahr wurde nicht aktiviert.</notActivateSchoolYear>
 			<errorFetchSchoolYear>Das Schuljahr konnte nicht von der Datenbank abgerufen werden!</errorFetchSchoolYear>

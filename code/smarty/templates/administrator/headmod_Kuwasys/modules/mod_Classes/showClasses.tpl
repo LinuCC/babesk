@@ -9,6 +9,7 @@
 			<th align='center'>Name</th>
 			<th align='center'>Registrierungen</th>
 			<th align='center'>Maximale Registrierungen</th>
+			<th align='center'>Schuljahr</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -18,6 +19,7 @@
 			<td align="center">{$class.label}</td>
 			<td align="center">Noch nicht implementiert!</td>
 			<td align="center">{$class.maxRegistration}</td>
+			<td align="center">{$class.schoolYearLabel}</td>
 			<td align="center" bgcolor='#FFD99'>
 			<form action="index.php?section=Kuwasys|Classes&action=changeClass&ID={$class.ID}" method="post"><input type='submit' value='bearbeiten'></form>
 			<form action="index.php?section=Kuwasys|Classes&action=deleteClass&ID={$class.ID}" method="post"><input type='submit' value='löschen'></form>
