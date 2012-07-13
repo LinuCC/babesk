@@ -348,6 +348,27 @@ class TableManager {
 			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error);
 		}
 	}
+	
+	/**
+	 * This function deletes all entries of the table with the value $value of the key $key
+	 * It does NOT validate the Parameters $keyName and $value!
+	 * @param string $keyName
+	 * @param string $value
+	 */
+	public function deleteAllEntriesWithValueOfKey($keyName, $value) {
+		
+		if(!isset($keyName, $value) || $value == '' || $keyName == '') {
+			throw new UnexpectedValueException('Wrong Parameter of the Function ' . __METHOD__ . '!');
+		}
+		
+		$query = sql_prev_inj(sprintf('DELETE FROM %s WHERE %s="%s";', $this->tablename, $keyName, $value));
+		$result = $this->db->query($query);
+		
+		if(!$result) {
+			throw new MySQLConnectionException(DQ_QUERY_ERROR . $this->db->error);
+		}
+		
+	}
 
 	/**
 	 * returns the ID of the next object that would be added (MySQL's Autoincrement)

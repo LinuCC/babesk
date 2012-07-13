@@ -2,7 +2,12 @@
 
 <script type="text/javascript" src="../smarty/templates/administrator/headmod_Kuwasys/modules/mod_Users/changeUser.js">
 </script>
-
+{$userHasGrade = false}
+{foreach $grades as $grade}
+	{if $user.gradeIDSelected == $grade.ID}
+		{$userHasGrade = true}
+	{/if}
+{/foreach}
 <style type='text/css'  media='all'>
 fieldset {
 	border: 1px solid #000000;
@@ -23,6 +28,19 @@ fieldset {
 	<label>Passwort wiederholen: <input id='pwRep' type='password' name='passwordRepeat'></label>
 	</fieldset><br><br>
 	<!--  -->
+	<label>Klasse:
+		<select name='grade' size='1'>
+			<option value='NoGrade' {if (!$userHasGrade)}selected='selected'{/if}>==Keine Klasse==</option>
+		{foreach $grades as $grade}
+			<option 
+				value='{$grade.ID}' 
+				{if $user.gradeIDSelected == $grade.ID}
+					selected='selected'
+				{/if}>
+				{$grade.gradeValue} - {$grade.label}
+			</option>
+		{/foreach}
+	</select><br><br>
 	<label>Email-Adresse: <input type='text' value="{$user.email}" name='email'></label><br><br>
 	<label>Telefonnummer: <input type='text' value="{$user.telephone}" name='telephone'></label><br><br>
 	<input type='submit' value='Absenden'>

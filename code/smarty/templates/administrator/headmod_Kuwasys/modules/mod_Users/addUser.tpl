@@ -24,6 +24,17 @@ input.moduleFormulars {
 	<label>Email-Adresse:<input type='text' name='email' class='moduleFormulars'></label> <br><br>
 	<label>Telefonnummer:<input type='text' name='telephone' class='moduleFormulars'></label> <br><br>
 	<label>Geburtstag:{html_select_date start_year="-100"} <br><br>
+	<label>Klasse:
+		<select name='grade' size='1'>
+			<option value='NoGrade' selected='selected'>==Keine Klasse==</option>
+		{foreach $grades as $grade}
+			<option 
+				value='{$grade.ID}'> 
+				{$grade.gradeValue} - {$grade.label}
+			</option>
+		{/foreach}
+	</select>
+	</label>
 	<input type='submit' value='Hinzufügen'>
 </form>
 </div>

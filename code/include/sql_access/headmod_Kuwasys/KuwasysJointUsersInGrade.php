@@ -22,8 +22,33 @@ class KuwasysJointUsersInGrade extends TableManager {
 		////////////////////////////////////////////////////////////////////////////////
 		//Methods
 		////////////////////////////////////////////////////////////////////////////////
+		public function addJoint ($userID, $gradeID) {
+			$this->addEntry('UserID', $userID, 'GradeID', $gradeID);
+		}
 		
-		////////////////////////////////////////////////////////////////////////////////
+		public function getAllJoints () {
+			
+			$joints = $this->getTableData();
+			return $joints;
+		}
+		
+		public function deleteJoint ($ID) {
+			
+			$this->delEntry($ID);
+		}
+		
+		public function deleteJointsByUserId ($userID) {
+			
+			$this->deleteAllEntriesWithValueOfKey('UserID', $userID);
+		}
+		
+		public function getJointByUserId ($userID) {
+			
+			$joint = $this->searchEntry('UserID = ' . $userID);
+			return $joint;
+		}
+		
+ 		////////////////////////////////////////////////////////////////////////////////
 		//Implementations
 		////////////////////////////////////////////////////////////////////////////////
 		

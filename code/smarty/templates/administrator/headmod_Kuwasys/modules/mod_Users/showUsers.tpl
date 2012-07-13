@@ -20,6 +20,7 @@
 			<th align='center'>Email-Adresse</th>
 			<th align='center'>Telefonnummer</th>
 			<th align='center'>letzter Login</th>
+			<th align='center'>In Klasse</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -33,6 +34,7 @@
 			<td align="center">{$user.email}</td>
 			<td align="center">{$user.telephone}</td>
 			<td align="center">{$user.last_login}</td>
+			<td align="center">{$user.gradeLabel}</td>
 			<td align="center" bgcolor='#FFD99'>
 			<form action="index.php?section=Kuwasys|Users&action=changeUser&ID={$user.ID}" method="post"><input type='submit' value='bearbeiten'></form>
 			<form action="index.php?section=Kuwasys|Users&action=deleteUser&ID={$user.ID}" method="post"><input type='submit' value='löschen'></form>

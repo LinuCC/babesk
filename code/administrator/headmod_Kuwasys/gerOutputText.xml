@@ -3,11 +3,7 @@
 	<module>
 		<name>Users</name>
 		<text>
-			<actionValueWrong>Der Wert der Get-Variable Action ist falsch! Möglicherweise wurde diese Funktion noch nicht implementiert.</actionValueWrong>
-			<errorAddUserConnectDatabase>Der Benutzer konnte nicht hinzugefügt werden, da nicht zu der Datenbank verbunden werden konnte.</errorAddUserConnectDatabase>
-			<errorAddUser>Der Benutzer konnte nicht hinzugefügt werden: %s</errorAddUser>
-			<errorFetchAllUsers>Konnte die Benutzer nicht von der Datenbank abrufen!</errorFetchAllUsers>
-			<errorConnectDatabase>Konnte nicht zur MySQL-Datenbank verbinden.</errorConnectDatabase>
+		    <!-- FormNames -->
 			<formName>Name</formName>
 			<formUsername>Benutzername</formUsername>
 			<formForename>Vorname</formForename>
@@ -15,19 +11,36 @@
 			<formPasswordRepeat>wiederholtes Passwort</formPasswordRepeat>
 			<formTelephone>Telefon</formTelephone>
 			<formEmail>Email-Adresse</formEmail>
+			<!-- Other FormStuff -->
 			<formWrongInput>Falsche Eingabe des Feldes "%s"!</formWrongInput>
 			<formWrongPasswordRepetition>Das Passwort stimmt nicht mit der Wiederholung überein!</formWrongPasswordRepetition>
-			<finishedAddUser>Der Benutzer %s %s wurde erfolgreich hinzugefügt.</finishedAddUser>
+			<!-- ErrorMessages -->
+			<actionValueWrong>Der Wert der Get-Variable Action ist falsch! Möglicherweise wurde diese Funktion noch nicht implementiert.</actionValueWrong>
+			<errorAddUserConnectDatabase>Der Benutzer konnte nicht hinzugefügt werden, da nicht zu der Datenbank verbunden werden konnte.</errorAddUserConnectDatabase>
+			<errorAddUser>Der Benutzer konnte nicht hinzugefügt werden: %s</errorAddUser>
+			<errorFetchAllUsers>Konnte die Benutzer nicht von der Datenbank abrufen!</errorFetchAllUsers>
+			<errorConnectDatabase>Konnte nicht zur MySQL-Datenbank verbinden.</errorConnectDatabase>
 			<errorNoUsers>Es konnten keine Benutzer angezeigt werden, da die Datenbank leer ist und somit keine Benutzer vorhanden sind.</errorNoUsers>
+			<errorGetUser>Die Informationen des Benutzers konnten nicht abgerufen werden.</errorGetUser>
+			<errorDeleteUser>Konnte den Benutzer nicht löschen: %s</errorDeleteUser>
+			<errorNoGrades>Es sind keine Klassen vorhanden</errorNoGrades>
+			<errorFetchGrades>Ein Fehler ist beim Abrufen von Klassen aufgetreten.</errorFetchGrades>
+			<errorFetchGrade>Ein Fehler ist beim Abrufen der Klasse aufgetreten.</errorFetchGrade>
+			<errorFetchJointUsersInGrade>Ein Fehler ist beim Abrufen der Daten zum Verlinken von Schülern und Klassen aufgetreten! Dieser Schüler gehört womöglich zu keiner Klasse.</errorFetchJointUsersInGrade>
+			<errorAddJointUsersInGrade>Ein Fehler ist beim Verlinken des Schülers mit der Klasse aufgetreten. Sie müssen den Schüler womöglich nochmal bearbeiten.</errorAddJointUsersInGrade>
+			<errorDeleteJointUsersInGrade>Die Verbindung zwischen dem Schüler und der Klasse konnte nicht gelöscht werden! Wenn der Schüler keiner Klasse zugewiesen war, können sie diese Warnung ignorieren.</errorDeleteJointUsersInGrade>
+			<errorNoJointUsersInGradeToDelete>Die Verbindung zwischen dem Schüler und der Klasse konnte nicht gelöscht werden weil die Verbindung nicht existiert.</errorNoJointUsersInGradeToDelete>
+			<errorFetchJointUsersInGrade>Ein Fehler ist beim Abrufen der Verlinkung zwischen dem Schüler und der Klasse aufgetreten!</errorFetchJointUsersInGrade>
+			<!-- Other stuff -->
+			<warningNoJointsUsersInGrade>Es existieren keine Links zwischen Schülern und Klassen!</warningNoJointsUsersInGrade>
+			<finishedAddUser>Der Benutzer %s %s wurde erfolgreich hinzugefügt.</finishedAddUser>
 			<confirmDeleteUser>Wollen Sie wirklich den Benutzer %s %s löschen?</confirmDeleteUser>
 			<confirmDeleteUserYes>JA, ich möchte den Benutzer wirklich löschen</confirmDeleteUserYes>
 			<confirmDeleteUserNo>NEIN, ich möchte den Benutzer NICHT löschen</confirmDeleteUserNo>
 			<deleteUserNotComfirmed>Der Benutzer wurde nicht gelöscht.</deleteUserNotComfirmed>
-			<errorDeleteUser>Konnte den Benutzer nicht löschen: %s</errorDeleteUser>
 			<finDeleteUser>Der Benutzer wurde erfolgreich gelöscht.</finDeleteUser>
-			<errorGetUser>Die Informationen des Benutzers konnten nicht abgerufen werden.</errorGetUser>
 			<finChangeUser>Der Benutzer wurde erfolgreich geändert.</finChangeUser>
-			</text>
+		</text>
 	</module>
 	<module>
 		<name>Classes</name>
