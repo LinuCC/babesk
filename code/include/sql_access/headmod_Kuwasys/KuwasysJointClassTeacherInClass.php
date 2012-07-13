@@ -12,7 +12,7 @@ class KuwasysJointClassTeacherInClass extends TableManager {
 		//Constructor
 		////////////////////////////////////////////////////////////////////////////////
 		public function __construct($interface = NULL) {
-			parent::__construct(V);
+			parent::__construct('jointClassTeacherInClass');
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////
@@ -22,6 +22,18 @@ class KuwasysJointClassTeacherInClass extends TableManager {
 		////////////////////////////////////////////////////////////////////////////////
 		//Methods
 		////////////////////////////////////////////////////////////////////////////////
+		public function addJoint ($classTeacherID, $classID) {
+			$this->addEntry('ClassTeacherID', $classTeacherID, 'classID', $classID);
+		}
+		
+		public function getAllJoints () {
+			$joints = $this->getTableData();
+			return $joints;
+		}
+		
+		public function deleteJoint ($ID) {
+			$this->delEntry($ID);
+		}
 		
 		////////////////////////////////////////////////////////////////////////////////
 		//Implementations

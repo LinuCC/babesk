@@ -48,6 +48,11 @@ class KuwasysClassTeacherManager extends TableManager {
 			$classTeacher = parent::searchEntry('ID=' . $ID);
 			return $classTeacher;
 		}
+		
+		public function getLastAddedId () {
+			$lastID = parent::getLastInsertedID();
+			return $lastID;
+		}
 		////////////////////////////////////////////////////////////////////////////////
 		//Implementations
 		////////////////////////////////////////////////////////////////////////////////

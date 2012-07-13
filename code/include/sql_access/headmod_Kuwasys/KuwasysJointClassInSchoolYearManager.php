@@ -49,6 +49,11 @@ class KuwasysJointClassInSchoolYearManager extends TableManager {
 		$entry = parent::searchEntry('ClassID=' . $classID);
 		parent::alterEntry($entry ['ID'], 'SchoolYearID', $schoolYearId);
 	}
+	
+	public function getAllJoints () {
+		$joints = parent::getTableData ();
+		return $joints;
+	}
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations

@@ -121,6 +121,21 @@
 			<changeClassTeacherSubmit>Daten verändern</changeClassTeacherSubmit>
 			<errorChangeClassTeacher>Der Kursleiter konnte nicht verändert werden.</errorChangeClassTeacher>
 			<finishedChangeClassTeacher>Der Kursleiter wurde erfolgreich verändert.</finishedChangeClassTeacher>
+			<errorFetchClasses>Ein Fehler ist beim Abrufen der Kurse aufgetreten.</errorFetchClasses>
+			<warningNoClasses>Es sind keine Klassen vorhanden.</warningNoClasses>
+			<errorNoActiveSchoolYear>Es ist kein aktives Schuljahr vorhanden.</errorNoActiveSchoolYear>
+			<errorFetchActiveSchoolYear>Ein Fehler ist beim Abrufen des aktuellen Schuljahres aufgetreten.</errorFetchActiveSchoolYear>
+			<errorNoLinksClassInSchoolYear>Keiner der Kurse ist einem Schuljahr zugeordnet</errorNoLinksClassInSchoolYear>
+			<errorFetchLinksClassInSchoolYear>Ein Fehler ist beim Abrufen der Beziehungen zwischen Kursen und Schuljahren aufgetreten.</errorFetchLinksClassInSchoolYear>
+			<warningClassNotAddedToClassTeacher>Der Kursleiter wurde zu keinem Kurs hinzugefügt.</warningClassNotAddedToClassTeacher>
+			<errorFetchLastAddedClassTeacherID>Ein Fehler ist beim Abrufen des zuletzt hinzugefügten Klassenlehrers aufgetreten. Er konnte leider nicht zu einem Kurs verlinkt werden.</errorFetchLastAddedClassTeacherID>
+			<warningNoClassTeacherInClassLinks>Warnung: Der / die Kursleiter ist / sind keinem Kurs zugewiesen</warningNoClassTeacherInClassLinks>
+			<errorFetchClassTeacherInClassLinks>Ein Fehler ist beim abrufen der Verlinkungen zwischen Kursleitern und Kursen aufgetreten.</errorFetchClassTeacherInClassLinks>
+			<warningDeleteJointMissing>Konnte eine Verbindung zwischen Kursleiter und Kurs nicht löschen weil sie nicht vorhanden ist!</warningDeleteJointMissing>
+			<warningDeleteJoint>Konnte eine Verbindung zwischen Kursleiter und Kurs aufgrund eines Verbindungsproblems zur Datenbank nicht löschen!</warningDeleteJoint>
+			<errorNoClassSelectedButMultipleOthersToo>Eine widersprüchliche Auswahl wurde getroffen; Bitte wählen sie keinen anderen Eintrag aus der Kursliste aus, wenn sie 'kein Kurs' selektiert haben. 
+			   </errorNoClassSelectedButMultipleOthersToo>
+			<errorAddClassTeacherToClassLink>Ein Fehler ist beim Verlinken des Kursleiters mit einem Kurs aufgetreten; Der Kursleiter wurde schon hinzugefügt. Bitte überprüfen sie die Daten.</errorAddClassTeacherToClassLink>
 		</text>
 	</module>
 	<module>

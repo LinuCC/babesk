@@ -28,35 +28,10 @@ class ClassTeacherInterface extends AdminInterface {
 		$this->smarty->display($this->tplFilePath . 'mainMenu.tpl');
 	}
 
-	public function displayAddClassTeacher () {
+	public function displayAddClassTeacher ($classes) {
 
-		$inputContainer = array(
-			array(
-				'name'			 => 'forename',
-				'displayName'	 => $this->languageManager->getText('formForename'),
-				'type'			 => 'text',
-			),
-			array(
-				'name'			 => 'name',
-				'displayName'	 => $this->languageManager->getText('formName'),
-				'type'			 => 'text',
-			),
-			array(
-				'name'			 => 'address',
-				'displayName'	 => $this->languageManager->getText('formAddress'),
-				'type'			 => 'text',
-			),
-			array(
-				'name'			 => 'telephone',
-				'displayName'	 => $this->languageManager->getText('formTelephone'),
-				'type'			 => 'text',
-			),
-		);
-		$actionString = 'addClassTeacher';
-		$submitString = $this->languageManager->getText('formAddClassTeacherSubmit');
-		$headString = $this->languageManager->getText('formAddClassTeacherHead');
-
-		parent::generalForm($headString, $this->sectionString, $actionString, $inputContainer, $submitString);
+		$this->smarty->assign('classes', $classes);
+		$this->smarty->display($this->tplFilePath . 'addClassTeacher.tpl');
 	}
 
 	public function displayShowClassTeacher ($classTeachers) {
@@ -76,39 +51,11 @@ class ClassTeacherInterface extends AdminInterface {
 			$notConfirmedString);
 	}
 
-	public function displayChangeClassTeacher ($classTeacher) {
-
-		$inputContainer = array(
-			array(
-				'name'			 => 'forename',
-				'displayName'	 => $this->languageManager->getText('formForename'),
-				'type'			 => 'text',
-				'value'			 => $classTeacher['forename'],
-			),
-			array(
-				'name'			 => 'name',
-				'displayName'	 => $this->languageManager->getText('formName'),
-				'type'			 => 'text',
-				'value'			 => $classTeacher['name'],
-			),
-			array(
-				'name'			 => 'address',
-				'displayName'	 => $this->languageManager->getText('formAddress'),
-				'type'			 => 'text',
-				'value'			 => $classTeacher['address'],
-			),
-			array(
-				'name'			 => 'telephone',
-				'displayName'	 => $this->languageManager->getText('formTelephone'),
-				'type'			 => 'text',
-				'value'			 => $classTeacher['telephone'],
-			),
-		);
+	public function displayChangeClassTeacher ($classTeacher, $classes) {
 		
-		$headString = $this->languageManager->getText('changeClassTeacherHead');
-		$submitString = $this->languageManager->getText('changeClassTeacherSubmit');
-		$actionString = 'changeClassTeacher&ID=' . $classTeacher ['ID'];
-		parent::generalForm($headString, $this->sectionString, $actionString, $inputContainer, $submitString);
+		$this->smarty->assign('classTeacher', $classTeacher);
+		$this->smarty->assign('classes', $classes);
+		$this->smarty->display($this->tplFilePath . 'changeClassTeacher.tpl');
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
