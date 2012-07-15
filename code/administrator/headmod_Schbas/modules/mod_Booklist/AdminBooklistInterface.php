@@ -1,9 +1,7 @@
 <?php
 require_once PATH_ADMIN.'/AdminInterface.php';
 /**
- * AdminUserInterface is to output the Interface
- * Enter description here ...
- * @author voelkerball
+ * @author Mirek Hancl
  *
  */
 class AdminBooklistInterface extends AdminInterface{
@@ -12,71 +10,36 @@ class AdminBooklistInterface extends AdminInterface{
 		
 		parent::__construct($mod_path);
 		
-		$this->MOD_HEADING = $this->tplFilePath.'mod_user_header.tpl';
-		$this->smarty->assign('UserParent', $this->MOD_HEADING);
+		$this->MOD_HEADING = $this->tplFilePath.'mod_booklist_header.tpl';
+		$this->smarty->assign('booklistParent', $this->MOD_HEADING);
 	}
 
-	function ShowSelectionFunctionality() {
-		$this->smarty->display($this->tplFilePath.'user_select.tpl');
+	function ShowSelectionFunctionality($arr_action) {
+		$this->smarty->assign('action', $arr_action);
+		$this->smarty->display($this->tplFilePath.'index.tpl');
 	}
 	
-	function ShowRegisterForm($ar_gid, $ar_g_names) {
-		$this->smarty->assign('gid', $ar_gid);
-		$this->smarty->assign('g_names', $ar_g_names);
-		$this->smarty->display($this->tplFilePath.'register.tpl');
+	function ShowBooklist($bookcodes) {
+		$this->smarty->assign('bookcodes', $bookcodes);
+		$this->smarty->display($this->tplFilePath.'show_booklist.tpl');
 	}
 	
-	function ShowCardidInput() {
-		$this->smarty->display($this->tplFilePath.'register_input_id.tpl');
+	function ShowChangeBook($bookdata) {
+		$this->smarty->assign('bookdata', $bookdata);
+		$this->smarty->display($this->tplFilePath.'change_book.tpl');
 	}
 	
-	function ShowRegisterFin($name, $forename) {
-		$this->smarty->assign('name', $name);
-		$this->smarty->assign('forename', $forename);
-		$this->smarty->display($this->tplFilePath.'register_finished.tpl');
-	}
-	
-	function ShowUsers($users) {
-		$this->smarty->assign('users', $users);
-		$this->smarty->display($this->tplFilePath.'show_users.tpl');
-	}
-	
-	function ShowRepeatRegister() {
-		///@todo: No Constant
-		die_error('<p><a href="index.php?section=user&action=1">Bitte wiederholen sie den Vorgang</a></p>');
-	}
-	
-	function ShowDeleteConfirmation($uid, $forename, $name) {
-		$this->smarty->assign('forename',$forename);
-		$this->smarty->assign('name',$name);
-		$this->smarty->assign('uid',$uid);
-		$this->smarty->display($this->tplFilePath.'deletion_confirm.tpl');
-	}
-	
-	function ShowDeleteFin() {
-		$this->smarty->display($this->tplFilePath.'deletion_finished.tpl');
-	}
-	
-	function ShowChangeUser($user, $ar_gid, $ar_g_names, $cardnumber) {
-		$this->smarty->assign('user', $user);
-		$this->smarty->assign('g_names', $ar_g_names);
-		$this->smarty->assign('cardnumber', $cardnumber);
-		$this->smarty->assign('gid', $ar_gid);
-	    
-		$this->smarty->display($this->tplFilePath.'change_user.tpl');
-		
-	}
-	function ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID, $locked,$soli) {
+	function ShowChangeBookFin($id, $subject, $class, $title, $author, $publisher, $isbn, $price, $bundle) {
 		$this->smarty->assign('id', $id);
-		$this->smarty->assign('name', $name);
-		$this->smarty->assign('forename', $forename);
-		$this->smarty->assign('username', $username);
-		$this->smarty->assign('birthday', $birthday);
-		$this->smarty->assign('credits', $credits);
-		$this->smarty->assign('gid', $GID);
-		$this->smarty->assign('locked', $locked);
-		$this->smarty->assign('soli',$soli);
-		$this->smarty->display($this->tplFilePath.'change_user_fin.tpl');
+		$this->smarty->assign('subject', $subject);
+		$this->smarty->assign('class', $class);
+		$this->smarty->assign('title', $title);
+		$this->smarty->assign('author', $author);
+		$this->smarty->assign('publisher', $publisher);
+		$this->smarty->assign('isbn', $isbn);
+		$this->smarty->assign('price', $price);
+		$this->smarty->assign('bundle', $bundle);
+		$this->smarty->display($this->tplFilePath.'change_book_fin.tpl');
 	}
 	
 	/**

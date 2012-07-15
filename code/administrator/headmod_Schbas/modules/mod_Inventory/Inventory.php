@@ -25,7 +25,8 @@ class Inventory extends Module {
 		$inventoryInterface = new AdminInventoryInterface($this->relPath);
 		$inventoryProcessing = new AdminInventoryProcessing($inventoryInterface);
 		
-		$action_arr = array('show_inventory' => 1,);
+		$action_arr = array('show_inventory' => 1,
+							'add_inventory' => 4);
 			
 			if ('POST' == $_SERVER['REQUEST_METHOD']) {
 			$action = $_GET['action'];
@@ -35,10 +36,10 @@ class Inventory extends Module {
 					break;
 				
 				case 2: //edit an entry
-					if (!isset ($_POST['id'], $_POST['purchase'], $_POST['exemplar'])){
+					if (!isset ($_POST['purchase'], $_POST['exemplar'])){
 						$inventoryProcessing->editInventory($_GET['ID']);
 					}else{
-						$inventoryProcessing->changeInventory($_GET['ID'], $_POST['id'], $_POST['purchase'], $_POST['exemplar']);
+						$inventoryProcessing->changeInventory($_GET['ID'], $_POST['purchase'], $_POST['exemplar']);
 					}
 					break;
 				
@@ -49,6 +50,13 @@ class Inventory extends Module {
 						$inventoryInterface->ShowSelectionFunctionality($action_arr);
 					} else {
 						$inventoryProcessing->DeleteConfirmation($_GET['ID']);
+					}
+					break;
+				case 4: //add an entry
+					if (!isset($_POST['barcode'])) {
+						$inventoryProcessing->AddEntry();
+					} else {
+						$inventoryProcessing->AddEntryFin($_POST['barcode']);
 					}
 					break;
 			}

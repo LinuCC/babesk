@@ -48,5 +48,27 @@ class BookManager extends TableManager{
 		return $res_array;
 	}
 	
+	/**
+	 * Gives the book ID from a given barcode
+	 */
+	function getBookIDByBarcode($barcode) {
+		require_once PATH_ACCESS . '/dbconnect.php';
+		try {
+			$barcode_exploded = explode(' ', $barcode);
+		} catch (Exception $e) {
+		}
+		
+		$query = sql_prev_inj(sprintf('subject = "%s" AND class = %s AND bundle = %s' , $barcode_exploded[0], $barcode_exploded[2], $barcode_exploded[3]));
+		//$result = $this->db->query($query);	
+		$result = parent::searchEntry($query);
+		return $result;
+	}
+	
+	/**
+	 * edit a book entry by given id
+	 */
+	function editBook($id, $subject, $class, $title, $author, $publisher, $isbn, $price, $bundle){
+		parent::alterEntry($id, 'subject', $subject, 'class', $class, 'title', $title, 'author', $author, 'publisher', $publisher, 'isbn', $isbn, 'price', $price, 'bundle', $bundle);
+	}
 }
 ?>

@@ -1,4 +1,4 @@
-<?php
+	<?php
 require_once PATH_ADMIN.'/AdminInterface.php';
 /**
  * AdminnventoryInterface is to output the Interface
@@ -47,6 +47,18 @@ class AdminInventoryInterface extends AdminInterface{
 	function ShowDeleteFin() {
 		$this->smarty->display($this->tplFilePath.'deletion_finished.tpl');
 	}
+	
+	function ShowAddEntry() {
+		$this->smarty->display($this->tplFilePath.'add_entry.tpl');
+	}
+	
+	function ShowAddEntryFin($book_info, $year_of_purchase,$exemplar) {
+		$this->smarty->assign('book_info', $book_info);
+		$this->smarty->assign('purchase', $year_of_purchase);
+		$this->smarty->assign('exemplar', $exemplar);
+		$this->smarty->display($this->tplFilePath.'add_entry_fin.tpl');
+	}
+	
 	/**
 	 * The Path to the Smarty-Parent-Templatefile
 	 */

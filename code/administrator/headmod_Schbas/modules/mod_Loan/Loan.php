@@ -2,7 +2,7 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 
-class Booklist extends Module {
+class Loan extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -19,11 +19,11 @@ class Booklist extends Module {
 		
 		defined('_AEXEC') or die('Access denied');
 		
-		require_once 'AdminBooklistInterface.php';
-		require_once 'AdminBooklistProcessing.php';
+		require_once 'AdminLoanInterface.php';
+		require_once 'AdminLoanProcessing.php';
 		
-		$BookInterface = new AdminBooklistInterface($this->relPath);
-		$BookProcessing = new AdminBooklistProcessing($BookInterface);
+		$LoanInterface = new AdminLoanInterface($this->relPath);
+		$LoanProcessing = new AdminLoanProcessing($LoanInterface);
 		
 		$action_arr = array('show_booklist' => 1,);
 		
@@ -45,7 +45,7 @@ class Booklist extends Module {
 					
 			}
 		} else {
-			$BookInterface->ShowSelectionFunctionality($action_arr);
+			$LoanInterface->ShowSelectionFunctionality($action_arr);
 		}
 	}
 }

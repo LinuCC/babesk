@@ -91,6 +91,11 @@
 				<name>Inventory</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Ausleihe</ger_name>
+				<name>Loan</name>
+				<active>true</active>
+			</module>
 		</head_module>
 	</administrator>
 	<web>

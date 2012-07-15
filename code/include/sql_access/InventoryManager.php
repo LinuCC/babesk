@@ -46,7 +46,7 @@ class InventoryManager extends TableManager{
 		$counter = 0;
 		foreach ($bookinfos as &$bookinfo) {
 			$bookcode[$counter]['id']=$inventory[$counter]['id'];
-			$bookcode[$counter]['code']=$bookinfo['subject'].' '.$inventory[$counter]['year_of_purchase'].' '.$bookinfo['class'].' '.$bookinfo['bundle'].'-'.$inventory[$counter]['exemplar'];
+			$bookcode[$counter]['code']=$bookinfo['subject'].' '.$inventory[$counter]['year_of_purchase'].' '.$bookinfo['class'].' '.$bookinfo['bundle'].' / '.$inventory[$counter]['exemplar'];
 			$counter++;
 		}
 		return $bookcode;
@@ -69,8 +69,8 @@ class InventoryManager extends TableManager{
 		return $res_array;
 	}
 	
-	function editInv($old_id, $id, $purchase, $exemplar){
-		parent::alterEntry($old_id, 'id', $id, 'year_of_purchase', $purchase, 'exemplar', $exemplar);
+	function editInv($id, $purchase, $exemplar){
+		parent::alterEntry($id, 'year_of_purchase', $purchase, 'exemplar', $exemplar);
 	}
 	
 	function deleteInv($id) {

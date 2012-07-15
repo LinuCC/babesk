@@ -4,8 +4,7 @@
 	method="post">
 	<fieldset>
 		<legend>Buchdaten</legend>
-		<label>ID des Exemplars:<input type="text" name="id" maxlength="10"
-			width="10" value={$invdata.id}></label><br> <br> 
+		<label>ID des Exemplars: {$invdata.id}</label><br> <br> 
 		<label>Fach: {$bookdata.subject}</label> <br> <br> 
 		<label>Klasse: {$bookdata.class}</label><br> <br> 
 		<label>Titel: {$bookdata.title}</label><br> <br> 
