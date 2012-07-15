@@ -13,12 +13,10 @@ class AdminLoanInterface extends AdminInterface{
 		$this->MOD_HEADING = $this->tplFilePath.'mod_loan_header.tpl';
 		$this->smarty->assign('loanParent', $this->MOD_HEADING);
 	}
-
-	function ShowSelectionFunctionality($arr_action) {
-		$this->smarty->assign('action', $arr_action);
-		$this->smarty->display($this->tplFilePath.'index.tpl');
-	}
 	
+	public function CardId() {
+		$this->smarty->display($this->tplFilePath . 'form.tpl');
+	}
 	/**
 	 * The Path to the Smarty-Parent-Templatefile
 	 */

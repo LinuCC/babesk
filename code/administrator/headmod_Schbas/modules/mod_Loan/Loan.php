@@ -24,29 +24,13 @@ class Loan extends Module {
 		
 		$LoanInterface = new AdminLoanInterface($this->relPath);
 		$LoanProcessing = new AdminLoanProcessing($LoanInterface);
-		
-		$action_arr = array('show_booklist' => 1,);
-		
-		if ('POST' == $_SERVER['REQUEST_METHOD']) {
-			$action = $_GET['action'];
-			switch ($action) {
-				case 1: //show booklist
-					$BookProcessing->ShowBooklist(false);
-				break;
-				case 2: //edit a book
-					if (!isset ($_POST['subject'], $_POST['class'],$_POST['title'],$_POST['author'],$_POST['publisher'],$_POST['isbn'],$_POST['price'],$_POST['bundle'])){
-						$BookProcessing->editBook($_GET['ID']);
-					}else{
-						$BookProcessing->changeBook($_GET['ID'],$_POST['subject'], $_POST['class'],$_POST['title'],$_POST['author'],$_POST['publisher'],$_POST['isbn'],$_POST['price'],$_POST['bundle']);
-					}
-					break;
-				break;
-				
-					
-			}
-		} else {
-			$LoanInterface->ShowSelectionFunctionality($action_arr);
+		if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['card_ID'])) {
+			$LoanProcessing->Loan($_POST['card_ID']);
 		}
+		else{
+			$LoanInterface->CardId();
+		}
+		
 	}
 }
 

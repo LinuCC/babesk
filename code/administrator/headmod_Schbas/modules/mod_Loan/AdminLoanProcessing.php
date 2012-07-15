@@ -1,47 +1,54 @@
 <?php
 class AdminLoanProcessing {
 	
-	
+
 	var $messages = array();
 	private $LoanInterface;
-	private $cardManager;
-	private $userManager;
+
 	protected $logs;	
 	
 	function __construct($LoanInterface) {
 
+		
+		require_once PATH_ACCESS . '/CardManager.php';
+		require_once PATH_ACCESS . '/UserManager.php';
+		
+		$this->cardManager = new CardManager();
+		$this->userManager = new UserManager();
 		$this->LoanInterface = $LoanInterface;
 		global $logger;
 		$this->logs = $logger;
-		$this->messages = array(
-				'error' => array('no_books' => 'Keine B&uuml;cher gefunden.',));
+		$this->msg = array('err_card_id' => 'Dies ist keine gültige Karten-ID ("%s")',
+				'err_get_user_by_card' => 'Anhand der Kartennummer konnte kein Benutzer gefunden werden.');
 	}
 	
-
+	/**
+	 * Ausleihtabelle anzeigen
+	 */
+	function Loan($card_id) {
+		if (!$this->cardManager->valid_card_ID($card_id))
+			$this->LoanInterface->dieError(sprintf($this->msg['err_card_id'], $card_id));
+		
+		$uid = $this->GetUser($card_id);
+		
+	}
 	
 	/**
-	 * Shows booklist
-	 * @param unknown_type $filter
+	 * Looks the user for the given CardID up, checks if the Card is locked and returns the UserID
+	 * @param string $card_id The ID of the Card
+	 * @return string UserID
 	 */
-	function ShowBooklist($filter) {
-	
-		require_once PATH_ACCESS . '/BookManager.php';
-		require_once PATH_ACCESS . '/CardManager.php';
-		require_once PATH_ACCESS . '/UserManager.php';
-	
-		$booklistManager = new BookManager();
-		$this->cardManager = new CardManager();
-		$this->userManager = new UserManager();
+	public function GetUser ($card_id) {
 	
 		try {
-			$booklist = $booklistManager->getBooklistSorted();
+			$uid = $this->cardManager->getUserID($card_id);
+			if ($this->userManager->checkAccount($uid)) {
+				$this->LoanInterface->CardLocked();
+			}
 		} catch (Exception $e) {
-			$this->logs
-			->log('ADMIN', 'MODERATE',
-					sprintf('Error while getting Data from MySQL:%s in %s', $e->getMessage(), __METHOD__));
-			$this->booklistInterface->dieError($this->messages['error']['get_data_failed']);
+			$this->LoanInterface->dieError($this->msg['err_get_user_by_card'] . ' Error:' . $e->getMessage());
 		}
-		$this->BookInterface->ShowBooklist($booklist);
+		return $uid;
 	}
 }
 
