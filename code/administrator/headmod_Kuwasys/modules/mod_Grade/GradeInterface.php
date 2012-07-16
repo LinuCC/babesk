@@ -28,24 +28,10 @@ class GradeInterface extends AdminInterface {
 		$this->smarty->display($this->tplFilePath . 'mainMenu.tpl');
 	}
 
-	public function displayAddGrade () {
-
-		$inputContainer = array(
-			array(
-				'name'			 => 'year',
-				'displayName'	 => $this->languageManager->getText('formYear'),
-				'type'			 => 'text',
-			),
-			array(
-				'name'			 => 'label',
-				'displayName'	 => $this->languageManager->getText('formLabel'),
-				'type'			 => 'text',
-			),
-		);
-		$submitString = $this->languageManager->getText('formAddGradeSubmit');
-		$headString = $this->languageManager->getText('formAddGradeHeader');
-
-		parent::generalForm($headString, $this->sectionString, 'addGrade', $inputContainer, $submitString);
+	public function displayAddGrade ($schoolyears) {
+		
+		$this->smarty->assign('schoolyears', $schoolyears);
+		$this->smarty->display($this->tplFilePath . 'addGrade.tpl');
 	}
 
 	public function displayShowGrades ($grades) {
@@ -64,27 +50,11 @@ class GradeInterface extends AdminInterface {
 			'deleteGradeConfirmationNo'));
 	}
 	
-	public function displayChangeGrade ($grade) {
+	public function displayChangeGrade ($grade, $schoolyears) {
 		
-		$inputContainer = array(
-				array(
-						'name'			 => 'year',
-						'displayName'	 => $this->languageManager->getText('formYear'),
-						'type'			 => 'text',
-						'value'			 => $grade['gradeValue'],
-				),
-				array(
-						'name'			 => 'label',
-						'displayName'	 => $this->languageManager->getText('formLabel'),
-						'type'			 => 'text',
-						'value'			 => $grade['label'],
-				),
-		);
-		$headString = $this->languageManager->getText('changeGradeHeader');
-		$actionString = 'changeGrade&ID=' . $grade['ID'];
-		$submitString = $this->languageManager->getText('changeGradeSubmit');
-		
-		parent::generalForm($headString, $this->sectionString, $actionString, $inputContainer, $submitString);
+		$this->smarty->assign('grade', $grade);
+		$this->smarty->assign('schoolyears', $schoolyears);
+		$this->smarty->display($this->tplFilePath . 'changeGrade.tpl');
 	}
 
 	////////////////////////////////////////////////////////////////////////////////

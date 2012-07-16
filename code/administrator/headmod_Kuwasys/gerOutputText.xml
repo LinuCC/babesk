@@ -114,6 +114,13 @@
 			<changeGradeSubmit>Klasse verändern</changeGradeSubmit>
 			<errorChangeGrade>Die Klasse konnte nicht verändert werden.</errorChangeGrade>
 			<finishedChangeGrade>Die Klasse wurde erfolgreich verändert.</finishedChangeGrade>
+			<errorNoSchoolYears>Es sind keine Schuljahre vorhanden, denen man die Klassen zuweisen könnte.</errorNoSchoolYears>
+			<errorFetchSchoolYears>Ein Fehler ist beim Abrufen der Schuljahre entstanden.</errorFetchSchoolYears>
+			<errorAddLinkGradeInSchoolyear>Ein Fehler ist beim hinzufügen der Klasse aufgetreten.</errorAddLinkGradeInSchoolyear>
+			<errorFetchSchoolyearForGrade>Ein Fehler ist beim Abrufen des Schuljahres für diese Klasse aufgetreten.</errorFetchSchoolyearForGrade>
+			<warningGradeNotLinkedToSchoolyear>Warnung: Die Klasse wurde bisher noch keinem Schuljahr zugeordnet.</warningGradeNotLinkedToSchoolyear>
+			<errorFetchJointGradeInSchoolyear>Die Verbindung zwischen Klasse und Schuljahr konnte nicht vun der Datenbank abgerufen werden.</errorFetchJointGradeInSchoolyear>
+			<errorDeleteJointGradeInSchoolyear>Konnte die Verbindung zwischen der Klasse und dem Schuljahr nicht löschen; möglicherweise ist sie nicht vorhanden</errorDeleteJointGradeInSchoolyear>
 		</text>
 	</module>
 	<module>

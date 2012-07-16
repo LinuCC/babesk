@@ -12,7 +12,7 @@ class KuwasysJointGradeInSchoolYear extends TableManager {
 		//Constructor
 		////////////////////////////////////////////////////////////////////////////////
 		public function __construct($interface = NULL) {
-			parent::__construct(V);
+			parent::__construct('jointGradeInSchoolYear');
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////
@@ -22,7 +22,35 @@ class KuwasysJointGradeInSchoolYear extends TableManager {
 		////////////////////////////////////////////////////////////////////////////////
 		//Methods
 		////////////////////////////////////////////////////////////////////////////////
+		public function addJoint ($gradeId, $schoolyearId) {
+			
+			$this->addEntry('GradeID', $gradeId, 'SchoolYearID', $schoolyearId);
+		}
 		
+		public function deleteJointByGradeId ($id) {
+			$this->deleteAllEntriesWithValueOfKey('GradeID', $id);
+		}
+		
+		public function deleteJoint ($id) {
+			
+			$this->delEntry($id);
+		}
+		
+		public function getAllJoints () {
+			$joints = $this->getTableData();
+			return $joints;
+		}
+		
+		public function getJointByGradeId ($gradeId) {
+			$joint = $this->searchEntry('GradeID=' . $gradeId);
+			return $joint;
+		}
+		
+		public function getSchoolyearIdOfGradeId ($gradeId) {
+			
+			$joint = $this->getJointByGradeId($gradeId);
+			return $joint ['SchoolYearID'];
+		}
 		////////////////////////////////////////////////////////////////////////////////
 		//Implementations
 		////////////////////////////////////////////////////////////////////////////////
