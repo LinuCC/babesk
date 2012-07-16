@@ -29,9 +29,10 @@ class UsersInterface extends AdminInterface {
 		$this->smarty->display($this->tplFilePath . 'mainMenu.tpl');
 	}
 	
-	public function showAddUser($grades) {
+	public function showAddUser($grades, $schoolYears) {
 		
 		$this->smarty->assign('grades', $grades);
+		$this->smarty->assign('schoolyears', $schoolYears);
 		$this->smarty->display($this->tplFilePath . 'addUser.tpl');
 	}
 	
@@ -41,10 +42,11 @@ class UsersInterface extends AdminInterface {
 		$this->smarty->display($this->tplFilePath . 'showUsers.tpl');
 	}
 	
-	public function showChangeUser ($userData, $grades) {
+	public function showChangeUser ($userData, $grades, $schoolyears) {
 		
 		$this->smarty->assign('user', $userData);
 		$this->smarty->assign('grades', $grades);
+		$this->smarty->assign('schoolyears', $schoolyears);
 		$this->smarty->assign('pathToJavascript', $this->tplFilePath . 'showUsers.js');
 		$this->smarty->display($this->tplFilePath . 'changeUser.tpl');
 	}

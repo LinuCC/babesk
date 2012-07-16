@@ -7,7 +7,7 @@ div.moduleFormulars {
 	margin:0 auto;
 }
 
-input.moduleFormulars {
+select, input.moduleFormulars {
 	float:right;
 }
 </style>
@@ -33,8 +33,18 @@ input.moduleFormulars {
 				{$grade.gradeValue} - {$grade.label}
 			</option>
 		{/foreach}
+	</select><br><br>
+	<label>Schuljahr:
+		<select name='schoolyear' size='1'>
+		{foreach $schoolyears as $schoolyear}
+			<option 
+				value='{$schoolyear.ID}' 
+				{if $schoolyear.active}selected='selected'{/if}>
+				{$schoolyear.label}
+			</option>
+		{/foreach}
 	</select>
-	</label>
+	</label><br><br>
 	<input type='submit' value='Hinzufügen'>
 </form>
 </div>

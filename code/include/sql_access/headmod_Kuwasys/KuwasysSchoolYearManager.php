@@ -91,6 +91,12 @@ class KuwasysSchoolYearManager extends TableManager {
 		
 		$this->delEntry($ID);
 	}
+	
+	public function getSchoolyearLabel ($schoolyearID) {
+		
+		$label = $this->getEntryValue($schoolyearID, 'label');
+		return $label;
+	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////

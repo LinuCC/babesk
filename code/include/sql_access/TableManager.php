@@ -261,6 +261,9 @@ class TableManager {
 		if (!isset($result_arr) || !count($result_arr)) {
 			throw new MySQLVoidDataException('MySQL returned void Data');
 		}
+		else if(count($result_arr) < 1) {
+			echo 'Warning: searchEntry found multiple entries, one expected. This means that either the Database has incorrect entries or the code is incorrect!';
+		}
 		$result = $result_arr[0];
 		return $result;
 	}

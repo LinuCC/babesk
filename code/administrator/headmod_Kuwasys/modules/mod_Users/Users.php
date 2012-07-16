@@ -6,6 +6,8 @@ require_once 'UsersInterface.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysGradeManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInGrade.php';
+require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInSchoolYear.php';
+require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
 
 /**
  * Main-Class for the Module Users
@@ -21,6 +23,8 @@ class Users extends Module {
 	private $_usersManager;
 	private $_jointUsersInGradeManager;
 	private $_gradeManager;
+	private $_schoolYearManager;
+	private $_jointUsersInSchoolYear;
 	/**
 	 * @var KuwasysLanguageManager
 	 */
@@ -71,7 +75,9 @@ class Users extends Module {
 		defined('_AEXEC') or die('Access denied');
 		$this->_usersManager = new KuwasysUsersManager();
 		$this->_gradeManager = new KuwasysGradeManager();
+		$this->_schoolYearManager = new KuwasysSchoolYearManager();
 		$this->_jointUsersInGradeManager = new KuwasysJointUsersInGrade();
+		$this->_jointUsersInSchoolYear = new KuwasysJointUsersInSchoolYear();
 		$this->_interface = new UsersInterface($this->relPath, $dataContainer->getSmarty());
 		$this->_languageManager = $dataContainer->getLanguageManager();
 		$this->_languageManager->setModule('Users');
@@ -90,6 +96,7 @@ class Users extends Module {
 			$this->checkAddUserInput();
 			$this->checkPasswordRepetition();
 			$this->addUserToDatabase();
+			$this->addJointUsersInSchoolYearByAddUser();
 			$userID = $this->_usersManager->getLastInsertedID();
 			$this->addJointUsersInGrade($userID, $_POST['grade']);
 			$this->_interface->dieMsg(sprintf($this->_languageManager->getText('finishedAddUser'), $_POST['forename'],
@@ -105,6 +112,7 @@ class Users extends Module {
 		if (isset($_POST['dialogConfirmed'])) {
 			$this->deleteUserFromDatabase();
 			$this->deleteAllJointsUsersInGradeOfUser($_GET['ID']);
+			$this->deleteJointUsersInSchoolYearByUserId($_GET['ID']);
 			$this->_interface->dieMsg($this->_languageManager->getText('finDeleteUser'));
 		}
 		else if (isset($_POST['dialogNotConfirmed'])) {
@@ -122,6 +130,7 @@ class Users extends Module {
 			$this->checkInputChangeUserData();
 			$this->ChangeUserDataToDatabase();
 			$this->changeJointUsersInGradeByUser();
+			$this->changeJointUsersInSchoolYearByChangeUser();
 			$this->_interface->dieMsg($this->_languageManager->getText('finChangeUser'));
 		}
 		else {
@@ -137,8 +146,10 @@ class Users extends Module {
 
 		$userData = $this->getUserData($_GET['ID']);
 		$userData = $this->setUpUserValueSelectedGrade($userData);
+		$userData = $this->setUpUserValueSelectedSchoolyear($userData);
 		$grades = $this->getAllGrades();
-		$this->_interface->showChangeUser($userData, $grades);
+		$schoolyears = $this->getAllSchoolYears();
+		$this->_interface->showChangeUser($userData, $grades, $schoolyears);
 	}
 
 	private function showDeleteUserConfirmation () {
@@ -164,7 +175,8 @@ class Users extends Module {
 	private function showAddUser () {
 
 		$grades = $this->getAllGrades();
-		$this->_interface->showAddUser($grades);
+		$schoolYears = $this->getAllSchoolYears();
+		$this->_interface->showAddUser($grades, $schoolYears);
 	}
 
 	/**-----------------------------------------------------------------------------
@@ -410,6 +422,171 @@ class Users extends Module {
 		$grade = $this->getGradeByGradeId($jointUsersInGrade['GradeID']);
 		$user['gradeIDSelected'] = $grade['ID'];
 		return $user;
+	}
+
+	/********************
+	 * KuwasysSchoolYearManager
+	 ********************/
+
+	private function getAllSchoolYears () {
+
+		try {
+			$schoolYears = $this->_schoolYearManager->getAllSchoolYears();
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorNoSchoolYears'));
+		}
+		catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorFetchSchoolYears'));
+		}
+		return $schoolYears;
+	}
+
+	private function getSchoolyearLabelOfSchoolyear ($schoolyearID) {
+
+		try {
+			$schoolyearLabel = $this->_schoolYearManager->getSchoolyearLabel ($schoolyearID);
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorFetchSchoolYearLabel'));
+		}
+		catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorNoSchoolYear'));
+		}
+		return $schoolyearLabel;
+	}
+	
+	private function getSchoolyearBySchoolyearId ($schoolyearID) {
+		
+		try {
+			$schoolyear = $this->_schoolYearManager->getSchoolYear($schoolyearID);
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorFetchSchoolYear'));
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorNoSchoolYear'));
+		}
+		return $schoolyear;
+	}
+
+	/********************
+	 * KuwasysJointUsersInSchoolYearManager
+	 ********************/
+
+	/**
+	 * this function adds a Link between an User and a Schoolyear to the Database using the
+	 * KuwasysJointUsersInSchoolYearManager class
+	 * @param string $userId
+	 * @param string $schoolyearId
+	 */
+	private function addJointUsersInSchoolYear ($userId, $schoolyearId) {
+
+		try {
+			$this->_jointUsersInSchoolYear->addJoint($userId, $schoolyearId);
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorAddLinkUsersInSchoolyear'));
+		}
+	}
+	
+	private function deleteJointUsersInSchoolYearByUserId ($userId) {
+		
+		try {
+			$this->_jointUsersInSchoolYear->deleteJointByUserId($userId);
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorDeleteJointUsersInSchoolYear'));
+		}
+	}
+	
+	private function getAllJointsUsersInSchoolyear () {
+		
+		try {
+			$joints = $this->_jointUsersInSchoolYear->getAllJoints();
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorNoSchoolYears'));
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorFetchSchoolYears'));
+		}
+		return $joints;
+	}
+
+	/**
+	 * searches the Table of links between user and schoolyear, and returns the the schoolyearID of the Element
+	 * that has the User-ID $userID
+	 * @param unknown_type $userID
+	 * @return unknown
+	 */
+	private function getSchoolyearIdOfUserId ($userID) {
+
+		try {
+			$schoolyearID = $this->_jointUsersInSchoolYear->getSchoolYearIdByUserId($userID);
+		} catch (MySQLVoidDataException $e) {
+			return;
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointUsersInSchoolYear'));
+		}
+		return $schoolyearID;
+	}
+	
+	private function setUpUserValueSelectedSchoolyear ($user) {
+	
+		$schoolyearId = $this->getSchoolyearIdOfUserId($user ['ID']);
+		if (!isset($schoolyearId)) {
+			return $user;
+		}
+		$user['schoolyearIdSelected'] = $schoolyearId;
+		return $user;
+	}
+
+	/**
+	 * This function adds a Link between Users and SchoolYear using the Parameters the addUser-Form returned
+	 */
+	private function addJointUsersInSchoolYearByAddUser () {
+
+		$userID = $this->_usersManager->getLastInsertedID();
+		$this->addJointUsersInSchoolYear($userID, $_POST['schoolyear']);
+	}
+	
+	/**
+	 * changes entries of the Table jointUsersInSchoolyear according to the values the User has given in the form changeUser
+	 */
+	private function changeJointUsersInSchoolYearByChangeUser () {
+		
+		$schoolyearBeforeId = $this->getSchoolyearIdOfUserId($_GET['ID']);
+		
+		if(!isset($_POST['schoolyear']) || $_POST['schoolyear'] == 0) {
+			$this->_interface->dieError($this->_languageManager->getText('errorInputJointUsersInSchoolYear'));
+		}
+		
+		if($_POST['schoolyear'] != $schoolyearBeforeId) {
+			try {
+				$this->deleteJointUsersInSchoolYearByUserId($_GET['ID']);
+			} catch (Exception $e) {
+				$this->_interface->showError($this->_languageManager->getText('errorDeleteJointUsersInSchoolYear'));
+			}
+			try {
+				$this->addJointUsersInSchoolYear($_GET['ID'], $_POST['schoolyear']);
+			} catch (Exception $e) {
+				$this->_interface->dieError($this->_languageManager->getText('errorAddLinkUsersInSchoolyear'));
+			}
+		}
+	}
+	
+	/**
+	 * adds a Schoolyear-Label to the User-Array to allow displaying the Schoolyear of the User in ShowUsers
+	 */
+	private function addSchoolyearLabelToUsers ($users) {
+	
+		$jointsUsersInSchoolyear = $this->get();
+		$grades = $this->getAllGrades();
+		foreach ($users as & $user) {
+			foreach ($jointsUsersInGrade as $joint) {
+				if ($joint['UserID'] == $user['ID']) {
+					foreach ($grades as $grade) {
+						if ($grade['ID'] == $joint['GradeID']) {
+							$user['gradeLabel'] = $grade['gradeValue'] . '-' . $grade['label'];
+						}
+					}
+				}
+			}
+		}
+		return $users;
 	}
 
 	/**-----------------------------------------------------------------------------

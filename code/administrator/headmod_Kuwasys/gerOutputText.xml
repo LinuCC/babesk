@@ -31,6 +31,15 @@
 			<errorDeleteJointUsersInGrade>Die Verbindung zwischen dem Schüler und der Klasse konnte nicht gelöscht werden! Wenn der Schüler keiner Klasse zugewiesen war, können sie diese Warnung ignorieren.</errorDeleteJointUsersInGrade>
 			<errorNoJointUsersInGradeToDelete>Die Verbindung zwischen dem Schüler und der Klasse konnte nicht gelöscht werden weil die Verbindung nicht existiert.</errorNoJointUsersInGradeToDelete>
 			<errorFetchJointUsersInGrade>Ein Fehler ist beim Abrufen der Verlinkung zwischen dem Schüler und der Klasse aufgetreten!</errorFetchJointUsersInGrade>
+			<errorNoSchoolYears>Es sind keine Schuljahre vorhanden!</errorNoSchoolYears>
+			<errorNoSchoolYear>Das gesuchte Schuljahr konnte nicht in der Datenbank gefunden werden.</errorNoSchoolYear>
+			<errorFetchSchoolYear>Ein Fehler ist beim Abrufen des Schuljahres von der Datenbank aufgetreten.</errorFetchSchoolYear>
+			<errorFetchSchoolYears>Die Schuljahre konnten nicht von der Datenbank abgerufen werden</errorFetchSchoolYears>
+			<errorAddLinkUsersInSchoolyear>Ein Fehler ist beim hinzufügen der Verbindung zwischen Schüler und Schuljahr aufgetreten.</errorAddLinkUsersInSchoolyear>
+			<errorFetchSchoolYearLabel>Ein Fehler ist beim Abrufen des Schuljahresnamens aufgetreten</errorFetchSchoolYearLabel>
+			<errorFetchJointUsersInSchoolYear>Ein Fehler ist beim Abrufen des Links zwischen Schüler und Schuljahr aufgetreten.</errorFetchJointUsersInSchoolYear>
+			<errorDeleteJointUsersInSchoolYear>Ein Fehler ist beim löschen der Verbindung zwischen Schüler und Schuljahr aufgetreten.</errorDeleteJointUsersInSchoolYear>
+			<errorInputJointUsersInSchoolYear>Bitte geben sie ein Schuljahr für den Benutzer ein.</errorInputJointUsersInSchoolYear>
 			<!-- Other stuff -->
 			<warningNoJointsUsersInGrade>Es existieren keine Links zwischen Schülern und Klassen!</warningNoJointsUsersInGrade>
 			<finishedAddUser>Der Benutzer %s %s wurde erfolgreich hinzugefügt.</finishedAddUser>

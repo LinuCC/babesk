@@ -12,7 +12,7 @@ class KuwasysJointUsersInSchoolYear extends TableManager {
 		//Constructor
 		////////////////////////////////////////////////////////////////////////////////
 		public function __construct($interface = NULL) {
-			parent::__construct(V);
+			parent::__construct('jointUsersInSchoolYear');
 		}
 		
 		////////////////////////////////////////////////////////////////////////////////
@@ -23,6 +23,27 @@ class KuwasysJointUsersInSchoolYear extends TableManager {
 		//Methods
 		////////////////////////////////////////////////////////////////////////////////
 		
+		public function addJoint ($UserID, $SchoolYearID) {
+			
+			$this->addEntry('UserID', $UserID, 'SchoolYearID', $SchoolYearID);
+		}
+		
+		public function deleteJointByUserId ($userId) {
+			
+			$this->deleteAllEntriesWithValueOfKey('UserID', $userId);
+		}
+		
+		public function getSchoolYearIdByUserId ($userID) {
+			
+			$jointId = $this->getIDByValue('UserID', $userID);
+			$schoolyearId = $this->getEntryValue($jointId, 'SchoolYearID');
+			return $schoolyearId;
+		}
+		
+		public function getAllJoints () {
+			$joints = $this->getTableData();
+			return $joints;
+		}
 		////////////////////////////////////////////////////////////////////////////////
 		//Implementations
 		////////////////////////////////////////////////////////////////////////////////

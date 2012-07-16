@@ -41,6 +41,17 @@ fieldset {
 			</option>
 		{/foreach}
 	</select><br><br>
+	<label>Schuljahr:
+		<select name='schoolyear' size='1'>
+		{if !isset($user.schoolyearIdSelected)}<option value='0' selected='selected'>==Keine Schuljahr==</option>{/if}
+		{foreach $schoolyears as $schoolyear}
+			<option 
+				value='{$schoolyear.ID}' 
+				{if $schoolyear.ID == $user.schoolyearIdSelected}selected='selected'{/if}>
+				{$schoolyear.label}
+			</option>
+		{/foreach}
+	</select><br><br>
 	<label>Email-Adresse: <input type='text' value="{$user.email}" name='email'></label><br><br>
 	<label>Telefonnummer: <input type='text' value="{$user.telephone}" name='telephone'></label><br><br>
 	<input type='submit' value='Absenden'>
