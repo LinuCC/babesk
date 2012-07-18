@@ -17,6 +17,11 @@ class AdminLoanInterface extends AdminInterface{
 	public function CardId() {
 		$this->smarty->display($this->tplFilePath . 'form.tpl');
 	}
+	
+	public function ShowLoanBooks($data) {
+		$this->smarty->assign('data', $data);
+		$this->smarty->display($this->tplFilePath . 'loanbooks.tpl');
+	}
 	/**
 	 * The Path to the Smarty-Parent-Templatefile
 	 */
