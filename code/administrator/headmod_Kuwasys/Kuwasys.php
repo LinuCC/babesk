@@ -34,6 +34,8 @@ class Kuwasys extends HeadModule {
 
 		$this->_languageManager = new KuwasysLanguageManager($dataContainer->getInterface());
 		
+		//$dataContainer->getInterface()->showMsg($this->_languageManager->getTextOfModule('alphaDisclaimer', 'Kuwasys'));
+		
 		$kuwasysDataContainer = new KuwasysDataContainer($dataContainer->getSmarty(), $dataContainer->getInterface(),
 			$this->_languageManager);
 		parent::executeModule($mod_name, $kuwasysDataContainer);

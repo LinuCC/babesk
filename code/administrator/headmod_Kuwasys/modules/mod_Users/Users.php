@@ -7,7 +7,9 @@ require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysGradeManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInGrade.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInSchoolYear.php';
+require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
+require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
 
 /**
  * Main-Class for the Module Users
@@ -25,6 +27,8 @@ class Users extends Module {
 	private $_gradeManager;
 	private $_schoolYearManager;
 	private $_jointUsersInSchoolYear;
+	private $_classManager;
+	private $_jointUsersInClass;
 	/**
 	 * @var KuwasysLanguageManager
 	 */
@@ -57,6 +61,12 @@ class Users extends Module {
 				case 'changeUser':
 					$this->changeUserData();
 					break;
+				case 'addUserToClass':
+					$this->addUserToClass();
+					break;
+				case 'showUserDetails':
+					$this->showUserDetails();
+					break;
 				default:
 					$this->_interface->dieError($this->_languageManager->getText('actionValueWrong'));
 			}
@@ -78,6 +88,8 @@ class Users extends Module {
 		$this->_schoolYearManager = new KuwasysSchoolYearManager();
 		$this->_jointUsersInGradeManager = new KuwasysJointUsersInGrade();
 		$this->_jointUsersInSchoolYear = new KuwasysJointUsersInSchoolYear();
+		$this->_classManager = new KuwasysClassManager();
+		$this->_jointUsersInClass = new KuwasysJointUsersInClass();
 		$this->_interface = new UsersInterface($this->relPath, $dataContainer->getSmarty());
 		$this->_languageManager = $dataContainer->getLanguageManager();
 		$this->_languageManager->setModule('Users');
@@ -138,6 +150,17 @@ class Users extends Module {
 		}
 	}
 
+	private function addUserToClass () {
+
+		if (isset($_POST['classId'], $_GET['ID'])) {
+			$this->addJointUsersInClass($_GET['ID'], $_POST['classId'], $_POST['classStatus']);
+			$this->_interface->dieMsg($this->_languageManager->getText('finAddUserToClass'));
+		}
+		else {
+			$this->showAddClassToUser();
+		}
+	}
+
 	/**-----------------------------------------------------------------------------
 	 * Functions for displaying forms and other stuff
 	 *----------------------------------------------------------------------------*/
@@ -177,6 +200,22 @@ class Users extends Module {
 		$grades = $this->getAllGrades();
 		$schoolYears = $this->getAllSchoolYears();
 		$this->_interface->showAddUser($grades, $schoolYears);
+	}
+
+	private function showAddClassToUser () {
+
+		$classes = $this->getAllClasses();
+		$user = $this->getUserData($_GET['ID']);
+		$this->_interface->showAddUserToClassDialog($user, $classes);
+	}
+
+	private function showUserDetails () {
+
+		$userId = $_GET['ID'];
+		$user = $this->getUserData ($userId);
+		$user = $this->addClassesToUser ($user);
+		$user = $this->addGradeLabelToSingleUser ($user);
+		$this->_interface->showUserDetails($user);
 	}
 
 	/**-----------------------------------------------------------------------------
@@ -399,6 +438,16 @@ class Users extends Module {
 		return $users;
 	}
 
+	private function addGradeLabelToSingleUser ($user) {
+
+		$jointUsersInGrade = $this->getJointUsersInGradeByUserId($user['ID']);
+		$grade = $this->getGradeByGradeId($jointUsersInGrade['GradeID']);
+		$user['gradeLabel'] = $grade['label'];
+		$user['gradeValue'] = $grade['gradeValue'];
+		$user['gradeId'] = $grade['ID'];
+		return $user;
+	}
+
 	private function getGradeByGradeId ($gradeID) {
 
 		try {
@@ -453,14 +502,15 @@ class Users extends Module {
 		}
 		return $schoolyearLabel;
 	}
-	
+
 	private function getSchoolyearBySchoolyearId ($schoolyearID) {
-		
+
 		try {
 			$schoolyear = $this->_schoolYearManager->getSchoolYear($schoolyearID);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorFetchSchoolYear'));
-		} catch (MySQLVoidDataException $e) {
+		}
+		catch (MySQLVoidDataException $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorNoSchoolYear'));
 		}
 		return $schoolyear;
@@ -484,23 +534,24 @@ class Users extends Module {
 			$this->_interface->dieError($this->_languageManager->getText('errorAddLinkUsersInSchoolyear'));
 		}
 	}
-	
+
 	private function deleteJointUsersInSchoolYearByUserId ($userId) {
-		
+
 		try {
 			$this->_jointUsersInSchoolYear->deleteJointByUserId($userId);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorDeleteJointUsersInSchoolYear'));
 		}
 	}
-	
+
 	private function getAllJointsUsersInSchoolyear () {
-		
+
 		try {
 			$joints = $this->_jointUsersInSchoolYear->getAllJoints();
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorNoSchoolYears'));
-		} catch (Exception $e) {
+		}
+		catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorFetchSchoolYears'));
 		}
 		return $joints;
@@ -518,15 +569,16 @@ class Users extends Module {
 			$schoolyearID = $this->_jointUsersInSchoolYear->getSchoolYearIdByUserId($userID);
 		} catch (MySQLVoidDataException $e) {
 			return;
-		} catch (Exception $e) {
+		}
+		catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointUsersInSchoolYear'));
 		}
 		return $schoolyearID;
 	}
-	
+
 	private function setUpUserValueSelectedSchoolyear ($user) {
-	
-		$schoolyearId = $this->getSchoolyearIdOfUserId($user ['ID']);
+
+		$schoolyearId = $this->getSchoolyearIdOfUserId($user['ID']);
 		if (!isset($schoolyearId)) {
 			return $user;
 		}
@@ -542,19 +594,19 @@ class Users extends Module {
 		$userID = $this->_usersManager->getLastInsertedID();
 		$this->addJointUsersInSchoolYear($userID, $_POST['schoolyear']);
 	}
-	
+
 	/**
 	 * changes entries of the Table jointUsersInSchoolyear according to the values the User has given in the form changeUser
 	 */
 	private function changeJointUsersInSchoolYearByChangeUser () {
-		
+
 		$schoolyearBeforeId = $this->getSchoolyearIdOfUserId($_GET['ID']);
-		
-		if(!isset($_POST['schoolyear']) || $_POST['schoolyear'] == 0) {
+
+		if (!isset($_POST['schoolyear']) || $_POST['schoolyear'] == 0) {
 			$this->_interface->dieError($this->_languageManager->getText('errorInputJointUsersInSchoolYear'));
 		}
-		
-		if($_POST['schoolyear'] != $schoolyearBeforeId) {
+
+		if ($_POST['schoolyear'] != $schoolyearBeforeId) {
 			try {
 				$this->deleteJointUsersInSchoolYearByUserId($_GET['ID']);
 			} catch (Exception $e) {
@@ -567,12 +619,12 @@ class Users extends Module {
 			}
 		}
 	}
-	
+
 	/**
 	 * adds a Schoolyear-Label to the User-Array to allow displaying the Schoolyear of the User in ShowUsers
 	 */
 	private function addSchoolyearLabelToUsers ($users) {
-	
+
 		$jointsUsersInSchoolyear = $this->get();
 		$grades = $this->getAllGrades();
 		foreach ($users as & $user) {
@@ -587,6 +639,87 @@ class Users extends Module {
 			}
 		}
 		return $users;
+	}
+
+	/********************
+	 * KuwasysClassManager
+	 ********************/
+
+	private function getAllClasses () {
+
+		try {
+			$classes = $this->_classManager->getAllClasses();
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorNoClasses'));
+		}
+		catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorFetchClasses'));
+		}
+		return $classes;
+	}
+
+	private function getClassByClassId ($classId) {
+
+		try {
+			$class = $this->_classManager->getClass($classId);
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorFetchClass'));
+		}
+		return $class;
+	}
+
+	private function addClassesToUser ($user) {
+
+		$userSpecificClasses = array();
+		$userSpecificJointsUserInClass = $this->getAllJointsOfUserId($user['ID']);
+		if (isset($userSpecificJointsUserInClass) && $userSpecificJointsUserInClass) {
+			foreach ($userSpecificJointsUserInClass as $joint) {
+				$class = $this->getClassByClassId($joint['ClassID']);
+				$user['classes'][] = array(
+					'ID'	 => $class['ID'],
+					'label'	 => $class['label'],
+					'status' => $joint['status'],
+				);
+			}
+		}
+		return $user;
+	}
+
+	/********************
+	 * KuwasysUsersInClassManager
+	 ********************/
+
+	/**
+	 *
+	 * @param unknown_type $userID
+	 * @param unknown_type $classID
+	 */
+	private function addJointUsersInClass ($userID, $classID, $status) {
+
+		try {
+			$this->_jointUsersInClass->addJoint($userID, $classID, $status);
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorAddJointUsersInClass'));
+		}
+	}
+
+	private function getAllJointsOfUserId ($userId) {
+
+		try {
+			$joints = $this->_jointUsersInClass->getAllJointsOfUserId($userId);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->showMsg(sprintf($this->_languageManager->getText('errorNoJointUsersInClassOfUserId'),
+				$userId));
+		}
+		catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointUsersInClass'));
+		}
+		if (isset($joints)) {
+			return $joints;
+		}
+		else {
+			return false;
+		}
 	}
 
 	/**-----------------------------------------------------------------------------

@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gerOutputText>
+    <module>
+        <name>Kuwasys</name>
+        <text>
+            <alphaDisclaimer>
+                Dieses Projekt steckt noch im AlphaStatus. Die Texte sind möglicherweise nicht korrekt,
+                und einige Funktionen könnten noch nicht funktionnieren.
+                Visuell sowie Codetechnisch wurde das Programm noch nicht / kaum optimiert.
+            </alphaDisclaimer>
+        </text>
+    </module>
 	<module>
 		<name>Users</name>
 		<text>
@@ -40,6 +50,12 @@
 			<errorFetchJointUsersInSchoolYear>Ein Fehler ist beim Abrufen des Links zwischen Schüler und Schuljahr aufgetreten.</errorFetchJointUsersInSchoolYear>
 			<errorDeleteJointUsersInSchoolYear>Ein Fehler ist beim löschen der Verbindung zwischen Schüler und Schuljahr aufgetreten.</errorDeleteJointUsersInSchoolYear>
 			<errorInputJointUsersInSchoolYear>Bitte geben sie ein Schuljahr für den Benutzer ein.</errorInputJointUsersInSchoolYear>
+			<errorNoClasses>Es sind keine Kurs vorhanden</errorNoClasses>
+			<errorFetchClasses>Ein Fehler ist beim Abrufen der Kurse aufgetreten</errorFetchClasses>
+			<errorAddJointUsersInClass>Ein Fehler ist beim Verbinden des Benutzers mit dem Kurs aufgetreten.</errorAddJointUsersInClass>
+			<errorFetchJointUsersInClass>Ein Fehler ist beim Abrufen der Verbindung zwischen dem Schüler und den Kursen aufgetreten.</errorFetchJointUsersInClass>
+			<errorNoJointUsersInClassOfUserId>Es konnten keine Verbindungen zwischen dem Benutzer mit der ID "%s" und Kursen gefunden werden.</errorNoJointUsersInClassOfUserId>
+			<errorFetchClass>Der Kurs konnte nicht abgerufen werden.</errorFetchClass>
 			<!-- Other stuff -->
 			<warningNoJointsUsersInGrade>Es existieren keine Links zwischen Schülern und Klassen!</warningNoJointsUsersInGrade>
 			<finishedAddUser>Der Benutzer %s %s wurde erfolgreich hinzugefügt.</finishedAddUser>
@@ -49,6 +65,7 @@
 			<deleteUserNotComfirmed>Der Benutzer wurde nicht gelöscht.</deleteUserNotComfirmed>
 			<finDeleteUser>Der Benutzer wurde erfolgreich gelöscht.</finDeleteUser>
 			<finChangeUser>Der Benutzer wurde erfolgreich geändert.</finChangeUser>
+			<finAddUserToClass>Der Benutzer wurde erfolgreich dem Kurs hinzugefügt.</finAddUserToClass>
 		</text>
 	</module>
 	<module>
@@ -87,6 +104,9 @@
 			<errorNoSchoolYearInLink>Das verlinkte Schuljahr ist nicht vorhanden.</errorNoSchoolYearInLink>
 			<errorFetchLinkSchoolYear>Ein Fehler ist beim Abrufen des Links zum Schuljahr aufgetreten!</errorFetchLinkSchoolYear>
 			<errorChangeLinkSchoolYear>Ein Fehler ist beim Verändern des Schuljahres des Kurses aufgetreten!</errorChangeLinkSchoolYear>
+			<errorGetCountOfUsersForClass>Ein Fehler ist beim zählen der Benutzer eines Kurses aufgetreten.</errorGetCountOfUsersForClass>
+			<errorNoJointsUsersInClassOfClassId>Es konnten keine Teilnehmer für diesen Kurs gefunden werden.</errorNoJointsUsersInClassOfClassId>
+			<errorFetchJointsUsersInClassOfClassId>Ein Fehler ist beim Abrufen der Teilnehmer für diesen Kurs aufgetreten.</errorFetchJointsUsersInClassOfClassId>
 		</text>
 	</module>
 	<module>

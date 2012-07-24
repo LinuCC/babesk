@@ -29,23 +29,6 @@ class ClassesInterface extends AdminInterface {
 
 	public function showAddClass ($schoolYears) {
 
-// 		$inputContainer = array(
-// 				array(
-// 						'name' => 'label',
-// 						'displayName' => $languageManager->getText('formLabel'),
-// 						'type' => 'text',
-// 						),
-// 				array(
-// 						'name' => 'maxRegistration',
-// 						'displayName' => $languageManager->getText('formMaxRegistration'),
-// 						'type' => 'text',
-// 						),
-// 				);
-// 		$actionString = 'addClass';
-// 		$submitString = $languageManager->getText('formAddClassSubmit');
-// 		$headString = $languageManager->getText('formAddClassHeader');
-		
-// 		$this->generalForm($headString, $this->sectionString, $actionString, $inputContainer, $submitString);
 		$this->smarty->assign('schoolYears', $schoolYears);
 		$this->smarty->display($this->tplFilePath . 'addClass.tpl');
 	}
@@ -67,6 +50,12 @@ class ClassesInterface extends AdminInterface {
 		$this->smarty->assign('schoolYears', $schoolYears);
 		$this->smarty->assign('nowUsedSchoolYearID', $nowUsedSchoolYearID);
 		$this->smarty->display($this->tplFilePath . 'changeClass.tpl');
+	}
+	
+	public function showClassDetails ($class) {
+		
+		$this->smarty->assign('class', $class);
+		$this->smarty->display($this->tplFilePath . 'showClassDetails.tpl');
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations

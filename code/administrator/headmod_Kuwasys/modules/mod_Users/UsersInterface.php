@@ -61,6 +61,18 @@ class UsersInterface extends AdminInterface {
 		$this->confirmationDialog($promptMessage, $sectionString, $actionString, $confirmedString, $notConfirmedString);
 	}
 
+	public function showAddUserToClassDialog ($user, $classes) {
+		
+		$this->smarty->assign('user', $user);
+		$this->smarty->assign('classes', $classes);
+		$this->smarty->display($this->tplFilePath . 'addUserToClass.tpl');
+	}
+	
+	public function showUserDetails ($user) {
+		
+		$this->smarty->assign('user', $user);
+		$this->smarty->display($this->tplFilePath . 'showUserDetails.tpl');
+	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////

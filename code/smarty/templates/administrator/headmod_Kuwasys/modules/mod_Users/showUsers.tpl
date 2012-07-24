@@ -3,9 +3,16 @@
 <style type='text/css'  media='all'>
 /*Table should not be over the Border of the Line of the main-block*/
 #main {
-	width:1000px;
+	width:1100px;
 }
 </style>
+
+<script type="text/javascript">
+function showOptions (ID) {
+	document.getElementById('optionButtons' + ID).hidden = false;
+	document.getElementById('option' + ID).hidden = true;
+}
+</script>
 
 <h2 class='moduleHeader'>Die Benutzer</h2>
 
@@ -38,8 +45,15 @@
 			<td align="center">{$user.gradeLabel}</td>
 			<td align="center">{$user.schoolyearLabel}</td>
 			<td align="center" bgcolor='#FFD99'>
+			<div id='option{$user.ID}'>
+			<form method="post"><input type='button' value='Optionen' onclick='showOptions("{$user.ID}")'></form>
+			</div>
+			<div id='optionButtons{$user.ID}' hidden>
 			<form action="index.php?section=Kuwasys|Users&action=changeUser&ID={$user.ID}" method="post"><input type='submit' value='bearbeiten'></form>
 			<form action="index.php?section=Kuwasys|Users&action=deleteUser&ID={$user.ID}" method="post"><input type='submit' value='löschen'></form>
+			<form action="index.php?section=Kuwasys|Users&action=addUserToClass&ID={$user.ID}" method="post"><input type='submit' value='zu einem Kurs hinzufügen'></form>
+			<form action="index.php?section=Kuwasys|Users&action=showUserDetails&ID={$user.ID}" method="post"><input type='submit' value='Details anzeigen'></form>
+			</div>
 			</td>
 		</tr>
 		{/foreach}

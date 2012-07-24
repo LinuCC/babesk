@@ -46,7 +46,7 @@ class KuwasysLanguageManager {
 	////////////////////////////////////////////////////////////////////////////////
 	public function getText ($nameOfTextElement) {
 
-		if(!isset($this->_xmlModuleObject)) {
+		if (!isset($this->_xmlModuleObject)) {
 			throw new BadMethodCallException('You need to set a Module first before using the getText()-function!');
 		}
 		if (!isset($this->_xmlModuleObject->text->$nameOfTextElement)) {
@@ -60,15 +60,18 @@ class KuwasysLanguageManager {
 	public function getTextOfModule ($nameOfTextElement, $moduleName) {
 
 		foreach ($this->_simpleXmlObject as $xmlModule) {
-			
+
 			if ($xmlModule->name == $moduleName) {
-				
-				if (!isset($this->_simpleXmlObject->$moduleName->text->$nameOfTextElement)) {
-					$this->_interface->showError(sprintf(
-						'The Text-Element "%s" does not exist. Expect missing/wrong text!', $nameOfTextElement));
-					return false;
+				foreach ($this->_simpleXmlObject as $xmlModule) {
+					if ($xmlModule->name == $moduleName) {
+						if (!isset($xmlModule->text->$nameOfTextElement)) {
+							$this->_interface->showError(sprintf(
+								'The Text-Element "%s" does not exist. Expect missing/wrong text!', $nameOfTextElement));
+							return false;
+						}
+						return $xmlModule->text->$nameOfTextElement;
+					}
 				}
-				return $this->_xmlModuleObject->text->$nameOfTextElement;
 
 			}
 		}
