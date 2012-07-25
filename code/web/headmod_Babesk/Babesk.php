@@ -21,7 +21,16 @@ class Babesk extends HeadModule {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	public function execute($moduleManager, $dataContainer) {
-		$moduleManager->execute("Babesk|Menu", false);
+		
+		require_once PATH_ACCESS . '/UserManager.php';
+		$userManager = new UserManager();
+		
+		if ($userManager->firstPassword($_SESSION['uid'])) {
+			$this->_moduleManager->execute('Babesk|ChangePassword', false);
+		}
+		else {
+			$moduleManager->execute("Babesk|Menu", false);
+		}
 	}
 }
 ?>

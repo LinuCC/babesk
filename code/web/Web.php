@@ -64,12 +64,7 @@ class Web {
 		//seems like something that Smarty itself needs
 		$this->_smarty->assign('status', ''); //???
 
-		// check for first password
-		if ($userManager->firstPassword($_SESSION['uid'])) {
-			$this->_moduleManager->execute('Babesk|ChangePassword', false);
-		}
 		$userData = $userManager->getEntryData($_SESSION['uid'], '*');
-
 		$_SESSION['last_login'] = formatDateTime($userData['last_login']);
 		$_SESSION['credit'] = $userData['credit'];
 		$_SESSION['username'] = $userData['forename'] . ' ' . $userData['name'];
@@ -97,7 +92,6 @@ class Web {
 				$head_module->getDisplayName());
 		}
 		$this->_smarty->assign('head_modules', $head_mod_arr);
-
 		//include the module specified in GET['section']
 		if ($mod_str) {
 			$this->_moduleManager->execute($mod_str, false);
