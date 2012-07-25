@@ -47,16 +47,15 @@ class Web {
 
 	public function logIn () {
 
-		require_once 'login.php';
-		return login();
+		require_once 'Login.php';
+		$loginManager = new Login($this->_smarty);
+		$loginManager->login();
 	}
 
 	public function mainRoutine ($mod_str) {
 
 		if (!$this->_loggedIn) {
-			if (!$this->logIn()) {
-				return;
-			}
+			$this->logIn();
 		}
 
 		require_once PATH_ACCESS . '/UserManager.php';

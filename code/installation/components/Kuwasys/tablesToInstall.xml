@@ -82,6 +82,7 @@
 		`telephone` varchar (64) NOT NULL,
 		`birthday` varchar (11) NOT NULL,
 		`last_login` varchar (11) NOT NULL,
+		`login_tries` smallint(5),
 		`locked` boolean NOT NULL,
 		Primary Key (`ID`)
 		);
