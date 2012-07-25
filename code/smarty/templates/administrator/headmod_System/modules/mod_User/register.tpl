@@ -1,5 +1,5 @@
 {extends file=$UserParent}{block name=content}
-    <form action="index.php?section=Babesk|User&action=1" method="post">
+    <form action="index.php?section=System|User&action=1" method="post">
     <fieldset>
         <legend>Persönliche Daten</legend>
         <label for="forename">Vorname:</label>

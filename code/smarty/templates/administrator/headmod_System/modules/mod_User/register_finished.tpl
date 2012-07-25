@@ -1,6 +1,6 @@
 {extends file=$UserParent}{block name=content}
 Der Benutzer {$forename} {$name} wurde hinzugefügt. <br><br>
-<form action="index.php?section=Babesk|User&action=1" method="post">
+<form action="index.php?section=System|User&action=1" method="post">
 	<input type ="submit" value="einen weiteren Benutzer hinzufügen">
 </form>
 <form action="index.php" method="post">

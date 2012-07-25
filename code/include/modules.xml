@@ -5,6 +5,16 @@
 	<administrator>
 		<path>administrator/</path>
 		<head_module>
+			<ger_name>Systemeinstellungen</ger_name>
+			<name>System</name>
+			<active>true</active>
+			<module>
+				<ger_name>Benutzerverwaltung</ger_name>
+				<name>User</name>
+				<active>true</active>
+			</module>
+		</head_module>
+		<head_module>
 			<ger_name>Bargeldloses Bestellsystem für Kantinen</ger_name>
 			<name>Babesk</name>
 			<active>true</active>
@@ -61,11 +71,6 @@
 				<name>Soli</name>
 				<active>true</active>
 			</module>
-			<module>
-				<ger_name>Benutzerverwaltung</ger_name>
-				<name>User</name>
-				<active>true</active>
-			</module>
 		</head_module>
 		<head_module>
 			<ger_name>Führerschein für IT-Systeme</ger_name>
@@ -94,6 +99,11 @@
 			<module>
 				<ger_name>Ausleihe</ger_name>
 				<name>Loan</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Rückgabe</ger_name>
+				<name>Retour</name>
 				<active>true</active>
 			</module>
 		</head_module>

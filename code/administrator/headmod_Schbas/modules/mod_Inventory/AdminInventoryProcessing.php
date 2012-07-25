@@ -120,7 +120,7 @@ class AdminInventoryProcessing {
 			$this->inventoryInterface->dieError($this->messages['error']['get_data_failed']);
 		}
 		try {
-			$search = $inventoryManager->searchEntry('book_id',$book_info['id'],'year_of_purchase',$barcode_exploded[1],'exemplar',$barcode_exploded[5]);
+			$search = $inventoryManager->searchEntry('book_id='.$book_info['id'].' AND year_of_purchase='.$barcode_exploded[1].' AND exemplar='.$barcode_exploded[5]);
 		}catch (Exception $e){
 			$search = 0;
 		}

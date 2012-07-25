@@ -31,7 +31,7 @@ function checkCardId() {
 </script>
 {/literal}
 
-<form action="index.php?section=Babesk|User&action=4&ID={$user.ID}"
+<form action="index.php?section=System|User&action=4&ID={$user.ID}"
 	method="post" onsubmit="submit()">
 	<fieldset>
 		<legend>Persönliche Daten</legend>
