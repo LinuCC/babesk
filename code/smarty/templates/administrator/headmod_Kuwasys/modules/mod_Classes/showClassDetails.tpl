@@ -28,6 +28,8 @@ label {
 	<div><label>Aktiv:</label> <div class="valueDiv"> {if isset($class.sumStatus.active)}{$class.sumStatus.active}{else}---{/if}</div></div><br>
 	<div><label>Wartend:</label> <div class="valueDiv"> {if isset($class.sumStatus.waiting)} {$class.sumStatus.waiting} {else}---{/if}</div></div><br>
 	<div><label>Wunsch:</label> <div class="valueDiv"> {if isset($class.sumStatus.request)} {$class.sumStatus.request} {else}---{/if}</div></div><br>
+	<div><label>Schüler-Registrierungen erlaubt:</label> <div class="valueDiv"> {if $class.registrationEnabled}<b>Ja</b>{else}<b>Nein</b>{/if}</div></div><br>
+	<div><label>Veranstaltungstag:</label> <div class="valueDiv"> {if $class.weekdayTranslated}{$class.weekdayTranslated}{else}---{/if}</div></div><br>
 	{if isset($class.users)}
 	<div><label>Teilnehmer:</label>
 		{foreach $class.users as $user}

@@ -17,6 +17,18 @@
 		{/foreach}
 	</select>
 	</label><br><br>
+	<label>Veranstaltungstag des Kurses:
+	<select name='weekday' size='1'>
+		<option value='Mon'>Montag</option>
+		<option value='Tue'>Dienstag</option>
+		<option value='Wed'>Mittwoch</option>
+		<option value='Thu'>Donnerstag</option>
+		<option value='Fri'>Freitag</option>
+		<option value='Sat'>Samstag</option>
+		<option value='Sun'>Sonntag</option>
+	</select>
+	</label><br><br>
+	<label>Registrierungen für Schüler ermöglichen: <input type="checkbox" name="allowRegistration" value="1" checked="checked"></label><br><br>
 	<input type='submit' value='Kurs hinzufügen'>
 </form>
 

@@ -218,7 +218,7 @@ class ModuleManager {
 	public function executeHeadModul ($headmod_name) {
 		foreach ($this->headModules as $head_module) {
 			if ($head_module->getName() == $headmod_name) {
-				$head_module->execute($this);
+				$head_module->execute($this, $this->dataContainer);
 				return;
 			}
 		}

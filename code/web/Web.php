@@ -65,11 +65,16 @@ class Web {
 
 		$userData = $userManager->getEntryData($_SESSION['uid'], '*');
 		$_SESSION['last_login'] = formatDateTime($userData['last_login']);
-		$_SESSION['credit'] = $userData['credit'];
 		$_SESSION['username'] = $userData['forename'] . ' ' . $userData['name'];
 		$_SESSION['login_tries'] = $userData['login_tries'];
 		$_SESSION['IP'] = $_SERVER['REMOTE_ADDR'];
 		$_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
+		
+		//module-specific
+		if(isset($userData['credit'])) {
+			$_SESSION['credit'] = $userData['credit'];
+			$this->_smarty->assign('credit', $_SESSION['credit']);
+		}
 
 		//general user data for header etc
 		if ($_SESSION['login_tries'] > 3) {
@@ -80,9 +85,9 @@ class Web {
 
 		$this->_smarty->assign('uid', $_SESSION['uid']);
 		$this->_smarty->assign('username', $_SESSION['username']);
-		$this->_smarty->assign('credit', $_SESSION['credit']);
 		$this->_smarty->assign('last_login', $_SESSION['last_login']);
 
+		
 		$head_modules = $this->_moduleManager->getHeadModules();
 		$head_mod_arr = array();
 
@@ -90,6 +95,8 @@ class Web {
 			$head_mod_arr[$head_module->getName()] = array('name' => $head_module->getName(), 'display_name' =>
 				$head_module->getDisplayName());
 		}
+		
+		
 		$this->_smarty->assign('head_modules', $head_mod_arr);
 		//include the module specified in GET['section']
 		if ($mod_str) {

@@ -36,7 +36,7 @@ function switchInfo(divName) {
     <div id="top">
     <div id="top_left">
        <p>Name: {$username}</p>
-       <p>Guthaben: {$credit} Euro</p>
+       {if isset($credit)}<p>Guthaben: {$credit} Euro</p>{/if}
        
        <a href="javascript:switchInfo('account')">Kontoeinstellungen</a><br />
     

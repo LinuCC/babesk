@@ -107,6 +107,14 @@
 			<errorGetCountOfUsersForClass>Ein Fehler ist beim zählen der Benutzer eines Kurses aufgetreten.</errorGetCountOfUsersForClass>
 			<errorNoJointsUsersInClassOfClassId>Es konnten keine Teilnehmer für diesen Kurs gefunden werden.</errorNoJointsUsersInClassOfClassId>
 			<errorFetchJointsUsersInClassOfClassId>Ein Fehler ist beim Abrufen der Teilnehmer für diesen Kurs aufgetreten.</errorFetchJointsUsersInClassOfClassId>
+			<errorAddClass>Ein Fehler ist beim Hinzufügen des Kurses aufgetreten.</errorAddClass>
+			<weekdayLabelMon>Montag</weekdayLabelMon>
+			<weekdayLabelTue>Dienstag</weekdayLabelTue>
+			<weekdayLabelWed>Mittwoch</weekdayLabelWed>
+			<weekdayLabelThu>Donnerstag</weekdayLabelThu>
+			<weekdayLabelFri>Freitag</weekdayLabelFri>
+			<weekdayLabelSat>Samstag</weekdayLabelSat>
+			<weekdayLabelSun>Sonntag</weekdayLabelSun>
 		</text>
 	</module>
 	<module>

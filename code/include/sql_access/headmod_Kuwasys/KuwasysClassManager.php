@@ -22,16 +22,16 @@ class KuwasysClassManager extends TableManager {
 		////////////////////////////////////////////////////////////////////////////////
 		//Methods
 		////////////////////////////////////////////////////////////////////////////////
-		public function addClass ($label, $maxRegistration) {
-			$this->addEntry('label', $label, 'maxRegistration', $maxRegistration);
+		public function addClass ($label, $maxRegistration, $regEnabled, $weekday) {
+			$this->addEntry('label', $label, 'maxRegistration', $maxRegistration, 'registrationEnabled', $regEnabled, 'weekday', $weekday);
 		}
 		
 		public function deleteClass ($ID) {
 			$this->delEntry($ID);
 		}
 		
-		public function alterClass ($ID, $label, $maxRegistration) {
-			$this->alterEntry($ID, 'label', $label, 'maxRegistration', $maxRegistration);
+		public function alterClass ($ID, $label, $maxRegistration, $regEnabled) {
+			$this->alterEntry($ID, 'label', $label, 'maxRegistration', $maxRegistration, 'registrationEnabled', $regEnabled);
 		}
 		
 		public function getAllClasses () {

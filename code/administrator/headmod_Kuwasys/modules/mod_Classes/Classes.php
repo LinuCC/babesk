@@ -104,6 +104,7 @@ class Classes extends Module {
 
 		$class = $this->getClass();
 		$class = $this->addUsersAndSumStatusToClass($class);
+		$class = $this->addWeekdayTranslatedToClass($class);
 		$this->_interface->showClassDetails($class);
 	}
 
@@ -158,8 +159,13 @@ class Classes extends Module {
 	}
 
 	private function addClassToDatabase () {
-
-		$this->_classManager->addClass($_POST['label'], $_POST['maxRegistration']);
+		
+		$allowRegistration = (isset($_POST['allowRegistration'])) ? true : false;
+		try {
+			$this->_classManager->addClass($_POST['label'], $_POST['maxRegistration'], $allowRegistration, $_POST['weekday']);
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorAddClass'));
+		}
 	}
 
 	private function showClasses () {
@@ -259,9 +265,10 @@ class Classes extends Module {
 	}
 
 	private function changeClassInDatabase () {
-
+		
+		$allowRegistration = (isset($_POST['allowRegistration'])) ? true : false;
 		try {
-			$this->_classManager->alterClass($_GET['ID'], $_POST['label'], $_POST['maxRegistration']);
+			$this->_classManager->alterClass($_GET['ID'], $_POST['label'], $_POST['maxRegistration'], $allowRegistration);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorChangeClass'));
 		}
@@ -428,6 +435,27 @@ class Classes extends Module {
 		return $schoolYearID;
 	}
 
+	/**
+	 * returns the translated string of the weekday
+	 * @param string $weekdayString The name of the weekday in three Chars (like, "Mon", "Tue", ... )
+	 */
+	private function getTranslatedWeekday ($weekdayString) {
+		
+		$text = $this->_languageManager->getText('weekdayLabel' . $weekdayString);
+		return $text;
+	}
+	
+	private function addWeekdayTranslatedToClass ($class) {
+		
+		if(!isset($class ['weekday']) || !$class ['weekday']) {
+			$class ['weekdayTranslated'] = false;
+		}
+		else {
+			$translatedWeekday = $this->getTranslatedWeekday($class ['weekday']);
+			$class ['weekdayTranslated'] = $translatedWeekday;
+		}
+		return $class;
+	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
 	////////////////////////////////////////////////////////////////////////////////

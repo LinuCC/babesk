@@ -33,7 +33,8 @@ class ChangePassword extends Module {
 			die(ERR);
 		}
 		$smarty->assign('username', $userData['forename'].' '.$userData['name']);
-		$smarty->assign('credit', $userData['credit']);
+		if(isset($userData['credit']))
+			$smarty->assign('credit', $userData['credit']);
 		$smarty->assign('last_login', $userData['last_login']);
 		
 		if(isset($_POST['passwd'])) {

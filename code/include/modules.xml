@@ -135,5 +135,15 @@
 				<active>true</active>
 			</module>
 		</head_module>
+		<head_module>
+			<ger_name>Kurswahlsystem</ger_name>
+			<name>Kuwasys</name>
+			<active>true</active>
+			<module>
+				<ger_name>Menü</ger_name>
+				<name>MainMenu</name>
+				<active>true</active>
+			</module>
+		</head_module>
 	</web>
 </modules>

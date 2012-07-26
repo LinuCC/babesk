@@ -50,6 +50,9 @@ class HeadModule {
 	 */
 	public function executeModule($mod_name, $dataContainer) {
 		
+		if(!count($this->modules)) {
+			throw new Exception('No Modules found!');
+		}
 		foreach($this->modules as $module) {
 			
 			if($module->getName() == $mod_name) {
