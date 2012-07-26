@@ -32,7 +32,7 @@ function ajaxFunction(){
 		}
 	}
 	var barcode = document.getElementById('barcode').value;
-	var queryString = "inventarnr=" + barcode;
+	var queryString = "inventarnr=" + barcode + "&uid=" + {$uid};
 	ajaxRequest.open("GET", "http://localhost/babesk/code/administrator/index.php?section=Schbas|Retour&" + queryString, true);
 	ajaxRequest.send(null); 
 }

@@ -18,7 +18,8 @@ class AdminRetourInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath . 'form.tpl');
 	}
 	
-	public function ShowRetourBooks($data) {
+	public function ShowRetourBooks($data,$uid) {
+		$this->smarty->assign('uid', $uid);
 		$this->smarty->assign('path', dirname($_SERVER['SCRIPT_NAME']).'/headmod_Schbas/modules/mod_Retour');
 		$this->smarty->assign('data', $data);
 		$this->smarty->display($this->tplFilePath . 'retourbooks.tpl');

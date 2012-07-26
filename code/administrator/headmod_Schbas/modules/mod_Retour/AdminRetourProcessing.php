@@ -31,7 +31,7 @@ class AdminRetourProcessing {
 	/**
 	 * Ausleihtabelle anzeigen
 	 */
-	function Retour($card_id) {
+	function RetourTableData($card_id) {
 		
 		if (!$this->cardManager->valid_card_ID($card_id))
 			$this->LoanInterface->dieError(sprintf($this->msg['err_card_id'], $card_id));
@@ -48,7 +48,17 @@ class AdminRetourProcessing {
 			
 		}
 		//var_dump($data);
-		$this->RetourInterface->ShowRetourBooks($data);
+		$this->RetourInterface->ShowRetourBooks($data,$uid);
+	}
+	
+	/**
+	 * Ein Buch zurückgeben
+	 */
+	function RetourBook($inventarnr,$uid) {
+		
+		$inv_nr = $this->inventoryManager->getInvIDByBarcode($inventarnr);
+	    
+		$this->loanManager->RemoveLoanByIDs($inv_nr["id"], $uid);
 	}
 	
 	/**

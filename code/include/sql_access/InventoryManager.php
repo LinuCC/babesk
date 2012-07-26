@@ -70,5 +70,19 @@ class InventoryManager extends TableManager{
 		return $res_array;
 	}
 	
+	function getInvIDByBarcode($barcode) {
+		require_once PATH_ACCESS . '/dbconnect.php';
+		$bookmanager = new BookManager;
+		$bookid = $bookmanager->getBookIDByBarcode($barcode);
+		try {
+			$barcode_exploded = explode(' ', $barcode);
+		} catch (Exception $e) {
+		}
+		$query = sql_prev_inj(sprintf('book_id = %s AND year_of_purchase = %s AND exemplar = %s' , $bookid["id"], $barcode_exploded[1], $barcode_exploded[5]));
+		//$result = $this->db->query($query);
+		$result = parent::searchEntry($query);
+		return $result;
+	}
+	
 }
 ?>

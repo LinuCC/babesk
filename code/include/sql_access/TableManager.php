@@ -308,6 +308,27 @@ class TableManager {
 	}
 
 	/**
+	 * Deletes an entry from the table
+	 * Delete the entry from the table when no ID is used
+	 *
+	 * @param noIDString The string of the entry to delete
+	 */
+	
+	public function delEntryNoID($noIDString) {
+		require_once PATH_INCLUDE . '/constants.php';
+	
+		if (!is_string($noIDString)) {
+			//parameter-checking
+			throw new UnexpectedValueException(ERR_TYPE_PARAM_ID);
+		}
+		$query = sql_prev_inj(sprintf('DELETE FROM %s WHERE %s;', $this->tablename, $noIDString));
+		$result = $this->db->query($query);
+		if (!$result) {
+			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error);
+		}
+	}
+	
+	/**
 	 * returns the ID of the next object that would be added (MySQL's Autoincrement)
 	 */
 	function getNextAutoIncrementID() {

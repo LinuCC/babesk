@@ -31,5 +31,17 @@ class LoanManager extends TableManager{
 		return $res_array;
 	}
 	
+	/**
+	 * Remove an entry in the loan list by a given user id and inventory id
+	 */
+	function RemoveLoanByIDs($inventoryID, $uid) {
+		require_once PATH_ACCESS . '/dbconnect.php';
+		
+		
+		$query = sql_prev_inj(sprintf('user_id = %s AND inventory_id = %s' , $uid, $inventoryID));
+		$result = parent::delEntryNoID($query);
+		return $result;
+	}
+	
 }
 ?>

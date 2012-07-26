@@ -26,10 +26,11 @@ class Retour extends Module {
 		$RetourProcessing = new AdminRetourProcessing($RetourInterface);
 		
 		if ('GET' == $_SERVER['REQUEST_METHOD'] && isset($_GET['inventarnr'])) {
-			echo $_GET['inventarnr'];
+			$RetourProcessing->RetourBook($_GET['inventarnr'],$_GET['uid']);
+			$RetourProcessing->RetourTableData($_POST['card_ID']);
 		}
 		else if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['card_ID'])) {
-			$RetourProcessing->Retour($_POST['card_ID']);
+			$RetourProcessing->RetourTableData($_POST['card_ID']);
 		}
 		else{
 			$RetourInterface->CardId();
