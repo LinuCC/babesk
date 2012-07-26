@@ -24,7 +24,11 @@ class Retour extends Module {
 		
 		$RetourInterface = new AdminRetourInterface($this->relPath);
 		$RetourProcessing = new AdminRetourProcessing($RetourInterface);
-		if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['card_ID'])) {
+		
+		if ('GET' == $_SERVER['REQUEST_METHOD'] && isset($_GET['inventarnr'])) {
+			echo $_GET['inventarnr'];
+		}
+		else if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['card_ID'])) {
 			$RetourProcessing->Retour($_POST['card_ID']);
 		}
 		else{
