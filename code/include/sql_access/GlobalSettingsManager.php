@@ -35,6 +35,35 @@ class GlobalSettingsManager extends TableManager {
 	}
 	
 	/**
+	 * returns the religions found in the MySQL-table global_settings
+	 * @throws MySQLVoidDataException
+	 * @throws Other Exceptions (@see TableManager)
+	 * @return string
+	 */
+	function getReligion() {
+		$entry_arr = $this->searchEntry('name="religion"');
+		if (!isset($entry_arr['value']) || !$entry_arr['value'])
+			throw new MySQLVoidDataException('religion is void!');
+		return $entry_arr['value'];
+	}
+	
+	/**
+	 * Sets the Religions
+	 * @param string $str the text will be changed to this string
+	 * @throws MySQLVoidDataException
+	 * @throws some other things if somethings gone wrong
+	 */
+	function setReligion($str) {
+		$entry_arr = $this->searchEntry('name="religion"');
+		if (!isset($entry_arr) || !count($entry_arr)) {
+			throw new MySQLVoidDataException('searchEntry returned void helparray');
+		}
+		$religion_id = $entry_arr['id'];
+		$this->alterEntry($religion_id, 'value', $str);
+	}
+	
+	
+	/**
 	 * Returns both of the infotexts of the table global_settings
 	 * Enter description here ...
 	 * @return array [0] = infotext1 [1] = infotext2

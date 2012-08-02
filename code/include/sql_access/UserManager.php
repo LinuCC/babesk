@@ -270,6 +270,17 @@ class UserManager extends TableManager{
 	}
 	
 	/**
+	 * sets religion
+	 *
+	 *@throws MySQLConnectionException if a problem with MySQL happened
+	 */
+	function SetReligion($uid,$religion) {
+		if(isset($uid)) {
+			parent::alterEntry($uid, 'religion', $religion);
+		}
+	}
+	
+	/**
 	 * Adds a User to the System
 	 *
 	 * The Function creates a new entry in the users Table

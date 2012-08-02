@@ -13,6 +13,11 @@
 				<name>User</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Religionszugehörigkeit</ger_name>
+				<name>Religion</name>
+				<active>true</active>
+			</module>
 		</head_module>
 		<head_module>
 			<ger_name>Bargeldloses Bestellsystem für Kantinen</ger_name>

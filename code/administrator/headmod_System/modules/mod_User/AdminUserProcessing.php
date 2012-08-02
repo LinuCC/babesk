@@ -44,12 +44,12 @@ class AdminUserProcessing {
 		require_once PATH_ACCESS . '/UserManager.php';
 		require_once PATH_ACCESS . '/CardManager.php';
 		require_once PATH_ACCESS . '/GroupManager.php';
-		require_once PATH_INCLUDE . "/logs.php";
+		require_once PATH_ACCESS . "/LogManager.php";
 
 		$userManager = new UserManager();
 		$cardManager = new CardManager();
 		$groupManager = new GroupManager();
-		$logger = new Logger;
+		$logger = new LogManager();
 
 		//checks the input for wrong Characters etc
 		try {
