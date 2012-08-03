@@ -18,12 +18,23 @@ class AdminRetourInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath . 'form.tpl');
 	}
 	
-	public function ShowRetourBooks($data,$uid) {
+	public function ShowRetourBooks($data,$card_id,$uid) {
+		$this->smarty->assign('cardid', $card_id);
 		$this->smarty->assign('uid', $uid);
-		$this->smarty->assign('path', dirname($_SERVER['SCRIPT_NAME']).'/headmod_Schbas/modules/mod_Retour');
+		$this->smarty->assign('adress', ($_SERVER['HTTP_HOST']).$_SERVER['REQUEST_URI']);
 		$this->smarty->assign('data', $data);
 		$this->smarty->display($this->tplFilePath . 'retourbooks.tpl');
 	}
+	
+	public function ShowRetourBooksAjax($data,$card_id,$uid) {
+		$this->smarty->assign('cardid', $card_id);
+		$this->smarty->assign('uid', $uid);
+		$this->smarty->assign('adress', ($_SERVER['HTTP_HOST']).$_SERVER['REQUEST_URI']);
+		$this->smarty->assign('data', $data);
+		$this->smarty->display($this->tplFilePath . 'retourbooksAjax.tpl');
+	}
+	
+	
 	/**
 	 * The Path to the Smarty-Parent-Templatefile
 	 */

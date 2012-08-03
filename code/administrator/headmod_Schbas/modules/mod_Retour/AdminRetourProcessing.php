@@ -48,8 +48,31 @@ class AdminRetourProcessing {
 			
 		}
 		//var_dump($data);
-		$this->RetourInterface->ShowRetourBooks($data,$uid);
+		$this->RetourInterface->ShowRetourBooks($data,$card_id,$uid);
 	}
+	
+	/**
+	 * Ausleihtabelle per Ajax anzeigen
+	 */
+	function RetourTableDataAjax($card_id) {
+	
+	
+	
+		$uid = $this->GetUser($card_id);
+		$loanbooks = $this->loanManager->getLoanByID($uid);
+	
+		foreach ($loanbooks as $loanbook){
+			$invData = $this->inventoryManager->getInvDataByID($loanbook['inventory_id']);
+			$bookdata = $this->bookManager->getBookDataByID($invData['book_id']);
+			$datatmp = array_merge($loanbook, $invData, $bookdata);
+			$data[] = $datatmp;
+			//$datatmp = null;
+				
+		}
+		//var_dump($data);
+		$this->RetourInterface->ShowRetourBooksAjax($data,$card_id,$uid);
+	}
+	
 	
 	/**
 	 * Ein Buch zurückgeben

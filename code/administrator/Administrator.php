@@ -70,7 +70,9 @@ class Administrator {
 
 		$this->_smarty->assign('_ADMIN_USERNAME', $_SESSION['username']);
 		$this->_smarty->assign('sid', htmlspecialchars(SID));
-		$this->_smarty->assign('base_path', PATH_SMARTY . '/templates/administrator/base_layout.tpl');
+		
+			$this->_smarty->assign('base_path', PATH_SMARTY . '/templates/administrator/base_layout.tpl');
+		
 	}
 
 	public function userLogOut () {
