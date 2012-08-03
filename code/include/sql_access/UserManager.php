@@ -279,6 +279,23 @@ class UserManager extends TableManager{
 			parent::alterEntry($uid, 'religion', $religion);
 		}
 	}
+	/**
+	 * sets foreign languages
+	 *
+	 *@throws MySQLConnectionException if a problem with MySQL happened
+	 */
+	function SetForeignLanguage($uid,$foreignLanguages) {
+		if(isset($uid)) {
+			
+			$string=implode("|", $foreignLanguages);
+			
+				try {
+					parent::alterEntry($uid, 'foreign_lang', $string);
+				} catch (Exception $e) {
+					$this->userInterface->dieError($this->messages['error']['change'] . $e->getMessage());
+				}
+		}
+	}
 	
 	/**
 	 * Adds a User to the System

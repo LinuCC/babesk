@@ -64,6 +64,34 @@ class GlobalSettingsManager extends TableManager {
 	
 	
 	/**
+	 * returns the foreign languages found in the MySQL-table global_settings
+	 * @throws MySQLVoidDataException
+	 * @throws Other Exceptions (@see TableManager)
+	 * @return string
+	 */
+	function getForeignLanguages() {
+		$entry_arr = $this->searchEntry('name="foreign_lang"');
+		if (!isset($entry_arr['value']) || !$entry_arr['value'])
+			throw new MySQLVoidDataException('foreign_lang is void!');
+		return $entry_arr['value'];
+	}
+	
+	/**
+	 * Sets the foreign languages
+	 * @param string $str the text will be changed to this string
+	 * @throws MySQLVoidDataException
+	 * @throws some other things if somethings gone wrong
+	 */
+	function setForeignLanguages($str) {
+		$entry_arr = $this->searchEntry('name="foreign_lang"');
+		if (!isset($entry_arr) || !count($entry_arr)) {
+			throw new MySQLVoidDataException('searchEntry returned void helparray');
+		}
+		$foreignLanguage_id = $entry_arr['id'];
+		$this->alterEntry($foreignLanguage_id, 'value', $str);
+	}
+	
+	/**
 	 * Returns both of the infotexts of the table global_settings
 	 * Enter description here ...
 	 * @return array [0] = infotext1 [1] = infotext2
