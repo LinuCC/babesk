@@ -9,7 +9,8 @@ class KuwasysJointUsersInClass extends TableManager {
 	////////////////////////////////////////////////////////////////////////////////
 	private $_statusActiveStr = 'active';
 	private $_statusWaitingStr = 'waiting';
-	private $_statusRequestStr = 'request';
+	private $_statusFirstRequestStr = 'request#1';
+	private $_statusSecondRequestStr = 'request#2';
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor

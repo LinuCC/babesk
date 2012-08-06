@@ -137,9 +137,9 @@ Donnerstag
 		{foreach $weekdayOfClasses as $class}
 		<tr>
 			<th class="classListClassLabel"><a onclick="switchClassDescriptionOfLink('{$class.ID}')">{$class.label}</a>
-			<div id="classDescription#{$class.ID}" class="classDescription" hidden="hidden">
-		<p>{$class.description}</p>
-	</div>
+				<div id="classDescription#{$class.ID}" class="classDescription" hidden="hidden">
+				<p>{$class.description}</p>
+				</div>
 			</th>
 			<td class="classListCheckbox"><input class="classListCheckbox" type="radio" name="firstChoiceThu" value="{$class.ID}" {if !$class.registrationForUserAllowed}disabled="disabled"{/if}></td>
 			<td class="classListCheckbox"><input class="classListCheckbox" type="radio" name="secondChoiceThu" value="{$class.ID}" {if !$class.registrationForUserAllowed}disabled="disabled"{/if}></td>

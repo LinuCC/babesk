@@ -149,6 +149,11 @@
 				<name>ClassList</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Kursdetails</ger_name>
+				<name>ClassDetails</name>
+				<active>true</active>
+			</module>
 		</head_module>
 	</web>
 </modules>

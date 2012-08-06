@@ -7,10 +7,8 @@
 
 
 a.classListing {
-	float:right;
 }
 p.classListing {
-	float:right;
 }
 
 div.classListing {
@@ -32,25 +30,21 @@ div.classListing {
 <h2>Hauptmenü des Kurswahlsystems</h2><br>
 Im anderen Modul Verhindern das eine Parameteränderung von ID zu Problemen führen kann!
 <div class="classListing">
-<h4 >Übersicht der Kurse</h4>
+<h4 style="text-align:center">Übersicht der Kurse</h4>
 {foreach $classes as $class}
-	<form style="float: right" action="">
-		<input id="showClassDescriptionOn#{$class.ID}" type="button" value="Beschreibung anzeigen" onclick="displayClassDescription('{$class.ID}')">
-		<input id="showClassDescriptionOff#{$class.ID}" type="button" value="Beschreibung verstecken" onclick="hideClassDescription('{$class.ID}')" hidden="hidden">
-	</form><pre style="float: right">   </pre>
 	<b>
 	{if $class.registrationEnabled}
-		<a class="classListing"
+		<a class="classListing" onmouseover="displayClassDescription('{$class.ID}')" onmouseout="hideClassDescription('{$class.ID}')"
 			{if $class.status == 'active'} style="color: rgb(255, 50, 50);" 
 			{else if $class.status == 'waiting'} style="color: rgb(50, 255, 50);" 
 			{else if $class.status == 'request'} style="color: rgb(50, 50, 255);" {/if}
-			href="index.php?section=Kuwasys|ChangeClass&classId={$class.ID}">{$class.label}</a>
+			href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}">{$class.label}</a>
 	{else}		
 		<p class="classListing"
 			{if $class.status == 'active'} style="color: rgb(255, 50, 50);" 
 			{else if $class.status == 'waiting'} style="color: rgb(50, 255, 50);" 
 			{else if $class.status == 'request'} style="color: rgb(50, 50, 255);" {/if}
-			href="index.php?section=Kuwasys|ChangeClass&classId={$class.ID}">{$class.label}</p>
+			href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}">{$class.label}</p>
 	{/if}</b>
 	<br>
 	<div id="classDescription#{$class.ID}" class="classDescription" hidden="hidden">
