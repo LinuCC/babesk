@@ -9,6 +9,7 @@
 a.classListing {
 }
 p.classListing {
+	color: maroon;
 }
 
 div.classListing {
@@ -40,7 +41,7 @@ Im anderen Modul Verhindern das eine Parameteränderung von ID zu Problemen füh
 			{else if $class.status == 'request'} style="color: rgb(50, 50, 255);" {/if}
 			href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}">{$class.label}</a>
 	{else}		
-		<p class="classListing"
+		<p class="classListing" onmouseover="displayClassDescription('{$class.ID}')" onmouseout="hideClassDescription('{$class.ID}')"
 			{if $class.status == 'active'} style="color: rgb(255, 50, 50);" 
 			{else if $class.status == 'waiting'} style="color: rgb(50, 255, 50);" 
 			{else if $class.status == 'request'} style="color: rgb(50, 50, 255);" {/if}

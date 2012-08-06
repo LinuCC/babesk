@@ -2,6 +2,8 @@
 
 <script type="text/javascript" src="../smarty/templates/web/headmod_Kuwasys/classDescriptionSwitch.js">
 </script>
+<script type="text/javascript" src="../smarty/templates/web/headmod_Kuwasys/generalFunctions.js">
+</script>
 
 <style type='text/css'  media='all'>
 
@@ -33,6 +35,12 @@ p.weekdayHeading {
 	font-variant: small-caps;
 }
 
+p.helpTextLockedClasses {
+
+	text-align: center;
+	border: 1px solid #000000;
+}
+
 </style>
 
 <h2>Kursliste</h2><br>
@@ -52,7 +60,7 @@ Montag
 		</tr>
 		{foreach $weekdayOfClasses as $class}
 		<tr>
-			<th class="classListClassLabel"><a onclick="switchClassDescriptionOfLink('{$class.ID}')">{$class.label}</a>
+			<th class="classListClassLabel"><a onclick="switchClassDescriptionOfLink('{$class.ID}')">{$class.label}{if !$class.registrationForUserAllowed} (gesperrt){/if}</a>
 			<div id="classDescription#{$class.ID}" class="classDescription" hidden="hidden">
 		<p>{$class.description}</p>
 	</div>
@@ -80,7 +88,7 @@ Dienstag
 		</tr>
 		{foreach $weekdayOfClasses as $class}
 		<tr>
-			<th class="classListClassLabel"><a onclick="switchClassDescriptionOfLink('{$class.ID}')">{$class.label}</a>
+			<th class="classListClassLabel"><a onclick="switchClassDescriptionOfLink('{$class.ID}')">{$class.label}{if !$class.registrationForUserAllowed} (gesperrt){/if}</a>
 			<div id="classDescription#{$class.ID}" class="classDescription" hidden="hidden">
 		<p>{$class.description}</p>
 	</div>
@@ -108,7 +116,7 @@ Mittwoch
 		</tr>
 		{foreach $weekdayOfClasses as $class}
 		<tr>
-			<th class="classListClassLabel"><a onclick="switchClassDescriptionOfLink('{$class.ID}')">{$class.label}</a>
+			<th class="classListClassLabel"><a onclick="switchClassDescriptionOfLink('{$class.ID}')">{$class.label}{if !$class.registrationForUserAllowed} (gesperrt){/if}</a>
 			<div id="classDescription#{$class.ID}" class="classDescription" hidden="hidden">
 		<p>{$class.description}</p>
 	</div>
@@ -136,7 +144,7 @@ Donnerstag
 		</tr>
 		{foreach $weekdayOfClasses as $class}
 		<tr>
-			<th class="classListClassLabel"><a onclick="switchClassDescriptionOfLink('{$class.ID}')">{$class.label}</a>
+			<th class="classListClassLabel"><a onclick="switchClassDescriptionOfLink('{$class.ID}')">{$class.label}{if !$class.registrationForUserAllowed} (gesperrt){/if}</a>
 				<div id="classDescription#{$class.ID}" class="classDescription" hidden="hidden">
 				<p>{$class.description}</p>
 				</div>
@@ -164,7 +172,7 @@ Freitag
 		</tr>
 		{foreach $weekdayOfClasses as $class}
 		<tr>
-			<th class="classListClassLabel"><a onclick="switchClassDescriptionOfLink('{$class.ID}')">{$class.label}</a>
+			<th class="classListClassLabel"><a onclick="switchClassDescriptionOfLink('{$class.ID}')">{$class.label}{if !$class.registrationForUserAllowed} (gesperrt){/if}</a>
 			<div id="classDescription#{$class.ID}" class="classDescription" hidden="hidden">
 		<p>{$class.description}</p>
 	</div>
@@ -177,5 +185,9 @@ Freitag
 {/if}	
 {/foreach}
 <input type="submit" value="Absenden">
+<a style="float:right" onmouseover="showHelpTextLockedClasses()" onmouseout="hideHelpTextLockedClasses()">Warum sind Kurse gesperrt?</a><br>
+<p class="helpTextLockedClasses" hidden="hidden">Für gesperrte Kurse kann sich der Benutzer nicht mehr anmelden. Entweder
+diese Kurse sind voll, erlauben generell keine Anmeldungen oder sie haben sich für diesen Veranstaltungstag schon bei
+anderen Kursen angemeldet.</p>
 </form>
 {include file='web/footer.tpl'}
