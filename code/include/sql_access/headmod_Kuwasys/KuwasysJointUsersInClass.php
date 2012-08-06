@@ -95,6 +95,23 @@ class KuwasysJointUsersInClass extends TableManager {
 		$joints = $this->getTableData('ClassID=' . $classId);
 		return $joints;
 	}
+	
+	public function getJointOfUserIdAndClassId ($userId, $classId) {
+		
+		$joint = $this->getTableData(sprintf('ClassID=%s AND UserID=%s', $classId, $userId));
+		if(count($joint) > 1) {
+			throw new OutOfBoundsException('There are more than one joints for this userId and ClassId!');
+		}
+		return $joint [0];
+	}
+	
+	public function alterStatusOfJoint ($jointId, $status) {
+		$this->alterEntry($jointId, 'status', $status);
+	}
+	
+	public function deleteJoint ($jointId) {
+		$this->delEntry($jointId);
+	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////

@@ -38,8 +38,9 @@ label {
 			<a class="valueDiv"
 			{if $class.status == 'active'} style="color: rgb(255, 50, 50);" 
 			{else if $class.status == 'waiting'} style="color: rgb(50, 255, 50);" 
-			{else if $class.status == 'request'} style="color: rgb(50, 50, 255);" {/if}
-			 href="index.php?section=Kuwasys|Classes&action=changeLinkUserToClass&classId={$class.ID}&userId={$user.ID}">{$class.label} -- {$class.status}</a><br>
+			{else if $class.status == 'request#1'} style="color: rgb(50, 50, 255);" 
+			{else if $class.status == 'request#2'} style="color: rgb(50, 100, 255);" {/if}
+			 href="index.php?section=Kuwasys|Users&action=changeUserToClass&classId={$class.ID}&userId={$user.ID}&classStatus={$class.status}">{$class.label} -- {$class.status}</a><br>
 		{/foreach}
 	</div>
 	{else}

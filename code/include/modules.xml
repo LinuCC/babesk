@@ -144,6 +144,11 @@
 				<name>MainMenu</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Kursliste</ger_name>
+				<name>ClassList</name>
+				<active>true</active>
+			</module>
 		</head_module>
 	</web>
 </modules>

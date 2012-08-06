@@ -68,6 +68,15 @@ class UsersInterface extends AdminInterface {
 		$this->smarty->display($this->tplFilePath . 'addUserToClass.tpl');
 	}
 	
+	public function showChangeUserToClassDialog ($user, $class, $linkStatus) {
+		
+		$this->smarty->assign('user', $user);
+		$this->smarty->assign('class', $class);
+		$this->smarty->assign('linkStatus', $linkStatus);
+		$this->smarty->display($this->tplFilePath . 'changeUserToClass.tpl');
+		
+	}
+	
 	public function showUserDetails ($user) {
 		
 		$this->smarty->assign('user', $user);

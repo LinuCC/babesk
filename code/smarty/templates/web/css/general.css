@@ -173,6 +173,19 @@ a #header_link {
 	display: inline;
 }
 
+div.classDescription {
+
+	padding: 5px;
+	border-style: dashed;
+	border-width: 2px;
+	border-color: #2e6132;
+	-webkit-border-radius: 20px;
+	-khtml-border-radius: 20px;
+	-moz-border-radius: 20px;
+	border-radius: 20px;
+	text-align: center;
+}
+
 #headmod_selector_link {
 	display: inline;
 	color: orange;

@@ -1,8 +1,10 @@
 {extends $inh_path} {block name="content"}
 
 <h2 class="moduleHeader">Den Schüler einen Kurs zuweisen</h2>
-<p>Welchen Kurs soll dem Schüler "{$user.forename} {$user.name}" zugewiesen werden?
-Der Schüler ist dann aktiv am Kurs beteiligt</p>
+<p>Welchen Kurs soll dem Schüler "{$user.forename} {$user.name}" zugewiesen werden?<br>
+ToDo: Kursveränderungen hier nicht erlaubt!<br>
+ToDo: Warnung wenn Kurs am selben Tag wie ein anderer Kurs!
+</p>
 
 <form action="index.php?section=Kuwasys|Users&action=addUserToClass&ID={$user.ID}" method="post">
 	<select name="classId">
@@ -14,7 +16,8 @@ Der Schüler ist dann aktiv am Kurs beteiligt</p>
 	<select name="classStatus">
 		<option value="active">Aktiv</option>
 		<option value="waiting">Wartend</option>
-		<option value="request">Wunsche</option>
+		<option value="request#1">Als Erstwunsch</option>
+		<option value="request#2">Als Zweitwunsch</option>
 	</select><br>
 	<input type="submit" value="Zuweisen">
 </form>

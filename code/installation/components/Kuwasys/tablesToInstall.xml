@@ -6,6 +6,7 @@
 		CREATE TABLE IF NOT EXISTS `class` (
 		`ID` int(11) unsigned NOT NULL auto_increment,
 		`label` varchar(255) NOT NULL,
+		`description` varchar(1024) NOT NULL,
 		`maxRegistration` int(5) NOT NULL,
 		`registrationEnabled` boolean NOT NULL,
 		`weekday` varchar(3) NOT NULL,

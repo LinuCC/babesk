@@ -182,7 +182,7 @@ class TableManager {
 		}
 		while ($buffer = $result->fetch_assoc())
 			$res_array[] = $buffer;
-		if (!isset($res_array)) {
+		if (!isset($res_array) || !count($res_array)) {
 			throw new MySQLVoidDataException('MySQL returned no data!');
 		}
 		return $res_array;

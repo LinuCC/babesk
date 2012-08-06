@@ -9,6 +9,25 @@ function showOptions (ID) {
 }
 </script>
 
+<div class="filterBar">
+<h3>Filter (noch nicht fertig implementiert!)</h3>
+<form action="index.php?section=Kuwasys|Classes&action=showClass" method="post">
+Nach
+	<input id="filterBarSubmitButton" type="submit" value="Absenden">
+<select name="keyToSortAfter">
+	<option value="name">Name</option>
+	<option value="schoolyear">Schuljahr</option>
+</select>
+sortieren.<br>
+<select name="keyToFilterAfter">
+	<option value="name">Name</option>
+	<option value="schoolyear">Schuljahr</option>
+</select>
+nach
+	<input type="text" maxlength="12">
+filtern.
+</form>
+</div><br>
 
 <table>
 	<thead>
@@ -18,6 +37,7 @@ function showOptions (ID) {
 			<th align='center'>Aktive Teilnehmer</th>
 			<th align='center'>Maximale Registrierungen</th>
 			<th align='center'>Schuljahr</th>
+			<th align='center'>Veranstaltungstag</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -28,6 +48,7 @@ function showOptions (ID) {
 			<td align="center">{$class.userCount}</td>
 			<td align="center">{$class.maxRegistration}</td>
 			<td align="center">{$class.schoolYearLabel}</td>
+			<td align="center">{$class.weekdayTranslated}</td>
 			<td align="center" bgcolor='#FFD99'>
 			<div id='option{$class.ID}'>
 			<form method="post"><input type='button' value='Optionen' onclick='showOptions("{$class.ID}")'></form>

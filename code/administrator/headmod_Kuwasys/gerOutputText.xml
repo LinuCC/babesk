@@ -56,9 +56,14 @@
 			<errorFetchJointUsersInClass>Ein Fehler ist beim Abrufen der Verbindung zwischen dem Schüler und den Kursen aufgetreten.</errorFetchJointUsersInClass>
 			<errorNoJointUsersInClassOfUserId>Es konnten keine Verbindungen zwischen dem Benutzer mit der ID "%s" und Kursen gefunden werden.</errorNoJointUsersInClassOfUserId>
 			<errorFetchClass>Der Kurs konnte nicht abgerufen werden.</errorFetchClass>
+			<errorFetchJointUsersInClass>Ein Fehler ist beim Abrufen der Verbindung zwischen Schülern und Kursen aufgetreten.</errorFetchJointUsersInClass>
+			<errorDeleteJointUsersInClass>Ein Fehler ist beim entfernen der Verbindung zwischen dem Schüler und dem Kurs aufgetreten.</errorDeleteJointUsersInClass>
+			<errorAlterJointUsersInClass>Ein Fehler ist beim Verändern der Verbindung zwischen dem Schüler und dem Kurs aufgetreten.</errorAlterJointUsersInClass>
 			<!-- Other stuff -->
 			<warningNoJointsUsersInGrade>Es existieren keine Links zwischen Schülern und Klassen!</warningNoJointsUsersInGrade>
 			<finishedAddUser>Der Benutzer %s %s wurde erfolgreich hinzugefügt.</finishedAddUser>
+			<finishedDeleteJointUsersInClass>Die Verbindung wurde erfolgreich entfernt.</finishedDeleteJointUsersInClass>
+			<finishedChangeJointUsersInClass>Die Verbindung wirde erfolgreich verändert.</finishedChangeJointUsersInClass>
 			<confirmDeleteUser>Wollen Sie wirklich den Benutzer %s %s löschen?</confirmDeleteUser>
 			<confirmDeleteUserYes>JA, ich möchte den Benutzer wirklich löschen</confirmDeleteUserYes>
 			<confirmDeleteUserNo>NEIN, ich möchte den Benutzer NICHT löschen</confirmDeleteUserNo>
@@ -86,6 +91,7 @@
 			<formLabel>Name des Kurses</formLabel>
 			<formMaxRegistration>Maximale Registrierungen</formMaxRegistration>
 			<formAddClassSubmit>Den Kurs hinzufügen</formAddClassSubmit>
+			<formDescription>Beschreibung</formDescription>
 			<formAddClassHeader>Kurs hinzufügen</formAddClassHeader>
 			<finishedAddClass>Der Kurs wurde erfolgreich hinzugefügt.</finishedAddClass>
 			<confirmDeleteClass>Wollen sie den Kurs "%s" wirklich löschen?</confirmDeleteClass>

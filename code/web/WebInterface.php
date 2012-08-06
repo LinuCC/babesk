@@ -31,7 +31,7 @@ class WebInterface {
 		
 		public function DieMessage($messageString) {
 			$this->_smarty->display('web/header.tpl');
-			echo $string;
+			echo $messageString;
 			$this->_smarty->display('web/footer.tpl');
 			die();
 		}

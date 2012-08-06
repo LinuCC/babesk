@@ -7,6 +7,7 @@ class Web {
 	private $_smarty;
 	private $_moduleManager;
 	private $_loggedIn;
+	private $_interface;
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -14,19 +15,21 @@ class Web {
 	public function __construct () {
 
 		if (!isset($_SESSION)) {
-			
+
 			require_once "../include/path.php";
-			
+
 			$this->initEnvironment();
 			$this->initSmarty();
 
-			require_once PATH_INCLUDE . '/moduleManager.php';
-			require_once PATH_INCLUDE . '/functions.php';
-
 		}
+		require_once PATH_INCLUDE . '/moduleManager.php';
+		require_once PATH_INCLUDE . '/functions.php';
+		require_once PATH_WEB . '/WebInterface.php';
+		
 		$this->_moduleManager = new ModuleManager('web');
 		$this->_loggedIn = isset($_SESSION['uid']);
 		$this->_moduleManager->allowAllModules();
+		$this->_interface = new WebInterface($this->_smarty);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -69,9 +72,9 @@ class Web {
 		$_SESSION['login_tries'] = $userData['login_tries'];
 		$_SESSION['IP'] = $_SERVER['REMOTE_ADDR'];
 		$_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
-		
+
 		//module-specific
-		if(isset($userData['credit'])) {
+		if (isset($userData['credit'])) {
 			$_SESSION['credit'] = $userData['credit'];
 			$this->_smarty->assign('credit', $_SESSION['credit']);
 		}
@@ -87,20 +90,22 @@ class Web {
 		$this->_smarty->assign('username', $_SESSION['username']);
 		$this->_smarty->assign('last_login', $_SESSION['last_login']);
 
-		
 		$head_modules = $this->_moduleManager->getHeadModules();
 		$head_mod_arr = array();
 
 		foreach ($head_modules as $head_module) {
-			$head_mod_arr[$head_module->getName()] = array('name' => $head_module->getName(), 'display_name' =>
-				$head_module->getDisplayName());
+			$head_mod_arr[$head_module->getName()] = array('name'			 => $head_module->getName(), 'display_name'
+					 => $head_module->getDisplayName());
 		}
-		
-		
+
 		$this->_smarty->assign('head_modules', $head_mod_arr);
 		//include the module specified in GET['section']
 		if ($mod_str) {
-			$this->_moduleManager->execute($mod_str, false);
+			try {
+				$this->_moduleManager->execute($mod_str, false);
+			} catch (Exception $e) {
+				$this->_interface->DieError(sprintf('Probleme beim Ausführen des Moduls: %s. Weil: %s', $mod_str, $e->getMessage()));
+			}
 		}
 		//or include the main menu
 		else {

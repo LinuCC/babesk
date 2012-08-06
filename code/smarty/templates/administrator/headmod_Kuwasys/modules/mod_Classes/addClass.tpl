@@ -4,8 +4,9 @@
 
 <form action='index.php?section=Kuwasys|Classes&action=addClass' method='post'>
 
-	<label>Bezeichner: <input type='text' name='label'></label><br><br>
-	<label>maximale Registrierungen: <input type='text' name='maxRegistration'></label><br><br>
+	<label>Name des Kurses: <input type='text' name='label'></label><br><br>
+	<label>Beschreibung: <textarea name='description' maxlength='1024' rows='4' cols='50'></textarea></label><br><br>
+	<label>maximale Registrierungen: <input type='text' name='maxRegistration' maxlength='4'></label><br><br>
 	<label>Zu welchem Schuljahr gehört der Kurs? 
 	<select name='schoolYear' size='1'>
 		{foreach $schoolYears as $schoolYear}

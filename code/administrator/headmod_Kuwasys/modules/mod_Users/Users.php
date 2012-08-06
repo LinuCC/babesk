@@ -64,6 +64,9 @@ class Users extends Module {
 				case 'addUserToClass':
 					$this->addUserToClass();
 					break;
+				case 'changeUserToClass':
+					$this->changeUserToClass();
+					break;
 				case 'showUserDetails':
 					$this->showUserDetails();
 					break;
@@ -160,6 +163,16 @@ class Users extends Module {
 			$this->showAddClassToUser();
 		}
 	}
+	
+	private function changeUserToClass () {
+		
+		if(isset($_POST['classStatus'])) {
+			$this->alterJointUsersInClassOfUserIdAndClassId($_GET['userId'], $_GET['classId'], $_POST['classStatus']);
+		}
+		else {
+			$this->showChangeClassToUser();
+		}
+	}
 
 	/**-----------------------------------------------------------------------------
 	 * Functions for displaying forms and other stuff
@@ -207,6 +220,14 @@ class Users extends Module {
 		$classes = $this->getAllClasses();
 		$user = $this->getUserData($_GET['ID']);
 		$this->_interface->showAddUserToClassDialog($user, $classes);
+	}
+	
+	private function showChangeClassToUser () {
+		
+		$class = $this->getClassByClassId($_GET['classId']);
+		$user = $this->getUserData($_GET['userId']);
+		$linkStatus = $_GET['classStatus'];
+		$this->_interface->showChangeUserToClassDialog($user, $class, $linkStatus);
 	}
 
 	private function showUserDetails () {
@@ -686,7 +707,7 @@ class Users extends Module {
 	}
 
 	/********************
-	 * KuwasysUsersInClassManager
+	 * KuwasysJointUsersInClassManager
 	 ********************/
 
 	/**
@@ -719,6 +740,47 @@ class Users extends Module {
 		}
 		else {
 			return false;
+		}
+	}
+	
+	private function getJointUsersInClassByUserIdAndClassId ($userId, $classId) {
+		
+		try {
+			$joint = $this->_jointUsersInClass->getJointOfUserIdAndClassId($userId, $classId);
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointUsersInClass'));
+		}
+		return $joint;
+	}
+	
+	private function deleteJointUsersInClass ($jointId) {
+		
+		try {
+			$this->_jointUsersInClass->deleteJoint($jointId);
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorDeleteJointUsersInClass'));
+		}
+	}
+	
+	private function alterJointUsersInClass ($jointId, $status) {
+		
+		try {
+			$this->_jointUsersInClass->alterStatusOfJoint($jointId, $status);
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorAlterJointUsersInClass'));
+		}
+	}
+	
+	private function alterJointUsersInClassOfUserIdAndClassId ($userId, $classId, $status) {
+		
+		$joint = $this->getJointUsersInClassByUserIdAndClassId($userId, $classId);
+		if ($status == 'noConnection') {
+			$this->deleteJointUsersInClass($joint ['ID']);
+			$this->_interface->dieMsg($this->_languageManager->getText('finishedDeleteJointUsersInClass'));
+		}
+		else {
+			$this->alterJointUsersInClass($joint ['ID'], $status);
+			$this->_interface->dieMsg($this->_languageManager->getText('finishedChangeJointUsersInClass'));
 		}
 	}
 

@@ -83,7 +83,7 @@ class Classes extends Module {
 
 	private function addClass () {
 
-		if (isset($_POST['label'], $_POST['maxRegistration'])) {
+		if (isset($_POST['label'], $_POST['maxRegistration'], $_POST['description'])) {
 			$this->checkClassInput();
 			$this->addClassToDatabase();
 			$this->addJointSchoolYear();
@@ -148,6 +148,7 @@ class Classes extends Module {
 		try {
 			inputcheck($_POST['label'], '/\A.{3,100}\z/', $this->_languageManager->getText('formLabel'));
 			inputcheck($_POST['maxRegistration'], 'number', $this->_languageManager->getText('formMaxRegistration'));
+			inputcheck($_POST['description'], '/\A.{3,1024}\z/', $this->_languageManager->getText('formDescription'));
 		} catch (WrongInputException $e) {
 			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorWrongInput'), $e->getFieldName())
 				);
@@ -162,7 +163,7 @@ class Classes extends Module {
 		
 		$allowRegistration = (isset($_POST['allowRegistration'])) ? true : false;
 		try {
-			$this->_classManager->addClass($_POST['label'], $_POST['maxRegistration'], $allowRegistration, $_POST['weekday']);
+			$this->_classManager->addClass($_POST['label'], $_POST['description'], $_POST['maxRegistration'], $allowRegistration, $_POST['weekday']);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorAddClass'));
 		}
@@ -173,6 +174,7 @@ class Classes extends Module {
 		$classes = $this->getAllClasses();
 		$classes = $this->addSchoolYearLabelToClasses($classes);
 		$classes = $this->addRegistrationCountToClasses($classes);
+		$classes = $this->addWeekdayTranslatedToClasses($classes);
 		$this->_interface->showClasses($classes);
 	}
 
@@ -268,7 +270,7 @@ class Classes extends Module {
 		
 		$allowRegistration = (isset($_POST['allowRegistration'])) ? true : false;
 		try {
-			$this->_classManager->alterClass($_GET['ID'], $_POST['label'], $_POST['maxRegistration'], $allowRegistration);
+			$this->_classManager->alterClass($_GET['ID'], $_POST['label'], $_POST['description'], $_POST['maxRegistration'], $allowRegistration, $_POST['weekday']);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorChangeClass'));
 		}
@@ -455,6 +457,14 @@ class Classes extends Module {
 			$class ['weekdayTranslated'] = $translatedWeekday;
 		}
 		return $class;
+	}
+	
+	private function addWeekdayTranslatedToClasses ($classes) {
+		
+		foreach ($classes as &$class) {
+			$class = $this->addWeekdayTranslatedToClass($class);
+		}
+		return $classes;
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
