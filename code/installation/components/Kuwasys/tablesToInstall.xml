@@ -164,4 +164,15 @@
 		);
 		</sqlCommand>
 	</table>
+	<table>
+		<name>global_settings</name>
+		<sqlCommand>
+		    CREATE TABLE IF NOT EXISTS `global_settings` (
+                                `id` smallint(5) unsigned NOT NULL auto_increment,
+                                `name` varchar(255) NOT NULL,
+                                `value` varchar(1024) NOT NULL,
+                                PRIMARY KEY (`id`)
+                            )AUTO_INCREMENT=1;
+		</sqlCommand>
+	</table>
 </database>

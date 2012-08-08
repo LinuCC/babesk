@@ -227,6 +227,9 @@ class TableManager {
 					//MySQL needs quotation marks for strings
 					$column_value_str .= '"' . func_get_arg($i - 1) . '",';
 				}
+				else if ((func_get_arg($i - 1)) === '') {
+					$column_value_str .= '"' . func_get_arg($i - 1) . '",';
+				}
 				else {
 					$column_value_str .= func_get_arg($i - 1) . ',';
 				}

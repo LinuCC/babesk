@@ -31,7 +31,7 @@ class AdminInterface extends GeneralInterface {
 	 */
 	function dieError ($msg) {
 
-		$this->smarty->assign('error', $msg);
+		$this->smarty->append('_userErrorOutput', $msg);
 		$this->smarty->display(PATH_SMARTY . '/templates/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5(
 			$_SERVER['REQUEST_URI']));
 		die();
@@ -43,7 +43,7 @@ class AdminInterface extends GeneralInterface {
 	 * @param string $msg The message to be shown
 	 */
 	function dieMsg ($msg) {
-		$this->smarty->assign('message', $msg);
+		$this->smarty->assign('_userMsgOutput', $msg);
 		$this->smarty->display(PATH_SMARTY . '/templates/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5(
 			$_SERVER['REQUEST_URI']));
 		die();

@@ -52,6 +52,9 @@ class Users extends Module {
 				case 'addUser':
 					$this->addUser();
 					break;
+				case 'csvImport':
+					$this->importUsersFromCsv();
+					break;
 				case 'showUsers':
 					$this->showUsers();
 					break;
@@ -110,7 +113,7 @@ class Users extends Module {
 		if (isset($_POST['username'], $_POST['name'], $_POST['forename'], $_POST['telephone'])) {
 			$this->checkAddUserInput();
 			$this->checkPasswordRepetition();
-			$this->addUserToDatabase();
+			$this->addUserToDatabaseByPost();
 			$this->addJointUsersInSchoolYearByAddUser();
 			$userID = $this->_usersManager->getLastInsertedID();
 			$this->addJointUsersInGrade($userID, $_POST['grade']);
@@ -163,14 +166,24 @@ class Users extends Module {
 			$this->showAddClassToUser();
 		}
 	}
-	
+
 	private function changeUserToClass () {
-		
-		if(isset($_POST['classStatus'])) {
+
+		if (isset($_POST['classStatus'])) {
 			$this->alterJointUsersInClassOfUserIdAndClassId($_GET['userId'], $_GET['classId'], $_POST['classStatus']);
 		}
 		else {
 			$this->showChangeClassToUser();
+		}
+	}
+
+	private function importUsersFromCsv () {
+
+		if (count($_FILES)) {
+			$this->handleCsvImport();
+		}
+		else {
+			$this->_interface->showSelectCsvFileForImport();
 		}
 	}
 
@@ -221,9 +234,9 @@ class Users extends Module {
 		$user = $this->getUserData($_GET['ID']);
 		$this->_interface->showAddUserToClassDialog($user, $classes);
 	}
-	
+
 	private function showChangeClassToUser () {
-		
+
 		$class = $this->getClassByClassId($_GET['classId']);
 		$user = $this->getUserData($_GET['userId']);
 		$linkStatus = $_GET['classStatus'];
@@ -250,7 +263,7 @@ class Users extends Module {
 	/**
 	 * @used-by Users::addUser
 	 */
-	private function addUserToDatabase () {
+	private function addUserToDatabaseByPost () {
 
 		$date = $this->convertNumbersToDate($_POST['Date_Day'], $_POST['Date_Month'], $_POST['Date_Year']);
 		try {
@@ -261,6 +274,29 @@ class Users extends Module {
 		}
 		catch (Exception $e) {
 			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorAddUser'), $e->getMessage()));
+		}
+	}
+
+	private function addUserToDatabase ($forename, $name, $username, $password, $email, $telephone, $date) {
+
+		try {
+			$this->_usersManager->addUser($forename, $name, $username, $password, $email, $telephone, $date);
+		} catch (MySQLConnectionException $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorAddUserConnectDatabase'));
+		}
+		catch (Exception $e) {
+			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorAddUser'), $e->getMessage()));
+		}
+	}
+
+	private function addUsersToDatabaseByCsvImport ($contentArray) {
+
+		foreach ($contentArray as $rowArray) {
+			echo 'Neuer Nutzer:<br>';
+			var_dump($rowArray);
+			echo '<br>';
+			$this->addUserToDatabase($rowArray['forename'], $rowArray['name'], $rowArray['username'], $rowArray[
+				'password'], $rowArray['email'], $rowArray['telephone'], $rowArray['date']);
 		}
 	}
 
@@ -462,7 +498,7 @@ class Users extends Module {
 	private function addGradeLabelToSingleUser ($user) {
 
 		$jointUsersInGrade = $this->getJointUsersInGradeByUserId($user['ID']);
-		$grade = $this->getGradeByGradeId($jointUsersInGrade['GradeID']);
+		$grade = $this->getGradeByGradeIdWithoutDieingAtError($jointUsersInGrade['GradeID']);
 		$user['gradeLabel'] = $grade['label'];
 		$user['gradeValue'] = $grade['gradeValue'];
 		$user['gradeId'] = $grade['ID'];
@@ -477,6 +513,18 @@ class Users extends Module {
 			$this->_interface->dieError($this->_languageManager->getText('errorFetchGrade'));
 		}
 		return $grade;
+	}
+
+	private function getGradeByGradeIdWithoutDieingAtError ($gradeID) {
+
+		try {
+			$grade = $this->_gradeManager->getGrade($gradeID);
+		} catch (Exception $e) {
+			$this->_interface->showMsg($this->_languageManager->getText('errorFetchGrade'));
+		}
+		if (isset($grade)) {
+			return $grade;
+		}
 	}
 
 	/**
@@ -742,9 +790,9 @@ class Users extends Module {
 			return false;
 		}
 	}
-	
+
 	private function getJointUsersInClassByUserIdAndClassId ($userId, $classId) {
-		
+
 		try {
 			$joint = $this->_jointUsersInClass->getJointOfUserIdAndClassId($userId, $classId);
 		} catch (Exception $e) {
@@ -752,34 +800,34 @@ class Users extends Module {
 		}
 		return $joint;
 	}
-	
+
 	private function deleteJointUsersInClass ($jointId) {
-		
+
 		try {
 			$this->_jointUsersInClass->deleteJoint($jointId);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorDeleteJointUsersInClass'));
 		}
 	}
-	
+
 	private function alterJointUsersInClass ($jointId, $status) {
-		
+
 		try {
 			$this->_jointUsersInClass->alterStatusOfJoint($jointId, $status);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorAlterJointUsersInClass'));
 		}
 	}
-	
+
 	private function alterJointUsersInClassOfUserIdAndClassId ($userId, $classId, $status) {
-		
+
 		$joint = $this->getJointUsersInClassByUserIdAndClassId($userId, $classId);
 		if ($status == 'noConnection') {
-			$this->deleteJointUsersInClass($joint ['ID']);
+			$this->deleteJointUsersInClass($joint['ID']);
 			$this->_interface->dieMsg($this->_languageManager->getText('finishedDeleteJointUsersInClass'));
 		}
 		else {
-			$this->alterJointUsersInClass($joint ['ID'], $status);
+			$this->alterJointUsersInClass($joint['ID'], $status);
 			$this->_interface->dieMsg($this->_languageManager->getText('finishedChangeJointUsersInClass'));
 		}
 	}
@@ -841,6 +889,39 @@ class Users extends Module {
 		else {
 			$this->_interface->dieError($this->_languageManager->getText('formWrongPasswordRepetition'));
 		}
+	}
+
+	private function handleCsvImport () {
+
+		require_once PATH_INCLUDE . '/CsvImporter.php';
+		$csvManager = new CsvImporter($_FILES['csvFile']['tmp_name']);
+		$contentArray = $csvManager->getContents();
+		$contentArray = $this->controlVariablesOfCsvImport($contentArray);
+		$this->addUsersToDatabaseByCsvImport($contentArray);
+	}
+
+	private function controlVariablesOfCsvImport ($contentArray) {
+
+		foreach ($contentArray as & $rowArray) {
+
+			$rowArray = $this->checkCsvImportVariable('forename', $rowArray);
+			$rowArray = $this->checkCsvImportVariable('name', $rowArray);
+			$rowArray = $this->checkCsvImportVariable('username', $rowArray);
+			$rowArray = $this->checkCsvImportVariable('password', $rowArray);
+			$rowArray = $this->checkCsvImportVariable('email', $rowArray);
+			$rowArray = $this->checkCsvImportVariable('telephone', $rowArray);
+			$rowArray = $this->checkCsvImportVariable('date', $rowArray);
+		}
+		var_dump($contentArray);
+		return $contentArray;
+	}
+
+	private function checkCsvImportVariable ($varName, $rowArray) {
+
+		if (!isset($rowArray[$varName])) {
+			$rowArray[$varName] = '';
+		}
+		return $rowArray;
 	}
 
 	/**
