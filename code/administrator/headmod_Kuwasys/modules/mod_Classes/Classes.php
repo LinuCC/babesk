@@ -226,8 +226,10 @@ class Classes extends Module {
 	private function deleteClass () {
 
 		if (isset($_POST['dialogConfirmed'])) {
+			$classId = $_GET['ID'];
 			$this->deleteClassFromDatabase();
 			$this->deleteJointsSchoolYear();
+			$this->deleteAllJointsUsersInClassOfClass($classId);
 			$this->_interface->dieMsg($this->_languageManager->getText('finishedDeleteClass'));
 		}
 		else if (isset($_POST['dialogNotConfirmed'])) {
@@ -241,9 +243,20 @@ class Classes extends Module {
 	private function showDeleteConfirmation () {
 
 		$promptMessage = sprintf($this->_languageManager->getText('confirmDeleteClass'), $this->getLabelOfClass());
+		if($this->isClassJointedWithUsers($_GET['ID'])) {$this->_interface->showError($this->_languageManager->getText('warningUsersJointedToClassToDelete'));}
 		$confirmYes = $this->_languageManager->getText('confirmDeleteClassYes');
 		$confirmNo = $this->_languageManager->getText('confirmDeleteClassNo');
 		$this->_interface->showDeleteClassConfirmation($_GET['ID'], $promptMessage, $confirmYes, $confirmNo);
+	}
+	
+	private function isClassJointedWithUsers ($classId) {
+		
+		try {
+			$this->_jointUserInClassManager->getAllJointsWithClassId($classId);
+		} catch (MySQLVoidDataException $e) {
+			return false;
+		}
+		return true;
 	}
 
 	private function deleteClassFromDatabase () {
@@ -570,6 +583,14 @@ class Classes extends Module {
 			$rowArray[$varName] = '';
 		}
 		return $rowArray;
+	}
+	
+	private function deleteAllJointsUsersInClassOfClass ($classId) {
+		try {
+			$this->_jointUserInClassManager->deleteAllJointsOfClassId($classId);
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorDeleteJointsUsersInClass'));
+		}
 	}
 
 	private function showImportClassesByCsvFile () {

@@ -71,7 +71,9 @@ class MainMenu extends Module {
 		catch (Exception $e) {
 			$this->dieErrorMsg('error fetching ClassLinks from the Database');
 		}
-		return $joints;
+		if(isset($joints)) {
+			return $joints;
+		}
 	}
 
 	private function getClassFromDatabase ($classId) {

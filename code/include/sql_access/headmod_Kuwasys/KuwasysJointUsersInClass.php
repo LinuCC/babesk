@@ -113,6 +113,11 @@ class KuwasysJointUsersInClass extends TableManager {
 	public function deleteJoint ($jointId) {
 		$this->delEntry($jointId);
 	}
+	
+	public function deleteAllJointsOfClassId ($classId) {
+		
+		$this->deleteAllEntriesWithValueOfKey('ClassID', $classId);
+	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////

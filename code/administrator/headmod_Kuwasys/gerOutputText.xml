@@ -117,6 +117,10 @@
 			<finAddClassesByCsv>Die Kurse wurden erfolgreich importiert.</finAddClassesByCsv>
 			<errorGetSchoolyearBySchoolyearName>Das Schuljahr "%s" wurde nicht gefunden! Sie können das Schuljahr einstellen wenn sie den Kurs bearbeiten</errorGetSchoolyearBySchoolyearName>
 			<errorFetchNextAutoIncrementId>Ein Fehler ist beim Abrufen der ID des hinzuzufügenden Kurses aufgetreten.</errorFetchNextAutoIncrementId>
+			<warningUsersJointedToClassToDelete>WARNUNG: Es sind noch Benutzer an dem Kurs angemeldet/interessiert! Wenn sie den Kurs löschen, gehen auch diese
+			    Beziehungen unwiderruflich verloren.</warningUsersJointedToClassToDelete>
+			<errorDeleteJointsUsersInClass>Ein Fehler ist beim löschen der Beziehungen der Benutzer zum Kurs aufgetreten. 
+			    Die Datenbank besitzt nun womöglich Einträge, die manuell gelöscht werden müssen!</errorDeleteJointsUsersInClass>
 			<weekdayLabelMon>Montag</weekdayLabelMon>
 			<weekdayLabelTue>Dienstag</weekdayLabelTue>
 			<weekdayLabelWed>Mittwoch</weekdayLabelWed>
