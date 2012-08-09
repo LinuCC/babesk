@@ -277,10 +277,10 @@ class Users extends Module {
 		}
 	}
 
-	private function addUserToDatabase ($forename, $name, $username, $password, $email, $telephone, $date) {
+	private function addUserToDatabase ($forename, $name, $username, $password, $email, $telephone, $birthday) {
 
 		try {
-			$this->_usersManager->addUser($forename, $name, $username, $password, $email, $telephone, $date);
+			$this->_usersManager->addUser($forename, $name, $username, $password, $email, $telephone, $birthday);
 		} catch (MySQLConnectionException $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorAddUserConnectDatabase'));
 		}
@@ -296,7 +296,7 @@ class Users extends Module {
 			var_dump($rowArray);
 			echo '<br>';
 			$this->addUserToDatabase($rowArray['forename'], $rowArray['name'], $rowArray['username'], $rowArray[
-				'password'], $rowArray['email'], $rowArray['telephone'], $rowArray['date']);
+				'password'], $rowArray['email'], $rowArray['telephone'], $rowArray['birthday']);
 		}
 	}
 
@@ -894,7 +894,7 @@ class Users extends Module {
 	private function handleCsvImport () {
 
 		require_once PATH_INCLUDE . '/CsvImporter.php';
-		$csvManager = new CsvImporter($_FILES['csvFile']['tmp_name']);
+		$csvManager = new CsvImporter($_FILES['csvFile']['tmp_name'], ';');
 		$contentArray = $csvManager->getContents();
 		$contentArray = $this->controlVariablesOfCsvImport($contentArray);
 		$this->addUsersToDatabaseByCsvImport($contentArray);
@@ -910,7 +910,7 @@ class Users extends Module {
 			$rowArray = $this->checkCsvImportVariable('password', $rowArray);
 			$rowArray = $this->checkCsvImportVariable('email', $rowArray);
 			$rowArray = $this->checkCsvImportVariable('telephone', $rowArray);
-			$rowArray = $this->checkCsvImportVariable('date', $rowArray);
+			$rowArray = $this->checkCsvImportVariable('birthday', $rowArray);
 		}
 		var_dump($contentArray);
 		return $contentArray;

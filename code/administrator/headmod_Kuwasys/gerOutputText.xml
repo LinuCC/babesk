@@ -114,6 +114,9 @@
 			<errorNoJointsUsersInClassOfClassId>Es konnten keine Teilnehmer für diesen Kurs gefunden werden.</errorNoJointsUsersInClassOfClassId>
 			<errorFetchJointsUsersInClassOfClassId>Ein Fehler ist beim Abrufen der Teilnehmer für diesen Kurs aufgetreten.</errorFetchJointsUsersInClassOfClassId>
 			<errorAddClass>Ein Fehler ist beim Hinzufügen des Kurses aufgetreten.</errorAddClass>
+			<finAddClassesByCsv>Die Kurse wurden erfolgreich importiert.</finAddClassesByCsv>
+			<errorGetSchoolyearBySchoolyearName>Das Schuljahr "%s" wurde nicht gefunden! Sie können das Schuljahr einstellen wenn sie den Kurs bearbeiten</errorGetSchoolyearBySchoolyearName>
+			<errorFetchNextAutoIncrementId>Ein Fehler ist beim Abrufen der ID des hinzuzufügenden Kurses aufgetreten.</errorFetchNextAutoIncrementId>
 			<weekdayLabelMon>Montag</weekdayLabelMon>
 			<weekdayLabelTue>Dienstag</weekdayLabelTue>
 			<weekdayLabelWed>Mittwoch</weekdayLabelWed>

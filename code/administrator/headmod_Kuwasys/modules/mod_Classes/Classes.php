@@ -38,6 +38,9 @@ class Classes extends Module {
 				case 'addClass':
 					$this->addClass();
 					break;
+				case 'csvImport':
+					$this->importClassesByCsvFile();
+					break;
 				case 'showClass':
 					$this->showClasses();
 					break;
@@ -85,8 +88,8 @@ class Classes extends Module {
 
 		if (isset($_POST['label'], $_POST['maxRegistration'], $_POST['description'])) {
 			$this->checkClassInput();
-			$this->addClassToDatabase();
-			$this->addJointSchoolYear();
+			$this->addClassToDatabaseByPost();
+			$this->addJointSchoolYearByPost();
 			$this->_interface->dieMsg($this->_languageManager->getText('finishedAddClass'));
 		}
 		else {
@@ -159,14 +162,42 @@ class Classes extends Module {
 		$this->checkSchoolYearExisting();
 	}
 
-	private function addClassToDatabase () {
-		
+	private function addClassToDatabaseByPost () {
+
 		$allowRegistration = (isset($_POST['allowRegistration'])) ? true : false;
+		$this->addClassToDatabase($_POST['label'], $_POST['description'], $_POST['maxRegistration'], $allowRegistration,
+			$_POST['weekday']);
+	}
+
+	private function addClassToDatabase ($label, $description, $maxRegistration, $allowRegistration, $weekday) {
+
 		try {
-			$this->_classManager->addClass($_POST['label'], $_POST['description'], $_POST['maxRegistration'], $allowRegistration, $_POST['weekday']);
+			$this->_classManager->addClass($label, $description, $maxRegistration, $allowRegistration, $weekday);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorAddClass'));
 		}
+	}
+
+	private function addClassToDatabaseByCsvImport ($contentArray) {
+
+		foreach ($contentArray as $rowArray) {
+			$idOfClass = $this->getNextAutoincrementIdOfClass();
+			$this->addClassToDatabase($rowArray['label'], $rowArray['description'], $rowArray['maxRegistration'],
+				$rowArray['registrationEnabled'], $rowArray['weekday']);
+			if($rowArray ['schoolyearId'] != '') {
+				$this->addJointSchoolYear($rowArray ['schoolyearId'], $idOfClass);
+			}
+		}
+	}
+	
+	private function getNextAutoincrementIdOfClass () {
+		
+		try {
+			$idOfClass = $this->_classManager->getNextAutoIncrementID();
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorFetchNextAutoIncrementId'));
+		}
+		return $idOfClass;
 	}
 
 	private function showClasses () {
@@ -267,10 +298,11 @@ class Classes extends Module {
 	}
 
 	private function changeClassInDatabase () {
-		
+
 		$allowRegistration = (isset($_POST['allowRegistration'])) ? true : false;
 		try {
-			$this->_classManager->alterClass($_GET['ID'], $_POST['label'], $_POST['description'], $_POST['maxRegistration'], $allowRegistration, $_POST['weekday']);
+			$this->_classManager->alterClass($_GET['ID'], $_POST['label'], $_POST['description'], $_POST[
+				'maxRegistration'], $allowRegistration, $_POST['weekday']);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorChangeClass'));
 		}
@@ -336,10 +368,21 @@ class Classes extends Module {
 	 * connects the new Class-entry with a SchoolYear
 	 * @used-by Classes::addClass()
 	 */
-	private function addJointSchoolYear () {
+	private function addJointSchoolYearByPost () {
 
 		try {
 			$this->_syJointManager->addJoint($_POST['schoolYear'], $this->getLastAddedClassId());
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorLinkSchoolYear') . $e->getMessage());
+		}
+	}
+	/**
+	 * connects the new Class-entry with a SchoolYear
+	 */
+	private function addJointSchoolYear ($schoolyearId, $classId) {
+
+		try {
+			$this->_syJointManager->addJoint($schoolyearId, $classId);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorLinkSchoolYear') . $e->getMessage());
 		}
@@ -401,6 +444,9 @@ class Classes extends Module {
 	private function getSchoolYearLabelByClassId ($classID) {
 
 		$schoolYearID = $this->getSchoolYearIdByClassId($classID);
+		if (!isset($schoolYearID)) {
+			return;
+		}
 		$schoolYear = $this->getSchoolYearById($schoolYearID);
 		return $schoolYear['label'];
 	}
@@ -429,12 +475,27 @@ class Classes extends Module {
 		try {
 			$schoolYearID = $this->_syJointManager->getSchoolYearIdOfClassId($classID);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorNoLinkSchoolYear'), $classID));
+			$this->_interface->showError(sprintf($this->_languageManager->getText('errorNoLinkSchoolYear'), $classID));
 		}
 		catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorFetchLinkSchoolYear'));
 		}
-		return $schoolYearID;
+		if (isset($schoolYearID)) {
+			return $schoolYearID;
+		}
+	}
+
+	private function getSchoolyearIdBySchoolyearName ($schoolyearName) {
+
+		try {
+			$id = $this->_syManager->getSchoolyearIdOfSchoolyearName($schoolyearName);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->showError(sprintf($this->_languageManager->getText('errorGetSchoolyearBySchoolyearName'),
+				$schoolyearName));
+		}
+		if(isset($id)) {
+			return $id;
+		}
 	}
 
 	/**
@@ -442,29 +503,78 @@ class Classes extends Module {
 	 * @param string $weekdayString The name of the weekday in three Chars (like, "Mon", "Tue", ... )
 	 */
 	private function getTranslatedWeekday ($weekdayString) {
-		
+
 		$text = $this->_languageManager->getText('weekdayLabel' . $weekdayString);
 		return $text;
 	}
-	
+
 	private function addWeekdayTranslatedToClass ($class) {
-		
-		if(!isset($class ['weekday']) || !$class ['weekday']) {
-			$class ['weekdayTranslated'] = false;
+
+		if (!isset($class['weekday']) || !$class['weekday']) {
+			$class['weekdayTranslated'] = false;
 		}
 		else {
-			$translatedWeekday = $this->getTranslatedWeekday($class ['weekday']);
-			$class ['weekdayTranslated'] = $translatedWeekday;
+			$translatedWeekday = $this->getTranslatedWeekday($class['weekday']);
+			$class['weekdayTranslated'] = $translatedWeekday;
 		}
 		return $class;
 	}
-	
+
 	private function addWeekdayTranslatedToClasses ($classes) {
-		
-		foreach ($classes as &$class) {
+
+		foreach ($classes as & $class) {
 			$class = $this->addWeekdayTranslatedToClass($class);
 		}
 		return $classes;
+	}
+
+	private function importClassesByCsvFile () {
+
+		if (isset($_FILES['csvFile'])) {
+			$this->handleCsvFile ();
+		}
+		else {
+			$this->showImportClassesByCsvFile();
+		}
+	}
+
+	private function handleCsvFile () {
+
+		require_once PATH_INCLUDE . '/CsvImporter.php';
+		$csvManager = new CsvImporter($_FILES['csvFile']['tmp_name'], ';');
+		$contentArray = $csvManager->getContents();
+		$contentArray = $this->controlVariablesOfCsvImport($contentArray);
+		$this->addClassToDatabaseByCsvImport($contentArray);
+		$this->_interface->dieMsg($this->_languageManager->getText('finAddClassesByCsv'));
+	}
+
+	private function controlVariablesOfCsvImport ($contentArray) {
+
+		foreach ($contentArray as & $rowArray) {
+
+			$rowArray = $this->checkCsvImportVariable('label', $rowArray);
+			$rowArray = $this->checkCsvImportVariable('description', $rowArray);
+			$rowArray = $this->checkCsvImportVariable('maxRegistration', $rowArray);
+			$rowArray = $this->checkCsvImportVariable('registrationEnabled', $rowArray);
+			$rowArray = $this->checkCsvImportVariable('weekday', $rowArray);
+
+			$rowArray['schoolyearId'] = (isset($rowArray['schoolyearName'])) ? $this->getSchoolyearIdBySchoolyearName(
+				$rowArray['schoolyearName']) : '';
+		}
+		return $contentArray;
+	}
+
+	private function checkCsvImportVariable ($varName, $rowArray) {
+
+		if (!isset($rowArray[$varName])) {
+			$rowArray[$varName] = '';
+		}
+		return $rowArray;
+	}
+
+	private function showImportClassesByCsvFile () {
+
+		$this->_interface->showImportClassesByCsvFile();
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes

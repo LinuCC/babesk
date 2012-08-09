@@ -37,21 +37,26 @@ class KuwasysJointClassInSchoolYearManager extends TableManager {
 			parent::delEntry($classJoint['ID']);
 		}
 	}
-	
+
 	public function getSchoolYearIdOfClassId ($classID) {
-		
+
 		$entry = parent::searchEntry('ClassID=' . $classID);
-		return $entry ['SchoolYearID'];
+		return $entry['SchoolYearID'];
 	}
-	
+
 	public function alterSchoolYearIdOfClassId ($classID, $schoolYearId) {
-		
-		$entry = parent::searchEntry('ClassID=' . $classID);
-		parent::alterEntry($entry ['ID'], 'SchoolYearID', $schoolYearId);
+
+		try {
+			$entry = parent::searchEntry('ClassID=' . $classID);
+		} catch (Exception $e) {
+			parent::addEntry('SchoolYearID', $schoolYearId, 'ClassID', $classID);
+			return;
+		}
+		parent::alterEntry($entry['ID'], 'SchoolYearID', $schoolYearId);
 	}
-	
+
 	public function getAllJoints () {
-		$joints = parent::getTableData ();
+		$joints = parent::getTableData();
 		return $joints;
 	}
 

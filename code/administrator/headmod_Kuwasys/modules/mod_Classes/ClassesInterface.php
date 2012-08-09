@@ -32,6 +32,11 @@ class ClassesInterface extends AdminInterface {
 		$this->smarty->assign('schoolYears', $schoolYears);
 		$this->smarty->display($this->tplFilePath . 'addClass.tpl');
 	}
+	
+	public function showImportClassesByCsvFile () {
+		
+		$this->smarty->display($this->tplFilePath . 'importLocalCsvFile.tpl');
+	}
 
 	public function showClasses ($classes) {
 

@@ -256,7 +256,6 @@ class TableManager {
 	 */
 
 	public function searchEntry ($search_str) {
-		
 		if (!is_string($search_str))
 			throw new UnexpectedValueException('One of the Parameters has the wrong format!');
 

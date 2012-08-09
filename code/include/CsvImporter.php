@@ -10,10 +10,11 @@ class CsvImporter {
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	////////////////////////////////////////////////////////////////////////////////
-	public function __construct ($pathToCsvFile) {
+	public function __construct ($pathToCsvFile, $delimiterChar) {
 
 		$this->_pathToCsvFile = $pathToCsvFile;
 		$this->_countOfVoidColumns = 0;
+		$this->_delimiterChar = $delimiterChar;
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Getters and Setters
@@ -94,7 +95,7 @@ class CsvImporter {
 
 	private function readLine () {
 
-		$row = fgetcsv($this->_csvFileHandle);
+		$row = fgetcsv($this->_csvFileHandle, 0, $this->_delimiterChar);
 		if ($row === NULL) {
 			throw new Exception('Handle of CSV-file is not correct; unable to load CSV-file');
 		}
@@ -109,6 +110,7 @@ class CsvImporter {
 	private $_csvFileHandle;
 	private $_countOfVoidColumns;
 	private $_completeArray;
+	private $_delimiterChar;
 }
 
 ?>

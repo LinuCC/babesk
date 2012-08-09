@@ -69,6 +69,7 @@ function switchInfo(divName) {
 {include file='web/module_selector.tpl' title='Modul Wählen'}
 <div id="main">
 <div id="content">
+{if isset($error)}<p class="error">{foreach $error as $errorMsg}{$errorMsg}{/foreach}</p>{/if}
 {if $status != ''}
     <h4>{$status}</h4>
 {/if}
