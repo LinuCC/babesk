@@ -2,7 +2,7 @@
 
 /**
  * Imports a CSV-File
- * @author voelkerball
+ * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
  *
  */
 class CsvImporter {

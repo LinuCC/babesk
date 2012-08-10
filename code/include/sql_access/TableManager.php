@@ -49,10 +49,10 @@ class TableManager {
 	 * @param unknown_type $key
 	 */
 	public function existsKey ($columnName) {
-		
-		$query = sql_prev_inj('SHOW COLUMNS FROM `' . $this->tablename . '`  LIKE "'. $columnName . '";');
+
+		$query = sql_prev_inj('SHOW COLUMNS FROM `' . $this->tablename . '`  LIKE "' . $columnName . '";');
 		$result = $this->db->query($query);
-		if(count($result->fetch_assoc())) {
+		if (count($result->fetch_assoc())) {
 			return true;
 		}
 		else {
@@ -223,7 +223,7 @@ class TableManager {
 					$column_value_str .= func_get_arg($i - 1) . ',';
 				}
 				//is_numeric killed the zeros leading numbers, problem with telephonenumber. (0581/642 etc. ftw)
-				else if (/*!is_numeric*/(func_get_arg($i - 1))) {
+				else if ( /*!is_numeric*/(func_get_arg($i - 1))) {
 					//MySQL needs quotation marks for strings
 					$column_value_str .= '"' . func_get_arg($i - 1) . '",';
 				}
@@ -263,8 +263,9 @@ class TableManager {
 		if (!isset($result_arr) || !count($result_arr)) {
 			throw new MySQLVoidDataException('MySQL returned void Data');
 		}
-		else if(count($result_arr) < 1) {
-			echo 'Warning: searchEntry found multiple entries, one expected. This means that either the Database has incorrect entries or the code is incorrect!';
+		else if (count($result_arr) < 1) {
+			echo
+				'Warning: searchEntry found multiple entries, one expected. This means that either the Database has incorrect entries or the code is incorrect!';
 		}
 		$result = $result_arr[0];
 		return $result;
@@ -353,26 +354,26 @@ class TableManager {
 			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error);
 		}
 	}
-	
+
 	/**
 	 * This function deletes all entries of the table with the value $value of the key $key
 	 * It does NOT validate the Parameters $keyName and $value!
 	 * @param string $keyName
 	 * @param string $value
 	 */
-	public function deleteAllEntriesWithValueOfKey($keyName, $value) {
-		
-		if(!isset($keyName, $value) || $value == '' || $keyName == '') {
+	public function deleteAllEntriesWithValueOfKey ($keyName, $value) {
+
+		if (!isset($keyName, $value) || $value == '' || $keyName == '') {
 			throw new UnexpectedValueException('Wrong Parameter of the Function ' . __METHOD__ . '!');
 		}
-		
+
 		$query = sql_prev_inj(sprintf('DELETE FROM %s WHERE %s="%s";', $this->tablename, $keyName, $value));
 		$result = $this->db->query($query);
-		
-		if(!$result) {
+
+		if (!$result) {
 			throw new MySQLConnectionException(DQ_QUERY_ERROR . $this->db->error);
 		}
-		
+
 	}
 
 	/**
@@ -389,24 +390,24 @@ class TableManager {
 			throw new MySQLVoidDataException('MySQL returned no data for last autoincrementID');
 		return $nextID['Auto_increment'];
 	}
-	
+
 	/**
 	 * returns the ID of the last inserted Object (only if using Auto_increment either in SQL or manually. If an
 	 * entry with an ID lower than the highest ID is added, this function will not work properly for this entry.
-	 * 
+	 *
 	 * @param string $idKeyName The name if the ID-Key. If nothing given, the function will assume the name "ID"
 	 */
 	function getLastInsertedID ($idKeyName = 'ID') {
-		
+
 		$query = sql_prev_inj(sprintf('SELECT MAX(%s) AS LastID FROM %s', $idKeyName, $this->tablename));
 		$result = $this->db->query($query);
-		
-		if(!$result) {
+
+		if (!$result) {
 			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error);
 		}
 		$valueRes = $result->fetch_assoc();
-		$lastID = $valueRes ['LastID'];
-		if(!$lastID || $lastID == '') {
+		$lastID = $valueRes['LastID'];
+		if (!$lastID || $lastID == '') {
 			throw new MySQLVoidDataException('MySQL returned no data for ID of last row added');
 		}
 		return $lastID;

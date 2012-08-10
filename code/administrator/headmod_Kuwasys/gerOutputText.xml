@@ -121,6 +121,10 @@
 			    Beziehungen unwiderruflich verloren.</warningUsersJointedToClassToDelete>
 			<errorDeleteJointsUsersInClass>Ein Fehler ist beim löschen der Beziehungen der Benutzer zum Kurs aufgetreten. 
 			    Die Datenbank besitzt nun womöglich Einträge, die manuell gelöscht werden müssen!</errorDeleteJointsUsersInClass>
+			<errorFetchIsClassRegistrationEnabledGlobally>Ein Fehler ist beim Abrufen des Wertes für Kursregistrierung aufgetreten.</errorFetchIsClassRegistrationEnabledGlobally>
+			<errorAlterIsClassRegistrationEnabledGlobally>Ein Fehler ist beim Verändern des Wertes für Kursregistrierungen aufgetreten.</errorAlterIsClassRegistrationEnabledGlobally>
+			<errorAddIsClassRegistrationEnabledGlobally>Ein Fehler ist beim Hinzufügen des Wertes für Kursregistrierungen aufgetreten.</errorAddIsClassRegistrationEnabledGlobally>
+			<finishedChangeIsClassRegistrationEnabledGlobally>Der Wert zum Erlauben von Kursregistrierungen wurde erfolgreich verändert.</finishedChangeIsClassRegistrationEnabledGlobally>
 			<weekdayLabelMon>Montag</weekdayLabelMon>
 			<weekdayLabelTue>Dienstag</weekdayLabelTue>
 			<weekdayLabelWed>Mittwoch</weekdayLabelWed>
@@ -232,7 +236,9 @@
 			<changeSchoolYearHead>Ein Schuljahr verändern</changeSchoolYearHead>
 			<changeSchoolYearSubmit>Schuljahr verändern</changeSchoolYearSubmit>
 			<finishedChangeSchoolYear>Das Schuljahr wurde erfolgreich verändert</finishedChangeSchoolYear>
-			<deleteSchoolYearPrompt>Wollen sie das Schuljahr "%s" wirklich löschen?</deleteSchoolYearPrompt>
+			<deleteSchoolYearPrompt>Wollen sie das Schuljahr "%s" wirklich löschen? &lt;br&gt;WARNUNG: Das Löschen der damit verbundenen
+			    Daten ist noch nicht implementiert! Wenn sie mit diesem Schuljahr schon gearbeitet haben, steht die Chance hoch
+			    dass erhebliche Probleme auftreten!</deleteSchoolYearPrompt>
 			<deleteSchoolYearConfirm>JA, ich möchte das Schuljahr löschen</deleteSchoolYearConfirm>
 			<deleteSchoolYearNotConfirm>NEIN, ich möchte das Schuljahr nicht löschen</deleteSchoolYearNotConfirm>
 			<deleteSchoolYearDeclined>Das Schuljahr wurde nicht gelöscht</deleteSchoolYearDeclined>

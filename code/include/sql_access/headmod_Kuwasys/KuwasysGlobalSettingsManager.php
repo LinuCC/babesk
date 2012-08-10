@@ -18,11 +18,33 @@ class KuwasysGlobalSettingsManager extends TableManager {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
+	public function isClassRegistrationGloballyEnabledAdd ($value) {
+		
+		$value = $this->isClassRegistrationEnabledHandleToggle($value);
+		$this->addEntry('name', 'isClassRegistrationEnabled', 'value', $value);
+	}
+	
+	public function isClassRegistrationGloballyEnabledAlter ($value) {
+		
+		$value = $this->isClassRegistrationEnabledHandleToggle($value);
+		$isClassRegistrationEnabled = $this->searchEntry('name="isClassRegistrationEnabled"');
+		$this->alterEntry($isClassRegistrationEnabled ['id'], 'value', $value);
+	}
+	
+	public function isClassRegistrationGloballyEnabledGet() {
+		
+		$isClassRegistrationEnabled = $this->searchEntry('name="isClassRegistrationEnabled"');
+		return $isClassRegistrationEnabled ['value'];
+	}
 	
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////
-	
+	private function isClassRegistrationEnabledHandleToggle ($toggle) {
+		
+		$value = ($toggle) ? '1' : '0';
+		return $value;
+	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
 	////////////////////////////////////////////////////////////////////////////////

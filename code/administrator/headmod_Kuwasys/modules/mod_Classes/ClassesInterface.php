@@ -22,8 +22,10 @@ class ClassesInterface extends AdminInterface {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
-	public function showMainMenu () {
+	public function showMainMenu ($isClassRegistrationGloballyEnabled) {
 
+		$isClassRegistrationGloballyEnabled = ($isClassRegistrationGloballyEnabled) ? true : false;
+		$this->smarty->assign('isClassRegistrationGloballyEnabled', $isClassRegistrationGloballyEnabled);
 		$this->smarty->display($this->tplFilePath . 'mainMenu.tpl');
 	}
 
@@ -61,6 +63,12 @@ class ClassesInterface extends AdminInterface {
 		
 		$this->smarty->assign('class', $class);
 		$this->smarty->display($this->tplFilePath . 'showClassDetails.tpl');
+	}
+	
+	public function showToggleGlobalClassRegistration ($isGlobalClassRegistrationEnabled) {
+		
+		$this->smarty->assign('enabled', $isGlobalClassRegistrationEnabled);
+		$this->smarty->display($this->tplFilePath . 'toggleGlobalClassRegistrationEnabled.tpl');
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations

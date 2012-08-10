@@ -5,6 +5,7 @@ require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysJointClassInSchoolYearManager.php';
+require_once PATH_ACCESS_KUWASYS . '/KuwasysGlobalSettingsManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
 require_once PATH_INCLUDE . '/Module.php';
 
@@ -53,6 +54,9 @@ class Classes extends Module {
 				case 'showClassDetails':
 					$this->showClassDetails();
 					break;
+				case 'toggleGlobalClassRegistrationEnabled':
+					$this->toggleGlobalClassRegistrationEnabled();
+					break;
 				default:
 					$this->_interface->dieError($this->_languageManager->getText('errorWrongActionValue'));
 			}
@@ -67,7 +71,7 @@ class Classes extends Module {
 	private function entryPoint ($dataContainer) {
 
 		defined('_AEXEC') or die('Access denied');
-
+		
 		$this->_dataContainer = $dataContainer;
 		$this->_classManager = new KuwasysClassManager();
 		$this->_syManager = new KuwasysSchoolYearManager();
@@ -77,11 +81,13 @@ class Classes extends Module {
 		$this->_interface = new ClassesInterface($this->relPath, $this->_dataContainer->getSmarty());
 		$this->_languageManager = $this->_dataContainer->getLanguageManager();
 		$this->_languageManager->setModule('Classes');
+		$this->_globalSettingsManager = new KuwasysGlobalSettingsManager();
 	}
 
 	private function showMainMenu () {
 
-		$this->_interface->showMainMenu();
+		$isClassRegistrationGloballyEnabled = $this->getIsClassRegistrationGloballyEnabled();
+		$this->_interface->showMainMenu($isClassRegistrationGloballyEnabled);
 	}
 
 	private function addClass () {
@@ -97,6 +103,51 @@ class Classes extends Module {
 		}
 	}
 
+	private function toggleGlobalClassRegistrationEnabled () {
+		
+		if(isset($_GET['toggleFormSend'])) {
+			$isToggled = isset($_POST['toggle']);
+			$this->setIsClassRegistrationGloballyEnabled($isToggled);
+			$this->_interface->dieMsg($this->_languageManager->getText('finishedChangeIsClassRegistrationEnabledGlobally'));
+		}
+		else {
+			$isGlobalClassRegistrationEnabled = $this->getIsClassRegistrationGloballyEnabled();
+			$this->_interface->showToggleGlobalClassRegistration($isGlobalClassRegistrationEnabled);
+		}
+	}
+	
+	private function getIsClassRegistrationGloballyEnabled () {
+		
+		try {
+			$toggle = $this->_globalSettingsManager->isClassRegistrationGloballyEnabledGet();
+			return $toggle;
+		} catch (MySQLVoidDataException $e) {
+			$this->addIsClassRegistrationGloballyEnabled(false);
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorFetchIsClassRegistrationEnabledGlobally'));
+		}
+	}
+	
+	private function setIsClassRegistrationGloballyEnabled ($toggle) {
+		
+		try {
+			$this->_globalSettingsManager->isClassRegistrationGloballyEnabledAlter($toggle);
+		} catch (MySQLVoidDataException $e) {
+			$this->_globalSettingsManager->isClassRegistrationGloballyEnabledAdd($toggle);
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorAlterIsClassRegistrationEnabledGlobally'));
+		}
+	}
+	
+	private function addIsClassRegistrationGloballyEnabled ($toggle) {
+		
+		try {
+			$this->_globalSettingsManager->isClassRegistrationGloballyEnabledAdd($toggle);
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorAlterIsClassRegistrationEnabledGlobally'));
+		}
+	}
+	
 	private function showAddClass () {
 
 		$schoolYears = $this->getAllSchoolYears();
@@ -607,6 +658,7 @@ class Classes extends Module {
 	private $_syJointManager;
 	private $_jointUserInClassManager;
 	private $_userManager;
+	private $_globalSettingsManager;
 	/**
 	 * @var KuwasysDataContainer
 	 */
