@@ -37,16 +37,9 @@ class AdminLoanProcessing {
 			$this->LoanInterface->dieError(sprintf($this->msg['err_card_id'], $card_id));
 		
 		$uid = $this->GetUser($card_id);
-		$loanbooks = $this->loanManager->getLoanByID($uid);
+		$loanbooks = $this->loanManager->getLoanByUID($uid);
 		
-		foreach ($loanbooks as $loanbook){
-			$invData = $this->inventoryManager->getInvDataByID($loanbook['inventory_id']);
-			$bookdata = $this->bookManager->getBookDataByID($invData['book_id']);
-			$datatmp = array_merge($loanbook, $invData, $bookdata);
-			$data[] = $datatmp;
-			$datatmp = null;
-		}
-		$this->LoanInterface->ShowLoanBooks($data);
+		$this->LoanInterface->ShowLoanBooks($loanbooks);
 	}
 	
 	/**

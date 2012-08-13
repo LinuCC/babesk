@@ -298,6 +298,19 @@ class UserManager extends TableManager{
 	}
 	
 	/**
+	 * gets the class, religion and foreign_language of an user
+	 */
+	function getUserDetails($uid){
+		$query = sql_prev_inj(sprintf('SELECT class, religion, foreign_language FROM %s WHERE ID = %s', $this->tablename, $uid));
+		$result = $this->db->query($query);
+		if (!$result) {
+			throw DB_QUERY_ERROR.$this->db->error;
+		}
+		$result = $result->fetch_assoc();
+		return $result;
+	}
+	
+	/**
 	 * Adds a User to the System
 	 *
 	 * The Function creates a new entry in the users Table
