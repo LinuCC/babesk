@@ -1,3 +1,6 @@
 {extends file=$loanParent}{block name=content}
-Hier werden die B&uuml;cher angezeigt, die auszuleihen sind.
+{foreach $data as $datatmp}
+<div>{$datatmp.title}, {$datatmp.publisher}
+</div>
+{/foreach}
 {/block}

@@ -18,17 +18,15 @@ class LoanManager extends TableManager{
 	 * Sorts the lending list for a UserID it gets from MySQL-table and returns them
 	 * Enter description here ...
 	 */
-	function getLoanByID($uid) {
+	function getLoanByUID($uid) {
 		require_once PATH_ACCESS . '/dbconnect.php';
-		$res_array = array();
-		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE user_id = %s', $this->tablename, $uid));
-		$result = $this->db->query($query);
-		if (!$result) {
-			throw DB_QUERY_ERROR.$this->db->error;
-		}
-		while($buffer = $result->fetch_assoc())
-			$res_array[] = $buffer;
-		return $res_array;
+		require_once PATH_ACCESS . '/UserManager.php';
+		require_once PATH_ACCESS . '/BookManager.php';
+		$userManager = new UserManager;
+		$bookManager = new BookManager;
+		$details = $userManager->getUserDetails($uid);
+		$books = $bookManager->getBooksByClass($details['class']);
+		return $books;
 	}
 	
 	/**

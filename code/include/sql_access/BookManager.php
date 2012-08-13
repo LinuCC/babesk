@@ -70,5 +70,21 @@ class BookManager extends TableManager{
 	function editBook($id, $subject, $class, $title, $author, $publisher, $isbn, $price, $bundle){
 		parent::alterEntry($id, 'subject', $subject, 'class', $class, 'title', $title, 'author', $author, 'publisher', $publisher, 'isbn', $isbn, 'price', $price, 'bundle', $bundle);
 	}
+	
+	/**
+	 * Gives all books for a class.
+	 */
+	function getBooksByClass($class) {
+		require_once PATH_ACCESS . '/dbconnect.php';
+		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE class = %s', $this->tablename, $class));
+		$result = $this->db->query($query);
+		if (!$result) {
+			throw DB_QUERY_ERROR.$this->db->error;
+		}
+		$res_array = NULL;
+		while($buffer = $result->fetch_assoc())
+			$res_array[] = $buffer;
+		return $res_array;
+	}
 }
 ?>
