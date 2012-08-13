@@ -36,8 +36,9 @@ class AdminUserInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath.'register_finished.tpl');
 	}
 	
-	function ShowUsers($users) {
+	function ShowUsers($users,$navbar) {
 		$this->smarty->assign('users', $users);
+		$this->smarty->assign('navbar', $navbar);
 		$this->smarty->display($this->tplFilePath.'show_users.tpl');
 	}
 	

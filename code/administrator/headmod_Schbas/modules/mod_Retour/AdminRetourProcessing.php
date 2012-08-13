@@ -24,8 +24,9 @@ class AdminRetourProcessing {
 		$this->RetourInterface = $RetourInterface;
 		global $logger;
 		$this->logs = $logger;
-		$this->msg = array('err_card_id' => 'Dies ist keine gültige Karten-ID ("%s")',
-				'err_get_user_by_card' => 'Anhand der Kartennummer konnte kein Benutzer gefunden werden.');
+		$this->msg = array('err_empty_books' => 'Keine ausgeliehenen B&uuml;cher vorhanden!',
+							'err_get_user_by_card' => 'Kein Benutzer gefunden!',
+							'err_card_id' => 'Die Karten-ID ist fehlerhaft!');
 	}
 	
 	/**
@@ -34,11 +35,10 @@ class AdminRetourProcessing {
 	function RetourTableData($card_id) {
 		
 		if (!$this->cardManager->valid_card_ID($card_id))
-			$this->LoanInterface->dieError(sprintf($this->msg['err_card_id'], $card_id));
-		
+			$this->RetourInterface->dieError(sprintf($this->msg['err_card_id']));
 		$uid = $this->GetUser($card_id);
 		$loanbooks = $this->loanManager->getLoanByID($uid);
-		
+		$data = array();
 		foreach ($loanbooks as $loanbook){
 			$invData = $this->inventoryManager->getInvDataByID($loanbook['inventory_id']);
 			$bookdata = $this->bookManager->getBookDataByID($invData['book_id']);
@@ -47,17 +47,17 @@ class AdminRetourProcessing {
 			//$datatmp = null;
 			
 		}
-		//var_dump($data);
-		$this->RetourInterface->ShowRetourBooks($data,$card_id,$uid);
+		if (empty($data)) {
+			$this->RetourInterface->dieError(sprintf($this->msg['err_empty_books']));
+		} else {
+			$this->RetourInterface->ShowRetourBooks($data,$card_id,$uid);
+		}	
 	}
 	
 	/**
 	 * Ausleihtabelle per Ajax anzeigen
 	 */
 	function RetourTableDataAjax($card_id) {
-	
-	
-	
 		$uid = $this->GetUser($card_id);
 		$loanbooks = $this->loanManager->getLoanByID($uid);
 	
@@ -70,7 +70,11 @@ class AdminRetourProcessing {
 				
 		}
 		//var_dump($data);
-		$this->RetourInterface->ShowRetourBooksAjax($data,$card_id,$uid);
+		if (!isset($data)) {
+			$this->RetourInterface->showMsg("Keine B&uuml;cher ausgeliehen!");
+		} else {
+			$this->RetourInterface->ShowRetourBooksAjax($data,$card_id,$uid);
+		}
 	}
 	
 	
@@ -80,8 +84,12 @@ class AdminRetourProcessing {
 	function RetourBook($inventarnr,$uid) {
 		
 		$inv_nr = $this->inventoryManager->getInvIDByBarcode($inventarnr);
-	    
-		$this->loanManager->RemoveLoanByIDs($inv_nr["id"], $uid);
+	    try {
+			$succ = $this->loanManager->RemoveLoanByIDs($inv_nr["id"], $uid);
+		} catch (Exception $e) {
+			return false;
+		}
+		return $succ;
 	}
 	
 	/**

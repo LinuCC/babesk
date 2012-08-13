@@ -83,7 +83,14 @@ class User extends Module {
 					}
 					break;
 			}
-		} else {
+		} elseif  ('GET' == $_SERVER['REQUEST_METHOD']) {
+			$action = $_GET['action'];
+			switch ($action) { 
+				case 2: //show the users
+					$userProcessing->ShowUsers(false);
+			}
+		}
+		else {
 			$userInterface->ShowSelectionFunctionality();
 		}
 	}

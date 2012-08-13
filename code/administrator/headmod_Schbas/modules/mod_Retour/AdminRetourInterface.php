@@ -34,6 +34,11 @@ class AdminRetourInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath . 'retourbooksAjax.tpl');
 	}
 	
+	public function RetourEmpty() {
+		$this->smarty->assign('adress', ($_SERVER['HTTP_HOST']).$_SERVER['REQUEST_URI']);
+		$this->smarty->display($this->tplFilePath . 'retourbooksAjaxEmpty.tpl');
+	}
+	
 	
 	/**
 	 * The Path to the Smarty-Parent-Templatefile

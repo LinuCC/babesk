@@ -55,7 +55,7 @@ return (keycode == 13);
 
 <form name='barcode_scan' onsubmit='return false;' />
 Inventarnummer: <input type='text' id='barcode' onKeyPress='if(enter_pressed(event)) ajaxFunction() '/> <br />
-<input type='button' onclick='ajaxFunction()' value='Abfragen' />
+
 </form>
 
 

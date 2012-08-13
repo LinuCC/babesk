@@ -156,7 +156,9 @@ class AdminUserProcessing {
 		try {
 			$groups = $groupManager->getTableData();
 			//$users = $userManager->getTableData();
-			$users = $userManager->getUsersSorted();
+			isset($_GET['sitePointer'])?$showPage = $_GET['sitePointer'] + 0:$showPage = 1;
+			$nextPointer = $showPage*10-10;
+			$users = $userManager->getUsersSorted($nextPointer);
 		} catch (Exception $e) {
 			$this->logs
 					->log('ADMIN', 'MODERATE',
@@ -175,8 +177,8 @@ class AdminUserProcessing {
 			}
 			$is_named or $user['groupname'] = 'Error: This group is non-existent!';
 		}
-
-		$this->userInterface->ShowUsers($users);
+		$navbar = $userManager->navBar($showPage);
+		$this->userInterface->ShowUsers($users,$navbar);
 	}
 	//////////////////////////////////////////////////
 	//--------------------Delete User--------------------
