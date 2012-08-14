@@ -84,5 +84,18 @@ class InventoryManager extends TableManager{
 		return $result;
 	}
 	
+	/**
+	 * Gets the book id by the inventory id.
+	 */
+	function getBookIDByInvID($inv_id) {
+		$query = sql_prev_inj(sprintf('SELECT book_id FROM %s WHERE id=%s', $this->tablename, $inv_id));
+		$result = $this->db->query($query);
+		if (!$result) {
+			throw DB_QUERY_ERROR.$this->db->error;
+		}
+		while($buffer = $result->fetch_assoc())
+			$book_id = $buffer;
+		return $book_id;
+	}
 }
 ?>

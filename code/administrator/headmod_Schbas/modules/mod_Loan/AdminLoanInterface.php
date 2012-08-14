@@ -18,9 +18,25 @@ class AdminLoanInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath . 'form.tpl');
 	}
 	
-	public function ShowLoanBooks($data) {
+	public function ShowLoanBooks($data, $card_id, $uid) {
+		$this->smarty->assign('cardid', $card_id);
+		$this->smarty->assign('uid', $uid);
+		$this->smarty->assign('adress', ($_SERVER['HTTP_HOST']).$_SERVER['REQUEST_URI']);
 		$this->smarty->assign('data', $data);
 		$this->smarty->display($this->tplFilePath . 'loanbooks.tpl');
+	}
+	
+	public function ShowLoanBooksAjax($data,$card_id,$uid) {
+		$this->smarty->assign('cardid', $card_id);
+		$this->smarty->assign('uid', $uid);
+		$this->smarty->assign('adress', ($_SERVER['HTTP_HOST']).$_SERVER['REQUEST_URI']);
+		$this->smarty->assign('data', $data);
+		$this->smarty->display($this->tplFilePath . 'loanbooksAjax.tpl');
+	}
+	
+	public function LoanEmpty() {
+		$this->smarty->assign('adress', ($_SERVER['HTTP_HOST']).$_SERVER['REQUEST_URI']);
+		$this->smarty->display($this->tplFilePath . 'loanbooksAjaxEmpty.tpl');
 	}
 	/**
 	 * The Path to the Smarty-Parent-Templatefile

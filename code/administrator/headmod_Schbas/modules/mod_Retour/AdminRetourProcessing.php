@@ -37,7 +37,7 @@ class AdminRetourProcessing {
 		if (!$this->cardManager->valid_card_ID($card_id))
 			$this->RetourInterface->dieError(sprintf($this->msg['err_card_id']));
 		$uid = $this->GetUser($card_id);
-		$loanbooks = $this->loanManager->getLoanByID($uid);
+		$loanbooks = $this->loanManager->getLoanByUID($uid);
 		$data = array();
 		foreach ($loanbooks as $loanbook){
 			$invData = $this->inventoryManager->getInvDataByID($loanbook['inventory_id']);

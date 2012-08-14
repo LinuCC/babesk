@@ -24,12 +24,22 @@ class Loan extends Module {
 		
 		$LoanInterface = new AdminLoanInterface($this->relPath);
 		$LoanProcessing = new AdminLoanProcessing($LoanInterface);
-		if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['card_ID'])) {
+		
+		if ('GET' == $_SERVER['REQUEST_METHOD'] && isset($_GET['inventarnr'])) {
+			if (!$LoanProcessing->LoanBook(urldecode($_GET['inventarnr']),$_GET['uid'])) {
+				$LoanInterface->LoanEmpty();
+			} else {
+				$LoanProcessing->LoanAjax($_GET['card_ID']);
+			}
+		}
+		else if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['card_ID'])) {
 			$LoanProcessing->Loan($_POST['card_ID']);
 		}
 		else{
 			$LoanInterface->CardId();
 		}
+		
+		
 		
 	}
 }
