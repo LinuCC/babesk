@@ -39,9 +39,13 @@ class AdminLoanProcessing {
 			$this->LoanInterface->dieError(sprintf($this->msg['err_card_id'], $card_id));
 		
 		$uid = $this->GetUser($card_id);
-		$loanbooks = $this->loanManager->getLoanByUID($uid);
+		$loanbooks = $this->loanManager->getLoanByUID($uid, false);
 		
-		$this->loanInterface->ShowLoanBooks($loanbooks, $card_id, $uid);
+		if (!isset($loanbooks)) {
+			$this->loanInterface->dieMsg("Keine B&uuml;cher mehr auszuleihen!");
+		}else{
+			$this->loanInterface->ShowLoanBooks($loanbooks, $card_id, $uid);
+		}
 	}
 	
 	/**
@@ -57,7 +61,7 @@ class AdminLoanProcessing {
 				$this->LoanInterface->CardLocked();
 			}
 		} catch (Exception $e) {
-			$this->LoanInterface->dieError($this->msg['err_get_user_by_card'] . ' Error:' . $e->getMessage());
+			$this->loanInterface->dieError($this->msg['err_get_user_by_card'] . ' Error:' . $e->getMessage());
 		}
 		return $uid;
 	}
@@ -67,7 +71,7 @@ class AdminLoanProcessing {
 	 */
 	function LoanAjax($card_id) {
 		$uid = $this->GetUser($card_id);
-		$loanbooks = $this->loanManager->getLoanByUID($uid);
+		$loanbooks = $this->loanManager->getLoanByUID($uid,true);
 	
 		if (!isset($loanbooks)) {
 			$this->loanInterface->showMsg("Keine B&uuml;cher mehr auszuleihen!");
@@ -88,13 +92,13 @@ class AdminLoanProcessing {
 			$this->logs
 					->log('ADMIN', 'MODERATE',
 							sprintf('Error while getting Data from MySQL:%s in %s', $e->getMessage(), __METHOD__));
-			$this->loanInterface->dieError($this->messages['error']['no_inv']);
+			$this->loanInterface->dieErrorAjax($this->messages['error']['no_inv']);
 		}
 			$duplicate = $this->loanManager->isEntry($inv_nr['id']);
 			if(!$duplicate){
 			$this->loanManager->AddLoanByIDs($inv_nr["id"], $uid);
 			}else{
-				$this->loanInterface->dieError($this->messages['error']['duplicate']);
+				$this->loanInterface->dieErrorAjax($this->messages['error']['duplicate']);
 			}
 		return true;
 	}

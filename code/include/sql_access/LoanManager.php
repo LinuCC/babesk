@@ -38,7 +38,7 @@ class LoanManager extends TableManager{
 	 * Sorts a list of books, which should lend for a User.
 	 * Used by mod_loan!!
 	 */
-	function getLoanByUID($uid) {
+	function getLoanByUID($uid, $ajax) {
 		require_once PATH_ACCESS . '/dbconnect.php';
 		require_once PATH_ACCESS . '/UserManager.php';
 		require_once PATH_ACCESS . '/BookManager.php';
@@ -52,13 +52,14 @@ class LoanManager extends TableManager{
 		unset($lang[$details['foreign_language']]);
 		unset($reli[$details['religion']]);
 		$books = $bookManager->getBooksByClass($details['class']);
-		//var_dump($books);
 		$counter = 0;
-		foreach ($books as &$book){
-			if ((in_array($book['subject'], $lang) OR (in_array($book['subject'], $reli)))){
-				unset($books[$counter]);
+		if ($books){
+			foreach ($books as &$book){
+				if ((in_array($book['subject'], $lang) OR (in_array($book['subject'], $reli)))){
+					unset($books[$counter]);
+				}
+				$counter++;
 			}
-			$counter++;
 		}
 		$query = sql_prev_inj(sprintf('SELECT inventory_id FROM %s WHERE user_id=%s', $this->tablename, $uid));
 		$result = $this->db->query($query);
@@ -67,28 +68,30 @@ class LoanManager extends TableManager{
 		}
 		while($buffer = $result->fetch_assoc())
 			$minusbooksinvarr[] = $buffer;
-		
-		foreach ($minusbooksinvarr as &$minusbooksinva){
-			$minusbooksinv[] = $minusbooksinva['inventory_id'];
-		}
-		
-		foreach ($minusbooksinv as &$minusbookinv){
-			$minusbooksarr[] = $inventoryManager->getBookIDByInvID($minusbookinv);
-		}
-		
-		foreach ($minusbooksarr as &$minusbooksa){
-			$minusbook[] = $minusbooksa['book_id'];
-		}
-		
-		$counter = 0;
-		foreach ($books as &$book){
-			$match = array_search($book['id'], $minusbook);
-			if (!is_bool($match)) {
-				unset($books[$counter]);
+		if (isset($minusbooksinvarr)) {
+			foreach ($minusbooksinvarr as &$minusbooksinva){
+				$minusbooksinv[] = $minusbooksinva['inventory_id'];
 			}
-			$counter++;
+			
+			foreach ($minusbooksinv as &$minusbookinv){
+				$minusbooksarr[] = $inventoryManager->getBookIDByInvID($minusbookinv);
+			}
+			
+			foreach ($minusbooksarr as &$minusbooksa){
+				$minusbook[] = $minusbooksa['book_id'];
+			}
+			
+			$counter = 0;
+			if ($books) {
+				foreach ($books as &$book){
+					$match = array_search($book['id'], $minusbook);
+					if (!is_bool($match)) {
+						unset($books[$counter]);
+					}
+					$counter++;
+				}
+			}
 		}
-		
 		return $books;
 	}
 	

@@ -79,7 +79,6 @@ class InventoryManager extends TableManager{
 		} catch (Exception $e) {
 		}
 		$query = sql_prev_inj(sprintf('book_id = %s AND year_of_purchase = %s AND exemplar = %s' , $bookid["id"], $barcode_exploded[1], $barcode_exploded[5]));
-		//$result = $this->db->query($query);
 		$result = parent::searchEntry($query);
 		return $result;
 	}
