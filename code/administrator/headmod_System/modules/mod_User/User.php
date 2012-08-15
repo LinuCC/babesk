@@ -83,7 +83,7 @@ class User extends Module {
 					}
 					break;
 			}
-		} elseif  ('GET' == $_SERVER['REQUEST_METHOD']) {
+		} elseif  (('GET' == $_SERVER['REQUEST_METHOD'])&&isset($_GET['action'])) {
 			$action = $_GET['action'];
 			switch ($action) { 
 				case 2: //show the users

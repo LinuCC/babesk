@@ -14,9 +14,29 @@ class LoanManager extends TableManager{
 		parent::__construct('schbas_lending');
 	}
 	
+	
+	/* Sorts the lending list for a UserID it gets from MySQL-table and returns them
+	 * Used by mod_retour !!
+	*/
+	function getLoanlistByUID($uid) {
+
+		require_once PATH_ACCESS . '/dbconnect.php';
+		$res_array = array();
+		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE user_id = "%s"', $this->tablename, $uid));
+		$result = $this->db->query($query);
+		if (!$result) {		
+			throw DB_QUERY_ERROR.$this->db->error;
+		}
+		while($buffer = $result->fetch_assoc())
+			$res_array[] = $buffer;
+		return $res_array;
+			
+			
+	}
+		
 	/**
 	 * Sorts a list of books, which should lend for a User.
-	 * Enter description here ...
+	 * Used by mod_loan!!
 	 */
 	function getLoanByUID($uid) {
 		require_once PATH_ACCESS . '/dbconnect.php';
@@ -76,12 +96,18 @@ class LoanManager extends TableManager{
 	 * Remove an entry in the loan list by a given user id and inventory id
 	 */
 	function RemoveLoanByIDs($inventoryID, $uid) {
-		require_once PATH_ACCESS . '/dbconnect.php';
-		
+		require_once PATH_ACCESS . '/dbconnect.php';	
 		$query = sql_prev_inj(sprintf('user_id = %s AND inventory_id = %s' , $uid, $inventoryID));
 		$result = parent::delEntryNoID($query);
-		return $result;
 	}
+	
+	/**
+	 * Search, whether an user_id exists.
+	 */
+	function isUserEntry($uid) {
+		$match = parent::existsEntry('user_id', $uid);
+		return $match;
+		}
 	
 	/**
 	 * Add an entry in the loan list by a given user id and inventory id

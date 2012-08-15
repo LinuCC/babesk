@@ -323,7 +323,7 @@ class UserManager extends TableManager{
 			$string=implode("|", $foreignLanguages);
 			
 				try {
-					parent::alterEntry($uid, 'foreign_lang', $string);
+					parent::alterEntry($uid, 'foreign_language', $string);
 				} catch (Exception $e) {
 					$this->userInterface->dieError($this->messages['error']['change'] . $e->getMessage());
 				}

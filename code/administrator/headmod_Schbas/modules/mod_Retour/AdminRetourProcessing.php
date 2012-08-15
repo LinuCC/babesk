@@ -37,7 +37,7 @@ class AdminRetourProcessing {
 		if (!$this->cardManager->valid_card_ID($card_id))
 			$this->RetourInterface->dieError(sprintf($this->msg['err_card_id']));
 		$uid = $this->GetUser($card_id);
-		$loanbooks = $this->loanManager->getLoanByUID($uid);
+		$loanbooks = $this->loanManager->getLoanlistByUID($uid);
 		$data = array();
 		foreach ($loanbooks as $loanbook){
 			$invData = $this->inventoryManager->getInvDataByID($loanbook['inventory_id']);
@@ -59,7 +59,7 @@ class AdminRetourProcessing {
 	 */
 	function RetourTableDataAjax($card_id) {
 		$uid = $this->GetUser($card_id);
-		$loanbooks = $this->loanManager->getLoanByID($uid);
+		$loanbooks = $this->loanManager->getLoanlistByUID($uid);
 	
 		foreach ($loanbooks as $loanbook){
 			$invData = $this->inventoryManager->getInvDataByID($loanbook['inventory_id']);
@@ -82,14 +82,20 @@ class AdminRetourProcessing {
 	 * Ein Buch zurückgeben
 	 */
 	function RetourBook($inventarnr,$uid) {
-		
+
 		$inv_nr = $this->inventoryManager->getInvIDByBarcode($inventarnr);
+	    if($this->loanManager->isUserEntry($uid)) {
 	    try {
-			$succ = $this->loanManager->RemoveLoanByIDs($inv_nr["id"], $uid);
+			$this->loanManager->RemoveLoanByIDs($inv_nr["id"], $uid);
+			return $this->loanManager->isUserEntry($uid);
 		} catch (Exception $e) {
-			return false;
+			
 		}
-		return $succ;
+	    } else {
+	    	return false;
+	    }
+		
+
 	}
 	
 	/**

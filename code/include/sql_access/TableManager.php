@@ -326,6 +326,7 @@ class TableManager {
 		if (!$result) {
 			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error);
 		}
+		return $result;
 	}
 	
 	/**

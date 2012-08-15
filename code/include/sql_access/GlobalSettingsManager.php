@@ -70,7 +70,7 @@ class GlobalSettingsManager extends TableManager {
 	 * @return string
 	 */
 	function getForeignLanguages() {
-		$entry_arr = $this->searchEntry('name="foreign_lang"');
+		$entry_arr = $this->searchEntry('name="foreign_language"');
 		if (!isset($entry_arr['value']) || !$entry_arr['value'])
 			throw new MySQLVoidDataException('foreign_lang is void!');
 		return $entry_arr['value'];
@@ -83,7 +83,7 @@ class GlobalSettingsManager extends TableManager {
 	 * @throws some other things if somethings gone wrong
 	 */
 	function setForeignLanguages($str) {
-		$entry_arr = $this->searchEntry('name="foreign_lang"');
+		$entry_arr = $this->searchEntry('name="foreign_language"');
 		if (!isset($entry_arr) || !count($entry_arr)) {
 			throw new MySQLVoidDataException('searchEntry returned void helparray');
 		}

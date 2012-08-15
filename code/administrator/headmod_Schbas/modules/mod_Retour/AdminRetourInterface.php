@@ -35,7 +35,7 @@ class AdminRetourInterface extends AdminInterface{
 	}
 	
 	public function RetourEmpty() {
-		$this->smarty->assign('adress', ($_SERVER['HTTP_HOST']).$_SERVER['REQUEST_URI']);
+		$this->smarty->assign('adress', $_SERVER['PHP_SELF']."?section=Schbas|Retour&");
 		$this->smarty->display($this->tplFilePath . 'retourbooksAjaxEmpty.tpl');
 	}
 	
