@@ -43,14 +43,18 @@ class LoanManager extends TableManager{
 		require_once PATH_ACCESS . '/UserManager.php';
 		require_once PATH_ACCESS . '/BookManager.php';
 		require_once PATH_ACCESS . '/InventoryManager.php';
+		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 		$userManager = new UserManager;
 		$bookManager = new BookManager;
 		$inventoryManager = new InventoryManager;
+		$globalSettingsManager = new GlobalSettingsManager;
+		$lang_str = $globalSettingsManager->getForeignLanguages();
+		$reli_str = $globalSettingsManager->getReligion();
+		$lang = explode('|', $lang_str);
+		$reli = explode('|', $reli_str);
 		$details = $userManager->getUserDetails($uid);
-		$lang = array('LA'=>'LA','FR'=>'FR','RU'=>'RU');
-		$reli = array('EV'=>'EV','WUN'=>'WUN');
-		unset($lang[$details['foreign_language']]);
-		unset($reli[$details['religion']]);
+		unset($lang[array_search($details['foreign_language'], $lang)]);
+		unset($reli[array_search($details['religion'], $reli)]);
 		$books = $bookManager->getBooksByClass($details['class']);
 		$counter = 0;
 		if ($books){
@@ -67,18 +71,12 @@ class LoanManager extends TableManager{
 			throw DB_QUERY_ERROR.$this->db->error;
 		}
 		while($buffer = $result->fetch_assoc())
-			$minusbooksinvarr[] = $buffer;
+			$minusbooksinv[] = $buffer['inventory_id'];
+		
 		if (isset($minusbooksinvarr)) {
-			foreach ($minusbooksinvarr as &$minusbooksinva){
-				$minusbooksinv[] = $minusbooksinva['inventory_id'];
-			}
 			
 			foreach ($minusbooksinv as &$minusbookinv){
-				$minusbooksarr[] = $inventoryManager->getBookIDByInvID($minusbookinv);
-			}
-			
-			foreach ($minusbooksarr as &$minusbooksa){
-				$minusbook[] = $minusbooksa['book_id'];
+				$minusbooks[] = $inventoryManager->getBookIDByInvID($minusbookinv);
 			}
 			
 			$counter = 0;

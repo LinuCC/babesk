@@ -93,7 +93,7 @@ class InventoryManager extends TableManager{
 			throw DB_QUERY_ERROR.$this->db->error;
 		}
 		while($buffer = $result->fetch_assoc())
-			$book_id = $buffer;
+			$book_id = $buffer['book_id'];
 		return $book_id;
 	}
 }
