@@ -126,4 +126,44 @@ function getFirstDayOfWeek($year, $weeknr) {
 
 	return strtotime('+' . ($weeknr - 1) . ' weeks', $monday);
 }
+
+/**
+ * Enter description here...
+ */
+
+function navBar($showPage, $table, $mod, $action) {
+	require_once 'sql_access/dbconnect.php';
+	$dbObject = new DBConnect();
+	$dbObject->initDatabaseFromXML();
+	$db = $dbObject->getDatabase();
+	$db->query('set names "utf8";');
+
+	$query = sql_prev_inj(sprintf('SELECT COUNT(*) AS total FROM %s', $table));
+	$result = $db->query($query);
+	if (!$result) {
+		throw DB_QUERY_ERROR.$db->error;
+	}
+
+	$row = $result->fetch_array(MYSQLI_ASSOC);
+	$maxPages = ceil($row['total'] / 10);
+	$string="";
+	if($showPage > 1){
+		$string .= '<a href="?sitePointer=1&section=System|'.$mod.'&action='.$action.'"><<</a>&nbsp;&nbsp;';
+		$string .= '<a href="?sitePointer='.($showPage-1).'&section=System|'.$mod.'&action='.$action.'"><</a>&nbsp;&nbsp;';
+	}
+
+	for($x=$showPage-5;$x<=$showPage+5;$x++){
+		if(($x>0 && $x<$showPage) || ($x>$showPage && $x<=$maxPages))
+			$string .= '<a href="?sitePointer='.$x.'&section=System|'.$mod.'&action='.$action.'">'.$x.'</a>&nbsp;&nbsp;';
+
+		if($x==$showPage)
+			$string .= $x . '&nbsp;&nbsp;';
+	}
+	if($showPage < $maxPages){
+		$string .= '<a href="?sitePointer='.($showPage+1).'&section=System|'.$mod.'&action='.$action.'">></a>&nbsp;&nbsp;';
+		$string .= '<a href="?sitePointer='.$maxPages.'&section=System|'.$mod.'&action='.$action.'">>></a>&nbsp;&nbsp;';
+	}
+
+	return $string;
+}
 ?>

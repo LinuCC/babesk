@@ -55,7 +55,8 @@ class LoanManager extends TableManager{
 		$details = $userManager->getUserDetails($uid);
 		unset($lang[array_search($details['foreign_language'], $lang)]);
 		unset($reli[array_search($details['religion'], $reli)]);
-		$books = $bookManager->getBooksByClass($details['class']);
+		$class = (string)intval($details['class']);
+		$books = $bookManager->getBooksByClass($class);
 		$counter = 0;
 		if ($books){
 			foreach ($books as &$book){

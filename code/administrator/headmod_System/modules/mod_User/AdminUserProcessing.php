@@ -177,7 +177,7 @@ class AdminUserProcessing {
 			}
 			$is_named or $user['groupname'] = 'Error: This group is non-existent!';
 		}
-		$navbar = $userManager->navBar($showPage);
+		$navbar = navBar($showPage, 'users', 'User', '2');
 		$this->userInterface->ShowUsers($users,$navbar);
 	}
 	//////////////////////////////////////////////////

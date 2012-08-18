@@ -65,38 +65,6 @@ class UserManager extends TableManager{
 		}
 		return true;
 	}
-	
-	function navBar($showPage) {
-		require_once PATH_ACCESS . '/dbconnect.php';
-		
-		$query = sql_prev_inj(sprintf('SELECT COUNT(*) AS total FROM %s', $this->tablename));
-		$result = $this->db->query($query);
-		if (!$result) {
-			throw DB_QUERY_ERROR.$this->db->error;
-		}
-		
-		$row = $result->fetch_array(MYSQLI_ASSOC);
-		$maxPages = ceil($row['total'] / 10);
-		$string="";
-		if($showPage > 1){
-			$string .= '<a href="?sitePointer=1&section=System|User&action=2"><<</a>&nbsp;&nbsp;';
-			$string .= '<a href="?sitePointer='.($showPage-1).'&section=System|User&action=2"><</a>&nbsp;&nbsp;';
-		}
-		
-		for($x=$showPage-5;$x<=$showPage+5;$x++){
-			if(($x>0 && $x<$showPage) || ($x>$showPage && $x<=$maxPages))
-				$string .= '<a href="?sitePointer='.$x.'&section=System|User&action=2">'.$x.'</a>&nbsp;&nbsp;';
-		
-			if($x==$showPage)
-				$string .= $x . '&nbsp;&nbsp;';
-		}
-		if($showPage < $maxPages){
-			$string .= '<a href="?sitePointer='.($showPage+1).'&section=System|User&action=2">></a>&nbsp;&nbsp;';
-			$string .= '<a href="?sitePointer='.$maxPages.'&section=System|User&action=2">>></a>&nbsp;&nbsp;';
-		}
-		
-		return $string;
-	}
 
 	
 	/**
