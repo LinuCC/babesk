@@ -34,6 +34,5 @@
     define('ORDER_ERROR_DELETE', '<p class="error">Ein Fehler ist beim löschen einer Bestellung aufgetreten!</p>');
     
     //defensiv programming
-    define('ERR_TYPE_PARAM_ID', '<p class="error">Die übergebene ID besteht nicht nur aus Zahlen!</p>');
     define('ERR_NUMBER_PARAM', '<p class="error">Die Anzahl der übergebenen Parameter ist falsch!</p>');
 ?>

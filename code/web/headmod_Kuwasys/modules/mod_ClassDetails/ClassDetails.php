@@ -4,6 +4,7 @@ require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
+require_once PATH_ACCESS_KUWASYS . '/KuwasysGlobalSettingsManager.php';
 require_once PATH_WEB . '/WebInterface.php';
 
 class ClassDetails extends Module {
@@ -50,6 +51,7 @@ class ClassDetails extends Module {
 		$this->_interface = new WebInterface($smarty);
 		$this->_classManager = new KuwasysClassManager();
 		$this->_jointUsersInClass = new KuwasysJointUsersInClass();
+		$this->_globalSettingsManager = new KuwasysGlobalSettingsManager();
 	}
 
 	private function getClassByClassId ($classId) {
@@ -70,6 +72,16 @@ class ClassDetails extends Module {
 			$this->_interface->DieError('Ein Fehler ist beim Abrufen der Verbindung zu dem Kurs aufgetreten.');
 		}
 		return $joint;
+	}
+	
+	private function getIsClassRegistrationGloballyEnabled () {
+		
+		try {
+			$value = $this->_globalSettingsManager->isClassRegistrationGloballyEnabledGet();
+		} catch (Exception $e) {
+			$this->_interface->DieError('Ein Fehler ist beim Abrufen vom KurswahlWert aufgetreten. Breche ab.');
+		}
+		return $value;
 	}
 	
 	private function deleteJointUsersInClass ($jointId) {
@@ -105,6 +117,9 @@ class ClassDetails extends Module {
 		if(!$class ['registrationEnabled']) {
 			$this->_interface->dieError('Dieser Kurs erlaubt momentan keine Abmeldungen!');
 		}
+		else if (!$this->getIsClassRegistrationGloballyEnabled()) {
+			$this->_interface->dieError('Kursan- und abmeldungen sind momentan gesperrt!');
+		}
 		else if (!isset($_POST['yes'])) {
 			$this->_interface->DieMessage(sprintf('Sie wurden nicht vom Kurs %s abgemeldet', $class ['label']));
 		}
@@ -119,6 +134,7 @@ class ClassDetails extends Module {
 	private $_jointUsersInClass;
 	private $_classManager;
 	private $_usersManager;
+	private $_globalSettingsManager;
 	private $_interface;
 	private $_smarty;
 	private $_smartyPath;

@@ -12,6 +12,8 @@ class KuwasysJointUsersInClass extends TableManager {
 	private $_statusFirstRequestStr = 'request#1';
 	private $_statusSecondRequestStr = 'request#2';
 
+	private $_multipleJointChanges;
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	////////////////////////////////////////////////////////////////////////////////
@@ -22,6 +24,14 @@ class KuwasysJointUsersInClass extends TableManager {
 	////////////////////////////////////////////////////////////////////////////////
 	//Getters and Setters
 	////////////////////////////////////////////////////////////////////////////////
+	public function getActiveStatusString () {
+		return $this->_statusActiveStr;
+	}
+
+	public function getWaitingStatusString () {
+		return $this->_statusWaitingStr;
+	}
+
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
@@ -42,8 +52,13 @@ class KuwasysJointUsersInClass extends TableManager {
 		return $joints;
 	}
 
-	public function getAllJointsWithStatusRequest () {
-		$joints = $this->getTableData(sprintf('status="%s"', $this->_statusRequestStr));
+	public function getAllJointsWithStatusRequestFirst () {
+		$joints = $this->getTableData(sprintf('status="%s"', $this->_statusFirstRequestStr));
+		return $joints;
+	}
+
+	public function getAllJointsWithStatusRequestSecond () {
+		$joints = $this->getTableData(sprintf('status="%s"', $this->_statusSecondRequestStr));
 		return $joints;
 	}
 
@@ -58,10 +73,11 @@ class KuwasysJointUsersInClass extends TableManager {
 	}
 
 	public function getAllJointsWithStatusRequestAndUserId ($userId) {
+		die ('getAllJointsWithStatusRequestAndUserId nicht angepasst!');
 		$joints = $this->getTableData('status="request" AND UserID=' . $userId);
 		return $joints;
 	}
-	
+
 	public function addJoint ($userId, $classId, $status) {
 		$this->addEntry('UserID', $userId, 'ClassID', $classId, 'status', $status);
 	}
@@ -71,17 +87,20 @@ class KuwasysJointUsersInClass extends TableManager {
 	public function addJointWithStatusWaiting () {
 		$this->addEntry('UserID', $userId, 'ClassID', $classId, 'status', $this->_statusWaitingStr);
 	}
-	public function addJointWithStatusRequest () {
-		$this->addEntry('UserID', $userId, 'ClassID', $classId, 'status', $this->_statusRequestStr);
+	public function addJointWithStatusRequestFirst () {
+		$this->addEntry('UserID', $userId, 'ClassID', $classId, 'status', $this->$_statusFirstRequestStr);
 	}
-	
+	public function addJointWithStatusRequestSecond () {
+		$this->addEntry('UserID', $userId, 'ClassID', $classId, 'status', $this->$_statusSecondRequestStr);
+	}
+
 	public function getAllJointsOfUserId ($userId) {
 		$joints = $this->getTableData('UserID=' . $userId);
 		return $joints;
 	}
-	
+
 	public function getCountOfActiveUsersInClass ($classId) {
-		
+
 		$joints = $this->getTableData('ClassID=' . $classId);
 		$counter = 0;
 		foreach ($joints as $joint) {
@@ -91,32 +110,59 @@ class KuwasysJointUsersInClass extends TableManager {
 		}
 		return $counter;
 	}
-	
+
 	public function getAllJointsWithClassId ($classId) {
 		$joints = $this->getTableData('ClassID=' . $classId);
 		return $joints;
 	}
-	
+
 	public function getJointOfUserIdAndClassId ($userId, $classId) {
-		
+
 		$joint = $this->getTableData(sprintf('ClassID=%s AND UserID=%s', $classId, $userId));
 		if(count($joint) > 1) {
 			throw new OutOfBoundsException('There are more than one joints for this userId and ClassId!');
 		}
 		return $joint [0];
 	}
-	
+
 	public function alterStatusOfJoint ($jointId, $status) {
 		$this->alterEntry($jointId, 'status', $status);
 	}
-	
+
 	public function deleteJoint ($jointId) {
 		$this->delEntry($jointId);
 	}
-	
+
 	public function deleteAllJointsOfClassId ($classId) {
-		
+
 		$this->deleteAllEntriesWithValueOfKey('ClassID', $classId);
+	}
+
+	public function getJointsByIdArray ($idArray) {
+
+		$joints = $this->getEntriesOfIds($idArray);
+		return $joints;
+	}
+
+	public function alterStatusOfJointAddEntryToTempList ($jointId, $status) {
+
+		$this->_multipleJointChanges [] = array('jointId' => $jointId, 'status' => $status);
+	}
+
+	public function upAlterStatusOfJointTempListToDatabase () {
+
+		if(!isset($this->_multipleJointChanges) || !count ($this->_multipleJointChanges)) {
+			throw new Exception ('Add some changes first!');
+		}
+
+		$valueChanges = '';
+		foreach ($this->_multipleJointChanges as $jointChange) {
+			$valueChanges .= sprintf('(%s,"%s"),', $jointChange ['jointId'], $jointChange ['status']);
+		}
+		$valueChanges = rtrim($valueChanges, ',');
+		$query = sql_prev_inj(sprintf('INSERT INTO %s (ID, status) VALUES %s ON DUPLICATE KEY UPDATE ID=VALUES(ID),status=VALUES(status);',
+				 $this->tablename, $valueChanges));
+		$this->executeQuery($query);
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations

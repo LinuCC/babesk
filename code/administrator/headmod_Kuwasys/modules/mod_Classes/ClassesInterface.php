@@ -18,7 +18,9 @@ class ClassesInterface extends AdminInterface {
 	////////////////////////////////////////////////////////////////////////////////
 	//Getters and Setters
 	////////////////////////////////////////////////////////////////////////////////
-
+	public function getSmarty () {
+		return $this->smarty;
+	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
@@ -69,6 +71,18 @@ class ClassesInterface extends AdminInterface {
 		
 		$this->smarty->assign('enabled', $isGlobalClassRegistrationEnabled);
 		$this->smarty->display($this->tplFilePath . 'toggleGlobalClassRegistrationEnabled.tpl');
+	}
+	
+	public function showAssignUsersToClassMenu () {
+		
+		$this->smarty->display($this->tplFilePath . 'assignUsersToClasses.tpl');
+	}
+	
+	public function showConfirmDialogAssignUsersToClass ($requestsPassed, $requestsNotPassed) {
+		
+		$this->smarty->assign('requestsPassed', $requestsPassed);
+		$this->smarty->assign('requestsNotPassed', $requestsNotPassed);
+		$this->smarty->display($this->tplFilePath . 'assignUsersToClassesOutline.tpl');
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations

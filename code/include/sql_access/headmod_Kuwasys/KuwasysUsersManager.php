@@ -38,6 +38,12 @@ class KuwasysUsersManager extends TableManager {
 		$userData = parent::searchEntry(sprintf('ID = "%s"', $ID));
 		return $userData;
 	}
+	
+	public function getAllUsers () {
+		
+		$users = $this->getTableData();
+		return $users;
+	}
 
 	public function changeUserWithoutPassword ($ID, $forename, $name, $username, $email, $telephone) {
 

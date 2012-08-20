@@ -57,6 +57,9 @@ class Classes extends Module {
 				case 'toggleGlobalClassRegistrationEnabled':
 					$this->toggleGlobalClassRegistrationEnabled();
 					break;
+				case 'assignUsersToClasses':
+					$this->assignUsersToClasses();
+					break;
 				default:
 					$this->_interface->dieError($this->_languageManager->getText('errorWrongActionValue'));
 			}
@@ -161,7 +164,7 @@ class Classes extends Module {
 		$class = $this->addWeekdayTranslatedToClass($class);
 		$this->_interface->showClassDetails($class);
 	}
-
+	
 	private function addUsersAndSumStatusToClass ($class) {
 
 		$jointsOfClass = $this->getAllJointsUsersInClassWithClassId($class['ID']);
@@ -647,6 +650,13 @@ class Classes extends Module {
 	private function showImportClassesByCsvFile () {
 
 		$this->_interface->showImportClassesByCsvFile();
+	}
+	
+	private function assignUsersToClasses () {
+		
+		require_once 'AssignUsersToClasses.php';
+		$utcManager = new AssignUsersToClasses($this->_interface, $this->_languageManager);
+		$utcManager->execute();
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes

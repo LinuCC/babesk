@@ -66,7 +66,7 @@ class Web {
 		//seems like something that Smarty itself needs
 		$this->_smarty->assign('status', ''); //???
 
-		$userData = $userManager->getEntryData($_SESSION['uid'], '*');
+		$userData = $userManager->getUserdata($_SESSION['uid']);
 		$_SESSION['last_login'] = formatDateTime($userData['last_login']);
 		$_SESSION['username'] = $userData['forename'] . ' ' . $userData['name'];
 		$_SESSION['login_tries'] = $userData['login_tries'];

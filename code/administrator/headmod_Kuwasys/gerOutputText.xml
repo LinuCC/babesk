@@ -117,6 +117,11 @@
 			<finAddClassesByCsv>Die Kurse wurden erfolgreich importiert.</finAddClassesByCsv>
 			<errorGetSchoolyearBySchoolyearName>Das Schuljahr "%s" wurde nicht gefunden! Sie können das Schuljahr einstellen wenn sie den Kurs bearbeiten</errorGetSchoolyearBySchoolyearName>
 			<errorFetchNextAutoIncrementId>Ein Fehler ist beim Abrufen der ID des hinzuzufügenden Kurses aufgetreten.</errorFetchNextAutoIncrementId>
+			<errorNoJointsUsersInClassFirstRequest>Es gibt keine primären Kurswünsche</errorNoJointsUsersInClassFirstRequest>
+			<errorNoJointsUsersInClassSecondRequest>Es gibt keine sekundären Kurswünsche</errorNoJointsUsersInClassSecondRequest>
+			<errorNoJointsUsersInClassInAssignUsersToClass>kein Schüler ist an einen Kurs interessiert!</errorNoJointsUsersInClassInAssignUsersToClass>
+			<errorFetchJointsUsersInClassFirstRequest>Ein Fehler ist beim Abrufen der primären Kurswünsche von Schülern aufgetreten.</errorFetchJointsUsersInClassFirstRequest>
+			<errorFetchJointsUsersInClassSecondRequest>Ein Fehler ist beim Abrufen der sekundären Kurswünsche von Schülern aufgetreten.</errorFetchJointsUsersInClassSecondRequest>
 			<warningUsersJointedToClassToDelete>WARNUNG: Es sind noch Benutzer an dem Kurs angemeldet/interessiert! Wenn sie den Kurs löschen, gehen auch diese
 			    Beziehungen unwiderruflich verloren.</warningUsersJointedToClassToDelete>
 			<errorDeleteJointsUsersInClass>Ein Fehler ist beim löschen der Beziehungen der Benutzer zum Kurs aufgetreten. 
@@ -125,6 +130,11 @@
 			<errorAlterIsClassRegistrationEnabledGlobally>Ein Fehler ist beim Verändern des Wertes für Kursregistrierungen aufgetreten.</errorAlterIsClassRegistrationEnabledGlobally>
 			<errorAddIsClassRegistrationEnabledGlobally>Ein Fehler ist beim Hinzufügen des Wertes für Kursregistrierungen aufgetreten.</errorAddIsClassRegistrationEnabledGlobally>
 			<finishedChangeIsClassRegistrationEnabledGlobally>Der Wert zum Erlauben von Kursregistrierungen wurde erfolgreich verändert.</finishedChangeIsClassRegistrationEnabledGlobally>
+			<finishedAssignRequestsOfUsers>Die Schüler wurden erfolgreich den Kursen zugeordnet.</finishedAssignRequestsOfUsers>
+			<errorJointUsersInClassChange>Ein Fehler ist beim Verändern des Statuses einer Kursregistrierung aufgetreten!</errorJointUsersInClassChange>
+			<errorJointUsersInClassChangeToDatabase>Die Veränderungen konnten nicht hochgeladen werden! Möglicherweise wurden schon einige Schüler zugewiesen.</errorJointUsersInClassChangeToDatabase>
+			<errorGetUsers>Ein Fehler ist beim Abrufen der Benutzer aufgetreten.</errorGetUsers>
+			<errorNoUsers>Es gibt keine Benutzer, denen man Kurse zuweisen könnte!</errorNoUsers>
 			<weekdayLabelMon>Montag</weekdayLabelMon>
 			<weekdayLabelTue>Dienstag</weekdayLabelTue>
 			<weekdayLabelWed>Mittwoch</weekdayLabelWed>

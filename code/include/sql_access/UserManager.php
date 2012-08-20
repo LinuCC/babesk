@@ -50,6 +50,10 @@ class UserManager extends TableManager{
 		return $this->getEntryValue($uid, 'username');
 	}
 	
+	function getUserdata ($uid) {
+		return $this->getEntryData($uid, '*');
+	}
+	
 	/**
 	 *  @todo this function is not necessary anymore, functionality is alredy in alterUser(), replace getUserID
 	 */

@@ -215,7 +215,7 @@ class InstallKuwasys extends InstallationComponent {
 	 * @param $tableName The name of the table
 	 */
 	private function isTableExisting ($tableName) {
-
+		///@ToDo new Class inheriting from tableManager to allow access to existsTable and existsKey
 		$tableManager = new TableManager($tableName);
 		return $tableManager->existsTable();
 	}

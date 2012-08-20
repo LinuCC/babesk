@@ -18,5 +18,9 @@
 <form action='index.php?section=Kuwasys|Classes&action=showClass' method='post'>
 	<input type='submit' value='Die Kurse anzeigen'>
 </form>
+<form action='index.php?section=Kuwasys|Classes&action=assignUsersToClasses' method='post'>
+	<input type='submit' value='Schüler gewählten Kursen zuweisen'>
+</form>
+
 
 {/block}

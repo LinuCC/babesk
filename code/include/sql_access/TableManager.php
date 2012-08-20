@@ -6,6 +6,7 @@
  * It should be the parent of all the other Manager-Classes in the access-files.
  *
  * @author Pascal Ernst, Informatik-AG LeG
+ * @ToDo Refactor function; No direct TableAccess should be allowed, make the functions protected!
  *
  */
 
@@ -35,13 +36,9 @@ class TableManager {
 	public function existsTable () {
 
 		$query = sql_prev_inj('SHOW TABLES LIKE "' . $this->tablename . '"');
-		$result = $this->db->query($query);
-		if (!count($result->fetch_assoc())) {
-			return false;
-		}
-		else {
-			return true;
-		}
+		$result = $this->executeQuery($query);
+		
+		return count($result->fetch_assoc());
 	}
 
 	/**
@@ -51,13 +48,8 @@ class TableManager {
 	public function existsKey ($columnName) {
 
 		$query = sql_prev_inj('SHOW COLUMNS FROM `' . $this->tablename . '`  LIKE "' . $columnName . '";');
-		$result = $this->db->query($query);
-		if (count($result->fetch_assoc())) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		$result = $this->executeQuery($query);
+		return count($result->fetch_assoc());
 	}
 
 	/**
@@ -69,15 +61,17 @@ class TableManager {
 	 */
 	public function existsEntry ($key, $value) {
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE %s="%s"', $this->tablename, $key, $value));
+		$result = $this->executeQuery($query);
+		return ($result->fetch_assoc()) ? true : false;
+	}
+	
+	public function executeQuery ($query) {
+		
 		$result = $this->db->query($query);
-		if (!$result)
+		if (!$result) {
 			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error . "<br />" . $query);
-		if ($res_var = $result->fetch_assoc()) {
-			return true;
 		}
-		else {
-			return false;
-		}
+		return $result;
 	}
 
 	/**
@@ -86,6 +80,7 @@ class TableManager {
 	 * @param string $value
 	 */
 	public function getIDByValue ($key, $value) {
+		
 		$result = $this->searchEntry(sprintf('%s="%s"', $key, $value));
 		if (!$result)
 			throw new MySQLVoidDataException('MySQL returned no Data to retrieve the ID from!');
@@ -97,7 +92,6 @@ class TableManager {
 			return $result['id'];
 		else
 			throw new Exception('No ID-Key found!');
-
 	}
 
 	/**
@@ -136,16 +130,30 @@ class TableManager {
 		else { //wrong arguments
 			throw new BadMethodCallException('wrong arguments');
 		}
-		$result = $this->db->query($query);
-		if (!$result) {
-			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error . "<br />" . $query);
+		
+		$result = $this->executeQuery($query);
+		return $this->getResultContent($result);
+	}
+	
+	/**
+	 * Returns every Entry that has the ID id of the array $idArray
+	 * 
+	 * @param $idArray array[string] an string of ids
+	 */
+	public function getEntriesOfIds ($idArray) {
+		
+		$idString = '';
+		if(!isset($idArray) || !count($idArray)) {
+			throw new BadMethodCallException('The $idArray-parameter is invalid!');
 		}
-		if ($res_var = $result->fetch_assoc()) {
-			return $res_var;
+		foreach ($idArray as $id) {
+			$idString .= $id . ',';
 		}
-		else {
-			throw new MySQLVoidDataException(DB_QUERY_ERROR . $this->db->error . "<br />" . $query);
-		}
+		$idString = rtrim($idString, ',');
+		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE ID IN (%s);', $this->tablename, $idString));
+		
+		$result = $this->executeQuery($query);
+		return $this->getResultArrayContent($result);
 	}
 
 	/**
@@ -162,30 +170,20 @@ class TableManager {
 	function getTableData () {
 		require_once PATH_INCLUDE . '/constants.php';
 
-		$num_args = func_num_args();
-		$args = func_get_args();
 
-		if ($num_args == 0) {
-			//all elements of the table
-			$query = sql_prev_inj(sprintf('SELECT * FROM %s', $this->tablename));
+		switch (func_num_args()) {
+			case 0: // all elements of the table
+				$query = sql_prev_inj(sprintf('SELECT * FROM %s', $this->tablename));
+				break;
+			case 1:
+				$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE %s', $this->tablename, func_get_arg(0)));
+				break;
+			default:
+				throw new Exception('Wrong number of arguments in ' . __METHOD__);
 		}
-		else if ($num_args == 1) {
-			$arg = func_get_arg(0);
-			$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE %s', $this->tablename, $arg));
-		}
-		else {
-			throw new Exception('Wrong number of arguments in ' . __METHOD__);
-		}
-		$result = $this->db->query($query);
-		if (!$result) {
-			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error . "<br />" . $query);
-		}
-		while ($buffer = $result->fetch_assoc())
-			$res_array[] = $buffer;
-		if (!isset($res_array) || !count($res_array)) {
-			throw new MySQLVoidDataException('MySQL returned no data!');
-		}
-		return $res_array;
+		
+		$result = $this->executeQuery($query);
+		return $this->getResultArrayContent($result);
 	}
 
 	/**
@@ -242,10 +240,7 @@ class TableManager {
 
 		$query = sql_prev_inj(sprintf('INSERT INTO %s (%s) VALUES (%s);', $this->tablename, $column_identifier_str,
 			$column_value_str));
-		$result = $this->db->query($query);
-		if (!$result) {
-			throw new Exception(DB_QUERY_ERROR . $this->db->error);
-		}
+		$result = $this->executeQuery($query);
 	}
 
 	/**
@@ -279,17 +274,13 @@ class TableManager {
 	 */
 
 	public function getEntryValue ($id, $key) {
+		
 		$query = sql_prev_inj(sprintf('SELECT %s FROM %s WHERE ID=%s', $key, $this->tablename, $id));
-		$result = $this->db->query($query);
-		if (!$result) {
-			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error . "<br />" . $query);
-		}
-		if ($res_var = $result->fetch_assoc()) {
-			return $res_var[$key];
-		}
-		else {
-			throw new MySQLVoidDataException(DB_QUERY_ERROR . $this->db->error . "<br />" . $query);
-		}
+		$result = $this->executeQuery($query);
+		$resVar = $this->getResultArrayContent($result);
+		
+		if(!isset($resVar [$key])) 	{throw new Exception ('The Key for the Entry does not exist!');}
+		return $resVar [$key];
 	}
 
 	/**
@@ -328,10 +319,7 @@ class TableManager {
 		}
 		$set_str = substr($set_str, 0, -1);
 		$query = sql_prev_inj(sprintf('UPDATE %s SET %s WHERE ID = %s', $this->tablename, $set_str, $ID));
-		$result = $this->db->query($query);
-		if (!$result) {
-			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error);
-		}
+		$result = $this->executeQuery($query);
 	}
 
 	/**
@@ -342,17 +330,11 @@ class TableManager {
 	 */
 
 	public function delEntry ($ID) {
+		
 		require_once PATH_INCLUDE . '/constants.php';
 
-		if (!is_numeric($ID)) {
-			//parameter-checking
-			throw new UnexpectedValueException(ERR_TYPE_PARAM_ID);
-		}
 		$query = sql_prev_inj(sprintf('DELETE FROM %s WHERE ID="%s";', $this->tablename, $ID));
-		$result = $this->db->query($query);
-		if (!$result) {
-			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error);
-		}
+		$result = $this->executeQuery($query);
 	}
 
 	/**
@@ -368,27 +350,19 @@ class TableManager {
 		}
 
 		$query = sql_prev_inj(sprintf('DELETE FROM %s WHERE %s="%s";', $this->tablename, $keyName, $value));
-		$result = $this->db->query($query);
-
-		if (!$result) {
-			throw new MySQLConnectionException(DQ_QUERY_ERROR . $this->db->error);
-		}
+		$result = $this->executeQuery($query);
 
 	}
 
 	/**
 	 * returns the ID of the next object that would be added (MySQL's Autoincrement)
 	 */
-	function getNextAutoIncrementID () {
+	public function getNextAutoIncrementID () {
 		$query = sql_prev_inj(sprintf('SELECT Auto_increment FROM information_schema.tables WHERE table_name="%s";',
 			$this->tablename));
-		$result = $this->db->query($query);
-		if (!$result)
-			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error);
-		$nextID = $result->fetch_assoc();
-		if (!$nextID || $nextID == '')
-			throw new MySQLVoidDataException('MySQL returned no data for last autoincrementID');
-		return $nextID['Auto_increment'];
+		$result = $this->executeQuery($query);
+		$nextId = $this->getResultArrayContent($result);
+		return $nextId ['Auto_increment'];
 	}
 
 	/**
@@ -397,22 +371,49 @@ class TableManager {
 	 *
 	 * @param string $idKeyName The name if the ID-Key. If nothing given, the function will assume the name "ID"
 	 */
-	function getLastInsertedID ($idKeyName = 'ID') {
+	public function getLastInsertedID ($idKeyName = 'ID') {
 
 		$query = sql_prev_inj(sprintf('SELECT MAX(%s) AS LastID FROM %s', $idKeyName, $this->tablename));
-		$result = $this->db->query($query);
-
-		if (!$result) {
-			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error);
-		}
-		$valueRes = $result->fetch_assoc();
-		$lastID = $valueRes['LastID'];
-		if (!$lastID || $lastID == '') {
-			throw new MySQLVoidDataException('MySQL returned no data for ID of last row added');
-		}
-		return $lastID;
+		$result = $this->executeQuery($query);
+		$valueRes = $this->getResultArrayContent($result);
+		return $valueRes['LastID'];
 	}
-
+	
+	/**
+	 * Returns the Content of the result of a MySQL-Query and checks if it is void. 
+	 * @param mySQL-query-returnValue $result 
+	 * @param string $exceptionMessage When Result-Content is void, an exception with this message will be thrown
+	 * @throws MySQLVoidDataException
+	 */
+	private function getResultContent ($result, $exceptionMessage = 'MySQL returned no data!') {
+		
+		$content = $result->fetch_assoc();
+		
+		if(!$content) {
+			throw new MySQLVoidDataException($exceptionMessage);
+		}
+		return $content;
+	}
+	
+	/**
+	 * Returns the Content of the result of a MySQL-Query and checks if it is void. 
+	 * @param mySQL-query-returnValue $result 
+	 * @param string $exceptionMessage When Result-Content is void, an exception with this message will be thrown
+	 * @throws MySQLVoidDataException
+	 */
+	private function getResultArrayContent ($result, $exceptionMessage = 'MySQL returned no data!') {
+		
+		while($buffer = $result->fetch_assoc()) {
+			$content [] = $buffer;
+		}
+		
+		if(!isset($content) || !count($content)) {
+			throw new MySQLVoidDataException($exceptionMessage);
+		}
+		
+		return $content;
+	}
+	
 	/**
 	 * Contains the MySQL-tablename
 	 * @var string
@@ -430,7 +431,6 @@ class TableManager {
 	 * @var Logger-Object (@see logs.php)
 	 */
 	protected $logs;
-
 }
 
 ?>
