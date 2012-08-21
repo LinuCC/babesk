@@ -277,7 +277,7 @@ class TableManager {
 		
 		$query = sql_prev_inj(sprintf('SELECT %s FROM %s WHERE ID=%s', $key, $this->tablename, $id));
 		$result = $this->executeQuery($query);
-		$resVar = $this->getResultArrayContent($result);
+		$resVar = $this->getResultContent($result);
 		
 		if(!isset($resVar [$key])) 	{throw new Exception ('The Key for the Entry does not exist!');}
 		return $resVar [$key];

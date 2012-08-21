@@ -133,6 +133,7 @@
 			<finishedAssignRequestsOfUsers>Die Schüler wurden erfolgreich den Kursen zugeordnet.</finishedAssignRequestsOfUsers>
 			<errorJointUsersInClassChange>Ein Fehler ist beim Verändern des Statuses einer Kursregistrierung aufgetreten!</errorJointUsersInClassChange>
 			<errorJointUsersInClassChangeToDatabase>Die Veränderungen konnten nicht hochgeladen werden! Möglicherweise wurden schon einige Schüler zugewiesen.</errorJointUsersInClassChangeToDatabase>
+			<errorJointUsersInClassCheckForExisting>Ein Fehler ist beim Überprüfen der Kursverbindungen aufgetreten!</errorJointUsersInClassCheckForExisting>
 			<errorGetUsers>Ein Fehler ist beim Abrufen der Benutzer aufgetreten.</errorGetUsers>
 			<errorNoUsers>Es gibt keine Benutzer, denen man Kurse zuweisen könnte!</errorNoUsers>
 			<weekdayLabelMon>Montag</weekdayLabelMon>

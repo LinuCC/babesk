@@ -309,6 +309,8 @@ class Classes extends Module {
 			$this->_jointUserInClassManager->getAllJointsWithClassId($classId);
 		} catch (MySQLVoidDataException $e) {
 			return false;
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorJointUsersInClassCheckForExisting'));
 		}
 		return true;
 	}
