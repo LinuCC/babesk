@@ -354,5 +354,11 @@ class UserManager extends TableManager{
 			throw new MySQLConnectionException('failed to add a login try!');
 		}
 	}
+	
+	public function updateLastLoginToNow ($userId) {
+		
+		$query = sql_prev_inj(sprintf('UPDATE %s SET last_login = NOW() WHERE ID = %s', $this->tablename, $userId));
+		$this->executeQuery($query);
+	}
 }
 ?>

@@ -62,6 +62,7 @@ class Login {
 		$this->checkPassword();
 		$this->checkLockedAccount();
 		$this->finishSuccessfulLogin();
+		return true;
 	}
 
 	private function setUpUserManager () {

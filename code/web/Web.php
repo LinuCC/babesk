@@ -8,6 +8,7 @@ class Web {
 	private $_moduleManager;
 	private $_loggedIn;
 	private $_interface;
+	private $_userManager;
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -22,10 +23,12 @@ class Web {
 			$this->initSmarty();
 
 		}
+		require_once PATH_ACCESS . '/UserManager.php';
 		require_once PATH_INCLUDE . '/moduleManager.php';
 		require_once PATH_INCLUDE . '/functions.php';
 		require_once PATH_WEB . '/WebInterface.php';
 		
+		$this->userManager = new UserManager();
 		$this->_moduleManager = new ModuleManager('web');
 		$this->_loggedIn = isset($_SESSION['uid']);
 		$this->_moduleManager->allowAllModules();
@@ -52,7 +55,9 @@ class Web {
 
 		require_once 'Login.php';
 		$loginManager = new Login($this->_smarty);
-		$loginManager->login();
+		if($loginManager->login()) {
+			$this->userManager->updateLastLoginToNow($_SESSION['uid']);
+		}
 	}
 
 	public function mainRoutine ($mod_str) {
@@ -61,12 +66,10 @@ class Web {
 			$this->logIn();
 		}
 
-		require_once PATH_ACCESS . '/UserManager.php';
-		$userManager = new UserManager();
 		//seems like something that Smarty itself needs
 		$this->_smarty->assign('status', ''); //???
 
-		$userData = $userManager->getUserdata($_SESSION['uid']);
+		$userData = $this->userManager->getUserdata($_SESSION['uid']);
 		$_SESSION['last_login'] = formatDateTime($userData['last_login']);
 		$_SESSION['username'] = $userData['forename'] . ' ' . $userData['name'];
 		$_SESSION['login_tries'] = $userData['login_tries'];
@@ -82,7 +85,7 @@ class Web {
 		//general user data for header etc
 		if ($_SESSION['login_tries'] > 3) {
 			$this->_smarty->assign('login_tries', $_SESSION['login_tries']);
-			$userManager->ResetLoginTries($userData['ID']);
+			$this->userManager->ResetLoginTries($userData['ID']);
 			$_SESSION['login_tries'] = 0;
 		}
 
