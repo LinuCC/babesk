@@ -48,6 +48,7 @@ class AssignUsersToClasses {
 		$requestsPassed = array(); //The Requests that are passed, so the Users get assigned to the classes
 		$requestsNotPassed = array(); //All of the Requests that havent passed, so the User gets on the waiting-list
 
+		///@FIXME: freeslots has to know how many people already are in the class!
 		foreach ($classes as $class) {
 			$freeSlots = (int) $class ['maxRegistration'];
 			foreach($combinedRequests as $requestsOfOneType) {

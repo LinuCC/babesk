@@ -68,13 +68,7 @@ class KuwasysJointUsersInClass extends TableManager {
 	}
 
 	public function getAllJointsWithStatusWaitingAndUserId ($userId) {
-		$joints = $this->getTableData('status="waiting" AND UserID=' . $userId);
-		return $joints;
-	}
-
-	public function getAllJointsWithStatusRequestAndUserId ($userId) {
-		die ('getAllJointsWithStatusRequestAndUserId nicht angepasst!');
-		$joints = $this->getTableData('status="request" AND UserID=' . $userId);
+		$joints = $this->getTableData('status="'. $this->_statusWaitingStr .'" AND UserID=' . $userId);
 		return $joints;
 	}
 
