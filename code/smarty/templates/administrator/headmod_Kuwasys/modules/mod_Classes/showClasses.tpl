@@ -34,7 +34,9 @@ filtern.
 		<tr bgcolor='#33CFF'>
 			<th align='center'>ID</th>
 			<th align='center'>Name</th>
+			<th align='center'>Kursleiter</th>
 			<th align='center'>Aktive Teilnehmer</th>
+			<th align='center'>Wartende Teilnehmer</th>
 			<th align='center'>Maximale Registrierungen</th>
 			<th align='center'>Schuljahr</th>
 			<th align='center'>Veranstaltungstag</th>
@@ -45,7 +47,9 @@ filtern.
 		<tr bgcolor='#FFC33'>
 			<td align="center">{$class.ID}</td>
 			<td align="center">{$class.label}</td>
+			<td align="center">{$class.classteacher.forename} {$class.classteacher.name}</td>
 			<td align="center">{$class.userCount}</td>
+			<td align="center">{$class.userWaitingCount}</td>
 			<td align="center">{$class.maxRegistration}</td>
 			<td align="center">{$class.schoolYearLabel}</td>
 			<td align="center">{$class.weekdayTranslated}</td>

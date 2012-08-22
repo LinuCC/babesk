@@ -7,6 +7,8 @@ require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysJointClassInSchoolYearManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysGlobalSettingsManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
+require_once PATH_ACCESS_KUWASYS . '/KuwasysClassTeacherManager.php';
+require_once PATH_ACCESS_KUWASYS . '/KuwasysJointClassTeacherInClass.php';
 require_once PATH_INCLUDE . '/Module.php';
 
 /**
@@ -85,6 +87,8 @@ class Classes extends Module {
 		$this->_languageManager = $this->_dataContainer->getLanguageManager();
 		$this->_languageManager->setModule('Classes');
 		$this->_globalSettingsManager = new KuwasysGlobalSettingsManager();
+		$this->_classteacherManager = new KuwasysClassTeacherManager();
+		$this->_jointClassteacherInClassManager = new KuwasysJointClassTeacherInClass();
 	}
 
 	private function showMainMenu () {
@@ -260,6 +264,8 @@ class Classes extends Module {
 		$classes = $this->addSchoolYearLabelToClasses($classes);
 		$classes = $this->addRegistrationCountToClasses($classes);
 		$classes = $this->addWeekdayTranslatedToClasses($classes);
+		$classes = $this->addClassteachersToClasses($classes);
+		$classes = $this->addCountOfWaitingUsersToClasses($classes);
 		$this->_interface->showClasses($classes);
 	}
 
@@ -596,7 +602,96 @@ class Classes extends Module {
 		}
 		return $classes;
 	}
-
+	
+	private function addClassteachersToClasses ($classes) {
+		
+		$classteachers = $this->getClassteachersByClassesWithoutDieingWhenVoidAndUpdateClasses ($classes);
+		foreach ($classes as &$class) {
+			foreach ($classteachers as $classteacher) {
+				if(!isset($class ['classteacher'] ['ID'])) {
+					$class ['classteacher'] = NULL;
+				}
+				if($class ['classteacher'] ['ID'] == $classteacher ['ID']) {
+					$class ['classteacher'] = $classteacher;
+				}
+			}
+		}
+		return $classes;
+	}
+	
+	private function getClassteachersByClassesWithoutDieingWhenVoidAndUpdateClasses (&$classes) {
+		
+		$joints = $this->getJointsClassteacherInClassByClassesWithoutDieingWhenVoid ($classes);
+		$classteacherIdArray = array();
+		foreach($joints as $joint) {
+			$classteacherIdArray [] = $joint ['ClassTeacherID'];
+			foreach ($classes as &$class) {
+				if($joint ['ClassID'] == $class ['ID']) {
+					$class ['classteacher'] ['ID'] = $joint ['ClassTeacherID'];
+				}
+			}
+		}
+		try {
+			$classteachers = $this->_classteacherManager->getClassteachersByClassteacherIdArray($classteacherIdArray);
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointsClassteacherInClass'));
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->showMsg($this->_languageManager->getText('errorNoJointsClassteacherInClass'));
+		}
+		if(is_array($classteachers)) {
+			return $classteachers;
+		}
+	}
+	
+	private function getJointsClassteacherInClassByClassesWithoutDieingWhenVoid ($classes) {
+		
+		$classIdArray = array();
+		foreach ($classes as $class) {
+			$classIdArray [] = $class ['ID'];
+		}
+		try {
+			$joints = $this->_jointClassteacherInClassManager->getJointsByClassIdArray($classIdArray);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->showMsg($this->_languageManager->getText('errorNoJointsClassteacherInClass'));
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointsClassteacherInClass'));
+		}
+		if(is_array($joints)) {
+			return $joints;
+		}
+	}
+	
+	private function getAllJointsOfUsersWaitingWithoutDieingWhenVoid () {
+		
+		try {
+			$joints = $this->_jointUserInClassManager->getAllJointsWithStatusWaiting();
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->showMsg($this->_languageManager->getText('errorNoWaitingUsers'));
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorFetchWaitingUsers'));
+		}
+		if(is_array($joints)) {
+			return $joints;
+		}
+	}
+	
+	private function addCountOfWaitingUsersToClasses ($classes) {
+		
+		$joints = $this->getAllJointsOfUsersWaitingWithoutDieingWhenVoid();
+		foreach ($classes as &$class) {
+			$userCount = 0;
+			if(is_array($joints)) {
+				foreach ($joints as $joint) {
+					if($joint ['ClassID'] == $class ['ID']) {
+						$userCount++;
+					}
+				}
+			}
+			$class ['userWaitingCount'] = $userCount;
+		}
+		return $classes;
+	}
+	
 	private function importClassesByCsvFile () {
 
 		if (isset($_FILES['csvFile'])) {
@@ -671,6 +766,8 @@ class Classes extends Module {
 	private $_jointUserInClassManager;
 	private $_userManager;
 	private $_globalSettingsManager;
+	private $_classteacherManager;
+	private $_jointClassteacherInClassManager;
 	/**
 	 * @var KuwasysDataContainer
 	 */

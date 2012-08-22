@@ -107,6 +107,10 @@
 			<warningNoJointToSchoolyearFound>Warnung: Die Klasse gehörte nicht zu einem Schuljahr.</warningNoJointToSchoolyearFound>
 			<errorDeleteJointSchoolyear>Die Verbindung zum Schuljahr konnte nicht gelöscht werden!</errorDeleteJointSchoolyear>
 			<deleteClassNotConfirmed>Der Kurs wurde nicht gelöscht. </deleteClassNotConfirmed>
+			<errorNoJointsClassteacherInClass>Es wurden keine Kursleiter für die Kurse gefunden.</errorNoJointsClassteacherInClass>
+			<errorFetchJointsClassteacherInClass>Ein Fehler ist beim Abrufen der Kursleiter für die Kurse aufgetreten.</errorFetchJointsClassteacherInClass>
+			<errorNoWaitingUsers>Es sind keine Schüler vorhanden, die auf der Warteliste stehen</errorNoWaitingUsers>
+			<errorFetchWaitingUsers>Ein Fehler ist beim Abrufen der wartenden Schüler aufgetreten</errorFetchWaitingUsers>
 			<errorDeleteClass>Der Kurs konnte nicht gelöscht werden!</errorDeleteClass>
 			<finishedDeleteClass>Der Kurs wurde erfolgreich gelöscht.</finishedDeleteClass>
 			<errorFetchLabel>Konnte den Namen des Kurses nicht von der Datenbank abrufen!</errorFetchLabel>

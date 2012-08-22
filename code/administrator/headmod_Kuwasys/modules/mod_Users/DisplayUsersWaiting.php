@@ -79,7 +79,6 @@ class DisplayUsersWaiting {
 	private function addClassItemsToUser (&$user, $class) {
 
 		if(is_array($this->_jointsUsersInClassActive)) {
-			echo 'hi';
 			$class ['activeParticipants'] = $this->getCountOfActiveUsersByClassId($class ['ID']);
 		}
 		if(is_array($this->_classteachers)) {
