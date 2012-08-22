@@ -10,8 +10,7 @@ require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInSchoolYear.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
-require_once PATH_ACCESS_KUWASYS . '/KuwasysClassTeacherManager.php';
-require_once PATH_ACCESS_KUWASYS . '/KuwasysJointClassTeacherInClass.php';
+require_once 'DisplayUsersWaiting.php';
 
 /**
  * Main-Class for the Module Users
@@ -31,8 +30,6 @@ class Users extends Module {
 	private $_jointUsersInSchoolYear;
 	private $_classManager;
 	private $_jointUsersInClass;
-	private $_classteacherManager;
-	private $_jointClassteacherInClassManager;
 	/**
 	 * @var KuwasysLanguageManager
 	 */
@@ -101,9 +98,7 @@ class Users extends Module {
 		$this->_schoolYearManager = new KuwasysSchoolYearManager();
 		$this->_jointUsersInGradeManager = new KuwasysJointUsersInGrade();
 		$this->_jointUsersInSchoolYear = new KuwasysJointUsersInSchoolYear();
-		$this->_jointClassteacherInClassManager = new KuwasysJointClassTeacherInClass();
 		$this->_classManager = new KuwasysClassManager();
-		$this->_classteacherManager = new KuwasysClassTeacherManager();
 		$this->_jointUsersInClass = new KuwasysJointUsersInClass();
 		$this->_interface = new UsersInterface($this->relPath, $dataContainer->getSmarty());
 		$this->_languageManager = $dataContainer->getLanguageManager();
@@ -185,6 +180,12 @@ class Users extends Module {
 			$this->showChangeClassToUser();
 		}
 	}
+	
+	private function showWaitingUsers () {
+		
+		$displayUsersWaitingObj = new DisplayUsersWaiting($this->_interface, $this->_languageManager);
+		$displayUsersWaitingObj->execute();
+	}
 
 	private function importUsersFromCsv () {
 
@@ -216,14 +217,6 @@ class Users extends Module {
 		$userForename = $userData['forename'];
 		$userName = $userData['name'];
 		$this->_interface->showDeleteUserConfirmation($_GET['ID'], $userForename, $userName, $this->_languageManager);
-	}
-
-	private function showWaitingUsers() {
-
-		$joints = $this->getAllJointsUsersInClassWaiting();
-		$users = $this->getUsersByJoints($joints);
-		$this->addTableItemsToUsersForInterfaceByShowWaitingUsers($users, $joints);
-
 	}
 
 	private function showUsers () {
@@ -754,22 +747,6 @@ class Users extends Module {
 		return $class;
 	}
 
-	private function getClassesByJointsUsersInClassWithoutDieing ($joints) {
-
-		$classIdArray = array();
-		foreach ($joints as $joint) {
-			$classIdArray [] = $joint ['ClassID'];
-		}
-		try {
-			$classes = $this->_classManager->getClassesByClassIdArray($classIdArray);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showError($this->_languageManager->getText('errorNoClassesForWaitingUsers'));
-		} catch (Exception $e) {
-			$this->_interface->showError(sprintf($this->_languageManager->getText('errorFetchClassesFromDatabase'), $e->getMessage()));
-		}
-		return $classes;
-	}
-
 	private function addClassesToUser ($user) {
 
 		$userSpecificClasses = array();
@@ -865,70 +842,6 @@ class Users extends Module {
 		}
 	}
 
-	private function getAllJointsUsersInClassWaiting () {
-
-		try {
-			$joints = $this->_jointUsersInClass->getAllJointsWithStatusWaiting();
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoJointsUsersInClassWaiting'));
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointsUsersInClassWaiting'));
-		}
-		return $joints;
-	}
-
-	private function getUsersByJoints ($jointsUsersInClass) {
-
-		$userIdArray = array ();
-		foreach ($jointsUsersInClass as $joint) {
-			$userIdArray [] = $joint ['UserID'];
-		}
-		try {
-			$users = $this->_usersManager->getUsersByUserIdArray ($userIdArray);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchUsersByJointsUsersInClass'));
-		}
-		return $users;
-	}
-
-	/********************
-	 * KuwasysClassTeacherManager
-	********************/
-
-	private function getClassteachersByJointsClassteacherInClass ($jointsClassteacherInClass) {
-
-		$classteacherIdArray = array();
-		foreach ($jointsClassteacherInClass as $joint) {
-			$classteacherIdArray [] = $joint ['ClassTeacherID'];
-		}
-		try {
-			$classteachers = $this->_classteacherManager->getClassteachersByClassteacherIdArray($classteacherIdArray);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchClassteacher'));
-		}
-		return $classteachers;
-	}
-
-	/********************
-	 * KuwasysJointClassTeacherInClass
-	********************/
-
-	private function getJointsClassteacherInClassByClassesWithoutDieing ($classes) {
-
-		$classIdArray = array();
-		foreach ($classes as $class) {
-			$classIdArray [] = $class ['ID'];
-		}
-		try {
-			$joints = $this->_jointClassteacherInClassManager->getJointsByClassIdArray($classIdArray);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showError($this->_languageManager->getText('errorNoClassteachersForClasses'));
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointsClassteacherInClass'));
-		}
-		if(isset($joints))
-			return $joints;
-	}
 	/**-----------------------------------------------------------------------------
 	 * Functions doing other stuff
 	*----------------------------------------------------------------------------*/
@@ -955,48 +868,6 @@ class Users extends Module {
 			$this->checkPasswordRepetition();
 		}
 	}
-
-	private function addTableItemsToUsersForInterfaceByShowWaitingUsers ($users, $jointsUsersInClasses) {
-
-		$classes = $this->getClassesByJointsUsersInClassWithoutDieing($jointsUsersInClasses);
-		if(isset($classes) && count ($classes)) {
-			$jointsClassteacherInClass = $this->getJointsClassteacherInClassByClassesWithoutDieing($classes);
-			if(isset($jointsClassteacherInClass) && count($jointsClassteacherInClass)) {
-				$classteachers = $this->getClassteachersByJointsClassteacherInClass($jointsClassteacherInClass);
-			}
-		}
-		foreach ($users as &$user) {
-			foreach ($jointsUsersInClasses as $joint) {
-				if($joint ['UserID'] == $user ['ID']) {
-					foreach ($classes as $class) {
-						if($class ['ID'] == $joint ['ClassID']) {
-							$user ['classes'] [] = $class;
-							if(is_array($classteachers)) {
-								$user ['classteachers'] [] = $this->getClassteacherByClassIdWithFetchedArrays($class ['ID'],
-										$jointsClassteacherInClass, $classteachers);
-							}
-							break;
-						}
-					}
-				}
-			}
-		}
-		$this->_interface->showUsersWaiting($users);
-	}
-
-	private function getClassteacherByClassIdWithFetchedArrays ($classId, $jointsClassteacherInClass, $classteachers) {
-
-		foreach ($jointsClassteacherInClass as $joint) {
-			if($joint ['ClassID'] == $classId) {
-				foreach ($classteachers as $classteacher) {
-					if($classteacher ['ID'] == $joint ['ClassTeacherID']) {
-						return $classteacher;
-					}
-				}
-			}
-		}
-	}
-
 
 	/**
 	 * @used-by Users::addUser

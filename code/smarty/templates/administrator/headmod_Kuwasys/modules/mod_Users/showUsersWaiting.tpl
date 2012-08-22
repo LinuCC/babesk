@@ -5,8 +5,8 @@
 <table class="dataTable">
 	<tr>
 		<th>Schülername</th>
-		<th>Kursleiter</th>
 		<th>Kursname</th>
+		<th>Kursleiter</th>
 		<th>Veranstaltungstag</th>
 		<th>max. Anzahl der Teilnehmer</th>
 		<th>Anzahl der Teilnehmer</th>
@@ -18,14 +18,11 @@
 		{foreach $user.classes as $class}
 		{if $counter > 0}<tr>{/if}
 		
-		<td>
-				{$user.classteachers.$counter.forename} {$user.classteachers.$counter.name} <br>
-		</td>
-		
 		<td>{$class.label}</td>
+		<td>{$user.classteachers.$counter.forename} {$user.classteachers.$counter.name} <br></td>
 		<td>{$class.weekday}</td>
 		<td>{$class.maxRegistration}</td>
-		<td>Nicht implementiert</td>
+		<td>{$class.activeParticipants}</td>
 		{if $counter > 0}</tr>{/if}{$counter = $counter + 1}
 		{/foreach}
 	</tr>
