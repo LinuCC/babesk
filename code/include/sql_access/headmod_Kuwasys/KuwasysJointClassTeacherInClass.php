@@ -35,6 +35,11 @@ class KuwasysJointClassTeacherInClass extends TableManager {
 			$this->delEntry($ID);
 		}
 		
+		public function getJointsByClassIdArray ($classIdArray) {
+			
+			$joints = $this->getMultipleEntriesByArray('ClassID', $classIdArray);
+			return $joints;
+		}
 		////////////////////////////////////////////////////////////////////////////////
 		//Implementations
 		////////////////////////////////////////////////////////////////////////////////

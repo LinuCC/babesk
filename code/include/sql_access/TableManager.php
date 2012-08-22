@@ -375,8 +375,30 @@ class TableManager {
 
 		$query = sql_prev_inj(sprintf('SELECT MAX(%s) AS LastID FROM %s', $idKeyName, $this->tablename));
 		$result = $this->executeQuery($query);
-		$valueRes = $this->getResultArrayContent($result);
+		$valueRes = $this->getResultContent($result);
 		return $valueRes['LastID'];
+	}
+	
+	/**
+	 * Returns every Element that has the same value as one of the values in the valuearray of the column-key $key
+	 * @param string $keyName The Key of the Column in the MySQL-table
+	 * @param array($value) $valueArray
+	 */
+	public function getMultipleEntriesByArray ($keyName, $valueArray) {
+	
+		$valueStr = '';
+		if(!count($valueArray)) {
+			throw new BadMethodCallException('valueArray is void!');
+		}
+	
+		foreach ($valueArray as $value) {
+			$valueStr .= sprintf('"%s", ', $value);
+		}
+		$valueStr = rtrim($valueStr, ', ');
+	
+		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE %s IN (%s);', $this->tablename, $keyName, $valueStr));
+		$result = $this->executeQuery($query);
+		return $this->getResultArrayContent($result);
 	}
 	
 	/**

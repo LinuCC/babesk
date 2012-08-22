@@ -51,14 +51,20 @@
 			<errorDeleteJointUsersInSchoolYear>Ein Fehler ist beim löschen der Verbindung zwischen Schüler und Schuljahr aufgetreten.</errorDeleteJointUsersInSchoolYear>
 			<errorInputJointUsersInSchoolYear>Bitte geben sie ein Schuljahr für den Benutzer ein.</errorInputJointUsersInSchoolYear>
 			<errorNoClasses>Es sind keine Kurs vorhanden</errorNoClasses>
+			<errorNoClassesForWaitingUsers>Es sind keine Kurse für die wartenden Benutzer vorhanden</errorNoClassesForWaitingUsers>
+			<errorNoClassteachersForClasses>Es konnten keine Kursleiter für die Kurse gefunden werden.</errorNoClassteachersForClasses>
 			<errorFetchClasses>Ein Fehler ist beim Abrufen der Kurse aufgetreten</errorFetchClasses>
 			<errorAddJointUsersInClass>Ein Fehler ist beim Verbinden des Benutzers mit dem Kurs aufgetreten.</errorAddJointUsersInClass>
 			<errorFetchJointUsersInClass>Ein Fehler ist beim Abrufen der Verbindung zwischen dem Schüler und den Kursen aufgetreten.</errorFetchJointUsersInClass>
+			<errorFetchJointsClassteacherInClass>Ein Fehler ist beim Abrufen der Links der Kursleiter zu den Kursen aufgetreten.</errorFetchJointsClassteacherInClass>
 			<errorNoJointUsersInClassOfUserId>Es konnten keine Verbindungen zwischen dem Benutzer mit der ID "%s" und Kursen gefunden werden.</errorNoJointUsersInClassOfUserId>
 			<errorFetchClass>Der Kurs konnte nicht abgerufen werden.</errorFetchClass>
 			<errorFetchJointUsersInClass>Ein Fehler ist beim Abrufen der Verbindung zwischen Schülern und Kursen aufgetreten.</errorFetchJointUsersInClass>
 			<errorDeleteJointUsersInClass>Ein Fehler ist beim entfernen der Verbindung zwischen dem Schüler und dem Kurs aufgetreten.</errorDeleteJointUsersInClass>
+			<errorFetchClassesFromDatabase>Konnte die Kurse nicht von der Datenbank abrufen: %s</errorFetchClassesFromDatabase>
+			<errorFetchClassteacher>Die Kursleiter konnten nicht abgerufen werden.</errorFetchClassteacher>
 			<errorAlterJointUsersInClass>Ein Fehler ist beim Verändern der Verbindung zwischen dem Schüler und dem Kurs aufgetreten.</errorAlterJointUsersInClass>
+			<errorFetchUsersByJointsUsersInClass>Ein Fehler ist beim Abrufen der Schüler mithilfe der Links aufgetreten.</errorFetchUsersByJointsUsersInClass>
 			<!-- Other stuff -->
 			<warningNoJointsUsersInGrade>Es existieren keine Links zwischen Schülern und Klassen!</warningNoJointsUsersInGrade>
 			<finishedAddUser>Der Benutzer %s %s wurde erfolgreich hinzugefügt.</finishedAddUser>
@@ -79,7 +85,6 @@
 			<errorWrongActionValue>Action Value besitzt einen falschen Wert! Möglicherweise wurde diese Funktion noch nicht implementiert</errorWrongActionValue>
 			<errorWrongInput>Sie haben den Wert im Feld "%s" nicht richtig eingegeben!</errorWrongInput>
 			<errorNoClasses>Es sind keine Kurse vorhanden</errorNoClasses>
-			<errorFetchClassesFromDatabase>Konnte die Kurse nicht von der Datenbank abrufen: %s</errorFetchClassesFromDatabase>
 			<errorNoSchoolYears>Es sind keine Schuljahre vorhanden! Bitte fügen sie zuerst Schuljahre hinzu.</errorNoSchoolYears>
 			<errorFetchSchoolYears>Ein Fehler ist beim abrufen der SchuljahresDaten aufgetreten.</errorFetchSchoolYears>
 			<errorFetchLastID>Ein Fehler ist beim Abrufen der Daten des letzten hinzugefügten Kurses aufgetreten.</errorFetchLastID>
@@ -122,6 +127,8 @@
 			<errorNoJointsUsersInClassInAssignUsersToClass>kein Schüler ist an einen Kurs interessiert!</errorNoJointsUsersInClassInAssignUsersToClass>
 			<errorFetchJointsUsersInClassFirstRequest>Ein Fehler ist beim Abrufen der primären Kurswünsche von Schülern aufgetreten.</errorFetchJointsUsersInClassFirstRequest>
 			<errorFetchJointsUsersInClassSecondRequest>Ein Fehler ist beim Abrufen der sekundären Kurswünsche von Schülern aufgetreten.</errorFetchJointsUsersInClassSecondRequest>
+			<errorFetchJointsUsersInClassWaiting>Ein Fehler ist beim Abrufen der der wartenden Schüler aufgetreten.</errorFetchJointsUsersInClassWaiting>
+			<errorNoJointsUsersInClassWaiting>Es gibt keine Schüler, die auf der Warteliste von Kursen stehen!</errorNoJointsUsersInClassWaiting>
 			<warningUsersJointedToClassToDelete>WARNUNG: Es sind noch Benutzer an dem Kurs angemeldet/interessiert! Wenn sie den Kurs löschen, gehen auch diese
 			    Beziehungen unwiderruflich verloren.</warningUsersJointedToClassToDelete>
 			<errorDeleteJointsUsersInClass>Ein Fehler ist beim löschen der Beziehungen der Benutzer zum Kurs aufgetreten. 
@@ -134,6 +141,7 @@
 			<errorJointUsersInClassChange>Ein Fehler ist beim Verändern des Statuses einer Kursregistrierung aufgetreten!</errorJointUsersInClassChange>
 			<errorJointUsersInClassChangeToDatabase>Die Veränderungen konnten nicht hochgeladen werden! Möglicherweise wurden schon einige Schüler zugewiesen.</errorJointUsersInClassChangeToDatabase>
 			<errorJointUsersInClassCheckForExisting>Ein Fehler ist beim Überprüfen der Kursverbindungen aufgetreten!</errorJointUsersInClassCheckForExisting>
+			<errorFetchClassteacher>Die Kursleiter konnten nicht abgerufen werden.</errorFetchClassteacher>
 			<errorGetUsers>Ein Fehler ist beim Abrufen der Benutzer aufgetreten.</errorGetUsers>
 			<errorNoUsers>Es gibt keine Benutzer, denen man Kurse zuweisen könnte!</errorNoUsers>
 			<weekdayLabelMon>Montag</weekdayLabelMon>

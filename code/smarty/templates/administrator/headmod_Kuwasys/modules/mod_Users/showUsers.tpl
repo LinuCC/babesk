@@ -16,9 +16,9 @@ function showOptions (ID) {
 
 <h2 class='moduleHeader'>Die Benutzer</h2>
 
-<table>
+<table class="dataTable">
 	<thead>
-		<tr bgcolor='#33CFF'>
+		<tr>
 			<th align='center'>ID</th>
 			<th align='center'>Vorname</th>
 			<th align='center'>Name</th>
@@ -33,7 +33,7 @@ function showOptions (ID) {
 	</thead>
 	<tbody>
 		{foreach $users as $user}
-		<tr bgcolor='#FFC33'>
+		<tr>
 			<td align="center">{$user.ID}</td>
 			<td align="center">{$user.forename}</td>
 			<td align="center">{$user.name}</td>

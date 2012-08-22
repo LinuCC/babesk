@@ -56,6 +56,12 @@ class KuwasysUsersManager extends TableManager {
 		parent::alterEntry($ID, 'forename', $forename, 'name', $name, 'username', $username, 'email', $email,
 			'telephone', $telephone, 'password', $password);
 	}
+	
+	public function getUsersByUserIdArray ($userIdArray) {
+	
+		$users = $this->getMultipleEntriesByArray('ID', $userIdArray);
+		return $users;
+	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////

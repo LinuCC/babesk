@@ -9,5 +9,9 @@
 <form action='index.php?section=Kuwasys|Users&action=showUsers' method='post'>
 	<input type='submit' value='alle Schüler anzeigen'>
 </form>
+<form action='index.php?section=Kuwasys|Users&action=showWaitingUsers' method='post'>
+	<input type='submit' value='Wartende Schüler anzeigen ("kommutierte Schülerliste")'>
+</form>
+
 
 {/block}

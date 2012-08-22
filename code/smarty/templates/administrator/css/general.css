@@ -46,6 +46,18 @@ fieldset {
     border: 0px;
 }
 
+table.dataTable {
+	line-height: 110%;
+}
+
+table.dataTable tr th {
+	background-color:#33CCFF;
+}
+
+table.dataTable tr td {
+	background-color:#FFCC33;
+}
+
 /* Error Messages */
 p.error {
 	color: red;

@@ -53,6 +53,12 @@ class KuwasysClassManager extends TableManager {
 			$lastID = $this->getLastInsertedID();
 			return $lastID;
 		}
+		
+		public function getClassesByClassIdArray ($classIdArray) {
+			
+			$classes = $this->getMultipleEntriesByArray('ID', $classIdArray);
+			return $classes;
+		}
 		////////////////////////////////////////////////////////////////////////////////
 		//Implementations
 		////////////////////////////////////////////////////////////////////////////////

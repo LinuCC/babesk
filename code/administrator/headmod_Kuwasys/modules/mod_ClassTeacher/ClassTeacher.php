@@ -60,9 +60,9 @@ class ClassTeacher extends Module {
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////
 	/**
-	 * This function initializes Data like the MySQL-Connection for this Class
-	 * @param unknown_type $dataContainer
-	 */
+	* This function initializes Data like the MySQL-Connection for this Class
+	* @param unknown_type $dataContainer
+	*/
 	private function entryPoint ($dataContainer) {
 
 		defined('_AEXEC') or die('Access denied');
@@ -71,14 +71,14 @@ class ClassTeacher extends Module {
 		$this->_languageManager = $this->_dataContainer->getLanguageManager();
 		$this->_languageManager->setModule('ClassTeacher');
 		$this->_interface = new ClassTeacherInterface($this->relPath, $this->_dataContainer->getSmarty(), $this->
-			_languageManager);
+				_languageManager);
 		$this->_classTeacherManager = new KuwasysClassTeacherManager();
 		$this->_classManager = new KuwasysClassManager();
 		$this->_classJointManager = new KuwasysJointClassTeacherInClass();
 		$this->_schoolYearManager = new KuwasysSchoolYearManager();
 		$this->_classInSchoolYearJointManager = new KuwasysJointClassInSchoolYearManager();
 	}
-	
+
 	/**
 	 * handles the part of the module to add the Class-Teacher
 	 */
@@ -120,7 +120,7 @@ class ClassTeacher extends Module {
 
 		try {
 			$this->_classTeacherManager->addClassTeacher($_POST['name'], $_POST['forename'], $_POST['address'], $_POST[
-				'telephone']);
+					'telephone']);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorAddClassTeacher'));
 		}
@@ -132,14 +132,14 @@ class ClassTeacher extends Module {
 	 * @param numeric_string $classID the ID of the class
 	 */
 	private function addJointClassTeacherInClass ($classTeacherID, $classID) {
-		
+
 		try {
 			$this->_classJointManager->addJoint($classTeacherID, $classID);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorAddClassTeacherToClassLink'));
 		}
 	}
-	
+
 	/**
 	 * Prepares to add a link between a Class-Teacher and a Class
 	 * @uses ClassTeacher::addJointClassTeacherInClass
@@ -154,7 +154,7 @@ class ClassTeacher extends Module {
 			}
 		}
 	}
-	
+
 	/**
 	 * Shows the Class-Teachers to the User
 	 */
@@ -195,7 +195,7 @@ class ClassTeacher extends Module {
 		}
 		return $classTeacher;
 	}
-	
+
 	/**
 	 * entry-Point for deleting the ClassTeacher and showing dialogs to the User
 	 */
@@ -213,7 +213,7 @@ class ClassTeacher extends Module {
 			$this->showConfirmationDialogDeleteClassTeacher();
 		}
 	}
-	
+
 	/**
 	 * Displays a Confirmation-Dialog to the user to choose if the User really wants to delete the ClassTeacher
 	 */
@@ -222,7 +222,7 @@ class ClassTeacher extends Module {
 		$classTeacher = $this->getClassTeacher();
 		$this->_interface->displayConfirmDeleteClassTeacher($classTeacher);
 	}
-	
+
 	/**
 	 * Deletes the ClassTeacher with the ID '$_GET['ID']' from the Database
 	 * @used-by ClassTeacher::deleteClassTeacher
@@ -235,7 +235,7 @@ class ClassTeacher extends Module {
 			$this->_interface->dieError($this->_languageManager->getText('errorDeleteClassTeacher'));
 		}
 	}
-	
+
 	/**
 	 * entry-point for changing the ClassTeacher and displaying dialogs to the User
 	 */
@@ -253,7 +253,7 @@ class ClassTeacher extends Module {
 			$this->_interface->displayChangeClassTeacher($classTeacher, $classes);
 		}
 	}
-	
+
 	/**
 	 * changes the Class-Teacher in the Database based on post- and get-variables
 	 */
@@ -261,7 +261,7 @@ class ClassTeacher extends Module {
 
 		try {
 			$this->_classTeacherManager->alterClassTeacher($_GET['ID'], $_POST['name'], $_POST['forename'], $_POST[
-				'address'], $_POST['telephone']);
+					'address'], $_POST['telephone']);
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorNoClassTeacher'));
 		}
@@ -277,18 +277,22 @@ class ClassTeacher extends Module {
 
 		$this->checkForCorrectClassInput($_POST['class']);
 		$allJointsClassTeacherToClass = $this->getJointsClassTeacherToClassByClassTeacherId($_GET['ID']);
-		foreach ($allJointsClassTeacherToClass as $joint) {
-			foreach ($_POST['class'] as $class) {
-				if ($class == $joint ['ClassID']) {
-					continue 2;
+		if(is_array($allJointsClassTeacherToClass)) {
+			foreach ($allJointsClassTeacherToClass as $joint) {
+				foreach ($_POST['class'] as $class) {
+					if ($class == $joint ['ClassID']) {
+						continue 2;
+					}
 				}
+				$this->deleteJointClassTeacherToClass($joint['ID']);
 			}
-			$this->deleteJointClassTeacherToClass($joint['ID']);
 		}
 		foreach ($_POST['class'] as $class) {
-			foreach ($allJointsClassTeacherToClass as $joint) {
-				if ($class == $joint ['ClassID']) {
-					continue 2;
+			if(is_array($allJointsClassTeacherToClass)) {
+				foreach ($allJointsClassTeacherToClass as $joint) {
+					if ($class == $joint ['ClassID']) {
+						continue 2;
+					}
 				}
 			}
 			$this->addJointClassTeacherInClass($_GET['ID'], $class);
@@ -305,7 +309,7 @@ class ClassTeacher extends Module {
 			if ($class == 'NoClass') {
 				if (count($_POST['class']) > 1) {
 					$this->_interface->dieError($this->_languageManager->getText(
-						'errorNoClassSelectedButMultipleOthersToo'));
+							'errorNoClassSelectedButMultipleOthersToo'));
 				}
 				else {
 					$this->_interface->showMsg($this->_languageManager->getText('warningClassNotAddedToClassTeacher'));
@@ -330,7 +334,7 @@ class ClassTeacher extends Module {
 
 	/**-----------------------------------------------------------------------------
 	 * Functions handling other tables than Classteacher
-	 *----------------------------------------------------------------------------*/
+	*----------------------------------------------------------------------------*/
 
 	/**
 	 * returns all the classes that are in the active schoolYear
@@ -459,7 +463,7 @@ class ClassTeacher extends Module {
 	}
 
 	/**
-	 * Returns all Links between Class-Teacher and Classes that are connected to the ID of the 
+	 * Returns all Links between Class-Teacher and Classes that are connected to the ID of the
 	 * ClassTeacher $classTeacherID
 	 * @param unknown_type $classTeacherID
 	 */
@@ -518,10 +522,13 @@ class ClassTeacher extends Module {
 
 		$jointsClassTeacherInClass = $this->getJointsClassTeacherToClassByClassTeacherId($classTeacherID);
 		foreach ($classes as & $class) {
-			foreach ($jointsClassTeacherInClass as $joint) {
-				if ($class['ID'] == $joint['ClassID']) {
-					$class['selected'] = true;
-					continue 2;
+			if(isset($jointsClassTeacherInClass) && count($jointsClassTeacherInClass)) {
+
+				foreach ($jointsClassTeacherInClass as $joint) {
+					if ($class['ID'] == $joint['ClassID']) {
+						$class['selected'] = true;
+						continue 2;
+					}
 				}
 			}
 			$class['selected'] = false;
