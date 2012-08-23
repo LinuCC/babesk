@@ -30,9 +30,10 @@ class AdminReligionInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath.'show_religions_set.tpl');
 	}
 	
-	function ShowUsers($users,$religions) {
+	function ShowUsers($users,$religions,$navbar) {
 		$this->smarty->assign('users', $users);
 		$this->smarty->assign('religions', $religions);
+		$this->smarty->assign('navbar', $navbar);
 		$this->smarty->display($this->tplFilePath.'show_users.tpl');
 	
 	}

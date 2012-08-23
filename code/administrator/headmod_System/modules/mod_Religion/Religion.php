@@ -40,7 +40,14 @@ class Religion extends Module {
 				case 4: //save the users
 					$ReligionProcessing->SaveUsers($_POST);
 				break;
-			}
+				} 
+		} elseif  (('GET' == $_SERVER['REQUEST_METHOD'])&&isset($_GET['action'])) {
+					$action = $_GET['action'];
+					switch ($action) {
+						case 3: //show the users
+							$ReligionProcessing->ShowUsers(false);
+					}
+				
 		} else {
 			$ReligionInterface->ShowSelectionFunctionality();
 		}

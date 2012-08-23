@@ -66,7 +66,9 @@ class AdminReligionProcessing {
 		try {
 			$groups = $groupManager->getTableData();
 			//$users = $userManager->getTableData();
-			$users = $userManager->getUsersSorted();
+			isset($_GET['sitePointer'])?$showPage = $_GET['sitePointer'] + 0:$showPage = 1;
+			$nextPointer = $showPage*10-10;
+			$users = $userManager->getUsersSorted($nextPointer);
 		} catch (Exception $e) {
 			$this->logs
 					->log('ADMIN', 'MODERATE',
@@ -87,7 +89,8 @@ class AdminReligionProcessing {
 		}
 		$religions = $globalSettingsManager->getReligion();
 		$religions_exploded = explode("|", $religions);
-		$this->ReligionInterface->ShowUsers($users,$religions_exploded);
+		$navbar = navBar($showPage, 'users', 'Religion', '3');
+		$this->ReligionInterface->ShowUsers($users,$religions_exploded,$navbar);
 	}
 
 	

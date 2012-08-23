@@ -1,4 +1,8 @@
 {extends file=$ReligionParent}{block name=content}
+<table width=100%>
+<tr><th align='center'>{$navbar}</th></tr>
+</table>
+
 <form action="index.php?section=System|Religion&action=4"
 	method="post" onsubmit="submit()">
 	<fieldset>
