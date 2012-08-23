@@ -116,6 +116,11 @@
 				<name>Retour</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Spezifische Informationen</ger_name>
+				<name>specific</name>
+				<active>true</active>
+			</module>
 		</head_module>
 	</administrator>
 	<web>
