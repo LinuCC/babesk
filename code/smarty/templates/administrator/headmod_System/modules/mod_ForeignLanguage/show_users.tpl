@@ -1,4 +1,9 @@
 {extends file=$ForeignLanguageParent}{block name=content}
+<table width=100%>
+<tr><th align='center'>{$navbar}</th></tr>
+</table>
+
+
 <form action="index.php?section=System|ForeignLanguage&action=4"
 	method="post" onsubmit="submit()">
 	<fieldset>
@@ -27,7 +32,7 @@
 			<td align="center">{$user.birthday}</td>
 			<td align="center">
 				{foreach from=$foreignLanguages item=foreignLanguage name=zaehler}
-		<input type="checkbox" name="{$user.ID}[]" value="{$foreignLanguage}" {if $user.foreign_lang|strstr:$foreignLanguage}checked{/if} />
+		<input type="checkbox" name="{$user.ID}[]" value="{$foreignLanguage}" {if $user.foreign_language|strstr:$foreignLanguage}checked{/if} />
 		{/foreach}
 			</td>
 			<td align="center" bgcolor='#FFD99'>

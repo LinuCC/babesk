@@ -30,9 +30,10 @@ class AdminForeignLanguageInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath.'show_foreignLanguages_set.tpl');
 	}
 	
-	function ShowUsers($users,$foreignLanguages) {
+	function ShowUsers($users,$foreignLanguages,$navbar) {
 		$this->smarty->assign('users', $users);
 		$this->smarty->assign('foreignLanguages', $foreignLanguages);
+		$this->smarty->assign('navbar', $navbar);
 		$this->smarty->display($this->tplFilePath.'show_users.tpl');
 	
 	}
