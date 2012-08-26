@@ -67,7 +67,7 @@ class AdminUserInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath.'change_user.tpl');
 		
 	}
-	function ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID, $locked,$soli) {
+	function ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID, $locked,$soli,$class) {
 		$this->smarty->assign('id', $id);
 		$this->smarty->assign('name', $name);
 		$this->smarty->assign('forename', $forename);
@@ -77,6 +77,7 @@ class AdminUserInterface extends AdminInterface{
 		$this->smarty->assign('gid', $GID);
 		$this->smarty->assign('locked', $locked);
 		$this->smarty->assign('soli',$soli);
+		$this->smarty->assign('class',$class);
 		$this->smarty->display($this->tplFilePath.'change_user_fin.tpl');
 	}
 	

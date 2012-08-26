@@ -34,7 +34,7 @@ class User extends Module {
 						try {
 							$userProcessing->RegisterUser($_POST['forename'], $_POST['name'], $_POST['username'], $_POST[
 									'passwd'], $_POST['passwd_repeat'], $_SESSION['CARD_ID'], $_POST["Date_Year"] . '-' . $_POST[
-									"Date_Month"] . '-' . $_POST["Date_Day"], $_POST["gid"], $_POST["credits"]);
+									"Date_Month"] . '-' . $_POST["Date_Day"], $_POST["gid"], $_POST["credits"], $_POST["class"]);
 						} catch (Exception $e) {
 							$userInterface->dieError($e->getMessage());
 						}
@@ -73,12 +73,12 @@ class User extends Module {
 							$userProcessing->ChangeUser($_GET['ID'], $_POST['id'], $_POST['forename'], $_POST['name'], $_POST[
 									'username'], $_POST['passwd'], $_POST['passwd_repeat'], $_POST['Date_Year'] . '-' . $_POST[
 									'Date_Month'] . '-' . $_POST['Date_Day'], $_POST['gid'], $_POST['credits'], 1, @$_POST[
-									'cardnumber'], $soli);
+									'cardnumber'], $soli,$_POST['class']);
 						} else {
 							$userProcessing->ChangeUser($_GET['ID'], $_POST['id'], $_POST['forename'], $_POST['name'], $_POST[
 									'username'], $_POST['passwd'], $_POST['passwd_repeat'], $_POST['Date_Year'] . '-' . $_POST[
 									'Date_Month'] . '-' . $_POST['Date_Day'], $_POST['gid'], $_POST['credits'], 0, @$_POST[
-									'cardnumber'], $soli);
+									'cardnumber'], $soli,$_POST['class']);
 						}
 					}
 					break;

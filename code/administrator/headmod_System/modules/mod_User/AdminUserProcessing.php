@@ -37,9 +37,10 @@ class AdminUserProcessing {
 	 * @param string $birthday The Birthday of the user. Format: YYYY-MM-DD
 	 * @param number $GID The Id of the Group the user is in
 	 * @param string $credits How much credits the user has
+	 * @param string $class the class 
 	 * @throws Exception if something gone wrong
 	 */
-	function RegisterUser($forename, $name, $username, $passwd, $passwd_repeat, $cardID, $birthday, $GID, $credits) {
+	function RegisterUser($forename, $name, $username, $passwd, $passwd_repeat, $cardID, $birthday, $GID, $credits,$class) {
 
 		require_once PATH_ACCESS . '/UserManager.php';
 		require_once PATH_ACCESS . '/CardManager.php';
@@ -94,7 +95,7 @@ class AdminUserProcessing {
 		}
 
 		try {
-			$userManager->addUser($name, $forename, $username, $passwd, $birthday, $credits, $GID);
+			$userManager->addUser($name, $forename, $username, $passwd, $birthday, $credits, $GID, $class);
 		} catch (Exception $e) {
 			$this->userInterface
 					->dieError("<br>" . $this->messages['error']['mysql_register'] . $e->getMessage() . "<br>");
@@ -267,7 +268,7 @@ class AdminUserProcessing {
 	 * @throws Exception
 	 */
 	function ChangeUser($old_id, $id, $forename, $name, $username, $passwd, $passwd_repeat, $birthday, $GID, $credits,
-			$locked, $cardnumber, $soli) {
+			$locked, $cardnumber, $soli,$class) {
 
 		require_once PATH_ACCESS . '/UserManager.php';
 		require_once PATH_ACCESS . '/CardManager.php';
@@ -302,7 +303,7 @@ class AdminUserProcessing {
 		try {
 			$userManager
 					->alterUser($old_id, $id, $name, $forename, $username, hash_password($passwd), $birthday, $credits,
-								$GID, $locked, $soli);
+								$GID, $locked, $soli,$class);
 			if ($cardnumber) {
 				$cardManager->changeCardnumber($cardManager->getIDByUserID($id), $cardnumber);
 				try {
@@ -319,7 +320,7 @@ class AdminUserProcessing {
 			$this->userInterface->dieError($this->messages['error']['change'] . $e->getMessage());
 		}
 		$this->userInterface
-				->ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID, $locked, $soli);
+				->ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID, $locked, $soli,$class);
 	}
 
 	var $messages = array();

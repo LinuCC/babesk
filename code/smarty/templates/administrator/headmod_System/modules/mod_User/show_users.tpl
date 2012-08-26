@@ -13,7 +13,7 @@
 			<th align='center'>Geburtstag</th>
 			<th align='center'>Geld</th>
 			<th align='center'>Gruppe</th>
-			<th align='center'>letzter Login</th>
+			<th align='center'>Klasse</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -26,7 +26,7 @@
 			<td align="center">{$user.birthday}</td>
 			<td align="center">{$user.credit}</td>
 			<td align="center">{$user.groupname}</td>
-			<td align="center">{$user.last_login}</td>
+			<td align="center">{$user.class}</td>
 			<td align="center" bgcolor='#FFD99'>
 			<form action="index.php?section=System|User&action=4&ID={$user.ID}" method="post"><input type='submit' value='bearbeiten'></form>
 			<form action="index.php?section=System|User&action=3&ID={$user.ID}" method="post"><input type='submit' value='löschen'></form>

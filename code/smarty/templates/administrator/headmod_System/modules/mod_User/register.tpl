@@ -17,7 +17,9 @@
     </fieldset>
     <br>
     <fieldset>
-        <legend>Identitätsinformationen</legend><br><br>
+        <legend>Identitätsinformationen</legend><br>
+       <label for="class">Klasse:</label>
+        <input type="text" name="class" /><br><br>
         <select name="gid">
 			{html_options values=$gid output=$g_names selected="1"}
 		</select>

@@ -324,16 +324,17 @@ class UserManager extends TableManager{
 	 * @param birthday The birthday of the User
 	 * @param credit The initial credit of the User
 	 * @param GID The group the user belongs to
+	 * @param class The class the user belongs to
 	 * @return false if error
 	 */
-	function addUser($name, $forename, $username, $passwd, $birthday, $credit, $GID) {
+	function addUser($name, $forename, $username, $passwd, $birthday, $credit, $GID, $class) {
 		
 		try { //test if username already exists
 			parent::getTableData('username = "'.$username.'"');
 		} catch (MySQLVoidDataException $e) {
 			//username does not exist
 			parent::addEntry('name', $name, 'forename', $forename, 'username', $username, 'password', md5($passwd),
-        					 'birthday', $birthday, 'credit', $credit, 'GID', $GID, 'last_login', 'CURRENT_TIMESTAMP', 'login_tries', 0, 'first_passwd', 1);
+        					 'birthday', $birthday, 'credit', $credit, 'GID', $GID, 'last_login', 'CURRENT_TIMESTAMP', 'login_tries', 0, 'first_passwd', 1,'class',$class);
 				
 			return;
 		}
@@ -354,14 +355,14 @@ class UserManager extends TableManager{
 	 * @param unknown_type $GID
 	 * @param unknown_type $locked
 	 */
-	function alterUser($old_id, $id, $name, $forename, $username, $passwd, $birthday, $credit, $GID, $locked,$soli) {
+	function alterUser($old_id, $id, $name, $forename, $username, $passwd, $birthday, $credit, $GID, $locked,$soli,$class) {
 		if(isset($passwd) && $passwd != "d41d8cd98f00b204e9800998ecf8427e") {	
 		parent::alterEntry($old_id, 'ID', $id, 'forename', $forename, 'name', $name, 'username',
-							$username, 'password', $passwd, 'birthday', $birthday, 'credit', $credit, 'GID', $GID,'locked', $locked,'soli',$soli);
+							$username, 'password', $passwd, 'birthday', $birthday, 'credit', $credit, 'GID', $GID,'locked', $locked,'soli',$soli,'class',$class);
 		}
 		else {
 			parent::alterEntry($old_id, 'ID', $id, 'forename', $forename, 'name', $name, 'username',
-								$username, 'birthday', $birthday, 'credit', $credit, 'GID', $GID,'locked',$locked,'soli',$soli);
+								$username, 'birthday', $birthday, 'credit', $credit, 'GID', $GID,'locked',$locked,'soli',$soli,'class',$class);
 		}
 	}
 

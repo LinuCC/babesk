@@ -62,6 +62,8 @@ function checkCardId() {
 	<br>
 	<fieldset>
 		<legend>Identitätsinformationen</legend>
+		<br> <br> <label>Klasse:<input type="text" name="class"
+			value="{$user.class}" />
 		<br> <br> <select name="gid"> {html_options values=$gid
 			output=$g_names selected="{$user.GID}"}
 		</select> <label>Guthaben:<input type="text" name="credits" size="5"
