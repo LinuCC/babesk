@@ -6,14 +6,14 @@
 <table>
 	<thead>
 		<tr bgcolor='#33CFF'>
-			<th align='center'>ID</th>
-			<th align='center'>Vorname</th>
-			<th align='center'>Name</th>
-			<th align='center'>Benutzername</th>
-			<th align='center'>Geburtstag</th>
-			<th align='center'>Geld</th>
+			<form name="filterID" action="index.php?section=System|User&action=2" method="post"><input type="hidden" name="filter" value="ID"><th align='center'><a href="#" onclick="document.filterID.submit();">ID</a></th></form>
+			<form name="filterForename" action="index.php?section=System|User&action=2" method="post"><input type="hidden" name="filter" value="forename"><th align='center'><a href="#" onclick="document.filterForename.submit();">Vorname</a></th></form>
+			<form name="filterName" action="index.php?section=System|User&action=2" method="post"><input type="hidden" name="filter" value="name"><th align='center'><a href="#" onclick="document.filterName.submit();">Name</a></th></form>
+			<form name="filterUsername" action="index.php?section=System|User&action=2" method="post"><input type="hidden" name="filter" value="username"><th align='center'><a href="#" onclick="document.filterUsername.submit();">Benutzername</a></th></form>
+			<form name="filterBirthday" action="index.php?section=System|User&action=2" method="post"><input type="hidden" name="filter" value="birthday"><th align='center'><a href="#" onclick="document.filterBirthday.submit();">Geburtstag</a></th></form>
+			<form name="filterCredit" action="index.php?section=System|User&action=2" method="post"><input type="hidden" name="filter" value="credit"><th align='center'><a href="#" onclick="document.filterCredit.submit();">Geld</a></th></form>
 			<th align='center'>Gruppe</th>
-			<th align='center'>Klasse</th>
+			<form name="filterClass" action="index.php?section=System|User&action=2" method="post"><input type="hidden" name="filter" value="class"><th align='center'><a href="#" onclick="document.filterClass.submit();">Klasse</a></th></form>
 		</tr>
 	</thead>
 	<tbody>

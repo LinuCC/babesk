@@ -35,7 +35,11 @@ class Religion extends Module {
 					$ReligionProcessing->EditReligions($_POST);
 				break;
 				case 3: //edit the users
-					$ReligionProcessing->ShowUsers(false);	
+					if (isset($_POST['filter'])) {
+						$ReligionProcessing->ShowUsers($_POST['filter']);
+					} else {
+						$ReligionProcessing->ShowUsers("name");
+					};	
 				break;
 				case 4: //save the users
 					$ReligionProcessing->SaveUsers($_POST);
@@ -45,7 +49,11 @@ class Religion extends Module {
 					$action = $_GET['action'];
 					switch ($action) {
 						case 3: //show the users
-							$ReligionProcessing->ShowUsers(false);
+					if (isset($_GET['filter'])) {
+						$ReligionProcessing->ShowUsers($_GET['filter']);
+					} else {
+						$ReligionProcessing->ShowUsers("name");
+					}
 					}
 				
 		} else {

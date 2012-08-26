@@ -35,7 +35,11 @@ class ForeignLanguage extends Module {
 					$ForeignLanguageProcessing->EditForeignLanguages($_POST);
 				break;
 				case 3: //edit the users
-					$ForeignLanguageProcessing->ShowUsers(false);	
+					if (isset($_POST['filter'])) {
+						$ForeignLanguageProcessing->ShowUsers($_POST['filter']);
+					} else {
+						$ForeignLanguageProcessing->ShowUsers("name");
+					};
 				break;
 				case 4: //save the users
 					$ForeignLanguageProcessing->SaveUsers($_POST);
@@ -45,7 +49,11 @@ class ForeignLanguage extends Module {
 					$action = $_GET['action'];
 					switch ($action) {
 						case 3: //show the users
-							$ForeignLanguageProcessing->ShowUsers(false);
+					if (isset($_GET['filter'])) {
+						$ForeignLanguageProcessing->ShowUsers($_GET['filter']);
+					} else {
+						$ForeignLanguageProcessing->ShowUsers("name");
+					}
 					}
 				
 		 

@@ -9,11 +9,11 @@
 <table>
 	<thead>
 		<tr bgcolor='#33CFF'>
-			<th align='center'>ID<br/>&nbsp;</th>
-			<th align='center'>Vorname<br/>&nbsp;</th>
-			<th align='center'>Name<br />&nbsp;</th>
-			<th align='center'>Benutzername<br/>&nbsp;</th>
-			<th align='center'>Geburtstag<br/>&nbsp;</th>	
+			<th align='center'><a href="index.php?section=System|Religion&action=3&filter=ID">ID</a></th>
+			<th align='center'><a href="index.php?section=System|Religion&action=3&filter=forename">Vorname</a></th>
+			<th align='center'><a href="index.php?section=System|Religion&action=3&filter=name">Name</a></th>
+			<th align='center'><a href="index.php?section=System|Religion&action=3&filter=username">Benutzername</a></th>
+			<th align='center'><a href="index.php?section=System|Religion&action=3&filter=birthday">Geburtsdatum</a></th>	
 			<th align='center'>Religionszugeh&ouml;rigkeit<br />
 				{foreach from=$religions item=religion name=zaehler}
 		{$religion}&nbsp;

@@ -49,7 +49,11 @@ class User extends Module {
 					}
 					break;
 				case 2: //show the users
-					$userProcessing->ShowUsers(false);
+					if (isset($_POST['filter'])) {
+						$userProcessing->ShowUsers($_POST['filter']);
+					} else {
+						$userProcessing->ShowUsers("name");
+					}
 					break;
 				case 3: //delete the user
 					if (isset($_POST['delete'])) {
@@ -87,7 +91,11 @@ class User extends Module {
 			$action = $_GET['action'];
 			switch ($action) { 
 				case 2: //show the users
-					$userProcessing->ShowUsers(false);
+					if (isset($_GET['filter'])) {
+						$userProcessing->ShowUsers($_GET['filter']);
+					} else {
+						$userProcessing->ShowUsers("name");
+					}
 			}
 		}
 		else {

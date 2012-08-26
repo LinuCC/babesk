@@ -68,7 +68,7 @@ class AdminForeignLanguageProcessing {
 			//$users = $userManager->getTableData();
 			isset($_GET['sitePointer'])?$showPage = $_GET['sitePointer'] + 0:$showPage = 1;
 			$nextPointer = $showPage*10-10;
-			$users = $userManager->getUsersSorted($nextPointer);
+			$users = $userManager->getUsersSorted($nextPointer,$filter);
 		} catch (Exception $e) {
 			$this->logs
 					->log('ADMIN', 'MODERATE',
@@ -89,7 +89,7 @@ class AdminForeignLanguageProcessing {
 		}
 		$foreignLanguages = $globalSettingsManager->getForeignLanguages();
 		$foreignLanguages_exploded = explode("|", $foreignLanguages);
-		$navbar = navBar($showPage, 'users', 'ForeignLanguage', '3');
+		$navbar = navBar($showPage, 'users', 'ForeignLanguage', '3',$filter);
 		$this->ForeignLanguageInterface->ShowUsers($users,$foreignLanguages_exploded,$navbar);
 	}
 

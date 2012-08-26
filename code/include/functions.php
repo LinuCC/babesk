@@ -131,7 +131,7 @@ function getFirstDayOfWeek($year, $weeknr) {
  * Enter description here...
  */
 
-function navBar($showPage, $table, $mod, $action) {
+function navBar($showPage, $table, $mod, $action,$filter) {
 	require_once 'sql_access/dbconnect.php';
 	$dbObject = new DBConnect();
 	$dbObject->initDatabaseFromXML();
@@ -148,20 +148,20 @@ function navBar($showPage, $table, $mod, $action) {
 	$maxPages = ceil($row['total'] / 10);
 	$string="";
 	if($showPage > 1){
-		$string .= '<a href="?sitePointer=1&section=System|'.$mod.'&action='.$action.'"><<</a>&nbsp;&nbsp;';
-		$string .= '<a href="?sitePointer='.($showPage-1).'&section=System|'.$mod.'&action='.$action.'"><</a>&nbsp;&nbsp;';
+		$string .= '<a href="?sitePointer=1&section=System|'.$mod.'&filter='.$filter.'&action='.$action.'"><<</a>&nbsp;&nbsp;';
+		$string .= '<a href="?sitePointer='.($showPage-1).'&section=System|'.$mod.'&filter='.$filter.'&action='.$action.'"><</a>&nbsp;&nbsp;';
 	}
 
 	for($x=$showPage-5;$x<=$showPage+5;$x++){
 		if(($x>0 && $x<$showPage) || ($x>$showPage && $x<=$maxPages))
-			$string .= '<a href="?sitePointer='.$x.'&section=System|'.$mod.'&action='.$action.'">'.$x.'</a>&nbsp;&nbsp;';
+			$string .= '<a href="?sitePointer='.$x.'&section=System|'.$mod.'&filter='.$filter.'&action='.$action.'">'.$x.'</a>&nbsp;&nbsp;';
 
 		if($x==$showPage)
 			$string .= $x . '&nbsp;&nbsp;';
 	}
 	if($showPage < $maxPages){
-		$string .= '<a href="?sitePointer='.($showPage+1).'&section=System|'.$mod.'&action='.$action.'">></a>&nbsp;&nbsp;';
-		$string .= '<a href="?sitePointer='.$maxPages.'&section=System|'.$mod.'&action='.$action.'">>></a>&nbsp;&nbsp;';
+		$string .= '<a href="?sitePointer='.($showPage+1).'&section=System|'.$mod.'&filter='.$filter.'&action='.$action.'">></a>&nbsp;&nbsp;';
+		$string .= '<a href="?sitePointer='.$maxPages.'&section=System|'.$mod.'&filter='.$filter.'&action='.$action.'">>></a>&nbsp;&nbsp;';
 	}
 
 	return $string;

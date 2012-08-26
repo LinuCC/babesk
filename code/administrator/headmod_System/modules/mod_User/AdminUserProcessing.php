@@ -147,7 +147,6 @@ class AdminUserProcessing {
 	//--------------------Show Users--------------------
 	//////////////////////////////////////////////////
 	function ShowUsers($filter) {
-
 		require_once PATH_ACCESS . '/UserManager.php';
 		require_once PATH_ACCESS . '/GroupManager.php';
 
@@ -159,7 +158,7 @@ class AdminUserProcessing {
 			//$users = $userManager->getTableData();
 			isset($_GET['sitePointer'])?$showPage = $_GET['sitePointer'] + 0:$showPage = 1;
 			$nextPointer = $showPage*10-10;
-			$users = $userManager->getUsersSorted($nextPointer);
+			$users = $userManager->getUsersSorted($nextPointer,$filter);
 		} catch (Exception $e) {
 			$this->logs
 					->log('ADMIN', 'MODERATE',
@@ -178,7 +177,7 @@ class AdminUserProcessing {
 			}
 			$is_named or $user['groupname'] = 'Error: This group is non-existent!';
 		}
-		$navbar = navBar($showPage, 'users', 'User', '2');
+		$navbar = navBar($showPage, 'users', 'User', '2',$filter);
 		$this->userInterface->ShowUsers($users,$navbar);
 	}
 	//////////////////////////////////////////////////

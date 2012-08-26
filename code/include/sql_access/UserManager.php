@@ -71,10 +71,10 @@ class UserManager extends TableManager{
 	 * Sorts the users it gets from MySQL-table and returns them
 	 * Enter description here ...
 	 */
-	function getUsersSorted($pagePointer) {
+	function getUsersSorted($pagePointer,$orderBy) {
 		require_once PATH_ACCESS . '/dbconnect.php';
 		$res_array = array();
-		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY name LIMIT %s,10', $this->tablename,$pagePointer));
+		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY %s LIMIT %s,10', $this->tablename,$orderBy,$pagePointer));
 		$result = $this->db->query($query);
 		if (!$result) {
 			throw DB_QUERY_ERROR.$this->db->error;
