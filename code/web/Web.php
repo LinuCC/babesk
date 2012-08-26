@@ -22,7 +22,7 @@ class Web {
 
 			require_once PATH_INCLUDE . '/moduleManager.php';
 			require_once PATH_INCLUDE . '/functions.php';
-			require_once PATH_INCLUDE . '/logs.php';
+			require_once PATH_ACCESS . "/LogManager.php";
 
 		}
 		$this->_moduleManager = new ModuleManager('web');

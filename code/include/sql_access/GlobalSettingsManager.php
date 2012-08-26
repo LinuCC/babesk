@@ -141,6 +141,21 @@ class GlobalSettingsManager extends TableManager {
 	}
 	
 	/**
+	 * returns the key for Fits module
+	 * @throws UnexpectedValueException when fits is NULL
+	 * @throws something else when MySQL has problems
+	 * @return string the fits_key
+	 */
+	function getFitsKey() {
+		$pid = parent::searchEntry("name = 'fits_key'");
+		$fits_key = parent::getEntryValue($pid['id'], 'value');
+		if($fits_key === NULL)
+			throw new UnexpectedValueException('fits_key has no value!');
+		return $fits_key;
+	}
+	
+	
+	/**
 	 * Changes the value of "soli_price" to the given value
 	 * @throws something if something has gone wrong
 	 */

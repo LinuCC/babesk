@@ -87,8 +87,8 @@
 			<name>Fits</name>
 			<active>true</active>
 			<module>
-				<ger_name>Führerschein anerkennen</ger_name>
-				<name>Activate</name>
+				<ger_name>Führerschein überprüfen</ger_name>
+				<name>FitsCheck</name>
 				<active>true</active>
 			</module>
 		</head_module>
@@ -157,6 +157,21 @@
 			<module>
 				<ger_name>Bestellen</ger_name>
 				<name>Order</name>
+				<active>true</active>
+			</module>
+		</head_module>
+		<head_module>
+			<ger_name>Fits</ger_name>
+			<name>Fits</name>
+			<active>true</active>
+			<module>
+				<ger_name>Menü</ger_name>
+				<name>Fmenu</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Quiz</ger_name>
+				<name>Quiz</name>
 				<active>true</active>
 			</module>
 		</head_module>

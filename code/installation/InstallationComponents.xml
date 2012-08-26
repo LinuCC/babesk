@@ -6,4 +6,10 @@
 		<path>components/Babesk/InstallBabesk.php</path>
 		<className>InstallBabesk</className>
 	</Component>
+	<Component>
+		<name>Fits</name>
+		<nameDisplay>Führerschein für IT-Systeme</nameDisplay>
+		<path>components/fits/InstallFits.php</path>
+		<className>InstallFits</className>
+	</Component>
 </InstallationComponents>

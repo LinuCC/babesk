@@ -15,6 +15,10 @@ function setNormal($id) {
 {/literal}
 
 <div id='headmod_selection'>
+
+
+    <p>Wilkommen! Bitte w&auml;hle ein Modul:</p>
+
 {$counter = 1}
 {foreach $head_modules as $headmod}
 <div class='headmod_selector' id='headmod_{$counter}'>
