@@ -76,7 +76,6 @@ class BookManager extends TableManager{
 	function getBooksByClass($class) {
 		require_once PATH_ACCESS . '/dbconnect.php';
 		$query = sql_prev_inj(sprintf("SELECT * FROM %s WHERE class LIKE '%%%s%%'", $this->tablename, $class));
-		var_dump($query);
 		$result = $this->db->query($query);
 		if (!$result) {
 			throw DB_QUERY_ERROR.$this->db->error;

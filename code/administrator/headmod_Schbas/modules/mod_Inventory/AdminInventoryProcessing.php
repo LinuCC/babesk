@@ -110,7 +110,9 @@ class AdminInventoryProcessing {
 		require_once PATH_ACCESS . '/BookManager.php';
 		$inventoryManager = new InventoryManager();
 		$bookManager = new BookManager();
-			$barcode_exploded = explode(' ', $barcode);
+		$barcode = preg_replace("/\/([0-9])/", "/ $1", $barcode); //add space after / when it's missing
+		$barcode = str_replace("  ", " ", $barcode); // remove two empty spaces
+		$barcode_exploded = explode(' ', $barcode);
 		try {
 			$book_info = $bookManager->getBookIDByBarcode($barcode);
 		} catch (Exception $e) {
