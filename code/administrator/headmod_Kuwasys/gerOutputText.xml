@@ -26,6 +26,7 @@
 			<formWrongPasswordRepetition>Das Passwort stimmt nicht mit der Wiederholung überein!</formWrongPasswordRepetition>
 			<!-- ErrorMessages -->
 			<actionValueWrong>Der Wert der Get-Variable Action ist falsch! Möglicherweise wurde diese Funktion noch nicht implementiert.</actionValueWrong>
+			<getIdWrong>Es liegt kein Get-Wert vor! kann die Aktion nicht ausführen.</getIdWrong>
 			<errorAddUserConnectDatabase>Der Benutzer konnte nicht hinzugefügt werden, da nicht zu der Datenbank verbunden werden konnte.</errorAddUserConnectDatabase>
 			<errorAddUser>Der Benutzer konnte nicht hinzugefügt werden: %s</errorAddUser>
 			<errorFetchAllUsers>Konnte die Benutzer nicht von der Datenbank abrufen!</errorFetchAllUsers>
@@ -86,7 +87,8 @@
 		<text>
 			<errorWrongActionValue>Action Value besitzt einen falschen Wert! Möglicherweise wurde diese Funktion noch nicht implementiert</errorWrongActionValue>
 			<errorWrongInput>Sie haben den Wert im Feld "%s" nicht richtig eingegeben!</errorWrongInput>
-			<errorNoClasses>Es sind keine Kurse vorhanden</errorNoClasses>
+			<errorNoClasses>Es konnten keine Kurse gefunden werden</errorNoClasses>
+			<errorNoClassesJointProblem>Die gesuchten Kurse konnten nicht gefunden werden; Die Datenbank weist Fehler auf!</errorNoClassesJointProblem>
 			<errorNoSchoolYears>Es sind keine Schuljahre vorhanden! Bitte fügen sie zuerst Schuljahre hinzu.</errorNoSchoolYears>
 			<errorFetchSchoolYears>Ein Fehler ist beim abrufen der SchuljahresDaten aufgetreten.</errorFetchSchoolYears>
 			<errorFetchLastID>Ein Fehler ist beim Abrufen der Daten des letzten hinzugefügten Kurses aufgetreten.</errorFetchLastID>
@@ -107,6 +109,7 @@
 			<warningNoJointToSchoolyearFound>Warnung: Die Klasse gehörte nicht zu einem Schuljahr.</warningNoJointToSchoolyearFound>
 			<errorDeleteJointSchoolyear>Die Verbindung zum Schuljahr konnte nicht gelöscht werden!</errorDeleteJointSchoolyear>
 			<deleteClassNotConfirmed>Der Kurs wurde nicht gelöscht. </deleteClassNotConfirmed>
+			<errorFetchJointUsersInGrade>Ein Fehler ist beim Abrufen der Daten zum Verlinken von Schülern und Klassen aufgetreten! Dieser Schüler gehört womöglich zu keiner Klasse.</errorFetchJointUsersInGrade>
 			<errorNoJointsClassteacherInClass>Es wurden keine Kursleiter für die Kurse gefunden.</errorNoJointsClassteacherInClass>
 			<errorFetchJointsClassteacherInClass>Ein Fehler ist beim Abrufen der Kursleiter für die Kurse aufgetreten.</errorFetchJointsClassteacherInClass>
 			<errorNoWaitingUsers>Es sind keine Schüler vorhanden, die auf der Warteliste stehen</errorNoWaitingUsers>
@@ -122,11 +125,13 @@
 			<errorFetchLinkSchoolYear>Ein Fehler ist beim Abrufen des Links zum Schuljahr aufgetreten!</errorFetchLinkSchoolYear>
 			<errorChangeLinkSchoolYear>Ein Fehler ist beim Verändern des Schuljahres des Kurses aufgetreten!</errorChangeLinkSchoolYear>
 			<errorGetCountOfUsersForClass>Ein Fehler ist beim zählen der Benutzer eines Kurses aufgetreten.</errorGetCountOfUsersForClass>
+			<errorFetchGrade>Ein Fehler ist beim Abrufen von einer Klasse aufgetreten.</errorFetchGrade>
 			<errorNoJointsUsersInClassOfClassId>Es konnten keine Teilnehmer für diesen Kurs gefunden werden.</errorNoJointsUsersInClassOfClassId>
 			<errorFetchJointsUsersInClassOfClassId>Ein Fehler ist beim Abrufen der Teilnehmer für diesen Kurs aufgetreten.</errorFetchJointsUsersInClassOfClassId>
 			<errorAddClass>Ein Fehler ist beim Hinzufügen des Kurses aufgetreten.</errorAddClass>
 			<finAddClassesByCsv>Die Kurse wurden erfolgreich importiert.</finAddClassesByCsv>
 			<errorGetSchoolyearBySchoolyearName>Das Schuljahr "%s" wurde nicht gefunden! Sie können das Schuljahr einstellen wenn sie den Kurs bearbeiten</errorGetSchoolyearBySchoolyearName>
+			<errorFetchSchoolyearBySchoolyearName>Ein Fehler ist beim abrufen des Schuljahres aufgetreten</errorFetchSchoolyearBySchoolyearName>
 			<errorFetchNextAutoIncrementId>Ein Fehler ist beim Abrufen der ID des hinzuzufügenden Kurses aufgetreten.</errorFetchNextAutoIncrementId>
 			<errorNoJointsUsersInClassFirstRequest>Es gibt keine primären Kurswünsche</errorNoJointsUsersInClassFirstRequest>
 			<errorNoJointsUsersInClassSecondRequest>Es gibt keine sekundären Kurswünsche</errorNoJointsUsersInClassSecondRequest>
@@ -157,6 +162,10 @@
 			<weekdayLabelFri>Freitag</weekdayLabelFri>
 			<weekdayLabelSat>Samstag</weekdayLabelSat>
 			<weekdayLabelSun>Sonntag</weekdayLabelSun>
+			<jointUsersInClassStatusLabelWaiting>Wartend</jointUsersInClassStatusLabelWaiting>
+			<jointUsersInClassStatusLabelActive>Aktiv</jointUsersInClassStatusLabelActive>
+			<jointUsersInClassStatusLabelFirstRequest>Primärer Wunsch</jointUsersInClassStatusLabelFirstRequest>
+			<jointUsersInClassStatusLabelSecondRequest>Sekundärer Wunsch</jointUsersInClassStatusLabelSecondRequest>
 		</text>
 	</module>
 	<module>

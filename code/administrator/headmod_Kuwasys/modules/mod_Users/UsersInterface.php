@@ -93,6 +93,14 @@ class UsersInterface extends AdminInterface {
 		$this->smarty->assign('users', $adjustedUsers);
 		$this->smarty->display($this->tplFilePath . 'showUsersWaiting.tpl');
 	}
+	
+	public function showMoveUserByClass ($classIdOld, $classes, $statusArray) {
+		
+		$this->smarty->assign('classes', $classes);
+		$this->smarty->assign('statusArray', $statusArray);
+		$this->smarty->assign('classIdOld', $classIdOld);
+		
+	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////

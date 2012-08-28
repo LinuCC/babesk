@@ -1,16 +1,8 @@
 <?php
 
 require_once 'ClassesInterface.php';
-require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
-require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
-require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
-require_once PATH_ACCESS_KUWASYS . '/KuwasysJointClassInSchoolYearManager.php';
-require_once PATH_ACCESS_KUWASYS . '/KuwasysGlobalSettingsManager.php';
-require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
-require_once PATH_ACCESS_KUWASYS . '/KuwasysClassTeacherManager.php';
-require_once PATH_ACCESS_KUWASYS . '/KuwasysJointClassTeacherInClass.php';
 require_once PATH_INCLUDE . '/Module.php';
-
+require_once PATH_INCLUDE_KUWASYS . '/jointUserInClassStatusDefinition.php';
 /**
  *
  * Notice that a class has to have only one SchoolYear!
@@ -77,18 +69,15 @@ class Classes extends Module {
 
 		defined('_AEXEC') or die('Access denied');
 		
+		
 		$this->_dataContainer = $dataContainer;
-		$this->_classManager = new KuwasysClassManager();
-		$this->_syManager = new KuwasysSchoolYearManager();
-		$this->_syJointManager = new KuwasysJointClassInSchoolYearManager();
-		$this->_jointUserInClassManager = new KuwasysJointUsersInClass();
-		$this->_userManager = new KuwasysUsersManager();
 		$this->_interface = new ClassesInterface($this->relPath, $this->_dataContainer->getSmarty());
 		$this->_languageManager = $this->_dataContainer->getLanguageManager();
 		$this->_languageManager->setModule('Classes');
-		$this->_globalSettingsManager = new KuwasysGlobalSettingsManager();
-		$this->_classteacherManager = new KuwasysClassTeacherManager();
-		$this->_jointClassteacherInClassManager = new KuwasysJointClassTeacherInClass();
+		require_once PATH_ADMIN . $this->relPath . '../../KuwasysDatabaseAccess.php';
+		$this->_databaseAccessManager = new KuwasysDatabaseAccess($this->_interface, $this->_languageManager);
+		$this->_jointUserInClassStatusDefiner = new jointUserInClassStatusTranslation($this->_languageManager);
+		
 	}
 
 	private function showMainMenu () {
@@ -125,34 +114,17 @@ class Classes extends Module {
 	
 	private function getIsClassRegistrationGloballyEnabled () {
 		
-		try {
-			$toggle = $this->_globalSettingsManager->isClassRegistrationGloballyEnabledGet();
-			return $toggle;
-		} catch (MySQLVoidDataException $e) {
-			$this->addIsClassRegistrationGloballyEnabled(false);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchIsClassRegistrationEnabledGlobally'));
-		}
+		return $this->_databaseAccessManager->classRegistrationGloballyIsEnabledGet();
 	}
 	
 	private function setIsClassRegistrationGloballyEnabled ($toggle) {
 		
-		try {
-			$this->_globalSettingsManager->isClassRegistrationGloballyEnabledAlter($toggle);
-		} catch (MySQLVoidDataException $e) {
-			$this->_globalSettingsManager->isClassRegistrationGloballyEnabledAdd($toggle);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAlterIsClassRegistrationEnabledGlobally'));
-		}
+		$this->_databaseAccessManager->classRegistrationGloballyIsEnabledSet($toggle);
 	}
 	
 	private function addIsClassRegistrationGloballyEnabled ($toggle) {
 		
-		try {
-			$this->_globalSettingsManager->isClassRegistrationGloballyEnabledAdd($toggle);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAlterIsClassRegistrationEnabledGlobally'));
-		}
+		$this->_databaseAccessManager->classRegistrationGloballyIsEnabledAdd($toggle);
 	}
 	
 	private function showAddClass () {
@@ -175,8 +147,12 @@ class Classes extends Module {
 
 		if (isset($jointsOfClass)) {
 			foreach ($jointsOfClass as $joint) {
-				$user = $this->_userManager->getUserByID($joint['UserID']);
+				///@ToDo can be made faster with userIdArray!
+				$user = $this->_databaseAccessManager->userGet($joint['UserID']);
 				$user['status'] = $joint['status'];
+				$user['statusTranslated'] = $this->_jointUserInClassStatusDefiner->statusTranslate($joint['status']);
+				$user = $this->addChoicesOfDayToUser($user, $class ['weekday']);
+				$user = $this->addGradeLabelToUser($user);
 				$class['users'][] = $user;
 
 				if (isset($class['sumStatus'][$user['status']])) {
@@ -189,19 +165,36 @@ class Classes extends Module {
 		}
 		return $class;
 	}
+	
+	private function addChoicesOfDayToUser ($user, $weekday) {
+		
+		$joints = $this->_databaseAccessManager->jointUserInClassGetAllByUserIdWithoutDyingWhenVoid($user ['ID']);
+		$classIdArray = array();
+		foreach ($joints as $joint) {
+			$classIdArray [] = $joint ['ClassID'];
+		}
+		$classes = $this->_databaseAccessManager->classGetByClassIdArray($classIdArray);
+		foreach ($classes as $class) {
+			if($class ['weekday'] == $weekday) {
+				$user ['classesOfSameDay'] [] = $class;
+			}
+		}
+		return $user;
+	}
+	
+	private function addGradeLabelToUser ($user) {
+		
+		$joint = $this->_databaseAccessManager->jointUserInGradeGetByUserIdWithoutDying($user ['ID']);
+		if(isset($joint) && is_array($joint)) {
+			$grade = $this->_databaseAccessManager->gradeGetById($joint ['GradeID']);
+			$user ['gradeName'] = $grade ['gradeValue'] . $grade ['label'];
+		}
+		return $user;
+	}
 
 	private function getAllJointsUsersInClassWithClassId ($classId) {
 
-		try {
-			$joints = $this->_jointUserInClassManager->getAllJointsWithClassId($classId);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('errorNoJointsUsersInClassOfClassId'));
-			return;
-		}
-		catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointsUsersInClassOfClassId'));
-		}
-		return $joints;
+		return $this->_databaseAccessManager->jointUserInClassGetAllByClassId($classId);
 	}
 
 	private function checkClassInput () {
@@ -229,11 +222,7 @@ class Classes extends Module {
 
 	private function addClassToDatabase ($label, $description, $maxRegistration, $allowRegistration, $weekday) {
 
-		try {
-			$this->_classManager->addClass($label, $description, $maxRegistration, $allowRegistration, $weekday);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddClass'));
-		}
+		$this->_databaseAccessManager->classAdd($label, $description, $maxRegistration, $allowRegistration, $weekday);
 	}
 
 	private function addClassToDatabaseByCsvImport ($contentArray) {
@@ -250,12 +239,7 @@ class Classes extends Module {
 	
 	private function getNextAutoincrementIdOfClass () {
 		
-		try {
-			$idOfClass = $this->_classManager->getNextAutoIncrementID();
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchNextAutoIncrementId'));
-		}
-		return $idOfClass;
+		return $this->_databaseAccessManager->classNextAutoincrementIdGet();
 	}
 
 	private function showClasses () {
@@ -271,16 +255,7 @@ class Classes extends Module {
 
 	private function getAllClasses () {
 
-		try {
-			$classes = $this->_classManager->getAllClasses();
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoClasses'));
-		}
-		catch (Exception $e) {
-			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorFetchClassesFromDatabase'), $e->
-				getMessage()));
-		}
-		return $classes;
+		return $this->_databaseAccessManager->classGetAll();
 	}
 
 	private function deleteClass () {
@@ -311,33 +286,17 @@ class Classes extends Module {
 	
 	private function isClassJointedWithUsers ($classId) {
 		
-		try {
-			$this->_jointUserInClassManager->getAllJointsWithClassId($classId);
-		} catch (MySQLVoidDataException $e) {
-			return false;
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorJointUsersInClassCheckForExisting'));
-		}
-		return true;
+		return $this->_databaseAccessManager->jointUserInClassIsClassJointedWithUser($classId);
 	}
 
 	private function deleteClassFromDatabase () {
 
-		try {
-			$this->_classManager->deleteClass($_GET['ID']);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorDeleteClass'));
-		}
+		$this->_databaseAccessManager->classDelete($_GET['ID']);
 	}
 
 	private function getLabelOfClass () {
 
-		try {
-			$label = $this->_classManager->getLabelOfClass($_GET['ID']);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchLabel'));
-		}
-		return $label;
+		return $this->_databaseAccessManager->classLabelGet($_GET['ID']);
 	}
 
 	private function changeClass () {
@@ -356,12 +315,7 @@ class Classes extends Module {
 
 	private function getClass () {
 
-		try {
-			$class = $this->_classManager->getClass($_GET['ID']);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchClass'));
-		}
-		return $class;
+		return $this->_databaseAccessManager->classGet($_GET['ID']);
 	}
 
 	private function showChangeClass () {
@@ -375,34 +329,18 @@ class Classes extends Module {
 	private function changeClassInDatabase () {
 
 		$allowRegistration = (isset($_POST['allowRegistration'])) ? true : false;
-		try {
-			$this->_classManager->alterClass($_GET['ID'], $_POST['label'], $_POST['description'], $_POST[
+		$this->_databaseAccessManager->classChange($_GET['ID'], $_POST['label'], $_POST['description'], $_POST[
 				'maxRegistration'], $allowRegistration, $_POST['weekday']);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorChangeClass'));
-		}
 	}
 
 	private function changeJointSchoolYearInDatabase () {
 
-		try {
-			$this->_syJointManager->alterSchoolYearIdOfClassId($_GET['ID'], $_POST['schoolYear']);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorChangeLinkSchoolYear'));
-		}
+		$this->_databaseAccessManager->jointClassInSchoolyearChangeByClassId($_GET['ID'], $_POST['schoolYear']);
 	}
 
 	private function getLastAddedClassId () {
 
-		try {
-			$lastID = $this->_classManager->getLastClassID();
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoClasses'));
-		}
-		catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchLastID'));
-		}
-		return $lastID;
+		return $this->_databaseAccessManager->classIdGetLastAdded();
 	}
 
 	/**-----------------------------------------------------------------------------
@@ -411,16 +349,7 @@ class Classes extends Module {
 
 	private function getAllSchoolYears () {
 
-		try {
-			$schoolYears = $this->_syManager->getAllSchoolYears();
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoSchoolYears'));
-		}
-		catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchSchoolYears'));
-		}
-
-		return $schoolYears;
+		return $this->_databaseAccessManager->schoolyearGetAll();
 	}
 
 	/**
@@ -428,15 +357,7 @@ class Classes extends Module {
 	 */
 	private function checkSchoolYearExisting () {
 
-		try {
-
-			$this->_syManager->getSchoolYear($_POST['schoolYear']);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorMissSchoolYear'));
-		}
-		catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchSchoolYear'));
-		}
+		$this->_databaseAccessManager->schoolyearCheckExisting($_POST['schoolYear']);
 	}
 
 	/**
@@ -445,22 +366,14 @@ class Classes extends Module {
 	 */
 	private function addJointSchoolYearByPost () {
 
-		try {
-			$this->_syJointManager->addJoint($_POST['schoolYear'], $this->getLastAddedClassId());
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorLinkSchoolYear') . $e->getMessage());
-		}
+		$this->_databaseAccessManager->jointClassInSchoolyearAdd($_POST['schoolYear'], $this->getLastAddedClassId());
 	}
 	/**
 	 * connects the new Class-entry with a SchoolYear
 	 */
 	private function addJointSchoolYear ($schoolyearId, $classId) {
 
-		try {
-			$this->_syJointManager->addJoint($schoolyearId, $classId);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorLinkSchoolYear') . $e->getMessage());
-		}
+		$this->_databaseAccessManager->jointClassInSchoolyearAdd($schoolyearId, $classId);
 	}
 
 	/**
@@ -469,15 +382,7 @@ class Classes extends Module {
 	 */
 	private function deleteJointsSchoolYear () {
 
-		try {
-
-			$this->_syJointManager->deleteAllJointsOfClass($_GET['ID']);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('warningNoJointToSchoolyearFound'));
-		}
-		catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorDeleteJointSchoolyear'));
-		}
+		$this->_databaseAccessManager->jointClassInSchoolyearDelete($_GET['ID']);
 	}
 
 	/**
@@ -504,16 +409,7 @@ class Classes extends Module {
 
 	private function getCountOfActiveUsersInClass ($classId) {
 
-		try {
-			$counter = $this->_jointUserInClassManager->getCountOfActiveUsersInClass($classId);
-		} catch (MySQLVoidDataException $e) {
-			$counter = 0;
-		}
-		catch (Exception $e) {
-			$this->_interface->showError($this->_languageManager->getText('errorGetCountOfUsersForClass'));
-			$counter = -1;
-		}
-		return $counter;
+		return $this->_databaseAccessManager->jointUserInClassGetCountOfActiveUsersOfClassId($classId);
 	}
 
 	private function getSchoolYearLabelByClassId ($classID) {
@@ -529,48 +425,22 @@ class Classes extends Module {
 	/**
 	 * @used-by Classes::getSchoolYearLabelByClassId
 	 */
-	private function getSchoolYearById ($schoolYearID) {
+	private function getSchoolYearById ($schoolyearId) {
 
-		try {
-			$schoolYear = $this->_syManager->getSchoolYear($schoolYearID);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoSchoolYearInLink'));
-		}
-		catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchSchoolYear'));
-		}
-		return $schoolYear;
+		return $this->_databaseAccessManager->schoolyearGet($schoolyearId);
 	}
 
 	/**
 	 * @used-by Classes::getSchoolYearLabelByClassId
 	 */
-	private function getSchoolYearIdByClassId ($classID) {
+	private function getSchoolYearIdByClassId ($classId) {
 
-		try {
-			$schoolYearID = $this->_syJointManager->getSchoolYearIdOfClassId($classID);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showError(sprintf($this->_languageManager->getText('errorNoLinkSchoolYear'), $classID));
-		}
-		catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchLinkSchoolYear'));
-		}
-		if (isset($schoolYearID)) {
-			return $schoolYearID;
-		}
+		return $this->_databaseAccessManager->jointClassInSchoolyearGetSchoolyearIdByClassIdWithoutDyingWhenVoid($classId);
 	}
 
 	private function getSchoolyearIdBySchoolyearName ($schoolyearName) {
 
-		try {
-			$id = $this->_syManager->getSchoolyearIdOfSchoolyearName($schoolyearName);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showError(sprintf($this->_languageManager->getText('errorGetSchoolyearBySchoolyearName'),
-				$schoolyearName));
-		}
-		if(isset($id)) {
-			return $id;
-		}
+		return $this->_databaseAccessManager->schoolyearIdGetBySchoolyearNameWithoutDying($schoolyearName);
 	}
 
 	/**
@@ -631,13 +501,7 @@ class Classes extends Module {
 				}
 			}
 		}
-		try {
-			$classteachers = $this->_classteacherManager->getClassteachersByClassteacherIdArray($classteacherIdArray);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointsClassteacherInClass'));
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('errorNoJointsClassteacherInClass'));
-		}
+		$classteachers = $this->_databaseAccessManager->classteacherGetByIdArrayWithoutDyingWhenVoid($classteacherIdArray);
 		if(is_array($classteachers)) {
 			return $classteachers;
 		}
@@ -649,13 +513,8 @@ class Classes extends Module {
 		foreach ($classes as $class) {
 			$classIdArray [] = $class ['ID'];
 		}
-		try {
-			$joints = $this->_jointClassteacherInClassManager->getJointsByClassIdArray($classIdArray);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('errorNoJointsClassteacherInClass'));
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointsClassteacherInClass'));
-		}
+		
+		$joints = $this->_databaseAccessManager->jointClassteacherInClassGetByClassIdArrayWithoutDyingWhenVoid($classIdArray);
 		if(is_array($joints)) {
 			return $joints;
 		}
@@ -663,16 +522,7 @@ class Classes extends Module {
 	
 	private function getAllJointsOfUsersWaitingWithoutDieingWhenVoid () {
 		
-		try {
-			$joints = $this->_jointUserInClassManager->getAllJointsWithStatusWaiting();
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('errorNoWaitingUsers'));
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchWaitingUsers'));
-		}
-		if(is_array($joints)) {
-			return $joints;
-		}
+		return $this->_databaseAccessManager->jointUserInClassGetAllWithStatusWaitingWithoutDyingWhenVoid();
 	}
 	
 	private function addCountOfWaitingUsersToClasses ($classes) {
@@ -737,11 +587,8 @@ class Classes extends Module {
 	}
 	
 	private function deleteAllJointsUsersInClassOfClass ($classId) {
-		try {
-			$this->_jointUserInClassManager->deleteAllJointsOfClassId($classId);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorDeleteJointsUsersInClass'));
-		}
+		
+		$this->_databaseAccessManager->jointUserInClassDeleteAllOfClassId($classId);
 	}
 
 	private function showImportClassesByCsvFile () {
@@ -760,14 +607,8 @@ class Classes extends Module {
 	////////////////////////////////////////////////////////////////////////////////
 	private $_interface;
 
-	private $_classManager;
-	private $_syManager;
-	private $_syJointManager;
-	private $_jointUserInClassManager;
-	private $_userManager;
-	private $_globalSettingsManager;
-	private $_classteacherManager;
-	private $_jointClassteacherInClassManager;
+	private $_databaseAccessManager;
+	
 	/**
 	 * @var KuwasysDataContainer
 	 */
@@ -777,6 +618,8 @@ class Classes extends Module {
 	 * @var KuwasysLanguageManager
 	 */
 	private $_languageManager;
+	
+	private $_jointUserInClassStatusDefiner;
 }
 
 ?>

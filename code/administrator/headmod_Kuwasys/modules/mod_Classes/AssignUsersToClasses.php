@@ -227,20 +227,6 @@ class AssignUsersToClasses {
 				'jointId' => $jointId);
 	}
 
-	/**
-	 * This function seeks the requestIterator to the position $position
-	 * @param int $position
-	 * @param ArrayIterator $requestIterator Call-by-Referenced!
-	 */
-	private function requestIteratorSeekTo ($position, &$requestIterator) {
-
-		try {
-			$requestIterator->seek($position);
-		} catch (OutOfBoundsException $e) {
-			$this->_interface->dieError('requestIterator was seeked to out of bound. Algorythm not correct!');
-		}
-	}
-
 	private function changesToDatabaseShowConfirmationDialog ($requestsPassed, $requestsNotPassed) {
 
 		$users = $this->usersGetAll();
@@ -395,17 +381,6 @@ class AssignUsersToClasses {
 			$this->_interface->dieError($this->_languageManager->getText(errorGetUsers));
 		}
 		return $users;
-	}
-
-	private function classGetById ($classId) {
-
-		try {
-			$this->_classManager->getClass($classId);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoClasses'));
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchClass'));
-		}
 	}
 
 	/**

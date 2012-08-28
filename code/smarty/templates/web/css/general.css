@@ -261,16 +261,17 @@ div.classDescription {
     display:inline;
 }
 
-#last_login {
-    margin-top: 30px;
-    font-size: 90%;    
-}
-
 #footer {
     margin-top: 30px;
     font-size: 80%;
     text-align: center;
 }
+
+#last_login {
+    margin-top: 30px;
+    font-size: 90%;    
+}
+
 
 #background {
 	

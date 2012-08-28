@@ -10,6 +10,7 @@ require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInSchoolYear.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
+require_once PATH_INCLUDE_KUWASYS . '/jointUserInClassStatusDefinition.php';
 require_once 'DisplayUsersWaiting.php';
 
 /**
@@ -30,6 +31,8 @@ class Users extends Module {
 	private $_jointUsersInSchoolYear;
 	private $_classManager;
 	private $_jointUsersInClass;
+	private $_databaseAccessManager;
+	private $_jointUserInClassStatusDefiner;
 	/**
 	 * @var KuwasysLanguageManager
 	 */
@@ -68,6 +71,9 @@ class Users extends Module {
 				case 'addUserToClass':
 					$this->addUserToClass();
 					break;
+				case 'moveUserByClass':
+					$this->moveUserByClass();
+					break;
 				case 'changeUserToClass':
 					$this->changeUserToClass();
 					break;
@@ -103,6 +109,9 @@ class Users extends Module {
 		$this->_interface = new UsersInterface($this->relPath, $dataContainer->getSmarty());
 		$this->_languageManager = $dataContainer->getLanguageManager();
 		$this->_languageManager->setModule('Users');
+		require_once PATH_ADMIN . $this->relPath . '../../KuwasysDatabaseAccess.php';
+		$this->_databaseAccessManager = new KuwasysDatabaseAccess($this->_interface, $this->_languageManager);
+		$this->_jointUserInClassStatusDefiner = new jointUserInClassStatusTranslation($this->_languageManager);
 	}
 
 	/**-----------------------------------------------------------------------------
@@ -196,6 +205,19 @@ class Users extends Module {
 			$this->_interface->showSelectCsvFileForImport();
 		}
 	}
+	
+	private function moveUserByClass () {
+		
+		if(isset($_POST['irgendwas'], $_GET['nochwas'])) {
+			
+		}
+		else if (isset($_GET['classIdOld'])) {
+			
+		}
+		else {
+			$this->_interface->dieError($this->_languageManager->getText('getIdWrong'));
+		}
+	}
 
 	/**-----------------------------------------------------------------------------
 	 * Functions for displaying forms and other stuff
@@ -260,6 +282,13 @@ class Users extends Module {
 		$user = $this->addClassesToUser ($user);
 		$user = $this->addGradeLabelToSingleUser ($user);
 		$this->_interface->showUserDetails($user);
+	}
+	
+	private function showMoveUserByClass () {
+		
+		$classes = $this->_databaseAccessManager->classGetAll();
+		$statusArray = $this->_jointUserInClassStatusDefiner->statusArrayGet();
+		$this->_interface->showMoveUserByClass($_GET['classIdOld'], $classes, $statusArray);
 	}
 
 	/**-----------------------------------------------------------------------------
@@ -922,7 +951,6 @@ class Users extends Module {
 			$rowArray = $this->checkCsvImportVariable('telephone', $rowArray);
 			$rowArray = $this->checkCsvImportVariable('birthday', $rowArray);
 		}
-		var_dump($contentArray);
 		return $contentArray;
 	}
 
