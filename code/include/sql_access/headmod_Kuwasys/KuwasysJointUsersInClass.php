@@ -106,6 +106,7 @@ class KuwasysJointUsersInClass extends TableManager {
 	}
 
 	public function getAllJointsWithClassId ($classId) {
+		
 		$joints = $this->getTableData('ClassID=' . $classId);
 		return $joints;
 	}
@@ -118,9 +119,24 @@ class KuwasysJointUsersInClass extends TableManager {
 		}
 		return $joint [0];
 	}
+	
+	public function isJointExistingByUserIdAndClassId ($userId, $classId) {
+		
+		try {
+			$this->searchEntry(sprintf('UserID="%s" AND ClassID="%s"', $userId, $classId));
+		} catch (MySQLVoidDataException $e) {
+			return false;
+		} catch (Exception $e) {
+			throw $e;
+		}
+		return true;
+	}
 
 	public function alterStatusOfJoint ($jointId, $status) {
 		$this->alterEntry($jointId, 'status', $status);
+	}
+	public function alterJoint ($jointId, $classId, $userId, $status) {
+		$this->alterEntry($jointId, 'status', $status, 'ClassID', $classId, 'UserID', $userId);
 	}
 
 	public function deleteJoint ($jointId) {
@@ -157,6 +173,13 @@ class KuwasysJointUsersInClass extends TableManager {
 		$query = sql_prev_inj(sprintf('INSERT INTO %s (ID, status) VALUES %s ON DUPLICATE KEY UPDATE ID=VALUES(ID),status=VALUES(status);',
 				 $this->tablename, $valueChanges));
 		$this->executeQuery($query);
+	}
+	
+	public function getAllJointsOfClassIdAndStatusActive ($classId) {
+		
+		$sqlPartString = sprintf('ClassID="%s" AND status="%s"', $classId, $this->_statusActiveStr);
+		$joints = $this->getTableData($sqlPartString);
+		return $joints;
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations

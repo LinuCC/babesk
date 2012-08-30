@@ -1,22 +1,25 @@
 {extends file=$inh_path} {block name="content"}
 
-<h2 class="moduleHeader">Einen Benutzer von einem Kurs in einen anderen bewegen</h2>
+<h2 class="moduleHeader">Den Benutzer "{$user.forename} {$user.name}" von dem Kurs "{$classOld.label}" in einen anderen verschieben</h2>
 
-<form action="index.php?section=Kuwasys|Users&action=moveUserByClass&classIdOld={$classIdOld}" method="post">
-	<label>Der neue Kurs des Schülers
-	<select name="classId">
+<form action="index.php?section=Kuwasys|Users&action=moveUserByClass&classIdOld={$classOld.ID}&userId={$user.ID}" method="post">
+	<label>Der neue Kurs des Schülers<br>
+	<select name="classIdNew">
 		{foreach $classes as $class}
-			<option value="{$class.ID}">{$class.label}</option>
+			<option value="{$class.ID}"
+			{if $class.ID == $classOld.ID}selected="selected"{/if}>
+			{$class.label}</option>
 		{/foreach}
 	</select>
-	</label>
-	<label>Das Verhältnis des Schülers zum neuen Kurs
-	<select name="status">
+	</label><br>
+	<label>Das Verhältnis des Schülers zum neuen Kurs<br>
+	<select name="statusNew">
 		{foreach $statusArray as $status}
 			<option value="{$status.name}">{$status.nameTrans}</option>
 		{/foreach}
 	</select>
-	</label>
+	</label><br>
+	<input type="submit" value="Absenden">
 </form>
 
-{block}
+{/block}

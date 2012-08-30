@@ -80,12 +80,22 @@ td {
 		{if isset($class.users) && count($class.users)} {foreach $class.users as $user}
 		<tr>
 			{$rowsOfSamePerson = count($user.classesOfSameDay)}
-			<td rowspan="{$rowsOfSamePerson}">{$user.forename} {$user.name}</td>
+			<td rowspan="{$rowsOfSamePerson}">
+			<!-- Link to UserDetails -->
+			<a href="index.php?section=Kuwasys|Users&action=showUserDetails&ID={$user.ID}">
+				{$user.forename} {$user.name}
+			</a>
+			</td>
 			<td rowspan="{$rowsOfSamePerson}"
 				{if $user.status == "active"}style="background-color: #99FF99"
 				{else if $user.status == "waiting"}style="background-color: #FF9999"
 				{/if}
-				>{$user.statusTranslated}</td>
+				>
+				<!-- Link to "move user to another Class" -->
+				<a href="index.php?section=Kuwasys|Users&action=moveUserByClass&classIdOld={$class.ID}&userId={$user.ID}">
+					{$user.statusTranslated}
+				</a>
+			</td>
 			<td rowspan="{$rowsOfSamePerson}">{$user.gradeName}</td>
 			<td rowspan="{$rowsOfSamePerson}">{$user.email}</td>
 			<td rowspan="{$rowsOfSamePerson}">{$user.telephone}</td>
@@ -94,7 +104,7 @@ td {
 					{if $otherClass.ID != $class.ID}
 						{if $counter}<tr>{/if}
 						<td {if ($counter % 2)}style="background-color: #CC9933"{else}style="background-color: #DDAA33"{/if}>
-							{$otherClass.label}
+							<a href="index.php?section=Kuwasys|Classes&action=showClassDetails&ID={$otherClass.ID}">{$otherClass.label}</a>
 						</td>
 						{if $counter}</tr>{/if}
 					{else}

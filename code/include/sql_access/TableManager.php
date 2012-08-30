@@ -60,6 +60,7 @@ class TableManager {
 	 * @return boolean true if an Entry exists, false if not
 	 */
 	public function existsEntry ($key, $value) {
+		
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE %s="%s"', $this->tablename, $key, $value));
 		$result = $this->executeQuery($query);
 		return ($result->fetch_assoc()) ? true : false;

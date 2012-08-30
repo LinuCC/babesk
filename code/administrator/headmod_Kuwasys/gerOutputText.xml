@@ -68,6 +68,9 @@
 			<errorFetchClassteacher>Die Kursleiter konnten nicht abgerufen werden.</errorFetchClassteacher>
 			<errorAlterJointUsersInClass>Ein Fehler ist beim Verändern der Verbindung zwischen dem Schüler und dem Kurs aufgetreten.</errorAlterJointUsersInClass>
 			<errorFetchUsersByJointsUsersInClass>Ein Fehler ist beim Abrufen der Schüler mithilfe der Links aufgetreten.</errorFetchUsersByJointsUsersInClass>
+			<moveUserToClassNotConfirmed>Der Benutzer wurde nicht in einen anderen Kurs bewegt.</moveUserToClassNotConfirmed>
+			<moveUserToClassJointAlreadyExisting>Der Benutzer ist schon für diesen Kurs eingetragen!</moveUserToClassJointAlreadyExisting>
+			<finishedMoveUserToClass>Der Benutzer wurde erfolgreich in den anderen Kurs bewegt</finishedMoveUserToClass>
 			<!-- Other stuff -->
 			<warningNoJointsUsersInGrade>Es existieren keine Links zwischen Schülern und Klassen!</warningNoJointsUsersInGrade>
 			<finishedAddUser>Der Benutzer %s %s wurde erfolgreich hinzugefügt.</finishedAddUser>

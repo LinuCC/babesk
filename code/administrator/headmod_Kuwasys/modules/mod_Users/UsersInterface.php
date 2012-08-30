@@ -94,12 +94,22 @@ class UsersInterface extends AdminInterface {
 		$this->smarty->display($this->tplFilePath . 'showUsersWaiting.tpl');
 	}
 	
-	public function showMoveUserByClass ($classIdOld, $classes, $statusArray) {
+	public function showMoveUserByClass ($classOld, $user, $classes, $statusArray) {
 		
 		$this->smarty->assign('classes', $classes);
 		$this->smarty->assign('statusArray', $statusArray);
-		$this->smarty->assign('classIdOld', $classIdOld);
+		$this->smarty->assign('classOld', $classOld);
+		$this->smarty->assign('user', $user);
+		$this->smarty->display($this->tplFilePath . 'moveUserToClass.tpl');
+	}
+	
+	public function showMoveUserByClassClassFullConfirmation ($user, $classOld, $classNew, $statusNew) {
 		
+		$this->smarty->assign('classOld', $classOld);
+		$this->smarty->assign('classNew', $classNew);
+		$this->smarty->assign('user', $user);
+		$this->smarty->assign('statusNew', $statusNew);
+		$this->smarty->display($this->tplFilePath . 'moveUserToClassClassFullConfirmation.tpl');
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations

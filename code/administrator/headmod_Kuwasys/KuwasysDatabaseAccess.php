@@ -507,6 +507,20 @@ class KuwasysDatabaseAccess {
 		}
 	}
 	
+	public function jointUserInClassGetAllByClassIdAndStatusActiveWithoutDyingWhenVoid ($classId) {
+		
+		try {
+			$joints = $this->_jointUserInClassManager->getAllJointsOfClassIdAndStatusActive($classId);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->showMsg($this->_languageManager->getText('errorNoJointsUsersInClassOfClassId'));
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointsUsersInClassOfClassId'));
+		}
+		if(isset($joints)) {
+			return $joints;
+		}
+	}
+	
 	public function jointUserInClassGetAllByUserIdWithoutDyingWhenVoid ($userId) {
 	
 		try {
@@ -529,6 +543,16 @@ class KuwasysDatabaseAccess {
 			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointUsersInClass'));
 		}
 		return $joint;
+	}
+	
+	public function jointUserInClassIsExistingByUserIdAndClassId ($userId, $classId) {
+		
+		try {
+			$isExisting = $this->_jointUserInClassManager->isJointExistingByUserIdAndClassId($userId, $classId);
+		} catch (Exception $e) {
+			$this->_interface->dieError('error in jointUserInClassIsExistingByUserIdAndClassId');
+		}
+		return $isExisting;
 	}
 
 	public function jointUserInClassGetCountOfActiveUsersOfClassId ($classId) {
@@ -610,10 +634,18 @@ class KuwasysDatabaseAccess {
 		}
 	}
 	
-	public function jointUserInClassAlter ($jointId, $status) {
+	public function jointUserInClassAlterStatus ($jointId, $status) {
 	
 		try {
 			$this->_jointUserInClassManager->alterStatusOfJoint($jointId, $status);
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorAlterJointUsersInClass'));
+		}
+	}
+	public function jointUserInClassAlter ($jointId, $classId, $userId, $status) {
+	
+		try {
+			$this->_jointUserInClassManager->alterJoint($jointId, $classId, $userId, $status);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorAlterJointUsersInClass'));
 		}

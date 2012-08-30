@@ -189,9 +189,9 @@ class Users extends Module {
 			$this->showChangeClassToUser();
 		}
 	}
-	
+
 	private function showWaitingUsers () {
-		
+
 		$displayUsersWaitingObj = new DisplayUsersWaiting($this->_interface, $this->_languageManager);
 		$displayUsersWaitingObj->execute();
 	}
@@ -205,14 +205,29 @@ class Users extends Module {
 			$this->_interface->showSelectCsvFileForImport();
 		}
 	}
-	
+
 	private function moveUserByClass () {
-		
-		if(isset($_POST['irgendwas'], $_GET['nochwas'])) {
-			
+
+		if(isset($_GET['classIdOld'], $_GET['userId'], $_POST['classIdNew'], $_POST['statusNew'])) {
+			if($this->isClassMaxRegistrationReached($_POST['classIdNew'])) {
+				if(isset($_POST['confirmed'])) {
+					$this->moveUserByClassToDatabase($_GET['userId'], $_GET['classIdOld'], $_POST['classIdNew'], $_POST['statusNew']);
+					$this->_interface->dieMsg($this->_languageManager->getText('finishedMoveUserToClass'));
+				}
+				else if (isset($_POST['notConfirmed'])) {
+					$this->_interface->dieMsg($this->_languageManager->getText('moveUserToClassNotConfirmed'));
+				}
+				else {
+					$this->showMoveUserByClassClassFullConfirmation($_GET['userId'], $_GET['classIdOld'], $_POST['classIdNew'], $_POST['statusNew']);
+				}
+			}
+			else {
+				$this->moveUserByClassToDatabase($_GET['userId'], $_GET['classIdOld'], $_POST['classIdNew'], $_POST['statusNew']);
+				$this->_interface->dieMsg($this->_languageManager->getText('finishedMoveUserToClass'));
+			}
 		}
-		else if (isset($_GET['classIdOld'])) {
-			
+		else if (isset($_GET['classIdOld'], $_GET['userId'])) {
+			$this->showMoveUserByClass();
 		}
 		else {
 			$this->_interface->dieError($this->_languageManager->getText('getIdWrong'));
@@ -283,12 +298,32 @@ class Users extends Module {
 		$user = $this->addGradeLabelToSingleUser ($user);
 		$this->_interface->showUserDetails($user);
 	}
-	
+
 	private function showMoveUserByClass () {
-		
+
 		$classes = $this->_databaseAccessManager->classGetAll();
+		$classOld = $this->searchClassArrayForClassWithId($_GET['classIdOld'], $classes);
+		$user = $this->_databaseAccessManager->userGet($_GET['userId']);
 		$statusArray = $this->_jointUserInClassStatusDefiner->statusArrayGet();
-		$this->_interface->showMoveUserByClass($_GET['classIdOld'], $classes, $statusArray);
+		$this->_interface->showMoveUserByClass($classOld, $user, $classes, $statusArray);
+	}
+
+	private function showMoveUserByClassClassFullConfirmation ($userId, $classIdOld, $classIdNew, $statusNew) {
+
+		$user = $this->_databaseAccessManager->userGet($userId);
+		$classOld = $this->_databaseAccessManager->classGet($classIdOld);
+		$classNew = $this->_databaseAccessManager->classGet($classIdNew);
+		$this->_interface->showMoveUserByClassClassFullConfirmation($user, $classOld, $classNew, $statusNew);
+	}
+
+	private function searchClassArrayForClassWithId ($classId, $classes) {
+
+		foreach ($classes as $class) {
+			if($class ['ID'] == $classId) {
+				return $class;
+			}
+		}
+		return NULL;
 	}
 
 	/**-----------------------------------------------------------------------------
@@ -871,6 +906,32 @@ class Users extends Module {
 		}
 	}
 
+	private function isClassMaxRegistrationReached ($classId) {
+
+		$class = $this->_databaseAccessManager->classGet($classId);
+		$registrationsOfClass = $this->_databaseAccessManager->jointUserInClassGetAllByClassIdAndStatusActiveWithoutDyingWhenVoid($classId);
+		if($class['maxRegistration'] > count($registrationsOfClass)) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
+	private function moveUserByClassToDatabase ($userId, $classIdOld, $classIdNew, $statusNew) {
+		
+		$jointUserInClassOld = $this->_databaseAccessManager->jointUserInClassGetByUserIdAndClassId($userId, $classIdOld);
+		//checks if Joint is duplicated
+		if($this->_databaseAccessManager->jointUserInClassIsExistingByUserIdAndClassId($userId, $classIdNew)) {
+			$jointDuplicate = $this->_databaseAccessManager->jointUserInClassGetByUserIdAndClassId($userId, $classIdNew);
+			//if IDs are the same, the same joint gets altered, so no duplication
+			if($jointDuplicate ['ID'] != $jointUserInClassOld ['ID']) {
+				$this->_interface->dieError($this->_languageManager->getText('moveUserToClassJointAlreadyExisting'));
+			}
+		}
+		$this->_databaseAccessManager->jointUserInClassAlter($jointUserInClassOld ['ID'], $classIdNew, $userId, $statusNew);
+	}
+	
 	/**-----------------------------------------------------------------------------
 	 * Functions doing other stuff
 	*----------------------------------------------------------------------------*/
