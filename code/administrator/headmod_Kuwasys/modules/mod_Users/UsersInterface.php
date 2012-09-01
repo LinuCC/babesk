@@ -111,6 +111,16 @@ class UsersInterface extends AdminInterface {
 		$this->smarty->assign('statusNew', $statusNew);
 		$this->smarty->display($this->tplFilePath . 'moveUserToClassClassFullConfirmation.tpl');
 	}
+	
+	public function showUsersGroupedByYearAndGrade ($schoolyears, $schoolyearDesired, $grades, $gradeDesired, $users) {
+		
+		$this->smarty->assign('schoolyearAll', $schoolyears);
+		$this->smarty->assign('schoolyearDesired', $schoolyearDesired);
+		$this->smarty->assign('gradeAll', $grades);
+		$this->smarty->assign('gradeDesired', $gradeDesired);
+		$this->smarty->assign('users', $users);
+		$this->smarty->display($this->tplFilePath . 'showUsersGroupedByYearAndGrade.tpl');
+	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////

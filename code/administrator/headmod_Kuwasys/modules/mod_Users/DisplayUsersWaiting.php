@@ -34,12 +34,15 @@ class DisplayUsersWaiting {
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysClassTeacherManager.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
+		require_once PATH_INCLUDE_KUWASYS . '/KuwasysDatabaseManager';
+		require_once PATH_ADMIN . $this->relPath . '../../KuwasysDatabaseAccess.php';
 
 		$this->_userManager = new KuwasysUsersManager();
 		$this->_classManager = new KuwasysClassManager();
 		$this->_classteacherManager = new KuwasysClassTeacherManager();
 		$this->_jointClassteacherInClassManager = new KuwasysJointClassTeacherInClass();
 		$this->_jointUsersInClassManager = new KuwasysJointUsersInClass();
+		$this->_databaseAccessManager = new KuwasysDatabaseAccess($this->_interface, $this->_languageManager);
 	}
 
 	private function initDataArrays () {
@@ -110,15 +113,10 @@ class DisplayUsersWaiting {
 
 	private function getUsersByJoints ($jointsUsersInClass) {
 
-		$userIdArray = array ();
 		foreach ($jointsUsersInClass as $joint) {
-			$userIdArray [] = $joint ['UserID'];
+			$this->_databaseAccessManager->userIdAddToUserIdArray($joint ['UserID']);
 		}
-		try {
-			$users = $this->_userManager->getUsersByUserIdArray ($userIdArray);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchUsersByJointsUsersInClass'));
-		}
+		$users = $this->_databaseAccessManager->userGetByUserIdArray($userIdArray);
 		return $users;
 	}
 
@@ -224,6 +222,8 @@ class DisplayUsersWaiting {
 	private $_classteachers;
 	private $_users;
 	private $_classes;
+	
+	private $_databaseAccessManager;
 
 	private $_interface;
 	private $_languageManager;

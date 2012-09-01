@@ -62,6 +62,9 @@ class Users extends Module {
 				case 'showUsers':
 					$this->showUsers();
 					break;
+				case 'showUsersGroupedByYearAndGrade':
+					$this->showUsersGroupedByYearAndGrade();
+					break;
 				case 'deleteUser':
 					$this->deleteUser();
 					break;
@@ -232,6 +235,95 @@ class Users extends Module {
 		else {
 			$this->_interface->dieError($this->_languageManager->getText('getIdWrong'));
 		}
+	}
+
+	/**
+	 * shows a UserList thats grouped by Schoolyears and Grades
+	 */
+	private function showUsersGroupedByYearAndGrade () {
+
+		$schoolyearAll = $this->_databaseAccessManager->schoolyearGetAll();
+		$schoolyearDesired = $this->getDesiredSchoolyear($schoolyearAll);
+		$gradesOfDesiredSchoolyear = $this->getGradesOfSchoolyearDesired($schoolyearDesired);
+		$gradeDesired = $this->getDesiredGrade($gradesOfDesiredSchoolyear);
+		$users = $this->getAllUsersOfDesiredGrade($gradeDesired);
+		$this->_interface->showUsersGroupedByYearAndGrade($schoolyearAll, $schoolyearDesired, $gradesOfDesiredSchoolyear,
+				$gradeDesired, $users);
+	}
+
+	/**
+	 * returns the Schoolyear the Admin wants, so that the program can display all Users of this Schoolyear
+	 * @used-by Users::showUsersGroupedByYearAndGrade
+	 * @return schoolyear[] the desired schoolyear
+	 */
+	private function getDesiredSchoolyear ($schoolyearAll) {
+
+		if(isset($_GET['schoolyearIdDesired'])) {
+			foreach ($schoolyearAll as $schoolyear) {
+				//pick the schoolyear the Admin wants
+				if($_GET['schoolyearIdDesired'] == $schoolyear ['ID']) {
+					return $schoolyear;
+				}
+			}
+		}
+		else {
+			foreach ($schoolyearAll as $schoolyear) {
+				//pick the schoolyear thats active at the moment
+				if($schoolyear ['active']) {
+					return $schoolyear;
+				}
+			}
+		}
+		$this->_interface->dieError($this->_languageManager->getText('errorSelectDesiredSchoolyear'));
+	}
+
+	/**
+	 * returns all Grades of the schoolyear $schoolyearDesired
+	 * @param schoolyear[] $schoolyearDesired
+	 * @return grades[] the grades of the schoolyear
+	 */
+	private function getGradesOfSchoolyearDesired ($schoolyearDesired) {
+
+		$jointsGradeInSchoolyear = $this->_databaseAccessManager->jointGradeInSchoolyearGetBySchoolyearId($schoolyearDesired ['ID']);
+		foreach ($jointsGradeInSchoolyear as $joint) {
+			$this->_databaseAccessManager->gradeIdAddToFetchArray($joint ['GradeID']);
+		}
+		$grades = $this->_databaseAccessManager->gradeGetAllByFetchArray();
+		return $grades;
+	}
+
+	/**
+	 * returns the grade that the user has selected in the form. If no Grade has been selected by the User yet,
+	 * it returns the first grade of $gradeDesired
+	 * @param grades[grade[]] $gradeDesired
+	 */
+	private function getDesiredGrade ($gradeDesired) {
+
+		if(isset($_GET['gradeIdDesired'])) {
+			foreach ($gradeDesired as $grade) {
+				if($grade ['ID'] == $_GET['gradeIdDesired']) {
+					return $grade;
+				}
+			}
+		}
+		else {
+			return $gradeDesired [0];
+		}
+		$this->_interface->dieError($this->_languageManager->getText('errorSelectDesiredGradeb'));
+	}
+
+	/**
+	 * returns all users of the desired grade
+	 * @param unknown $gradeDesired
+	 */
+	private function getAllUsersOfDesiredGrade ($gradeDesired) {
+
+		$jointsUserInGrade = $this->_databaseAccessManager->jointUserInGradeGetAllByGradeId($gradeDesired ['ID']);
+		foreach ($jointsUserInGrade as $joint) {
+			$this->_databaseAccessManager->userIdAddToUserIdArray($joint ['UserID']);
+		}
+		$users = $this->_databaseAccessManager->userGetByUserIdArray();
+		return $users;
 	}
 
 	/**-----------------------------------------------------------------------------
@@ -817,12 +909,10 @@ class Users extends Module {
 		$userSpecificJointsUserInClass = $this->getAllJointsOfUserId($user['ID']);
 		if (isset($userSpecificJointsUserInClass) && $userSpecificJointsUserInClass) {
 			foreach ($userSpecificJointsUserInClass as $joint) {
+				$status = $this->_jointUserInClassStatusDefiner->statusTranslate($joint ['status']);
 				$class = $this->getClassByClassId($joint['ClassID']);
-				$user['classes'][] = array(
-						'ID'	 => $class['ID'],
-						'label'	 => $class['label'],
-						'status' => $joint['status'],
-				);
+				$class ['status'] = $status;
+				$user['classes'][] = $class;
 			}
 		}
 		return $user;
@@ -919,7 +1009,7 @@ class Users extends Module {
 	}
 
 	private function moveUserByClassToDatabase ($userId, $classIdOld, $classIdNew, $statusNew) {
-		
+
 		$jointUserInClassOld = $this->_databaseAccessManager->jointUserInClassGetByUserIdAndClassId($userId, $classIdOld);
 		//checks if Joint is duplicated
 		if($this->_databaseAccessManager->jointUserInClassIsExistingByUserIdAndClassId($userId, $classIdNew)) {
@@ -931,7 +1021,7 @@ class Users extends Module {
 		}
 		$this->_databaseAccessManager->jointUserInClassAlter($jointUserInClassOld ['ID'], $classIdNew, $userId, $statusNew);
 	}
-	
+
 	/**-----------------------------------------------------------------------------
 	 * Functions doing other stuff
 	*----------------------------------------------------------------------------*/

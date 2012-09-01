@@ -48,6 +48,12 @@ class KuwasysJointUsersInGrade extends TableManager {
 			return $joint;
 		}
 		
+		public function getAllJointsOfGradeId ($gradeId) {
+			
+			$joints = $this->getTableData('GradeID=' . $gradeId);
+			return $joints;
+		}
+		
  		////////////////////////////////////////////////////////////////////////////////
 		//Implementations
 		////////////////////////////////////////////////////////////////////////////////

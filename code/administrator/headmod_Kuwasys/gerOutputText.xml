@@ -71,6 +71,8 @@
 			<moveUserToClassNotConfirmed>Der Benutzer wurde nicht in einen anderen Kurs bewegt.</moveUserToClassNotConfirmed>
 			<moveUserToClassJointAlreadyExisting>Der Benutzer ist schon für diesen Kurs eingetragen!</moveUserToClassJointAlreadyExisting>
 			<finishedMoveUserToClass>Der Benutzer wurde erfolgreich in den anderen Kurs bewegt</finishedMoveUserToClass>
+			<errorSelectDesiredSchoolyear>Das gewünschte Schuljahr konnte nicht gefunden werden. Entweder ist die ID falsch, oder es gibt kein aktives Schuljahr.</errorSelectDesiredSchoolyear>
+			<errorSelectDesiredGrade>Die gewünschte Klasse konnte nicht gefunden werden. Entweder ist die ID falsch, oder das Schuljahr hat keine Klassen.</errorSelectDesiredGrade>
 			<!-- Other stuff -->
 			<warningNoJointsUsersInGrade>Es existieren keine Links zwischen Schülern und Klassen!</warningNoJointsUsersInGrade>
 			<finishedAddUser>Der Benutzer %s %s wurde erfolgreich hinzugefügt.</finishedAddUser>

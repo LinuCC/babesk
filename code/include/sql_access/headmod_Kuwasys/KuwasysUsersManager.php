@@ -13,6 +13,7 @@ class KuwasysUsersManager extends TableManager {
 	////////////////////////////////////////////////////////////////////////////////
 	public function __construct ($interface = NULL) {
 		parent::__construct('users');
+		$this->_userToFetchArray = array ();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -57,15 +58,20 @@ class KuwasysUsersManager extends TableManager {
 			'telephone', $telephone, 'password', $password);
 	}
 	
-	public function getUsersByUserIdArray ($userIdArray) {
+	public function addUserIdToUserIdArray ($userId) {
+		
+		$this->_userToFetchArray [] = $userId;
+	}
 	
-		$users = $this->getMultipleEntriesByArray('ID', $userIdArray);
+	public function getUsersByUserIdArray () {
+	
+		$users = $this->getMultipleEntriesByArray('ID', $this->_userToFetchArray);
 		return $users;
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////
-
+	private $_userToFetchArray;
 }
 
 ?>

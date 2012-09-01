@@ -332,6 +332,29 @@ class KuwasysDatabaseAccess {
 		}
 		return $grades;
 	}
+	
+	public function gradeIdAddToFetchArray ($gradeId) {
+		
+		try {
+			$this->_gradeManager->addGradeIdItemToFetch($gradeId);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError('to add' . __METHOD__);
+		} catch (Exception $e) {
+			$this->_interface->dieError('to add' . __METHOD__);
+		}
+	}
+	
+	public function gradeGetAllByFetchArray () {
+		
+		try {
+			$grades = $this->_gradeManager->getAllGradesOfGradeIdItemArray();
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError('to add' . __METHOD__);
+		} catch (Exception $e) {
+			$this->_interface->dieError('to add' . __METHOD__);
+		}
+		return $grades;
+	}
 
 	public function schoolyearAdd ($label, $active) {
 
@@ -471,10 +494,19 @@ class KuwasysDatabaseAccess {
 		return $users;
 	}
 	
-	public function userGetByUserIdArray ($userIdArray) {
+	public function userIdAddToUserIdArray ($userId) {
 		
 		try {
-			$users = $this->_userManager->getUsersByUserIdArray ($userIdArray);
+			$this->_userManager->addUserIdToUserIdArray($userId);
+		} catch (Exception $e) {
+			$this->_interface->dieError('to add ' . __METHOD__);
+		}
+	}
+	
+	public function userGetByUserIdArray () {
+		
+		try {
+			$users = $this->_userManager->getUsersByUserIdArray ();
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorFetchUsersByJointsUsersInClass'));
 		}
@@ -784,6 +816,18 @@ class KuwasysDatabaseAccess {
 			return $jointUsersInGrade;
 		}
 	}
+	
+	public function jointUserInGradeGetAllByGradeId ($gradeId) {
+		
+		try {
+			$joints = $this->_jointUserInGradeManager->getAllJointsOfGradeId($gradeId);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError('to add ' . __METHOD__);
+		} catch (Exception $e) {
+			$this->_interface->dieError('to add ' . __METHOD__);
+		}
+		return $joints;
+	}
 
 	public function jointClassInSchoolyearGetAll () {
 
@@ -923,6 +967,18 @@ class KuwasysDatabaseAccess {
 			$this->_interface->dieError($this->_languageManager->getText('errorNoSchoolYears'));
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorFetchSchoolYears'));
+		}
+		return $joints;
+	}
+	
+	public function jointGradeInSchoolyearGetBySchoolyearId ($schoolyearId) {
+		
+		try {
+			$joints = $this->_jointGradeInSchoolyearManager->getAllJointsOfSchoolyearId($schoolyearId);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError('To add in ' . __METHOD__);
+		} catch (Exception $e) {
+			$this->_interface->dieError('To add in ' . __METHOD__);
 		}
 		return $joints;
 	}

@@ -51,6 +51,12 @@ class KuwasysJointGradeInSchoolYear extends TableManager {
 			$joint = $this->getJointByGradeId($gradeId);
 			return $joint ['SchoolYearID'];
 		}
+		
+		public function getAllJointsOfSchoolyearId ($schoolyearId) {
+			
+			$joints = $this->getTableData(sprintf('SchoolYearID="%s"', $schoolyearId));
+			return $joints;
+		}
 		////////////////////////////////////////////////////////////////////////////////
 		//Implementations
 		////////////////////////////////////////////////////////////////////////////////
