@@ -25,14 +25,14 @@ fieldset {
 
 <fieldset>
 <legend>Benutzer anzeigen</legend>
-<form action='index.php?section=Kuwasys|Users&action=showUsers' method='post'>
-	<input type='submit' value='alle Schüler anzeigen'>
+<form action='index.php?section=Kuwasys|Users&action=showUsersGroupedByYearAndGrade' method='post'>
+	<input type='submit' value='Die Schüler geordnet anzeigen'>
 </form>
 <form action='index.php?section=Kuwasys|Users&action=showWaitingUsers' method='post'>
 	<input type='submit' value='Wartende Schüler anzeigen ("kommutierte Schülerliste")'>
 </form>
-<form action='index.php?section=Kuwasys|Users&action=showUsersGroupedByYearAndGrade' method='post'>
-	<input type='submit' value='Die Schüler geordnet anzeigen'>
+<form action='index.php?section=Kuwasys|Users&action=showUsers' method='post'>
+	<input type='submit' value='alle Schüler anzeigen'>
 </form>
 </fieldset>
 

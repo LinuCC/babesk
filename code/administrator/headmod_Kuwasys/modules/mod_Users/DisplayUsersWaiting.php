@@ -34,8 +34,7 @@ class DisplayUsersWaiting {
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysClassTeacherManager.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
-		require_once PATH_INCLUDE_KUWASYS . '/KuwasysDatabaseManager';
-		require_once PATH_ADMIN . $this->relPath . '../../KuwasysDatabaseAccess.php';
+		require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysDatabaseAccess.php';
 
 		$this->_userManager = new KuwasysUsersManager();
 		$this->_classManager = new KuwasysClassManager();
@@ -116,7 +115,7 @@ class DisplayUsersWaiting {
 		foreach ($jointsUsersInClass as $joint) {
 			$this->_databaseAccessManager->userIdAddToUserIdArray($joint ['UserID']);
 		}
-		$users = $this->_databaseAccessManager->userGetByUserIdArray($userIdArray);
+		$users = $this->_databaseAccessManager->userGetByUserIdArray();
 		return $users;
 	}
 
