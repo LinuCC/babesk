@@ -50,7 +50,7 @@ class Fmenu extends Module {
 			die('Ein Fehler ist aufgetreten:'.$e->getMessage());
 		}
 		
-		if (isset($userClass) && $userClass==6 && $has_Fits == false) {
+		if (isset($userClass) && $userClass==7 && $has_Fits == false) {
 			$smarty->assign('showTestlink', true);
 		}
 		

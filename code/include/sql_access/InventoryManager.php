@@ -73,6 +73,7 @@ class InventoryManager extends TableManager{
 	function getInvIDByBarcode($barcode) {
 		require_once PATH_ACCESS . '/dbconnect.php';
 		$bookmanager = new BookManager;
+		$barcode = str_replace("-", "/", $barcode); // replace - with /
 		$barcode = preg_replace("/\/([0-9])/", "/ $1", $barcode); //add space after / when it's missing
 		$barcode = str_replace("  ", " ", $barcode); // remove two empty spaces
 		

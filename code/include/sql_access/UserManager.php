@@ -299,10 +299,10 @@ class UserManager extends TableManager{
 	}
 	
 	/**
-	 * gets the class, religion and foreign_language of an user
+	 * gets the class, religion, foreign_language and course of an user
 	 */
 	function getUserDetails($uid){
-		$query = sql_prev_inj(sprintf('SELECT class, religion, foreign_language FROM %s WHERE ID = %s', $this->tablename, $uid));
+		$query = sql_prev_inj(sprintf('SELECT class, religion, foreign_language, course FROM %s WHERE ID = %s', $this->tablename, $uid));
 		$result = $this->db->query($query);
 		if (!$result) {
 			throw DB_QUERY_ERROR.$this->db->error;

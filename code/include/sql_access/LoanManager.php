@@ -15,7 +15,7 @@ class LoanManager extends TableManager{
 	}
 	
 	
-	/* Sorts the lending list for a UserID it gets from MySQL-table and returns them
+	/** Sorts the lending list for a UserID it gets from MySQL-table and returns them
 	 * Used by mod_retour !!
 	*/
 	function getLoanlistByUID($uid) {
@@ -50,17 +50,26 @@ class LoanManager extends TableManager{
 		$globalSettingsManager = new GlobalSettingsManager;
 		$lang_str = $globalSettingsManager->getForeignLanguages();
 		$reli_str = $globalSettingsManager->getReligion();
+		$course_str = $globalSettingsManager->getCourse();
 		$lang = explode('|', $lang_str);
 		$reli = explode('|', $reli_str);
+		$course = explode('|', $course_str);
 		$details = $userManager->getUserDetails($uid);
-		unset($lang[array_search($details['foreign_language'], $lang)]);
-		unset($reli[array_search($details['religion'], $reli)]);
-		$class = (string)intval($details['class']);
-		$books = $bookManager->getBooksByClass($class);
+		
+		$user_lang = explode('|', $details['foreign_language']);
+		$lang = array_diff($lang, $user_lang);
+		
+		$user_reli = explode('|', $details['religion']);
+		$reli = array_diff($reli, $user_reli);
+		
+		$user_course = explode('|', $details['course']);
+		$course = array_diff($course, $user_course);
+		
+		$books = $bookManager->getBooksByClass($details['class']);
 		$counter = 0;
 		if ($books){
 			foreach ($books as &$book){
-				if ((in_array($book['subject'], $lang) OR (in_array($book['subject'], $reli)))){
+				if (in_array($book['subject'], $lang) OR in_array($book['subject'], $reli) OR in_array($book['subject'], $course)){
 					unset($books[$counter]);
 				}
 				$counter++;

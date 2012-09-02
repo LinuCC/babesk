@@ -40,11 +40,14 @@ class AdminLoanProcessing {
 		
 		$uid = $this->GetUser($card_id);
 		$loanbooks = $this->loanManager->getLoanByUID($uid, false);
+		$class = $this->userManager->getUserDetails($uid);
+		$class = $class['class'];
+		$fullname = $this->userManager->getForename($uid)." ".$this->userManager->getName($uid)." (".$class.")";
 		
 		if (!isset($loanbooks)) {
 			$this->loanInterface->dieMsg("Keine B&uuml;cher mehr auszuleihen!");
 		}else{
-			$this->loanInterface->ShowLoanBooks($loanbooks, $card_id, $uid);
+			$this->loanInterface->ShowLoanBooks($loanbooks, $card_id, $uid,$fullname);
 		}
 	}
 	
@@ -72,11 +75,13 @@ class AdminLoanProcessing {
 	function LoanAjax($card_id) {
 		$uid = $this->GetUser($card_id);
 		$loanbooks = $this->loanManager->getLoanByUID($uid,true);
-	
+		$class = $this->userManager->getUserDetails($uid);
+		$class = $class['class'];
+	    $fullname = $this->userManager->getForename($uid)." ".$this->userManager->getName($uid)." (".$class.")";
 		if (!isset($loanbooks)) {
 			$this->loanInterface->showMsg("Keine B&uuml;cher mehr auszuleihen!");
 		} else {
-			$this->loanInterface->ShowLoanBooksAjax($loanbooks,$card_id,$uid);
+			$this->loanInterface->ShowLoanBooksAjax($loanbooks,$card_id,$uid,$fullname);
 		}
 	}
 	

@@ -78,13 +78,13 @@ class BookManager extends TableManager{
 		$class = preg_replace('/[^0-9]/i', '', $class); // keep numbers only
 		$classAssign = array(
 				'5'=>'05,56',			// hier mit assoziativem array
-				'6'=>'06',				// arbeiten, in der wertzuw.
-				'7'=>'07',				// alle kombinationen auflisten
-				'8'=>'08',				// sql-abfrage: 
-				'9'=>'09,90,92',				// SELECT * FROM `schbas_books` WHERE `class` IN (werte-array pro klasse)
-				'10'=>'10,90,92',				
-				'11'=>'01,12,92,13,23',
-				'12'=>'02,12,92,13,23');
+				'6'=>'56,06,69,67',				// arbeiten, in der wertzuw.
+				'7'=>'78,07,69,79,67',				// alle kombinationen auflisten
+				'8'=>'78,08,69,79,89',				// sql-abfrage: 
+				'9'=>'90,91,09,92,69,79,89',				// SELECT * FROM `schbas_books` WHERE `class` IN (werte-array pro klasse)
+				'10'=>'90,91,10,92',				
+				'11'=>'12,92,13',
+				'12'=>'12,92,13');
 		require_once PATH_ACCESS . '/dbconnect.php';
 		//$query = sql_prev_inj(sprintf("SELECT * FROM %s WHERE class LIKE '%%%s%%'", $this->tablename, $class));
 		$query = sql_prev_inj(sprintf("SELECT * FROM %s WHERE class IN (%s)", $this->tablename, $classAssign[$class]));

@@ -59,11 +59,14 @@ return (keycode == 13);
 //-->
 </script>
 
-
+<div align="center"><h2>Ausleihliste f&uuml;r: {$fullname}</h2></div>
+<hr>
 <form name='barcode_scan' onsubmit='return false;'>
-Inventarnummer: 
+<b>Bitte Barcode eingeben:</b> 
 <input type='text' id='barcode' onKeyPress='if(enter_pressed(event)) ajaxFunction() '/> <br>
 </form>
+<hr>
+<div align="center"><h3>Auszugebende B&uuml;cher</h3></div>
 <div id='booklist'>
 {foreach $data as $datatmp}
 {$datatmp.title}, {$datatmp.publisher} <br>

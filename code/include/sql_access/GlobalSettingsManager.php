@@ -62,6 +62,34 @@ class GlobalSettingsManager extends TableManager {
 		$this->alterEntry($religion_id, 'value', $str);
 	}
 	
+	/**
+	 * returns the courses found in the MySQL-table global_settings
+	 * @throws MySQLVoidDataException
+	 * @throws Other Exceptions (@see TableManager)
+	 * @return string
+	 */
+	function getCourse() {
+		$entry_arr = $this->searchEntry('name="course"');
+		if (!isset($entry_arr['value']) || !$entry_arr['value'])
+			throw new MySQLVoidDataException('course is void!');
+		return $entry_arr['value'];
+	}
+	
+	/**
+	 * Sets the Courses
+	 * @param string $str the text will be changed to this string
+	 * @throws MySQLVoidDataException
+	 * @throws some other things if somethings gone wrong
+	 */
+	function setCourse($str) {
+		$entry_arr = $this->searchEntry('name="course"');
+		if (!isset($entry_arr) || !count($entry_arr)) {
+			throw new MySQLVoidDataException('searchEntry returned void helparray');
+		}
+		$course_id = $entry_arr['id'];
+		$this->alterEntry($course_id, 'value', $str);
+	}
+	
 	
 	/**
 	 * returns the foreign languages found in the MySQL-table global_settings
