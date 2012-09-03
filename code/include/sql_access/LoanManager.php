@@ -83,17 +83,15 @@ class LoanManager extends TableManager{
 		while($buffer = $result->fetch_assoc())
 			$minusbooksinv[] = $buffer['inventory_id'];
 		
-		if (isset($minusbooksinvarr)) {
+		if (isset($minusbooksinv)) {
 			
 			foreach ($minusbooksinv as &$minusbookinv){
 				$minusbooks[] = $inventoryManager->getBookIDByInvID($minusbookinv);
 			}
-			
 			$counter = 0;
 			if ($books) {
 				foreach ($books as &$book){
-					$match = array_search($book['id'], $minusbook);
-					if (!is_bool($match)) {
+					if (in_array($book['id'], $minusbooks)) {
 						unset($books[$counter]);
 					}
 					$counter++;

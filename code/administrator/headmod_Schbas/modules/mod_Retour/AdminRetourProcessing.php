@@ -108,7 +108,7 @@ class AdminRetourProcessing {
 		try {
 			$uid = $this->cardManager->getUserID($card_id);
 			if ($this->userManager->checkAccount($uid)) {
-				$this->LoanInterface->CardLocked();
+				$this->RetourInterface->CardLocked();
 			}
 		} catch (Exception $e) {
 			$this->RetourInterface->dieError($this->msg['err_get_user_by_card'] . ' Error:' . $e->getMessage());

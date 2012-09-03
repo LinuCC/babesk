@@ -26,17 +26,13 @@ function ajaxFunction(){
 
 	ajax.onreadystatechange = function(){
 		if(ajax.readyState == 4){
-			if (ajax.status != 200) {
-                alert("Fehler:" + req.status);
-            } else {
-            	var ajaxDisplay = document.getElementById('booklist');
-            	ajaxDisplay.innerHTML = ajax.responseText;
-            }
+			var ajaxDisplay = document.getElementById('booklist');
+			ajaxDisplay.innerHTML = ajax.responseText;
 		}
 	}
 	
 	var barcode = document.getElementById('barcode').value;
-	var queryString = "inventarnr=" + encodeURIComponent(barcode) + "&card_ID=" + {$cardid} + "&uid=" + {$uid} + "&ajax=1";
+	var queryString = "inventarnr=" + encodeURIComponent(barcode) + "&card_ID={$cardid}&uid={$uid}&ajax=1";
 	ajax.open("GET", "http://{$adress}" + queryString, true);
 	
 	ajax.send(null); 
