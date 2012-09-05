@@ -91,4 +91,13 @@ function showOptions (ID) {
 	</tbody>
 </table>
 
+<form action="index.php?section=Kuwasys|Users&action=printParticipationConfirmation" method="post">
+	{foreach $users as $user}
+		<input type="hidden" name="userIds[]" value="{$user.ID}">
+	{/foreach}
+	<input type="hidden" name="schoolyearId" value="{$schoolyearDesired.ID}">
+	<input type="hidden" name="gradeId" value="{$gradeDesired.ID}">
+	<input type="submit" value="Bestätigungsdokumente für diese Klasse abrufen">
+</form>
+
 {/block}

@@ -41,7 +41,7 @@ class DisplayUsersWaiting {
 		$this->_classteacherManager = new KuwasysClassTeacherManager();
 		$this->_jointClassteacherInClassManager = new KuwasysJointClassTeacherInClass();
 		$this->_jointUsersInClassManager = new KuwasysJointUsersInClass();
-		$this->_databaseAccessManager = new KuwasysDatabaseAccess($this->_interface, $this->_languageManager);
+		$this->_databaseAccessManager = new KuwasysDatabaseAccess($this->_interface);
 	}
 
 	private function initDataArrays () {

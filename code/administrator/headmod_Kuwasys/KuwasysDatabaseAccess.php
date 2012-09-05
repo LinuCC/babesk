@@ -10,10 +10,13 @@ class KuwasysDatabaseAccess {
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	////////////////////////////////////////////////////////////////////////////////
-	public function __construct ($interface, $languageManager) {
+	public function __construct ($interface) {
+
+		require_once 'KuwasysLanguageManager.php';
 
 		$this->_interface = $interface;
-		$this->_languageManager = $languageManager;
+		$this->_languageManager = new KuwasysLanguageManager($this->_interface);
+		$this->_languageManager->setModule('databaseAccess');
 		$this->initManagers();
 	}
 	////////////////////////////////////////////////////////////////////////////////
@@ -57,7 +60,7 @@ class KuwasysDatabaseAccess {
 		try {
 			$this->_classManager->addClass($label, $description, $maxRegistration, $allowRegistration, $weekday);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddClass') . $e->getMessage());
+			$this->_interface->dieError($this->_languageManager->getText('classErrorAdd') . $e->getMessage());
 		}
 	}
 
@@ -66,7 +69,7 @@ class KuwasysDatabaseAccess {
 		try {
 			$this->_classManager->deleteClass($classId);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorDeleteClass'));
+			$this->_interface->dieError($this->_languageManager->getText('classErrorDelete'));
 		}
 	}
 
@@ -75,7 +78,7 @@ class KuwasysDatabaseAccess {
 		try {
 			$label = $this->_classManager->getLabelOfClass($classId);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchLabel'));
+			$this->_interface->dieError($this->_languageManager->getText('classLabelErrorFetch'));
 		}
 		return $label;
 	}
@@ -85,21 +88,21 @@ class KuwasysDatabaseAccess {
 		try {
 			$class = $this->_classManager->getClass($classId);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoClasses'));
+			$this->_interface->dieError($this->_languageManager->getText('classErrorNoClasses'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchClass'));
+			$this->_interface->dieError($this->_languageManager->getText('classErrorFetch'));
 		}
 		return $class;
 	}
-	
+
 	public function classGetByClassIdArray ($classIdArray) {
-		
+
 		try {
 			$classes = $this->_classManager->getClassesByClassIdArray($classIdArray);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoClassesJointProblem'));
+			$this->_interface->dieError($this->_languageManager->getText('classErrorNoClasses'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchClass'));
+			$this->_interface->dieError($this->_languageManager->getText('classErrorFetch'));
 		}
 		return $classes;
 	}
@@ -109,10 +112,10 @@ class KuwasysDatabaseAccess {
 		try {
 			$lastID = $this->_classManager->getLastClassID();
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoClasses'));
+			$this->_interface->dieError($this->_languageManager->getText('classErrorNoClasses'));
 		}
 		catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchLastID'));
+			$this->_interface->dieError($this->_languageManager->getText('classIdErrorFetchLastAdded'));
 		}
 		return $lastID;
 	}
@@ -122,7 +125,7 @@ class KuwasysDatabaseAccess {
 		try {
 			$idOfClass = $this->_classManager->getNextAutoIncrementID();
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchNextAutoIncrementId'));
+			$this->_interface->dieError($this->_languageManager->getText('classIdErrorFetchNextAutoincrement'));
 		}
 		return $idOfClass;
 	}
@@ -132,10 +135,9 @@ class KuwasysDatabaseAccess {
 		try {
 			$classes = $this->_classManager->getAllClasses();
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoClasses'));
+			$this->_interface->dieError($this->_languageManager->getText('classErrorNoClasses'));
 		} catch (Exception $e) {
-			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorFetchClassesFromDatabase'), $e->
-					getMessage()));
+			$this->_interface->dieError($this->_languageManager->getText('classErrorFetch'));
 		}
 		return $classes;
 	}
@@ -145,7 +147,7 @@ class KuwasysDatabaseAccess {
 		try {
 			$class = $this->_classManager->getClass($classId);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchClass'));
+			$this->_interface->dieError($this->_languageManager->getText('classErrorFetch'));
 		}
 		return $class;
 	}
@@ -155,18 +157,19 @@ class KuwasysDatabaseAccess {
 		try {
 			$this->_classManager->alterClass($id, $label, $description, $maxRegistration, $allowRegistration, $weekday);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorChangeClass'));
+			$this->_interface->dieError($this->_languageManager->getText('classErrorChange'));
 		}
 	}
 
-	public function classRegistrationGloballyIsEnabledGet () {
+	public function classRegistrationGloballyIsEnabledGetAndAddingWhenVoid () {
 
 		try {
 			$toggle = $this->_globalSettingsManager->isClassRegistrationGloballyEnabledGet();
 		} catch (MySQLVoidDataException $e) {
 			$this->addIsClassRegistrationGloballyEnabled(false);
+			return false;
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchIsClassRegistrationEnabledGlobally'));
+			$this->_interface->dieError($this->_languageManager->getText('globalSettingsErrorFetchClassRegEnabled'));
 		}
 		return $toggle;
 	}
@@ -178,7 +181,7 @@ class KuwasysDatabaseAccess {
 		} catch (MySQLVoidDataException $e) {
 			$this->_globalSettingsManager->isClassRegistrationGloballyEnabledAdd($toggle);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAlterIsClassRegistrationEnabledGlobally'));
+			$this->_interface->dieError($this->_languageManager->getText('globalSettingsErrorSetClassRegEnabled'));
 		}
 	}
 
@@ -187,7 +190,7 @@ class KuwasysDatabaseAccess {
 		try {
 			$this->_globalSettingsManager->isClassRegistrationGloballyEnabledAdd($toggle);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAlterIsClassRegistrationEnabledGlobally'));
+			$this->_interface->dieError($this->_languageManager->getText('globalSettingsErrorSetClassRegEnabled'));
 		}
 	}
 
@@ -196,9 +199,9 @@ class KuwasysDatabaseAccess {
 		try {
 			$classTeachers = $this->_classteacherManager->getAllClassTeachers();
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoClassTeachers'));
+			$this->_interface->dieError($this->_languageManager->getText('classteacherErrorNoClassteachers'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchClassTeachers'));
+			$this->_interface->dieError($this->_languageManager->getText('classteacherErrorFetch'));
 		}
 		return $classTeachers;
 	}
@@ -208,9 +211,9 @@ class KuwasysDatabaseAccess {
 		try {
 			$classteacher = $this->_classteacherManager->getClassTeacher($classteacherId);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoClassTeacher'));
+			$this->_interface->dieError($this->_languageManager->getText('classteacherErrorNoClassteachers'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchClassTeacher'));
+			$this->_interface->dieError($this->_languageManager->getText('classteacherErrorFetch'));
 		}
 		return $classteacher;
 	}
@@ -218,9 +221,9 @@ class KuwasysDatabaseAccess {
 	public function classteacherAdd ($name, $forename, $address, $telephone) {
 
 		try {
-			$this->_classteacherManager->addClassTeacher($name, $forename, $addess, $telephone);
+			$this->_classteacherManager->addClassTeacher($name, $forename, $address, $telephone);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddClassTeacher'));
+			$this->_interface->dieError($this->_languageManager->getText('classteacherErrorAdd'));
 		}
 	}
 
@@ -229,7 +232,7 @@ class KuwasysDatabaseAccess {
 		try {
 			$this->_classteacherManager->deleteClassTeacher($classteacherId);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorDeleteClassTeacher'));
+			$this->_interface->dieError($this->_languageManager->getText('classteacherErrorDelete'));
 		}
 	}
 
@@ -237,10 +240,8 @@ class KuwasysDatabaseAccess {
 
 		try {
 			$this->_classteacherManager->alterClassTeacher($id, $name, $forename, $address, $telephone);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoClassTeacher'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorChangeClassTeacher'));
+			$this->_interface->dieError($this->_languageManager->getText('classteacherErrorChange'));
 		}
 	}
 
@@ -249,7 +250,7 @@ class KuwasysDatabaseAccess {
 		try {
 			$lastId = $this->_classteacherManager->getLastAddedId();
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchLastAddedClassTeacherID'));
+			$this->_interface->dieError($this->_languageManager->getText('classteacherIdErrorFetchLastAdded'));
 		}
 		return $lastId;
 	}
@@ -259,9 +260,9 @@ class KuwasysDatabaseAccess {
 		try {
 			$classteachers = $this->_classteacherManager->getClassteachersByClassteacherIdArray($classteacherIdArray);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('errorNoJointsClassteacherInClass'));
+			$this->_interface->showMsg($this->_languageManager->getText('classteacherErrorNoClassteachers'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointsClassteacherInClass'));
+			$this->_interface->dieError($this->_languageManager->getText('classteacherErrorFetch'));
 		}
 		if(is_array($classteachers)) {
 			return $classteachers;
@@ -273,7 +274,7 @@ class KuwasysDatabaseAccess {
 		try {
 			$this->_gradeManager->addGrade($label, $year);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddGrade'));
+			$this->_interface->dieError($this->_languageManager->getText('gradeErrorAdd'));
 		}
 	}
 
@@ -281,10 +282,8 @@ class KuwasysDatabaseAccess {
 
 		try {
 			$this->_gradeManager->delEntry($id);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoGrade'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorDeleteGrade'));
+			$this->_interface->dieError($this->_languageManager->getText('gradeErrorDelete'));
 		}
 	}
 
@@ -293,9 +292,9 @@ class KuwasysDatabaseAccess {
 		try {
 			$this->_gradeManager->alterGrade($id, $label, $year);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoGrade'));
+			$this->_interface->dieError($this->_languageManager->getText('gradeErrorNoGrades'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorChangeGrade'));
+			$this->_interface->dieError($this->_languageManager->getText('gradeErrorChange'));
 		}
 	}
 
@@ -304,17 +303,17 @@ class KuwasysDatabaseAccess {
 		try {
 			$grade = $this->_gradeManager->getGrade($gradeId);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchGrade'));
+			$this->_interface->dieError($this->_languageManager->getText('gradeErrorFetch'));
 		}
 		return $grade;
 	}
-	
+
 	public function gradeGetWithoutDyingWhenError ($gradeId) {
-	
+
 		try {
 			$grade = $this->_gradeManager->getGrade($gradeId);
 		} catch (Exception $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('errorFetchGrade'));
+			$this->_interface->showMsg($this->_languageManager->getText('gradeErrorFetch'));
 		}
 		if (is_array($grade)) {
 			return $grade;
@@ -326,32 +325,26 @@ class KuwasysDatabaseAccess {
 		try {
 			$grades = $this->_gradeManager->getAllGrades();
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoGrades'));
+			$this->_interface->dieError($this->_languageManager->getText('gradeErrorNoGrades'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorShowGrades'));
+			$this->_interface->dieError($this->_languageManager->getText('gradeErrorFetch'));
 		}
 		return $grades;
 	}
-	
+
 	public function gradeIdAddToFetchArray ($gradeId) {
-		
-		try {
-			$this->_gradeManager->addGradeIdItemToFetch($gradeId);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError('to add' . __METHOD__);
-		} catch (Exception $e) {
-			$this->_interface->dieError('to add' . __METHOD__);
-		}
+
+		$this->_gradeManager->addGradeIdItemToFetch($gradeId);
 	}
-	
+
 	public function gradeGetAllByFetchArray () {
-		
+
 		try {
 			$grades = $this->_gradeManager->getAllGradesOfGradeIdItemArray();
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError('to add' . __METHOD__);
+			$this->_interface->dieError('gradeErrorNoGrades');
 		} catch (Exception $e) {
-			$this->_interface->dieError('to add' . __METHOD__);
+			$this->_interface->dieError('gradeErrorFetch');
 		}
 		return $grades;
 	}
@@ -361,40 +354,38 @@ class KuwasysDatabaseAccess {
 		try {
 			$this->_schoolyearManager->addSchoolYear($label, $active);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddSchoolYear') . $e->getMessage());
+			$this->_interface->dieError($this->_languageManager->getText('schoolyearErrorAdd') . $e->getMessage());
 		}
 	}
 
 	public function schoolyearDelete($schoolyearId) {
-	
+
 		try {
 			$this->_schoolyearManager->deleteSchoolYear($schoolyearId);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoSchoolYear'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorDeleteSchoolYear'));
+			$this->_interface->dieError($this->_languageManager->getText('schoolyearErrorDelete'));
 		}
 	}
-	
+
 	public function schoolyearChange ($id, $label, $active) {
-	
+
 		try {
 			$this->_schoolyearManager->alterSchoolYear($id, $label, $active);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoSchoolYear'));
+			$this->_interface->dieError($this->_languageManager->getText('schoolyearErrorNoSpecificSchoolyear'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorChangeSchoolYear'));
+			$this->_interface->dieError($this->_languageManager->getText('schoolyearErrorChange'));
 		}
 	}
-	
+
 	public function schoolyearGetAll () {
 
 		try {
 			$schoolYears = $this->_schoolyearManager->getAllSchoolYears();
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoSchoolYears'));
+			$this->_interface->dieError($this->_languageManager->getText('schoolyearErrorNoSchoolyears'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchSchoolYears'));
+			$this->_interface->dieError($this->_languageManager->getText('schoolyearErrorFetch'));
 		}
 		return $schoolYears;
 	}
@@ -404,21 +395,21 @@ class KuwasysDatabaseAccess {
 		try {
 			$schoolyear = $this->_schoolyearManager->getSchoolYear($schoolyearId);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoSchoolYearInLink'));
+			$this->_interface->dieError($this->_languageManager->getText('schoolyearErrorNoSpecificSchoolyear'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchSchoolYear'));
+			$this->_interface->dieError($this->_languageManager->getText('schoolyearErrorFetch'));
 		}
 		return $schoolyear;
 	}
-	
+
 	public function schoolyearLabelGet ($schoolyearId) {
-	
+
 		try {
 			$schoolyearLabel = $this->_schoolyearManager->getSchoolyearLabel ($schoolyearId);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchSchoolYearLabel'));
+			$this->_interface->dieError($this->_languageManager->getText('schoolyearErrorNoSpecificSchoolyear'));
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoSchoolYear'));
+			$this->_interface->dieError($this->_languageManager->getText('schoolyearErrorFetchSchoolyearLabel'));
 		}
 		return $schoolyearLabel;
 	}
@@ -428,9 +419,9 @@ class KuwasysDatabaseAccess {
 		try {
 			$schoolyear = $this->_schoolyearManager->getActiveSchoolYear();
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoActiveSchoolYear'));
+			$this->_interface->dieError($this->_languageManager->getText('schoolyearErrorNoActive'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchActiveSchoolYear'));
+			$this->_interface->dieError($this->_languageManager->getText('schoolyearErrorFetchActive'));
 		}
 		return $schoolyear['ID'];
 	}
@@ -440,10 +431,10 @@ class KuwasysDatabaseAccess {
 		try {
 			$id = $this->_schoolyearManager->getSchoolyearIdOfSchoolyearName($schoolyearName);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showError(sprintf($this->_languageManager->getText('errorGetSchoolyearBySchoolyearName'),
+			$this->_interface->showError(sprintf($this->_languageManager->getText('schoolyearErrorNoSpecificSchoolyearName'),
 					$schoolyearName));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchSchoolyearBySchoolyearName'));
+			$this->_interface->dieError($this->_languageManager->getText('schoolyearErrorFetch'));
 		}
 		if(isset($id)) {
 			return $id;
@@ -455,30 +446,28 @@ class KuwasysDatabaseAccess {
 		try {
 			$this->_schoolyearManager->getSchoolYear($schoolyearId);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorMissSchoolYear'));
+			$this->_interface->dieError($this->_languageManager->getText('schoolyearErrorNoSpecificSchoolyear'));
 		}
 		catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchSchoolYear'));
+			$this->_interface->dieError($this->_languageManager->getText('schoolyearErrorFetch'));
 		}
 	}
-	
+
 	public function userAdd ($forename, $name, $username, $password, $email, $telephone, $birthday) {
-	
+
 		try {
 			$this->_userManager->addUser($forename, $name, $username, $password, $email, $telephone, $birthday);
-		} catch (MySQLConnectionException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddUserConnectDatabase'));
 		} catch (Exception $e) {
-			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorAddUser'), $e->getMessage()));
+			$this->_interface->dieError(sprintf($this->_languageManager->getText('userErrorAdd'), $e->getMessage()));
 		}
 	}
-	
+
 	public function userDelete ($userId) {
-	
+
 		try {
 			$this->_userManager->deleteUser($userId);
 		} catch (Exception $e) {
-			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorDeleteUser'), $e->getMessage()));
+			$this->_interface->dieError(sprintf($this->_languageManager->getText('userErrorDelete'), $e->getMessage()));
 		}
 	}
 
@@ -487,40 +476,36 @@ class KuwasysDatabaseAccess {
 		try {
 			$users = $this->_userManager->getAllUsers();
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoUsers'));
+			$this->_interface->dieError($this->_languageManager->getText('userErrorNoUsers'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorGetUsers'));
+			$this->_interface->dieError($this->_languageManager->getText('userErrorFetch'));
 		}
 		return $users;
 	}
-	
+
 	public function userIdAddToUserIdArray ($userId) {
-		
-		try {
-			$this->_userManager->addUserIdToUserIdArray($userId);
-		} catch (Exception $e) {
-			$this->_interface->dieError('to add ' . __METHOD__);
-		}
+
+		$this->_userManager->addUserIdToUserIdArray($userId);
 	}
-	
+
 	public function userGetByUserIdArray () {
-		
+
 		try {
 			$users = $this->_userManager->getUsersByUserIdArray ();
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchUsersByJointsUsersInClass'));
+			$this->_interface->dieError($this->_languageManager->getText('userErrorFetch'));
 		}
 		return $users;
 	}
-	
+
 	public function userGet ($userId) {
-	
+
 		try {
 			$userData = $this->_userManager->getUserByID($userId);
 		} catch (MySQLConnectionException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorConnectDatabase'));
+			$this->_interface->dieError($this->_languageManager->getText('userErrorNoSpecific'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorGetUser'));
+			$this->_interface->dieError($this->_languageManager->getText('userErrorFetch'));
 		}
 		return $userData;
 	}
@@ -530,59 +515,61 @@ class KuwasysDatabaseAccess {
 		try {
 			$joints = $this->_jointUserInClassManager->getAllJointsWithClassId($classId);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('errorNoJointsUsersInClassOfClassId'));
+			$this->_interface->showMsg($this->_languageManager->getText('jointUserInClassErrorNoJointsOfClass'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointsUsersInClassOfClassId'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorFetch'));
 		}
 		if(isset($joints) && is_array($joints)) {
 			return $joints;
 		}
 	}
-	
+
 	public function jointUserInClassGetAllByClassIdAndStatusActiveWithoutDyingWhenVoid ($classId) {
-		
+
 		try {
 			$joints = $this->_jointUserInClassManager->getAllJointsOfClassIdAndStatusActive($classId);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('errorNoJointsUsersInClassOfClassId'));
+			$this->_interface->showMsg($this->_languageManager->getText('jointUserInClassErrorNoJointsOfClass'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointsUsersInClassOfClassId'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorFetch'));
 		}
 		if(isset($joints)) {
 			return $joints;
 		}
 	}
-	
+
 	public function jointUserInClassGetAllByUserIdWithoutDyingWhenVoid ($userId) {
-	
+
 		try {
 			$joints = $this->_jointUserInClassManager->getAllJointsOfUserId($userId);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg(sprintf($this->_languageManager->getText('errorNoJointUsersInClassOfUserId'), $userId));
+			$this->_interface->showMsg(sprintf($this->_languageManager->getText('jointUserInClassNoJointsOfUser'), $userId));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointUsersInClass'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorFetch'));
 		}
 		if (is_array($joints)) {
 			return $joints;
 		}
 	}
-	
+
 	public function jointUserInClassGetByUserIdAndClassId ($userId, $classId) {
-	
+
 		try {
 			$joint = $this->_jointUserInClassManager->getJointOfUserIdAndClassId($userId, $classId);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorNoSpecific'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointUsersInClass'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorFetch'));
 		}
 		return $joint;
 	}
-	
+
 	public function jointUserInClassIsExistingByUserIdAndClassId ($userId, $classId) {
-		
+
 		try {
 			$isExisting = $this->_jointUserInClassManager->isJointExistingByUserIdAndClassId($userId, $classId);
 		} catch (Exception $e) {
-			$this->_interface->dieError('error in jointUserInClassIsExistingByUserIdAndClassId');
+			$this->_interface->dieError('jointUserInClassErrorCheckForExisting');
 		}
 		return $isExisting;
 	}
@@ -594,103 +581,103 @@ class KuwasysDatabaseAccess {
 		} catch (MySQLVoidDataException $e) {
 			$counter = 0;
 		} catch (Exception $e) {
-			$this->_interface->showError($this->_languageManager->getText('errorGetCountOfUsersForClass'));
+			$this->_interface->showError($this->_languageManager->getText('jointUserInClassErrorFetch'));
 		}
 		if(is_numeric($counter)) {
 			return $counter;
 		}
 	}
-	
+
 	public function jointUserInClassGetAllWithStatusWaiting() {
-	
+
 		try {
 			$joints = $this->_jointUserInClassManager->getAllJointsWithStatusWaiting();
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoJointsUsersInClassWaiting'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorNoWaiting'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointsUsersInClassWaiting'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorFetchWaiting'));
 		}
 		return $joints;
 	}
-	
+
 	public function jointUserInClassGetAllWithStatusWaitingWithoutDyingWhenVoid () {
-		
+
 		try {
 			$joints = $this->_jointUserInClassManager->getAllJointsWithStatusWaiting();
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('errorNoWaitingUsers'));
+			$this->_interface->showMsg($this->_languageManager->getText('jointUserInClassErrorNoWaiting'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchWaitingUsers'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorFetchWaiting'));
 		}
 		if(is_array($joints)) {
 			return $joints;
 		}
 	}
-	
+
 	public function jointUserInClassGetAllWithStatusActiveWithoutDyingWhenVoid () {
-	
+
 		try {
 			$jointsUsersInClassActive = $this->_jointUserInClassManager->getAllJointsWithStatusActive();
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('errorNoJointUsersInClassActive'));
+			$this->_interface->showMsg($this->_languageManager->getText('jointUserInClassErrorNoActive'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointUsersInClassActive'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorFetchActive'));
 		}
 		return $jointsUsersInClassActive;
 	}
 
 	public function jointUserInClassAdd ($userId, $classId, $status) {
-	
+
 		try {
 			$this->_jointUserInClassManager->addJoint($userId, $classId, $status);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddJointUsersInClass'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrirAdd'));
 		}
 	}
-	
+
 	public function jointUserInClassDelete ($jointId) {
-	
+
 		try {
 			$this->_jointUserInClassManager->deleteJoint($jointId);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorDeleteJointUsersInClass'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorDelete'));
 		}
 	}
-	
+
 	public function jointUserInClassDeleteAllOfClassId ($classId) {
 
 		try {
 			$this->_jointUserInClassManager->deleteAllJointsOfClassId($classId);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorDeleteJointsUsersInClass'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorDelete'));
 		}
 	}
-	
+
 	public function jointUserInClassAlterStatus ($jointId, $status) {
-	
+
 		try {
 			$this->_jointUserInClassManager->alterStatusOfJoint($jointId, $status);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAlterJointUsersInClass'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorChange'));
 		}
 	}
 	public function jointUserInClassAlter ($jointId, $classId, $userId, $status) {
-	
+
 		try {
 			$this->_jointUserInClassManager->alterJoint($jointId, $classId, $userId, $status);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAlterJointUsersInClass'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorChange'));
 		}
 	}
-	
+
 	public function jointUserInClassIsClassJointedWithUser ($classId) {
-	
+
 		try {
 			$this->_jointUserInClassManager->getAllJointsWithClassId($classId);
 		} catch (MySQLVoidDataException $e) {
 			return false;
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorJointUsersInClassCheckForExisting'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorCheckForExisting'));
 		}
 		return true;
 	}
@@ -701,7 +688,7 @@ class KuwasysDatabaseAccess {
 			$this->_jointUserInClassManager->alterStatusOfJointAddEntryToTempList($jointId,
 					$this->_jointUserInClassManager->getActiveStatusString());
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorJointUsersInClassChange'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorChange'));
 		}
 	}
 
@@ -711,7 +698,7 @@ class KuwasysDatabaseAccess {
 			$this->_jointUserInClassManager->alterStatusOfJointAddEntryToTempList($jointId,
 					$this->_jointUserInClassManager->getWaitingStatusString());
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorJointUsersInClassChange'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorChange'));
 		}
 	}
 
@@ -722,7 +709,7 @@ class KuwasysDatabaseAccess {
 		} catch (MySQLVoidDataException $e) {
 			throw new MySQLVoidDataException('No UsersInClass-Joints with firstRequests');
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointsUsersInClassFirstRequest'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorFetchFirstRequest'));
 		}
 		return $joints;
 	}
@@ -734,7 +721,7 @@ class KuwasysDatabaseAccess {
 		} catch (MySQLVoidDataException $e) {
 			throw new MySQLVoidDataException('No UsersInClass-Joints with secondRequests');
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointsUsersInClassSecondRequest'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorFetchSecondRequest'));
 		}
 		return $joints;
 	}
@@ -744,7 +731,7 @@ class KuwasysDatabaseAccess {
 		try {
 			$this->_jointUserInClassManager->upAlterStatusOfJointTempListToDatabase();
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorJointUsersInClassChangeToDatabase') . $e->getMessage());
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorChange'));
 		}
 	}
 
@@ -753,78 +740,78 @@ class KuwasysDatabaseAccess {
 		try {
 			$joints = $this->_jointUserInClassManager->getAllJointsWithStatusWaiting();
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('errorNoWaitingUsers'));
+			$this->_interface->showMsg($this->_languageManager->getText('jointUserInClassErrorNoWaiting'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchWaitingUsers'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorFetchWaiting'));
 		}
 		if(is_array($joints)) {
 			return $joints;
 		}
 	}
-	
+
 	public function jointUserInGradeAdd ($userId, $gradeId) {
-	
+
 		try {
 			$this->_jointUserInGradeManager->addJoint($userId, $gradeId);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddJointUsersInGrade'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInGradeErrorAdd'));
 		}
 	}
-	
+
 	public function jointUserInGradeDelete($jointId) {
-	
+
 		try {
 			$this->_jointUserInGradeManager->deleteJoint($jointId);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoJointUsersInGradeToDelete'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorDeleteJointUsersInGrade'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInGradeErrorDelete'));
 		}
 	}
-	
+
 	public function jointUserInGradeDeleteAllWithUserIdWithoutDyingWhenError($userId) {
-	
+
 		try {
 			$this->_jointUserInGradeManager->deleteJointsByUserId($userId);
 		} catch (Exception $e) {
-			$this->_interface->ShowMsg($this->_languageManager->getText('errorDeleteJointUsersInGrade'));
+			$this->_interface->ShowMsg($this->_languageManager->getText('jointUserInGradeErrorDelete'));
 		}
 	}
-	
+
 	public function jointUserInGradeGetAllWithoutDyingWhenVoid () {
-	
+
 		try {
 			$joints = $this->_jointUserInGradeManager->getAllJoints();
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('warningNoJointsUsersInGrade'));
+			$this->_interface->showMsg($this->_languageManager->getText('jointUserInGradeErrorNoJoints'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointUsersInGrade'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInGradeErrorFetch'));
 		}
 		if(is_array($joints)) {
 			return $joints;
 		}
 	}
-	
+
 	public function jointUserInGradeGetByUserIdWithoutDying ($userId) {
-	
+
 		try {
 			$jointUsersInGrade = $this->_jointUserInGradeManager->getJointByUserId($userId);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->showMsg($this->_languageManager->getText('jointUserInGradeErrorNoJoints'));
 		} catch (Exception $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('errorFetchJointUsersInGrade'));
+			$this->_interface->showMsg($this->_languageManager->getText('jointUserInGradeErrorFetch'));
 		}
 		if (isset($jointUsersInGrade)) {
 			return $jointUsersInGrade;
 		}
 	}
-	
+
 	public function jointUserInGradeGetAllByGradeId ($gradeId) {
-		
+
 		try {
 			$joints = $this->_jointUserInGradeManager->getAllJointsOfGradeId($gradeId);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError('to add ' . __METHOD__);
+			$this->_interface->dieError('jointUserInGradeErrorNoJoints');
 		} catch (Exception $e) {
-			$this->_interface->dieError('to add ' . __METHOD__);
+			$this->_interface->dieError('jointUserInGradeErrorFetch');
 		}
 		return $joints;
 	}
@@ -834,9 +821,9 @@ class KuwasysDatabaseAccess {
 		try {
 			$joints = $this->_jointClassInSchoolyearManager->getAllJoints();
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoLinksClassInSchoolYear'));
+			$this->_interface->dieError($this->_languageManager->getText('jointClassInSchoolyearErrorNoJoints'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchLinksClassInSchoolYear'));
+			$this->_interface->dieError($this->_languageManager->getText('jointClassInSchoolyearErrorFetch'));
 		}
 		return $joints;
 	}
@@ -846,7 +833,7 @@ class KuwasysDatabaseAccess {
 		try {
 			$this->_jointClassInSchoolyearManager->alterSchoolYearIdOfClassId($classId, $schoolyearId);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorChangeLinkSchoolYear'));
+			$this->_interface->dieError($this->_languageManager->getText('jointClassInSchoolyearErrorChange'));
 		}
 	}
 
@@ -855,7 +842,7 @@ class KuwasysDatabaseAccess {
 		try {
 			$this->_jointClassInSchoolyearManager->addJoint($schoolyearId, $classId);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorLinkSchoolYear') . $e->getMessage());
+			$this->_interface->dieError($this->_languageManager->getText('jointClassInSchoolyearErrorAdd'));
 		}
 	}
 
@@ -863,21 +850,19 @@ class KuwasysDatabaseAccess {
 
 		try {
 			$this->_jointClassInSchoolyearManager->deleteAllJointsOfClass($id);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('warningNoJointToSchoolyearFound'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorDeleteJointSchoolyear'));
+			$this->_interface->dieError($this->_languageManager->getText('jointClassInSchoolyearErrorDelete'));
 		}
 	}
-	
+
 	public function jointClassInSchoolyearGetSchoolyearIdByClassIdWithoutDyingWhenVoid ($classId) {
-	
+
 		try {
 			$schoolyearId = $this->_jointClassInSchoolyearManager->getSchoolYearIdOfClassId($classId);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showError(sprintf($this->_languageManager->getText('errorNoLinkSchoolYear'), $classId));
+			$this->_interface->showError($this->_languageManager->getText('jointClassInSchoolyearErrorNoJoints'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchLinkSchoolYear'));
+			$this->_interface->dieError($this->_languageManager->getText('jointClassInSchoolyearErrorFetchSpecific'));
 		}
 		if (isset($schoolyearId)) {
 			return $schoolyearId;
@@ -889,7 +874,7 @@ class KuwasysDatabaseAccess {
 		try {
 			$this->_jointClassteacherInClassManager->addJoint($classTeacherID, $classID);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddClassTeacherToClassLink'));
+			$this->_interface->dieError($this->_languageManager->getText('jointClassteacherInClassErrorAdd'));
 		}
 	}
 
@@ -897,10 +882,8 @@ class KuwasysDatabaseAccess {
 
 		try {
 			$this->_jointClassteacherInClassManager->deleteJoint($id);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showError($this->_languageManager->getText('warningDeleteJointMissing'));
 		} catch (Exception $e) {
-			$this->_interface->showError($this->_languageManager->getText('warningDeleteJoint'));
+			$this->_interface->showError($this->_languageManager->getText('jointClassteacherInClassErrorDelete'));
 		}
 	}
 
@@ -909,9 +892,9 @@ class KuwasysDatabaseAccess {
 		try {
 			$joints = $this->_jointClassteacherInClassManager->getAllJoints();
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('warningNoClassTeacherInClassLinks'));
+			$this->_interface->showMsg($this->_languageManager->getText('jointClassteacherInClassErrorNoJoints'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchClassTeacherInClassLinks'));
+			$this->_interface->dieError($this->_languageManager->getText('jointClassteacherInClassErrorFetch'));
 		}
 		if (isset($joints)) {
 			return $joints;
@@ -923,9 +906,9 @@ class KuwasysDatabaseAccess {
 		try {
 			$joints = $this->_jointClassteacherInClassManager->getJointsByClassIdArray($classIdArray);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('errorNoJointsClassteacherInClass'));
+			$this->_interface->showMsg($this->_languageManager->getText('jointClassteacherInClassErrorNoJoints'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointsClassteacherInClass'));
+			$this->_interface->dieError($this->_languageManager->getText('jointClassteacherInClassErrorFetch'));
 		}
 		if(is_array($joints)) {
 			return $joints;
@@ -937,7 +920,7 @@ class KuwasysDatabaseAccess {
 		try {
 			$this->_jointGradeInSchoolyearManager->addJoint($gradeId, $schoolyearId);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddLinkGradeInSchoolyear'));
+			$this->_interface->dieError($this->_languageManager->getText('jointGradeInSchoolyearErrorAdd'));
 		}
 	}
 
@@ -946,7 +929,7 @@ class KuwasysDatabaseAccess {
 		try {
 			$this->_jointGradeInSchoolyearManager->deleteJoint($id);
 		} catch (Exception $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('errorDeleteJointGradeInSchoolyear'));
+			$this->_interface->showMsg($this->_languageManager->getText('jointGradeInSchoolyearErrorDelete'));
 		}
 	}
 
@@ -955,7 +938,7 @@ class KuwasysDatabaseAccess {
 		try {
 			$this->_jointGradeInSchoolyearManager->deleteJointByGradeId($gradeId);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorDeleteJointGradeInSchoolyear'));
+			$this->_interface->dieError($this->_languageManager->getText('jointGradeInSchoolyearErrorDelete'));
 		}
 	}
 
@@ -964,21 +947,21 @@ class KuwasysDatabaseAccess {
 		try {
 			$joints = $this->_jointGradeInSchoolyearManager->getAllJoints();
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoSchoolYears'));
+			$this->_interface->dieError($this->_languageManager->getText('jointGradeInSchoolyearErrorNoJoints'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchSchoolYears'));
+			$this->_interface->dieError($this->_languageManager->getText('jointGradeInSchoolyearErrorFetch'));
 		}
 		return $joints;
 	}
-	
+
 	public function jointGradeInSchoolyearGetBySchoolyearId ($schoolyearId) {
-		
+
 		try {
 			$joints = $this->_jointGradeInSchoolyearManager->getAllJointsOfSchoolyearId($schoolyearId);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError('To add in ' . __METHOD__);
+			$this->_interface->dieError('jointGradeInSchoolyearErrorNoJoints');
 		} catch (Exception $e) {
-			$this->_interface->dieError('To add in ' . __METHOD__);
+			$this->_interface->dieError('jointGradeInSchoolyearErrorFetch');
 		}
 		return $joints;
 	}
@@ -988,9 +971,9 @@ class KuwasysDatabaseAccess {
 		try {
 			$schoolyearId = $this->_jointGradeInSchoolyearManager->getSchoolyearIdOfGradeId($gradeId);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('warningGradeNotLinkedToSchoolyear'));
+			$this->_interface->showMsg($this->_languageManager->getText('jointGradeInSchoolyearErrorNoJoints'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchSchoolyearForGrade'));
+			$this->_interface->dieError($this->_languageManager->getText('jointGradeInSchoolyearErrorFetch'));
 		}
 		return $schoolyearId;
 	}
@@ -1000,50 +983,50 @@ class KuwasysDatabaseAccess {
 		try {
 			$joint = $this->_jointGradeInSchoolyearManager->getJointByGradeId($gradeId);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointGradeInSchoolyear'));
+			$this->_interface->dieError($this->_languageManager->getText('jointGradeInSchoolyearError'));
 		}
 		return $joint;
 	}
-	
-	public function jointUserInSchooyearAdd ($userId, $schoolyearId) {
-	
+
+	public function jointUserInSchoolyearAdd ($userId, $schoolyearId) {
+
 		try {
 			$this->_jointUserInSchoolyearManager->addJoint($userId, $schoolyearId);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddLinkUsersInSchoolyear'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInSchoolyearErrorAdd'));
 		}
 	}
-	
+
 	public function jointUserInSchoolyearDeleteByUserId ($userId) {
-	
+
 		try {
 			$this->_jointUserInSchoolyearManager->deleteJointByUserId($userId);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorDeleteJointUsersInSchoolYear'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInSchoolyearErrorChange'));
 		}
 	}
-	
+
 	public function jointUserInSchoolyearGetAll () {
-	
+
 		try {
 			$joints = $this->_jointUserInSchoolyearManager->getAllJoints();
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoSchoolYears'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInSchoolyearErrorNoJoints'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchSchoolYears'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInSchoolyearErrorFetch'));
 		}
 		return $joints;
 	}
-	
+
 	public function jointUserInSchoolyearGetSchoolyearIdByUserIdWithoutDyingWhenVoid ($userId) {
-	
+
 		try {
 			$schoolyearId = $this->_jointUserInSchoolyearManager->getSchoolYearIdByUserId($userId);
 		} catch (MySQLVoidDataException $e) {
 			return;
 		}
 		catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManagerManager->getText('errorFetchJointUsersInSchoolYear'));
+			$this->_interface->dieError($this->_languageManagerManager->getText('jointUserInSchoolyearErrorFetch'));
 		}
 		return $schoolyearId;
 	}

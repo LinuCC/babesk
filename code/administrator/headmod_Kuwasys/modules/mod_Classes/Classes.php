@@ -75,7 +75,7 @@ class Classes extends Module {
 		$this->_languageManager = $this->_dataContainer->getLanguageManager();
 		$this->_languageManager->setModule('Classes');
 		require_once PATH_ADMIN . $this->relPath . '../../KuwasysDatabaseAccess.php';
-		$this->_databaseAccessManager = new KuwasysDatabaseAccess($this->_interface, $this->_languageManager);
+		$this->_databaseAccessManager = new KuwasysDatabaseAccess($this->_interface);
 		$this->_jointUserInClassStatusDefiner = new jointUserInClassStatusTranslation($this->_languageManager);
 		
 	}
@@ -114,7 +114,7 @@ class Classes extends Module {
 	
 	private function getIsClassRegistrationGloballyEnabled () {
 		
-		return $this->_databaseAccessManager->classRegistrationGloballyIsEnabledGet();
+		return $this->_databaseAccessManager->classRegistrationGloballyIsEnabledGetAndAddingWhenVoid();
 	}
 	
 	private function setIsClassRegistrationGloballyEnabled ($toggle) {

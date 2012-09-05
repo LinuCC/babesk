@@ -57,6 +57,11 @@ class ClassTeacherInterface extends AdminInterface {
 		$this->smarty->assign('classes', $classes);
 		$this->smarty->display($this->tplFilePath . 'changeClassTeacher.tpl');
 	}
+	
+	public function displayImportCsvForm () {
+		
+		$this->smarty->display($this->tplFilePath . 'importLocalCsvFile.tpl');
+	}
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations

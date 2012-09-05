@@ -11,10 +11,19 @@
 .project
 .settings
 
+#NetBeans-specific settings#
+############################
+/nbproject/private/
+/nbproject/
+
 #OS-specific files we do not want#
 ##################################
 .directory
 
-#third-party-programs#
-######################
+#third-party-librarys of the project,#
+#generating runtime-based files      #
+######################################
 templates_c
+/code/smarty/templates_c_default/
+/code/smarty/configs/
+.sublime-project

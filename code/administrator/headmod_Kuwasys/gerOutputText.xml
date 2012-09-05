@@ -20,7 +20,6 @@
 			<formPassword>Passwort</formPassword>
 			<formPasswordRepeat>wiederholtes Passwort</formPasswordRepeat>
 			<formTelephone>Telefon</formTelephone>
-			<formEmail>Email-Adresse</formEmail>
 			<!-- Other FormStuff -->
 			<formWrongInput>Falsche Eingabe des Feldes "%s"!</formWrongInput>
 			<formWrongPasswordRepetition>Das Passwort stimmt nicht mit der Wiederholung überein!</formWrongPasswordRepetition>
@@ -53,10 +52,8 @@
 			<errorFetchJointUsersInSchoolYear>Ein Fehler ist beim Abrufen des Links zwischen Schüler und Schuljahr aufgetreten.</errorFetchJointUsersInSchoolYear>
 			<errorDeleteJointUsersInSchoolYear>Ein Fehler ist beim löschen der Verbindung zwischen Schüler und Schuljahr aufgetreten.</errorDeleteJointUsersInSchoolYear>
 			<errorInputJointUsersInSchoolYear>Bitte geben sie ein Schuljahr für den Benutzer ein.</errorInputJointUsersInSchoolYear>
-			<errorNoClasses>Es sind keine Kurs vorhanden</errorNoClasses>
 			<errorNoClassesForWaitingUsers>Es sind keine Kurse für die wartenden Benutzer vorhanden</errorNoClassesForWaitingUsers>
 			<errorNoClassteachersForClasses>Es konnten keine Kursleiter für die Kurse gefunden werden.</errorNoClassteachersForClasses>
-			<errorFetchClasses>Ein Fehler ist beim Abrufen der Kurse aufgetreten</errorFetchClasses>
 			<errorAddJointUsersInClass>Ein Fehler ist beim Verbinden des Benutzers mit dem Kurs aufgetreten.</errorAddJointUsersInClass>
 			<errorFetchJointUsersInClass>Ein Fehler ist beim Abrufen der Verbindung zwischen dem Schüler und den Kursen aufgetreten.</errorFetchJointUsersInClass>
 			<errorFetchJointsClassteacherInClass>Ein Fehler ist beim Abrufen der Links der Kursleiter zu den Kursen aufgetreten.</errorFetchJointsClassteacherInClass>
@@ -64,12 +61,10 @@
 			<errorFetchClass>Der Kurs konnte nicht abgerufen werden.</errorFetchClass>
 			<errorFetchJointUsersInClass>Ein Fehler ist beim Abrufen der Verbindung zwischen Schülern und Kursen aufgetreten.</errorFetchJointUsersInClass>
 			<errorDeleteJointUsersInClass>Ein Fehler ist beim entfernen der Verbindung zwischen dem Schüler und dem Kurs aufgetreten.</errorDeleteJointUsersInClass>
-			<errorFetchClassesFromDatabase>Konnte die Kurse nicht von der Datenbank abrufen: %s</errorFetchClassesFromDatabase>
 			<errorFetchClassteacher>Die Kursleiter konnten nicht abgerufen werden.</errorFetchClassteacher>
 			<errorAlterJointUsersInClass>Ein Fehler ist beim Verändern der Verbindung zwischen dem Schüler und dem Kurs aufgetreten.</errorAlterJointUsersInClass>
 			<errorFetchUsersByJointsUsersInClass>Ein Fehler ist beim Abrufen der Schüler mithilfe der Links aufgetreten.</errorFetchUsersByJointsUsersInClass>
 			<moveUserToClassNotConfirmed>Der Benutzer wurde nicht in einen anderen Kurs bewegt.</moveUserToClassNotConfirmed>
-			<moveUserToClassJointAlreadyExisting>Der Benutzer ist schon für diesen Kurs eingetragen!</moveUserToClassJointAlreadyExisting>
 			<finishedMoveUserToClass>Der Benutzer wurde erfolgreich in den anderen Kurs bewegt</finishedMoveUserToClass>
 			<errorSelectDesiredSchoolyear>Das gewünschte Schuljahr konnte nicht gefunden werden. Entweder ist die ID falsch, oder es gibt kein aktives Schuljahr.</errorSelectDesiredSchoolyear>
 			<errorSelectDesiredGrade>Die gewünschte Klasse konnte nicht gefunden werden. Entweder ist die ID falsch, oder das Schuljahr hat keine Klassen.</errorSelectDesiredGrade>
@@ -85,6 +80,7 @@
 			<finDeleteUser>Der Benutzer wurde erfolgreich gelöscht.</finDeleteUser>
 			<finChangeUser>Der Benutzer wurde erfolgreich geändert.</finChangeUser>
 			<finAddUserToClass>Der Benutzer wurde erfolgreich dem Kurs hinzugefügt.</finAddUserToClass>
+			<errorPdfHtmlTemplateMissing>Konnte das Html-Template zum erstellen der PDF-Datei nicht finden.</errorPdfHtmlTemplateMissing>
 		</text>
 	</module>
 	<module>
@@ -92,11 +88,8 @@
 		<text>
 			<errorWrongActionValue>Action Value besitzt einen falschen Wert! Möglicherweise wurde diese Funktion noch nicht implementiert</errorWrongActionValue>
 			<errorWrongInput>Sie haben den Wert im Feld "%s" nicht richtig eingegeben!</errorWrongInput>
-			<errorNoClasses>Es konnten keine Kurse gefunden werden</errorNoClasses>
-			<errorNoClassesJointProblem>Die gesuchten Kurse konnten nicht gefunden werden; Die Datenbank weist Fehler auf!</errorNoClassesJointProblem>
 			<errorNoSchoolYears>Es sind keine Schuljahre vorhanden! Bitte fügen sie zuerst Schuljahre hinzu.</errorNoSchoolYears>
 			<errorFetchSchoolYears>Ein Fehler ist beim abrufen der SchuljahresDaten aufgetreten.</errorFetchSchoolYears>
-			<errorFetchLastID>Ein Fehler ist beim Abrufen der Daten des letzten hinzugefügten Kurses aufgetreten.</errorFetchLastID>
 			<errorLinkSchoolYear>Ein Fehler ist beim verlinken des Kurses mit dem Schuljahr aufgetreten. 
 			    Bitte bearbeiten sie den Kurs nochmal und wählen sie das korrekte Schuljahr aus, um den Fehler zu beheben.</errorLinkSchoolYear>
 			<errorInputSchoolYear>Ein falsches Schuljahr wurde eingegeben!</errorInputSchoolYear>
@@ -119,9 +112,7 @@
 			<errorFetchJointsClassteacherInClass>Ein Fehler ist beim Abrufen der Kursleiter für die Kurse aufgetreten.</errorFetchJointsClassteacherInClass>
 			<errorNoWaitingUsers>Es sind keine Schüler vorhanden, die auf der Warteliste stehen</errorNoWaitingUsers>
 			<errorFetchWaitingUsers>Ein Fehler ist beim Abrufen der wartenden Schüler aufgetreten</errorFetchWaitingUsers>
-			<errorDeleteClass>Der Kurs konnte nicht gelöscht werden!</errorDeleteClass>
 			<finishedDeleteClass>Der Kurs wurde erfolgreich gelöscht.</finishedDeleteClass>
-			<errorFetchLabel>Konnte den Namen des Kurses nicht von der Datenbank abrufen!</errorFetchLabel>
 			<errorFetchClass>Konnte den Kurs nicht von der Datenbank abrufen!</errorFetchClass>
 			<errorChangeClass>Konnte den Kurs nicht verändern.</errorChangeClass>
 			<finishedChangeClass>Der Kurs wurde erfolgreich verändert.</finishedChangeClass>
@@ -133,11 +124,9 @@
 			<errorFetchGrade>Ein Fehler ist beim Abrufen von einer Klasse aufgetreten.</errorFetchGrade>
 			<errorNoJointsUsersInClassOfClassId>Es konnten keine Teilnehmer für diesen Kurs gefunden werden.</errorNoJointsUsersInClassOfClassId>
 			<errorFetchJointsUsersInClassOfClassId>Ein Fehler ist beim Abrufen der Teilnehmer für diesen Kurs aufgetreten.</errorFetchJointsUsersInClassOfClassId>
-			<errorAddClass>Ein Fehler ist beim Hinzufügen des Kurses aufgetreten.</errorAddClass>
 			<finAddClassesByCsv>Die Kurse wurden erfolgreich importiert.</finAddClassesByCsv>
 			<errorGetSchoolyearBySchoolyearName>Das Schuljahr "%s" wurde nicht gefunden! Sie können das Schuljahr einstellen wenn sie den Kurs bearbeiten</errorGetSchoolyearBySchoolyearName>
 			<errorFetchSchoolyearBySchoolyearName>Ein Fehler ist beim abrufen des Schuljahres aufgetreten</errorFetchSchoolyearBySchoolyearName>
-			<errorFetchNextAutoIncrementId>Ein Fehler ist beim Abrufen der ID des hinzuzufügenden Kurses aufgetreten.</errorFetchNextAutoIncrementId>
 			<errorNoJointsUsersInClassFirstRequest>Es gibt keine primären Kurswünsche</errorNoJointsUsersInClassFirstRequest>
 			<errorNoJointsUsersInClassSecondRequest>Es gibt keine sekundären Kurswünsche</errorNoJointsUsersInClassSecondRequest>
 			<errorNoJointsUsersInClassInAssignUsersToClass>kein Schüler ist an einen Kurs interessiert!</errorNoJointsUsersInClassInAssignUsersToClass>
@@ -283,6 +272,92 @@
 			<deleteSchoolYearDeclined>Das Schuljahr wurde nicht gelöscht</deleteSchoolYearDeclined>
 			<errorDeleteSchoolYear>Konnte das Schuljahr nicht löschen!</errorDeleteSchoolYear>
 			<finishedDeleteSchoolYear>Das Schuljahr wurde erfolgreich gelöscht.</finishedDeleteSchoolYear>
+		</text>
+	</module>
+	<module>
+		<name>databaseAccess</name>
+		<text>
+			<classErrorAdd>Ein Fehler ist beim hinzufügen des Kurses aufgetreten.</classErrorAdd>
+			<classErrorDelete>Ein Fehler ist beim löschen des Kurses aufgetreten.</classErrorDelete>
+			<classErrorChange>Ein Fehler ist beim Ändern des Kurses aufgetreten.</classErrorChange>
+			<classLabelErrorFetch>Ein Fehler ist beim Abrufen des Kursnamens aufgetreten.</classLabelErrorFetch>
+			<classErrorNoClasses>Es konnten keine Kurse gefunden werden.</classErrorNoClasses>
+			<classErrorFetch>Ein Fehler ist beim Abrufen der Kurse aufgetreten.</classErrorFetch>
+			<classIdErrorFetchLastAdded>Ein Fehler ist beim Abrufen des zuletzt hinzugefügten Kurse aufgetreten.</classIdErrorFetchLastAdded>
+			<classIdErrorFetchNextAutoincrement>Ein Fehler ist beim Abrufen der nächsten ID der Kursliste aufgetreten.</classIdErrorFetchNextAutoincrement>
+			<globalSettingsErrorFetchClassRegEnabled>Der Status der Kursregistrierungen konnte nicht abgerufen werden.</globalSettingsErrorFetchClassRegEnabled>
+			<globalSettingsErrorSetClassRegEnabled>Der Status der Kursregistrierungen konnte nicht verändert werden.</globalSettingsErrorSetClassRegEnabled>
+			<classteacherErrorNoClassteachers>Es sind keine Kursleiter vorhanden.</classteacherErrorNoClassteachers>
+			<classteacherErrorFetch>Ein Fehler ist beim Abrufen der Kursleiter aufgetreten.</classteacherErrorFetch>
+			<classteacherErrorAdd>Der Kursleiter konnte nicht hinzugefügt werden.</classteacherErrorAdd>
+			<classteacherErrorDelete>Der Kursleiter konnte nicht gelöscht werden.</classteacherErrorDelete>
+			<classteacherErrorChange>Der Kursleiter konnte nicht verändert werden.</classteacherErrorChange>
+			<classteacherIdErrorFetchLastAdded>Die zuletzt hinzugefügte Kursleiter-ID konnte nicht abgerufen werden.</classteacherIdErrorFetchLastAdded>
+			<gradeErrorAdd>Die Klasse konnte nicht hinzugefügt werden.</gradeErrorAdd>
+			<gradeErrorDelete>Die Klasse konnte nicht gelöscht werden.</gradeErrorDelete>
+			<gradeErrorChange>Die Klasse konnte nicht verändert werden.</gradeErrorChange>
+			<gradeErrorNoGrades>Es sind keine Klassen vorhanden.</gradeErrorNoGrades>
+			<gradeErrorNoSpecificGrade>Die Klasse ist nicht vorhanden.</gradeErrorNoSpecificGrade>
+			<gradeErrorFetch>Die Klasse konnte nicht abgerufen werden.</gradeErrorFetch>
+			<schoolyearErrorAdd>Das Schuljahr konnte nicht hinzugefügt werden.</schoolyearErrorAdd>
+			<schoolyearErrorDelete>Das Schuljahr konnte nicht gelöscht werden.</schoolyearErrorDelete>
+			<schoolyearErrorChange>Das Schuljahr konnte nicht verändert werden.</schoolyearErrorChange>
+			<schoolyearErrorNoSchoolyears>Es sind keine Schuljahre vorhanden.</schoolyearErrorNoSchoolyears>
+			<schoolyearErrorNoSpecificSchoolyear>Dieses Schuljahr ist nicht vorhanden.</schoolyearErrorNoSpecificSchoolyear>
+			<schoolyearErrorFetch>Das Schuljahr konnte nicht abgerufen werden.</schoolyearErrorFetch>
+			<schoolyearErrorFetchSchoolyearLabel>Der Name des Schuljahres konnte nicht abgerufen werden.</schoolyearErrorFetchSchoolyearLabel>
+			<schoolyearErrorNoActive>Es gibt keine aktiven Schuljahre.</schoolyearErrorNoActive>
+			<schoolyearErrorFetchActive>Die aktiven Schuljahre konnten nicht abgerufen werden.</schoolyearErrorFetchActive>
+			<schoolyearErrorNoSpecificSchoolyearName>Es gibt keinen Schuljahreseintrag mit diesem Namen.</schoolyearErrorNoSpecificSchoolyearName>
+			<userErrorAdd>Der Benutzer konnte nicht hinzugefügt werden.</userErrorAdd>
+			<userErrorDelete>Der Benutzer konnte nicht gelöscht werden.</userErrorDelete>
+			<userErrorNoUsers>Es sind keine Benutzer vorhanden.</userErrorNoUsers>
+			<userErrorNoSpecific>Der gewünschte Benutzer konnte nicht gefunden werden.</userErrorNoSpecific>
+			<userErrorFetch>Ein Fehler ist beim Abrufen der Benutzer aufgetreten.</userErrorFetch>
+			<jointUserInClassErrorAdd>Eine Verbindung zwischen einem Schüler und einem Kurs konnte nicht hinzugefügt werden.</jointUserInClassErrorAdd>
+			<jointUserInClassErrorDelete>Eine Verbindung zwischen einem Benutzer und einem Kurs konnte nicht gelöscht werden.</jointUserInClassErrorDelete>
+			<jointUserInClassErrorChange>Eine Verbindung zwischen einem Benutzer und einem Kurs konnte nicht verändert werden.</jointUserInClassErrorChange>
+			<jointUserInClassErrorFetch>Ein Fehler ist beim Abrufen der Verbindung zwischen Benutzern und Kursen aufgetreten.</jointUserInClassErrorFetch>
+			<jointUserInClassErrorNoJointsOfClass>Es konnten keine Benutzer für den Kurs gefunden werden.</jointUserInClassErrorNoJointsOfClass>
+			<jointUserInClassErrorNoJointsOfUser>Es konnten keine Kurse für den Benutzer gefunden werden</jointUserInClassErrorNoJointsOfUser>
+			<jointUserInClassErrorNoSpecific>Eine Verbindung zwischen Kurs und Benutzer ist nicht vorhanden.</jointUserInClassErrorNoSpecific>
+			<jointUserInClassErrorNoJoints>Es sind keine Schüler in Kursen zugeteilt.</jointUserInClassErrorNoJoints>
+			<jointUserInClassErrorFetchWaiting>Ein Fehler ist beim Abrufen aller Verbindungen mit dem Status "Warten" aufgetreten.</jointUserInClassErrorFetchWaiting>
+			<jointUserInClassErrorFetchActive>Ein Fehler ist beim Abrufen aller Verbindungen mit dem Status "Aktiv" aufgetreten.</jointUserInClassErrorFetchActive>
+			<jointUserInClassErrorNoWaiting>Es gibt keine Benutzer, die in der Warteliste eines Kurses stehen.</jointUserInClassErrorNoWaiting>
+			<jointUserInClassErrorNoActive>Es gibt keine Benutzer mit dem Status Aktiv in einem Kurs.</jointUserInClassErrorNoActive>
+			<jointUserInClassErrorCheckForExisting>Ein Fehler ist beim überprüfen der Vorhandenheit des Links zwischen Schülern und Kursen aufgetreten</jointUserInClassErrorCheckForExisting>
+			<jointUserInClassErrorFetchFirstRequest>Ein Fehler ist beim Abrufen der Primären Wünsche aufgetreten</jointUserInClassErrorFetchFirstRequest>
+			<jointUserInClassErrorFetchSecondRequest>Ein Fehler ist beim Abrufen der Sekundären Wünsche aufgetreten</jointUserInClassErrorFetchSecondRequest>
+			<jointUserInGradeErrorAdd>Ein Fehler ist beim Hinzufügen der Klasse aufgetreten.</jointUserInGradeErrorAdd>
+			<jointUserInGradeErrorDelete>Ein Fehler ist beim Löschen der Klasse aufgetreten.</jointUserInGradeErrorDelete>
+			<jointUserInGradeErrorChange>Ein Fehler ist beim Verändern der Klasse aufgetreten.</jointUserInGradeErrorChange>
+			<jointUserInGradeErrorNoJoints>Es gibt keine Schüler, die einer Klasse zugewiesen sind.</jointUserInGradeErrorNoJoints>
+			<jointUserInGradeErrorFetch>Die Zuweisungen von Schülern zu Klassen konnten nicht abgerufen werden.</jointUserInGradeErrorFetch>
+			<jointUserInGradeErrorFetchSpecificJoint>Konnte die Klasse nicht abrufen.</jointUserInGradeErrorFetchSpecificJoint>
+			<jointUserInGradeErrorNoSpecificJoint>Die Klasse ist nicht vorhanden.</jointUserInGradeErrorNoSpecificJoint>
+			<jointClassInSchoolyearErrorAdd>Ein Fehler ist beim Verändern der Zuweisung vom Kurs im Schuljahr aufgetreten.</jointClassInSchoolyearErrorAdd>
+			<jointClassInSchoolyearErrorChange>Ein Fehler ist beim Verändern der Zuweisung vom Kurs im Schuljahr aufgetreten.</jointClassInSchoolyearErrorChange>
+			<jointClassInSchoolyearErrorDelete>Ein Fehler ist beim löschen der Zuweisung vom Kurs im Schuljahr aufgetreten.</jointClassInSchoolyearErrorDelete>
+			<jointClassInSchoolyearErrorNoJoints>Es gibt keine Zuweisungen von Kursen in Schuljahren.</jointClassInSchoolyearErrorNoJoints>
+			<jointClassInSchoolyearErrorFetch>Die Zuweisungen von Kursen in Schuljahren konnten nicht abgerufen werden.</jointClassInSchoolyearErrorFetch>
+			<jointClassInSchoolyearErrorFetchSpecific>Die Zuweisung von Kurs in Schuljahr konnte nicht abgerufen werden.</jointClassInSchoolyearErrorFetchSpecific>
+			<jointClassteacherInClassErrorAdd>Ein Fehler ist beim Hinzufügen einer Zuweisung Kursleiter in Kurs aufgetreten.</jointClassteacherInClassErrorAdd>
+			<jointClassteacherInClassErrorDelete>Ein Fehler ist beim Löschen einer Zuweisung Kursleiter in Kurs aufgetreten.</jointClassteacherInClassErrorDelete>
+			<jointClassteacherInClassErrorChange>Ein Fehler ist beim Verändern einer Zuweisung Kursleiter in Kurs aufgetreten.</jointClassteacherInClassErrorChange>
+			<jointClassteacherInClassErrorNoJoints>Es gibt keine Zuweisungen von Kursleitern in Kursen.</jointClassteacherInClassErrorNoJoints>
+			<jointClassteacherInClassErrorFetch>Zuweisungen von Kursleitern in Kursen konnten nicht abgerufen werden.</jointClassteacherInClassErrorFetch>
+			<jointGradeInSchoolyearErrorAdd>Die Zuweisung von Klasse in Schuljahr konnte nicht hinzugefügt werden.</jointGradeInSchoolyearErrorAdd>
+			<jointGradeInSchoolyearErrorDelete>Die Zuweisung von Klasse in Schuljahr konnte nicht gelöscht werden.</jointGradeInSchoolyearErrorDelete>
+			<jointGradeInSchoolyearErrorChange>Die Zuweisung von Klasse in Schuljahr konnte nicht verändert werden.</jointGradeInSchoolyearErrorChange>
+			<jointGradeInSchoolyearErrorNoJoints>Es sind keine Zuweisungen von Klasse in Schuljahr vorhanden.</jointGradeInSchoolyearErrorNoJoints>
+			<jointGradeInSchoolyearErrorFetchJoints>Die Zuweisungen von Klasse in Schuljahr konnten nicht abgerufen werden.</jointGradeInSchoolyearErrorFetchJoints>
+			<jointGradeInSchoolyearErrorNoJointOfGradeId>Die Klasse ist nicht mit einem Schuljahr verlinkt.</jointGradeInSchoolyearErrorNoJointOfGradeId>
+			<jointUserInSchoolyearErrorAdd>Ein Fehler ist beim Hinzufügen der Zuweisung von Benutzern im Schuljahr aufgetreten.</jointUserInSchoolyearErrorAdd>
+			<jointUserInSchoolyearErrorChange>Ein Fehler ist beim Verändern der Zuweisung von Benutzern im Schuljahr aufgetreten.</jointUserInSchoolyearErrorChange>
+			<jointUserInSchoolyearErrorDelete>Ein Fehler ist beim Löschen der Zuweisung von Benutzern im Schuljahr aufgetreten.</jointUserInSchoolyearErrorDelete>
+			<jointUserInSchoolyearErrorFetch>Die Zuweisungen von Benutzern im Schuljahr konnten nicht abgerufen werden.</jointUserInSchoolyearErrorFetch>
+			<jointUserInSchoolyearErrorNoJoints>Es gibt keine Zuweisungen von Benutzern im Schuljahr.</jointUserInSchoolyearErrorNoJoints>
 		</text>
 	</module>
 </gerOutputText>

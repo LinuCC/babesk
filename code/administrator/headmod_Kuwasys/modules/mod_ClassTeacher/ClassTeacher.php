@@ -38,6 +38,9 @@ class ClassTeacher extends Module {
 				case 'addClassTeacher':
 					$this->addClassTeacher();
 					break;
+				case 'csvImport':
+					$this->addClassteacherByCsvImport();
+					break;
 				case 'showClassTeacher':
 					$this->showClassTeachers();
 					break;
@@ -77,6 +80,8 @@ class ClassTeacher extends Module {
 		$this->_classJointManager = new KuwasysJointClassTeacherInClass();
 		$this->_schoolYearManager = new KuwasysSchoolYearManager();
 		$this->_classInSchoolYearJointManager = new KuwasysJointClassInSchoolYearManager();
+		require_once PATH_ADMIN . $this->relPath . '../../KuwasysDatabaseAccess.php';
+		$this->_databaseAccessManager = new KuwasysDatabaseAccess($this->_interface, $this->_languageManager);
 	}
 
 	/**
@@ -123,6 +128,54 @@ class ClassTeacher extends Module {
 					'telephone']);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorAddClassTeacher'));
+		}
+	}
+	
+	private function addClassteacherByCsvImport () {
+		
+		if(count($_FILES)) {
+			$this->handleCsvImport();
+		}
+		else {
+			$this->_interface->displayImportCsvForm();
+		}
+	}
+	
+	private function handleCsvImport () {
+		
+		require_once PATH_INCLUDE . '/CsvImporter.php';
+		$csvManager = new CsvImporter($_FILES['csvFile']['tmp_name'], ';');
+		$contentArray = $csvManager->getContents();
+		$contentArray = $this->handleMissingKeysOfCsvImport($contentArray);
+		$this->addUserToDatabaseByCsvImport($contentArray);
+	}
+	
+	private function handleMissingKeysOfCsvImport ($contentArray) {
+		
+		foreach ($contentArray as &$rowArray) {
+			$this->checkCsvImportKeyVariable('name', $rowArray);
+			$this->checkCsvImportKeyVariable('forename', $rowArray);
+			$this->checkCsvImportKeyVariable('address', $rowArray);
+			$this->checkCsvImportKeyVariable('telephone', $rowArray);
+		}
+		return $contentArray;
+	}
+	
+	private function checkCsvImportKeyVariable ($varName, $rowArray) {
+		
+		if (!isset($rowArray[$varName])) {
+			$rowArray[$varName] = '';
+		}
+		return $rowArray;
+	}
+	
+	private function addUserToDatabaseByCsvImport ($contentArray) {
+		
+		foreach ($contentArray as $row) {
+			echo 'geaddet werden:<br>';
+			var_dump($row);
+			echo '<br><br>';
+			$this->_databaseAccessManager->classteacherAdd($row ['name'], $row ['forename'], $row ['address'], $row ['telephone']);
 		}
 	}
 
@@ -554,6 +607,8 @@ class ClassTeacher extends Module {
 	 * @var KuwasysLanguageManager
 	 */
 	private $_languageManager;
+	
+	private $_databaseAccessManager;
 }
 
 ?>

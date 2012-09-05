@@ -86,10 +86,12 @@ class Users extends Module {
 				case 'showWaitingUsers':
 					$this->showWaitingUsers();
 					break;
+				case 'printParticipationConfirmation':
+					$this->handleParticipationConfirmationPdf();
+					break;
 				default:
 					$this->_interface->dieError($this->_languageManager->getText('actionValueWrong'));
 			}
-
 		}
 		else {
 			$this->showMainMenu();
@@ -113,7 +115,7 @@ class Users extends Module {
 		$this->_languageManager = $dataContainer->getLanguageManager();
 		$this->_languageManager->setModule('Users');
 		require_once PATH_ADMIN . $this->relPath . '../../KuwasysDatabaseAccess.php';
-		$this->_databaseAccessManager = new KuwasysDatabaseAccess($this->_interface, $this->_languageManager);
+		$this->_databaseAccessManager = new KuwasysDatabaseAccess($this->_interface);
 		$this->_jointUserInClassStatusDefiner = new jointUserInClassStatusTranslation($this->_languageManager);
 	}
 
@@ -309,7 +311,7 @@ class Users extends Module {
 		else {
 			return $gradeDesired [0];
 		}
-		$this->_interface->dieError($this->_languageManager->getText('errorSelectDesiredGradeb'));
+		$this->_interface->dieError($this->_languageManager->getText('errorSelectDesiredGrade'));
 	}
 
 	/**
@@ -326,9 +328,82 @@ class Users extends Module {
 		return $users;
 	}
 
+	/**
+	 * Creates a PDF-file based on post-variables. For each user in the Grade it creates a confirmation
+	 * for the classes the user attends to.
+	 */
+	private function handleParticipationConfirmationPdf () {
+
+		require_once PATH_INCLUDE . '/pdf/joinMultiplePdf.php';
+
+		foreach ($_POST['userIds'] as $userId) {
+			$this->_databaseAccessManager->userIdAddToUserIdArray($userId);
+		}
+		$users = $this->_databaseAccessManager->userGetByUserIdArray();
+		$filename = $this->getPdfFilename ($_POST['schoolyearId'], $_POST['gradeId']);
+
+		$pdfTmpPathArray = $this->createTemporaryPdfFiles($users);
+		$pdfCombined = $this->combineTemporaryPdfFiles($pdfTmpPathArray);
+		$pdfCombined->pdfCombinedProvideAsDownload ($filename);
+		$pdfCombined->pdfTempDirClean ();
+	}
+
+	/**
+	 * creates temporary Pdffiles on the Serverfilesystem and returns an array with the paths to them.
+	 */
+	private function createTemporaryPdfFiles ($users) {
+
+		require_once PATH_INCLUDE . '/pdf/HtmlToPdfImporter.php';
+
+		$confTemplatePath = PATH_INCLUDE . '/pdf/printTemplates/printTemplateTest.html';
+		if(!file_exists($confTemplatePath)) {
+			$this->_interface->dieError($this->_languageManager->getText('errorPdfHtmlTemplateMissing')
+										 . $confTemplatePath);
+		}
+		$pdfTmpPathArray = array();
+
+		foreach ($users as $user) {
+			$pdf = new HtmlToPdfImporter ();
+			$pdf->htmlImport($confTemplatePath, true);
+			$pdf->tempVarReplaceInHtml('username', sprintf('%s %s', $user['forename'], $user['name']), '#!%s#!');
+			$pdf->htmlToPdfConvert();
+			$pdfTmpPathArray [] = $pdf->pdfSaveTemporaryAndGetFilename ();
+		}
+		return $pdfTmpPathArray;
+	}
+
+	/**
+	 * Combines the Temporary PDF-Files whose path is in $tempFilePathArray
+	 * @param array[string] $tempFilePathArray An array of paths to the Temporary PDF-Files
+	 * @return joinMultiplePdf the Combined PDF's
+	 */
+	private function combineTemporaryPdfFiles ($tempFilePathArray) {
+
+		require_once PATH_INCLUDE . '/pdf/joinMultiplePdf.php';
+
+		$pdfCombiner = new joinMultiplePdf ();
+
+		foreach ($tempFilePathArray as $tmpPath) {
+			$pdfCombiner->pdfAdd ($tmpPath);
+		}
+		$pdfCombiner->pdfCombine ();
+		return $pdfCombiner;
+	}
+
+	/**
+	 * Creates a filename fitting to the combined PDF that is getting created.
+	 */
+	private function getPdfFilename ($schoolyearId, $gradeId) {
+
+		$schoolyear = $this->_databaseAccessManager->schoolyearGet ($schoolyearId);
+		$grade = $this->_databaseAccessManager->gradeGetById ($gradeId);
+		$filename = sprintf('%s_%s_%s.pdf', $schoolyear ['label'], $grade ['label'] . $grade ['gradeValue'], date('Y-m-d'));
+		return $filename;
+	}
+
 	/**-----------------------------------------------------------------------------
 	 * Functions for displaying forms and other stuff
-	*----------------------------------------------------------------------------*/
+	 *----------------------------------------------------------------------------*/
 
 	private function showChangeUserData () {
 
@@ -1090,6 +1165,12 @@ class Users extends Module {
 		$this->addUsersToDatabaseByCsvImport($contentArray);
 	}
 
+	/**
+	 * adds void strings to missing parts of the array that werent in the CsvFile, so that PHP does not warn everytime
+	 * something is missing
+	 * @param unknown $contentArray
+	 * @return unknown
+	 */
 	private function controlVariablesOfCsvImport ($contentArray) {
 
 		foreach ($contentArray as & $rowArray) {
