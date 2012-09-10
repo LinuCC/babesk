@@ -298,7 +298,6 @@ class AdminAdminProcessing {
 		global $modManager;
 		$allowed_modules = array();
 
-		var_dump($moduleNames);
 		foreach ($moduleNames as $moduleName) {
 			$allowed_modules[] = $moduleName;
 		}
