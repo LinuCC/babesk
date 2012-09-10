@@ -92,7 +92,8 @@ class ClassTeacher extends Module {
 		if (isset($_POST['name'], $_POST['forename'], $_POST['address'], $_POST['telephone'])) {
 			$this->checkInput();
 			$this->checkForCorrectClassInput($_POST['class']);
-			$this->addClassTeacherToDatabase();
+			$this->_databaseAccessManager->classteacherAdd ($_POST['name'], $_POST['forename'], $_POST['address'], 
+				$_POST['telephone']);
 			$this->addJointClassTeacherInClassAtAddDialog();
 			$this->_interface->dieMsg($this->_languageManager->getText('finishedAddClassTeacher'));
 		}
@@ -117,19 +118,6 @@ class ClassTeacher extends Module {
 			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorInput'), $e->getFieldName()));
 		}
 	}
-
-	/**
-	 * adds a Class-Teacher to the MySQL-Database
-	 */
-	private function addClassTeacherToDatabase () {
-
-		try {
-			$this->_classTeacherManager->addClassTeacher($_POST['name'], $_POST['forename'], $_POST['address'], $_POST[
-					'telephone']);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddClassTeacher'));
-		}
-	}
 	
 	private function addClassteacherByCsvImport () {
 		
@@ -147,7 +135,7 @@ class ClassTeacher extends Module {
 		$csvManager = new CsvImporter($_FILES['csvFile']['tmp_name'], ';');
 		$contentArray = $csvManager->getContents();
 		$contentArray = $this->handleMissingKeysOfCsvImport($contentArray);
-		$this->addUserToDatabaseByCsvImport($contentArray);
+		$this->addClassteacherToDatabaseByCsvImport($contentArray);
 	}
 	
 	private function handleMissingKeysOfCsvImport ($contentArray) {
@@ -169,27 +157,13 @@ class ClassTeacher extends Module {
 		return $rowArray;
 	}
 	
-	private function addUserToDatabaseByCsvImport ($contentArray) {
+	private function addClassteacherToDatabaseByCsvImport ($contentArray) {
 		
 		foreach ($contentArray as $row) {
 			echo 'geaddet werden:<br>';
 			var_dump($row);
 			echo '<br><br>';
 			$this->_databaseAccessManager->classteacherAdd($row ['name'], $row ['forename'], $row ['address'], $row ['telephone']);
-		}
-	}
-
-	/**
-	 * Adds a link between a Class-Teacher and a Class
-	 * @param numeric_string $classTeacherID The ID of the Class Teacher
-	 * @param numeric_string $classID the ID of the class
-	 */
-	private function addJointClassTeacherInClass ($classTeacherID, $classID) {
-
-		try {
-			$this->_classJointManager->addJoint($classTeacherID, $classID);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddClassTeacherToClassLink'));
 		}
 	}
 
@@ -203,7 +177,7 @@ class ClassTeacher extends Module {
 		$lastID = $this->getLastAddedClassTeacherId();
 		foreach ($_POST['class'] as $class) {
 			if ($class != 'NoClass') {
-				$this->addJointClassTeacherInClass($lastID, $class);
+				$this->_databaseAccessManager->jointClassteacherInClassAdd ($lastID, $class);
 			}
 		}
 	}
@@ -215,38 +189,6 @@ class ClassTeacher extends Module {
 
 		$classTeachers = $this->getAllClassTeachersWithClassLabel();
 		$this->_interface->displayShowClassTeacher($classTeachers);
-	}
-
-	/**
-	 * returns all Class-Teachers in the Database
-	 */
-	private function getAllClassTeachers () {
-
-		try {
-			$classTeachers = $this->_classTeacherManager->getAllClassTeachers();
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoClassTeachers'));
-		}
-		catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchClassTeachers'));
-		}
-		return $classTeachers;
-	}
-
-	/**
-	 * Returns a Class-Teacher with the ID of '$_GET['ID']'
-	 */
-	private function getClassTeacher () {
-
-		try {
-			$classTeacher = $this->_classTeacherManager->getClassTeacher($_GET['ID']);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoClassTeacher'));
-		}
-		catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchClassTeacher'));
-		}
-		return $classTeacher;
 	}
 
 	/**
@@ -272,7 +214,7 @@ class ClassTeacher extends Module {
 	 */
 	private function showConfirmationDialogDeleteClassTeacher () {
 
-		$classTeacher = $this->getClassTeacher();
+		$classTeacher = $this->_databaseAccessManager->classteacherGetById ($_GET['ID']);
 		$this->_interface->displayConfirmDeleteClassTeacher($classTeacher);
 	}
 
@@ -301,8 +243,8 @@ class ClassTeacher extends Module {
 			$this->_interface->dieMsg($this->_languageManager->getText('finishedChangeClassTeacher'));
 		}
 		else {
-			$classTeacher = $this->getClassTeacher();
-			$classes = $this->addIsSelectedValueToClassesByClassTeacher($this->getAllClasses(), $_GET['ID']);
+			$classTeacher = $this->_databaseAccessManager->classteacherGetById ($_GET['ID']);
+			$classes = $this->addIsSelectedValueToClassesByClassTeacher($this->_databaseAccessManager->classGetAll(), $_GET['ID']);
 			$this->_interface->displayChangeClassTeacher($classTeacher, $classes);
 		}
 	}
@@ -348,7 +290,7 @@ class ClassTeacher extends Module {
 					}
 				}
 			}
-			$this->addJointClassTeacherInClass($_GET['ID'], $class);
+			$this->_databaseAccessManager->jointClassteacherInClassAdd ($_GET['ID'], $class);
 		}
 	}
 
@@ -394,27 +336,11 @@ class ClassTeacher extends Module {
 	 */
 	private function getAllClassesInActiveSchoolYear () {
 
-		$classes = $this->getAllClasses();
+		$classes = $this->_databaseAccessManager->classGetAll();
 		if (isset($classes) && count($classes)) {
 			$activeClasses = $this->separateClassesInActiveSchoolYear($classes);
 		}
 		return $activeClasses;
-	}
-
-	/**
-	 * returns all Classes in the Database
-	 */
-	private function getAllClasses () {
-
-		try {
-			$classes = $this->_classManager->getAllClasses();
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('warningNoClasses'));
-		}
-		catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchClasses'));
-		}
-		return $classes;
 	}
 
 	/**
@@ -434,47 +360,13 @@ class ClassTeacher extends Module {
 	}
 
 	/**
-	 * returns all Links between Classes and SchoolYears
-	 */
-	private function getAllJointsClassInSchoolYear () {
-
-		try {
-			$joints = $this->_classInSchoolYearJointManager->getAllJoints();
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoLinksClassInSchoolYear'));
-		}
-		catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchLinksClassInSchoolYear'));
-		}
-		return $joints;
-	}
-
-	/**
-	 * returns all Links between Class-Teachers and Classes
-	 */
-	private function getAllJointsClassTeacherInClass () {
-
-		try {
-			$joints = $this->_classJointManager->getAllJoints();
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('warningNoClassTeacherInClassLinks'));
-		}
-		catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchClassTeacherInClassLinks'));
-		}
-		if (isset($joints)) {
-			return $joints;
-		}
-	}
-
-	/**
 	 * Separates the Classes of the Active Schoolyear from the given classes-Parameter and returns them
 	 * @param unknown_type $classes
 	 */
 	private function separateClassesInActiveSchoolYear ($classes) {
 
 		$activeSchoolYearID = $this->getActiveSchoolYearId();
-		$jointsClass = $this->getAllJointsClassInSchoolYear();
+		$jointsClass = $this->_databaseAccessManager->jointClassInSchoolyearGetAll();
 		$activeClasses = array();
 
 		foreach ($jointsClass as $joint) {
@@ -495,8 +387,8 @@ class ClassTeacher extends Module {
 	 */
 	private function getAllClassTeachersWithClassLabel () {
 
-		$classTeachers = $this->getAllClassTeachers();
-		$classes = $this->getAllClasses();
+		$classteachers = $this->_databaseAccessManager->classteacherGetAll ();
+		$classes = $this->_databaseAccessManager->classGetAll();
 		$classTeacherJoints = $this->getAllJointsClassTeacherInClass();
 
 		if (isset($classTeacherJoints) && count($classTeacherJoints)) {
