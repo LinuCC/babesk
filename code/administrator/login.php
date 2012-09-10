@@ -43,12 +43,6 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 	$module_string = $groupData['modules'];
 	$modules = $moduleManager->getAllModules();
 
-	//copy the module mask
-	$_SESSION['modules'] = array();
-	foreach ($modules as $module) {
-		$_SESSION['modules'][$module->getName()] = False; //set all modules to disallow
-	}
-
 	//global admin
 	if ($module_string == '_ALL') {
 		$moduleManager->allowAllModules();
