@@ -35,6 +35,91 @@ class GlobalSettingsManager extends TableManager {
 	}
 	
 	/**
+	 * returns the religions found in the MySQL-table global_settings
+	 * @throws MySQLVoidDataException
+	 * @throws Other Exceptions (@see TableManager)
+	 * @return string
+	 */
+	function getReligion() {
+		$entry_arr = $this->searchEntry('name="religion"');
+		if (!isset($entry_arr['value']) || !$entry_arr['value'])
+			throw new MySQLVoidDataException('religion is void!');
+		return $entry_arr['value'];
+	}
+	
+	/**
+	 * Sets the Religions
+	 * @param string $str the text will be changed to this string
+	 * @throws MySQLVoidDataException
+	 * @throws some other things if somethings gone wrong
+	 */
+	function setReligion($str) {
+		$entry_arr = $this->searchEntry('name="religion"');
+		if (!isset($entry_arr) || !count($entry_arr)) {
+			throw new MySQLVoidDataException('searchEntry returned void helparray');
+		}
+		$religion_id = $entry_arr['id'];
+		$this->alterEntry($religion_id, 'value', $str);
+	}
+	
+	/**
+	 * returns the courses found in the MySQL-table global_settings
+	 * @throws MySQLVoidDataException
+	 * @throws Other Exceptions (@see TableManager)
+	 * @return string
+	 */
+	function getCourse() {
+		$entry_arr = $this->searchEntry('name="course"');
+		if (!isset($entry_arr['value']) || !$entry_arr['value'])
+			throw new MySQLVoidDataException('course is void!');
+		return $entry_arr['value'];
+	}
+	
+	/**
+	 * Sets the Courses
+	 * @param string $str the text will be changed to this string
+	 * @throws MySQLVoidDataException
+	 * @throws some other things if somethings gone wrong
+	 */
+	function setCourse($str) {
+		$entry_arr = $this->searchEntry('name="course"');
+		if (!isset($entry_arr) || !count($entry_arr)) {
+			throw new MySQLVoidDataException('searchEntry returned void helparray');
+		}
+		$course_id = $entry_arr['id'];
+		$this->alterEntry($course_id, 'value', $str);
+	}
+	
+	
+	/**
+	 * returns the foreign languages found in the MySQL-table global_settings
+	 * @throws MySQLVoidDataException
+	 * @throws Other Exceptions (@see TableManager)
+	 * @return string
+	 */
+	function getForeignLanguages() {
+		$entry_arr = $this->searchEntry('name="foreign_language"');
+		if (!isset($entry_arr['value']) || !$entry_arr['value'])
+			throw new MySQLVoidDataException('foreign_lang is void!');
+		return $entry_arr['value'];
+	}
+	
+	/**
+	 * Sets the foreign languages
+	 * @param string $str the text will be changed to this string
+	 * @throws MySQLVoidDataException
+	 * @throws some other things if somethings gone wrong
+	 */
+	function setForeignLanguages($str) {
+		$entry_arr = $this->searchEntry('name="foreign_language"');
+		if (!isset($entry_arr) || !count($entry_arr)) {
+			throw new MySQLVoidDataException('searchEntry returned void helparray');
+		}
+		$foreignLanguage_id = $entry_arr['id'];
+		$this->alterEntry($foreignLanguage_id, 'value', $str);
+	}
+	
+	/**
 	 * Returns both of the infotexts of the table global_settings
 	 * Enter description here ...
 	 * @return array [0] = infotext1 [1] = infotext2
@@ -82,6 +167,21 @@ class GlobalSettingsManager extends TableManager {
 			throw new UnexpectedValueException('soli_price has no value!');
 		return $soli_price;
 	}
+	
+	/**
+	 * returns the key for Fits module
+	 * @throws UnexpectedValueException when fits is NULL
+	 * @throws something else when MySQL has problems
+	 * @return string the fits_key
+	 */
+	function getFitsKey() {
+		$pid = parent::searchEntry("name = 'fits_key'");
+		$fits_key = parent::getEntryValue($pid['id'], 'value');
+		if($fits_key === NULL)
+			throw new UnexpectedValueException('fits_key has no value!');
+		return $fits_key;
+	}
+	
 	
 	/**
 	 * Changes the value of "soli_price" to the given value

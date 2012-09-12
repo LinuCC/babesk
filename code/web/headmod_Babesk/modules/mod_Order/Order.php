@@ -32,8 +32,10 @@ class Order extends Module {
 		require_once PATH_ACCESS . '/UserManager.php';
 		require_once PATH_ACCESS . '/OrderManager.php';
 		require_once PATH_ACCESS . '/PriceClassManager.php';
+		require_once PATH_ACCESS . '/LogManager.php';
+		
 		global $smarty;
-		global $logger;
+		 $logger = new LogManager();
 
 		$this->webInterface = new WebInterface($smarty);
 		

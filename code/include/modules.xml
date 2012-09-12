@@ -5,6 +5,26 @@
 	<administrator>
 		<path>administrator/</path>
 		<head_module>
+			<ger_name>Systemeinstellungen</ger_name>
+			<name>System</name>
+			<active>true</active>
+			<module>
+				<ger_name>Benutzerverwaltung</ger_name>
+				<name>User</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Religionszugehörigkeit</ger_name>
+				<name>Religion</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Fremdsprachen</ger_name>
+				<name>ForeignLanguage</name>
+				<active>true</active>
+			</module>
+		</head_module>
+		<head_module>
 			<ger_name>Bargeldloses Bestellsystem für Kantinen</ger_name>
 			<name>Babesk</name>
 			<active>true</active>
@@ -61,9 +81,44 @@
 				<name>Soli</name>
 				<active>true</active>
 			</module>
+		</head_module>
+		<head_module>
+			<ger_name>Führerschein für IT-Systeme</ger_name>
+			<name>Fits</name>
+			<active>true</active>
 			<module>
-				<ger_name>Benutzerverwaltung</ger_name>
-				<name>User</name>
+				<ger_name>Führerschein überprüfen</ger_name>
+				<name>FitsCheck</name>
+				<active>true</active>
+			</module>
+		</head_module>
+		<head_module>
+			<ger_name>Schulbuchausleihsystem</ger_name>
+			<name>Schbas</name>
+			<active>true</active>
+			<module>
+				<ger_name>Bücherliste</ger_name>
+				<name>Booklist</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Inventarliste</ger_name>
+				<name>Inventory</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Ausleihe</ger_name>
+				<name>Loan</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Rückgabe</ger_name>
+				<name>Retour</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Spezifische Informationen</ger_name>
+				<name>specific</name>
 				<active>true</active>
 			</module>
 		</head_module>
@@ -136,17 +191,17 @@
 			</module>
 		</head_module>
 		<head_module>
-			<ger_name>Kurswahlsystem</ger_name>
-			<name>Kuwasys</name>
+			<ger_name>Fits</ger_name>
+			<name>Fits</name>
 			<active>true</active>
 			<module>
 				<ger_name>Menü</ger_name>
-				<name>MainMenu</name>
+				<name>Fmenu</name>
 				<active>true</active>
 			</module>
 			<module>
-				<ger_name>Kursliste</ger_name>
-				<name>ClassList</name>
+				<ger_name>Quiz</ger_name>
+				<name>Quiz</name>
 				<active>true</active>
 			</module>
 			<module>

@@ -83,10 +83,13 @@ class ModuleManager {
 			$modules = $head_mod->getModules();
 			foreach ($modules as $module) {
 				foreach ($allowed_modules_array as $mod_name) {
-					if ($mod_name == $module) {
+					if ($mod_name == $module->getName()) {
 						$_SESSION['modules'][$head_mod->getName() . '|' . $module->getName()] = True; //allow module
+						continue 2;
 					}
 				}
+				$_SESSION['modules'][$head_mod->getName() . '|' . $module->getName()] = False; //disallow module
+
 			}
 		}
 	}

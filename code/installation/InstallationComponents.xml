@@ -7,9 +7,9 @@
 		<className>InstallBabesk</className>
 	</Component>
 	<Component>
-		<name>Kuwasys</name>
-		<nameDisplay>KurswahlSystem</nameDisplay>
-		<path>components/Kuwasys/InstallKuwasys.php</path>
-		<className>InstallKuwasys</className>
+		<name>Fits</name>
+		<nameDisplay>Führerschein für IT-Systeme</nameDisplay>
+		<path>components/fits/InstallFits.php</path>
+		<className>InstallFits</className>
 	</Component>
 </InstallationComponents>

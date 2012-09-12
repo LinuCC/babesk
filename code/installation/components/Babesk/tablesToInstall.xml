@@ -31,6 +31,9 @@
                         `first_passwd` boolean NOT NULL,
                         `locked` boolean NOT NULL,
                         `soli` boolean NOT NULL,
+                      	`class` varchar(5) NOT NULL,
+                      	`religion` varchar(3) NOT NULL,
+                      	`foreign_language` varchar(30) NOT NULL,
                         PRIMARY KEY  (`ID`)
                     );
 		</sqlString>
@@ -174,4 +177,69 @@
                     )
 		</sqlString>
 	</table>
+	<table>
+		<name>schbas_books</name>
+		<sqlString>
+		CREATE TABLE IF NOT EXISTS `schbas_books` (
+					  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+					  `subject` varchar(3) NOT NULL,
+					  `class` varchar(25) NOT NULL,
+					  `title` varchar(255) NOT NULL,
+					  `author` varchar(255) NOT NULL,
+					  `publisher` varchar(255) NOT NULL,
+					  `isbn` varchar(17) NOT NULL,
+					  `price` float(4,2) NOT NULL,
+					  `bundle` smallint(1) NOT NULL,
+					  PRIMARY KEY (`id`)
+                    )
+		</sqlString>
+	</table>
+	<table>
+		<name>schbas_fee</name>
+		<sqlString>
+		CREATE TABLE IF NOT EXISTS `schbas_fee` (
+					  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+					  `class` varchar(5) NOT NULL,
+					  `fee_normal` float(4,2) NOT NULL,
+					  `fee_reduced` float(4,2) NOT NULL,
+					  PRIMARY KEY (`id`)
+					)
+		</sqlString>
+	</table>
+	<table>
+		<name>schbas_inventory</name>
+		<sqlString>
+		CREATE TABLE IF NOT EXISTS `schbas_inventory` (
+					  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+					  `book_id` smallint(5) NOT NULL,
+					  `year_of_purchase` smallint(4) NOT NULL,
+					  `exemplar` int(11) NOT NULL,
+					  PRIMARY KEY (`id`)
+					)
+		</sqlString>
+	</table>
+	<table>
+		<name>schbas_lending</name>
+		<sqlString>
+		CREATE TABLE IF NOT EXISTS `schbas_lending` (
+					  `user_id` bigint(20) NOT NULL,
+					  `inventory_id` int(11) NOT NULL,
+					  `lend_date` date NOT NULL,
+					  KEY `user_id` (`user_id`)
+					)
+		</sqlString>
+	</table>
+	<table>
+		<name>schbas_specific</name>
+		<sqlString>
+		CREATE TABLE IF NOT EXISTS `schbas_spezific` (
+					  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+					  `book_id` int(10) NOT NULL,
+					  `class` varchar(5) NOT NULL,
+					  `notify_only` tinyint(1) NOT NULL,
+					  `info` longtext NOT NULL,
+					  PRIMARY KEY (`ID`)
+					)
+		</sqlString>
+</table>
 </database>

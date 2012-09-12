@@ -7,7 +7,7 @@
 <link rel="stylesheet"
 	href="../smarty/templates/administrator/css/general.css"
 	type="text/css" />
-
+{block name=html_head}{/block}
 </head>
 
 <body

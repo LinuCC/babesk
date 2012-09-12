@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+	<table>
+		<name>fits</name>
+		<sqlString>
+		CREATE TABLE IF NOT EXISTS `fits` (
+  						`ID` bigint(20) NOT NULL,
+  						`passedTest` tinyint(1) NOT NULL,
+  						`locked` tinyint(1) NOT NULL
+						);
+		</sqlString>
+	</table>
+</database>

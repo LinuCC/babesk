@@ -26,7 +26,7 @@ class Web {
 		require_once PATH_ACCESS . '/UserManager.php';
 		require_once PATH_INCLUDE . '/moduleManager.php';
 		require_once PATH_INCLUDE . '/functions.php';
-		require_once PATH_WEB . '/WebInterface.php';
+			require_once PATH_ACCESS . "/LogManager.php";
 		
 		$this->userManager = new UserManager();
 		$this->_moduleManager = new ModuleManager('web');

@@ -36,6 +36,19 @@ class AdminInterface extends GeneralInterface {
 			$_SERVER['REQUEST_URI']));
 		die();
 	}
+	
+	/**
+	 * Show an error to the user and dies while using ajax.
+	 * This function shows an error to the user and die()s the process.
+	 * @param string $msg The message to be shown
+	 */
+	function dieErrorAjax ($msg) {
+	
+		$this->smarty->assign('error', $msg);
+		$this->smarty->display(PATH_SMARTY . '/templates/administrator/messageAjax.tpl', md5($_SERVER['REQUEST_URI']), md5(
+				$_SERVER['REQUEST_URI']));
+		die();
+	}
 
 	/**
 	 * Show a message to the user and dies

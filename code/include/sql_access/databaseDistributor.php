@@ -6,7 +6,7 @@
  * @todo: Remove this file and replace the occurences with DBConnect.php and the Class DBConnect
  */
 
-require_once dirname(__FILE__) . '/DBConnect.php';
+require_once dirname(__FILE__) . '/DBConnect.php.bak';
 
 $host = 'localhost';
 $username = 'root';

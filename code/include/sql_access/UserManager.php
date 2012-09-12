@@ -69,15 +69,16 @@ class UserManager extends TableManager{
 		}
 		return true;
 	}
+
 	
 	/**
 	 * Sorts the users it gets from MySQL-table and returns them
 	 * Enter description here ...
 	 */
-	function getUsersSorted() {
+	function getUsersSorted($pagePointer,$orderBy) {
 		require_once PATH_ACCESS . '/databaseDistributor.php';
 		$res_array = array();
-		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY name', $this->tablename));
+		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY %s LIMIT %s,10', $this->tablename,$orderBy,$pagePointer));
 		$result = $this->db->query($query);
 		if (!$result) {
 			throw DB_QUERY_ERROR.$this->db->error;
@@ -274,6 +275,47 @@ class UserManager extends TableManager{
 	}
 	
 	/**
+	 * sets religion
+	 *
+	 *@throws MySQLConnectionException if a problem with MySQL happened
+	 */
+	function SetReligion($uid,$religion) {
+		if(isset($uid)) {
+			parent::alterEntry($uid, 'religion', $religion);
+		}
+	}
+	/**
+	 * sets foreign languages
+	 *
+	 *@throws MySQLConnectionException if a problem with MySQL happened
+	 */
+	function SetForeignLanguage($uid,$foreignLanguages) {
+		if(isset($uid)) {
+			
+			$string=implode("|", $foreignLanguages);
+			
+				try {
+					parent::alterEntry($uid, 'foreign_language', $string);
+				} catch (Exception $e) {
+					$this->userInterface->dieError($this->messages['error']['change'] . $e->getMessage());
+				}
+		}
+	}
+	
+	/**
+	 * gets the class, religion, foreign_language and course of an user
+	 */
+	function getUserDetails($uid){
+		$query = sql_prev_inj(sprintf('SELECT class, religion, foreign_language, course FROM %s WHERE ID = %s', $this->tablename, $uid));
+		$result = $this->db->query($query);
+		if (!$result) {
+			throw DB_QUERY_ERROR.$this->db->error;
+		}
+		$result = $result->fetch_assoc();
+		return $result;
+	}
+	
+	/**
 	 * Adds a User to the System
 	 *
 	 * The Function creates a new entry in the users Table
@@ -286,16 +328,17 @@ class UserManager extends TableManager{
 	 * @param birthday The birthday of the User
 	 * @param credit The initial credit of the User
 	 * @param GID The group the user belongs to
+	 * @param class The class the user belongs to
 	 * @return false if error
 	 */
-	function addUser($name, $forename, $username, $passwd, $birthday, $credit, $GID) {
+	function addUser($name, $forename, $username, $passwd, $birthday, $credit, $GID, $class) {
 		
 		try { //test if username already exists
 			parent::getTableData('username = "'.$username.'"');
 		} catch (MySQLVoidDataException $e) {
 			//username does not exist
 			parent::addEntry('name', $name, 'forename', $forename, 'username', $username, 'password', md5($passwd),
-        					 'birthday', $birthday, 'credit', $credit, 'GID', $GID, 'last_login', 'CURRENT_TIMESTAMP', 'login_tries', 0, 'first_passwd', 1);
+        					 'birthday', $birthday, 'credit', $credit, 'GID', $GID, 'last_login', 'CURRENT_TIMESTAMP', 'login_tries', 0, 'first_passwd', 1,'class',$class);
 				
 			return;
 		}
@@ -316,14 +359,14 @@ class UserManager extends TableManager{
 	 * @param unknown_type $GID
 	 * @param unknown_type $locked
 	 */
-	function alterUser($old_id, $id, $name, $forename, $username, $passwd, $birthday, $credit, $GID, $locked,$soli) {
+	function alterUser($old_id, $id, $name, $forename, $username, $passwd, $birthday, $credit, $GID, $locked,$soli,$class) {
 		if(isset($passwd) && $passwd != "d41d8cd98f00b204e9800998ecf8427e") {	
 		parent::alterEntry($old_id, 'ID', $id, 'forename', $forename, 'name', $name, 'username',
-							$username, 'password', $passwd, 'birthday', $birthday, 'credit', $credit, 'GID', $GID,'locked', $locked,'soli',$soli);
+							$username, 'password', $passwd, 'birthday', $birthday, 'credit', $credit, 'GID', $GID,'locked', $locked,'soli',$soli,'class',$class);
 		}
 		else {
 			parent::alterEntry($old_id, 'ID', $id, 'forename', $forename, 'name', $name, 'username',
-								$username, 'birthday', $birthday, 'credit', $credit, 'GID', $GID,'locked',$locked,'soli',$soli);
+								$username, 'birthday', $birthday, 'credit', $credit, 'GID', $GID,'locked',$locked,'soli',$soli,'class',$class);
 		}
 	}
 

@@ -293,13 +293,13 @@ class AdminAdminProcessing {
 		return $modules;
 	}
 
-	private function GetAllowedModules ($module_ids) {
+	private function GetAllowedModules ($moduleNames) {
 
 		global $modManager;
 		$allowed_modules = array();
 
-		foreach ($module_ids as $m_id) {
-			$allowed_modules[] = $modManager->getModuleDisplayName($m_id);
+		foreach ($moduleNames as $moduleName) {
+			$allowed_modules[] = $moduleName;
 		}
 		return $allowed_modules;
 	}

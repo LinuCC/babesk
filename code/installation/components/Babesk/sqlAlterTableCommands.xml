@@ -72,4 +72,24 @@
 		" ");
 		</sqlString>
 	</command>
+	<command>
+		<name>AddReligion</name>
+		<sqlString>
+		INSERT INTO
+		global_settings(name, value)
+		VALUES
+		("religion",
+		" ");
+		</sqlString>
+	</command>
+	<command>
+		<name>AddForeignLanguage</name>
+		<sqlString>
+		INSERT INTO
+		global_settings(name, value)
+		VALUES
+		("foreign_language",
+		" ");
+		</sqlString>
+	</command>
 </commands>
