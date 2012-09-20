@@ -82,7 +82,6 @@ class LoanManager extends TableManager{
 		}
 		while($buffer = $result->fetch_assoc())
 			$minusbooksinv[] = $buffer['inventory_id'];
-		
 		if (isset($minusbooksinv)) {
 			
 			foreach ($minusbooksinv as &$minusbookinv){
@@ -90,6 +89,7 @@ class LoanManager extends TableManager{
 			}
 			$counter = 0;
 			if ($books) {
+				$books = array_values($books); // notwendig, um array neu zu indexieren. verursacht sonst fehler.
 				foreach ($books as &$book){
 					if (in_array($book['id'], $minusbooks)) {
 						unset($books[$counter]);

@@ -34,7 +34,7 @@
 				<active>true</active>
 			</module>
 			<module>
-				<ger_name>Kasse</ger_name>
+				<ger_name>Essensausgabe</ger_name>
 				<name>Checkout</name>
 				<active>true</active>
 			</module>

@@ -12,7 +12,7 @@ function switchInfo(divName) {
 </script>
 {/literal}
 
-<h3>Anzahl der Bestellungen</h3>
+<h3>Anzahl der Bestellungen f&uuml;r den {$ordering_date}</h3>
 
 	{foreach $num_orders as $num_order} <h4>{$num_order.name} hat {$num_order.number} Bestellungen:</h4>
 		{foreach $num_order.user_groups as $group}
