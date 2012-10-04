@@ -1,4 +1,8 @@
-{extends file=$booklistParent}{block name=content}
+{extends file=$booklistParent}
+{block name=search}
+<form action="index.php?section=Schbas|Booklist&action=2" method="post"><input type='text' name='isbn_search'><input type='submit' value='Mit ISBN suchen'></form>
+{/block}
+{block name=content}
 <table>
 	<thead>
 		<tr bgcolor='#33CFF'>
