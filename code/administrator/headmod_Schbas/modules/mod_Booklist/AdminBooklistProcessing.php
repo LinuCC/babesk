@@ -6,7 +6,7 @@ class AdminBooklistProcessing {
 		global $logger;
 		$this->logs = $logger;
 		$this->messages = array(
-				'error' => array('no_books' => 'Keine B&uuml;cher gefunden.',));
+				'error' => array('no_books' => 'Keine B&uuml;cher gefunden.','notFound' => 'Buch nicht gefunden!'));
 	}
 	
 	var $messages = array();
@@ -50,7 +50,7 @@ class AdminBooklistProcessing {
 		$bookManager = new BookManager();
 	
 		try {
-			$bookData = $bookManager->getBookDataByID($_GET['ID']);
+			$bookData = $bookManager->getBookDataByID($id);
 		} catch (Exception $e) {
 			$this->userInterface->dieError($this->messages['error']['uid_get_param'] . $e->getMessage());
 		}
@@ -69,12 +69,24 @@ class AdminBooklistProcessing {
 		try {
 			$bookManager->editBook($id, $subject, $class, $title, $author, $publisher, $isbn, $price, $bundle);
 		} catch (Exception $e) {
-			$this->booklistInterface->dieError($this->messages['error']['change'] . $e->getMessage());
+			$this->BookInterface->dieError($this->messages['error']['change'] . $e->getMessage());
 		}
 		$this->BookInterface->ShowChangeBookFin($id, $subject, $class, $title, $author, $publisher, $isbn, $price, $bundle);
-	
 	}
 	
+	/**
+	 * Returns the book ID by a given ISBN
+	 */
+	function getBookIdByISBN($isbn_search) {
+		require_once PATH_ACCESS . '/BookManager.php';
+		$bookManager = new BookManager();
+		try {
+			$book_id = $bookManager->getBookIDByISBNBarcode($isbn_search);
+		} catch (Exception $e) {
+			$this->BookInterface->dieError($this->messages['error']['notFound'] . $e->getMessage());
+		}
+		return $book_id['id'];
+	}
 	
 }
 

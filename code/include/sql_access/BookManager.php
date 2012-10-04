@@ -49,7 +49,7 @@ class BookManager extends TableManager{
 	}
 	
 	/**
-	 * Gives the book ID from a given barcode
+	 * Gives the book ID from a given inventory (!) barcode
 	 */
 	function getBookIDByBarcode($barcode) {
 		require_once PATH_ACCESS . '/dbconnect.php';
@@ -59,6 +59,17 @@ class BookManager extends TableManager{
 		}
 		$query = sql_prev_inj(sprintf('subject = "%s" AND class = "%s" AND bundle = %s' , $barcode_exploded[0], $barcode_exploded[2], $barcode_exploded[3]));
 		//$result = $this->db->query($query);	
+		$result = parent::searchEntry($query);
+		return $result;
+	}
+	
+	/**
+	 * Gives the book ID from a given isbn (!) barcode
+	 */
+	function getBookIDByISBNBarcode($barcode) {
+		require_once PATH_ACCESS . '/dbconnect.php';
+		$query = sql_prev_inj(sprintf('isbn = "%s"' , $barcode));
+		//$result = $this->db->query($query);
 		$result = parent::searchEntry($query);
 		return $result;
 	}

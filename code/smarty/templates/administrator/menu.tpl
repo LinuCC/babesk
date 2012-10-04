@@ -88,7 +88,7 @@ function changeHeadModule(headMod) {
 
 
 <div class="HeadItemContainer">
-{foreach $head_modules as $headmod}
+{foreach $head_modules as $headmod} 
 <div class="HeadItem" id="head_module{$headmod.name}">
 	<a class="HeadItemText" href="javascript:changeHeadModule('{$headmod.name}')">{$headmod.display_name}</a>
 </div>

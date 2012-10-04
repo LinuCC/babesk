@@ -164,9 +164,9 @@ a #header_link {
 	border: 2px solid #99cc66;
   
   
-    -webkit-border-radius: 10px;
-    -khtml-border-radius: 10px;
-    -moz-border-radius: 10px;
+    -webkit-border-radius: 20px;
+    -khtml-border-radius: 20px;
+    -moz-border-radius: 20px;
     border-radius: 20px;
       
     z-index: 6; 

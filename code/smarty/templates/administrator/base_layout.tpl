@@ -40,6 +40,7 @@
 	{/if}
 	
 	<div id="main">
+	    <div id="content">{block name=search}{/block}</div>
 		<div id="content">{block name=content}{/block}</div>
 	</div>
 	<div id="footer">

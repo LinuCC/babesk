@@ -34,6 +34,10 @@ class Booklist extends Module {
 					$BookProcessing->ShowBooklist(false);
 				break;
 				case 2: //edit a book
+					if (isset ($_POST['isbn_search'])) {
+						$bookID = $BookProcessing->getBookIdByISBN($_POST['isbn_search']);
+						$BookProcessing->editBook($bookID);
+					}
 					if (!isset ($_POST['subject'], $_POST['class'],$_POST['title'],$_POST['author'],$_POST['publisher'],$_POST['isbn'],$_POST['price'],$_POST['bundle'])){
 						$BookProcessing->editBook($_GET['ID']);
 					}else{
