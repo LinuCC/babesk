@@ -204,6 +204,11 @@
 				<name>Quiz</name>
 				<active>true</active>
 			</module>
+		</head_module>
+		<head_module>
+			<ger_name>Kuwasys</ger_name>
+			<name>Kuwasys</name>
+			<active>true</active>
 			<module>
 				<ger_name>Kursdetails</ger_name>
 				<name>ClassDetails</name>
