@@ -23,6 +23,11 @@
 				<name>ForeignLanguage</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Karteninfo</ger_name>
+				<name>CardInfo</name>
+				<active>true</active>
+			</module>
 		</head_module>
 		<head_module>
 			<ger_name>Bargeldloses Bestellsystem für Kantinen</ger_name>
