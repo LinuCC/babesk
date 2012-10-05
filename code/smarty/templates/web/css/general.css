@@ -287,6 +287,14 @@ div.classDescription {
     height:100%;
 }
 
+img.center {
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width:100%;
+    height:100%;
+}
+
 #account {
 	width: 200px;
     padding-top: 10px;

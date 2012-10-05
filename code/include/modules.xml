@@ -161,7 +161,7 @@
 	<web>
 		<path>web/</path>
 		<head_module>
-			<ger_name>Bargeldloses Bestellsystem für Kantinen</ger_name>
+			<ger_name>BaBeSK</ger_name>
 			<name>Babesk</name>
 			<active>true</active>
 			<module>
@@ -196,7 +196,7 @@
 			</module>
 		</head_module>
 		<head_module>
-			<ger_name>Fits</ger_name>
+			<ger_name>FITS</ger_name>
 			<name>Fits</name>
 			<active>true</active>
 			<module>
@@ -211,7 +211,7 @@
 			</module>
 		</head_module>
 		<head_module>
-			<ger_name>Kuwasys</ger_name>
+			<ger_name>KuWaSys</ger_name>
 			<name>Kuwasys</name>
 			<active>true</active>
 			<module>
