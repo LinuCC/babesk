@@ -43,13 +43,15 @@ class AdminFitsCheckProcessing {
 	 */
 	public function CheckCard ($card_id) {
 
-		if (!$this->cardManager->valid_card_ID($card_id))
+		if (!$this->cardManager->valid_card_ID($card_id)) 
 			$this->fitsCheckInterface->dieError(sprintf($this->msg['err_card_id'], $card_id));
-
+		
+		
 		$uid = $this->GetUser($card_id);
+		if ($uid != "locked") {
 		$has_Fits = $this->fitsManager->getFits($uid);
 		$this->fitsCheckInterface->HasFits($has_Fits);
-
+		}
 	
 	}
 
@@ -66,6 +68,7 @@ class AdminFitsCheckProcessing {
 			$uid = $this->cardManager->getUserID($card_id);
 			if ($this->userManager->checkAccount($uid)) {
 				$this->fitsCheckInterface->CardLocked();
+				return "locked";
 			}
 		} catch (Exception $e) {
 			$this->fitsCheckInterface->dieError($this->msg['err_get_user_by_card'] . ' Error:' . $e->getMessage());
