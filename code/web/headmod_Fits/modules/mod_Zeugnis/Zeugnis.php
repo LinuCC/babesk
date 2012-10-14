@@ -2,7 +2,7 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 
-class Quiz extends Module {
+class Zeugnis extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -25,32 +25,23 @@ class Quiz extends Module {
 		
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 		require_once PATH_ACCESS . '/FitsManager.php';
+		require_once PATH_ACCESS . '/UserManager.php';
 		
 		$gsm = new GlobalSettingsManager();
 		$fm = new FitsManager();
-		$has_Fits = false;
+		$um = new UserManager();
 		
-		if (isset($_POST['fits_key'])) {
-			try {
-				if ($_POST['fits_key'] == $gsm->getFitsKey()) {
-					$has_Fits = true;
-					
-					$fm->setFits($_SESSION['uid'],true,$gsm->getFitsYear());
-					
-				} else {
-					$smarty->display($this->smartyPath . 'quiz_error.tpl');
-				}
-			} catch (Exception $e) {
-			}
+		if ($fm->getFits($_SESSION['uid'])) {
+		$smarty->assign('forename',$um->getForename($_SESSION['uid']));
+		$smarty->assign('name',$um->getName($_SESSION['uid']));
+		$smarty->assign('year',$fm->getFitsYear($_SESSION['uid']) );
+		
+		$smarty->display($this->smartyPath . 'zeugnis.tpl');
+		
 		}
 		
-		
-		$smarty->assign('uid',$_SESSION['uid']);
-		if ($has_Fits) {
-			$smarty->display($this->smartyPath . 'quiz_success.tpl');
-		} else {
-			$smarty->display($this->smartyPath . 'quiz.tpl');
-		}
 	}
+	
+	
 }
 ?>

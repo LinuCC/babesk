@@ -29,7 +29,6 @@ div.classListing {
 </style>
 
 <h2>Hauptmenü des Kurswahlsystems</h2><br>
-Im anderen Modul Verhindern das eine Parameteränderung von ID zu Problemen führen kann!
 <div class="classListing">
 <h4 style="text-align:center">Übersicht der Kurse</h4>
 {foreach $classes as $class}

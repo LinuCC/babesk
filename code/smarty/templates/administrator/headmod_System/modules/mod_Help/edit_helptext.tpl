@@ -3,9 +3,9 @@
 
 <h3>Hilfetext bearbeiten:</h3>
 
-<form action='index.php?section=Babesk|Help&action=2'
+<form action='index.php?section=System|Help&action=2'
 	method="post">
 	<textarea class="ckeditor" name="helptext">{$helptext}</textarea>
-	<input id="submit" type="submit" value="Submit" />
+	<input id="submit" onclick="submit()" type="submit" value="Submit" />
 </form>
 {/block}

@@ -19,7 +19,7 @@ class InventoryManager extends TableManager{
 	 * Sorts the book inventory it gets from MySQL-table and returns them.
 	 */
 	function getInventorySorted() {
-		require_once PATH_ACCESS . '/dbconnect.php';
+		require_once PATH_ACCESS . '/DBConnect.php';
 		$res_array = array();
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY id', $this->tablename));
 		$result = $this->db->query($query);
@@ -38,7 +38,7 @@ class InventoryManager extends TableManager{
 	
 	function getBookCodesByInvData($inventory) {
 		$bookmanager = new BookManager;
-		require_once PATH_ACCESS . '/dbconnect.php';
+		require_once PATH_ACCESS . '/DBConnect.php';
 		foreach ($inventory as &$inventor) {
 			$bookinfos[] = $bookmanager->getBookDataById($inventor['book_id']);
 		}
@@ -59,7 +59,7 @@ class InventoryManager extends TableManager{
 		 */
 		
 	function getInvDataByID($id) {
-		require_once PATH_ACCESS . '/dbconnect.php';
+		require_once PATH_ACCESS . '/DBConnect.php';
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE id=%s', $this->tablename, $id));
 		$result = $this->db->query($query);
 		if (!$result) {
@@ -71,7 +71,7 @@ class InventoryManager extends TableManager{
 	}
 	
 	function getInvIDByBarcode($barcode) {
-		require_once PATH_ACCESS . '/dbconnect.php';
+		require_once PATH_ACCESS . '/DBConnect.php';
 		$bookmanager = new BookManager;
 		$barcode = str_replace("-", "/", $barcode); // replace - with /
 		$barcode = preg_replace("/\/([0-9])/", "/ $1", $barcode); //add space after / when it's missing

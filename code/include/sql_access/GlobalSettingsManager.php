@@ -182,6 +182,20 @@ class GlobalSettingsManager extends TableManager {
 		return $fits_key;
 	}
 	
+	/**
+	 * returns the schoolyear for Fits module
+	 * @throws UnexpectedValueException when schoolyear is NULL
+	 * @throws something else when MySQL has problems
+	 * @return string the schoolyear
+	 */
+	function getFitsYear() {
+		$pid = parent::searchEntry("name = 'fits_year'");
+		$fits_year = parent::getEntryValue($pid['id'], 'value');
+		if($fits_year === NULL)
+			throw new UnexpectedValueException('fits_year has no value!');
+		return $fits_year;
+	}
+	
 	
 	/**
 	 * Changes the value of "soli_price" to the given value

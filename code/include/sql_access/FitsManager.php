@@ -37,13 +37,26 @@ class FitsManager extends TableManager {
 	}
 	
 	/**
+	 * returns the schoolyear
+	 * @throws MySQLVoidDataException
+	 * @throws Other Exceptions (@see TableManager)
+	 */
+	function  getFitsYear($uid) {
+		if ($this->prepUser($uid)) {
+			return $this->getEntryValue($uid, 'schoolyear');
+		} else {
+			return false;
+		}
+	}
+	
+	/**
 	 * sets fits
 	 *
 	 *@throws MySQLConnectionException if a problem with MySQL happened
 	 */
-	function SetFits($uid,$hasFits) {
+	function SetFits($uid,$hasFits,$fitsYear) {
 		if(isset($uid)) {
-			parent::alterEntry($uid, 'passedTest', $hasFits);
+			parent::alterEntry($uid, 'passedTest', $hasFits, 'schoolyear', $fitsYear);
 		}
 	}
 }

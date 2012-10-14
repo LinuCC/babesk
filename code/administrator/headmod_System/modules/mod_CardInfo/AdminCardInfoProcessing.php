@@ -40,7 +40,7 @@ class AdminCardInfoProcessing {
 	public function CheckCard ($card_id) {
 
 		if (!$this->cardManager->valid_card_ID($card_id))
-			$this->fitsCheckInterface->dieError(sprintf($this->msg['err_card_id'], $card_id));
+			$this->cardInfoInterface->dieError(sprintf($this->msg['err_card_id'], $card_id));
 
 		$uid = $this->GetUser($card_id);
 		return  $uid;
@@ -54,16 +54,7 @@ class AdminCardInfoProcessing {
 	 * @return string UserID
 	 */
 	public function GetUser ($card_id) {
-
-		try {
-			$uid = $this->cardManager->getUserID($card_id);
-			if ($this->userManager->checkAccount($uid)) {
-				$this->fitsCheckInterface->CardLocked();
-			}
-		} catch (Exception $e) {
-			$this->fitsCheckInterface->dieError($this->msg['err_get_user_by_card'] . ' Error:' . $e->getMessage());
-		}
-		return $uid;
+			return $this->cardManager->getUserID($card_id);
 	}
 	
 	/**

@@ -14,9 +14,10 @@ class AdminHelpProcessing {
 	 * @param string $str
 	 */
 	function change_help($str) {
-		if (!$str || $str = '')
-			$str = '&nbsp;';
 
+		if (!$str || $str == "") {
+			$str = '&nbsp;';
+		}
 		try {
 			$this->helpManager->changeHelpText(mysql_escape_string($str));
 		} catch (Exception $e) {

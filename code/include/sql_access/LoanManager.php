@@ -20,7 +20,7 @@ class LoanManager extends TableManager{
 	*/
 	function getLoanlistByUID($uid) {
 
-		require_once PATH_ACCESS . '/dbconnect.php';
+		require_once PATH_ACCESS . '/DBConnect.php';
 		$res_array = array();
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE user_id = "%s"', $this->tablename, $uid));
 		$result = $this->db->query($query);
@@ -39,7 +39,7 @@ class LoanManager extends TableManager{
 	 * Used by mod_loan!!
 	 */
 	function getLoanByUID($uid, $ajax) {
-		require_once PATH_ACCESS . '/dbconnect.php';
+		require_once PATH_ACCESS . '/DBConnect.php';
 		require_once PATH_ACCESS . '/UserManager.php';
 		require_once PATH_ACCESS . '/BookManager.php';
 		require_once PATH_ACCESS . '/InventoryManager.php';
@@ -105,7 +105,7 @@ class LoanManager extends TableManager{
 	 * Remove an entry in the loan list by a given user id and inventory id
 	 */
 	function RemoveLoanByIDs($inventoryID, $uid) {
-		require_once PATH_ACCESS . '/dbconnect.php';	
+		require_once PATH_ACCESS . '/DBConnect.php';	
 		$query = sql_prev_inj(sprintf('user_id = %s AND inventory_id = %s' , $uid, $inventoryID));
 		$result = parent::delEntryNoID($query);
 	}
@@ -122,7 +122,7 @@ class LoanManager extends TableManager{
 	 * Add an entry in the loan list by a given user id and inventory id
 	 */
 	function AddLoanByIDs($inventoryID, $uid) {
-		require_once PATH_ACCESS . '/dbconnect.php';
+		require_once PATH_ACCESS . '/DBConnect.php';
 		$result = parent::addEntry('user_id', $uid, 'inventory_id', $inventoryID);
 		return $result;
 	}

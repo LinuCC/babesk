@@ -1,7 +1,7 @@
 {include file='web/header.tpl' title='Hauptmen&uuml;'}
 {if $hasFits}
 <div id="order">
-    <h3>Fits wurde bestanden!</h3>
+    <h3><a href="index.php?section=Fits|Zeugnis">Zertifikat &ouml;ffnen</a></h3>
 </div>
 
 {elseif $showTestlink}

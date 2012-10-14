@@ -177,7 +177,8 @@ class TableManager {
 				$query = sql_prev_inj(sprintf('SELECT * FROM %s', $this->tablename));
 				break;
 			case 1:
-				$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE %s', $this->tablename, func_get_arg(0)));
+				$string = func_get_arg(0);
+				$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE %s', $this->tablename, $string));
 				break;
 			default:
 				throw new Exception('Wrong number of arguments in ' . __METHOD__);

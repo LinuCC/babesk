@@ -139,7 +139,7 @@ function getFirstDayOfWeek($year, $weeknr) {
  */
 
 function navBar($showPage, $table, $mod, $action,$filter) {
-	require_once 'sql_access/dbconnect.php';
+	require_once 'sql_access/DBConnect.php';
 	$dbObject = new DBConnect();
 	$dbObject->initDatabaseFromXML();
 	$db = $dbObject->getDatabase();

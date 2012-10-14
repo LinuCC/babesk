@@ -197,7 +197,6 @@ class AdminUserProcessing {
 		try {
 			$user = $userManager->getEntryData($uid, 'forename', 'name');
 		} catch (Exception $e) {
-			var_dump($uid);
 			$this->userInterface
 					->dieError($this->messages['error']['uid_get_param'] . ';<br>ExceptionMessage:' . $e->getMessage());
 		}

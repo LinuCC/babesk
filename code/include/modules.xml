@@ -24,6 +24,11 @@
 				<active>true</active>
 			</module>
 			<module>
+				<ger_name>Hilfetexteinstellung</ger_name>
+				<name>Help</name>
+				<active>true</active>
+			</module>
+			<module>
 				<ger_name>Karteninfo</ger_name>
 				<name>CardInfo</name>
 				<active>true</active>
@@ -49,11 +54,6 @@
 			<module>
 				<ger_name>Gruppenverwaltung</ger_name>
 				<name>Groups</name>
-				<active>true</active>
-			</module>
-			<module>
-				<ger_name>Hilfetexteinstellung</ger_name>
-				<name>Help</name>
 				<active>true</active>
 			</module>
 			<module>
@@ -209,6 +209,11 @@
 				<name>Quiz</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Zeugnis</ger_name>
+				<name>Zeugnis</name>
+				<active>true</active>
+			</module>
 		</head_module>
 		<head_module>
 			<ger_name>KuWaSys</ger_name>
@@ -217,6 +222,16 @@
 			<module>
 				<ger_name>Kursdetails</ger_name>
 				<name>ClassDetails</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Menü</ger_name>
+				<name>MainMenu</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Klassenliste</ger_name>
+				<name>ClassList</name>
 				<active>true</active>
 			</module>
 		</head_module>
