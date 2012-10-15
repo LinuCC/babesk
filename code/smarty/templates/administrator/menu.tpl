@@ -106,11 +106,11 @@ function changeHeadModule(headMod) {
 </div>
 {/section}
 
-{if count($head_modules) != 1}
+
 <div id="ToolTip" style="text-align:center">
-<b>Bitte wählen sie ein Modul aus</b>
+<b>Bitte w&auml;hlen Sie ein Modul aus</b>
 </div>
-{/if}
+
 
 <div id="close"></div>
 {/block}
