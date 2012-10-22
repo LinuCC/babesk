@@ -51,6 +51,7 @@ class LoanManager extends TableManager{
 		$lang_str = $globalSettingsManager->getForeignLanguages();
 		$reli_str = $globalSettingsManager->getReligion();
 		$course_str = $globalSettingsManager->getCourse();
+
 		$lang = explode('|', $lang_str);
 		$reli = explode('|', $reli_str);
 		$course = explode('|', $course_str);
@@ -66,6 +67,7 @@ class LoanManager extends TableManager{
 		$course = array_diff($course, $user_course);
 		
 		$books = $bookManager->getBooksByClass($details['class']);
+
 		$counter = 0;
 		if ($books){
 			foreach ($books as &$book){

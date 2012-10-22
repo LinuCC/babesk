@@ -254,6 +254,14 @@ class UserManager extends TableManager{
 		$is_soli = parent::getEntryData($UID, 'soli');
 		return $is_soli['soli'];
 	}
+
+	/**
+	 * returns the birthday
+	 */
+	function getBirthday($UID) {
+		$birthday = parent::getEntryData($UID, 'birthday');
+		return $birthday['birthday'];
+	}	
 	
 	/**
 	 * returns all User with Soli-Status

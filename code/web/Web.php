@@ -112,6 +112,7 @@ class Web {
 		}
 		//or include the main menu
 		else {
+			$this->_smarty->assign('birthday',$this->userManager->getBirthday($_SESSION['uid']));
 			$this->_smarty->display(PATH_SMARTY . '/templates/web/main_menu.tpl');
 		}
 	}
