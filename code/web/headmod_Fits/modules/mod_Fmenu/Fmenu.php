@@ -23,10 +23,12 @@ class Fmenu extends Module {
 		
 		require_once PATH_ACCESS . '/UserManager.php';
 		require_once PATH_ACCESS . '/FitsManager.php';
+		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 		
 		global $smarty;
 		$userManager = new UserManager();
 		$fitsManager = new FitsManager();
+		$gsm = new GlobalSettingsManager();
 		
 		$has_Fits=false;
 		
@@ -50,7 +52,19 @@ class Fmenu extends Module {
 			die('Ein Fehler ist aufgetreten:'.$e->getMessage());
 		}
 		
-		if (isset($userClass) && $userClass==7 && $has_Fits == false) {
+		try {
+			$class = $gsm->getFitsClass();
+		} catch (Exception $e) {
+			die('Ein Fehler ist aufgetreten:'.$e->getMessage());
+		}
+		
+		try {
+			$allClasses = $gsm->getFitsAllClasses();
+		} catch (Exception $e) {
+			die('Ein Fehler ist aufgetreten:'.$e->getMessage());
+		}
+		if ($allClasses==true) $userClass =  preg_replace('/[^0-9]/i', '', $userClass); 
+		if (isset($userClass) && $userClass==$class && $has_Fits == false) {
 			$smarty->assign('showTestlink', true);
 		}
 		

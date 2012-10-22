@@ -182,6 +182,16 @@ class GlobalSettingsManager extends TableManager {
 		return $fits_key;
 	}
 	
+	
+	/**
+	 * changes the Fits key
+	 * @param unknown_type $key
+	 */
+	function setFitsKey($key) {
+		$this->alterEntry($this->getIDByValue('name', 'fits_key'), 'value', $key);
+	}
+	
+	
 	/**
 	 * returns the schoolyear for Fits module
 	 * @throws UnexpectedValueException when schoolyear is NULL
@@ -195,6 +205,62 @@ class GlobalSettingsManager extends TableManager {
 			throw new UnexpectedValueException('fits_year has no value!');
 		return $fits_year;
 	}
+
+	
+	
+	/**
+	 * changes the Fits year
+	 * @param unknown_type $year
+	 */
+	function setFitsYear($year) {
+		$this->alterEntry($this->getIDByValue('name', 'fits_year'), 'value', $year);
+	}
+	
+	/**
+	 * returns the class for Fits module
+	 * @throws UnexpectedValueException when class is NULL
+	 * @throws something else when MySQL has problems
+	 * @return string the class
+	 */
+	function getFitsClass() {
+		$pid = parent::searchEntry("name = 'fits_class'");
+		$fits_class = parent::getEntryValue($pid['id'], 'value');
+		if($fits_class === NULL)
+			throw new UnexpectedValueException('fits_year has no value!');
+		return $fits_class;
+	}	
+	
+	
+	/**
+	 * changes the Fits class
+	 * @param unknown_type $class
+	 */
+	function setFitsClass($class) {
+		$this->alterEntry($this->getIDByValue('name', 'fits_class'), 'value', $class);
+	}	
+	
+	/**
+	 * returns the search method for Fits module
+	 * @throws UnexpectedValueException when search method is NULL
+	 * @throws something else when MySQL has problems
+	 * @return boolean the search method
+	 */
+	function getFitsAllClasses() {
+		$pid = parent::searchEntry("name = 'fits_all_classes'");
+		$fits_class = parent::getEntryValue($pid['id'], 'value');
+		if($fits_class === NULL)
+			throw new UnexpectedValueException('fits_all_classes has no value!');
+		return $fits_class;
+	}
+	
+	
+	/**
+	 * changes the Fits search methof
+	 * @param unknown_type $flag
+	 */
+	function setFitsAllClasses($flag) {
+		$this->alterEntry($this->getIDByValue('name', 'fits_all_classes'), 'value', $flag);
+	}	
 	
 	
 	/**

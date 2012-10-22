@@ -1,7 +1,7 @@
 {include file='web/header.tpl' title='Passwort &Auml;ndern'}
 
 <p>Bitte neues Passwort eingeben und zur Sicherheit wiederholen.</p>
-<form action="index.php" method="post">
+<form action="index.php?section=Babesk|ChangePassword" method="post">
     <fieldset>
       <label for="passwd">Neues Passwort:</label>
       <input type="password" name="passwd" /><br><br>

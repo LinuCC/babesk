@@ -96,6 +96,11 @@
 				<name>FitsCheck</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Fits-Einstellungen</ger_name>
+				<name>FitsSettings</name>
+				<active>true</active>
+			</module>
 		</head_module>
 		<head_module>
 			<ger_name>Schulbuchausleihsystem</ger_name>

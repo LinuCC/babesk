@@ -1,4 +1,7 @@
 {extends file=$UserParent}{block name=content}
+{block name=search}
+<form action="index.php?section=System|User&action=4" method="post"><input type='text' name='user_search'><input type='submit' value='Mit Benutzernamen oder Kartennummer suchen'></form>
+{/block}
 <table width=100%>
 <tr><th align='center'>{$navbar}</th></tr>
 </table>

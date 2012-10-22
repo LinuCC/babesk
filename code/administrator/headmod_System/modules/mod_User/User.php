@@ -22,6 +22,15 @@ class User extends Module {
 		require_once 'AdminUserInterface.php';
 		require_once 'AdminUserProcessing.php';
 		
+		require_once PATH_ACCESS . '/CardManager.php';
+		require_once PATH_ACCESS . '/UserManager.php';
+		
+		$cm = new CardManager();
+		$um = new UserManager();
+		
+		$this->messages = array(
+				'error' => array('no_id' => 'ID nicht gefunden.'));
+		
 		$userInterface = new AdminUserInterface($this->relPath);
 		$userProcessing = new AdminUserProcessing($userInterface);
 		
@@ -65,6 +74,26 @@ class User extends Module {
 					}
 					break;
 				case 4:
+					if (isset ($_POST['user_search'])) {
+						try {	
+							$userID = $cm->getUserID($_POST['user_search']);
+						} catch (Exception $e) {
+							 $userID =  $e->getMessage();
+						}
+						if ($userID == 'MySQL returned no data!') {
+						try {
+							$userID = $um->getUserID($_POST['user_search']);
+						} catch (Exception $e) {
+							$userInterface->dieError("Benutzer nicht gefunden!");
+						}
+						
+					}
+						
+						$userProcessing->ChangeUserForm($userID);
+					
+						break;
+					}
+					
 					if (!isset($_POST['id'], $_POST['forename'], $_POST['name'], $_POST['username'], $_POST['credits'], $_POST[
 					'gid'])) {
 					$userProcessing->ChangeUserForm($_GET['ID']);

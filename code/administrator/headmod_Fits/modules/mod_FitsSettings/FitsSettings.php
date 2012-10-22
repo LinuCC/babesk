@@ -24,9 +24,10 @@ class FitsSettings extends Module {
 		
 		$fitsSettingsInterface = new AdminfitsSettingsInterface($this->relPath);
 		$fitsSettingsProcessing = new AdminFitsSettingsProcessing($fitsSettingsInterface);
-		
+		$allClasses = 0;
+		if (isset($_POST['allClasses'])) $allClasses = 1;
 		if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['password']) && isset($_POST['schoolyear'])  && isset($_POST['class'])) {
-			$fitsSettingsProcessing->SaveSetting($_POST['password'],$_POST['schoolyear'],$_POST['class']);
+			$fitsSettingsProcessing->SaveSettings($_POST['password'],$_POST['schoolyear'],$_POST['class'],$allClasses);
 		}
 		else{
 			$fitsSettingsProcessing->ShowForm();

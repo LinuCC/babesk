@@ -233,7 +233,7 @@ class AdminUserProcessing {
 		$cardManager = new CardManager();
 		$userManager = new UserManager();
 		$groupManager = new GroupManager();
-		$cardnumber = $cardManager->getCardnumberByUserID($_GET['ID']);
+		$cardnumber = $cardManager->getCardnumberByUserID($uid);
 		try {
 			$user = $userManager->getEntryData($uid);
 		} catch (Exception $e) {
