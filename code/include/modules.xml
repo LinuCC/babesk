@@ -24,8 +24,28 @@
 				<active>true</active>
 			</module>
 			<module>
+				<ger_name>Oberstufenkurse</ger_name>
+				<name>SpecialCourse</name>
+				<active>true</active>
+			</module>
+			<module>
 				<ger_name>Hilfetexteinstellung</ger_name>
 				<name>Help</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Administratorverwaltung</ger_name>
+				<name>Admin</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Gruppenverwaltung</ger_name>
+				<name>Groups</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Logverwaltung</ger_name>
+				<name>Logs</name>
 				<active>true</active>
 			</module>
 			<module>
@@ -39,11 +59,6 @@
 			<name>Babesk</name>
 			<active>true</active>
 			<module>
-				<ger_name>Administratorverwaltung</ger_name>
-				<name>Admin</name>
-				<active>true</active>
-			</module>
-			<module>
 				<ger_name>Essensausgabe</ger_name>
 				<name>Checkout</name>
 				<active>true</active>
@@ -51,16 +66,6 @@
 			<!-- <module> <ger_name>Datenbank löschen D:</ger_name> <name>clear</name> 
 				</module> <module> <ger_name>Dummy_macht_keinen_Sinn</ger_name> <name>dummy</name> 
 				</module> -->
-			<module>
-				<ger_name>Gruppenverwaltung</ger_name>
-				<name>Groups</name>
-				<active>true</active>
-			</module>
-			<module>
-				<ger_name>Logverwaltung</ger_name>
-				<name>Logs</name>
-				<active>true</active>
-			</module>
 			<module>
 				<ger_name>Mahlzeitenverwaltung</ger_name>
 				<name>Meals</name>

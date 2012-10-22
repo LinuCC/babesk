@@ -62,7 +62,7 @@ class LoanManager extends TableManager{
 		$user_reli = explode('|', $details['religion']);
 		$reli = array_diff($reli, $user_reli);
 		
-		$user_course = explode('|', $details['course']);
+		$user_course = explode('|', $details['special_course']);
 		$course = array_diff($course, $user_course);
 		
 		$books = $bookManager->getBooksByClass($details['class']);

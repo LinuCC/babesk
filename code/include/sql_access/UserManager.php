@@ -281,9 +281,16 @@ class UserManager extends TableManager{
 	 */
 	function SetReligion($uid,$religion) {
 		if(isset($uid)) {
-			parent::alterEntry($uid, 'religion', $religion);
+		$string=implode("|", $religion);
+			
+				try {
+					parent::alterEntry($uid, 'religion', $string);
+				} catch (Exception $e) {
+					$this->userInterface->dieError($this->messages['error']['change'] . $e->getMessage());
+				}
 		}
 	}
+	
 	/**
 	 * sets foreign languages
 	 *
@@ -301,12 +308,31 @@ class UserManager extends TableManager{
 				}
 		}
 	}
+
+	
+	/**
+	 * sets special courses
+	 *
+	 *@throws MySQLConnectionException if a problem with MySQL happened
+	 */
+	function SetSpecialCourse($uid,$specialCourses) {
+		if(isset($uid)) {
+				
+			$string=implode("|", $specialCourses);
+				
+			try {
+				parent::alterEntry($uid, 'special_course', $string);
+			} catch (Exception $e) {
+				$this->userInterface->dieError($this->messages['error']['change'] . $e->getMessage());
+			}
+		}
+	}
 	
 	/**
 	 * gets the class, religion, foreign_language and course of an user
 	 */
 	function getUserDetails($uid){
-		$query = sql_prev_inj(sprintf('SELECT class, religion, foreign_language, course FROM %s WHERE ID = %s', $this->tablename, $uid));
+		$query = sql_prev_inj(sprintf('SELECT class, religion, foreign_language, special_course FROM %s WHERE ID = %s', $this->tablename, $uid));
 		$result = $this->db->query($query);
 		if (!$result) {
 			throw DB_QUERY_ERROR.$this->db->error;

@@ -31,7 +31,7 @@
 			<td align="center">{$user.birthday}</td>
 			<td align="center">
 				{foreach from=$religions item=religion name=zaehler}
-		<input type="radio" name="{$user.ID}" value="{$religion}" {if {$religion}=={$user.religion}}checked{/if} />
+		<input type="checkbox" name="{$user.ID}[]" value="{$religion}" {if $user.religion|strstr:$religion}checked{/if} />
 		{/foreach}
 			</td>
 			<td align="center" bgcolor='#FFD99'>

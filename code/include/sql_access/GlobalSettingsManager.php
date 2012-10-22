@@ -69,9 +69,9 @@ class GlobalSettingsManager extends TableManager {
 	 * @return string
 	 */
 	function getCourse() {
-		$entry_arr = $this->searchEntry('name="course"');
+		$entry_arr = $this->searchEntry('name="special_course"');
 		if (!isset($entry_arr['value']) || !$entry_arr['value'])
-			throw new MySQLVoidDataException('course is void!');
+			throw new MySQLVoidDataException('special_course is void!');
 		return $entry_arr['value'];
 	}
 	
@@ -82,7 +82,7 @@ class GlobalSettingsManager extends TableManager {
 	 * @throws some other things if somethings gone wrong
 	 */
 	function setCourse($str) {
-		$entry_arr = $this->searchEntry('name="course"');
+		$entry_arr = $this->searchEntry('name="special_course"');
 		if (!isset($entry_arr) || !count($entry_arr)) {
 			throw new MySQLVoidDataException('searchEntry returned void helparray');
 		}
@@ -118,6 +118,34 @@ class GlobalSettingsManager extends TableManager {
 		$foreignLanguage_id = $entry_arr['id'];
 		$this->alterEntry($foreignLanguage_id, 'value', $str);
 	}
+
+	/**
+	 * returns the special courses found in the MySQL-table global_settings
+	 * @throws MySQLVoidDataException
+	 * @throws Other Exceptions (@see TableManager)
+	 * @return string
+	 */
+	function getSpecialCourses() {
+		$entry_arr = $this->searchEntry('name="special_course"');
+		if (!isset($entry_arr['value']) || !$entry_arr['value'])
+			throw new MySQLVoidDataException('special_course is void!');
+		return $entry_arr['value'];
+	}
+	
+	/**
+	 * Sets the special courses
+	 * @param string $str the text will be changed to this string
+	 * @throws MySQLVoidDataException
+	 * @throws some other things if somethings gone wrong
+	 */
+	function setSpecialCourses($str) {
+		$entry_arr = $this->searchEntry('name="special_course"');
+		if (!isset($entry_arr) || !count($entry_arr)) {
+			throw new MySQLVoidDataException('searchEntry returned void helparray');
+		}
+		$specialCourse_id = $entry_arr['id'];
+		$this->alterEntry($specialCourse_id, 'value', $str);
+	}	
 	
 	/**
 	 * Returns both of the infotexts of the table global_settings
