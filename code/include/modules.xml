@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Please restrain from using specialcharacters like ", it can break some 
+<!-- Please restrain from using specialcharacters like ", it can break some
 	functions in the programm -->
 <modules>
 	<administrator>
@@ -63,8 +63,8 @@
 				<name>Checkout</name>
 				<active>true</active>
 			</module>
-			<!-- <module> <ger_name>Datenbank löschen D:</ger_name> <name>clear</name> 
-				</module> <module> <ger_name>Dummy_macht_keinen_Sinn</ger_name> <name>dummy</name> 
+			<!-- <module> <ger_name>Datenbank löschen D:</ger_name> <name>clear</name>
+				</module> <module> <ger_name>Dummy_macht_keinen_Sinn</ger_name> <name>dummy</name>
 				</module> -->
 			<module>
 				<ger_name>Mahlzeitenverwaltung</ger_name>
@@ -133,7 +133,7 @@
 			</module>
 			<module>
 				<ger_name>Spezifische Informationen</ger_name>
-				<name>specific</name>
+				<name>Specific</name>
 				<active>true</active>
 			</module>
 		</head_module>

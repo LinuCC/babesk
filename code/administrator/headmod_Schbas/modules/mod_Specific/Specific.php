@@ -6,27 +6,27 @@ class Specific extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute() {
-		
+	public function execute($dataContainer) {
+
 		defined('_AEXEC') or die('Access denied');
-		
+
 		require_once 'AdminSpecificInterface.php';
 		require_once 'AdminSpecificProcessing.php';
-		
+
 		$SpecificInterface = new AdminSpecificInterface($this->relPath);
 		$SpecificProcessing = new AdminSpecificProcessing($SpecificInterface);
-		
+
 		$action_arr = array('show_Specific' => 1,);
-		
+
 		if ('POST' == $_SERVER['REQUEST_METHOD']) {
 			$action = $_GET['action'];
 			switch ($action) {
@@ -41,8 +41,8 @@ class Specific extends Module {
 					}
 					break;
 				break;
-				
-					
+
+
 			}
 		} else {
 			$SpecificInterface->ShowSelectionFunctionality($action_arr);
