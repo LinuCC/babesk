@@ -16,6 +16,6 @@
 		<name>Kuwasys</name>
 		<nameDisplay>Kurswahlsystem</nameDisplay>
 		<path>components/Kuwasys/InstallKuwasys.php</path>
-		<className>InstallKuwasys</className><
+		<className>InstallKuwasys</className>
 	</Component>
 </InstallationComponents>
