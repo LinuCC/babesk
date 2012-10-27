@@ -6,22 +6,22 @@ class FitsSettings extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute() {
+	public function execute($dataContainer) {
 		//no direct access
 		defined('_AEXEC') or die("Access denied");
-		
+
 		require_once 'AdminFitsSettingsProcessing.php';
 		require_once 'AdminFitsSettingsInterface.php';
-		
+
 		$fitsSettingsInterface = new AdminfitsSettingsInterface($this->relPath);
 		$fitsSettingsProcessing = new AdminFitsSettingsProcessing($fitsSettingsInterface);
 		$allClasses = 0;
@@ -34,5 +34,5 @@ class FitsSettings extends Module {
 		}
 	}
 }
-      
+
 ?>

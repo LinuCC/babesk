@@ -6,25 +6,25 @@ class CardInfo extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute() {
+	public function execute($dataContainer) {
 		//no direct access
 		defined('_AEXEC') or die("Access denied");
-		
+
 		require_once 'AdminCardInfoProcessing.php';
 		require_once 'AdminCardInfoInterface.php';
-		
+
 		$cardInfoInterface = new AdminCardInfoInterface($this->relPath);
 		$cardInfoProcessing = new AdminCardInfoProcessing($cardInfoInterface);
-		
+
 		if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['card_ID'])) {
 			$uid = $cardInfoProcessing->CheckCard($_POST['card_ID']);
 			$userData = $cardInfoProcessing->GetUserData($uid);
@@ -35,5 +35,5 @@ class CardInfo extends Module {
 		}
 	}
 }
-      
+
 ?>

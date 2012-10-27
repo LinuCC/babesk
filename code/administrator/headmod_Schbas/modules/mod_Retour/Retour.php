@@ -6,25 +6,25 @@ class Retour extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute() {
-		
+	public function execute($dataContainer) {
+
 		defined('_AEXEC') or die('Access denied');
-		
+
 		require_once 'AdminRetourInterface.php';
 		require_once 'AdminRetourProcessing.php';
-		
+
 		$RetourInterface = new AdminRetourInterface($this->relPath);
 		$RetourProcessing = new AdminRetourProcessing($RetourInterface);
-		
+
 		if ('GET' == $_SERVER['REQUEST_METHOD'] && isset($_GET['inventarnr'])) {
 			if (!$RetourProcessing->RetourBook(urldecode($_GET['inventarnr']),$_GET['uid'])) {
 				$RetourInterface->RetourEmpty();
@@ -38,7 +38,7 @@ class Retour extends Module {
 		else{
 			$RetourInterface->CardId();
 		}
-		
+
 	}
 }
 

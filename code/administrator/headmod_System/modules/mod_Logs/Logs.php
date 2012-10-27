@@ -12,31 +12,31 @@ class Logs extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute() {
+	public function execute($dataContainer) {
 		//no direct access
 		defined('_AEXEC') or die("Access denied");
-		
+
 		require_once 'AdminLogProcessing.php';
 		require_once 'AdminLogInterface.php';
-		
+
 		$logInterface = new AdminLogInterface($this->relPath);
 		$logProcessing = new AdminLogProcessing($logInterface);
-		
+
 		//the different actions the module can do
 		$_chooseSev = 'choose_sev';
 		$_showLogs = 'show';
 		$_delLogs  = 'delete';
-		
-		
+
+
 		if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_GET['action'])) {
 			switch($_GET['action']) {
 				case $_showLogs:
@@ -49,8 +49,8 @@ class Logs extends Module {
 					$logProcessing->DeleteLogs();
 					break;
 			}
-		
-		
+
+
 		}
 		else {
 			$logProcessing->ChooseCategory();

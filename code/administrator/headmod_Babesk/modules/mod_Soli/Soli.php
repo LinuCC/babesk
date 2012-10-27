@@ -15,7 +15,7 @@ class Soli extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute () {
+	public function execute ($dataContainer) {
 
 		defined('_AEXEC') or die('Access denied');
 		require_once 'AdminSoliInterface.php';

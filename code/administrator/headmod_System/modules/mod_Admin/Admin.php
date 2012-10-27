@@ -15,7 +15,7 @@ class Admin extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute () {
+	public function execute ($dataContainer) {
 
 		defined('_AEXEC') or die("Access denied");
 
@@ -24,7 +24,7 @@ class Admin extends Module {
 
 		$adminInterface = new AdminAdminInterface($this->relPath);
 		$adminProcessing = new AdminAdminProcessing($adminInterface);
-		
+
 		$action = array('add_admin'			 => 1,
 			'show_admins'		 => 2,
 			'add_admin_group'	 => 3,

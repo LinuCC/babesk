@@ -20,7 +20,7 @@ class Groups extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute () {
+	public function execute ($dataContainer) {
 		//no direct access
 		defined('_AEXEC') or die("Access denied");
 

@@ -6,27 +6,27 @@ class Booklist extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute() {
-		
+	public function execute($dataContainer) {
+
 		defined('_AEXEC') or die('Access denied');
-		
+
 		require_once 'AdminBooklistInterface.php';
 		require_once 'AdminBooklistProcessing.php';
-		
+
 		$BookInterface = new AdminBooklistInterface($this->relPath);
 		$BookProcessing = new AdminBooklistProcessing($BookInterface);
-		
+
 		$action_arr = array('show_booklist' => 1,);
-		
+
 		if ('POST' == $_SERVER['REQUEST_METHOD']) {
 			$action = $_GET['action'];
 			switch ($action) {
@@ -45,8 +45,8 @@ class Booklist extends Module {
 					}
 					break;
 				break;
-				
-					
+
+
 			}
 		} else {
 			$BookInterface->ShowSelectionFunctionality($action_arr);

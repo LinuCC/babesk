@@ -29,7 +29,7 @@ class Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute () {
+	public function execute ($dataContainer) {
 		require $this->executablePath;
 	}
 }

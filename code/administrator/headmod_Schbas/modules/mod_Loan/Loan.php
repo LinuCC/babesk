@@ -6,25 +6,25 @@ class Loan extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute() {
-		
+	public function execute($dataContainer) {
+
 		defined('_AEXEC') or die('Access denied');
-		
+
 		require_once 'AdminLoanInterface.php';
 		require_once 'AdminLoanProcessing.php';
-		
+
 		$LoanInterface = new AdminLoanInterface($this->relPath);
 		$LoanProcessing = new AdminLoanProcessing($LoanInterface);
-		
+
 		if ('GET' == $_SERVER['REQUEST_METHOD'] && isset($_GET['inventarnr'])) {
 			if (!$LoanProcessing->LoanBook(urldecode($_GET['inventarnr']),$_GET['uid'])) {
 				$LoanInterface->LoanEmpty();
@@ -38,9 +38,9 @@ class Loan extends Module {
 		else{
 			$LoanInterface->CardId();
 		}
-		
-		
-		
+
+
+
 	}
 }
 

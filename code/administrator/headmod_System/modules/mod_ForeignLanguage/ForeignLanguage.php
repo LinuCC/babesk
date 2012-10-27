@@ -6,25 +6,25 @@ class ForeignLanguage extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute() {
-		
+	public function execute($dataContainer) {
+
 		defined('_AEXEC') or die('Access denied');
-		
+
 		require_once 'AdminForeignLanguageInterface.php';
 		require_once 'AdminForeignLanguageProcessing.php';
-		
+
 		$ForeignLanguageInterface = new AdminForeignLanguageInterface($this->relPath);
 		$ForeignLanguageProcessing = new AdminForeignLanguageProcessing($ForeignLanguageInterface);
-		
+
 		if ('POST' == $_SERVER['REQUEST_METHOD']) {
 			$action = $_GET['action'];
 			switch ($action) {
@@ -44,7 +44,7 @@ class ForeignLanguage extends Module {
 				case 4: //save the users
 					$ForeignLanguageProcessing->SaveUsers($_POST);
 				break;
-			} 
+			}
 		} elseif  (('GET' == $_SERVER['REQUEST_METHOD'])&&isset($_GET['action'])) {
 					$action = $_GET['action'];
 					switch ($action) {
@@ -55,8 +55,8 @@ class ForeignLanguage extends Module {
 						$ForeignLanguageProcessing->ShowUsers("name");
 					}
 					}
-				
-		 
+
+
 		} else {
 			$ForeignLanguageInterface->ShowSelectionFunctionality();
 		}
