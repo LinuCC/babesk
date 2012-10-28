@@ -1,11 +1,15 @@
 <--------------------------------BaBeSK-README-------------------------------->
 
 BaBeSK: "Bargeldloses Bestellsystem für Schulkantinen"
+Fits: "Führerschein für IT-Systeme"
+Kuwasys: "Kurswahlsystem"
+Schbas: "Schulbuchausleihsystem"
 
 #### WARNING: ####
 
-This Program is still in an Alpha-Phase, which means that some things can
-go unexpected or even terribly wrong. It comes with absolute no warranty.
+This Program is still under development, which means that some things can
+go unexpected or even wrong. It comes with absolute no warranty.
+Please report bugs.
 Have fun!
 
 ----------------------------------
@@ -13,13 +17,13 @@ Requirements:
 
 BaBeSK needs a Server running 
  * PHP Version 5.1 or higher
- * A MySQL-Server (3.3 or higher)
- * More to be added
+ * MySQL-Server (3.3 or higher)
+ * GD library
 
 
 ----------------------------------
 Installation:
 
-Copy the Sourcode to your Server, then open 
-babesk/trunk/code/installation/index.php with your favourite webbrowser.
+Copy the sourcode to your Server, then open 
+babesk/code/installation/index.php with your favourite webbrowser.
 After that, follow the instructions displayed.
