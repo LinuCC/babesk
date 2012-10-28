@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
  * This class acts as the central point for accessing data of the database. Additionally, it does most of the
@@ -161,12 +161,12 @@ class KuwasysDatabaseAccess {
 		}
 	}
 
-	public function classRegistrationGloballyIsEnabledGetAndAddingWhenVoid () {
+	public function classRegistrationGloballyEnabledGetAndAddingWhenVoid () {
 
 		try {
 			$toggle = $this->_globalSettingsManager->isClassRegistrationGloballyEnabledGet();
 		} catch (MySQLVoidDataException $e) {
-			$this->addIsClassRegistrationGloballyEnabled(false);
+			$this->classRegistrationGloballyIsEnabledAdd(false);
 			return false;
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('globalSettingsErrorFetchClassRegEnabled'));

@@ -68,8 +68,8 @@ class Classes extends Module {
 	private function entryPoint ($dataContainer) {
 
 		defined('_AEXEC') or die('Access denied');
-		
-		
+
+
 		$this->_dataContainer = $dataContainer;
 		$this->_interface = new ClassesInterface($this->relPath, $this->_dataContainer->getSmarty());
 		$this->_languageManager = $this->_dataContainer->getLanguageManager();
@@ -77,7 +77,7 @@ class Classes extends Module {
 		require_once PATH_ADMIN . $this->relPath . '../../KuwasysDatabaseAccess.php';
 		$this->_databaseAccessManager = new KuwasysDatabaseAccess($this->_interface);
 		$this->_jointUserInClassStatusDefiner = new jointUserInClassStatusTranslation($this->_languageManager);
-		
+
 	}
 
 	private function showMainMenu () {
@@ -100,7 +100,7 @@ class Classes extends Module {
 	}
 
 	private function toggleGlobalClassRegistrationEnabled () {
-		
+
 		if(isset($_GET['toggleFormSend'])) {
 			$isToggled = isset($_POST['toggle']);
 			$this->setIsClassRegistrationGloballyEnabled($isToggled);
@@ -111,22 +111,22 @@ class Classes extends Module {
 			$this->_interface->showToggleGlobalClassRegistration($isGlobalClassRegistrationEnabled);
 		}
 	}
-	
+
 	private function getIsClassRegistrationGloballyEnabled () {
-		
-		return $this->_databaseAccessManager->classRegistrationGloballyIsEnabledGetAndAddingWhenVoid();
+
+		return $this->_databaseAccessManager->classRegistrationGloballyEnabledGetAndAddingWhenVoid();
 	}
-	
+
 	private function setIsClassRegistrationGloballyEnabled ($toggle) {
-		
+
 		$this->_databaseAccessManager->classRegistrationGloballyIsEnabledSet($toggle);
 	}
-	
+
 	private function addIsClassRegistrationGloballyEnabled ($toggle) {
-		
+
 		$this->_databaseAccessManager->classRegistrationGloballyIsEnabledAdd($toggle);
 	}
-	
+
 	private function showAddClass () {
 
 		$schoolYears = $this->getAllSchoolYears();
@@ -140,7 +140,7 @@ class Classes extends Module {
 		$class = $this->addWeekdayTranslatedToClass($class);
 		$this->_interface->showClassDetails($class);
 	}
-	
+
 	private function addUsersAndSumStatusToClass ($class) {
 
 		$jointsOfClass = $this->getAllJointsUsersInClassWithClassId($class['ID']);
@@ -165,9 +165,9 @@ class Classes extends Module {
 		}
 		return $class;
 	}
-	
+
 	private function addChoicesOfDayToUser ($user, $weekday) {
-		
+
 		$joints = $this->_databaseAccessManager->jointUserInClassGetAllByUserIdWithoutDyingWhenVoid($user ['ID']);
 		$classIdArray = array();
 		foreach ($joints as $joint) {
@@ -181,9 +181,9 @@ class Classes extends Module {
 		}
 		return $user;
 	}
-	
+
 	private function addGradeLabelToUser ($user) {
-		
+
 		$joint = $this->_databaseAccessManager->jointUserInGradeGetByUserIdWithoutDying($user ['ID']);
 		if(isset($joint) && is_array($joint)) {
 			$grade = $this->_databaseAccessManager->gradeGetById($joint ['GradeID']);
@@ -236,9 +236,9 @@ class Classes extends Module {
 			}
 		}
 	}
-	
+
 	private function getNextAutoincrementIdOfClass () {
-		
+
 		return $this->_databaseAccessManager->classNextAutoincrementIdGet();
 	}
 
@@ -283,9 +283,9 @@ class Classes extends Module {
 		$confirmNo = $this->_languageManager->getText('confirmDeleteClassNo');
 		$this->_interface->showDeleteClassConfirmation($_GET['ID'], $promptMessage, $confirmYes, $confirmNo);
 	}
-	
+
 	private function isClassJointedWithUsers ($classId) {
-		
+
 		return $this->_databaseAccessManager->jointUserInClassIsClassJointedWithUser($classId);
 	}
 
@@ -472,9 +472,9 @@ class Classes extends Module {
 		}
 		return $classes;
 	}
-	
+
 	private function addClassteachersToClasses ($classes) {
-		
+
 		$classteachers = $this->getClassteachersByClassesWithoutDieingWhenVoidAndUpdateClasses ($classes);
 		foreach ($classes as &$class) {
 			foreach ($classteachers as $classteacher) {
@@ -488,9 +488,9 @@ class Classes extends Module {
 		}
 		return $classes;
 	}
-	
+
 	private function getClassteachersByClassesWithoutDieingWhenVoidAndUpdateClasses (&$classes) {
-		
+
 		$joints = $this->getJointsClassteacherInClassByClassesWithoutDieingWhenVoid ($classes);
 		$classteacherIdArray = array();
 		foreach($joints as $joint) {
@@ -506,27 +506,27 @@ class Classes extends Module {
 			return $classteachers;
 		}
 	}
-	
+
 	private function getJointsClassteacherInClassByClassesWithoutDieingWhenVoid ($classes) {
-		
+
 		$classIdArray = array();
 		foreach ($classes as $class) {
 			$classIdArray [] = $class ['ID'];
 		}
-		
+
 		$joints = $this->_databaseAccessManager->jointClassteacherInClassGetByClassIdArrayWithoutDyingWhenVoid($classIdArray);
 		if(is_array($joints)) {
 			return $joints;
 		}
 	}
-	
+
 	private function getAllJointsOfUsersWaitingWithoutDieingWhenVoid () {
-		
+
 		return $this->_databaseAccessManager->jointUserInClassGetAllWithStatusWaitingWithoutDyingWhenVoid();
 	}
-	
+
 	private function addCountOfWaitingUsersToClasses ($classes) {
-		
+
 		$joints = $this->getAllJointsOfUsersWaitingWithoutDieingWhenVoid();
 		foreach ($classes as &$class) {
 			$userCount = 0;
@@ -541,7 +541,7 @@ class Classes extends Module {
 		}
 		return $classes;
 	}
-	
+
 	private function importClassesByCsvFile () {
 
 		if (isset($_FILES['csvFile'])) {
@@ -585,9 +585,9 @@ class Classes extends Module {
 		}
 		return $rowArray;
 	}
-	
+
 	private function deleteAllJointsUsersInClassOfClass ($classId) {
-		
+
 		$this->_databaseAccessManager->jointUserInClassDeleteAllOfClassId($classId);
 	}
 
@@ -595,9 +595,9 @@ class Classes extends Module {
 
 		$this->_interface->showImportClassesByCsvFile();
 	}
-	
+
 	private function assignUsersToClasses () {
-		
+
 		require_once 'AssignUsersToClasses.php';
 		$utcManager = new AssignUsersToClasses($this->_interface, $this->_languageManager);
 		$utcManager->execute();
@@ -608,7 +608,7 @@ class Classes extends Module {
 	private $_interface;
 
 	private $_databaseAccessManager;
-	
+
 	/**
 	 * @var KuwasysDataContainer
 	 */
@@ -618,7 +618,7 @@ class Classes extends Module {
 	 * @var KuwasysLanguageManager
 	 */
 	private $_languageManager;
-	
+
 	private $_jointUserInClassStatusDefiner;
 }
 
