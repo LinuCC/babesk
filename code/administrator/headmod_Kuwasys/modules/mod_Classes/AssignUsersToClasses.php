@@ -14,10 +14,10 @@ class AssignUsersToClasses {
 	////////////////////////////////////////////////////////////////////////////////
 	public function __construct ($interface, $languageManager, $users = NULL) {
 
-		$this->databaseManagersInit();
-		$this->_users = (isset($users)) ? $users : $this->UsersGetAll();
 		$this->_interface = $interface;
 		$this->_languageManager = $languageManager;
+		$this->databaseManagersInit();
+		$this->_users = (isset($users)) ? $users : $this->UsersGetAll();
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Getters and Setters
@@ -116,9 +116,9 @@ class AssignUsersToClasses {
 			$freeSlots = 0;
 		}
 	}
-	
+
 	private function jointUsersInClassSetToActiveAddToMultipleChangesList ($jointId) {
-		
+
 		try {
 			$this->_jointUsersInClassManager->alterStatusOfJointAddEntryToTempList($jointId,
 					$this->_jointUsersInClassManager->getActiveStatusString());
@@ -126,9 +126,9 @@ class AssignUsersToClasses {
 			$this->_interface->dieError($this->_languageManager->getText('errorJointUsersInClassChange'));
 		}
 	}
-	
+
 	private function jointUsersInClassSetToWaitingAddToMultipleChangesList ($jointId) {
-		
+
 		try {
 			$this->_jointUsersInClassManager->alterStatusOfJointAddEntryToTempList($jointId,
 					$this->_jointUsersInClassManager->getWaitingStatusString());
@@ -136,9 +136,9 @@ class AssignUsersToClasses {
 			$this->_interface->dieError($this->_languageManager->getText('errorJointUsersInClassChange'));
 		}
 	}
-	
+
 	private function jointUsersInClassUploadMultipleChangesList () {
-		
+
 		try {
 			$this->_jointUsersInClassManager->upAlterStatusOfJointTempListToDatabase();
 		} catch (Exception $e) {
@@ -376,9 +376,9 @@ class AssignUsersToClasses {
 		try {
 			$users = $this->_usersManager->getAllUsers();
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText(errorNoUsers));
+			$this->_interface->dieError($this->_languageManager->getText('errorNoUsers'));
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText(errorGetUsers));
+			$this->_interface->dieError($this->_languageManager->getText('errorGetUsers'));
 		}
 		return $users;
 	}
