@@ -99,7 +99,7 @@ class Users extends Module {
 
 	}
 
-	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	//Implements
 	private function entryPoint ($dataContainer) {
 
@@ -119,9 +119,9 @@ class Users extends Module {
 		$this->_jointUserInClassStatusDefiner = new jointUserInClassStatusTranslation($this->_languageManager);
 	}
 
-	/**-----------------------------------------------------------------------------
+	/**-------------------------------------------------------------------------
 	 * Entry-point-functions for different parts of the module
-	*----------------------------------------------------------------------------*/
+	 *------------------------------------------------------------------------*/
 
 	/**
 	 * adds a User to the MySQL-table
@@ -438,8 +438,22 @@ class Users extends Module {
 	private function showAddUser () {
 
 		$grades = $this->getAllGrades();
+		$grades = $this->addSchoolyearToGrades ($grades);
 		$schoolYears = $this->getAllSchoolYears();
 		$this->_interface->showAddUser($grades, $schoolYears);
+	}
+
+	private function addSchoolyearToGrades ($grades) {
+		$joints = $this->_databaseAccessManager->jointGradeInSchoolyearGetAll ();
+		foreach ($grades as &$grade) {
+			foreach ($joints as $joint) {
+				if ($grade ['ID'] == $joint ['GradeID']) {
+					$grade ['schoolyearId'] = $joint ['SchoolYearID'];
+					continue 2;
+				}
+			}
+		}
+		return $grades;
 	}
 
 	private function showAddClassToUser () {
