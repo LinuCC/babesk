@@ -27,3 +27,8 @@ templates_c
 /code/smarty/templates_c_default/
 /code/smarty/configs/
 .sublime-project
+
+#For files that are only for testing purposes#
+#andshouldnt be uploaded                     #
+##############################################
+*__TESTING__*
