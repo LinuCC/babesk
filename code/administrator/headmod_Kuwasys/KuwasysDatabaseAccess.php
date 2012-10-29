@@ -959,9 +959,9 @@ class KuwasysDatabaseAccess {
 		try {
 			$joints = $this->_jointGradeInSchoolyearManager->getAllJointsOfSchoolyearId($schoolyearId);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError('jointGradeInSchoolyearErrorNoJoints');
+			$this->_interface->dieError($this->_languageManager->getText('jointGradeInSchoolyearErrorNoJoints'));
 		} catch (Exception $e) {
-			$this->_interface->dieError('jointGradeInSchoolyearErrorFetch');
+			$this->_interface->dieError($this->_languageManager->getText('jointGradeInSchoolyearErrorFetch'));
 		}
 		return $joints;
 	}
