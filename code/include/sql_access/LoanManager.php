@@ -125,7 +125,8 @@ class LoanManager extends TableManager{
 	 */
 	function AddLoanByIDs($inventoryID, $uid) {
 		require_once PATH_ACCESS . '/DBConnect.php';
-		$result = parent::addEntry('user_id', $uid, 'inventory_id', $inventoryID);
+		$date = date("Y-m-d");
+		$result = parent::addEntry('user_id', $uid, 'inventory_id', $inventoryID, 'lend_date', $date);
 		return $result;
 	}
 	
@@ -135,6 +136,18 @@ class LoanManager extends TableManager{
 	function isEntry($inventory_id) {
 		$match = parent::existsEntry('inventory_id', $inventory_id);
 		return $match;
+		}
+		
+		
+	function getUserIDByInvID($invID){
+		$query = sql_prev_inj(sprintf('SELECT user_id FROM %s WHERE inventory_id="%s"', $this->tablename, $invID));
+		$result = $this->db->query($query);
+		$uid_arr = $result->fetch_assoc();
+		$uid = $uid_arr['user_id'];
+		if(!$uid) {
+			throw new MySQLVoidDataException('MySQL returned no data!');
+			}
+		return $uid;
 		}
 }
 ?>

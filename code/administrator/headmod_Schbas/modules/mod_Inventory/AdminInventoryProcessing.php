@@ -115,7 +115,7 @@ class AdminInventoryProcessing {
 		$barcode = str_replace("  ", " ", $barcode); // remove two empty spaces
 		$barcode_exploded = explode(' ', $barcode);
 		try {
-			$book_info = $bookManager->getBookIDByBarcode($barcode);
+			$book_info = $bookManager->getBookDataByBarcode($barcode);
 		} catch (Exception $e) {
 			$this->logs
 			->log('ADMIN', 'MODERATE',

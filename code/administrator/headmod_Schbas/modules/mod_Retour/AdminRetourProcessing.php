@@ -83,10 +83,10 @@ class AdminRetourProcessing {
 	 */
 	function RetourBook($inventarnr,$uid) {
 
-		$inv_nr = $this->inventoryManager->getInvIDByBarcode($inventarnr);
+		$inv_id = $this->inventoryManager->getInvIDByBarcode($inventarnr);
 	    if($this->loanManager->isUserEntry($uid)) {
 	    try {
-			$this->loanManager->RemoveLoanByIDs($inv_nr["id"], $uid);
+			$this->loanManager->RemoveLoanByIDs($inv_id, $uid);
 			return $this->loanManager->isUserEntry($uid);
 		} catch (Exception $e) {
 			

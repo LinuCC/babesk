@@ -51,16 +51,18 @@ class BookManager extends TableManager{
 	/**
 	 * Gives the book ID from a given inventory (!) barcode
 	 */
-	function getBookIDByBarcode($barcode) {
+	function getBookDataByBarcode($barcode) {
 		require_once PATH_ACCESS . '/DBConnect.php';
 		try {
 			$barcode_exploded = explode(' ', $barcode);
 		} catch (Exception $e) {
 		}
-		$query = sql_prev_inj(sprintf('subject = "%s" AND class = "%s" AND bundle = %s' , $barcode_exploded[0], $barcode_exploded[2], $barcode_exploded[3]));
-		//$result = $this->db->query($query);	
-		$result = parent::searchEntry($query);
-		return $result;
+		if (isset ($barcode_exploded[5])){
+			$query = sql_prev_inj(sprintf('subject = "%s" AND class = "%s" AND bundle = %s' , $barcode_exploded[0], $barcode_exploded[2], $barcode_exploded[3]));
+			//$result = $this->db->query($query);	
+			$result = parent::searchEntry($query);
+			return $result;
+		}
 	}
 	
 	/**
@@ -108,5 +110,6 @@ class BookManager extends TableManager{
 			$res_array[] = $buffer;
 		return $res_array;
 	}
+	
 }
 ?>
