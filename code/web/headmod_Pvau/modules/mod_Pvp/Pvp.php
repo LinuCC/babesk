@@ -61,7 +61,7 @@ class Pvp extends Module {
 			foreach ($searchterm_exploded as $st) {
 				foreach($date->find('tr') as $e) {
 			
-				if (strstr($e->innertext,' >'.$st.'</td>')) {	
+				if (strstr($e->innertext,'>'.$st.'</td>')) {	
 				
 					$result_tmp .= '<tr>'.$e->innertext().'</tr>';
 					$result_tmp = str_get_html($result_tmp);
