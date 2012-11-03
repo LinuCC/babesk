@@ -17,7 +17,7 @@ class Pvp extends Module {
 	
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute() {
+	public function execute($dataContainer) {
 		//No direct access
 		defined('_WEXEC') or die("Access denied");
 		
