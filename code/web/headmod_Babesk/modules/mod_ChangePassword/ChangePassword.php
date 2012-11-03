@@ -7,17 +7,17 @@ class ChangePassword extends Module {
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
 	private $smartyPath;
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
 		$this->smartyPath = PATH_SMARTY . '/templates/web' . $path;
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute() {
+	public function execute($dataContainer) {
 		//No direct access
 		defined('_WEXEC') or die("Access denied");
 		require_once 'change_password_constants.php';
@@ -36,7 +36,7 @@ class ChangePassword extends Module {
 		if(isset($userData['credit']))
 			$smarty->assign('credit', $userData['credit']);
 		$smarty->assign('last_login', $userData['last_login']);
-		
+
 		if(isset($_POST['passwd'])) {
 			if (!isset($_POST['passwd']) and !isset($_POST['passwd_repeat'])) {
 				die(INVALID_FORM);
@@ -57,7 +57,7 @@ class ChangePassword extends Module {
 				$smarty->display($this->smartyPath . 'change_password.tpl');
 				exit();
 			}
-		
+
 			$userManager->updatePassword($_SESSION['uid'], $passwd);
 				$smarty->assign('status', '<p>Passwort wurde erfolgreich ge&auml;ndert!</p>');
 				$smarty->display($this->smartyPath . 'change_password_success.tpl');

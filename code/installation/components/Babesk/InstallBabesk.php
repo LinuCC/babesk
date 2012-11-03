@@ -46,7 +46,7 @@ class InstallBabesk extends InstallationComponent {
 	/**
 	 * Entry-Point for the Babesk-Installation
 	 */
-	public function execute () {
+	public function execute ($dataContainer) {
 
 		if (isset($_GET['action'])) {
 
@@ -241,12 +241,12 @@ class InstallBabesk extends InstallationComponent {
 
 		require_once PATH_CODE . '/include/sql_access/PriceClassManager.php';
 		$pcManager = new PriceClassManager();
-		
+
 		$pc_name = $_POST['name'];
 		$normal_price = $_POST['n_price'];
 		$groups = $this->retrieveGroups();
 		$highestPriceclassID = $pcManager->getHighestPriceclassID();
-		
+
 		if(isset($_POST['goOn']) && trim($_POST['name']) == '') {
 			$this->showInstallationFinished();
 			return;
@@ -271,7 +271,7 @@ class InstallBabesk extends InstallationComponent {
 					'ID'] . '" aufgetreten.';
 			}
 		}
-		
+
 		if(isset($_POST['addAnother'])) {
 			$this->inputPriceclass();
 		}
@@ -279,12 +279,12 @@ class InstallBabesk extends InstallationComponent {
 			$this->showInstallationFinished();
 		}
 	}
-	
+
 	private function retrieveGroups() {
-		
+
 		require_once PATH_CODE . '/include/sql_access/GroupManager.php';
 		$groupManager = new GroupManager();
-		
+
 		try {
 			$groups = $groupManager->getTableData();
 		} catch (MySQLVoidDataException $e) {
@@ -293,12 +293,12 @@ class InstallBabesk extends InstallationComponent {
 		} catch (Exception $e) {
 			die('Could not fetch the Groups');
 		}
-		
+
 		return $groups;
 	}
-	
+
 	private function showInstallationFinished () {
-		
+
 		$this->_smarty->display($this->_templatePath . '/finished.tpl');
 	}
 }

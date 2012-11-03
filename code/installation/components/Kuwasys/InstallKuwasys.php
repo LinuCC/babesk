@@ -29,7 +29,7 @@ class InstallKuwasys extends InstallationComponent {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
-	public function execute () {
+	public function execute ($dataContainer) {
 
 // 		die('Database muss noch angegeben werden können! OMG noob...');
 		if (isset($_GET['action'])) {
@@ -185,20 +185,20 @@ class InstallKuwasys extends InstallationComponent {
 			$this->addError('Die Passwörter stimmen nicht überein');
 			$this->displayAndDie();
 		}
-		
+
 		$this->initDatabase();
 		$queryStr = sql_prev_inj(sprintf('INSERT INTO administrators(name, password, GID) VALUES ("admin", "%s", 1);',
 			hash_password($password)));
 		$this->_db->query($queryStr);
-		
+
 		$this->addAdminGroupGlobal();
 	}
-	
+
 	private function addAdminGroupGlobal () {
-		
+
 		$queryStr = 'INSERT INTO admin_groups(name, modules) VALUES ("global", "_ALL");';
 		$result = $this->_db->query($queryStr);
-		
+
 		if(!$result) {
 			$this->addError('Konnte die globale Administratorgruppe nicht hinzufügen!');
 			$this->displayAndDie();

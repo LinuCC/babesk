@@ -27,16 +27,16 @@ class Kuwasys extends HeadModule {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute () {
+	public function execute ($moduleManager, $dataContainer) {
 		//function not needed, javascript is doing everything
 	}
 
 	public function executeModule ($mod_name, $dataContainer) {
 
 		$this->_languageManager = new KuwasysLanguageManager($dataContainer->getInterface());
-		
+
 		//$dataContainer->getInterface()->showMsg($this->_languageManager->getTextOfModule('alphaDisclaimer', 'Kuwasys'));
-		
+
 		$kuwasysDataContainer = new KuwasysDataContainer($dataContainer->getSmarty(), $dataContainer->getInterface(),
 			$this->_languageManager);
 		parent::executeModule($mod_name, $kuwasysDataContainer);

@@ -23,7 +23,7 @@ class ClassList extends Module {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
-	public function execute () {
+	public function execute ($dataContainer) {
 
 		$this->entryPoint();
 		if (isset($_GET['action'])) {
@@ -66,17 +66,17 @@ class ClassList extends Module {
 	}
 
 	private function getIsClassRegistrationGloballyEnabled () {
-		
-		require_once PATH_ACCESS_KUWASYS . '/KuwasysGlobalSettingsManager.php';
-		$globalSettingsManager = new KuwasysGlobalSettingsManager();
+
+		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
+		$globalSettingsManager = new GlobalSettingsManager();
 		try {
-			$value = $globalSettingsManager->isClassRegistrationGloballyEnabledGet();
+			$value = $globalSettingsManager->valueGet (GlobalSettings::IS_CLASSREGISTRATION_ENABLED);
 		} catch (Exception $e) {
 			$this->_interface->DieError('Ein Fehler ist beim Abrufen vom KurswahlWert aufgetreten. Breche ab.');
 		}
 		return $value;
 	}
-	
+
 	private function getAllClasses () {
 
 		try {
@@ -171,11 +171,11 @@ class ClassList extends Module {
 		$this->_interface->DieMessage(
 			'Das Formular wurde erfolgreich verarbeitet. Im Hauptmenü sehen sie ihre Registrierungen.');
 	}
-	
+
 	private function checkAreAllPickedClassesEnabled () {
-		
+
 		$classes = $this->getAllClasses();
-		
+
 		foreach ($this->_weekdayAbbreviationArr as $weekday) {
 			if (isset($_POST['firstChoice' . $weekday])) {
 				$classId = $_POST['firstChoice' . $weekday];
@@ -191,23 +191,23 @@ class ClassList extends Module {
 			}
 		}
 	}
-	
+
 	private function checkIsClassEnabled ($classId, $allClasses) {
-		
+
 		foreach ($allClasses as $class) {
 			if ($class ['ID'] == $classId) {
 				return (boolean) $class ['registrationEnabled'];
 			}
 		}
 	}
-	
+
 	private function checkIsClassRegistrationGloballyEnabled () {
 		var_dump((boolean)$this->getIsClassRegistrationGloballyEnabled());
 		if(!$this->getIsClassRegistrationGloballyEnabled()) {
 			$this->_interface->DieError('Klassenregistration ist momentan nicht erlaubt!');
 		}
 	}
-	
+
 	private function checkClassListInputForSomethingWasChecked () {
 
 		foreach ($this->_weekdayAbbreviationArr as $weekday) {
