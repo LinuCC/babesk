@@ -9,7 +9,7 @@ class Order extends Module {
 	private $smartyPath;
 	private $modulePath;
 	private $webInterface;
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	public function __construct($name, $display_name, $path) {
@@ -18,10 +18,10 @@ class Order extends Module {
 		$this->smartyPath = PATH_SMARTY . '/templates/web' . $path;
 		require_once PATH_CODE . '/web/WebInterface.php';
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute() {
+	public function execute($dataContainer) {
 		//No direct access
 		defined('_WEXEC') or die("Access denied");
 		require_once 'order_constants.php';
@@ -33,12 +33,12 @@ class Order extends Module {
 		require_once PATH_ACCESS . '/OrderManager.php';
 		require_once PATH_ACCESS . '/PriceClassManager.php';
 		require_once PATH_ACCESS . '/LogManager.php';
-		
+
 		global $smarty;
 		 $logger = new LogManager();
 
 		$this->webInterface = new WebInterface($smarty);
-		
+
 		$mealManager = new MealManager();
 		$userManager = new UserManager();
 		$orderManager = new OrderManager();
@@ -46,13 +46,13 @@ class Order extends Module {
 		$soliCouponManager = new SoliCouponsManager();
 		$priceClassManager = new PriceClassManager();
 		$gbManager = new GlobalSettingsManager();
-		
+
 		$smarty->assign('babesk_version', file_get_contents("../version.txt"));
-		
+
 		if (isset($_GET['order'])) {
-		
+
 			$payment = NULL;
-		
+
 			try {//checking mealdata
 				inputcheck($_GET['order'], 'id');
 				$meal = $mealManager->getEntryData($_GET['order']);
@@ -64,7 +64,7 @@ class Order extends Module {
 				$this->webInterface->dieError(ERR_ORDER);
 			}
 			$meal['price'] = $priceClassManager->getPrice($_SESSION['uid'], $meal['ID']);
-		
+
 			if ('POST' == $_SERVER['REQUEST_METHOD']) {
 				////////////////////////////////////////////////////
 				//Pay for meal
@@ -79,15 +79,15 @@ class Order extends Module {
 						$this->webInterface->dieError(ERR_ORDER);
 						die();
 					}
-		
+
 					if ($soliCouponManager->HasValidCoupon($_SESSION['uid'], $meal['date'])) {
 						$payment = $gbManager->getSoliPrice();
 					}
-		
+
 					// 			if ($userManager->isSoli($_SESSION['uid'])) {
 					// 				$payment = $gbManager->getSoliPrice();
 					// 			}
-		
+
 					if (!$userManager->changeBalance($_SESSION['uid'], -$payment)) {
 						$smarty->display($this->smartyPath . 'failed.tpl');
 						die();
@@ -109,7 +109,7 @@ class Order extends Module {
 								$meal['name'], $meal['price'], $meal['date'],
 								$gbManager->getSoliPrice());
 				} catch (Exception $e) {
-		
+
 					//meal couldn't be ordered so give the user his money back
 					$userManager->changeBalance($_SESSION['uid'], $payment);
 					$logger->log('WEB|ORDER', 'MODERATE',
@@ -144,7 +144,7 @@ class Order extends Module {
 			$pcManager = new PriceClassManager();
 			$gsManager = new GlobalSettingsManager();
 			$userManager = new UserManager();
-		
+
 			$hour = date('H:i', time());
 			// To change the timewindow the orders can be ordered, just change $enddate (and $last_order_time)
 			//first date to show the meals
@@ -161,7 +161,7 @@ class Order extends Module {
 					* 4. Every meal has mealdata (like ID, description, name, ...)
 					*/
 			//Ordering only possible until $last_order_time
-		
+
 			$last_order_time = $gsManager->getLastOrderTime();
 			if (str_replace(":", "", $hour) > str_replace(":", "", $last_order_time)) {
 				$date += $day_in_secs;
@@ -174,10 +174,10 @@ class Order extends Module {
 			} catch (Exception $e) {
 				$smarty->assign('message', ERR_MYSQL . '<br>' . $e->getMessage());
 			}
-		
+
 			//////////////////////////////////////////////////
 			//Sort the meals
-		
+
 			foreach ($sql_meals as &$meal) {
 				$meal_day = date('N', strtotime($meal['date']));
 				$meal_weeknum = date('W', strtotime($meal['date']));
@@ -185,7 +185,7 @@ class Order extends Module {
 					$meal['price'] = $gsManager->getSoliPrice();
 				else
 					$meal['price'] = $pcManager->getPrice($_SESSION['uid'], $meal['ID']);
-		
+
 				$meallist[$meal_weeknum][$meal_day][] = $meal;
 				//The date of the beginning of the week (here monday). +7 because of negative meal_day setting the date 1 week behind
 				$meallist[$meal_weeknum]['date'][1] = date('d.m.Y',

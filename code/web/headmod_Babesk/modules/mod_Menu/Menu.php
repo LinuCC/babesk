@@ -7,34 +7,34 @@ class Menu extends Module {
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
 	private $smartyPath;
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
 		$this->smartyPath = PATH_SMARTY . '/templates/web' . $path;
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute() {
+	public function execute($dataContainer) {
 		//No direct access
 		defined('_WEXEC') or die("Access denied");
-		
+
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 		require_once PATH_ACCESS . '/OrderManager.php';
 		require_once PATH_ACCESS . '/MealManager.php';
-		
+
 		global $smarty;
 		global $logger;
-		
+
 		$orderManager = new OrderManager('orders');
 		$mealManager = new MealManager('meals');
-		
+
 		$meal = array();
 		$orders_existing = true;
 		$meal_problems = false;
-		
+
 		try {
 			$orders = $orderManager->getAllOrdersOfUser($_SESSION['uid'], strtotime(date('Y-m-d')));
 		} catch (MySQLVoidDataException $e) {
@@ -57,13 +57,13 @@ class Menu extends Module {
 					continue;
 				}
 				if (!$order['fetched'] AND $order['date'] >= $today) {
-		
+
 					//fetch last_order_time from database and compare with actual time
 					$gsManager = new GlobalSettingsManager();
 					$hour = date('H:i', time());
 					$last_order_time = $gsManager->getLastOrderTime();
 					if ((str_replace(":", "", $hour) > str_replace(":", "", $last_order_time)) AND ($order['date'] == $today)) {
-		
+
 						$meal[] = array('date' => formatDate($order["date"]), 'name' => $mealname["name"],
 								'orderID' => $order['ID'], 'cancel' => false);
 					} else {

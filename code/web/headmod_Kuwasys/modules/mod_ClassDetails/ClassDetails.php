@@ -77,7 +77,7 @@ class ClassDetails extends Module {
 	private function getIsClassRegistrationGloballyEnabled () {
 
 		try {
-			$value = $this->_globalSettingsManager->return $this->valueGet (GlobalSettings::IS_CLASSREGISTRATION_ENABLED);
+			$value = $this->_globalSettingsManager->valueGet (GlobalSettings::IS_CLASSREGISTRATION_ENABLED);
 		} catch (Exception $e) {
 			$this->_interface->DieError('Ein Fehler ist beim Abrufen vom KurswahlWert aufgetreten. Breche ab.');
 		}

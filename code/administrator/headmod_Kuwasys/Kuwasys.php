@@ -27,7 +27,7 @@ class Kuwasys extends HeadModule {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute ($dataContainer) {
+	public function execute ($moduleManager, $dataContainer) {
 		//function not needed, javascript is doing everything
 	}
 

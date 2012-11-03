@@ -7,25 +7,25 @@ class Help extends Module {
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
 	private $smartyPath;
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
 		$this->smartyPath = PATH_SMARTY . '/templates/web' . $path;
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute() {
+	public function execute($dataContainer) {
 		//No direct access
 		defined('_WEXEC') or die("Access denied");
 		global $smarty;
-		
+
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 		require_once PATH_ACCESS . '/CardManager.php';
 		require_once PATH_ACCESS . '/UserManager.php';
-		
+
 		$cm = new CardManager();
 		$um = new UserManager();
 		$gsManager = new GlobalSettingsManager();
