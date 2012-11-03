@@ -51,12 +51,27 @@ class EmailConfiguration extends Module {
 	}
 
 	private function mainMenuShow () {
-		$host = $this->_globalSettingsManager->valueGet (GlobalSettings::SMTP_HOST);
-		$username = $this->_globalSettingsManager->valueGet (GlobalSettings::SMTP_USERNAME);
-		$password = $this->_globalSettingsManager->valueGet (GlobalSettings::SMTP_PASSWORD);
-		$fromName = $this->_globalSettingsManager->valueGet (GlobalSettings::SMTP_FROMNAME);
-		$from = $this->_globalSettingsManager->valueGet (GlobalSettings::SMTP_FROM);
+
+		$host = $this->globalSettingGetWithoutDieing ('SMTP_HOST');
+		$username = $this->globalSettingGetWithoutDieing ('SMTP_USERNAME');
+		$password = $this->globalSettingGetWithoutDieing ('SMTP_PASSWORD');
+		$fromName = $this->globalSettingGetWithoutDieing ('SMTP_FROMNAME');
+		$from = $this->globalSettingGetWithoutDieing ('SMTP_FROM');
 		$this->_interface->mainMenuDisplay ($host, $username, $password, $fromName, $from);
+	}
+
+	/** Fetches a GlobalSetting, but without dieing
+	 * Fetches a GlobalSetting with the name $name from the database
+	 * (name defined in GlobalSettings) and returns it. If an MySQLVoidData
+	 * error occurred, it will return a void string.
+	 */
+	private function globalSettingGetWithoutDieing ($name) {
+		try {
+			$value = $this->_globalSettingsManager->valueGet (constant('GlobalSettings::' . $name));
+		} catch (Exception $e) {
+			return '';
+		}
+		return $value;
 	}
 
 	private function changeSettings () {
