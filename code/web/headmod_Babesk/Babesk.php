@@ -26,7 +26,7 @@ class Babesk extends HeadModule {
 		$userManager = new UserManager();
 		
 		if ($userManager->firstPassword($_SESSION['uid'])) {
-			$this->_moduleManager->execute('Babesk|ChangePassword', false);
+			$moduleManager->execute('Babesk|ChangePassword', false);
 		}
 		else {
 			$moduleManager->execute("Babesk|Menu", false);
