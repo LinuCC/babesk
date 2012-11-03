@@ -1,4 +1,4 @@
-<?php 
+<?php
 class DisplayUsersWaiting {
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -16,8 +16,8 @@ class DisplayUsersWaiting {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
-	public function execute () {
-		
+	public function execute ($dataContainer) {
+
 		$this->initManagers();
 		$this->initDataArrays();
 		$this->filterAndAddData();
@@ -77,7 +77,7 @@ class DisplayUsersWaiting {
 			}
 		}
 	}
-	
+
 	private function addClassItemsToUser (&$user, $class) {
 
 		if(is_array($this->_jointsUsersInClassActive)) {
@@ -88,9 +88,9 @@ class DisplayUsersWaiting {
 		}
 		$user ['classes'] [] = $class;
 	}
-	
+
 	private function showUsersWaiting () {
-	
+
 		$this->_interface->showUsersWaiting($this->_users);
 	}
 
@@ -221,7 +221,7 @@ class DisplayUsersWaiting {
 	private $_classteachers;
 	private $_users;
 	private $_classes;
-	
+
 	private $_databaseAccessManager;
 
 	private $_interface;

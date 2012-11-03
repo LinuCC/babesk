@@ -24,7 +24,7 @@ class ClassDetails extends Module {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
-	public function execute () {
+	public function execute ($dataContainer) {
 
 		$this->entryPoint();
 		if (isset($_GET['action'])) {
@@ -73,9 +73,9 @@ class ClassDetails extends Module {
 		}
 		return $joint;
 	}
-	
+
 	private function getIsClassRegistrationGloballyEnabled () {
-		
+
 		try {
 			$value = $this->_globalSettingsManager->isClassRegistrationGloballyEnabledGet();
 		} catch (Exception $e) {
@@ -83,9 +83,9 @@ class ClassDetails extends Module {
 		}
 		return $value;
 	}
-	
+
 	private function deleteJointUsersInClass ($jointId) {
-		
+
 		try {
 			$this->_jointUsersInClass->deleteJoint($jointId);
 		} catch (Exception $e) {
@@ -109,9 +109,9 @@ class ClassDetails extends Module {
 		$this->_smarty->assign('class', $class);
 		$this->_smarty->display($this->_smartyPath . 'deRegisterClassConfirmation.tpl');
 	}
-	
+
 	private function deRegisterUserFromClass () {
-		
+
 		$class = $this->getClassByClassId($_GET['classId']);
 		$joint = $this->getJointUsersInClassByUserIdAndClassId($class ['ID']);
 		if(!$class ['registrationEnabled']) {
