@@ -46,7 +46,7 @@ class InstallFits extends InstallationComponent {
 	/**
 	 * Entry-Point for the Babesk-Installation
 	 */
-	public function execute () {
+	public function execute ($dataContainer) {
 
 		if (isset($_GET['action'])) {
 
@@ -189,9 +189,9 @@ class InstallFits extends InstallationComponent {
 
 		}
 	}
-	
+
 	private function showInstallationFinished () {
-		
+
 		$this->_smarty->display($this->_templatePath . '/finished.tpl');
 	}
 }

@@ -122,11 +122,6 @@ class Classes extends Module {
 		$this->_databaseAccessManager->classRegistrationGloballyIsEnabledSet($toggle);
 	}
 
-	private function addIsClassRegistrationGloballyEnabled ($toggle) {
-
-		$this->_databaseAccessManager->classRegistrationGloballyIsEnabledAdd($toggle);
-	}
-
 	private function showAddClass () {
 
 		$schoolYears = $this->getAllSchoolYears();
@@ -476,6 +471,7 @@ class Classes extends Module {
 	private function addClassteachersToClasses ($classes) {
 
 		$classteachers = $this->getClassteachersByClassesWithoutDieingWhenVoidAndUpdateClasses ($classes);
+		if (!$classteachers) return $classes;
 		foreach ($classes as &$class) {
 			foreach ($classteachers as $classteacher) {
 				if(!isset($class ['classteacher'] ['ID'])) {
@@ -493,6 +489,7 @@ class Classes extends Module {
 
 		$joints = $this->getJointsClassteacherInClassByClassesWithoutDieingWhenVoid ($classes);
 		$classteacherIdArray = array();
+		if(!$joints) return;
 		foreach($joints as $joint) {
 			$classteacherIdArray [] = $joint ['ClassTeacherID'];
 			foreach ($classes as &$class) {
@@ -592,16 +589,15 @@ class Classes extends Module {
 	}
 
 	private function showImportClassesByCsvFile () {
-
 		$this->_interface->showImportClassesByCsvFile();
 	}
 
 	private function assignUsersToClasses () {
-
 		require_once 'AssignUsersToClasses.php';
 		$utcManager = new AssignUsersToClasses($this->_interface, $this->_languageManager);
 		$utcManager->execute();
 	}
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
 	////////////////////////////////////////////////////////////////////////////////

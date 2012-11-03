@@ -20,10 +20,10 @@ class Babesk extends HeadModule {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute() {
+	public function execute($moduleManager, $dataContainer) {
 		//function not needed, javascript is doing everything
 	}
-	
+
 	public function executeModule($mod_name, $dataContainer) {
 		parent::executeModule($mod_name, $dataContainer);
 	}

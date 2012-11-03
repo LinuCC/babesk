@@ -1,5 +1,11 @@
-{extends file=$inh_path} 
+{extends file=$inh_path}
 {block name='content'}
+
+{foreach $schoolyears as $schoolyear}
+	{if $schoolyear.active}
+		{$activeSchoolyear = $schoolyear}
+	{/if}
+{/foreach}
 
 <style type='text/css'  media='all'>
 div.moduleFormulars {
@@ -28,8 +34,8 @@ select, input.moduleFormulars {
 		<select name='grade' size='1'>
 			<option value='NoGrade' selected='selected'>==Keine Klasse==</option>
 		{foreach $grades as $grade}
-			<option 
-				value='{$grade.ID}'> 
+			<option
+				value='{$grade.ID}'{if $grade.schoolyearId != $activeSchoolyear.ID}disabled="disabled"{/if}>
 				{$grade.gradeValue} - {$grade.label}
 			</option>
 		{/foreach}
@@ -37,8 +43,8 @@ select, input.moduleFormulars {
 	<label>Schuljahr:
 		<select name='schoolyear' size='1'>
 		{foreach $schoolyears as $schoolyear}
-			<option 
-				value='{$schoolyear.ID}' 
+			<option
+				value='{$schoolyear.ID}'
 				{if $schoolyear.active}selected='selected'{/if}>
 				{$schoolyear.label}
 			</option>
