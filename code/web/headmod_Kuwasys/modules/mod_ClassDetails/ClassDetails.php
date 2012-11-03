@@ -4,7 +4,7 @@ require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
-require_once PATH_ACCESS_KUWASYS . '/KuwasysGlobalSettingsManager.php';
+require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 require_once PATH_WEB . '/WebInterface.php';
 
 class ClassDetails extends Module {
@@ -51,7 +51,7 @@ class ClassDetails extends Module {
 		$this->_interface = new WebInterface($smarty);
 		$this->_classManager = new KuwasysClassManager();
 		$this->_jointUsersInClass = new KuwasysJointUsersInClass();
-		$this->_globalSettingsManager = new KuwasysGlobalSettingsManager();
+		$this->_globalSettingsManager = new GlobalSettingsManager();
 	}
 
 	private function getClassByClassId ($classId) {
@@ -77,7 +77,7 @@ class ClassDetails extends Module {
 	private function getIsClassRegistrationGloballyEnabled () {
 
 		try {
-			$value = $this->_globalSettingsManager->isClassRegistrationGloballyEnabledGet();
+			$value = $this->_globalSettingsManager->return $this->valueGet (GlobalSettings::IS_CLASSREGISTRATION_ENABLED);
 		} catch (Exception $e) {
 			$this->_interface->DieError('Ein Fehler ist beim Abrufen vom KurswahlWert aufgetreten. Breche ab.');
 		}

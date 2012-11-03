@@ -67,10 +67,10 @@ class ClassList extends Module {
 
 	private function getIsClassRegistrationGloballyEnabled () {
 
-		require_once PATH_ACCESS_KUWASYS . '/KuwasysGlobalSettingsManager.php';
-		$globalSettingsManager = new KuwasysGlobalSettingsManager();
+		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
+		$globalSettingsManager = new GlobalSettingsManager();
 		try {
-			$value = $globalSettingsManager->isClassRegistrationGloballyEnabledGet();
+			$value = $globalSettingsManager->return $this->valueGet (GlobalSettings::IS_CLASSREGISTRATION_ENABLED);
 		} catch (Exception $e) {
 			$this->_interface->DieError('Ein Fehler ist beim Abrufen vom KurswahlWert aufgetreten. Breche ab.');
 		}

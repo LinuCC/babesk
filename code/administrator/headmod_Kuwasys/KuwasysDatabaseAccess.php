@@ -31,7 +31,6 @@ class KuwasysDatabaseAccess {
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysClassTeacherManager.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysGradeManager.php';
-		require_once PATH_ACCESS_KUWASYS . '/KuwasysGlobalSettingsManager.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysJointClassInSchoolYearManager.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysJointClassTeacherInClass.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysJointGradeInSchoolYear.php';
@@ -40,13 +39,14 @@ class KuwasysDatabaseAccess {
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInSchoolYear.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
+		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 
 		$this->_userManager = new KuwasysUsersManager();
 		$this->_classManager = new KuwasysClassManager();
 		$this->_gradeManager = new KuwasysGradeManager();
 		$this->_schoolyearManager = new KuwasysSchoolYearManager();
 		$this->_classteacherManager = new KuwasysClassTeacherManager();
-		$this->_globalSettingsManager = new KuwasysGlobalSettingsManager();
+		$this->_globalSettingsManager = new GlobalSettingsManager();
 		$this->_jointUserInClassManager = new KuwasysJointUsersInClass();
 		$this->_jointUserInGradeManager = new KuwasysJointUsersInGrade();
 		$this->_jointClassInSchoolyearManager = new KuwasysJointClassInSchoolYearManager();
@@ -161,12 +161,13 @@ class KuwasysDatabaseAccess {
 		}
 	}
 
+	///TODO: Following both functions duplicated
 	public function classRegistrationGloballyEnabledGetAndAddingWhenVoid () {
 
 		try {
-			$toggle = $this->_globalSettingsManager->isClassRegistrationGloballyEnabledGet();
+			$toggle = $this->_globalSettingsManager->valueGet (GlobalSettings::IS_CLASSREGISTRATION_ENABLED);
 		} catch (MySQLVoidDataException $e) {
-			$this->classRegistrationGloballyIsEnabledAdd(false);
+			$this->_globalSettingsManager->valueSet (GlobalSettings::IS_CLASSREGISTRATION_ENABLED, false);
 			return false;
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('globalSettingsErrorFetchClassRegEnabled'));
@@ -177,18 +178,7 @@ class KuwasysDatabaseAccess {
 	public function classRegistrationGloballyIsEnabledSet ($toggle) {
 
 		try {
-			$this->_globalSettingsManager->isClassRegistrationGloballyEnabledAlter($toggle);
-		} catch (MySQLVoidDataException $e) {
-			$this->_globalSettingsManager->isClassRegistrationGloballyEnabledAdd($toggle);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('globalSettingsErrorSetClassRegEnabled'));
-		}
-	}
-
-	public function classRegistrationGloballyIsEnabledAdd ($toggle) {
-
-		try {
-			$this->_globalSettingsManager->isClassRegistrationGloballyEnabledAdd($toggle);
+			$this->_globalSettingsManager->$this->valueSet (GlobalSettings::IS_CLASSREGISTRATION_ENABLED, $toggle);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('globalSettingsErrorSetClassRegEnabled'));
 		}
@@ -609,7 +599,7 @@ class KuwasysDatabaseAccess {
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorFetchWaiting'));
 		}
-		if(is_array($joints)) {
+		if(isset ($joints) && is_array($joints)) {
 			return $joints;
 		}
 	}
@@ -910,7 +900,7 @@ class KuwasysDatabaseAccess {
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('jointClassteacherInClassErrorFetch'));
 		}
-		if(is_array($joints)) {
+		if(isset ($joints) && is_array($joints)) {
 			return $joints;
 		}
 	}
