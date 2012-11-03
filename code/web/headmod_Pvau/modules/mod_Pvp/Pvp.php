@@ -49,7 +49,7 @@ class Pvp extends Module {
 		foreach($date->find('meta') as $e)
 			$e->outertext = '';
 
-		
+		$treffer = 0;
 		$result_tmp='';
 		// replace all input
 		foreach($date->find('div.mon_title') as $e)
@@ -62,7 +62,7 @@ class Pvp extends Module {
 				foreach($date->find('tr') as $e) {
 			
 				if (strstr($e->innertext,'>'.$st.'</td>')) {	
-				
+					$treffer = 1;
 					$result_tmp .= '<tr>'.$e->innertext().'</tr>';
 					$result_tmp = str_get_html($result_tmp);
 					foreach($result_tmp->find('td') as $e) {
@@ -75,7 +75,13 @@ class Pvp extends Module {
 			}
 				
 	
-	$result .= $result_tmp;
+	
+	if (!$treffer) {
+		foreach($date->find('div.mon_title') as $e)
+			$result = '<h3>'.$e->outertext . '</h3>';
+		$result .= "<h4>Keine Vertretungen!</h4>";
+	}
+	else $result .= $result_tmp; 
 		// dump contents
 		$result .= "</table>";
 		return $result;
