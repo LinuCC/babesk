@@ -1,0 +1,37 @@
+<?php
+
+require_once PATH_ADMIN . '/AdminInterface.php';
+
+class EmailConfigurationInterface extends AdminInterface {
+	/////////////////////////////////////////////////////////////////////
+	//Constructor
+	/////////////////////////////////////////////////////////////////////
+
+	public function __construct ($modPath, $smarty) {
+		parent::__construct ($modPath, $smarty);
+		$this->parentPath = $this->tplFilePath . 'header.tpl';
+		$this->smarty->assign('inh_path', $this->parentPath);
+	}
+
+	/////////////////////////////////////////////////////////////////////
+	//Methods
+	/////////////////////////////////////////////////////////////////////
+
+	public function mainMenuDisplay ($host, $username, $password, $fromName, $from) {
+		$this->smarty->assign ('host', $host);
+		$this->smarty->assign ('username', $username);
+		$this->smarty->assign ('password', $password);
+		$this->smarty->assign ('fromName', $fromName);
+		$this->smarty->assign ('from', $from);
+		$this->smarty->display ($this->tplFilePath . 'mainMenu.tpl');
+	}
+
+	/////////////////////////////////////////////////////////////////////
+	//Implements
+	/////////////////////////////////////////////////////////////////////
+
+	/////////////////////////////////////////////////////////////////////
+	//Attributes
+	/////////////////////////////////////////////////////////////////////
+}
+?>
