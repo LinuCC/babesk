@@ -25,11 +25,11 @@ class Pvp extends Module {
 		require_once PATH_ACCESS .'/PVauManager.php';
 		$this->pvm = new PVauManager();
 		
-		include('simple_html_dom.php');
-		
-		if (isset($_POST['search'])) {
+		include('simple_html_dom.php');		
+		if (isset($_POST['search']) && $_POST['search'] != "" && $_POST['search'] != " ") {
 			$this->pvm->SetSearchterms($_SESSION['uid'], $_POST['search']);
 		}
+		
 		
 		// get DOM from URL
 		$today = file_get_html('http://www.leg-uelzen.de/vertretungsplan/Heute/subst_001.htm');
@@ -37,8 +37,12 @@ class Pvp extends Module {
 		$searchterm = $this->pvm->getSearchterms($_SESSION['uid']);
 		
 		$smarty->assign('searchterm',$searchterm);
-		$smarty->assign('planheute',$this->createPVP($today,$searchterm));
-		$smarty->assign('planmorgen',$this->createPVP($tomorrow,$searchterm));
+		if (isset($searchterm))  {
+			$smarty->assign('planheute',$this->createPVP($today,$searchterm));
+			$smarty->assign('planmorgen',$this->createPVP($tomorrow,$searchterm));
+		} else {
+			$smarty->assign('planheute','<p class="error">Keine Suchbegriffe angegeben!</p>');
+		}
 		$smarty->display($this->smartyPath . "pvp.tpl");	
 	}
 	
@@ -61,7 +65,7 @@ class Pvp extends Module {
 			foreach ($searchterm_exploded as $st) {
 				foreach($date->find('tr') as $e) {
 			
-				if (strstr($e->innertext,'>'.$st.'</td>')) {	
+				if (strstr($e->innertext,sprintf('>%s</td>',$st))) {	
 					$treffer = 1;
 					$result_tmp .= '<tr>'.$e->innertext().'</tr>';
 					$result_tmp = str_get_html($result_tmp);

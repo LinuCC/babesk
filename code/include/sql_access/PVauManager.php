@@ -46,9 +46,9 @@ class PVauManager extends TableManager {
 	function SetSearchterms($uid,$searchterms) {
 		if(isset($uid)) {
 			if ($this->existsEntry("ID", $uid)) {
-				parent::alterEntry($uid, 'searchterms', $searchterms);
+				parent::alterEntry($uid, 'searchterms', mysql_real_escape_string($searchterms));
 			} else {
-				$this->addEntry("ID", $uid,"searchterms",$searchterms);
+				$this->addEntry("ID", $uid,"searchterms",mysql_real_escape_string($searchterms));
 				return false;
 					
 			}
