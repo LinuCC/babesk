@@ -91,7 +91,7 @@
 		);
 		</sqlCommand>
 		<alternateSqlCommandForBabesk>
-		ALTER TABLE users 
+		ALTER TABLE users
 		ADD
 		(`email` varchar(64) NOT NULL,
 		`telephon` varchar (64) NOT NULL);
@@ -127,6 +127,17 @@
 		`UserID` int(11) unsigned NOT NULL,
 		`ClassID` int(11) unsigned NOT NULL,
 		`status` varchar(32) NOT NULL,
+		Primary Key (`ID`)
+		);
+		</sqlCommand>
+	</table>
+	<table>
+		<name>jointUsersInClassStatus</name>
+		<sqlCommand>
+		CREATE TABLE IF NOT EXISTS `jointUsersInClassStatus` (
+		`ID` int(11) unsigned NOT NULL auto_increment,
+		`name` varchar (64) NOT NULL,
+		`translatedName` varchar(255) NOT NULL,
 		Primary Key (`ID`)
 		);
 		</sqlCommand>

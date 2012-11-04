@@ -47,7 +47,7 @@ td {
 	</tr>
 	<tr>
 		<th>Wunsch:</th>
-		<td>{if isset($class.sumStatus.request)} {$class.sumStatus.request}
+		<td>{if (isset($class.sumStatus.request1) || isset($class.sumStatus.request2))} {$class.sumStatus.request1 + $class.sumStatus.request2}
 			{else}---{/if}</td>
 	</tr>
 	<tr>

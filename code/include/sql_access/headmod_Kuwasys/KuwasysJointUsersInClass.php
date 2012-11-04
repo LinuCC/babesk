@@ -9,8 +9,8 @@ class KuwasysJointUsersInClass extends TableManager {
 	////////////////////////////////////////////////////////////////////////////////
 	private $_statusActiveStr = 'active';
 	private $_statusWaitingStr = 'waiting';
-	private $_statusFirstRequestStr = 'request#1';
-	private $_statusSecondRequestStr = 'request#2';
+	private $_statusFirstRequestStr = 'request1';
+	private $_statusSecondRequestStr = 'request2';
 
 	private $_multipleJointChanges;
 
@@ -106,7 +106,7 @@ class KuwasysJointUsersInClass extends TableManager {
 	}
 
 	public function getAllJointsWithClassId ($classId) {
-		
+
 		$joints = $this->getTableData('ClassID=' . $classId);
 		return $joints;
 	}
@@ -119,9 +119,9 @@ class KuwasysJointUsersInClass extends TableManager {
 		}
 		return $joint [0];
 	}
-	
+
 	public function isJointExistingByUserIdAndClassId ($userId, $classId) {
-		
+
 		try {
 			$this->searchEntry(sprintf('UserID="%s" AND ClassID="%s"', $userId, $classId));
 		} catch (MySQLVoidDataException $e) {
@@ -174,9 +174,9 @@ class KuwasysJointUsersInClass extends TableManager {
 				 $this->tablename, $valueChanges));
 		$this->executeQuery($query);
 	}
-	
+
 	public function getAllJointsOfClassIdAndStatusActive ($classId) {
-		
+
 		$sqlPartString = sprintf('ClassID="%s" AND status="%s"', $classId, $this->_statusActiveStr);
 		$joints = $this->getTableData($sqlPartString);
 		return $joints;
