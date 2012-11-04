@@ -132,9 +132,9 @@
 		</sqlCommand>
 	</table>
 	<table>
-		<name>jointUsersInClassStatus</name>
+		<name>usersInClassStatus</name>
 		<sqlCommand>
-		CREATE TABLE IF NOT EXISTS `jointUsersInClassStatus` (
+		CREATE TABLE IF NOT EXISTS `usersInClassStatus` (
 		`ID` int(11) unsigned NOT NULL auto_increment,
 		`name` varchar (64) NOT NULL,
 		`translatedName` varchar(255) NOT NULL,
