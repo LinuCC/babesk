@@ -89,6 +89,9 @@ class Users extends Module {
 				case 'printParticipationConfirmation':
 					$this->handleParticipationConfirmationPdf();
 					break;
+				case 'sendEmailsParticipationConfirmation':
+					$this->sendEmailParticipationConfirmation ();
+					break;
 				default:
 					$this->_interface->dieError($this->_languageManager->getText('actionValueWrong'));
 			}
@@ -352,24 +355,27 @@ class Users extends Module {
 	 * creates temporary Pdffiles on the Serverfilesystem and returns an array with the paths to them.
 	 */
 	private function createTemporaryPdfFiles ($users) {
-
-		require_once PATH_INCLUDE . '/pdf/HtmlToPdfImporter.php';
-
-		$confTemplatePath = PATH_INCLUDE . '/pdf/printTemplates/printTemplateTest.html';
-		if(!file_exists($confTemplatePath)) {
-			$this->_interface->dieError($this->_languageManager->getText('errorPdfHtmlTemplateMissing')
-										 . $confTemplatePath);
-		}
 		$pdfTmpPathArray = array();
-
 		foreach ($users as $user) {
-			$pdf = new HtmlToPdfImporter ();
-			$pdf->htmlImport($confTemplatePath, true);
-			$pdf->tempVarReplaceInHtml('username', sprintf('%s %s', $user['forename'], $user['name']), '#!%s#!');
-			$pdf->htmlToPdfConvert();
-			$pdfTmpPathArray [] = $pdf->pdfSaveTemporaryAndGetFilename ();
+			$pdfTmpPathArray [] = $this->createPdfParticipationConfirmation ($user);
 		}
 		return $pdfTmpPathArray;
+	}
+
+	/** Creates a PDF for the Participation Confirmation and returns its Path
+	 *
+	 */
+	private function createPdfParticipationConfirmation ($user) {
+		require_once PATH_INCLUDE . '/pdf/HtmlToPdfImporter.php';
+		$confTemplatePath = PATH_INCLUDE . '/pdf/printTemplates/printTemplateTest.html';
+		if(!file_exists($confTemplatePath))
+			$this->_interface->dieError($this->_languageManager->getText('errorPdfHtmlTemplateMissing') . $confTemplatePath);
+		$pdf = new HtmlToPdfImporter ();
+		$pdf->htmlImport($confTemplatePath, true);
+		$pdf->tempVarReplaceInHtml('username', sprintf('%s %s', $user['forename'], $user['name']), '#!%s#!');
+		$pdf->htmlToPdfConvert();
+		$pdfPath = $pdf->pdfSaveTemporaryAndGetFilename ();
+		return $pdfPath;
 	}
 
 	/**
@@ -399,6 +405,36 @@ class Users extends Module {
 		$grade = $this->_databaseAccessManager->gradeGetById ($gradeId);
 		$filename = sprintf('%s_%s_%s.pdf', $schoolyear ['label'], $grade ['label'] . $grade ['gradeValue'], date('Y-m-d'));
 		return $filename;
+	}
+
+	private function sendEmailParticipationConfirmation () {
+		foreach ($_POST['userIds'] as $userId) {
+			$this->_databaseAccessManager->userIdAddToUserIdArray($userId);
+		}
+		$users = $this->_databaseAccessManager->userGetByUserIdArray();
+		foreach ($users as $user) {
+			$pdfPath = $this->createPdfParticipationConfirmation ($user);
+			$this->sendEmailIfUserHasEmail ($user, $pdfPath);
+		}
+		$this->_interface->dieMsg ('Das Versenden der Emails wurde abgeschlossen.');
+	}
+
+	/**
+	 *
+	 */
+	private function sendEmailIfUserHasEmail ($user, $pdfPath) {
+		if ($user ['email'] == '') {
+			$this->_interface->showMsg (sprintf('Der Benutzer %s %s hat keine Email angegeben.', $user ['forename'], $user ['name']));
+		}
+		require_once PATH_INCLUDE . '/email/SMTPMailer.php';
+		$mailer = new SMTPMailer ($this->_interface);
+		$mailer->smtpDataInDatabaseLoad ();
+		$mailer->emailFromXmlLoad (PATH_INCLUDE . '/email/Kuwasys_Bestaetigung.xml');
+		$mailer->AddAttachment ($pdfPath, 'KurswahlBestaetigung.pdf');
+		$mailer->AddAddress ($user ['email']);
+		if (!$mailer->Send ()) {
+			$this->_interface->showError (sprintf('Konnte die Email an %s %s nicht versenden. Fehlermeldung: %s', $user ['forename'], $user ['name'], $mailer->ErrorInfo));
+		}
 	}
 
 	/**-----------------------------------------------------------------------------
