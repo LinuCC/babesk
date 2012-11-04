@@ -43,7 +43,7 @@ class Pvp extends Module {
 		} else {
 			$smarty->assign('planheute','<p class="error">Keine Suchbegriffe angegeben!</p>');
 		}
-		$smarty->display($this->smartyPath . "pvp.tpl");	
+		$smarty->display($this->smartyPath . "Pvp.tpl");	
 	}
 	
 	private function createPVP($date,$searchterm) {
