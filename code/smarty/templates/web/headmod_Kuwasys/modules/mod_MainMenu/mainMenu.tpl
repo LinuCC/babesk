@@ -13,7 +13,7 @@ p.classListing {
 }
 
 div.classListing {
-	
+
 	border-style: solid;
 	border-width: 1px;
 	border-color: #2e6132;
@@ -35,20 +35,18 @@ div.classListing {
 	<b>
 	{if $class.registrationEnabled}
 		<a class="classListing" onmouseover="displayClassDescription('{$class.ID}')" onmouseout="hideClassDescription('{$class.ID}')"
-			{if $class.status == 'active'} style="color: rgb(255, 50, 50);" 
-			{else if $class.status == 'waiting'} style="color: rgb(50, 255, 50);" 
-			{else if $class.status == 'request'} style="color: rgb(50, 50, 255);" {/if}
+			{if $class.status == 'Aktiv'} style="color: rgb(255, 50, 50);"
+			{else if $class.status == 'waiting'} style="color: rgb(50, 255, 50);"{/if}
 			href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}">{$class.label}</a>
-	{else}		
+	{else}
 		<p class="classListing" onmouseover="displayClassDescription('{$class.ID}')" onmouseout="hideClassDescription('{$class.ID}')"
-			{if $class.status == 'active'} style="color: rgb(255, 50, 50);" 
-			{else if $class.status == 'waiting'} style="color: rgb(50, 255, 50);" 
-			{else if $class.status == 'request'} style="color: rgb(50, 50, 255);" {/if}
+			{if $class.statusTranslated == 'Aktiv'} style="color: rgb(255, 50, 50);"
+			{else if $class.status == 'Wartend'} style="color: rgb(50, 255, 50);"{/if}
 			href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}">{$class.label}</p>
 	{/if}</b>
 	<br>
 	<div id="classDescription#{$class.ID}" class="classDescription" hidden="hidden">
-		<p>{$class.status}</p>
+		<p>{$class.statusTranslated}</p>
 		<p>{$class.description}</p>
 	</div>
 {/foreach}

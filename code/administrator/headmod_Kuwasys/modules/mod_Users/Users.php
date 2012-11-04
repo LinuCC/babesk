@@ -10,7 +10,7 @@ require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInSchoolYear.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
-require_once PATH_INCLUDE_KUWASYS . '/jointUserInClassStatusDefinition.php';
+require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
 require_once 'DisplayUsersWaiting.php';
 
 /**
@@ -32,7 +32,7 @@ class Users extends Module {
 	private $_classManager;
 	private $_jointUsersInClass;
 	private $_databaseAccessManager;
-	private $_jointUserInClassStatusDefiner;
+	private $_usersInClassStatusManager;
 	/**
 	 * @var KuwasysLanguageManager
 	 */
@@ -119,7 +119,7 @@ class Users extends Module {
 		$this->_languageManager->setModule('Users');
 		require_once PATH_ADMIN . $this->relPath . '../../KuwasysDatabaseAccess.php';
 		$this->_databaseAccessManager = new KuwasysDatabaseAccess($this->_interface);
-		$this->_jointUserInClassStatusDefiner = new jointUserInClassStatusTranslation($this->_languageManager);
+		$this->_usersInClassStatusManager = new KuwasysUsersInClassStatusManager ();
 	}
 
 	/**-------------------------------------------------------------------------
@@ -1034,9 +1034,9 @@ class Users extends Module {
 		$userSpecificJointsUserInClass = $this->getAllJointsOfUserId($user['ID']);
 		if (isset($userSpecificJointsUserInClass) && $userSpecificJointsUserInClass) {
 			foreach ($userSpecificJointsUserInClass as $joint) {
-				$status = $this->_jointUserInClassStatusDefiner->statusTranslate($joint ['status']);
+				$status = $this->_usersInClassStatusManager->statusGet ($joint ['statusId']);
 				$class = $this->getClassByClassId($joint['ClassID']);
-				$class ['status'] = $status;
+				$class ['status'] = $status ['translatedName'];
 				$user['classes'][] = $class;
 			}
 		}
@@ -1052,10 +1052,11 @@ class Users extends Module {
 	 * @param unknown_type $userID
 	 * @param unknown_type $classID
 	 */
-	private function addJointUsersInClass ($userID, $classID, $status) {
+	private function addJointUsersInClass ($userID, $classID, $statusName) {
 
 		try {
-			$this->_jointUsersInClass->addJoint($userID, $classID, $status);
+			$status = $this->_usersInClassStatusManager->statusGetByName ($statusName);
+			$this->_jointUsersInClass->addJoint($userID, $classID, $status ['ID']);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorAddJointUsersInClass'));
 		}
@@ -1099,10 +1100,11 @@ class Users extends Module {
 		}
 	}
 
-	private function alterJointUsersInClass ($jointId, $status) {
+	private function alterJointUsersInClass ($jointId, $statusName) {
 
 		try {
-			$this->_jointUsersInClass->alterStatusOfJoint($jointId, $status);
+			$status = $this->_usersInClassStatusManager->statusGetByName ($statusName);
+			$this->_jointUsersInClass->alterStatusIdOfJoint($jointId, $status ['ID']);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorAlterJointUsersInClass'));
 		}

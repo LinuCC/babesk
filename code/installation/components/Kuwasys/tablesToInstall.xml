@@ -126,7 +126,7 @@
 		`ID` int(11) unsigned NOT NULL auto_increment,
 		`UserID` int(11) unsigned NOT NULL,
 		`ClassID` int(11) unsigned NOT NULL,
-		`status` varchar(32) NOT NULL,
+		`statusId` int(11) unsigned NOT NULL,
 		Primary Key (`ID`)
 		);
 		</sqlCommand>
