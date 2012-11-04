@@ -25,7 +25,7 @@ class UserManager extends TableManager{
 		$user = parent::getTableData('username="'.$username.'"');
 		return $user[0]['ID'];
 	}
-	
+
 	/**
 	 * returns the forename of the given ID of the user
 	 * @param numeric_string $uid The ID of the User
@@ -33,7 +33,7 @@ class UserManager extends TableManager{
 	function getForename($uid) {
 		return $this->getEntryValue($uid, 'forename');
 	}
-	
+
 	/**
 	 * returns the name of the given ID of the user
 	 * @param numeric_string $uid The ID of the User
@@ -41,7 +41,7 @@ class UserManager extends TableManager{
 	function getName($uid) {
 		return $this->getEntryValue($uid, 'name');
 	}
-	
+
 	/**
 	 * returns the username of the given ID of the user
 	 * @param numeric_string $uid The ID of the User
@@ -49,11 +49,11 @@ class UserManager extends TableManager{
 	function getUsername($uid) {
 		return $this->getEntryValue($uid, 'username');
 	}
-	
+
 	function getUserdata ($uid) {
 		return $this->getEntryData($uid, '*');
 	}
-	
+
 	/**
 	 *  @todo this function is not necessary anymore, functionality is alredy in alterUser(), replace getUserID
 	 */
@@ -70,7 +70,7 @@ class UserManager extends TableManager{
 		return true;
 	}
 
-	
+
 	/**
 	 * Sorts the users it gets from MySQL-table and returns them
 	 * Enter description here ...
@@ -87,7 +87,7 @@ class UserManager extends TableManager{
 			$res_array[] = $buffer;
 		return $res_array;
 	}
-	
+
 	/**
 	 * Checks if the Username or the complete name (forename + name) are already existing
 	 * Enter description here ...
@@ -106,14 +106,14 @@ class UserManager extends TableManager{
 			} catch (MySQLVoidDataException $e) {
 				return false;
 			}
-		} 
+		}
 		return true;
 	}
-	
+
 	/**
 	 * Looks if the Amount of Credits the user has exeeds the maximum Amount of the group of the user
 	 * Enter description here ...
-	 * @param numeric string $uid the userID 
+	 * @param numeric string $uid the userID
 	 * @return number
 	 */
 	function getMaxRechargeAmount($uid) {
@@ -202,7 +202,7 @@ class UserManager extends TableManager{
 		require_once PATH_INCLUDE.'/functions.php';
 		$sql = ('SELECT locked FROM users WHERE ID = ?');
 		$stmt = $this->db->prepare($sql);
-	
+
 		if (!$stmt) {
 			exit($this->db->error);
 		}
@@ -210,7 +210,7 @@ class UserManager extends TableManager{
 		if (!$stmt->execute()) {
 			exit($stmt->error);
 		}
-	
+
 		$stmt->bind_result($result);
 		if (!$stmt->fetch()) {
 			return false;
@@ -218,7 +218,7 @@ class UserManager extends TableManager{
 		$stmt->close();
 		return $result;
 	}
-	
+
 	/**
 	 * returns ID of all users, whose have a coupon
 	 */
@@ -246,7 +246,7 @@ class UserManager extends TableManager{
 		$users = TableManager::getTableData('soli = "1"');
 		return $users;
 	}
-	
+
 	/**
 	 * checks if user of given UID does not need to pay full price
 	 */
@@ -261,8 +261,8 @@ class UserManager extends TableManager{
 	function getBirthday($UID) {
 		$birthday = parent::getEntryData($UID, 'birthday');
 		return $birthday['birthday'];
-	}	
-	
+	}
+
 	/**
 	 * returns all User with Soli-Status
 	 */
@@ -270,7 +270,7 @@ class UserManager extends TableManager{
 		$solis = $this->getTableData('soli = 1');
 		return $solis;
 	}
-	
+
 	/**
 	* Locks an account
 	*
@@ -281,7 +281,7 @@ class UserManager extends TableManager{
 		parent::alterEntry($uid, 'locked', '1');
 		}
 	}
-	
+
 	/**
 	 * sets religion
 	 *
@@ -290,7 +290,7 @@ class UserManager extends TableManager{
 	function SetReligion($uid,$religion) {
 		if(isset($uid)) {
 		$string=implode("|", $religion);
-			
+
 				try {
 					parent::alterEntry($uid, 'religion', $string);
 				} catch (Exception $e) {
@@ -298,7 +298,7 @@ class UserManager extends TableManager{
 				}
 		}
 	}
-	
+
 	/**
 	 * sets foreign languages
 	 *
@@ -306,9 +306,9 @@ class UserManager extends TableManager{
 	 */
 	function SetForeignLanguage($uid,$foreignLanguages) {
 		if(isset($uid)) {
-			
+
 			$string=implode("|", $foreignLanguages);
-			
+
 				try {
 					parent::alterEntry($uid, 'foreign_language', $string);
 				} catch (Exception $e) {
@@ -317,7 +317,7 @@ class UserManager extends TableManager{
 		}
 	}
 
-	
+
 	/**
 	 * sets special courses
 	 *
@@ -325,9 +325,9 @@ class UserManager extends TableManager{
 	 */
 	function SetSpecialCourse($uid,$specialCourses) {
 		if(isset($uid)) {
-				
+
 			$string=implode("|", $specialCourses);
-				
+
 			try {
 				parent::alterEntry($uid, 'special_course', $string);
 			} catch (Exception $e) {
@@ -335,7 +335,7 @@ class UserManager extends TableManager{
 			}
 		}
 	}
-	
+
 	/**
 	 * gets the class, religion, foreign_language and course of an user
 	 */
@@ -343,12 +343,12 @@ class UserManager extends TableManager{
 		$query = sql_prev_inj(sprintf('SELECT class, religion, foreign_language, special_course FROM %s WHERE ID = %s', $this->tablename, $uid));
 		$result = $this->db->query($query);
 		if (!$result) {
-			throw DB_QUERY_ERROR.$this->db->error;
+			throw new Exception(DB_QUERY_ERROR.$this->db->error);
 		}
 		$result = $result->fetch_assoc();
 		return $result;
 	}
-	
+
 	/**
 	 * Adds a User to the System
 	 *
@@ -366,14 +366,14 @@ class UserManager extends TableManager{
 	 * @return false if error
 	 */
 	function addUser($name, $forename, $username, $passwd, $birthday, $credit, $GID, $class) {
-		
+
 		try { //test if username already exists
 			parent::getTableData('username = "'.$username.'"');
 		} catch (MySQLVoidDataException $e) {
 			//username does not exist
 			parent::addEntry('name', $name, 'forename', $forename, 'username', $username, 'password', md5($passwd),
         					 'birthday', $birthday, 'credit', $credit, 'GID', $GID, 'last_login', 'CURRENT_TIMESTAMP', 'login_tries', 0, 'first_passwd', 1,'class',$class);
-				
+
 			return;
 		}
 		//username exists
@@ -394,7 +394,7 @@ class UserManager extends TableManager{
 	 * @param unknown_type $locked
 	 */
 	function alterUser($old_id, $id, $name, $forename, $username, $passwd, $birthday, $credit, $GID, $locked,$soli,$class) {
-		if(isset($passwd) && $passwd != "d41d8cd98f00b204e9800998ecf8427e") {	
+		if(isset($passwd) && $passwd != "d41d8cd98f00b204e9800998ecf8427e") {
 		parent::alterEntry($old_id, 'ID', $id, 'forename', $forename, 'name', $name, 'username',
 							$username, 'password', $passwd, 'birthday', $birthday, 'credit', $credit, 'GID', $GID,'locked', $locked,'soli',$soli,'class',$class);
 		}
@@ -431,9 +431,9 @@ class UserManager extends TableManager{
 			throw new MySQLConnectionException('failed to add a login try!');
 		}
 	}
-	
+
 	public function updateLastLoginToNow ($userId) {
-		
+
 		$query = sql_prev_inj(sprintf('UPDATE %s SET last_login = NOW() WHERE ID = %s', $this->tablename, $userId));
 		$this->executeQuery($query);
 	}
