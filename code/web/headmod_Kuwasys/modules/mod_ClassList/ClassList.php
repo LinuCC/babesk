@@ -202,7 +202,6 @@ class ClassList extends Module {
 	}
 
 	private function checkIsClassRegistrationGloballyEnabled () {
-		var_dump((boolean)$this->getIsClassRegistrationGloballyEnabled());
 		if(!$this->getIsClassRegistrationGloballyEnabled()) {
 			$this->_interface->DieError('Klassenregistration ist momentan nicht erlaubt!');
 		}

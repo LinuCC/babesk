@@ -180,7 +180,7 @@ class KuwasysDatabaseAccess {
 	public function classRegistrationGloballyIsEnabledSet ($toggle) {
 
 		try {
-			$this->_globalSettingsManager->$this->valueSet (GlobalSettings::IS_CLASSREGISTRATION_ENABLED, $toggle);
+			$this->_globalSettingsManager->valueSet (GlobalSettings::IS_CLASSREGISTRATION_ENABLED, $toggle);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('globalSettingsErrorSetClassRegEnabled'));
 		}

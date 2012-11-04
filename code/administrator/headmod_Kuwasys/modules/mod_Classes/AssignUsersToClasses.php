@@ -122,7 +122,8 @@ class AssignUsersToClasses {
 	private function jointUsersInClassSetToActiveAddToMultipleChangesList ($jointId) {
 
 		try {
-			$this->_jointUsersInClassManager->alterStatusOfJointAddEntryToTempList($jointId, 'active');
+			$status = $this->_usersInClassStatusManager->statusGetByName ('active');
+			$this->_jointUsersInClassManager->alterStatusOfJointAddEntryToTempList($jointId, $status ['ID']);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorJointUsersInClassChange'));
 		}
@@ -131,7 +132,8 @@ class AssignUsersToClasses {
 	private function jointUsersInClassSetToWaitingAddToMultipleChangesList ($jointId) {
 
 		try {
-			$this->_jointUsersInClassManager->alterStatusOfJointAddEntryToTempList($jointId, 'waiting');
+			$status = $this->_usersInClassStatusManager->statusGetByName ('waiting');
+			$this->_jointUsersInClassManager->alterStatusOfJointAddEntryToTempList($jointId, $status ['ID']);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorJointUsersInClassChange'));
 		}
@@ -324,15 +326,15 @@ class AssignUsersToClasses {
 	private function jointsUsersInClassHandle () {
 
 		try {
-			$jointsUsersInClass ['request#1'] = $this->jointsUsersInClassFirstRequestGetAndThrowWhenVoid();
+			$jointsUsersInClass ['request1'] = $this->jointsUsersInClassFirstRequestGetAndThrowWhenVoid();
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->showMsg($this->_languageManager->getText('errorNoJointsUsersInClassFirstRequest'));
 		}
 		try {
-			$jointsUsersInClass ['request#2'] = $this->jointsUsersInClassSecondRequestGetAndThrowWhenVoid();
+			$jointsUsersInClass ['request2'] = $this->jointsUsersInClassSecondRequestGetAndThrowWhenVoid();
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->showMsg($this->_languageManager->getText('errorNoJointsUsersInClassSecondRequest'));
-			if(!isset($jointsUsersInClass ['request#1'])) {
+			if(!isset($jointsUsersInClass ['request1'])) {
 				$this->_interface->dieError($this->_languageManager->getText('errorNoJointsUsersInClassInAssignUsersToClass'));
 			}
 		}

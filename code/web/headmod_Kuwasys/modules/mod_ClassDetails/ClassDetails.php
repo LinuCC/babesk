@@ -99,10 +99,21 @@ class ClassDetails extends Module {
 
 		$classId = $_GET['classId'];
 		$jointUsersInClass = $this->getJointUsersInClassByUserIdAndClassId($classId);
-		$status = $this->_usersInClassStatusManager->statusGet ($jointUsersInClass['statusId']);
+		$status = $this->statusGetWithoutDieing ($jointUsersInClass['statusId']);
 		$this->_smarty->assign('class', $this->getClassByClassId($classId));
-		$this->_smarty->assign('classStatus', $status ['translatedName']);
+		if($status) {
+			$this->_smarty->assign('classStatus', $status ['translatedName']);
+		}
 		$this->_smarty->display($this->_smartyPath . 'classDetails.tpl');
+	}
+
+	private function statusGetWithoutDieing ($statusId) {
+		try {
+			$status = $this->_usersInClassStatusManager->statusGet ($statusId);
+		} catch (MySQLVoidDataException $e) {
+			return false;
+		}
+		return status;
 	}
 
 	private function showConfirmationDeRegisterClass () {
