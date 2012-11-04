@@ -143,8 +143,10 @@ class Classes extends Module {
 				///@ToDo can be made faster with userIdArray!
 				$user = $this->_databaseAccessManager->userGet($joint['UserID']);
 				$user['statusId'] = $joint['statusId'];
-				$status = $usersInClassStatusManager->statusGet ($joint ['statusId']);
-				$user['statusTranslated'] = $status ['translatedName'];
+				$status = $this->_databaseAccessManager->usersInClassStatusGetWithoutDieing ($joint ['statusId']);
+				if ($status) {
+					$user['statusTranslated'] = $status ['translatedName'];
+				}
 				$user = $this->addChoicesOfDayToUser($user, $class ['weekday']);
 				$user = $this->addGradeLabelToUser($user);
 				$class['users'][] = $user;

@@ -4,6 +4,7 @@ require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
+require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
 require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 require_once PATH_WEB . '/WebInterface.php';
 
@@ -52,6 +53,7 @@ class ClassDetails extends Module {
 		$this->_classManager = new KuwasysClassManager();
 		$this->_jointUsersInClass = new KuwasysJointUsersInClass();
 		$this->_globalSettingsManager = new GlobalSettingsManager();
+		$this->_usersInClassStatusManager = new KuwasysUsersInClassStatusManager ();
 	}
 
 	private function getClassByClassId ($classId) {
@@ -97,8 +99,9 @@ class ClassDetails extends Module {
 
 		$classId = $_GET['classId'];
 		$jointUsersInClass = $this->getJointUsersInClassByUserIdAndClassId($classId);
+		$status = $this->_usersInClassStatusManager->statusGet ($jointUsersInClass['statusId']);
 		$this->_smarty->assign('class', $this->getClassByClassId($classId));
-		$this->_smarty->assign('classStatus', $jointUsersInClass['status']);
+		$this->_smarty->assign('classStatus', $status ['translatedName']);
 		$this->_smarty->display($this->_smartyPath . 'classDetails.tpl');
 	}
 
@@ -135,6 +138,7 @@ class ClassDetails extends Module {
 	private $_classManager;
 	private $_usersManager;
 	private $_globalSettingsManager;
+	private $_usersInClassStatusManager;
 	private $_interface;
 	private $_smarty;
 	private $_smartyPath;

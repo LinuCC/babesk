@@ -93,7 +93,9 @@ td {
 				>
 				<!-- Link to "move user to another Class" -->
 				<a href="index.php?section=Kuwasys|Users&action=moveUserByClass&classIdOld={$class.ID}&userId={$user.ID}">
-					{$user.statusTranslated}
+					{if $user.statusTranslated}
+						{$user.statusTranslated}
+					{else}Fehler!{/if}
 				</a>
 			</td>
 			<td rowspan="{$rowsOfSamePerson}">{$user.gradeName}</td>

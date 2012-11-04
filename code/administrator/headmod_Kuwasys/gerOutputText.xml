@@ -83,6 +83,7 @@
 			<finDeleteUser>Der Benutzer wurde erfolgreich gelöscht.</finDeleteUser>
 			<finChangeUser>Der Benutzer wurde erfolgreich geändert.</finChangeUser>
 			<finAddUserToClass>Der Benutzer wurde erfolgreich dem Kurs hinzugefügt.</finAddUserToClass>
+			<errorFetchUsersInClassStatus>Ein Fehler ist beim Abrufen des Statuses aufgetreten!</errorFetchUsersInClassStatus>
 			<errorPdfHtmlTemplateMissing>Konnte das Html-Template zum erstellen der PDF-Datei nicht finden.</errorPdfHtmlTemplateMissing>
 		</text>
 	</module>

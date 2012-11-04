@@ -55,12 +55,22 @@ class MainMenu extends Module {
 		if (isset($jointsUsersInClass)) {
 			foreach ($jointsUsersInClass as $joint) {
 				$class = $this->getClassFromDatabase($joint['ClassID']);
-				$status = $this->_usersInClassStatusManager->statusGet( $joint['statusId']);
-				$class['statusTranslated'] = $status ['translatedName'];
+				$status = $this->usersInClassStatusGet ($joint['statusId']);
+				if ($status)
+					$class['statusTranslated'] = $status ['translatedName'];
 				$classes[] = $class;
 			}
 			return $classes;
 		}
+	}
+
+	private function usersInClassStatusGet ($statusId) {
+		try {
+			$status = $this->_usersInClassStatusManager->statusGet($statusId);
+		} catch (MySQLVoidDataException $e) {
+			return false;
+		}
+		return $status;
 	}
 
 	private function getAllJointsUsersInClassOfUser () {

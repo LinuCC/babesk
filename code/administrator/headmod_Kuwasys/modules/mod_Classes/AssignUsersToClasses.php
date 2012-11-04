@@ -27,7 +27,7 @@ class AssignUsersToClasses {
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
 
-	public function execute ($dataContainer) {
+	public function execute () {
 
 		if(isset($_POST['confirmed'])) {
 			$this->usersToClassesAssignShowConfirmationDialog();

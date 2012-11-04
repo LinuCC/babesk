@@ -15,7 +15,7 @@
 	<label>Das Verhältnis des Schülers zum neuen Kurs<br>
 	<select name="statusNew">
 		{foreach $statusArray as $status}
-			<option value="{$status.name}">{$status.nameTrans}</option>
+			<option value="{$status.ID}">{$status.translatedName}</option>
 		{/foreach}
 	</select>
 	</label><br>

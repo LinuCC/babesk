@@ -649,11 +649,9 @@ class KuwasysDatabaseAccess {
 		}
 	}
 
-	public function jointUserInClassAlter ($jointId, $classId, $userId, $statusName) {
-
+	public function jointUserInClassAlter ($jointId, $classId, $userId, $statusId) {
 		try {
-			$status = $this->_usersInClassStatusManager->statusGetByName ($statusName);
-			$this->_jointUserInClassManager->alterJoint($jointId, $classId, $userId, $status ['ID']);
+			$this->_jointUserInClassManager->alterJoint($jointId, $classId, $userId, $statusId);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorChange'));
 		}
@@ -1019,6 +1017,15 @@ class KuwasysDatabaseAccess {
 			$this->_interface->dieError($this->_languageManagerManager->getText('jointUserInSchoolyearErrorFetch'));
 		}
 		return $schoolyearId;
+	}
+
+	public function usersInClassStatusGetWithoutDieing ($statusId) {
+		try {
+			$status = $this->_usersInClassStatusManager->statusGet ($statusId);
+		} catch (MySQLVoidDataException $e) {
+			return false;
+		}
+		return $status;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////

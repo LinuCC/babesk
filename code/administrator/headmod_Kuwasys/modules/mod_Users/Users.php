@@ -521,7 +521,7 @@ class Users extends Module {
 		$classes = $this->_databaseAccessManager->classGetAll();
 		$classOld = $this->searchClassArrayForClassWithId($_GET['classIdOld'], $classes);
 		$user = $this->_databaseAccessManager->userGet($_GET['userId']);
-		$statusArray = $this->_jointUserInClassStatusDefiner->statusArrayGet();
+		$statusArray = $this->_usersInClassStatusManager->statusGetAll ();
 		$this->_interface->showMoveUserByClass($classOld, $user, $classes, $statusArray);
 	}
 
@@ -1034,9 +1034,11 @@ class Users extends Module {
 		$userSpecificJointsUserInClass = $this->getAllJointsOfUserId($user['ID']);
 		if (isset($userSpecificJointsUserInClass) && $userSpecificJointsUserInClass) {
 			foreach ($userSpecificJointsUserInClass as $joint) {
-				$status = $this->_usersInClassStatusManager->statusGet ($joint ['statusId']);
+				$status = $this->_databaseAccessManager->usersInClassStatusGetWithoutDieing ($joint ['statusId']);
 				$class = $this->getClassByClassId($joint['ClassID']);
-				$class ['status'] = $status ['translatedName'];
+				if ($status) {
+					$class ['status'] = $status ['translatedName'];
+				}
 				$user['classes'][] = $class;
 			}
 		}
@@ -1110,15 +1112,20 @@ class Users extends Module {
 		}
 	}
 
-	private function alterJointUsersInClassOfUserIdAndClassId ($userId, $classId, $status) {
+	private function alterJointUsersInClassOfUserIdAndClassId ($userId, $classId, $statusName) {
 
 		$joint = $this->getJointUsersInClassByUserIdAndClassId($userId, $classId);
-		if ($status == 'noConnection') {
+		if ($statusName == 'noConnection') {
 			$this->deleteJointUsersInClass($joint['ID']);
 			$this->_interface->dieMsg($this->_languageManager->getText('finishedDeleteJointUsersInClass'));
 		}
 		else {
-			$this->alterJointUsersInClass($joint['ID'], $status);
+			try {
+				$this->_usersInClassStatusManager->statusGetByName ($statusName);
+			} catch (MySQLVoidDataException $e) {
+				$this->_interface->dieError ($this->_languageManager->getText ('errorFetchUsersInClassStatus'));
+			}
+			$this->alterJointUsersInClass($joint['ID'], $statusName);
 			$this->_interface->dieMsg($this->_languageManager->getText('finishedChangeJointUsersInClass'));
 		}
 	}
