@@ -40,6 +40,7 @@
 			<errorFetchJointUsersInGrade>Ein Fehler ist beim Abrufen der Daten zum Verlinken von Schülern und Klassen aufgetreten! Dieser Schüler gehört womöglich zu keiner Klasse.</errorFetchJointUsersInGrade>
 			<errorFetchJointUsersInClassActive>Die Aktiven Benutzer von Kursen konnten nicht abgerufen werden.</errorFetchJointUsersInClassActive>
 			<errorNoJointUsersInClassActive>Es konnten keine Aktiven Benutzer von Kursen gefunden werden.</errorNoJointUsersInClassActive>
+			<errorNoJointsUsersInClassWaiting>Es gibt keine Schüler, die auf der Warteliste von Kursen stehen!</errorNoJointsUsersInClassWaiting>
 			<errorAddJointUsersInGrade>Ein Fehler ist beim Verlinken des Schülers mit der Klasse aufgetreten. Sie müssen den Schüler womöglich nochmal bearbeiten.</errorAddJointUsersInGrade>
 			<errorDeleteJointUsersInGrade>Die Verbindung zwischen dem Schüler und der Klasse konnte nicht gelöscht werden! Wenn der Schüler keiner Klasse zugewiesen war, können sie diese Warnung ignorieren.</errorDeleteJointUsersInGrade>
 			<errorNoJointUsersInGradeToDelete>Die Verbindung zwischen dem Schüler und der Klasse konnte nicht gelöscht werden weil die Verbindung nicht existiert.</errorNoJointUsersInGradeToDelete>
@@ -134,7 +135,6 @@
 			<errorFetchJointsUsersInClassFirstRequest>Ein Fehler ist beim Abrufen der primären Kurswünsche von Schülern aufgetreten.</errorFetchJointsUsersInClassFirstRequest>
 			<errorFetchJointsUsersInClassSecondRequest>Ein Fehler ist beim Abrufen der sekundären Kurswünsche von Schülern aufgetreten.</errorFetchJointsUsersInClassSecondRequest>
 			<errorFetchJointsUsersInClassWaiting>Ein Fehler ist beim Abrufen der der wartenden Schüler aufgetreten.</errorFetchJointsUsersInClassWaiting>
-			<errorNoJointsUsersInClassWaiting>Es gibt keine Schüler, die auf der Warteliste von Kursen stehen!</errorNoJointsUsersInClassWaiting>
 			<warningUsersJointedToClassToDelete>WARNUNG: Es sind noch Benutzer an dem Kurs angemeldet/interessiert! Wenn sie den Kurs löschen, gehen auch diese
 			    Beziehungen unwiderruflich verloren.</warningUsersJointedToClassToDelete>
 			<errorDeleteJointsUsersInClass>Ein Fehler ist beim löschen der Beziehungen der Benutzer zum Kurs aufgetreten.
