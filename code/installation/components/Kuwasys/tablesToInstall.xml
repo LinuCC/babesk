@@ -15,6 +15,17 @@
 		</sqlCommand>
 	</table>
 	<table>
+		<name>kuwasysClassUnit</name>
+		<sqlCommand>
+		CREATE TABLE IF NOT EXISTS `kuwasysClassUnit` (
+		`ID` int(11) unsigned NOT NULL auto_increment,
+		`name` varchar(128) NOT NULL,
+		`translatedName` varchar(255) NOT NULL,
+		Primary Key (`ID`)
+		);
+		</sqlCommand>
+	</table>
+	<table>
 		<name>grade</name>
 		<sqlCommand>
 		CREATE TABLE IF NOT EXISTS `grade` (
@@ -142,6 +153,7 @@
 		);
 		</sqlCommand>
 	</table>
+
 	<table>
 		<name>jointClassInSchoolYear</name>
 		<sqlCommand>
