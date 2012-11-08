@@ -52,8 +52,8 @@ function changeHeadModule(headMod) {
 	width: 500px;
 	margin: 5px;
 	line-height: 200%;
-	padding: 5px;
-	border: 5px double #006699;
+	padding: 3px;
+	border: 3px ridge #006699;
 	background-color: #dbecd2;
 
 	-webkit-border-radius: 20px;
@@ -61,10 +61,15 @@ function changeHeadModule(headMod) {
 	-moz-border-radius: 20px;
 	border-radius: 20px;
 	display: inline;
+	
+	
 }
 .HeadItemText {
 	color: #0a2800;
 	display: inline;
+	font-family:verdana, sans-serif;
+	font-size: 10pt;
+	font-weight:bold;
 }
 .menu_item {
 /* if only one headModule, show all Modules instantly without having to click the option*/
@@ -86,9 +91,11 @@ function changeHeadModule(headMod) {
 
 <!-- ACTUAL HTML -->
 
-
+{assign var=headmod_counter value=0}
 <div class="HeadItemContainer">
 {foreach $head_modules as $headmod} 
+{$headmod_counter=$headmod_counter+($headmod.display_name|count_characters:true)}
+	{if $headmod_counter>80}<div style="float:none;"></div>{$headmod_counter=0}{/if}
 <div class="HeadItem" id="head_module{$headmod.name}">
 	<a class="HeadItemText" href="javascript:changeHeadModule('{$headmod.name}')">{$headmod.display_name}</a>
 </div>

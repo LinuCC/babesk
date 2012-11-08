@@ -44,11 +44,13 @@ class PVauManager extends TableManager {
 	 *@throws MySQLConnectionException if a problem with MySQL happened
 	 */
 	function SetSearchterms($uid,$searchterms) {
+		$searchterms = str_replace('"', '\'', $searchterms);
+
 		if(isset($uid)) {
 			if ($this->existsEntry("ID", $uid)) {
-				parent::alterEntry($uid, 'searchterms', mysql_real_escape_string($searchterms));
+				parent::alterEntry($uid, 'searchterms', sql_prev_inj($searchterms));
 			} else {
-				$this->addEntry("ID", $uid,"searchterms",mysql_real_escape_string($searchterms));
+				$this->addEntry("ID", $uid,"searchterms",sql_prev_inj($searchterms));
 				return false;
 					
 			}

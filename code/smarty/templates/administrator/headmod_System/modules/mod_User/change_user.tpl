@@ -72,5 +72,6 @@ function checkCardId() {
 	</fieldset>
 	<br> <input id="submit" onclick="submit()" type="submit" value="Submit" />
 </form>
+<div align="right"><form action="index.php?section=System|User&action=3&ID={$user.ID}" method="post"><input type='submit' value='löschen'></form></div>
 
 {/block}

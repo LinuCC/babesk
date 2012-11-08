@@ -30,10 +30,23 @@ class Pvp extends Module {
 			$this->pvm->SetSearchterms($_SESSION['uid'], $_POST['search']);
 		}
 		
+		$curl = curl_init('http://www.leg-uelzen.de/vertretungsplan/Heute/subst_001.htm');
+		curl_setopt($curl, CURLOPT_HEADER, false);
+		curl_setopt($curl, CURLOPT_VERBOSE, false);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		$output = curl_exec($curl);
 		
-		// get DOM from URL
-		$today = file_get_html('http://www.leg-uelzen.de/vertretungsplan/Heute/subst_001.htm');
-		$tomorrow = file_get_html('http://www.leg-uelzen.de/vertretungsplan/Morgen/subst_001.htm');
+		$today = str_get_html($output);
+		
+		$curl2 = curl_init('http://www.leg-uelzen.de/vertretungsplan/Morgen/subst_001.htm');
+		curl_setopt($curl2, CURLOPT_HEADER, false);
+		curl_setopt($curl2, CURLOPT_VERBOSE, false);
+		curl_setopt($curl2, CURLOPT_RETURNTRANSFER, true);
+		$output2 = curl_exec($curl2);
+		
+		
+		
+		$tomorrow = str_get_html($output2);
 		$searchterm = $this->pvm->getSearchterms($_SESSION['uid']);
 		
 		$smarty->assign('searchterm',$searchterm);
@@ -47,7 +60,6 @@ class Pvp extends Module {
 	}
 	
 	private function createPVP($date,$searchterm) {
-		
 		$searchterm_exploded = explode(" ", $searchterm);
 		// remove all meta
 		foreach($date->find('meta') as $e)
@@ -65,7 +77,7 @@ class Pvp extends Module {
 			foreach ($searchterm_exploded as $st) {
 				foreach($date->find('tr') as $e) {
 			
-				if (strstr($e->innertext,sprintf('>%s</td>',$st))) {	
+				if (strstr($e->innertext,sprintf('>%s<',$st))) {	
 					$treffer = 1;
 					$result_tmp .= '<tr>'.$e->innertext().'</tr>';
 					$result_tmp = str_get_html($result_tmp);
