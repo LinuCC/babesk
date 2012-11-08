@@ -11,11 +11,11 @@
 		<option value="waiting"
 			{if $linkStatus == "waiting"} selected="selected"{/if}
 		>Wartend</option>
-		<option value="request#1"
-			{if $linkStatus == "request#1"} selected="selected"{/if}
+		<option value="request1"
+			{if $linkStatus == "request1"} selected="selected"{/if}
 		>Als Erstwunsch</option>
-		<option value="request#2"
-			{if $linkStatus == "request#2"} selected="selected"{/if}
+		<option value="request2"
+			{if $linkStatus == "request2"} selected="selected"{/if}
 		>Als Zweitwunsch</option>
 		<option value="noConnection"
 			{if $linkStatus != "active" && $linkStatus != "waiting" && $linkStatus != "request#1" && $linkStatus != "request#2"} selected="selected"{/if}

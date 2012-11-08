@@ -47,7 +47,7 @@ td {
 	</tr>
 	<tr>
 		<th>Wunsch:</th>
-		<td>{if isset($class.sumStatus.request)} {$class.sumStatus.request}
+		<td>{if (isset($class.sumStatus.request1) || isset($class.sumStatus.request2))} {$class.sumStatus.request1 + $class.sumStatus.request2}
 			{else}---{/if}</td>
 	</tr>
 	<tr>
@@ -93,7 +93,9 @@ td {
 				>
 				<!-- Link to "move user to another Class" -->
 				<a href="index.php?section=Kuwasys|Users&action=moveUserByClass&classIdOld={$class.ID}&userId={$user.ID}">
-					{$user.statusTranslated}
+					{if $user.statusTranslated}
+						{$user.statusTranslated}
+					{else}Fehler!{/if}
 				</a>
 			</td>
 			<td rowspan="{$rowsOfSamePerson}">{$user.gradeName}</td>

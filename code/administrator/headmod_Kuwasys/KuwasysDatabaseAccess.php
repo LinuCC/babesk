@@ -39,6 +39,7 @@ class KuwasysDatabaseAccess {
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInSchoolYear.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
+		require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 
 		$this->_userManager = new KuwasysUsersManager();
@@ -53,6 +54,7 @@ class KuwasysDatabaseAccess {
 		$this->_jointGradeInSchoolyearManager = new KuwasysJointGradeInSchoolYear();
 		$this->_jointUserInSchoolyearManager = new KuwasysJointUsersInSchoolYear();
 		$this->_jointClassteacherInClassManager = new KuwasysJointClassTeacherInClass();
+		$this->_usersInClassStatusManager = new KuwasysUsersInClassStatusManager ();
 	}
 
 	public function classAdd ($label, $description, $maxRegistration, $allowRegistration, $weekday) {
@@ -178,7 +180,7 @@ class KuwasysDatabaseAccess {
 	public function classRegistrationGloballyIsEnabledSet ($toggle) {
 
 		try {
-			$this->_globalSettingsManager->$this->valueSet (GlobalSettings::IS_CLASSREGISTRATION_ENABLED, $toggle);
+			$this->_globalSettingsManager->valueSet (GlobalSettings::IS_CLASSREGISTRATION_ENABLED, $toggle);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('globalSettingsErrorSetClassRegEnabled'));
 		}
@@ -567,7 +569,8 @@ class KuwasysDatabaseAccess {
 	public function jointUserInClassGetCountOfActiveUsersOfClassId ($classId) {
 
 		try {
-			$counter = $this->_jointUserInClassManager->getCountOfActiveUsersInClass($classId);
+			$status = $this->_usersInClassStatusManager->statusGetByName ('active');
+			$counter = $this->_jointUserInClassManager->getCountOfUsersInClassWithStatus ($status ['ID'], $classId);
 		} catch (MySQLVoidDataException $e) {
 			$counter = 0;
 		} catch (Exception $e) {
@@ -581,7 +584,8 @@ class KuwasysDatabaseAccess {
 	public function jointUserInClassGetAllWithStatusWaiting() {
 
 		try {
-			$joints = $this->_jointUserInClassManager->getAllJointsWithStatusWaiting();
+			$status = $this->_usersInClassStatusManager->statusGetByName ('waiting');
+			$joints = $this->_jointUserInClassManager->getAllJointsWithStatusId ($status ['ID']);
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorNoWaiting'));
 		} catch (Exception $e) {
@@ -593,7 +597,8 @@ class KuwasysDatabaseAccess {
 	public function jointUserInClassGetAllWithStatusWaitingWithoutDyingWhenVoid () {
 
 		try {
-			$joints = $this->_jointUserInClassManager->getAllJointsWithStatusWaiting();
+			$status = $this->_usersInClassStatusManager->statusGetByName ('waiting');
+			$joints = $this->_jointUserInClassManager->getAllJointsWithStatusId ($status ['ID']);
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->showMsg($this->_languageManager->getText('jointUserInClassErrorNoWaiting'));
 		} catch (Exception $e) {
@@ -607,7 +612,8 @@ class KuwasysDatabaseAccess {
 	public function jointUserInClassGetAllWithStatusActiveWithoutDyingWhenVoid () {
 
 		try {
-			$jointsUsersInClassActive = $this->_jointUserInClassManager->getAllJointsWithStatusActive();
+			$status = $this->_usersInClassStatusManager->statusGetByName ('active');
+			$jointsUsersInClassActive = $this->_jointUserInClassManager->getAllJointsWithStatusId ($status ['ID']);
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->showMsg($this->_languageManager->getText('jointUserInClassErrorNoActive'));
 		} catch (Exception $e) {
@@ -643,18 +649,9 @@ class KuwasysDatabaseAccess {
 		}
 	}
 
-	public function jointUserInClassAlterStatus ($jointId, $status) {
-
+	public function jointUserInClassAlter ($jointId, $classId, $userId, $statusId) {
 		try {
-			$this->_jointUserInClassManager->alterStatusOfJoint($jointId, $status);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorChange'));
-		}
-	}
-	public function jointUserInClassAlter ($jointId, $classId, $userId, $status) {
-
-		try {
-			$this->_jointUserInClassManager->alterJoint($jointId, $classId, $userId, $status);
+			$this->_jointUserInClassManager->alterJoint($jointId, $classId, $userId, $statusId);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorChange'));
 		}
@@ -675,8 +672,7 @@ class KuwasysDatabaseAccess {
 	public function jointUserInClassSetToActiveAddToMultipleChangesList ($jointId) {
 
 		try {
-			$this->_jointUserInClassManager->alterStatusOfJointAddEntryToTempList($jointId,
-					$this->_jointUserInClassManager->getActiveStatusString());
+			$this->_jointUserInClassManager->alterStatusOfJointAddEntryToTempList($jointId, 'waiting');
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorChange'));
 		}
@@ -685,8 +681,7 @@ class KuwasysDatabaseAccess {
 	public function jointUserInClassSetToWaitingAddToMultipleChangesList ($jointId) {
 
 		try {
-			$this->_jointUserInClassManager->alterStatusOfJointAddEntryToTempList($jointId,
-					$this->_jointUserInClassManager->getWaitingStatusString());
+			$this->_jointUserInClassManager->alterStatusOfJointAddEntryToTempList($jointId, 'waiting');
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorChange'));
 		}
@@ -695,7 +690,8 @@ class KuwasysDatabaseAccess {
 	public function jointUserInClassFirstRequestGetAndThrowWhenVoid () {
 
 		try {
-			$joints = $this->_jointUserInClassManager->getAllJointsWithStatusRequestFirst();
+			$status = $this->_usersInClassStatusManager->statusGetByName ('request1');
+			$joints = $this->_jointUserInClassManager->getAllJointsWithStatusId($status ['ID']);
 		} catch (MySQLVoidDataException $e) {
 			throw new MySQLVoidDataException('No UsersInClass-Joints with firstRequests');
 		} catch (Exception $e) {
@@ -707,7 +703,8 @@ class KuwasysDatabaseAccess {
 	public function jointUserInClassSecondRequestGetAndThrowWhenVoid () {
 
 		try {
-			$joints = $this->_jointUserInClassManager->getAllJointsWithStatusRequestSecond();
+			$status = $this->_usersInClassStatusManager->statusGetByName ('request2');
+			$joints = $this->_jointUserInClassManager->getAllJointsWithStatusId($status ['ID']);
 		} catch (MySQLVoidDataException $e) {
 			throw new MySQLVoidDataException('No UsersInClass-Joints with secondRequests');
 		} catch (Exception $e) {
@@ -728,7 +725,8 @@ class KuwasysDatabaseAccess {
 	public function jointUserInClassGetAllWithoutDyingWhenVoid () {
 
 		try {
-			$joints = $this->_jointUserInClassManager->getAllJointsWithStatusWaiting();
+			$status = $this->_usersInClassStatusManager->statusGetByName ('waiting');
+			$joints = $this->_jointUserInClassManager->getAllJointsWithStatusId($status ['ID']);
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->showMsg($this->_languageManager->getText('jointUserInClassErrorNoWaiting'));
 		} catch (Exception $e) {
@@ -1021,6 +1019,15 @@ class KuwasysDatabaseAccess {
 		return $schoolyearId;
 	}
 
+	public function usersInClassStatusGetWithoutDieing ($statusId) {
+		try {
+			$status = $this->_usersInClassStatusManager->statusGet ($statusId);
+		} catch (MySQLVoidDataException $e) {
+			return false;
+		}
+		return $status;
+	}
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////
@@ -1043,9 +1050,10 @@ class KuwasysDatabaseAccess {
 	private $_globalSettingsManager;
 	private $_jointUserInClassManager;
 	private $_jointUserInGradeManager;
+	private $_usersInClassStatusManager;
+	private $_jointUserInSchoolyearManager;
 	private $_jointClassInSchoolyearManager;
 	private $_jointGradeInSchoolyearManager;
-	private $_jointUserInSchoolyearManager;
 	private $_jointClassteacherInClassManager;
 
 }

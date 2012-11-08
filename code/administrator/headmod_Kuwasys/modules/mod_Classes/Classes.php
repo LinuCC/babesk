@@ -2,7 +2,6 @@
 
 require_once 'ClassesInterface.php';
 require_once PATH_INCLUDE . '/Module.php';
-require_once PATH_INCLUDE_KUWASYS . '/jointUserInClassStatusDefinition.php';
 /**
  *
  * Notice that a class has to have only one SchoolYear!
@@ -76,7 +75,6 @@ class Classes extends Module {
 		$this->_languageManager->setModule('Classes');
 		require_once PATH_ADMIN . $this->relPath . '../../KuwasysDatabaseAccess.php';
 		$this->_databaseAccessManager = new KuwasysDatabaseAccess($this->_interface);
-		$this->_jointUserInClassStatusDefiner = new jointUserInClassStatusTranslation($this->_languageManager);
 
 	}
 
@@ -137,24 +135,27 @@ class Classes extends Module {
 	}
 
 	private function addUsersAndSumStatusToClass ($class) {
-
+		require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
+		$usersInClassStatusManager = new KuwasysUsersInClassStatusManager ();
 		$jointsOfClass = $this->getAllJointsUsersInClassWithClassId($class['ID']);
-
 		if (isset($jointsOfClass)) {
 			foreach ($jointsOfClass as $joint) {
 				///@ToDo can be made faster with userIdArray!
 				$user = $this->_databaseAccessManager->userGet($joint['UserID']);
-				$user['status'] = $joint['status'];
-				$user['statusTranslated'] = $this->_jointUserInClassStatusDefiner->statusTranslate($joint['status']);
+				$user['statusId'] = $joint['statusId'];
+				$status = $this->_databaseAccessManager->usersInClassStatusGetWithoutDieing ($joint ['statusId']);
+				if ($status) {
+					$user['statusTranslated'] = $status ['translatedName'];
+				}
 				$user = $this->addChoicesOfDayToUser($user, $class ['weekday']);
 				$user = $this->addGradeLabelToUser($user);
 				$class['users'][] = $user;
 
-				if (isset($class['sumStatus'][$user['status']])) {
-					$class['sumStatus'][$user['status']] += 1;
+				if (isset($class['sumStatus'][$user['statusId']])) {
+					$class['sumStatus'][$user['statusId']] += 1;
 				}
 				else {
-					$class['sumStatus'][$user['status']] = 1;
+					$class['sumStatus'][$user['statusId']] = 1;
 				}
 			}
 		}
@@ -393,9 +394,7 @@ class Classes extends Module {
 	}
 
 	private function addRegistrationCountToClasses ($classes) {
-
 		foreach ($classes as & $class) {
-
 			$userCount = $this->getCountOfActiveUsersInClass($class['ID']);
 			$class['userCount'] = $userCount;
 		}

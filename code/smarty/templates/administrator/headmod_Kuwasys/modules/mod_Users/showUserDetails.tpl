@@ -48,8 +48,8 @@ table.dataTable td {
 	<div><label class="left">Geburtstag:</label> <div class="valueDiv"> {$user.birthday} </div></div><br>
 	<div><label class="left">Email-Adresse:</label> <div class="valueDiv"> {$user.email} </div></div><br>
 	<div><label class="left">Telefon:</label> <div class="valueDiv"> {$user.telephone} </div></div><br>
-	<div><label class="left">Letzter Login:</label> <div class="valueDiv"> 
-		{if $user.last_login}{$user.last_login}{else}---{/if} 
+	<div><label class="left">Letzter Login:</label> <div class="valueDiv">
+		{if $user.last_login}{$user.last_login}{else}---{/if}
 	</div></div><br>
 	{if isset($user.gradeLabel)}
 		<div><label class="left">In Klasse:</label> <div class="valueDiv"> {$user.gradeValue} {$user.gradeLabel} </div></div>
@@ -72,7 +72,7 @@ table.dataTable td {
 				{$counter = $counter + 1}
 				<tr>
 					<td><a href="index.php?section=Kuwasys|Classes&action=showClassDetails&ID={$class.ID}">{$class.label}</a></td>
-					<td><a href="index.php?section=Kuwasys|Users&action=changeUserToClass&classId={$class.ID}&userId={$user.ID}&classStatus={$class.status}">{$class.status}</a></td>
+					<td><a href="index.php?section=Kuwasys|Users&action=changeUserToClass&classId={$class.ID}&userId={$user.ID}&classStatus={if $class.status}{$class.status}{else}Fehler!{/if}">{if $class.status}{$class.status}{else}Fehler!{/if}</a></td>
 					<td>{$class.weekday}</td>
 				</tr>
 				{/if}
@@ -96,7 +96,7 @@ table.dataTable td {
 				{$counter = $counter + 1}
 				<tr>
 					<td><a href="index.php?section=Kuwasys|Classes&action=showClassDetails&ID={$class.ID}">{$class.label}</a></td>
-					<td><a href="index.php?section=Kuwasys|Users&action=changeUserToClass&classId={$class.ID}&userId={$user.ID}&classStatus={$class.status}">{$class.status}</a></td>
+					<td><a href="index.php?section=Kuwasys|Users&action=changeUserToClass&classId={$class.ID}&userId={$user.ID}&classStatus={$class.status}">{if $class.status}{$class.status}{else}Fehler!{/if}</a></td>
 					<td>{$class.weekday}</td>
 				</tr>
 				{/if}
@@ -120,7 +120,7 @@ table.dataTable td {
 				{$counter = $counter + 1}
 				<tr>
 					<td><a href="index.php?section=Kuwasys|Classes&action=showClassDetails&ID={$class.ID}">{$class.label}</a></td>
-					<td><a href="index.php?section=Kuwasys|Users&action=changeUserToClass&classId={$class.ID}&userId={$user.ID}&classStatus={$class.status}">{$class.status}</a></td>
+					<td><a href="index.php?section=Kuwasys|Users&action=changeUserToClass&classId={$class.ID}&userId={$user.ID}&classStatus={$class.status}">{if $class.status}{$class.status}{else}Fehler!{/if}</a></td>
 					<td>{$class.weekday}</td>
 				</tr>
 				{/if}
@@ -144,7 +144,7 @@ table.dataTable td {
 				{$counter = $counter + 1}
 				<tr>
 					<td><a href="index.php?section=Kuwasys|Classes&action=showClassDetails&ID={$class.ID}">{$class.label}</a></td>
-					<td><a href="index.php?section=Kuwasys|Users&action=changeUserToClass&classId={$class.ID}&userId={$user.ID}&classStatus={$class.status}">{$class.status}</a></td>
+					<td><a href="index.php?section=Kuwasys|Users&action=changeUserToClass&classId={$class.ID}&userId={$user.ID}&classStatus={$class.status}">{if $class.status}{$class.status}{else}Fehler!{/if}</a></td>
 					<td>{$class.weekday}</td>
 				</tr>
 				{/if}
@@ -168,7 +168,7 @@ table.dataTable td {
 				{$counter = $counter + 1}
 				<tr>
 					<td><a href="index.php?section=Kuwasys|Classes&action=showClassDetails&ID={$class.ID}">{$class.label}</a></td>
-					<td><a href="index.php?section=Kuwasys|Users&action=changeUserToClass&classId={$class.ID}&userId={$user.ID}&classStatus={$class.status}">{$class.status}</a></td>
+					<td><a href="index.php?section=Kuwasys|Users&action=changeUserToClass&classId={$class.ID}&userId={$user.ID}&classStatus={$class.status}">{if $class.status}{$class.status}{else}Fehler!{/if}</a></td>
 					<td>{$class.weekday}</td>
 				</tr>
 				{/if}

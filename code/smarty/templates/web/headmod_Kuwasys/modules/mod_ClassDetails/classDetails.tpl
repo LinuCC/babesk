@@ -7,7 +7,9 @@
 </div>
 <br>
 Dein Status bei diesem Kurs:<br>
-{$classStatus}
+{if $classStatus} {$classStatus}
+{else}<b>Fehler - ein falscher Statuseintrag! Wenden sie sich an den Administrator!</b>
+{/if}
 <br><br>
 {if $class.registrationEnabled}
 <form action="index.php?section=Kuwasys|ClassDetails&action=deRegisterClassConfirmation&classId={$class.ID}" method="post">

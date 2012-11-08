@@ -10,7 +10,7 @@ require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInSchoolYear.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
-require_once PATH_INCLUDE_KUWASYS . '/jointUserInClassStatusDefinition.php';
+require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
 require_once 'DisplayUsersWaiting.php';
 
 /**
@@ -32,7 +32,7 @@ class Users extends Module {
 	private $_classManager;
 	private $_jointUsersInClass;
 	private $_databaseAccessManager;
-	private $_jointUserInClassStatusDefiner;
+	private $_usersInClassStatusManager;
 	/**
 	 * @var KuwasysLanguageManager
 	 */
@@ -119,7 +119,7 @@ class Users extends Module {
 		$this->_languageManager->setModule('Users');
 		require_once PATH_ADMIN . $this->relPath . '../../KuwasysDatabaseAccess.php';
 		$this->_databaseAccessManager = new KuwasysDatabaseAccess($this->_interface);
-		$this->_jointUserInClassStatusDefiner = new jointUserInClassStatusTranslation($this->_languageManager);
+		$this->_usersInClassStatusManager = new KuwasysUsersInClassStatusManager ();
 	}
 
 	/**-------------------------------------------------------------------------
@@ -521,7 +521,7 @@ class Users extends Module {
 		$classes = $this->_databaseAccessManager->classGetAll();
 		$classOld = $this->searchClassArrayForClassWithId($_GET['classIdOld'], $classes);
 		$user = $this->_databaseAccessManager->userGet($_GET['userId']);
-		$statusArray = $this->_jointUserInClassStatusDefiner->statusArrayGet();
+		$statusArray = $this->_usersInClassStatusManager->statusGetAll ();
 		$this->_interface->showMoveUserByClass($classOld, $user, $classes, $statusArray);
 	}
 
@@ -1034,9 +1034,11 @@ class Users extends Module {
 		$userSpecificJointsUserInClass = $this->getAllJointsOfUserId($user['ID']);
 		if (isset($userSpecificJointsUserInClass) && $userSpecificJointsUserInClass) {
 			foreach ($userSpecificJointsUserInClass as $joint) {
-				$status = $this->_jointUserInClassStatusDefiner->statusTranslate($joint ['status']);
+				$status = $this->_databaseAccessManager->usersInClassStatusGetWithoutDieing ($joint ['statusId']);
 				$class = $this->getClassByClassId($joint['ClassID']);
-				$class ['status'] = $status;
+				if ($status) {
+					$class ['status'] = $status ['translatedName'];
+				}
 				$user['classes'][] = $class;
 			}
 		}
@@ -1052,10 +1054,11 @@ class Users extends Module {
 	 * @param unknown_type $userID
 	 * @param unknown_type $classID
 	 */
-	private function addJointUsersInClass ($userID, $classID, $status) {
+	private function addJointUsersInClass ($userID, $classID, $statusName) {
 
 		try {
-			$this->_jointUsersInClass->addJoint($userID, $classID, $status);
+			$status = $this->_usersInClassStatusManager->statusGetByName ($statusName);
+			$this->_jointUsersInClass->addJoint($userID, $classID, $status ['ID']);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorAddJointUsersInClass'));
 		}
@@ -1099,24 +1102,30 @@ class Users extends Module {
 		}
 	}
 
-	private function alterJointUsersInClass ($jointId, $status) {
+	private function alterJointUsersInClass ($jointId, $statusName) {
 
 		try {
-			$this->_jointUsersInClass->alterStatusOfJoint($jointId, $status);
+			$status = $this->_usersInClassStatusManager->statusGetByName ($statusName);
+			$this->_jointUsersInClass->alterStatusIdOfJoint($jointId, $status ['ID']);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorAlterJointUsersInClass'));
 		}
 	}
 
-	private function alterJointUsersInClassOfUserIdAndClassId ($userId, $classId, $status) {
+	private function alterJointUsersInClassOfUserIdAndClassId ($userId, $classId, $statusName) {
 
 		$joint = $this->getJointUsersInClassByUserIdAndClassId($userId, $classId);
-		if ($status == 'noConnection') {
+		if ($statusName == 'noConnection') {
 			$this->deleteJointUsersInClass($joint['ID']);
 			$this->_interface->dieMsg($this->_languageManager->getText('finishedDeleteJointUsersInClass'));
 		}
 		else {
-			$this->alterJointUsersInClass($joint['ID'], $status);
+			try {
+				$this->_usersInClassStatusManager->statusGetByName ($statusName);
+			} catch (MySQLVoidDataException $e) {
+				$this->_interface->dieError ($this->_languageManager->getText ('errorFetchUsersInClassStatus'));
+			}
+			$this->alterJointUsersInClass($joint['ID'], $statusName);
 			$this->_interface->dieMsg($this->_languageManager->getText('finishedChangeJointUsersInClass'));
 		}
 	}
