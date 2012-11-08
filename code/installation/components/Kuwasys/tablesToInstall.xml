@@ -9,6 +9,7 @@
 		`description` varchar(1024) NOT NULL,
 		`maxRegistration` int(5) NOT NULL,
 		`registrationEnabled` boolean NOT NULL,
+		'unitId' int (11) unsigned NOT NULL,
 		Primary Key (`ID`)
 		);
 		</sqlCommand>

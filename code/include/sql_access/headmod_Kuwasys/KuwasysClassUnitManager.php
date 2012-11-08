@@ -50,7 +50,7 @@ class KuwasysClassUnitManager extends TableManager {
 	 * @return An Array with the Data of the ClassUnit
 	 */
 	public function unitGetByName ($name) {
-		return $this->searchEntry (sprintf('%s = %s',KuwasysClassUnit::name, $id));
+		return $this->searchEntry (sprintf('%s = "%s"',KuwasysClassUnit::name, $name));
 	}
 
 	/** Adds an ClassUnit-Entry to the table
