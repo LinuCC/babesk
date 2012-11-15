@@ -1,7 +1,8 @@
 <?php
-
 require_once PATH_CODE . '/include/sql_access/DBConnect.php';
 require_once PATH_CODE . '/include/sql_access/TableManager.php';
+require_once PATH_ACCESS . '/headmod_Kuwasys/KuwasysUsersInClassStatusManager.php';
+require_once PATH_ACCESS . '/headmod_Kuwasys/KuwasysClassUnitManager.php';
 
 class InstallKuwasys extends InstallationComponent {
 
@@ -29,7 +30,7 @@ class InstallKuwasys extends InstallationComponent {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
-	public function execute ($dataContainer) {
+	public function execute () {
 
 // 		die('Database muss noch angegeben werden können! OMG noob...');
 		if (isset($_GET['action'])) {
@@ -89,6 +90,8 @@ class InstallKuwasys extends InstallationComponent {
 			);
 		$this->initDatabase();
 		$this->installDatabaseTables();
+		$this->addUsersInClassStatus ();
+		$this->addKuwasysClassUnit ();
 		$this->showAddAdminForm();
 
 	}
@@ -203,6 +206,30 @@ class InstallKuwasys extends InstallationComponent {
 			$this->addError('Konnte die globale Administratorgruppe nicht hinzufügen!');
 			$this->displayAndDie();
 		}
+	}
+
+	/** This function adds some Entries to the Table "usersInClassStatus"
+	 *
+	 */
+	private function addUsersInClassStatus () {
+
+		$usersInClassStatusManager = new KuwasysUsersInClassStatusManager ();
+		$usersInClassStatusManager->statusAdd ('active', 'Aktive');
+		$usersInClassStatusManager->statusAdd ('waiting', 'wartend');
+		$usersInClassStatusManager->statusAdd ('request1', 'Erstwunsch');
+		$usersInClassStatusManager->statusAdd ('request2', 'Zweitwunsch');
+	}
+
+	/** Adds some Entries to the Table "KuwasysClassUnit"
+	 *
+	 */
+	private function addKuwasysClassUnit () {
+
+		$kuwasysClassUnitManager = new KuwasysClassUnitManager ();
+		$kuwasysClassUnitManager->unitAdd ('monday', 'Montag');
+		$kuwasysClassUnitManager->unitAdd ('tuesday', 'Dienstag');
+		$kuwasysClassUnitManager->unitAdd ('wednesday', 'Mittwoch');
+		$kuwasysClassUnitManager->unitAdd ('thursday', 'Donnerstag');
 	}
 
 	private function finishInstallation () {

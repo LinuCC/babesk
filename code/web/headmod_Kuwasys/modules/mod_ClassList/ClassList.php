@@ -4,6 +4,7 @@ require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
+require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysDatabaseAccess.php';
 require_once PATH_WEB . '/WebInterface.php';
 
 class ClassList extends Module {
@@ -52,16 +53,29 @@ class ClassList extends Module {
 		$this->_classManager = new KuwasysClassManager();
 		$this->_usersManager = new KuwasysUsersManager();
 		$this->_interface = new WebInterface($this->_smarty);
-		$this->_weekdayAbbreviationArr = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
-		$this->_firstRequestStatusStr = 'request#1';
-		$this->_secondRequestStatusStr = 'request#2';
+		$this->_databaseAccessManager = new KuwasysDatabaseAccess ($this->_interface);
+		$this->initWeekdayIdArray ();
+		$this->_firstStatusRequestId = $this->_databaseAccessManager->usersInClassStatusGetByName ('request1') ['ID'];
+		$this->_secondStatusRequestId = $this->_databaseAccessManager->usersInClassStatusGetByName ('request2') ['ID'];
+	}
+
+	private function initWeekdayIdArray () {
+		$classUnits = $this->_databaseAccessManager->kuwasysClassUnitGetAll ();
+		$classUnitIdArray = [];
+		foreach ($classUnits as $classUnit) {
+			$classUnitIdArray [] = $classUnit ['ID'];
+		}
+		$this->_weekdayIdArray = $classUnitIdArray;
 	}
 
 	private function showClassList () {
 
 		$classes = $this->addRegistrationForUserAllowedToClass();
-		$sortedClasses = $this->sortClassesAfterWeekdayInArray($classes);
-		$this->_smarty->assign('sortedClasses', $sortedClasses);
+		// $sortedClasses = $this->sortClassesAfterWeekdayInArray($classes);
+		$classUnits = $this->_databaseAccessManager->kuwasysClassUnitGetAll ();
+		// $this->_smarty->assign ('sortedClasses', $sortedClasses);
+		$this->_smarty->assign ('classUnits', $classUnits);
+		$this->_smarty->assign ('classes', $classes);
 		$this->_smarty->display($this->_smartyPath . 'classList.tpl');
 	}
 
@@ -115,11 +129,11 @@ class ClassList extends Module {
 				foreach ($jointsUsersInClass as $joint) {
 					if ($joint['ClassID'] == $class['ID']) {
 						foreach ($alreadyUsedWeekdays as $weekday) {
-							if ($class['weekday'] == $weekday) {
+							if ($class['unitId'] == $weekday) {
 								continue 2;
 							}
 						}
-						$alreadyUsedWeekdays[] = $class['weekday'];
+						$alreadyUsedWeekdays[] =$this->_databaseAccessManager->kuwasysClassUnitGet ($class['unitId']);
 					}
 				}
 			}
@@ -129,7 +143,7 @@ class ClassList extends Module {
 			{
 				//check if $class can be selected by the User
 				foreach ($alreadyUsedWeekdays as $alreadyUsedWeekday) {
-					if ($class['weekday'] == $alreadyUsedWeekday) {
+					if ($class['unitId'] == $alreadyUsedWeekday) {
 						$class['registrationForUserAllowed'] = false;
 						continue 2;
 					}
@@ -157,7 +171,7 @@ class ClassList extends Module {
 		$classesSorted = array();
 
 		foreach ($classes as $class) {
-			$classesSorted[$class['weekday']][] = $class;
+			$classesSorted[$class['unitId']][] = $class;
 		}
 		return $classesSorted;
 	}
@@ -176,7 +190,7 @@ class ClassList extends Module {
 
 		$classes = $this->getAllClasses();
 
-		foreach ($this->_weekdayAbbreviationArr as $weekday) {
+		foreach ($this->_weekdayIdArray as $weekday) {
 			if (isset($_POST['firstChoice' . $weekday])) {
 				$classId = $_POST['firstChoice' . $weekday];
 				if(!$this->checkIsClassEnabled($classId, $classes)) {
@@ -209,7 +223,7 @@ class ClassList extends Module {
 
 	private function checkClassListInputForSomethingWasChecked () {
 
-		foreach ($this->_weekdayAbbreviationArr as $weekday) {
+		foreach ($this->_weekdayIdArray as $weekday) {
 			if (isset($_POST['firstChoice' . $weekday]) || isset($_POST['secondChoice' . $weekday])) {
 				return;
 			}
@@ -220,7 +234,7 @@ class ClassList extends Module {
 	private function checkClassListInput () {
 
 		$this->checkClassListInputForSomethingWasChecked();
-		foreach ($this->_weekdayAbbreviationArr as $weekday) {
+		foreach ($this->_weekdayIdArray as $weekday) {
 			$this->checkClassListInputForDoubledChoices($weekday);
 			$this->checkClassListInputForOnlySecondChoiceSelected($weekday);
 			$this->checkClassListInputForAlreadyExistingJointsForWeekday($weekday);
@@ -285,16 +299,15 @@ class ClassList extends Module {
 
 		$userId = $_SESSION['uid'];
 
-		foreach ($this->_weekdayAbbreviationArr as $weekday) {
+		foreach ($this->_weekdayIdArray as $weekday) {
 			if (isset($_POST['firstChoice' . $weekday])) {
 				$firstChoiceClassId = $_POST['firstChoice' . $weekday];
-				$this->_jointUsersInClass->addJoint($userId, $firstChoiceClassId, $this->_firstRequestStatusStr);
+				$this->_jointUsersInClass->addJoint($userId, $firstChoiceClassId, $this->_firstStatusRequestId);
 			}
 			if (isset($_POST['secondChoice' . $weekday])) {
 				$secondChoiceClassId = $_POST['secondChoice' . $weekday];
-				$this->_jointUsersInClass->addJoint($userId, $secondChoiceClassId, $this->_secondRequestStatusStr);
+				$this->_jointUsersInClass->addJoint($userId, $secondChoiceClassId, $this->_secondStatusRequestId);
 			}
-
 		}
 	}
 
@@ -305,12 +318,13 @@ class ClassList extends Module {
 	private $_jointUsersInClass;
 	private $_classManager;
 	private $_usersManager;
+	private $_databaseAccessManager;
 	private $_interface;
 	private $_smarty;
 	private $_smartyPath;
-	private $_weekdayAbbreviationArr;
-	private $_firstRequestStatusStr;
-	private $_secondRequestStatusStr;
+	private $_weekdayIdArray;
+	private $_firstStatusRequestId;
+	private $_secondStatusRequestId;
 }
 
 ?>

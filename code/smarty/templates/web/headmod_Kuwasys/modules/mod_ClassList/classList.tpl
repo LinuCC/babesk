@@ -44,13 +44,44 @@ p.helpTextLockedClasses {
 </style>
 
 <h2>Kursliste</h2><br>
-
+<form action="index.php?section=Kuwasys|ClassList&action=formSubmitted" method="post">
+{foreach $classUnits as $classUnit}
 <p class="weekdayHeading">
+{$classUnit.translatedName}
+</p>
+<table>
+		<tr>
+			<th>Kurs</th>
+			<th>Erste Wahl</th>
+			<th>Zweite Wahl</th>
+		</tr>
+		{foreach $classes as $class}
+		{if $class.unitId == $classUnit.ID}
+		<tr>
+			<th class="classListClassLabel"><a onclick="switchClassDescriptionOfLink('{$class.ID}')">{$class.label}{if !$class.registrationForUserAllowed} (gesperrt){/if}</a>
+			<div id="classDescription#{$class.ID}" class="classDescription" hidden="hidden">
+		<p>{$class.description}</p>
+	</div>
+			</th>
+			<td class="classListCheckbox"><input class="classListCheckbox" type="radio" name="firstChoice{$classUnit.ID}" value="{$class.ID}" {if !$class.registrationForUserAllowed}disabled="disabled"{/if}></td>
+			<td class="classListCheckbox"><input class="classListCheckbox" type="radio" name="secondChoice{$classUnit.ID}" value="{$class.ID}" {if !$class.registrationForUserAllowed}disabled="disabled"{/if}></td>
+		</tr>
+		{/if}
+		{/foreach}
+	</table><br>
+{/foreach}
+
+
+
+
+
+<!-- <p class="weekdayHeading">
 Montag
 </p>
-<form action="index.php?section=Kuwasys|ClassList&action=formSubmitted" method="post">
+
 {foreach $sortedClasses as $weekdayOfClasses}
 {$dayname = array_keys($sortedClasses, $weekdayOfClasses)}
+
 {if $dayname[0] == "Mon"}
 	<table>
 		<tr>
@@ -70,7 +101,7 @@ Montag
 		</tr>
 		{/foreach}
 	</table><br>
-{/if}	
+{/if}
 {/foreach}
 
 <p class="weekdayHeading">
@@ -98,7 +129,7 @@ Dienstag
 		</tr>
 		{/foreach}
 	</table><br>
-{/if}	
+{/if}
 {/foreach}
 
 <p class="weekdayHeading">
@@ -126,7 +157,7 @@ Mittwoch
 		</tr>
 		{/foreach}
 	</table><br>
-{/if}	
+{/if}
 {/foreach}
 
 <p class="weekdayHeading">
@@ -154,7 +185,7 @@ Donnerstag
 		</tr>
 		{/foreach}
 	</table><br>
-{/if}	
+{/if}
 {/foreach}
 
 <p class="weekdayHeading">
@@ -182,8 +213,8 @@ Freitag
 		</tr>
 		{/foreach}
 	</table><br>
-{/if}	
-{/foreach}
+{/if}
+{/foreach} -->
 <input type="submit" value="Absenden">
 <a style="float:right" onmouseover="showHelpTextLockedClasses()" onmouseout="hideHelpTextLockedClasses()">Warum sind Kurse gesperrt?</a><br>
 <p class="helpTextLockedClasses" hidden="hidden">Für gesperrte Kurse kann sich der Benutzer nicht mehr anmelden. Entweder

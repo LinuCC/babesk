@@ -37,7 +37,7 @@ class TableManager {
 
 		$query = sql_prev_inj('SHOW TABLES LIKE "' . $this->tablename . '"');
 		$result = $this->executeQuery($query);
-		
+
 		return count($result->fetch_assoc());
 	}
 
@@ -60,14 +60,14 @@ class TableManager {
 	 * @return boolean true if an Entry exists, false if not
 	 */
 	public function existsEntry ($key, $value) {
-		
+
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE %s="%s"', $this->tablename, $key, $value));
 		$result = $this->executeQuery($query);
 		return ($result->fetch_assoc()) ? true : false;
 	}
-	
+
 	public function executeQuery ($query) {
-		
+
 		$result = $this->db->query($query);
 		if (!$result) {
 			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error . "<br />" . $query);
@@ -81,7 +81,7 @@ class TableManager {
 	 * @param string $value
 	 */
 	public function getIDByValue ($key, $value) {
-		
+
 		$result = $this->searchEntry(sprintf('%s="%s"', $key, $value));
 		if (!$result)
 			throw new MySQLVoidDataException('MySQL returned no Data to retrieve the ID from!');
@@ -131,18 +131,18 @@ class TableManager {
 		else { //wrong arguments
 			throw new BadMethodCallException('wrong arguments');
 		}
-		
+
 		$result = $this->executeQuery($query);
 		return $this->getResultContent($result);
 	}
-	
+
 	/**
 	 * Returns every Entry that has the ID id of the array $idArray
-	 * 
+	 *
 	 * @param $idArray array[string] an string of ids
 	 */
 	public function getEntriesOfIds ($idArray) {
-		
+
 		$idString = '';
 		if(!isset($idArray) || !count($idArray)) {
 			throw new BadMethodCallException('The $idArray-parameter is invalid!');
@@ -152,7 +152,7 @@ class TableManager {
 		}
 		$idString = rtrim($idString, ',');
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE ID IN (%s);', $this->tablename, $idString));
-		
+
 		$result = $this->executeQuery($query);
 		return $this->getResultArrayContent($result);
 	}
@@ -183,7 +183,7 @@ class TableManager {
 			default:
 				throw new Exception('Wrong number of arguments in ' . __METHOD__);
 		}
-		
+
 		$result = $this->executeQuery($query);
 		return $this->getResultArrayContent($result);
 	}
@@ -231,7 +231,7 @@ class TableManager {
 					$column_value_str .= '"' . func_get_arg($i - 1) . '",';
 				}
 				else {
-					$column_value_str .= func_get_arg($i - 1) . ',';
+					$column_value_str .= '"' . func_get_arg($i - 1) . '",';
 				}
 			}
 		}
@@ -276,11 +276,11 @@ class TableManager {
 	 */
 
 	public function getEntryValue ($id, $key) {
-		
+
 		$query = sql_prev_inj(sprintf('SELECT %s FROM %s WHERE ID=%s', $key, $this->tablename, $id));
 		$result = $this->executeQuery($query);
 		$resVar = $this->getResultContent($result);
-		
+
 		if(!isset($resVar [$key])) 	{throw new Exception ('The Key for the Entry does not exist!');}
 		return $resVar [$key];
 	}
@@ -332,7 +332,7 @@ class TableManager {
 	 */
 
 	public function delEntry ($ID) {
-		
+
 		require_once PATH_INCLUDE . '/constants.php';
 
 		$query = sql_prev_inj(sprintf('DELETE FROM %s WHERE ID="%s";', $this->tablename, $ID));
@@ -362,10 +362,10 @@ class TableManager {
 	 *
 	 * @param noIDString The string of the entry to delete
 	 */
-	
+
 	public function delEntryNoID($noIDString) {
 		require_once PATH_INCLUDE . '/constants.php';
-	
+
 		if (!is_string($noIDString)) {
 			//parameter-checking
 			throw new UnexpectedValueException(ERR_TYPE_PARAM_ID);
@@ -377,18 +377,16 @@ class TableManager {
 		}
 		return $result;
 	}
-	
+
 	/**
 	 * returns the ID of the next object that would be added (MySQL's Autoincrement)
 	 */
 	public function getNextAutoIncrementID () {
 		$query = sql_prev_inj(sprintf('SELECT Auto_increment FROM information_schema.tables WHERE table_name="%s";',
 			$this->tablename));
-	
 		$result = $this->executeQuery($query);
-		$nextId = $this->getResultArrayContent($result);
-		
-		return $nextId [0]['Auto_increment'];
+		$nextId = $this->getResultContent($result);
+		return $nextId ['Auto_increment'];
 	}
 
 	/**
@@ -404,64 +402,64 @@ class TableManager {
 		$valueRes = $this->getResultContent($result);
 		return $valueRes['LastID'];
 	}
-	
+
 	/**
 	 * Returns every Element that has the same value as one of the values in the valuearray of the column-key $key
 	 * @param string $keyName The Key of the Column in the MySQL-table
 	 * @param array($value) $valueArray
 	 */
 	public function getMultipleEntriesByArray ($keyName, $valueArray) {
-	
+
 		$valueStr = '';
 		if(!count($valueArray)) {
 			throw new BadMethodCallException('valueArray is void!');
 		}
-	
+
 		foreach ($valueArray as $value) {
 			$valueStr .= sprintf('"%s", ', $value);
 		}
 		$valueStr = rtrim($valueStr, ', ');
-	
+
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE %s IN (%s);', $this->tablename, $keyName, $valueStr));
 		$result = $this->executeQuery($query);
 		return $this->getResultArrayContent($result);
 	}
-	
+
 	/**
-	 * Returns the Content of the result of a MySQL-Query and checks if it is void. 
-	 * @param mySQL-query-returnValue $result 
+	 * Returns the Content of the result of a MySQL-Query and checks if it is void.
+	 * @param mySQL-query-returnValue $result
 	 * @param string $exceptionMessage When Result-Content is void, an exception with this message will be thrown
 	 * @throws MySQLVoidDataException
 	 */
 	private function getResultContent ($result, $exceptionMessage = 'MySQL returned no data!') {
-		
+
 		$content = $result->fetch_assoc();
-		
+
 		if(!$content) {
 			throw new MySQLVoidDataException($exceptionMessage);
 		}
 		return $content;
 	}
-	
+
 	/**
-	 * Returns the Content of the result of a MySQL-Query and checks if it is void. 
-	 * @param mySQL-query-returnValue $result 
+	 * Returns the Content of the result of a MySQL-Query and checks if it is void.
+	 * @param mySQL-query-returnValue $result
 	 * @param string $exceptionMessage When Result-Content is void, an exception with this message will be thrown
 	 * @throws MySQLVoidDataException
 	 */
 	private function getResultArrayContent ($result, $exceptionMessage = 'MySQL returned no data!') {
-		
+
 		while($buffer = $result->fetch_assoc()) {
 			$content [] = $buffer;
 		}
-		
+
 		if(!isset($content) || !count($content)) {
 			throw new MySQLVoidDataException($exceptionMessage);
 		}
-		
+
 		return $content;
 	}
-	
+
 	/**
 	 * Contains the MySQL-tablename
 	 * @var string

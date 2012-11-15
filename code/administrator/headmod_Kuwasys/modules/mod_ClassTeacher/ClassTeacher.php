@@ -92,7 +92,7 @@ class ClassTeacher extends Module {
 		if (isset($_POST['name'], $_POST['forename'], $_POST['address'], $_POST['telephone'])) {
 			$this->checkInput();
 			$this->checkForCorrectClassInput($_POST['class']);
-			$this->_databaseAccessManager->classteacherAdd ($_POST['name'], $_POST['forename'], $_POST['address'], 
+			$this->_databaseAccessManager->classteacherAdd ($_POST['name'], $_POST['forename'], $_POST['address'],
 				$_POST['telephone']);
 			$this->addJointClassTeacherInClassAtAddDialog();
 			$this->_interface->dieMsg($this->_languageManager->getText('finishedAddClassTeacher'));
@@ -118,9 +118,9 @@ class ClassTeacher extends Module {
 			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorInput'), $e->getFieldName()));
 		}
 	}
-	
+
 	private function addClassteacherByCsvImport () {
-		
+
 		if(count($_FILES)) {
 			$this->handleCsvImport();
 		}
@@ -128,18 +128,18 @@ class ClassTeacher extends Module {
 			$this->_interface->displayImportCsvForm();
 		}
 	}
-	
+
 	private function handleCsvImport () {
-		
+
 		require_once PATH_INCLUDE . '/CsvImporter.php';
 		$csvManager = new CsvImporter($_FILES['csvFile']['tmp_name'], ';');
 		$contentArray = $csvManager->getContents();
 		$contentArray = $this->handleMissingKeysOfCsvImport($contentArray);
 		$this->addClassteacherToDatabaseByCsvImport($contentArray);
 	}
-	
+
 	private function handleMissingKeysOfCsvImport ($contentArray) {
-		
+
 		foreach ($contentArray as &$rowArray) {
 			$this->checkCsvImportKeyVariable('name', $rowArray);
 			$this->checkCsvImportKeyVariable('forename', $rowArray);
@@ -148,17 +148,17 @@ class ClassTeacher extends Module {
 		}
 		return $contentArray;
 	}
-	
+
 	private function checkCsvImportKeyVariable ($varName, $rowArray) {
-		
+
 		if (!isset($rowArray[$varName])) {
 			$rowArray[$varName] = '';
 		}
 		return $rowArray;
 	}
-	
+
 	private function addClassteacherToDatabaseByCsvImport ($contentArray) {
-		
+
 		foreach ($contentArray as $row) {
 			echo 'geaddet werden:<br>';
 			var_dump($row);
@@ -387,11 +387,12 @@ class ClassTeacher extends Module {
 	 */
 	private function getAllClassTeachersWithClassLabel () {
 
-		$classteachers = $this->_databaseAccessManager->classteacherGetAll ();
-		$classes = $this->_databaseAccessManager->classGetAll();
-		$classTeacherJoints = $this->getAllJointsClassTeacherInClass();
+		$classTeachers = $this->_databaseAccessManager->classteacherGetAll ();
+		$classes = $this->_databaseAccessManager->classGetAllWithoutDieing();
+		$classTeacherJoints = $this->_databaseAccessManager->jointClassteacherInClassGetAllWithoutDieing ();
 
-		if (isset($classTeacherJoints) && count($classTeacherJoints)) {
+		if (isset($classTeacherJoints) && count($classTeacherJoints)
+			&& isset ($classes) && count($classes)) {
 			foreach ($classTeachers as & $classTeacher) {
 				foreach ($classTeacherJoints as $classTeacherJoint) {
 					if ($classTeacherJoint['ClassTeacherID'] == $classTeacher['ID']) {
@@ -414,7 +415,7 @@ class ClassTeacher extends Module {
 	 */
 	private function getJointsClassTeacherToClassByClassTeacherId ($classTeacherID) {
 
-		$joints = $this->getAllJointsClassTeacherInClass();
+		$joints = $this->_databaseAccessManager->jointClassteacherInClassGetAllWithoutDieing ();
 		if (isset($joints) && count($joints)) {
 			$sortedJoints = array();
 			foreach ($joints as $joint) {
@@ -499,7 +500,7 @@ class ClassTeacher extends Module {
 	 * @var KuwasysLanguageManager
 	 */
 	private $_languageManager;
-	
+
 	private $_databaseAccessManager;
 }
 

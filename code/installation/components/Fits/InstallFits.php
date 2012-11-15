@@ -46,7 +46,7 @@ class InstallFits extends InstallationComponent {
 	/**
 	 * Entry-Point for the Babesk-Installation
 	 */
-	public function execute ($dataContainer) {
+	public function execute () {
 
 		if (isset($_GET['action'])) {
 

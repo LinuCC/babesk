@@ -40,6 +40,7 @@ class KuwasysDatabaseAccess {
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
+		require_once PATH_ACCESS_KUWASYS . '/KuwasysClassUnitManager.php';
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 
 		$this->_userManager = new KuwasysUsersManager();
@@ -55,6 +56,7 @@ class KuwasysDatabaseAccess {
 		$this->_jointUserInSchoolyearManager = new KuwasysJointUsersInSchoolYear();
 		$this->_jointClassteacherInClassManager = new KuwasysJointClassTeacherInClass();
 		$this->_usersInClassStatusManager = new KuwasysUsersInClassStatusManager ();
+		$this->_classUnitManager = new KuwasysClassUnitManager ();
 	}
 
 	public function classAdd ($label, $description, $maxRegistration, $allowRegistration, $weekday) {
@@ -130,6 +132,18 @@ class KuwasysDatabaseAccess {
 			$this->_interface->dieError($this->_languageManager->getText('classIdErrorFetchNextAutoincrement'));
 		}
 		return $idOfClass;
+	}
+
+	public function classGetAllWithoutDieing () {
+
+		try {
+			$classes = $this->_classManager->getAllClasses();
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->showMsg($this->_languageManager->getText('classErrorNoClasses'));
+		} catch (Exception $e) {
+			$this->_interface->showMsg($this->_languageManager->getText('classErrorFetch'));
+		}
+		return $classes;
 	}
 
 	public function classGetAll () {
@@ -848,12 +862,24 @@ class KuwasysDatabaseAccess {
 		try {
 			$schoolyearId = $this->_jointClassInSchoolyearManager->getSchoolYearIdOfClassId($classId);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showError($this->_languageManager->getText('jointClassInSchoolyearErrorNoJoints'));
+			$this->_interface->showMsg($this->_languageManager->getText('jointClassInSchoolyearErrorNoJoints'));
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('jointClassInSchoolyearErrorFetchSpecific'));
 		}
 		if (isset($schoolyearId)) {
 			return $schoolyearId;
+		}
+	}
+
+	public function jointClassteacherInClassGetAllWithoutDieing () {
+
+		try {
+			$joints = $this->_jointClassteacherInClassManager->getAllJoints ();
+		} catch (Exception $e) {
+			$this->_interface->showMsg ($this->_languageManager->getText("jointClassteacherInClassErrorFetch"));
+		}
+		if (isset($joints)) {
+			return $joints;
 		}
 	}
 
@@ -1014,7 +1040,7 @@ class KuwasysDatabaseAccess {
 			return;
 		}
 		catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManagerManager->getText('jointUserInSchoolyearErrorFetch'));
+			$this->_interface->dieError($this->_languageManager->getText('jointUserInSchoolyearErrorFetch'));
 		}
 		return $schoolyearId;
 	}
@@ -1026,6 +1052,48 @@ class KuwasysDatabaseAccess {
 			return false;
 		}
 		return $status;
+	}
+
+	public function usersInClassStatusGetByName ($name) {
+		try {
+			$status = $this->_usersInClassStatusManager->statusGetByName ($name);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError ($this->_languageManager->getText('usersInClassStatusErrorNotFound'));
+		}
+		return $status;
+	}
+
+	public function kuwasysClassUnitGet ($id) {
+		try {
+			$unit = $this->_classUnitManager->unitGet ($id);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError ($this->_languageManager->getText('classUnitErrorNotFound'));
+		} catch (Exception $e) {
+			$this->_interface->dieError ($this->_languageManager->getText('classUnitErrorFetch'));
+		}
+		return $unit;
+	}
+
+	public function kuwasysClassUnitGetAll () {
+		try {
+			$units = $this->_classUnitManager->unitGetAll ();
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError ($this->_languageManager->getText('classUnitsErrorNotFound'));
+		} catch (Exception $e) {
+			$this->_interface->dieError ($this->_languageManager->getText('classUnitsErrorFetch'));
+		}
+		return $units;
+	}
+
+	public function kuwasysClassUnitgetByName ($name) {
+		try {
+			$unit = $this->_classUnitManager->unitGetbyName ($name);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError ($this->_languageManager->getText('classUnitErrorNotFound') . ':' . $name);
+		} catch (Exception $e) {
+			$this->_interface->dieError ($this->_languageManager->getText('classUnitErrorFetch'));
+		}
+		return $unit;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -1045,6 +1113,7 @@ class KuwasysDatabaseAccess {
 	private $_userManager;
 	private $_classManager;
 	private $_gradeManager;
+	private $_classUnitManager;
 	private $_schoolyearManager;
 	private $_classteacherManager;
 	private $_globalSettingsManager;
