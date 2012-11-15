@@ -231,7 +231,7 @@ class TableManager {
 					$column_value_str .= '"' . func_get_arg($i - 1) . '",';
 				}
 				else {
-					$column_value_str .= func_get_arg($i - 1) . ',';
+					$column_value_str .= '"' . func_get_arg($i - 1) . '",';
 				}
 			}
 		}
