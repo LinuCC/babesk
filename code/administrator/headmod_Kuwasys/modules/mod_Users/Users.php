@@ -595,7 +595,7 @@ class Users extends Module {
 
 		if ($_POST['password'] != '' && $_POST['password'] != NULL) {
 
-			$this->_usersManager->changeUserWithoutPassword($_POST['ID'], $_POST['forename'], $_POST['name'], $_POST[
+			$this->_usersManager->changeUserWithoutPassword($_GET['ID'], $_POST['forename'], $_POST['name'], $_POST[
 					'username'], $_POST['email'], $_POST['telephone']);
 		}
 		else {
@@ -774,7 +774,7 @@ class Users extends Module {
 
 		$jointsUsersInGrade = $this->getAllJointsUsersInGrade();
 		$grades = $this->getAllGrades();
-		if (isset($users) && count ($users)) {
+		if (isset($users) && count ($users) && isset($jointsUsersInGrade) && count ($jointsUsersInGrade)) {
 			foreach ($users as & $user) {
 				foreach ($jointsUsersInGrade as $joint) {
 					if ($joint['UserID'] == $user['ID']) {
