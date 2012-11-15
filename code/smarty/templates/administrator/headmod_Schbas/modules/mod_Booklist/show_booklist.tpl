@@ -3,17 +3,20 @@
 <form action="index.php?section=Schbas|Booklist&action=2" method="post"><input type='text' name='isbn_search'><input type='submit' value='Mit ISBN suchen'></form>
 {/block}
 {block name=content}
+<table width=100%>
+<tr><th align='center'>{$navbar}</th></tr>
+</table>
 <table>
 	<thead>
 		<tr bgcolor='#33CFF'>
-			<th align='center'>Fach</th>
-			<th align='center'>Jahrgang</th>
-			<th align='center'>Titel</th>
-			<th align='center'>Autor</th>
-			<th align='center'>Verlag</th>
-			<th align='center'>ISBN</th>
+			<form name="filterFach" action="index.php?section=Schbas|Booklist&action=1" method="post"><input type="hidden" name="filter" value="subject"><th align='center'><a href="#" onclick="document.filterSubject.submit();">Fach</a></th></form>
+			<form name="filterJahrgang" action="index.php?section=Schbas|Booklist&action=1" method="post"><input type="hidden" name="filter" value="class"><th align='center'><a href="#" onclick="document.filterClass.submit();">Jahrgang</a></th></form>
+			<form name="filterTitel" action="index.php?section=Schbas|Booklist&action=1" method="post"><input type="hidden" name="filter" value="title"><th align='center'><a href="#" onclick="document.filterTitle.submit();">Titel</a></th></form>
+			<form name="filterAutor" action="index.php?section=Schbas|Booklist&action=1" method="post"><input type="hidden" name="filter" value="author"><th align='center'><a href="#" onclick="document.filterAuthor.submit();">Autor</a></th></form>
+			<form name="filterVerlag" action="index.php?section=Schbas|Booklist&action=1" method="post"><input type="hidden" name="filter" value="publisher"><th align='center'><a href="#" onclick="document.filterPublisher.submit();">Verlag</a></th></form>
+			<form name="filterISBN" action="index.php?section=Schbas|Booklist&action=1" method="post"><input type="hidden" name="filter" value="isbn"><th align='center'><a href="#" onclick="document.filterIsbn.submit();">ISBN</a></th></form>
 			<th align='center'>Preis</th>
-			<th align='center'>Bundle</th>
+			<form name="filterBundle" action="index.php?section=Schbas|Booklist&action=1" method="post"><input type="hidden" name="filter" value="bundle"><th align='center'><a href="#" onclick="document.filterBundle.submit();">Bundle</a></th></form>
 		</tr>
 	</thead>
 	<tbody>

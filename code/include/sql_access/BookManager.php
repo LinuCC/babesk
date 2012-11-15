@@ -18,10 +18,10 @@ class BookManager extends TableManager{
 	 * Sorts the booklist it gets from MySQL-table and returns them
 	 * Enter description here ...
 	 */
-	function getBooklistSorted() {
+	function getBooklistSorted($pagePointer, $orderBy) {
 		require_once PATH_ACCESS . '/DBConnect.php';
 		$res_array = array();
-		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY id', $this->tablename));
+		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY "%s" LIMIT %s,10', $this->tablename,$orderBy,$pagePointer));
 		$result = $this->db->query($query);
 		if (!$result) {
 			throw DB_QUERY_ERROR.$this->db->error;

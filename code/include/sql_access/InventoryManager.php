@@ -18,10 +18,10 @@ class InventoryManager extends TableManager{
 	/**
 	 * Sorts the book inventory it gets from MySQL-table and returns them.
 	 */
-	function getInventorySorted() {
+	function getInventorySorted($nextPointer) {
 		require_once PATH_ACCESS . '/DBConnect.php';
 		$res_array = array();
-		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY id', $this->tablename));
+		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY id LIMIT %s,10', $this->tablename,$nextPointer));
 		$result = $this->db->query($query);
 		if (!$result) {
 			throw DB_QUERY_ERROR.$this->db->error;

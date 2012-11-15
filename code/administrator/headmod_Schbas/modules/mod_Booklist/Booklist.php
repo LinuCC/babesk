@@ -25,14 +25,19 @@ class Booklist extends Module {
 		$BookInterface = new AdminBooklistInterface($this->relPath);
 		$BookProcessing = new AdminBooklistProcessing($BookInterface);
 
-		$action_arr = array('show_booklist' => 1,);
+		$action_arr = array('show_booklist' => 1,
+							'add_book' => 4);
 
 		if ('POST' == $_SERVER['REQUEST_METHOD']) {
 			$action = $_GET['action'];
 			switch ($action) {
 				case 1: //show booklist
-					$BookProcessing->ShowBooklist(false);
-				break;
+					if (isset($_POST['filter'])){
+						$BookProcessing->ShowBooklist($_POST['filter']);
+					}else{
+						$BookProcessing->ShowBooklist("name");
+					}
+					break;
 				case 2: //edit a book
 					if (isset ($_POST['isbn_search'])) {
 						$bookID = $BookProcessing->getBookIdByISBN($_POST['isbn_search']);
@@ -42,6 +47,22 @@ class Booklist extends Module {
 						$BookProcessing->editBook($_GET['ID']);
 					}else{
 						$BookProcessing->changeBook($_GET['ID'],$_POST['subject'], $_POST['class'],$_POST['title'],$_POST['author'],$_POST['publisher'],$_POST['isbn'],$_POST['price'],$_POST['bundle']);
+					}
+					break;
+				case 3: //delete an entry
+					if (isset($_POST['delete'])) {
+						$BookProcessing->DeleteEntry($_GET['ID']);
+					} else if (isset($_POST['not_delete'])) {
+						$BookInterface->ShowSelectionFunctionality($action_arr);
+					} else {
+						$BookProcessing->DeleteConfirmation($_GET['ID']);
+					}
+					break;
+				case 4: //add an entry
+					if (!isset($_POST['title'])) {
+						$BookProcessing->AddEntry();
+					} else {
+						$BookProcessing->AddEntryFin($_POST['subject'], $_POST['class'],$_POST['title'],$_POST['author'],$_POST['publisher'],$_POST['isbn'],$_POST['price'],$_POST['bundle']);
 					}
 					break;
 				break;
