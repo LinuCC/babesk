@@ -134,6 +134,18 @@ class KuwasysDatabaseAccess {
 		return $idOfClass;
 	}
 
+	public function classGetAllWithoutDieing () {
+
+		try {
+			$classes = $this->_classManager->getAllClasses();
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->showMsg($this->_languageManager->getText('classErrorNoClasses'));
+		} catch (Exception $e) {
+			$this->_interface->showMsg($this->_languageManager->getText('classErrorFetch'));
+		}
+		return $classes;
+	}
+
 	public function classGetAll () {
 
 		try {

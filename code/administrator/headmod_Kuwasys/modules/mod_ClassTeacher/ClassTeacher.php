@@ -388,10 +388,11 @@ class ClassTeacher extends Module {
 	private function getAllClassTeachersWithClassLabel () {
 
 		$classTeachers = $this->_databaseAccessManager->classteacherGetAll ();
-		$classes = $this->_databaseAccessManager->classGetAll();
+		$classes = $this->_databaseAccessManager->classGetAllWithoutDieing();
 		$classTeacherJoints = $this->_databaseAccessManager->jointClassteacherInClassGetAllWithoutDieing ();
 
-		if (isset($classTeacherJoints) && count($classTeacherJoints)) {
+		if (isset($classTeacherJoints) && count($classTeacherJoints)
+			&& isset ($classes) && count($classes)) {
 			foreach ($classTeachers as & $classTeacher) {
 				foreach ($classTeacherJoints as $classTeacherJoint) {
 					if ($classTeacherJoint['ClassTeacherID'] == $classTeacher['ID']) {
