@@ -595,13 +595,12 @@ class Users extends Module {
 
 		if ($_POST['password'] != '' && $_POST['password'] != NULL) {
 
-			$this->_usersManager->changeUserWithoutPassword($_GET['ID'], $_POST['forename'], $_POST['name'], $_POST[
-					'username'], $_POST['email'], $_POST['telephone']);
+			$this->_usersManager->changeUserWithPassword($_GET['ID'], $_POST['forename'], $_POST['name'], $_POST[
+					'username'], $_POST['email'], $_POST['telephone'], hash_password($_POST['password']));
 		}
 		else {
-
 			$this->_usersManager->changeUserWithoutPassword($_GET['ID'], $_POST['forename'], $_POST['name'], $_POST[
-					'username'], $_POST['email'], $_POST['telephone'], hash_password($_POST['password']));
+					'username'], $_POST['email'], $_POST['telephone']);
 		}
 	}
 
