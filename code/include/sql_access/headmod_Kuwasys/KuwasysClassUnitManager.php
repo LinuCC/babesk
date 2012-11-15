@@ -58,7 +58,7 @@ class KuwasysClassUnitManager extends TableManager {
 	 * @param $translatedName the translatedName (shown to the User) of the ClassUnit
 	 */
 	public function unitAdd ($name, $translatedName) {
-		$this->addEntry ($id, $name, $translatedName);
+		$this->addEntry ('name', $name, 'translatedName', $translatedName);
 	}
 
 	/** Deletes an ClassUnit from the Table
