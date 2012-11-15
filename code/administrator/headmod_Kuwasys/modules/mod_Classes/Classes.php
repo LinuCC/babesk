@@ -147,7 +147,7 @@ class Classes extends Module {
 				if ($status) {
 					$user['statusTranslated'] = $status ['translatedName'];
 				}
-				$user = $this->addChoicesOfDayToUser($user, $class ['weekday']);
+				$user = $this->addChoicesOfDayToUser($user, $class ['unitId']);
 				$user = $this->addGradeLabelToUser($user);
 				$class['users'][] = $user;
 
@@ -171,7 +171,7 @@ class Classes extends Module {
 		}
 		$classes = $this->_databaseAccessManager->classGetByClassIdArray($classIdArray);
 		foreach ($classes as $class) {
-			if($class ['weekday'] == $weekday) {
+			if($class ['unitId'] == $weekday) {
 				$user ['classesOfSameDay'] [] = $class;
 			}
 		}
