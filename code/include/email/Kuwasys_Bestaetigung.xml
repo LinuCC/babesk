@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<email>
+	<subject>
+		Teilnahmebestätigung Schulkurse
+	</subject>
+	<body><![CDATA[
+		Hier die Kurse. Blubb.
+		]]>
+	</body>
+</email>

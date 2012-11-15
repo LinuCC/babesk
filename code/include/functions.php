@@ -4,9 +4,9 @@ ini_set('display_errors', 1);
 require_once "constants.php";
 
 /**
- * Checks if the session is valid 
+ * Checks if the session is valid
  *
- * The function compares the ip address and 
+ * The function compares the ip address and
  * saves it if no address was previously saved
  *
  * @return false if invalid
@@ -27,7 +27,7 @@ function validSession() {
 /**
  * Formats a dateformat to d.m.Y
  * This function formats the parameter $date to d.m.Y using strtotime (if the Parameter is a datestring) and date()
- * @param $date The datestring; UnixTimestamp or date string 
+ * @param $date The datestring; UnixTimestamp or date string
  * @return string
  */
 function formatDate($date) {
@@ -40,7 +40,7 @@ function formatDate($date) {
 
 /**
  * Formats a dateformat to d.m.Y H:i
- * @param $date UnixTimestamp or date string 
+ * @param $date UnixTimestamp or date string
  * @return string
  */
 function formatDateTime($date) {
@@ -63,7 +63,7 @@ function sql_prev_inj($str) {
 /**
  * hash_password returns the md5-hash of the string
  * Enter description here ...
- * @param $pw_str the string to hash 
+ * @param $pw_str the string to hash
  * @return string
  */
 function hash_password($pw_str) {
@@ -72,7 +72,7 @@ function hash_password($pw_str) {
 
 /**
  * Checks the string with the given regex or string
- * inputcheck takes the string and checks if it matches with a regex. The Regex can be 
+ * inputcheck takes the string and checks if it matches with a regex. The Regex can be
  * given by the parameter $regex_str, $regex_str can also have a string (for more information see param)
  * @param string $str the string to check
  * @param string $regex_str either the regex_str which should check the string or one of the

@@ -1,6 +1,7 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
 
 class MainMenu extends Module {
 
@@ -45,20 +46,31 @@ class MainMenu extends Module {
 		$this->_classManager = new KuwasysClassManager();
 		$this->_userManager = new KuwasysUsersManager();
 		$this->_jointUsersInClassManager = new KuwasysJointUsersInClass();
+		$this->_usersInClassStatusManager = new KuwasysUsersInClassStatusManager ();
 	}
 
 	private function getAllClassesOfUser () {
-
 		$classes = array();
 		$jointsUsersInClass = $this->getAllJointsUsersInClassOfUser();
 		if (isset($jointsUsersInClass)) {
 			foreach ($jointsUsersInClass as $joint) {
 				$class = $this->getClassFromDatabase($joint['ClassID']);
-				$class['status'] = $joint['status'];
+				$status = $this->usersInClassStatusGet ($joint['statusId']);
+				if ($status)
+					$class['statusTranslated'] = $status ['translatedName'];
 				$classes[] = $class;
 			}
 			return $classes;
 		}
+	}
+
+	private function usersInClassStatusGet ($statusId) {
+		try {
+			$status = $this->_usersInClassStatusManager->statusGet($statusId);
+		} catch (MySQLVoidDataException $e) {
+			return false;
+		}
+		return $status;
 	}
 
 	private function getAllJointsUsersInClassOfUser () {
@@ -114,6 +126,7 @@ class MainMenu extends Module {
 	private $_classManager;
 	private $_userManager;
 	private $_jointUsersInClassManager;
+	private $_usersInClassStatusManager;
 	private $_smarty;
 	private $_smartyPath;
 }

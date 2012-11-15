@@ -53,6 +53,11 @@
 				<name>CardInfo</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Emailverwaltung</ger_name>
+				<name>EmailConfiguration</name>
+				<active>true</active>
+			</module>
 		</head_module>
 		<head_module>
 			<ger_name>Bargeldloses Bestellsystem für Kantinen</ger_name>
@@ -247,6 +252,16 @@
 			<module>
 				<ger_name>Klassenliste</ger_name>
 				<name>ClassList</name>
+				<active>true</active>
+			</module>
+		</head_module>
+		<head_module>
+			<ger_name>PVau</ger_name>
+			<name>Pvau</name>
+			<active>true</active>
+			<module>
+				<ger_name>Pvp</ger_name>
+				<name>Pvp</name>
 				<active>true</active>
 			</module>
 		</head_module>

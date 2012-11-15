@@ -16,7 +16,7 @@ class DisplayUsersWaiting {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
-	public function execute ($dataContainer) {
+	public function execute () {
 
 		$this->initManagers();
 		$this->initDataArrays();
@@ -34,12 +34,14 @@ class DisplayUsersWaiting {
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysClassTeacherManager.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
+		require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
 		require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysDatabaseAccess.php';
 
 		$this->_userManager = new KuwasysUsersManager();
 		$this->_classManager = new KuwasysClassManager();
 		$this->_classteacherManager = new KuwasysClassTeacherManager();
 		$this->_jointClassteacherInClassManager = new KuwasysJointClassTeacherInClass();
+		$this->_usersInClassStatusManager = new KuwasysUsersInClassStatusManager ();
 		$this->_jointUsersInClassManager = new KuwasysJointUsersInClass();
 		$this->_databaseAccessManager = new KuwasysDatabaseAccess($this->_interface);
 	}
@@ -101,7 +103,8 @@ class DisplayUsersWaiting {
 	private function getAllJointsUsersInClassWaiting () {
 
 		try {
-			$joints = $this->_jointUsersInClassManager->getAllJointsWithStatusWaiting();
+			$status = $this->_usersInClassStatusManager->statusGetByName ('waiting');
+			$joints = $this->_jointUsersInClassManager->getAllJointsWithStatusId($status ['ID']);
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorNoJointsUsersInClassWaiting'));
 		} catch (Exception $e) {
@@ -150,7 +153,8 @@ class DisplayUsersWaiting {
 	private function getAllJointsUsersInClassWithStatusActiveWithoutDieing () {
 
 		try {
-			$jointsUsersInClassActive = $this->_jointUsersInClassManager->getAllJointsWithStatusActive();
+			$status = $this->_usersInClassStatusManager->statusGetByName ('waiting');
+			$jointsUsersInClassActive = $this->_usersInClassStatusManager->getAllJointsWithStatusId ($status ['ID']);
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->showMsg($this->_languageManager->getText('errorNoJointUsersInClassActive'));
 		} catch (Exception $e) {
@@ -218,6 +222,7 @@ class DisplayUsersWaiting {
 	private $_jointsUsersInClassWaiting;
 	private $_jointsUsersInClassActive;
 	private $_jointsClassteacherInClass;
+	private $_usersInClassStatusManager;
 	private $_classteachers;
 	private $_users;
 	private $_classes;

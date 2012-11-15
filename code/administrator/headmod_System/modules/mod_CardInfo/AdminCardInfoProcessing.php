@@ -23,7 +23,7 @@ class AdminCardInfoProcessing {
 		$this->cardInfoInterface = $cardInfoInterface;
 
 		$this->msg = array(
-			'err_card_id'			 => 'Dies ist keine gültige Karten-ID ("%s")',
+			'err_card_id'			 => 'Diese Karte ist nicht vergeben!',
 			'err_get_user_by_card'	 => 'Anhand der Kartennummer konnte kein Benutzer gefunden werden.',
 			'err_no_orders'			 => 'Es sind keine Bestellungen für diesen Benutzer vorhanden.',
 			'err_meal_not_found'	 => 'Ein Menü konnte nicht gefunden werden!',
@@ -54,7 +54,12 @@ class AdminCardInfoProcessing {
 	 * @return string UserID
 	 */
 	public function GetUser ($card_id) {
+		try {
 			return $this->cardManager->getUserID($card_id);
+		} catch (Exception $e) {
+			$this->cardInfoInterface->dieError(sprintf($this->msg['err_card_id'], $card_id));
+		}
+			
 	}
 	
 	/**

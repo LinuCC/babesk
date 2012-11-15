@@ -27,7 +27,7 @@ class AssignUsersToClasses {
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
 
-	public function execute ($dataContainer) {
+	public function execute () {
 
 		if(isset($_POST['confirmed'])) {
 			$this->usersToClassesAssignShowConfirmationDialog();
@@ -90,10 +90,12 @@ class AssignUsersToClasses {
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
+		require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
 
 		$this->_usersManager = new KuwasysUsersManager();
 		$this->_classManager = new KuwasysClassManager();
 		$this->_jointUsersInClassManager = new KuwasysJointUsersInClass();
+		$this->_usersInClassStatusManager = new KuwasysUsersInClassStatusManager ();
 	}
 
 	/**
@@ -120,8 +122,8 @@ class AssignUsersToClasses {
 	private function jointUsersInClassSetToActiveAddToMultipleChangesList ($jointId) {
 
 		try {
-			$this->_jointUsersInClassManager->alterStatusOfJointAddEntryToTempList($jointId,
-					$this->_jointUsersInClassManager->getActiveStatusString());
+			$status = $this->_usersInClassStatusManager->statusGetByName ('active');
+			$this->_jointUsersInClassManager->alterStatusOfJointAddEntryToTempList($jointId, $status ['ID']);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorJointUsersInClassChange'));
 		}
@@ -130,8 +132,8 @@ class AssignUsersToClasses {
 	private function jointUsersInClassSetToWaitingAddToMultipleChangesList ($jointId) {
 
 		try {
-			$this->_jointUsersInClassManager->alterStatusOfJointAddEntryToTempList($jointId,
-					$this->_jointUsersInClassManager->getWaitingStatusString());
+			$status = $this->_usersInClassStatusManager->statusGetByName ('waiting');
+			$this->_jointUsersInClassManager->alterStatusOfJointAddEntryToTempList($jointId, $status ['ID']);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorJointUsersInClassChange'));
 		}
@@ -324,15 +326,15 @@ class AssignUsersToClasses {
 	private function jointsUsersInClassHandle () {
 
 		try {
-			$jointsUsersInClass ['request#1'] = $this->jointsUsersInClassFirstRequestGetAndThrowWhenVoid();
+			$jointsUsersInClass ['request1'] = $this->jointsUsersInClassFirstRequestGetAndThrowWhenVoid();
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->showMsg($this->_languageManager->getText('errorNoJointsUsersInClassFirstRequest'));
 		}
 		try {
-			$jointsUsersInClass ['request#2'] = $this->jointsUsersInClassSecondRequestGetAndThrowWhenVoid();
+			$jointsUsersInClass ['request2'] = $this->jointsUsersInClassSecondRequestGetAndThrowWhenVoid();
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->showMsg($this->_languageManager->getText('errorNoJointsUsersInClassSecondRequest'));
-			if(!isset($jointsUsersInClass ['request#1'])) {
+			if(!isset($jointsUsersInClass ['request1'])) {
 				$this->_interface->dieError($this->_languageManager->getText('errorNoJointsUsersInClassInAssignUsersToClass'));
 			}
 		}
@@ -342,7 +344,8 @@ class AssignUsersToClasses {
 	private function jointsUsersInClassFirstRequestGetAndThrowWhenVoid () {
 
 		try {
-			$joints = $this->_jointUsersInClassManager->getAllJointsWithStatusRequestFirst();
+			$status = $this->_usersInClassStatusManager->statusGetByName ('waiting');
+			$joints = $this->_jointUsersInClassManager->getAllJointsWithStatusId($status ['ID']);
 		} catch (MySQLVoidDataException $e) {
 			throw new MySQLVoidDataException('No UsersInClass-Joints with firstRequests');
 		} catch (Exception $e) {
@@ -357,7 +360,8 @@ class AssignUsersToClasses {
 	private function jointsUsersInClassSecondRequestGetAndThrowWhenVoid () {
 
 		try {
-			$joints = $this->_jointUsersInClassManager->getAllJointsWithStatusRequestSecond();
+			$status = $this->_usersInClassStatusManager->statusGetByName ('request2');
+			$joints = $this->_jointUsersInClassManager->getAllJointsWithStatusId($status ['ID']);
 		} catch (MySQLVoidDataException $e) {
 			throw new MySQLVoidDataException('No UsersInClass-Joints with secondRequests');
 		} catch (Exception $e) {
@@ -445,6 +449,11 @@ class AssignUsersToClasses {
 	 * @var KuwasysLanguageManager
 	 */
 	private $_languageManager;
+
+	/**
+	 * @var KuwasysUsersInClassStatusManager
+	 */
+	private $_usersInClassStatusManager;
 }
 
 ?>

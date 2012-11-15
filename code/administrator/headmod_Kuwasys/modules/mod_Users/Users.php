@@ -10,7 +10,7 @@ require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInSchoolYear.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
-require_once PATH_INCLUDE_KUWASYS . '/jointUserInClassStatusDefinition.php';
+require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
 require_once 'DisplayUsersWaiting.php';
 
 /**
@@ -32,7 +32,7 @@ class Users extends Module {
 	private $_classManager;
 	private $_jointUsersInClass;
 	private $_databaseAccessManager;
-	private $_jointUserInClassStatusDefiner;
+	private $_usersInClassStatusManager;
 	/**
 	 * @var KuwasysLanguageManager
 	 */
@@ -89,6 +89,9 @@ class Users extends Module {
 				case 'printParticipationConfirmation':
 					$this->handleParticipationConfirmationPdf();
 					break;
+				case 'sendEmailsParticipationConfirmation':
+					$this->sendEmailParticipationConfirmation ();
+					break;
 				default:
 					$this->_interface->dieError($this->_languageManager->getText('actionValueWrong'));
 			}
@@ -116,7 +119,7 @@ class Users extends Module {
 		$this->_languageManager->setModule('Users');
 		require_once PATH_ADMIN . $this->relPath . '../../KuwasysDatabaseAccess.php';
 		$this->_databaseAccessManager = new KuwasysDatabaseAccess($this->_interface);
-		$this->_jointUserInClassStatusDefiner = new jointUserInClassStatusTranslation($this->_languageManager);
+		$this->_usersInClassStatusManager = new KuwasysUsersInClassStatusManager ();
 	}
 
 	/**-------------------------------------------------------------------------
@@ -352,24 +355,27 @@ class Users extends Module {
 	 * creates temporary Pdffiles on the Serverfilesystem and returns an array with the paths to them.
 	 */
 	private function createTemporaryPdfFiles ($users) {
-
-		require_once PATH_INCLUDE . '/pdf/HtmlToPdfImporter.php';
-
-		$confTemplatePath = PATH_INCLUDE . '/pdf/printTemplates/printTemplateTest.html';
-		if(!file_exists($confTemplatePath)) {
-			$this->_interface->dieError($this->_languageManager->getText('errorPdfHtmlTemplateMissing')
-										 . $confTemplatePath);
-		}
 		$pdfTmpPathArray = array();
-
 		foreach ($users as $user) {
-			$pdf = new HtmlToPdfImporter ();
-			$pdf->htmlImport($confTemplatePath, true);
-			$pdf->tempVarReplaceInHtml('username', sprintf('%s %s', $user['forename'], $user['name']), '#!%s#!');
-			$pdf->htmlToPdfConvert();
-			$pdfTmpPathArray [] = $pdf->pdfSaveTemporaryAndGetFilename ();
+			$pdfTmpPathArray [] = $this->createPdfParticipationConfirmation ($user);
 		}
 		return $pdfTmpPathArray;
+	}
+
+	/** Creates a PDF for the Participation Confirmation and returns its Path
+	 *
+	 */
+	private function createPdfParticipationConfirmation ($user) {
+		require_once PATH_INCLUDE . '/pdf/HtmlToPdfImporter.php';
+		$confTemplatePath = PATH_INCLUDE . '/pdf/printTemplates/printTemplateTest.html';
+		if(!file_exists($confTemplatePath))
+			$this->_interface->dieError($this->_languageManager->getText('errorPdfHtmlTemplateMissing') . $confTemplatePath);
+		$pdf = new HtmlToPdfImporter ();
+		$pdf->htmlImport($confTemplatePath, true);
+		$pdf->tempVarReplaceInHtml('username', sprintf('%s %s', $user['forename'], $user['name']), '#!%s#!');
+		$pdf->htmlToPdfConvert();
+		$pdfPath = $pdf->pdfSaveTemporaryAndGetFilename ();
+		return $pdfPath;
 	}
 
 	/**
@@ -399,6 +405,36 @@ class Users extends Module {
 		$grade = $this->_databaseAccessManager->gradeGetById ($gradeId);
 		$filename = sprintf('%s_%s_%s.pdf', $schoolyear ['label'], $grade ['label'] . $grade ['gradeValue'], date('Y-m-d'));
 		return $filename;
+	}
+
+	private function sendEmailParticipationConfirmation () {
+		foreach ($_POST['userIds'] as $userId) {
+			$this->_databaseAccessManager->userIdAddToUserIdArray($userId);
+		}
+		$users = $this->_databaseAccessManager->userGetByUserIdArray();
+		foreach ($users as $user) {
+			$pdfPath = $this->createPdfParticipationConfirmation ($user);
+			$this->sendEmailIfUserHasEmail ($user, $pdfPath);
+		}
+		$this->_interface->dieMsg ('Das Versenden der Emails wurde abgeschlossen.');
+	}
+
+	/**
+	 *
+	 */
+	private function sendEmailIfUserHasEmail ($user, $pdfPath) {
+		if ($user ['email'] == '') {
+			$this->_interface->showMsg (sprintf('Der Benutzer %s %s hat keine Email angegeben.', $user ['forename'], $user ['name']));
+		}
+		require_once PATH_INCLUDE . '/email/SMTPMailer.php';
+		$mailer = new SMTPMailer ($this->_interface);
+		$mailer->smtpDataInDatabaseLoad ();
+		$mailer->emailFromXmlLoad (PATH_INCLUDE . '/email/Kuwasys_Bestaetigung.xml');
+		$mailer->AddAttachment ($pdfPath, 'KurswahlBestaetigung.pdf');
+		$mailer->AddAddress ($user ['email']);
+		if (!$mailer->Send ()) {
+			$this->_interface->showError (sprintf('Konnte die Email an %s %s nicht versenden. Fehlermeldung: %s', $user ['forename'], $user ['name'], $mailer->ErrorInfo));
+		}
 	}
 
 	/**-----------------------------------------------------------------------------
@@ -485,7 +521,7 @@ class Users extends Module {
 		$classes = $this->_databaseAccessManager->classGetAll();
 		$classOld = $this->searchClassArrayForClassWithId($_GET['classIdOld'], $classes);
 		$user = $this->_databaseAccessManager->userGet($_GET['userId']);
-		$statusArray = $this->_jointUserInClassStatusDefiner->statusArrayGet();
+		$statusArray = $this->_usersInClassStatusManager->statusGetAll ();
 		$this->_interface->showMoveUserByClass($classOld, $user, $classes, $statusArray);
 	}
 
@@ -998,9 +1034,11 @@ class Users extends Module {
 		$userSpecificJointsUserInClass = $this->getAllJointsOfUserId($user['ID']);
 		if (isset($userSpecificJointsUserInClass) && $userSpecificJointsUserInClass) {
 			foreach ($userSpecificJointsUserInClass as $joint) {
-				$status = $this->_jointUserInClassStatusDefiner->statusTranslate($joint ['status']);
+				$status = $this->_databaseAccessManager->usersInClassStatusGetWithoutDieing ($joint ['statusId']);
 				$class = $this->getClassByClassId($joint['ClassID']);
-				$class ['status'] = $status;
+				if ($status) {
+					$class ['status'] = $status ['translatedName'];
+				}
 				$user['classes'][] = $class;
 			}
 		}
@@ -1016,10 +1054,11 @@ class Users extends Module {
 	 * @param unknown_type $userID
 	 * @param unknown_type $classID
 	 */
-	private function addJointUsersInClass ($userID, $classID, $status) {
+	private function addJointUsersInClass ($userID, $classID, $statusName) {
 
 		try {
-			$this->_jointUsersInClass->addJoint($userID, $classID, $status);
+			$status = $this->_usersInClassStatusManager->statusGetByName ($statusName);
+			$this->_jointUsersInClass->addJoint($userID, $classID, $status ['ID']);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorAddJointUsersInClass'));
 		}
@@ -1063,24 +1102,30 @@ class Users extends Module {
 		}
 	}
 
-	private function alterJointUsersInClass ($jointId, $status) {
+	private function alterJointUsersInClass ($jointId, $statusName) {
 
 		try {
-			$this->_jointUsersInClass->alterStatusOfJoint($jointId, $status);
+			$status = $this->_usersInClassStatusManager->statusGetByName ($statusName);
+			$this->_jointUsersInClass->alterStatusIdOfJoint($jointId, $status ['ID']);
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorAlterJointUsersInClass'));
 		}
 	}
 
-	private function alterJointUsersInClassOfUserIdAndClassId ($userId, $classId, $status) {
+	private function alterJointUsersInClassOfUserIdAndClassId ($userId, $classId, $statusName) {
 
 		$joint = $this->getJointUsersInClassByUserIdAndClassId($userId, $classId);
-		if ($status == 'noConnection') {
+		if ($statusName == 'noConnection') {
 			$this->deleteJointUsersInClass($joint['ID']);
 			$this->_interface->dieMsg($this->_languageManager->getText('finishedDeleteJointUsersInClass'));
 		}
 		else {
-			$this->alterJointUsersInClass($joint['ID'], $status);
+			try {
+				$this->_usersInClassStatusManager->statusGetByName ($statusName);
+			} catch (MySQLVoidDataException $e) {
+				$this->_interface->dieError ($this->_languageManager->getText ('errorFetchUsersInClassStatus'));
+			}
+			$this->alterJointUsersInClass($joint['ID'], $statusName);
 			$this->_interface->dieMsg($this->_languageManager->getText('finishedChangeJointUsersInClass'));
 		}
 	}

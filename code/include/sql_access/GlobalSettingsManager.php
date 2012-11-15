@@ -16,6 +16,11 @@ abstract class GlobalSettings {
 	const FITS_ALL_CLASSES = 'fits_all_classes';
 	const SOLI_PRICE = 'soli_price';
 	const IS_CLASSREGISTRATION_ENABLED = 'isClassRegistrationEnabled';
+	const SMTP_HOST = 'smtpHost';
+	const SMTP_USERNAME = 'smtpUsername';
+	const SMTP_PASSWORD = 'smtpPassword';
+	const SMTP_FROMNAME = 'smtpFromName';
+	const SMTP_FROM = 'smtpFrom';
 }
 
 class GlobalSettingsManager extends TableManager {

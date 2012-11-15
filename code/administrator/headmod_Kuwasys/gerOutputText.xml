@@ -20,6 +20,7 @@
 			<formPassword>Passwort</formPassword>
 			<formPasswordRepeat>wiederholtes Passwort</formPasswordRepeat>
 			<formTelephone>Telefon</formTelephone>
+			<formEmail>Email</formEmail>
 			<!-- Other FormStuff -->
 			<formWrongInput>Falsche Eingabe des Feldes "%s"!</formWrongInput>
 			<formWrongPasswordRepetition>Das Passwort stimmt nicht mit der Wiederholung überein!</formWrongPasswordRepetition>
@@ -39,6 +40,8 @@
 			<errorFetchJointUsersInGrade>Ein Fehler ist beim Abrufen der Daten zum Verlinken von Schülern und Klassen aufgetreten! Dieser Schüler gehört womöglich zu keiner Klasse.</errorFetchJointUsersInGrade>
 			<errorFetchJointUsersInClassActive>Die Aktiven Benutzer von Kursen konnten nicht abgerufen werden.</errorFetchJointUsersInClassActive>
 			<errorNoJointUsersInClassActive>Es konnten keine Aktiven Benutzer von Kursen gefunden werden.</errorNoJointUsersInClassActive>
+			<errorNoJointsUsersInClassWaiting>Es gibt keine Schüler, die auf der Warteliste von Kursen stehen!</errorNoJointsUsersInClassWaiting>
+			<errorFetchJointsUsersInClassWaiting>Ein Fehler ist beim Abrufen der der wartenden Schüler aufgetreten.</errorFetchJointsUsersInClassWaiting>
 			<errorAddJointUsersInGrade>Ein Fehler ist beim Verlinken des Schülers mit der Klasse aufgetreten. Sie müssen den Schüler womöglich nochmal bearbeiten.</errorAddJointUsersInGrade>
 			<errorDeleteJointUsersInGrade>Die Verbindung zwischen dem Schüler und der Klasse konnte nicht gelöscht werden! Wenn der Schüler keiner Klasse zugewiesen war, können sie diese Warnung ignorieren.</errorDeleteJointUsersInGrade>
 			<errorNoJointUsersInGradeToDelete>Die Verbindung zwischen dem Schüler und der Klasse konnte nicht gelöscht werden weil die Verbindung nicht existiert.</errorNoJointUsersInGradeToDelete>
@@ -80,6 +83,7 @@
 			<finDeleteUser>Der Benutzer wurde erfolgreich gelöscht.</finDeleteUser>
 			<finChangeUser>Der Benutzer wurde erfolgreich geändert.</finChangeUser>
 			<finAddUserToClass>Der Benutzer wurde erfolgreich dem Kurs hinzugefügt.</finAddUserToClass>
+			<errorFetchUsersInClassStatus>Ein Fehler ist beim Abrufen des Statuses aufgetreten!</errorFetchUsersInClassStatus>
 			<errorPdfHtmlTemplateMissing>Konnte das Html-Template zum erstellen der PDF-Datei nicht finden.</errorPdfHtmlTemplateMissing>
 		</text>
 	</module>
@@ -90,7 +94,7 @@
 			<errorWrongInput>Sie haben den Wert im Feld "%s" nicht richtig eingegeben!</errorWrongInput>
 			<errorNoSchoolYears>Es sind keine Schuljahre vorhanden! Bitte fügen sie zuerst Schuljahre hinzu.</errorNoSchoolYears>
 			<errorFetchSchoolYears>Ein Fehler ist beim abrufen der SchuljahresDaten aufgetreten.</errorFetchSchoolYears>
-			<errorLinkSchoolYear>Ein Fehler ist beim verlinken des Kurses mit dem Schuljahr aufgetreten. 
+			<errorLinkSchoolYear>Ein Fehler ist beim verlinken des Kurses mit dem Schuljahr aufgetreten.
 			    Bitte bearbeiten sie den Kurs nochmal und wählen sie das korrekte Schuljahr aus, um den Fehler zu beheben.</errorLinkSchoolYear>
 			<errorInputSchoolYear>Ein falsches Schuljahr wurde eingegeben!</errorInputSchoolYear>
 			<errorMissSchoolYear>Dieses Schuljahr ist nicht vorhanden!</errorMissSchoolYear>
@@ -132,11 +136,9 @@
 			<errorNoJointsUsersInClassInAssignUsersToClass>kein Schüler ist an einen Kurs interessiert!</errorNoJointsUsersInClassInAssignUsersToClass>
 			<errorFetchJointsUsersInClassFirstRequest>Ein Fehler ist beim Abrufen der primären Kurswünsche von Schülern aufgetreten.</errorFetchJointsUsersInClassFirstRequest>
 			<errorFetchJointsUsersInClassSecondRequest>Ein Fehler ist beim Abrufen der sekundären Kurswünsche von Schülern aufgetreten.</errorFetchJointsUsersInClassSecondRequest>
-			<errorFetchJointsUsersInClassWaiting>Ein Fehler ist beim Abrufen der der wartenden Schüler aufgetreten.</errorFetchJointsUsersInClassWaiting>
-			<errorNoJointsUsersInClassWaiting>Es gibt keine Schüler, die auf der Warteliste von Kursen stehen!</errorNoJointsUsersInClassWaiting>
 			<warningUsersJointedToClassToDelete>WARNUNG: Es sind noch Benutzer an dem Kurs angemeldet/interessiert! Wenn sie den Kurs löschen, gehen auch diese
 			    Beziehungen unwiderruflich verloren.</warningUsersJointedToClassToDelete>
-			<errorDeleteJointsUsersInClass>Ein Fehler ist beim löschen der Beziehungen der Benutzer zum Kurs aufgetreten. 
+			<errorDeleteJointsUsersInClass>Ein Fehler ist beim löschen der Beziehungen der Benutzer zum Kurs aufgetreten.
 			    Die Datenbank besitzt nun womöglich Einträge, die manuell gelöscht werden müssen!</errorDeleteJointsUsersInClass>
 			<errorFetchIsClassRegistrationEnabledGlobally>Ein Fehler ist beim Abrufen des Wertes für Kursregistrierung aufgetreten.</errorFetchIsClassRegistrationEnabledGlobally>
 			<errorAlterIsClassRegistrationEnabledGlobally>Ein Fehler ist beim Verändern des Wertes für Kursregistrierungen aufgetreten.</errorAlterIsClassRegistrationEnabledGlobally>
@@ -235,7 +237,7 @@
 			<errorFetchClassTeacherInClassLinks>Ein Fehler ist beim abrufen der Verlinkungen zwischen Kursleitern und Kursen aufgetreten.</errorFetchClassTeacherInClassLinks>
 			<warningDeleteJointMissing>Konnte eine Verbindung zwischen Kursleiter und Kurs nicht löschen weil sie nicht vorhanden ist!</warningDeleteJointMissing>
 			<warningDeleteJoint>Konnte eine Verbindung zwischen Kursleiter und Kurs aufgrund eines Verbindungsproblems zur Datenbank nicht löschen!</warningDeleteJoint>
-			<errorNoClassSelectedButMultipleOthersToo>Eine widersprüchliche Auswahl wurde getroffen; Bitte wählen sie keinen anderen Eintrag aus der Kursliste aus, wenn sie 'kein Kurs' selektiert haben. 
+			<errorNoClassSelectedButMultipleOthersToo>Eine widersprüchliche Auswahl wurde getroffen; Bitte wählen sie keinen anderen Eintrag aus der Kursliste aus, wenn sie 'kein Kurs' selektiert haben.
 			   </errorNoClassSelectedButMultipleOthersToo>
 			<errorAddClassTeacherToClassLink>Ein Fehler ist beim Verlinken des Kursleiters mit einem Kurs aufgetreten; Der Kursleiter wurde schon hinzugefügt. Bitte überprüfen sie die Daten.</errorAddClassTeacherToClassLink>
 		</text>
