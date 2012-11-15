@@ -121,9 +121,9 @@ class Classes extends Module {
 	}
 
 	private function showAddClass () {
-
 		$schoolYears = $this->getAllSchoolYears();
-		$this->_interface->showAddClass($schoolYears);
+		$classUnits = $this->_databaseAccessManager->kuwasysClassUnitGetAll ();
+		$this->_interface->showAddClass($schoolYears, $classUnits);
 	}
 
 	private function showClassDetails () {
@@ -147,7 +147,7 @@ class Classes extends Module {
 				if ($status) {
 					$user['statusTranslated'] = $status ['translatedName'];
 				}
-				$user = $this->addChoicesOfDayToUser($user, $class ['weekday']);
+				$user = $this->addChoicesOfDayToUser($user, $class ['unitId']);
 				$user = $this->addGradeLabelToUser($user);
 				$class['users'][] = $user;
 
@@ -171,7 +171,7 @@ class Classes extends Module {
 		}
 		$classes = $this->_databaseAccessManager->classGetByClassIdArray($classIdArray);
 		foreach ($classes as $class) {
-			if($class ['weekday'] == $weekday) {
+			if($class ['unitId'] == $weekday) {
 				$user ['classesOfSameDay'] [] = $class;
 			}
 		}
@@ -225,8 +225,9 @@ class Classes extends Module {
 
 		foreach ($contentArray as $rowArray) {
 			$idOfClass = $this->getNextAutoincrementIdOfClass();
+			$classUnit = $this->_databaseAccessManager->kuwasysClassUnitGetByName ($rowArray['weekday']);
 			$this->addClassToDatabase($rowArray['label'], $rowArray['description'], $rowArray['maxRegistration'],
-				$rowArray['registrationEnabled'], $rowArray['weekday']);
+				$rowArray['registrationEnabled'], $classUnit ['ID']);
 			if($rowArray ['schoolyearId'] != '') {
 				$this->addJointSchoolYear($rowArray ['schoolyearId'], $idOfClass);
 			}
@@ -319,7 +320,8 @@ class Classes extends Module {
 		$class = $this->getClass();
 		$nowUsedSchoolYearId = $this->getSchoolYearIdByClassId($class['ID']);
 		$schoolYears = $this->getAllSchoolYears();
-		$this->_interface->showChangeClass($class, $schoolYears, $nowUsedSchoolYearId);
+		$classUnits = $this->_databaseAccessManager->kuwasysClassUnitGetAll ();
+		$this->_interface->showChangeClass($class, $schoolYears, $nowUsedSchoolYearId, $classUnits);
 	}
 
 	private function changeClassInDatabase () {
@@ -437,34 +439,24 @@ class Classes extends Module {
 		return $this->_databaseAccessManager->schoolyearIdGetBySchoolyearNameWithoutDying($schoolyearName);
 	}
 
-	/**
-	 * returns the translated string of the weekday
-	 * @param string $weekdayString The name of the weekday in three Chars (like, "Mon", "Tue", ... )
-	 */
-	private function getTranslatedWeekday ($weekdayString) {
+	private function addWeekdayTranslatedToClasses ($classes) {
 
-		$text = $this->_languageManager->getText('weekdayLabel' . $weekdayString);
-		return $text;
+		$classUnits = $this->_databaseAccessManager->kuwasysClassUnitGetAll ();
+
+		foreach ($classes as &$class) {
+			foreach ($classUnits as $unit) {
+				if ($unit ['ID'] == $class ['unitId']) {
+					$class ['weekdayTranslated'] = $unit ['translatedName'];
+				}
+			}
+		}
+		return $classes;
 	}
 
 	private function addWeekdayTranslatedToClass ($class) {
-
-		if (!isset($class['weekday']) || !$class['weekday']) {
-			$class['weekdayTranslated'] = false;
-		}
-		else {
-			$translatedWeekday = $this->getTranslatedWeekday($class['weekday']);
-			$class['weekdayTranslated'] = $translatedWeekday;
-		}
+		$classUnit = $this->_databaseAccessManager->kuwasysClassUnitGet ($class ['unitId']);
+		$class ['weekdayTranslated'] = $classUnit ['translatedName'];
 		return $class;
-	}
-
-	private function addWeekdayTranslatedToClasses ($classes) {
-
-		foreach ($classes as & $class) {
-			$class = $this->addWeekdayTranslatedToClass($class);
-		}
-		return $classes;
 	}
 
 	private function addClassteachersToClasses ($classes) {

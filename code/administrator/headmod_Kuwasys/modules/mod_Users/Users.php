@@ -595,13 +595,12 @@ class Users extends Module {
 
 		if ($_POST['password'] != '' && $_POST['password'] != NULL) {
 
-			$this->_usersManager->changeUserWithoutPassword($_POST['ID'], $_POST['forename'], $_POST['name'], $_POST[
-					'username'], $_POST['email'], $_POST['telephone']);
+			$this->_usersManager->changeUserWithPassword($_GET['ID'], $_POST['forename'], $_POST['name'], $_POST[
+					'username'], $_POST['email'], $_POST['telephone'], hash_password($_POST['password']));
 		}
 		else {
-
 			$this->_usersManager->changeUserWithoutPassword($_GET['ID'], $_POST['forename'], $_POST['name'], $_POST[
-					'username'], $_POST['email'], $_POST['telephone'], hash_password($_POST['password']));
+					'username'], $_POST['email'], $_POST['telephone']);
 		}
 	}
 
@@ -673,7 +672,9 @@ class Users extends Module {
 		catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointUsersInGrade'));
 		}
-		return $joints;
+		if(isset($joints)) {
+			return $joints;
+		}
 	}
 
 	/**
@@ -772,12 +773,14 @@ class Users extends Module {
 
 		$jointsUsersInGrade = $this->getAllJointsUsersInGrade();
 		$grades = $this->getAllGrades();
-		foreach ($users as & $user) {
-			foreach ($jointsUsersInGrade as $joint) {
-				if ($joint['UserID'] == $user['ID']) {
-					foreach ($grades as $grade) {
-						if ($grade['ID'] == $joint['GradeID']) {
-							$user['gradeLabel'] = $grade['gradeValue'] . '-' . $grade['label'];
+		if (isset($users) && count ($users) && isset($jointsUsersInGrade) && count ($jointsUsersInGrade)) {
+			foreach ($users as & $user) {
+				foreach ($jointsUsersInGrade as $joint) {
+					if ($joint['UserID'] == $user['ID']) {
+						foreach ($grades as $grade) {
+							if ($grade['ID'] == $joint['GradeID']) {
+								$user['gradeLabel'] = $grade['gradeValue'] . '-' . $grade['label'];
+							}
 						}
 					}
 				}

@@ -113,7 +113,7 @@ class ClassDetails extends Module {
 		} catch (MySQLVoidDataException $e) {
 			return false;
 		}
-		return status;
+		return $status;
 	}
 
 	private function showConfirmationDeRegisterClass () {

@@ -31,14 +31,15 @@ class ClassesInterface extends AdminInterface {
 		$this->smarty->display($this->tplFilePath . 'mainMenu.tpl');
 	}
 
-	public function showAddClass ($schoolYears) {
+	public function showAddClass ($schoolYears, $classUnits) {
 
-		$this->smarty->assign('schoolYears', $schoolYears);
+		$this->smarty->assign ('schoolYears', $schoolYears);
+		$this->smarty->assign ('classUnits', $classUnits);
 		$this->smarty->display($this->tplFilePath . 'addClass.tpl');
 	}
-	
+
 	public function showImportClassesByCsvFile () {
-		
+
 		$this->smarty->display($this->tplFilePath . 'importLocalCsvFile.tpl');
 	}
 
@@ -49,37 +50,37 @@ class ClassesInterface extends AdminInterface {
 	}
 
 	public function showDeleteClassConfirmation ($ID, $promptMessage, $confirmedString, $notConfirmedString) {
-		
+
 		$this->confirmationDialog($promptMessage, $this->sectionString, 'deleteClass&ID=' . $ID, $confirmedString, $notConfirmedString);
 	}
-	
-	public function showChangeClass ($class, $schoolYears, $nowUsedSchoolYearID) {
-		
+
+	public function showChangeClass ($class, $schoolYears, $nowUsedSchoolYearID, $classUnits) {
 		$this->smarty->assign('class', $class);
 		$this->smarty->assign('schoolYears', $schoolYears);
 		$this->smarty->assign('nowUsedSchoolYearID', $nowUsedSchoolYearID);
+		$this->smarty->assign ('classUnits', $classUnits);
 		$this->smarty->display($this->tplFilePath . 'changeClass.tpl');
 	}
-	
+
 	public function showClassDetails ($class) {
-		
+
 		$this->smarty->assign('class', $class);
 		$this->smarty->display($this->tplFilePath . 'showClassDetails.tpl');
 	}
-	
+
 	public function showToggleGlobalClassRegistration ($isGlobalClassRegistrationEnabled) {
-		
+
 		$this->smarty->assign('enabled', $isGlobalClassRegistrationEnabled);
 		$this->smarty->display($this->tplFilePath . 'toggleGlobalClassRegistrationEnabled.tpl');
 	}
-	
+
 	public function showAssignUsersToClassMenu () {
-		
+
 		$this->smarty->display($this->tplFilePath . 'assignUsersToClasses.tpl');
 	}
-	
+
 	public function showConfirmDialogAssignUsersToClass ($requestsPassed, $requestsNotPassed) {
-		
+
 		$this->smarty->assign('requestsPassed', $requestsPassed);
 		$this->smarty->assign('requestsNotPassed', $requestsNotPassed);
 		$this->smarty->display($this->tplFilePath . 'assignUsersToClassesOutline.tpl');
