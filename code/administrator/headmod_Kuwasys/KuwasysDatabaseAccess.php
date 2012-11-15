@@ -859,6 +859,18 @@ class KuwasysDatabaseAccess {
 		}
 	}
 
+	public function jointClassteacherInClassGetAllWithoutDieing () {
+
+		try {
+			$joints = $this->_jointClassteacherInClassManager->getAllJoints ();
+		} catch (Exception $e) {
+			$this->_interface->showMsg ($this->_languageManager->getText("jointClassteacherInClassErrorFetch"));
+		}
+		if (isset($joints)) {
+			return $joints;
+		}
+	}
+
 	public function jointClassteacherInClassAdd ($classTeacherID, $classID) {
 
 		try {
