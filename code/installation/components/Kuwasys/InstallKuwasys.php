@@ -29,7 +29,7 @@ class InstallKuwasys extends InstallationComponent {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
-	public function execute ($dataContainer) {
+	public function execute () {
 
 // 		die('Database muss noch angegeben werden können! OMG noob...');
 		if (isset($_GET['action'])) {

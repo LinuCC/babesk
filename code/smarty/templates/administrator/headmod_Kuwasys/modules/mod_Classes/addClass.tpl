@@ -7,11 +7,11 @@
 	<label>Name des Kurses: <input type='text' name='label'></label><br><br>
 	<label>Beschreibung: <textarea name='description' maxlength='1024' rows='4' cols='50'></textarea></label><br><br>
 	<label>maximale Registrierungen: <input type='text' name='maxRegistration' maxlength='4'></label><br><br>
-	<label>Zu welchem Schuljahr gehört der Kurs? 
+	<label>Zu welchem Schuljahr gehört der Kurs?
 	<select name='schoolYear' size='1'>
 		{foreach $schoolYears as $schoolYear}
-			<option 
-				value='{$schoolYear.ID}' 
+			<option
+				value='{$schoolYear.ID}'
 				{if $schoolYear.active}selected='selected'{/if}>
 				{$schoolYear.label}
 			</option>
@@ -20,13 +20,9 @@
 	</label><br><br>
 	<label>Veranstaltungstag des Kurses:
 	<select name='weekday' size='1'>
-		<option value='Mon'>Montag</option>
-		<option value='Tue'>Dienstag</option>
-		<option value='Wed'>Mittwoch</option>
-		<option value='Thu'>Donnerstag</option>
-		<option value='Fri'>Freitag</option>
-		<option value='Sat'>Samstag</option>
-		<option value='Sun'>Sonntag</option>
+		{foreach $classUnits as $classUnit}
+		<option value='{$classUnit.ID}'>{$classUnit.translatedName}</option>
+		{/foreach}
 	</select>
 	</label><br><br>
 	<label>Registrierungen für Schüler ermöglichen: <input type="checkbox" name="allowRegistration" value="1" checked="checked"></label><br><br>

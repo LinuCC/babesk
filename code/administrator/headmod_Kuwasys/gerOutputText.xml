@@ -360,6 +360,11 @@
 			<jointUserInSchoolyearErrorDelete>Ein Fehler ist beim Löschen der Zuweisung von Benutzern im Schuljahr aufgetreten.</jointUserInSchoolyearErrorDelete>
 			<jointUserInSchoolyearErrorFetch>Die Zuweisungen von Benutzern im Schuljahr konnten nicht abgerufen werden.</jointUserInSchoolyearErrorFetch>
 			<jointUserInSchoolyearErrorNoJoints>Es gibt keine Zuweisungen von Benutzern im Schuljahr.</jointUserInSchoolyearErrorNoJoints>
+			<usersInClassStatusErrorNotFound>Der Status wurde nicht gefunden</usersInClassStatusErrorNotFound>
+			<classUnitErrorNotFound>Die Klasseneinheit konnte nicht gefunden werden</classUnitErrorNotFound>
+			<classUnitErrorFetch>Die Klasseneinheit konnte nicht abgerufen werden.</classUnitErrorFetch>
+			<classUnitsErrorNotFound>Es konnten keine Klasseneinheiten gefunden werden</classUnitsErrorNotFound>
+			<classUnitsErrorFetch>Die Klasseneinheiten konnten nicht abgerufen werden</classUnitsErrorFetch>
 		</text>
 	</module>
 </gerOutputText>
