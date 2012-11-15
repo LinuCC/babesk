@@ -384,9 +384,11 @@ class TableManager {
 	public function getNextAutoIncrementID () {
 		$query = sql_prev_inj(sprintf('SELECT Auto_increment FROM information_schema.tables WHERE table_name="%s";',
 			$this->tablename));
+	
 		$result = $this->executeQuery($query);
 		$nextId = $this->getResultArrayContent($result);
-		return $nextId ['Auto_increment'];
+		
+		return $nextId [0]['Auto_increment'];
 	}
 
 	/**
