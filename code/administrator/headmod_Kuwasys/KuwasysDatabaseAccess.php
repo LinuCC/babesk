@@ -862,7 +862,7 @@ class KuwasysDatabaseAccess {
 		try {
 			$schoolyearId = $this->_jointClassInSchoolyearManager->getSchoolYearIdOfClassId($classId);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showError($this->_languageManager->getText('jointClassInSchoolyearErrorNoJoints'));
+			$this->_interface->showMsg($this->_languageManager->getText('jointClassInSchoolyearErrorNoJoints'));
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('jointClassInSchoolyearErrorFetchSpecific'));
 		}

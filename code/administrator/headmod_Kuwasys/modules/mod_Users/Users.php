@@ -673,7 +673,9 @@ class Users extends Module {
 		catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointUsersInGrade'));
 		}
-		return $joints;
+		if(isset($joints)) {
+			return $joints;
+		}
 	}
 
 	/**
@@ -772,12 +774,14 @@ class Users extends Module {
 
 		$jointsUsersInGrade = $this->getAllJointsUsersInGrade();
 		$grades = $this->getAllGrades();
-		foreach ($users as & $user) {
-			foreach ($jointsUsersInGrade as $joint) {
-				if ($joint['UserID'] == $user['ID']) {
-					foreach ($grades as $grade) {
-						if ($grade['ID'] == $joint['GradeID']) {
-							$user['gradeLabel'] = $grade['gradeValue'] . '-' . $grade['label'];
+		if (isset($users) && count ($users)) {
+			foreach ($users as & $user) {
+				foreach ($jointsUsersInGrade as $joint) {
+					if ($joint['UserID'] == $user['ID']) {
+						foreach ($grades as $grade) {
+							if ($grade['ID'] == $joint['GradeID']) {
+								$user['gradeLabel'] = $grade['gradeValue'] . '-' . $grade['label'];
+							}
 						}
 					}
 				}
