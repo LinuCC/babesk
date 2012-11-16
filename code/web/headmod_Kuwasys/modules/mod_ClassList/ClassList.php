@@ -55,8 +55,10 @@ class ClassList extends Module {
 		$this->_interface = new WebInterface($this->_smarty);
 		$this->_databaseAccessManager = new KuwasysDatabaseAccess ($this->_interface);
 		$this->initWeekdayIdArray ();
-		$this->_firstStatusRequestId = $this->_databaseAccessManager->usersInClassStatusGetByName ('request1') ['ID'];
-		$this->_secondStatusRequestId = $this->_databaseAccessManager->usersInClassStatusGetByName ('request2') ['ID'];
+		$firstStatusRequest = $this->_databaseAccessManager->usersInClassStatusGetByName ('request1');
+		$this->_firstStatusRequestId = $firstStatusRequest ['ID'];
+		$secondStatusRequest = $this->_databaseAccessManager->usersInClassStatusGetByName ('request2');
+		$this->_secondStatusRequestId = $secondStatusRequest['ID'];
 	}
 
 	private function initWeekdayIdArray () {
