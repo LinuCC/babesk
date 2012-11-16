@@ -63,7 +63,7 @@ class ClassList extends Module {
 
 	private function initWeekdayIdArray () {
 		$classUnits = $this->_databaseAccessManager->kuwasysClassUnitGetAll ();
-		$classUnitIdArray = [];
+		$classUnitIdArray = array();
 		foreach ($classUnits as $classUnit) {
 			$classUnitIdArray [] = $classUnit ['ID'];
 		}
