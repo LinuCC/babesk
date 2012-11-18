@@ -3,6 +3,7 @@ require_once PATH_CODE . '/include/sql_access/DBConnect.php';
 require_once PATH_CODE . '/include/sql_access/TableManager.php';
 require_once PATH_ACCESS . '/headmod_Kuwasys/KuwasysUsersInClassStatusManager.php';
 require_once PATH_ACCESS . '/headmod_Kuwasys/KuwasysClassUnitManager.php';
+require_once PATH_ACCESS . '/AdminManager.php';
 
 class InstallKuwasys extends InstallationComponent {
 
@@ -104,9 +105,7 @@ class InstallKuwasys extends InstallationComponent {
 		$tables = simplexml_load_file(dirname(__FILE__) . '/tablesToInstall.xml');
 
 		foreach ($tables->table as $table) {
-
 			if (!$this->checkTablesForSpecialTreatment($table->name, $table)) {
-
 				$result = $this->_db->query($table->sqlCommand);
 				if (!$result) {
 					echo 'Could not add the table "' . $table->name . '"! ' . $this->_db->error . '<br>';
@@ -129,10 +128,8 @@ class InstallKuwasys extends InstallationComponent {
 				$this->tableSpecialTreatmentUsers($table);
 				break;
 			case 'administrators':
-				if (!$this->isTableExisting('administrators')) {
-					$this->tableSpecialTreatmentAdministrators($table);
-					return false;
-				}
+				$this->tableSpecialTreatmentAdministrators($table);
+				return false;
 				break;
 			default:
 				return false;
@@ -146,7 +143,6 @@ class InstallKuwasys extends InstallationComponent {
 	private function tableSpecialTreatmentUsers ($table) {
 
 		if ($this->isTableKeyExisting('users', 'email')) {
-
 			$this->addNotice('Die Tabelle Users enthält schon an das Kurswahlsystem angepasste Spalten.');
 		}
 		else {
@@ -162,8 +158,17 @@ class InstallKuwasys extends InstallationComponent {
 	 * @param SimpleXML-Object $table
 	 */
 	private function tableSpecialTreatmentAdministrators ($table) {
-
-		$this->_flagAddAdmin = true;
+		if (!$this->isTableExisting('administrators')) {
+			$this->_flagAddAdmin = true;
+			return;
+		}
+		//check if an Administrator was added
+		$adminManager = new AdminManager ();
+		try {
+			$adminManager->getAllAdmins ();
+		} catch (MySQLVoidDataException $e) {
+			$this->_flagAddAdmin = true;
+		}
 	}
 
 	private function showAddAdminForm () {
