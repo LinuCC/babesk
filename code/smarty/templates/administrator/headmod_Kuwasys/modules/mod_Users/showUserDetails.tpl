@@ -1,4 +1,4 @@
-{extends file=$inh_path} {block name="content"}
+#{extends file=$inh_path} {block name="content"}
 
 <h2 class='moduleHeader'>Details des Schülers "{$user.forename} {$user.name}"</h2>
 

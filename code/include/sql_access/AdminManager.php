@@ -35,7 +35,7 @@ class AdminManager extends TableManager{
 		if($row['ID']) {
 			return $row['ID'];
 		}
-		else {               //the name doesn't exist
+		else {	//the name doesn't exist
 			return -1;
 		}
 	}
