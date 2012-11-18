@@ -1,5 +1,5 @@
 {extends file=$soliParent}{block name=content}
-<h3 align=center>{$name} - Essenszuschuss</h3><h3 align=right>KW {$ordering_date}</h3><br>
+<h3 align=center>{$name} - Essenszuschuss f&uuml;r KW {$ordering_date}</h3><br>
 {literal}
 <style>
 td {
@@ -19,7 +19,6 @@ td {
 			<th>Preis</th>
 			<th>Eigenanteil</th>
 			<th>Aus Kasse</th>
-			<th>Wurde abgeholt</th>
 		</tr>
 	</thead>
 	
@@ -31,7 +30,6 @@ td {
 			<td>{sprintf("%01.2f", $order.mealprice)}€</td>
 			<td>{sprintf("%01.2f", $order.soliprice)}€</td>
 			<td>{sprintf("%01.2f", ($order.mealprice - $order.soliprice))}€</td>
-			<td>{if ($order.is_fetched)}Ja{else}Nein{/if}</td>
 		</tr>
 	{/foreach}
 	</tbody>
