@@ -72,7 +72,7 @@ class Fmenu extends Module {
 			$smarty->assign('hasFits',true);
 		}
 		$smarty->assign('uid', $_SESSION['uid']);
-		$smarty->display($this->smartyPath . 'Menu.tpl');
+		$smarty->display($this->smartyPath . 'menu.tpl');
 	}
 }
 ?>
