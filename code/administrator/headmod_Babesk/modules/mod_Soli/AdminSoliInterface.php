@@ -46,6 +46,12 @@ class AdminSoliInterface extends AdminInterface {
 		$this->smarty->display($this->tplFilePath.'show_orders.tpl');
 	}
 	
+	function ShowNoOrdersFound($weeknum, $username) {
+		$this->smarty->assign('ordering_date', $weeknum);
+		$this->smarty->assign('name', $username);
+		$this->smarty->display($this->tplFilePath.'show_no_orders_found.tpl');
+	}
+	
 	function AskShowSoliUser($solis) {
 		$this->smarty->assign('solis', $solis);
 		$this->smarty->display($this->tplFilePath.'show_orders_select_date.tpl');
