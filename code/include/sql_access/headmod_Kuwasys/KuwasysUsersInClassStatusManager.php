@@ -31,7 +31,7 @@ class KuwasysUsersInClassStatusManager extends TableManager {
 	 * @return array () An Array containing the information of the status
 	 */
 	public function statusGet ($id) {
-		return $this->searchEntry('ID =' . $id);
+		return $this->searchEntry('ID ="' . $id.'"');
 	}
 
 	/** Returns one status based on the given $name
