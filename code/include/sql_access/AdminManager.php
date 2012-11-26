@@ -47,6 +47,14 @@ class AdminManager extends TableManager{
 		}
 		return $admin['name'];
 	}
+	
+	function getAdminGroup($ID) {
+		$admin = $this->getEntryData($ID);
+		if(!$admin) {
+			throw new MySQLVoidDataException('MySQL returned no data!');
+		}
+		return $admin['GID'];
+	}
 
 	/**
 	 * Check whether the password for the given admin is correct

@@ -5,7 +5,7 @@
 	<label>Passwort des Admins:<input type="text" name='password'></label><br><br>
 	<select name="admingroup">
 	{foreach $groups as $group}
-		<option value="{$group.ID}">{$group.name}</option>
+		<option value="{$group.ID}" {if $group.ID==$active_group}selected{/if}>{$group.name}</option>
 	{/foreach}
 	</select><br>
 	<input type="submit" value="Bestätigen">

@@ -33,10 +33,11 @@ class AdminAdminInterface extends AdminInterface {
 		$this->dieMsg($msg);
 	}
 
-	function ChangeAdmin($ID, $name, $groups) {
+	function ChangeAdmin($ID, $name, $groups,$active_group) {
 		$this->smarty->assign('ID', $ID);
 		$this->smarty->assign('name', $name);
 		$this->smarty->assign('groups', $groups);
+		$this->smarty->assign('active_group', $active_group);
 		$this->smarty->display($this->tplFilePath . 'change_admin.tpl');
 	}
 
