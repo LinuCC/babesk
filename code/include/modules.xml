@@ -260,5 +260,10 @@
 				<active>true</active>
 			</module>
 		</head_module>
+		<head_module>
+			<ger_name>Einstellungen</ger_name>
+			<name>Settings</name>
+			<active>true</active>
+		</head_module>
 	</web>
 </modules>
