@@ -58,6 +58,11 @@
 				<name>EmailConfiguration</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Voreingestelltes Passwort verwalten</ger_name>
+				<name>PresetPassword</name>
+				<active>true</active>
+			</module>
 		</head_module>
 		<head_module>
 			<ger_name>Bargeldloses Bestellsystem für Kantinen</ger_name>
@@ -264,6 +269,11 @@
 			<ger_name>Einstellungen</ger_name>
 			<name>Settings</name>
 			<active>true</active>
+			<module>
+				<ger_name>Voreingestelltes Passwort verändern</ger_name>
+				<name>ChangePresetPassword</name>
+				<active>true</active>
+			</module>
 		</head_module>
 	</web>
 </modules>

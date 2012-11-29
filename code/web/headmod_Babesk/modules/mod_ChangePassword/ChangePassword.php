@@ -58,7 +58,7 @@ class ChangePassword extends Module {
 				exit();
 			}
 
-			$userManager->updatePassword($_SESSION['uid'], $passwd);
+			$userManager->changePassword($_SESSION['uid'], $passwd);
 				$smarty->assign('status', '<p>Passwort wurde erfolgreich ge&auml;ndert!</p>');
 				$smarty->display($this->smartyPath . 'change_password_success.tpl');
 		}

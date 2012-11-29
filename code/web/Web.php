@@ -8,7 +8,7 @@ class Web {
 	private $_moduleManager;
 	private $_loggedIn;
 	private $_interface;
-	private $_userManager;
+	private $__userManager;
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -16,22 +16,21 @@ class Web {
 	public function __construct () {
 
 		if (!isset($_SESSION)) {
-
 			require_once "../include/path.php";
-
 			$this->initEnvironment();
 			$this->initSmarty();
-
 		}
 		require_once PATH_ACCESS . '/UserManager.php';
 		require_once PATH_INCLUDE . '/moduleManager.php';
 		require_once PATH_INCLUDE . '/functions.php';
-			require_once PATH_ACCESS . "/LogManager.php";
-		
-		$this->userManager = new UserManager();
+		require_once PATH_ACCESS . '/LogManager.php';
+		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
+
+		$this->_userManager = new UserManager();
+		$this->_gsManager = new GlobalSettingsManager ();
 		$this->_moduleManager = new ModuleManager('web');
-		$this->_loggedIn = isset($_SESSION['uid']);
 		$this->_moduleManager->allowAllModules();
+		$this->_loggedIn = isset($_SESSION['uid']);
 		$this->_interface = new WebInterface($this->_smarty);
 	}
 
@@ -56,7 +55,7 @@ class Web {
 		require_once 'Login.php';
 		$loginManager = new Login($this->_smarty);
 		if($loginManager->login()) {
-			$this->userManager->updateLastLoginToNow($_SESSION['uid']);
+			$this->_userManager->updateLastLoginToNow($_SESSION['uid']);
 		}
 	}
 
@@ -69,7 +68,7 @@ class Web {
 		//seems like something that Smarty itself needs
 		$this->_smarty->assign('status', ''); //???
 
-		$userData = $this->userManager->getUserdata($_SESSION['uid']);
+		$userData = $this->_userManager->getUserdata($_SESSION['uid']);
 		$_SESSION['last_login'] = formatDateTime($userData['last_login']);
 		$_SESSION['username'] = $userData['forename'] . ' ' . $userData['name'];
 		$_SESSION['login_tries'] = $userData['login_tries'];
@@ -85,7 +84,7 @@ class Web {
 		//general user data for header etc
 		if ($_SESSION['login_tries'] > 3) {
 			$this->_smarty->assign('login_tries', $_SESSION['login_tries']);
-			$this->userManager->ResetLoginTries($userData['ID']);
+			$this->_userManager->ResetLoginTries($userData['ID']);
 			$_SESSION['login_tries'] = 0;
 		}
 
@@ -102,7 +101,7 @@ class Web {
 		}
 
 		$this->_smarty->assign('head_modules', $head_mod_arr);
-		//include the module specified in GET['section']
+		$this->checkFirstPassword ();
 		if ($mod_str) {
 			try {
 				$this->_moduleManager->execute($mod_str, false);
@@ -110,9 +109,8 @@ class Web {
 				$this->_interface->DieError(sprintf('Probleme beim Ausführen des Moduls: %s. Weil: %s', $mod_str, $e->getMessage()));
 			}
 		}
-		//or include the main menu
 		else {
-			$this->_smarty->assign('birthday',$this->userManager->getBirthday($_SESSION['uid']));
+			$this->_smarty->assign('birthday',$this->_userManager->getBirthday($_SESSION['uid']));
 			$this->_smarty->display(PATH_SMARTY . '/templates/web/main_menu.tpl');
 		}
 	}
@@ -140,6 +138,21 @@ class Web {
 		$this->_smarty->assign('smarty_path', REL_PATH_SMARTY);
 		$this->_smarty->assign('babesk_version', file_get_contents("../version.txt"));
 		$this->_smarty->assign('error', '');
+	}
+
+	/** Checks if the User has a preset Password and has not changed it yet
+	 *
+	 */
+	private function checkFirstPassword () {
+		$changePasswordOnFirstLoginEnabled = $this->_gsManager->valueGet (GlobalSettings::FIRST_LOGIN_CHANGE_PASSWORD);
+		if ($changePasswordOnFirstLoginEnabled) {
+			$userData = $this->_userManager->getUserdata ($_SESSION ['uid']);
+			$firstPassword = $userData ['first_passwd'];
+			if ($firstPassword == true) {
+				$this->_moduleManager->execute ('Settings|ChangePresetPassword');
+				die ();
+			}
+		}
 	}
 }
 

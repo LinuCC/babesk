@@ -54,19 +54,8 @@ class UserManager extends TableManager{
 		return $this->getEntryData($uid, '*');
 	}
 
-	/**
-	 *  @todo this function is not necessary anymore, functionality is alredy in alterUser(), replace getUserID
-	 */
-	function updatePassword($uid, $new_passwd) {
-		require 'databaseDistributor.php';
-		require_once PATH_INCLUDE.'/functions.php';
-		$query = sprintf( 'UPDATE users SET first_passwd = 0, password = "%s" WHERE ID = %s;',
-							hash_password($new_passwd),
-							sql_prev_inj($uid));
-		$result = $this->db->query($query);
-		if (!$result) {
-			throw DB_QUERY_ERROR.$this->db->error;
-		}
+	function changePassword ($userId, $new_password) {
+		$this->alterEntry ($userId, 'password', hash_password($new_password), 'first_passwd', '0');
 		return true;
 	}
 
@@ -408,6 +397,11 @@ class UserManager extends TableManager{
 	function firstPassword($ID) {
 		$user_data = parent::getEntryData($ID, 'first_passwd');
 		return $user_data['first_passwd'];
+	}
+
+	function setFirstPasswordOfUser ($userId, $isFirstPw) {
+		$isFirstPwSql = ($isFirstPw) ? '1' : '0';
+		$this->alterEntry ($userId, 'first_passwd', $isFirstPwSql);
 	}
 
 	/**

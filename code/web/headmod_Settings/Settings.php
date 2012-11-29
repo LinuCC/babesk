@@ -21,7 +21,8 @@ class Settings extends HeadModule {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	public function execute($moduleManager, $dataContainer) {
-		$moduleManager->execute("Settings|MainMenu", false);
+		echo '<b>Das hier noch verändern!!!!!!</b>';
+		$moduleManager->execute("Settings|ChangePresetPassword", false);
 	}
 }
 
