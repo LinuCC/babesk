@@ -2,6 +2,8 @@
 
 require_once "../include/path.php";
 require_once 'PublicDataInterface.php';
+require_once PATH_INCLUDE . '/moduleManager.php';
+require_once PATH_INCLUDE . '/DataContainer.php';
 
 /**
  * This Class organizes the Sub-program "publicData"
@@ -12,7 +14,7 @@ class PublicData {
 	//Constructor
 	////////////////////////////////////////////////////////////////////////////////
 	public function __construct () {
-
+		$this->environmentInit ();
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Getters and Setters
@@ -21,18 +23,35 @@ class PublicData {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
+	public function moduleExecute ($moduleName) {
+		$this->_moduleManager->execute ($moduleName);
+	}
+
+	public function publicDataEntrypoint () {
+		if (isset ($_GET ['section'])) {
+			$this->moduleExecute ($_GET ['section']);
+		}
+		else {
+			$this->_interface->dieError ('No Module requested; Aborting');
+		}
+	}
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////
 	private function environmentInit () {
-
+		$this->_interface = new PublicDataInterface ();
+		$this->_dataContainer = new DataContainer ($this->_interface->getSmarty (), $this->_interface);
+		$this->_moduleManager = new ModuleManager ('publicData', $this->_interface);
+		$this->_moduleManager->setDataContainer ($this->_dataContainer);
 	}
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
 	////////////////////////////////////////////////////////////////////////////////
 	private $_moduleManager;
 	private $_interface;
+	private $_dataContainer;
 }
 
 ?>

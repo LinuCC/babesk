@@ -10,4 +10,6 @@
 require_once 'PublicData.php';
 
 $publicData = new PublicData ();
+$publicData->publicDataEntrypoint ();
+
 ?>

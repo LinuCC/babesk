@@ -261,4 +261,7 @@
 			</module>
 		</head_module>
 	</web>
+	<publicData>
+		<path>publicData/</path>
+	</publicData>
 </modules>

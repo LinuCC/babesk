@@ -38,7 +38,7 @@ class ModuleManager {
 		else {
 			$this->generalInterface = new GeneralInterface();
 		}
-		
+
 		if (isset($program_part)) {
 			$this->parseModuleXML($program_part);
 		}
@@ -51,15 +51,15 @@ class ModuleManager {
 	public function setModuleXMLPath ($path) {
 		$this->moduleXMLPath = $path;
 	}
-	
+
 	public function setDataContainer ($dC) {
 		$this->dataContainer = $dC;
 	}
-	
+
 	public function getDataContainer () {
 		return $this->dataContainer;
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
@@ -219,6 +219,9 @@ class ModuleManager {
 	}
 
 	public function executeHeadModul ($headmod_name) {
+		if (!count ($this->headModules)) {
+			$this->generalInterface->dieError ('No HeadModules active! Check modules.xml');
+		}
 		foreach ($this->headModules as $head_module) {
 			if ($head_module->getName() == $headmod_name) {
 				$head_module->execute($this, $this->dataContainer);
@@ -226,7 +229,7 @@ class ModuleManager {
 			}
 		}
 	}
-	
+
 	public function parseModuleXML ($program_part) {
 
 		/**
