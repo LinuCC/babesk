@@ -40,10 +40,32 @@ class PublicData {
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////
 	private function environmentInit () {
+		$this->phpIniSet();
+		$this->sessionInit ();
+		$this->attributesInit ();
+		//if this value is not set, the modules will not execute
+		define('_AEXEC', 1);
+		error_reporting(E_ALL);
+	}
+
+	private function attributesInit () {
 		$this->_interface = new PublicDataInterface ();
 		$this->_dataContainer = new DataContainer ($this->_interface->getSmarty (), $this->_interface);
 		$this->_moduleManager = new ModuleManager ('publicData', $this->_interface);
 		$this->_moduleManager->setDataContainer ($this->_dataContainer);
+		$this->_moduleManager->allowAllModules ();
+	}
+
+	private function sessionInit () {
+		session_name('sid');
+		session_start();
+	}
+
+	private function phpIniSet () {
+		ini_set('display_errors', 1);
+		ini_set('session.use_cookies', 1);
+		ini_set('session.use_only_cookies', 0);
+		ini_set("default_charset", "utf-8");
 	}
 
 	////////////////////////////////////////////////////////////////////////////////

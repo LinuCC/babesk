@@ -16,13 +16,14 @@ class PublicDataInterface extends GeneralInterface {
 	 * @param $smarty If given, the class will use this variable as a smarty-Class.
 	 * if not given, the class will initialize the complete Smarty-environment
 	 */
-	public function __construct ($smarty = false) {
+	public function __construct ($smarty = false, $modRelativePath = false) {
 		if (!$smarty) {
 			$this->initSmarty ();
 		}
 		else {
 			$this->_smarty = $smarty;
 		}
+		$this->_smartyModTemplates = PATH_SMARTY . '/templates/publicData' . $modRelativePath;
 		$this->_smartyParentTemplate = PATH_SMARTY . '/templates/publicData/base_layout.tpl';
 		$this->_smarty->assign('inh_path', $this->_smartyParentTemplate);
 	}
@@ -73,7 +74,7 @@ class PublicDataInterface extends GeneralInterface {
 	 * dies and displays all messages which were used by showError and showMsg
 	 */
 	function dieDisplay () {
-		$this->smarty->display(PATH_SMARTY . '/templates/administrator/message.tpl',
+		$this->smarty->display(PATH_SMARTY . '/templates/publicData/message.tpl',
 			md5($_SERVER['REQUEST_URI']), md5(	$_SERVER['REQUEST_URI']));
 	}
 
@@ -84,7 +85,7 @@ class PublicDataInterface extends GeneralInterface {
 	 * Initializes Smarty and the Variables of the program
 	 */
 	private function initSmarty () {
-		require_once PATH_SMARTY . "/smarty_init.php";
+		require PATH_SMARTY . "/smarty_init.php";
 		$this->_smarty = $smarty;
 		$this->_smarty->assign('smarty_path', REL_PATH_SMARTY);
 		$this->_smarty->assign('status', '');
@@ -93,7 +94,7 @@ class PublicDataInterface extends GeneralInterface {
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
 	////////////////////////////////////////////////////////////////////////////////
-	private $_smarty;
+	protected $_smarty;
 	/**
 	 * The path to a template defining the structure to display
 	 */

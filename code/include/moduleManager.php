@@ -112,9 +112,7 @@ class ModuleManager {
 			$modules = $head_mod->getModules();
 			foreach ($modules as $module) {
 				if (!isset($_SESSION['modules'][$head_mod->getName() . '|' . $module->getName()])) {
-					echo('Ein Fehler ist mit Modul-Session-Variablen aufgetreten! Bitte loggen sie sich neu ein!');
-					global $adminManager;
-					$adminManager->userLogOut();
+					throw new Exception('Ein Fehler ist mit Modul-Session-Variablen aufgetreten! Bitte loggen sie sich neu ein!');
 				}
 				if ($_SESSION['modules'][$head_mod->getName() . '|' . $module->getName()])
 					$allowedModules[] = $head_mod->getName() . '|' . $module->getName();
@@ -228,6 +226,7 @@ class ModuleManager {
 				return;
 			}
 		}
+		$this->generalInterface->dieError ('Could not find appropriate Headmodul for given string');
 	}
 
 	public function parseModuleXML ($program_part) {
