@@ -43,7 +43,7 @@ class AdminInventoryProcessing {
 							sprintf('Error while getting Data from MySQL:%s in %s', $e->getMessage(), __METHOD__));
 			$this->inventoryInterface->dieError($this->messages['error']['get_data_failed']);
 		}
-		$navbar = navBar($showPage, 'schbas_inventory', 'Inventory', '1',$filter);
+		$navbar = navBar($showPage, 'schbas_inventory', 'Schbas', 'Inventory', '1',$filter);
 		$this->inventoryInterface->ShowInventory($bookcodes,$navbar);
 	}
 	

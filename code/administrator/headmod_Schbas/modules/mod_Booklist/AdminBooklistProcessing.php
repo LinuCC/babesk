@@ -37,7 +37,7 @@ class AdminBooklistProcessing {
 					sprintf('Error while getting Data from MySQL:%s in %s', $e->getMessage(), __METHOD__));
 			$this->booklistInterface->dieError($this->messages['error']['get_data_failed']);
 		}
-		$navbar = navBar($showPage, 'schbas_books', 'Booklist', '1',$filter);
+		$navbar = navBar($showPage, 'schbas_books', 'Schbas', 'Booklist', '1',$filter);
 		$this->BookInterface->ShowBooklist($booklist,$navbar);
 	}
 	
@@ -84,7 +84,7 @@ class AdminBooklistProcessing {
 		require_once PATH_ACCESS . '/BookManager.php';
 		$bookManager = new BookManager();
 		try {
-			$book_id = $bookManager->getBookIDByISBNBarcode($isbn_search);
+			$book_id = $bookManager->getBookIDByISBN($isbn_search);
 		} catch (Exception $e) {
 			$this->BookInterface->dieError($this->messages['error']['notFound'] . $e->getMessage());
 		}
