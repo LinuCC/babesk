@@ -83,6 +83,7 @@
 			<finDeleteUser>Der Benutzer wurde erfolgreich gelöscht.</finDeleteUser>
 			<finChangeUser>Der Benutzer wurde erfolgreich geändert.</finChangeUser>
 			<finAddUserToClass>Der Benutzer wurde erfolgreich dem Kurs hinzugefügt.</finAddUserToClass>
+			<finResetPasswordsOfUsers>Die Passwörter wurden erfolgreich zurückgesetzt</finResetPasswordsOfUsers>
 			<errorFetchUsersInClassStatus>Ein Fehler ist beim Abrufen des Statuses aufgetreten!</errorFetchUsersInClassStatus>
 			<errorPdfHtmlTemplateMissing>Konnte das Html-Template zum erstellen der PDF-Datei nicht finden.</errorPdfHtmlTemplateMissing>
 		</text>
@@ -316,6 +317,7 @@
 			<userErrorNoUsers>Es sind keine Benutzer vorhanden.</userErrorNoUsers>
 			<userErrorNoSpecific>Der gewünschte Benutzer konnte nicht gefunden werden.</userErrorNoSpecific>
 			<userErrorFetch>Ein Fehler ist beim Abrufen der Benutzer aufgetreten.</userErrorFetch>
+			<userErrorChangePasswords>Konnte das Passwort für einen Benutzer nicht verändern</userErrorChangePasswords>
 			<jointUserInClassErrorAdd>Eine Verbindung zwischen einem Schüler und einem Kurs konnte nicht hinzugefügt werden.</jointUserInClassErrorAdd>
 			<jointUserInClassErrorDelete>Eine Verbindung zwischen einem Benutzer und einem Kurs konnte nicht gelöscht werden.</jointUserInClassErrorDelete>
 			<jointUserInClassErrorChange>Eine Verbindung zwischen einem Benutzer und einem Kurs konnte nicht verändert werden.</jointUserInClassErrorChange>
@@ -360,6 +362,7 @@
 			<jointUserInSchoolyearErrorDelete>Ein Fehler ist beim Löschen der Zuweisung von Benutzern im Schuljahr aufgetreten.</jointUserInSchoolyearErrorDelete>
 			<jointUserInSchoolyearErrorFetch>Die Zuweisungen von Benutzern im Schuljahr konnten nicht abgerufen werden.</jointUserInSchoolyearErrorFetch>
 			<jointUserInSchoolyearErrorNoJoints>Es gibt keine Zuweisungen von Benutzern im Schuljahr.</jointUserInSchoolyearErrorNoJoints>
+			<jointUserInSchoolyearErrorNoJointsActiveSchoolyear>Es gibt keine Zuweisungen von Benutzern im aktiven Schuljahr</jointUserInSchoolyearErrorNoJointsActiveSchoolyear>
 			<usersInClassStatusErrorNotFound>Der Status wurde nicht gefunden</usersInClassStatusErrorNotFound>
 			<classUnitErrorNotFound>Die Klasseneinheit konnte nicht gefunden werden</classUnitErrorNotFound>
 			<classUnitErrorFetch>Die Klasseneinheit konnte nicht abgerufen werden.</classUnitErrorFetch>

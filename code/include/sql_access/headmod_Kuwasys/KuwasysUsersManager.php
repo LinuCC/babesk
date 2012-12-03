@@ -13,7 +13,7 @@ class KuwasysUsersManager extends TableManager {
 	////////////////////////////////////////////////////////////////////////////////
 	public function __construct ($interface = NULL) {
 		parent::__construct('users');
-		$this->_userToFetchArray = array ();
+		$this->_userIdArray = array ();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -39,9 +39,9 @@ class KuwasysUsersManager extends TableManager {
 		$userData = parent::searchEntry(sprintf('ID = "%s"', $ID));
 		return $userData;
 	}
-	
+
 	public function getAllUsers () {
-		
+
 		$users = $this->getTableData();
 		return $users;
 	}
@@ -57,21 +57,38 @@ class KuwasysUsersManager extends TableManager {
 		parent::alterEntry($ID, 'forename', $forename, 'name', $name, 'username', $username, 'email', $email,
 			'telephone', $telephone, 'password', $password);
 	}
-	
+
 	public function addUserIdToUserIdArray ($userId) {
-		
-		$this->_userToFetchArray [] = $userId;
+
+		$this->_userIdArray [] = $userId;
 	}
-	
+
 	public function getUsersByUserIdArray () {
-	
-		$users = $this->getMultipleEntriesByArray('ID', $this->_userToFetchArray);
+
+		$users = $this->getMultipleEntriesByArray('ID', $this->_userIdArray);
+		$this->cleanUserIdArray ();
 		return $users;
 	}
+
+	public function changePasswordOfUserIdArray ($password) {
+		$idStr = '';
+		foreach ($this->_userIdArray as $userId) {
+			$idStr .= sprintf('%s,', $userId);
+		}
+		$idStr = rtrim ($idStr, ',');
+		$query = sql_prev_inj(sprintf('UPDATE %s SET password = "%s" WHERE ID IN(%s)', $this->tablename, $password, $idStr));
+		$this->executeQuery ($query);
+		$this->cleanUserIdArray ();
+	}
+
+	private function cleanUserIdArray () {
+		$this->_userIdArray = array();
+	}
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////
-	private $_userToFetchArray;
+	private $_userIdArray;
 }
 
 ?>

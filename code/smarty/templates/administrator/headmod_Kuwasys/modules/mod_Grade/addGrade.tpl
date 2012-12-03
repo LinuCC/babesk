@@ -1,4 +1,4 @@
-{extends file=$inh_path} 
+{extends file=$inh_path}
 {block name='content'}
 
 <style type='text/css'  media='all'>
@@ -16,13 +16,13 @@ select, input.moduleFormulars {
 <br>
 <div class='moduleFormulars'>
 <form action='index.php?section=Kuwasys|Grade&action=addGrade' method='post'>
-	<label>Label:<input type='text' name='label' class='moduleFormulars'></label> <br><br>
 	<label>Jahrgangsstufe:<input type='text' name='year' class='moduleFormulars'></label> <br><br>
+	<label>Label:<input type='text' name='label' class='moduleFormulars'></label> <br><br>
 	<label>Schuljahr:
 		<select name='schoolyear' size='1'>
 		{foreach $schoolyears as $schoolyear}
-			<option 
-				value='{$schoolyear.ID}' 
+			<option
+				value='{$schoolyear.ID}'
 				{if $schoolyear.active}selected='selected'{/if}>
 				{$schoolyear.label}
 			</option>

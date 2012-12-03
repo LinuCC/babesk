@@ -1,4 +1,4 @@
-{extends file=$inh_path} {block name='content'}
+#{extends file=$inh_path} {block name='content'}
 
 <style type='text/css'  media='all'>
 /*Table should not be over the Border of the Line of the main-block*/
@@ -14,12 +14,15 @@ fieldset {
 <h2 class="moduleHeader">Hauptmenü des Benutzer-Moduls</h2>
 
 <fieldset>
-<legend>Benutzer hinzufügen</legend>
+<legend>Benutzer verändern</legend>
 <form action='index.php?section=Kuwasys|Users&action=addUser' method='post'>
 	<input type='submit' value='einen neuen Schüler hinzufügen'>
 </form>
 <form action='index.php?section=Kuwasys|Users&action=csvImport' method='post'>
 	<input type='submit' value='Schüler per CSV importieren'>
+</form>
+<form action='index.php?section=Kuwasys|Users&action=resetPasswords' method='post'>
+	<input type='submit' value='Alle Passwörter der Schüler zurücksetzen'>
 </form>
 </fieldset>
 

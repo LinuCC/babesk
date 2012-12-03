@@ -242,21 +242,23 @@ class AdminSoliProcessing {
 																				  date('Y-m-d',
 																					   $monday + ($i * $secs_per_day)));
 				} catch (MySQLVoidDataException $e) {
-					$this->soliInterface->dieError($this->msg['ERR_ORDERS_NOT_FOUND']);
+				//	$this->soliInterface->showMsg($this->msg['ERR_ORDERS_NOT_FOUND']);
 				}
 				foreach ($buffer as $order)
 					$orders[] = $order;
 			}
-			if (!count($orders))
-				$this->soliInterface->dieError($this->msg['ERR_ORDERS_NOT_FOUND']);
-
+			$username = $userManager->getForename($uid) . ' ' . $userManager->getName($uid);
+			if (!count($orders)) {
+				//$this->soliInterface->dieError($this->msg['ERR_ORDERS_NOT_FOUND']);
+				$this->soliInterface->ShowNoOrdersFound($weeknum, $username);
+			} else {
 			foreach ($orders as &$order) {
 				$sum_pricediff += $order['mealprice'] - $order['soliprice'];
 			}
 
-			$username = $userManager->getForename($uid) . ' ' . $userManager->getName($uid);
+			
 			$this->soliInterface->ShowSpecOrders($orders, $weeknum, $username, $sum_pricediff);
-
+			}
 		} else {
 			try {
 				//Show Form to fill out Weeknumber and Soli

@@ -11,6 +11,7 @@ require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
+require_once 'UsersPasswordResetter.php';
 require_once 'DisplayUsersWaiting.php';
 
 /**
@@ -33,6 +34,7 @@ class Users extends Module {
 	private $_jointUsersInClass;
 	private $_databaseAccessManager;
 	private $_usersInClassStatusManager;
+
 	/**
 	 * @var KuwasysLanguageManager
 	 */
@@ -50,7 +52,6 @@ class Users extends Module {
 	public function execute ($dataContainer) {
 
 		$this->entryPoint($dataContainer);
-
 		if (isset($_GET['action'])) {
 			switch ($_GET['action']) {
 				case 'addUser':
@@ -91,6 +92,9 @@ class Users extends Module {
 					break;
 				case 'sendEmailsParticipationConfirmation':
 					$this->sendEmailParticipationConfirmation ();
+					break;
+				case 'resetPasswords':
+					$this->resetPasswordOfAllUsers ();
 					break;
 				default:
 					$this->_interface->dieError($this->_languageManager->getText('actionValueWrong'));
@@ -435,6 +439,12 @@ class Users extends Module {
 		if (!$mailer->Send ()) {
 			$this->_interface->showError (sprintf('Konnte die Email an %s %s nicht versenden. Fehlermeldung: %s', $user ['forename'], $user ['name'], $mailer->ErrorInfo));
 		}
+	}
+
+	private function resetPasswordOfAllUsers () {
+		$usersPasswordResetter = new UsersPasswordResetter ($this->_interface,
+			$this->_databaseAccessManager, $this->_languageManager);
+		$usersPasswordResetter->execute ();
 	}
 
 	/**-----------------------------------------------------------------------------

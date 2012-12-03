@@ -478,7 +478,6 @@ class KuwasysDatabaseAccess {
 	}
 
 	public function userGetAll () {
-
 		try {
 			$users = $this->_userManager->getAllUsers();
 		} catch (MySQLVoidDataException $e) {
@@ -489,13 +488,21 @@ class KuwasysDatabaseAccess {
 		return $users;
 	}
 
-	public function userIdAddToUserIdArray ($userId) {
+	public function userChangePasswordByUserIdArray ($password) {
+		try {
+			$this->_userManager->changePasswordOfUserIdArray ($password);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError ($this->_languageManager->getText ('userErrorChangePasswords'));
+		} catch (Exception $e) {
+			$this->_interface->dieError ($this->_languageManager->getText ('userErrorChangePasswords'));
+		}
+	}
 
+	public function userIdAddToUserIdArray ($userId) {
 		$this->_userManager->addUserIdToUserIdArray($userId);
 	}
 
 	public function userGetByUserIdArray () {
-
 		try {
 			$users = $this->_userManager->getUsersByUserIdArray ();
 		} catch (Exception $e) {
@@ -1028,6 +1035,17 @@ class KuwasysDatabaseAccess {
 			$this->_interface->dieError($this->_languageManager->getText('jointUserInSchoolyearErrorNoJoints'));
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('jointUserInSchoolyearErrorFetch'));
+		}
+		return $joints;
+	}
+
+	public function jointUserInSchoolyearGetBySchoolyearId ($id) {
+		try {
+			$joints = $this->_jointUserInSchoolyearManager->getAllJointsOfSchoolyearId ($id);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError ($this->_languageManager->getText ('jointUserInSchoolyearErrorNoJointsActiveSchoolyear'));
+		} catch (Exception $e) {
+			$this->_interface_dieError ($this->_languageManager->getText ('jointUserInSchoolyearErrorFetch'));
 		}
 		return $joints;
 	}

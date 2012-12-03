@@ -23,7 +23,7 @@ class AdminManager extends TableManager{
 	 * @return false if error otherwise the admin id
 	 */
 	function getAdminID($adminname) {
-		
+
 		$query = sql_prev_inj(sprintf('SELECT ID FROM administrators WHERE name = "%s"', $adminname));
 		$result = $this->db->query($query);
 		if (!$result) {
@@ -35,17 +35,25 @@ class AdminManager extends TableManager{
 		if($row['ID']) {
 			return $row['ID'];
 		}
-		else {               //the name doesn't exist
+		else {	//the name doesn't exist
 			return -1;
 		}
 	}
-	
+
 	function getAdminName($ID) {
 		$admin = $this->getEntryData($ID);
 		if(!$admin) {
 			throw new MySQLVoidDataException('MySQL returned no data!');
 		}
 		return $admin['name'];
+	}
+	
+	function getAdminGroup($ID) {
+		$admin = $this->getEntryData($ID);
+		if(!$admin) {
+			throw new MySQLVoidDataException('MySQL returned no data!');
+		}
+		return $admin['GID'];
 	}
 
 	/**
@@ -84,6 +92,12 @@ class AdminManager extends TableManager{
 		return $adminNames;
 	}
 
+
+	function getAllAdmins () {
+		$admins = $this->getTableData ();
+		return $admins;
+	}
+
 	/**
 	 * Adds an Administrator to the System
 	 *
@@ -94,11 +108,11 @@ class AdminManager extends TableManager{
 	 * @param password His password
 	 * @param gid His Group ID
 	 * @return false if error
-	 * 
+	 *
 	 * @todo Use addEntry instead!
 	 */
 	function addAdmin($name, $password, $gid) {
-		 
+
 		require_once PATH_INCLUDE.'/functions.php';
 		if ($this->getAdminID($name) != -1) {
 			throw new Exception(USERNAME_EXISTS);

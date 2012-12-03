@@ -121,6 +121,16 @@ class UsersInterface extends AdminInterface {
 		$this->smarty->assign('users', $users);
 		$this->smarty->display($this->tplFilePath . 'showUsersGroupedByYearAndGrade.tpl');
 	}
+
+	public function showMainDialogResetPasswordOfAllUsers ($activeYearName) {
+		$this->smarty->assign ('activeYearName', $activeYearName);
+		$this->smarty->display ($this->tplFilePath . 'resetPasswordOfAll.tpl');
+	}
+
+	public function showConfirmResetPasswordOfAllUsers ($activeYearName) {
+		$this->smarty->assign ('activeYearName', $activeYearName);
+		$this->smarty->display ($this->tplFilePath . 'confirmResetPasswordOfAll.tpl');
+	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////

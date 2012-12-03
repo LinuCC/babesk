@@ -209,7 +209,8 @@ class AdminAdminProcessing {
 		else if (isset($old_ID)) {
 			$admingroups = $this->admingroupManager->getTableData();
 			$admin = $this->adminManager->getEntryData($old_ID);
-			$this->adminInterface->ChangeAdmin($old_ID, $admin['name'], $admingroups);
+			$active_group = $this->adminManager->getAdminGroup($old_ID);
+			$this->adminInterface->ChangeAdmin($old_ID, $admin['name'], $admingroups,$active_group);
 		}
 	}
 
