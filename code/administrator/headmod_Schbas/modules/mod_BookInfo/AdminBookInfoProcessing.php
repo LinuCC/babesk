@@ -27,7 +27,7 @@ class AdminBookInfoProcessing {
 		$this->BookInfoInterface = $BookInfoInterface;
 
 		$this->msg = array(
-			'err_get_user_by_Book'	 => 'Anhand der Kartennummer konnte kein Benutzer gefunden werden.',
+			'err_get_user_by_Book'	 => 'Anhand des Buchcodes konnte kein Benutzer gefunden werden.',
 			'err_connection'		 => 'Ein Fehler ist beim Verbinden zum MySQL-Server aufgetreten',);
 	}
 
@@ -40,9 +40,13 @@ class AdminBookInfoProcessing {
 	 * @return string UserID
 	 */
 	public function GetUser ($barcode) {
+		try {
 		$invID = $this->InventoryManager->getInvIDByBarcode($barcode);
 		$uid = $this->LoanManager->getUserIDByInvID($invID);
 		return $uid;
+		}catch (Exception $e){
+			$this->BookInfoInterface->dieError(sprintf($this->msg['err_get_user_by_Book']));
+		}
 	}
 	
 	/**
