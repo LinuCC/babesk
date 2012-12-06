@@ -35,7 +35,7 @@ class Booklist extends Module {
 					if (isset($_POST['filter'])){
 						$BookProcessing->ShowBooklist($_POST['filter']);
 					}else{
-						$BookProcessing->ShowBooklist("name");
+						$BookProcessing->ShowBooklist("subject");
 					}
 					break;
 				case 2: //edit a book
@@ -55,7 +55,11 @@ class Booklist extends Module {
 					} else if (isset($_POST['not_delete'])) {
 						$BookInterface->ShowSelectionFunctionality($action_arr);
 					} else {
-						$BookProcessing->DeleteConfirmation($_GET['ID']);
+						if (!$BookProcessing->isInvForBook($_GET['ID'])){
+							$BookProcessing->DeleteConfirmation($_GET['ID']);
+						}else{
+							$BookInterface->dieError("Es ist noch Inventar zu diesem Buch vorhanden!\nBitte l&ouml;schen Sie dies zuerst!");
+						}
 					}
 					break;
 				case 4: //add an entry

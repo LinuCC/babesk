@@ -145,7 +145,7 @@ class AdminBooklistProcessing {
 	
 	
 		try {
-			$BookManager->delEntry($id);
+			$bookManager->delEntry($id);
 		} catch (Exception $e) {
 			$this->logs
 			->log('ADMIN', 'MODERATE',
@@ -153,6 +153,17 @@ class AdminBooklistProcessing {
 			$this->BookInterface->dieError($this->messages['error']['delete'] . $e->getMessage());
 		}
 		$this->BookInterface->ShowDeleteFin();
+	}
+	
+	function isInvForBook($book_id) {
+		require_once PATH_ACCESS . '/BookManager.php';
+		require_once PATH_ACCESS . '/InventoryManager.php';
+		$bookManager = new BookManager();
+		$inventoryManager = new InventoryManager();
+		
+		$existEntry = $inventoryManager->existsEntry('book_id', $book_id);
+		return $existEntry;
+		
 	}
 }
 
