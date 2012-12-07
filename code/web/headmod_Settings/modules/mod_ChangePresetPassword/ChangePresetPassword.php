@@ -3,7 +3,7 @@
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_WEB . '/WebInterface.php';
 require_once PATH_ACCESS . '/UserManager.php';
-
+require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 
 class ChangePresetPassword extends Module {
 
@@ -28,6 +28,7 @@ class ChangePresetPassword extends Module {
 		$this->_smarty = $smarty;
 		$this->_interface = new WebInterface ($this->_smarty);
 		$this->_userManager = new UserManager ();
+		$this->_globalSettingsManager = new GlobalSettingsManager ();
 		$this->firstLoginCheck ();
 	}
 
@@ -35,7 +36,7 @@ class ChangePresetPassword extends Module {
 		if (isset($_GET['action'])) {
 			switch ($_GET['action']) {
 				case 'changePassword':
-				$this->changePasswordHandle ();
+					$this->changePasswordHandle ();
 					break;
 				default:
 					die ('Wrong variable for action!');
@@ -78,6 +79,14 @@ class ChangePresetPassword extends Module {
 		} catch (WrongInputException $e) {
 			$this->_interface->DieError ('Das Passwort enthält nicht unterstützte Zeichen oder ist zu kurz / zu lang!');
 		}
+		try {
+			$presetPw = $this->_globalSettingsManager->valueGet (GlobalSettings::PRESET_PASSWORD);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->DieError ('Konnte das voreingestellte Passwort nicht abrufen');
+		}
+		if ($presetPw == hash_password($pw)) {
+			$this->_interface->DieError ('Dass Passwort ist das gleiche wie das voreingestellte! Nimm ein anderes!');
+		}
 	}
 
 	private function changePasswordToDatabase ($pw) {
@@ -99,6 +108,7 @@ class ChangePresetPassword extends Module {
 	private $_smartyPath;
 	private $_interface;
 	private $_userManager;
+	private $_globalSettingsManager;
 }
 
 ?>
