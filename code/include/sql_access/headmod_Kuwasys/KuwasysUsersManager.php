@@ -46,16 +46,15 @@ class KuwasysUsersManager extends TableManager {
 		return $users;
 	}
 
-	public function changeUserWithoutPassword ($ID, $forename, $name, $username, $email, $telephone) {
+	public function changeUserWithoutPassword ($ID, $forename, $name, $username, $email, $telephone, $isFirstPassword) {
 
 		parent::alterEntry($ID, 'forename', $forename, 'name', $name, 'username', $username, 'email', $email,
-			'telephone', $telephone);
+			'telephone', $telephone, 'first_passwd', $isFirstPassword);
 	}
 
-	public function changeUserWithPassword ($ID, $forename, $name, $username, $email, $telephone, $password) {
-
+	public function changeUserWithPassword ($ID, $forename, $name, $username, $email, $telephone, $password, $isFirstPassword) {
 		parent::alterEntry($ID, 'forename', $forename, 'name', $name, 'username', $username, 'email', $email,
-			'telephone', $telephone, 'password', $password);
+			'telephone', $telephone, 'password', $password, 'first_passwd', $isFirstPassword);
 	}
 
 	public function addUserIdToUserIdArray ($userId) {

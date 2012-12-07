@@ -604,13 +604,12 @@ class Users extends Module {
 	private function ChangeUserDataToDatabase () {
 
 		if ($_POST['password'] != '' && $_POST['password'] != NULL) {
-
 			$this->_usersManager->changeUserWithPassword($_GET['ID'], $_POST['forename'], $_POST['name'], $_POST[
-					'username'], $_POST['email'], $_POST['telephone'], hash_password($_POST['password']));
+					'username'], $_POST['email'], $_POST['telephone'], hash_password($_POST['password']), isset($_POST ['isPresetPw']));
 		}
 		else {
 			$this->_usersManager->changeUserWithoutPassword($_GET['ID'], $_POST['forename'], $_POST['name'], $_POST[
-					'username'], $_POST['email'], $_POST['telephone']);
+					'username'], $_POST['email'], $_POST['telephone'], isset($_POST ['isPresetPw']));
 		}
 	}
 

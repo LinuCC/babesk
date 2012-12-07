@@ -26,14 +26,18 @@ fieldset {
 	<fieldset id='pwF' hidden>
 	<label>Passwort: <input id='pw' type='password' name='password'></label><br><br>
 	<label>Passwort wiederholen: <input id='pwRep' type='password' name='passwordRepeat'></label>
-	</fieldset><br><br>
+	</fieldset><br>
+	<label>jetziges Passwort ändern lassen: <input type='checkbox' name='isPresetPw'
+		{if $user.first_passwd}checked="checked"{/if}>	</label>
+		<p>Hinweis: Wenn diese Box angehackt wurde, wird der Benutzer beim nächsten
+			Login aufgefordert, ein neues Passwort einzugeben.</p><br>
 	<!--  -->
 	<label>Klasse:
 		<select name='grade' size='1'>
 			<option value='NoGrade' {if (!$userHasGrade)}selected='selected'{/if}>==Keine Klasse==</option>
 		{foreach $grades as $grade}
-			<option 
-				value='{$grade.ID}' 
+			<option
+				value='{$grade.ID}'
 				{if $user.gradeIDSelected == $grade.ID}
 					selected='selected'
 				{/if}>
@@ -45,8 +49,8 @@ fieldset {
 		<select name='schoolyear' size='1'>
 		{if !isset($user.schoolyearIdSelected)}<option value='0' selected='selected'>==Keine Schuljahr==</option>{/if}
 		{foreach $schoolyears as $schoolyear}
-			<option 
-				value='{$schoolyear.ID}' 
+			<option
+				value='{$schoolyear.ID}'
 				{if $schoolyear.ID == $user.schoolyearIdSelected}selected='selected'{/if}>
 				{$schoolyear.label}
 			</option>
