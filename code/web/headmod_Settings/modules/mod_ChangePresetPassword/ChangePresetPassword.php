@@ -37,6 +37,9 @@ class ChangePresetPassword extends Module {
 			switch ($_GET['action']) {
 				case 'changePassword':
 					$this->changePasswordHandle ();
+					$this->emailChangeOnFirstLoginHandle ();
+					$this->isFirstPasswordOfUserSet (false);
+					$this->_interface->DieMessage ('Die Einstellungen wurden übernommen.');
 					break;
 				default:
 					die ('Wrong variable for action!');
@@ -59,6 +62,8 @@ class ChangePresetPassword extends Module {
 	}
 
 	private function dialogChangePasswordShow () {
+		$onFirstLoginChangeEmail = $this->emailChangeOnFirstLoginGet ();
+		$this->_smarty->assign ('onFirstLoginChangeEmail', $onFirstLoginChangeEmail);
 		$this->_smarty->display ($this->_smartyPath . 'changePasswordDialog.tpl');
 	}
 
@@ -67,7 +72,6 @@ class ChangePresetPassword extends Module {
 		$repeatPw = $_POST ['newPasswordRepeat'];
 		$this->changePasswordCheckInput ($pw, $repeatPw);
 		$this->changePasswordToDatabase ($pw);
-		$this->_interface->DieMessage ('Das Passwort wurde verändert.');
 	}
 
 	private function changePasswordCheckInput ($pw, $repeatPw) {
@@ -95,10 +99,48 @@ class ChangePresetPassword extends Module {
 		} catch (Exception $e) {
 			$this->_interface->DieError ('Konnte das Passwort nicht verändern!');
 		}
+	}
+
+	private function isFirstPasswordOfUserSet ($value) {
 		try {
-			$this->_userManager->setFirstPasswordOfUser ($_SESSION ['uid'], false);
+			$this->_userManager->setFirstPasswordOfUser ($_SESSION ['uid'], $value);
 		} catch (Exception $e) {
 			$this->_interface->DieError ('Konnte die Passwortänderung nicht speichern! Bitte kontaktiere den Administrator!');
+		}
+	}
+
+	private function emailChangeOnFirstLoginHandle () {
+		if ($this->emailChangeOnFirstLoginGet ()) {
+			$newEmail = $_POST ['newEmail'];
+			$this->emailChangeOnFirstLoginCheckInput ($newEmail);
+			$this->emailSet ($newEmail);
+		}
+	}
+
+	private function emailChangeOnFirstLoginGet () {
+		try {
+			$email = $this->_globalSettingsManager->valueGet (GlobalSettings::FIRST_LOGIN_CHANGE_EMAIL);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->DieError ('Datenbankfehler: Konnte nicht herausfinden ob die Email für einen ErstLogin benötigt wird; Installation fehlerhaft / nicht vollständig');
+		} catch (Exception $e) {
+			$this->_interface->DieError ('Datenbankfehler: Konnte nicht herausfinden ob die Email für einen ErstLogin benötigt wird');
+		}
+		return ($email != '0');
+	}
+
+	private function emailSet ($email) {
+		try {
+			$this->_userManager->changeEmailAdress ($_SESSION ['uid'], $email);
+		} catch (Exception $e) {
+			$this->_interface->DieError ('Datenbankfehler: Konnte die Emailadresse nicht verändern');
+		}
+	}
+
+	private function emailChangeOnFirstLoginCheckInput ($email) {
+		try {
+			inputcheck ($email, 'email', 'Email');
+		} catch (WrongInputException $e) {
+			$this->_interface->DieError ('Die Email-Adresse wurde falsch eingegeben; Bitte gebe eine gültige EmailAdresse ein. <br>(Hinweis: Die Emailadresse wird dafür benötigt, um dich zu erreichen, wenn etwas schief läuft; Es ist wichtig das du darüber erreichbar bist)');
 		}
 	}
 

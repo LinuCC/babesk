@@ -20,6 +20,7 @@ class ChangePassword extends Module {
 	public function execute($dataContainer) {
 		//No direct access
 		defined('_WEXEC') or die("Access denied");
+		echo 'schinken';
 		require_once 'change_password_constants.php';
 		require_once PATH_INCLUDE.'/functions.php';
 		global $smarty;

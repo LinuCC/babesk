@@ -7,7 +7,10 @@
 <form action="index.php?section=Settings|ChangePresetPassword&action=changePassword" method='POST'>
 	<label>neues Passwort: <input type='password' name='newPassword'></label><br>
 	<label>Passwort wiederholen: <input type='password' name='newPasswordRepeat'></label><br>
-	<input type='submit' value="Passwort ändern">
+	{if $onFirstLoginChangeEmail}
+	<label>Email-Adresse: <input type='text' name='newEmail'></label><br>
+	{/if}
+	<input type='submit' value="Einstellung ändern">
 </form>
 
 {include file='web/footer.tpl'}

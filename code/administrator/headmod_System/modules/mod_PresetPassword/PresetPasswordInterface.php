@@ -17,8 +17,9 @@ class PresetPasswordInterface extends AdminInterface {
 	//Methods
 	/////////////////////////////////////////////////////////////////////
 
-	public function mainMenuShow ($flcp) {
+	public function mainMenuShow ($flcp, $flce) {
 		$this->smarty->assign ('onFirstLoginChangePassword', $flcp);
+		$this->smarty->assign ('onFirstLoginChangeEmail', $flce);
 		$this->smarty->display ($this->tplFilePath . 'changePresetPassword.tpl');
 	}
 

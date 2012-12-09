@@ -59,6 +59,10 @@ class UserManager extends TableManager{
 		return true;
 	}
 
+	public function changeEmailAdress ($userId, $email) {
+		$this->alterEntry ($userId, 'email', $email);
+	}
+
 
 	/**
 	 * Sorts the users it gets from MySQL-table and returns them

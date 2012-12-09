@@ -26,7 +26,9 @@ class PresetPassword extends Module {
 		if (isset($_GET ['action'])) {
 			switch ($_GET ['action']) {
 				case 'changePassword':
-					$this->changePasswordHandle ();
+					$changePwChecked = $this->changePasswordHandle ();
+					$this->changeEmailHandle ($changePwChecked);
+					$this->_interface->dieMsg ('Die Einstellungen wurden übernommen');
 					break;
 			default:
 				die ('action not defined');
@@ -52,7 +54,8 @@ class PresetPassword extends Module {
 
 	private function mainMenuShow () {
 		$firstLoginChangePassword = $this->firstLoginChangePasswordGet ();
-		$this->_interface->mainMenuShow ($firstLoginChangePassword);
+		$onFirstLoginChangeEmail = $this->emailChangeOnFirstLoginGet ();
+		$this->_interface->mainMenuShow ($firstLoginChangePassword, $onFirstLoginChangeEmail);
 	}
 
 	private function changePasswordHandle () {
@@ -61,7 +64,15 @@ class PresetPassword extends Module {
 		$this->changePasswordCheckInput ($pw);
 		$this->presetPasswordSet ($pw);
 		$this->firstLoginChangePasswordSet ($onFirstLoginChangePassword);
-		$this->_interface->dieMsg ('Die Einstellungen wurden übernommen');
+		return ($pw != '0');
+	}
+
+	private function changeEmailHandle ($isAllowed) {
+		$onFirstLoginChangeEmail = (isset($_POST ['firstLoginEmail'])) ? '1' : '0';
+		if (!$isAllowed && $onFirstLoginChangeEmail == '1') {
+			$this->_interface->dieError ('Die Email kann nur abgefragt werden, wenn auch das Passwort beim ersten Login abgefragt wird');
+		}
+		$this->emailChangeOnFirstLoginSet ($onFirstLoginChangeEmail);
 	}
 
 	private function changePasswordCheckInput ($pw) {
@@ -103,10 +114,32 @@ class PresetPassword extends Module {
 
 	private function firstLoginChangePasswordSet ($flcp) {
 		try {
-			var_dump($flcp);
 			$this->_globalSettingsManager->valueSet (GlobalSettings::FIRST_LOGIN_CHANGE_PASSWORD, $flcp);
 		} catch (Exception $e) {
 			$this->_interface->dieError ('Konnte das den Wert für die Funktion zum Verändern des Passwortes bei einem ersten Login nicht verändern');
+		}
+	}
+
+	/**
+	 * Returns if the Email should be changed by the User on his first login
+	 * @return boolean
+	 */
+	private function emailChangeOnFirstLoginGet () {
+		try {
+			$bEmail = $this->_globalSettingsManager->valueGet (GlobalSettings::FIRST_LOGIN_CHANGE_EMAIL);
+		} catch (MySQLVoidDataException $e) {
+			$this->emailChangeOnFirstLoginSet ('0');
+		} catch (Exception $e) {
+			$this->_interface->dieError ('Konnte den Wert für das Verändern der Email bei einem ersten Userlogin nicht abrufen');
+		}
+		return $bEmail;
+	}
+
+	private function emailChangeOnFirstLoginSet ($onFirstLoginChangeEmail) {
+		try {
+			$this->_globalSettingsManager->valueSet (GlobalSettings::FIRST_LOGIN_CHANGE_EMAIL, $onFirstLoginChangeEmail);
+		} catch (Exception $e) {
+			$this->_interface->dieError ('Konnte den Wert für das Verändern der Email bei einem ersten Userlogin nicht abrufen');
 		}
 	}
 

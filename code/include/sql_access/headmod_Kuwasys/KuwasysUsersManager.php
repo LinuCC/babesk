@@ -80,6 +80,10 @@ class KuwasysUsersManager extends TableManager {
 		$this->cleanUserIdArray ();
 	}
 
+	public function changeEmailAdress ($userId, $email) {
+		$this->alterEntry ($userId, 'email', $email);
+	}
+
 	private function cleanUserIdArray () {
 		$this->_userIdArray = array();
 	}

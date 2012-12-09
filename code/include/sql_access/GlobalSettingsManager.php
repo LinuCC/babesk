@@ -23,6 +23,7 @@ abstract class GlobalSettings {
 	const SMTP_FROM = 'smtpFrom';
 	const PRESET_PASSWORD = 'presetPassword';
 	const FIRST_LOGIN_CHANGE_PASSWORD = 'firstLoginChangePassword';
+	const FIRST_LOGIN_CHANGE_EMAIL = 'firstLoginChangeEmail';
 }
 
 class GlobalSettingsManager extends TableManager {
