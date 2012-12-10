@@ -296,6 +296,8 @@
 			<classteacherErrorDelete>Der Kursleiter konnte nicht gelöscht werden.</classteacherErrorDelete>
 			<classteacherErrorChange>Der Kursleiter konnte nicht verändert werden.</classteacherErrorChange>
 			<classteacherIdErrorFetchLastAdded>Die zuletzt hinzugefügte Kursleiter-ID konnte nicht abgerufen werden.</classteacherIdErrorFetchLastAdded>
+			<classteacherErrorFetchByName>Ein Fehler ist beim Abrufen der Namen der Kursleiter aufgetreten.</classteacherErrorFetchByName>
+			<classteacherNoFoundByName>Es konnte kein Kursleiter für den angegebenen Namen gefunden werden</classteacherNoFoundByName>
 			<gradeErrorAdd>Die Klasse konnte nicht hinzugefügt werden.</gradeErrorAdd>
 			<gradeErrorDelete>Die Klasse konnte nicht gelöscht werden.</gradeErrorDelete>
 			<gradeErrorChange>Die Klasse konnte nicht verändert werden.</gradeErrorChange>

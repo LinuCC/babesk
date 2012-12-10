@@ -2,6 +2,8 @@
 
 require_once 'ClassesInterface.php';
 require_once PATH_INCLUDE . '/Module.php';
+require_once 'ClassesCsvImport.php';
+
 /**
  *
  * Notice that a class has to have only one SchoolYear!
@@ -221,24 +223,6 @@ class Classes extends Module {
 		$this->_databaseAccessManager->classAdd($label, $description, $maxRegistration, $allowRegistration, $weekday);
 	}
 
-	private function addClassToDatabaseByCsvImport ($contentArray) {
-
-		foreach ($contentArray as $rowArray) {
-			$idOfClass = $this->getNextAutoincrementIdOfClass();
-			$classUnit = $this->_databaseAccessManager->kuwasysClassUnitGetByName ($rowArray['weekday']);
-			$this->addClassToDatabase($rowArray['label'], $rowArray['description'], $rowArray['maxRegistration'],
-				$rowArray['registrationEnabled'], $classUnit ['ID']);
-			if($rowArray ['schoolyearId'] != '') {
-				$this->addJointSchoolYear($rowArray ['schoolyearId'], $idOfClass);
-			}
-		}
-	}
-
-	private function getNextAutoincrementIdOfClass () {
-
-		return $this->_databaseAccessManager->classNextAutoincrementIdGet();
-	}
-
 	private function showClasses () {
 
 		$classes = $this->getAllClasses();
@@ -366,13 +350,6 @@ class Classes extends Module {
 
 		$this->_databaseAccessManager->jointClassInSchoolyearAdd($_POST['schoolYear'], $this->getLastAddedClassId());
 	}
-	/**
-	 * connects the new Class-entry with a SchoolYear
-	 */
-	private function addJointSchoolYear ($schoolyearId, $classId) {
-
-		$this->_databaseAccessManager->jointClassInSchoolyearAdd($schoolyearId, $classId);
-	}
 
 	/**
 	 * deletes all links between the deleted class and the Schoolyear
@@ -432,11 +409,6 @@ class Classes extends Module {
 	private function getSchoolYearIdByClassId ($classId) {
 
 		return $this->_databaseAccessManager->jointClassInSchoolyearGetSchoolyearIdByClassIdWithoutDyingWhenVoid($classId);
-	}
-
-	private function getSchoolyearIdBySchoolyearName ($schoolyearName) {
-
-		return $this->_databaseAccessManager->schoolyearIdGetBySchoolyearNameWithoutDying($schoolyearName);
 	}
 
 	private function addWeekdayTranslatedToClasses ($classes) {
@@ -533,37 +505,12 @@ class Classes extends Module {
 	private function importClassesByCsvFile () {
 
 		if (isset($_FILES['csvFile'])) {
-			$this->handleCsvFile ();
+			ClassesCsvImport::classInit ($this->_interface, $this->_databaseAccessManager);
+			ClassesCsvImport::csvFileImport ($_FILES['csvFile']['tmp_name'], ';');
 		}
 		else {
-			$this->showImportClassesByCsvFile();
+			$this->_interface->showImportClassesByCsvFile();
 		}
-	}
-
-	private function handleCsvFile () {
-
-		require_once PATH_INCLUDE . '/CsvImporter.php';
-		$csvManager = new CsvImporter($_FILES['csvFile']['tmp_name'], ';');
-		$contentArray = $csvManager->getContents();
-		$contentArray = $this->controlVariablesOfCsvImport($contentArray);
-		$this->addClassToDatabaseByCsvImport($contentArray);
-		$this->_interface->dieMsg($this->_languageManager->getText('finAddClassesByCsv'));
-	}
-
-	private function controlVariablesOfCsvImport ($contentArray) {
-
-		foreach ($contentArray as & $rowArray) {
-
-			$rowArray = $this->checkCsvImportVariable('label', $rowArray);
-			$rowArray = $this->checkCsvImportVariable('description', $rowArray);
-			$rowArray = $this->checkCsvImportVariable('maxRegistration', $rowArray);
-			$rowArray = $this->checkCsvImportVariable('registrationEnabled', $rowArray);
-			$rowArray = $this->checkCsvImportVariable('weekday', $rowArray);
-
-			$rowArray['schoolyearId'] = (isset($rowArray['schoolyearName'])) ? $this->getSchoolyearIdBySchoolyearName(
-				$rowArray['schoolyearName']) : '';
-		}
-		return $contentArray;
 	}
 
 	private function checkCsvImportVariable ($varName, $rowArray) {
@@ -577,10 +524,6 @@ class Classes extends Module {
 	private function deleteAllJointsUsersInClassOfClass ($classId) {
 
 		$this->_databaseAccessManager->jointUserInClassDeleteAllOfClassId($classId);
-	}
-
-	private function showImportClassesByCsvFile () {
-		$this->_interface->showImportClassesByCsvFile();
 	}
 
 	private function assignUsersToClasses () {
