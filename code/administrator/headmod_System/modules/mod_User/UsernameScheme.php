@@ -1,7 +1,7 @@
 <?php
 /**
  * Used to allow to create Schemes for Creating Usernames.
- * Instances of this class then can be used in UsernameAutoCreate.
+ * Instances of this class then can be used in UsernameAutoCreator.
  * use UsernameScheme::templateAdd and UsernameScheme::stringAdd to design the
  * Scheme, and UsernameScheme::schemeUseOnUser to parse the scheme and
  * hopefully get something useful.

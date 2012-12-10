@@ -2,24 +2,25 @@
 
 require_once 'AdminUserInterface.php';
 require_once 'AdminUserProcessing.php';
-require_once 'UsernameAutoCreate.php';
+require_once 'UsernameAutoCreator.php';
 require_once PATH_ACCESS . '/CardManager.php';
 require_once PATH_ACCESS . '/UserManager.php';
 require_once PATH_INCLUDE . '/Module.php';
 
 class User extends Module {
-
-	////////////////////////////////////////////////////////////////////////////////
-	//Attributes
-
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
+	////////////////////////////////////////////////////////////////////////////////
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
 	}
+	////////////////////////////////////////////////////////////////////////////////
+	//Getters and Setters
+	////////////////////////////////////////////////////////////////////////////////
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
+	////////////////////////////////////////////////////////////////////////////////
 	public function execute($dataContainer) {
 		$this->entryPoint ();
 		if ('POST' == $_SERVER['REQUEST_METHOD']) {
@@ -76,6 +77,9 @@ class User extends Module {
 						}
 					}
 					break;
+				case 5:
+					$this->userCreateUsernames ();
+					break;
 			}
 		} elseif  (('GET' == $_SERVER['REQUEST_METHOD'])&&isset($_GET['action'])) {
 			$action = $_GET['action'];
@@ -92,20 +96,6 @@ class User extends Module {
 			$this->userInterface->ShowSelectionFunctionality();
 		}
 	}
-
-
-	////////////////////////////////////////////////////////////////////////////////
-	//Constructor
-	////////////////////////////////////////////////////////////////////////////////
-
-	////////////////////////////////////////////////////////////////////////////////
-	//Getters and Setters
-	////////////////////////////////////////////////////////////////////////////////
-
-	////////////////////////////////////////////////////////////////////////////////
-	//Methods
-	////////////////////////////////////////////////////////////////////////////////
-
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////
@@ -158,6 +148,27 @@ class User extends Module {
 			$this->userInterface->ShowSelectionFunctionality();
 		} else {
 			$this->userProcessing->DeleteConfirmation($_GET['ID']);
+		}
+	}
+
+	protected function userCreateUsernames () {
+		if (isset ($_POST ['confirmed'])) {
+			$creator = new UsernameAutoCreator ();
+			$scheme = new UsernameScheme ();
+			$scheme->templateAdd (UsernameScheme::Forename);
+			$scheme->stringAdd ('.');
+			$scheme->templateAdd (UsernameScheme::Name);
+			$creator->usersSet ($this->userManager->getAllUsers());
+			$creator->schemeSet ($scheme);
+			$users = $creator->usernameCreateAll ();
+			foreach ($users as $user) {
+				///@FIXME: PURE EVIL DOOM LOOP OF LOOPING SQL-USE. Kill it with fire.
+				$this->userManager->alterUsername ($user ['ID'], $user ['username']);
+			}
+			$this->userInterface->dieMsg ('Die Benutzernamen wurden erfolgreich geändert');
+		}
+		else {
+			$this->userInterface->showConfirmAutoChangeUsernames ();
 		}
 	}
 

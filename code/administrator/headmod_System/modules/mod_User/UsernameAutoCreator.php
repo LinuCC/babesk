@@ -6,7 +6,7 @@ require_once 'UsernameScheme.php';
 /**
  * Allows for automatic creation of Usernames based on predefined rules
  */
-class UsernameAutoCreate {
+class UsernameAutoCreator {
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	////////////////////////////////////////////////////////////////////////////////
@@ -38,8 +38,8 @@ class UsernameAutoCreate {
 	////////////////////////////////////////////////////////////////////////////////
 	/**
 	 * Creates Usernames for all the Users which were set beforehands with
-	 * UsernameAutoCreat::usersSet. Also it needs a scheme to create the username,
-	 * so make sure you called UsernameAutoCreate::schemeSet ()
+	 * UsernameAutoCreator::usersSet. Also it needs a scheme to create the username,
+	 * so make sure you called UsernameAutoCreator::schemeSet ()
 	 */
 	public function usernameCreateAll () {
 		$result = array ();
