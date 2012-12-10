@@ -3,6 +3,15 @@
 require_once PATH_INCLUDE . '/Module.php';
 require_once 'UsernameAutoCreate.php';
 
+function test () {
+	$scheme = new UsernameScheme ();
+	$scheme->stringAdd ('TEST');
+	$scheme->templateAdd (UsernameScheme::Forename);
+	$scheme->stringAdd ('blubb');
+	var_dump($scheme->scheme);
+}
+
+
 class User extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -25,6 +34,11 @@ class User extends Module {
 
 		require_once PATH_ACCESS . '/CardManager.php';
 		require_once PATH_ACCESS . '/UserManager.php';
+
+
+
+		test ();
+
 
 		$cm = new CardManager();
 		$um = new UserManager();
