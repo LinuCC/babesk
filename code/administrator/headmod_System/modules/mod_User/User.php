@@ -1,6 +1,7 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once 'UsernameAutoCreate.php';
 
 class User extends Module {
 
