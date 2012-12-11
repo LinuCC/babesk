@@ -172,7 +172,7 @@ class ClassTeacher extends Module {
 	private function handleWholeNameCsvImport ($row) {
 		if ($row ['wholeName'] != '') {
 			$name = array ('', '');
-			$name = explode (' ', $row, '1');
+			$name = explode (' ', $row, '2');
 			$row ['forename'] = $name [0];
 			$row ['name'] = $name [1];
 		}
