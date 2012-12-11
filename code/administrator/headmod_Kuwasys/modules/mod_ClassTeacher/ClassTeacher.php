@@ -143,6 +143,7 @@ class ClassTeacher extends Module {
 		foreach ($contentArray as &$rowArray) {
 			$this->checkCsvImportKeyVariable('name', $rowArray);
 			$this->checkCsvImportKeyVariable('forename', $rowArray);
+			$this->checkCsvImportKeyVariable('wholeName', $rowArray);
 			$this->checkCsvImportKeyVariable('address', $rowArray);
 			$this->checkCsvImportKeyVariable('telephone', $rowArray);
 		}
@@ -163,8 +164,19 @@ class ClassTeacher extends Module {
 			echo 'geaddet werden:<br>';
 			var_dump($row);
 			echo '<br><br>';
+			$row = $this->handleWholeNameCsvImport ($row);
 			$this->_databaseAccessManager->classteacherAdd($row ['name'], $row ['forename'], $row ['address'], $row ['telephone']);
 		}
+	}
+
+	private function handleWholeNameCsvImport ($row) {
+		if ($row ['wholeName'] != '') {
+			$name = array ('', '');
+			$name = explode (' ', $row, '1');
+			$row ['forename'] = $name [0];
+			$row ['name'] = $name [1];
+		}
+		return $row;
 	}
 
 	/**
