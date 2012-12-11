@@ -32,8 +32,8 @@ class ClassesCsvImport {
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////
 	protected static function dataToDb ($contentArray) {
-		$classId = self::$_databaseAccessManager->classNextAutoincrementIdGet();
 		foreach ($contentArray as $rowArray) {
+			$classId = self::$_databaseAccessManager->classNextAutoincrementIdGet();
 			self::classToDb($rowArray);
 			self::jointClassInSchoolyearToDb ($rowArray, $classId);
 			self::jointClassteacherInClassToDb ($rowArray, $classId);
