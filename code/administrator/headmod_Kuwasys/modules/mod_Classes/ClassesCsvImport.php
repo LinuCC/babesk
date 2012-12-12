@@ -2,6 +2,9 @@
 
 require_once PATH_INCLUDE . '/CsvImporter.php';
 
+/**
+ * This class contains the functions needed to import classes by a Csv-File
+ */
 class ClassesCsvImport {
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -42,7 +45,7 @@ class ClassesCsvImport {
 
 	protected static function cellsMissingHandle ($contentArray) {
 		foreach ($contentArray as & $rowArray) {
-			foreach (self::$csvStructure as $cell) {
+			foreach (self::$_csvStructure as $cell) {
 				$rowArray = self::cellMissingHandle ($cell, $rowArray);
 			}
 		}
@@ -51,18 +54,18 @@ class ClassesCsvImport {
 
 	protected static function schoolyearIdAddByName ($contentArray) {
 		foreach ($contentArray as &$rowArray) {
-			$name = $rowArray [self::$csvStructure ['SchoolyearName']];
+			$name = $rowArray [self::$_csvStructure ['SchoolyearName']];
 			$schoolyearId = self::$_databaseAccessManager->schoolyearIdGetBySchoolyearNameWithoutDying ($name);
-			$rowArray [self::$csvStructure ['SchoolyearId']] = $schoolyearId;
+			$rowArray [self::$_csvStructure ['SchoolyearId']] = $schoolyearId;
 		}
 		return $contentArray;
 	}
 
 	protected static function classUnitIdAddByName ($contentArray) {
 		foreach ($contentArray as &$rowArray) {
-			if ($rowArray [self::$csvStructure ['ClassUnit']] != '') {
+			if ($rowArray [self::$_csvStructure ['ClassUnit']] != '') {
 				$classUnit = self::$_databaseAccessManager->kuwasysClassUnitGetByName ($rowArray['weekday']);
-				$rowArray [self::$csvStructure ['ClassUnit']] = $classUnit ['ID'];
+				$rowArray [self::$_csvStructure ['ClassUnit']] = $classUnit ['ID'];
 			}
 		}
 		return $contentArray;
@@ -72,7 +75,7 @@ class ClassesCsvImport {
 		$classteachers = self::$_databaseAccessManager->classteacherGetAllWithoutDieingWhenVoid ();
 		if (isset ($classteachers)) {
 			foreach ($contentArray as &$rowArray) {
-				if ($rowArray [self::$csvStructure ['ClassteacherName']] != '') {
+				if ($rowArray [self::$_csvStructure ['ClassteacherName']] != '') {
 					$rowArray = self::classteacherIdAddByNameRoutine ($rowArray, $classteachers);
 				}
 			}
@@ -83,8 +86,8 @@ class ClassesCsvImport {
 	protected static function classteacherIdAddByNameRoutine ($rowArray, $classteachers) {
 		foreach ($classteachers as $classteacher) {
 			$ctName = $classteacher ['forename'] . ' ' . $classteacher ['name'];
-			if ($rowArray [self::$csvStructure ['ClassteacherName']] == $ctName) {
-				$rowArray [self::$csvStructure ['ClassteacherId']] = $classteacher ['ID'];
+			if ($rowArray [self::$_csvStructure ['ClassteacherName']] == $ctName) {
+				$rowArray [self::$_csvStructure ['ClassteacherId']] = $classteacher ['ID'];
 			}
 		}
 		return $rowArray;
@@ -99,21 +102,21 @@ class ClassesCsvImport {
 
 	protected static function classToDb ($rowArray) {
 		self::$_databaseAccessManager->classAdd (
-			$rowArray [self::$csvStructure ['Label']],
-			$rowArray [self::$csvStructure ['Description']],
-			$rowArray [self::$csvStructure ['MaxRegistration']],
-			$rowArray [self::$csvStructure ['IsRegistrationEnabled']],
-			$rowArray [self::$csvStructure ['ClassUnit']]);
+			$rowArray [self::$_csvStructure ['Label']],
+			$rowArray [self::$_csvStructure ['Description']],
+			$rowArray [self::$_csvStructure ['MaxRegistration']],
+			$rowArray [self::$_csvStructure ['IsRegistrationEnabled']],
+			$rowArray [self::$_csvStructure ['ClassUnit']]);
 	}
 
 	protected static function jointClassInSchoolyearToDb ($rowArray, $classId) {
-		if($rowArray [self::$csvStructure ['SchoolyearId']] != '') {
+		if($rowArray [self::$_csvStructure ['SchoolyearId']] != '') {
 			self::$_databaseAccessManager->jointClassInSchoolyearAdd($rowArray ['schoolyearId'], $classId);
 		}
 	}
 
 	protected static function jointClassteacherInClassToDb ($rowArray, $classId) {
-		$ctId = $rowArray [self::$csvStructure ['ClassteacherId']];
+		$ctId = $rowArray [self::$_csvStructure ['ClassteacherId']];
 		if ($ctId != '') {
 			self::$_databaseAccessManager->jointClassteacherInClassAdd ($ctId, $classId);
 		}
@@ -126,7 +129,7 @@ class ClassesCsvImport {
 
 	protected static $_interface;
 	protected static $_databaseAccessManager;
-	protected static $csvStructure = array (
+	protected static $_csvStructure = array (
 		'Label' => 'label',
 		'Description' => 'description',
 		'MaxRegistration' => 'maxRegistration',

@@ -1,6 +1,7 @@
 <?php
 
 require_once 'ClassTeacherInterface.php';
+require_once 'ClassteacherCsvImport.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysClassTeacherManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysJointClassTeacherInClass.php';
@@ -122,61 +123,12 @@ class ClassTeacher extends Module {
 	private function addClassteacherByCsvImport () {
 
 		if(count($_FILES)) {
-			$this->handleCsvImport();
+			ClassteacherCsvImport::classInit ($this->_interface, $this->_databaseAccessManager);
+			ClassteacherCsvImport::csvFileImport ($_FILES['csvFile']['tmp_name'], ';');
 		}
 		else {
 			$this->_interface->displayImportCsvForm();
 		}
-	}
-
-	private function handleCsvImport () {
-
-		require_once PATH_INCLUDE . '/CsvImporter.php';
-		$csvManager = new CsvImporter($_FILES['csvFile']['tmp_name'], ';');
-		$contentArray = $csvManager->getContents();
-		$contentArray = $this->handleMissingKeysOfCsvImport($contentArray);
-		$this->addClassteacherToDatabaseByCsvImport($contentArray);
-	}
-
-	private function handleMissingKeysOfCsvImport ($contentArray) {
-
-		foreach ($contentArray as &$rowArray) {
-			$this->checkCsvImportKeyVariable('name', $rowArray);
-			$this->checkCsvImportKeyVariable('forename', $rowArray);
-			$this->checkCsvImportKeyVariable('wholeName', $rowArray);
-			$this->checkCsvImportKeyVariable('address', $rowArray);
-			$this->checkCsvImportKeyVariable('telephone', $rowArray);
-		}
-		return $contentArray;
-	}
-
-	private function checkCsvImportKeyVariable ($varName, $rowArray) {
-
-		if (!isset($rowArray[$varName])) {
-			$rowArray[$varName] = '';
-		}
-		return $rowArray;
-	}
-
-	private function addClassteacherToDatabaseByCsvImport ($contentArray) {
-
-		foreach ($contentArray as $row) {
-			echo 'geaddet werden:<br>';
-			var_dump($row);
-			echo '<br><br>';
-			$row = $this->handleWholeNameCsvImport ($row);
-			$this->_databaseAccessManager->classteacherAdd($row ['name'], $row ['forename'], $row ['address'], $row ['telephone']);
-		}
-	}
-
-	private function handleWholeNameCsvImport ($row) {
-		if ($row ['wholeName'] != '') {
-			$name = array ('', '');
-			$name = explode (' ', $row['wholeName'], '2');
-			$row ['forename'] = $name [0];
-			$row ['name'] = $name [1];
-		}
-		return $row;
 	}
 
 	/**
