@@ -13,6 +13,7 @@ require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
 require_once 'UsersPasswordResetter.php';
 require_once 'DisplayUsersWaiting.php';
+require_once PATH_INCLUDE . '/CsvExporter.php';
 
 /**
  * Main-Class for the Module Users
@@ -50,7 +51,6 @@ class Users extends Module {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	public function execute ($dataContainer) {
-
 		$this->entryPoint($dataContainer);
 		if (isset($_GET['action'])) {
 			switch ($_GET['action']) {

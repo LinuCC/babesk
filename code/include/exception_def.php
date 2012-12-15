@@ -1,8 +1,8 @@
-<?php 
+<?php
 	/**
 	 * defines the Exceptions used in the Project
 	 */
-	
+
 	/**
 	 * VoidDataException
 	 * This Exception is thrown when void data would be returned
@@ -14,7 +14,7 @@
 			parent::__construct($strMessage);
 		}
 	}
-	
+
 	/**
 	 * MySQLException
 	 * This Exception is thrown when a general Error with MySQL-Data occured
@@ -23,9 +23,9 @@
 	class MySQLException extends Exception{
 		function __construct($strMessage) {
 			parent::__construct($strMessage);
-		}		
+		}
 	}
-	
+
 	/**
 	 * MySQLVoidDataException
 	 * This Exception is thrown when MySQL has returned no entry
@@ -37,9 +37,9 @@
 			parent::__construct($strMessage);
 		}
 	}
-	
+
 	/**
-	 * MySQLConnectionException 
+	 * MySQLConnectionException
 	 * If the connection to MySQL fails, this Exception should be thrown
 	 * @author voelkerball
 	 *
@@ -49,26 +49,26 @@
 			parent::__construct($strMessage);
 		}
 	}
-	
+
 	class ModuleException extends Exception {
 		function __construct($msg) {
 			parent::__construct($msg);
 		}
 	}
-	
+
 	class ModuleNotFoundException extends ModuleException {
 		function __construct($msg) {
 			parent::__construct($msg);
 		}
 	}
-	
+
 	class HeadModuleNotFoundException extends ModuleException {
 		function __construct($msg) {
 			parent::__construct($msg);
 		}
 	}
-	
-	
+
+
 	class WrongInputException extends Exception{
 		function __construct($strMessage, $strFieldName = 'Input') {
 			parent::__construct($strMessage);
@@ -81,5 +81,11 @@
 		 * The name of the Field the value was entered
 		 */
 		protected $strFieldName;
+	}
+
+	class CsvExportException extends Exception {
+		function __construct($msg) {
+			parent::__construct($msg);
+		}
 	}
 ?>
