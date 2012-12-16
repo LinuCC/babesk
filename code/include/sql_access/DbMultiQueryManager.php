@@ -1,10 +1,11 @@
 <?php
 /**
+ * DbMultiQueryManager allows to use multiple querys at once, to increase performance
  * @TODO: deleting things should give feedback if error
  * @TODO: adding things should give feedback if error
  * @TODO: changing things should give feedback if error
  */
-class DbAccessMultiple {
+class DbMultiQueryManager {
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
 	/////////////////////////////////////////////////////////////////////
@@ -19,11 +20,20 @@ class DbAccessMultiple {
 	/**
 	 * Adds a Row to change. This Row should already have its searchFields
 	 * and processFields filled out.
+	 * @param $row DbAMRow
 	 */
 	public function rowAdd ($row) {
 		$this->_rows [] = $row;
 	}
 
+	/**
+	 * Executes the Rows added to this Instance of class with the function $function
+	 * @param $function one of the static Members of this class:
+	 * $Delete -- deletes all entries found with the searchFields of each row.
+	 * $Alter -- Alters all entries found with searchFields by processFields
+	 * $Insert -- Inserts for each row a new entry and fills it with the data in processFields
+	 * $Fetch -- Returns all data found with searchFields of the rows
+	 */
 	public function dbExecute ($function) {
 		$wholeQuery = '';
 		foreach ($this->_rows as $row) {

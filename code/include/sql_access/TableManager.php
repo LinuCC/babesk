@@ -1,5 +1,9 @@
 <?php
 
+require_once PATH_INCLUDE . '/functions.php';
+require_once PATH_INCLUDE . '/exception_def.php';
+require_once PATH_ACCESS . '/DbMultiQueryManager.php';
+
 /**
  *
  * Template-Class which contains non-specific functions for access to the table
@@ -9,10 +13,6 @@
  * @ToDo Refactor function; No direct TableAccess should be allowed, make the functions protected!
  *
  */
-
-require_once PATH_INCLUDE . '/functions.php';
-require_once PATH_INCLUDE . '/exception_def.php';
-
 class TableManager {
 
 	/**
@@ -423,6 +423,15 @@ class TableManager {
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE %s IN (%s);', $this->tablename, $keyName, $valueStr));
 		$result = $this->executeQuery($query);
 		return $this->getResultArrayContent($result);
+	}
+
+	/**
+	 * Returns a new DbMultiQueryManager-Object, allowing to do multiple querys
+	 * with the returned object, since TableManager can only commit a single Command
+	 * at a time to the SQL-Server which is hitting the performance at loops
+	 */
+	public function getMultiQueryManager () {
+		return new DbMultiQueryManager ($this->db, $this->tablename);
 	}
 
 	/**
