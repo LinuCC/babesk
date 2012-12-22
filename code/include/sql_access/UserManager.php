@@ -63,6 +63,10 @@ class UserManager extends TableManager{
 		$this->alterEntry ($userId, 'email', $email);
 	}
 
+	public function getAllUsers () {
+		return $this->getTableData ();
+	}
+
 
 	/**
 	 * Sorts the users it gets from MySQL-table and returns them
@@ -395,6 +399,10 @@ class UserManager extends TableManager{
 			parent::alterEntry($old_id, 'ID', $id, 'forename', $forename, 'name', $name, 'username',
 								$username, 'birthday', $birthday, 'credit', $credit, 'GID', $GID,'locked',$locked,'soli',$soli,'class',$class);
 		}
+	}
+
+	public function alterUsername ($userId, $newUsername) {
+		$this->alterEntry ($userId, 'username', $newUsername);
 	}
 
 	// check for first password

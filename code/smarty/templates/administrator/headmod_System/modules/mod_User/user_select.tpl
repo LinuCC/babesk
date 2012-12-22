@@ -6,5 +6,8 @@
 <form action="index.php?section=System|User&action=2" method="post">
 	<input type="submit" value="Benutzer anzeigen">
 </form>
+<form action="index.php?section=System|User&action=5" method="post">
+	<input type="submit" value="Benutzernamen automatisch zuweisen">
+</form>
 
 {/block}

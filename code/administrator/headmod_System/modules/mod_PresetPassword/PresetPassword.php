@@ -43,8 +43,8 @@ class PresetPassword extends Module {
 	//Implements
 	/////////////////////////////////////////////////////////////////////
 
-	/** Sets the Classes Variables
-	 *
+	/**
+	 * Sets the Classes Variables
 	 */
 	private function entryPoint ($dataContainer) {
 		defined('_AEXEC') or die('Access denied');
