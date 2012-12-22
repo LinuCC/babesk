@@ -11,6 +11,7 @@ Die CSV-Datei sollte folgende Schlüssel beinhalten:
 		<td>registrationEnabled</td>
 		<td>weekday</td>
 		<td>schoolyearName</td>
+		<td>classteacherName</td>
 	</tr>
 	<tr bgcolor='#33CFF'>
 		<td>Name des Kurses</td>
@@ -19,6 +20,8 @@ Die CSV-Datei sollte folgende Schlüssel beinhalten:
 		<td>Registrierungen erlaubt oder nicht (wenn erlaubt, dann auf "1" gesetzt, ansonsten auf "0")</td>
 		<td>Der Veranstaltungstag in Englisch ("Monday", "Tuesday", "Wednesday", "Thursday")</td>
 		<td>Der Name des Schuljahres, in dem der Kurs sein soll. Das Schuljahr muss schon in dem Programm vorhanden sein!</td>
+		<td>Der Name des Kursleiters. Der Name muss aus "Vorname Nachname" bestehen.
+			Der Kursleiter muss bereits in dem Programm vorhanden sein</td>
 	</tr>
 </table>
 Bitte beachten sie dabei auch die Groß - und Kleinschreibung. Wählen sie das Semikolon (;) als Trennzeichen beim Speichern der Datei.

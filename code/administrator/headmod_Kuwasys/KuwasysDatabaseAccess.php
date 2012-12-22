@@ -212,6 +212,20 @@ class KuwasysDatabaseAccess {
 		return $classTeachers;
 	}
 
+	public function classteacherGetAllWithoutDieingWhenVoid () {
+
+		try {
+			$classTeachers = $this->_classteacherManager->getAllClassTeachers();
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->showError($this->_languageManager->getText('classteacherErrorNoClassteachers'));
+		} catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('classteacherErrorFetch'));
+		}
+		if (isset ($classTeachers)) {
+			return $classTeachers;
+		}
+	}
+
 	public function classteacherGetById ($classteacherId) {
 
 		try {

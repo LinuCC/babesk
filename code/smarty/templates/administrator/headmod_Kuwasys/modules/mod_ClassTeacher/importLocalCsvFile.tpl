@@ -8,19 +8,21 @@ Die CSV-Datei sollte folgende Schlüssel beinhalten:
 	<tr>
 		<th>forename</th>
 		<th>name</th>
+		<th>wholeName</th>
 		<th>address</th>
 		<th>telephone</th>
 	</tr>
 	<tr>
 		<td>Der Vorname des Kursleiters</td>
 		<td>Der Name des Kursleiters</td>
+		<td>Der ganze Name (Vor- und Nachname, mit einem Leerzeichen getrennt) des Kursleiters. Nur benutzen, wenn es kein forename und name gibt!</td>
 		<td>Die Adresse</td>
 		<td>Die Telefonnummer</td>
 	</tr>
 </table>
 Bitte beachten sie dabei auch die Groß - und Kleinschreibung. Wählen sie das Semikolon (;) als Trennzeichen beim Speichern der Datei.
 Wenn sie Kursleiter bereits in der CSV-Datei Kursen zuweisen wollen, beachten sie bitte, dass dies nur für Kurse des aktuell aktivierten
-Jahrgangs möglich ist. 
+Jahrgangs möglich ist.
 </div>
 
 <form action="index.php?section=Kuwasys|ClassTeacher&action=csvImport" enctype="multipart/form-data" method="post">
