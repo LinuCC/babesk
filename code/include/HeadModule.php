@@ -56,8 +56,9 @@ class HeadModule {
 		foreach($this->modules as $module) {
 
 			if($module->getName() == $mod_name) {
-				if (!$_SESSION['modules'][$this->name . '|' . $module->getName()])
+				if (!$_SESSION['modules'][$this->name . '|' . $module->getName()]) {
 					die('Module forbidden');
+				}
 
 				$module->execute($dataContainer);
 				return;

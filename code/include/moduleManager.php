@@ -38,7 +38,7 @@ class ModuleManager {
 		else {
 			$this->generalInterface = new GeneralInterface();
 		}
-		
+
 		if (isset($program_part)) {
 			$this->parseModuleXML($program_part);
 		}
@@ -51,15 +51,15 @@ class ModuleManager {
 	public function setModuleXMLPath ($path) {
 		$this->moduleXMLPath = $path;
 	}
-	
+
 	public function setDataContainer ($dC) {
 		$this->dataContainer = $dC;
 	}
-	
+
 	public function getDataContainer () {
 		return $this->dataContainer;
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
@@ -112,9 +112,7 @@ class ModuleManager {
 			$modules = $head_mod->getModules();
 			foreach ($modules as $module) {
 				if (!isset($_SESSION['modules'][$head_mod->getName() . '|' . $module->getName()])) {
-					echo('Ein Fehler ist mit Modul-Session-Variablen aufgetreten! Bitte loggen sie sich neu ein!');
-					global $adminManager;
-					$adminManager->userLogOut();
+					throw new Exception('Ein Fehler ist mit Modul-Session-Variablen aufgetreten! Bitte loggen sie sich neu ein!');
 				}
 				if ($_SESSION['modules'][$head_mod->getName() . '|' . $module->getName()])
 					$allowedModules[] = $head_mod->getName() . '|' . $module->getName();
@@ -219,14 +217,18 @@ class ModuleManager {
 	}
 
 	public function executeHeadModul ($headmod_name) {
+		if (!count ($this->headModules)) {
+			$this->generalInterface->dieError ('No HeadModules active! Check modules.xml');
+		}
 		foreach ($this->headModules as $head_module) {
 			if ($head_module->getName() == $headmod_name) {
 				$head_module->execute($this, $this->dataContainer);
 				return;
 			}
 		}
+		$this->generalInterface->dieError ('Could not find appropriate Headmodul for given string');
 	}
-	
+
 	public function parseModuleXML ($program_part) {
 
 		/**

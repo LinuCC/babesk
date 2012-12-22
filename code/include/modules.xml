@@ -276,4 +276,17 @@
 			</module>
 		</head_module>
 	</web>
+	<publicData>
+		<path>publicData/</path>
+		<head_module>
+			<ger_name>BaBesK</ger_name>
+			<name>Babesk</name>
+			<active>true</active>
+			<module>
+				<ger_name>MahlzeitenMenü</ger_name>
+				<name>Menu</name>
+				<active>true</active>
+			</module>
+		</head_module>
+	</publicData>
 </modules>

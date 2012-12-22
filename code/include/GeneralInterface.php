@@ -15,7 +15,6 @@ class GeneralInterface {
 	//Constructor
 	////////////////////////////////////////////////////////////////////////////////
 	public function __construct() {
-		
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Getters and Setters
@@ -28,30 +27,25 @@ class GeneralInterface {
 	 * Show an error to the user and dies
 	 */
 	function dieError ($msg) {
-		
 		die('ERROR:' . $msg);
 	}
-	
+
 	/**
 	 * Show a message to the user and dies
 	 */
 	function dieMsg ($msg) {
-		
 		die($msg);
 	}
-	
+
 	function showError ($msg) {
-		
 		echo 'ERROR: ' . $msg . '<br>';
 	}
-	
+
 	function showMsg ($msg) {
-		
 		echo $msg . '<br>';
 	}
-	
+
 	function dieDisplay () {
-		
 		die();
 	}
 
