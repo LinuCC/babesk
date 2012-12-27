@@ -65,13 +65,19 @@ class LoanManager extends TableManager{
 		
 		$user_course = explode('|', $details['special_course']);
 		$course = array_diff($course, $user_course);
+			
+		$regex ='/[^0-9]/'; //keep only numbers in class assign
+		$sct = intval($globalSettingsManager->valueGet("special_course_trigger"));
 		
-		$books = $bookManager->getBooksByClass($details['class']);
+		//if () { // filter special_courses if class larger than 10 a.k.a. "Oberstufe"
+		
 
+		$books = $bookManager->getBooksByClass($details['class']);
+		
 		$counter = 0;
 		if ($books){
 			foreach ($books as &$book){
-				if (in_array($book['subject'], $lang) OR in_array($book['subject'], $reli) OR in_array($book['subject'], $course)){
+				if (in_array($book['subject'], $lang) OR in_array($book['subject'], $reli) OR ((intval(preg_replace($regex,'',$details['class'])) >= $sct) AND in_array($book['subject'], $course))){
 					unset($books[$counter]);
 				}
 				$counter++;

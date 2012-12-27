@@ -26,8 +26,14 @@ function ajaxFunction(){
 
 	ajax.onreadystatechange = function(){
 		if(ajax.readyState == 4){
+		
+			var barcodeField = document.getElementById('barcode');
+			barcodeField.value = '';
+			
 			var ajaxDisplay = document.getElementById('booklist');
 			ajaxDisplay.innerHTML = ajax.responseText;
+			
+			
 		}
 	}
 	
