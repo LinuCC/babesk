@@ -370,6 +370,11 @@
 			<classUnitErrorFetch>Die Klasseneinheit konnte nicht abgerufen werden.</classUnitErrorFetch>
 			<classUnitsErrorNotFound>Es konnten keine Klasseneinheiten gefunden werden</classUnitsErrorNotFound>
 			<classUnitsErrorFetch>Die Klasseneinheiten konnten nicht abgerufen werden</classUnitsErrorFetch>
+			<!-- names of refactored functions; use "%s" to show the Exception-Message-->
+			<classAdd_Exception>Konnte die Klasse aufgrund eines Datenbankfehlers nicht hinzufügen</classAdd_Exception>
+			<classDelete_Exception>Konnte die Klasse aufgrund eines Datenbankfehlers nicht löschen.</classDelete_Exception>
+			<classLabelGet_Exception>Konnte einen Klassennamen nicht abrufen: %s</classLabelGet_Exception>
+			<classGetById_Exception>Konnte eine Klasse nicht abrufen</classGetById_Exception>
 		</text>
 	</module>
 </gerOutputText>

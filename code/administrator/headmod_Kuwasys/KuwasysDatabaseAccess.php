@@ -60,43 +60,47 @@ class KuwasysDatabaseAccess {
 	}
 
 	public function classAdd ($label, $description, $maxRegistration, $allowRegistration, $weekday) {
-
-		try {
-			$this->_classManager->addClass($label, $description, $maxRegistration, $allowRegistration, $weekday);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('classErrorAdd') . $e->getMessage());
-		}
+		$paramArr = array($label, $description, $maxRegistration, $allowRegistration, $weekday);
+		$this->execData (self::ClassManager, 'addClass', $paramArr, __FUNCTION__);
+		// try {
+		// 	$this->_classManager->addClass($label, $description, $maxRegistration, $allowRegistration, $weekday);
+		// } catch (Exception $e) {
+		// 	$this->_interface->dieError($this->_languageManager->getText('classErrorAdd') . $e->getMessage());
+		// }
 	}
 
 	public function classDelete ($classId) {
-
-		try {
-			$this->_classManager->deleteClass($classId);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('classErrorDelete'));
-		}
+		$this->execData (self::ClassManager, 'deleteClass', array($classId), __FUNCTION__);
+		// try {
+		// 	$this->_classManager->deleteClass($classId);
+		// } catch (Exception $e) {
+		// 	$this->_interface->dieError($this->_languageManager->getText('classErrorDelete'));
+		// }
 	}
 
 	public function classLabelGet ($classId) {
 
-		try {
-			$label = $this->_classManager->getLabelOfClass($classId);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('classLabelErrorFetch'));
-		}
+		$label = $this->execData (self::ClassManager, 'getLabelOfClass', array($classId), __FUNCTION__);
+		// try {
+		// 	$label = $this->_classManager->getLabelOfClass($classId);
+		// } catch (Exception $e) {
+		// 	$this->_interface->dieError($this->_languageManager->getText('classLabelErrorFetch'));
+		// }
 		return $label;
 	}
 
 	public function classGetById ($classId) {
 
-		try {
-			$class = $this->_classManager->getClass($classId);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('classErrorNoClasses'));
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('classErrorFetch'));
-		}
-		return $class;
+		return $this->execData (self::ClassManager, 'getClass', array($classId), __FUNCTION__);
+
+		// try {
+		// 	$class = $this->_classManager->getClass($classId);
+		// } catch (MySQLVoidDataException $e) {
+		// 	$this->_interface->dieError($this->_languageManager->getText('classErrorNoClasses'));
+		// } catch (Exception $e) {
+		// 	$this->_interface->dieError($this->_languageManager->getText('classErrorFetch'));
+		// }
+		// return $class;
 	}
 
 	public function classGetByClassIdArray ($classIdArray) {
@@ -1142,44 +1146,65 @@ class KuwasysDatabaseAccess {
 	 * @param $mngFuncName the name of the Function of the Manager to call, like getAllUsers
 	 * @param $paramArr An array of parameters that gets handed over to the called function (mngFuncName)
 	 * @param $errorName If an Error occurs, the function will search for Elements in the Language-Xml that have the Name $errorName. A good habit when called inside this class is to use __FUNCTION__ as the $errorName. Based on the Exception that is thrown, it will concatenate the Exception-Name at the end of the $errorName. For example: 'kuwasysClassUnitGetByName_Exception'
-	 * @param excModArr An Array of DbAccExceptionMods. With these Objects you can define how single Exceptions should be displayed and more. See @see DbAccExceptionMods for more docs.
+	 * @param excModArr An Array of DbAccExceptionMods. With these Objects you can define how single Exceptions should be displayed and more. See @see DbAccExceptionMods for more docs. Defaults to dieError
 	 * @return The result of the Database-query. Not 'result' as in a link to the MySQL-Server, but a normal Variable or an Array of Variables.
  	 */
 	protected function execData ($mngName, $mngFuncName, $paramArr, $errorName, $excModArr = False) {
+		self::methodNameCheck ($this->$mngName, $mngFuncName);
 		try {
 			$ret = call_user_func_array(array($this->$mngName, $mngFuncName), $paramArr);
 		} catch (MySQLVoidDataException $e) {
 			$this->errorDisplay ($excModArr,
 				DbAccExceptionMods::$MySQLVoidDataException,
-				$errorName . '_MySQLVoidDataException', $e);
+				$errorName, '_MySQLVoidDataException', $e);
 		} catch (MySQLConnectionException $e) {
 			$this->errorDisplay ($excModArr,
 				DbAccExceptionMods::$MySQLConnectionException,
-				$errorName . '_MySQLConnectionException', $e);
+				$errorName, '_MySQLConnectionException', $e);
 		} catch (Exception $e) {
 			$this->errorDisplay ($excModArr,
 				DbAccExceptionMods::$Exception,
-				$errorName . '_Exception', $e);
+				$errorName, '_Exception', $e);
 		}
 		if (isset ($ret)) {
 			return $ret;
 		}
 	}
 
-	protected function errorDisplay ($excModArr, $excName, $errorName, $exception) {
+	protected static function methodNameCheck ($mngName, $mngFuncName) {
+		if (!method_exists($mngName, $mngFuncName)) {
+			throw new Exception (sprintf('Method "%s" of Class "%s" does not exist', $mngFuncName, $mngName));
+		}
+	}
+
+	protected function errorDisplay ($excModArr, $excName, $errorName, $errorAttach, $exception) {
 		$mod = self::exceptionModExtract ($excModArr, $excName);
 		if (!$mod) { // If nothing specified, default to modDieError
-			$mod = DbAccExceptionMods::$modDieError;
+			$mod = DbAccExceptionMods::$ModDieError;
 		}
 		else if ($mod == DbAccExceptionMods::$modRethrow) {
 			throw $exception;
 		}
 		if ($displayStyle = self::displayByExcModGet ($mod)) {
-		$this->_interface->$displayStyle($this->_languageManager->getText($errorName)); //show Error
+			$text = $this->errorTextFetch ($errorName, $errorAttach, $exception);
+			$this->_interface->$displayStyle($text); //show Error
 		}
 		else {
 			//do nothing
 		}
+	}
+
+	protected function errorTextFetch ($errorName, $errorAttach, $exception) {
+		try {
+			$text = $this->_languageManager->getText($errorName . $errorAttach, true);
+		} catch (Exception $e) {
+			//if no Errortext for specific Exception found, default to Exception
+			$text = $this->_languageManager->getText($errorName . '_Exception', true);
+		}
+		if (strpos ($text, '%s')) {
+			$text = sprintf ($text, $exception->getMessage ());
+		}
+		return $text;
 	}
 
 	protected static function exceptionModExtract ($excModArr, $excName) {
@@ -1197,19 +1222,19 @@ class KuwasysDatabaseAccess {
 
 	protected static function displayByExcModGet ($mod) {
 		switch ($mod) {
-			case DbAccExceptionMods::$modDieError:
+			case DbAccExceptionMods::$ModDieError:
 				return 'dieError';
 				break;
-			case DbAccExceptionMods::$modShowError:
+			case DbAccExceptionMods::$ModShowError:
 				return 'showError';
 				break;
-			case DbAccExceptionMods::$modDieMsg:
+			case DbAccExceptionMods::$ModDieMsg:
 				return 'dieMsg';
 				break;
-			case DbAccExceptionMods::$modShowMsg:
+			case DbAccExceptionMods::$ModShowMsg:
 				return 'showMsg';
 				break;
-			case DbAccExceptionMods::$modDoNothing:
+			case DbAccExceptionMods::$ModDoNothing:
 				return false;
 				break;
 			default:
