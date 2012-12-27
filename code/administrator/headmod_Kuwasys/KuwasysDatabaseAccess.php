@@ -1128,7 +1128,7 @@ class KuwasysDatabaseAccess {
 		return $unit;
 	}
 
-	public function doThingie ($mngName, $mngFuncName, $paramArr, $funcName, $excModArr = False) {
+	public function dbAccessExec ($mngName, $mngFuncName, $paramArr, $funcName, $excModArr = False) {
 		return $this->execData ($mngName, $mngFuncName, $paramArr, $funcName, $excModArr = False);
 	}
 
