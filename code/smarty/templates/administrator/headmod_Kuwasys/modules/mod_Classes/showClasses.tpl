@@ -10,7 +10,7 @@ function showOptions (ID) {
 </script>
 
 <div class="filterBar">
-<h3>Filter (noch nicht fertig implementiert!)</h3>
+<h3>Filter</h3>
 <form action="index.php?section=Kuwasys|Classes&action=showClass" method="post">
 	<input id="filterBarSubmitButton" type="submit" value="Absenden">
 Nach

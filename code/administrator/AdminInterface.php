@@ -21,7 +21,8 @@ class AdminInterface extends GeneralInterface {
 		}
 		$this->tplFilePath = PATH_SMARTY_ADMIN_TEMPLATES . $mod_rel_path;
 		$this->parentPath = PATH_SMARTY . '/templates/administrator/base_layout.tpl';
-		$this->smarty->assign('inh_path', $this->parentPath);
+		$this->smarty->assign ('tplFilePath', $this->tplFilePath);
+		$this->smarty->assign ('inh_path', $this->parentPath);
 	}
 
 	/**
@@ -36,14 +37,14 @@ class AdminInterface extends GeneralInterface {
 			$_SERVER['REQUEST_URI']));
 		die();
 	}
-	
+
 	/**
 	 * Show an error to the user and dies while using ajax.
 	 * This function shows an error to the user and die()s the process.
 	 * @param string $msg The message to be shown
 	 */
 	function dieErrorAjax ($msg) {
-	
+
 		$this->smarty->assign('error', $msg);
 		$this->smarty->display(PATH_SMARTY . '/templates/administrator/messageAjax.tpl', md5($_SERVER['REQUEST_URI']), md5(
 				$_SERVER['REQUEST_URI']));
@@ -112,7 +113,7 @@ class AdminInterface extends GeneralInterface {
 	 *  displayName: The label that describes the inputfield
 	 *  name: The name of the input-field, needed for Postprocessing the Variables
 	 *  value: This variable is optional. if set, it sets the Value of the input-field to the String given.
-	 *  optionString : This variable is optional. optionString is used for additional information like "checked" for 
+	 *  optionString : This variable is optional. optionString is used for additional information like "checked" for
 	 *   checkboxes.This string will be placed in the <input> field if set.
 	 * @param string $submitString The content of the Submit-Button
 	 */

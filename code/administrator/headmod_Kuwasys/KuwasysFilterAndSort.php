@@ -6,11 +6,19 @@ require_once PATH_INCLUDE . '/ElementsFilterHandler.php';
  * Some functions to filter and sort elements
  * Used by the modules directly
  * Uses specific Post-values
+ * The functions check if the Post-values are existing, and only if they
+ * exist they sort / filter the elements.
  */
 class KuwasysFilterAndSort {
 	/////////////////////////////////////////////////////////////////////
 	//Methods
 	/////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Sorts elements by specific Post-values
+	 * @param $elements the elements to sort
+	 * @var $_POST ['keyToSortAfter'] the key to sort after
+	 */
 	public static function elementsSort ($elements) {
 		if (isset ($_POST ['keyToSortAfter']) && $_POST ['keyToSortAfter'] != '') {
 			self::$sortKey = $_POST ['keyToSortAfter'];
@@ -22,9 +30,15 @@ class KuwasysFilterAndSort {
 		return $elements;
 	}
 
+	/**
+	 * Filters elements by a specific Post-value
+	 * @param $elements the elements to filter
+	 * @var $_POST ['keyToFilterAfter'] Which of the values of the elements to filter
+	 * @var $_POST ['filterValue'] Filters the elements by the value
+	 */
 	public static function elementsFilter ($elements) {
 		if (isset ($_POST ['keyToFilterAfter']) && isset ($_POST ['filterValue']) && $_POST ['filterValue'] != '') {
-			$elements = ElementsFilterHandler::elementsFilter ($elements, $_POST ['keyToFilterAfter'], $_POST ['filterValue'], FilterComparisonType::$Same);
+			$elements = ElementsFilterHandler::elementsFilter ($elements, $_POST ['keyToFilterAfter'], $_POST ['filterValue'], FilterComparisonType::$StringContains);
 		}
 		return $elements;
 	}

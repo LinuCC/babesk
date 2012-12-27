@@ -11,6 +11,7 @@ require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
+require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysFilterAndSort.php';
 require_once 'UsersPasswordResetter.php';
 require_once 'DisplayUsersWaiting.php';
 require_once PATH_INCLUDE . '/CsvExporter.php';
@@ -473,6 +474,8 @@ class Users extends Module {
 
 		$users = $this->getAllUsers();
 		$users = $this->addGradeLabelToUsers($users);
+		$users = KuwasysFilterAndSort::elementsSort ($users);
+		$users = KuwasysFilterAndSort::elementsFilter ($users);
 		$this->_interface->showAllUsers($users);
 	}
 

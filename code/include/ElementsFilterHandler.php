@@ -74,7 +74,7 @@ class ElementsFilterHandler {
 				return ($toCheck <= $filter);
 				break;
 			case FilterComparisonType::$StringContains:
-				return (strpos ($filter, $toCheck) !== False);
+				return (strpos ($toCheck, $filter) !== False);
 				break;
 			default:
 				throw new Exception ('Wrong parameter $mod given');
