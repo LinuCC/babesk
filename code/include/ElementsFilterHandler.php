@@ -10,6 +10,7 @@ class FilterComparisonType {
 	public static $Same = 2;
 	public static $BiggerSame = 3;
 	public static $SmallerSame = 4;
+	public static $StringContains = 5;
 }
 
 /**
@@ -55,7 +56,7 @@ class ElementsFilterHandler {
 	 * FilterComparisonType like FilterComparisonType::$Bigger
 	 * @return boolean If the Comparison went well
 	 */
-	private static function elementCheck ($toCheck, $filter, $mod) {
+	protected static function elementCheck ($toCheck, $filter, $mod) {
 		switch ($mod) {
 			case FilterComparisonType::$Bigger:
 				return ($toCheck > $filter);
@@ -72,6 +73,9 @@ class ElementsFilterHandler {
 			case FilterComparisonType::$SmallerSame:
 				return ($toCheck <= $filter);
 				break;
+			case FilterComparisonType::$StringContains:
+				return (strpos ($filter, $toCheck) !== False);
+				break;
 			default:
 				throw new Exception ('Wrong parameter $mod given');
 		}
@@ -83,7 +87,7 @@ class ElementsFilterHandler {
 	 * @param $key the key of the element
 	 * @throws Exception of element has no such key
 	 */
-	private static function elementHasKey ($element, $key) {
+	protected static function elementHasKey ($element, $key) {
 		if (!isset ($element [$key])) {
 			throw new Exception (sprintf('Could not find Key %s in element', $toFilter));
 		}
