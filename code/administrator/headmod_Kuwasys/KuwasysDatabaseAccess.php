@@ -1128,9 +1128,94 @@ class KuwasysDatabaseAccess {
 		return $unit;
 	}
 
+	public function doThingie ($mngName, $mngFuncName, $paramArr, $funcName, $excModArr = False) {
+		return $this->execData ($mngName, $mngFuncName, $paramArr, $funcName, $excModArr = False);
+	}
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Executes a function of a table-Manager (For Example UserManager)
+	 * @param $mngName the Name of the Manager to call its method. It is intended to use the Constants of KuwasysDatabaseAccess for this Parameter (like KuwasysDatabaseAccess::UserManager)
+	 * @param $mngFuncName the name of the Function of the Manager to call, like getAllUsers
+	 * @param $paramArr An array of parameters that gets handed over to the called function (mngFuncName)
+	 * @param $errorName If an Error occurs, the function will search for Elements in the Language-Xml that have the Name $errorName. A good habit when called inside this class is to use __FUNCTION__ as the $errorName. Based on the Exception that is thrown, it will concatenate the Exception-Name at the end of the $errorName. For example: 'kuwasysClassUnitGetByName_Exception'
+	 * @param excModArr An Array of DbAccExceptionMods. With these Objects you can define how single Exceptions should be displayed and more. See @see DbAccExceptionMods for more docs.
+	 * @return The result of the Database-query. Not 'result' as in a link to the MySQL-Server, but a normal Variable or an Array of Variables.
+ 	 */
+	protected function execData ($mngName, $mngFuncName, $paramArr, $errorName, $excModArr = False) {
+		try {
+			$ret = call_user_func_array(array($this->$mngName, $mngFuncName), $paramArr);
+		} catch (MySQLVoidDataException $e) {
+			$this->errorDisplay ($excModArr,
+				DbAccExceptionMods::$MySQLVoidDataException,
+				$errorName . '_MySQLVoidDataException', $e);
+		} catch (MySQLConnectionException $e) {
+			$this->errorDisplay ($excModArr,
+				DbAccExceptionMods::$MySQLConnectionException,
+				$errorName . '_MySQLConnectionException', $e);
+		} catch (Exception $e) {
+			$this->errorDisplay ($excModArr,
+				DbAccExceptionMods::$Exception,
+				$errorName . '_Exception', $e);
+		}
+		if (isset ($ret)) {
+			return $ret;
+		}
+	}
+
+	protected function errorDisplay ($excModArr, $excName, $errorName, $exception) {
+		$mod = self::exceptionModExtract ($excModArr, $excName);
+		if (!$mod) { // If nothing specified, default to modDieError
+			$mod = DbAccExceptionMods::$modDieError;
+		}
+		else if ($mod == DbAccExceptionMods::$modRethrow) {
+			throw $exception;
+		}
+		if ($displayStyle = self::displayByExcModGet ($mod)) {
+		$this->_interface->$displayStyle($this->_languageManager->getText($errorName)); //show Error
+		}
+		else {
+			//do nothing
+		}
+	}
+
+	protected static function exceptionModExtract ($excModArr, $excName) {
+		if (!$excModArr) {
+			return false;
+		}
+		foreach ($excModArr as $excMod) {
+			if ($excMod->exception == $excName ||
+				$excMod->exception == DbAccExceptionMods::$AllExceptions) {
+				return $excMod->mod;
+			}
+		}
+		return false; //No Mod found for this Exception
+	}
+
+	protected static function displayByExcModGet ($mod) {
+		switch ($mod) {
+			case DbAccExceptionMods::$modDieError:
+				return 'dieError';
+				break;
+			case DbAccExceptionMods::$modShowError:
+				return 'showError';
+				break;
+			case DbAccExceptionMods::$modDieMsg:
+				return 'dieMsg';
+				break;
+			case DbAccExceptionMods::$modShowMsg:
+				return 'showMsg';
+				break;
+			case DbAccExceptionMods::$modDoNothing:
+				return false;
+				break;
+			default:
+				throw new Exception ('wrong ExceptionMod in KuwasysDatabaseAccess');
+		}
+	}
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -1157,5 +1242,64 @@ class KuwasysDatabaseAccess {
 	private $_jointGradeInSchoolyearManager;
 	private $_jointClassteacherInClassManager;
 
+	const ClassManager = '_classManager';
+	const ClassteacherManager = '_classteacherManager';
+	const ClassUnitManager = '_classUnitManager';
+	const GlobalSettingsManager = '_globalSettingsManager';
+	const GradeManager = '_gradeManager';
+	const JClassInSchoolyearManager = '_jointClassInSchoolyearManager';
+	const JClassteacherInClassManager = '_jointClassteacherInClassManager';
+	const JGradeInSchoolyearManager = '_jointGradeInSchoolyearManager';
+	const JUserInClassManager = '_jointUserInClassManager';
+	const JUserInGradeManager = '_jointUserInGradeManager';
+	const JUserInSchoolyearManager = '_jointUserInSchoolyearManager';
+	const SchoolyearManager = '_schoolyearManager';
+	const UserInClassStatusManager = '_usersInClassStatusManager';
+	const UserManager = '_userManager';
 }
+
+
+/**
+ * Defines some Modifications for Exceptions
+ * It allows to change the way the Exceptions are displayed.
+ * @var self::$MySQLVoidDataException
+ * @var self::$MySQLConnectionException
+ * @var self::$Exception
+ * @var self::$AllExceptions The mod will be used on all Exceptions
+ * @var self::$ModDieError shows an error, see the Interface-classes
+ * @var self::$ModShowError shows an error, see the Interface-classes
+ * @var self::$ModDieMsg shows an error, see the Interface-classes
+ * @var self::$ModShowMsg shows an error, see the Interface-classes
+ * @var self::$ModDoNothing does nothing if the Exception gets thrown
+ * @var self::$ModRethrow Throws the Exception again
+ * @used-by KuwasysDatabaseAccess::execData()
+ */
+class DbAccExceptionMods {
+	/**
+	 * Constructs the DbAccExceptionMods and initialises its data
+	 * @param $exception the Exception to use the Mod on
+	 * @param $mod the Modification to use
+	 */
+	public function __construct ($exception, $mod) {
+		$this->exception = $exception;
+		$this->mod = $mod;
+	}
+
+	public $exception;
+	public $mod;
+
+	static public $MySQLVoidDataException = '1';
+	static public $MySQLConnectionException = '2';
+	static public $Exception = '3';
+	static public $AllExceptions = '4';
+
+	static public $ModDieError = '1';
+	static public $ModShowError = '2';
+	static public $ModDieMsg = '3';
+	static public $ModShowMsg = '4';
+	static public $ModDoNothing = '5';
+	static public $ModRethrow = '6';
+
+}
+
 ?>
