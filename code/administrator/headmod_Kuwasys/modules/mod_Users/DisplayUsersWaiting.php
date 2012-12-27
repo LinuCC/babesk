@@ -18,10 +18,11 @@ class DisplayUsersWaiting {
 	////////////////////////////////////////////////////////////////////////////////
 	public function execute () {
 
-		$this->initManagers();
-		$this->initDataArrays();
-		$this->filterAndAddData();
-		$this->showUsersWaiting();
+		$this->initManagers ();
+		$this->initDataArrays ();
+		$this->filterAndAddData ();
+		$this->sortFilterUsers ();
+		$this->showUsersWaiting ();
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
@@ -69,6 +70,18 @@ class DisplayUsersWaiting {
 				}
 			}
 		}
+	}
+
+	private function sortFilterUsers () {
+		$users = $this->_users;
+		try {
+			$users = KuwasysFilterAndSort::elementsFilter ($users);
+			$users = KuwasysFilterAndSort::elementsSort ($users);
+		} catch (Exception $e) {
+			$this->_interface->showMsg ("Konnte die Benutzer nicht nach den angegebenen Kriterien filtern");
+			return;
+		}
+		$this->_users = $users;
 	}
 
 	private function filterCorrectClasses (&$user, $jointUsersInClassWaiting) {
@@ -140,7 +153,8 @@ class DisplayUsersWaiting {
 	private function getCountOfActiveUsersByClassId ($classId) {
 
 		$activeUsers = 0;
-		if(is_array($this->_jointsUsersInClassActive)) {
+		if(is_array($this->_jointsUsersInClassActive)
+			&& count ($this->_jointsUsersInClassActive)) {
 			foreach ($this->_jointsUsersInClassActive as $joint) {
 				if($joint ['ClassID'] == $classId) {
 					$activeUsers++;
@@ -153,14 +167,16 @@ class DisplayUsersWaiting {
 	private function getAllJointsUsersInClassWithStatusActiveWithoutDieing () {
 
 		try {
-			$status = $this->_usersInClassStatusManager->statusGetByName ('waiting');
-			$jointsUsersInClassActive = $this->_usersInClassStatusManager->getAllJointsWithStatusId ($status ['ID']);
+			$status = $this->_usersInClassStatusManager->statusGetByName ('active');
+			$jointsUsersInClassActive = $this->_jointUsersInClassManager->getAllJointsWithStatusId ($status ['ID']);
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->showMsg($this->_languageManager->getText('errorNoJointUsersInClassActive'));
 		} catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointUsersInClassActive'));
 		}
-		return $jointsUsersInClassActive;
+		if (isset($jointsUsersInClassActive)) {
+			return $jointsUsersInClassActive;
+		}
 	}
 
 	private function getClassteachersByJointsClassteacherInClass ($jointsClassteacherInClass) {
