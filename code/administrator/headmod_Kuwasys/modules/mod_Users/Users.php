@@ -11,6 +11,7 @@ require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
+require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysFilterAndSort.php';
 require_once 'UsersPasswordResetter.php';
 require_once 'DisplayUsersWaiting.php';
 require_once PATH_INCLUDE . '/CsvExporter.php';
@@ -250,12 +251,20 @@ class Users extends Module {
 	 * shows a UserList thats grouped by Schoolyears and Grades
 	 */
 	private function showUsersGroupedByYearAndGrade () {
-
 		$schoolyearAll = $this->_databaseAccessManager->schoolyearGetAll();
 		$schoolyearDesired = $this->getDesiredSchoolyear($schoolyearAll);
 		$gradesOfDesiredSchoolyear = $this->getGradesOfSchoolyearDesired($schoolyearDesired);
 		$gradeDesired = $this->getDesiredGrade($gradesOfDesiredSchoolyear);
 		$users = $this->getAllUsersOfDesiredGrade($gradeDesired);
+		try {
+			$preUsers = $users;
+			$users = KuwasysFilterAndSort::elementsFilter ($users);
+			$users = KuwasysFilterAndSort::elementsSort ($users);
+		} catch (Exception $e) {
+			$users = $preUsers;
+			$this->_interface->showMsg ('Konnte die Benutzer nicht nach den angegebenen Kriterien filtern. Hinweis: da hier einige
+				Filteroptionen überflüssig sind, funktionieren sie auch nicht.');
+		}
 		$this->_interface->showUsersGroupedByYearAndGrade($schoolyearAll, $schoolyearDesired, $gradesOfDesiredSchoolyear,
 				$gradeDesired, $users);
 	}
@@ -473,6 +482,8 @@ class Users extends Module {
 
 		$users = $this->getAllUsers();
 		$users = $this->addGradeLabelToUsers($users);
+		$users = KuwasysFilterAndSort::elementsSort ($users);
+		$users = KuwasysFilterAndSort::elementsFilter ($users);
 		$this->_interface->showAllUsers($users);
 	}
 

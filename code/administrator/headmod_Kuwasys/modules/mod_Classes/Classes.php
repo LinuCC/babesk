@@ -2,6 +2,7 @@
 
 require_once 'ClassesInterface.php';
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysFilterAndSort.php';
 require_once 'ClassesCsvImport.php';
 
 /**
@@ -231,6 +232,8 @@ class Classes extends Module {
 		$classes = $this->addWeekdayTranslatedToClasses($classes);
 		$classes = $this->addClassteachersToClasses($classes);
 		$classes = $this->addCountOfWaitingUsersToClasses($classes);
+		$classes = KuwasysFilterAndSort::elementsFilter ($classes);
+		$classes = KuwasysFilterAndSort::elementsSort ($classes);
 		$this->_interface->showClasses($classes);
 	}
 

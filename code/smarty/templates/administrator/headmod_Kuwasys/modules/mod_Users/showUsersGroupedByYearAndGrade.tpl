@@ -31,6 +31,9 @@ function showOptions (ID) {
 
 <h2 class='moduleHeader'>Die Benutzer</h2>
 
+{$modAction = "showUsersGroupedByYearAndGrade"}
+{include file="$tplFilePath"|cat:"filterUsers.tpl"}
+
 <fieldset class="selectiveLink">
 <legend>Jahrgang</legend>
 {foreach $schoolyearAll as $schoolyear}

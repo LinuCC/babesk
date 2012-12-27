@@ -10,21 +10,21 @@ function showOptions (ID) {
 </script>
 
 <div class="filterBar">
-<h3>Filter (noch nicht fertig implementiert!)</h3>
+<h3>Filter</h3>
 <form action="index.php?section=Kuwasys|Classes&action=showClass" method="post">
-Nach
 	<input id="filterBarSubmitButton" type="submit" value="Absenden">
+Nach
 <select name="keyToSortAfter">
-	<option value="name">Name</option>
-	<option value="schoolyear">Schuljahr</option>
+	<option value="label">Name</option>
+	<option value="schoolYearLabel">Schuljahr</option>
 </select>
 sortieren.<br>
 <select name="keyToFilterAfter">
-	<option value="name">Name</option>
-	<option value="schoolyear">Schuljahr</option>
+	<option value="label">Name</option>
+	<option value="schoolYearLabel">Schuljahr</option>
 </select>
 nach
-	<input type="text" maxlength="12">
+	<input type="text" name="filterValue" maxlength="12">
 filtern.
 </form>
 </div><br>

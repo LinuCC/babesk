@@ -2,6 +2,9 @@
 
 <h2 class="moduleHeader">Die wartenden Benutzer</h2>
 
+{$modAction = "showWaitingUsers"}
+{include file="$tplFilePath"|cat:"filterUsers.tpl"}
+
 <table class="dataTable">
 	<tr>
 		<th>Schülername</th>
@@ -17,7 +20,7 @@
 		{$counter = 0}
 		{foreach $user.classes as $class}
 		{if $counter > 0}<tr>{/if}
-		
+
 		<td>{$class.label}</td>
 		<td>{$user.classteachers.$counter.forename} {$user.classteachers.$counter.name} <br></td>
 		<td>{$class.weekday}</td>

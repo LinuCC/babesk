@@ -10,6 +10,7 @@ class FilterComparisonType {
 	public static $Same = 2;
 	public static $BiggerSame = 3;
 	public static $SmallerSame = 4;
+	public static $StringContains = 5;
 }
 
 /**
@@ -17,7 +18,7 @@ class FilterComparisonType {
  * use self::elementsFilter to filter them
  * all functions of this class are static
  */
-class ElementsFilter {
+class ElementsFilterHandler {
 	/////////////////////////////////////////////////////////////////////
 	//Methods
 	/////////////////////////////////////////////////////////////////////
@@ -33,7 +34,7 @@ class ElementsFilter {
 	 * FilterComparisonType, for Example FilterComparisonType::$Bigger
 	 * @return Array of Elements without those that didnt pass the test
 	 */
-	public static elementsFilter ($elements, $toFilter, $filter, $mod) {
+	public static function elementsFilter ($elements, $toFilter, $filter, $mod) {
 		$filtered = array ();
 		foreach ($elements as $element) {
 			self::elementHasKey ($element, $toFilter); //throws Exception if error
@@ -55,7 +56,7 @@ class ElementsFilter {
 	 * FilterComparisonType like FilterComparisonType::$Bigger
 	 * @return boolean If the Comparison went well
 	 */
-	private static elementCheck ($toCheck, $filter, $mod) {
+	protected static function elementCheck ($toCheck, $filter, $mod) {
 		switch ($mod) {
 			case FilterComparisonType::$Bigger:
 				return ($toCheck > $filter);
@@ -72,6 +73,9 @@ class ElementsFilter {
 			case FilterComparisonType::$SmallerSame:
 				return ($toCheck <= $filter);
 				break;
+			case FilterComparisonType::$StringContains:
+				return (strpos ($toCheck, $filter) !== False);
+				break;
 			default:
 				throw new Exception ('Wrong parameter $mod given');
 		}
@@ -83,7 +87,7 @@ class ElementsFilter {
 	 * @param $key the key of the element
 	 * @throws Exception of element has no such key
 	 */
-	private static elementHasKey ($element, $key) {
+	protected static function elementHasKey ($element, $key) {
 		if (!isset ($element [$key])) {
 			throw new Exception (sprintf('Could not find Key %s in element', $toFilter));
 		}
