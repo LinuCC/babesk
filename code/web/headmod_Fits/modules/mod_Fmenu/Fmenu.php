@@ -63,7 +63,11 @@ class Fmenu extends Module {
 		} catch (Exception $e) {
 			die('Ein Fehler ist aufgetreten:'.$e->getMessage());
 		}
-		if ($allClasses==true) $userClass =  preg_replace('/[^0-9]/i', '', $userClass);
+		if ($allClasses==true) {
+			$userClass =  preg_replace('/[^0-9]/i', '', $userClass);
+			$class =  preg_replace('/[^0-9]/i', '', $class);
+		}
+		
 		if (isset($userClass) && $userClass==$class && $has_Fits == false) {
 			$smarty->assign('showTestlink', true);
 		}

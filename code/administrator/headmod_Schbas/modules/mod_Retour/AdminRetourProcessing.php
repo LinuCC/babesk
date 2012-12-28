@@ -45,12 +45,14 @@ class AdminRetourProcessing {
 			$datatmp = array_merge($loanbook, $invData, $bookdata);
 			$data[] = $datatmp;
 			//$datatmp = null;
-			
+			$class = $this->userManager->getUserDetails($uid);
+		$class = $class['class'];
+		$fullname = $this->userManager->getForename($uid)." ".$this->userManager->getName($uid)." (".$class.")";	
 		}
 		if (empty($data)) {
 			$this->RetourInterface->dieError(sprintf($this->msg['err_empty_books']));
 		} else {
-			$this->RetourInterface->ShowRetourBooks($data,$card_id,$uid);
+			$this->RetourInterface->ShowRetourBooks($data,$card_id,$uid,$fullname);
 		}	
 	}
 	
@@ -69,11 +71,13 @@ class AdminRetourProcessing {
 			//$datatmp = null;
 				
 		}
-		//var_dump($data);
+		$class = $this->userManager->getUserDetails($uid);
+		$class = $class['class'];
+		$fullname = $this->userManager->getForename($uid)." ".$this->userManager->getName($uid)." (".$class.")";
 		if (!isset($data)) {
 			$this->RetourInterface->showMsg("Keine B&uuml;cher ausgeliehen!");
 		} else {
-			$this->RetourInterface->ShowRetourBooksAjax($data,$card_id,$uid);
+			$this->RetourInterface->ShowRetourBooksAjax($data,$card_id,$uid,$fullname);
 		}
 	}
 	

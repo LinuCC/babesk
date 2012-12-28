@@ -39,6 +39,10 @@ function ajaxFunction(){
 	// Create a function that will receive data sent from the server
 	ajaxRequest.onreadystatechange = function(){
 		if(ajaxRequest.readyState == 4){
+			
+			var barcodeField = document.getElementById('barcode');
+			barcodeField.value = '';
+		
 			var ajaxDisplay = document.getElementById('booklist');
 			ajaxDisplay.innerHTML = ajaxRequest.responseText;
 		}
@@ -55,13 +59,15 @@ function ajaxFunction(){
 //-->
 </script>
 
+<div align="center"><h2>Ausleihliste f&uuml;r: {$fullname}</h2></div>
+<hr>
 <form name='barcode_scan' onsubmit='return false;' />
 	Inventarnummer: <input type='text' id='barcode' onKeyPress='if(enter_pressed(event)){ ajaxFunction(); }'/> <br />
 </form>
 
 
 
-<h3>Ausgeliehene B&uuml;cher</h3>
+
 <div id="booklist">	
 	{foreach $data as $retourbook}
 		{$retourbook.title}, {$retourbook.author}, {$retourbook.publisher}. Inv.-Nr.: {$retourbook.subject} {$retourbook.year_of_purchase} {$retourbook.class} {$retourbook.bundle} / {$retourbook.exemplar}<br />
