@@ -375,6 +375,7 @@
 			<classDelete_Exception>Konnte die Klasse aufgrund eines Datenbankfehlers nicht löschen.</classDelete_Exception>
 			<classLabelGet_Exception>Konnte einen Klassennamen nicht abrufen: %s</classLabelGet_Exception>
 			<classGetById_Exception>Konnte eine Klasse nicht abrufen</classGetById_Exception>
+			<classGetByClassIdArray_Exception>Konnte die Klassen nicht abrufen: %s</classGetByClassIdArray_Exception>
 		</text>
 	</module>
 </gerOutputText>

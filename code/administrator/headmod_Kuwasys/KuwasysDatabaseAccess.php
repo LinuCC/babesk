@@ -105,14 +105,16 @@ class KuwasysDatabaseAccess {
 
 	public function classGetByClassIdArray ($classIdArray) {
 
-		try {
-			$classes = $this->_classManager->getClassesByClassIdArray($classIdArray);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('classErrorNoClasses'));
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('classErrorFetch'));
-		}
-		return $classes;
+		return $this->execData (self::ClassManager, 'getClassesByClassIdArray', array($classIdArray), __FUNCTION__);
+
+		// try {
+		// 	$classes = $this->_classManager->getClassesByClassIdArray($classIdArray);
+		// } catch (MySQLVoidDataException $e) {
+		// 	$this->_interface->dieError($this->_languageManager->getText('classErrorNoClasses'));
+		// } catch (Exception $e) {
+		// 	$this->_interface->dieError($this->_languageManager->getText('classErrorFetch'));
+		// }
+		// return $classes;
 	}
 
 	public function classIdGetLastAdded () {
