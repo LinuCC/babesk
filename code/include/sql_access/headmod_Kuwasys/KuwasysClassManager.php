@@ -44,6 +44,14 @@ class KuwasysClassManager extends TableManager {
 			return $label;
 		}
 
+		/**
+		 * Returns the maxRegistration-Value of the class with the $classId
+		 */
+		public function getMaxRegOfClass ($classId) {
+			$maxReg = $this->getEntryValue ($classId, 'maxRegistration');
+			return $maxReg;
+		}
+
 		public function getClass ($ID) {
 			$class = $this->searchEntry('ID =' . $ID);
 			return $class;

@@ -19,6 +19,7 @@
 		{/foreach}
 	</select>
 	</label><br>
+	<label>Soll ignoriert werden, wenn der Kurs schon voll ist?<input type="checkbox" name="ignoreMaxReg" value="yes"></label><br>
 	<input type="submit" value="Absenden">
 </form>
 

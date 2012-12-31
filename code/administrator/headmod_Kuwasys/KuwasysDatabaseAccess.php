@@ -557,20 +557,6 @@ class KuwasysDatabaseAccess {
 		}
 	}
 
-	public function jointUserInClassGetAllByClassIdAndStatusActiveWithoutDyingWhenVoid ($classId) {
-
-		try {
-			$joints = $this->_jointUserInClassManager->getAllJointsOfClassIdAndStatusActive($classId);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('jointUserInClassErrorNoJointsOfClass'));
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('jointUserInClassErrorFetch'));
-		}
-		if(isset($joints)) {
-			return $joints;
-		}
-	}
-
 	public function jointUserInClassGetAllByUserIdWithoutDyingWhenVoid ($userId) {
 
 		try {
@@ -1135,7 +1121,7 @@ class KuwasysDatabaseAccess {
 	}
 
 	public function dbAccessExec ($mngName, $mngFuncName, $paramArr, $funcName, $excModArr = False) {
-		return $this->execData ($mngName, $mngFuncName, $paramArr, $funcName, $excModArr = False);
+		return $this->execData ($mngName, $mngFuncName, $paramArr, $funcName, $excModArr);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -1184,7 +1170,7 @@ class KuwasysDatabaseAccess {
 		if (!$mod) { // If nothing specified, default to modDieError
 			$mod = DbAccExceptionMods::$ModDieError;
 		}
-		else if ($mod == DbAccExceptionMods::$modRethrow) {
+		else if ($mod == DbAccExceptionMods::$ModRethrow) {
 			throw $exception;
 		}
 		if ($displayStyle = self::displayByExcModGet ($mod)) {

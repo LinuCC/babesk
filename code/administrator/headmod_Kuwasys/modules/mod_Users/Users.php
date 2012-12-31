@@ -222,17 +222,9 @@ class Users extends Module {
 	private function moveUserByClass () {
 
 		if(isset($_GET['classIdOld'], $_GET['userId'], $_POST['classIdNew'], $_POST['statusNew'])) {
-			if($this->isClassMaxRegistrationReached($_POST['classIdNew'])) {
-				if(isset($_POST['confirmed'])) {
-					$this->moveUserByClassToDatabase($_GET['userId'], $_GET['classIdOld'], $_POST['classIdNew'], $_POST['statusNew']);
-					$this->_interface->dieMsg($this->_languageManager->getText('finishedMoveUserToClass'));
-				}
-				else if (isset($_POST['notConfirmed'])) {
-					$this->_interface->dieMsg($this->_languageManager->getText('moveUserToClassNotConfirmed'));
-				}
-				else {
-					$this->showMoveUserByClassClassFullConfirmation($_GET['userId'], $_GET['classIdOld'], $_POST['classIdNew'], $_POST['statusNew']);
-				}
+			if($this->isClassMaxRegistrationReached($_POST['classIdNew'])
+				&& !isset ($_POST ['ignoreMaxReg'])) {
+				$this->moveUserByClassDialog ();
 			}
 			else {
 				$this->moveUserByClassToDatabase($_GET['userId'], $_GET['classIdOld'], $_POST['classIdNew'], $_POST['statusNew']);
@@ -244,6 +236,23 @@ class Users extends Module {
 		}
 		else {
 			$this->_interface->dieError($this->_languageManager->getText('getIdWrong'));
+		}
+	}
+
+	/**
+	 * Checks if a confirmation-Dialog has to be shown to move the User
+	 * Based on the maximum Registration of the Class
+	 */
+	private function moveUserByClassDialog () {
+		if(isset($_POST['confirmed'])) { //Already confirmed the Dialog
+			$this->moveUserByClassToDatabase($_GET['userId'], $_GET['classIdOld'], $_POST['classIdNew'], $_POST['statusNew']);
+			$this->_interface->dieMsg($this->_languageManager->getText('finishedMoveUserToClass'));
+		}
+		else if (isset($_POST['notConfirmed'])) { //Dialog declined
+			$this->_interface->dieMsg($this->_languageManager->getText('moveUserToClassNotConfirmed'));
+		}
+		else { //show the Dialog
+			$this->showMoveUserByClassClassFullConfirmation($_GET['userId'], $_GET['classIdOld'], $_POST['classIdNew'], $_POST['statusNew']);
 		}
 	}
 
@@ -1154,15 +1163,11 @@ class Users extends Module {
 	}
 
 	private function isClassMaxRegistrationReached ($classId) {
-
 		$class = $this->_databaseAccessManager->classGet($classId);
-		$registrationsOfClass = $this->_databaseAccessManager->jointUserInClassGetAllByClassIdAndStatusActiveWithoutDyingWhenVoid($classId);
-		if($class['maxRegistration'] > count($registrationsOfClass)) {
-			return false;
-		}
-		else {
-			return true;
-		}
+		//Dont die when no joints where found
+		$dbAccEMod = new DbAccExceptionMods (DbAccExceptionMods::$MySQLVoidDataException, DbAccExceptionMods::$ModDoNothing);
+		$regOfClass = $this->_databaseAccessManager->dbAccessExec (KuwasysDatabaseAccess::JUserInClassManager, 'getAllJointsOfClassIdAndStatusActive', array($classId), __FUNCTION__, array($dbAccEMod));
+		return ($class['maxRegistration'] >= count($regOfClass));
 	}
 
 	private function moveUserByClassToDatabase ($userId, $classIdOld, $classIdNew, $statusNew) {
