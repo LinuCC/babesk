@@ -18,6 +18,7 @@ class KuwasysDatabaseAccess {
 		$this->_languageManager = new KuwasysLanguageManager($this->_interface);
 		$this->_languageManager->setModule('databaseAccess');
 		$this->initManagers();
+		self::$excOnVoidDoNothing = new DbAccExceptionMods (DbAccExceptionMods::$MySQLVoidDataException, DbAccExceptionMods::$ModDoNothing);
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Getters and Setters
@@ -115,6 +116,39 @@ class KuwasysDatabaseAccess {
 		// 	$this->_interface->dieError($this->_languageManager->getText('classErrorFetch'));
 		// }
 		// return $classes;
+	}
+
+	/**
+	 * Returns the Classes that the user with the Id $userId selected.
+	 * This function adds things like the status to the classes and sorts them by
+	 * the weekdayunit
+	 */
+	public function classSWeekdayGetByUser ($userId) {
+		$jUserInClass = self::execData (self::JUserInClassManager,
+			'getAllJointsOfUserId', array ($userId), __FUNCTION__,
+			array(self::$excOnVoidDoNothing)); //fetch the joints
+		if (!isset ($jUserInClass) || !count ($jUserInClass)) {return false;}
+		foreach ($jUserInClass as $joint) {
+			$classIds [] = $joint ['ClassID'];
+			$statusIds [] = $joint ['statusId'];
+		}
+		$classes = self::execData (self::ClassManager,
+			'getClassesByClassIdArray', array ($classIds), __FUNCTION__,
+			array(self::$excOnVoidDoNothing));//fetch the classes
+		$statuses = self::execData (self::UserInClassStatusManager,
+			'statusGetMultiple', array ($statusIds), __FUNCTION__);//fetch the statuses
+		foreach ($classes as $class) {
+			$unitIds [] = $class ['unitId'];
+		}
+		$units = self::execData (self::ClassUnitManager, 'unitGetMultiple', array ($unitIds), __FUNCTION__);
+		foreach ($jUserInClass as $joint) {//Combine the data
+			$class = self::elementExtractBy ($classes, 'ID', $joint ['ClassID']);
+			$class ['status'] = self::elementExtractBy ($statuses, 'ID', $joint ['statusId']);
+			$class ['unit'] = self::elementExtractBy ($units, 'ID',
+				 $class ['unitId']);
+			$finClasses [$class ['unitId']] [] = $class; //sorted by unitId
+		}
+		return $finClasses;
 	}
 
 	public function classIdGetLastAdded () {
@@ -1230,6 +1264,17 @@ class KuwasysDatabaseAccess {
 		}
 	}
 
+	/**
+	 * Extracts an element of an array and returns it
+	 */
+	protected static function elementExtractBy ($toSearch, $key, $value) {
+		foreach ($toSearch as $s) {
+			if (isset($s[$key]) && $s[$key] == $value) {
+				return $s;
+			}
+		}
+	}
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
 	////////////////////////////////////////////////////////////////////////////////
@@ -1269,6 +1314,8 @@ class KuwasysDatabaseAccess {
 	const SchoolyearManager = '_schoolyearManager';
 	const UserInClassStatusManager = '_usersInClassStatusManager';
 	const UserManager = '_userManager';
+
+	protected static $excOnVoidDoNothing;
 }
 
 

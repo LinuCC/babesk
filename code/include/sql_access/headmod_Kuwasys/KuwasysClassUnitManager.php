@@ -67,6 +67,10 @@ class KuwasysClassUnitManager extends TableManager {
 	public function unitDelete ($id) {
 		$this->delEntry ($id);
 	}
+
+	public function unitGetMultiple ($unitIds) {
+		return $this->getMultipleEntriesByArray ('ID', $unitIds);
+	}
 	////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////

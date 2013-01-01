@@ -1060,21 +1060,31 @@ class Users extends Module {
 		return $class;
 	}
 
+	/**
+	 * Returns the Classes of the specific User
+	 */
+	private function getClassesOfUser ($userId) {
+
+	}
+
 	private function addClassesToUser ($user) {
 
-		$userSpecificClasses = array();
-		$userSpecificJointsUserInClass = $this->getAllJointsOfUserId($user['ID']);
-		if (isset($userSpecificJointsUserInClass) && $userSpecificJointsUserInClass) {
-			foreach ($userSpecificJointsUserInClass as $joint) {
-				$status = $this->_databaseAccessManager->usersInClassStatusGetWithoutDieing ($joint ['statusId']);
-				$class = $this->getClassByClassId($joint['ClassID']);
-				if ($status) {
-					$class ['status'] = $status ['translatedName'];
-				}
-				$user['classes'][] = $class;
-			}
-		}
+		$classes = $this->_databaseAccessManager->classSWeekdayGetByUser ($user ['ID']);
+		$user ['classes'] = $classes;
 		return $user;
+		// $userSpecificClasses = array();
+		// $userSpecificJointsUserInClass = $this->getAllJointsOfUserId($user['ID']);
+		// if (isset($userSpecificJointsUserInClass) && $userSpecificJointsUserInClass) {
+		// 	foreach ($userSpecificJointsUserInClass as $joint) {
+		// 		$status = $this->_databaseAccessManager->usersInClassStatusGetWithoutDieing ($joint ['statusId']);
+		// 		$class = $this->getClassByClassId($joint['ClassID']);
+		// 		if ($status) {
+		// 			$class ['status'] = $status ['translatedName'];
+		// 		}
+		// 		$user['classes'][] = $class;
+		// 	}
+		// }
+		// return $user;
 	}
 
 	/********************

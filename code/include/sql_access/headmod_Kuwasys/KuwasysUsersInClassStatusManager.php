@@ -34,6 +34,10 @@ class KuwasysUsersInClassStatusManager extends TableManager {
 		return $this->searchEntry('ID ="' . $id.'"');
 	}
 
+	public function statusGetMultiple ($statusIds) {
+		return $this->getMultipleEntriesByArray ('ID', $statusIds);
+	}
+
 	/** Returns one status based on the given $name
 	 * @param $name The name of the status to return
 	 * @return array () An Array containing the information of the status

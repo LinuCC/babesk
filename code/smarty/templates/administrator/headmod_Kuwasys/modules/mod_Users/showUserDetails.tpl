@@ -58,127 +58,23 @@ table.dataTable td {
 	{/if}<br>
 	{if isset($user.classes)}
 	<div><label class="left">Kurse:</label><br>
-	<!-- The Classes of the user, sorted by Weekdays -->
-		<label class="classList">Montag:</label>
-		<table class="dataTable">
-			<tr>
-				<th>Kursname</th>
-				<th>Status</th>
-				<th>Wochentag</th>
-			</tr>
-			{$counter = 0}
-			{foreach $user.classes as $class}
-				{if $class.weekday == 'Mon'}
-				{$counter = $counter + 1}
-				<tr>
-					<td><a href="index.php?section=Kuwasys|Classes&action=showClassDetails&ID={$class.ID}">{$class.label}</a></td>
-					<td><a href="index.php?section=Kuwasys|Users&action=changeUserToClass&classId={$class.ID}&userId={$user.ID}&classStatus={if $class.status}{$class.status}{else}Fehler!{/if}">{if $class.status}{$class.status}{else}Fehler!{/if}</a></td>
-					<td>{$class.weekday}</td>
-				</tr>
-				{/if}
-			{/foreach}
-			{if !$counter}
-				<tr>
-					<td colspan="3" style="background-color: #7EFF00">Keine Kurse an diesem Tag</td>
-				</tr>
-			{/if}
-		</table>
-		<label class="classList">Dienstag:</label>
-		<table class="dataTable">
-			<tr>
-				<th>Kursname</th>
-				<th>Status</th>
-				<th>Wochentag</th>
-			</tr>
-			{$counter = 0}
-			{foreach $user.classes as $class}
-				{if $class.weekday == 'Tue'}
-				{$counter = $counter + 1}
-				<tr>
-					<td><a href="index.php?section=Kuwasys|Classes&action=showClassDetails&ID={$class.ID}">{$class.label}</a></td>
-					<td><a href="index.php?section=Kuwasys|Users&action=changeUserToClass&classId={$class.ID}&userId={$user.ID}&classStatus={$class.status}">{if $class.status}{$class.status}{else}Fehler!{/if}</a></td>
-					<td>{$class.weekday}</td>
-				</tr>
-				{/if}
-			{/foreach}
-			{if !$counter}
-				<tr>
-					<td colspan="3" style="background-color: #7EFF00">Keine Kurse an diesem Tag</td>
-				</tr>
-			{/if}
-		</table>
-		<label class="classList">Mittwoch:</label>
-		<table class="dataTable">
-			<tr>
-				<th>Kursname</th>
-				<th>Status</th>
-				<th>Wochentag</th>
-			</tr>
-			{$counter = 0}
-			{foreach $user.classes as $class}
-				{if $class.weekday == 'Wed'}
-				{$counter = $counter + 1}
-				<tr>
-					<td><a href="index.php?section=Kuwasys|Classes&action=showClassDetails&ID={$class.ID}">{$class.label}</a></td>
-					<td><a href="index.php?section=Kuwasys|Users&action=changeUserToClass&classId={$class.ID}&userId={$user.ID}&classStatus={$class.status}">{if $class.status}{$class.status}{else}Fehler!{/if}</a></td>
-					<td>{$class.weekday}</td>
-				</tr>
-				{/if}
-			{/foreach}
-			{if !$counter}
-				<tr>
-					<td colspan="3" style="background-color: #7EFF00">Keine Kurse an diesem Tag</td>
-				</tr>
-			{/if}
-		</table>
-		<label class="classList">Donnerstag:</label>
-		<table class="dataTable">
-			<tr>
-				<th>Kursname</th>
-				<th>Status</th>
-				<th>Wochentag</th>
-			</tr>
-			{$counter = 0}
-			{foreach $user.classes as $class}
-				{if $class.weekday == 'Thu'}
-				{$counter = $counter + 1}
-				<tr>
-					<td><a href="index.php?section=Kuwasys|Classes&action=showClassDetails&ID={$class.ID}">{$class.label}</a></td>
-					<td><a href="index.php?section=Kuwasys|Users&action=changeUserToClass&classId={$class.ID}&userId={$user.ID}&classStatus={$class.status}">{if $class.status}{$class.status}{else}Fehler!{/if}</a></td>
-					<td>{$class.weekday}</td>
-				</tr>
-				{/if}
-			{/foreach}
-			{if !$counter}
-				<tr>
-					<td colspan="3" style="background-color: #7EFF00">Keine Kurse an diesem Tag</td>
-				</tr>
-			{/if}
-		</table>
-		<label class="classList">Freitag:</label>
-		<table class="dataTable">
-			<tr>
-				<th>Kursname</th>
-				<th>Status</th>
-				<th>Wochentag</th>
-			</tr>
-			{$counter = 0}
-			{foreach $user.classes as $class}
-				{if $class.weekday == 'Fri'}
-				{$counter = $counter + 1}
-				<tr>
-					<td><a href="index.php?section=Kuwasys|Classes&action=showClassDetails&ID={$class.ID}">{$class.label}</a></td>
-					<td><a href="index.php?section=Kuwasys|Users&action=changeUserToClass&classId={$class.ID}&userId={$user.ID}&classStatus={$class.status}">{if $class.status}{$class.status}{else}Fehler!{/if}</a></td>
-					<td>{$class.weekday}</td>
-				</tr>
-				{/if}
-			{/foreach}
-			{if !$counter}
-				<tr>
-					<td colspan="3" style="background-color: #7EFF00">Keine Kurse an diesem Tag</td>
-				</tr>
-			{/if}
-		</table>
+		{foreach $user.classes as $unit}
+		<label class="classList">{$unit.0.unit.translatedName}:</label>
+				<table class="dataTable">
+					<tr>
+						<th>Kursname</th>
+						<th>Status</th>
+						<th>Wochentag</th>
+					</tr>
+					{foreach $unit as $class}
+						<tr>
+							<td><a href="index.php?section=Kuwasys|Classes&action=showClassDetails&ID={$class.ID}">{$class.label}</a></td>
+							<td><a href="index.php?section=Kuwasys|Users&action=changeUserToClass&classId={$class.ID}&userId={$user.ID}&classStatus={if $class.status}{$class.status}{else}Fehler!{/if}">{if $class.status}{$class.status.translatedName}{else}Fehler!{/if}</a></td>
+							<td>{$class.unit.translatedName}</td>
+						</tr>
+					{/foreach}
+				</table>
+		{/foreach}
 	</div>
 	{else}
 	<div><label class="left">Kurse:</label> <div class="valueDiv"><b>kein Kurs</b></div></div><br>
