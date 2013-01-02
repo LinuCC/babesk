@@ -6,5 +6,7 @@
 <form action="index.php?section=System|ForeignLanguage&action=3" method="post">
 	<input type="submit" value="Fremdsprachen den Benutzern zuordnen">
 </form>
-
+<form action="index.php?section=System|ForeignLanguage&action=5" method="post">
+	<input type="submit" value="Fremdsprachen mit Inventarnummer(n) zuordnen">
+</form>
 {/block}

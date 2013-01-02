@@ -44,6 +44,9 @@ class ForeignLanguage extends Module {
 				case 4: //save the users
 					$ForeignLanguageProcessing->SaveUsers($_POST);
 				break;
+				case 5: //edit user via cardscan
+					$ForeignLanguageProcessing->AssignForeignLanguageWithCardscan($_POST);
+				break;
 			}
 		} elseif  (('GET' == $_SERVER['REQUEST_METHOD'])&&isset($_GET['action'])) {
 					$action = $_GET['action'];
