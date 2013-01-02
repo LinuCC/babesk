@@ -1154,7 +1154,7 @@ class KuwasysDatabaseAccess {
 		return $unit;
 	}
 
-	public function dbAccessExec ($mngName, $mngFuncName, $paramArr, $funcName, $excModArr = False) {
+	public function dbAccessExec ($mngName, $mngFuncName, $paramArr = array (), $funcName = False, $excModArr = False) {
 		return $this->execData ($mngName, $mngFuncName, $paramArr, $funcName, $excModArr);
 	}
 
@@ -1171,8 +1171,9 @@ class KuwasysDatabaseAccess {
 	 * @param excModArr An Array of DbAccExceptionMods. With these Objects you can define how single Exceptions should be displayed and more. See @see DbAccExceptionMods for more docs. Defaults to dieError
 	 * @return The result of the Database-query. Not 'result' as in a link to the MySQL-Server, but a normal Variable or an Array of Variables.
  	 */
-	protected function execData ($mngName, $mngFuncName, $paramArr, $errorName, $excModArr = False) {
-		self::methodNameCheck ($this->$mngName, $mngFuncName);
+	protected function execData ($mngName, $mngFuncName, $paramArr = array (), $errorName = False, $excModArr = False) {
+		if (!$errorName) {$errorName = $mngFuncName;}
+		$this->methodNameCheck ($mngName, $mngFuncName);
 		try {
 			$ret = call_user_func_array(array($this->$mngName, $mngFuncName), $paramArr);
 		} catch (MySQLVoidDataException $e) {
@@ -1193,8 +1194,8 @@ class KuwasysDatabaseAccess {
 		}
 	}
 
-	protected static function methodNameCheck ($mngName, $mngFuncName) {
-		if (!method_exists($mngName, $mngFuncName)) {
+	protected function methodNameCheck ($mngName, $mngFuncName) {
+		if (!method_exists($this->$mngName, $mngFuncName)) {
 			throw new Exception (sprintf('Method "%s" of Class "%s" does not exist', $mngFuncName, $mngName));
 		}
 	}

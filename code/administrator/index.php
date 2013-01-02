@@ -1,7 +1,6 @@
 <?php
 
 require_once 'Administrator.php';
-
 $adminManager = new Administrator();
 
 $adminManager->setUserLoggedIn(isset($_SESSION['UID']));
@@ -16,7 +15,7 @@ if ($adminManager->testLogin()) {
 	$logger = $adminManager->getLogger();
 	$modManager = $adminManager->getModuleManager();
 	$adminManager->initUserInterface();
-	
+
 	if (isset($_GET['section'])) {
 		$adminManager->executeModule($_GET['section'], false);
 	}

@@ -29,7 +29,6 @@ class ModuleManager {
 	 * @param GeneralInterface $general_interface The Class or a from GeneralInterface inheriting class, used for Useroutput
 	 */
 	function __construct ($program_part = NULL, $general_interface = NULL) {
-
 		$this->moduleXMLPath = PATH_INCLUDE . '/modules.xml';
 
 		if ($general_interface != NULL) {
@@ -240,7 +239,6 @@ class ModuleManager {
 			die("Could not parse the ModuleXML");
 		}
 		$this->programPartPath = (string) $mod_xml->$program_part->path;
-
 		foreach ($mod_xml->$program_part->head_module as $head_mod) {
 
 			if (!isset($head_mod->active) || $head_mod->active != true) {
@@ -255,7 +253,6 @@ class ModuleManager {
 					echo 'A module is not active; it will not be used.';
 					continue;
 				}
-
 				$this->extractModule($module, $headModule);
 			}
 		}
@@ -292,7 +289,6 @@ class ModuleManager {
 	}
 
 	private function extractModule ($module, $headModule) {
-
 		$include_path = sprintf(PATH_CODE . '/' . $this->programPartPath . 'headmod_%s/modules/mod_%s/%s.php', (string)
 			$headModule->getName(), $module->name, $module->name);
 
@@ -301,12 +297,12 @@ class ModuleManager {
 	}
 
 	private function createModule ($include_path, $module, $headModule) {
-
 		if (!(file_exists($include_path))) {
 			$this->generalInterface->showError('Could not load file for Module ' . $module->name);
 		}
 		else {
 			include_once $include_path;
+
 			if (!class_exists($classname = (string) $module->name)) {
 				$this->generalInterface->showError('<br>Could not load the class ' . $classname . '!');
 			}

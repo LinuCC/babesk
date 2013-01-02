@@ -435,6 +435,17 @@ class TableManager {
 	}
 
 	/**
+	 * Allows to change multiple entries with the multi-query-manager
+	 */
+	public function doMultiQueryManagerByRows ($function, $rows) {
+		$mQMng = $this->getMultiQueryManager ();
+		foreach ($rows as $row) {
+			$mQMng->rowAdd ($row);
+		}
+		return $mQMng->dbExecute ($function);
+	}
+
+	/**
 	 * Returns the Content of the result of a MySQL-Query and checks if it is void.
 	 * @param mySQL-query-returnValue $result
 	 * @param string $exceptionMessage When Result-Content is void, an exception with this message will be thrown

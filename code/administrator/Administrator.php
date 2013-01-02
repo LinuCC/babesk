@@ -35,7 +35,7 @@ class Administrator {
 
 		validSession() or die(INVALID_SESSION);
 		$this->initSmarty();
-		
+
 		$this->_adminInterface = new AdminInterface(NULL, $this->_smarty);
 
 		$this->_logger = new LogManager();
@@ -65,16 +65,16 @@ class Administrator {
 	public function getModuleManager () {
 		return $this->_moduleManager;
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	public function initUserInterface () {
 
 		$this->_smarty->assign('_ADMIN_USERNAME', $_SESSION['username']);
 		$this->_smarty->assign('sid', htmlspecialchars(SID));
-		
+
 			$this->_smarty->assign('base_path', PATH_SMARTY . '/templates/administrator/base_layout.tpl');
-		
+
 	}
 
 	public function userLogOut () {

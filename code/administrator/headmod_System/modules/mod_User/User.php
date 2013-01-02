@@ -7,6 +7,7 @@ require_once PATH_ACCESS . '/CardManager.php';
 require_once PATH_ACCESS . '/UserManager.php';
 require_once PATH_INCLUDE . '/Module.php';
 
+
 class User extends Module {
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor

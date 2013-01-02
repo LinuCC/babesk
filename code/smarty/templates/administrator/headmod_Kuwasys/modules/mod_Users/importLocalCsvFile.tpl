@@ -13,6 +13,7 @@ Die CSV-Datei sollte folgende Schlüssel beinhalten:
 		<td>email</td>
 		<td>telephone</td>
 		<td>birthday</td>
+		<td>grade</td>
 	</tr>
 </table>
 Bitte beachten sie dabei auch die Groß - und Kleinschreibung. Außerdem dürfen kleine Leerzeichen in den Schlüsseln

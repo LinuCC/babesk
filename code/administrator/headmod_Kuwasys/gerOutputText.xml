@@ -380,6 +380,7 @@
 			<UserInClassStatusGetByName_Exception>Konnte die Id für den Status Aktive nicht abrufen.</UserInClassStatusGetByName_Exception>
 			<JUserInClassGetByStatusId_Exception>Konnte die aktiven Nutzer nicht abrufen</JUserInClassGetByStatusId_Exception>
 			<isClassMaxRegistrationReached_Exception>Konnte die maximal erlaubten Registrierungen für den Kurs nicht abrufen</isClassMaxRegistrationReached_Exception>
+			<addMultipleUser_Exception>Konnte die Benutzer nicht hinzufügen.</addMultipleUser_Exception>
 		</text>
 	</module>
 </gerOutputText>

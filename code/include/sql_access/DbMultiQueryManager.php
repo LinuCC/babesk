@@ -36,6 +36,9 @@ class DbMultiQueryManager {
 	 */
 	public function dbExecute ($function) {
 		$wholeQuery = '';
+		if (!count ($this->_rows)) {
+			throw new Exception ('No rows set!');
+		}
 		foreach ($this->_rows as $row) {
 			$processStr = $this->fieldsAppendAsStr ($row->processFieldGetAll ());
 			$searchStr = $this->fieldsAppendAsSearchStr ($row->searchFieldGetAll ());
@@ -157,6 +160,21 @@ class DbMultiQueryManager {
 }
 
 class DbAMRow {
+	public function __construct ($fields = false) {
+		if ($fields) {
+			foreach ($fields as $field) {
+				switch ($field [0]) {
+					case self::$ProcessField:
+						$this->_processFields [] = $field [1];
+						break;
+					case self::$SearchField:
+						$this->_searchFields [] = $field [1];
+						break;
+				}
+			}
+		}
+	}
+
 	public function processFieldAdd ($key, $value) {
 		$this->_processFields [] = new DbAMField ($key, $value);
 	}
@@ -172,6 +190,9 @@ class DbAMRow {
 	public function searchFieldGetAll () {
 		return $this->_searchFields;
 	}
+
+	public static $ProcessField = 0;
+	public static $SearchField = 1;
 
 	protected $_tablename;
 	/**

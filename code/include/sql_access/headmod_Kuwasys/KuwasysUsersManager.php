@@ -29,6 +29,18 @@ class KuwasysUsersManager extends TableManager {
 			$email, 'telephone', $telephone, 'birthday', $birthday);
 	}
 
+	/**
+	 * Adds multiple Users
+	 * @param $rows DbAMRow-Array
+	 */
+	public function addMultipleUser ($rows) {
+		$mQMng = $this->getMultiQueryManager ();
+		foreach ($rows as $row) {
+			$mQMng->rowAdd ($row);
+		}
+		$mQMng->dbExecute ($mQMng::$Insert);
+	}
+
 	public function deleteUser ($ID) {
 
 		parent::delEntry($ID);
@@ -82,6 +94,13 @@ class KuwasysUsersManager extends TableManager {
 
 	public function changeEmailAdress ($userId, $email) {
 		$this->alterEntry ($userId, 'email', $email);
+	}
+
+	/**
+	 * Returns the ID that the next added tablerow would get
+	 */
+	public function getNextAIUserId () {
+		return $this->getNextAutoIncrementID ();
 	}
 
 	private function cleanUserIdArray () {

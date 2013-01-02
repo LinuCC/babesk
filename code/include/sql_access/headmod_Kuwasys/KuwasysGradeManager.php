@@ -25,28 +25,40 @@ class KuwasysGradeManager extends TableManager {
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
 	public function addGrade ($label, $year) {
-			
+
 		parent::addEntry('label', $label, 'gradeValue', $year);
 	}
 
+	/**
+	 * @param $rows array(DbAMRows)
+	 */
+	public function addMultipleGrades ($rows) {
+		return $this->doMultiQueryManagerByRows (DbMultiQueryManager::$Insert, $rows);
+	}
+
 	public function deleteGrade ($ID) {
-			
+
 		parent::delEntry($ID);
 	}
 
 	public function alterGrade ($ID, $label, $year) {
-			
+
 		parent::alterEntry($ID, 'label', $label, 'gradeValue', $year);
 	}
 
+	public function getMultipleGrades ($rows) {
+		$grades = $this->doMultiQueryManagerByRows (DbMultiQueryManager::$Fetch, $rows);
+		return $grades;
+	}
+
 	public function getAllGrades () {
-			
+
 		$grades = parent::getTableData();
 		return $grades;
 	}
 
 	public function getGrade ($ID) {
-			
+
 		$grade = parent::searchEntry('ID=' . $ID);
 		return $grade;
 	}
@@ -57,7 +69,7 @@ class KuwasysGradeManager extends TableManager {
 	 * @param unknown $gradeId
 	 */
 	public function addGradeIdItemToFetch ($gradeId) {
-		
+
 		$this->_gradesToFetchArray [] = $gradeId;
 	}
 
@@ -66,10 +78,15 @@ class KuwasysGradeManager extends TableManager {
 	 * @return grades []
 	 */
 	public function getAllGradesOfGradeIdItemArray () {
-		
+
 		$grades = $this->getMultipleEntriesByArray('ID', $this->_gradesToFetchArray);
 		return $grades;
 	}
+
+	public function getNextAIGradeId () {
+		return $this->getNextAutoIncrementID ();
+	}
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////

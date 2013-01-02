@@ -2,6 +2,7 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/functions.php';
+require_once PATH_INCLUDE . '/CsvExporter.php';
 require_once 'UsersInterface.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysGradeManager.php';
@@ -14,7 +15,7 @@ require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
 require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysFilterAndSort.php';
 require_once 'UsersPasswordResetter.php';
 require_once 'DisplayUsersWaiting.php';
-require_once PATH_INCLUDE . '/CsvExporter.php';
+require_once 'UsersCsvImport.php';
 
 /**
  * Main-Class for the Module Users
@@ -212,7 +213,8 @@ class Users extends Module {
 	private function importUsersFromCsv () {
 
 		if (count($_FILES)) {
-			$this->handleCsvImport();
+			UsersCsvImport::classInit ($this->_interface, $this->_databaseAccessManager);
+			UsersCsvImport::import ($_FILES['csvFile']['tmp_name'], ';');
 		}
 		else {
 			$this->_interface->showSelectCsvFileForImport();
@@ -360,7 +362,6 @@ class Users extends Module {
 	private function handleParticipationConfirmationPdf () {
 
 		require_once PATH_INCLUDE . '/pdf/joinMultiplePdf.php';
-
 		foreach ($_POST['userIds'] as $userId) {
 			$this->_databaseAccessManager->userIdAddToUserIdArray($userId);
 		}
@@ -607,17 +608,6 @@ class Users extends Module {
 		}
 		catch (Exception $e) {
 			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorAddUser'), $e->getMessage()));
-		}
-	}
-
-	private function addUsersToDatabaseByCsvImport ($contentArray) {
-
-		foreach ($contentArray as $rowArray) {
-			echo 'Neuer Nutzer:<br>';
-			var_dump($rowArray);
-			echo '<br>';
-			$this->addUserToDatabase($rowArray['forename'], $rowArray['name'], $rowArray['username'], $rowArray[
-					'password'], $rowArray['email'], $rowArray['telephone'], $rowArray['birthday']);
 		}
 	}
 
@@ -1253,43 +1243,6 @@ class Users extends Module {
 		}
 	}
 
-	private function handleCsvImport () {
-
-		require_once PATH_INCLUDE . '/CsvImporter.php';
-		$csvManager = new CsvImporter($_FILES['csvFile']['tmp_name'], ';');
-		$contentArray = $csvManager->getContents();
-		$contentArray = $this->controlVariablesOfCsvImport($contentArray);
-		$this->addUsersToDatabaseByCsvImport($contentArray);
-	}
-
-	/**
-	 * adds void strings to missing parts of the array that werent in the CsvFile, so that PHP does not warn everytime
-	 * something is missing
-	 * @param unknown $contentArray
-	 * @return unknown
-	 */
-	private function controlVariablesOfCsvImport ($contentArray) {
-
-		foreach ($contentArray as & $rowArray) {
-
-			$rowArray = $this->checkCsvImportVariable('forename', $rowArray);
-			$rowArray = $this->checkCsvImportVariable('name', $rowArray);
-			$rowArray = $this->checkCsvImportVariable('username', $rowArray);
-			$rowArray = $this->checkCsvImportVariable('password', $rowArray);
-			$rowArray = $this->checkCsvImportVariable('email', $rowArray);
-			$rowArray = $this->checkCsvImportVariable('telephone', $rowArray);
-			$rowArray = $this->checkCsvImportVariable('birthday', $rowArray);
-		}
-		return $contentArray;
-	}
-
-	private function checkCsvImportVariable ($varName, $rowArray) {
-
-		if (!isset($rowArray[$varName])) {
-			$rowArray[$varName] = '';
-		}
-		return $rowArray;
-	}
 
 	/**
 	 * @used-by Users::addUserToDatabase

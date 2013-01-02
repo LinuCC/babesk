@@ -1,5 +1,4 @@
- <?php
-
+<?php
 /**
  * Provides functions for the RFID Cards
  */
@@ -49,7 +48,7 @@ class CardManager extends TableManager {
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE cardnumber="%s"',
 									$this->tablename, $cardnumber));
 		$result = $this->db->query($query);
-		
+
 		$card = $result->fetch_assoc();
 		if(!$card) {
 			return false;
@@ -83,11 +82,11 @@ class CardManager extends TableManager {
 		}
 		parent::alterEntry($ID, 'cardnumber', $cardnumber);
 	}
-	
+
 	/**
 	 * If CardID was changed, this function adds 1 to changed_cardID on the MySQL-Server
 	 * Enter description here ...
-	 * 
+	 *
 	 * @param $ID The ID of the object in the cards-table, which cardnumber was changed
 	 */
 	function addCardIdChange($ID) {
@@ -96,13 +95,13 @@ class CardManager extends TableManager {
 			try {
 				parent::alterEntry($ID, 'changed_cardID', $card);
 			} catch (Exception $e) {
-				throw new Exception('could not alter the card-entry:'.$e->getMessage()); 
+				throw new Exception('could not alter the card-entry:'.$e->getMessage());
 			}
 		} else {
 			throw new Exception('could not get the card!');
 		}
 	}
-	
+
 	/**
 	 * Returns the number of CardID-changes
 	 * Enter description here ...
@@ -118,7 +117,7 @@ class CardManager extends TableManager {
 			throw new Exception('could not get the value changed_cardID');
 		}
 	}
-	
+
 	function getCardnumberByUserID($ID) {
 		require PATH_ACCESS . '/databaseDistributor.php';
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE UID=%s',$this->tablename, $ID));
@@ -133,7 +132,7 @@ class CardManager extends TableManager {
 		}
 		return $card['cardnumber'];
 	}
-	
+
 	/**
 	 * This function returns the ID of the Card which has the given UserID
 	 * Enter description here ...
@@ -156,7 +155,7 @@ class CardManager extends TableManager {
 		}
 		return $card['ID'];
 	}
-	
+
 	function getIDByUserID($uid) {
 		require PATH_ACCESS . '/databaseDistributor.php';
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE UID=%s',$this->tablename, $uid));
