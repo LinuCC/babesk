@@ -97,6 +97,7 @@
 		`birthday` varchar (11) NOT NULL,
 		`last_login` varchar (11) NOT NULL,
 		`login_tries` smallint(5),
+		`first_passwd` boolean NOT NULL DEFAULT '0',
 		`locked` boolean NOT NULL,
 		Primary Key (`ID`)
 		);

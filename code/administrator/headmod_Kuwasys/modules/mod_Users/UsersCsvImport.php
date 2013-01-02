@@ -56,12 +56,24 @@ class UsersCsvImport {
 	 */
 	protected static function userToDb ($rows) {
 		$toAdd = array ();
+		$schoolyear = self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::SchoolyearManager, 'getActiveSchoolyear');
 		$userId = self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::UserManager,
 			'getNextAIUserId', array());
 		foreach ($rows as &$row) {
 			$process = new DbAMRow ();
 			foreach (self::$_csvStructure as $key) {
-				if ($key != 'grade') {
+				if ($key == self::$_csvStructure ['GradeName']) {
+					// do Nothing
+				}
+				else if ($key == self::$_csvStructure ['Birthday']) {
+					$timestamp = strtotime ($row [self::$_csvStructure ['Birthday']]);
+					$parsed = date ('Y-m-d', $timestamp);
+					echo "<br>DATE:";
+					var_dump($parsed);
+					echo "<br>";
+					$process->processFieldAdd ($key, $parsed);
+				}
+				else {
 					$process->processFieldAdd ($key, $row [$key]);
 				}
 			}
@@ -71,6 +83,7 @@ class UsersCsvImport {
 		}
 		self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::UserManager,
 			'addMultipleUser', array ($toAdd), 'addMultipleUser');
+		self::jUserSchoolyearAdd ($rows);
 		return $rows;
 	}
 
@@ -142,6 +155,18 @@ class UsersCsvImport {
 		$schoolyear = self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::SchoolyearManager, 'getActiveSchoolyear');
 		self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::JGradeInSchoolyearManager, 'addJoint',
 			array ($gradeId, $schoolyear ['ID']));
+	}
+
+	protected static function jUserSchoolyearAdd ($rows) {
+		$schoolyear = self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::SchoolyearManager, 'getActiveSchoolyear');
+		$proc = array ();
+		foreach ($rows as $row) {
+			$process = new DbAMRow ();
+			$process->processFieldAdd('UserID', $row ['_userId']);
+			$process->processFieldAdd('SchoolYearID', $schoolyear ['ID']);
+			$proc [] = $process;
+		}
+		self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::JUserInSchoolyearManager, 'addMultipleJoints', array ($proc));
 	}
 
 	protected static function gradeIdAdd ($grade, $rows) {

@@ -492,6 +492,7 @@ class Users extends Module {
 
 		$users = $this->getAllUsers();
 		$users = $this->addGradeLabelToUsers($users);
+		$users = $this->addSchoolyearLabelToUsers ($users);
 		$users = KuwasysFilterAndSort::elementsSort ($users);
 		$users = KuwasysFilterAndSort::elementsFilter ($users);
 		$this->_interface->showAllUsers($users);
@@ -898,6 +899,7 @@ class Users extends Module {
 		return $schoolyear;
 	}
 
+
 	/********************
 	 * KuwasysJointUsersInSchoolYearManager
 	********************/
@@ -1007,14 +1009,16 @@ class Users extends Module {
 	 */
 	private function addSchoolyearLabelToUsers ($users) {
 
-		$jointsUsersInSchoolyear = $this->get();
-		$grades = $this->getAllGrades();
+		$jointsUsersInSchoolyear = $this->_databaseAccessManager->dbAccessExec (
+			KuwasysDatabaseAccess::JUserInSchoolyearManager, 'getAllJoints');
+		$schoolyears = $this->getAllSchoolYears ();
 		foreach ($users as & $user) {
-			foreach ($jointsUsersInGrade as $joint) {
+			$user['schoolyearLabel'] = '';
+			foreach ($jointsUsersInSchoolyear as $joint) {
 				if ($joint['UserID'] == $user['ID']) {
-					foreach ($grades as $grade) {
-						if ($grade['ID'] == $joint['GradeID']) {
-							$user['gradeLabel'] = $grade['gradeValue'] . '-' . $grade['label'];
+					foreach ($schoolyears as $schoolyear) {
+						if ($schoolyear['ID'] == $joint['SchoolYearID']) {
+							$user['schoolyearLabel'] = $schoolyear ['label'];
 						}
 					}
 				}

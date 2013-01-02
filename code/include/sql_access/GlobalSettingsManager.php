@@ -24,6 +24,7 @@ abstract class GlobalSettings {
 	const PRESET_PASSWORD = 'presetPassword';
 	const FIRST_LOGIN_CHANGE_PASSWORD = 'firstLoginChangePassword';
 	const FIRST_LOGIN_CHANGE_EMAIL = 'firstLoginChangeEmail';
+	const FIRST_LOGIN_CHANGE_EMAIL_FORCED = 'firstLoginForceChangeEmail';
 }
 
 class GlobalSettingsManager extends TableManager {

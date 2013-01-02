@@ -11,11 +11,14 @@ class Kuwasys extends HeadModule {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
+	public static $buttonBackToMM = '<br>
+		<form action="index.php?section=Kuwasys|MainMenu" method="post">
+		<input type="submit" value="Zum Hauptmenü"></form>';
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	public function __construct($name, $display_name) {
-		
+
 		parent::__construct($name, $display_name);
 		defined('PATH_ACCESS_KUWASYS') or define('PATH_ACCESS_KUWASYS', PATH_ACCESS . '/headmod_Kuwasys');
 	}
