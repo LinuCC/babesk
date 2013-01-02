@@ -38,6 +38,15 @@ class AdminForeignLanguageInterface extends AdminInterface{
 	
 	}
 	
+	function ShowCardscan() {
+		$this->smarty->display($this->tplFilePath.'show_cardscan.tpl');
+	}
+	
+	function ShowBookscan($uid) {
+		$this->smarty->assign('uid',$uid);
+		$this->smarty->display($this->tplFilePath.'show_bookscan.tpl');
+	}
+	
 	function ShowUsersSuccess() {
 		$this->smarty->display($this->tplFilePath.'show_foreignLanguages_set.tpl');
 	

@@ -107,9 +107,56 @@ class AdminReligionProcessing {
 		$this->ReligionInterface->ShowUsersSuccess();
 	}
 	
-
+	function AssignConfessionWithCardscan($postvars) {
+		require_once PATH_ACCESS . '/CardManager.php';
+		require_once PATH_ACCESS . '/UserManager.php';
+		$this->cardManager = new CardManager();
+		$this->userManager = new UserManager();
+		if (isset($postvars['uid']) && isset($postvars['bookcodes'])) {
+			$barcodes = explode( "\r\n", $postvars['bookcodes'] );
+			if(in_array("",$barcodes)){
+				$pos=array_search("",$barcodes);
+				unset($barcodes[$pos]);
+			}
+			$barcodes = array_values($barcodes);
+			$confessions = array();
+			foreach ($barcodes as $barcode) {
+				$tmp = explode(' ', $barcode);
+				$confessions[] = $tmp[0];
+			}
+			try {
+				$this->userManager->SetReligion($postvars['uid'], $confessions);
+				$this->ReligionInterface->ShowUsersSuccess();
+			} catch (Exception $e) {
+				$this->ReligionInterface->dieError($this->messages['error']['change'] . $e->getMessage());
+			}
+		}
+		else if (isset($postvars['card_ID'])) {
+			$uid = $this->CheckCard($_POST['card_ID']);
+			$this->ReligionInterface->ShowBookscan($uid);
+		}
+		else{
+			$this->ReligionInterface->ShowCardscan();
+		}
 	
+	}
 
+	public function CheckCard ($card_id) {
+	
+		if (!$this->cardManager->valid_card_ID($card_id))
+			$this->cardInfoInterface->dieError(sprintf($this->msg['err_card_id'], $card_id));
+	
+		$uid = $this->GetUser($card_id);
+		return  $uid;
+	}
+	
+	public function GetUser ($card_id) {
+		try {
+			return $this->cardManager->getUserID($card_id);
+		} catch (Exception $e) {
+			$this->cardInfoInterface->dieError(sprintf($this->msg['err_card_id'], $card_id));
+		}
+	}
 	var $messages = array();
 	private $userInterface;
 

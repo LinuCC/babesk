@@ -43,6 +43,14 @@ class AdminReligionInterface extends AdminInterface{
 	
 	}
 	
+	function ShowCardscan() {
+		$this->smarty->display($this->tplFilePath.'show_cardscan.tpl');
+	}
+	
+	function ShowBookscan($uid) {
+		$this->smarty->assign('uid',$uid);
+		$this->smarty->display($this->tplFilePath.'show_bookscan.tpl');
+	}
 	/**
 	 * The Path to the Smarty-Parent-Templatefile
 	 */

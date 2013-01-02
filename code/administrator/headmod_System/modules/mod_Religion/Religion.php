@@ -44,6 +44,9 @@ class Religion extends Module {
 				case 4: //save the users
 					$ReligionProcessing->SaveUsers($_POST);
 				break;
+				case 5: //edit user via cardscan
+					$ReligionProcessing->AssignConfessionWithCardscan($_POST);
+					break;
 				}
 		} elseif  (('GET' == $_SERVER['REQUEST_METHOD'])&&isset($_GET['action'])) {
 					$action = $_GET['action'];
