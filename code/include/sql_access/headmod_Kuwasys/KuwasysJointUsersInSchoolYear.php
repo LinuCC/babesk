@@ -28,6 +28,10 @@ class KuwasysJointUsersInSchoolYear extends TableManager {
 			$this->addEntry('UserID', $UserID, 'SchoolYearID', $SchoolYearID);
 		}
 
+		public function addMultipleJoints ($rows) {
+			$this->doMultiQueryManagerByRows (DbMultiQueryManager::$Insert, $rows);
+		}
+
 		public function deleteJointByUserId ($userId) {
 
 			$this->deleteAllEntriesWithValueOfKey('UserID', $userId);

@@ -16,8 +16,12 @@ Um für bereits bestehende Schüler das Passwort zurückzusetzen, gehen sie bitt
 		<input type='checkbox' name='firstLoginPassword'
 		{if $onFirstLoginChangePassword}checked='checked'{/if}>
 	</label><br>
-	<label>Neueingabe der Email beim ersten Login (erzwungen):
+	<label>Neueingabe der Email beim ersten Login:
 		<input type='checkbox' name='firstLoginEmail'
+		{if $onFirstLoginChangeEmail}checked='checked'{/if}>
+	</label><br>
+	<label>Email muss eingegeben werden:
+		<input type='checkbox' name='firstLoginEmailForce'
 		{if $onFirstLoginChangeEmail}checked='checked'{/if}>
 	</label><br>
 	<input type='submit' value='Einstellungen verändern'>

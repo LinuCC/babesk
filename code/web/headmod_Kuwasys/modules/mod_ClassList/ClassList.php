@@ -256,9 +256,9 @@ class ClassList extends Module {
 	private function checkClassListInputForOnlySecondChoiceSelected ($weekday) {
 
 		if (isset($_POST['secondChoice' . $weekday]) && !isset($_POST['firstChoice' . $weekday])) {
-			$this->_interface->DieError(
-				'Für einen bestimmten Tag wurde keine erste Wahl gewählt, aber eine Zweitwahl.
-					Wenn sie nur eine Wahl haben, wählen sie den Kurs bitte als Erstwahl.'
+			$this->_interface->DieError(sprintf(
+							'Für einen bestimmten Tag wurde keine erste Wahl gewählt, aber eine Zweitwahl.
+								Wenn sie nur eine Wahl haben, wählen sie den Kurs bitte als Erstwahl.%s', Kuwasys::$buttonBackToMM)
 				);
 		}
 	}
@@ -276,7 +276,7 @@ class ClassList extends Module {
 				} catch (Exception $e) {
 					$this->_interface->DieError('Fehler beim Abrufen von Daten!');
 				}
-				$this->_interface->DieError('Sie sind schon für diesen Kurs angemeldet!');
+				$this->_interface->DieError(sprintf('Sie sind schon für diesen Kurs angemeldet! %s', Kuwasys::$buttonBackToMM));
 			} catch (Exception $e) {
 			}
 		}
@@ -291,7 +291,7 @@ class ClassList extends Module {
 				} catch (Exception $e) {
 					$this->_interface->DieError('Fehler beim Abrufen von Daten!');
 				}
-				$this->_interface->DieError('Sie sind schon für diesen Kurs angemeldet!');
+				$this->_interface->DieError(sprintf('Sie sind schon für diesen Kurs angemeldet! %s', Kuwasys::$buttonBackToMM));
 			} catch (Exception $e) {
 			}
 		}

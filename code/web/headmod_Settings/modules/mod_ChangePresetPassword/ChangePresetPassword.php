@@ -112,14 +112,30 @@ class ChangePresetPassword extends Module {
 	private function emailChangeOnFirstLoginHandle () {
 		if ($this->emailChangeOnFirstLoginGet ()) {
 			$newEmail = $_POST ['newEmail'];
-			$this->emailChangeOnFirstLoginCheckInput ($newEmail);
-			$this->emailSet ($newEmail);
+			if ($newEmail == '' && !$this->emailChangeOnFirstLoginForcedGet ()) {
+				//Email not forced
+			}
+			else {
+				$this->emailChangeOnFirstLoginCheckInput ($newEmail);
+				$this->emailSet ($newEmail);
+			}
 		}
 	}
 
 	private function emailChangeOnFirstLoginGet () {
 		try {
 			$email = $this->_globalSettingsManager->valueGet (GlobalSettings::FIRST_LOGIN_CHANGE_EMAIL);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->DieError ('Datenbankfehler: Konnte nicht herausfinden ob die Email für einen ErstLogin benötigt wird; Installation fehlerhaft / nicht vollständig');
+		} catch (Exception $e) {
+			$this->_interface->DieError ('Datenbankfehler: Konnte nicht herausfinden ob die Email für einen ErstLogin benötigt wird');
+		}
+		return ($email != '0');
+	}
+
+	private function emailChangeOnFirstLoginForcedGet () {
+		try {
+			$email = $this->_globalSettingsManager->valueGet (GlobalSettings::FIRST_LOGIN_CHANGE_EMAIL_FORCED);
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->DieError ('Datenbankfehler: Konnte nicht herausfinden ob die Email für einen ErstLogin benötigt wird; Installation fehlerhaft / nicht vollständig');
 		} catch (Exception $e) {

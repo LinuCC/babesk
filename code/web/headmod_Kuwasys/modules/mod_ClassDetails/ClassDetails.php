@@ -135,10 +135,10 @@ class ClassDetails extends Module {
 			$this->_interface->dieError('Kursan- und abmeldungen sind momentan gesperrt!');
 		}
 		else if (!isset($_POST['yes'])) {
-			$this->_interface->DieMessage(sprintf('Sie wurden nicht vom Kurs %s abgemeldet', $class ['label']));
+			$this->_interface->DieMessage(sprintf('Sie wurden nicht vom Kurs %s abgemeldet %s', $class ['label'], Kuwasys::$buttonBackToMM));
 		}
 		$this->deleteJointUsersInClass($joint ['ID']);
-		$this->_interface->DieMessage(sprintf('Sie wurden erfolgreich vom Kurs %s abgemeldet.', $class ['label']));
+		$this->_interface->DieMessage(sprintf('Sie wurden erfolgreich vom Kurs %s abgemeldet. %s', $class ['label'], Kuwasys::$buttonBackToMM));
 	}
 
 	////////////////////////////////////////////////////////////////////////////////

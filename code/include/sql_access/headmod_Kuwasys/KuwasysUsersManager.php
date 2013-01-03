@@ -38,7 +38,7 @@ class KuwasysUsersManager extends TableManager {
 		foreach ($rows as $row) {
 			$mQMng->rowAdd ($row);
 		}
-		$mQMng->dbExecute ($mQMng::$Insert);
+		$mQMng->dbExecute (DbMultiQueryManager::$Insert);
 	}
 
 	public function deleteUser ($ID) {

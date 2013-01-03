@@ -69,10 +69,12 @@ class PresetPassword extends Module {
 
 	private function changeEmailHandle ($isAllowed) {
 		$onFirstLoginChangeEmail = (isset($_POST ['firstLoginEmail'])) ? '1' : '0';
+		$onFirstLoginChangeEmailForce = (isset($_POST ['firstLoginEmailForce'])) ? '1' : '0';
 		if (!$isAllowed && $onFirstLoginChangeEmail == '1') {
 			$this->_interface->dieError ('Die Email kann nur abgefragt werden, wenn auch das Passwort beim ersten Login abgefragt wird');
 		}
 		$this->emailChangeOnFirstLoginSet ($onFirstLoginChangeEmail);
+		$this->emailChangeOnFirstLoginForcedSet ($onFirstLoginChangeEmailForce);
 	}
 
 	private function changePasswordCheckInput ($pw) {
@@ -138,6 +140,14 @@ class PresetPassword extends Module {
 	private function emailChangeOnFirstLoginSet ($onFirstLoginChangeEmail) {
 		try {
 			$this->_globalSettingsManager->valueSet (GlobalSettings::FIRST_LOGIN_CHANGE_EMAIL, $onFirstLoginChangeEmail);
+		} catch (Exception $e) {
+			$this->_interface->dieError ('Konnte den Wert für das Verändern der Email bei einem ersten Userlogin nicht abrufen');
+		}
+	}
+
+	protected function emailChangeOnFirstLoginForcedSet ($isForced) {
+		try {
+			$this->_globalSettingsManager->valueSet (GlobalSettings::FIRST_LOGIN_CHANGE_EMAIL_FORCED, $isForced);
 		} catch (Exception $e) {
 			$this->_interface->dieError ('Konnte den Wert für das Verändern der Email bei einem ersten Userlogin nicht abrufen');
 		}

@@ -58,7 +58,7 @@ class KuwasysFilterAndSort {
 
 	protected static function elementHasSortKey ($element) {
 		if (!isset ($element [self::$sortKey])) {
-			throw new Exception (sprintf('Class has not "%s" as a key', self::$sortKey));
+			throw new Exception (sprintf('Element has not "%s" as a key %s', self::$sortKey, var_dump($element)));
 		}
 	}
 

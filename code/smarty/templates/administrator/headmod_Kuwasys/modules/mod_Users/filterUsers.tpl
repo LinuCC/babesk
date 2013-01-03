@@ -18,7 +18,7 @@ Nach
 	<option value="email">Email-Adresse</option>
 	<option value="telephone">Telefon-Nummer</option>
 	<option value="gradeLabel">Klasse</option>
-	<option value="schoolYearLabel">Schuljahr</option>
+	<option value="schoolyearLabel">Schuljahr</option>
 </select>
 sortieren.<br>
 <select name="keyToFilterAfter">
@@ -30,7 +30,7 @@ sortieren.<br>
 	<option value="email">Email-Adresse</option>
 	<option value="telephone">Telefon-Nummer</option>
 	<option value="gradeLabel">Klasse</option>
-	<option value="schoolYearLabel">Schuljahr</option>
+	<option value="schoolyearLabel">Schuljahr</option>
 </select>
 nach
 	<input type="text" name="filterValue" maxlength="12">
