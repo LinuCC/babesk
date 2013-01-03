@@ -310,5 +310,7 @@ img.center {
     
     z-index: 7;
     overflow:visible;
+    position:absolute;
+
 }
 
