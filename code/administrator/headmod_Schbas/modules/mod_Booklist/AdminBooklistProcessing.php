@@ -10,7 +10,7 @@ class AdminBooklistProcessing {
 	}
 	
 	var $messages = array();
-	private $userInterface;
+	private $bookInterface;
 
 	/**
 	 *@var Logger
@@ -21,16 +21,34 @@ class AdminBooklistProcessing {
 	 * Shows booklist
 	 * @param $filter
 	 */
-	function ShowBooklist($filter) {
+	function ShowBooklist($option, $filter) {
 	
 		require_once PATH_ACCESS . '/BookManager.php';
+		require_once PATH_ACCESS . '/UserManager.php';
 	
 		$booklistManager = new BookManager();
+		$userManager = new UserManager();
 	
 		try {
 			isset($_GET['sitePointer'])?$showPage = $_GET['sitePointer'] + 0:$showPage = 1;
 			$nextPointer = $showPage*10-10;
-			$booklist = $booklistManager->getBooklistSorted($nextPointer, $filter);
+			if ($option == "filter"){
+				$booklist = $booklistManager->getBooklistSorted($nextPointer, $filter);
+			}elseif ($option == "search"){
+				try {
+					$class = $userManager->getClassByUsername($filter);
+					$booklist = $booklistManager->getBooksByClass($class);
+				} catch (Exception $e) {
+					$booklist = $e->getMessage();
+				}
+				if ($booklist == 'MySQL returned no data!'){
+					try {
+						$booklist = $booklistManager->getBooksByClass($filter);
+					} catch (Exception $e) {
+						$this->BookInterface->dieError("Keine Einträge gefunden!");
+					}
+				}
+			}
 		} catch (Exception $e) {
 			$this->logs
 			->log('ADMIN', 'MODERATE',

@@ -24,24 +24,13 @@ class Search extends Module {
 
 		$searchInterface = new AdminSearchInterface($this->relPath);
 		$searchProcessing = new AdminSearchProcessing($searchInterface);
-
-		if (isset($_GET['search'])){
-			try {
-				$userID = $cm->getUserID($_POST['user_search']);
-			} catch (Exception $e) {
-				$userID =  $e->getMessage();
-			}
-			if ($userID == 'MySQL returned no data!') {
-				try {
-					$userID = $um->getUserID($_POST['user_search']);
-				} catch (Exception $e) {
-					$userInterface->dieError("Benutzer nicht gefunden!");
-				}
-			}
+		
+		if (isset($_POST['search'])){
+			$searchProcessing->ShowBooks($_POST['search']);
 		}else{
 			$searchInterface->showSearchForm();
 		}
-
+				
 	}
 }
 ?>

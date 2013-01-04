@@ -437,5 +437,10 @@ class UserManager extends TableManager{
 		$query = sql_prev_inj(sprintf('UPDATE %s SET last_login = NOW() WHERE ID = %s', $this->tablename, $userId));
 		$this->executeQuery($query);
 	}
+	
+	function getClassByUsername($username) {
+		$user = parent::getTableData('username="'.$username.'"');
+		return $user[0]['class'];
+	}
 }
 ?>

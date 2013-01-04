@@ -1,5 +1,10 @@
 {extends file=$booklistParent}
 {block name=search}
+<form action="index.php?section=Schbas|Booklist&action=5" method="post">
+	<input type='text' name='search'>
+	<input type='submit' value='Mit Benutzernamen, Klasse oder Jahrgang suchen'>
+</form>
+<br>
 <form action="index.php?section=Schbas|Booklist&action=2" method="post"><input type='text' name='isbn_search'><input type='submit' value='Mit ISBN suchen'></form>
 {/block}
 {block name=content}

@@ -33,9 +33,9 @@ class Booklist extends Module {
 			switch ($action) {
 				case 1: //show booklist
 					if (isset($_POST['filter'])){
-						$BookProcessing->ShowBooklist($_POST['filter']);
+						$BookProcessing->ShowBooklist("filter", $_POST['filter']);
 					}else{
-						$BookProcessing->ShowBooklist("subject");
+						$BookProcessing->ShowBooklist("filter","subject");
 					}
 					break;
 				case 2: //edit a book
@@ -68,6 +68,9 @@ class Booklist extends Module {
 					} else {
 						$BookProcessing->AddEntryFin($_POST['subject'], $_POST['class'],$_POST['title'],$_POST['author'],$_POST['publisher'],$_POST['isbn'],$_POST['price'],$_POST['bundle']);
 					}
+					break;
+				case 5: //filter
+					$BookProcessing->ShowBooklist("search", $_POST['search']);
 					break;
 				break;
 
