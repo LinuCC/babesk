@@ -21,6 +21,9 @@
         {if isset($chickenMode)}
         	<img src="http://www.duetsblog.com/uploads/image/eat-more-chicken.jpg" width="438" height="320" alt="Save The Cows!" />
         {/if}
+        {if isset($showLoginButton) && $showLoginButton}
+        <a href="../publicData/index.php?section=GeneralPublicData|LoginHelp">Hilfe</a>
+        {/if}
 </div>
 <div id="footer">
     <p>BaBeSK {$babesk_version} &copy; 2011 Lessing Gymnasium Uelzen</p>

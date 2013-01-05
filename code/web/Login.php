@@ -12,9 +12,9 @@ class Login {
 	//Constructor
 	////////////////////////////////////////////////////////////////////////////////
 	public function __construct ($smarty) {
-
 		$this->_smarty = $smarty;
 		$this->setUpUserManager();
+		$this->setUpGlobalSettingsManager ();
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Getters and Setters
@@ -54,7 +54,7 @@ class Login {
 	}
 
 	private function checkLogin () {
-		
+
 		$this->easterEggLeg();
 		$this->easterEggCows();
 		$this->checkLoginInput();
@@ -69,6 +69,11 @@ class Login {
 
 		require_once PATH_ACCESS . '/UserManager.php';
 		$this->_userManager = new UserManager();
+	}
+
+	private function setUpGlobalSettingsManager () {
+		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
+		$this->_globalSettingsManager = new GlobalSettingsManager ();
 	}
 
 	private function setUserIdByUsername () {
@@ -96,9 +101,26 @@ class Login {
 	}
 
 	private function dieShowLoginForm () {
-
+		if ($this->isWebloginHelptext ()) {
+			$this->_smarty->assign ('showLoginButton', true);
+		}
+		else {
+			$this->_smarty->assign ('showLoginButton', false);
+		}
 		$this->_smarty->display('web/login.tpl');
 		die();
+	}
+
+	/**
+	 * Checks if the global Setting GlobalSettings::WEBLOGIN_HELPTEXT is existing
+	 */
+	private function isWebloginHelptext () {
+		try {
+			$txt = $this->_globalSettingsManager->valueGet (GlobalSettings::WEBLOGIN_HELPTEXT);
+		} catch (Exception $e) {
+			return false;
+		}
+		return ($txt != '');
 	}
 
 	private function easterEggCows () {
@@ -121,27 +143,27 @@ class Login {
 
 		$this->_smarty->assign('error', $str);
 	}
-	
+
 	private function checkPassword () {
-		
+
 		if(!$this->_userManager->checkPassword($this->_userId, $this->_password)) {
-			
+
 			$this->assignErrorToSmarty(INVALID_LOGIN);
 			$this->addLoginTryToUser();
 			$this->dieShowLoginForm();
 		}
 	}
-	
+
 	private function checkLockedAccount () {
-		
+
 		if($this->_userManager->checkAccount($this->_userId)) {
 			$this->assignErrorToSmarty(ACCOUNT_LOCKED);
 			$this->dieShowLoginForm();
 		}
 	}
-	
+
 	private function addLoginTryToUser () {
-		
+
 		try {
 			$this->_userManager->AddLoginTry($this->_userId);
 		} catch (Exception $e) {
@@ -149,9 +171,9 @@ class Login {
 			$this->dieShowLoginForm();
 		}
 	}
-	
+
 	private function finishSuccessfulLogin () {
-		
+
 		$_SESSION['uid'] = $this->_userId;
 	}
 
@@ -165,6 +187,11 @@ class Login {
 	 * @var UserManager
 	 */
 	private $_userManager;
+
+	/**
+	 * @var GlobalSettingsManager
+	 */
+	private $_globalSettingsManager;
 
 	private $_username;
 	private $_password;

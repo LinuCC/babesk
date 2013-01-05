@@ -303,5 +303,15 @@
 				<active>true</active>
 			</module>
 		</head_module>
+		<head_module>
+			<ger_name>öffentlich einsehbare Daten</ger_name>
+			<name>GeneralPublicData</name>
+			<active>true</active>
+			<module>
+				<ger_name>Einlog-Hilfe</ger_name>
+				<name>LoginHelp</name>
+				<active>true</active>
+			</module>
+		</head_module>
 	</publicData>
 </modules>

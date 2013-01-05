@@ -6,6 +6,7 @@ require_once PATH_ACCESS . '/TableManager.php';
  */
 abstract class GlobalSettings {
 	const HELPTEXT = 'helptext';
+	const WEBLOGIN_HELPTEXT  = 'webLoginHelptext';
 	const RELIGION = 'religion';
 	const SPECIAL_COURSE = 'special_course';
 	const FOREIGN_LANGUAGE = 'foreign_language';

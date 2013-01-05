@@ -23,8 +23,8 @@ class Menu extends Module {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
-	public function execute($dataContainer) {
 
+	public function execute($dataContainer) {
 		$menuInterface = new AdminMenuInterface($dataContainer->getSmarty(), $this->relPath);
 		$menuProcessing = new AdminMenuProcessing($menuInterface);
 		$menuProcessing->ShowMenu();
