@@ -14,6 +14,10 @@ class UserManager extends TableManager{
 		parent::__construct('users');
 	}
 
+	function getUser ($uid) {
+		return $this->getEntryData($uid, '*');
+	}
+
 	/**
 	 * Returns the id of the user with the given username
 	 *

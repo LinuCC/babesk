@@ -274,6 +274,21 @@
 				<name>ChangePresetPassword</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Emailadresse verändern</ger_name>
+				<name>ChangeEmail</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Einstellungsmenü</ger_name>
+				<name>SettingsMainMenu</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Password verändern</ger_name>
+				<name>SettingsChangePassword</name>
+				<active>true</active>
+			</module>
 		</head_module>
 	</web>
 	<publicData>
