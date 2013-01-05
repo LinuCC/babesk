@@ -8,7 +8,8 @@
 	<label>neues Passwort: <input type='password' name='newPassword'></label><br>
 	<label>Passwort wiederholen: <input type='password' name='newPasswordRepeat'></label><br>
 	{if $onFirstLoginChangeEmail}
-	<label>Email-Adresse: <input type='text' name='newEmail'></label><br>
+	<label>Email-Adresse: {if !$emailChangeForced}(erwünscht){/if}
+	 <input type='text' name='newEmail'></label><br>
 	{/if}
 	<input type='submit' value="Einstellung ändern">
 </form>
