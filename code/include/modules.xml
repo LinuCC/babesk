@@ -284,6 +284,11 @@
 				<name>SettingsMainMenu</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Password verändern</ger_name>
+				<name>SettingsChangePassword</name>
+				<active>true</active>
+			</module>
 		</head_module>
 	</web>
 	<publicData>
