@@ -1234,6 +1234,9 @@ class KuwasysDatabaseAccess {
 		if (!$excModArr) {
 			return false;
 		}
+		if (!is_array($excModArr)) {
+			throw new Exception ('Exceptionmods has to be Array!');
+		}
 		foreach ($excModArr as $excMod) {
 			if ($excMod->exception == $excName ||
 				$excMod->exception == DbAccExceptionMods::$AllExceptions) {

@@ -382,7 +382,11 @@
 			<isClassMaxRegistrationReached_Exception>Konnte die maximal erlaubten Registrierungen für den Kurs nicht abrufen</isClassMaxRegistrationReached_Exception>
 			<addMultipleUser_Exception>Konnte die Benutzer nicht hinzufügen</addMultipleUser_Exception>
 			<getClassesByClassIdArray_Exception>Konnte die Kurse nicht abrufen.</getClassesByClassIdArray_Exception>
+			<getAllClasses_MySQLVoidDataException>Es sind keine Kurse vorhanden</getAllClasses_MySQLVoidDataException>
+			<getAllClasses_Exception>Die Kurse konnten nicht abgerufen werden</getAllClasses_Exception>
 			<statusGetMultipleByNames_Exception>Konnte die Statuse der Kurse nicht abrufen.</statusGetMultipleByNames_Exception>
+			<addJoint_Exception>Konnte eine Verlinkung nicht hinzufügen.</addJoint_Exception>
+			<webFetchJUserInClass_Exception>Konnte deine Kurse nicht abrufen!</webFetchJUserInClass_Exception>
 		</text>
 	</module>
 </gerOutputText>

@@ -49,28 +49,14 @@ class ClassList extends Module {
 
 		global $smarty;
 		$this->_smarty = $smarty;
-
-		$this->_jointUsersInClass = new KuwasysJointUsersInClass();
-		$this->_classManager = new KuwasysClassManager();
-		$this->_usersManager = new KuwasysUsersManager();
-		$this->_interface = new WebInterface($this->_smarty);
 		$this->_databaseAccessManager = new KuwasysDatabaseAccess ($this->_interface);
-		$this->initWeekdayIdArray ();
-		$firstStatusRequest = $this->_databaseAccessManager->usersInClassStatusGetByName ('request1');
-		$this->_firstStatusRequestId = $firstStatusRequest ['ID'];
-		$secondStatusRequest = $this->_databaseAccessManager->usersInClassStatusGetByName ('request2');
-		$this->_secondStatusRequestId = $secondStatusRequest['ID'];
+		$this->_userId = $_SESSION ['uid'];
+		$this->_interface = new WebInterface($this->_smarty);
 	}
 
-	private function initWeekdayIdArray () {
-		$classUnits = $this->_databaseAccessManager->kuwasysClassUnitGetAll ();
-		$classUnitIdArray = array();
-		foreach ($classUnits as $classUnit) {
-			$classUnitIdArray [] = $classUnit ['ID'];
-		}
-		$this->_weekdayIdArray = $classUnitIdArray;
-	}
-
+	/**
+	 * Shows the the List of selectable Classes to the User
+	 */
 	private function showClassList () {
 
 		$classes = $this->addRegistrationForUserAllowedToClass();
@@ -82,8 +68,11 @@ class ClassList extends Module {
 		$this->_smarty->display($this->_smartyPath . 'classList.tpl');
 	}
 
+	/**
+	 * Checks if the Class Registration is globally enabled
+	 * @return boolean true if classRegistration is enabled
+	 */
 	private function getIsClassRegistrationGloballyEnabled () {
-
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 		$globalSettingsManager = new GlobalSettingsManager();
 		try {
@@ -94,41 +83,43 @@ class ClassList extends Module {
 		return $value;
 	}
 
+	/**
+	 * returns all Classes
+	 * @return array () an array of Classobjects (represented by another array)
+	 * @ToDo return only the Classes of the active year
+	 */
 	private function getAllClasses () {
-
-		try {
-			$classes = $this->_classManager->getAllClasses();
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->DieError('Es sind keine Kurse vorhanden');
-		}
-		catch (Exception $e) {
-			$this->_interface->DieError('Die Kurse konnten nicht abgerufen werden');
-		}
+		$classes = $this->_databaseAccessManager->dbAccessExec (
+			KuwasysDatabaseAccess::ClassManager, 'getAllClasses');
 		return $classes;
 	}
 
+	/**
+	 * Returns all JUserInClass of the user logged in
+	 * @return array () All Joints, represented by another array
+	 */
 	private function getAllJointsUsersInClassOfUser () {
-
-		try {
-			$joints = $this->_jointUsersInClass->getAllJointsOfUserId($_SESSION['uid']);
-		} catch (MySQLVoidDataException $e) {
-			return false;
-		}
-		catch (Exception $e) {
-			$this->_interface->DieError('konnte deine Kurse nicht abrufen!');
-		}
-		return $joints;
+		$jFetchExc = new DbAccExceptionMods (DbAccExceptionMods::$MySQLVoidDataException, DbAccExceptionMods::$ModDoNothing);
+		$joints = $this->_databaseAccessManager->dbAccessExec (
+			KuwasysDatabaseAccess::JUserInClassManager, 'getAllJointsOfUserId',
+			array ($this->_userId), 'webFetchJUserInClass', array ($jFetchExc));
+		if (isset ($joints))
+			{return $joints;}
 	}
 
+	/**
+	 * Gets all classes and adds elements to the Array
+	 * These elements are describing if the registration for the classes are
+	 * allowed, This allows to display which class can be selected and which not.
+	 * @return array () An array of all classes, with some elements added
+	 */
 	private function addRegistrationForUserAllowedToClass () {
-
 		$classes = $this->getAllClasses();
 		$jointsUsersInClass = $this->getAllJointsUsersInClassOfUser();
 		$alreadyUsedWeekdays = array();
-
 		//init the array alreadyUsedWeekdays
 		foreach ($classes as $class) {
-			if ($jointsUsersInClass) {
+			if (isset($jointsUsersInClass)) {
 				foreach ($jointsUsersInClass as $joint) {
 					if ($joint['ClassID'] == $class['ID']) {
 						foreach ($alreadyUsedWeekdays as $weekday) {
@@ -141,7 +132,6 @@ class ClassList extends Module {
 				}
 			}
 		}
-
 		foreach ($classes as & $class) {
 			{
 				//check if $class can be selected by the User
@@ -169,43 +159,50 @@ class ClassList extends Module {
 		return $classes;
 	}
 
+	/**
+	 * Restructures the array of arrays representing objects after units
+	 * @return array the restructured array, every unit has its classes
+	 */
 	private function sortClassesAfterWeekdayInArray ($classes) {
-
 		$classesSorted = array();
-
 		foreach ($classes as $class) {
 			$classesSorted[$class['unitId']][] = $class;
 		}
 		return $classesSorted;
 	}
 
+	/**
+	 * The main-Routine to check and commit the selections of the User
+	 */
 	private function registerUserInClasses () {
-
-		$this->setSelections ();
-		$this->setSelectionVars ();
-		var_dump($this->_selections);
-
-		die ();
+		$this->checkClassListInput();
 		$this->checkIsClassRegistrationGloballyEnabled();
 		$this->checkAreAllPickedClassesEnabled();
-		$this->checkClassListInput();
 		$this->addRequestsToDatabase();
 		$this->_interface->DieMessage(
 			'Das Formular wurde erfolgreich verarbeitet. Im Hauptmenü sehen sie ihre Registrierungen.');
 	}
 
+	/**
+	 * Initializes the Selections of this class
+	 */
 	private function setSelections () {
 		//for each selection checked in the form, add an object
 		$selections = array ();
-		foreach ($this->_weekdayIdArray as $weekday) {
-			$unitId = $weekday;
-			if (isset($_POST['firstChoice' . $weekday])) {
-				$classId = $_POST['firstChoice' . $weekday];
+		$classUnits = $this->_databaseAccessManager->kuwasysClassUnitGetAll ();
+		$classUnitIds = array ();
+		foreach ($classUnits as $cU) {
+			$classUnitIds [] = $cU ['ID'];
+		}
+		foreach ($classUnitIds as $classUnit) {
+			$unitId = $classUnit;
+			if (isset($_POST['firstChoice' . $classUnit])) {
+				$classId = $_POST['firstChoice' . $classUnit];
 				$statusName = 'request1';
 				$selections [] = new clRegSelection ($classId, $statusName, $unitId);
 			}
-			if (isset($_POST['secondChoice' . $weekday])) {
-				$classId = $_POST['secondChoice' . $weekday];
+			if (isset($_POST['secondChoice' . $classUnit])) {
+				$classId = $_POST['secondChoice' . $classUnit];
 				$statusName = 'request2';
 				$selections [] = new clRegSelection ($classId, $statusName, $unitId);
 			}
@@ -213,6 +210,9 @@ class ClassList extends Module {
 		$this->_selections = $selections;
 	}
 
+	/**
+	 * Initializes the selections of this class further, replacing simple IDs with Objects
+	 */
 	private function setSelectionVars () {
 		$classIds = array ();
 		$statNames = array ();
@@ -234,37 +234,24 @@ class ClassList extends Module {
 		$this->_selections = ClRegSelection::unitsSet ($this->_selections, $units);
 	}
 
+	/**
+	 * Checks if all selected Classes are Enabled, else dies
+	 */
 	private function checkAreAllPickedClassesEnabled () {
 		$classes = ClRegSelection::classesGetBy ($this->_selections, $this->_databaseAccessManager);
 		foreach ($this->_selections as $sel) {
-			if(!$this->checkIsClassEnabled($classId, $classes)) {
+			if(!$this->checkIsClassEnabled($sel->class ['ID'], $classes)) {
 				$this->_interface->DieError('Entry forbidden. Stop Hacking!');
 			}
 		}
 	}
 
-	// private function checkAreAllPickedClassesEnabled () {
-
-	// 	$classes = $this->getAllClasses();
-
-	// 	foreach ($this->_weekdayIdArray as $weekday) {
-	// 		if (isset($_POST['firstChoice' . $weekday])) {
-	// 			$classId = $_POST['firstChoice' . $weekday];
-	// 			if(!$this->checkIsClassEnabled($classId, $classes)) {
-	// 				$this->_interface->DieError('Entry forbidden. Stop Hacking!');
-	// 			}
-	// 		}
-	// 		if (isset($_POST['secondChoice' . $weekday])) {
-	// 			$classId = $_POST['secondChoice' . $weekday];
-	// 			if(!$this->checkIsClassEnabled($classId, $classes)) {
-	// 				$this->_interface->DieError('Entry forbidden. Stop Hacking!');
-	// 			}
-	// 		}
-	// 	}
-	// }
-
+	/**
+	 * Checks if the Class is Enabled
+	 * @param $classId the ClassId of the Class to check
+	 * @param $allClasses the array of classes to search for the class of $classId
+	 */
 	private function checkIsClassEnabled ($classId, $allClasses) {
-
 		foreach ($allClasses as $class) {
 			if ($class ['ID'] == $classId) {
 				return (boolean) $class ['registrationEnabled'];
@@ -272,38 +259,39 @@ class ClassList extends Module {
 		}
 	}
 
+	/**
+	 * Checks if the ClassRegistration is globally enabled, else dies
+	 */
 	private function checkIsClassRegistrationGloballyEnabled () {
 		if(!$this->getIsClassRegistrationGloballyEnabled()) {
 			$this->_interface->DieError('Klassenregistration ist momentan nicht erlaubt!');
 		}
 	}
 
+	/**
+	 * Checks if the user selected something from the list, else dies
+	 */
 	private	function checkClassListInputForSomethingWasChecked () {
 		if (!count ($this->_selections)) {
 			$this->_interface->DieError('Es wurde nichts ausgewählt.');
 		}
 	}
 
-	// private function checkClassListInputForSomethingWasChecked () {
-
-	// 	foreach ($this->_weekdayIdArray as $weekday) {
-	// 		if (isset($_POST['firstChoice' . $weekday]) || isset($_POST['secondChoice' . $weekday])) {
-	// 			return;
-	// 		}
-	// 	}
-	// 	$this->_interface->DieError('Es wurde nichts ausgewählt.');
-	// }
-
+	/**
+	 * The main-Routine to check the input of the User
+	 */
 	private function checkClassListInput () {
-
-		$this->checkClassListInputForSomethingWasChecked();
-		foreach ($this->_weekdayIdArray as $weekday) {
-			$this->checkClassListInputForDoubledChoices($weekday);
-			$this->checkClassListInputForOnlySecondChoiceSelected($weekday);
-			$this->checkClassListInputForAlreadyExistingJointsForWeekday($weekday);
-		}
+		$this->setSelections ();
+		$this->checkClassListInputForSomethingWasChecked ();
+		$this->setSelectionVars ();
+		$this->checkClassListInputForDoubledChoices ();
+		$this->checkClassListInputForOnlySecondChoiceSelected ();
+		$this->checkClassListInputForExistingJoints ();
 	}
 
+	/**
+	 * checks the input of the user for doubled choices (class selected as first- and second-choice at the same time)
+	 */
 	private function checkClassListInputForDoubledChoices () {
 		foreach ($this->_selections as $sel) {
 			foreach ($this->_selections as $selCheck) {
@@ -317,17 +305,9 @@ class ClassList extends Module {
 		}
 	}
 
-
-	// private function checkClassListInputForDoubledChoices ($weekday) {
-
-	// 	if (isset($_POST['firstChoice' . $weekday], $_POST['secondChoice' . $weekday])) {
-	// 		if ($_POST['firstChoice' . $weekday] == $_POST['secondChoice' . $weekday]) {
-	// 			$this->_interface->DieError(
-	// 				'Ein Kurs kann nicht gleichzeitig als erste und als zweite Wahl gewählt werden!');
-	// 		}
-	// 	}
-	// }
-
+	/**
+	 * Checks if the user selected classes at one unit with only a second choice
+	 */
 	private function checkClassListInputForOnlySecondChoiceSelected () {
 		foreach ($this->_selections as $sel) {
 			if ($sel->status ['name'] == 'request2') {
@@ -339,16 +319,9 @@ class ClassList extends Module {
 		}
 	}
 
-	// private function checkClassListInputForOnlySecondChoiceSelected ($weekday) {
-
-	// 	if (isset($_POST['secondChoice' . $weekday]) && !isset($_POST['firstChoice' . $weekday])) {
-	// 		$this->_interface->DieError(sprintf(
-	// 						'Für einen bestimmten Tag wurde keine erste Wahl gewählt, aber eine Zweitwahl.
-	// 							Wenn sie nur eine Wahl haben, wählen sie den Kurs bitte als Erstwahl.%s', Kuwasys::$buttonBackToMM)
-	// 			);
-	// 	}
-	// }
-
+	/**
+	 * Checks if there are already Classes selected for that day
+	 */
 	private function checkClassListInputForExistingJoints () {
 		try {
 			$joints = ClRegSelection::jUserInClassGetByStatus ($this->_selections, $this->_databaseAccessManager);
@@ -359,93 +332,56 @@ class ClassList extends Module {
 		foreach ($joints as $joint) {
 			$classIds [] = $joint ['ClassID'];
 		}
+		//get all classes of classIds
 		$classes = $this->_databaseAccessManager->dbAccessExec (
 			KuwasysDatabaseAccess::ClassManager, 'getClassesByClassIdArray',
 			array ($classIds));
 		foreach ($this->_selections as $sel) {
-			foreach ($classes as $class) {
-				if ($sel->class ['unitId'] == $class ['unitId']) {
-
-				}
+			$extrClasses = $this->extrElements ($classes, 'unitId', $sel->class ['unitId']); //Classes with the same unitId
+			if (count ($extrClasses)) {
+				$this->_interface->DieError(sprintf('Du bist am %s schon für Kurse angemeldet! %s', $sel->unit ['translatedName'], Kuwasys::$buttonBackToMM));
 			}
 		}
 	}
 
-
-	// private function checkClassListInputForAlreadyExistingJointsForWeekday ($weekday) {
-	// 	var_dump($_POST['firstChoice' .
-	// 					$weekday]);
-	// 	if (isset($_POST['firstChoice' . $weekday])) {
-	// 		try {
-	// 			try {
-	// 				$this->_jointUsersInClass->getJointOfUserIdAndClassId($_SESSION['uid'], $_POST['firstChoice' .
-	// 					$weekday]);
-	// 			} catch (MySQLVoidDataException $e) {
-	// 				//correct when no joint found
-	// 				throw new Exception();
-	// 			} catch (Exception $e) {
-	// 				$this->_interface->DieError('Fehler beim Abrufen von Daten!');
-	// 			}
-	// 			$this->_interface->DieError(sprintf('Sie sind schon für diesen Kurs angemeldet! %s', Kuwasys::$buttonBackToMM));
-	// 		} catch (Exception $e) {
-	// 		}
-	// 	}
-	// 	if (isset($_POST['secondChoice' . $weekday])) {
-	// 		try {
-	// 			try {
-	// 				$this->_jointUsersInClass->getJointOfUserIdAndClassId($_SESSION['uid'], $_POST['firstChoice' .
-	// 					$weekday]);
-	// 			} catch (MySQLVoidDataException $e) {
-	// 				//correct when no joint found
-	// 				throw new Exception();
-	// 			} catch (Exception $e) {
-	// 				$this->_interface->DieError('Fehler beim Abrufen von Daten!');
-	// 			}
-	// 			$this->_interface->DieError(sprintf('Sie sind schon für diesen Kurs angemeldet! %s', Kuwasys::$buttonBackToMM));
-	// 		} catch (Exception $e) {
-	// 		}
-	// 	}
-	// }
-
-	// private function checkClassListInputForAlreadyExistingJointsForWeekday ($weekday) {
-	// }
-
-	// private function checkClInputForJointsBy ($status, $unitId) {
-	// 	$this->_databaseAccessManager->dbAccessExec (KuwasysDatabaseAccess::JUserInClassManager, 'getAllJointsByStatusIdAndUserId', array ($status, $_SESSION ['uid']))
-	// }
-
+	/**
+	 * Commits the selections of the User to the database
+	 */
 	private function addRequestsToDatabase () {
-		die ();
-		$userId = $_SESSION['uid'];
-
-		foreach ($this->_weekdayIdArray as $weekday) {
-			if (isset($_POST['firstChoice' . $weekday])) {
-				$firstChoiceClassId = $_POST['firstChoice' . $weekday];
-				$this->_jointUsersInClass->addJoint($userId, $firstChoiceClassId, $this->_firstStatusRequestId);
-			}
-			if (isset($_POST['secondChoice' . $weekday])) {
-				$secondChoiceClassId = $_POST['secondChoice' . $weekday];
-				$this->_jointUsersInClass->addJoint($userId, $secondChoiceClassId, $this->_secondStatusRequestId);
-			}
+		foreach ($this->_selections as $sel) {
+			$this->_databaseAccessManager->dbAccessExec (
+				KuwasysDatabaseAccess::JUserInClassManager, 'addJoint',
+				array ($this->_userId, $sel->class ['ID'], $sel->status ['ID']));
 		}
 	}
 
+	/**
+	 * Extracts an Element from an Array
+	 */
+	private function extrElements ($array, $needleName, $needle) {
+		$elements = array ();
+		foreach ($array as $element) {
+			if (!isset($element [$needleName])) {
+				continue;
+			}
+			if ($element [$needleName] == $needle) {
+				$elements [] = $element;
+			}
+		}
+
+		return $elements;
+	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
 	////////////////////////////////////////////////////////////////////////////////
 
-	private $_jointUsersInClass;
-	private $_classManager;
-	private $_usersManager;
 	private $_databaseAccessManager;
 	private $_interface;
 	private $_smarty;
 	private $_smartyPath;
-	private $_weekdayIdArray;
-	private $_firstStatusRequestId;
-	private $_secondStatusRequestId;
 
 	private $_selections;
+	private $_userId;
 }
 
 ?>

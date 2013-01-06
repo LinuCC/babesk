@@ -1,7 +1,7 @@
 <?php
 
 
-require_once PATH_ACCESS_KUWASYS . 'KuwasysDatabaseAccess.php';
+require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysDatabaseAccess.php';
 
 /**
  * Represents one selection in the Classlist
