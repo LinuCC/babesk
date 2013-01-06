@@ -328,6 +328,9 @@ class ClassList extends Module {
 		} catch (MySQLVoidDataException $e) {
 			return; //no joints existing, no problems
 		}
+		if (!count ($joints)) {
+			return; //workaround for bug, DbMultiQueryManager not throwing when void
+		}
 		$classIds = array ();
 		foreach ($joints as $joint) {
 			$classIds [] = $joint ['ClassID'];
