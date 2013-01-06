@@ -90,10 +90,15 @@ class UsersCsvImport {
 	protected static function jUserInGradeToDb ($rows) {
 		$toAdd = array ();
 		foreach ($rows as $row) {
-			$process = new DbAMRow ();
-			$process->processFieldAdd ('UserID', $row ['_userId']);
-			$process->processFieldAdd ('GradeID', $row ['_gradeId']);
-			$toAdd [] = $process;
+			if ($row ['_gradeId']) {
+				$process = new DbAMRow ();
+				$process->processFieldAdd ('UserID', $row ['_userId']);
+				$process->processFieldAdd ('GradeID', $row ['_gradeId']);
+				$toAdd [] = $process;
+			}
+			else {
+				$this->_interface->showError (sprintf ('Konnte den Nutzer mit der ID "%s" nicht zu seiner Klasse hinzufügen'));
+			}
 		}
 		self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::JUserInGradeManager,
 			'addMultipleJoints', array ($toAdd));
@@ -103,16 +108,21 @@ class UsersCsvImport {
 		$toSearch = array ();
 		$toComp = array ();
 		foreach ($rows as &$row) {
-			$grade = self::gradeSplit($row [self::$_csvStructure ['GradeName']]);
+			$rowGrade = $row [self::$_csvStructure ['GradeName']];
+			if ($rowGrade == '') {
+				continue;
+			}
+			$grade = self::gradeSplit($rowGrade);
 			$searchRow = new DbAMRow ();
 			$searchRow->searchFieldAdd ('gradeValue', $grade [0]);
 			$searchRow->searchFieldAdd ('label', $grade [1]);
 			$toSearch [] = $searchRow;
 			$toComp [] = $grade;
 		}
-		$grades = self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::GradeManager, 'getMultipleGrades', array($toSearch));
-		$rows = self::nonExGradeAdd ($grades, $toComp, $rows);
-		var_dump($rows);
+		if (count ($toSearch)) {
+			$grades = self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::GradeManager, 'getMultipleGrades', array($toSearch));
+			$rows = self::nonExGradeAdd ($grades, $toComp, $rows);
+		}
 		return $rows;
 	}
 
@@ -139,7 +149,10 @@ class UsersCsvImport {
 			foreach ($rows as &$row) {//add GradeID to row
 				if ($row ['grade'] == $gradeComp [0] . $gradeComp [1]) {
 					$row ['_gradeId'] = $nextDbGradeId;
-					break;
+					continue;
+				}
+				else {
+					$row ['_gradeId'] = false;
 				}
 			}
 			$nextDbGradeId ++;
