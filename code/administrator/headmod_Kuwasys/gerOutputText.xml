@@ -381,6 +381,8 @@
 			<JUserInClassGetByStatusId_Exception>Konnte die aktiven Nutzer nicht abrufen</JUserInClassGetByStatusId_Exception>
 			<isClassMaxRegistrationReached_Exception>Konnte die maximal erlaubten Registrierungen für den Kurs nicht abrufen</isClassMaxRegistrationReached_Exception>
 			<addMultipleUser_Exception>Konnte die Benutzer nicht hinzufügen</addMultipleUser_Exception>
+			<getClassesByClassIdArray_Exception>Konnte die Kurse nicht abrufen.</getClassesByClassIdArray_Exception>
+			<statusGetMultipleByNames_Exception>Konnte die Statuse der Kurse nicht abrufen.</statusGetMultipleByNames_Exception>
 		</text>
 	</module>
 </gerOutputText>
