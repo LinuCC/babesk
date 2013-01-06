@@ -24,6 +24,7 @@ class MainMenu extends Module {
 
 		$this->entryPoint();
 		$classes = $this->getAllClassesOfUser();
+		$classes = $this->sortClassesByUnit ($classes);
 		$this->displayMainMenu($classes);
 	}
 	////////////////////////////////////////////////////////////////////////////////
@@ -42,11 +43,13 @@ class MainMenu extends Module {
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
+		require_once PATH_ACCESS_KUWASYS . '/KuwasysClassUnitManager.php';
 
 		$this->_classManager = new KuwasysClassManager();
 		$this->_userManager = new KuwasysUsersManager();
 		$this->_jointUsersInClassManager = new KuwasysJointUsersInClass();
 		$this->_usersInClassStatusManager = new KuwasysUsersInClassStatusManager ();
+		$this->_classUnitManager = new KuwasysClassUnitManager ();
 	}
 
 	private function getAllClassesOfUser () {
@@ -56,12 +59,31 @@ class MainMenu extends Module {
 			foreach ($jointsUsersInClass as $joint) {
 				$class = $this->getClassFromDatabase($joint['ClassID']);
 				$status = $this->usersInClassStatusGet ($joint['statusId']);
+				$unit = $this->unitOfClassGet ($class ['unitId']);
 				if ($status)
 					$class['statusTranslated'] = $status ['translatedName'];
+				if ($unit)
+					{$class ['unit'] = $unit;}
 				$classes[] = $class;
 			}
 			return $classes;
 		}
+	}
+
+	protected function sortClassesByUnit ($classes) {
+		if (!$classes)
+			{return;}
+		$sorted = array ();
+		foreach ($classes as $class) {
+			foreach ($sorted as $unit) {
+				if ($unit->unit ['ID'] == $class ['unit'] ['ID']) {
+					$unit->classes [] = $class;
+					continue 2;
+				}
+			}
+			$sorted [] = new SortedClassesByUnits ($class ['unit'], $class);
+		}
+		return $sorted;
 	}
 
 	private function usersInClassStatusGet ($statusId) {
@@ -71,6 +93,15 @@ class MainMenu extends Module {
 			return false;
 		}
 		return $status;
+	}
+
+	protected function unitOfClassGet ($unitId) {
+		try {
+			$unit = $this->_classUnitManager->unitGet ($unitId);
+		} catch (Exception $e) {
+			$this->dieErrorMsg ('Konnte bestimmten Kursen keine Tage zuordnen');
+		}
+		return $unit;
 	}
 
 	private function getAllJointsUsersInClassOfUser () {
@@ -126,9 +157,19 @@ class MainMenu extends Module {
 	private $_classManager;
 	private $_userManager;
 	private $_jointUsersInClassManager;
+	protected $_classUnitManager;
 	private $_usersInClassStatusManager;
 	private $_smarty;
 	private $_smartyPath;
+}
+
+class SortedClassesByUnits {
+	public function __construct ($unit, $class) {
+		$this->unit = $unit;
+		$this->classes [] = $class;
+	}
+	public $classes;
+	public $unit;
 }
 
 ?>
