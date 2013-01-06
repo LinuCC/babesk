@@ -9,7 +9,7 @@ Die CSV-Datei sollte folgende Schlüssel beinhalten:
 		<th>forename</th>
 		<th>name</th>
 		<th>wholeName</th>
-		<th>address</th>
+		<th>adress</th>
 		<th>telephone</th>
 	</tr>
 	<tr>

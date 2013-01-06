@@ -94,7 +94,7 @@ class ClassteacherCsvImport {
 		'Name' => 'name',
 		'Forename' => 'forename',
 		'WholeName' => 'wholeName',
-		'Adress' => 'address',
+		'Adress' => 'adress',
 		'Telephone' => 'telephone',
 		);
 }
