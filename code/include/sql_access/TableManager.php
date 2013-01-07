@@ -225,13 +225,13 @@ class TableManager {
 				//is_numeric killed the zeros leading numbers, problem with telephonenumber. (0581/642 etc. ftw)
 				else if ( /*!is_numeric*/(func_get_arg($i - 1))) {
 					//MySQL needs quotation marks for strings
-					$column_value_str .= '"' . func_get_arg($i - 1) . '",';
+					$column_value_str .= "'" . func_get_arg($i - 1) . "',";
 				}
 				else if ((func_get_arg($i - 1)) === '') {
-					$column_value_str .= '"' . func_get_arg($i - 1) . '",';
+					$column_value_str .= "'" . func_get_arg($i - 1) . "',";
 				}
 				else {
-					$column_value_str .= '"' . func_get_arg($i - 1) . '",';
+					$column_value_str .= "'" . func_get_arg($i - 1) . "',";
 				}
 			}
 		}

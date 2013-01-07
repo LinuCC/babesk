@@ -371,7 +371,7 @@
 			<classUnitsErrorNotFound>Es konnten keine Klasseneinheiten gefunden werden</classUnitsErrorNotFound>
 			<classUnitsErrorFetch>Die Klasseneinheiten konnten nicht abgerufen werden</classUnitsErrorFetch>
 			<!-- names of refactored functions; use "%s" to show the Exception-Message-->
-			<classAdd_Exception>Konnte den Kurs aufgrund eines Datenbankfehlers nicht hinzufügen</classAdd_Exception>
+			<classAdd_Exception>Konnte den Kurs aufgrund eines Datenbankfehlers nicht hinzufügen %s</classAdd_Exception>
 			<classDelete_Exception>Konnte den Kurs aufgrund eines Datenbankfehlers nicht löschen.</classDelete_Exception>
 			<classLabelGet_Exception>Konnte einen Kursnamen nicht abrufen: %s</classLabelGet_Exception>
 			<classGetById_Exception>Konnte einen Kurs nicht abrufen</classGetById_Exception>
