@@ -49,9 +49,9 @@ class ClassList extends Module {
 
 		global $smarty;
 		$this->_smarty = $smarty;
+		$this->_interface = new WebInterface($this->_smarty);
 		$this->_databaseAccessManager = new KuwasysDatabaseAccess ($this->_interface);
 		$this->_userId = $_SESSION ['uid'];
-		$this->_interface = new WebInterface($this->_smarty);
 	}
 
 	/**
