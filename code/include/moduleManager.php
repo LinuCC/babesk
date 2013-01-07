@@ -241,16 +241,14 @@ class ModuleManager {
 		$this->programPartPath = (string) $mod_xml->$program_part->path;
 		foreach ($mod_xml->$program_part->head_module as $head_mod) {
 
-			if (!isset($head_mod->active) || $head_mod->active != true) {
-				echo 'A headmodule is not active; it will not be used.';
+			if (!isset($head_mod->active) || $head_mod->active != 'true') {
 				continue;
 			}
 			$headModule = $this->extractHeadModule($head_mod);
 
 			foreach ($head_mod->module as $module) {
 
-				if (!isset($module->active) || $module->active != true) {
-					echo 'A module is not active; it will not be used.';
+				if (!isset($module->active) || $module->active != 'true') {
 					continue;
 				}
 				$this->extractModule($module, $headModule);
