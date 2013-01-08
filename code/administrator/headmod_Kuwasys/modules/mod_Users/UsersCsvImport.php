@@ -3,7 +3,7 @@
 require_once PATH_INCLUDE . '/CsvImporter.php';
 
 class UsersCsvImport {
-	/////////////////////////////////////////////////////////////////////
+	//WACKEN
 	//Constructor
 	/////////////////////////////////////////////////////////////////////
 
@@ -25,6 +25,15 @@ class UsersCsvImport {
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
+	protected static function dataToDb ($rows) {
+		self::usersToAddInit ($rows);
+		self::usersSetId ();
+		self::usersSetToActiveSchoolyear ();
+		self::grades ();
+		self::upload ();
+		self::$_interface->dieMsg ('Die Daten wurden erfolgreich hochgeladen');
+	}
+
 	protected static function varControl ($rows) {
 		foreach ($rows as &$row) {
 			foreach (self::$_csvStructure as $key) {
@@ -41,154 +50,101 @@ class UsersCsvImport {
 		return $rowArray;
 	}
 
-	protected static function dataToDb ($rows) {
-		try {
-			$rows = self::gradesHandle ($rows);
-			$rows = self::userToDb ($rows);
-			self::jUserInGradeToDb ($rows);
-		} catch (Exception $e) {
-			self::$_interface->dieError ('Konnte die Benutzer nicht importieren. Möglicherweise ist die Datenbank nun beschädigt! Fehler:' . $e->getMessage());
-		}
-	}
-
-	/**
-	 * Adds the new Users to the Db and adds the element _userId to the $rows
-	 */
-	protected static function userToDb ($rows) {
-		$toAdd = array ();
-		$schoolyear = self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::SchoolyearManager, 'getActiveSchoolyear');
-		$userId = self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::UserManager,
-			'getNextAIUserId', array());
-		foreach ($rows as &$row) {
-			$process = new DbAMRow ();
-			foreach (self::$_csvStructure as $key) {
-				if ($key == self::$_csvStructure ['GradeName']) {
-					// do Nothing
-				}
-				else if ($key == self::$_csvStructure ['Birthday']) {
-					$timestamp = strtotime ($row [self::$_csvStructure ['Birthday']]);
-					$parsed = date ('Y-m-d', $timestamp);
-					echo "<br>DATE:";
-					var_dump($parsed);
-					echo "<br>";
-					$process->processFieldAdd ($key, $parsed);
-				}
-				else {
-					$process->processFieldAdd ($key, $row [$key]);
-				}
-			}
-			$toAdd [] = $process;
-			$row ['_userId'] = $userId;
-			$userId ++;
-		}
-		self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::UserManager,
-			'addMultipleUser', array ($toAdd), 'addMultipleUser');
-		self::jUserSchoolyearAdd ($rows);
-		return $rows;
-	}
-
-	protected static function jUserInGradeToDb ($rows) {
-		$toAdd = array ();
+	protected static function usersToAddInit ($rows) {
 		foreach ($rows as $row) {
-			if ($row ['_gradeId']) {
-				$process = new DbAMRow ();
-				$process->processFieldAdd ('UserID', $row ['_userId']);
-				$process->processFieldAdd ('GradeID', $row ['_gradeId']);
-				$toAdd [] = $process;
-			}
-			else {
-				$this->_interface->showError (sprintf ('Konnte den Nutzer mit der ID "%s" nicht zu seiner Klasse hinzufügen'));
-			}
+			self::$_usersToUpload [] = new UCsvIUserToUpload ($row);
 		}
-		self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::JUserInGradeManager,
-			'addMultipleJoints', array ($toAdd));
 	}
 
-	protected static function gradesHandle ($rows) {
-		$toSearch = array ();
-		$toComp = array ();
-		foreach ($rows as &$row) {
-			$rowGrade = $row [self::$_csvStructure ['GradeName']];
-			if ($rowGrade == '') {
+	protected static function usersSetToActiveSchoolyear () {
+		$active = self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::SchoolyearManager, 'getActiveSchoolyear');
+		foreach (self::$_usersToUpload as $user) {
+			$user->schoolyear = $active;
+		}
+	}
+
+	protected static function usersSetId () {
+		$next = self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::UserManager,
+			'getNextAIUserId', array());
+		foreach (self::$_usersToUpload as $user) {
+			$user->id = $next;
+			$next ++;
+		}
+	}
+
+	protected static function grades () {
+		$grades = self::gradesFetch ();
+		foreach (self::$_usersToUpload as &$user) {
+			if ($user->gradeName == '') {
 				continue;
 			}
-			$grade = self::gradeSplit($rowGrade);
-			$searchRow = new DbAMRow ();
-			$searchRow->searchFieldAdd ('gradeValue', $grade [0]);
-			$searchRow->searchFieldAdd ('label', $grade [1]);
-			$toSearch [] = $searchRow;
-			$toComp [] = $grade;
-		}
-		if (count ($toSearch)) {
-			$grades = self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::GradeManager, 'getMultipleGrades', array($toSearch));
-			$rows = self::nonExGradeAdd ($grades, $toComp, $rows);
-		}
-		return $rows;
-	}
-
-	/**
-	 * Checks for non-existend Grades and adds them to the db
-	 */
-	protected static function nonExGradeAdd ($grades, $compGrades, $rows) {
-		$toAdd = array (); //grades to add to db
-		$nextDbGradeId = self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::GradeManager, 'getNextAIGradeId');
-		foreach ($compGrades as $gradeComp) {
-			if (isset ($grades)) {
-				foreach ($grades as $grade) {
-					$wholeName = $grade ['gradeValue'] . $grade ['label'];
-					if ($wholeName == $gradeComp [0] . $gradeComp [1]) {
-						$rows = self::gradeIdAdd ($grade, $rows);
-						continue 2;
-					}
-				}
+			else if ($grade = self::gradesHasGrade ($grades, $user->gradeName)) {
+				$user->grade = $grade;
 			}
-			self::jGradeSchoolyearAdd ($nextDbGradeId);
-			$toAdd [] = new DbAMRow (array(
-				array(DbAMRow::$ProcessField, new DbAMField('gradeValue', $gradeComp [0])),
-				array(DbAMRow::$ProcessField, new DbAMField('label', $gradeComp [1]))));
-			foreach ($rows as &$row) {//add GradeID to row
-				if ($row ['grade'] == $gradeComp [0] . $gradeComp [1]) {
-					$row ['_gradeId'] = $nextDbGradeId;
-					continue;
-				}
-				else {
-					$row ['_gradeId'] = false;
-				}
-			}
-			$nextDbGradeId ++;
-		}
-		if (count ($toAdd)) {
-			self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::GradeManager,
-				'addMultipleGrades', array($toAdd));
-		}
-		return $rows;
-	}
-
-	protected static function jGradeSchoolyearAdd ($gradeId) {
-		$schoolyear = self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::SchoolyearManager, 'getActiveSchoolyear');
-		self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::JGradeInSchoolyearManager, 'addJoint',
-			array ($gradeId, $schoolyear ['ID']));
-	}
-
-	protected static function jUserSchoolyearAdd ($rows) {
-		$schoolyear = self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::SchoolyearManager, 'getActiveSchoolyear');
-		$proc = array ();
-		foreach ($rows as $row) {
-			$process = new DbAMRow ();
-			$process->processFieldAdd('UserID', $row ['_userId']);
-			$process->processFieldAdd('SchoolYearID', $schoolyear ['ID']);
-			$proc [] = $process;
-		}
-		self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::JUserInSchoolyearManager, 'addMultipleJoints', array ($proc));
-	}
-
-	protected static function gradeIdAdd ($grade, $rows) {
-		foreach ($rows as &$row) {//add GradeID to row
-			if ($row ['grade'] == $grade ['gradeValue'] . $grade ['label']) {
-				$row ['_gradeId'] = $grade ['ID'];
+			else {
+				$gradeId = self::gradeAdd ($user->gradeName);
+				$user->grade = self::gradeMake ($gradeId, $user->gradeName);
 			}
 		}
-		return $rows;
+		self::gradesSetToActiveSchoolyear ();
+	}
+
+	protected static function gradesSetToActiveSchoolyear () {
+		if (!count (self::$_gradesToUpload))
+			{return;}
+		$active = self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::SchoolyearManager, 'getActiveSchoolyear');
+		foreach (self::$_gradesToUpload as $grade) {
+			$grade->schoolyear = $active;
+		}
+	}
+
+	protected static function gradesFetch () {
+		$toFetch = array ();
+		foreach (self::$_usersToUpload as $user) {
+			if ($user->gradeName == '') {
+				continue; // no Grade given, no need to search for it
+			}
+			$grade = self::gradeSplit ($user->gradeName);
+			$row = new DbAMRow ();
+			$row->searchFieldAdd ('gradeValue', $grade [0]);
+			$row->searchFieldAdd ('label', $grade [1]);
+			$toFetch [] = $row;
+		}
+		if (!count ($toFetch)) {
+			return array ();
+		}
+		$grades = self::$_dbMng->dbAccessExec (
+			KuwasysDatabaseAccess::GradeManager, 'getMultipleGrades',
+			array($toFetch));
+		return $grades;
+	}
+
+	protected static function gradesHasGrade ($grades, $gradeName) {
+		foreach ($grades as $grade) {
+			if ($grade ['gradeValue'] . $grade ['label'] == $gradeName) {
+				return $grade;
+			}
+		}
+		if (!count (self::$_gradesToUpload)) {
+			return false;
+		}
+		foreach (self::$_gradesToUpload as $grade) {
+			if ($grade->gradeValue . $grade->gradeLabel == $gradeName) {
+				return $grade->toArray ();
+			}
+		}
+		return false;
+	}
+
+	protected static function gradeAdd ($gradeName) {
+		if (!isset(self::$_aiGradeId)) {
+			self::$_aiGradeId = self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::GradeManager, 'getNextAIGradeId');
+		}
+		$gradeId = self::$_aiGradeId;
+		$name = self::gradeSplit ($gradeName);
+		self::$_gradesToUpload [] = new UCsvIGradeToAdd ($name [1], $name [0], $gradeId);
+		self::$_aiGradeId ++;
+		return $gradeId;
 	}
 
 	protected static function gradeSplit ($gradeName) {
@@ -204,14 +160,125 @@ class UsersCsvImport {
 		return $elements;
 	}
 
+	protected static function gradeMake ($gradeId, $gradeName) {
+		$names = self::gradeSplit ($gradeName);
+		return array ('ID' => $gradeId,
+			'gradeValue' => $names [0],
+			'label' => $names [1]
+			);
+	}
+
+	protected static function upload () {
+		try {
+			self::userUpload ();
+			self::jUserInGradeUpload ();
+			self::jUserInSchoolyearUpload ();
+			self::gradeUpload ();
+			self::jGradeInSchoolyearUpload ();
+		} catch (Exception $e) {
+			self::$_interface->dieError (sprintf('Nicht alle Daten konnten hochgeladen werden, die Datenbank ist jetzt wahrscheinlich beschädigt. Fehler: %s', $e->getMessage ()));
+		}
+	}
+
+	protected static function userUpload () {
+		$rows = array ();
+		foreach (self::$_usersToUpload as $user) {
+			$row = new DbAMRow ();
+			$row->processFieldAdd (self::$_csvStructure ['Forename'],
+				$user->forename);
+			$row->processFieldAdd (self::$_csvStructure ['Name'],
+				$user->name);
+			$row->processFieldAdd (self::$_csvStructure ['Username'],
+				$user->username);
+			$row->processFieldAdd (self::$_csvStructure ['Password'],
+				$user->password);
+			$row->processFieldAdd (self::$_csvStructure ['Email'],
+				$user->email);
+			$row->processFieldAdd (self::$_csvStructure ['Birthday'],
+				$user->birthday);
+			$row->processFieldAdd (self::$_csvStructure ['Telephone'],
+				$user->telephone);
+			$rows [] = $row;
+		}
+		if (count ($rows)) {
+			self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::UserManager,
+				'addMultipleUser', array ($rows), 'addMultipleUser');
+		}
+	}
+
+	protected static function jUserInGradeUpload () {
+		$rows = array ();
+		foreach (self::$_usersToUpload as $user) {
+			$row = new DbAMRow ();
+			$row->processFieldAdd ('UserID', $user->id);
+			$row->processFieldAdd ('GradeID', $user->grade ['ID']);
+			$rows [] = $row;
+		}
+		if (count ($rows)) {
+			self::$_dbMng->dbAccessExec (
+				KuwasysDatabaseAccess::JUserInGradeManager,
+				'addMultipleJoints', array ($rows));
+		}
+	}
+
+	protected static function jUserInSchoolyearUpload () {
+		$rows = array ();
+		foreach (self::$_usersToUpload as $user) {
+			$row = new DbAMRow ();
+			$row->processFieldAdd ('UserID', $user->id);
+			$row->processFieldAdd ('SchoolYearID', $user->schoolyear ['ID']);
+			$rows [] = $row;
+		}
+		if (count ($rows)) {
+			self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::JUserInSchoolyearManager, 'addMultipleJoints', array ($rows));
+		}
+	}
+
+	protected static function gradeUpload () {
+		if (!count (self::$_gradesToUpload))
+			{return;}
+		$rows = array ();
+		foreach (self::$_gradesToUpload as $grade) {
+			$row = new DbAMRow ();
+			$row->processFieldAdd ('ID', $grade->gradeId);
+			$row->processFieldAdd ('gradeValue', $grade->gradeValue);
+			$row->processFieldAdd ('label', $grade->gradeLabel);
+			$rows [] = $row;
+		}
+		if (count ($rows)) {
+			self::$_dbMng->dbAccessExec (KuwasysDatabaseAccess::GradeManager,
+					'addMultipleGrades', array($rows));
+		}
+	}
+
+	protected static function jGradeInSchoolyearUpload () {
+		if (!count (self::$_gradesToUpload))
+			{return;}
+		$rows = array ();
+		foreach (self::$_gradesToUpload as $grade) {
+			$row = new DbAMRow ();
+			$row->processFieldAdd ('GradeID', $grade->gradeId);
+			$row->processFieldAdd ('SchoolYearID', $grade->schoolyear ['ID']);
+			$rows [] = $row;
+		}
+		if (count ($rows)) {
+			self::$_dbMng->dbAccessExec (
+				KuwasysDatabaseAccess::JGradeInSchoolyearManager,
+				'addMultipleJoints', array ($rows));
+		}
+	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
 
+	protected static $_usersToUpload;
+	protected static $_gradesToUpload;
+	protected static $_aiGradeId; // the id of the grade that is next added
+
 	protected static $_interface;
 	protected static $_dbMng;
-	protected static $_csvStructure = array (
+	public static $_csvStructure = array (
 		'Forename' => 'forename',
 		'Name' => 'name',
 		'Username' => 'username',
@@ -221,6 +288,58 @@ class UsersCsvImport {
 		'Birthday' => 'birthday',
 		'GradeName' => 'grade',
 		);
+}
+
+class UCsvIUserToUpload {
+	public function __construct ($row) {
+		$this->forename = $row [UsersCsvImport::$_csvStructure ['Forename']];
+		$this->name = $row [UsersCsvImport::$_csvStructure ['Name']];
+		$this->username = $row [UsersCsvImport::$_csvStructure ['Username']];
+		$this->password = $row [UsersCsvImport::$_csvStructure ['Password']];
+		$this->email = $row [UsersCsvImport::$_csvStructure ['Email']];
+		$this->telephone = $row [UsersCsvImport::$_csvStructure ['Telephone']];
+		$this->birthday = $row [UsersCsvImport::$_csvStructure ['Birthday']];
+		$this->gradeName = $row [UsersCsvImport::$_csvStructure ['GradeName']];
+	}
+
+	public function birthdayParse () {
+		$timestamp = strtotime ($this->birthday);
+		$parsed = date ('Y-m-d', $timestamp);
+		$this->birthday = $parsed;
+	}
+
+	public $id;
+	public $grade;
+	public $schoolyear;
+
+	public $forename;
+	public $name;
+	public $username;
+	public $password;
+	public $email;
+	public $telephone;
+	public $birthday;
+	public $gradeName;
+
+}
+
+class UCsvIGradeToAdd {
+	public function __construct ($label, $value, $id) {
+		$this->gradeLabel = $label;
+		$this->gradeValue = $value;
+		$this->gradeId = $id;
+	}
+
+	public function toArray () {
+		return array ('ID' => $this->gradeId,
+			'gradeValue' => $this->gradeValue,
+			'label' => $this->gradeLabel);
+	}
+
+	public $gradeId;
+	public $gradeValue;
+	public $gradeLabel;
+	public $schoolyear;
 }
 
 ?>
