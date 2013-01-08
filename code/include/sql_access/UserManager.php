@@ -18,6 +18,14 @@ class UserManager extends TableManager{
 		return $this->getEntryData($uid, '*');
 	}
 
+	public function changeUsers ($rows) {
+		$qMng = $this->getMultiQueryManager ();
+		foreach ($rows as $row) {
+			$qMng->rowAdd ($row);
+		}
+		$qMng->dbExecute (DbMultiQueryManager::$Alter);
+	}
+
 	/**
 	 * Returns the id of the user with the given username
 	 *
