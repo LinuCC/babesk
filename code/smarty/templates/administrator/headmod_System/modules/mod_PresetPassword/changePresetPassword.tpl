@@ -9,7 +9,7 @@ Um für bereits bestehende Schüler das Passwort zurückzusetzen, gehen sie bitt
 "Passwörter zurücksetzen" <b> (noch nicht implementiert!) </b>
 </p>
 
-<form action='index.php?section=System|PresetPassword&action=changePassword' method='post'>
+<form action='index.php?section=System|PresetPassword&action=changePassword&webRedirect=1' method='post'>
 
 	<label>Passwort: <input type='password' name='newPassword'></label><br><br>
 	<label>Neueingabe des Passworts beim ersten Login:

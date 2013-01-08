@@ -63,9 +63,14 @@ class Web {
 
 		if (!$this->_loggedIn) {
 			$this->logIn();
+			$this->redirect ();
 		}
 
-		//seems like something that Smarty itself needs
+		if (isset($_GET ['webRedirect'])) { //redirect to a module
+			$this->redirect ();
+		}
+
+		///@fix: does this have a purpose?
 		$this->_smarty->assign('status', ''); //???
 
 		$userData = $this->_userManager->getUserdata($_SESSION['uid']);
@@ -140,8 +145,8 @@ class Web {
 		$this->_smarty->assign('error', '');
 	}
 
-	/** Checks if the User has a preset Password and has not changed it yet
-	 *
+	/**
+	 * Checks if the User has a preset Password and has not changed it yet
 	 */
 	private function checkFirstPassword () {
 		$changePasswordOnFirstLoginEnabled = $this->_gsManager->valueGet (GlobalSettings::FIRST_LOGIN_CHANGE_PASSWORD);
@@ -152,6 +157,25 @@ class Web {
 				$this->_moduleManager->execute ('Settings|ChangePresetPassword');
 				die ();
 			}
+		}
+	}
+
+	/**
+	 * handles if the user gets redirected after some seconds
+	 */
+	private function redirect () {
+		try {
+			$redirectDelay = $this->_gsManager->valueGet (
+				GlobalSettings::WEBHP_REDIRECT_DELAY);
+			$redirectTarget = $this->_gsManager->valueGet (
+				GlobalSettings::WEBHP_REDIRECT_TARGET);
+		} catch (Exception $e) {
+			return;
+		}
+		if ($redirectTarget != '') {
+			$red = array ('time' => $redirectDelay, 'target' => $redirectTarget
+				);
+			$this->_smarty->assign ('redirection', $red);
 		}
 	}
 }
