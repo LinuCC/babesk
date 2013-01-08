@@ -190,7 +190,7 @@ class User extends Module {
 					$rows [] = $row;
 				}
 			}
-			$this->userManager->changeUsers ();
+			$this->userManager->changeUsers ($rows);
 		}
 		else {
 			$this->userInterface->showRemoveSpecialCharsFromUsername ($rows);
