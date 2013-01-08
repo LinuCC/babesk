@@ -170,8 +170,6 @@ class TableManager {
 	 */
 	function getTableData () {
 		require_once PATH_INCLUDE . '/constants.php';
-
-
 		switch (func_num_args()) {
 			case 0: // all elements of the table
 				$query = sql_prev_inj(sprintf('SELECT * FROM %s', $this->tablename));

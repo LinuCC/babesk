@@ -4,6 +4,11 @@
     <title>{$title|default:'BaBeSK'}</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" href="../smarty/templates/web/css/general.css" type="text/css" />
+	{if isset($redirection)}
+		{*If this Var is set, redirect the user to another Website*}
+		<meta HTTP-EQUIV="REFRESH" content="{$redirection.time};
+		url=index.php?section={$redirection.target}">
+	{/if}
 	{literal}
 <script type="text/javascript">
 var oldDiv = '';
@@ -36,21 +41,21 @@ function switchInfo(divName) {
     <div id="top_left">
        <p>Name: {$username}</p>
        {if isset($credit)}<p>Guthaben: {$credit} Euro</p>{/if}
-       
+
        <a href="javascript:switchInfo('account')">Kontoeinstellungen</a><br />
-    
+
     <div id="account" style="display: none;">
-	
-		
+
+
 			<a href="index.php?section=Babesk|Account">Karte sperren</a>
 			<br>
 			<a href="index.php?section=Babesk|ChangePassword">Passwort &auml;ndern</a>
-	
-	
-	</div>   
-       
-    
-    
+
+
+	</div>
+
+
+
     </div>
     <div id="top_right">
        <a href="index.php?section=Babesk|Help">Hilfe</a><br />
