@@ -24,7 +24,7 @@ class ClassteacherCsvImport {
 		$contentArray = self::$_csvImportManager->getContents ();
 		$contentArray = self::cellsMissingHandle ($contentArray);
 		$contentArray = self::wholeNameHandle ($contentArray);
-
+		self::dataToDb ($contentArray);
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
@@ -81,7 +81,7 @@ class ClassteacherCsvImport {
 		$forename = $rowArray [self::$_csvStructure ['Forename']];
 		$adress = $rowArray [self::$_csvStructure ['Adress']];
 		$telephone = $rowArray [self::$_csvStructure ['Telephone']];
-		$this->_databaseAccessManager->classteacherAdd($name, $forename, $adress, $telephone);
+		self::$_databaseAccessManager->classteacherAdd($name, $forename, $adress, $telephone);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
