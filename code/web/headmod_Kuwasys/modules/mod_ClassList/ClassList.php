@@ -3,6 +3,7 @@
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
+require_once PATH_ACCESS_KUWASYS . '/KuwasysJointClassTeacherInClass.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
 require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysDatabaseAccess.php';
 require_once PATH_WEB . '/WebInterface.php';
@@ -60,6 +61,7 @@ class ClassList extends Module {
 	private function showClassList () {
 
 		$classes = $this->addRegistrationForUserAllowedToClass();
+		$classes = $this->addClassteacherToClass ($classes);
 		// $sortedClasses = $this->sortClassesAfterWeekdayInArray($classes);
 		$classUnits = $this->_databaseAccessManager->kuwasysClassUnitGetAll ();
 		// $this->_smarty->assign ('sortedClasses', $sortedClasses);
@@ -157,6 +159,37 @@ class ClassList extends Module {
 			$class['registrationForUserAllowed'] = true;
 		}
 		return $classes;
+	}
+
+	private function addClassteacherToClass ($classes) {
+		try {
+			$joints = $this->getAllJClassteacherInClass ();
+			$cts = $this->getAllClassteachers ();
+		} catch (Exception $e) {
+			return $classes;
+		}
+		foreach ($classes as &$class) {
+			foreach ($joints as $joint) {
+				if ($joint ['ClassID'] == $class ['ID']) {
+					foreach ($cts as $ct) {
+						if ($ct ['ID'] == $joint ['ClassTeacherID']) {
+							$class ['classteacher'] = $ct;
+						}
+					}
+				}
+			}
+		}
+		return $classes;
+	}
+
+	private function getAllClassteachers () {
+		$exc = new DbAccExceptionMods (DbAccExceptionMods::$AllExceptions, DbAccExceptionMods::$ModRethrow);
+		return $this->_databaseAccessManager->dbAccessExec (KuwasysDatabaseAccess::ClassteacherManager, 'getAllClassTeachers', array (), 'getAllClassTeachers', array($exc));
+	}
+
+	private function getAllJClassteacherInClass () {
+		$exc = new DbAccExceptionMods (DbAccExceptionMods::$AllExceptions, DbAccExceptionMods::$ModRethrow);
+		return $this->_databaseAccessManager->dbAccessExec (KuwasysDatabaseAccess::JClassteacherInClassManager, 'getAllJoints', array (), 'getAllJoints', array($exc));
 	}
 
 	/**
