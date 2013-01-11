@@ -55,6 +55,10 @@ Keine Kurse wurden ausgewählt.
 			<p>{$class.description}</p>
 		</div>
 	{/foreach}
+	{*Cancel all registrations for the User that are in this Unit*}
+	<form action="index.php?section=Kuwasys|MainMenu&amp;action=cancelClassRegOfDay&amp;unitId={$unit->unit.ID}" method="post">
+		<input type="submit" value="alle Kurse an diesem Tag abmelden">
+	</form>
 {/foreach}
 {/if}
 

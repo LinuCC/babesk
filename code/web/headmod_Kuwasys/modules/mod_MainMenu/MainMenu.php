@@ -2,6 +2,7 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
+require_once 'MainMenuCancelClassRegOfDay.php';
 
 class MainMenu extends Module {
 
@@ -21,8 +22,15 @@ class MainMenu extends Module {
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
 	public function execute ($dataContainer) {
-
 		$this->entryPoint();
+
+		if (isset ($_GET ['action'])) {
+			if ($_GET ['action'] == 'cancelClassRegOfDay') {
+				$this->cancelClassRegOfDay ();
+				die ();
+			}
+		}
+
 		$classes = $this->getAllClassesOfUser();
 		$classes = $this->sortClassesByUnit ($classes);
 		$this->displayMainMenu($classes);
@@ -149,6 +157,11 @@ class MainMenu extends Module {
 
 		$this->_smarty->assign('classes', $classes);
 		$this->_smarty->display($this->_smartyPath . 'mainMenu.tpl');
+	}
+
+	private function cancelClassRegOfDay () {
+		MainMenuCancelClassRegOfDay::init ($this->_smarty, $this->_smartyPath);
+		MainMenuCancelClassRegOfDay::execute ();
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
