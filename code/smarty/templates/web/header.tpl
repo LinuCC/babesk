@@ -70,6 +70,16 @@ function switchInfo(divName) {
 {include file='web/module_selector.tpl' title='Modul Wählen'}
 <div id="main">
 <div id="content">
+	<noscript>
+	<p>
+		<b>Ihr Browser hat JavaScript ausgestellt. Diese Seite funktioniert nur dann
+		vollständig, wenn sie Javascript aktiviert haben!</b><br />
+		(Kurswahlen sind auch ohne Javascript möglich, allerdings wird die Seite nicht korrekt angezeigt)<br />
+		Ein Anleitung finden sie
+		 <a href="http://www.enable-javascript.com/de/" target="_blank">hier</a>.
+	</p>
+	<hr />
+	</noscript>
 {if isset($error)}<p class="error">{foreach $error as $errorMsg}{$errorMsg}{/foreach}</p>{/if}
 {if $status != ''}
     <h4>{$status}</h4>

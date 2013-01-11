@@ -18,7 +18,8 @@
 
 #Sublime-text specific settings#
 ################################
-.sublime-project
+*.sublime-project
+*.sublime-workspace
 
 #OS-specific files we do not want#
 ##################################
