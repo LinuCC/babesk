@@ -5,5 +5,7 @@
 <form action="index.php?section=System|WebHomepageSettings&amp;action=redirect" method="post">
 	<input type="submit" value="Die Weiterleitung nach dem Login einstellen">
 </form>
-
+<form action="index.php?section=System|WebHomepageSettings&amp;action=helptext" method="post">
+	<input type="submit" value="Hilfetext auf der Loginseite einrichten">
+</form>
 {/block}

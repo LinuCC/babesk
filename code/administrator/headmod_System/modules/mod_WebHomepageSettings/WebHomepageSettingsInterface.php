@@ -16,8 +16,15 @@ class WebHomepageSettingsInterface extends AdminInterface {
 		$this->smarty->display ($this->tplFilePath . 'mainMenu.tpl');
 	}
 
-	public function redirect () {
+	public function redirect ($delay,$target) {
+		$this->smarty->assign('delay',$delay);
+		$this->smarty->assign('target',$target);
 		$this->smarty->display ($this->tplFilePath . 'redirect.tpl');
+	}
+	
+	public function helptext ($helptext) {
+		$this->smarty->assign('helptext',$helptext);
+		$this->smarty->display ($this->tplFilePath . 'helptext.tpl');
 	}
 	/////////////////////////////////////////////////////////////////////
 	//Methods

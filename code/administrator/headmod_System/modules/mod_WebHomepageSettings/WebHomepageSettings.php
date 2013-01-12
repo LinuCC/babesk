@@ -23,7 +23,10 @@ class WebHomepageSettings extends Module {
 			switch ($_GET ['action']) {
 				case 'redirect':
 					$this->redirect ();
-					break;
+				break;
+				case 'helptext':
+					$this->helptext ();
+				break;
 				default:
 					die ('wrong action-value');
 					break;
@@ -55,7 +58,7 @@ class WebHomepageSettings extends Module {
 			$this->_interface->dieMsg ('Die Weiterleitungs-Einstellungen wurden verändert');
 		}
 		else {
-			$this->_interface->redirect ();
+			$this->_interface->redirect ($this->_globalSettingsMng->valueGet(GlobalSettings::WEBHP_REDIRECT_DELAY),$this->_globalSettingsMng->valueGet(GlobalSettings::WEBHP_REDIRECT_TARGET));
 		}
 	}
 
@@ -83,6 +86,33 @@ class WebHomepageSettings extends Module {
 				GlobalSettings::WEBHP_REDIRECT_TARGET, $target);
 		} catch (Exception $e) {
 			$this->dieError ('Konnte die Weiterleitungs-Einstellungen nicht ändern');
+		}
+	}
+	
+	/**
+	 * Settings for helptext in web, before the user logged in
+	 */
+	protected function helptext () {
+		if (isset ($_POST ['helptext'])) {
+			$this->helptextSet ($_POST ['helptext']);
+			$this->_interface->dieMsg ('Die Hilfetext-Einstellungen wurden ver&auml;ndert');
+		}
+		else {
+			$this->_interface->helptext ($this->_globalSettingsMng->valueGet(GlobalSettings::WEBLOGIN_HELPTEXT));
+		}
+	}
+	
+
+	
+	/**
+	 * Uploads the Changes to the Db
+	 */
+	protected function helptextSet ($helptext) {
+		try {
+			$this->_globalSettingsMng->valueSet (
+					GlobalSettings::WEBLOGIN_HELPTEXT,$helptext);
+		} catch (Exception $e) {
+			$this->dieError ('Konnte die Hilfetext-Einstellungen nicht &auml;ndern');
 		}
 	}
 
