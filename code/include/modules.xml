@@ -147,11 +147,6 @@
 				<active>true</active>
 			</module>
 			<module>
-				<ger_name>Spezifische Informationen</ger_name>
-				<name>Specific</name>
-				<active>true</active>
-			</module>
-			<module>
 				<ger_name>Buchinfo</ger_name>
 				<name>BookInfo</name>
 				<active>true</active>
