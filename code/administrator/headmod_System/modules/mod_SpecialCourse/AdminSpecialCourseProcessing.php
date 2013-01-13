@@ -89,7 +89,7 @@ class AdminSpecialCourseProcessing {
 		}
 		$specialCourses = $globalSettingsManager->getSpecialCourses();
 		$specialCourses_exploded = explode("|", $specialCourses);
-		$navbar = navBar($showPage, 'users', 'SpecialCourse', '3',$filter);
+		$navbar = navBar($showPage, 'users', 'System', 'SpecialCourse', '3',$filter);
 		$this->SpecialCourseInterface->ShowUsers($users,$specialCourses_exploded,$navbar);
 	}
 

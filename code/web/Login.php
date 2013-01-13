@@ -133,7 +133,7 @@ class Login {
 
 	private function easterEggLeg () {
 
-		if ($this->_username == 'BaBeSK.Team' && $this->_password == 'LeGUelzen') {
+		if ($this->_username == 'BaBeSK') {
 			$this->assignErrorToSmarty('<marquee>' . file_get_contents("../credits.txt") . '</marquee>');
 			$this->dieShowLoginForm();
 		}

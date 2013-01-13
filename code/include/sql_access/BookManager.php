@@ -18,10 +18,10 @@ class BookManager extends TableManager{
 	 * Sorts the booklist it gets from MySQL-table and returns them
 	 * Enter description here ...
 	 */
-	function getBooklistSorted() {
+	function getBooklistSorted($pagePointer, $orderBy) {
 		require_once PATH_ACCESS . '/DBConnect.php';
 		$res_array = array();
-		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY id', $this->tablename));
+		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY "%s" LIMIT %s,10', $this->tablename,$orderBy,$pagePointer));
 		$result = $this->db->query($query);
 		if (!$result) {
 			throw DB_QUERY_ERROR.$this->db->error;
@@ -51,26 +51,32 @@ class BookManager extends TableManager{
 	/**
 	 * Gives the book ID from a given inventory (!) barcode
 	 */
-	function getBookIDByBarcode($barcode) {
+	function getBookDataByBarcode($barcode) {
 		require_once PATH_ACCESS . '/DBConnect.php';
 		try {
 			$barcode_exploded = explode(' ', $barcode);
 		} catch (Exception $e) {
 		}
-		$query = sql_prev_inj(sprintf('subject = "%s" AND class = "%s" AND bundle = %s' , $barcode_exploded[0], $barcode_exploded[2], $barcode_exploded[3]));
-		//$result = $this->db->query($query);	
-		$result = parent::searchEntry($query);
-		return $result;
+		if (isset ($barcode_exploded[5])){
+			$query = sql_prev_inj(sprintf('subject = "%s" AND class = "%s" AND bundle = %s' , $barcode_exploded[0], $barcode_exploded[2], $barcode_exploded[3]));
+			$result = parent::searchEntry($query);  
+			if (!$result) {
+				throw DB_QUERY_ERROR.$this->db->error;
+			}
+			return $result;
+		}
 	}
 	
 	/**
 	 * Gives the book ID from a given isbn (!) barcode
 	 */
-	function getBookIDByISBNBarcode($barcode) {
+	function getBookIDByISBN($isbn) {
 		require_once PATH_ACCESS . '/DBConnect.php';
-		$query = sql_prev_inj(sprintf('isbn = "%s"' , $barcode));
-		//$result = $this->db->query($query);
+		$query = sql_prev_inj(sprintf('isbn = "%s"' , $isbn));
 		$result = parent::searchEntry($query);
+		if (!$result) {
+			throw DB_QUERY_ERROR.$this->db->error;
+		}
 		return $result;
 	}
 	
@@ -97,7 +103,6 @@ class BookManager extends TableManager{
 				'11'=>'12,92,13',
 				'12'=>'12,92,13');
 		require_once PATH_ACCESS . '/DBConnect.php';
-		//$query = sql_prev_inj(sprintf("SELECT * FROM %s WHERE class LIKE '%%%s%%'", $this->tablename, $class));
 		$query = sql_prev_inj(sprintf("SELECT * FROM %s WHERE class IN (%s)", $this->tablename, $classAssign[$class]));
 		$result = $this->db->query($query);
 		if (!$result) {
@@ -108,5 +113,6 @@ class BookManager extends TableManager{
 			$res_array[] = $buffer;
 		return $res_array;
 	}
+	
 }
 ?>

@@ -36,7 +36,7 @@ class AdminLoanProcessing {
 	function Loan($card_id) {
 		
 		if (!$this->cardManager->valid_card_ID($card_id))
-			$this->LoanInterface->dieError(sprintf($this->msg['err_card_id'], $card_id));
+			$this->loanInterface->dieError(sprintf($this->msg['err_card_id'], $card_id));
 		
 		$uid = $this->GetUser($card_id);
 		$loanbooks = $this->loanManager->getLoanByUID($uid, false);
@@ -89,23 +89,27 @@ class AdminLoanProcessing {
 	/**
 	 * Ein Buch ausleihen
 	 */
-	function LoanBook($inventarnr,$uid) {
+	function LoanBook($barcode,$uid) {
 	
 		try {
-			$inv_nr = $this->inventoryManager->getInvIDByBarcode($inventarnr);
+			$inv_id = $this->inventoryManager->getInvIDByBarcode($barcode);
 		} catch (Exception $e) {
 			$this->logs
 					->log('ADMIN', 'MODERATE',
 							sprintf('Error while getting Data from MySQL:%s in %s', $e->getMessage(), __METHOD__));
 			$this->loanInterface->dieErrorAjax($this->messages['error']['no_inv']);
 		}
-			$duplicate = $this->loanManager->isEntry($inv_nr['id']);
+		if (isset($inv_id)){
+			$duplicate = $this->loanManager->isEntry($inv_id);
 			if(!$duplicate){
-			$this->loanManager->AddLoanByIDs($inv_nr["id"], $uid);
+			$this->loanManager->AddLoanByIDs($inv_id, $uid);
 			}else{
 				$this->loanInterface->dieErrorAjax($this->messages['error']['duplicate']);
 			}
 		return true;
+		}else{
+			$this->loanInterface->dieErrorAjax($this->messages['error']['no_inv']);
+		}
 	}
 }
 

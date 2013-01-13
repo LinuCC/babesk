@@ -1,4 +1,7 @@
 {extends file=$inventoryParent}{block name=content}
+<table width=100%>
+<tr><th align='center'>{$navbar}</th></tr>
+</table>
 <table>
 	<thead>
 		<tr bgcolor='#33CFF'>

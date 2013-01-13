@@ -25,7 +25,9 @@ class AdminInventoryProcessing {
 		$inventoryManager = new InventoryManager();
 
 		try {
-			$inventory = $inventoryManager->getInventorySorted();
+			isset($_GET['sitePointer'])?$showPage = $_GET['sitePointer'] + 0:$showPage = 1;
+			$nextPointer = $showPage*10-10;
+			$inventory = $inventoryManager->getInventorySorted($nextPointer);
 		} catch (Exception $e) {
 			$this->logs
 					->log('ADMIN', 'MODERATE',
@@ -41,8 +43,8 @@ class AdminInventoryProcessing {
 							sprintf('Error while getting Data from MySQL:%s in %s', $e->getMessage(), __METHOD__));
 			$this->inventoryInterface->dieError($this->messages['error']['get_data_failed']);
 		}
-		
-		$this->inventoryInterface->ShowInventory($bookcodes);
+		$navbar = navBar($showPage, 'schbas_inventory', 'Schbas', 'Inventory', '1',$filter);
+		$this->inventoryInterface->ShowInventory($bookcodes,$navbar);
 	}
 	
 	/**
@@ -115,7 +117,7 @@ class AdminInventoryProcessing {
 		$barcode = str_replace("  ", " ", $barcode); // remove two empty spaces
 		$barcode_exploded = explode(' ', $barcode);
 		try {
-			$book_info = $bookManager->getBookIDByBarcode($barcode);
+			$book_info = $bookManager->getBookDataByBarcode($barcode);
 		} catch (Exception $e) {
 			$this->logs
 			->log('ADMIN', 'MODERATE',
