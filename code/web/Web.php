@@ -141,7 +141,9 @@ class Web {
 		require PATH_SMARTY . "/smarty_init.php";
 		$this->_smarty = $smarty;
 		$this->_smarty->assign('smarty_path', REL_PATH_SMARTY);
-		$this->_smarty->assign('babesk_version', file_get_contents("../version.txt"));
+		$version=@file_get_contents("../version.txt");
+if ($version===FALSE) $version = "";
+$smarty->assign('babesk_version', $version);
 		$this->_smarty->assign('error', '');
 	}
 
