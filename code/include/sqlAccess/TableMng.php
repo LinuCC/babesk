@@ -31,6 +31,9 @@ class TableMng {
 	 * @return Array () if $hasData has been set to true, it returns the fetched data as an Array
 	 */
 	public static function query ($query, $hasData = false, $isMultiple = false) {
+		if (!isset (self::$db)) {
+			throw new Exception ('TableMng hasnt been initialized yet!');
+		}
 		sql_prev_inj ($query);
 		if (!$isMultiple) {
 			$result = self::queryExecute ($query, $isMultiple);
