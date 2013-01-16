@@ -227,14 +227,6 @@ class Classes extends Module {
 	private function showClasses () {
 
 		require_once PATH_INCLUDE . '/sqlAccess/TableMng.php';
-		// require_once PATH_INCLUDE . '/sqlAccess/TJointClassInSchoolyear.php';
-		// require_once PATH_INCLUDE . '/sqlAccess/TJointClassteacherInClass.php';
-		// require_once PATH_INCLUDE . '/sqlAccess/TJointUsersInClass.php';
-		// require_once PATH_INCLUDE . '/sqlAccess/TKuwasysClassUnit.php';
-		// require_once PATH_INCLUDE . '/sqlAccess/TSchoolyear.php';
-		// require_once PATH_INCLUDE . '/sqlAccess/TUsersInClassStatus.php';
-		// require_once PATH_INCLUDE . '/sqlAccess/TClassteacher.php';
-		// require_once PATH_INCLUDE . '/sqlAccess/TClass.php';
 
 		$subQueryCountUsers = '
 			(SELECT Count(*)
