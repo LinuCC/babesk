@@ -1162,7 +1162,8 @@ class Users extends Module {
 				$this->_interface->dieError ($this->_languageManager->getText ('errorFetchUsersInClassStatus'));
 			}
 			$this->alterJointUsersInClass($joint['ID'], $statusName);
-			$this->_interface->dieMsg($this->_languageManager->getText('finishedChangeJointUsersInClass'));
+			$link = '<a href="index.php?section=Kuwasys|Classes&action=showClass">zurück</a>';
+			$this->_interface->dieMsg($this->_languageManager->getText('finishedChangeJointUsersInClass') . '<br />' . $link);
 		}
 	}
 
