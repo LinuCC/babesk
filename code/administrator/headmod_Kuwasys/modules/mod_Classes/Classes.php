@@ -268,13 +268,14 @@ class Classes extends Module {
 				ON kuwasysClassUnit.ID = class.unitId
 			';
 		TableMng::init ();
-		$classes = TableMng::query ($query, true);
-		// foreach ($classes as $class) {
-		// 	echo '<br />';
-		// 	var_dump($class);
-		// 	echo '<br />';
-		// }
-
+		try {
+			$classes = TableMng::query ($query, true);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError ('Konnte keine Kurse finden');
+		} catch (Exception $e) {
+			$this->_interface->dieError (
+				sprintf ('Konnte die Kurse nicht abrufen!', $e->getMessage()));
+		}
 		$classes = KuwasysFilterAndSort::elementsFilter ($classes);
 		$classes = KuwasysFilterAndSort::elementsSort ($classes);
 		$this->_interface->showClasses($classes);
