@@ -226,59 +226,20 @@ class Classes extends Module {
 
 	private function showClasses () {
 
-		require_once PATH_INCLUDE . '/sqlAccess/TableMng.php';
-		// require_once PATH_INCLUDE . '/sqlAccess/TJointClassInSchoolyear.php';
-		// require_once PATH_INCLUDE . '/sqlAccess/TJointClassteacherInClass.php';
-		// require_once PATH_INCLUDE . '/sqlAccess/TJointUsersInClass.php';
-		// require_once PATH_INCLUDE . '/sqlAccess/TKuwasysClassUnit.php';
-		// require_once PATH_INCLUDE . '/sqlAccess/TSchoolyear.php';
-		// require_once PATH_INCLUDE . '/sqlAccess/TUsersInClassStatus.php';
-		// require_once PATH_INCLUDE . '/sqlAccess/TClassteacher.php';
-		// require_once PATH_INCLUDE . '/sqlAccess/TClass.php';
-
-		$subQueryCountUsers = '
-			(SELECT Count(*)
-				FROM jointUsersInClass uic
-				JOIN users ON users.ID = uic.UserID
-				WHERE uic.statusId = (SELECT ID FROM usersInClassStatus
-					WHERE name="%s") AND class.ID = uic.ClassID
-				)
-			';
-
-		$query = '
-			SELECT class.ID, class.label, class.maxRegistration,
-				kuwasysClassUnit.name AS "unitName",
-				kuwasysClassUnit.translatedName AS "unitTranslatedName",
-				schoolYear.label AS schoolyearLabel,
-				CONCAT (classTeacher.forename, " ", classTeacher.name) AS classteacherName,
-				'. sprintf ($subQueryCountUsers, 'active') . ' AS activeCount,
-				'. sprintf ($subQueryCountUsers, 'waiting') . ' AS waitingCount,
-				'. sprintf ($subQueryCountUsers, 'request1') . ' AS request1Count,
-				'. sprintf ($subQueryCountUsers, 'request2') . ' AS request2Count
-			FROM class
-				LEFT JOIN jointClassTeacherInClass
-				ON class.ID = jointClassTeacherInClass.ClassID
-				LEFT JOIN classTeacher
-				ON classTeacher.ID = jointClassTeacherInClass.ClassTeacherID
-				LEFT JOIN jointClassInSchoolYear
-				ON jointClassInSchoolYear.ClassID = class.ID
-				LEFT JOIN schoolYear
-				ON jointClassInSchoolYear.SchoolYearID = schoolYear.ID
-				LEFT JOIN kuwasysClassUnit
-				ON kuwasysClassUnit.ID = class.unitId
-			';
-		TableMng::init ();
-		try {
-			$classes = TableMng::query ($query, true);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError ('Konnte keine Kurse finden');
-		} catch (Exception $e) {
-			$this->_interface->dieError (
-				sprintf ('Konnte die Kurse nicht abrufen!', $e->getMessage()));
-		}
+		$classes = $this->getAllClasses();
+		$classes = $this->addSchoolYearLabelToClasses($classes);
+		$classes = $this->addRegistrationCountToClasses($classes);
+		$classes = $this->addWeekdayTranslatedToClasses($classes);
+		$classes = $this->addClassteachersToClasses($classes);
+		$classes = $this->addCountOfWaitingUsersToClasses($classes);
 		$classes = KuwasysFilterAndSort::elementsFilter ($classes);
 		$classes = KuwasysFilterAndSort::elementsSort ($classes);
 		$this->_interface->showClasses($classes);
+	}
+
+	private function getAllClasses () {
+
+		return $this->_databaseAccessManager->classGetAll();
 	}
 
 	private function deleteClass () {
@@ -402,6 +363,26 @@ class Classes extends Module {
 		$this->_databaseAccessManager->jointClassInSchoolyearDelete($_GET['ID']);
 	}
 
+	/**
+	 * adds the labels of SchoolYear to the Class as a value in the array,
+	 * to allow showing to the User which Class is linked with which schoolYear
+	 */
+	private function addSchoolYearLabelToClasses ($classes) {
+
+		foreach ($classes as & $class) {
+			$class['schoolYearLabel'] = $this->getSchoolYearLabelByClassId($class['ID']);
+		}
+		return $classes;
+	}
+
+	private function addRegistrationCountToClasses ($classes) {
+		foreach ($classes as & $class) {
+			$userCount = $this->getCountOfActiveUsersInClass($class['ID']);
+			$class['userCount'] = $userCount;
+		}
+		return $classes;
+	}
+
 	private function getCountOfActiveUsersInClass ($classId) {
 
 		return $this->_databaseAccessManager->jointUserInClassGetCountOfActiveUsersOfClassId($classId);
@@ -433,10 +414,41 @@ class Classes extends Module {
 		return $this->_databaseAccessManager->jointClassInSchoolyearGetSchoolyearIdByClassIdWithoutDyingWhenVoid($classId);
 	}
 
+	private function addWeekdayTranslatedToClasses ($classes) {
+
+		$classUnits = $this->_databaseAccessManager->kuwasysClassUnitGetAll ();
+
+		foreach ($classes as &$class) {
+			foreach ($classUnits as $unit) {
+				if ($unit ['ID'] == $class ['unitId']) {
+					$class ['weekdayTranslated'] = $unit ['translatedName'];
+				}
+			}
+		}
+		return $classes;
+	}
+
 	private function addWeekdayTranslatedToClass ($class) {
 		$classUnit = $this->_databaseAccessManager->kuwasysClassUnitGet ($class ['unitId']);
 		$class ['weekdayTranslated'] = $classUnit ['translatedName'];
 		return $class;
+	}
+
+	private function addClassteachersToClasses ($classes) {
+
+		$classteachers = $this->getClassteachersByClassesWithoutDieingWhenVoidAndUpdateClasses ($classes);
+		if (!$classteachers) return $classes;
+		foreach ($classes as &$class) {
+			foreach ($classteachers as $classteacher) {
+				if(!isset($class ['classteacher'] ['ID'])) {
+					$class ['classteacher'] = NULL;
+				}
+				if($class ['classteacher'] ['ID'] == $classteacher ['ID']) {
+					$class ['classteacher'] = $classteacher;
+				}
+			}
+		}
+		return $classes;
 	}
 
 	private function getClassteachersByClassesWithoutDieingWhenVoidAndUpdateClasses (&$classes) {
@@ -474,6 +486,23 @@ class Classes extends Module {
 	private function getAllJointsOfUsersWaitingWithoutDieingWhenVoid () {
 
 		return $this->_databaseAccessManager->jointUserInClassGetAllWithStatusWaitingWithoutDyingWhenVoid();
+	}
+
+	private function addCountOfWaitingUsersToClasses ($classes) {
+
+		$joints = $this->getAllJointsOfUsersWaitingWithoutDieingWhenVoid();
+		foreach ($classes as &$class) {
+			$userCount = 0;
+			if(is_array($joints)) {
+				foreach ($joints as $joint) {
+					if($joint ['ClassID'] == $class ['ID']) {
+						$userCount++;
+					}
+				}
+			}
+			$class ['userWaitingCount'] = $userCount;
+		}
+		return $classes;
 	}
 
 	private function importClassesByCsvFile () {

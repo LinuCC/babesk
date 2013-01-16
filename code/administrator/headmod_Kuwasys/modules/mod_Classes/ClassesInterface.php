@@ -85,6 +85,29 @@ class ClassesInterface extends AdminInterface {
 		$this->smarty->assign('requestsNotPassed', $requestsNotPassed);
 		$this->smarty->display($this->tplFilePath . 'assignUsersToClassesOutline.tpl');
 	}
+
+	public function showAssignUsersToClassesClassList ($classes) {
+		$this->smarty->assign ('classes', $classes);
+		$this->smarty->display (
+			$this->tplFilePath . 'assignUsersToClassesClassList.tpl');
+	}
+
+	public function showAssignUsersToClassesTempTableCreation ($tempTableExists) {
+		$this->smarty->assign ('tempTableExists', $tempTableExists);
+		$this->smarty->display (
+			$this->tplFilePath . 'assignUsersToClassesTempTableCreation.tpl');
+	}
+
+	public function showAssignUsersToClassesUserList (
+		$classname, $dataPrimary, $dataSecondary, $dataRemoved) {
+		$this->smarty->assign ('classname', $classname);
+		$this->smarty->assign ('dataPrimary', $dataPrimary);
+		$this->smarty->assign ('dataSecondary', $dataSecondary);
+		$this->smarty->assign ('dataRemoved', $dataRemoved);
+		$this->smarty->display ($this->tplFilePath . 'assignUsersToClassesUserList.tpl');
+	}
+
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////
