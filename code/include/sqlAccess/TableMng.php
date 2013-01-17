@@ -81,25 +81,25 @@ class TableMng {
 	 */
 	protected static function queryMultiExecute ($query) {
 		$result = NULL;
-		if ($this->_db->multi_query ($query)) {
+		if (self::$db->multi_query ($query)) {
 			$rows = array();
 			do {
-				if($result = $this->_db->store_result ()) {
+				if($result = self::$db->store_result ()) {
 					while ($row = $result->fetch_assoc ()) {
 						$rows [] = $row;
 					}
 					$result->free ();
 				}
-				if ($this->_db->errno) {
-					throw new MySQlException ('Error:' . $this->_db->error);
+				if (self::$db->errno) {
+					throw new MySQlException ('Error:' . self::$db->error);
 				}
-				if(!$this->_db->more_results ()) {
+				if(!self::$db->more_results ()) {
 					break;
 				}
-			} while ($this->_db->next_result ());
+			} while (self::$db->next_result ());
 		}
 		else {
-			throw new MySQlException (sprintf('Error executing a MySQL-Command: %s, because: %s', $query, $this->_db->error));
+			throw new MySQlException (sprintf('Error executing a MySQL-Command: %s, because: %s', $query, self::$db->error));
 		}
 		return $rows;
 	}

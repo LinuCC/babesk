@@ -5,13 +5,14 @@
 {if $dataPrimary}
 <table class="dataTable">
 	<thead>
-		<th colspan='5'>
-				Primärwünsche / Erstwünsche
+		<th colspan='6'>
+				Aktiv
 			</th>
 		<tr>
 			<th align='center'>Schülername</th>
 			<th align='center'>Klassenname</th>
 			<th align='center'>Wochentag</th>
+			<th align='center'>Wahlstatus</th>
 			<th align='center'> </th>
 			<th align='center'> </th>
 		</tr>
@@ -22,6 +23,7 @@
 			<td align="center">{$row.username}</td>
 			<td align="center">{$row.classLabel}</td>
 			<td align="center">{$row.unitName}</td>
+			<td align="center">{$row.origStatusName}</td>
 			<td align="center">
 				<a href="index.php?section=Kuwasys|Classes&amp;action=assignUsersToClasses&amp;showClassDetails={$row.classId}&amp;toStatus=waiting&amp;id={$row.id}">Zu wartend</a>
 			</td>
@@ -42,14 +44,15 @@
 <table class="dataTable">
 	<thead>
 		<tr>
-			<th colspan='5'>
-				Sekundärwünsche / Zweitwünsche
+			<th colspan='6'>
+				wartend
 			</th>
 		</tr>
 		<tr>
 			<th align='center'>Schülername</th>
 			<th align='center'>Klassenname</th>
 			<th align='center'>Wochentag</th>
+			<th align='center'>Wahlstatus</th>
 			<th align='center'> </th>
 			<th align='center'> </th>
 		</tr>
@@ -60,6 +63,7 @@
 			<td align="center">{$row.username}</td>
 			<td align="center">{$row.classLabel}</td>
 			<td align="center">{$row.unitName}</td>
+			<td align="center">{$row.origStatusName}</td>
 			<td align="center">
 				<a href="index.php?section=Kuwasys|Classes&amp;action=assignUsersToClasses&amp;showClassDetails={$row.classId}&amp;toStatus=active&amp;id={$row.id}">Zu aktiv</a>
 			</td>
@@ -79,7 +83,7 @@
 <table class="dataTable">
 	<thead>
 		<tr>
-			<th colspan='5'>
+			<th colspan='6'>
 				entfernte Wünsche
 			</th>
 		</tr>
@@ -87,6 +91,7 @@
 			<th align='center'>Schülername</th>
 			<th align='center'>Klassenname</th>
 			<th align='center'>Wochentag</th>
+			<th align='center'>Wahlstatus</th>
 			<th align='center'> </th>
 			<th align='center'> </th>
 		</tr>
@@ -97,6 +102,7 @@
 			<td align="center">{$row.username}</td>
 			<td align="center">{$row.classLabel}</td>
 			<td align="center">{$row.unitName}</td>
+			<td align="center">{$row.origStatusName}</td>
 			<td align="center">
 				<a href="index.php?section=Kuwasys|Classes&amp;action=assignUsersToClasses&amp;showClassDetails={$row.classId}&amp;toStatus=active&amp;id={$row.id}">Zu aktiv</a>
 			</td>

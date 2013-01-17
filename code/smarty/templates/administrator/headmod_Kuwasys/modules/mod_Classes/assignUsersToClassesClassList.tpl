@@ -22,5 +22,8 @@
 		{/foreach}
 	</tbody>
 </table>
-
+<br /><br /><br />
+<form action="index.php?section=Kuwasys|Classes&amp;action=assignUsersToClasses&amp;toDatabase=true" method="post">
+	<input type="submit" value="Die Schüler UNWIEDERBRINGLICH ändern">
+</form>
 {/block}
