@@ -56,7 +56,6 @@ class Login {
 	private function checkLogin () {
 
 		$this->easterEggLeg();
-		$this->easterEggCows();
 		$this->checkLoginInput();
 		$this->setUserIdByUsername();
 		$this->checkPassword();
@@ -121,14 +120,6 @@ class Login {
 			return false;
 		}
 		return ($txt != '');
-	}
-
-	private function easterEggCows () {
-
-		if ($this->_username == 'SaveTheCows') {
-			$this->_smarty->assign('chickenMode', true);
-			$this->dieShowLoginForm();
-		}
 	}
 
 	private function easterEggLeg () {
