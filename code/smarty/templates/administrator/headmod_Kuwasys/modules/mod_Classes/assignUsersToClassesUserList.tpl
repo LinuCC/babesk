@@ -21,7 +21,7 @@
 		{foreach $dataPrimary as $row}
 		<tr>
 			<td align="center">{$row.username}</td>
-			<td align="center">{$row.classLabel}</td>
+			<td align="center">{$row.grade}</td>
 			<td align="center">{$row.unitName}</td>
 			<td align="center">{$row.origStatusName}</td>
 			<td align="center">
@@ -61,7 +61,7 @@
 		{foreach $dataSecondary as $row}
 		<tr>
 			<td align="center">{$row.username}</td>
-			<td align="center">{$row.classLabel}</td>
+			<td align="center">{$row.grade}</td>
 			<td align="center">{$row.unitName}</td>
 			<td align="center">{$row.origStatusName}</td>
 			<td align="center">
@@ -100,7 +100,7 @@
 		{foreach $dataRemoved as $row}
 		<tr>
 			<td align="center">{$row.username}</td>
-			<td align="center">{$row.classLabel}</td>
+			<td align="center">{$row.grade}</td>
 			<td align="center">{$row.unitName}</td>
 			<td align="center">{$row.origStatusName}</td>
 			<td align="center">

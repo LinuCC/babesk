@@ -1,7 +1,5 @@
 <?php
 
-require_once PATH_INCLUDE . '/sqlAccess/TableMng.php';
-
 /**
  * This Class contains the algorythm to assign Users to the requested Class of theirs.
  * It handles things like too many Users requested a Class, Users that are on the waiting-list etc.
@@ -18,7 +16,6 @@ class AssignUsersToClasses {
 
 		$this->_interface = $interface;
 		$this->_languageManager = $languageManager;
-		TableMng::init ();
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Getters and Setters
@@ -235,8 +232,6 @@ class AssignUsersToClasses {
 					}
 					$toAdd [] = new RToAdd ($req, RToAdd::sActive);
 					$classReq ['freeSlots'] --;
-					$alreadyAdded [] = new UtcUserAdded (
-						$req ['userId'], $req ['unitId'], UtcUserAdded::sActive);
 				}
 			}
 			else {
@@ -264,7 +259,6 @@ class AssignUsersToClasses {
 					$counter ++;
 				}
 				//Add the leftover users to the waiting-list
-				var_dump($counter < count ($shuffled));
 				for (;$counter < count ($shuffled); $counter ++) {
 					$req = $shuffled [$counter];
 					$alreadyAddedStatus = $this->getStatusByUserAndUnit ($toAdd,
@@ -403,7 +397,8 @@ class AssignUsersToClasses {
 		$query = 'SELECT t.ID as id, c.label AS classLabel, c.ID as classId,
 			cu.translatedName AS unitName,
 			CONCAT(u.forename, " ", u.name) AS username,
-			cs.name AS statusName, ucs.translatedName AS origStatusName
+			cs.name AS statusName, ucs.translatedName AS origStatusName,
+			CONCAT(g.gradeValue, g.label) as grade
 		FROM ' . self::$tableName . ' t
 			LEFT JOIN users u ON u.ID = t.UserID
 			LEFT JOIN jointUsersInGrade uig ON u.ID = uig.UserID
@@ -416,6 +411,7 @@ class AssignUsersToClasses {
 			LEFT JOIN usersInClassStatus ucs ON uic.statusId = ucs.ID
 		WHERE t.ClassID = "' . $classId . '" AND
 			t.statusId = ' . $subQuerySelectStatus . '
+		ORDER BY grade
 		;';
 		try {
 			$data = TableMng::query ($query, true);

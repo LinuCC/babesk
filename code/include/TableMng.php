@@ -1,5 +1,7 @@
 <?php
 
+require_once PATH_ACCESS . '/DBConnect.php';
+
 /**
  *
  */

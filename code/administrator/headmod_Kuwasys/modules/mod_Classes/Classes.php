@@ -226,7 +226,7 @@ class Classes extends Module {
 
 	private function showClasses () {
 
-		require_once PATH_INCLUDE . '/sqlAccess/TableMng.php';
+		require_once PATH_INCLUDE . '/TableMng.php';
 
 		$subQueryCountUsers = '
 			(SELECT Count(*)

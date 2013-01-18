@@ -1092,11 +1092,14 @@ class Users extends Module {
 	 */
 	private function addJointUsersInClass ($userID, $classID, $statusName) {
 
+		$query = sprintf ('INSERT INTO jointUsersInClass
+			(UserID, ClassID, statusId) VALUES (%s, %s,
+				(SELECT ID FROM usersInClassStatus WHERE name="%s")
+				)', $userID, $classID, $statusName);
 		try {
-			$status = $this->_usersInClassStatusManager->statusGetByName ($statusName);
-			$this->_jointUsersInClass->addJoint($userID, $classID, $status ['ID']);
+			TableMng::query ($query);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddJointUsersInClass'));
+			$this->_interface->dieError($this->_languageManager->getText('errorAddJointUsersInClass') . $e->getMessage ());
 		}
 	}
 

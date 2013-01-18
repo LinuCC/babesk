@@ -23,6 +23,7 @@ class Web {
 		require_once PATH_ACCESS . '/UserManager.php';
 		require_once PATH_INCLUDE . '/moduleManager.php';
 		require_once PATH_INCLUDE . '/functions.php';
+		require_once PATH_INCLUDE . '/TableMng.php';
 		require_once PATH_ACCESS . '/LogManager.php';
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 
@@ -32,6 +33,7 @@ class Web {
 		$this->_moduleManager->allowAllModules();
 		$this->_loggedIn = isset($_SESSION['uid']);
 		$this->_interface = new WebInterface($this->_smarty);
+		TableMng::init ();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
