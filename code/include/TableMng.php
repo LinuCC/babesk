@@ -36,7 +36,7 @@ class TableMng {
 		if (!isset (self::$db)) {
 			throw new Exception ('TableMng hasnt been initialized yet!');
 		}
-		sql_prev_inj ($query);
+		$query = sql_prev_inj ($query);
 		if (!$isMultiple) {
 			$result = self::queryExecute ($query, $isMultiple);
 			if ($hasData) {
