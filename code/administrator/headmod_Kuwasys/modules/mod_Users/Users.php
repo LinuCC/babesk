@@ -16,6 +16,7 @@ require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysFilterAndSort.php';
 require_once 'UsersPasswordResetter.php';
 require_once 'DisplayUsersWaiting.php';
 require_once 'UsersCsvImport.php';
+require_once 'UsersCreateParticipationConfirmationPdf.php';
 
 /**
  * Main-Class for the Module Users
@@ -92,7 +93,11 @@ class Users extends Module {
 				case 'printParticipationConfirmation':
 					$this->handleParticipationConfirmationPdf();
 					break;
+				case 'printParticipationConfirmationForAll':
+					$this->handleParticipationConfirmationPdfForAll ();
+					break;
 				case 'sendEmailsParticipationConfirmation':
+					$this->dieError ('diese Funktion ist momentan veraltet');
 					$this->sendEmailParticipationConfirmation ();
 					break;
 				case 'resetPasswords':
@@ -355,109 +360,30 @@ class Users extends Module {
 		return $users;
 	}
 
-	/**
-	 * Creates a PDF-file based on post-variables. For each user in the Grade it creates a confirmation
-	 * for the classes the user attends to.
-	 */
 	private function handleParticipationConfirmationPdf () {
-
-		require_once PATH_INCLUDE . '/pdf/joinMultiplePdf.php';
-		foreach ($_POST['userIds'] as $userId) {
-			$this->_databaseAccessManager->userIdAddToUserIdArray($userId);
-		}
-		$users = $this->_databaseAccessManager->userGetByUserIdArray();
-		$filename = $this->getPdfFilename ($_POST['schoolyearId'], $_POST['gradeId']);
-
-		$pdfTmpPathArray = $this->createTemporaryPdfFiles($users);
-		$pdfCombined = $this->combineTemporaryPdfFiles($pdfTmpPathArray);
-		$pdfCombined->pdfCombinedProvideAsDownload ($filename);
-		$pdfCombined->pdfTempDirClean ();
+		UsersCreateParticipationConfirmationPdf::init ($this->_interface);
+		UsersCreateParticipationConfirmationPdf::execute ($_POST ['userIds']);
 	}
 
-	/**
-	 * creates temporary Pdffiles on the Serverfilesystem and returns an array with the paths to them.
-	 */
-	private function createTemporaryPdfFiles ($users) {
-		$pdfTmpPathArray = array();
-		foreach ($users as $user) {
-			$pdfTmpPathArray [] = $this->createPdfParticipationConfirmation ($user);
+	private function handleParticipationConfirmationPdfForAll () {
+		$query = 'SELECT u.ID as userId
+			FROM users u
+				JOIN jointUsersInClass uic ON u.ID = uic.UserID
+				JOIN usersInClassStatus uics ON uic.statusId = uics.ID
+			WHERE uics.name = "active" OR uics.name = "waiting";';
+		try {
+			$data = TableMng::query ($query, true);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError ('Es wurden keine Schüler gefunden, für die man die Dokumente hätte drucken können');
+		} catch (Exception $e) {
+			$this->_interface->dieError ('konnte die Daten der Schüler nicht abrufen' . $e->getMessage ());
 		}
-		return $pdfTmpPathArray;
-	}
-
-	/** Creates a PDF for the Participation Confirmation and returns its Path
-	 *
-	 */
-	private function createPdfParticipationConfirmation ($user) {
-		require_once PATH_INCLUDE . '/pdf/HtmlToPdfImporter.php';
-		$confTemplatePath = PATH_INCLUDE . '/pdf/printTemplates/printTemplateTest.html';
-		if(!file_exists($confTemplatePath))
-			$this->_interface->dieError($this->_languageManager->getText('errorPdfHtmlTemplateMissing') . $confTemplatePath);
-		$pdf = new HtmlToPdfImporter ();
-		$pdf->htmlImport($confTemplatePath, true);
-		$pdf->tempVarReplaceInHtml('username', sprintf('%s %s', $user['forename'], $user['name']), '#!%s#!');
-		$pdf->htmlToPdfConvert();
-		$pdfPath = $pdf->pdfSaveTemporaryAndGetFilename ();
-		return $pdfPath;
-	}
-
-	/**
-	 * Combines the Temporary PDF-Files whose path is in $tempFilePathArray
-	 * @param array[string] $tempFilePathArray An array of paths to the Temporary PDF-Files
-	 * @return joinMultiplePdf the Combined PDF's
-	 */
-	private function combineTemporaryPdfFiles ($tempFilePathArray) {
-
-		require_once PATH_INCLUDE . '/pdf/joinMultiplePdf.php';
-
-		$pdfCombiner = new joinMultiplePdf ();
-
-		foreach ($tempFilePathArray as $tmpPath) {
-			$pdfCombiner->pdfAdd ($tmpPath);
+		$userIds = array ();
+		foreach ($data as $row) {
+			$userIds [] = $row ['userId'];
 		}
-		$pdfCombiner->pdfCombine ();
-		return $pdfCombiner;
-	}
-
-	/**
-	 * Creates a filename fitting to the combined PDF that is getting created.
-	 */
-	private function getPdfFilename ($schoolyearId, $gradeId) {
-
-		$schoolyear = $this->_databaseAccessManager->schoolyearGet ($schoolyearId);
-		$grade = $this->_databaseAccessManager->gradeGetById ($gradeId);
-		$filename = sprintf('%s_%s_%s.pdf', $schoolyear ['label'], $grade ['label'] . $grade ['gradeValue'], date('Y-m-d'));
-		return $filename;
-	}
-
-	private function sendEmailParticipationConfirmation () {
-		foreach ($_POST['userIds'] as $userId) {
-			$this->_databaseAccessManager->userIdAddToUserIdArray($userId);
-		}
-		$users = $this->_databaseAccessManager->userGetByUserIdArray();
-		foreach ($users as $user) {
-			$pdfPath = $this->createPdfParticipationConfirmation ($user);
-			$this->sendEmailIfUserHasEmail ($user, $pdfPath);
-		}
-		$this->_interface->dieMsg ('Das Versenden der Emails wurde abgeschlossen.');
-	}
-
-	/**
-	 *
-	 */
-	private function sendEmailIfUserHasEmail ($user, $pdfPath) {
-		if ($user ['email'] == '') {
-			$this->_interface->showMsg (sprintf('Der Benutzer %s %s hat keine Email angegeben.', $user ['forename'], $user ['name']));
-		}
-		require_once PATH_INCLUDE . '/email/SMTPMailer.php';
-		$mailer = new SMTPMailer ($this->_interface);
-		$mailer->smtpDataInDatabaseLoad ();
-		$mailer->emailFromXmlLoad (PATH_INCLUDE . '/email/Kuwasys_Bestaetigung.xml');
-		$mailer->AddAttachment ($pdfPath, 'KurswahlBestaetigung.pdf');
-		$mailer->AddAddress ($user ['email']);
-		if (!$mailer->Send ()) {
-			$this->_interface->showError (sprintf('Konnte die Email an %s %s nicht versenden. Fehlermeldung: %s', $user ['forename'], $user ['name'], $mailer->ErrorInfo));
-		}
+		UsersCreateParticipationConfirmationPdf::init ($this->_interface);
+		UsersCreateParticipationConfirmationPdf::execute ($userIds);
 	}
 
 	private function resetPasswordOfAllUsers () {
