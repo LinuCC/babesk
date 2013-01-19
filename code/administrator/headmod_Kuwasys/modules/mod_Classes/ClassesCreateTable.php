@@ -207,7 +207,7 @@ class CctContent {
 		// $sheet->getRowDimension (3)->setRowHeight (30);
 		$sheet->getRowDimension (4)->setRowHeight (35);
 		$sheet->getColumnDimension ('A')->setWidth (25);
-		$sheet->getColumnDimension ('B')->setWidth (3);
+		$sheet->getColumnDimension ('B')->setWidth (4,5);
 		$sheet->getColumnDimension ('C')->setWidth (18);
 		for ($i = 3; $i < 26; $i++) {
 			$char = self::getCharAtNum ($i);
