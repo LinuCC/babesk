@@ -4,6 +4,7 @@ require_once 'ClassesInterface.php';
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysFilterAndSort.php';
 require_once 'ClassesCsvImport.php';
+require_once 'ClassesCreateTable.php';
 
 /**
  *
@@ -55,6 +56,9 @@ class Classes extends Module {
 					break;
 				case 'assignUsersToClasses':
 					$this->assignUsersToClasses();
+					break;
+				case 'createClassTable':
+					$this->createClassTable ();
 					break;
 				default:
 					$this->_interface->dieError($this->_languageManager->getText('errorWrongActionValue'));
@@ -570,6 +574,11 @@ class Classes extends Module {
 		require_once 'AssignUsersToClasses.php';
 		$utcManager = new AssignUsersToClasses($this->_interface, $this->_languageManager);
 		$utcManager->execute();
+	}
+
+	private function createClassTable () {
+		ClassesCreateTable::init ($this->_interface);
+		ClassesCreateTable::execute ();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
