@@ -223,12 +223,14 @@ class AssignUsersToClasses {
 					$status = $this->getStatusByUserAndUnit ($toAdd,
 						$req ['userId'], $req ['unitId']);
 					if ($status == RToAdd::sActive) {
+						$toAdd [] = new RToAdd ($req, RToAdd::sNotAssigned);
 						//user has already been added at this unit (aka weekday)
 						continue;
 					}
 					else if ($status == RToAdd::sWaiting) {
-						RToAdd::rowDelete ($toAdd, $req ['userId'],
+						$deleted = RToAdd::rowDelete ($toAdd, $req ['userId'],
 							$req ['unitId']);
+						$toAdd [] = new RToAdd ($deleted, RToAdd::sNotAssigned);
 					}
 					$toAdd [] = new RToAdd ($req, RToAdd::sActive);
 					$classReq ['freeSlots'] --;
@@ -245,14 +247,15 @@ class AssignUsersToClasses {
 					$alreadyAddedStatus = $this->getStatusByUserAndUnit ($toAdd,
 						$req ['userId'], $req ['unitId']);
 					if ($alreadyAddedStatus == RToAdd::sActive) {
+						$toAdd [] = new RToAdd ($req, RToAdd::sNotAssigned);
 						//user has already been added at this unit (aka weekday)
 						$counter ++;
 						continue;
 					}
 					else if ($alreadyAddedStatus == RToAdd::sWaiting) {
-
-						RToAdd::rowDelete ($toAdd, $req ['userId'],
+						$deleted = RToAdd::rowDelete ($toAdd, $req ['userId'],
 							$req ['unitId']);
+						$toAdd [] = new RToAdd ($deleted, RToAdd::sNotAssigned);
 					}
 					$toAdd [] = RToAdd::rowAdd ($req, RToAdd::sActive,
 						$classReq ['freeSlots']);
@@ -267,7 +270,6 @@ class AssignUsersToClasses {
 						//user has already been added at this unit (aka weekday), either as active or waiting (we dont want two waitings)
 						continue;
 					}
-
 					$toAdd [] = new RToAdd ($req, RToAdd::sWaiting);
 				}
 			}
@@ -307,8 +309,11 @@ class AssignUsersToClasses {
 			if ($row->getStatus () == RToAdd::sActive) {
 				$statusId = $activeStatusId [0] ['ID'];
 			}
-			else {
+			else if ($row->getStatus () == RToAdd::sWaiting){
 				$statusId = $waitingStatusId [0] ['ID'];
+			}
+			else if ($row->getStatus () == RToAdd::sNotAssigned) {
+				$statusId = '0';//indicating that the original row should be deleted
 			}
 			$valueQuery .= sprintf ('(%s, %s, %s), ', $row->getUserId (), $row->getClassId (), $statusId);
 		}
@@ -579,21 +584,17 @@ class RToAdd {
 		foreach ($rows as $row) {
 			if ($row->getUserId () == $userId) {
 				if ($row->getUnitId () == $unitId) {
+					$rowDeleted = $row;
 					unset ($row);
-					$rowDeleted = true;
 				}
 			}
 		}
-		if ($rowDeleted) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		return $rowDeleted;
 	}
 
 	const sWaiting = 1;
 	const sActive = 2;
+	const sNotAssigned = 3;
 
 	protected $row;
 	protected $status;
