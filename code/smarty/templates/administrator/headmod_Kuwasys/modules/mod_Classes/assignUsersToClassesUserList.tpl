@@ -127,6 +127,11 @@
 {else}
 <p>Keine entfernten Einträge für diesen Kurs vorhanden.</p>
 {/if}
+
+<a href="index.php?section=Kuwasys|Classes&amp;action=assignUsersToClasses&amp;addUser=true&amp;classId={$row.classId}">
+	Einen neuen Benutzer der Klasse hinzufügen
+</a>
+
 <br />
 <a href="index.php?section=Kuwasys|Classes&amp;action=assignUsersToClasses&amp;showClasses=true">zurück</a>
 {/block}

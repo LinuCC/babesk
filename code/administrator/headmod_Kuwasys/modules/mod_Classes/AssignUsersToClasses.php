@@ -1,6 +1,7 @@
 <?php
 
-require_once 'AssignUsersToClassesSwitchUser.php';
+require_once 'AssignUsersToClassesMoveUser.php';
+require_once 'AssignUsersToClassesAddUser.php';
 
 /**
  * This Class contains the algorythm to assign Users to the requested Class of theirs.
@@ -50,9 +51,14 @@ class AssignUsersToClasses {
 			$this->origJointsChange ();
 		}
 		else if (isset ($_GET ['moveUser'])) {
-			AssignUsersToClassesSwitchUser::init (
+			AssignUsersToClassesMoveUser::init (
 				$this->_interface, self::$tableName);
-			AssignUsersToClassesSwitchUser::execute ();
+			AssignUsersToClassesMoveUser::execute ();
+		}
+		else if (isset ($_GET ['addUser'])) {
+			AssignUsersToClassesAddUser::init (
+				$this->_interface, self::$tableName);
+			AssignUsersToClassesAddUser::execute ();
 		}
 		else {
 			$te = $this->tempTableIsExisting ();
