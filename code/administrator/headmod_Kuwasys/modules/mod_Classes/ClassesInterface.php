@@ -107,6 +107,20 @@ class ClassesInterface extends AdminInterface {
 		$this->smarty->display ($this->tplFilePath . 'assignUsersToClassesUserList.tpl');
 	}
 
+	public function showAssignUsersToClassesMoveUser ($userId, $userFullname, $oldLinkId, $movedFromClassId, $classes, $statuses) {
+		$this->smarty->assign ('userId', $userId);
+		$this->smarty->assign ('userFullname', $userFullname);
+		$this->smarty->assign ('oldLinkId', $oldLinkId);
+		$this->smarty->assign ('movedFromClassId', $movedFromClassId);
+		$this->smarty->assign ('classes', $classes);
+		$this->smarty->assign ('statuses', $statuses);
+		$this->smarty->display ($this->tplFilePath . 'assignUsersToClassesMoveUser.tpl');
+	}
+	public function showAssignUsersToClassesMoveUserFinished ($movedFromClassId) {
+		$this->smarty->assign ('movedFromClassId', $movedFromClassId);
+		$this->smarty->display ($this->tplFilePath . 'assignUsersToClassesMoveUserFin.tpl');
+	}
+
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations

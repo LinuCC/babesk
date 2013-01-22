@@ -1,5 +1,7 @@
 <?php
 
+require_once 'AssignUsersToClassesSwitchUser.php';
+
 /**
  * This Class contains the algorythm to assign Users to the requested Class of theirs.
  * It handles things like too many Users requested a Class, Users that are on the waiting-list etc.
@@ -46,6 +48,11 @@ class AssignUsersToClasses {
 		}
 		else if (isset ($_GET ['toDatabase'])) {
 			$this->origJointsChange ();
+		}
+		else if (isset ($_GET ['moveUser'])) {
+			AssignUsersToClassesSwitchUser::init (
+				$this->_interface, self::$tableName);
+			AssignUsersToClassesSwitchUser::execute ();
 		}
 		else {
 			$te = $this->tempTableIsExisting ();
@@ -399,9 +406,9 @@ class AssignUsersToClasses {
 		else {
 			$subQuerySelectStatus = $statusName;
 		}
-		$query = 'SELECT t.ID as id, c.label AS classLabel, c.ID as classId,
+		$query = 'SELECT t.ID as id, c.label AS classLabel, c.ID AS classId,
 			cu.translatedName AS unitName,
-			CONCAT(u.forename, " ", u.name) AS username,
+			CONCAT(u.forename, " ", u.name) AS username, u.ID AS userId,
 			cs.name AS statusName, ucs.translatedName AS origStatusName,
 			CONCAT(g.gradeValue, g.label) as grade
 		FROM ' . self::$tableName . ' t

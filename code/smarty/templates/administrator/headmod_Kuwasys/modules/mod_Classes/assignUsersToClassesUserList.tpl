@@ -15,6 +15,7 @@
 			<th align='center'>Wahlstatus</th>
 			<th align='center'> </th>
 			<th align='center'> </th>
+			<th align='center'> </th>
 		</tr>
 	</thead>
 	<tbody>
@@ -29,6 +30,9 @@
 			</td>
 			<td align="center">
 				<a href="index.php?section=Kuwasys|Classes&amp;action=assignUsersToClasses&amp;showClassDetails={$row.classId}&amp;toStatus=removed&amp;id={$row.id}">völlig entfernen</a>
+			</td>
+			<td align="center">
+				<a href="index.php?section=Kuwasys|Classes&amp;action=assignUsersToClasses&amp;moveUser=true&amp;userId={$row.userId}&amp;oldLinkId={$row.id}&amp;movedFromClassId={$row.classId}">Kurs ändern</a>
 			</td>
 		</tr>
 		{/foreach}
@@ -55,6 +59,7 @@
 			<th align='center'>Wahlstatus</th>
 			<th align='center'> </th>
 			<th align='center'> </th>
+			<th align='center'> </th>
 		</tr>
 	</thead>
 	<tbody>
@@ -69,6 +74,9 @@
 			</td>
 			<td align="center">
 				<a href="index.php?section=Kuwasys|Classes&amp;action=assignUsersToClasses&amp;showClassDetails={$row.classId}&amp;toStatus=removed&amp;id={$row.id}">völlig entfernen</a>
+			</td>
+			<td align="center">
+				<a href="index.php?section=Kuwasys|Classes&amp;action=assignUsersToClasses&amp;moveUser=true&amp;userId={$row.userId}&amp;oldLinkId={$row.id}&amp;movedFromClassId={$row.classId}">Kurs ändern</a>
 			</td>
 		</tr>
 		{/foreach}
@@ -108,6 +116,9 @@
 			</td>
 			<td align="center">
 				<a href="index.php?section=Kuwasys|Classes&amp;action=assignUsersToClasses&amp;showClassDetails={$row.classId}&amp;toStatus=waiting&amp;id={$row.id}">Zu wartend</a>
+			</td>
+			<td align="center">
+				<a href="index.php?section=Kuwasys|Classes&amp;action=assignUsersToClasses&amp;moveUser=true&amp;userId={$row.userId}&amp;oldLinkId={$row.id}&amp;movedFromClassId={$row.classId}">Kurs ändern</a>
 			</td>
 		</tr>
 		{/foreach}
