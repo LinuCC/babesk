@@ -5,11 +5,12 @@
 {if $dataPrimary}
 <table class="dataTable">
 	<thead>
-		<th colspan='6'>
+		<th colspan='5'>
 				Aktiv
 			</th>
 		<tr>
 			<th align='center'>Schülername</th>
+			<th align='center'>Telefonnummer</th>
 			<th align='center'>Klassenname</th>
 			<th align='center'>Wochentag</th>
 			<th align='center'>Wahlstatus</th>
@@ -22,6 +23,7 @@
 		{foreach $dataPrimary as $row}
 		<tr>
 			<td align="center">{$row.username}</td>
+			<td align="center">{$row.userTelephone}</td>
 			<td align="center">{$row.grade}</td>
 			<td align="center">{$row.unitName}</td>
 			<td align="center">{$row.origStatusName}</td>
@@ -48,12 +50,13 @@
 <table class="dataTable">
 	<thead>
 		<tr>
-			<th colspan='6'>
+			<th colspan='5'>
 				wartend
 			</th>
 		</tr>
 		<tr>
 			<th align='center'>Schülername</th>
+			<th align='center'>Telefonnummer</th>
 			<th align='center'>Klassenname</th>
 			<th align='center'>Wochentag</th>
 			<th align='center'>Wahlstatus</th>
@@ -66,6 +69,7 @@
 		{foreach $dataSecondary as $row}
 		<tr>
 			<td align="center">{$row.username}</td>
+			<td align="center">{$row.userTelephone}</td>
 			<td align="center">{$row.grade}</td>
 			<td align="center">{$row.unitName}</td>
 			<td align="center">{$row.origStatusName}</td>
@@ -91,15 +95,17 @@
 <table class="dataTable">
 	<thead>
 		<tr>
-			<th colspan='6'>
+			<th colspan='5'>
 				entfernte Wünsche
 			</th>
 		</tr>
 		<tr>
 			<th align='center'>Schülername</th>
+			<th align='center'>Telefonnummer</th>
 			<th align='center'>Klassenname</th>
 			<th align='center'>Wochentag</th>
 			<th align='center'>Wahlstatus</th>
+			<th align='center'> </th>
 			<th align='center'> </th>
 			<th align='center'> </th>
 		</tr>
@@ -108,6 +114,7 @@
 		{foreach $dataRemoved as $row}
 		<tr>
 			<td align="center">{$row.username}</td>
+			<td align="center">{$row.userTelephone}</td>
 			<td align="center">{$row.grade}</td>
 			<td align="center">{$row.unitName}</td>
 			<td align="center">{$row.origStatusName}</td>

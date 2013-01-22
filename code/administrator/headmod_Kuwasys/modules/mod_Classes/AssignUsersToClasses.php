@@ -415,6 +415,7 @@ class AssignUsersToClasses {
 		$query = 'SELECT t.ID as id, c.label AS classLabel, c.ID AS classId,
 			cu.translatedName AS unitName,
 			CONCAT(u.forename, " ", u.name) AS username, u.ID AS userId,
+			u.telephone AS userTelephone,
 			cs.name AS statusName, ucs.translatedName AS origStatusName,
 			CONCAT(g.gradeValue, g.label) as grade
 		FROM ' . self::$tableName . ' t
