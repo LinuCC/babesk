@@ -33,14 +33,17 @@ class UsersCreateParticipationConfirmationPdf {
 				sy.label AS schoolyear,
 				c.label AS classLabel,
 				cu.name AS unitName, cu.translatedName AS unitTranslatedName,
-				uics.translatedName AS statusTranslatedName
+				uics.translatedName AS statusTranslatedName,
+				CONCAT(g.gradeValue, g.label) AS gradeName
 			FROM users u
 				JOIN jointUsersInSchoolYear uisy ON u.ID  = uisy.UserID
 				JOIN schoolYear sy ON sy.ID = uisy.SchoolYearID
 				JOIN jointUsersInClass uic ON u.ID = uic.UserID
 				JOIN usersInClassStatus uics ON uics.ID = uic.statusId
 				JOIN class c ON c.ID = uic.ClassID
-				JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
+				JOIN jointUsersInGrade uig ON u.ID = uig.UserID
+				LEFT JOIN grade g ON g.ID = uig.GradeID
+				lEFT JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
 			WHERE (%s) AND (uics.name = "active" OR uics.name = "waiting")
 			;', $whereQuery);
 
@@ -58,7 +61,7 @@ class UsersCreateParticipationConfirmationPdf {
 		foreach ($data as $row) {
 			if (!$user = self::usersHas ($row ['userId'])) {
 				$user = new UcpcPdfUser ($row ['userId'], $row ['userFullname'],
-					$row ['schoolyear']);
+					$row ['schoolyear'], $row ['gradeName']);
 				$user->addClass ($row ['classLabel'], $row ['unitName'], $row ['unitTranslatedName'], $row ['statusTranslatedName']);
 				self::$_users [] = $user;
 			}
@@ -90,6 +93,7 @@ class UsersCreateParticipationConfirmationPdf {
 			$pdf->htmlImport ($confTemplatePath, true);
 			$pdf->tempVarReplaceInHtml('fullname', $user->fullname, '#!%s#!');
 			$pdf->tempVarReplaceInHtml('schoolyear', $user->schoolyear, '#!%s#!');
+			$pdf->tempVarReplaceInHtml('grade', $user->grade, '#!%s#!');
 			$pdf->tempVarReplaceInHtml('classList',
 				self::pdfClassListCreate ($user), '#!%s#!');
 			$pdf->htmlToPdfConvert();
@@ -136,10 +140,11 @@ class UsersCreateParticipationConfirmationPdf {
 
 class UcpcPdfUser {
 
-	public function __construct ($id, $fullname, $schoolyear) {
+	public function __construct ($id, $fullname, $schoolyear, $grade) {
 		$this->id = $id;
 		$this->fullname = $fullname;
 		$this->schoolyear = $schoolyear;
+		$this->grade = $grade;
 	}
 
 	public function addClass ($label, $unitName, $unitTranslatedName, $statusTranslatedName) {
@@ -150,6 +155,7 @@ class UcpcPdfUser {
 	public $fullname;
 	public $schoolyear;
 	public $classes;
+	public $grade;
 
 }
 
