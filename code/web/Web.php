@@ -117,7 +117,9 @@ class Web {
 			}
 		}
 		else {
-			$this->_smarty->assign('birthday',$this->_userManager->getBirthday($_SESSION['uid']));
+			$birthday = date("m-d",strtotime($this->_userManager->getBirthday($_SESSION['uid'])));
+
+			$this->_smarty->assign('birthday',$birthday);
 			$this->_smarty->display(PATH_SMARTY . '/templates/web/main_menu.tpl');
 		}
 	}

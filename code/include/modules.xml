@@ -271,6 +271,16 @@
 			</module>
 		</head_module>
 		<head_module>
+			<ger_name>Contract</ger_name>
+			<name>Contract</name>
+			<active>true</active>
+			<module>
+				<ger_name>Admin</ger_name>
+				<name>CAdmin</name>
+				<active>true</active>
+			</module>
+		</head_module>
+		<head_module>
 			<ger_name>Einstellungen</ger_name>
 			<name>Settings</name>
 			<active>true</active>
