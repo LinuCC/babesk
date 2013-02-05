@@ -2,7 +2,7 @@
 
 require_once PATH_ADMIN . '/AdminInterface.php';
 
-class ContractUsersInterface extends AdminInterface {
+class NachrichtenUsersInterface extends AdminInterface {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes

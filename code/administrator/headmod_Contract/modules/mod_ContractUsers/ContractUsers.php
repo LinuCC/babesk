@@ -2,8 +2,8 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/functions.php';
-require_once 'ContractUsersInterface.php';
-require_once PATH_ACCESS_CONTRACT . '/ContractUsersManager.php';
+require_once 'NachrichtenUsersInterface.php';
+require_once PATH_ACCESS_CONTRACT . '/NachrichtenUsersManager.php';
 
 
 
@@ -14,7 +14,7 @@ require_once PATH_ACCESS_CONTRACT . '/ContractUsersManager.php';
  * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
  *
  */
-class ContractUsers extends Module {
+class NachrichtenUsers extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -30,7 +30,7 @@ class ContractUsers extends Module {
 	private $_usersInClassStatusManager;
 
 	/**
-	 * @var ContractLanguageManager
+	 * @var NachrichtenLanguageManager
 	 */
 	private $_languageManager;
 
@@ -105,13 +105,13 @@ class ContractUsers extends Module {
 	private function entryPoint ($dataContainer) {
 
 		defined('_AEXEC') or die('Access denied');
-		$this->_usersManager = new ContractUsersManager();
+		$this->_usersManager = new NachrichtenUsersManager();
 		
 		$this->_interface = new UsersInterface($this->relPath, $dataContainer->getSmarty());
 		$this->_languageManager = $dataContainer->getLanguageManager();
-		$this->_languageManager->setModule('ContractUsers');
-		require_once PATH_ADMIN . $this->relPath . '../../ContractDatabaseAccess.php';
-		$this->_databaseAccessManager = new ContractDatabaseAccess($this->_interface);
+		$this->_languageManager->setModule('NachrichtenUsers');
+		require_once PATH_ADMIN . $this->relPath . '../../NachrichtenDatabaseAccess.php';
+		$this->_databaseAccessManager = new NachrichtenDatabaseAccess($this->_interface);
 		
 	}
 
@@ -422,7 +422,7 @@ class ContractUsers extends Module {
 		require_once PATH_INCLUDE . '/email/SMTPMailer.php';
 		$mailer = new SMTPMailer ($this->_interface);
 		$mailer->smtpDataInDatabaseLoad ();
-		$mailer->emailFromXmlLoad (PATH_INCLUDE . '/email/Contract_Bestaetigung.xml');
+		$mailer->emailFromXmlLoad (PATH_INCLUDE . '/email/Nachrichten_Bestaetigung.xml');
 		$mailer->AddAttachment ($pdfPath, 'KurswahlBestaetigung.pdf');
 		$mailer->AddAddress ($user ['email']);
 		if (!$mailer->Send ()) {
@@ -646,7 +646,7 @@ class ContractUsers extends Module {
 	}
 
 	/********************
-	 * ContractUsersInGradeManager
+	 * NachrichtenUsersInGradeManager
 	********************/
 
 	private function addJointUsersInGrade ($userID, $gradeID) {
@@ -746,7 +746,7 @@ class ContractUsers extends Module {
 	}
 
 	/********************
-	 * ContractGradeManager
+	 * NachrichtenGradeManager
 	********************/
 
 	/**
@@ -836,7 +836,7 @@ class ContractUsers extends Module {
 	}
 
 	/********************
-	 * ContractSchoolYearManager
+	 * NachrichtenSchoolYearManager
 	********************/
 
 	private function getAllSchoolYears () {
@@ -879,12 +879,12 @@ class ContractUsers extends Module {
 	}
 
 	/********************
-	 * ContractJointUsersInSchoolYearManager
+	 * NachrichtenJointUsersInSchoolYearManager
 	********************/
 
 	/**
 	 * this function adds a Link between an User and a Schoolyear to the Database using the
-	 * ContractJointUsersInSchoolYearManager class
+	 * NachrichtenJointUsersInSchoolYearManager class
 	 * @param string $userId
 	 * @param string $schoolyearId
 	 */
@@ -1004,7 +1004,7 @@ class ContractUsers extends Module {
 	}
 
 	/********************
-	 * ContractClassManager
+	 * NachrichtenClassManager
 	********************/
 
 	private function getAllClasses () {
@@ -1048,7 +1048,7 @@ class ContractUsers extends Module {
 	}
 
 	/********************
-	 * ContractJointUsersInClassManager
+	 * NachrichtenJointUsersInClassManager
 	********************/
 
 	/**

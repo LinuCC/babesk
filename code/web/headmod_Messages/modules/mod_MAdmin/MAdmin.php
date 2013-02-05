@@ -2,7 +2,7 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 
-class CAdmin extends Module {
+class MAdmin extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -72,7 +72,13 @@ class CAdmin extends Module {
 				break;
 
 			case 'showcontract':
-				
+				$contractClass = TableMng::query('SELECT class FROM contracts WHERE id="'.$_GET['id'].'"',true); 
+				$userClass = TableMng::query('SELECT class FROM users WHERE id="'.$_SESSION['uid'].'"',true);
+				 
+				if (!strstr($contractClass[0]['class'],$userClass[0]['class'])) {
+					$this->_interface->dieError (
+							'Kein Zugriff erlaubt!');
+				}
 				$contract = TableMng::query("SELECT title,text FROM contracts WHERE id = ".$_GET['id'],true);
 				$forename = TableMng::query('SELECT forename FROM users WHERE ID = '.$_SESSION['uid'],true);
 				$name = TableMng::query('SELECT name FROM users WHERE ID = '.$_SESSION['uid'],true);
@@ -95,7 +101,7 @@ class CAdmin extends Module {
 			try {
 				$contracts = TableMng::query ($query, true);
 			} catch (MySQLVoidDataException $e) {
-				$this->_interface->dieError ('Konnte keine Vorlagen finden');
+				$smarty->assign('error','Konnte keine Vorlagen finden');
 			} catch (Exception $e) {
 				$this->_interface->dieError (
 						sprintf ('Konnte die Vorlagen nicht abrufen!', $e->getMessage()));
@@ -108,10 +114,10 @@ class CAdmin extends Module {
 			try {
 				$contracts = TableMng::query ($contracts, true);
 			} catch (MySQLVoidDataException $e) {
-				$this->_interface->dieError ('Konnte keine Vorlagen finden');
+				$smarty->assign('error','Keine Post vorhanden!');
 			} catch (Exception $e) {
 				$this->_interface->dieError (
-						sprintf ('Konnte die Vorlagen nicht abrufen!', $e->getMessage()));
+						sprintf ('Konnte die Post nicht abrufen!', $e->getMessage()));
 			}
 		}
 
@@ -140,7 +146,7 @@ $pdf->SetSubject($title);
 $pdf->SetKeywords('');
 
 // set default header data
-$pdf->SetHeaderData('../../../../web/headmod_Contract/modules/mod_CAdmin/logo.jpg', 15, 'LeG Uelzen', "Formulargenerator 0.1\nKlasse: ".$class, array(0,0,0), array(0,0,0));
+$pdf->SetHeaderData('../../../../web/headmod_Messages/modules/mod_MAdmin/logo.jpg', 15, 'LeG Uelzen', "Formulargenerator 0.1\nKlasse: ".$class, array(0,0,0), array(0,0,0));
 $pdf->setFooterData($tc=array(0,0,0), $lc=array(0,0,0));
 
 // set header and footer fonts

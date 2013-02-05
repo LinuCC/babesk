@@ -2,7 +2,7 @@
 
 require_once PATH_ACCESS . '/TableManager.php';
 
-class ContractUsersManager extends TableManager {
+class NachrichtenUsersManager extends TableManager {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes

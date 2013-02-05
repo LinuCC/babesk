@@ -271,12 +271,12 @@
 			</module>
 		</head_module>
 		<head_module>
-			<ger_name>Contract</ger_name>
-			<name>Contract</name>
+			<ger_name>Postfach</ger_name>
+			<name>Messages</name>
 			<active>true</active>
 			<module>
 				<ger_name>Admin</ger_name>
-				<name>CAdmin</name>
+				<name>MAdmin</name>
 				<active>true</active>
 			</module>
 		</head_module>

@@ -71,6 +71,8 @@ class Web {
 		if (isset($_GET ['webRedirect'])) { //redirect to a module
 			$this->redirect ();
 		}
+		
+		
 
 		///@fix: does this have a purpose?
 		$this->_smarty->assign('status', ''); //???
@@ -82,6 +84,13 @@ class Web {
 		$_SESSION['IP'] = $_SERVER['REMOTE_ADDR'];
 		$_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
 
+		//check for new mail
+		$mailcount = TableMng::query('SELECT COUNT(id) FROM contracts WHERE class LIKE "%'.$userData['class'].'%"',true);
+	
+		if ($mailcount[0]['COUNT(id)']>0) {
+			$this->_smarty->assign('newmail',true);
+		}
+		
 		//module-specific
 		if (isset($userData['credit'])) {
 			$_SESSION['credit'] = $userData['credit'];

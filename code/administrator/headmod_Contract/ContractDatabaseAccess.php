@@ -6,17 +6,17 @@
  * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
  *
  */
-class ContractDatabaseAccess {
+class NachrichtenDatabaseAccess {
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	////////////////////////////////////////////////////////////////////////////////
 	public function __construct ($interface) {
 
-		require_once 'ContractLanguageManager.php';
+		require_once 'NachrichtenLanguageManager.php';
 
 		$this->_interface = $interface;
-		$this->_languageManager = new ContractLanguageManager($this->_interface);
-		$this->_languageManager->setModule('ContractDatabaseAccess');
+		$this->_languageManager = new NachrichtenLanguageManager($this->_interface);
+		$this->_languageManager->setModule('NachrichtenDatabaseAccess');
 		$this->initManagers();
 	}
 	////////////////////////////////////////////////////////////////////////////////
@@ -29,10 +29,10 @@ class ContractDatabaseAccess {
 	public function initManagers () {
 
 
-		require_once PATH_ACCESS_CONTRACT . '/ContractUsersManager.php';
+		require_once PATH_ACCESS_CONTRACT . '/NachrichtenUsersManager.php';
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 
-		$this->_userManager = new ContractUsersManager();
+		$this->_userManager = new NachrichtenUsersManager();
 		$this->_globalSettingsManager = new GlobalSettingsManager();
 		
 	}

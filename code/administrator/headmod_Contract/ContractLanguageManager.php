@@ -5,7 +5,7 @@
  * @author voelkerball,infchem
  *
  */
-class ContractLanguageManager {
+class NachrichtenLanguageManager {
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	////////////////////////////////////////////////////////////////////////////////
@@ -98,7 +98,7 @@ class ContractLanguageManager {
 
 		if (!$this->_simpleXmlObject) {
 			$this->_interface->dieError(
-				'Could not load XML for the ContractLanguageManager! Please Check the Path and name of the file:<br>' .
+				'Could not load XML for the NachrichtenLanguageManager! Please Check the Path and name of the file:<br>' .
 				$this->_pathToXml);
 		}
 	}

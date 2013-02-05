@@ -3,7 +3,7 @@
 
 <h3>Neue Mitteilung erstellen:</h3>
 
-<form action='index.php?section=Contract|CAdmin&action=savecontract'
+<form action='index.php?section=Messages|MAdmin&action=savecontract'
 	method="post">
 	Titel:<input type="text" name="contracttitle" value=""><br>
 	Text:<textarea class="ckeditor" name="contracttext"></textarea>

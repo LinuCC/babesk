@@ -7,7 +7,7 @@ require_once PATH_INCLUDE . '/HeadModule.php';
  * @author Mirek Hancl
  *
  */
-class Contract extends HeadModule {
+class Messages extends HeadModule {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -21,7 +21,7 @@ class Contract extends HeadModule {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	public function execute($moduleManager, $dataContainer) {
-		$moduleManager->execute("Contract|CAdmin", false);
+		$moduleManager->execute("Messages|MAdmin", false);
 	}
 }
 ?>
