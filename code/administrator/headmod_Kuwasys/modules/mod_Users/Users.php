@@ -17,6 +17,7 @@ require_once 'UsersPasswordResetter.php';
 require_once 'DisplayUsersWaiting.php';
 require_once 'UsersCsvImport.php';
 require_once 'UsersCreateParticipationConfirmationPdf.php';
+require_once 'UsersEmailParticipationConfirmation.php';
 
 /**
  * Main-Class for the Module Users
@@ -97,8 +98,7 @@ class Users extends Module {
 					$this->handleParticipationConfirmationPdfForAll ();
 					break;
 				case 'sendEmailsParticipationConfirmation':
-					$this->dieError ('diese Funktion ist momentan veraltet');
-					$this->sendEmailParticipationConfirmation ();
+					$this->emailParticipationConfirmation ();
 					break;
 				case 'resetPasswords':
 					$this->resetPasswordOfAllUsers ();
@@ -1188,6 +1188,14 @@ class Users extends Module {
 
 		$date = sprintf('%s.%s.%s', $day, $month, $year);
 		return $date;
+	}
+
+	/**
+	 * Sends an Email-Participation-Confirmation
+	 */
+	private function emailParticipationConfirmation() {
+		UsersEmailParticipationConfirmation::init($this->_interface);
+		UsersEmailParticipationConfirmation::execute();
 	}
 
 

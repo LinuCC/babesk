@@ -131,6 +131,10 @@ class UsersInterface extends AdminInterface {
 		$this->smarty->assign ('activeYearName', $activeYearName);
 		$this->smarty->display ($this->tplFilePath . 'confirmResetPasswordOfAll.tpl');
 	}
+
+	public function showFormParticipationConfirmationEmail () {
+		$this->smarty->display ($this->tplFilePath . 'emailParticipationConfirmationForm.tpl');
+	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////
