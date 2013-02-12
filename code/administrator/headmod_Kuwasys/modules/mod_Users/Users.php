@@ -191,12 +191,30 @@ class Users extends Module {
 	private function addUserToClass () {
 
 		if (isset($_POST['classId'], $_GET['ID'])) {
-			$this->addJointUsersInClass($_GET['ID'], $_POST['classId'], $_POST['classStatus']);
-			$this->_interface->dieMsg($this->_languageManager->getText('finAddUserToClass'));
+			$statusId = $this->statusIdOfStatusNameGet ($_POST['classStatus']);
+			if(!$this->hasClassWithSameDayAndStatusIdAs($_POST['classId'], $_GET['ID'], $statusId)) {
+				$this->addJointUsersInClass($_GET['ID'], $_POST['classId'], $_POST['classStatus']);
+				$this->_interface->dieMsg($this->_languageManager->getText('finAddUserToClass'));
+			}
+			else {
+				$this->_interface->dieError ('Der Schüler hat an diesem Tag bereits einen Kurs mit diesem Status. Bitte passen sie zuerst diesen Kurs an');
+			}
 		}
 		else {
 			$this->showAddClassToUser();
 		}
+	}
+
+	private function statusIdOfStatusNameGet ($statusName) {
+		$query = 'SELECT ID FROM usersInClassStatus WHERE name = "' . $statusName . '"';
+		try {
+			$id = TableMng::query ($query, true);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError('Konnte einen Status nicht finden');
+		} catch (Exception $e) {
+			$this->_interface->dieError('Konnte die Status-ID nicht abrufen');
+		}
+		return $id [0] ['ID'];
 	}
 
 	private function changeUserToClass () {
@@ -229,11 +247,9 @@ class Users extends Module {
 	private function moveUserByClass () {
 
 		if(isset($_GET['classIdOld'], $_GET['userId'], $_POST['classIdNew'], $_POST['statusNew'])) {
-			if($this->isClassMaxRegistrationReached($_POST['classIdNew'])
-				&& !isset ($_POST ['ignoreMaxReg'])) {
-				$this->moveUserByClassDialog ();
-			}
-			else {
+
+			if ($this->moveUserByClassCheck ()) {
+				$this->moveUserByClassCleanSessionVars();
 				$this->moveUserByClassToDatabase($_GET['userId'], $_GET['classIdOld'], $_POST['classIdNew'], $_POST['statusNew']);
 				$this->_interface->dieMsg($this->_languageManager->getText('finishedMoveUserToClass'));
 			}
@@ -246,14 +262,149 @@ class Users extends Module {
 		}
 	}
 
+	private function moveUserByClassCleanSessionVars () {
+		if(isset($_SESSION ['moveUserByClassMaxRegConf'])) {
+			unset($_SESSION ['moveUserByClassMaxRegConf']);
+		}
+		if(isset($_SESSION ['moveUserByClassOnDupDelete'])) {
+			unset($_SESSION ['moveUserByClassOnDupDelete']);
+		}
+	}
+
+	/**
+	 * Checks if the circumstances for moving the user are correct; else show
+	 * warnings and dialogs
+	 */
+	private function moveUserByClassCheck () {
+		$shouldAdd = true;
+		//check if the added Link would make the class bigger than maxRegistration allows
+		if($this->isClassMaxRegistrationReached($_POST['classIdNew'])
+			&& !isset($_SESSION ['moveUserByClassMaxRegConf'])
+			&& !isset ($_POST ['ignoreMaxReg'])) {
+			$shouldAdd = $this->moveUserByClassDialog ();
+			if(!$shouldAdd) {
+				return false;
+			}
+			else {
+				$_SESSION ['moveUserByClassMaxRegConf'] = true;
+			}
+		}
+		//check if there is already a Link with same status and unit, which would cause the programm to error out on specific Modules
+		if($this->hasClassWithSameDayAndStatusIdAs ($_POST['classIdNew'],
+			$_GET['userId'], $_POST['statusNew'])) {
+			$shouldAdd = $this->moveUserByClassDuplicateDialog();
+			if(!$shouldAdd) {
+				return false;
+			}
+		}
+		//no problem, add the new link
+		else {
+			return true;
+		}
+		return $shouldAdd;
+	}
+
+	private function moveUserByClassDuplicateDialog() {
+		if (isset ($_POST['removeOldUicLink'])) {
+			$this->moveUserByClassDuplicateDeleteOldLink();
+			return true;
+		}
+		else {
+			$this->moveUserByClassDuplicateDialogShow ($_GET['classIdOld'], $_POST['classIdNew'], $_GET['userId'], $_POST['statusNew']);
+			return false;
+		}
+	}
+
+	private function moveUserByClassDuplicateDeleteOldLink() {
+		$whereQuery = $this->moveUserByClassDuplicateDialogDeleteOldLinkGetWhereQuery();
+		$query = sprintf(
+			'DELETE FROM jointUsersInClass WHERE %s
+			', $whereQuery);
+		try {
+			TableMng::query ($query);
+		} catch (Exception $e) {
+			$this->_interface->dieError ('Konnte die alten Links nicht löschen' . $e->getMessage());
+		}
+		$this->_interface->showMsg ('Die alten Links wurden erfolgreich gelöscht');
+	}
+
+	private function moveUserByClassDuplicateDialogDeleteOldLinkGetWhereQuery() {
+		$whereQuery = '';
+		foreach ($_SESSION ['moveUserByClassOnDupDelete'] as $link) {
+			$whereQuery .= sprintf ('ID = "%s" OR ', $link);
+		}
+		$whereQuery= rtrim ($whereQuery, 'OR ');
+		return $whereQuery;
+	}
+
+	private function moveUserByClassDuplicateDialogShow($classIdOld, $classIdNew, $userId, $statusId) {
+		$dupClass = $this->moveUserByClassDuplicateDialogShowFetchData(
+			$classIdOld, $classIdNew, $userId, $statusId);
+		if (count($dupClass) > 1) {
+			$this->_interface->showError ('Es sind bereits mehrere sehr ähnliche Links zu dem Benutzer vorhanden; Wenn fortgefahren wird, werden sie alle gelöscht');
+		}
+		$dupLinkArray = array ();
+		foreach ($dupClass as $d) {
+			$dupLinkArray [] = $d ['linkId'];
+		}
+		$_SESSION ['moveUserByClassOnDupDelete'] = $dupLinkArray;
+		$this->_interface->showMoveUserByClassDuplicateDialog ($dupClass, $classIdOld, $classIdNew, $userId, $statusId);
+	}
+
+	private function moveUserByClassDuplicateDialogShowFetchData (
+		$classIdOld, $classIdNew, $userId, $statusId) {
+		//fetch some data to show the problem to the user
+		$query = sprintf(
+			"SELECT c.label AS class, uic.ID as linkId,
+				(SELECT translatedName FROM kuwasysClassUnit WHERE ID = c.unitId)
+				AS unit,
+				(SELECT translatedName FROM usersInClassStatus WHERE ID = uic.statusId)
+				AS status
+			FROM class c
+			INNER JOIN jointUsersInClass uic ON uic.ClassID = c.ID
+			WHERE uic.UserID = %s
+				AND uic.statusId = %s
+				AND c.unitId = (SELECT unitId FROM class WHERE ID = %s)
+			", $userId, $statusId, $classIdNew);
+		try {
+			$dupClass = TableMng::query ($query, true);
+		} catch (MySQLVoidDataException $e) {
+			throw $e;
+		} catch (Exception $e) {
+			$this->_interface->dieError ('Konnte die Kursdaten nicht abrufen.');
+		}
+		return $dupClass;
+	}
+
+	private function hasClassWithSameDayAndStatusIdAs ($classId, $userId, $statusId) {
+		$query = sprintf(
+			"SELECT COUNT(*) AS count
+			FROM jointUsersInClass uic
+			INNER JOIN class c ON uic.ClassID = c.ID
+			WHERE uic.UserID = %s
+				AND uic.statusId = %s
+				AND c.unitId = (SELECT unitId FROM class WHERE ID = %s)
+			", $userId, $statusId, $classId);
+		try {
+			$hasClass = TableMng::query ($query, true);
+		} catch (Exception $e) {
+			$this->_interface->dieError ('Konnte nicht auf weitere Kurse mit gleichem Status und Tag überprüfen' . $e->getMessage());
+		}
+		if ($hasClass[0] ['count'] != 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	/**
 	 * Checks if a confirmation-Dialog has to be shown to move the User
 	 * Based on the maximum Registration of the Class
 	 */
 	private function moveUserByClassDialog () {
 		if(isset($_POST['confirmed'])) { //Already confirmed the Dialog
-			$this->moveUserByClassToDatabase($_GET['userId'], $_GET['classIdOld'], $_POST['classIdNew'], $_POST['statusNew']);
-			$this->_interface->dieMsg($this->_languageManager->getText('finishedMoveUserToClass'));
+			return true;
 		}
 		else if (isset($_POST['notConfirmed'])) { //Dialog declined
 			$this->_interface->dieMsg($this->_languageManager->getText('moveUserToClassNotConfirmed'));
