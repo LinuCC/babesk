@@ -25,6 +25,7 @@ class MAdmin extends Module {
 		require_once PATH_ACCESS . '/GroupManager.php';
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 
+
 		global $smarty;
 		$this->_interface = new WebInterface($smarty);
 		$userManager = new UserManager();
@@ -58,7 +59,11 @@ class MAdmin extends Module {
 				
 			case 'savecontract':
 				$class = implode('|', $_POST['class']);
-				TableMng::query(sql_prev_inj(sprintf('INSERT INTO contracts (author_id,class,title,text) VALUES (%s,"%s","%s","%s")',$_SESSION['uid'],$class,$_POST['contracttitle'],$_POST['contracttext'])));	
+				TableMng::query(sql_prev_inj(sprintf('INSERT INTO contracts (author_id,class,title,text,valid_from,valid_to) VALUES (%s,"%s","%s","%s","%s","%s")',$_SESSION['uid'],$class,$_POST['contracttitle'],$_POST['contracttext'],
+						$_POST['StartDateYear'] . '-' . $_POST['StartDateMonth'] . '-' .
+							$_POST['StartDateDay'], $_POST['EndDateYear'] . '-' . $_POST['EndDateMonth'] . '-' . $_POST[
+							'EndDateDay'])));	
+				$smarty->display($this->smartyPath . 'new_contract_fin.tpl');
 				break;
 				
 			case 'deletecontract':
@@ -69,13 +74,13 @@ class MAdmin extends Module {
 				TableMng::query(sql_prev_inj(sprintf("DELETE FROM contracts WHERE id='%s'",$_GET['id'])));
 				
 				}
+				$smarty->display($this->smartyPath . 'delete_contract_fin.tpl');
 				break;
 
 			case 'showcontract':
 				$contractClass = TableMng::query('SELECT class FROM contracts WHERE id="'.$_GET['id'].'"',true); 
 				$userClass = TableMng::query('SELECT class FROM users WHERE id="'.$_SESSION['uid'].'"',true);
-				 
-				if (!strstr($contractClass[0]['class'],$userClass[0]['class'])) {
+				if (!$editor && !strstr($contractClass[0]['class'],$userClass[0]['class'])) {
 					$this->_interface->dieError (
 							'Kein Zugriff erlaubt!');
 				}
@@ -95,11 +100,13 @@ class MAdmin extends Module {
 		
 		
 		if ($editor) {
-			$query = 'SELECT c.id,c.title,c.class FROM contracts AS c WHERE c.author_id LIKE "'.$_SESSION['uid'].'"';
+			$query = 'SELECT c.id,c.title,c.class,c.valid_from,c.valid_to FROM contracts AS c WHERE c.author_id LIKE "'.$_SESSION['uid'].'"';
 			
 			$smarty->assign('editor',true);
 			try {
 				$contracts = TableMng::query ($query, true);
+				$smarty->assign('valid_from',  formatDate($contracts[0]['valid_from']));
+				$smarty->assign('valid_to',  formatDate($contracts[0]['valid_to']));
 			} catch (MySQLVoidDataException $e) {
 				$smarty->assign('error','Konnte keine Vorlagen finden');
 			} catch (Exception $e) {
@@ -109,10 +116,12 @@ class MAdmin extends Module {
 		} else {
 			$class = TableMng::query('SELECT class FROM users WHERE ID LIKE "'.$_SESSION['uid'].'"',true);
 		
-			$contracts= "SELECT c.id,c.title,c.class FROM contracts AS c WHERE c.class LIKE '%".$class[0]['class']."%'";
+			$contracts= "SELECT c.id,c.title,c.class,c.valid_from,c.valid_to FROM contracts AS c WHERE c.class LIKE '%".$class[0]['class']."%' AND SYSDATE() BETWEEN c.valid_from AND c.valid_to";
 	
 			try {
 				$contracts = TableMng::query ($contracts, true);
+				$smarty->assign('valid_from',  formatDate($contracts[0]['valid_from']));
+				$smarty->assign('valid_to',  formatDate($contracts[0]['valid_to']));
 			} catch (MySQLVoidDataException $e) {
 				$smarty->assign('error','Keine Post vorhanden!');
 			} catch (Exception $e) {
@@ -121,7 +130,7 @@ class MAdmin extends Module {
 			}
 		}
 
-		
+
 		$smarty->assign('contracts', $contracts);
 		$smarty->display($this->smartyPath . 'menu.tpl');
 		}

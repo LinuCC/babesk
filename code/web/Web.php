@@ -85,7 +85,7 @@ class Web {
 		$_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
 
 		//check for new mail
-		$mailcount = TableMng::query('SELECT COUNT(id) FROM contracts WHERE class LIKE "%'.$userData['class'].'%"',true);
+		$mailcount = TableMng::query('SELECT COUNT(id) FROM contracts WHERE class LIKE "%'.$userData['class'].'%"  AND SYSDATE() BETWEEN valid_from AND valid_to',true);
 	
 		if ($mailcount[0]['COUNT(id)']>0) {
 			$this->_smarty->assign('newmail',true);
@@ -112,10 +112,11 @@ class Web {
 		$head_mod_arr = array();
 
 		foreach ($head_modules as $head_module) {
-			$head_mod_arr[$head_module->getName()] = array('name'			 => $head_module->getName(), 'display_name'
-					 => $head_module->getDisplayName());
+			$head_mod_arr[$head_module->getName()] = array( 'name'			 => $head_module->getName(), 
+															'display_name'					 => $head_module->getDisplayName(),
+															'headmod_menu' => $head_module->getHeadmodMenu());
 		}
-
+		
 		$this->_smarty->assign('head_modules', $head_mod_arr);
 		$this->checkFirstPassword ();
 		if ($mod_str) {

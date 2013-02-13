@@ -14,8 +14,8 @@ class Pvau extends HeadModule {
 	
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
-	public function __construct($name, $display_name) {
-		parent::__construct($name, $display_name);
+	public function __construct($name, $display_name,$headmod_menu) {
+		parent::__construct($name, $display_name,$headmod_menu);
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////

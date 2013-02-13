@@ -12,7 +12,7 @@ CKEDITOR.editorConfig = function( config )
 	config.extraPlugins = 'contractvars'; 
 	config.toolbar_BaBeSK =
 	[
-	    [ 'Bold', 'Italic','-','Cut','Copy','Paste','PasteFromWord','-','contractforename', 'contractname' ]
+	    [ 'Bold', 'Italic','-','Cut','Copy','Paste','PasteFromWord','-','HorizontalRule','-','contractforename', 'contractname' ]
 	];
 	config.toolbar = 'BaBeSK';
 	 config.language = 'de';

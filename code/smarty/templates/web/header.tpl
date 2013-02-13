@@ -51,7 +51,7 @@ function switchInfo(divName) {
 
 			<a href="index.php?section=Babesk|Account">Karte sperren</a>
 			<br>
-			<a href="index.php?section=Babesk|ChangePassword">Passwort &auml;ndern</a>
+			<a href="index.php?section=Settings">Daten &auml;ndern</a>
 
 
 	</div>

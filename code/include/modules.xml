@@ -284,6 +284,7 @@
 			<ger_name>Einstellungen</ger_name>
 			<name>Settings</name>
 			<active>true</active>
+			<nomenu>true</nomenu>
 			<module>
 				<ger_name>Voreingestelltes Passwort verändern</ger_name>
 				<name>ChangePresetPassword</name>

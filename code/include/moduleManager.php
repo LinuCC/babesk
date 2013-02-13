@@ -276,12 +276,12 @@ class ModuleManager {
 
 		if (class_exists((string) $head_mod->name)) {
 			$headmod_classname = (string) $head_mod->name;
-			$headModule = new $headmod_classname((string) $head_mod->name, (string) $head_mod->ger_name);
+			$headModule = new $headmod_classname((string) $head_mod->name, (string) $head_mod->ger_name, (string) $head_mod->nomenu);
 		}
 		else {
 			$this->generalInterface->showError('No file or class does exist for the HeadModule ' . $head_mod->name .
 				', falling back to the StandardClass! If you see this, then the Log-Modul isnt finished yet<br>');
-			$headModule = new HeadModule((string) $head_mod->name, (string) $head_mod->ger_name);
+			$headModule = new HeadModule((string) $head_mod->name, (string) $head_mod->ger_name, (string) $head_mod->nomenu);
 		}
 		return $headModule;
 	}
