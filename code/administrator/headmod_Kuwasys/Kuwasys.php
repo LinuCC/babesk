@@ -18,9 +18,9 @@ class Kuwasys extends HeadModule {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
-	public function __construct ($name, $display_name) {
+	public function __construct ($name, $display_name,$headmod_menu) {
 
-		parent::__construct($name, $display_name);
+		parent::__construct($name, $display_name,$headmod_menu);
 		defined('PATH_ACCESS_KUWASYS') or define('PATH_ACCESS_KUWASYS', PATH_ACCESS . '/headmod_Kuwasys');
 		defined('PATH_INCLUDE_KUWASYS') or define('PATH_INCLUDE_KUWASYS', PATH_INCLUDE . '/headmod_Kuwasys');
 	}
