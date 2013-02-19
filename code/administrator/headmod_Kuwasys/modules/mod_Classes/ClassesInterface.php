@@ -135,6 +135,13 @@ class ClassesInterface extends AdminInterface {
 		$this->smarty->display ($this->tplFilePath . 'assignUsersToClassesAddUserFin.tpl');
 	}
 
+	public function unregisterUserConfirmation($jointId, $username, $classname) {
+		$this->smarty->assign('jointId', $jointId);
+		$this->smarty->assign('username', $username);
+		$this->smarty->assign('classname', $classname);
+		$this->smarty->display($this->tplFilePath . "unregisterUserConfirmation.tpl");
+	}
+
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations

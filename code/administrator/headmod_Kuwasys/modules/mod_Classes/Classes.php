@@ -5,6 +5,7 @@ require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysFilterAndSort.php';
 require_once 'ClassesCsvImport.php';
 require_once 'ClassesCreateTable.php';
+require_once 'ClassesUnregisterUser.php';
 
 /**
  *
@@ -58,7 +59,10 @@ class Classes extends Module {
 					$this->assignUsersToClasses();
 					break;
 				case 'createClassTable':
-					$this->createClassTable ();
+					$this->createClassTable();
+					break;
+				case 'unregisterUser':
+					$this->unregisterUser();
 					break;
 				default:
 					$this->_interface->dieError($this->_languageManager->getText('errorWrongActionValue'));
@@ -150,6 +154,7 @@ class Classes extends Module {
 				///@ToDo can be made faster with userIdArray!
 				$user = $this->_databaseAccessManager->userGet($joint['UserID']);
 				$user['statusId'] = $joint['statusId'];
+				$user['jointId'] = $joint['ID'];
 				$status = $this->_databaseAccessManager->usersInClassStatusGetWithoutDieing ($joint ['statusId']);
 				if ($status) {
 					$user['statusTranslated'] = $status ['translatedName'];
@@ -579,6 +584,11 @@ class Classes extends Module {
 	private function createClassTable () {
 		ClassesCreateTable::init ($this->_interface);
 		ClassesCreateTable::execute ();
+	}
+
+	private function unregisterUser() {
+		ClassesUnregisterUser::init($this->_interface);
+		ClassesUnregisterUser::execute($_GET['jointId']);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
