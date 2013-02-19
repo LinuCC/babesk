@@ -119,6 +119,7 @@ td {
 					{/if}
 						{$counter = $counter + 1}
 				{/foreach}
+			<td rowspan="{$rowsOfSamePerson}"><a href="index.php?section=Kuwasys|Classes&amp;action=unregisterUser&amp;jointId=	{$user.jointId}">Abmelden</a></td>
 		</tr>
 		{/foreach}
 		{/if}
