@@ -56,7 +56,7 @@ table.dataTable td {
 	{else}
 		<div><label class="left">In Klasse:</label><div class="valueDiv"> <b>keine Klasse</b></div></div>
 	{/if}<br>
-	{if isset($user.classes)}
+	{if isset($user.classes) and is_array($user.classes)}
 	<div><label class="left">Kurse:</label><br>
 		{foreach $user.classes as $unit}
 		<label class="classList">{$unit.0.unit.translatedName}:</label>
