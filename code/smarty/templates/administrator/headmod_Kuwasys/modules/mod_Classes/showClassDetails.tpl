@@ -106,7 +106,7 @@ td {
 							<a href="index.php?section=Kuwasys|Classes&action=showClassDetails&ID={$otherClass.ID}">{$otherClass.label}</a>
 							{*$blubb is used so the value of end($user.classesOfSameDay) does not get outputted*}
 							{$blubb = end($user.classesOfSameDay)}
-							{*check if it is not the last element}
+							{*check if it is not the last element*}
 							{if $cKey ==! key($user.classesOfSameDay)}<hr />{/if}
 				{/foreach}
 						</td>
