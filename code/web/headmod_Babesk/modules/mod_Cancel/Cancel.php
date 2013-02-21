@@ -37,8 +37,9 @@ class Cancel extends Module {
 		$soliCouponManager = new SoliCouponsManager();
 		$soliOrderManager = new SoliOrderManager();
 		$orderUserID = $orderManager->getEntryData($_GET['id'], 'UID');
+		$orderFetched = $orderManager->getEntryData($_GET['id'], 'fetched');
 		
-		if ($_SESSION['uid'] != $orderUserID['UID']  ) {
+		if (($_SESSION['uid'] != $orderUserID['UID'])  && !$orderFetched) {
 			$smarty->display($this->smartyPath . "illegal.tpl");
 					die();
 		}
