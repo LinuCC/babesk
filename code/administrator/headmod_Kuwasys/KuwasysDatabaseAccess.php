@@ -208,15 +208,6 @@ class KuwasysDatabaseAccess {
 		return $class;
 	}
 
-	public function classChange ($id, $label, $description, $maxRegistration, $allowRegistration, $weekday) {
-
-		try {
-			$this->_classManager->alterClass($id, $label, $description, $maxRegistration, $allowRegistration, $weekday);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('classErrorChange'));
-		}
-	}
-
 	///TODO: Following both functions duplicated
 	public function classRegistrationGloballyEnabledGetAndAddingWhenVoid () {
 

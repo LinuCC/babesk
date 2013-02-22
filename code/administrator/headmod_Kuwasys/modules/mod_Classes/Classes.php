@@ -208,9 +208,9 @@ class Classes extends Module {
 	private function checkClassInput () {
 
 		try {
-			inputcheck($_POST['label'], '/\A.{3,100}\z/', $this->_languageManager->getText('formLabel'));
+			inputcheck($_POST['label'], '/\A[^~]{3,100}\z/', $this->_languageManager->getText('formLabel'));
 			inputcheck($_POST['maxRegistration'], 'number', $this->_languageManager->getText('formMaxRegistration'));
-			inputcheck($_POST['description'], '/\A.{3,1024}\z/', $this->_languageManager->getText('formDescription'));
+			inputcheck($_POST['description'], '/\A[^~]{3,1024}\z/', $this->_languageManager->getText('formDescription'));
 		} catch (WrongInputException $e) {
 			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorWrongInput'), $e->getFieldName())
 				);
@@ -360,8 +360,23 @@ class Classes extends Module {
 	private function changeClassInDatabase () {
 
 		$allowRegistration = (isset($_POST['allowRegistration'])) ? true : false;
-		$this->_databaseAccessManager->classChange($_GET['ID'], $_POST['label'], $_POST['description'], $_POST[
-				'maxRegistration'], $allowRegistration, $_POST['weekday']);
+		$query = "UPDATE class
+			SET label = ?, description = ?, maxRegistration = ?, registrationEnabled = ?, unitId = ?
+			WHERE ID = ?";
+		if($stmt = TableMng::getDb()->prepare($query)) {
+			$stmt->bind_param('ssissi', $_POST['label'],
+				$_POST['description'], $_POST['maxRegistration'],
+				$allowRegistration, $_POST['weekday'],$_GET['ID']);
+			if($stmt->execute()) {
+				$this->_interface->dieMsg('Der Kurs wurde erfolgreich verändert');
+			}
+			else {
+				$this->_interface->dieError('Der Kurs konnte nicht verändert werden!');
+			}
+		}
+		else {
+			$this->_interface->dieError('Fehler beim Verbinden mit der Datenbank');
+		}
 	}
 
 	private function changeJointSchoolYearInDatabase () {
