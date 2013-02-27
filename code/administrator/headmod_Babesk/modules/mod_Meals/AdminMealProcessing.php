@@ -295,19 +295,22 @@ class AdminMealProcessing {
 				$num_orders[$counter]['user_groups'] = $groups;
 				$counter++;
 			}
-
+			
+		
 			/**
 			 * Sort the Orders
 			 */
-			foreach ($orders as $order) {
+			foreach ($orders as &$order) {
 				$meals[$order['meal_name']][] = $order;
 			}
+			
 			//sorting by usernames
 			foreach ($meals as $meal) {
 				foreach ($meal as $order) {
 					$temp[] = $order['user_name'];
 				}
 				sort($temp);
+				
 				foreach ($temp as $temp_name) {
 					foreach ($meal as & $order) {
 						if ($order['user_name'] == $temp_name) {
@@ -318,7 +321,7 @@ class AdminMealProcessing {
 					}
 				}
 			}
-
+			
 			/**
 			 * Show Orders
 			 */
