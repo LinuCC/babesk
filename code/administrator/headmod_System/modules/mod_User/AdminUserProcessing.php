@@ -317,8 +317,9 @@ class AdminUserProcessing {
 		} catch (Exception $e) {
 			$this->userInterface->dieError($this->messages['error']['change'] . $e->getMessage());
 		}
+		$cardChanges = $cardManager->getCardIDChanges($cardManager->getIDByUserID($id));
 		$this->userInterface
-				->ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID, $locked, $soli,$class);
+				->ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID, $locked, $soli,$class,$cardChanges);
 	}
 
 	var $messages = array();

@@ -91,9 +91,10 @@ class CardManager extends TableManager {
 	 */
 	function addCardIdChange($ID) {
 		$card = parent::getEntryData($ID);
+
 		if($card != NULL) {
 			try {
-				parent::alterEntry($ID, 'changed_cardID', $card);
+				parent::alterEntry($ID, 'changed_cardID', $card['changed_cardID']+1);
 			} catch (Exception $e) {
 				throw new Exception('could not alter the card-entry:'.$e->getMessage());
 			}
