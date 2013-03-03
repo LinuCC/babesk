@@ -132,6 +132,13 @@ class MAdmin extends Module {
 
 
 		$smarty->assign('contracts', $contracts);
+		
+		if (preg_match("/BaBeSK/i", $_SERVER['HTTP_USER_AGENT'])) {
+			$smarty->assign('BaBeSkTerminal',true);
+		} else {
+			$smarty->assign('BaBeSkTerminal',false);
+		}
+		
 		$smarty->display($this->smartyPath . 'menu.tpl');
 		}
 	}
