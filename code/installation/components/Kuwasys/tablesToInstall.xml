@@ -97,6 +97,7 @@
 		`birthday` varchar (11) NOT NULL,
 		`last_login` varchar (11) NOT NULL,
 		`login_tries` smallint(5),
+		`GID` smallint(5),
 		`first_passwd` boolean NOT NULL DEFAULT '0',
 		`locked` boolean NOT NULL,
 		Primary Key (`ID`)
@@ -108,6 +109,17 @@
 		(`email` varchar(64) NOT NULL,
 		`telephone` varchar (64) NOT NULL);
 		</alternateSqlCommandForBabesk>
+	</table>
+	<table>
+		<name>groups</name>
+		<sqlString>
+		CREATE TABLE IF NOT EXISTS `groups` (
+                        `ID` smallint(5) unsigned NOT NULL auto_increment,
+                        `name` varchar(255) NOT NULL,
+                        `max_credit` decimal(4,2) NOT NULL,
+                        PRIMARY KEY  (`ID`)
+                    ) AUTO_INCREMENT=1;
+		</sqlString>
 	</table>
 	<table>
 		<name>jointUsersInSchoolYear</name>

@@ -164,23 +164,39 @@ class Users extends Module {
 		}
 	}
 
-	private function addUserToDatabase() {
-		$query = "INSERT INTO users (forename, name, username, password,
-				email, telephone, birthday) VALUES (?, ?, ?, ?, ?, ?, ?);
+	private function addUserToDatabase($forename, $name,$username,
+		$hashedPassword, $email,$telephone, $birthday, $schoolyearId, $gradeId) {
+		$db = TableMng::getDb();
+		$db->real_escape_string($forename);
+		$db->real_escape_string($name);
+		$db->real_escape_string($username);
+		$db->real_escape_string($hashedPassword);
+		$db->real_escape_string($email);
+		$db->real_escape_string($telephone);
+		$db->real_escape_string($birthday);
+		$db->real_escape_string($schoolyearId);
+		$db->real_escape_string($gradeId);
+		$query = sprintf(
+			"INSERT INTO users (forename, name, username, password,
+				email, telephone, birthday) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s');
 			SET @last_user_id = LAST_INSERT_ID();
 			INSERT INTO jointUsersInSchoolYear (UserID, SchoolYearID)
-				VALUES (@last_user_id, ?);
+				VALUES (@last_user_id, '%s');
 			INSERT INTO jointUsersInGrade (UserID, GradeID)
-				VALUES (@last_user_id, ?);";
-		// TableMng::getDb()->autocommit(false);//mySQL-transaction
-		if($stmt = TableMng::getDb()->prepare($query)) {
-			$stmt->bind_param("sssssssii", $forename, $name,$username,
-				$hashedPassword, $email, $telephone, $birthday, $schoolyearId,
-				$gradeId);
-			// TableMng::getDb()->commit();
+				VALUES (@last_user_id, '%s');",
+				$forename, $name,$username, $hashedPassword, $email,
+				$telephone, $birthday, $schoolyearId, $gradeId);
+		$db->autocommit(false);//mySQL-transaction
+		if($db->multi_query($query)) {
+			do {
+				$db->next_result();
+			} while($db->more_results());
+		}
+		if(!$db->errno) {
+			$db->commit();
 		}
 		else {
-			$this->_interface->dieError('Ein Fehler ist beim Verbinden mit der Datenbank aufgetreten' . TableMng::getDb()->error);
+			$this->_interface->dieError('Ein Fehler ist beim Verbinden mit der Datenbank aufgetreten' . $db->error);
 		}
 	}
 
