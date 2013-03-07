@@ -143,19 +143,67 @@ class Users extends Module {
 	private function addUser () {
 
 		if (isset($_POST['username'], $_POST['name'], $_POST['forename'], $_POST['telephone'])) {
-			$this->checkAddUserInput();
-			$this->checkPasswordRepetition();
-			$this->addUserToDatabaseByPost();
-			$this->addJointUsersInSchoolYearByAddUser();
-			$userID = $this->_usersManager->getLastInsertedID();
-			$this->addJointUsersInGrade($userID, $_POST['grade']);
-			$this->_interface->dieMsg(sprintf($this->_languageManager->getText('finishedAddUser'), $_POST['forename'],
-					$_POST['name']));
+			$this->checkAddUserInput(); //check User Input
+			$this->checkPasswordRepetition(); //is repeated Password the same?
+			$birthday = $this->handleBirthday($_POST['Date_Day'],
+				$_POST['Date_Month'], $_POST['Date_Year']);
+			$this->addUserToDatabase($_POST['forename'], $_POST['name'],
+				$_POST['username'], $_POST['password'], $_POST['email'],
+				$_POST['telephone'], $birthday, $_POST['schoolyear'],
+				$_POST['grade']);
+			// fetches the ID of the last inserted object from the Db
+			/// @todo: There has to be a better way to get the other elements
+			/// inserted
+			// $userID = $this->_usersManager->getLastInsertedID();
+			// $this->addJointUsersInSchoolYear($userID, $_POST['schoolyear']);
+			// $this->addJointUsersInGrade($userID, $_POST['grade']);
+			$this->_interface->dieMsg(sprintf($this->_languageManager->getText('finishedAddUser'), $_POST['forename'], $_POST['name']));
 		}
 		else {
 			$this->showAddUser();
 		}
 	}
+
+	private function addUserToDatabase() {
+		$query = "INSERT INTO users (forename, name, username, password,
+				email, telephone, birthday) VALUES (?, ?, ?, ?, ?, ?, ?);
+			SET @last_user_id = LAST_INSERT_ID();
+			INSERT INTO jointUsersInSchoolYear (UserID, SchoolYearID)
+				VALUES (@last_user_id, ?);
+			INSERT INTO jointUsersInGrade (UserID, GradeID)
+				VALUES (@last_user_id, ?);";
+		// TableMng::getDb()->autocommit(false);//mySQL-transaction
+		if($stmt = TableMng::getDb()->prepare($query)) {
+			$stmt->bind_param("sssssssii", $forename, $name,$username,
+				$hashedPassword, $email, $telephone, $birthday, $schoolyearId,
+				$gradeId);
+			// TableMng::getDb()->commit();
+		}
+		else {
+			$this->_interface->dieError('Ein Fehler ist beim Verbinden mit der Datenbank aufgetreten' . TableMng::getDb()->error);
+		}
+	}
+
+	// private function addUserToDatabase ($forename, $name, $username, $password, $email, $telephone, $birthday) {
+
+	// 	$hashedPassword = hash_password($password);
+	// 	$query = "INSERT INTO users (forename, name, username, password,
+	// 		email, telephone, birthday) VALUES (?, ?, ?, ?, ?, ?, ?)";
+	// 	if($stmt = TableMng::getDb()->prepare($query)) {
+	// 		$stmt->bind_param("sssssss", $forename, $name,
+	// 			$username, $hashedPassword,
+	// 			$email, $telephone, $birthday);
+	// 		if($stmt->execute()) {
+	// 			//everything was good
+	// 		}
+	// 		else {
+	// 			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorAddUser'), TableMng::getDb()->error));
+	// 		}
+	// 	}
+	// 	else {
+	// 		$this->_interface->dieError('Ein Fehler ist beim Verbinden mit der Datenbank aufgetreten.' . TableMng::getDb()->error);
+	// 	}
+	// }
 
 	private function deleteUser () {
 
@@ -660,34 +708,7 @@ class Users extends Module {
 	 * UserManager
 	********************/
 
-	/**
-	 * @used-by Users::addUser
-	 */
-	private function addUserToDatabaseByPost () {
 
-		$date = $this->convertNumbersToDate($_POST['Date_Day'], $_POST['Date_Month'], $_POST['Date_Year']);
-		try {
-			$this->_usersManager->addUser($_POST['forename'], $_POST['name'], $_POST['username'], hash_password($_POST[
-					'password']), $_POST['email'], $_POST['telephone'], $date);
-		} catch (MySQLConnectionException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddUserConnectDatabase'));
-		}
-		catch (Exception $e) {
-			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorAddUser'), $e->getMessage()));
-		}
-	}
-
-	private function addUserToDatabase ($forename, $name, $username, $password, $email, $telephone, $birthday) {
-
-		try {
-			$this->_usersManager->addUser($forename, $name, $username, $password, $email, $telephone, $birthday);
-		} catch (MySQLConnectionException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddUserConnectDatabase'));
-		}
-		catch (Exception $e) {
-			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorAddUser'), $e->getMessage()));
-		}
-	}
 
 	private function ChangeUserDataToDatabase () {
 
@@ -749,10 +770,16 @@ class Users extends Module {
 
 	private function addJointUsersInGrade ($userID, $gradeID) {
 
-		try {
-			$this->_jointUsersInGradeManager->addJoint($userID, $gradeID);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddJointUsersInGrade'));
+		$query = "INSERT INTO jointUsersInGrade (UserID, GradeID)
+			VALUES (?, ?)";
+		if($stmt = TableMng::getDb()->prepare($query)) {
+			$stmt->bind_param('ii', $userID, $gradeID);
+			if(!$stmt->execute()) {
+				$this->_interface->dieError($this->_languageManager->getText('errorAddJointUsersInGrade'));
+			}
+		}
+		else {
+			$this->_interface->dieError('Konnte nicht zur Datenbank Verbinden');
 		}
 	}
 
@@ -1052,8 +1079,17 @@ class Users extends Module {
 	 */
 	private function addJointUsersInSchoolYearByAddUser () {
 
-		$userID = $this->_usersManager->getLastInsertedID();
-		$this->addJointUsersInSchoolYear($userID, $_POST['schoolyear']);
+		$query = "INSERT INTO jointUsersInSchoolYear (UserID, SchoolYearID)
+			VALUES (?,?)";
+		if($stmt = TableMng::getDb()->prepare($query)) {
+			$stmt->bind_param("ii", $_POST['userId'], $_POST['schoolyear']);
+			if(!$stmt->execute()) {
+				$this->_interface->dieError($this->_languageManager->getText('errorAddLinkUsersInSchoolyear') . TableMng::getDb()->error);
+			}
+		}
+		else {
+			$this->_interface->dieError('Ein Fehler ist beim Verbinden zur Datenbank aufgetreten.' . TableMng::getDb()->error);
+		}
 	}
 
 	/**
@@ -1331,14 +1367,20 @@ class Users extends Module {
 
 	/**
 	 * @used-by Users::addUserToDatabase
+	 * Checks if the given Date is valid and returns a date-string in the
+	 * format YYYY-MM-DD
 	 * @param int(2) $day
 	 * @param int(2) $month
 	 * @param int(4) $year
 	 */
-	private function convertNumbersToDate ($day, $month, $year) {
-
-		$date = sprintf('%s.%s.%s', $day, $month, $year);
-		return $date;
+	private function handleBirthday($day, $month, $year) {
+		if(checkdate($month, $day, $year)) {
+			$date = sprintf('%s-%s-%s', $year, $month, $day);
+			return $date;
+		}
+		else {
+			$this->_interface->dieError('Kein gültiges Datum eingegeben!');
+		}
 	}
 
 	/**
