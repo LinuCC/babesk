@@ -51,6 +51,9 @@ function formatDateTime($date) {
 	}
 }
 
+/**
+ * DEPRECATED
+ */
 function sql_prev_inj($str) {
 	require 'sql_access/databaseDistributor.php';
 	if (!is_string($str)) {
