@@ -144,7 +144,7 @@ class MAdmin extends Module {
 	}
 	
 
-	/** Creates a PDF for the Participation Confirmation and returns its Path
+	/** Creates a PDF for the Message 
 	 *
 	 */
 	private function createPdf ($title,$text,$class) {
