@@ -27,7 +27,8 @@ class Booklist extends Module {
 
 		$action_arr = array('show_booklist' => 1,
 							'add_book' => 4);
-
+		
+		if ('POST' == $_SERVER['REQUEST_METHOD']){
 		if (isset($_GET['action'])) {
 			$action = $_GET['action'];
 			switch ($action) {
@@ -73,10 +74,20 @@ class Booklist extends Module {
 					$BookProcessing->ShowBooklist("search", $_POST['search']);
 					break;
 				break;
-
-
 			}
-		} else {
+		}
+		}elseif  (('GET' == $_SERVER['REQUEST_METHOD'])&&isset($_GET['action'])) {
+			$action = $_GET['action'];
+			$mode = $_GET['mode'];
+			switch ($action) {
+				case 1: //show the users
+					if (isset($_GET['filter'])) {
+						$BookProcessing->ShowBooklist($mode,$_GET['filter']);
+					} else {
+						$BookProcessing->ShowBooklist("name");
+					}
+			}
+		}else {
 			$BookInterface->ShowSelectionFunctionality($action_arr);
 		}
 	}

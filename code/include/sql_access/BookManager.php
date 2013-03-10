@@ -20,6 +20,8 @@ class BookManager extends TableManager{
 	 */
 	function getBooklistSorted($pagePointer, $orderBy) {
 		require_once PATH_ACCESS . '/DBConnect.php';
+		require_once PATH_ACCESS . '/InventoryManager.php';
+		$inventoryManager = new InventoryManager();
 		$res_array = array();
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY `%s` LIMIT %s,10', $this->tablename,$orderBy,$pagePointer));
 		$result = $this->db->query($query);
@@ -28,6 +30,10 @@ class BookManager extends TableManager{
 		}
 		while($buffer = $result->fetch_assoc())
 			$res_array[] = $buffer;
+		foreach ($res_array as &$book){
+			$book['lastNumber'] = $inventoryManager->getHighestNumberByBookId($book['id']);
+		}
+		var_dump($res_array);
 		return $res_array;
 	}
 	

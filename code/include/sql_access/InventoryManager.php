@@ -102,5 +102,17 @@ class InventoryManager extends TableManager{
 			$book_id = $buffer['book_id'];
 		return $book_id;
 	}
+	
+	function getHighestNumberByBookId($book_id) {
+		$query = sql_prev_inj(sprintf('SELECT MAX(`exemplar`) AS number FROM `%s` WHERE book_id=%s', $this->tablename, $book_id));
+		$result = $this->db->query($query);
+		if (!$result) {
+			throw DB_QUERY_ERROR.$this->db->error;
+		}
+		while($buffer = $result->fetch_assoc()){
+			$exemplar = $buffer['number'];
+			return $exemplar;
+		}
+	}
 }
 ?>
