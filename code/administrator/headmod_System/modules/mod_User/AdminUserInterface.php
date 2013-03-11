@@ -56,7 +56,9 @@ class AdminUserInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath.'deletion_confirm.tpl');
 	}
 
-	function ShowDeleteFin() {
+	function ShowDeleteFin($uid) {
+		$this->smarty->assign('pdf','../include/pdf/tempPdf/deleted_'.$uid.'.pdf');
+		$this->smarty->assign('uid',$uid);
 		$this->smarty->display($this->tplFilePath.'deletion_finished.tpl');
 	}
 
@@ -91,6 +93,12 @@ class AdminUserInterface extends AdminInterface{
 	public function showRemoveSpecialCharsFromUsername () {
 		$this->smarty->display ($this->tplFilePath . 'usernameRemoveSpecialChars.tpl');
 	}
+	
+	
+public function showDeletePdfSuccess () {
+		$this->smarty->display ($this->tplFilePath . 'showDeletePdfSuccess.tpl');
+	}
+	
 
 	/**
 	 * The Path to the Smarty-Parent-Templatefile

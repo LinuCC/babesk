@@ -84,6 +84,9 @@ class User extends Module {
 				case 6:
 					$this->usernamesRemoveSpecialChars ();
 					break;
+				case 7:
+					$this->deletePdf ();
+					break;
 			}
 		} elseif  (('GET' == $_SERVER['REQUEST_METHOD'])&&isset($_GET['action'])) {
 			$action = $_GET['action'];
@@ -169,7 +172,7 @@ class User extends Module {
 				///@FIXME: PURE EVIL DOOM LOOP OF LOOPING SQL-USE. Kill it with fire.
 				$this->userManager->alterUsername ($user ['ID'], $user ['username']);
 			}
-			$this->userInterface->dieMsg ('Die Benutzernamen wurden erfolgreich geändert');
+			$this->userInterface->dieMsg ('Die Benutzernamen wurden erfolgreich geÃ¤ndert');
 		}
 		else {
 			$this->userInterface->showConfirmAutoChangeUsernames ();
@@ -196,7 +199,18 @@ class User extends Module {
 			$this->userInterface->showRemoveSpecialCharsFromUsername ($rows);
 		}
 	}
-
+	
+	protected function deletePdf () {
+		if (isset ($_GET['ID'])) {
+			try {
+			unlink (dirname(realpath(''))."/include/pdf/tempPdf/deleted_".$_GET['ID'].".pdf");
+			$this->userInterface->showDeletePdfSuccess ();
+			} catch (Exception $e) {
+			$this->userInterface->dieError ('Fehler beim L&ouml;schen des PDFs.');
+		
+		}
+		}
+	}
 	protected function usersGetAll () {
 		try {
 			$users = $this->userManager->getAllUsers ();
@@ -222,7 +236,7 @@ class User extends Module {
 	protected $userProcessing;
 	protected $messages;
 
-	protected static $invalid = array('Š'=>'S', 'š'=>'s', 'Đ'=>'D', 'đ'=>'d', 'Ž'=>'Z', 'ž'=>'z', 'Č'=>'C', 'č'=>'c', 'Ć'=>'C', 'ć'=>'c', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E', 'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U', 'Ú'=>'U', 'Û'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c', 'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y', 'Ŕ'=>'R', 'ŕ'=>'r');
+	protected static $invalid = array('Å '=>'S', 'Å¡'=>'s', 'Ä�'=>'D', 'Ä‘'=>'d', 'Å½'=>'Z', 'Å¾'=>'z', 'ÄŒ'=>'C', 'Ä�'=>'c', 'Ä†'=>'C', 'Ä‡'=>'c', 'Ã€'=>'A', 'Ã�'=>'A', 'Ã‚'=>'A', 'Ãƒ'=>'A', 'Ã„'=>'A', 'Ã…'=>'A', 'Ã†'=>'A', 'Ã‡'=>'C', 'Ãˆ'=>'E', 'Ã‰'=>'E', 'ÃŠ'=>'E', 'Ã‹'=>'E', 'ÃŒ'=>'I', 'Ã�'=>'I', 'ÃŽ'=>'I', 'Ã�'=>'I', 'Ã‘'=>'N', 'Ã’'=>'O', 'Ã“'=>'O', 'Ã”'=>'O', 'Ã•'=>'O', 'Ã–'=>'O', 'Ã˜'=>'O', 'Ã™'=>'U', 'Ãš'=>'U', 'Ã›'=>'U', 'Ã�'=>'Y', 'Ãž'=>'B', 'Ã '=>'a', 'Ã¡'=>'a', 'Ã¢'=>'a', 'Ã£'=>'a', 'Ã¥'=>'a', 'Ã¦'=>'a', 'Ã§'=>'c', 'Ã¨'=>'e', 'Ã©'=>'e', 'Ãª'=>'e', 'Ã«'=>'e', 'Ã¬'=>'i', 'Ã­'=>'i', 'Ã®'=>'i', 'Ã¯'=>'i', 'Ã°'=>'o', 'Ã±'=>'n', 'Ã²'=>'o', 'Ã³'=>'o', 'Ã´'=>'o', 'Ãµ'=>'o', 'Ã¸'=>'o', 'Ã¹'=>'u', 'Ãº'=>'u', 'Ã»'=>'u', 'Ã½'=>'y', 'Ã½'=>'y', 'Ã¾'=>'b', 'Ã¿'=>'y', 'Å”'=>'R', 'Å•'=>'r');
 
 }
 

@@ -229,22 +229,22 @@ class AdminUserProcessing {
 		
 		try {
 			
-			$user = $userManager->getEntryData($uid, 'forename', 'name','credit','birthday');
+			$user = $userManager->getEntryData($uid, 'forename', 'name','credit','birthday','class');
 			
-			//$userManager->delEntry($uid);
-			//$cardManager->delEntry($cardManager->getCardIDByUserID($uid));
+			$userManager->delEntry($uid);
+			$cardManager->delEntry($cardManager->getCardIDByUserID($uid));
 		} catch (Exception $e) {
 			$this->userInterface->dieError($this->messages['error']['delete'] . $e->getMessage());
 		}
-		$this->createPdf($user);
-		$this->userInterface->ShowDeleteFin();
+		if ($this->createPdf($user,$uid)) $this->userInterface->ShowDeleteFin($uid);
+		else $this->userInterface->dieError('Fehler beim Generieren des PDFs!');
 	}
 	
 	
 	/** Creates a PDF for the Message
 	 *
 	 */
-	private function createPdf ($user) {
+	private function createPdf ($user,$uid) {
 		require_once  PATH_INCLUDE .('/pdf/tcpdf/config/lang/ger.php');
 		require_once PATH_INCLUDE . '/pdf/tcpdf/tcpdf.php';
 	
@@ -258,7 +258,7 @@ class AdminUserProcessing {
 		$pdf->SetKeywords('');
 	
 		// set default header data
-		$pdf->SetHeaderData('../../../../web/headmod_Messages/modules/mod_MAdmin/logo.jpg', 15, 'LeG Uelzen', "Formulargenerator 0.1\nKlasse: ", array(0,0,0), array(0,0,0));
+		$pdf->SetHeaderData('../../../../web/headmod_Messages/modules/mod_MAdmin/logo.jpg', 15, 'LeG Uelzen', "Abmeldung von: ".$user['forename']." ".$user['name']."\nKlasse: ".$user['class'], array(0,0,0), array(0,0,0));
 		$pdf->setFooterData($tc=array(0,0,0), $lc=array(0,0,0));
 	
 		// set header and footer fonts
@@ -291,7 +291,7 @@ class AdminUserProcessing {
 		// dejavusans is a UTF-8 Unicode font, if you only need to
 		// print standard ASCII chars, you can use core fonts like
 		// helvetica or times to reduce file size.
-		$pdf->SetFont('helvetica', '', 14, '', true);
+		$pdf->SetFont('helvetica', '', 11, '', true);
 	
 		// Add a page
 		// This method has several options, check the source code documentation for more information.
@@ -305,34 +305,35 @@ class AdminUserProcessing {
 				.'Hiermit wird best&auml;tigt, dass die Schulb&uuml;cher von '.$user['forename'].' '.$user['name'].' vollst&auml;ndig zur&uuml;ckgegeben wurden. <br/>
 Hiermit wird best&auml;tigt, dass s&auml;mtliche personenbezogenen Daten am '.date("d.m.Y").' aus dem System gel&ouml;scht wurden.<br/>';
 
-		if ($user['credit']=="0.00") $html .= 'Es liegt kein bzw. ein Restguthaben in H&ouml;he von XX &euro; vor.<br/>';
+		if ($user['credit']=="0.00") $html .= 'Es liegt kein Restguthaben vor.<br/>';
 		else $html .= 'Es liegt ein Restguthaben in H&ouml;he von '.$user['credit'].' &euro; vor. Dieses muss beim Caterer abgeholt werden.<br/>';
  $html .= 'Mit der R&uuml;ckgabe der LeG-Card kann das Pfandgeld in H&ouml;he von 3,50 &euro; zzgl. 0,50 &euro;, je nach Zustand der H&uuml;lle, ausbezahlt werden.<br/>
 <hr> 		
 <p align="center"><h3>Auszahlung des Restguthabens</h3></p><br>
-Das Restguthaben in H&ouml;he von '.$user['credit'].' &euro; wurde ausgezahlt.<br>
-<br>
-Uelzen, den __.__.2013						Unterschrift Caterer
+Restguthaben in H&ouml;he von '.$user['credit'].' &euro; am ___.___.2013 erhalten.<br><br>
+<br>						Unterschrift Caterer
 		<br><hr>
 <p align="center"><h3>Pfanderstattung</h3></p><br>
 Bitte geben Sie diesen Abschnitt im Lessing-Gymnasium ab.<br>
 Bitte kreuzen Sie an, ob Sie den Pfandbetrag an die Sch&uuml;lergenossenschaft Gnissel des LeG Uelzen spenden m&ouml;chten 
 		oder eine &Uuml;berweisung auf ein Bankkonto w&uuml;nschen.<br>
 		
-[ ] Das Pfandgeld m&ouml;chte ich an Gnissel spenden
-[ ] Ich m&ouml;chte das Pfandgeld auf folgendes Konto &uuml;berwiesen haben:
-Kontoinhaber:   
-Kontonummer:
-BLZ:		
-Kreditinstitut: 
+[&nbsp;&nbsp;] Das Pfandgeld m&ouml;chte ich an Gnissel spenden<br>
+[&nbsp;&nbsp;] Ich m&ouml;chte das Pfandgeld auf folgendes Konto &uuml;berwiesen haben:<br>
+Kontoinhaber:   <br>
+Kontonummer:<br>
+BLZ:		<br>
+Kreditinstitut: <br><br>
 
-Uelzen, den ___.___.2013  			
-		Unterschrift Elternteil bzw. vollj&auml;hriger Sch&uuml;ler
+Uelzen, den ___.___.2013   			
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unterschrift Elternteil bzw. vollj&auml;hriger Sch&uuml;ler<br>
 
-Abschnitt f&uuml;r den Caterer
 
-Restguthaben in H&ouml;he von XX &euro; am tt.mm.2013 ausgezahlt.			
- 		';
+<hr>
+<p align="center"><h3>Abschnitt f&uuml;r den Caterer</h3></p><br>			
+ Restguthaben in H&ouml;he von '.$user['credit'].' &euro; am ___.___.2013 erhalten.<br><br>
+		<br><br>Unterschrift Elternteil bzw. vollj&auml;hriger Sch&uuml;ler
+		';
 	
 		// Print text using writeHTMLCell()
 		$pdf->writeHTMLCell($w=0, $h=0, $x='', $y='', $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
@@ -341,7 +342,8 @@ Restguthaben in H&ouml;he von XX &euro; am tt.mm.2013 ausgezahlt.
 	
 		// Close and output PDF document
 		// This method has several options, check the source code documentation for more information.
-		$pdf->Output('example_001.pdf', 'I');
+		$pdf->Output('../include/pdf/tempPdf/deleted_'.$uid.'.pdf', 'F');
+		return true;
 	}
 	
 
