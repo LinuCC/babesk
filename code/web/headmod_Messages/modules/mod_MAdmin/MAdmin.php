@@ -4,147 +4,391 @@ require_once PATH_INCLUDE . '/Module.php';
 
 class MAdmin extends Module {
 
-	////////////////////////////////////////////////////////////////////////////////
-	//Attributes
-	private $smartyPath;
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
-		$this->smartyPath = PATH_SMARTY . '/templates/web' . $path;
+		$this->_smartyPath = PATH_SMARTY . '/templates/web' . $path;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	public function execute($dataContainer) {
 		//No direct access
-		defined('_WEXEC') or die("Access denied");
-
-		require_once PATH_ACCESS . '/UserManager.php';
-		require_once PATH_ACCESS . '/GroupManager.php';
-		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
-
-
-		global $smarty;
-		$this->_interface = new WebInterface($smarty);
-		$userManager = new UserManager();
-		$groupManager = new GroupManager();
-		$gsm = new GlobalSettingsManager();
-		require_once PATH_INCLUDE . '/TableMng.php';
-		TableMng::init ();
-
-		$contracts = "";
-		$editor=false;
-		$contractGID = TableMng::query('SELECT value FROM global_settings WHERE name LIKE "contracts_edit"',true);
-
-		$userGID = TableMng::query('SELECT GID FROM users WHERE ID LIKE "'.$_SESSION['uid'].'"',true);
-
-		($contractGID[0]['value'] == $userGID[0]['GID'])? $editor=true : $editor=false;
-
+		$this->init();
 		if (isset($_GET['action'])) {
-
-		$action=$_GET['action'];
-		switch ($action) {
-			case 'newcontract':
-				$classesRaw = TableMng::query('SELECT DISTINCT CLASS FROM users ',true);
-
-				foreach($classesRaw as $class) {
-					$classes[] = $class['CLASS'];
-				}
-
-				$smarty->assign('classes',$classes);
-				$smarty->display($this->smartyPath . 'new_contract.tpl');
-				break;
-
-			case 'savecontract':
-				$class = implode('|', $_POST['class']);
-				TableMng::query(sql_prev_inj(sprintf('INSERT INTO contracts (author_id,class,title,text,valid_from,valid_to) VALUES (%s,"%s","%s","%s","%s","%s")',$_SESSION['uid'],$class,$_POST['contracttitle'],$_POST['contracttext'],
-						$_POST['StartDateYear'] . '-' . $_POST['StartDateMonth'] . '-' .
-							$_POST['StartDateDay'], $_POST['EndDateYear'] . '-' . $_POST['EndDateMonth'] . '-' . $_POST[
-							'EndDateDay'])));
-				$smarty->display($this->smartyPath . 'new_contract_fin.tpl');
-				break;
-
-			case 'deletecontract':
-
-				$authorID = TableMng::query(sql_prev_inj(sprintf('SELECT author_id FROM contracts WHERE id="%s"',$_GET['id'])),true);
-
-				if ($editor && ($authorID[0]['author_id']==$_SESSION['uid'])) {
-				TableMng::query(sql_prev_inj(sprintf("DELETE FROM contracts WHERE id='%s'",$_GET['id'])));
-
-				}
-				$smarty->display($this->smartyPath . 'delete_contract_fin.tpl');
-				break;
-
-			case 'showcontract':
-				$contractClass = TableMng::query('SELECT class FROM contracts WHERE id="'.$_GET['id'].'"',true);
-				$userClass = TableMng::query('SELECT class FROM users WHERE id="'.$_SESSION['uid'].'"',true);
-				if (!$editor && !strstr($contractClass[0]['class'],$userClass[0]['class'])) {
-					$this->_interface->dieError (
-							'Kein Zugriff erlaubt!');
-				}
-				$contract = TableMng::query("SELECT title,text FROM contracts WHERE id = ".$_GET['id'],true);
-				$forename = TableMng::query('SELECT forename FROM users WHERE ID = '.$_SESSION['uid'],true);
-				$name = TableMng::query('SELECT name FROM users WHERE ID = '.$_SESSION['uid'],true);
-				$class = TableMng::query('SELECT class FROM users WHERE ID = '.$_SESSION['uid'],true);
-
-				$contract[0]['text'] = str_replace("{vorname}",$forename[0]['forename'], $contract[0]['text']);
-				$contract[0]['text'] = str_replace("{name}",$name[0]['name'], $contract[0]['text']);
-
-					$this->createPdf($contract[0]['title'],$contract[0]['text'],$class[0]['class']);
+			$action=$_GET['action'];
+			switch ($action) {
+				case 'newMessage':
+					$this->newMessageForm();
 					break;
+				case 'saveMessage':
+					$this->saveMessage();
+					break;
+				case 'deleteMessage':
+					$this->deleteMessage();
+					break;
+				case 'showMessage':
+					$this->showMessage();
+					break;
+				case 'searchUserAjax':
+					$this->searchUserAjax();
+					break;
+				default:
+					die('wrong Action-value');
 			}
 		}
 		else {
-
-		if ($editor) {
-			$query = 'SELECT c.id,c.title,c.class,c.valid_from,c.valid_to FROM contracts AS c WHERE c.author_id LIKE "'.$_SESSION['uid'].'"';
-
-			$smarty->assign('editor',true);
-			try {
-				$contracts = TableMng::query ($query, true);
-				$smarty->assign('valid_from',  formatDate($contracts[0]['valid_from']));
-				$smarty->assign('valid_to',  formatDate($contracts[0]['valid_to']));
-			} catch (MySQLVoidDataException $e) {
-				$smarty->assign('error','Konnte keine Vorlagen finden');
-			} catch (Exception $e) {
-				$this->_interface->dieError (
-						sprintf ('Konnte die Vorlagen nicht abrufen!', $e->getMessage()));
-			}
-		} else {
-			$class = TableMng::query('SELECT class FROM users WHERE ID LIKE "'.$_SESSION['uid'].'"',true);
-
-			$contracts= "SELECT c.id,c.title,c.class,c.valid_from,c.valid_to FROM contracts AS c WHERE c.class LIKE '%".$class[0]['class']."%' AND SYSDATE() BETWEEN c.valid_from AND c.valid_to";
-
-			try {
-				$contracts = TableMng::query ($contracts, true);
-				$smarty->assign('valid_from',  formatDate($contracts[0]['valid_from']));
-				$smarty->assign('valid_to',  formatDate($contracts[0]['valid_to']));
-			} catch (MySQLVoidDataException $e) {
-				$smarty->assign('error','Keine Post vorhanden!');
-			} catch (Exception $e) {
-				$this->_interface->dieError (
-						sprintf ('Konnte die Post nicht abrufen!', $e->getMessage()));
-			}
-		}
-
-
-		$smarty->assign('contracts', $contracts);
-
-		if (preg_match("/BaBeSK/i", $_SERVER['HTTP_USER_AGENT'])) {
-			$smarty->assign('BaBeSkTerminal',true);
-		} else {
-			$smarty->assign('BaBeSkTerminal',false);
-		}
-
-		$smarty->display($this->smartyPath . 'menu.tpl');
+			$this->showMainMenu();
 		}
 	}
 
+	private function init() {
+		defined('_WEXEC') or die("Access denied");
+		global $smarty;
+		$this->_smarty = $smarty;
+		$this->_interface = new WebInterface($smarty);
+		require_once PATH_INCLUDE . '/TableMng.php';
+		TableMng::init();
+		$this->setEditor();
+	}
 
-	/** Creates a PDF for the Participation Confirmation and returns its Path
+	/**
+	 * Sets the variable $_isEditor based on the User
+	 */
+	private function setEditor() {
+		$contractGID = TableMng::query('SELECT value FROM global_settings WHERE name = "messagesEdit"',true);
+		$userGID = TableMng::query('SELECT GID FROM users WHERE ID =
+			"'.$_SESSION['uid'].'"',true);
+		$this->_isEditor = ($contractGID[0]['value'] == $userGID[0]['GID']);
+	}
+
+	/**
+	 * Fetches the messages that the User is allowed to manage
 	 *
+	 * @return array() an array of array-elements describing the messages
+	 */
+	private function fetchManagedMessages() {
+		$messages = array();
+		$query = sprintf(
+			'SELECT m.ID,m.title,m.class,m.valid_from,m.valid_to
+			FROM Message m
+			JOIN MessageManagers mm ON m.ID = mm.messageId AND mm.userId = %s
+			', $_SESSION['uid']);
+		try {
+			$messages = TableMng::query ($query, true);
+		} catch (MySQLVoidDataException $e) {
+			$this->_smarty->append('error','Konnte keine selbst-erstellten Nachrichten finden');
+		} catch (Exception $e) {
+			$this->_smarty->append(
+					sprintf ('Konnte die selbst-erstellten Nachrichten nicht abrufen!', $e->getMessage()));
+		}
+		return $messages;
+	}
+
+	/**
+	 * Fetches the messages directed towards this user
+	 *
+	 * @return array() an array of array-elements describing the messages
+	 */
+	private function fetchReceivedMessages() {
+		$messages = array();
+		$query = sprintf(
+			'SELECT m.id AS ID,m.title AS title,m.validFrom AS validFrom,
+			m.validTo AS validTo
+			FROM Message m
+			JOIN MessageReceivers mr ON mr.userId = %s
+			WHERE SYSDATE() BETWEEN m.validFrom AND m.validTo
+			', $_SESSION['uid']);
+		try {
+			$messages = TableMng::query ($query, true);
+		} catch (MySQLVoidDataException $e) {
+			$this->_smarty->assign('error','Keine Post vorhanden!');
+		} catch (Exception $e) {
+			$this->_interface->DieError (
+					sprintf ('Konnte die Post nicht abrufen! %s', $e->getMessage()));
+		}
+		return $messages;
+	}
+
+	/**
+	 * Displays the MainMenu of Messages
+	 */
+	private function showMainMenu() {
+		$createdMsg = $receivedMsg = array();
+		if ($this->_isEditor) {
+			$this->_smarty->assign('editor',true);
+			$createdMsg = $this->fetchManagedMessages();
+		}
+		$receivedMsg = $this->fetchReceivedMessages();
+		$this->_smarty->assign('createdMsg', $createdMsg);
+		$this->_smarty->assign('receivedMsg', $receivedMsg);
+		$this->_smarty->assign('BaBeSkTerminal', $this->checkIsKioskMode());
+		$this->_smarty->display($this->_smartyPath . 'menu.tpl');
+	}
+
+	/**
+	 * Shows a form to the User in which he can create a new Message
+	 *
+	 * @fixme grades do not get sorted out by schoolyear
+	 */
+	private function newMessageForm() {
+		$grades = TableMng::query(
+			'SELECT CONCAT(gradeValue, label) AS name, ID
+			FROM grade', true);
+		$this->_smarty->assign('grades',$grades);
+		$this->_smarty->display($this->_smartyPath . 'newMessage.tpl');
+	}
+
+	/**
+	 * Saves a contract
+	 */
+	private function saveMessage() {
+		$db = TableMng::getDb();
+		$msgTitle = $db->real_escape_string($_POST['contracttitle']);
+		$msgText = $db->real_escape_string($_POST['contracttext']);
+		$startDate = sprintf('%s-%s-%s',
+			$db->real_escape_string($_POST['StartDateYear']),
+			$db->real_escape_string($_POST['StartDateMonth']),
+			$db->real_escape_string($_POST['StartDateDay']));
+		$endDate = sprintf('%s-%s-%s',
+			$db->real_escape_string($_POST['EndDateYear']),
+			$db->real_escape_string($_POST['EndDateMonth']),
+			$db->real_escape_string($_POST['EndDateDay']));
+		$db->autocommit(false);
+		TableMng::query(sprintf(
+			'INSERT INTO Message (originUserId,title,text,validFrom,validTo)
+			VALUES (%s,"%s","%s","%s","%s")',
+			$_SESSION['uid'], $msgTitle, $msgText, $startDate, $endDate));
+
+		$messageId = $db->insert_id;
+		//Add creator to the managers-list
+		TableMng::query(sprintf(
+			'INSERT INTO MessageManagers (messageId, userId)
+			VALUES (%s, %s)', $messageId, $_SESSION['uid']));
+
+		//Add receivers to the receiver-list
+		$queryReceivers = 'INSERT INTO MessageReceivers (messageId, userId)
+			VALUES (?, ?)';
+		$stmt = $db->prepare($queryReceivers);
+		$msgReceiverIds = array();
+		if(isset($_POST['msgReceiver']) && count($_POST['msgReceiver'])) {
+			$msgReceiverIds = array_merge($msgReceiverIds,
+				$_POST['msgReceiver']);
+		}
+		$userIdsOfGrades = $this->saveMessageGrades();
+		if(count($userIdsOfGrades)) {
+			$msgReceiverIds = array_merge($msgReceiverIds, $userIdsOfGrades);
+		}
+		foreach ($msgReceiverIds as $rec) {
+			$stmt->bind_param("ii", $messageId, $rec);
+			$stmt->execute();
+		}
+		$db->commit();
+		$this->_smarty->display($this->_smartyPath . 'new_contract_fin.tpl');
+	}
+
+	/**
+	 * Handles the user-selected grades when saving a new message
+	 *
+	 * @return an Array of userIds of the users that are in the selected grades
+	 */
+	private function saveMessageGrades() {
+		$userIds = array();
+		$userId = '';
+		if(isset($_POST['grades']) && count($_POST['grades'])) {
+			$db = TableMng::getDb();
+			$grades = $_POST['grades'];
+			$stmt =$db->prepare("SELECT UserID AS userId
+				FROM jointUsersInGrade WHERE GradeID = ?");
+			foreach($grades as $gradeId) {
+				$stmt->bind_param("i", $gradeId);
+				$stmt->execute();
+				$stmt->bind_result($userId);
+				while($stmt->fetch()) {
+					$userIds [] = $userId;
+				}
+			}
+		}
+		return $userIds;
+	}
+
+	/**
+	 * Deletes a Contract
+	 */
+	private function deleteMessage() {
+		$authorID = TableMng::query(sql_prev_inj(sprintf('SELECT author_id FROM contracts WHERE id="%s"',$_GET['id'])),true);
+
+		if ($this->editor && ($authorID[0]['author_id']==$_SESSION['uid'])) {
+		TableMng::query(sql_prev_inj(sprintf("DELETE FROM contracts WHERE id='%s'",$_GET['id'])));
+
+		}
+		$this->_smarty->display($this->_smartyPath . 'delete_contract_fin.tpl');
+	}
+
+	/**
+	 * Shows a specific message
+	 */
+	private function showMessage() {
+		$db = TableMng::getDb();
+		$messageId = $db->real_escape_string($_GET['ID']);
+		if(($isManager = $this->checkIsManagerOf($messageId, $_SESSION['uid']))
+			|| ($this->checkHasReceived($messageId, $_SESSION['uid']))) {
+
+			$msgText = $msgTitle = $forename = $name = $grade = '';
+			$query = "SELECT m.title, m.text, u.forename, u.name,
+					CONCAT(g.gradeValue, g.label)
+				FROM users u
+				JOIN MessageReceivers mr ON mr.userId = u.ID
+				JOIN Message m ON mr.messageId = m.ID AND m.ID = ?
+				LEFT JOIN jointUsersInGrade uig ON u.ID = uig.UserID
+				LEFT JOIN grade g ON g.ID = uig.GradeID
+				WHERE u.ID = ?";
+			$stmt = $db->prepare($query);
+			if($stmt) {
+				$stmt->bind_param('ii', $messageId, $_SESSION['uid']);
+				$stmt->bind_result($msgTitle, $msgText, $forename, $name,
+					$grade);
+				$stmt->execute();
+				$stmt->fetch();
+				$msgText = str_replace("{vorname}", $forename, $msgText);
+				$msgText = str_replace("{name}", $name, $msgText);
+				$this->createPdf($msgTitle, $msgText, $grade);
+			}
+			else {
+				$this->_interface->DieError('Konnte die Nachrichtendaten nicht
+					abrufen');
+			}
+		}
+		else {
+			$this->_interface->DieError ( 'Kein Zugriff erlaubt!');
+		}
+	}
+
+	/**
+	 * Checks if the user has received the message and is allowed to access it
+	 *
+	 * @param integer $messageId the Id of the message
+	 * @param integer $userId the Id of the user
+	 * @return bool true if the user is allowed to access the message, else
+	 * false
+	 */
+	private function checkHasReceived($messageId, $userId) {
+		$db = TableMng::getDb();
+		$escMessageId = $db->real_escape_string($messageId);
+		$escUserId = $db->real_escape_string($userId);
+		$query = sprintf("SELECT COUNT(*) AS count
+			FROM MessageReceivers
+			WHERE %s = userId AND %s = messageId
+			AND SYSDATE() BETWEEN valid_from AND valid_to",
+			$escUserId, $escMessageId);
+		$isReceiving = TableMng::query($queryRec, true);
+		return (bool) $isReceiving[0]['count'];
+	}
+
+	/**
+	 * Checks if the user is a manager of the message
+	 *
+	 * @param integer $messageId the Id of the message
+	 * @param integer $userId the Id of the user
+	 * @return bool true if the user is the manager of the message, else false
+	 */
+	private function checkIsManagerOf($messageId, $userId) {
+		$db = TableMng::getDb();
+		$escMessageId = $db->real_escape_string($messageId);
+		$escUserId = $db->real_escape_string($userId);
+		$query = sprintf("SELECT COUNT(*) AS count
+			FROM MessageManagers
+			WHERE %s = userId AND %s = messageId", $escUserId, $escMessageId);
+		$isManaging = TableMng::query($query, true);
+		return (bool) $isManaging[0]['count'];
+	}
+
+	/**
+	 * Checks if the Client runs in Kioskmode
+	 * We dont want to let the user circumvent the Kioskmode (for example if he
+	 * opens PDF-files, another program gets opened up, which can break the
+	 * kiosk-mode)
+	 */
+	private function checkIsKioskMode() {
+		return preg_match("/BaBeSK/i", $_SERVER['HTTP_USER_AGENT']);
+	}
+
+	/**
+	 * Searches for users with Ajax
+	 */
+	private function searchUserAjax() {
+		$db = TableMng::getDb();
+		$username = $db->real_escape_string($_GET['username']);
+		$users = $this->usersGetSimilarTo($username, 10);
+		//output the findings
+		foreach($users as $user) {
+			echo sprintf(
+				'<input type="button" onclick="addUser(\'%s\', \'%s\');"
+					value="%s"><br />',
+				$user['userId'], $user['userFullname'],
+				$user['userFullname']);
+		}
+	}
+
+	/**
+	 * Gets the users taht have a similar name to the $username
+	 */
+	protected static function usersGetSimilarTo ($username, $maxUsersToGet) {
+		$bestMatches = array ();
+		$users = self::usersFetch ();
+		foreach ($users as $key => $user) {
+			$per = 0.0;
+			similar_text($username, $user ['userFullname'], $per);
+			$users [$key] ['percentage'] = $per;
+		}
+		usort ($users, array ('MAdmin', 'userPercentageComp'));
+		for ($i = 0; $i < $maxUsersToGet; $i++) {
+			$bestMatches [] = $users [$i];
+		}
+		return $bestMatches;
+	}
+
+	/**
+	 * Compares two strings, used with usort()
+	 */
+	protected static function userPercentageComp ($user1, $user2) {
+		if ($user1 ['percentage'] == $user2 ['percentage']) {
+			return 0;
+		}
+		else if ($user1 ['percentage'] < $user2 ['percentage']) {
+			return 1;
+		}
+		else if ($user1 ['percentage'] > $user2 ['percentage']) {
+			return -1;
+		}
+	}
+
+	/**
+	 * Returns all users of this schoolyear
+	 */
+	protected static function usersFetch () {
+		$activeSchoolyearQuery = sprintf (
+			'SELECT sy.ID FROM schoolYear sy WHERE sy.active = "%s"', 1);
+		$query = sprintf (
+			'SELECT u.ID AS userId,
+				CONCAT(u.forename, " ", u.name) AS userFullname
+			FROM users u
+			JOIN jointUsersInSchoolYear uisy ON u.ID = uisy.UserID
+			WHERE uisy.SchoolYearID = (%s)', $activeSchoolyearQuery);
+		try {
+			$users = TableMng::query ($query, true);
+		} catch (MySQLVoidDataException $e) {
+			$this->$_interface->DieError ('Konnte keine Benutzer finden');
+		} catch (Exception $e) {
+			$this->$_interface->DieError ('Ein Fehler ist beim Abrufen der Benutzer aufgetreten' . $e->getMessage ());
+		}
+		return $users;
+	}
+
+	/**
+	 * Creates a PDF for the Participation Confirmation and returns its Path
 	 */
 	private function createPdf ($title,$text,$class) {
 		require_once  PATH_INCLUDE .('/pdf/tcpdf/config/lang/ger.php');
@@ -212,8 +456,33 @@ class MAdmin extends Module {
 		// ---------------------------------------------------------
 
 		// Close and output PDF document
-		// This method has several options, check the source code documentation for more information.
+		// This method has several options, check the source code documentation
+		// for more information.
 		$pdf->Output('example_001.pdf', 'I');
 	}
+
+	////////////////////////////////////////////////////////////////////////////////
+	//Attributes
+
+	/**
+	 * The path to the Smarty-templates of this module
+	 */
+	private $_smartyPath;
+
+	/**
+	 * An Smarty-Object, used to Output data
+	 */
+	private $_smarty;
+
+	/**
+	 * Stores the Interface of this Module
+	 */
+	private $_interface;
+
+	/**
+	 * Saves if the User is allowed to send Messages
+	 */
+	private $_isEditor;
+
 }
 ?>
