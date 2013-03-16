@@ -5,27 +5,27 @@
 function displayChangeCardId() {
 	document.getElementById("cardnumber").disabled = false;
 	document.getElementById("cardnumber").focus();
-	document.getElementById("showccid").hidden = true;
-	document.getElementById("hideccid").hidden = false;//show button to abandon changing cardID
+	document.getElementById("showccid").style.display = 'none';
+	document.getElementById("hideccid").style.display = 'inline';//show button to abandon changing cardID
 	old_cardnumber = document.getElementById("cardnumber").value;
 	document.getElementById("cardnumber").value = "";
 }
 
 function resetCardId() {
 	document.getElementById("cardnumber").value = old_cardnumber;
-	document.getElementById("hideccid").hidden = true;
-	document.getElementById("showccid").hidden = false;//show button to change cardID
+	document.getElementById("hideccid").style.display = 'none';
+	document.getElementById("showccid").style.display = 'inline';//show button to change cardID
 	document.getElementById("cardnumber").disabled = true;
-	document.getElementById("cardiderror").hidden = true;
+	document.getElementById("cardiderror").style.display = 'none';
 }
 
 function checkCardId() {
 	is_okay = document.getElementById("cardnumber").value.search(/[a-z0-9]{10}/);
 	if(is_okay != -1) {
-		document.getElementById("cardiderror").hidden = true;
+		document.getElementById("cardiderror").style.display = 'none';
 	}
 	else {
-		document.getElementById("cardiderror").hidden = false;
+		document.getElementById("cardiderror").style.display = 'inline';
 	}
 }
 </script>
@@ -41,8 +41,8 @@ function checkCardId() {
 			type="text" name="cardnumber" maxlength="10" width="10"
 			value={$cardnumber} onblur="checkCardId()" disabled>
 			<button id="showccid" type="button" onclick="displayChangeCardId()">KartenID verändern</button>
-			<button id="hideccid" type="button" onclick="resetCardId()" hidden>KartenID doch nicht verändern</button>
-			<p id="cardiderror" class="error" hidden>Die KartenID ist nicht richtig eingegeben worden.</p>
+			<button id="hideccid" type="button" onclick="resetCardId()" style="display:none">KartenID doch nicht verändern</button>
+			<p id="cardiderror" class="error" style="display:none;">Die KartenID ist nicht richtig eingegeben worden.</p>
 		</label> <br> <br> <label>Vorname:<input type="text" name="forename"
 			value="{$user.forename}" />
 		</label><br> <br> <label>Name:<input type="text" name="name"
