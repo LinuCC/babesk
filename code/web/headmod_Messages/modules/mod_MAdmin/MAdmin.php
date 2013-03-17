@@ -2,18 +2,27 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 
+/**
+ * Entry-Point for the User to display, print and create new messages
+ * The User can only create a new Message if he is in the correct group
+ *
+ * @author Mirek Hancl
+ * @author Pascal Ernst <pascal.cc.ernst@gmail.com>
+ */
 class MAdmin extends Module {
 
 
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Constructor
+	///////////////////////////////////////////////////////////////////////
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
 		$this->_smartyPath = PATH_SMARTY . '/templates/web' . $path;
 	}
 
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Methods
+	///////////////////////////////////////////////////////////////////////
 	public function execute($dataContainer) {
 		//No direct access
 		$this->init();
@@ -186,6 +195,8 @@ class MAdmin extends Module {
 			$stmt->execute();
 		}
 		$db->commit();
+		$db->autocommit(true);
+		$this->addSavedCopiesCount(count($msgReceiverIds), $_SESSION['uid']);
 		$this->_smarty->display($this->_smartyPath . 'new_contract_fin.tpl');
 	}
 
@@ -236,9 +247,9 @@ class MAdmin extends Module {
 		if(($isManager = $this->checkIsManagerOf($messageId, $_SESSION['uid']))
 			|| ($this->checkHasReceived($messageId, $_SESSION['uid']))) {
 
-			$msgText = $msgTitle = $forename = $name = $grade = '';
-			$query = "SELECT m.title, m.text, u.forename, u.name,
-					CONCAT(g.gradeValue, g.label)
+			$msgText = $msgTitle = $forename = $name = $grade = $msgRecId = '';
+			$query = "SELECT m.title, m.text, mr.read, mr.ID,
+					u.forename, u.name, CONCAT(g.gradeValue, g.label)
 				FROM users u
 				JOIN MessageReceivers mr ON mr.userId = u.ID
 				JOIN Message m ON mr.messageId = m.ID AND m.ID = ?
@@ -248,10 +259,16 @@ class MAdmin extends Module {
 			$stmt = $db->prepare($query);
 			if($stmt) {
 				$stmt->bind_param('ii', $messageId, $_SESSION['uid']);
-				$stmt->bind_result($msgTitle, $msgText, $forename, $name,
-					$grade);
+				$stmt->bind_result($msgTitle, $msgText, $isRead, $msgRecId,
+					$forename, $name, $grade);
 				$stmt->execute();
-				$stmt->fetch();
+				while($stmt->fetch()) {
+					// User got multiple messages of the same kind, select only
+					// the last one
+				}
+				if($isRead == '0') {
+					$this->markMsgAsRead($msgRecId);
+				}
 				$msgText = str_replace("{vorname}", $forename, $msgText);
 				$msgText = str_replace("{name}", $name, $msgText);
 				$this->createPdf($msgTitle, $msgText, $grade);
@@ -332,6 +349,19 @@ class MAdmin extends Module {
 		}
 	}
 
+	private function markMsgAsRead($msgReceiverId) {
+		$db = TableMng::getDb();
+		$query = sprintf(
+			'UPDATE MessageReceivers SET `read` = "1" WHERE ID = "%s";',
+			$db->real_escape_string($msgReceiverId));
+		if($db->query($query)){
+			return;
+		}
+		else {
+			$this->_interface->DieError('Konnte die Nachricht nicht als gelesen markieren' . $db->error);
+		}
+	}
+
 	/**
 	 * Gets the users taht have a similar name to the $username
 	 */
@@ -385,6 +415,42 @@ class MAdmin extends Module {
 			$this->$_interface->DieError ('Ein Fehler ist beim Abrufen der Benutzer aufgetreten' . $e->getMessage ());
 		}
 		return $users;
+	}
+
+	/**
+	 * Adds saved Copies to the Carbon-Footprint-Table
+	 *
+	 * @param int $count the Count of saved Copies to add
+	 * @param int $authorId the author of the message that saved $count copies
+	 */
+	private function addSavedCopiesCount($count, $authorId) {
+		$db  = TableMng::getDb();
+		$count = $db->real_escape_string($count);
+		$authorId = $db->real_escape_string($authorId);
+		try {
+			$authorEntryExists = TableMng::query(sprintf(
+				"SELECT COUNT(*) AS count FROM MessageCarbonFootprint
+				WHERE `authorId` = %s;
+				", $authorId), true);
+			if( ( (int) $authorEntryExists [0]['count']) > 0) {
+				TableMng::query(sprintf(
+					"UPDATE MessageCarbonFootprint
+					SET `savedCopies` = `savedCopies` + %s
+					WHERE `authorId` = %s
+					", $count, $authorId));
+			}
+			else {
+				$query = sprintf(
+					"INSERT INTO MessageCarbonFootprint
+						(`authorId`, `savedCopies`, `returnedCopies`)
+					VALUES (%s, %s, 0);
+					", $authorId, $count);
+				TableMng::query($query);
+			}
+		} catch (Exception $e) {
+			//not important, just echoing is enough
+			echo "Konnte die CarbonFootprint-Daten nicht verarbeiten";
+		}
 	}
 
 	/**
@@ -461,8 +527,9 @@ class MAdmin extends Module {
 		$pdf->Output('example_001.pdf', 'I');
 	}
 
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Attributes
+	///////////////////////////////////////////////////////////////////////
 
 	/**
 	 * The path to the Smarty-templates of this module
