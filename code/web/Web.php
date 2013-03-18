@@ -86,12 +86,12 @@ class Web {
 		$_SESSION['IP'] = $_SERVER['REMOTE_ADDR'];
 		$_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
 
-		//check for new mail
-		// $mailcount = TableMng::query('SELECT COUNT(id) FROM contracts WHERE class LIKE "%'.$userData['class'].'%"  AND SYSDATE() BETWEEN valid_from AND valid_to',true);
+		// check for new mail
+		$mailcount = TableMng::query('SELECT COUNT(id) FROM contracts WHERE class LIKE "%'.$userData['class'].'%"  AND SYSDATE() BETWEEN valid_from AND valid_to',true);
 
-		// if ($mailcount[0]['COUNT(id)']>0) {
-		// 	$this->_smarty->assign('newmail',true);
-		// }
+		if ($mailcount[0]['COUNT(id)']>0) {
+			$this->_smarty->assign('newmail',true);
+		}
 
 		//module-specific
 		if (isset($userData['credit'])) {
