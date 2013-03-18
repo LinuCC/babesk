@@ -47,7 +47,9 @@ class Order extends Module {
 		$priceClassManager = new PriceClassManager();
 		$gbManager = new GlobalSettingsManager();
 
-		$smarty->assign('babesk_version', file_get_contents("../version.txt"));
+		$version=@file_get_contents("../version.txt");
+if ($version===FALSE) $version = "";
+$smarty->assign('babesk_version', $version);
 
 		if (isset($_GET['order'])) {
 

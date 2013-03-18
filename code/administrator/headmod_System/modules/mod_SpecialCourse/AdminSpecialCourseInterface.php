@@ -17,17 +17,17 @@ class AdminSpecialCourseInterface extends AdminInterface{
 	}
 
 	function ShowSelectionFunctionality() {
-		$this->smarty->display($this->tplFilePath.'SpecialCourse_select.tpl');
+		$this->smarty->display($this->tplFilePath.'specialCourse_select.tpl');
 	}
 	
 	function ShowSpecialCourses($SpecialCourses) {
 		$this->smarty->assign('SpecialCourses', $SpecialCourses);
-		$this->smarty->display($this->tplFilePath.'show_SpecialCourses.tpl');
+		$this->smarty->display($this->tplFilePath.'show_specialCourses.tpl');
 	}
 	
 	function ShowSpecialCoursesSet($SpecialCourses) {
 		$this->smarty->assign('SpecialCourse', $SpecialCourses);
-		$this->smarty->display($this->tplFilePath.'show_SpecialCourses_set.tpl');
+		$this->smarty->display($this->tplFilePath.'show_specialCourses_set.tpl');
 	}
 	
 	function ShowUsers($users,$SpecialCourses,$navbar) {
@@ -39,7 +39,7 @@ class AdminSpecialCourseInterface extends AdminInterface{
 	}
 	
 	function ShowUsersSuccess() {
-		$this->smarty->display($this->tplFilePath.'show_SpecialCourses_set.tpl');
+		$this->smarty->display($this->tplFilePath.'show_specialCourses_set.tpl');
 	
 	}
 	

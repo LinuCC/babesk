@@ -23,6 +23,7 @@ class Web {
 		require_once PATH_ACCESS . '/UserManager.php';
 		require_once PATH_INCLUDE . '/moduleManager.php';
 		require_once PATH_INCLUDE . '/functions.php';
+		require_once PATH_INCLUDE . '/TableMng.php';
 		require_once PATH_ACCESS . '/LogManager.php';
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 
@@ -32,6 +33,7 @@ class Web {
 		$this->_moduleManager->allowAllModules();
 		$this->_loggedIn = isset($_SESSION['uid']);
 		$this->_interface = new WebInterface($this->_smarty);
+		TableMng::init ();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -63,9 +65,16 @@ class Web {
 
 		if (!$this->_loggedIn) {
 			$this->logIn();
+			$this->redirect ();
 		}
 
-		//seems like something that Smarty itself needs
+		if (isset($_GET ['webRedirect'])) { //redirect to a module
+			$this->redirect ();
+		}
+		
+		
+
+		///@fix: does this have a purpose?
 		$this->_smarty->assign('status', ''); //???
 
 		$userData = $this->_userManager->getUserdata($_SESSION['uid']);
@@ -75,6 +84,13 @@ class Web {
 		$_SESSION['IP'] = $_SERVER['REMOTE_ADDR'];
 		$_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
 
+		//check for new mail
+		$mailcount = TableMng::query('SELECT COUNT(id) FROM contracts WHERE class LIKE "%'.$userData['class'].'%"  AND SYSDATE() BETWEEN valid_from AND valid_to',true);
+	
+		if ($mailcount[0]['COUNT(id)']>0) {
+			$this->_smarty->assign('newmail',true);
+		}
+		
 		//module-specific
 		if (isset($userData['credit'])) {
 			$_SESSION['credit'] = $userData['credit'];
@@ -96,10 +112,11 @@ class Web {
 		$head_mod_arr = array();
 
 		foreach ($head_modules as $head_module) {
-			$head_mod_arr[$head_module->getName()] = array('name'			 => $head_module->getName(), 'display_name'
-					 => $head_module->getDisplayName());
+			$head_mod_arr[$head_module->getName()] = array( 'name'			 => $head_module->getName(), 
+															'display_name'					 => $head_module->getDisplayName(),
+															'headmod_menu' => $head_module->getHeadmodMenu());
 		}
-
+		
 		$this->_smarty->assign('head_modules', $head_mod_arr);
 		$this->checkFirstPassword ();
 		if ($mod_str) {
@@ -110,7 +127,9 @@ class Web {
 			}
 		}
 		else {
-			$this->_smarty->assign('birthday',$this->_userManager->getBirthday($_SESSION['uid']));
+			$birthday = date("m-d",strtotime($this->_userManager->getBirthday($_SESSION['uid'])));
+
+			$this->_smarty->assign('birthday',$birthday);
 			$this->_smarty->display(PATH_SMARTY . '/templates/web/main_menu.tpl');
 		}
 	}
@@ -136,12 +155,14 @@ class Web {
 		require PATH_SMARTY . "/smarty_init.php";
 		$this->_smarty = $smarty;
 		$this->_smarty->assign('smarty_path', REL_PATH_SMARTY);
-		$this->_smarty->assign('babesk_version', file_get_contents("../version.txt"));
+		$version=@file_get_contents("../version.txt");
+if ($version===FALSE) $version = "";
+$smarty->assign('babesk_version', $version);
 		$this->_smarty->assign('error', '');
 	}
 
-	/** Checks if the User has a preset Password and has not changed it yet
-	 *
+	/**
+	 * Checks if the User has a preset Password and has not changed it yet
 	 */
 	private function checkFirstPassword () {
 		$changePasswordOnFirstLoginEnabled = $this->_gsManager->valueGet (GlobalSettings::FIRST_LOGIN_CHANGE_PASSWORD);
@@ -152,6 +173,25 @@ class Web {
 				$this->_moduleManager->execute ('Settings|ChangePresetPassword');
 				die ();
 			}
+		}
+	}
+
+	/**
+	 * handles if the user gets redirected after some seconds
+	 */
+	private function redirect () {
+		try {
+			$redirectDelay = $this->_gsManager->valueGet (
+				GlobalSettings::WEBHP_REDIRECT_DELAY);
+			$redirectTarget = $this->_gsManager->valueGet (
+				GlobalSettings::WEBHP_REDIRECT_TARGET);
+		} catch (Exception $e) {
+			return;
+		}
+		if ($redirectTarget != '') {
+			$red = array ('time' => $redirectDelay, 'target' => $redirectTarget
+				);
+			$this->_smarty->assign ('redirection', $red);
 		}
 	}
 }

@@ -63,7 +63,9 @@ class ChangePresetPassword extends Module {
 
 	private function dialogChangePasswordShow () {
 		$onFirstLoginChangeEmail = $this->emailChangeOnFirstLoginGet ();
+		$emailChangeForced = $this->emailChangeOnFirstLoginForcedGet ();
 		$this->_smarty->assign ('onFirstLoginChangeEmail', $onFirstLoginChangeEmail);
+		$this->_smarty->assign ('emailChangeForced', $emailChangeForced);
 		$this->_smarty->display ($this->_smartyPath . 'changePasswordDialog.tpl');
 	}
 

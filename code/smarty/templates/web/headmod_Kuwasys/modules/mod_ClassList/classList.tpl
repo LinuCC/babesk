@@ -59,8 +59,12 @@ p.helpTextLockedClasses {
 		{if $class.unitId == $classUnit.ID}
 		<tr>
 			<th class="classListClassLabel"><a onclick="switchClassDescriptionOfLink('{$class.ID}')">{$class.label}{if !$class.registrationForUserAllowed} (gesperrt){/if}</a>
-			<div id="classDescription#{$class.ID}" class="classDescription" hidden="hidden">
+			<div id="classDescription#{$class.ID}" class="classDescription">
 		<p>{$class.description}</p>
+		<p>{if isset($class.classteacher)}Kursleiter: {$class.classteacher.forename} {$class.classteacher.name}{/if}</p>
+		<script type="text/javascript">
+			switchClassDescriptionOfLink('{$class.ID}');
+		</script>
 	</div>
 			</th>
 			<td class="classListCheckbox"><input class="classListCheckbox" type="radio" name="firstChoice{$classUnit.ID}" value="{$class.ID}" {if !$class.registrationForUserAllowed}disabled="disabled"{/if}></td>

@@ -28,7 +28,7 @@ class Inventory extends Module {
 		$action_arr = array('show_inventory' => 1,
 							'add_inventory' => 4);
 
-			if ('POST' == $_SERVER['REQUEST_METHOD']) {
+			if (isset($_GET['action'])) {
 			$action = $_GET['action'];
 			switch ($action) {
 				case 1: //show the inventory

@@ -4,6 +4,8 @@ require_once 'ClassesInterface.php';
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysFilterAndSort.php';
 require_once 'ClassesCsvImport.php';
+require_once 'ClassesCreateTable.php';
+require_once 'ClassesUnregisterUser.php';
 
 /**
  *
@@ -55,6 +57,12 @@ class Classes extends Module {
 					break;
 				case 'assignUsersToClasses':
 					$this->assignUsersToClasses();
+					break;
+				case 'createClassTable':
+					$this->createClassTable();
+					break;
+				case 'unregisterUser':
+					$this->unregisterUser();
 					break;
 				default:
 					$this->_interface->dieError($this->_languageManager->getText('errorWrongActionValue'));
@@ -146,6 +154,7 @@ class Classes extends Module {
 				///@ToDo can be made faster with userIdArray!
 				$user = $this->_databaseAccessManager->userGet($joint['UserID']);
 				$user['statusId'] = $joint['statusId'];
+				$user['jointId'] = $joint['ID'];
 				$status = $this->_databaseAccessManager->usersInClassStatusGetWithoutDieing ($joint ['statusId']);
 				if ($status) {
 					$user['statusTranslated'] = $status ['translatedName'];
@@ -199,9 +208,9 @@ class Classes extends Module {
 	private function checkClassInput () {
 
 		try {
-			inputcheck($_POST['label'], '/\A.{3,100}\z/', $this->_languageManager->getText('formLabel'));
+			inputcheck($_POST['label'], '/\A[^~]{3,100}\z/', $this->_languageManager->getText('formLabel'));
 			inputcheck($_POST['maxRegistration'], 'number', $this->_languageManager->getText('formMaxRegistration'));
-			inputcheck($_POST['description'], '/\A.{3,1024}\z/', $this->_languageManager->getText('formDescription'));
+			inputcheck($_POST['description'], '/\A[^~]{3,1024}\z/', $this->_languageManager->getText('formDescription'));
 		} catch (WrongInputException $e) {
 			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorWrongInput'), $e->getFieldName())
 				);
@@ -226,12 +235,49 @@ class Classes extends Module {
 
 	private function showClasses () {
 
-		$classes = $this->getAllClasses();
-		$classes = $this->addSchoolYearLabelToClasses($classes);
-		$classes = $this->addRegistrationCountToClasses($classes);
-		$classes = $this->addWeekdayTranslatedToClasses($classes);
-		$classes = $this->addClassteachersToClasses($classes);
-		$classes = $this->addCountOfWaitingUsersToClasses($classes);
+		require_once PATH_INCLUDE . '/TableMng.php';
+
+		$subQueryCountUsers = '
+			(SELECT Count(*)
+				FROM jointUsersInClass uic
+				JOIN users ON users.ID = uic.UserID
+				WHERE uic.statusId = (SELECT ID FROM usersInClassStatus
+					WHERE name="%s") AND class.ID = uic.ClassID
+				)
+			';
+
+		$query = '
+			SELECT class.ID, class.label, class.maxRegistration,
+				kuwasysClassUnit.name AS "unitName",
+				kuwasysClassUnit.translatedName AS "unitTranslatedName",
+				schoolYear.label AS schoolyearLabel,
+				CONCAT (classTeacher.forename, " ", classTeacher.name) AS classteacherName,
+				'. sprintf ($subQueryCountUsers, 'active') . ' AS activeCount,
+				'. sprintf ($subQueryCountUsers, 'waiting') . ' AS waitingCount,
+				'. sprintf ($subQueryCountUsers, 'request1') . ' AS request1Count,
+				'. sprintf ($subQueryCountUsers, 'request2') . ' AS request2Count
+			FROM class
+				LEFT JOIN jointClassTeacherInClass
+				ON class.ID = jointClassTeacherInClass.ClassID
+				LEFT JOIN classTeacher
+				ON classTeacher.ID = jointClassTeacherInClass.ClassTeacherID
+				LEFT JOIN jointClassInSchoolYear
+				ON jointClassInSchoolYear.ClassID = class.ID
+				LEFT JOIN schoolYear
+				ON jointClassInSchoolYear.SchoolYearID = schoolYear.ID
+				LEFT JOIN kuwasysClassUnit
+				ON kuwasysClassUnit.ID = class.unitId
+			';
+		TableMng::init ();
+		try {
+			$classes = TableMng::query ($query, true);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError ('Konnte keine Kurse finden');
+		} catch (Exception $e) {
+			$this->_interface->dieError (
+				sprintf ('Konnte die Kurse nicht abrufen!', $e->getMessage()));
+		}
+
 		$classes = KuwasysFilterAndSort::elementsFilter ($classes);
 		$classes = KuwasysFilterAndSort::elementsSort ($classes);
 		$this->_interface->showClasses($classes);
@@ -314,8 +360,23 @@ class Classes extends Module {
 	private function changeClassInDatabase () {
 
 		$allowRegistration = (isset($_POST['allowRegistration'])) ? true : false;
-		$this->_databaseAccessManager->classChange($_GET['ID'], $_POST['label'], $_POST['description'], $_POST[
-				'maxRegistration'], $allowRegistration, $_POST['weekday']);
+		$query = "UPDATE class
+			SET label = ?, description = ?, maxRegistration = ?, registrationEnabled = ?, unitId = ?
+			WHERE ID = ?";
+		if($stmt = TableMng::getDb()->prepare($query)) {
+			$stmt->bind_param('ssissi', $_POST['label'],
+				$_POST['description'], $_POST['maxRegistration'],
+				$allowRegistration, $_POST['weekday'],$_GET['ID']);
+			if($stmt->execute()) {
+				$this->_interface->dieMsg('Der Kurs wurde erfolgreich verändert');
+			}
+			else {
+				$this->_interface->dieError('Der Kurs konnte nicht verändert werden!');
+			}
+		}
+		else {
+			$this->_interface->dieError('Fehler beim Verbinden mit der Datenbank');
+		}
 	}
 
 	private function changeJointSchoolYearInDatabase () {
@@ -533,6 +594,16 @@ class Classes extends Module {
 		require_once 'AssignUsersToClasses.php';
 		$utcManager = new AssignUsersToClasses($this->_interface, $this->_languageManager);
 		$utcManager->execute();
+	}
+
+	private function createClassTable () {
+		ClassesCreateTable::init ($this->_interface);
+		ClassesCreateTable::execute ();
+	}
+
+	private function unregisterUser() {
+		ClassesUnregisterUser::init($this->_interface);
+		ClassesUnregisterUser::execute($_GET['jointId']);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////

@@ -9,5 +9,8 @@
 <form action="index.php?section=System|User&action=5" method="post">
 	<input type="submit" value="Benutzernamen automatisch zuweisen">
 </form>
+<form action="index.php?section=System|User&action=6" method="post">
+	<input type="submit" value="Benutzernamen die speziellen Spezialcharakter entfernen">
+</form>
 
 {/block}

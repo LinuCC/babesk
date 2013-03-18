@@ -1,11 +1,13 @@
 <?php
 require_once PATH_ACCESS . '/TableManager.php';
 
-/** This class contains the names of the globalSettings in the database
+/**
+ * This class contains the names of the globalSettings in the database
  * It acts as an enum
  */
 abstract class GlobalSettings {
 	const HELPTEXT = 'helptext';
+	const WEBLOGIN_HELPTEXT  = 'webLoginHelptext';
 	const RELIGION = 'religion';
 	const SPECIAL_COURSE = 'special_course';
 	const FOREIGN_LANGUAGE = 'foreign_language';
@@ -25,6 +27,8 @@ abstract class GlobalSettings {
 	const FIRST_LOGIN_CHANGE_PASSWORD = 'firstLoginChangePassword';
 	const FIRST_LOGIN_CHANGE_EMAIL = 'firstLoginChangeEmail';
 	const FIRST_LOGIN_CHANGE_EMAIL_FORCED = 'firstLoginForceChangeEmail';
+	const WEBHP_REDIRECT_DELAY = 'webHomepageRedirectDelay';
+	const WEBHP_REDIRECT_TARGET  = 'webHomepageRedirectTarget';
 }
 
 class GlobalSettingsManager extends TableManager {
@@ -272,7 +276,8 @@ class GlobalSettingsManager extends TableManager {
 		$this->valueSet (GlobalSettings::SOLI_PRICE, $value);
 	}
 
-	/** Sets the Global Setting that has the name $name to the value $value
+	/**
+	 * Sets the Global Setting that has the name $name to the value $value
 	 * If no entry with this name is found, the entry will be created in the
 	 * table with the value $value
 	 */
@@ -287,7 +292,8 @@ class GlobalSettingsManager extends TableManager {
 		$this->alterEntry ($id, 'value', $value);
 	}
 
-	/** Returns the value of the GlobalSettings-entry with the name $name
+	/**
+	 * Returns the value of the GlobalSettings-entry with the name $name
 	 * @throws MySQLVoidDataException if no entry with the name $name was found
 	 */
 	public function valueGet ($name) {

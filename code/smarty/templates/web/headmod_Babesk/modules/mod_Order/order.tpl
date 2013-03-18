@@ -55,7 +55,7 @@ count($mealday)} {foreach $mealday as $meal} {if isset($meal.ID)}
 	<fieldset class="div-info">
 		<form class="div-info-submit"
 			action="index.php?section=Babesk|Order&order={$meal.ID}" method="post">
-			<input type="submit" value="{$meal.name} bestellen">
+			<input type="submit" value='{$meal.name} bestellen'>
 		</form>
 	</fieldset>
 </div>

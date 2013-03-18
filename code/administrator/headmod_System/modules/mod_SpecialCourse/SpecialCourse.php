@@ -21,6 +21,10 @@ class SpecialCourse extends Module {
 
 		require_once 'AdminSpecialCourseInterface.php';
 		require_once 'AdminSpecialCourseProcessing.php';
+		require_once PATH_ACCESS . '/CardManager.php';
+		require_once PATH_ACCESS . '/UserManager.php';
+		$this->cardManager = new CardManager();
+		$this->userManager = new UserManager();
 
 		$SpecialCourseInterface = new AdminSpecialCourseInterface($this->relPath);
 		$SpecialCourseProcessing = new AdminSpecialCourseProcessing($SpecialCourseInterface);
@@ -35,6 +39,27 @@ class SpecialCourse extends Module {
 					$SpecialCourseProcessing->EditSpecialCourses($_POST);
 				break;
 				case 3: //edit the users
+					
+					$userID = null;
+					if (isset ($_POST['user_search'])) {
+						try {
+							$userID = $this->cardManager->getUserID($_POST['user_search']);
+						} catch (Exception $e) {
+							$userID =  $e->getMessage();
+						}
+						if ($userID == 'MySQL returned no data!') {
+							try {
+								$userID = $this->userManager->getUserID($_POST['user_search']);
+							} catch (Exception $e) {
+								$this->userInterface->dieError("Benutzer nicht gefunden!");
+							}
+					
+						}
+					
+						$SpecialCourseProcessing->ShowSingleUser($userID);
+					
+						break;
+					}
 					if (isset($_POST['filter'])) {
 						$SpecialCourseProcessing->ShowUsers($_POST['filter']);
 					} else {
@@ -61,6 +86,9 @@ class SpecialCourse extends Module {
 			$SpecialCourseInterface->ShowSelectionFunctionality();
 		}
 	}
+
+	protected $cardManager;
+	protected $userManager;
 }
 
 ?>

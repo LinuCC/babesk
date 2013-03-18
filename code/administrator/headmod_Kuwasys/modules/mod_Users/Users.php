@@ -16,6 +16,8 @@ require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysFilterAndSort.php';
 require_once 'UsersPasswordResetter.php';
 require_once 'DisplayUsersWaiting.php';
 require_once 'UsersCsvImport.php';
+require_once 'UsersCreateParticipationConfirmationPdf.php';
+require_once 'UsersEmailParticipationConfirmation.php';
 
 /**
  * Main-Class for the Module Users
@@ -92,8 +94,11 @@ class Users extends Module {
 				case 'printParticipationConfirmation':
 					$this->handleParticipationConfirmationPdf();
 					break;
+				case 'printParticipationConfirmationForAll':
+					$this->handleParticipationConfirmationPdfForAll ();
+					break;
 				case 'sendEmailsParticipationConfirmation':
-					$this->sendEmailParticipationConfirmation ();
+					$this->emailParticipationConfirmation ();
 					break;
 				case 'resetPasswords':
 					$this->resetPasswordOfAllUsers ();
@@ -138,19 +143,83 @@ class Users extends Module {
 	private function addUser () {
 
 		if (isset($_POST['username'], $_POST['name'], $_POST['forename'], $_POST['telephone'])) {
-			$this->checkAddUserInput();
-			$this->checkPasswordRepetition();
-			$this->addUserToDatabaseByPost();
-			$this->addJointUsersInSchoolYearByAddUser();
-			$userID = $this->_usersManager->getLastInsertedID();
-			$this->addJointUsersInGrade($userID, $_POST['grade']);
-			$this->_interface->dieMsg(sprintf($this->_languageManager->getText('finishedAddUser'), $_POST['forename'],
-					$_POST['name']));
+			$this->checkAddUserInput(); //check User Input
+			$this->checkPasswordRepetition(); //is repeated Password the same?
+			$birthday = $this->handleBirthday($_POST['Date_Day'],
+				$_POST['Date_Month'], $_POST['Date_Year']);
+			$this->addUserToDatabase($_POST['forename'], $_POST['name'],
+				$_POST['username'], $_POST['password'], $_POST['email'],
+				$_POST['telephone'], $birthday, $_POST['schoolyear'],
+				$_POST['grade']);
+			// fetches the ID of the last inserted object from the Db
+			/// @todo: There has to be a better way to get the other elements
+			/// inserted
+			// $userID = $this->_usersManager->getLastInsertedID();
+			// $this->addJointUsersInSchoolYear($userID, $_POST['schoolyear']);
+			// $this->addJointUsersInGrade($userID, $_POST['grade']);
+			$this->_interface->dieMsg(sprintf($this->_languageManager->getText('finishedAddUser'), $_POST['forename'], $_POST['name']));
 		}
 		else {
 			$this->showAddUser();
 		}
 	}
+
+	private function addUserToDatabase($forename, $name,$username,
+		$hashedPassword, $email,$telephone, $birthday, $schoolyearId, $gradeId) {
+		$db = TableMng::getDb();
+		$db->real_escape_string($forename);
+		$db->real_escape_string($name);
+		$db->real_escape_string($username);
+		$db->real_escape_string($hashedPassword);
+		$db->real_escape_string($email);
+		$db->real_escape_string($telephone);
+		$db->real_escape_string($birthday);
+		$db->real_escape_string($schoolyearId);
+		$db->real_escape_string($gradeId);
+		$query = sprintf(
+			"INSERT INTO users (forename, name, username, password,
+				email, telephone, birthday) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s');
+			SET @last_user_id = LAST_INSERT_ID();
+			INSERT INTO jointUsersInSchoolYear (UserID, SchoolYearID)
+				VALUES (@last_user_id, '%s');
+			INSERT INTO jointUsersInGrade (UserID, GradeID)
+				VALUES (@last_user_id, '%s');",
+				$forename, $name,$username, $hashedPassword, $email,
+				$telephone, $birthday, $schoolyearId, $gradeId);
+		$db->autocommit(false);//mySQL-transaction
+		if($db->multi_query($query)) {
+			do {
+				$db->next_result();
+			} while($db->more_results());
+		}
+		if(!$db->errno) {
+			$db->commit();
+		}
+		else {
+			$this->_interface->dieError('Ein Fehler ist beim Verbinden mit der Datenbank aufgetreten' . $db->error);
+		}
+	}
+
+	// private function addUserToDatabase ($forename, $name, $username, $password, $email, $telephone, $birthday) {
+
+	// 	$hashedPassword = hash_password($password);
+	// 	$query = "INSERT INTO users (forename, name, username, password,
+	// 		email, telephone, birthday) VALUES (?, ?, ?, ?, ?, ?, ?)";
+	// 	if($stmt = TableMng::getDb()->prepare($query)) {
+	// 		$stmt->bind_param("sssssss", $forename, $name,
+	// 			$username, $hashedPassword,
+	// 			$email, $telephone, $birthday);
+	// 		if($stmt->execute()) {
+	// 			//everything was good
+	// 		}
+	// 		else {
+	// 			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorAddUser'), TableMng::getDb()->error));
+	// 		}
+	// 	}
+	// 	else {
+	// 		$this->_interface->dieError('Ein Fehler ist beim Verbinden mit der Datenbank aufgetreten.' . TableMng::getDb()->error);
+	// 	}
+	// }
 
 	private function deleteUser () {
 
@@ -186,12 +255,30 @@ class Users extends Module {
 	private function addUserToClass () {
 
 		if (isset($_POST['classId'], $_GET['ID'])) {
-			$this->addJointUsersInClass($_GET['ID'], $_POST['classId'], $_POST['classStatus']);
-			$this->_interface->dieMsg($this->_languageManager->getText('finAddUserToClass'));
+			$statusId = $this->statusIdOfStatusNameGet ($_POST['classStatus']);
+			if(!$this->hasClassWithSameDayAndStatusIdAs($_POST['classId'], $_GET['ID'], $statusId)) {
+				$this->addJointUsersInClass($_GET['ID'], $_POST['classId'], $_POST['classStatus']);
+				$this->_interface->dieMsg($this->_languageManager->getText('finAddUserToClass'));
+			}
+			else {
+				$this->_interface->dieError ('Der Schüler hat an diesem Tag bereits einen Kurs mit diesem Status. Bitte passen sie zuerst diesen Kurs an');
+			}
 		}
 		else {
 			$this->showAddClassToUser();
 		}
+	}
+
+	private function statusIdOfStatusNameGet ($statusName) {
+		$query = 'SELECT ID FROM usersInClassStatus WHERE name = "' . $statusName . '"';
+		try {
+			$id = TableMng::query ($query, true);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError('Konnte einen Status nicht finden');
+		} catch (Exception $e) {
+			$this->_interface->dieError('Konnte die Status-ID nicht abrufen');
+		}
+		return $id [0] ['ID'];
 	}
 
 	private function changeUserToClass () {
@@ -224,11 +311,9 @@ class Users extends Module {
 	private function moveUserByClass () {
 
 		if(isset($_GET['classIdOld'], $_GET['userId'], $_POST['classIdNew'], $_POST['statusNew'])) {
-			if($this->isClassMaxRegistrationReached($_POST['classIdNew'])
-				&& !isset ($_POST ['ignoreMaxReg'])) {
-				$this->moveUserByClassDialog ();
-			}
-			else {
+
+			if ($this->moveUserByClassCheck ()) {
+				$this->moveUserByClassCleanSessionVars();
 				$this->moveUserByClassToDatabase($_GET['userId'], $_GET['classIdOld'], $_POST['classIdNew'], $_POST['statusNew']);
 				$this->_interface->dieMsg($this->_languageManager->getText('finishedMoveUserToClass'));
 			}
@@ -241,14 +326,149 @@ class Users extends Module {
 		}
 	}
 
+	private function moveUserByClassCleanSessionVars () {
+		if(isset($_SESSION ['moveUserByClassMaxRegConf'])) {
+			unset($_SESSION ['moveUserByClassMaxRegConf']);
+		}
+		if(isset($_SESSION ['moveUserByClassOnDupDelete'])) {
+			unset($_SESSION ['moveUserByClassOnDupDelete']);
+		}
+	}
+
+	/**
+	 * Checks if the circumstances for moving the user are correct; else show
+	 * warnings and dialogs
+	 */
+	private function moveUserByClassCheck () {
+		$shouldAdd = true;
+		//check if the added Link would make the class bigger than maxRegistration allows
+		if($this->isClassMaxRegistrationReached($_POST['classIdNew'])
+			&& !isset($_SESSION ['moveUserByClassMaxRegConf'])
+			&& !isset ($_POST ['ignoreMaxReg'])) {
+			$shouldAdd = $this->moveUserByClassDialog ();
+			if(!$shouldAdd) {
+				return false;
+			}
+			else {
+				$_SESSION ['moveUserByClassMaxRegConf'] = true;
+			}
+		}
+		//check if there is already a Link with same status and unit, which would cause the programm to error out on specific Modules
+		if($this->hasClassWithSameDayAndStatusIdAs ($_POST['classIdNew'],
+			$_GET['userId'], $_POST['statusNew'])) {
+			$shouldAdd = $this->moveUserByClassDuplicateDialog();
+			if(!$shouldAdd) {
+				return false;
+			}
+		}
+		//no problem, add the new link
+		else {
+			return true;
+		}
+		return $shouldAdd;
+	}
+
+	private function moveUserByClassDuplicateDialog() {
+		if (isset ($_POST['removeOldUicLink'])) {
+			$this->moveUserByClassDuplicateDeleteOldLink();
+			return true;
+		}
+		else {
+			$this->moveUserByClassDuplicateDialogShow ($_GET['classIdOld'], $_POST['classIdNew'], $_GET['userId'], $_POST['statusNew']);
+			return false;
+		}
+	}
+
+	private function moveUserByClassDuplicateDeleteOldLink() {
+		$whereQuery = $this->moveUserByClassDuplicateDialogDeleteOldLinkGetWhereQuery();
+		$query = sprintf(
+			'DELETE FROM jointUsersInClass WHERE %s
+			', $whereQuery);
+		try {
+			TableMng::query ($query);
+		} catch (Exception $e) {
+			$this->_interface->dieError ('Konnte die alten Links nicht löschen' . $e->getMessage());
+		}
+		$this->_interface->showMsg ('Die alten Links wurden erfolgreich gelöscht');
+	}
+
+	private function moveUserByClassDuplicateDialogDeleteOldLinkGetWhereQuery() {
+		$whereQuery = '';
+		foreach ($_SESSION ['moveUserByClassOnDupDelete'] as $link) {
+			$whereQuery .= sprintf ('ID = "%s" OR ', $link);
+		}
+		$whereQuery= rtrim ($whereQuery, 'OR ');
+		return $whereQuery;
+	}
+
+	private function moveUserByClassDuplicateDialogShow($classIdOld, $classIdNew, $userId, $statusId) {
+		$dupClass = $this->moveUserByClassDuplicateDialogShowFetchData(
+			$classIdOld, $classIdNew, $userId, $statusId);
+		if (count($dupClass) > 1) {
+			$this->_interface->showError ('Es sind bereits mehrere sehr ähnliche Links zu dem Benutzer vorhanden; Wenn fortgefahren wird, werden sie alle gelöscht');
+		}
+		$dupLinkArray = array ();
+		foreach ($dupClass as $d) {
+			$dupLinkArray [] = $d ['linkId'];
+		}
+		$_SESSION ['moveUserByClassOnDupDelete'] = $dupLinkArray;
+		$this->_interface->showMoveUserByClassDuplicateDialog ($dupClass, $classIdOld, $classIdNew, $userId, $statusId);
+	}
+
+	private function moveUserByClassDuplicateDialogShowFetchData (
+		$classIdOld, $classIdNew, $userId, $statusId) {
+		//fetch some data to show the problem to the user
+		$query = sprintf(
+			"SELECT c.label AS class, uic.ID as linkId,
+				(SELECT translatedName FROM kuwasysClassUnit WHERE ID = c.unitId)
+				AS unit,
+				(SELECT translatedName FROM usersInClassStatus WHERE ID = uic.statusId)
+				AS status
+			FROM class c
+			INNER JOIN jointUsersInClass uic ON uic.ClassID = c.ID
+			WHERE uic.UserID = %s
+				AND uic.statusId = %s
+				AND c.unitId = (SELECT unitId FROM class WHERE ID = %s)
+			", $userId, $statusId, $classIdNew);
+		try {
+			$dupClass = TableMng::query ($query, true);
+		} catch (MySQLVoidDataException $e) {
+			throw $e;
+		} catch (Exception $e) {
+			$this->_interface->dieError ('Konnte die Kursdaten nicht abrufen.');
+		}
+		return $dupClass;
+	}
+
+	private function hasClassWithSameDayAndStatusIdAs ($classId, $userId, $statusId) {
+		$query = sprintf(
+			"SELECT COUNT(*) AS count
+			FROM jointUsersInClass uic
+			INNER JOIN class c ON uic.ClassID = c.ID
+			WHERE uic.UserID = %s
+				AND uic.statusId = %s
+				AND c.unitId = (SELECT unitId FROM class WHERE ID = %s)
+			", $userId, $statusId, $classId);
+		try {
+			$hasClass = TableMng::query ($query, true);
+		} catch (Exception $e) {
+			$this->_interface->dieError ('Konnte nicht auf weitere Kurse mit gleichem Status und Tag überprüfen' . $e->getMessage());
+		}
+		if ($hasClass[0] ['count'] != 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	/**
 	 * Checks if a confirmation-Dialog has to be shown to move the User
 	 * Based on the maximum Registration of the Class
 	 */
 	private function moveUserByClassDialog () {
 		if(isset($_POST['confirmed'])) { //Already confirmed the Dialog
-			$this->moveUserByClassToDatabase($_GET['userId'], $_GET['classIdOld'], $_POST['classIdNew'], $_POST['statusNew']);
-			$this->_interface->dieMsg($this->_languageManager->getText('finishedMoveUserToClass'));
+			return true;
 		}
 		else if (isset($_POST['notConfirmed'])) { //Dialog declined
 			$this->_interface->dieMsg($this->_languageManager->getText('moveUserToClassNotConfirmed'));
@@ -355,109 +575,30 @@ class Users extends Module {
 		return $users;
 	}
 
-	/**
-	 * Creates a PDF-file based on post-variables. For each user in the Grade it creates a confirmation
-	 * for the classes the user attends to.
-	 */
 	private function handleParticipationConfirmationPdf () {
-
-		require_once PATH_INCLUDE . '/pdf/joinMultiplePdf.php';
-		foreach ($_POST['userIds'] as $userId) {
-			$this->_databaseAccessManager->userIdAddToUserIdArray($userId);
-		}
-		$users = $this->_databaseAccessManager->userGetByUserIdArray();
-		$filename = $this->getPdfFilename ($_POST['schoolyearId'], $_POST['gradeId']);
-
-		$pdfTmpPathArray = $this->createTemporaryPdfFiles($users);
-		$pdfCombined = $this->combineTemporaryPdfFiles($pdfTmpPathArray);
-		$pdfCombined->pdfCombinedProvideAsDownload ($filename);
-		$pdfCombined->pdfTempDirClean ();
+		UsersCreateParticipationConfirmationPdf::init ($this->_interface);
+		UsersCreateParticipationConfirmationPdf::execute ($_POST ['userIds']);
 	}
 
-	/**
-	 * creates temporary Pdffiles on the Serverfilesystem and returns an array with the paths to them.
-	 */
-	private function createTemporaryPdfFiles ($users) {
-		$pdfTmpPathArray = array();
-		foreach ($users as $user) {
-			$pdfTmpPathArray [] = $this->createPdfParticipationConfirmation ($user);
+	private function handleParticipationConfirmationPdfForAll () {
+		$query = 'SELECT u.ID as userId
+			FROM users u
+				JOIN jointUsersInClass uic ON u.ID = uic.UserID
+				JOIN usersInClassStatus uics ON uic.statusId = uics.ID
+			WHERE uics.name = "active" OR uics.name = "waiting";';
+		try {
+			$data = TableMng::query ($query, true);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError ('Es wurden keine Schüler gefunden, für die man die Dokumente hätte drucken können');
+		} catch (Exception $e) {
+			$this->_interface->dieError ('konnte die Daten der Schüler nicht abrufen' . $e->getMessage ());
 		}
-		return $pdfTmpPathArray;
-	}
-
-	/** Creates a PDF for the Participation Confirmation and returns its Path
-	 *
-	 */
-	private function createPdfParticipationConfirmation ($user) {
-		require_once PATH_INCLUDE . '/pdf/HtmlToPdfImporter.php';
-		$confTemplatePath = PATH_INCLUDE . '/pdf/printTemplates/printTemplateTest.html';
-		if(!file_exists($confTemplatePath))
-			$this->_interface->dieError($this->_languageManager->getText('errorPdfHtmlTemplateMissing') . $confTemplatePath);
-		$pdf = new HtmlToPdfImporter ();
-		$pdf->htmlImport($confTemplatePath, true);
-		$pdf->tempVarReplaceInHtml('username', sprintf('%s %s', $user['forename'], $user['name']), '#!%s#!');
-		$pdf->htmlToPdfConvert();
-		$pdfPath = $pdf->pdfSaveTemporaryAndGetFilename ();
-		return $pdfPath;
-	}
-
-	/**
-	 * Combines the Temporary PDF-Files whose path is in $tempFilePathArray
-	 * @param array[string] $tempFilePathArray An array of paths to the Temporary PDF-Files
-	 * @return joinMultiplePdf the Combined PDF's
-	 */
-	private function combineTemporaryPdfFiles ($tempFilePathArray) {
-
-		require_once PATH_INCLUDE . '/pdf/joinMultiplePdf.php';
-
-		$pdfCombiner = new joinMultiplePdf ();
-
-		foreach ($tempFilePathArray as $tmpPath) {
-			$pdfCombiner->pdfAdd ($tmpPath);
+		$userIds = array ();
+		foreach ($data as $row) {
+			$userIds [] = $row ['userId'];
 		}
-		$pdfCombiner->pdfCombine ();
-		return $pdfCombiner;
-	}
-
-	/**
-	 * Creates a filename fitting to the combined PDF that is getting created.
-	 */
-	private function getPdfFilename ($schoolyearId, $gradeId) {
-
-		$schoolyear = $this->_databaseAccessManager->schoolyearGet ($schoolyearId);
-		$grade = $this->_databaseAccessManager->gradeGetById ($gradeId);
-		$filename = sprintf('%s_%s_%s.pdf', $schoolyear ['label'], $grade ['label'] . $grade ['gradeValue'], date('Y-m-d'));
-		return $filename;
-	}
-
-	private function sendEmailParticipationConfirmation () {
-		foreach ($_POST['userIds'] as $userId) {
-			$this->_databaseAccessManager->userIdAddToUserIdArray($userId);
-		}
-		$users = $this->_databaseAccessManager->userGetByUserIdArray();
-		foreach ($users as $user) {
-			$pdfPath = $this->createPdfParticipationConfirmation ($user);
-			$this->sendEmailIfUserHasEmail ($user, $pdfPath);
-		}
-		$this->_interface->dieMsg ('Das Versenden der Emails wurde abgeschlossen.');
-	}
-
-	/**
-	 *
-	 */
-	private function sendEmailIfUserHasEmail ($user, $pdfPath) {
-		if ($user ['email'] == '') {
-			$this->_interface->showMsg (sprintf('Der Benutzer %s %s hat keine Email angegeben.', $user ['forename'], $user ['name']));
-		}
-		require_once PATH_INCLUDE . '/email/SMTPMailer.php';
-		$mailer = new SMTPMailer ($this->_interface);
-		$mailer->smtpDataInDatabaseLoad ();
-		$mailer->emailFromXmlLoad (PATH_INCLUDE . '/email/Kuwasys_Bestaetigung.xml');
-		$mailer->AddAttachment ($pdfPath, 'KurswahlBestaetigung.pdf');
-		$mailer->AddAddress ($user ['email']);
-		if (!$mailer->Send ()) {
-			$this->_interface->showError (sprintf('Konnte die Email an %s %s nicht versenden. Fehlermeldung: %s', $user ['forename'], $user ['name'], $mailer->ErrorInfo));
-		}
+		UsersCreateParticipationConfirmationPdf::init ($this->_interface);
+		UsersCreateParticipationConfirmationPdf::execute ($userIds);
 	}
 
 	private function resetPasswordOfAllUsers () {
@@ -583,34 +724,7 @@ class Users extends Module {
 	 * UserManager
 	********************/
 
-	/**
-	 * @used-by Users::addUser
-	 */
-	private function addUserToDatabaseByPost () {
 
-		$date = $this->convertNumbersToDate($_POST['Date_Day'], $_POST['Date_Month'], $_POST['Date_Year']);
-		try {
-			$this->_usersManager->addUser($_POST['forename'], $_POST['name'], $_POST['username'], hash_password($_POST[
-					'password']), $_POST['email'], $_POST['telephone'], $date);
-		} catch (MySQLConnectionException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddUserConnectDatabase'));
-		}
-		catch (Exception $e) {
-			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorAddUser'), $e->getMessage()));
-		}
-	}
-
-	private function addUserToDatabase ($forename, $name, $username, $password, $email, $telephone, $birthday) {
-
-		try {
-			$this->_usersManager->addUser($forename, $name, $username, $password, $email, $telephone, $birthday);
-		} catch (MySQLConnectionException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddUserConnectDatabase'));
-		}
-		catch (Exception $e) {
-			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorAddUser'), $e->getMessage()));
-		}
-	}
 
 	private function ChangeUserDataToDatabase () {
 
@@ -672,10 +786,16 @@ class Users extends Module {
 
 	private function addJointUsersInGrade ($userID, $gradeID) {
 
-		try {
-			$this->_jointUsersInGradeManager->addJoint($userID, $gradeID);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddJointUsersInGrade'));
+		$query = "INSERT INTO jointUsersInGrade (UserID, GradeID)
+			VALUES (?, ?)";
+		if($stmt = TableMng::getDb()->prepare($query)) {
+			$stmt->bind_param('ii', $userID, $gradeID);
+			if(!$stmt->execute()) {
+				$this->_interface->dieError($this->_languageManager->getText('errorAddJointUsersInGrade'));
+			}
+		}
+		else {
+			$this->_interface->dieError('Konnte nicht zur Datenbank Verbinden');
 		}
 	}
 
@@ -975,8 +1095,17 @@ class Users extends Module {
 	 */
 	private function addJointUsersInSchoolYearByAddUser () {
 
-		$userID = $this->_usersManager->getLastInsertedID();
-		$this->addJointUsersInSchoolYear($userID, $_POST['schoolyear']);
+		$query = "INSERT INTO jointUsersInSchoolYear (UserID, SchoolYearID)
+			VALUES (?,?)";
+		if($stmt = TableMng::getDb()->prepare($query)) {
+			$stmt->bind_param("ii", $_POST['userId'], $_POST['schoolyear']);
+			if(!$stmt->execute()) {
+				$this->_interface->dieError($this->_languageManager->getText('errorAddLinkUsersInSchoolyear') . TableMng::getDb()->error);
+			}
+		}
+		else {
+			$this->_interface->dieError('Ein Fehler ist beim Verbinden zur Datenbank aufgetreten.' . TableMng::getDb()->error);
+		}
 	}
 
 	/**
@@ -1092,11 +1221,14 @@ class Users extends Module {
 	 */
 	private function addJointUsersInClass ($userID, $classID, $statusName) {
 
+		$query = sprintf ('INSERT INTO jointUsersInClass
+			(UserID, ClassID, statusId) VALUES (%s, %s,
+				(SELECT ID FROM usersInClassStatus WHERE name="%s")
+				)', $userID, $classID, $statusName);
 		try {
-			$status = $this->_usersInClassStatusManager->statusGetByName ($statusName);
-			$this->_jointUsersInClass->addJoint($userID, $classID, $status ['ID']);
+			TableMng::query ($query);
 		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddJointUsersInClass'));
+			$this->_interface->dieError($this->_languageManager->getText('errorAddJointUsersInClass') . $e->getMessage ());
 		}
 	}
 
@@ -1162,7 +1294,8 @@ class Users extends Module {
 				$this->_interface->dieError ($this->_languageManager->getText ('errorFetchUsersInClassStatus'));
 			}
 			$this->alterJointUsersInClass($joint['ID'], $statusName);
-			$this->_interface->dieMsg($this->_languageManager->getText('finishedChangeJointUsersInClass'));
+			$link = '<a href="index.php?section=Kuwasys|Classes&action=showClass">zurück</a>';
+			$this->_interface->dieMsg($this->_languageManager->getText('finishedChangeJointUsersInClass') . '<br />' . $link);
 		}
 	}
 
@@ -1250,14 +1383,28 @@ class Users extends Module {
 
 	/**
 	 * @used-by Users::addUserToDatabase
+	 * Checks if the given Date is valid and returns a date-string in the
+	 * format YYYY-MM-DD
 	 * @param int(2) $day
 	 * @param int(2) $month
 	 * @param int(4) $year
 	 */
-	private function convertNumbersToDate ($day, $month, $year) {
+	private function handleBirthday($day, $month, $year) {
+		if(checkdate($month, $day, $year)) {
+			$date = sprintf('%s-%s-%s', $year, $month, $day);
+			return $date;
+		}
+		else {
+			$this->_interface->dieError('Kein gültiges Datum eingegeben!');
+		}
+	}
 
-		$date = sprintf('%s.%s.%s', $day, $month, $year);
-		return $date;
+	/**
+	 * Sends an Email-Participation-Confirmation
+	 */
+	private function emailParticipationConfirmation() {
+		UsersEmailParticipationConfirmation::init($this->_interface);
+		UsersEmailParticipationConfirmation::execute();
 	}
 
 

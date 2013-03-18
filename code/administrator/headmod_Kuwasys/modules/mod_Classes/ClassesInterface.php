@@ -85,6 +85,64 @@ class ClassesInterface extends AdminInterface {
 		$this->smarty->assign('requestsNotPassed', $requestsNotPassed);
 		$this->smarty->display($this->tplFilePath . 'assignUsersToClassesOutline.tpl');
 	}
+
+	public function showAssignUsersToClassesClassList ($classes) {
+		$this->smarty->assign ('classes', $classes);
+		$this->smarty->display (
+			$this->tplFilePath . 'assignUsersToClassesClassList.tpl');
+	}
+
+	public function showAssignUsersToClassesTempTableCreation ($tempTableExists) {
+		$this->smarty->assign ('tempTableExists', $tempTableExists);
+		$this->smarty->display (
+			$this->tplFilePath . 'assignUsersToClassesTempTableCreation.tpl');
+	}
+
+	public function showAssignUsersToClassesUserList (
+		$classname, $dataPrimary, $dataSecondary, $dataRemoved) {
+		$this->smarty->assign ('classname', $classname);
+		$this->smarty->assign ('dataPrimary', $dataPrimary);
+		$this->smarty->assign ('dataSecondary', $dataSecondary);
+		$this->smarty->assign ('dataRemoved', $dataRemoved);
+		$this->smarty->display ($this->tplFilePath . 'assignUsersToClassesUserList.tpl');
+	}
+
+	public function showAssignUsersToClassesMoveUser ($userId, $userFullname, $oldLinkId, $movedFromClassId, $classes, $statuses) {
+		$this->smarty->assign ('userId', $userId);
+		$this->smarty->assign ('userFullname', $userFullname);
+		$this->smarty->assign ('oldLinkId', $oldLinkId);
+		$this->smarty->assign ('movedFromClassId', $movedFromClassId);
+		$this->smarty->assign ('classes', $classes);
+		$this->smarty->assign ('statuses', $statuses);
+		$this->smarty->display ($this->tplFilePath . 'assignUsersToClassesMoveUser.tpl');
+	}
+
+	public function showAssignUsersToClassesMoveUserFinished ($movedFromClassId) {
+		$this->smarty->assign ('movedFromClassId', $movedFromClassId);
+		$this->smarty->display ($this->tplFilePath . 'assignUsersToClassesMoveUserFin.tpl');
+	}
+
+	public function showAssignUsersToClassesAddUserSearch ($classId, $users, $statuses) {
+		$this->smarty->assign ('classId', $classId);
+		$this->smarty->assign ('statuses', $statuses);
+		$this->smarty->assign ('users', $users);
+		$this->smarty->display (
+			$this->tplFilePath . 'assignUsersToClassesAddUserSearch.tpl');
+	}
+
+	public function showAssignUsersToClassesAddUserFinished ($classId) {
+		$this->smarty->assign ('classId', $classId);
+		$this->smarty->display ($this->tplFilePath . 'assignUsersToClassesAddUserFin.tpl');
+	}
+
+	public function unregisterUserConfirmation($jointId, $username, $classname) {
+		$this->smarty->assign('jointId', $jointId);
+		$this->smarty->assign('username', $username);
+		$this->smarty->assign('classname', $classname);
+		$this->smarty->display($this->tplFilePath . "unregisterUserConfirmation.tpl");
+	}
+
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////

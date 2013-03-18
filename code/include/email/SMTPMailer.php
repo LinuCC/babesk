@@ -16,9 +16,10 @@ class SMTPMailer extends PHPMailer {
 		$this->_globalSettingsManager = new GlobalSettingsManager ();
 	}
 
-	/** Loads an Email by the Xml-data of the given path of the Xml
+	/**
+	 * Loads an Email by the Xml-data of the given path of the Xml
 	 * @param path the full path to the XML-File
-	 * @utf8Decode if the content of the XMl-File should be decoded from utf-8 to ISO_8859-1 (Latin-1)
+	 * @param utf8Decode if the content of the XMl-File should be decoded from utf-8 to ISO_8859-1 (Latin-1)
 	 */
 	public function emailFromXmlLoad ($path, $utf8Decode = true) {
 		$this->emailFromXmlInit ($path);
@@ -30,7 +31,8 @@ class SMTPMailer extends PHPMailer {
 		}
 	}
 
-	/** This function loads information for the Email-SMTP-Protocoll from the Database
+	/**
+	 * This function loads information for the Email-SMTP-Protocoll from the Database
 	 * Looks for the smtp-Host, the Username and the Password for the Smtp-Server
 	 * as well as the sender and the sendername.
 	 */
@@ -46,7 +48,8 @@ class SMTPMailer extends PHPMailer {
 		}
 	}
 
-	/** Changes / Adds the SMTP-data for the Database
+	/**
+	 * Changes / Adds the SMTP-data for the Database
 	 * @param host The Host of the SMTP-Server, like smtp.gmx.net
 	 * @param username The Username to allow to Login to the smtp-server
 	 * @param password The Password needed to Login to the Server
@@ -66,8 +69,8 @@ class SMTPMailer extends PHPMailer {
 		}
 	}
 
-	/** Loads the xml in the given Path into this class
-	 *
+	/**
+	 * Loads the xml in the given Path into this class
 	 */
 	public function emailFromXmlInit ($path) {
 		$this->_xmlEmail = simplexml_load_file($path);
@@ -77,8 +80,9 @@ class SMTPMailer extends PHPMailer {
 		}
 	}
 
-	/** Tries to fetch an Object in the Email-Xml with the name $objName and returns it
-	 *  @return string
+	/**
+	 * Tries to fetch an Object in the Email-Xml with the name $objName and returns it
+	 * @return string
 	 */
 	private function emailFromXmlGetObj ($objName) {
 		if(!is_object($this->_xmlEmail->$objName)) {

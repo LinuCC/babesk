@@ -16,8 +16,8 @@ ToDo: Warnung wenn Kurs am selben Tag wie ein anderer Kurs!
 	<select name="classStatus">
 		<option value="active">Aktiv</option>
 		<option value="waiting">Wartend</option>
-		<option value="request#1">Als Erstwunsch</option>
-		<option value="request#2">Als Zweitwunsch</option>
+		<option value="request1">Als Erstwunsch</option>
+		<option value="request2">Als Zweitwunsch</option>
 	</select><br>
 	<input type="submit" value="Zuweisen">
 </form>

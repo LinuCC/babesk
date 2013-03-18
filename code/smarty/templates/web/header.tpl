@@ -4,6 +4,13 @@
     <title>{$title|default:'BaBeSK'}</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" href="../smarty/templates/web/css/general.css" type="text/css" />
+	{if isset($redirection)}
+		{*If this Var is set, redirect the user to another Website*}
+		<meta HTTP-EQUIV="REFRESH" content="{$redirection.time};
+		url=index.php?section={$redirection.target}">
+	{/if}
+
+	
 	{literal}
 <script type="text/javascript">
 var oldDiv = '';
@@ -36,24 +43,26 @@ function switchInfo(divName) {
     <div id="top_left">
        <p>Name: {$username}</p>
        {if isset($credit)}<p>Guthaben: {$credit} Euro</p>{/if}
-       
+
        <a href="javascript:switchInfo('account')">Kontoeinstellungen</a><br />
-    
+
     <div id="account" style="display: none;">
-	
-		
+
+
 			<a href="index.php?section=Babesk|Account">Karte sperren</a>
 			<br>
-			<a href="index.php?section=Babesk|ChangePassword">Passwort &auml;ndern</a>
-	
-	
-	</div>   
-       
-    
-    
+			<a href="index.php?section=Settings">Daten &auml;ndern</a>
+
+
+	</div>
+
+
+
     </div>
     <div id="top_right">
-       <a href="index.php?section=Babesk|Help">Hilfe</a><br />
+      
+       {if $newmail}<a href="index.php?section=Messages"><img src="../smarty/templates/web/images/email.png"></a>{/if}<br />
+    <a href="index.php?section=Babesk|Help">Hilfe</a><br />
        <a href="index.php?action=logout">Ausloggen</a>
     </div>
     <div id="heading">
@@ -65,6 +74,16 @@ function switchInfo(divName) {
 {include file='web/module_selector.tpl' title='Modul Wählen'}
 <div id="main">
 <div id="content">
+	<noscript>
+	<p>
+		<b>Ihr Browser hat JavaScript ausgestellt. Diese Seite funktioniert nur dann
+		vollständig, wenn sie Javascript aktiviert haben!</b><br />
+		(Kurswahlen sind auch ohne Javascript möglich, allerdings wird die Seite nicht korrekt angezeigt)<br />
+		Ein Anleitung finden sie
+		 <a href="http://www.enable-javascript.com/de/" target="_blank">hier</a>.
+	</p>
+	<hr />
+	</noscript>
 {if isset($error)}<p class="error">{foreach $error as $errorMsg}{$errorMsg}{/foreach}</p>{/if}
 {if $status != ''}
     <h4>{$status}</h4>

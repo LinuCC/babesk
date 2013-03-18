@@ -10,7 +10,9 @@ $adminManager = new AdminManager();
 $admingroupManager = new AdminGroupManager();
 $moduleManager = new ModuleManager('administrator');
 
-$smarty->assign('babesk_version', file_get_contents("../version.txt"));
+$version=@file_get_contents("../version.txt");
+if ($version===FALSE) $version = "";
+$smarty->assign('babesk_version', $version);
 
 $login = false;
 

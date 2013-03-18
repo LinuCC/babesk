@@ -18,6 +18,14 @@ class UserManager extends TableManager{
 		return $this->getEntryData($uid, '*');
 	}
 
+	public function changeUsers ($rows) {
+		$qMng = $this->getMultiQueryManager ();
+		foreach ($rows as $row) {
+			$qMng->rowAdd ($row);
+		}
+		$qMng->dbExecute (DbMultiQueryManager::$Alter);
+	}
+
 	/**
 	 * Returns the id of the user with the given username
 	 *
@@ -71,7 +79,17 @@ class UserManager extends TableManager{
 		return $this->getTableData ();
 	}
 
-
+	public function getSingleUser ($uid) {
+		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE ID=%s', $this->tablename,$uid));
+		$result = $this->db->query($query);
+		if (!$result) {
+			throw DB_QUERY_ERROR.$this->db->error;
+		}
+		while($buffer = $result->fetch_assoc())
+			$res_array[] = $buffer;
+		return $res_array;
+	}
+	
 	/**
 	 * Sorts the users it gets from MySQL-table and returns them
 	 * Enter description here ...

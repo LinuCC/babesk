@@ -89,10 +89,44 @@ class AdminSpecialCourseProcessing {
 		}
 		$specialCourses = $globalSettingsManager->getSpecialCourses();
 		$specialCourses_exploded = explode("|", $specialCourses);
-		$navbar = navBar($showPage, 'users', 'SpecialCourse', '3',$filter);
+		$navbar = navBar($showPage, 'users', 'System', 'SpecialCourse', '3',$filter);
 		$this->SpecialCourseInterface->ShowUsers($users,$specialCourses_exploded,$navbar);
 	}
 
+	//////////////////////////////////////////////////
+	//--------------------Show single user------------
+	//////////////////////////////////////////////////
+	function ShowSingleUser($uid) {
+		require_once PATH_ACCESS . '/UserManager.php';
+		require_once PATH_ACCESS . '/GroupManager.php';
+		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
+	
+		$globalSettingsManager = new globalSettingsManager();
+		$userManager = new UserManager();
+		$groupManager = new GroupManager();
+	
+		try {
+			
+			
+			$users = $userManager->getSingleUser($uid);
+		} catch (Exception $e) {
+			$this->logs
+			->log('ADMIN', 'MODERATE',
+					sprintf('Error while getting Data from MySQL:%s in %s', $e->getMessage(), __METHOD__));
+			$this->userInterface->dieError($this->messages['error']['get_data_failed']);
+		}
+	
+		
+		
+		
+		$specialCourses = $globalSettingsManager->getSpecialCourses();
+		$specialCourses_exploded = explode("|", $specialCourses);
+		
+		$this->SpecialCourseInterface->ShowUsers($users,$specialCourses_exploded,'');
+	}
+	
+	
+	
 	
 	function SaveUsers($post_vars) {
 		require_once PATH_ACCESS . '/UserManager.php';

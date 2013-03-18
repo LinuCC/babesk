@@ -1,25 +1,29 @@
 {extends file=$inh_path} {block name='content'}
 
-<h2 class='moduleHeader'>Hauptmenü der Kursverwaltung</h2>
+<h2 class='moduleHeader'>Hauptmen&uuml; der Kursverwaltung</h2>
 
 {if !$isClassRegistrationGloballyEnabled}<p>Kursregistrierungen sind nicht erlaubt!</p>
 {else}<p>Kursregistrierungen sind erlaubt</p>
 {/if}<br>
 
-<form action='index.php?section=Kuwasys|Classes&action=addClass' method='post'>
-	<input type='submit' value='einen neuen Kurs hinzufügen'>
+<form action='index.php?section=Kuwasys|Classes&amp;action=addClass' method='post'>
+	<input type='submit' value='einen neuen Kurs hinzuf&uuml;gen'>
 </form>
-<form action='index.php?section=Kuwasys|Classes&action=csvImport' method='post'>
+<form action='index.php?section=Kuwasys|Classes&amp;action=csvImport' method='post'>
 	<input type='submit' value='Kurse per CSV-Datei importieren'>
 </form>
-<form action='index.php?section=Kuwasys|Classes&action=toggleGlobalClassRegistrationEnabled' method='post'>
+<form action='index.php?section=Kuwasys|Classes&amp;action=toggleGlobalClassRegistrationEnabled' method='post'>
 	<input type='submit' value='Bei allen Kursen Registrierungen erlauben / nicht erlauben'>
 </form>
-<form action='index.php?section=Kuwasys|Classes&action=showClass' method='post'>
+<form action='index.php?section=Kuwasys|Classes&amp;action=showClass' method='post'>
 	<input type='submit' value='Die Kurse anzeigen'>
 </form>
-<form action='index.php?section=Kuwasys|Classes&action=assignUsersToClasses' method='post'>
-	<input type='submit' value='Schüler gewählten Kursen zuweisen'>
+<form action='index.php?section=Kuwasys|Classes&amp;action=createClassTable'
+	method='post'>
+	<input type='submit' value='Die Kurs&uuml;bersichten erstellen'>
+</form>
+<form action='index.php?section=Kuwasys|Classes&amp;action=assignUsersToClasses' method='post'>
+	<input type='submit' value='Sch&uuml;ler gew&auml;hlten Kursen zuweisen'>
 </form>
 
 

@@ -52,6 +52,17 @@ class KuwasysJointUsersInClass extends TableManager {
 		return $counter;
 	}
 
+	public function getJointsOfUserWithStatusArray ($userId, $statusIds) {
+		$dbMng = $this->getMultiQueryManager ();
+		foreach ($statusIds as $statusId) {
+			$row = new DbAMRow ();
+			$row->searchFieldAdd ('statusId', $statusId);
+			$row->searchFieldAdd ('UserID', $userId);
+			$dbMng->rowAdd ($row);
+		}
+		return $dbMng->dbExecute (DbMultiQueryManager::$Fetch);
+	}
+
 	public function getAllJointsWithStatusActive () {
 		$joints = $this->getTableData(sprintf('statusId="%s"', $this->_statusActiveStr));
 		return $joints;
@@ -101,6 +112,15 @@ class KuwasysJointUsersInClass extends TableManager {
 	public function getAllJointsOfUserId ($userId) {
 		$joints = $this->getTableData('UserID=' . $userId);
 		return $joints;
+	}
+
+	public function getAllJointsByStatusIdAndUserId ($statusId, $userId) {
+		$dbMng = $this->getMultiQueryManager ();
+		$row = new DbAMRow ();
+		$row->searchFieldAdd ('statusId', $statusId);
+		$row->searchFieldAdd ('UserID', $userId);
+		$dbMng->rowAdd ($row);
+		return $dbMng->dbExecute (DbMultiQueryManager::$Fetch);
 	}
 
 	public function getCountOfActiveUsersInClass ($classId) {

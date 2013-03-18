@@ -16,12 +16,12 @@ function showOptions (ID) {
 Nach
 <select name="keyToSortAfter">
 	<option value="label">Name</option>
-	<option value="schoolYearLabel">Schuljahr</option>
+	<option value="schoolyearLabel">Schuljahr</option>
 </select>
 sortieren.<br>
 <select name="keyToFilterAfter">
 	<option value="label">Name</option>
-	<option value="schoolYearLabel">Schuljahr</option>
+	<option value="schoolyearLabel">Schuljahr</option>
 </select>
 nach
 	<input type="text" name="filterValue" maxlength="12">
@@ -37,6 +37,7 @@ filtern.
 			<th align='center'>Kursleiter</th>
 			<th align='center'>Aktive Teilnehmer</th>
 			<th align='center'>Wartende Teilnehmer</th>
+			<th align='center'>Wünschende Teilnehmer</th>
 			<th align='center'>Maximale Registrierungen</th>
 			<th align='center'>Schuljahr</th>
 			<th align='center'>Veranstaltungstag</th>
@@ -47,12 +48,13 @@ filtern.
 		<tr bgcolor='#FFC33'>
 			<td align="center">{$class.ID}</td>
 			<td align="center">{$class.label}</td>
-			<td align="center">{$class.classteacher.forename} {$class.classteacher.name}</td>
-			<td align="center">{$class.userCount}</td>
-			<td align="center">{$class.userWaitingCount}</td>
+			<td align="center">{$class.classteacherName}</td>
+			<td align="center">{$class.activeCount}</td>
+			<td align="center">{$class.waitingCount}</td>
+			<td align="center">{$class.request1Count + $class.request2Count}</td>
 			<td align="center">{$class.maxRegistration}</td>
-			<td align="center">{$class.schoolYearLabel}</td>
-			<td align="center">{$class.weekdayTranslated}</td>
+			<td align="center">{$class.schoolyearLabel}</td>
+			<td align="center">{$class.unitTranslatedName}</td>
 			<td align="center" bgcolor='#FFD99'>
 			<div id='option{$class.ID}'>
 			<form method="post"><input type='button' value='Optionen' onclick='showOptions("{$class.ID}")'></form>

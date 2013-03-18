@@ -56,7 +56,9 @@ class AdminUserInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath.'deletion_confirm.tpl');
 	}
 
-	function ShowDeleteFin() {
+	function ShowDeleteFin($uid) {
+		$this->smarty->assign('pdf','../include/pdf/tempPdf/deleted_'.$uid.'.pdf');
+		$this->smarty->assign('uid',$uid);
 		$this->smarty->display($this->tplFilePath.'deletion_finished.tpl');
 	}
 
@@ -69,7 +71,7 @@ class AdminUserInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath.'change_user.tpl');
 
 	}
-	function ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID, $locked,$soli,$class) {
+	function ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID, $locked,$soli,$class,$cardChanges) {
 		$this->smarty->assign('id', $id);
 		$this->smarty->assign('name', $name);
 		$this->smarty->assign('forename', $forename);
@@ -80,12 +82,23 @@ class AdminUserInterface extends AdminInterface{
 		$this->smarty->assign('locked', $locked);
 		$this->smarty->assign('soli',$soli);
 		$this->smarty->assign('class',$class);
+		$this->smarty->assign('cardChanges',$cardChanges);
 		$this->smarty->display($this->tplFilePath.'change_user_fin.tpl');
 	}
 
 	function showConfirmAutoChangeUsernames () {
 		$this->smarty->display ($this->tplFilePath . 'dialogAutoCreateUsernames.tpl');
 	}
+
+	public function showRemoveSpecialCharsFromUsername () {
+		$this->smarty->display ($this->tplFilePath . 'usernameRemoveSpecialChars.tpl');
+	}
+	
+	
+public function showDeletePdfSuccess () {
+		$this->smarty->display ($this->tplFilePath . 'showDeletePdfSuccess.tpl');
+	}
+	
 
 	/**
 	 * The Path to the Smarty-Parent-Templatefile

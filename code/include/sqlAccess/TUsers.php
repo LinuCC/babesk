@@ -1,0 +1,66 @@
+<?php
+
+require_once 'TTable.php';
+
+class TUsers {
+
+	public static function toObject ($elements) {
+		$obj = self::__construct ();
+		foreach ($elements as $key => $value) {
+			foreach (self::$el as $elKey => $elValue) {
+				if ($key == $elValue) {
+					// set the values of the instance
+					$obj->$elKey = $value;
+				}
+			}
+		}
+		return $obj;
+	}
+
+	public static function el ($name) {
+		if (isset (self::$el [$name])) {
+			return self::$el [$name];
+		}
+		else {
+			throw new Exception (sprintf(
+				'Could not find Element "%s" of table "%s"', $name, self::$tablename));
+		}
+	}
+
+	public static function elT ($name) {
+		if (isset (self::$el [$name])) {
+			return self::$tablename . '.' . $el [$name];
+		}
+		else {
+			throw new Exception (sprintf(
+				'Could not find Element "%s" of table "%s"', $name, self::$tablename));
+		}
+	}
+
+
+	public static $el = array (
+		'id' => 'ID',
+		'name' => 'name',
+		'forename' => 'forename',
+		'username' => 'username',
+		'password' => 'password',
+		'birthday' => 'birthday',
+		'credit' => 'credit',
+		'gid' => 'GID',
+		'lastLogin' => 'last_login',
+		'loginTries' => 'login_tries',
+		'firstPassword' => 'first_passwd',
+		'locked' => 'locked',
+		'soli' => 'soli',
+		'religion' => 'religion',
+		'foreignLanguage' => 'foreign_language',
+		'email' => 'email',
+		'telephone' => 'telephone',
+		'class' => 'class',
+		);
+
+	public static $tablename = 'users';
+
+}
+
+?>

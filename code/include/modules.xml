@@ -63,6 +63,16 @@
 				<name>PresetPassword</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Benutzerportal-Einstellungen</ger_name>
+				<name>WebHomepageSettings</name>
+				<active>true</active>
+			</module>
+				<module>
+				<ger_name>Kartenwechsel</ger_name>
+				<name>CardChange</name>
+				<active>true</active>
+			</module>
 		</head_module>
 		<head_module>
 			<ger_name>Bargeldloses Bestellsystem für Kantinen</ger_name>
@@ -142,8 +152,8 @@
 				<active>true</active>
 			</module>
 			<module>
-				<ger_name>Spezifische Informationen</ger_name>
-				<name>Specific</name>
+				<ger_name>Buchinfo</ger_name>
+				<name>BookInfo</name>
 				<active>true</active>
 			</module>
 		</head_module>
@@ -266,9 +276,20 @@
 			</module>
 		</head_module>
 		<head_module>
+			<ger_name>Postfach</ger_name>
+			<name>Messages</name>
+			<active>true</active>
+			<module>
+				<ger_name>Admin</ger_name>
+				<name>MAdmin</name>
+				<active>true</active>
+			</module>
+		</head_module>
+		<head_module>
 			<ger_name>Einstellungen</ger_name>
 			<name>Settings</name>
 			<active>true</active>
+			<nomenu>true</nomenu>
 			<module>
 				<ger_name>Voreingestelltes Passwort verändern</ger_name>
 				<name>ChangePresetPassword</name>
@@ -300,6 +321,16 @@
 			<module>
 				<ger_name>MahlzeitenMenü</ger_name>
 				<name>Menu</name>
+				<active>true</active>
+			</module>
+		</head_module>
+		<head_module>
+			<ger_name>öffentlich einsehbare Daten</ger_name>
+			<name>GeneralPublicData</name>
+			<active>true</active>
+			<module>
+				<ger_name>Einlog-Hilfe</ger_name>
+				<name>LoginHelp</name>
 				<active>true</active>
 			</module>
 		</head_module>

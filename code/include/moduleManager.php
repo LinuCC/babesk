@@ -241,16 +241,14 @@ class ModuleManager {
 		$this->programPartPath = (string) $mod_xml->$program_part->path;
 		foreach ($mod_xml->$program_part->head_module as $head_mod) {
 
-			if (!isset($head_mod->active) || $head_mod->active != true) {
-				echo 'A headmodule is not active; it will not be used.';
+			if (!isset($head_mod->active) || $head_mod->active != 'true') {
 				continue;
 			}
 			$headModule = $this->extractHeadModule($head_mod);
 
 			foreach ($head_mod->module as $module) {
 
-				if (!isset($module->active) || $module->active != true) {
-					echo 'A module is not active; it will not be used.';
+				if (!isset($module->active) || $module->active != 'true') {
 					continue;
 				}
 				$this->extractModule($module, $headModule);
@@ -278,12 +276,12 @@ class ModuleManager {
 
 		if (class_exists((string) $head_mod->name)) {
 			$headmod_classname = (string) $head_mod->name;
-			$headModule = new $headmod_classname((string) $head_mod->name, (string) $head_mod->ger_name);
+			$headModule = new $headmod_classname((string) $head_mod->name, (string) $head_mod->ger_name, (string) $head_mod->nomenu);
 		}
 		else {
 			$this->generalInterface->showError('No file or class does exist for the HeadModule ' . $head_mod->name .
 				', falling back to the StandardClass! If you see this, then the Log-Modul isnt finished yet<br>');
-			$headModule = new HeadModule((string) $head_mod->name, (string) $head_mod->ger_name);
+			$headModule = new HeadModule((string) $head_mod->name, (string) $head_mod->ger_name, (string) $head_mod->nomenu);
 		}
 		return $headModule;
 	}

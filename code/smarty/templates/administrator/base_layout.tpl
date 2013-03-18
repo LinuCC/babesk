@@ -8,10 +8,23 @@
 	href="../smarty/templates/administrator/css/general.css"
 	type="text/css" />
 {block name=html_head}{/block}
+
+<script type="text/javascript" language="JavaScript">
+function setFocus() {
+for (i = 0; i < document.forms[0].length; i++)
+ {
+     if ((document.forms[0].elements[i].type == "text") || (document.forms[0].elements[i].type == "textarea"))
+     {
+     document.forms[0].elements[i].focus();
+     break;
+     }
+ }
+}
+</script>
 </head>
 
 <body
-	onload="x = document.getElementsByTagName('input')[0];if(x)if (x.value == '') x.focus();">
+	onload="setFocus()">
 	<div id="header">
 		<div id="top">
 	{nocache}

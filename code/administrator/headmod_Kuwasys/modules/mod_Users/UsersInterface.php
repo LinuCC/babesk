@@ -103,6 +103,15 @@ class UsersInterface extends AdminInterface {
 		$this->smarty->display($this->tplFilePath . 'moveUserToClass.tpl');
 	}
 
+	public function showMoveUserByClassDuplicateDialog ($dupClass, $classIdOld, $classIdNew, $userId, $statusId) {
+		$this->smarty->assign ('class', $dupClass);
+		$this->smarty->assign('classIdOld', $classIdOld);
+		$this->smarty->assign('classIdNew', $classIdNew);
+		$this->smarty->assign('userId', $userId);
+		$this->smarty->assign('statusId', $statusId);
+		$this->smarty->display ($this->tplFilePath . 'moveUserToClassDuplicateDialog.tpl');
+	}
+
 	public function showMoveUserByClassClassFullConfirmation ($user, $classOld, $classNew, $statusNew) {
 
 		$this->smarty->assign('classOld', $classOld);
@@ -130,6 +139,10 @@ class UsersInterface extends AdminInterface {
 	public function showConfirmResetPasswordOfAllUsers ($activeYearName) {
 		$this->smarty->assign ('activeYearName', $activeYearName);
 		$this->smarty->display ($this->tplFilePath . 'confirmResetPasswordOfAll.tpl');
+	}
+
+	public function showFormParticipationConfirmationEmail () {
+		$this->smarty->display ($this->tplFilePath . 'emailParticipationConfirmationForm.tpl');
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations

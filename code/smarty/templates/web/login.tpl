@@ -18,8 +18,8 @@
           <p>Passwort: <input name="password" type="password" size="30" /></p>
           <input type="submit" value="Login" />
         </form>
-        {if isset($chickenMode)}
-        	<img src="http://www.duetsblog.com/uploads/image/eat-more-chicken.jpg" width="438" height="320" alt="Save The Cows!" />
+        {if isset($showLoginButton) && $showLoginButton}
+        <a href="../publicData/index.php?section=GeneralPublicData|LoginHelp">Hilfe</a>
         {/if}
 </div>
 <div id="footer">

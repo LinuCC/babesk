@@ -9,5 +9,6 @@ Geburtstag: {$birthday}<br>
 Klasse: {$class}<br>
 Guthaben: {$credits}<br>
 Gesperrt: {if $locked}ja{else}nein{/if}<br>
-Teilhabepaket: {if $soli}ja{else}nein{/if}
+Teilhabepaket: {if $soli}ja{else}nein{/if}<br>
+Kartenverluste: {$cardChanges}
 {/block}

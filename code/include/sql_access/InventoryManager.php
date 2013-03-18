@@ -18,10 +18,10 @@ class InventoryManager extends TableManager{
 	/**
 	 * Sorts the book inventory it gets from MySQL-table and returns them.
 	 */
-	function getInventorySorted() {
+	function getInventorySorted($nextPointer) {
 		require_once PATH_ACCESS . '/DBConnect.php';
 		$res_array = array();
-		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY id', $this->tablename));
+		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY id LIMIT %s,10', $this->tablename,$nextPointer));
 		$result = $this->db->query($query);
 		if (!$result) {
 			throw DB_QUERY_ERROR.$this->db->error;
@@ -77,14 +77,16 @@ class InventoryManager extends TableManager{
 		$barcode = preg_replace("/\/([0-9])/", "/ $1", $barcode); //add space after / when it's missing
 		$barcode = str_replace("  ", " ", $barcode); // remove two empty spaces
 		
-		$bookid = $bookmanager->getBookIDByBarcode($barcode);
+		$bookData = $bookmanager->getBookDataByBarcode($barcode);
 		try {
 			$barcode_exploded = explode(' ', $barcode);
 		} catch (Exception $e) {
 		}
-		$query = sql_prev_inj(sprintf('book_id = %s AND year_of_purchase = %s AND exemplar = %s' , $bookid["id"], $barcode_exploded[1], $barcode_exploded[5]));
+		if (isset ($bookData["id"]) && isset ($barcode_exploded[5])){
+			$query = sql_prev_inj(sprintf('book_id = %s AND year_of_purchase = %s AND exemplar = %s' , $bookData["id"], $barcode_exploded[1], $barcode_exploded[5]));
 		$result = parent::searchEntry($query);
-		return $result;
+		return $result['id'];
+		}
 	}
 	
 	/**

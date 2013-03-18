@@ -19,7 +19,7 @@ class AdminBooklistProcessing {
 	
 	/**
 	 * Shows booklist
-	 * @param unknown_type $filter
+	 * @param $filter
 	 */
 	function ShowBooklist($filter) {
 	
@@ -28,14 +28,17 @@ class AdminBooklistProcessing {
 		$booklistManager = new BookManager();
 	
 		try {
-			$booklist = $booklistManager->getBooklistSorted();
+			isset($_GET['sitePointer'])?$showPage = $_GET['sitePointer'] + 0:$showPage = 1;
+			$nextPointer = $showPage*10-10;
+			$booklist = $booklistManager->getBooklistSorted($nextPointer, $filter);
 		} catch (Exception $e) {
 			$this->logs
 			->log('ADMIN', 'MODERATE',
 					sprintf('Error while getting Data from MySQL:%s in %s', $e->getMessage(), __METHOD__));
 			$this->booklistInterface->dieError($this->messages['error']['get_data_failed']);
 		}
-		$this->BookInterface->ShowBooklist($booklist);
+		$navbar = navBar($showPage, 'schbas_books', 'Schbas', 'Booklist', '1',$filter);
+		$this->BookInterface->ShowBooklist($booklist,$navbar);
 	}
 	
 	/**
@@ -52,7 +55,7 @@ class AdminBooklistProcessing {
 		try {
 			$bookData = $bookManager->getBookDataByID($id);
 		} catch (Exception $e) {
-			$this->userInterface->dieError($this->messages['error']['uid_get_param'] . $e->getMessage());
+			$this->BookInterface->dieError($this->messages['error']['uid_get_param'] . $e->getMessage());
 		}
 	
 		$this->BookInterface->ShowChangeBook($bookData);
@@ -81,13 +84,76 @@ class AdminBooklistProcessing {
 		require_once PATH_ACCESS . '/BookManager.php';
 		$bookManager = new BookManager();
 		try {
-			$book_id = $bookManager->getBookIDByISBNBarcode($isbn_search);
+			$book_id = $bookManager->getBookIDByISBN($isbn_search);
 		} catch (Exception $e) {
 			$this->BookInterface->dieError($this->messages['error']['notFound'] . $e->getMessage());
 		}
 		return $book_id['id'];
 	}
+
+	/**
+	 * Show template for adding an entry in Book list.
+	 */
+	function AddEntry() {
+		$this->BookInterface->ShowAddEntry();
+	}
 	
+	/**
+	 * Adds an entry into Book list.
+	 * @param $barcode
+	 */
+	function AddEntryFin($subject, $class, $title, $author, $publisher, $isbn, $price, $bundle) {
+		require_once PATH_ACCESS . '/BookManager.php';
+		$bookManager = new BookManager();
+		try {
+			$search = $bookManager->searchEntry('subject='.$subject.' AND class='.$class.' AND bundle='.$bundle);
+		}catch (Exception $e){
+			$search = 0;
+		}
+		if($search) {
+			$this->BookInterface->dieError($this->messages['error']['duplicate']);
+		} else {
+			try {
+				$bookManager->addEntry('subject',$subject,'class', $class,'title', $title,'author', $author,'publisher', $publisher,'isbn', $isbn, 'price', $price,'bundle', $bundle);
+			}catch (Exception $e) {
+				$this->logs
+				->log('ADMIN', 'MODERATE',
+						sprintf('Error while getting Data from MySQL:%s in %s', $e->getMessage(), __METHOD__));
+				$this->BookInterface->dieError($this->messages['error']['get_data_failed']);
+			}
+		}
+	
+		$this->BookInterface->showAddEntryFin($subject, $class, $title, $author, $publisher, $isbn, $price, $bundle);
+	}
+	
+	/**
+	 * Shows the template for confirmation of an delete request.
+	 * @param $id
+	 */
+	function DeleteConfirmation($id) {
+		$this->BookInterface->ShowDeleteConfirmation($id);
+	}
+	
+	
+	/**
+	 * Deletes an entry from MySQL.
+	 * @param $id
+	 */
+	function DeleteEntry($id) {
+		require_once PATH_ACCESS . '/BookManager.php';
+		$BookManager = new BookManager();
+	
+	
+		try {
+			$BookManager->delEntry($id);
+		} catch (Exception $e) {
+			$this->logs
+			->log('ADMIN', 'MODERATE',
+					sprintf('Error while deleting Data from MySQL:%s in %s', $e->getMessage(), __METHOD__));
+			$this->BookInterface->dieError($this->messages['error']['delete'] . $e->getMessage());
+		}
+		$this->BookInterface->ShowDeleteFin();
+	}
 }
 
 ?>

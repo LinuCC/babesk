@@ -170,8 +170,6 @@ class TableManager {
 	 */
 	function getTableData () {
 		require_once PATH_INCLUDE . '/constants.php';
-
-
 		switch (func_num_args()) {
 			case 0: // all elements of the table
 				$query = sql_prev_inj(sprintf('SELECT * FROM %s', $this->tablename));
@@ -225,13 +223,13 @@ class TableManager {
 				//is_numeric killed the zeros leading numbers, problem with telephonenumber. (0581/642 etc. ftw)
 				else if ( /*!is_numeric*/(func_get_arg($i - 1))) {
 					//MySQL needs quotation marks for strings
-					$column_value_str .= '"' . func_get_arg($i - 1) . '",';
+					$column_value_str .= "'" . func_get_arg($i - 1) . "',";
 				}
 				else if ((func_get_arg($i - 1)) === '') {
-					$column_value_str .= '"' . func_get_arg($i - 1) . '",';
+					$column_value_str .= "'" . func_get_arg($i - 1) . "',";
 				}
 				else {
-					$column_value_str .= '"' . func_get_arg($i - 1) . '",';
+					$column_value_str .= "'" . func_get_arg($i - 1) . "',";
 				}
 			}
 		}

@@ -6,6 +6,7 @@
 		CREATE TABLE IF NOT EXISTS `fits` (
   						`ID` bigint(20) NOT NULL,
   						`passedTest` tinyint(1) NOT NULL,
+  						`schoolyear`varchar(30) NOT NULL,
   						`locked` tinyint(1) NOT NULL
 						);
 		</sqlString>

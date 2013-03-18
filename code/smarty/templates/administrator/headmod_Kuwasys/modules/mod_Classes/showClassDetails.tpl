@@ -79,7 +79,7 @@ td {
 	<tbody>
 		{if isset($class.users) && count($class.users)} {foreach $class.users as $user}
 		<tr>
-			{$rowsOfSamePerson = count($user.classesOfSameDay)}
+			{$rowsOfSamePerson = 1}
 			<td rowspan="{$rowsOfSamePerson}">
 			<!-- Link to UserDetails -->
 			<a href="index.php?section=Kuwasys|Users&action=showUserDetails&ID={$user.ID}">
@@ -101,24 +101,16 @@ td {
 			<td rowspan="{$rowsOfSamePerson}">{$user.gradeName}</td>
 			<td rowspan="{$rowsOfSamePerson}">{$user.email}</td>
 			<td rowspan="{$rowsOfSamePerson}">{$user.telephone}</td>
-				{$counter = 0}
-				{foreach $user.classesOfSameDay as $otherClass}
-					{if $otherClass.ID != $class.ID}
-						{if $counter}<tr>{/if}
 						<td {if ($counter % 2)}style="background-color: #CC9933"{else}style="background-color: #DDAA33"{/if}>
+				{foreach $user.classesOfSameDay as $cKey => $otherClass}
 							<a href="index.php?section=Kuwasys|Classes&action=showClassDetails&ID={$otherClass.ID}">{$otherClass.label}</a>
-						</td>
-						{if $counter}</tr>{/if}
-					{else}
-						{if $counter}<tr>{/if}
-							<td>
-							<!-- Void cell, to make sure rowspan is still correct even if class is the same as in classdetails -->
-							---
-							</td>
-						{if $counter}</tr>{/if}
-					{/if}
-						{$counter = $counter + 1}
+							{*$blubb is used so the value of end($user.classesOfSameDay) does not get outputted*}
+							{$blubb = end($user.classesOfSameDay)}
+							{*check if it is not the last element*}
+							{if $cKey ==! key($user.classesOfSameDay)}<hr />{/if}
 				{/foreach}
+						</td>
+			<td rowspan="{$rowsOfSamePerson}"><a href="index.php?section=Kuwasys|Classes&amp;action=unregisterUser&amp;jointId=	{$user.jointId}">Abmelden</a></td>
 		</tr>
 		{/foreach}
 		{/if}
