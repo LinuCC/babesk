@@ -15,19 +15,7 @@ Die CSV-Datei sollte folgende Schlüssel beinhalten:
 		<td>birthday</td>
 		<td>grade</td>
 	</tr>
-	<tr bgcolor='#FFC33'>
-		<td>Der Vorname des Schülers</td>
-		<td>Der Nachname des Schülers</td>
-		<td>Der Benutzername des Schülers</td>
-		<td>Das Password des Schülers, schon gehasht</td>
-		<td>Die Emailadresse des Schülers</td>
-		<td>Die Telefonadresse des Schülers</td>
-		<td>Der Geburtstag des Schülers</td>
-		<td>Der Klassenname des Schülers</td>
-	</tr>
 </table>
-Alle Schlüssel können auch weggelassen werden, zum Beispiel brauchen sie nicht den
-Benutzernamen des Schülers angeben wenn sie keinen setzen wollen.
 Bitte beachten sie dabei auch die Groß - und Kleinschreibung. Außerdem dürfen kleine Leerzeichen in den Schlüsseln
 vorhanden sein. Wählen sie das Semikolon (;) als Trennzeichen beim Speichern der Datei.
 </div>
