@@ -1,6 +1,7 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_WEB . '/headmod_Messages/MessageFunctions.php';
 
 /**
  * Entry-Point for the User to display, print and create new messages
@@ -9,7 +10,7 @@ require_once PATH_INCLUDE . '/Module.php';
  * @author Mirek Hancl
  * @author Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
-class MAdmin extends Module {
+class MessageMainMenu extends Module {
 
 
 	///////////////////////////////////////////////////////////////////////
@@ -41,11 +42,15 @@ class MAdmin extends Module {
 				case 'showMessage':
 					$this->showMessage();
 					break;
+				case 'showMessageAdmin':
+					$this->showMessageAdmin();
+					break;
 				case 'searchUserAjax':
 					$this->searchUserAjax();
 					break;
 				default:
 					die('wrong Action-value');
+					break;
 			}
 		}
 		else {
@@ -81,7 +86,8 @@ class MAdmin extends Module {
 	private function fetchManagedMessages() {
 		$messages = array();
 		$query = sprintf(
-			'SELECT m.ID,m.title,m.class,m.valid_from,m.valid_to
+			'SELECT m.ID AS ID,m.title AS title,m.validFrom AS validFrom,
+				m.validTo AS validTo
 			FROM Message m
 			JOIN MessageManagers mm ON m.ID = mm.messageId AND mm.userId = %s
 			', $_SESSION['uid']);
@@ -105,9 +111,10 @@ class MAdmin extends Module {
 		$messages = array();
 		$query = sprintf(
 			'SELECT m.id AS ID,m.title AS title,m.validFrom AS validFrom,
-			m.validTo AS validTo
+			m.validTo AS validTo, mr.return AS "return"
 			FROM Message m
 			JOIN MessageReceivers mr ON mr.userId = %s
+				AND m.ID = mr.messageId
 			WHERE SYSDATE() BETWEEN m.validFrom AND m.validTo
 			', $_SESSION['uid']);
 		try {
@@ -176,10 +183,12 @@ class MAdmin extends Module {
 		TableMng::query(sprintf(
 			'INSERT INTO MessageManagers (messageId, userId)
 			VALUES (%s, %s)', $messageId, $_SESSION['uid']));
-
+		$shouldReturn = isset($_POST['shouldReturn']) ?
+			'shouldReturn' : 'noReturn';
 		//Add receivers to the receiver-list
-		$queryReceivers = 'INSERT INTO MessageReceivers (messageId, userId)
-			VALUES (?, ?)';
+		$queryReceivers = 'INSERT INTO MessageReceivers
+			(`messageId`, `userId`, `return`)
+			VALUES (?, ?, ?)';
 		$stmt = $db->prepare($queryReceivers);
 		$msgReceiverIds = array();
 		if(isset($_POST['msgReceiver']) && count($_POST['msgReceiver'])) {
@@ -191,7 +200,7 @@ class MAdmin extends Module {
 			$msgReceiverIds = array_merge($msgReceiverIds, $userIdsOfGrades);
 		}
 		foreach ($msgReceiverIds as $rec) {
-			$stmt->bind_param("ii", $messageId, $rec);
+			$stmt->bind_param("iis", $messageId, $rec, $shouldReturn);
 			$stmt->execute();
 		}
 		$db->commit();
@@ -229,13 +238,30 @@ class MAdmin extends Module {
 	 * Deletes a Contract
 	 */
 	private function deleteMessage() {
-		$authorID = TableMng::query(sql_prev_inj(sprintf('SELECT author_id FROM contracts WHERE id="%s"',$_GET['id'])),true);
-
-		if ($this->editor && ($authorID[0]['author_id']==$_SESSION['uid'])) {
-		TableMng::query(sql_prev_inj(sprintf("DELETE FROM contracts WHERE id='%s'",$_GET['id'])));
-
+		$db = TableMng::getDb();
+		$messageId = TableMng::getDb()->real_escape_string($_GET['ID']);
+		if ($this->_isEditor &&
+			MessageFunctions::checkIsManagerOf($messageId, $_SESSION['uid'])) {
+			try {
+				$db->autocommit(false);
+				TableMng::query(sprintf(
+					'DELETE FROM Message WHERE `id` = "%s";', $messageId));
+				TableMng::query(sprintf(
+					'DELETE FROM MessageReceivers WHERE `messageId` = "%s";',
+					$messageId));
+				TableMng::query(sprintf(
+					'DELETE FROM MessageManagers WHERE `messageId` = "%s";',
+					$messageId));
+				$db->autocommit(true);//automatically commits
+			} catch (Exception $e) {
+				$this->_interface->DieError('Die Nachricht konnte nicht gelöscht werden.' . $e->getMessage());
+			}
 		}
-		$this->_smarty->display($this->_smartyPath . 'delete_contract_fin.tpl');
+		else {
+			$this->_interface->DieError(sprintf('Keine Zugriffsberechtigungen auf diese Nachricht (Message-ID: %s)', $messageId));
+		}
+		$this->_smarty->display($this->_smartyPath
+			. 'delete_contract_fin.tpl');
 	}
 
 	/**
@@ -244,8 +270,10 @@ class MAdmin extends Module {
 	private function showMessage() {
 		$db = TableMng::getDb();
 		$messageId = $db->real_escape_string($_GET['ID']);
-		if(($isManager = $this->checkIsManagerOf($messageId, $_SESSION['uid']))
-			|| ($this->checkHasReceived($messageId, $_SESSION['uid']))) {
+		if(($isManager = MessageFunctions::checkIsManagerOf($messageId,
+			$_SESSION['uid']))
+			|| (MessageFunctions::checkHasReceived($messageId,
+				$_SESSION['uid']))) {
 
 			$msgText = $msgTitle = $forename = $name = $grade = $msgRecId = '';
 			$query = "SELECT m.title, m.text, mr.read, mr.ID,
@@ -281,45 +309,6 @@ class MAdmin extends Module {
 		else {
 			$this->_interface->DieError ( 'Kein Zugriff erlaubt!');
 		}
-	}
-
-	/**
-	 * Checks if the user has received the message and is allowed to access it
-	 *
-	 * @param integer $messageId the Id of the message
-	 * @param integer $userId the Id of the user
-	 * @return bool true if the user is allowed to access the message, else
-	 * false
-	 */
-	private function checkHasReceived($messageId, $userId) {
-		$db = TableMng::getDb();
-		$escMessageId = $db->real_escape_string($messageId);
-		$escUserId = $db->real_escape_string($userId);
-		$query = sprintf("SELECT COUNT(*) AS count
-			FROM MessageReceivers
-			WHERE %s = userId AND %s = messageId
-			AND SYSDATE() BETWEEN valid_from AND valid_to",
-			$escUserId, $escMessageId);
-		$isReceiving = TableMng::query($queryRec, true);
-		return (bool) $isReceiving[0]['count'];
-	}
-
-	/**
-	 * Checks if the user is a manager of the message
-	 *
-	 * @param integer $messageId the Id of the message
-	 * @param integer $userId the Id of the user
-	 * @return bool true if the user is the manager of the message, else false
-	 */
-	private function checkIsManagerOf($messageId, $userId) {
-		$db = TableMng::getDb();
-		$escMessageId = $db->real_escape_string($messageId);
-		$escUserId = $db->real_escape_string($userId);
-		$query = sprintf("SELECT COUNT(*) AS count
-			FROM MessageManagers
-			WHERE %s = userId AND %s = messageId", $escUserId, $escMessageId);
-		$isManaging = TableMng::query($query, true);
-		return (bool) $isManaging[0]['count'];
 	}
 
 	/**
@@ -453,6 +442,12 @@ class MAdmin extends Module {
 		}
 	}
 
+	private function showMessageAdmin() {
+		require_once 'MessageShowAdmin.php';
+		MessageShowAdmin::init($this->_smarty, $this->_smartyPath, $this->_interface);
+		MessageShowAdmin::execute();
+	}
+
 	/**
 	 * Creates a PDF for the Participation Confirmation and returns its Path
 	 */
@@ -471,7 +466,7 @@ class MAdmin extends Module {
 		$pdf->SetKeywords('');
 
 		// set default header data
-		$pdf->SetHeaderData('../../../../web/headmod_Messages/modules/mod_MAdmin/logo.jpg', 15, 'LeG Uelzen', "Formulargenerator 0.1\nKlasse: ".$class, array(0,0,0), array(0,0,0));
+		$pdf->SetHeaderData('../../../../web/headmod_Messages/modules/mod_MessageMainMenu/logo.jpg', 15, 'LeG Uelzen', "Formulargenerator 0.1\nKlasse: ".$class, array(0,0,0), array(0,0,0));
 		$pdf->setFooterData($tc=array(0,0,0), $lc=array(0,0,0));
 
 		// set header and footer fonts

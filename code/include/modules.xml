@@ -281,7 +281,12 @@
 			<active>true</active>
 			<module>
 				<ger_name>Admin</ger_name>
-				<name>MAdmin</name>
+				<name>MessageAdmin</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Übersicht</ger_name>
+				<name>MessageMainMenu</name>
 				<active>true</active>
 			</module>
 		</head_module>

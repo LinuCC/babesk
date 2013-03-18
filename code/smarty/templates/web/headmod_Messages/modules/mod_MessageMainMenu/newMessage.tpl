@@ -17,7 +17,7 @@ function searchUser() {
 			document.getElementById("userSelection").innerHTML = xmlhttp.responseText;
 		}
 	}
-	xmlhttp.open("POST", "?section=Messages|MAdmin&action=searchUserAjax&username="+name,
+	xmlhttp.open("POST", "?section=Messages|MessageMainMenu&action=searchUserAjax&username="+name,
 		true);
 	xmlhttp.send();
 }
@@ -53,7 +53,7 @@ fieldset {
 <h3>Neue Mitteilung erstellen:</h3>
 
 <form id="addMessage"
-	action='index.php?section=Messages|MAdmin&amp;action=saveMessage'
+	action='index.php?section=Messages|MessageMainMenu&amp;action=saveMessage'
 	method="post">
 	<label>Titel:<input type="text" name="contracttitle" value=""></label><br /><br />
 	<label>Text:<textarea class="ckeditor" name="contracttext"></textarea></label><br /><br />

@@ -206,7 +206,8 @@ class Web {
 				FROM MessageReceivers mr
 				LEFT JOIN Message m ON mr.messageId = m.ID
 				WHERE %s = userId
-				AND SYSDATE() BETWEEN m.validFrom AND m.validTo",
+					AND SYSDATE() BETWEEN m.validFrom AND m.validTo
+					AND mr.read = 0",
 				$_SESSION['uid']);
 			$mailcount = TableMng::query($query, true);
 		} catch (MySQLVoidDataException $e) {
