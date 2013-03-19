@@ -1,4 +1,4 @@
-{include file='web/header.tpl' title='Vorlagen'}
+{include file='web/header.tpl' title='Nachrichten-Menü'}
 
 
 {*Show the messages that the user got*}
@@ -35,6 +35,9 @@
 				<img src="../smarty/templates/web/images/page_white_acrobat.png">
 			</a>
 			{/if}
+			<a href="index.php?section=Messages|MessageAdmin&amp;action=showMessage&amp;ID={$message.ID}">
+				Details...
+			</a>
 		</td>
 	</tr>
 	{/foreach}

@@ -18,6 +18,7 @@ class MessageAdmin extends Module{
 	/////////////////////////////////////////////////////////////////////
 
 	public function execute($dataContainer) {
+		$this->init();
 		if(isset($_GET['action'])) {
 			switch($_GET['action']) {
 				case 'showMessage':
@@ -37,14 +38,44 @@ class MessageAdmin extends Module{
 	//Implements
 	/////////////////////////////////////////////////////////////////////
 
+	protected function init() {
+		global $smarty;
+		$this->_smarty = $smarty;
+	}
+
+	/**
+	 * Shows the Message-Data to the User allowing administrative things
+	 * @return [type] [description]
+	 */
 	protected function showMessage() {
 		$messageId = $_GET['ID'];
 		$userId = $_SESSION['uid'];
 		if(MessageFunctions::checkIsManagerOf($messageId, $userId)){
-
+			$receivers = $this->getReceiverOfMessage($messageId);
+			$managers = $this->getManagerOfMessage($messageId);
+			$messageData = $this->getMessage($messageId);
+			$this->smartyAssignIsCreator($userId,
+				$messageData ['originUserId']);
+			$this->_smarty->assign('receivers', $receivers);
+			$this->_smarty->assign('managers', $managers);
+			$this->_smarty->assign('messageData', $messageData);
+			$this->_smarty->display($this->_smartyPath . '/showMessage.tpl');
 		}
 		else {
 			$this->_interface->DieError('Keine Berechtigung, um diese Nachricht als Manager einzusehen.');
+		}
+	}
+
+	/**
+	 * Assigns a Var to Smarty based on the check if the user is the creator of
+	 * the message or not
+	 */
+	protected function smartyAssignIsCreator($userId, $origUserId) {
+		if($userId == $origUserId) {
+			$this->_smarty->assign('isCreator', true);
+		}
+		else {
+			$this->_smarty->assign('isCreator', false);
 		}
 	}
 
@@ -60,9 +91,9 @@ class MessageAdmin extends Module{
 				'SELECT * FROM Message WHERE `ID` = %s;
 				', $id), true);
 		} catch (Exception $e) {
-			$this->_interface->DieError('Konnte die Nachricht nicht abrufen');
+			$this->_interface->DieError('Konnte die Nachricht nicht abrufen!');
 		}
-		return $data;
+		return $data[0];
 	}
 
 	/**
@@ -78,7 +109,10 @@ class MessageAdmin extends Module{
 		//get Ids of Managers
 		try {
 			$managerArray = TableMng::query(sprintf(
-				'SELECT * FROM MessageManagers '), true);
+				'SELECT *
+				FROM MessageManagers
+				WHERE userId = %s AND messageId = %s',
+				$_SESSION['uid'], $id), true);
 		} catch (MySQLVoidDataException $e) {
 			return array();
 		} catch (Exception $e) {
@@ -93,6 +127,7 @@ class MessageAdmin extends Module{
 			$stmt->bind_param('i', $mng ['userId']);
 			$stmt->bind_result($userForename, $userName);
 			if($stmt->execute()) {
+				$stmt->fetch();
 				$managers [] = new MessageAdminManager($mng ['userId'],
 					$userForename, $userName);
 			}
@@ -117,24 +152,31 @@ class MessageAdmin extends Module{
 		//get IDs of the Receivers
 		try {
 			$receiverArray = TableMng::query(sprintf(
-				'SELECT userId, read, `return` FROM MessageReceivers
+				'SELECT userId, `read`, `return` FROM MessageReceivers
 				WHERE messageId = %s;', $id), true);
 		} catch (MySQLVoidDataException $e) {
 			return array();
 		} catch (Exception $e) {
-			echo 'konnte die Empfänger nicht abrufen';
+			echo 'konnte die Empfänger nicht abrufen' . $e->getMessage();
 		}
 		//get the data of the receivers
 		$stmt = TableMng::getDb()->prepare(
-			'SELECT forename, name
+			'SELECT u.forename, u.name
 			FROM users u
 			WHERE u.ID = ?;
 			');
-		foreach($receiverArray as &$receiver) {
+		foreach($receiverArray as $receiver) {
 			$stmt->bind_param('i', $receiver ['userId']);
 			$stmt->bind_result($userForename, $userName);
-			$stmt->execute();
-			$receivers [] = new MessageAdminReceiver($forename, $name, $receiver['read'], $receiver['return']);
+			if($stmt->execute()) {
+				$stmt->fetch();
+				$receivers [] = new MessageAdminReceiver($receiver['userId'],
+					$userForename, $userName, $receiver['read'],
+					$receiver['return']);
+			}
+			else {
+				echo sprintf('Konnte den Empfänger mit der ID "%s" nicht laden', $receiver ['userId']);
+			}
 		}
 		return $receivers;
 	}

@@ -327,7 +327,7 @@ class MessageMainMenu extends Module {
 	private function searchUserAjax() {
 		$db = TableMng::getDb();
 		$username = $db->real_escape_string($_GET['username']);
-		$users = $this->usersGetSimilarTo($username, 10);
+		$users = MessageFunctions::usersGetSimilarTo($username, 10);
 		//output the findings
 		foreach($users as $user) {
 			echo sprintf(
@@ -349,61 +349,6 @@ class MessageMainMenu extends Module {
 		else {
 			$this->_interface->DieError('Konnte die Nachricht nicht als gelesen markieren' . $db->error);
 		}
-	}
-
-	/**
-	 * Gets the users taht have a similar name to the $username
-	 */
-	protected static function usersGetSimilarTo ($username, $maxUsersToGet) {
-		$bestMatches = array ();
-		$users = self::usersFetch ();
-		foreach ($users as $key => $user) {
-			$per = 0.0;
-			similar_text($username, $user ['userFullname'], $per);
-			$users [$key] ['percentage'] = $per;
-		}
-		usort ($users, array ('MAdmin', 'userPercentageComp'));
-		for ($i = 0; $i < $maxUsersToGet; $i++) {
-			$bestMatches [] = $users [$i];
-		}
-		return $bestMatches;
-	}
-
-	/**
-	 * Compares two strings, used with usort()
-	 */
-	protected static function userPercentageComp ($user1, $user2) {
-		if ($user1 ['percentage'] == $user2 ['percentage']) {
-			return 0;
-		}
-		else if ($user1 ['percentage'] < $user2 ['percentage']) {
-			return 1;
-		}
-		else if ($user1 ['percentage'] > $user2 ['percentage']) {
-			return -1;
-		}
-	}
-
-	/**
-	 * Returns all users of this schoolyear
-	 */
-	protected static function usersFetch () {
-		$activeSchoolyearQuery = sprintf (
-			'SELECT sy.ID FROM schoolYear sy WHERE sy.active = "%s"', 1);
-		$query = sprintf (
-			'SELECT u.ID AS userId,
-				CONCAT(u.forename, " ", u.name) AS userFullname
-			FROM users u
-			JOIN jointUsersInSchoolYear uisy ON u.ID = uisy.UserID
-			WHERE uisy.SchoolYearID = (%s)', $activeSchoolyearQuery);
-		try {
-			$users = TableMng::query ($query, true);
-		} catch (MySQLVoidDataException $e) {
-			$this->$_interface->DieError ('Konnte keine Benutzer finden');
-		} catch (Exception $e) {
-			$this->$_interface->DieError ('Ein Fehler ist beim Abrufen der Benutzer aufgetreten' . $e->getMessage ());
-		}
-		return $users;
 	}
 
 	/**

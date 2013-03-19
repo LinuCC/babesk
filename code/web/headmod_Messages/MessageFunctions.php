@@ -64,6 +64,39 @@ class MessageFunctions {
 		$isManaging = TableMng::query($query, true);
 		return (bool) $isManaging[0]['count'];
 	}
+
+	/**
+	 * Gets the users taht have a similar name to the $username
+	 */
+	public static function usersGetSimilarTo ($username, $maxUsersToGet) {
+		$bestMatches = array ();
+		$users = self::usersFetch ();
+		foreach ($users as $key => $user) {
+			$per = 0.0;
+			similar_text($username, $user ['userFullname'], $per);
+			$users [$key] ['percentage'] = $per;
+		}
+		usort ($users, array ('MessageFunctions', 'userPercentageComp'));
+		for ($i = 0; $i < $maxUsersToGet; $i++) {
+			$bestMatches [] = $users [$i];
+		}
+		return $bestMatches;
+	}
+
+	/**
+	 * Compares two strings, used with usort()
+	 */
+	protected static function userPercentageComp ($user1, $user2) {
+		if ($user1 ['percentage'] == $user2 ['percentage']) {
+			return 0;
+		}
+		else if ($user1 ['percentage'] < $user2 ['percentage']) {
+			return 1;
+		}
+		else if ($user1 ['percentage'] > $user2 ['percentage']) {
+			return -1;
+		}
+	}
 }
 
 ?>
