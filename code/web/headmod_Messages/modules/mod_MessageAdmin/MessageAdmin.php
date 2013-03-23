@@ -18,11 +18,33 @@ class MessageAdmin extends Module{
 	/////////////////////////////////////////////////////////////////////
 
 	public function execute($dataContainer) {
+		echo $_SERVER["SERVER_NAME"];
 		$this->init();
 		if(isset($_GET['action'])) {
 			switch($_GET['action']) {
+				case 'newMessage':
+					$this->newMessage();
+					break;
+				case 'newMessageForm':
+					$this->newMessageForm();
+					break;
 				case 'showMessage':
 					$this->showMessage();
+					break;
+				case 'addReceiverAjax':
+					$this->addReceiverAjax();
+					break;
+				case 'addManagerAjax':
+					$this->addManagerAjax();
+					break;
+				case 'deleteMessageAjax':
+					$this->deleteMessageAjax();
+					break;
+				case 'removeReceiverAjax':
+					$this->removeReceiverAjax();
+					break;
+				case 'removeManagerAjax':
+					$this->removeManagerAjax();
 					break;
 				default:
 					die('Wrong action-value given');
@@ -30,7 +52,7 @@ class MessageAdmin extends Module{
 			}
 		}
 		else {
-
+			die('No Access');
 		}
 	}
 
@@ -41,6 +63,208 @@ class MessageAdmin extends Module{
 	protected function init() {
 		global $smarty;
 		$this->_smarty = $smarty;
+		$this->_interface = new WebInterface($this->_smarty);
+	}
+
+	/**
+	 * Saves a Message created by the user
+	 */
+	private function newMessage() {
+		//INIT
+		$db = TableMng::getDb();
+		$msgTitle = $db->real_escape_string($_POST['contracttitle']);
+		$msgText = $db->real_escape_string($_POST['contracttext']);
+		$startDate = sprintf('%s-%s-%s',
+			$db->real_escape_string($_POST['StartDateYear']),
+			$db->real_escape_string($_POST['StartDateMonth']),
+			$db->real_escape_string($_POST['StartDateDay']));
+		$endDate = sprintf('%s-%s-%s',
+			$db->real_escape_string($_POST['EndDateYear']),
+			$db->real_escape_string($_POST['EndDateMonth']),
+			$db->real_escape_string($_POST['EndDateDay']));
+		$shouldReturn = isset($_POST['shouldReturn']) ?
+			'shouldReturn' : 'noReturn';
+		$shouldEmail = isset($_POST['shouldEmail']);
+		$msgReceiverIds = array();
+		try {
+			//UPLOAD
+			$db->autocommit(false);
+			//Add Message itself
+			TableMng::query(sprintf('INSERT INTO Message
+					(originUserId,title,text,validFrom,validTo)
+				VALUES (%s,"%s","%s","%s","%s")',
+				$_SESSION['uid'], $msgTitle, $msgText, $startDate, $endDate));
+			$messageId = $db->insert_id;
+			$this->newMessageAddCreator($messageId);
+			//Add receivers to the receiver-list
+			$msgReceiverIds = array();
+			if(isset($_POST['addMessageAddedUser']) && count($_POST['addMessageAddedUser'])) {
+				$msgReceiverIds = array_merge($msgReceiverIds,
+					$_POST['addMessageAddedUser']);
+			}
+			$userIdsOfGrades = $this->saveMessageGrades();
+			if(count($userIdsOfGrades)) {
+				$msgReceiverIds = array_merge($msgReceiverIds,
+					$userIdsOfGrades);
+			}
+			$queryReceivers = 'INSERT INTO MessageReceivers
+				(`messageId`, `userId`, `return`)
+				VALUES (?, ?, ?)';
+			$stmt = $db->prepare($queryReceivers);
+			foreach ($msgReceiverIds as $rec) {
+				$stmt->bind_param("iis", $messageId, $rec, $shouldReturn);
+				$stmt->execute();
+			}
+			$db->autocommit(true);
+		} catch (Exception $e) {
+			$this->_interface->DieError('Konnte die Nachricht nicht
+				hinzufügen!');
+		}
+		if($shouldEmail) {
+			$recNotSendTo = $this->sendEmails($msgReceiverIds);
+			$notSendStr = '';
+			foreach($recNotSendTo as $receiver) {
+				$notSendStr .= sprintf('Dem Benutzer %s konnte keine Email gesendet werden. (Email-Adresse: "%s")<br />',
+					$receiver->forename . ' ' .$receiver->name,
+					$receiver->email);
+			}
+		}
+		else {
+			$notSendStr = 'Es wurden keine Emails verschickt.';
+		}
+		$this->addSavedCopiesCount(count($msgReceiverIds), $_SESSION['uid']);
+		$this->_smarty->assign('emailsNotSend', $notSendStr);
+		$this->_smarty->display($this->_smartyPath . 'new_contract_fin.tpl');
+	}
+
+	/**
+	 * Adds the creator of the Message to the Managers
+	 * @param  int $messageId
+	 */
+	private function newMessageAddCreator($messageId) {
+		TableMng::query(sprintf(
+			'INSERT INTO MessageManagers (messageId, userId)
+			VALUES (%s, %s)', $messageId, $_SESSION['uid']));
+	}
+
+	/**
+	 * Adds saved Copies to the Carbon-Footprint-Table
+	 *
+	 * @param int $count the Count of saved Copies to add
+	 * @param int $authorId the author of the message that saved $count copies
+	 */
+	private function addSavedCopiesCount($count, $authorId) {
+		$db  = TableMng::getDb();
+		$count = $db->real_escape_string($count);
+		$authorId = $db->real_escape_string($authorId);
+		try {
+			$authorEntryExists = TableMng::query(sprintf(
+				"SELECT COUNT(*) AS count FROM MessageCarbonFootprint
+				WHERE `authorId` = %s;
+				", $authorId), true);
+			if( ( (int) $authorEntryExists [0]['count']) > 0) {
+				TableMng::query(sprintf(
+					"UPDATE MessageCarbonFootprint
+					SET `savedCopies` = `savedCopies` + %s
+					WHERE `authorId` = %s
+					", $count, $authorId));
+			}
+			else {
+				$query = sprintf(
+					"INSERT INTO MessageCarbonFootprint
+						(`authorId`, `savedCopies`, `returnedCopies`)
+					VALUES (%s, %s, 0);
+					", $authorId, $count);
+				TableMng::query($query);
+			}
+		} catch (Exception $e) {
+			//not important, just echoing is enough
+			echo "Konnte die CarbonFootprint-Daten nicht verarbeiten";
+		}
+	}
+
+	/**
+	 * Sends notice-emails to the Receivers
+	 * @param  array(MessageAdminReceivers) $receivers
+	 * @return array(MessageAdminReceivers) the receivers were the email
+	 * couldnt be send to
+	 */
+	private function sendEmails($receivers) {
+		require_once PATH_INCLUDE . '/email/SMTPMailer.php';
+		$usersNotSend = array();//the Email could not be send to these users
+		$userdata = $this->sendEmailsFetchUserdata($receivers);
+		$mailer = new SMTPMailer($this->_interface);
+		$mailer->smtpDataInDatabaseLoad();
+		$mailer->emailFromXmlLoad(PATH_INCLUDE .
+			'/email/Babesk_Nachricht_Info.xml');
+		foreach($userdata as $user) {
+			$mailer->AddAddress($user->email);
+			if($user->email != '' && $mailer->Send()) {
+				//everything fine
+			}
+			else {
+				$usersNotSend[] = $user;
+			}
+			$mailer->ClearAddresses();
+		}
+		return $usersNotSend;
+	}
+
+	private function sendEmailsFetchUserdata($receivers) {
+		$userData = array();
+		$forename = $name = $username = $birthday = $email = $telephone = '';
+		$stmt = TableMng::getDb()->prepare(
+			'SELECT `forename`, `name`, `username`, `birthday`, `email`,
+				`telephone` FROM users WHERE `ID` = ?');
+		$stmt->bind_result($forename, $name, $username, $birthday, $email,
+			$telephone);
+		foreach($receivers as $recId) {
+			$stmt->bind_param('i', $recId);
+			$stmt->execute();
+			while($stmt->fetch()) {
+				$userData[] = new MessageAdminUser($recId, $forename, $name,
+					$username, $birthday, $email, $telephone);
+			}
+		}
+		return $userData;
+	}
+
+	/**
+	 * Shows a form to the User in which he can create a new Message
+	 *
+	 * @fixme grades do not get sorted out by schoolyear
+	 */
+	private function newMessageForm() {
+		$grades = TableMng::query(
+			'SELECT CONCAT(gradeValue, label) AS name, ID
+			FROM grade', true);
+		$this->_smarty->assign('grades',$grades);
+		$this->_smarty->display($this->_smartyPath . 'newMessage.tpl');
+	}
+
+	/**
+	 * Handles the user-selected grades when saving a new message
+	 *
+	 * @return an Array of userIds of the users that are in the selected grades
+	 */
+	private function saveMessageGrades() {
+		$userIds = array();
+		$userId = '';
+		if(isset($_POST['grades']) && count($_POST['grades'])) {
+			$db = TableMng::getDb();
+			$grades = $_POST['grades'];
+			$stmt =$db->prepare("SELECT UserID AS userId
+				FROM jointUsersInGrade WHERE GradeID = ?");
+			foreach($grades as $gradeId) {
+				$stmt->bind_param("i", $gradeId);
+				$stmt->execute();
+				$stmt->bind_result($userId);
+				while($stmt->fetch()) {
+					$userIds [] = $userId;
+				}
+			}
+		}
+		return $userIds;
 	}
 
 	/**
@@ -54,6 +278,9 @@ class MessageAdmin extends Module{
 			$receivers = $this->getReceiverOfMessage($messageId);
 			$managers = $this->getManagerOfMessage($messageId);
 			$messageData = $this->getMessage($messageId);
+			//format dateformat ISO 8601 into european-friendly Date
+			$messageData['validTo'] = formatDate($messageData['validTo']);
+			$messageData['validFrom'] = formatDate($messageData['validFrom']);
 			$this->smartyAssignIsCreator($userId,
 				$messageData ['originUserId']);
 			$this->_smarty->assign('receivers', $receivers);
@@ -62,7 +289,7 @@ class MessageAdmin extends Module{
 			$this->_smarty->display($this->_smartyPath . '/showMessage.tpl');
 		}
 		else {
-			$this->_interface->DieError('Keine Berechtigung, um diese Nachricht als Manager einzusehen.');
+			$this->_interface->DieError('Keine Berechtigung, um diese Nachricht als Manager einzusehen oder die Nachricht existiert nicht.');
 		}
 	}
 
@@ -111,8 +338,7 @@ class MessageAdmin extends Module{
 			$managerArray = TableMng::query(sprintf(
 				'SELECT *
 				FROM MessageManagers
-				WHERE userId = %s AND messageId = %s',
-				$_SESSION['uid'], $id), true);
+				WHERE messageId = %s', $id), true);
 		} catch (MySQLVoidDataException $e) {
 			return array();
 		} catch (Exception $e) {
@@ -181,6 +407,101 @@ class MessageAdmin extends Module{
 		return $receivers;
 	}
 
+	protected function addReceiverAjax() {
+		$messageId = TableMng::getDb()->real_escape_string($_POST['messageId']);
+		$userId = TableMng::getDb()->real_escape_string($_POST['userId']);
+		if(MessageFunctions::checkIsManagerOf($messageId, $_SESSION['uid'])) {
+			try {
+				TableMng::query(sprintf(
+					'INSERT INTO MessageReceivers (messageId, userId)
+					VALUES (%s, %s)
+					', $messageId, $userId));
+			} catch (Exception $e) {
+				echo('Could not add the Receiver');
+			}
+		}
+		else {
+			echo 'No Manager!';
+		}
+
+	}
+
+	protected function addManagerAjax() {
+		$messageId = TableMng::getDb()->real_escape_string($_POST['messageId']);
+		$userId = TableMng::getDb()->real_escape_string($_POST['userId']);
+		if(MessageFunctions::checkIsManagerOf($messageId, $_SESSION['uid'])) {
+			try {
+				var_dump(sprintf(
+					'INSERT INTO MessageManagers (messageId, userId)
+					VALUES (%s, %s)
+					', $messageId, $userId));
+				TableMng::query(sprintf(
+					'INSERT INTO MessageManagers (messageId, userId)
+					VALUES (%s, %s)
+					', $messageId, $userId));
+			} catch (Exception $e) {
+				echo('Could not add teh Receiver');
+			}
+		}
+		else {
+			echo 'No Manager!';
+		}
+	}
+
+	protected function deleteMessageAjax() {
+		$messageId = TableMng::getDb()->real_escape_string($_POST['messageId']);
+		if(MessageFunctions::checkIsCreatorOf($messageId, $_SESSION['uid'])) {
+			try {
+				MessageFunctions::deleteMessage($messageId);
+			} catch (Exception $e) {
+				die('error');
+			}
+		}
+		else {
+			die('No Owner!');
+		}
+	}
+
+	protected function removeReceiverAjax() {
+		$messageId =
+			TableMng::getDb()->real_escape_string($_POST['messageId']);
+		$receiverId =
+			TableMng::getDb()->real_escape_string($_POST['receiverId']);
+		if(MessageFunctions::checkIsManagerOf($messageId, $_SESSION['uid'])) {
+			try {
+				MessageFunctions::removeReceiver($messageId, $receiverId);
+			} catch (Exception $e) {
+				die('error' . $e->getMessage());
+			}
+		}
+		else {
+			die('No Manager!');
+		}
+	}
+
+	protected function removeManagerAjax() {
+		$messageId =
+			TableMng::getDb()->real_escape_string($_POST['messageId']);
+		$managerId =
+			TableMng::getDb()->real_escape_string($_POST['managerId']);
+		if(MessageFunctions::checkIsManagerOf($messageId, $_SESSION['uid'])) {
+			if($_SESSION['uid'] != $managerId) {
+				try {
+					MessageFunctions::removeManager($messageId, $managerId);
+				} catch (Exception $e) {
+					die('error');
+				}
+			}
+			else {
+				//The Manager wants to remove himself, say nope in Javascript
+				die('errorSelf');
+			}
+		}
+		else {
+			die('No Manager!');
+		}
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
@@ -228,6 +549,30 @@ class MessageAdminManager {
 	public $id;
 	public $forename;
 	public $name;
+}
+
+/**
+ * Data-Object used in MessageAdmin
+ */
+class MessageAdminUser {
+
+	public function __construct($id, $forename, $name, $username, $birthday, $email, $telephone) {
+		$this->id = $id;
+		$this->forename = $forename;
+		$this->name = $name;
+		$this->username = $username;
+		$this->birthday = $birthday;
+		$this->telephone = $telephone;
+		$this->email = $email;
+	}
+
+	public $id;
+	public $forename;
+	public $name;
+	public $username;
+	public $birthday;
+	public $telephone;
+	public $email;
 }
 
 ?>

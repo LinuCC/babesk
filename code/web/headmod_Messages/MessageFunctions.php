@@ -52,7 +52,8 @@ class MessageFunctions {
 	 *
 	 * @param integer $messageId the Id of the message
 	 * @param integer $userId the Id of the user
-	 * @return bool true if the user is the manager of the message, else false
+	 * @return bool true if the user is the manager of the message, on
+	 * error/else false
 	 */
 	public static function checkIsManagerOf($messageId, $userId) {
 		$db = TableMng::getDb();
@@ -61,8 +62,63 @@ class MessageFunctions {
 		$query = sprintf("SELECT COUNT(*) AS count
 			FROM MessageManagers
 			WHERE %s = userId AND %s = messageId", $escUserId, $escMessageId);
-		$isManaging = TableMng::query($query, true);
+		try {
+			$isManaging = TableMng::query($query, true);
+		} catch (Exception $e) {
+			return false;
+		}
 		return (bool) $isManaging[0]['count'];
+	}
+
+	/**
+	 * checks if the User is the creator of the message
+	 * @param  int $messageId the message-ID
+	 * @param  int $userId the User-ID
+	 * @return bool true if the User is the creator, false if not or an error occurred
+	 */
+	public static function checkIsCreatorOf($messageId, $userId) {
+		try {
+			$res = TableMng::query(sprintf('SELECT originUserId FROM Message
+				WHERE `ID` = "%s"', $messageId), true);
+		} catch (Exception $e) {
+			return false;
+		}
+		return ($res[0]['originUserId'] == $userId);
+	}
+
+	/**
+	 * Deletes the Message with the Id $messageId
+	 * Also deletes all entries in the tables MessageReceivers and
+	 * MessageManagers that are linked to this Message
+	 * @param  id $messageId the message to delete
+	 * @throws Exception if somethings gone wrong
+	 */
+	public static function deleteMessage($messageId) {
+		$db = TableMng::getDb();
+		$db->autocommit(false);
+		$query = sprintf(
+			'DELETE FROM Message WHERE `ID` = %s;
+			DELETE FROM MessageReceivers WHERE `messageId` = %s;
+			DELETE FROM MessageManagers WHERE `messageId` = %s;',
+			$messageId, $messageId, $messageId);
+		TableMng::query($query, false, true);
+		$db->autocommit(true);
+	}
+
+	public static function removeReceiver($messageId, $receiverId) {
+		self::removeFromMessage($messageId, $receiverId, 'MessageReceivers');
+	}
+
+	public static function removeManager($messageId, $managerId) {
+		self::removeFromMessage($messageId, $managerId, 'MessageManagers');
+	}
+
+	public static function removeFromMessage($messageId, $userId, $tablename) {
+		TableMng::query(sprintf(
+			'DELETE FROM %s
+			WHERE `messageId` = %s AND `userId` = %s
+			', $tablename, $messageId, $userId));
+
 	}
 
 	/**

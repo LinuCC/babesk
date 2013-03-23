@@ -2,45 +2,6 @@
 <script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
 
 {literal}
-<script type="text/javascript">
-
-function searchUser() {
-	var name = document.getElementById("searchUserInp").value;
-	if (window.XMLHttpRequest) {
-		xmlhttp = new XMLHttpRequest();
-	}
-	else {
-		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	xmlhttp.onreadystatechange = function() {
-		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-			document.getElementById("userSelection").innerHTML = xmlhttp.responseText;
-		}
-	}
-	xmlhttp.open("POST", "?section=Messages|MessageMainMenu&action=searchUserAjax&username="+name,
-		true);
-	xmlhttp.send();
-}
-
-/* Cleans the search-user dialog */
-function cleanSearchUser() {
-	var selection = document.getElementById("userSelection")
-	selection.innerHTML = "";
-}
-
-function addUser(ID, name) {
-	var hiddenInput = document.createElement("input");
-	hiddenInput.setAttribute("type", "hidden");
-	hiddenInput.setAttribute("value", ID);
-	hiddenInput.setAttribute("name", "msgReceiver[]");
-	document.getElementById("addMessage").appendChild(hiddenInput);
-	var output = document.createElement("li");
-	output.innerHTML = name;
-	document.getElementById("userSelected").appendChild(output);
-	cleanSearchUser();
-}
-
-</script>
 
 <style type='text/css'  media='all'>
 fieldset {
@@ -53,18 +14,25 @@ fieldset {
 <h3>Neue Mitteilung erstellen:</h3>
 
 <form id="addMessage"
-	action='index.php?section=Messages|MessageMainMenu&amp;action=saveMessage'
+	action='index.php?section=Messages|MessageAdmin&amp;action=newMessage'
 	method="post">
 	<label>Titel:<input type="text" name="contracttitle" value=""></label><br /><br />
 	<label>Text:<textarea class="ckeditor" name="contracttext"></textarea></label><br /><br />
 	<fieldset>
-		<legend>Zettelrückgabe</legend>
+		<legend>Einstellungen</legend>
 		<label>
 			Zettel zurückgeben?
 			<input type="checkbox" name="shouldReturn">
 		</label><br />
 		<small>
 			dadurch werden Funktionen für diese Nachricht benutzt, die eine Übersicht erlauben, um zu sehen welche Schüler (noch nicht) abgegeben haben.
+		</small><br />
+		<label>
+			Eine Email versenden?
+			<input type="checkbox" name="shouldEmail">
+		</label><br />
+		<small>
+			Wenn bestätigt, wird eine Notiz-Email an alle Empfänger dieser Nachricht versendet, die eine Email angegeben haben.
 		</small><br />
 	</fieldset>
 	<fieldset>
@@ -83,7 +51,7 @@ fieldset {
 	<fieldset>
 		<legend>An spezifische Benutzer senden</legend>
 		<input id="searchUserInp" type="text" name="searchUserInp"
-			value="Benutzer suchen..." onKeyPress="searchUser()">
+			value="Benutzer suchen...">
 		<div id="userSelection">
 		</div>
 		Einzelne Benutzer, an die die Email geschickt wird:
@@ -101,4 +69,21 @@ fieldset {
 	</fieldset>
 	<input id="submit" onclick="submit()" type="submit" value="Absenden" />
 </form>
+
+{literal}
+<script type="text/JavaScript" src="../smarty/templates/web/headmod_Messages/searchUser.js"></script>
+
+<script type="text/javascript">
+	$('#searchUserInp').on('keypress', function(event){
+		searchUser('searchUserInp', 'userSelection', 'userSelectionButton');
+	});
+
+	$(document).on('click', '.userSelectionButton', function(event){
+		var meId = $(this).attr('id').replace('userSelectionButtonId', '');
+		var name = $(this).val();
+		cleanSearchUser('userSelection');
+		addUserAsHiddenInp(meId, name, 'addMessage', 'userSelected');
+	});
+</script>
+{/literal}
 {include file='web/footer.tpl'}

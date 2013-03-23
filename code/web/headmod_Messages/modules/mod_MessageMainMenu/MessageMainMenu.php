@@ -33,9 +33,6 @@ class MessageMainMenu extends Module {
 				case 'newMessage':
 					$this->newMessageForm();
 					break;
-				case 'saveMessage':
-					$this->saveMessage();
-					break;
 				case 'deleteMessage':
 					$this->deleteMessage();
 					break;
@@ -145,120 +142,15 @@ class MessageMainMenu extends Module {
 	}
 
 	/**
-	 * Shows a form to the User in which he can create a new Message
-	 *
-	 * @fixme grades do not get sorted out by schoolyear
-	 */
-	private function newMessageForm() {
-		$grades = TableMng::query(
-			'SELECT CONCAT(gradeValue, label) AS name, ID
-			FROM grade', true);
-		$this->_smarty->assign('grades',$grades);
-		$this->_smarty->display($this->_smartyPath . 'newMessage.tpl');
-	}
-
-	/**
-	 * Saves a contract
-	 */
-	private function saveMessage() {
-		$db = TableMng::getDb();
-		$msgTitle = $db->real_escape_string($_POST['contracttitle']);
-		$msgText = $db->real_escape_string($_POST['contracttext']);
-		$startDate = sprintf('%s-%s-%s',
-			$db->real_escape_string($_POST['StartDateYear']),
-			$db->real_escape_string($_POST['StartDateMonth']),
-			$db->real_escape_string($_POST['StartDateDay']));
-		$endDate = sprintf('%s-%s-%s',
-			$db->real_escape_string($_POST['EndDateYear']),
-			$db->real_escape_string($_POST['EndDateMonth']),
-			$db->real_escape_string($_POST['EndDateDay']));
-		$db->autocommit(false);
-		TableMng::query(sprintf(
-			'INSERT INTO Message (originUserId,title,text,validFrom,validTo)
-			VALUES (%s,"%s","%s","%s","%s")',
-			$_SESSION['uid'], $msgTitle, $msgText, $startDate, $endDate));
-
-		$messageId = $db->insert_id;
-		//Add creator to the managers-list
-		TableMng::query(sprintf(
-			'INSERT INTO MessageManagers (messageId, userId)
-			VALUES (%s, %s)', $messageId, $_SESSION['uid']));
-		$shouldReturn = isset($_POST['shouldReturn']) ?
-			'shouldReturn' : 'noReturn';
-		//Add receivers to the receiver-list
-		$queryReceivers = 'INSERT INTO MessageReceivers
-			(`messageId`, `userId`, `return`)
-			VALUES (?, ?, ?)';
-		$stmt = $db->prepare($queryReceivers);
-		$msgReceiverIds = array();
-		if(isset($_POST['msgReceiver']) && count($_POST['msgReceiver'])) {
-			$msgReceiverIds = array_merge($msgReceiverIds,
-				$_POST['msgReceiver']);
-		}
-		$userIdsOfGrades = $this->saveMessageGrades();
-		if(count($userIdsOfGrades)) {
-			$msgReceiverIds = array_merge($msgReceiverIds, $userIdsOfGrades);
-		}
-		foreach ($msgReceiverIds as $rec) {
-			$stmt->bind_param("iis", $messageId, $rec, $shouldReturn);
-			$stmt->execute();
-		}
-		$db->commit();
-		$db->autocommit(true);
-		$this->addSavedCopiesCount(count($msgReceiverIds), $_SESSION['uid']);
-		$this->_smarty->display($this->_smartyPath . 'new_contract_fin.tpl');
-	}
-
-	/**
-	 * Handles the user-selected grades when saving a new message
-	 *
-	 * @return an Array of userIds of the users that are in the selected grades
-	 */
-	private function saveMessageGrades() {
-		$userIds = array();
-		$userId = '';
-		if(isset($_POST['grades']) && count($_POST['grades'])) {
-			$db = TableMng::getDb();
-			$grades = $_POST['grades'];
-			$stmt =$db->prepare("SELECT UserID AS userId
-				FROM jointUsersInGrade WHERE GradeID = ?");
-			foreach($grades as $gradeId) {
-				$stmt->bind_param("i", $gradeId);
-				$stmt->execute();
-				$stmt->bind_result($userId);
-				while($stmt->fetch()) {
-					$userIds [] = $userId;
-				}
-			}
-		}
-		return $userIds;
-	}
-
-	/**
-	 * Deletes a Contract
+	 * Deletes a Message if the User is the creator, else displays error
 	 */
 	private function deleteMessage() {
-		$db = TableMng::getDb();
 		$messageId = TableMng::getDb()->real_escape_string($_GET['ID']);
-		if ($this->_isEditor &&
-			MessageFunctions::checkIsManagerOf($messageId, $_SESSION['uid'])) {
-			try {
-				$db->autocommit(false);
-				TableMng::query(sprintf(
-					'DELETE FROM Message WHERE `id` = "%s";', $messageId));
-				TableMng::query(sprintf(
-					'DELETE FROM MessageReceivers WHERE `messageId` = "%s";',
-					$messageId));
-				TableMng::query(sprintf(
-					'DELETE FROM MessageManagers WHERE `messageId` = "%s";',
-					$messageId));
-				$db->autocommit(true);//automatically commits
-			} catch (Exception $e) {
-				$this->_interface->DieError('Die Nachricht konnte nicht gelöscht werden.' . $e->getMessage());
-			}
+		if(MessageFunctions::checkIsCreatorOf($messageId, $_SESSION['uid'])) {
+			MessageFunctions::deleteMessage($messageId, $_SESSION['uid']);
 		}
 		else {
-			$this->_interface->DieError(sprintf('Keine Zugriffsberechtigungen auf diese Nachricht (Message-ID: %s)', $messageId));
+			$this->_interface->DieError('Nur der Ersteller der Nachricht kann diese löschen');
 		}
 		$this->_smarty->display($this->_smartyPath
 			. 'delete_contract_fin.tpl');
@@ -326,15 +218,14 @@ class MessageMainMenu extends Module {
 	 */
 	private function searchUserAjax() {
 		$db = TableMng::getDb();
-		$username = $db->real_escape_string($_GET['username']);
+		$username = $db->real_escape_string($_POST['username']);
+		$buttonClass = $db->real_escape_string($_POST['buttonClass']);
 		$users = MessageFunctions::usersGetSimilarTo($username, 10);
 		//output the findings
 		foreach($users as $user) {
 			echo sprintf(
-				'<input type="button" onclick="addUser(\'%s\', \'%s\');"
-					value="%s"><br />',
-				$user['userId'], $user['userFullname'],
-				$user['userFullname']);
+				'<input id="%sId%s" class="%s" type="button" value="%s"><br />',
+				$buttonClass, $user['userId'], $buttonClass, $user['userFullname']);
 		}
 	}
 
@@ -348,42 +239,6 @@ class MessageMainMenu extends Module {
 		}
 		else {
 			$this->_interface->DieError('Konnte die Nachricht nicht als gelesen markieren' . $db->error);
-		}
-	}
-
-	/**
-	 * Adds saved Copies to the Carbon-Footprint-Table
-	 *
-	 * @param int $count the Count of saved Copies to add
-	 * @param int $authorId the author of the message that saved $count copies
-	 */
-	private function addSavedCopiesCount($count, $authorId) {
-		$db  = TableMng::getDb();
-		$count = $db->real_escape_string($count);
-		$authorId = $db->real_escape_string($authorId);
-		try {
-			$authorEntryExists = TableMng::query(sprintf(
-				"SELECT COUNT(*) AS count FROM MessageCarbonFootprint
-				WHERE `authorId` = %s;
-				", $authorId), true);
-			if( ( (int) $authorEntryExists [0]['count']) > 0) {
-				TableMng::query(sprintf(
-					"UPDATE MessageCarbonFootprint
-					SET `savedCopies` = `savedCopies` + %s
-					WHERE `authorId` = %s
-					", $count, $authorId));
-			}
-			else {
-				$query = sprintf(
-					"INSERT INTO MessageCarbonFootprint
-						(`authorId`, `savedCopies`, `returnedCopies`)
-					VALUES (%s, %s, 0);
-					", $authorId, $count);
-				TableMng::query($query);
-			}
-		} catch (Exception $e) {
-			//not important, just echoing is enough
-			echo "Konnte die CarbonFootprint-Daten nicht verarbeiten";
 		}
 	}
 

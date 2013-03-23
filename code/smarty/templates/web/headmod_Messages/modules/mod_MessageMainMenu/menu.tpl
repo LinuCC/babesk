@@ -1,5 +1,10 @@
 {include file='web/header.tpl' title='Nachrichten-Menü'}
 
+<style type="text/css" media="all">
+.dateBeyondValid {
+	color: rgb(150,20,20);
+}
+</style>
 
 {*Show the messages that the user got*}
 {if count($receivedMsg)}
@@ -35,9 +40,6 @@
 				<img src="../smarty/templates/web/images/page_white_acrobat.png">
 			</a>
 			{/if}
-			<a href="index.php?section=Messages|MessageAdmin&amp;action=showMessage&amp;ID={$message.ID}">
-				Details...
-			</a>
 		</td>
 	</tr>
 	{/foreach}
@@ -69,7 +71,9 @@
 		<td>
 			{$message.validFrom}
 		</td>
-		<td>
+		<td{if strtotime($message.validTo) < time()}
+		class="dateBeyondValid"
+		{/if}>
 			{$message.validTo}
 		</td>
 		<td>
@@ -83,13 +87,16 @@
 			<a href="index.php?section=Messages|MessageMainMenu&amp;action=deleteMessage&amp;ID={$message.ID}">
 				<img src="../smarty/templates/web/images/delete.png">
 			</a>
+			<a href="index.php?section=Messages|MessageAdmin&amp;action=showMessage&amp;ID={$message.ID}">
+				Details...
+			</a>
 		</td>
 	</tr>
 	{/foreach}
 </table>
 {/if}
 {if $editor}
-	<a href="index.php?section=Messages|MessageMainMenu&amp;action=newMessage">
+	<a href="index.php?section=Messages|MessageAdmin&amp;action=newMessageForm">
 		Neue Vorlage erstellen
 	</a>
 {/if}
