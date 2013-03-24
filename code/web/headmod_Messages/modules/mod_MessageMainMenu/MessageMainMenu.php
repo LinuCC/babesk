@@ -69,7 +69,7 @@ class MessageMainMenu extends Module {
 	 * Sets the variable $_isEditor based on the User
 	 */
 	private function setEditor() {
-		$contractGID = TableMng::query('SELECT value FROM global_settings WHERE name = "messagesEdit"',true);
+		$contractGID = TableMng::query('SELECT value FROM global_settings WHERE name = "messageEditGroupId"',true);
 		$userGID = TableMng::query('SELECT GID FROM users WHERE ID =
 			"'.$_SESSION['uid'].'"',true);
 		$this->_isEditor = ($contractGID[0]['value'] == $userGID[0]['GID']);

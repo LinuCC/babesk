@@ -1,12 +1,12 @@
 /* COMMON STYLE
 --------------------------------------------------------- */
-        
+
 body, h1, h2, h3, h4, h5, h6, div, p, table, td, ul, ol, li, dd, dt, dl, blockquote, address, hr, pre {
   margin: 0;     /* no borders */
   padding: 0;
 }
 
- 
+
 /* -- Normal link -- */
 
 a {
@@ -35,7 +35,7 @@ p, pre, blockquote, ul, ol, h1, h2, h3, h4, h5, h6 {
 
 input, select, textarea, .inputbox {
   padding: 3px 5px;
-  font-family: Tahoma, 
+  font-family: Tahoma,
                Arial,
                Helvetica,
                sans-serif;
@@ -44,6 +44,10 @@ input, select, textarea, .inputbox {
 
 fieldset {
     border: 0px;
+}
+
+fieldset.blockyField{
+  border: 1px solid;
 }
 
 table.dataTable {
@@ -125,12 +129,12 @@ div.filterBar {
 }
 
 h3.filterBar {
-	
+
 	border: 1px solid #444444;
 }
 
 #filterBarSubmitButton {
-	
+
 	padding: 15px;
 	float: right;
 }

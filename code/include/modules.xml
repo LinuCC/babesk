@@ -128,6 +128,26 @@
 			</module>
 		</head_module>
 		<head_module>
+			<ger_name>NachrichtenSystem</ger_name>
+			<name>Messages</name>
+			<active>true</active>
+			<module>
+				<ger_name>Autorgruppe</ger_name>
+				<name>MessageAuthor</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Vorlagen</ger_name>
+				<name>MessageTemplates</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Nachrichten</ger_name>
+				<name>MessageAdmin</name>
+				<active>true</active>
+			</module>
+		</head_module>
+		<head_module>
 			<ger_name>Schulbuchausleihsystem</ger_name>
 			<name>Schbas</name>
 			<active>true</active>
