@@ -2,7 +2,7 @@
 
 require_once PATH_ADMIN . '/AdminInterface.php';
 
-class MessageTemplateInterface extends AdminInterface {
+class MessageAdminInterface extends AdminInterface {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -19,15 +19,9 @@ class MessageTemplateInterface extends AdminInterface {
 	//Methods
 	/////////////////////////////////////////////////////////////////////
 
-	public function mainMenu($templates) {
+	public function mainMenu() {
 
-		$this->smarty->assign('templates', $templates);
 		$this->smarty->display($this->tplFilePath . 'mainMenu.tpl');
-	}
-
-	public function templateCreateForm() {
-
-		$this->smarty->display($this->tplFilePath . 'createTemplate.tpl');
 	}
 
 	/////////////////////////////////////////////////////////////////////
