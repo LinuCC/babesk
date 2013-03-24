@@ -138,7 +138,7 @@
 			</module>
 			<module>
 				<ger_name>Vorlagen</ger_name>
-				<name>MessageTemplates</name>
+				<name>MessageTemplate</name>
 				<active>true</active>
 			</module>
 			<module>
