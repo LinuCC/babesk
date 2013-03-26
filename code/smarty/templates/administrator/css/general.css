@@ -54,7 +54,12 @@ fieldset.blockyField{
 	width:100%;
 }
 table.dataTable {
-	line-height: 110%;
+	/*line-height: 1.5em;*/
+	text-align: center;
+}
+
+table.dataTable tr *{
+	padding: 5px;
 }
 
 table.dataTable tr th {
