@@ -18,8 +18,9 @@ class MessageAdmin extends Module{
 	/////////////////////////////////////////////////////////////////////
 
 	public function execute($dataContainer) {
-		echo $_SERVER["SERVER_NAME"];
+
 		$this->init();
+
 		if(isset($_GET['action'])) {
 			switch($_GET['action']) {
 				case 'newMessage':
@@ -45,6 +46,9 @@ class MessageAdmin extends Module{
 					break;
 				case 'removeManagerAjax':
 					$this->removeManagerAjax();
+					break;
+				case 'fetchTemplateAjax':
+					$this->fetchTemplateAjax();
 					break;
 				default:
 					die('Wrong action-value given');
@@ -72,8 +76,8 @@ class MessageAdmin extends Module{
 	private function newMessage() {
 		//INIT
 		$db = TableMng::getDb();
-		$msgTitle = $db->real_escape_string($_POST['contracttitle']);
-		$msgText = $db->real_escape_string($_POST['contracttext']);
+		$msgTitle = $db->real_escape_string($_POST['messagetitle']);
+		$msgText = $db->real_escape_string($_POST['messagetext']);
 		$startDate = sprintf('%s-%s-%s',
 			$db->real_escape_string($_POST['StartDateYear']),
 			$db->real_escape_string($_POST['StartDateMonth']),
@@ -235,10 +239,25 @@ class MessageAdmin extends Module{
 	 * @fixme grades do not get sorted out by schoolyear
 	 */
 	private function newMessageForm() {
-		$grades = TableMng::query(
-			'SELECT CONCAT(gradeValue, label) AS name, ID
-			FROM grade', true);
-		$this->_smarty->assign('grades',$grades);
+
+		$grades = $templates = array();
+
+		try {
+			$grades = TableMng::query(
+				'SELECT CONCAT(gradeValue, label) AS name, ID
+				FROM grade', true);
+			$templates = TableMng::query(
+				'SELECT * FROM MessageTemplate;', true);
+
+		} catch (MySQLVoidDataException $e) {
+			//gets sorted out with Smarty in the tpl-File
+
+		} catch (Exception $e) {
+			$this->_interface->DieError('Konnte die nötigen Daten nicht abrufen.');
+		}
+
+		$this->_smarty->assign('grades', $grades);
+		$this->_smarty->assign('templates', $templates);
 		$this->_smarty->display($this->_smartyPath . 'newMessage.tpl');
 	}
 
@@ -500,6 +519,23 @@ class MessageAdmin extends Module{
 		else {
 			die('No Manager!');
 		}
+	}
+
+	protected function fetchTemplateAjax() {
+
+		$templateId =
+			TableMng::getDb()->real_escape_string($_POST['templateId']);
+
+		try {
+			$template = TableMng::query(sprintf(
+				'SELECT * FROM MessageTemplate WHERE `ID` = "%s"',
+				$templateId), true);
+
+		} catch (Exception $e) {
+			die('errorFetchTemplate');
+		}
+
+		die(json_encode($template[0]));
 	}
 
 	/////////////////////////////////////////////////////////////////////

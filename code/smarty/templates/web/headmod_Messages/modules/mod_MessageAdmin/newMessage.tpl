@@ -16,8 +16,18 @@ fieldset {
 <form id="addMessage"
 	action='index.php?section=Messages|MessageAdmin&amp;action=newMessage'
 	method="post">
-	<label>Titel:<input type="text" name="contracttitle" value=""></label><br /><br />
-	<label>Text:<textarea class="ckeditor" name="contracttext"></textarea></label><br /><br />
+	<label>Titel:<input id="messagetitle" type="text" name="messagetitle" value="" /></label><br />
+	{if isset($templates) and count($templates)}
+		<label>Template:
+			<select id="templateSelection" name="template">
+				{foreach $templates as $template}
+					<option value="{$template.ID}">{$template.title}</option>
+				{/foreach}
+			</select>
+		</label>
+	{/if}
+	<br />
+	<label>Text:<textarea class="ckeditor" name="messagetext"></textarea></label><br /><br />
 	<fieldset>
 		<legend>Einstellungen</legend>
 		<label>
@@ -70,20 +80,6 @@ fieldset {
 	<input id="submit" onclick="submit()" type="submit" value="Absenden" />
 </form>
 
-{literal}
 <script type="text/JavaScript" src="../smarty/templates/web/headmod_Messages/searchUser.js"></script>
-
-<script type="text/javascript">
-	$('#searchUserInp').on('keypress', function(event){
-		searchUser('searchUserInp', 'userSelection', 'userSelectionButton');
-	});
-
-	$(document).on('click', '.userSelectionButton', function(event){
-		var meId = $(this).attr('id').replace('userSelectionButtonId', '');
-		var name = $(this).val();
-		cleanSearchUser('userSelection');
-		addUserAsHiddenInp(meId, name, 'addMessage', 'userSelected');
-	});
-</script>
-{/literal}
+<script type="text/JavaScript" src="../smarty/templates/web/headmod_Messages/modules/mod_MessageAdmin/newMessageBinds.js"></script>
 {include file='web/footer.tpl'}

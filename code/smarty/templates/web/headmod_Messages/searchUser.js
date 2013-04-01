@@ -65,7 +65,7 @@ function addReceiver(userId, messageId) {
 		success: function(data) {
 			//refresh the tables... no interest in ajax-ing them, too
 			if(data == "No Manager!") {
-				alert("Sie sind kein Manager dieser Message!");
+				alert("Sie sind kein Manager dieser Nachricht!");
 			}
 			location.reload();
 		},
