@@ -23,6 +23,9 @@ $('#templateSelection').on('click', function(event) {
 			'templateId': templateId
 		},
 		success: function(data) {
+			if(data == 'errorFetchTemplate') {
+				alert('Konnte das Template nicht abrufen!');
+			}
 			templateData = $.parseJSON(data);
 			CKEDITOR.instances['messagetext'].setData(templateData.text);
 			$('#messagetitle').val(templateData.title);

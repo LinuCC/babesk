@@ -138,7 +138,7 @@ class MessageAdmin extends Module{
 		}
 		$this->addSavedCopiesCount(count($msgReceiverIds), $_SESSION['uid']);
 		$this->_smarty->assign('emailsNotSend', $notSendStr);
-		$this->_smarty->display($this->_smartyPath . 'new_contract_fin.tpl');
+		$this->_smarty->display($this->_smartyPath . 'messageCreateFinished.tpl');
 	}
 
 	/**

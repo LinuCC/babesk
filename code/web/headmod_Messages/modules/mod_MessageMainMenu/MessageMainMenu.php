@@ -153,7 +153,7 @@ class MessageMainMenu extends Module {
 			$this->_interface->DieError('Nur der Ersteller der Nachricht kann diese löschen');
 		}
 		$this->_smarty->display($this->_smartyPath
-			. 'delete_contract_fin.tpl');
+			. 'messageDeleteFinished.tpl');
 	}
 
 	/**
