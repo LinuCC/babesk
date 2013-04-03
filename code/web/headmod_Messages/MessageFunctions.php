@@ -14,15 +14,9 @@ class MessageFunctions {
 			'SELECT u.ID AS userId,
 				CONCAT(u.forename, " ", u.name) AS userFullname
 			FROM users u
-			JOIN jointUsersInSchoolYear uisy ON u.ID = uisy.UserID
+				JOIN jointUsersInSchoolYear uisy ON u.ID = uisy.UserID
 			WHERE uisy.SchoolYearID = (%s)', $activeSchoolyearQuery);
-		try {
-			$users = TableMng::query ($query, true);
-		} catch (MySQLVoidDataException $e) {
-			$this->$_interface->DieError ('Konnte keine Benutzer finden');
-		} catch (Exception $e) {
-			$this->$_interface->DieError ('Ein Fehler ist beim Abrufen der Benutzer aufgetreten' . $e->getMessage ());
-		}
+		$users = TableMng::query ($query, true);
 		return $users;
 	}
 

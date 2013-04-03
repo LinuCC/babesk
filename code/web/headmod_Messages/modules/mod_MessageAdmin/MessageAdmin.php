@@ -427,6 +427,7 @@ class MessageAdmin extends Module{
 	}
 
 	protected function addReceiverAjax() {
+
 		$messageId = TableMng::getDb()->real_escape_string($_POST['messageId']);
 		$userId = TableMng::getDb()->real_escape_string($_POST['userId']);
 		if(MessageFunctions::checkIsManagerOf($messageId, $_SESSION['uid'])) {

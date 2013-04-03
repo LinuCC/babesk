@@ -49,7 +49,13 @@
 			{/if}
 		</td>
 		<td>
-			{$receiver->returnedMessage}
+			{if $receiver->returnedMessage == "noReturn"}
+				<p>keine Rückgabe</p>
+			{elseif $receiver->returnedMessage == "shouldReturn"}
+				<p>Rückgabe ausstehend</p>
+			{elseif $receiver->returnedMessage == "hasReturned"}
+				<p>bereits zurückgegeben</p>
+			{/if}
 		</td>
 		<td>
 			<a id="{$receiver->id}" class="removeReceiver" href="">
