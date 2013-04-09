@@ -34,8 +34,18 @@ class Fmenu extends Module {
 
 
 		try {
-			$userDetails = $userManager->getUserDetails($_SESSION['uid']);
-			$userClass = $userDetails['class'];
+			$userDetails = TableMng::query(sprintf(
+				'SELECT u.*,
+				(SELECT CONCAT(g.gradeValue, g.label)
+					FROM jointUsersInGrade uig
+					LEFT JOIN grade g ON uig.gradeId = g.ID
+					LEFT JOIN jointGradeInSchoolYear gisy
+						ON gisy.gradeId = g.ID
+					LEFT JOIN schoolYear sy ON gisy.schoolyearId = sy.ID
+					WHERE uig.userId = u.ID) AS class
+				FROM users u WHERE `ID` = %s', $_SESSION['uid']), true);
+			// $userDetails = $userManager->getUserDetails($_SESSION['uid']);
+			$userClass = $userDetails[0]['class'];
 		} catch (Exception $e) {
 			die('Ein Fehler ist aufgetreten:'.$e->getMessage());
 		}
@@ -67,7 +77,7 @@ class Fmenu extends Module {
 			$userClass =  preg_replace('/[^0-9]/i', '', $userClass);
 			$class =  preg_replace('/[^0-9]/i', '', $class);
 		}
-		
+
 		if (isset($userClass) && $userClass==$class && $has_Fits == false) {
 			$smarty->assign('showTestlink', true);
 		}

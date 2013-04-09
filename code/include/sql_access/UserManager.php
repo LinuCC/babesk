@@ -89,21 +89,37 @@ class UserManager extends TableManager{
 			$res_array[] = $buffer;
 		return $res_array;
 	}
-	
+
 	/**
 	 * Sorts the users it gets from MySQL-table and returns them
 	 * Enter description here ...
 	 */
 	function getUsersSorted($pagePointer,$orderBy) {
+
 		require_once PATH_ACCESS . '/databaseDistributor.php';
 		$res_array = array();
-		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY %s LIMIT %s,10', $this->tablename,$orderBy,$pagePointer));
+
+		$query = sprintf(
+			'SELECT u.*,
+			(SELECT CONCAT(g.gradeValue, g.label) FROM jointUsersInGrade uig
+				LEFT JOIN grade g ON uig.gradeId = g.ID
+				LEFT JOIN jointGradeInSchoolYear gisy ON gisy.gradeId = g.ID
+				LEFT JOIN schoolYear sy ON gisy.schoolyearId = sy.ID
+				WHERE uig.userId = u.ID) AS class
+			FROM %s u ORDER BY %s LIMIT %s, 10',
+			$this->tablename,$orderBy,$pagePointer);
+
+		// $query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY %s LIMIT %s,10', $this->tablename,$orderBy,$pagePointer));
+
 		$result = $this->db->query($query);
+
 		if (!$result) {
 			throw DB_QUERY_ERROR.$this->db->error;
 		}
+
 		while($buffer = $result->fetch_assoc())
 			$res_array[] = $buffer;
+
 		return $res_array;
 	}
 

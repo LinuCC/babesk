@@ -15,7 +15,7 @@ class AdminCardInfoProcessing {
 
 		require_once PATH_ACCESS . '/CardManager.php';
 		require_once PATH_ACCESS . '/UserManager.php';
-		
+
 		require_once 'AdminCardInfoInterface.php';
 
 		$this->cardManager = new CardManager();
@@ -59,14 +59,34 @@ class AdminCardInfoProcessing {
 		} catch (Exception $e) {
 			$this->cardInfoInterface->dieError(sprintf($this->msg['err_card_id'], $card_id));
 		}
-			
+
 	}
-	
+
 	/**
 	 * Returns some generic user data for identifying a card
 	 */
 	public function GetUserData($uid) {
-		return $this->userManager->getUserdata($uid);
+
+		try {
+			$data = TableMng::query(sprintf(
+				'SELECT u.*,
+				(SELECT CONCAT(g.gradeValue, g.label)
+					FROM jointUsersInGrade uig
+					LEFT JOIN grade g ON uig.gradeId = g.ID
+					LEFT JOIN jointGradeInSchoolYear gisy
+						ON gisy.gradeId = g.ID
+					LEFT JOIN schoolYear sy ON gisy.schoolyearId = sy.ID
+					WHERE uig.userId = u.ID) AS class
+				FROM users u WHERE ID = %s', $uid), true);
+
+		} catch (MySQLVoidDataException $e) {
+			$this->cardInfoInterface->dieError('Der Benutzer wurde nicht gefunden');
+
+		} catch (Exception $e) {
+			$this->cardInfoInterface->dieError('Der Benutzer konnte nicht von der Datenbanke abgerufen werden!');
+		}
+
+		return $data[0];
 	}
 }
 
