@@ -125,13 +125,7 @@ class MessageAdmin extends Module{
 				hinzufügen!');
 		}
 		if($shouldEmail) {
-			$recNotSendTo = $this->sendEmails($msgReceiverIds);
-			$notSendStr = '';
-			foreach($recNotSendTo as $receiver) {
-				$notSendStr .= sprintf('Dem Benutzer %s konnte keine Email gesendet werden. (Email-Adresse: "%s")<br />',
-					$receiver->forename . ' ' .$receiver->name,
-					$receiver->email);
-			}
+			$notSendStr = $this->newMessageSendEmail();
 		}
 		else {
 			$notSendStr = 'Es wurden keine Emails verschickt.';
@@ -139,6 +133,34 @@ class MessageAdmin extends Module{
 		$this->addSavedCopiesCount(count($msgReceiverIds), $_SESSION['uid']);
 		$this->_smarty->assign('emailsNotSend', $notSendStr);
 		$this->_smarty->display($this->_smartyPath . 'messageCreateFinished.tpl');
+	}
+
+	/**
+	 * Performs safety-checks and sends the email.
+	 *
+	 * @return string messages showing the Creator to which user the
+	 * email-sending failed.
+	 */
+	private function newMessageSendEmail() {
+
+		if(existSMTPMailData()) {
+			$recNotSendTo = $this->sendEmails($msgReceiverIds);
+			$notSendStr = '';
+
+			foreach($recNotSendTo as $receiver) {
+				$notSendStr .= sprintf('Dem Benutzer %s konnte keine Email gesendet werden. (Email-Adresse: "%s")<br />',
+					$receiver->forename . ' ' .$receiver->name,
+					$receiver->email);
+			}
+		}
+		else {
+			$this->_interface->DieError('Die Daten zum Email-Versenden
+				wurden noch nicht angegeben. Sie können die Nachrichten
+				aber ohne Email-benachrichtigungen senden, indem sie
+				zurückgehen und die Option nicht ankreuzen.');
+		}
+
+		return $notSendStr;
 	}
 
 	/**
@@ -537,6 +559,35 @@ class MessageAdmin extends Module{
 		}
 
 		die(json_encode($template[0]));
+	}
+
+	/**
+	 * Checks if the database contains Smtp-data to send emails from
+	 *
+	 * @return bool true if Smtp-Data are existing, false if not
+	 */
+	protected function existSMTPMailData() {
+
+		$data = array();
+
+		try {
+			$data = TableMng::query(sprintf(
+				'SELECT COUNT(*) AS "entries" FROM global_settings WHERE
+				`name` = "smtpHost" OR
+				`name` = "smtpUsername" OR
+				`name` = "smtpPassword" OR
+				`name` = "smtpFromName" OR
+				`name` = "smtpFrom"'), true);
+
+		} catch (MySQLVoidDataException $e) {
+			return false;
+
+		} catch (Exception $e) {
+			$this->_interface->DieError('Konnte nicht überprüfen, ob die Email-Daten angegeben sind.');
+		}
+
+		//Only return true if ALL 5 global_settings exist
+		return ($data['entries'] == 5);
 	}
 
 	/////////////////////////////////////////////////////////////////////

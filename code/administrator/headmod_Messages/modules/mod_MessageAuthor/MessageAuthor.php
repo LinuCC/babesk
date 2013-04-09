@@ -138,6 +138,7 @@ class MessageAuthor extends Module {
 
 		if(isset($_POST['group'])) {
 			$groupId = TableMng::getDb()->real_escape_string($_POST['group']);
+
 			if($this->groupExists($groupId)) {
 				$this->authorGroupChangeCommit($groupId);
 			}
@@ -188,6 +189,12 @@ class MessageAuthor extends Module {
 				'UPDATE global_settings
 				SET `value` = "%s"
 				WHERE `name` = "messageEditGroupId"', $newGroupId));
+
+			if(TableMng::getDb()->affected_rows == 0) {
+				TableMng::query(sprintf(
+					'INSERT INTO global_settings (`value`, `name`)
+					VALUES ("%s", "messageEditGroupId")', $newGroupId));
+			}
 
 		} catch (Exception $e) {
 			$this->_interface->dieError('Konnte die Gruppe nicht verändern');

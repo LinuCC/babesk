@@ -119,15 +119,21 @@ class MessageFunctions {
 	 * Gets the users taht have a similar name to the $username
 	 */
 	public static function usersGetSimilarTo ($username, $maxUsersToGet) {
+
 		$bestMatches = array ();
 		$users = self::usersFetch ();
+
 		foreach ($users as $key => $user) {
 			$per = 0.0;
 			similar_text($username, $user ['userFullname'], $per);
 			$users [$key] ['percentage'] = $per;
 		}
+
 		usort ($users, array ('MessageFunctions', 'userPercentageComp'));
-		for ($i = 0; $i < $maxUsersToGet; $i++) {
+
+		$elementCount = (count($users) >= $maxUsersToGet) ?
+			$maxUsersToGet : count($users);
+		for ($i = 0; $i < $elementCount; $i++) {
 			$bestMatches [] = $users [$i];
 		}
 		return $bestMatches;

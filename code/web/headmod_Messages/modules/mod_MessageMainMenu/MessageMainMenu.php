@@ -69,10 +69,20 @@ class MessageMainMenu extends Module {
 	 * Sets the variable $_isEditor based on the User
 	 */
 	private function setEditor() {
-		$contractGID = TableMng::query('SELECT value FROM global_settings WHERE name = "messageEditGroupId"',true);
-		$userGID = TableMng::query('SELECT GID FROM users WHERE ID =
-			"'.$_SESSION['uid'].'"',true);
-		$this->_isEditor = ($contractGID[0]['value'] == $userGID[0]['GID']);
+
+		try {
+			$contractGID = TableMng::query('SELECT value FROM global_settings
+				WHERE name = "messageEditGroupId"',true);
+			$userGID = TableMng::query('SELECT GID FROM users WHERE ID =
+				"'.$_SESSION['uid'].'"',true);
+			$this->_isEditor = ($contractGID[0]['value'] == $userGID[0]['GID']);
+		} catch (MySQLVoidDataException $e) {
+			echo 'Konnte die Gruppe nicht überprüfen!';
+			$this->_isEditor = false;
+
+		} catch (Exception $e) {
+			$this->_interface->DieError('Konnte keine Überprüfung der Gruppe vornehmen!');
+		}
 	}
 
 	/**
