@@ -177,8 +177,8 @@ class MessageMainMenu extends Module {
 			|| (MessageFunctions::checkHasReceived($messageId,
 				$_SESSION['uid']))) {
 
-			$msgText = $msgTitle = $forename = $name = $grade = $msgRecId = '';
-			$query = "SELECT m.title, m.text, mr.read, mr.ID,
+			$msgText = $msgTitle = $forename = $name = $grade = $msgRecId = $msgReturn = '';
+			$query = "SELECT m.title, m.text, mr.read, mr.ID, mr.return,
 					u.forename, u.name, CONCAT(g.gradeValue, g.label)
 				FROM users u
 				JOIN MessageReceivers mr ON mr.userId = u.ID
@@ -189,7 +189,7 @@ class MessageMainMenu extends Module {
 			$stmt = $db->prepare($query);
 			if($stmt) {
 				$stmt->bind_param('ii', $messageId, $_SESSION['uid']);
-				$stmt->bind_result($msgTitle, $msgText, $isRead, $msgRecId,
+				$stmt->bind_result($msgTitle, $msgText, $isRead, $msgRecId, $msgReturn,
 					$forename, $name, $grade);
 				$stmt->execute();
 				while($stmt->fetch()) {
@@ -201,7 +201,8 @@ class MessageMainMenu extends Module {
 				}
 				$msgText = str_replace("{vorname}", $forename, $msgText);
 				$msgText = str_replace("{name}", $name, $msgText);
-				$this->createPdf($msgTitle, $msgText, $grade);
+				
+				$this->createPdf($msgTitle, $msgText, $grade, $msgReturn,$messageId,$_SESSION['uid']);
 			}
 			else {
 				$this->_interface->DieError('Konnte die Nachrichtendaten nicht
@@ -261,10 +262,23 @@ class MessageMainMenu extends Module {
 	/**
 	 * Creates a PDF for the Participation Confirmation and returns its Path
 	 */
-	private function createPdf ($title,$text,$class) {
+	private function createPdf ($title,$text,$class,$msgReturn,$mid,$uid) {
+		require  PATH_INCLUDE .('/barcode/php-barcode.php');
+		$barcode = '';
+		if(strcasecmp($msgReturn, "shouldReturn") == 0) {
+			$url = "http://".$_SERVER['SERVER_NAME'].substr($_SERVER['PHP_SELF'],0,-strlen(basename($_SERVER['PHP_SELF'])))."../include/barcode/barcode.php?code=".$mid."+".$uid."&scale=2&mode=htm&encoding=128";
+			$curl = curl_init($url);
+			curl_setopt($curl, CURLOPT_HEADER, false);
+			curl_setopt($curl, CURLOPT_VERBOSE, false);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+			$barcode = curl_exec($curl);
+		}
+		
 		require_once  PATH_INCLUDE .('/pdf/tcpdf/config/lang/ger.php');
 		require_once PATH_INCLUDE . '/pdf/tcpdf/tcpdf.php';
-
+		
+		
+		
 		// create new PDF document
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
@@ -319,11 +333,11 @@ class MessageMainMenu extends Module {
 		$pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
 
 		// Set some content to print
-		$html = '<p align="center"><h2>'. $title.'</h2></p><br>'.$text;
+		$html = '<p align="center"><h2>'. $title.'</h2></p><br>'.$text.'<br>';
 
 		// Print text using writeHTMLCell()
 		$pdf->writeHTMLCell($w=0, $h=0, $x='', $y='', $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
-
+		$pdf->writeHTMLCell($w=0, $h=0, $x='140', $y='-5', $barcode, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
 		// ---------------------------------------------------------
 
 		// Close and output PDF document
