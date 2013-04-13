@@ -35,11 +35,5 @@ CKEDITOR.plugins.add( 'messagevars',
 						command: 'name',
 						icon: this.path + 'name.png'
 					});
-				editor.ui.addButton( 'messageBarcodeButton',
-					{
-						label: 'Platzhalter f&#252;r: Nachrichten-Barcode',
-						command: 'messageBarcode',
-						icon: this.path + 'barcode.png'
-					});
 			}
 		} );
