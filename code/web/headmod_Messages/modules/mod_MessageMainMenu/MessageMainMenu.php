@@ -201,8 +201,8 @@ class MessageMainMenu extends Module {
 				}
 				$msgText = str_replace("{vorname}", $forename, $msgText);
 				$msgText = str_replace("{name}", $name, $msgText);
-				
-				
+
+
 				$this->createPdf($msgTitle, $msgText, $grade, $msgReturn,$messageId,$_SESSION['uid']);
 			}
 			else {
@@ -263,97 +263,96 @@ class MessageMainMenu extends Module {
 	/**
 	 * Creates a PDF for the Participation Confirmation and returns its Path
 	 */
-	private function createPdf ($title,$text,$class,$msgReturn,$mid,$uid) {
-		
-		require_once  PATH_INCLUDE .('/pdf/tcpdf/config/lang/ger.php');
-		require_once PATH_INCLUDE . '/pdf/tcpdf/tcpdf.php';
-		
-		// create new PDF document
-		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+	private function createPdf ($title, $text, $class, $msgReturn, $mid, $uid) {
 
-		// set document information
-		$pdf->SetCreator(PDF_CREATOR);
-		$pdf->SetAuthor('LeG Uelzen');
-		$pdf->SetTitle($title);
-		$pdf->SetSubject($title);
-		$pdf->SetKeywords('');
+		require_once 'MessageMainMenuPdf.php';
 
-		// set default header data
-		$pdf->SetHeaderData('../../../../web/headmod_Messages/modules/mod_MessageMainMenu/logo.jpg', 15, 'LeG Uelzen', "Formulargenerator 0.1\nKlasse: ".$class, array(0,0,0), array(0,0,0));
-		$pdf->setFooterData($tc=array(0,0,0), $lc=array(0,0,0));
+		try {
+			$pdfCreator = new MessageMainMenuPdf($title, $text, $class,
+				$msgReturn, $mid, $uid);
+			$pdfCreator->create();
+			$pdfCreator->output();
 
-		// set header and footer fonts
-		$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-		$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+		} catch (Exception $e) {
+			$this->_interface->DieError('Konnte die PDF nicht erstellen!');
+		}
 
-		// set default monospaced font
-		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+		// require_once  PATH_INCLUDE .'/pdf/tcpdf/config/lang/ger.php';
+		// require_once PATH_INCLUDE . '/pdf/tcpdf/tcpdf.php';
 
-		//set margins
-		$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-		$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+		// // create new PDF document
+		// $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
-		//set auto page breaks
-		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+		// // set document information
+		// $pdf->SetCreator(PDF_CREATOR);
+		// $pdf->SetAuthor('LeG Uelzen');
+		// $pdf->SetTitle($title);
+		// $pdf->SetSubject($title);
+		// $pdf->SetKeywords('');
 
-		//set image scale factor
-		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+		// // set default header data
+		// $pdf->SetHeaderData('../../../../web/headmod_Messages/modules/mod_MessageMainMenu/logo.jpg', 15, 'LeG Uelzen', "Formulargenerator 0.1\nKlasse: ".$class, array(0,0,0), array(0,0,0));
+		// $pdf->setFooterData($tc=array(0,0,0), $lc=array(0,0,0));
 
-		//set some language-dependent strings
-		$pdf->setLanguageArray($l);
+		// // set header and footer fonts
+		// $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+		// $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
-		// ---------------------------------------------------------
+		// // set default monospaced font
+		// $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
-		// set default font subsetting mode
-		$pdf->setFontSubsetting(true);
+		// //set margins
+		// $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+		// $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+		// $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
-		// Set font
-		// dejavusans is a UTF-8 Unicode font, if you only need to
-		// print standard ASCII chars, you can use core fonts like
-		// helvetica or times to reduce file size.
-		$pdf->SetFont('helvetica', '', 14, '', true);
+		// //set auto page breaks
+		// $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
-		// Add a page
-		// This method has several options, check the source code documentation for more information.
-		$pdf->AddPage();
+		// //set image scale factor
+		// $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
-		// set text shadow effect
-		$pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
+		// //set some language-dependent strings
+		// $pdf->setLanguageArray($l);
 
-		// Set some content to print
-		$html = '<p align="center"><h2>'. $title.'</h2></p><br>'.$text.'<br>';
+		// // ---------------------------------------------------------
 
-		// Print text using writeHTMLCell()
-		$pdf->writeHTMLCell($w=0, $h=0, $x='', $y='', $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
-		
-		// define barcode style
-		$style = array(
-				'position' => '',
-				'align' => 'C',
-				'stretch' => false,
-				'fitwidth' => true,
-				'cellfitalign' => '',
-				'border' => true,
-				'hpadding' => 'auto',
-				'vpadding' => 'auto',
-				'fgcolor' => array(0,0,0),
-				'bgcolor' => false, //array(255,255,255),
-				'text' => false,
-				'font' => 'helvetica',
-				'fontsize' => 8,
-				'stretchtext' => 4
-		);
-		if(strcasecmp($msgReturn, "shouldReturn") == 0) 
-		$pdf->write1DBarcode($mid." ".$uid, 'C128', 150, 5, '', 15, 0.4, $style, 'N');
-		
-		$pdf->Ln();
-		// ---------------------------------------------------------
+		// // set default font subsetting mode
+		// $pdf->setFontSubsetting(true);
 
-		// Close and output PDF document
-		// This method has several options, check the source code documentation
-		// for more information.
-		$pdf->Output('example_001.pdf', 'I');
+		// // Set font
+		// // dejavusans is a UTF-8 Unicode font, if you only need to
+		// // print standard ASCII chars, you can use core fonts like
+		// // helvetica or times to reduce file size.
+		// $pdf->SetFont('helvetica', '', 14, '', true);
+
+		// // Add a page
+		// // This method has several options, check the source code documentation for more information.
+		// $pdf->AddPage();
+
+		// // set text shadow effect
+		// $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
+
+		// // Set some content to print
+		// $html = '<p align="center"><h2>'. $title.'</h2></p><br>'.$text.'<br>';
+
+		// // Print text using writeHTMLCell()
+		// $pdf->writeHTMLCell($w=0, $h=0, $x='', $y='', $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+
+		// if(strcasecmp($msgReturn, "shouldReturn") == 0) {
+		// 	$pdf->write1DBarcode($mid." ".$uid, 'C128', 150, 5, '', 15, 0.4,
+		// 		$this->barcodeStyle, 'N');
+		// }
+
+		// $pdf->Ln();
+		// // ---------------------------------------------------------
+
+		// // Close and output PDF document
+		// // This method has several options, check the source code documentation
+		// // for more information.
+		// $pdfName = sprintf('%s_%s_nachricht.pdf', $mid, $uid);
+		// $pdf->Output($pdfName, 'I');
 	}
 
 	///////////////////////////////////////////////////////////////////////
@@ -379,6 +378,24 @@ class MessageMainMenu extends Module {
 	 * Saves if the User is allowed to send Messages
 	 */
 	private $_isEditor;
+
+
+	private $barcodeStyle = array(
+		'position' => '',
+		'align' => 'C',
+		'stretch' => false,
+		'fitwidth' => true,
+		'cellfitalign' => '',
+		'border' => true,
+		'hpadding' => 'auto',
+		'vpadding' => 'auto',
+		'fgcolor' => array(0,0,0),
+		'bgcolor' => false, //array(255,255,255),
+		'text' => false,
+		'font' => 'helvetica',
+		'fontsize' => 8,
+		'stretchtext' => 4
+		);
 
 }
 ?>
