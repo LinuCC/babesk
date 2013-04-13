@@ -18,6 +18,9 @@
 	<form action="index.php?section=Babesk|Soli&action=4" method="post">
 		<input type="submit" value="Bestellungen eines Benutzers für eine Bestimmte Woche anzeigen" />
 	</form>
+	<form action="index.php?section=Babesk|Soli&action=7" method="post">
+		<input type="submit" value="Bestellungen r&uuml;ckwirkend &uuml;bernehmen" />
+	</form>
 	</fieldset>
 	<fieldset>
 	<legend><b>Einstellungen</b></legend>
