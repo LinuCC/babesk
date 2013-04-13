@@ -263,21 +263,9 @@ class MessageMainMenu extends Module {
 	 * Creates a PDF for the Participation Confirmation and returns its Path
 	 */
 	private function createPdf ($title,$text,$class,$msgReturn,$mid,$uid) {
-		require  PATH_INCLUDE .('/barcode/php-barcode.php');
-		$barcode = '';
-		if(strcasecmp($msgReturn, "shouldReturn") == 0) {
-			$url = "http://".$_SERVER['SERVER_NAME'].substr($_SERVER['PHP_SELF'],0,-strlen(basename($_SERVER['PHP_SELF'])))."../include/barcode/barcode.php?code=".$mid."+".$uid."&scale=2&mode=htm&encoding=128";
-			$curl = curl_init($url);
-			curl_setopt($curl, CURLOPT_HEADER, false);
-			curl_setopt($curl, CURLOPT_VERBOSE, false);
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-			$barcode = curl_exec($curl);
-		}
 		
 		require_once  PATH_INCLUDE .('/pdf/tcpdf/config/lang/ger.php');
 		require_once PATH_INCLUDE . '/pdf/tcpdf/tcpdf.php';
-		
-		
 		
 		// create new PDF document
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -337,7 +325,28 @@ class MessageMainMenu extends Module {
 
 		// Print text using writeHTMLCell()
 		$pdf->writeHTMLCell($w=0, $h=0, $x='', $y='', $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
-		$pdf->writeHTMLCell($w=0, $h=0, $x='140', $y='-5', $barcode, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
+		
+		// define barcode style
+		$style = array(
+				'position' => '',
+				'align' => 'C',
+				'stretch' => false,
+				'fitwidth' => true,
+				'cellfitalign' => '',
+				'border' => true,
+				'hpadding' => 'auto',
+				'vpadding' => 'auto',
+				'fgcolor' => array(0,0,0),
+				'bgcolor' => false, //array(255,255,255),
+				'text' => false,
+				'font' => 'helvetica',
+				'fontsize' => 8,
+				'stretchtext' => 4
+		);
+		
+		$pdf->write1DBarcode($mid." ".$uid, 'C128', 150, 5, '', 15, 0.4, $style, 'N');
+		
+		$pdf->Ln();
 		// ---------------------------------------------------------
 
 		// Close and output PDF document
