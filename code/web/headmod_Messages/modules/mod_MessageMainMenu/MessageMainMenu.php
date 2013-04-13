@@ -202,6 +202,7 @@ class MessageMainMenu extends Module {
 				$msgText = str_replace("{vorname}", $forename, $msgText);
 				$msgText = str_replace("{name}", $name, $msgText);
 				
+				
 				$this->createPdf($msgTitle, $msgText, $grade, $msgReturn,$messageId,$_SESSION['uid']);
 			}
 			else {
@@ -343,7 +344,7 @@ class MessageMainMenu extends Module {
 				'fontsize' => 8,
 				'stretchtext' => 4
 		);
-		
+		if(strcasecmp($msgReturn, "shouldReturn") == 0) 
 		$pdf->write1DBarcode($mid." ".$uid, 'C128', 150, 5, '', 15, 0.4, $style, 'N');
 		
 		$pdf->Ln();
