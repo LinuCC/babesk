@@ -50,11 +50,11 @@ class MessageAdmin extends Module{
 				case 'fetchTemplateAjax':
 					$this->fetchTemplateAjax();
 					break;
-				case 'userReturnedMsgByBarcodeAjax':
-					$this->userReturnedMsgByBarcodeAjax();
+				case 'userSetReturnedMsgByBarcodeAjax':
+					$this->userSetReturnedMsgByBarcodeAjax();
 					break;
-				case 'userReturnedMsgByButtonAjax':
-					$this->userReturnedMsgByButtonAjax();
+				case 'userSetReturnedMsgByButtonAjax':
+					$this->userSetReturnedMsgByButtonAjax();
 					break;
 				default:
 					die('Wrong action-value given');
@@ -615,7 +615,13 @@ class MessageAdmin extends Module{
 		return ($data['entries'] == 5);
 	}
 
-	protected function userReturnedMsgByBarcodeAjax() {
+	/**
+	 * based on the post-values given from Ajax, this function sets the
+	 * has-user-returned-the-message-value to "hasReturned"
+	 *
+	 * @return void
+	 */
+	protected function userSetReturnedMsgByBarcodeAjax() {
 
 		$barcode = TableMng::getDb()->real_escape_string($_POST['barcode']);
 		$barcodeArray = explode(' ', $barcode);
@@ -626,14 +632,7 @@ class MessageAdmin extends Module{
 			$uid = $barcodeArray[1];
 
 			if(is_numeric($mid) && is_numeric($uid)) {
-				$this->userReturnedMsgCheckEditable($mid, $uid);
-				try {
-					$this->setMessageReceiversReturnedTo('hasReturned',
-						$mid, $uid);
-
-				} catch (Exception $e) {
-					die('error');
-				}
+				$this->userSetReturnedMsg($mid, $uid);
 			}
 			else {
 				die('notNumeric');
@@ -644,10 +643,31 @@ class MessageAdmin extends Module{
 		}
 	}
 
-	protected function userReturnedMsgByButtonAjax() {
+	/**
+	 * based on the post-values given from Ajax, this function sets the
+	 * has-user-returned-the-message-value to "hasReturned"
+	 *
+	 * @return void
+	 */
+	protected function userSetReturnedMsgByButtonAjax() {
 
 		$mid = TableMng::getDb()->real_escape_string($_POST['messageId']);
 		$uid = TableMng::getDb()->real_escape_string($_POST['userId']);
+
+		$this->userSetReturnedMsg($mid, $uid);
+	}
+
+	/**
+	 * Sets the has-user-returned-the-message-value to "hasReturned"
+	 *
+	 *On Error dies ajax-like with the die()-function.with various Messages,
+	 *then handled by Ajax
+	 *
+	 * @param  int(11) $mid
+	 * @param  int(11) $uid
+	 * @return void
+	 */
+	protected function userSetReturnedMsg($mid, $uid) {
 
 		$this->userReturnedMsgCheckEditable($mid, $uid);
 

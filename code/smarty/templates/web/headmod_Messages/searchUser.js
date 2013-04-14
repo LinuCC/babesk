@@ -181,7 +181,7 @@ function removeManager(messageId, managerId) {
 function sendUserReturnedBarcode(barcode) {
 	$.ajax({
 		'type': 'POST',
-		'url': 'index.php?section=Messages|MessageAdmin&action=userReturnedMsgByBarcodeAjax',
+		'url': 'index.php?section=Messages|MessageAdmin&action=userSetReturnedMsgByBarcodeAjax',
 		data: {
 			'barcode': barcode
 		},
@@ -211,13 +211,12 @@ function sendUserReturnedBarcode(barcode) {
 function sendUserReturnedButton(userId) {
 	$.ajax({
 		'type': 'POST',
-		'url': 'index.php?section=Messages|MessageAdmin&action=userReturnedMsgByButtonAjax',
+		'url': 'index.php?section=Messages|MessageAdmin&action=userSetReturnedMsgByButtonAjax',
 		data: {
 			'userId': userId,
 			'messageId': _messageId
 		},
 		success: function(data) {
-			alert(data);
 			if(data == 'error') {
 				alert('Konnte die Nachricht des Benutzers nicht als "bereits zurückgegeben" markieren');
 			}
