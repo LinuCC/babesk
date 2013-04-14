@@ -177,3 +177,62 @@ function removeManager(messageId, managerId) {
 		alert(e);
 	}
 }
+
+function sendUserReturnedBarcode(barcode) {
+	$.ajax({
+		'type': 'POST',
+		'url': 'index.php?section=Messages|MessageAdmin&action=userReturnedMsgByBarcodeAjax',
+		data: {
+			'barcode': barcode
+		},
+		success: function(data) {
+			if(data == 'error') {
+				alert('Konnte die Nachricht des Benutzers nicht als "bereits zurückgegeben" markieren');
+			}
+			else if(data == 'entryNotFound') {
+				alert('Der Link zwischen Nachricht und Benutzer konnte nicht gefunden werden');
+			}
+			else if(data == 'noManager') {
+				alert('Sie sind kein Manager der Nachricht!');
+			}
+			else if(data == 'notNumeric') {
+				alert('Der Barcode enthält inkorrekte Zeichen');
+			}
+			else {
+				location.reload();
+			}
+		},
+		error: function(data) {
+			alert('Ein Fehler ist beim Senden des Barcodes aufgetreten!');
+		}
+	});
+}
+
+function sendUserReturnedButton(userId) {
+	$.ajax({
+		'type': 'POST',
+		'url': 'index.php?section=Messages|MessageAdmin&action=userReturnedMsgByButtonAjax',
+		data: {
+			'userId': userId,
+			'messageId': _messageId
+		},
+		success: function(data) {
+			alert(data);
+			if(data == 'error') {
+				alert('Konnte die Nachricht des Benutzers nicht als "bereits zurückgegeben" markieren');
+			}
+			else if(data == 'entryNotFound') {
+				alert('Der Link zwischen Nachricht und Benutzer konnte nicht gefunden werden');
+			}
+			else if(data == 'noManager') {
+				alert('Sie sind kein Manager der Nachricht!');
+			}
+			else {
+				location.reload();
+			}
+		},
+		error: function(data) {
+			alert('Ein Fehler ist beim Senden der Infos aufgetreten!');
+		}
+	});
+}

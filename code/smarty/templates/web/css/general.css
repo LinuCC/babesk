@@ -1,9 +1,20 @@
 /* COMMON STYLE
 --------------------------------------------------------- */
 
-body, h1, h2, h3, h4, h5, h6, div, p, table, td, ul, ol, li, dd, dt, dl, blockquote, address, hr, pre {
+body {
+	background-color: #ffffff;
 	margin: 0;     /* no borders */
 	padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6, div, p, table, td, ul, ol, li, dd, dt, dl, blockquote, address, hr, pre {
+	margin: 0;     /* no borders */
+	padding: 0;
+	background-color: transparent;
+}
+
+button p{
+	background-color: black;
 }
 
 /* -- Normal link -- */

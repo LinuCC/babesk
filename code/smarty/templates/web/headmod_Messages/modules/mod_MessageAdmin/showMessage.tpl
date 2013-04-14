@@ -1,5 +1,14 @@
 {include file='web/header.tpl' title='Nachrichten-Admin'}
 
+{literal}
+<style type="text/css">
+
+.barcodeInput {
+	float: right;
+}
+
+</style>
+{/literal}
 <h2>
 	Nachrichten-Administration
 </h2>
@@ -59,14 +68,31 @@
 		</td>
 		<td>
 			<a id="{$receiver->id}" class="removeReceiver" href="">
-				<img src="../smarty/templates/web/images/delete.png">
+				<img src="../smarty/templates/web/images/delete.png" />
 			</a>
+			{if $shouldReturn}
+			<a id="{$receiver->id}" class="toReturned" href="">
+				<img src="../smarty/templates/web/images/fileAdd.png"
+					title="Den Benutzer als 'hat zurückgegeben' eintragen" />
+			</a>
+			{/if}
 		</td>
 	</tr>
 	{/foreach}
 </table>
 
-<input id="receiverSearch" type="text" value="neuer Empfänger..." /><br />
+<input id="receiverSearch" type="text" value="neuer Empfänger..." />
+
+{if $shouldReturn}
+	<button id="showBarcodeInput" class="barcodeInput">
+		Barcode für Zettelrückgabe einscannen...
+	</button>
+	<label id="barcodeInputWrap" class="barcodeInput" hidden="hidden" />
+		Barcode:<input id="barcodeInput" type="text" /><br />
+		<small>Enter drücken, wenn Barcode eingescannt</small>
+	</label>
+{/if}
+<br />
 
 <span id="receiverSearchOutput">
 </span>
@@ -115,7 +141,8 @@
 var _messageId = {/literal}{$messageData.ID}{literal};
 
 $('#receiverSearch').on('keypress', function(event) {
-	searchUser('receiverSearch', 'receiverSearchOutput', 'receiverSelectButton');
+	searchUser('receiverSearch', 'receiverSearchOutput',
+		'receiverSelectButton');
 });
 
 $(document).on('click', '.receiverSelectButton', function(event) {
@@ -150,6 +177,23 @@ $('.removeManager').on('click', function(event) {
 	if(confirm('Wollen sie diesen Manager wirklich von der Nachrichten entfernen?')) {
 		removeManager(_messageId, $(this).attr('id'));
 	}
+});
+
+$('#showBarcodeInput').on('click', function(event) {
+	$('#showBarcodeInput').hide();
+	$('#barcodeInputWrap').show();
+	$('#barcodeInput').focus();
+});
+
+$('#barcodeInput').on('keyup', function(event) {
+	if(event.keyCode == 13) {
+		sendUserReturnedBarcode($(this).val());
+	}
+});
+
+$('.toReturned').on('click', function(event) {
+	event.preventDefault();
+	sendUserReturnedButton($(this).attr('id'));
 });
 
 </script>

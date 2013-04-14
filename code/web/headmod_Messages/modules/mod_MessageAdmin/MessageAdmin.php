@@ -50,6 +50,12 @@ class MessageAdmin extends Module{
 				case 'fetchTemplateAjax':
 					$this->fetchTemplateAjax();
 					break;
+				case 'userReturnedMsgByBarcodeAjax':
+					$this->userReturnedMsgByBarcodeAjax();
+					break;
+				case 'userReturnedMsgByButtonAjax':
+					$this->userReturnedMsgByButtonAjax();
+					break;
 				default:
 					die('Wrong action-value given');
 					break;
@@ -324,6 +330,8 @@ class MessageAdmin extends Module{
 			$messageData['validFrom'] = formatDate($messageData['validFrom']);
 			$this->smartyAssignIsCreator($userId,
 				$messageData ['originUserId']);
+			$shouldReturn = $this->shouldUsersReturn($receivers);
+			$this->_smarty->assign('shouldReturn', $shouldReturn);
 			$this->_smarty->assign('receivers', $receivers);
 			$this->_smarty->assign('managers', $managers);
 			$this->_smarty->assign('messageData', $messageData);
@@ -446,6 +454,23 @@ class MessageAdmin extends Module{
 			}
 		}
 		return $receivers;
+	}
+
+	/**
+	 * Checks if one of the Users given has to return the Message to the Author
+	 *
+	 * @param  array(MessageAdminReceivers) $users
+	 * @return bool true if one of the Users has to return the message
+	 */
+	protected function shouldUsersReturn($users) {
+
+		foreach($users as $user) {
+			if($user->returnedMessage == "shouldReturn") {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	protected function addReceiverAjax() {
@@ -588,6 +613,106 @@ class MessageAdmin extends Module{
 
 		//Only return true if ALL 5 global_settings exist
 		return ($data['entries'] == 5);
+	}
+
+	protected function userReturnedMsgByBarcodeAjax() {
+
+		$barcode = TableMng::getDb()->real_escape_string($_POST['barcode']);
+		$barcodeArray = explode(' ', $barcode);
+
+		if(count($barcodeArray) == 2) {
+
+			$mid = $barcodeArray[0];
+			$uid = $barcodeArray[1];
+
+			if(is_numeric($mid) && is_numeric($uid)) {
+				$this->userReturnedMsgCheckEditable($mid, $uid);
+				try {
+					$this->setMessageReceiversReturnedTo('hasReturned',
+						$mid, $uid);
+
+				} catch (Exception $e) {
+					die('error');
+				}
+			}
+			else {
+				die('notNumeric');
+			}
+		}
+		else {
+			die('error');
+		}
+	}
+
+	protected function userReturnedMsgByButtonAjax() {
+
+		$mid = TableMng::getDb()->real_escape_string($_POST['messageId']);
+		$uid = TableMng::getDb()->real_escape_string($_POST['userId']);
+
+		$this->userReturnedMsgCheckEditable($mid, $uid);
+
+		try {
+			$this->setMessageReceiversReturnedTo('hasReturned', $mid, $uid);
+
+		} catch (Exception $e) {
+			die('error');
+		}
+	}
+
+	/**
+	 * Checks if the Message-Admin has access to the message [hack-safety] and
+	 * if the User got this Message, uses die() on error for Ajax
+	 *
+	 * @param  int(11) $mid
+	 * @param  int(11) $uid
+	 * @return void
+	 */
+	protected function userReturnedMsgCheckEditable($mid, $uid) {
+
+		try {
+			if(!MessageFunctions::checkIsManagerOf($mid, $_SESSION['uid'])) {
+				die('noManager');
+			}
+			else if(!$this->existMessageWithReceiver($mid, $uid)) {
+				die('entryNotFound');
+			}
+		} catch (Exception $e) {
+			die('error');
+		}
+	}
+
+	/**
+	 * Checks if the user with ID $uid got a Message with the ID $mid
+	 *
+	 * @param  int(11) $mid
+	 * @param  int(11) $uid
+	 * @return bool true if such an entry exists, false if not
+	 */
+	protected function existMessageWithReceiver($mid, $uid) {
+
+		$count = TableMng::query(sprintf(
+			'SELECT COUNT(*) AS `count` FROM MessageReceivers
+			WHERE `messageId` = %s AND `userId` = %s;
+			', $mid, $uid), true);
+
+		return ($count[0]['count'] > 0);
+	}
+
+	/**
+	 * Updates the Information if a user has returned the message
+	 *
+	 * @param  string $returnState On of the three states of the SQL-enum:
+	 * 'hasReturned', 'shouldReturn' or 'noReturn'
+	 * @param  int(11) $mid
+	 * @param  int(11) $uid
+	 * @return void
+	 */
+	protected function setMessageReceiversReturnedTo($returnState, $mid, $uid) {
+
+		TableMng::query(sprintf(
+			'UPDATE MessageReceivers
+			SET `return` = "%s" WHERE `messageId` = "%s" AND `userId` = "%s"',
+			$returnState, $mid, $uid));
 	}
 
 	/////////////////////////////////////////////////////////////////////
