@@ -56,7 +56,8 @@ class AdminBookInfoProcessing {
 
 		$data = TableMng::query(sprintf(
 			'SELECT u.*,
-			(SELECT CONCAT(g.gradeValue, g.label) FROM jointUsersInGrade uig
+			(SELECT CONCAT(g.gradeValue, g.label) AS class
+				FROM jointUsersInGrade uig
 				LEFT JOIN grade g ON uig.gradeId = g.ID
 				LEFT JOIN jointGradeInSchoolYear gisy ON gisy.gradeId = g.ID
 				LEFT JOIN schoolYear sy ON gisy.schoolyearId = sy.ID

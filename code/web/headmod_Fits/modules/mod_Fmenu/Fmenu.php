@@ -36,7 +36,7 @@ class Fmenu extends Module {
 		try {
 			$userDetails = TableMng::query(sprintf(
 				'SELECT u.*,
-				(SELECT CONCAT(g.gradeValue, g.label)
+				(SELECT CONCAT(g.gradeValue, g.label) AS class
 					FROM jointUsersInGrade uig
 					LEFT JOIN grade g ON uig.gradeId = g.ID
 					LEFT JOIN jointGradeInSchoolYear gisy
