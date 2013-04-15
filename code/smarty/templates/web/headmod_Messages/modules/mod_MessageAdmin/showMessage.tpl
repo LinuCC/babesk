@@ -1,6 +1,7 @@
 {include file='web/header.tpl' title='Nachrichten-Admin'}
 
 {literal}
+<script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
 <style type="text/css">
 
 .barcodeInput {
@@ -13,14 +14,21 @@
 	Nachrichten-Administration
 </h2>
 
+<div class="popup messageText">
+	<small style="float:right">ESC zum schließen</small>
+	<textarea class="ckeditor" id="messagetext">{$messageData.text}</textarea>
+</div>
+
 <table class="dataTable">
 	<tr>
 		<th>Titel</th>
 		<td>{$messageData.title}</td>
 	</tr>
 	<tr>
-		<th>HTML-Text</th>
-		<td>{$messageData.text}</td>
+		<th>Text</th>
+		<td>
+			<button class="showMessageText">Text anzeigen</button>
+		</td>
 	</tr>
 	<tr>
 		<th>Gültig ab</th>
@@ -61,7 +69,7 @@
 			{if $receiver->returnedMessage == "noReturn"}
 				<p>keine Rückgabe</p>
 			{elseif $receiver->returnedMessage == "shouldReturn"}
-				<p>Rückgabe ausstehend</p>
+				<p><b>Rückgabe ausstehend</b></p>
 			{elseif $receiver->returnedMessage == "hasReturned"}
 				<p>bereits zurückgegeben</p>
 			{/if}
@@ -195,6 +203,46 @@ $('.toReturned').on('click', function(event) {
 	event.preventDefault();
 	sendUserReturnedButton($(this).attr('id'));
 });
+
+
+$(document).ready(function() {
+
+	/*Set up the use of nice-looking fade-functions for the popup*/
+	$('.popup.messageText').show();
+	$('.popup.messageText').fadeOut(0);
+});
+
+CKEDITOR.on('instanceReady', function(event) {
+	CKEDITOR.instances.messagetext.setReadOnly(true);
+
+});
+
+CKEDITOR.on('instanceCreated', function(e) {
+		e.editor.on('contentDom', function() {
+			e.editor.document.on('keyup', function(event) {
+				if(event.data.getKey() == 27) {
+					$('.popup.messageText').fadeOut(400);
+					$('.showMessageText').show();
+				}
+			}
+		);
+	});
+});
+
+/*
+ * Popup
+ */
+$('.showMessageText').on('click', function(event) {
+	$(this).hide();
+	$('.popup.messageText').fadeIn(400);
+});
+
+$(document).on('keyup', function(event) {
+	if(event.keyCode == 27 && $('.popup.messageText').css('display') == 'block') {
+		$('.popup.messageText').fadeOut(400);
+		$('.showMessageText').show();
+	}
+})
 
 </script>
 {/literal}
