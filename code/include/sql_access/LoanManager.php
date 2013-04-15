@@ -156,7 +156,7 @@ class LoanManager extends TableManager{
 		return $uid;
 		}
 
-	public function fetchUserDetails($uid) {
+	public function fetchUserDetails($userId) {
 
 		$userDetails = TableMng::query(sprintf(
 			'SELECT u.*,
