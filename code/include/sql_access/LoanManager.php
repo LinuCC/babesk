@@ -56,7 +56,6 @@ class LoanManager extends TableManager{
 		$reli = explode('|', $reli_str);
 		$course = explode('|', $course_str);
 		$details = $this->fetchUserDetails($uid);
-		// $details = $userManager->getUserDetails($uid);
 
 		$user_lang = explode('|', $details['foreign_language']);
 		$lang = array_diff($lang, $user_lang);
@@ -157,7 +156,7 @@ class LoanManager extends TableManager{
 		return $uid;
 		}
 
-	public function fetchUserDetails() {
+	public function fetchUserDetails($uid) {
 
 		$userDetails = TableMng::query(sprintf(
 			'SELECT u.*,
