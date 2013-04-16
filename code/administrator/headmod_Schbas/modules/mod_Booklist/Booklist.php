@@ -27,15 +27,16 @@ class Booklist extends Module {
 
 		$action_arr = array('show_booklist' => 1,
 							'add_book' => 4);
-
+		
+		if ('POST' == $_SERVER['REQUEST_METHOD']){
 		if (isset($_GET['action'])) {
 			$action = $_GET['action'];
 			switch ($action) {
 				case 1: //show booklist
 					if (isset($_POST['filter'])){
-						$BookProcessing->ShowBooklist($_POST['filter']);
+						$BookProcessing->ShowBooklist("filter", $_POST['filter']);
 					}else{
-						$BookProcessing->ShowBooklist("name");
+						$BookProcessing->ShowBooklist("filter","subject");
 					}
 					break;
 				case 2: //edit a book
@@ -55,7 +56,11 @@ class Booklist extends Module {
 					} else if (isset($_POST['not_delete'])) {
 						$BookInterface->ShowSelectionFunctionality($action_arr);
 					} else {
-						$BookProcessing->DeleteConfirmation($_GET['ID']);
+						if (!$BookProcessing->isInvForBook($_GET['ID'])){
+							$BookProcessing->DeleteConfirmation($_GET['ID']);
+						}else{
+							$BookInterface->dieError("Es ist noch Inventar zu diesem Buch vorhanden!\nBitte l&ouml;schen Sie dies zuerst!");
+						}
 					}
 					break;
 				case 4: //add an entry
@@ -65,11 +70,24 @@ class Booklist extends Module {
 						$BookProcessing->AddEntryFin($_POST['subject'], $_POST['class'],$_POST['title'],$_POST['author'],$_POST['publisher'],$_POST['isbn'],$_POST['price'],$_POST['bundle']);
 					}
 					break;
+				case 5: //filter
+					$BookProcessing->ShowBooklist("search", $_POST['search']);
+					break;
 				break;
-
-
 			}
-		} else {
+		}
+		}elseif  (('GET' == $_SERVER['REQUEST_METHOD'])&&isset($_GET['action'])) {
+			$action = $_GET['action'];
+			$mode = $_GET['mode'];
+			switch ($action) {
+				case 1: //show the users
+					if (isset($_GET['filter'])) {
+						$BookProcessing->ShowBooklist($mode,$_GET['filter']);
+					} else {
+						$BookProcessing->ShowBooklist("name");
+					}
+			}
+		}else {
 			$BookInterface->ShowSelectionFunctionality($action_arr);
 		}
 	}

@@ -20,14 +20,20 @@ class BookManager extends TableManager{
 	 */
 	function getBooklistSorted($pagePointer, $orderBy) {
 		require_once PATH_ACCESS . '/DBConnect.php';
+		require_once PATH_ACCESS . '/InventoryManager.php';
+		$inventoryManager = new InventoryManager();
 		$res_array = array();
-		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY "%s" LIMIT %s,10', $this->tablename,$orderBy,$pagePointer));
+		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY `%s` LIMIT %s,10', $this->tablename,$orderBy,$pagePointer));
 		$result = $this->db->query($query);
 		if (!$result) {
 			throw DB_QUERY_ERROR.$this->db->error;
 		}
 		while($buffer = $result->fetch_assoc())
 			$res_array[] = $buffer;
+		foreach ($res_array as &$book){
+			$book['lastNumber'] = $inventoryManager->getHighestNumberByBookId($book['id']);
+		}
+		var_dump($res_array);
 		return $res_array;
 	}
 	
@@ -95,10 +101,15 @@ class BookManager extends TableManager{
 		$class = preg_replace('/[^0-9]/i', '', $class); // keep numbers only
 		$classAssign = array(
 				'5'=>'05,56',			// hier mit assoziativem array
-				'6'=>'56,06,69,67',				// arbeiten, in der wertzuw.
-				'7'=>'78,07,69,79,67',				// alle kombinationen auflisten
-				'8'=>'78,08,69,79,89',				// sql-abfrage: 
-				'9'=>'90,91,09,92,69,79,89',				// SELECT * FROM `schbas_books` WHERE `class` IN (werte-array pro klasse)
+				'05'=>'05,56',			// arbeiten, in der wertzuw.
+				'6'=>'56,06,69,67',		// alle kombinationen auflisten
+				'06'=>'56,06,69,67',	// sql-abfrage: 
+				'7'=>'78,07,69,79,67',	// SELECT * FROM `schbas_books` WHERE `class` IN (werte-array pro klasse)
+				'07'=>'78,07,69,79,67',			
+				'8'=>'78,08,69,79,89',	
+				'08'=>'78,08,69,79,89',			
+				'9'=>'90,91,09,92,69,79,89',	
+				'09'=>'90,91,09,92,69,79,89',			
 				'10'=>'90,91,10,92',				
 				'11'=>'12,92,13',
 				'12'=>'12,92,13');
