@@ -156,11 +156,6 @@
 				<name>BookInfo</name>
 				<active>true</active>
 			</module>
-			<module>
-				<ger_name>Suche</ger_name>
-				<name>Search</name>
-				<active>true</active>
-			</module>
 		</head_module>
 		<head_module>
 			<ger_name>KurswahlSystem</ger_name>

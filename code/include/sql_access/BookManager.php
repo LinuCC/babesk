@@ -33,7 +33,7 @@ class BookManager extends TableManager{
 		foreach ($res_array as &$book){
 			$book['lastNumber'] = $inventoryManager->getHighestNumberByBookId($book['id']);
 		}
-		var_dump($res_array);
+		
 		return $res_array;
 	}
 	
