@@ -1,30 +1,30 @@
 /* COMMON STYLE
 --------------------------------------------------------- */
-        
+
 body, h1, h2, h3, h4, h5, h6, div, p, table, td, ul, ol, li, dd, dt, dl, blockquote, address, hr, pre {
-  margin: 0;     /* no borders */
-  padding: 0;
+	margin: 0;     /* no borders */
+	padding: 0;
 }
 
- 
+
 /* -- Normal link -- */
 
 a {
-  color: #006699;
-  text-decoration: none;
+	color: #006699;
+	text-decoration: none;
 }
 
 a:hover, a:active, a:focus {
-  text-decoration: underline;
+	text-decoration: underline;
 }
 
 
 
 p, pre, blockquote, ul, ol, h1, h2, h3, h4, h5, h6 {
-  font-family: "Lucida Sans",
-               "Lucida Grande",
-               Lucida,
-               sans-serif;
+	font-family: "Lucida Sans",
+							 "Lucida Grande",
+							 Lucida,
+							 sans-serif;
 }
 
 .moduleHeader {
@@ -34,20 +34,32 @@ p, pre, blockquote, ul, ol, h1, h2, h3, h4, h5, h6 {
 }
 
 input, select, textarea, .inputbox {
-  padding: 3px 5px;
-  font-family: Tahoma, 
-               Arial,
-               Helvetica,
-               sans-serif;
-  font-size: 100%;
+	padding: 3px 5px;
+	font-family: Tahoma,
+							 Arial,
+							 Helvetica,
+							 sans-serif;
+	font-size: 100%;
 }
 
 fieldset {
-    border: 0px;
+		border: 0px;
 }
 
+fieldset.blockyField{
+	border: 1px solid;
+}
+
+.dataTable {
+	width:100%;
+}
 table.dataTable {
-	line-height: 110%;
+	/*line-height: 1.5em;*/
+	text-align: center;
+}
+
+table.dataTable tr *{
+	padding: 5px;
 }
 
 table.dataTable tr th {
@@ -68,48 +80,48 @@ p.error {
 -------------------------------------------- */
 
 body {
-    color: #333333;
+		color: #333333;
 }
 
 
 
 #login {
-  width: 500px;
-  margin: 0 auto;
-  line-height: 200%;
-  padding: 25px;
-  border: 2px solid #006699;
+	width: 500px;
+	margin: 0 auto;
+	line-height: 200%;
+	padding: 25px;
+	border: 2px solid #006699;
 
-  -webkit-border-radius: 20px;
-  -khtml-border-radius: 20px;
-  -moz-border-radius: 20px;
-  border-radius: 20px;
+	-webkit-border-radius: 20px;
+	-khtml-border-radius: 20px;
+	-moz-border-radius: 20px;
+	border-radius: 20px;
 }
 
 #login_header {
-    text-align: center;
-    font-size: 130%;
-    font-weight: bold;
-    padding-top: 10px;
-    margin-bottom: 75px;
+		text-align: center;
+		font-size: 130%;
+		font-weight: bold;
+		padding-top: 10px;
+		margin-bottom: 75px;
 }
 
 #header {
-    background-color: #e6e6e6;
-    border: 1px solid #333333;
-    color: #2e6132;
-    margin-bottom: 30px;
+		background-color: #e6e6e6;
+		border: 1px solid #333333;
+		color: #2e6132;
+		margin-bottom: 30px;
 
-    -webkit-border-radius: 20px;
-    -khtml-border-radius: 20px;
-    -moz-border-radius: 20px;
-    border-radius: 20px;
+		-webkit-border-radius: 20px;
+		-khtml-border-radius: 20px;
+		-moz-border-radius: 20px;
+		border-radius: 20px;
 }
 
 #top {
-    width: 750px;
-    margin: 10px auto 0;
-    text-align: center;
+		width: 750px;
+		margin: 10px auto 0;
+		text-align: center;
 }
 
 div.filterBar {
@@ -125,50 +137,50 @@ div.filterBar {
 }
 
 h3.filterBar {
-	
+
 	border: 1px solid #444444;
 }
 
 #filterBarSubmitButton {
-	
+
 	padding: 15px;
 	float: right;
 }
 
 #main {
-  width: 700px;
-  margin: 0 auto;
-  line-height: 200%;
-  padding: 25px;
-  border: 2px solid #006699;
+	width: 700px;
+	margin: 0 auto;
+	line-height: 200%;
+	padding: 25px;
+	border: 2px solid #006699;
 
-  -webkit-border-radius: 20px;
-  -khtml-border-radius: 20px;
-  -moz-border-radius: 20px;
-  border-radius: 20px;
+	-webkit-border-radius: 20px;
+	-khtml-border-radius: 20px;
+	-moz-border-radius: 20px;
+	border-radius: 20px;
 }
 
 #footer {
-    margin-top: 30px;
-    font-size: 80%;
-    text-align: center;
+		margin-top: 30px;
+		font-size: 80%;
+		text-align: center;
 }
 
 
 /* General
 -------------------------------------------- */
 #menu_header {
-    text-align: center;
-    text-decoration: underline;
-    margin-bottom: 50px;
+		text-align: center;
+		text-decoration: underline;
+		margin-bottom: 50px;
 }
 .menu_item {
-    width: 230px;
-    height: 100px;
-    text-align: center;
-    float: left;
+		width: 230px;
+		height: 100px;
+		text-align: center;
+		float: left;
 }
 #close {
-    clear: both;
+		clear: both;
 }
 

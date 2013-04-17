@@ -32,7 +32,7 @@ class SMTPMailer extends PHPMailer {
 	}
 
 	/**
-	 * This function loads information for the Email-SMTP-Protocoll from the Database
+	 * This function loads information for the Email-SMTP-Protocol from the Database
 	 * Looks for the smtp-Host, the Username and the Password for the Smtp-Server
 	 * as well as the sender and the sendername.
 	 */
@@ -72,7 +72,7 @@ class SMTPMailer extends PHPMailer {
 	/**
 	 * Loads the xml in the given Path into this class
 	 */
-	public function emailFromXmlInit ($path) {
+	private function emailFromXmlInit ($path) {
 		$this->_xmlEmail = simplexml_load_file($path);
 		if (!$this->_xmlEmail) {
 			$this->_interface->dieError ("Could not load the Xml of the Email!"

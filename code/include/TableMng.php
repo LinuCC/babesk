@@ -30,7 +30,7 @@ class TableMng {
 	/////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Executes a query and checks for things like SQL-Injection
+	 * Executes a query
 	 * @param $query the SQL-Query to execute
 	 * @param $hasData false if the query returns no data, true if the query returns data and this function should also return it. Standard is false
 	 * @param $isMultiple true if the query does contain multiple SQL-Querys, else false. Standard is false
@@ -40,7 +40,6 @@ class TableMng {
 		if (!isset (self::$db)) {
 			throw new Exception ('TableMng hasnt been initialized yet!');
 		}
-		$query = sql_prev_inj ($query);
 		if (!$isMultiple) {
 			$result = self::queryExecute ($query, $isMultiple);
 			if ($hasData) {
@@ -105,7 +104,7 @@ class TableMng {
 			} while (self::$db->next_result ());
 		}
 		else {
-			throw new MySQlException (sprintf('Error executing a MySQL-Command: %s, because: %s', $query, self::$db->error));
+			throw new MySQLException (sprintf('Error executing a MySQL-Command: %s, because: %s', $query, self::$db->error));
 		}
 		return $rows;
 	}
@@ -114,7 +113,7 @@ class TableMng {
 	 * fetches the Data of the Result of a MySQL-Query
 	 */
 	protected static function getResults ($result,
-								$exceptionMessage = 'MySQL returned no data!') {
+		$exceptionMessage = 'MySQL returned no data!') {
 		while($buffer = $result->fetch_assoc()) {
 			$content [] = $buffer;
 		}

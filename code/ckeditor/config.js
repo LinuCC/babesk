@@ -9,14 +9,14 @@ CKEDITOR.editorConfig = function( config )
 	// Define changes to default configuration here. For example:
 	// Defines a toolbar with only one strip containing the "Source" button, a
 	// separator and the "Bold" and "Italic" buttons.
-	config.extraPlugins = 'contractvars'; 
+	config.extraPlugins = 'messagevars';
 	config.toolbar_BaBeSK =
 	[
-	    [ 'Bold', 'Italic','-','Cut','Copy','Paste','PasteFromWord','-','HorizontalRule','-','contractforename', 'contractname' ]
+		[ 'Bold', 'Italic','-','Cut','Copy','Paste','PasteFromWord','-','HorizontalRule','-','messageForename', 'messageName']
 	];
 	config.toolbar = 'BaBeSK';
 	 config.language = 'de';
 	 config.uiColor = '#AADC6E';
-	 
+
 };
 

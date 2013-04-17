@@ -10,7 +10,7 @@ class Web {
 	private $_moduleManager;
 	private $_loggedIn;
 	private $_interface;
-	private $__userManager;
+	private $_userManager;
 
 	///////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -75,23 +75,11 @@ class Web {
 		}
 
 
-
 		///@fix: does this have a purpose?
 		$this->_smarty->assign('status', ''); //???
 
-		$userData = $this->_userManager->getUserdata($_SESSION['uid']);
-		$_SESSION['last_login'] = formatDateTime($userData['last_login']);
-		$_SESSION['username'] = $userData['forename'] . ' ' . $userData['name'];
-		$_SESSION['login_tries'] = $userData['login_tries'];
-		$_SESSION['IP'] = $_SERVER['REMOTE_ADDR'];
-		$_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
-
-		// check for new mail
-		$mailcount = TableMng::query('SELECT COUNT(id) FROM contracts WHERE class LIKE "%'.$userData['class'].'%"  AND SYSDATE() BETWEEN valid_from AND valid_to',true);
-
-		if ($mailcount[0]['COUNT(id)']>0) {
-			$this->_smarty->assign('newmail',true);
-		}
+		$this->addSessionUserdata();
+		$this->checkForMail();
 
 		//module-specific
 		if (isset($userData['credit'])) {
@@ -114,9 +102,10 @@ class Web {
 		$head_mod_arr = array();
 
 		foreach ($head_modules as $head_module) {
-			$head_mod_arr[$head_module->getName()] = array( 'name'			 => $head_module->getName(),
-															'display_name'					 => $head_module->getDisplayName(),
-															'headmod_menu' => $head_module->getHeadmodMenu());
+			$head_mod_arr[$head_module->getName()] = array(
+				'name' => $head_module->getName(),
+				'display_name' => $head_module->getDisplayName(),
+				'headmod_menu' => $head_module->getHeadmodMenu());
 		}
 
 		$this->_smarty->assign('head_modules', $head_mod_arr);
@@ -158,8 +147,10 @@ class Web {
 		$this->_smarty = $smarty;
 		$this->_smarty->assign('smarty_path', REL_PATH_SMARTY);
 		$version=@file_get_contents("../version.txt");
-if ($version===FALSE) $version = "";
-$smarty->assign('babesk_version', $version);
+		if ($version===FALSE) {
+			$version = "";
+		}
+		$smarty->assign('babesk_version', $version);
 		$this->_smarty->assign('error', '');
 	}
 
@@ -194,6 +185,42 @@ $smarty->assign('babesk_version', $version);
 			$red = array ('time' => $redirectDelay, 'target' => $redirectTarget
 				);
 			$this->_smarty->assign ('redirection', $red);
+		}
+	}
+
+	/**
+	 * Adds Session-vars containing data about the connected client
+	 */
+	private function addSessionUserdata() {
+		$userData = $this->_userManager->getUserdata($_SESSION['uid']);
+		$_SESSION['username'] = $userData['forename'] . ' ' . $userData['name'];
+		$_SESSION['last_login'] = formatDateTime($userData['last_login']);
+		$_SESSION['login_tries'] = $userData['login_tries'];
+		$_SESSION['IP'] = $_SERVER['REMOTE_ADDR'];
+		$_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
+	}
+
+	/**
+	 * check for new mail
+	 */
+	private function checkForMail() {
+		try {
+			$query = sprintf("SELECT COUNT(*) AS count
+				FROM MessageReceivers mr
+				LEFT JOIN Message m ON mr.messageId = m.ID
+				WHERE %s = userId
+					AND SYSDATE() BETWEEN m.validFrom AND m.validTo
+					AND mr.read = 0",
+				$_SESSION['uid']);
+			$mailcount = TableMng::query($query, true);
+		} catch (MySQLVoidDataException $e) {
+			return; //no new mails found
+		} catch (Exception $e) {
+			echo 'Konnte die Mails nicht abrufen!' . $e->getMessage();
+			return;
+		}
+		if ($mailcount[0]['count'] > 0) {
+			$this->_smarty->assign('newmail', true);
 		}
 	}
 }

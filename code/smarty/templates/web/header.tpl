@@ -10,8 +10,11 @@
 		url=index.php?section={$redirection.target}">
 	{/if}
 
-	
+
 	{literal}
+	<script type="text/javascript"
+		src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+</script>
 <script type="text/javascript">
 var oldDiv = '';
 
@@ -60,7 +63,7 @@ function switchInfo(divName) {
 
     </div>
     <div id="top_right">
-      
+
        {if $newmail}<a href="index.php?section=Messages"><img src="../smarty/templates/web/images/email.png"></a>{/if}<br />
     <a href="index.php?section=Babesk|Help">Hilfe</a><br />
        <a href="index.php?action=logout">Ausloggen</a>
