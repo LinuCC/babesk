@@ -27,7 +27,6 @@ class Zeugnis extends Module {
 		require_once PATH_ACCESS . '/FitsManager.php';
 		require_once PATH_ACCESS . '/UserManager.php';
 
-		$gsm = new GlobalSettingsManager();
 		$fm = new FitsManager();
 		$um = new UserManager();
 

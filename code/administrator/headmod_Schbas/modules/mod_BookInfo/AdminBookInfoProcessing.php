@@ -17,7 +17,7 @@ class AdminBookInfoProcessing {
 		require_once PATH_ACCESS . '/LoanManager.php';
 		require_once PATH_ACCESS . '/InventoryManager.php';
 		require_once PATH_ACCESS . '/UserManager.php';
-		
+
 		require_once 'AdminBookInfoInterface.php';
 
 		$this->BookManager = new BookManager();
@@ -33,7 +33,7 @@ class AdminBookInfoProcessing {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	
+
 	/**
 	 * Looks the user for the given BookID up, checks if the Book is locked and returns the UserID
 	 * @param string $Book_id The ID of the Book
@@ -41,21 +41,32 @@ class AdminBookInfoProcessing {
 	 */
 	public function GetUser ($barcode) {
 		try {
-		$invID = $this->InventoryManager->getInvIDByBarcode($barcode);
-		$uid = $this->LoanManager->getUserIDByInvID($invID);
-		return $uid;
+			$invID = $this->InventoryManager->getInvIDByBarcode($barcode);
+			$uid = $this->LoanManager->getUserIDByInvID($invID);
+			return $uid;
 		}catch (Exception $e){
 			$this->BookInfoInterface->dieError(sprintf($this->msg['err_get_user_by_Book']));
 		}
 	}
-	
+
 	/**
 	 * Returns some generic user data for identifying a Book
 	 */
 	public function GetUserData($uid) {
-		return $this->userManager->getUserdata($uid);
+
+		$data = TableMng::query(sprintf(
+			'SELECT u.*,
+			(SELECT CONCAT(g.gradeValue, g.label) AS class
+				FROM jointUsersInGrade uig
+				LEFT JOIN grade g ON uig.gradeId = g.ID
+				LEFT JOIN jointGradeInSchoolYear gisy ON gisy.gradeId = g.ID
+				LEFT JOIN schoolYear sy ON gisy.schoolyearId = sy.ID
+				WHERE uig.userId = u.ID) AS class
+			FROM users u WHERE ID = %s', $uid), true);
+
+		return $data[0];
 	}
-	
+
 	/**
 	 * Returns some generic book data for identifying a Book
 	 */

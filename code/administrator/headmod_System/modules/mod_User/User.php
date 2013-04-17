@@ -199,7 +199,7 @@ class User extends Module {
 			$this->userInterface->showRemoveSpecialCharsFromUsername ($rows);
 		}
 	}
-	
+
 	protected function deletePdf () {
 		if (isset ($_GET['ID'])) {
 			try {
@@ -207,17 +207,35 @@ class User extends Module {
 			$this->userInterface->showDeletePdfSuccess ();
 			} catch (Exception $e) {
 			$this->userInterface->dieError ('Fehler beim L&ouml;schen des PDFs.');
-		
+
 		}
 		}
 	}
+
+	/**
+	 * Fetches all of the users from the database and returns them
+	 *
+	 * @return array(array(...)) An Array of Users, each one represented by
+	 * another array
+	 */
 	protected function usersGetAll () {
+
 		try {
-			$users = $this->userManager->getAllUsers ();
+			$data = TableMng::query(
+				'SELECT u.*,
+				(SELECT CONCAT(g.gradeValue, g.label) AS class
+					FROM jointUsersInGrade uig
+					LEFT JOIN grade g ON uig.gradeId = g.ID
+					LEFT JOIN jointGradeInSchoolYear gisy ON gisy.gradeId = g.ID
+					LEFT JOIN schoolYear sy ON gisy.schoolyearId = sy.ID
+					WHERE uig.userId = u.ID) AS class
+				FROM users u', true);
+
 		} catch (Exception $e) {
 			$this->userInterface->dieError ('Konnte die Benutzer nicht abrufen');
 		}
-		return $users;
+
+		return $data;
 	}
 
 	protected function specialCharsRemove ($str) {
