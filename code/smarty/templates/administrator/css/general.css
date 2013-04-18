@@ -34,12 +34,12 @@ p, pre, blockquote, ul, ol, h1, h2, h3, h4, h5, h6 {
 }
 
 input, select, textarea, .inputbox {
-	padding: 3px 5px;
-	font-family: Tahoma,
-							 Arial,
-							 Helvetica,
-							 sans-serif;
-	font-size: 100%;
+  padding: 3px 5px;
+  font-family: Tahoma,
+               Arial,
+               Helvetica,
+               sans-serif;
+  font-size: 100%;
 }
 
 fieldset {
@@ -80,7 +80,7 @@ p.error {
 -------------------------------------------- */
 
 body {
-		color: #333333;
+    color: #ffffff;
 }
 
 
