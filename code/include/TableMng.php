@@ -25,6 +25,15 @@ class TableMng {
 		return self::$db;
 	}
 
+	/**
+	 * Passes th param as reference and mask it with mysqli::real_escape_string
+	 * @param  string $param The string to mask
+	 * @return void The parameter gets changed as pass-by-reference
+	 */
+	public static function sqlSave(&$param) {
+		$param = self::$db->real_escape_string($param);
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//Methods
 	/////////////////////////////////////////////////////////////////////

@@ -142,21 +142,20 @@ class Users extends Module {
 	 */
 	private function addUser () {
 
+
 		if (isset($_POST['username'], $_POST['name'], $_POST['forename'], $_POST['telephone'])) {
+
 			$this->checkAddUserInput(); //check User Input
 			$this->checkPasswordRepetition(); //is repeated Password the same?
+
 			$birthday = $this->handleBirthday($_POST['Date_Day'],
 				$_POST['Date_Month'], $_POST['Date_Year']);
+
 			$this->addUserToDatabase($_POST['forename'], $_POST['name'],
-				$_POST['username'], $_POST['password'], $_POST['email'],
+				$_POST['username'], md5($_POST['password']), $_POST['email'],
 				$_POST['telephone'], $birthday, $_POST['schoolyear'],
 				$_POST['grade']);
-			// fetches the ID of the last inserted object from the Db
-			/// @todo: There has to be a better way to get the other elements
-			/// inserted
-			// $userID = $this->_usersManager->getLastInsertedID();
-			// $this->addJointUsersInSchoolYear($userID, $_POST['schoolyear']);
-			// $this->addJointUsersInGrade($userID, $_POST['grade']);
+
 			$this->_interface->dieMsg(sprintf($this->_languageManager->getText('finishedAddUser'), $_POST['forename'], $_POST['name']));
 		}
 		else {
@@ -167,15 +166,16 @@ class Users extends Module {
 	private function addUserToDatabase($forename, $name,$username,
 		$hashedPassword, $email,$telephone, $birthday, $schoolyearId, $gradeId) {
 		$db = TableMng::getDb();
-		$db->real_escape_string($forename);
-		$db->real_escape_string($name);
-		$db->real_escape_string($username);
-		$db->real_escape_string($hashedPassword);
-		$db->real_escape_string($email);
-		$db->real_escape_string($telephone);
-		$db->real_escape_string($birthday);
-		$db->real_escape_string($schoolyearId);
-		$db->real_escape_string($gradeId);
+		TableMng::sqlSave($forename);
+		TableMng::sqlSave($name);
+		TableMng::sqlSave($username);
+		TableMng::sqlSave($hashedPassword);
+		TableMng::sqlSave($email);
+		TableMng::sqlSave($telephone);
+		TableMng::sqlSave($birthday);
+		TableMng::sqlSave($schoolyearId);
+		TableMng::sqlSave($gradeId);
+
 		$query = sprintf(
 			"INSERT INTO users (forename, name, username, password,
 				email, telephone, birthday) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s');
@@ -186,6 +186,7 @@ class Users extends Module {
 				VALUES (@last_user_id, '%s');",
 				$forename, $name,$username, $hashedPassword, $email,
 				$telephone, $birthday, $schoolyearId, $gradeId);
+
 		$db->autocommit(false);//mySQL-transaction
 		if($db->multi_query($query)) {
 			do {
@@ -1356,11 +1357,20 @@ class Users extends Module {
 		try {
 			inputcheck($_POST['forename'], 'name', $this->_languageManager->getText('formForename'));
 			inputcheck($_POST['name'], 'name', $this->_languageManager->getText('formName'));
-			inputcheck($_POST['username'], 'name', $this->_languageManager->getText('formUsername'));
-			inputcheck($_POST['password'], 'password', $this->_languageManager->getText('formPassword'));
-			inputcheck($_POST['passwordRepeat'], 'password', $this->_languageManager->getText('formPasswordRepeat'));
-			inputcheck($_POST['email'], 'email', $this->_languageManager->getText('formEmail'));
-			inputcheck($_POST['telephone'], 'number', $this->_languageManager->getText('formTelephone'));
+			if($_POST['username'] != '') {
+				inputcheck($_POST['username'], 'name', $this->_languageManager->getText('formUsername'));
+			}
+			if($_POST['password'] != '') {
+				inputcheck($_POST['password'], 'password', $this->_languageManager->getText('formPassword'));
+				inputcheck($_POST['passwordRepeat'], 'password', $this->_languageManager->getText('formPasswordRepeat'));
+			}
+			if($_POST['email'] != '') {
+				inputcheck($_POST['email'], 'email', $this->_languageManager->getText('formEmail'));
+			}
+			if($_POST['telephone'] != '') {
+				inputcheck($_POST['telephone'], 'number',
+					$this->_languageManager->getText('formTelephone'));
+			}
 		} catch (WrongInputException $e) {
 			$this->_interface->dieError(sprintf($this->_languageManager->getText('formWrongInput'), $e->getFieldName()));
 		}
