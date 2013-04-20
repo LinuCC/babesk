@@ -158,12 +158,18 @@ class Web {
 	 * Checks if the User has a preset Password and has not changed it yet
 	 */
 	private function checkFirstPassword () {
-		$changePasswordOnFirstLoginEnabled = $this->_gsManager->valueGet (GlobalSettings::FIRST_LOGIN_CHANGE_PASSWORD);
-		if ($changePasswordOnFirstLoginEnabled) {
+
+		$changePasswordOnFirstLoginEnabled = TableMng::query('SELECT value
+			FROM global_settings WHERE `name` = "firstLoginChangePassword"',
+			true);
+
+		if ($changePasswordOnFirstLoginEnabled[0]['value'] == '0') {
 			$userData = $this->_userManager->getUserdata ($_SESSION ['uid']);
 			$firstPassword = $userData ['first_passwd'];
-			if ($firstPassword == true) {
-				$this->_moduleManager->execute ('Settings|ChangePresetPassword');
+
+			if ($firstPassword != '0') {
+				$this->_moduleManager->execute
+					('Settings|ChangePresetPassword');
 				die ();
 			}
 		}
@@ -204,21 +210,23 @@ class Web {
 	 * check for new mail
 	 */
 	private function checkForMail() {
+
 		try {
-			$query = sprintf("SELECT COUNT(*) AS count
+			$mailcount = TableMng::query(sprintf("SELECT COUNT(*) AS count
 				FROM MessageReceivers mr
 				LEFT JOIN Message m ON mr.messageId = m.ID
 				WHERE %s = userId
 					AND SYSDATE() BETWEEN m.validFrom AND m.validTo
 					AND mr.read = 0",
-				$_SESSION['uid']);
-			$mailcount = TableMng::query($query, true);
+				$_SESSION['uid']), true);
+
 		} catch (MySQLVoidDataException $e) {
 			return; //no new mails found
+
 		} catch (Exception $e) {
-			echo 'Konnte die Mails nicht abrufen!' . $e->getMessage();
-			return;
+			return; //No Emails found, maybe the tables do not exist
 		}
+
 		if ($mailcount[0]['count'] > 0) {
 			$this->_smarty->assign('newmail', true);
 		}
