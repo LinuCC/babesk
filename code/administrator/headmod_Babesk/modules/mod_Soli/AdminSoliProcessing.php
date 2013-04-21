@@ -132,17 +132,17 @@ class AdminSoliProcessing {
 	}
 
 	/**
-	 * 
+	 *
 	 * Enter description here ...
 	 */
 	function ShowUsers() {
 
 		require_once PATH_ACCESS . '/UserManager.php';
 		require_once PATH_ACCESS.'/GroupManager.php';
-		
+
 		$groupManager = new GroupManager();
 		$userManager = new UserManager();
-		
+
 		try {
 			$soli_users = $userManager->getAllSoli();
 		} catch (MySQLVoidDataException $e) {
@@ -150,16 +150,16 @@ class AdminSoliProcessing {
 		} catch (Exception $e) {
 			$this->soliInterface->dieError($this->msg['ERR_SQL'] . ':' . $e->getMessage());
 		}
-		
+
 		foreach ($soli_users as &$soli_user) {
 			$soli_user ['groupname'] = $groupManager->getGroupName($soli_user['GID']);
 		}
-		
+
 		$this->soliInterface->ShowSoliUser($soli_users);
 	}
 
 	/**
-	 * 
+	 *
 	 * Enter description here ...
 	 */
 	function ShowAllSoliOrders() {
@@ -238,9 +238,9 @@ class AdminSoliProcessing {
 			for ($i = 0; $i < 5; $i++) {
 				$buffer = array();
 				try {
-					$buffer = $this->soliOrderManager->getOrdersByUserandMealdate($uid,
-																				  date('Y-m-d',
-																					   $monday + ($i * $secs_per_day)));
+					$buffer = $this->soliOrderManager->
+						getOrdersByUserandMealdate($uid, date('Y-m-d',
+							$monday + ($i * $secs_per_day)));
 				} catch (MySQLVoidDataException $e) {
 				//	$this->soliInterface->showMsg($this->msg['ERR_ORDERS_NOT_FOUND']);
 				}
@@ -256,7 +256,7 @@ class AdminSoliProcessing {
 				$sum_pricediff += $order['mealprice'] - $order['soliprice'];
 			}
 
-			
+
 			$this->soliInterface->ShowSpecOrders($orders, $weeknum, $username, $sum_pricediff);
 			}
 		} else {
@@ -279,7 +279,6 @@ class AdminSoliProcessing {
 
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 
-		global $smarty;
 		$gbManager = new GlobalSettingsManager();
 
 		if ($soli_price !== NULL) {
@@ -315,9 +314,9 @@ class AdminSoliProcessing {
 	protected $soliCouponManager;
 
 	protected $soliOrderManager;
-	
+
 	/**
-	 * $msg contains messages shown to the User 
+	 * $msg contains messages shown to the User
 	 * @var array($string)
 	 */
 	protected $msg = array();
