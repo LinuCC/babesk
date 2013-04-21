@@ -87,6 +87,7 @@ class AdminBooklistProcessing {
 	function changeBook($id, $subject, $class, $title, $author, $publisher, $isbn, $price, $bundle) {
 		require_once PATH_ACCESS . '/BookManager.php';
 		$bookManager = new BookManager();
+		$price = str_replace (",", ".", $price );
 		try {
 			$bookManager->editBook($id, $subject, $class, $title, $author, $publisher, $isbn, $price, $bundle);
 		} catch (Exception $e) {
@@ -123,6 +124,7 @@ class AdminBooklistProcessing {
 	function AddEntryFin($subject, $class, $title, $author, $publisher, $isbn, $price, $bundle) {
 		require_once PATH_ACCESS . '/BookManager.php';
 		$bookManager = new BookManager();
+		$price = str_replace (",", ".", $price );
 		try {
 			$search = $bookManager->searchEntry('subject='.$subject.' AND class='.$class.' AND bundle='.$bundle);
 		}catch (Exception $e){
@@ -163,7 +165,7 @@ class AdminBooklistProcessing {
 	
 	
 		try {
-			$bookManager->delEntry($id);
+			$BookManager->delEntry($id);
 		} catch (Exception $e) {
 			$this->logs
 			->log('ADMIN', 'MODERATE',
