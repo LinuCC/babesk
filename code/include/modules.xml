@@ -187,6 +187,16 @@
 				<active>true</active>
 			</module>
 		</head_module>
+		<head_module>
+			<ger_name>Statistiken</ger_name>
+			<name>Statistics</name>
+			<active>true</active>
+			<module>
+				<ger_name>Kuwasys-Statistiken</ger_name>
+				<name>KuwasysStats</name>
+				<active>true</active>
+			</module>
+		</head_module>
 	</administrator>
 	<web>
 		<path>web/</path>
