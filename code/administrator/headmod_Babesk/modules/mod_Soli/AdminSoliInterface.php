@@ -66,6 +66,10 @@ class AdminSoliInterface extends AdminInterface {
 		$this->smarty->assign('old_price', $soli_price);
 		$this->smarty->display($this->tplFilePath.'show_settings.tpl');
 	}
+	
+	function AskCopyOldOrdersToSoli() {
+		$this->smarty->display($this->tplFilePath.'conf_copy_old_orders.tpl');
+	}
 }
 
 

@@ -1,6 +1,7 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once 'CopyOldOrdersToSoli.php';
 
 class Soli extends Module {
 
@@ -56,10 +57,21 @@ class Soli extends Module {
 						$soliProcessing->DeleteCoupon($_GET['ID'], false);
 					break;
 				case 6: //Change Soli-Settings
-					if (isset($_POST['soli_price']))
+					if (isset($_POST['user_id']))
 						$soliProcessing->ChangeSettings($_POST['soli_price']);
 					else
 						$soliProcessing->ChangeSettings(NULL);
+					break;
+				case 7: //copy old orders to soli
+					if (isset($_POST['copy'])) {
+						// $soliProcessing->CopyOldOrdersToSoli();
+						CopyOldOrdersToSoli::init($soliInterface);
+						CopyOldOrdersToSoli::execute();
+					}
+					else if (isset($_POST['dont_copy']))
+						$soliInterface->ShowInitialMenu();
+					else
+						$soliInterface->AskCopyOldOrdersToSoli();
 					break;
 			}
 
