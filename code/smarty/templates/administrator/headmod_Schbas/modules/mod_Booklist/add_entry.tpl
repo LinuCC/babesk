@@ -4,7 +4,7 @@
 		<legend>Buchdaten</legend>
 		<label>Fach: <input type="text" name="subject" maxlength="3" /></label> <br> <br> 
 		<label>Klasse: <input type="text" name="class" maxlength="2" /></label><br> <br> 
-		<label>Titel: <input type="text" name="title" maxlength="30" /></label><br> <br> 
+		<label>Titel: <input type="text" name="title" maxlength="50" /></label><br> <br> 
 		<label>Autor: <input type="text" name="author" maxlength="30" /></label><br> <br> 
 		<label>Verlag:<input type="text" name="publisher" maxlength="30" /></label><br> <br> 
 		<label>ISBN: <input type="text" name="isbn" maxlength="20" /></label><br> <br> 
