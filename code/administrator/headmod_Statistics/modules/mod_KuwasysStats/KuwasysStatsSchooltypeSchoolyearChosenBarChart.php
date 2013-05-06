@@ -140,7 +140,7 @@ class KuwasysStatsSchooltypeSchoolyearChosenBarChart
 		foreach($this->_data as $data) {
 			$schooltypes[$data['schooltypeToken']] = true;
 		}
-		ksort($schooltypes);
+		//dont sort, identifier is string => no need
 
 		return $schooltypes;
 	}

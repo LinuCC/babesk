@@ -29,8 +29,9 @@ class KuwasysStatsGradelevelsChosenBarChart extends StatisticsBarChart {
 
 	protected function dataFetch() {
 
+		TableMng::query('SET @activeSy := (SELECT ID FROM schoolYear WHERE active = "1");');
 		$this->_gradeData = TableMng::query(
-			'SET @activeSy := (SELECT ID FROM schoolYear WHERE active = "1");
+			'
 			SELECT COUNT(*) AS gradelevelCount, gradeValue AS gradelevel
 			FROM grade g
 				JOIN jointUsersInGrade uig ON g.ID = uig.GradeID
@@ -46,7 +47,7 @@ class KuwasysStatsGradelevelsChosenBarChart extends StatisticsBarChart {
 						WHERE name="active" OR name="waiting"
 					) status ON status.ID = uic.statusId
 				GROUP BY g.gradeValue
-			', true, true);
+			', true);
 	}
 
 	protected function dataProcess() {
