@@ -1,4 +1,4 @@
-{extends file=$inh_path} 
+{extends file=$inh_path}
 {block name='content'}
 
 <style type='text/css'  media='all'>
@@ -21,14 +21,30 @@ select, input.moduleFormulars {
 	<label>Schuljahr:
 		<select name='schoolyear' size='1'>
 		{foreach $schoolyears as $schoolyear}
-			<option 
-				value='{$schoolyear.ID}' 
+			<option
+				value='{$schoolyear.ID}'
 				{if $schoolyear.ID == $grade.schoolyearId}selected='selected'{/if}>
 				{$schoolyear.label}
 			</option>
 		{/foreach}
 	</select>
-	</label><br><br>
+	</label><br /><br />
+	{if count($schooltypes)}
+	<label>
+		Schultyp:
+		<select name='schooltype' size='1'>
+		{foreach $schooltypes as $schooltype}
+		<option value='{$schooltype.ID}'
+			{if $schooltype.ID = $grade.schooltypeId}
+				selected='selected'
+			{/if}>
+			{$schooltype.name}
+		</option>
+		{/foreach}
+		</select>
+	</label>
+	<br><br>
+	{/if}
 	<input type='submit' value='Ändern'>
 </form>
 </div>

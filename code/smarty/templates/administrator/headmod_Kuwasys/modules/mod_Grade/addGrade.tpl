@@ -28,7 +28,19 @@ select, input.moduleFormulars {
 			</option>
 		{/foreach}
 	</select>
-	</label><br><br>
+	</label><br /><br />
+	{if count($schooltypes)}
+	<label> Schultyp:
+		<select name='schooltype' size='1'>
+		{foreach $schooltypes as $schooltype}
+		<option value='{$schooltype.ID}'>
+			{$schooltype.name}
+		</option>
+		{/foreach}
+		</select>
+	</label>
+	{/if}
+	<br><br>
 	<input type='submit' value='Hinzufügen'>
 </form>
 </div>

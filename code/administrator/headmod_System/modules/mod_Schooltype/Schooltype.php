@@ -37,6 +37,14 @@ class Schooltype extends Module {
 				case 'deleteSchooltype':
 					$this->delete();
 					break;
+				case 'activate':
+					$this->isEnabledUpdateEntry(true);
+					$this->showAll();
+					break;
+				case 'deactivate':
+					$this->isEnabledUpdateEntry(false);
+					$this->showAll();
+					break;
 				default:
 					die('Wrong action-value');
 					break;
@@ -191,9 +199,63 @@ class Schooltype extends Module {
 		}
 	}
 
+	/**
+	 * Checks if the Schooltypes are enabled in the Settings
+	 * @return boolean True if the Schooltypes are enabled, else false
+	 */
+	protected function isEnabled() {
+		try {
+			$data = TableMng::query('SELECT value FROM global_settings
+				WHERE name = "schooltypeEnabled"', true);
+
+		} catch (MySQLVoidDataException $e) {
+			$this->isEnabledAddEntry();
+			return false; //default to false if no entry found
+
+		} catch (Exception $e) {
+			$this->_interface->showError('Konnte nicht überprüfen, ob Schultypen benutzt werden');
+		}
+
+		return ($data[0]['value'] != '0');
+	}
+
+	/**
+	 * Adds the isEnabled-Entry to the globalSettings and defaults to false
+	 * @return void
+	 */
+	protected function isEnabledAddEntry() {
+
+		try {
+			TableMng::query('INSERT INTO global_settings (`name`, `value`)
+				VALUES ("schooltypeEnabled", 0)');
+
+		} catch (Exception $e) {
+			$this->_interface->dieError('konnte den Schultyp-Switch nicht hinzufügen!');
+		}
+	}
+
+	protected function isEnabledUpdateEntry($isEnabled) {
+
+		$ie = ($isEnabled) ? '1' : '0';
+
+		try {
+			TableMng::query(sprintf('UPDATE global_settings SET value = "%s"
+							WHERE name = "schooltypeEnabled"', $ie));
+
+		} catch (Exception $e) {
+			$this->_interface->dieError('Konnte die Schultypen nicht
+				(de-)aktivieren');
+		}
+	}
+
 	protected function showAll() {
 
-		$data = $this->fetchAll();
+		if($this->isEnabled()) {
+			$data = $this->fetchAll();
+		}
+		else {
+			$data = false;
+		}
 		$this->_interface->mainMenu($data);
 	}
 

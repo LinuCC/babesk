@@ -357,7 +357,7 @@ abstract class StatisticsChart {
 	 */
 	protected function imageLegendDraw() {
 
-		$this->_pImage->drawLegend($this->_imageWidth -120, 12, $this->_legend);
+		$this->_pImage->drawLegend($this->_imageWidth -170, 12, $this->_legend);
 	}
 
 	protected function imageHeadingDraw() {
@@ -462,7 +462,7 @@ abstract class StatisticsChart {
 	 */
 	protected $_legend = array(
 		'Style' => LEGEND_NOBORDER,
-		'Mode' => LEGEND_HORIZONTAL);
+		'Mode' => LEGEND_VERTICAL);
 
 	/**
 	 * Styles the Heading of the Image
@@ -489,7 +489,7 @@ abstract class StatisticsChart {
 	 * The Width of the created Image
 	 * @var integer
 	 */
-	protected $_imageWidth = 800;
+	protected $_imageWidth = 1000;
 
 	/**
 	 * The Height of the created Image
@@ -501,7 +501,7 @@ abstract class StatisticsChart {
 	 * The Width of the Chart in the Image
 	 * @var integer
 	 */
-	protected $_chartWidth = 700;
+	protected $_chartWidth = 900;
 
 	/**
 	 * The Height of the Chart in the Image
