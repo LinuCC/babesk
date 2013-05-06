@@ -23,10 +23,13 @@
 			Wahlen nach Jahrgängen
 		</option>
 		<option value="usersChosenInSchoolyears">
-			Schüler die gewählt habenin Schuljahre aufgeteilt
+			Schüler die gewählt haben in Schuljahre aufgeteilt
 		</option>
 		<option value="classesChosenInSchoolyears">
 			Wahlen in Schuljahre aufgeteilt
+		</option>
+		<option value="byUsersChosenInSchooltypeAndYeargroup">
+			Anzahl Wahlen in Schultypen und Jahrgängen
 		</option>
 	</select>
 	<input type="submit" value="Statistik anzeigen" />

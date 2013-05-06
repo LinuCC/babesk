@@ -97,6 +97,11 @@ class KuwasysStats extends Module {
 				$chart =
 					new KuwasysStatsClassesChosenBySchoolyearBarChart();
 				break;
+			case 'byUsersChosenInSchooltypeAndYeargroup':
+				require_once
+					'KuwasysStatsSchooltypeSchoolyearChosenBarChart.php';
+				$chart = new KuwasysStatsSchooltypeSchoolyearChosenBarChart();
+				break;
 			default:
 				die('Wrong Chart-Switch given');
 				break;
@@ -131,7 +136,7 @@ class KuwasysStats extends Module {
 	protected $_interface;
 
 	protected $_imgWidth = 1000;
-	protected $_imgHeight = 300;
+	protected $_imgHeight = 350;
 
 }
 

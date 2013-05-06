@@ -38,9 +38,9 @@ class KuwasysStatsUsersChosenStackedBarChart extends StatisticsStackedBarChart {
 
 		$this->_userData = TableMng::query(
 			'SELECT g.schooltypeId AS schooltypeId,
-			(SELECT COUNT(*) FROM jointUsersInClass uic
-				JOIN jointClassInSchoolYear cisy ON uic.ClassID = cisy.ClassID
-				JOIN schoolYear sy ON cisy.SchoolYearID = sy.ID
+				(SELECT COUNT(*) FROM jointUsersInClass uic
+					JOIN jointClassInSchoolYear cisy ON uic.ClassID = cisy.ClassID
+					JOIN schoolYear sy ON cisy.SchoolYearID = sy.ID
 				WHERE uic.userId = u.ID AND sy.active = "1") AS choiceCount
 			FROM users u
 				JOIN jointUsersInSchoolYear uisy ON u.ID = uisy.UserID
