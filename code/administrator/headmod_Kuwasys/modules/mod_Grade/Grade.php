@@ -80,8 +80,14 @@ class Grade extends Module {
 			$this->_interface->dieMsg($this->_languageManager->getText('finishedAddGrade'));
 		}
 		else {
+			if($this->checkIsSchooltypeEnabled()) {
+				$schooltypes = $this->fetchAllSchooltypes();
+			}
+			else {
+				$schooltypes = array();
+			}
 			$schoolyears = $this->getAllSchoolyears();
-			$this->_interface->displayAddGrade($schoolyears);
+			$this->_interface->displayAddGrade($schoolyears, $schooltypes);
 		}
 	}
 
@@ -98,9 +104,29 @@ class Grade extends Module {
 
 	private function addGradeToDatabase () {
 
+		$label = TableMng::getDb()->real_escape_string($_POST['label']);
+		$year = TableMng::getDb()->real_escape_string($_POST['year']);
+
+		if($this->checkIsSchooltypeEnabled()) {
+			$schooltype = TableMng::getDb()->real_escape_string(
+				$_POST['schooltype']);
+			$query = sprintf('INSERT INTO grade
+				(label, gradeValue, schooltypeId)
+				VALUES ("%s", "%s", "%s");',
+				$label, $year, $schooltype);
+		}
+		else {
+			$query = sprintf('INSERT INTO grade
+				(label, gradeValue)
+				VALUES ("%s", "%s");',
+				$label, $year);
+		}
+
 		try {
-			$this->_gradeManager->addGrade($_POST['label'], $_POST['year']);
+			TableMng::query($query);
+
 		} catch (Exception $e) {
+			var_dump($e->getMessage());
 			$this->_interface->dieError($this->_languageManager->getText('errorAddGrade'));
 		}
 	}
@@ -115,13 +141,20 @@ class Grade extends Module {
 	private function getAllGrades () {
 
 		try {
-			$grades = $this->_gradeManager->getAllGrades();
+			$grades = TableMng::query(
+				'SELECT g.*, st.name AS schooltypeName
+				FROM grade g
+					LEFT JOIN Schooltype st ON g.schooltypeId = st.ID
+				', true);
+
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorNoGrades'));
+
 		}
 		catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorShowGrades'));
 		}
+
 		return $grades;
 	}
 
@@ -184,10 +217,28 @@ class Grade extends Module {
 
 	private function changeGradeInDatabase () {
 
+		$id = TableMng::getDb()->real_escape_string($_GET['ID']);
+		$label = TableMng::getDb()->real_escape_string($_POST['label']);
+		$year = TableMng::getDb()->real_escape_string($_POST['year']);
+
 		try {
-			$this->_gradeManager->alterGrade($_GET['ID'], $_POST['label'], $_POST['year']);
+			if($this->checkIsSchooltypeEnabled()) {
+			$schooltype = TableMng::getDb()->real_escape_string(
+				$_POST['schooltype']);
+				$schooltypeQuery = sprintf(', schooltypeId = "%s"',
+					$schooltype);
+			}
+			else {
+				$schooltypeQuery = '';
+			}
+			TableMng::query(sprintf(
+				'UPDATE grade SET label = "%s", gradeValue = "%s"
+				%s WHERE ID = "%s";',
+				$label, $year, $schooltypeQuery, $id));
+
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorNoGrade'));
+
 		}
 		catch (Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorChangeGrade'));
@@ -199,7 +250,14 @@ class Grade extends Module {
 		$grade = $this->getGrade();
 		$grade = $this->setUpSchoolyearIdInGrade($grade);
 		$schoolyears = $this->getAllSchoolyears();
-		$this->_interface->displayChangeGrade($grade, $schoolyears);
+		if($this->checkIsSchooltypeEnabled()) {
+			$schooltypes = $this->fetchAllSchooltypes();
+		}
+		else {
+			$schooltypes = array();
+		}
+		$this->_interface->displayChangeGrade($grade, $schoolyears,
+			$schooltypes);
 	}
 
 	/********************
@@ -263,7 +321,7 @@ class Grade extends Module {
 	}
 
 	private function getAllJointsGradeInSchoolyear () {
-		
+
 		try {
 			$joints = $this->_jointGradeInSchoolyear->getAllJoints();
 		} catch (MySQLVoidDataException $e) {
@@ -273,7 +331,7 @@ class Grade extends Module {
 		}
 		return $joints;
 	}
-	
+
 	/**
 	 * adds an array-key 'schoolyearId' to the Grade-array
 	 */
@@ -341,7 +399,7 @@ class Grade extends Module {
 	}
 
 	private function setUpSchoolyearLabelInAllGrades ($grades) {
-		
+
 		$schoolyears = $this->getAllSchoolyears();
 		$jointsGradeInSchoolyear = $this->getAllJointsGradeInSchoolyear();
 
@@ -359,6 +417,46 @@ class Grade extends Module {
 			}
 		}
 		return $grades;
+	}
+
+	/**
+	 * Fetches all Schooltypes in the database and returns them
+	 * @return Array
+	 */
+	private function fetchAllSchooltypes() {
+
+		try {
+			$data = TableMng::query('SELECT * FROM Schooltype', true);
+
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError('Keine Schultypen gefunden');
+
+		} catch (Exception $e) {
+			$this->_interface->dieError('Konnte die Schultypen nicht abrufen');
+
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Checks if the Schooltype is enabled
+	 * @return bool true if the Schooltype is enabled, else false
+	 */
+	private function checkIsSchooltypeEnabled() {
+
+		try {
+			$data = TableMng::query('SELECT value FROM global_settings
+				WHERE name = "schooltypeEnabled"', true);
+
+		} catch (MySQLVoidDataException $e) {
+			return false; //default to false if no entry found
+
+		} catch (Exception $e) {
+			$this->_interface->showError('Konnte nicht überprüfen, ob Schultypen benutzt werden');
+		}
+
+		return ($data[0]['value'] != '0');
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
