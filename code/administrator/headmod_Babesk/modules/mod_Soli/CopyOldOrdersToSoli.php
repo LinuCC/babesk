@@ -29,18 +29,33 @@ class CopyOldOrdersToSoli {
 
 		try {
 			self::soliDataFetch();
-			self::couponDataFetch();
+	
+			foreach(self::$_soliData as $soliData) {
+			
+				
+			$result= TableMng::query(sprintf('SELECT count(id) FROM soli_coupons WHERE '.$soliData['userId'].'=UID AND (SELECT date from meals WHERE ID='.$soliData['existMealAndPriceclass'].
+						') BETWEEN startdate AND enddate'),true); 
+			if ($result[0]['count(id)']>0) {
+				try {
+					TableMng::query("INSERT INTO `soli_orders` (`ID`, `UID`, `date`, `IP`, `ordertime`, `fetched`, `mealname`, `mealprice`,
+							 `mealdate`, `soliprice`) VALUES (NULL, '".$soliData['userId']."', '2013-05-01', '', CURRENT_TIMESTAMP, 
+							 '0', 'test', '3.50', '2013-05-10', '1.00')",false);
+				} catch (Exception $e) {
+					self::$_interface->dieError('Fehler beim &Uuml;bertragen!');
+				}
+			}
+			
+				 
+				
+			}
+			
 
 		} catch (Exception $e) {
 			self::$_interface->dieError('Konnte die Daten nicht abrufen');
 		}
 
-		if(count(self::$_soliData) && count(self::$_couponData)) {
-			self::soliDataProcess();
-		}
-		else {
-			self::$_interface->dieError('Es wurden keine Soli-Daten oder Coupon-Daten gefunden');
-		}
+
+		
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -58,20 +73,19 @@ class CopyOldOrdersToSoli {
 		self::$_soliData = TableMng::query(sprintf(
 			'SELECT u.ID AS userId, CONCAT(u.forename, " ", u.name) AS name,
 			-- Does the Meal and the priceclass still exist?
-			(SELECT COUNT(*) FROM meals m
+			(SELECT m.ID FROM meals m
 				JOIN price_classes pc ON m.price_class = pc.ID
 				WHERE m.ID = o.MID
-			) AS existMealAndPriceclass,
-			-- Is the order already in soli_orders?
-			(SELECT COUNT(*) FROM soli_orders so
+			) AS existMealAndPriceclass
+			FROM users u,
+			orders o WHERE o.UID = u.ID
+			AND u.soli = 1 AND
+(SELECT COUNT(*) FROM soli_orders so
 				WHERE o.date = so.date -- Has same Date?
 				AND o.UID = so.UID -- Has same UserId?
 				AND (SELECT m.name FROM meals m WHERE o.MID = m.ID)
 					= so.mealname -- Has same mealname?
-			) AS orderedAsSoli
-			FROM users u
-			JOIN orders o ON o.UID = u.ID
-			WHERE u.soli = 1'), true);
+			) = 0'), true);
 	}
 
 	/**
