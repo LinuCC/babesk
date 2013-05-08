@@ -68,9 +68,14 @@
 				<name>WebHomepageSettings</name>
 				<active>true</active>
 			</module>
-				<module>
+			<module>
 				<ger_name>Kartenwechsel</ger_name>
 				<name>CardChange</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Schultypen</ger_name>
+				<name>Schooltype</name>
 				<active>true</active>
 			</module>
 		</head_module>
@@ -204,6 +209,16 @@
 			<module>
 				<ger_name>Schuljahrverwaltung</ger_name>
 				<name>SchoolYear</name>
+				<active>true</active>
+			</module>
+		</head_module>
+		<head_module>
+			<ger_name>Statistiken</ger_name>
+			<name>Statistics</name>
+			<active>true</active>
+			<module>
+				<ger_name>Kuwasys-Statistiken</ger_name>
+				<name>KuwasysStats</name>
 				<active>true</active>
 			</module>
 		</head_module>

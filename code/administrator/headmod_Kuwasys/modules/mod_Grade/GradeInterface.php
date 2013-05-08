@@ -28,9 +28,10 @@ class GradeInterface extends AdminInterface {
 		$this->smarty->display($this->tplFilePath . 'mainMenu.tpl');
 	}
 
-	public function displayAddGrade ($schoolyears) {
-		
+	public function displayAddGrade ($schoolyears, $schooltypes) {
+
 		$this->smarty->assign('schoolyears', $schoolyears);
+		$this->smarty->assign('schooltypes', $schooltypes);
 		$this->smarty->display($this->tplFilePath . 'addGrade.tpl');
 	}
 
@@ -49,11 +50,12 @@ class GradeInterface extends AdminInterface {
 			languageManager->getText('deleteGradeConfirmationYes'), $this->languageManager->getText(
 			'deleteGradeConfirmationNo'));
 	}
-	
-	public function displayChangeGrade ($grade, $schoolyears) {
-		
+
+	public function displayChangeGrade ($grade, $schoolyears, $schooltypes) {
+
 		$this->smarty->assign('grade', $grade);
 		$this->smarty->assign('schoolyears', $schoolyears);
+		$this->smarty->assign('schooltypes', $schooltypes);
 		$this->smarty->display($this->tplFilePath . 'changeGrade.tpl');
 	}
 

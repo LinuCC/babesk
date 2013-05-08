@@ -12,8 +12,8 @@ class GeneralPublicData extends HeadModule {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
-	public function __construct($name, $display_name) {
-		parent::__construct($name, $display_name);
+	public function __construct($name, $display_name, $mod_menu) {
+		parent::__construct($name, $display_name, $mod_menu);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////

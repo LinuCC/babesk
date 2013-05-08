@@ -9,6 +9,7 @@
 			<th align='center'>Jahrgangsstufe</th>
 			<th align='center'>Bezeichner</th>
 			<th align='center'>Für Schuljahr</th>
+			<th align='center'>Schultyp</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -18,6 +19,7 @@
 			<td align="center">{$grade.gradeValue}</td>
 			<td align="center">{$grade.label}</td>
 			<td align="center">{$grade.schoolyearLabel}</td>
+			<td align="center">{$grade.schooltypeName}</td>
 			<td align="center" bgcolor='#FFD99'>
 			<form action="index.php?section=Kuwasys|Grade&action=changeGrade&ID={$grade.ID}" method="post"><input type='submit' value='bearbeiten'></form>
 			<form action="index.php?section=Kuwasys|Grade&action=deleteGrade&ID={$grade.ID}" method="post"><input type='submit' value='löschen'></form>
