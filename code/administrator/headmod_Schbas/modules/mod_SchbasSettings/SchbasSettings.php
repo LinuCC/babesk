@@ -25,8 +25,25 @@ class SchbasSettings extends Module {
 		$SchbasSettingsInterface = new AdminSchbasSettingsInterface($this->relPath);
 		$SchbasSettingsProcessing = new AdminSchbasSettingsProcessing($SchbasSettingsInterface);
 
-		$SchbasSettingsInterface->InitialMenu();
-		
+		if (!isset($_GET['action']))
+			$SchbasSettingsInterface->InitialMenu();
+		else {
+			switch ($_GET['action']){
+				case '1':	$SchbasSettingsInterface->GeneralSettings();break;
+				case '2':	$SchbasSettingsInterface->LoanSettings($SchbasSettingsProcessing->getLoanSettings(),false);break;
+				case '3':	$SchbasSettingsInterface->RetourSettings();break;
+				case '4':	break;
+				case '5';	TableMng::query(sprintf("UPDATE schbas_fee SET fee_normal = %s, fee_reduced = %s WHERE class = '5'",$_POST['5norm'], $_POST['5erm']));
+							TableMng::query(sprintf("UPDATE schbas_fee SET fee_normal = %s, fee_reduced = %s WHERE class = '6'",$_POST['6norm'], $_POST['6erm']));
+							TableMng::query(sprintf("UPDATE schbas_fee SET fee_normal = %s, fee_reduced = %s WHERE class = '7'",$_POST['7norm'], $_POST['7erm']));
+							TableMng::query(sprintf("UPDATE schbas_fee SET fee_normal = %s, fee_reduced = %s WHERE class = '8'",$_POST['8norm'], $_POST['8erm']));
+							TableMng::query(sprintf("UPDATE schbas_fee SET fee_normal = %s, fee_reduced = %s WHERE class = '9'",$_POST['9norm'], $_POST['9erm']));
+							TableMng::query(sprintf("UPDATE schbas_fee SET fee_normal = %s, fee_reduced = %s WHERE class = '10'",$_POST['10norm'], $_POST['10erm']));
+							TableMng::query(sprintf("UPDATE schbas_fee SET fee_normal = %s, fee_reduced = %s WHERE class = '11'",$_POST['11norm'], $_POST['11erm']));
+							TableMng::query(sprintf("UPDATE schbas_fee SET fee_normal = %s, fee_reduced = %s WHERE class = '12'",$_POST['12norm'], $_POST['12erm']));
+							$SchbasSettingsInterface->LoanSettings($SchbasSettingsProcessing->getLoanSettings(),true);break;
+			}	
+		}
 	}
 }
 

@@ -18,6 +18,20 @@ class AdminSchbasSettingsInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath . 'index.tpl');
 	}
 	
+	public function GeneralSettings() {
+		$this->smarty->display($this->tplFilePath . 'general.tpl');
+	}
+	
+	public function LoanSettings($settings, $save) {
+		$this->smarty->assign('settings', $settings);
+		$this->smarty->assign('save', $save);
+		$this->smarty->display($this->tplFilePath . 'loan.tpl');
+	}
+	
+	public function RetourSettings() {
+		$this->smarty->display($this->tplFilePath . 'retour.tpl');
+	}
+	
 	/**
 	 * The Path to the Smarty-Parent-Templatefile
 	 */
