@@ -221,6 +221,11 @@
 				<name>KuwasysStats</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Babesk-Statistiken</ger_name>
+				<name>BabeskStats</name>
+				<active>true</active>
+			</module>
 		</head_module>
 	</administrator>
 	<web>
