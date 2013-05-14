@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Imports a CSV-File
- * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
+ * Parses a CSV-File
  *
+ * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
  */
-class CsvImporter {
+class CsvReader {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -34,7 +34,7 @@ class CsvImporter {
 		}
 
 		$keyRow = $this->getKeyRow();
-		
+
 		$allValuesArray = array();
 
 		$rowCounter = 0;
@@ -49,6 +49,13 @@ class CsvImporter {
 		$this->_completeArray = $allValuesArray;
 	}
 
+	/**
+	 * Reads the whole content of the Csv-File and returns it as an Array
+	 *
+	 * Void data-fields will be returned as a void string
+	 *
+	 * @return Array
+	 */
 	public function getContents () {
 
 		if (!isset($this->_completeArray)) {

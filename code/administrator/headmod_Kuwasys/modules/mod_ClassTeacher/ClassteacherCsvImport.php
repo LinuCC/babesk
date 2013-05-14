@@ -1,6 +1,6 @@
 <?php
 
-require_once PATH_INCLUDE . '/CsvImporter.php';
+// require_once PATH_INCLUDE . '/CsvImporter.php';
 
 class ClassteacherCsvImport {
 	////////////////////////////////////////////////////////////////////////////////
