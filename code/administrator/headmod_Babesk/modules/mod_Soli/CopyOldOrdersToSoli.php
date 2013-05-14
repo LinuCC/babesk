@@ -29,33 +29,16 @@ class CopyOldOrdersToSoli {
 
 		try {
 			self::soliDataFetch();
-	
-			foreach(self::$_soliData as $soliData) {
-			
-				
-			$result= TableMng::query(sprintf('SELECT count(id) FROM soli_coupons WHERE '.$soliData['userId'].'=UID AND (SELECT date from meals WHERE ID='.$soliData['existMealAndPriceclass'].
-						') BETWEEN startdate AND enddate'),true); 
-			if ($result[0]['count(id)']>0) {
-				try {
-					TableMng::query("INSERT INTO `soli_orders` (`ID`, `UID`, `date`, `IP`, `ordertime`, `fetched`, `mealname`, `mealprice`,
-							 `mealdate`, `soliprice`) VALUES (NULL, '".$soliData['userId']."', '2013-05-01', '', CURRENT_TIMESTAMP, 
-							 '0', 'test', '3.50', '2013-05-10', '1.00')",false);
-				} catch (Exception $e) {
-					self::$_interface->dieError('Fehler beim &Uuml;bertragen!');
-				}
-			}
-			
-				 
-				
-			}
-			
+			self::couponDataFetch();
+			self::solipriceFetch();
+			self::upload();
+
+			self::errorsShow();
+			self::$_interface->dieMsg('Die Bestellungen wurden erfolgreich verarbeitet.');
 
 		} catch (Exception $e) {
-			self::$_interface->dieError('Konnte die Daten nicht abrufen');
+			self::$_interface->dieError('Konnte die alten Bestellungen nicht verarbeiten.' . $e->getMessage());
 		}
-
-
-		
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -70,22 +53,37 @@ class CopyOldOrdersToSoli {
 	 */
 	protected static function soliDataFetch() {
 
-		self::$_soliData = TableMng::query(sprintf(
-			'SELECT u.ID AS userId, CONCAT(u.forename, " ", u.name) AS name,
-			-- Does the Meal and the priceclass still exist?
-			(SELECT m.ID FROM meals m
-				JOIN price_classes pc ON m.price_class = pc.ID
-				WHERE m.ID = o.MID
-			) AS existMealAndPriceclass
-			FROM users u,
-			orders o WHERE o.UID = u.ID
-			AND u.soli = 1 AND
-(SELECT COUNT(*) FROM soli_orders so
-				WHERE o.date = so.date -- Has same Date?
-				AND o.UID = so.UID -- Has same UserId?
-				AND (SELECT m.name FROM meals m WHERE o.MID = m.ID)
-					= so.mealname -- Has same mealname?
-			) = 0'), true);
+		try {
+			self::$_soliData = TableMng::query(sprintf(
+				'SELECT u.ID AS userId, o.ID AS orderId, o.fetched AS fetched,
+					m.name AS mealname, pc.price AS price, m.date AS mealdate,
+					CONCAT(u.forename, " ", u.name) AS userWholename,
+					o.ordertime AS ordertime,
+					/*Does the Meal and the priceclass still exist?*/
+					(SELECT m.ID FROM meals m
+						JOIN price_classes pc ON m.price_class = pc.ID
+						WHERE m.ID = o.MID
+					) AS existMealAndPriceclass
+				FROM users u
+				JOIN orders o ON o.UID = u.ID
+				/*We want to check if meal exists manually (for error-output), so using LEFT JOIN instead of JOIN*/
+				LEFT JOIN meals m ON o.MID = m.ID
+				/*Fetch the price of the meal for the user*/
+				LEFT JOIN
+					(SELECT ID, pc_ID, GID, price FROM price_classes) pc
+						ON pc.pc_ID = m.price_class AND pc.GID = u.GID
+				WHERE /*does the order already exist in soli_orders?*/
+						(SELECT COUNT(*) FROM soli_orders so
+					 	WHERE o.date = so.date /* Has same Date?*/
+						AND o.UID = so.UID /* Has same UserId?*/
+						AND (SELECT m.name FROM meals m WHERE o.MID = m.ID)
+							= so.mealname /* Has same mealname?*/
+					) = 0'), true);
+
+		} catch (MySQLVoidDataException $e) {
+			self::$_interface->dieError('Alle passenden Bestellungen wurden schon korrekt abgelegt oder es gibt keine Bestellungen mit soli-Status');
+		}
+
 	}
 
 	/**
@@ -111,11 +109,42 @@ class CopyOldOrdersToSoli {
 		}
 	}
 
-	protected static function soliDataProcess() {
+	/**
+	 * Processes the data and uploads them to the Db. On error, nothing gets
+	 * comitted
+	 */
+	protected static function upload() {
+
+		TableMng::getDb()->autocommit(false);
+
+		$stmt = TableMng::getDb()->prepare(
+			'INSERT INTO `soli_orders`
+				(`UID`, `date`, `IP`, `ordertime`, `fetched`, `mealname`,
+				`mealprice`, `mealdate`, `soliprice`)
+			VALUES (?, ?, "", ?, ?, ?, ?, ?, ?)');
 
 		foreach(self::$_soliData as $order) {
+			if(self::soliDataCheck($order)) {
 
+				$price = (isset(self::$_soliprice) && self::$_soliprice != '')
+					? self::$_soliprice : 0;
+
+				$stmt->bind_param('ssssssss', $order['userId'],
+					$order['mealdate'], $order['ordertime'], $order['fetched'],
+					$order['mealname'], $order['price'], $order['mealdate'],
+					$price);
+				if($stmt->execute()) {
+					//good for us
+				}
+				else {
+					throw new Exception(
+						'Could not execute an upload successfully');
+				}
+			}
 		}
+		$stmt->close();
+
+		TableMng::getDb()->autocommit(true);
 	}
 
 	/**
@@ -125,18 +154,17 @@ class CopyOldOrdersToSoli {
 	 */
 	protected static function soliDataCheck($order) {
 
-		if($order['orderedAsSoli'] == true) {
-			if($order['existMealAndPriceclass'] == true) {
-				if(self::orderedWithCoupon($order)) {
+		if($order['existMealAndPriceclass'] == true) {
+			if(self::orderedWithCoupon($order)) {
 
-				}
-			}
-			else {
-
+				return true;
 			}
 		}
 		else {
-			self::$_errors[] = sprintf('');
+			self::$_errors[] = sprintf('The Meal or Priceclass does not exist anymore for the order with the ID %s',
+				$order['orderId']);
+
+			return false;
 		}
 	}
 
@@ -149,9 +177,9 @@ class CopyOldOrdersToSoli {
 	protected static function orderedWithCoupon($order) {
 
 		$orderUserId = $order['userId'];
-		$orderTimestamp = strtotime($order['date']);
+		$orderTimestamp = strtotime($order['mealdate']);
 
-		foreach($this->_couponData as $coupon) {
+		foreach(self::$_couponData as $coupon) {
 			if($coupon->getUserId() == $orderUserId) {
 				if($coupon->timestampIsCovered($orderTimestamp)) {
 					return true;
@@ -160,6 +188,34 @@ class CopyOldOrdersToSoli {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Fetches the Price that soli-users should pay when ordering meals
+	 *
+	 * Saves it into the protected variable $_soliprice
+	 */
+	protected static function solipriceFetch() {
+
+		try {
+			$res = TableMng::query('SELECT value FROM global_settings
+				WHERE name = "soli_price"', true);
+
+		} catch (Exception $e) {
+			throw new Exception('Could not fetch the soliprice');
+		}
+
+		self::$_soliprice = $res[0]['value'];
+	}
+
+	/**
+	 * Shows all of the non-scriptkilling Errors to the User
+	 */
+	protected static function errorsShow() {
+
+		foreach(self::$_errors as $error) {
+			self::$_interface->showError($error);
+		}
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -198,6 +254,12 @@ class CopyOldOrdersToSoli {
 	 */
 	protected static $_copied;
 
+	/**
+	 * The Price of meals for soli-users
+	 * @var float
+	 */
+	protected static $_soliprice;
+
 }
 
 class CopyOldOrdersToSoliCoupon {
@@ -212,7 +274,7 @@ class CopyOldOrdersToSoliCoupon {
 
 		$this->_coupon = $coupon;
 
-		if($this->datesSet()) {
+		if(!$this->datesSet()) {
 			throw new Exception('Konnte die Daten des Coupons nicht parsen');
 		}
 	}
@@ -242,9 +304,9 @@ class CopyOldOrdersToSoliCoupon {
 	 * @return bool true if the timestamp is between the start- and enddate of
 	 * this coupon
 	 */
-	public function timestampIsCovered($timstamp) {
+	public function timestampIsCovered($timestamp) {
 
-		if($this->_startdate <= $timestamp && $this->enddate >= $timestamp) {
+		if($this->_startdate <= $timestamp && $this->_enddate >= $timestamp) {
 			return true;
 		}
 		else {

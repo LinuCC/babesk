@@ -66,7 +66,7 @@ $smarty->assign('babesk_version', $version);
 				$this->webInterface->dieError(ERR_ORDER);
 			}
 			$meal['price'] = $priceClassManager->getPrice($_SESSION['uid'], $meal['ID']);
-			
+
 			if ('POST' == $_SERVER['REQUEST_METHOD']) {
 				////////////////////////////////////////////////////
 				//Pay for meal
@@ -84,7 +84,7 @@ $smarty->assign('babesk_version', $version);
 
 					if ($soliCouponManager->HasValidCoupon($_SESSION['uid'], $meal['date'])) {
 						$payment = $gbManager->getSoliPrice();
-						
+
 					}
 
 					// 			if ($userManager->isSoli($_SESSION['uid'])) {
