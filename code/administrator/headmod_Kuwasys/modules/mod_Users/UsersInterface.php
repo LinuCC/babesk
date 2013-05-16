@@ -65,7 +65,17 @@ class UsersInterface extends AdminInterface {
 		$notConfirmedString = $languageManager->getText('confirmDeleteUserNo');
 		$this->confirmationDialog($promptMessage, $sectionString, $actionString, $confirmedString, $notConfirmedString);
 	}
-
+	
+	public function showDeletePdfSuccess () {
+		$this->smarty->display ($this->tplFilePath . 'showPdfDeleted.tpl');
+	}
+	
+	public function showDeleteUserSuccess ( $ID) {
+		$this->smarty->assign('pdf','../include/pdf/tempPdf/deleted_'.$ID.'.pdf');
+		$this->smarty->assign('uid',$ID);
+		$this->smarty->display($this->tplFilePath.'showUserDeleted.tpl');
+	}
+	
 	public function showAddUserToClassDialog ($user, $classes) {
 
 		$this->smarty->assign('user', $user);

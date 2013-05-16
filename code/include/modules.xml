@@ -331,6 +331,16 @@
 			</module>
 		</head_module>
 		<head_module>
+			<ger_name>Schbas</ger_name>
+			<name>Schbas</name>
+			<active>true</active>
+			<module>
+				<ger_name>Ausleihsystem</ger_name>
+				<name>LoanInfo</name>
+				<active>true</active>
+			</module>
+		</head_module>
+		<head_module>
 			<ger_name>Einstellungen</ger_name>
 			<name>Settings</name>
 			<active>true</active>

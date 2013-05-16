@@ -34,6 +34,9 @@
 			<errorNoUsers>Es konnten keine Benutzer angezeigt werden, da die Datenbank leer ist und somit keine Benutzer vorhanden sind.</errorNoUsers>
 			<errorGetUser>Die Informationen des Benutzers konnten nicht abgerufen werden.</errorGetUser>
 			<errorDeleteUser>Konnte den Benutzer nicht löschen: %s</errorDeleteUser>
+			<errorDeleteCard>Konnte die Karte nicht löschen.</errorDeleteCard>
+			<errorUserHasBooks>Es sind noch Bücher ausgeliehen.</errorUserHasBooks>
+			<errorFetchBooks>Fehler beim Abrufen der ausgeliehenen Bücher.</errorFetchBooks>
 			<errorNoGrades>Es sind keine Klassen vorhanden</errorNoGrades>
 			<errorFetchGrades>Ein Fehler ist beim Abrufen von Klassen aufgetreten.</errorFetchGrades>
 			<errorFetchGrade>Ein Fehler ist beim Abrufen der Klasse aufgetreten.</errorFetchGrade>
