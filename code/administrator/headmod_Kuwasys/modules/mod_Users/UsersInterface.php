@@ -38,7 +38,7 @@ class UsersInterface extends AdminInterface {
 
 	public function showSelectCsvFileForImport () {
 
-		$this->smarty->display($this->tplFilePath . 'importLocalCsvFile.tpl');
+		$this->smarty->display($this->tplFilePath . 'importCsvFile.tpl');
 	}
 
 	public function showAllUsers ($users) {

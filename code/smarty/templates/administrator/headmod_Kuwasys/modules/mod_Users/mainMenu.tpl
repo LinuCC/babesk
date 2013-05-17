@@ -1,5 +1,4 @@
-#{extends file=$inh_path} {block name='content'}
-
+{extends file=$inh_path} {block name='content'}
 <style type='text/css'  media='all'>
 /*Table should not be over the Border of the Line of the main-block*/
 
@@ -44,6 +43,7 @@ fieldset {
 	<form action='index.php?section=Kuwasys|Users&action=printParticipationConfirmationForAll' method='post'>
 		<input type='submit' value='Für alle Schüler die Teilnahmebestätigungen ausdrucken'>
 	</form>
+
 </fieldset>
 
 {/block}

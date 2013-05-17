@@ -70,6 +70,10 @@ table.dataTable tr td {
 	background-color:#FFCC33;
 }
 
+label {
+	margin: 10px;
+}
+
 /* Error Messages */
 p.error {
 	color: red;
@@ -165,7 +169,16 @@ h3.filterBar {
 		font-size: 80%;
 		text-align: center;
 }
-
+div.smallContainer,
+span.smallContainer,
+p.smallContainer {
+	border: 1px solid #c1e1f2;
+	border-radius: 5px;
+	padding: 10px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	color: #555555;
+}
 
 /* General
 -------------------------------------------- */
@@ -182,5 +195,29 @@ h3.filterBar {
 }
 #close {
 		clear: both;
+}
+
+/* Accordion Settings */
+
+.accordion h1,
+.accordion h2,
+.accordion h3,
+.accordion h4,
+.accordion h5 {
+	font-size: 15px;
+	color: #2e6132;
+	background-color: #c1e1f2;
+	padding-left: 10px;
+	margin: 2px 0 0 0;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+
+.accordion > div,
+.accordion > span,
+.accordion > p {
+	border: 1px solid #c1e1f2;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
 }
 

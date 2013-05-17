@@ -8,17 +8,17 @@
 	href="../smarty/templates/administrator/css/general.css"
 	type="text/css" />
 {block name=html_head}{/block}
-
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script type="text/javascript" language="JavaScript">
 function setFocus() {
-for (i = 0; i < document.forms[0].length; i++)
- {
-     if ((document.forms[0].elements[i].type == "text") || (document.forms[0].elements[i].type == "textarea"))
-     {
-     document.forms[0].elements[i].focus();
-     break;
-     }
- }
+for (i = 0; i < document.forms[0].length; i++) {
+		if ((document.forms[0].elements[i].type == "text")
+			|| (document.forms[0].elements[i].type == "textarea")) {
+		document.forms[0].elements[i].focus();
+		break;
+		}
+	}
 }
 </script>
 </head>
@@ -38,7 +38,7 @@ for (i = 0; i < document.forms[0].length; i++)
 	{/nocache}
 		</div>
 	</div>
-	
+
 	{if $_userMsgOutput or $_userErrorOutput}
 	<div id="main">
 		<div id="content">
@@ -51,7 +51,7 @@ for (i = 0; i < document.forms[0].length; i++)
 		</div>
 	</div>
 	{/if}
-	
+
 	<div id="main">
 	    <div id="content">{block name=search}{/block}</div>
 		<div id="content">{block name=content}{/block}</div>
