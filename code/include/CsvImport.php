@@ -34,7 +34,6 @@ abstract class CsvImport {
 		$this->parse();
 		$this->check();
 		$this->upload();
-		$this->finalize();
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -65,7 +64,7 @@ abstract class CsvImport {
 			die('voidCsv');
 		}
 
-		if(count($this->_csvColumns) == 1) {
+		if(count($this->_csvColumns) == 1 && !$this->_isSingleColumnAllowed) {
 			die('tinyCsv');
 		}
 
@@ -147,8 +146,10 @@ abstract class CsvImport {
 		if(count($_FILES)) {
 			if(!empty($_FILES['csvFile']) && isset($_POST['isPreview'])) {
 				$this->_filePath = $_FILES['csvFile']['tmp_name'];
-				$this->_isPreview = (boolean) $_POST['isPreview'];
+				$this->_isPreview = ($_POST['isPreview'] == 'true');
 				$this->csvDelimiterCheck();
+				$this->isSingleColumnAllowedHandle();
+				$this->fieldsAllowedVoidParse();
 			}
 			else {
 				die('errorWrongData');
@@ -160,39 +161,85 @@ abstract class CsvImport {
 	}
 
 	/**
+	 * Extracts from the data Ajax send if a single-Column CSV is allowed
+	 */
+	protected function isSingleColumnAllowedHandle() {
+
+		$this->_isSingleColumnAllowed = ($_POST['isSingleColumnAllowed'] == 'true') ? true : false;
+	}
+
+	protected function fieldsAllowedVoidParse() {
+
+		if(!empty($_POST['voidColumnAllowed']) &&
+			count($_POST['voidColumnAllowed'])) {
+
+			$columns = json_decode($_POST['voidColumnAllowed']);
+			foreach($columns as $col) {
+				//Incoming JSON got parsed to Objects, cast it to an array
+				$ar = (array) $col;
+
+				foreach($ar as $key => $val) {
+					if($val) {
+						$this->_keysAllowedVoid[$key] = $val;
+					}
+				}
+			}
+		}
+	}
+
+	/**
 	 * Puts all data into the database
 	 */
 	abstract protected function upload();
 
-	protected function finalize() {
+	/**
+	 * Handles the Entry of the Data-Upload. Begins Transaction
+	 */
+	protected function uploadStart() {
+
+		TableMng::getDb()->autocommit(false);
+	}
+
+	/**
+	 * Finalizes the Data-Upload. Ends Transaction and, on certain
+	 * circumstances, rolls the changes back
+	 */
+	protected function uploadFinalize() {
 
 		if($this->_isPreview) {
 			$this->uploadPreview();
+			TableMng::getDb()->rollback();
 		}
 		else {
 			if(!count($this->_errors)) {
-				TableMng::getDb()->autocommit(true);
+				var_dump('schinken');
+				TableMng::getDb()->query('COMMIT');
 			}
 			else {
 				$this->_errors['fatalError'][] = true;
 				//show errors 'n stuff'
+				TableMng::getDb()->query('ROLLBACK');
 				$this->uploadPreview();
 			}
 		}
 	}
 
 	/**
-	 * With autocommit(false), tests if the upload to the database went good
+	 * tests if the upload to the database went good
 	 *
-	 * echoes a JSON-File including some previewed data and error-messages
+	 * dies echoing a JSON-File including some previewed data and error-messages
 	 */
 	protected function uploadPreview() {
+
+		$this->previewTableCreate();
 		$this->errorToReadable();
+
 		$return = array(
 			'errors' => $this->_errorStr,
 			'errorCount' => $this->_errorCount,
 			'preview' => $this->_previewStr,
-			'csvColumns' => $this->_csvColumns
+			'csvColumns' => $this->_csvColumns,
+			'keysAllowedVoid' => $this->_keysAllowedVoid,
 			);
 
 		$return = json_encode($return);
@@ -210,6 +257,80 @@ abstract class CsvImport {
 		}
 	}
 
+	/**
+	 * Creates a Table containing a preview of Database-Changes made when
+	 * importing the CSV
+	 * @return String The HTML-String directly usable in JS/HTML
+	 */
+	protected function previewTableCreate() {
+
+		$str = '';
+		$tableElements = array();
+
+		if(count($this->_previewData) && count($this->_previewDataHead)) {
+
+			//check if the Element does not screw up the Table-Column-Count
+			foreach($this->_previewData as $preview) {
+				foreach($preview as $column => $value) {
+					if(isset($this->_previewDataHead[$column])) {
+						$tableElements[][$column] = $value;
+					}
+				}
+			}
+
+			$tableRowStr = $this->previewTableBodyCreate();
+			$tableHeadStr = $this->previewTableHeadCreate();
+
+			$str = sprintf('<table class="dataTable">%s%s</table>', $tableHeadStr, $tableRowStr);
+		}
+		else {
+			$str = 'Es wurde keine Vorschau von dem Modul erstellt';
+		}
+
+		$this->_previewStr = $str;
+	}
+
+	protected function previewTableHeadCreate() {
+
+		$tableHeadStr = '<tr>';
+
+		foreach($this->_previewDataHead as $prev) {
+			$tableHeadStr .= sprintf('<th>%s</th>', $prev);
+		}
+		$tableHeadStr .= '</tr>';
+		return $tableHeadStr;
+	}
+
+	protected function previewTableBodyCreate() {
+
+		$tableRowStr = '';
+
+		foreach($this->_previewData as $preview) {
+
+			$tableRowStr .= '<tr>';
+			$rowValStr = array();
+
+			foreach($preview as $column => $value) {
+				//make the HTML-line...
+				$rowValStr[$column] = sprintf('<td>%s</td>', $value);
+			}
+
+			//and sort it so that every column has its correct value
+			foreach($this->_previewDataHead as $previewHead) {
+
+				if(isset($rowValStr[$previewHead])) {
+					$tableRowStr .= $rowValStr[$previewHead];
+				}
+				else {
+					$tableRowStr .= '<td>UNDEFINED</td>';
+				}
+			}
+
+			$tableRowStr .= '</tr>';
+		}
+
+		return $tableRowStr;
+	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -280,6 +401,24 @@ abstract class CsvImport {
 	 * @var array
 	 */
 	protected $_csvColumns = array();
+
+	/**
+	 * Stores if a single Column in the CSV-File is allowed
+	 * @var boolean
+	 */
+	protected $_isSingleColumnAllowed = false;
+
+	/**
+	 * Stores Data to show the User a preview-form
+	 * @var array
+	 */
+	protected $_previewData = array();
+
+	/**
+	 * Stores Data to show the User a preview-form. The Head of the table.
+	 * @var array
+	 */
+	protected $_previewDataHead = array();
 
 }
 

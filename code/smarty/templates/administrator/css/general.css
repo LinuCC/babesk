@@ -9,6 +9,17 @@ body, h1, h2, h3, h4, h5, h6, div, p, table, td, ul, ol, li, dd, dt, dl, blockqu
 
 /* -- Normal link -- */
 
+body {
+	background: #ffffff;
+}
+
+body * {
+	font-family: "Lucida Sans",
+		"Lucida Grande",
+		Lucida,
+		sans-serif;
+}
+
 a {
 	color: #006699;
 	text-decoration: none;
@@ -22,9 +33,9 @@ a:hover, a:active, a:focus {
 
 p, pre, blockquote, ul, ol, h1, h2, h3, h4, h5, h6 {
 	font-family: "Lucida Sans",
-							 "Lucida Grande",
-							 Lucida,
-							 sans-serif;
+		"Lucida Grande",
+		Lucida,
+		sans-serif;
 }
 
 .moduleHeader {
@@ -221,3 +232,18 @@ p.smallContainer {
 	border-bottom-right-radius: 5px;
 }
 
+/* CSV-Upload settings */
+.csvUpload .errorCount {
+	float: right;
+	margin-right: 20px;
+	color: red;
+}
+
+.csvUpload .errorCount.noError {
+	color: #2e6132;
+}
+
+/* No status given, for Example no File Uploaded */
+.csvUpload .errorCount.noAction {
+	color: #006699;
+}
