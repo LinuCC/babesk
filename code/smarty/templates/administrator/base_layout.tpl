@@ -46,9 +46,13 @@ $(document).ready(function() {
 	<!-- Error-Output, if any exist -->
 	{if isset($_userErrorOutput)}
 	<div id="errorContainer">
+		<ul>
 		{foreach $_userErrorOutput as $error}
-			<p>{$error}</p>
+			<li>
+				<p>{$error}</p>
+			</li>
 		{/foreach}
+		</ul>
 		<a class="errorContainerClose" href="#">Schließen</a>
 	</div>
 	{/if}
@@ -56,10 +60,12 @@ $(document).ready(function() {
 	<!-- Message-Output, if any exist -->
 	{if isset($_userMsgOutput)}
 	<div id="messageContainer">
-	{foreach $_userMsgOutput as $msg}
-		<p>{$msg}</p>
-		<a class="messageContainerClose" href="#">Schließen</a>
-	{/foreach}
+	<ul>
+		{foreach $_userMsgOutput as $msg}
+			<li><p>{$msg}</p></li>
+			<a class="messageContainerClose" href="#">Schließen</a>
+		{/foreach}
+	</ul>
 	</div>
 	{/if}
 

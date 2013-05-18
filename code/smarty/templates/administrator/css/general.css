@@ -200,7 +200,7 @@ h3.filterBar {
 #errorContainer {
 	color: #af2d2b;
 	background: #ffc0bf;
-	border-radius: 5px;
+	border-radius: 15px;
 	margin: 20px auto;
 	width: 700px;
 	padding: 25px;
@@ -225,7 +225,7 @@ h3.filterBar {
 #messageContainer {
 	color: #2b67af;
 	background: #acd2ff;
-	border-radius: 5px;
+	border-radius: 15px;
 	margin: 20px auto;
 	width: 700px;
 	padding: 25px;
