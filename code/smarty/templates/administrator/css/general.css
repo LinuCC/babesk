@@ -9,6 +9,17 @@ body, h1, h2, h3, h4, h5, h6, div, p, table, td, ul, ol, li, dd, dt, dl, blockqu
 
 /* -- Normal link -- */
 
+body {
+	background: #ffffff;
+}
+
+body * {
+	font-family: "Lucida Sans",
+		"Lucida Grande",
+		Lucida,
+		sans-serif;
+}
+
 a {
 	color: #006699;
 	text-decoration: none;
@@ -22,9 +33,9 @@ a:hover, a:active, a:focus {
 
 p, pre, blockquote, ul, ol, h1, h2, h3, h4, h5, h6 {
 	font-family: "Lucida Sans",
-							 "Lucida Grande",
-							 Lucida,
-							 sans-serif;
+		"Lucida Grande",
+		Lucida,
+		sans-serif;
 }
 
 .moduleHeader {
@@ -68,6 +79,10 @@ table.dataTable tr th {
 
 table.dataTable tr td {
 	background-color:#FFCC33;
+}
+
+label {
+	margin: 10px;
 }
 
 /* Error Messages */
@@ -165,7 +180,16 @@ h3.filterBar {
 		font-size: 80%;
 		text-align: center;
 }
-
+div.smallContainer,
+span.smallContainer,
+p.smallContainer {
+	border: 1px solid #c1e1f2;
+	border-radius: 5px;
+	padding: 10px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	color: #555555;
+}
 
 /* General
 -------------------------------------------- */
@@ -184,3 +208,42 @@ h3.filterBar {
 		clear: both;
 }
 
+/* Accordion Settings */
+
+.accordion h1,
+.accordion h2,
+.accordion h3,
+.accordion h4,
+.accordion h5 {
+	font-size: 15px;
+	color: #2e6132;
+	background-color: #c1e1f2;
+	padding-left: 10px;
+	margin: 2px 0 0 0;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+
+.accordion > div,
+.accordion > span,
+.accordion > p {
+	border: 1px solid #c1e1f2;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+/* CSV-Upload settings */
+.csvUpload .errorCount {
+	float: right;
+	margin-right: 20px;
+	color: red;
+}
+
+.csvUpload .errorCount.noError {
+	color: #2e6132;
+}
+
+/* No status given, for Example no File Uploaded */
+.csvUpload .errorCount.noAction {
+	color: #006699;
+}

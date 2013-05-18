@@ -1,6 +1,6 @@
 <?php
 
-require_once PATH_INCLUDE . '/CsvImporter.php';
+// require_once PATH_INCLUDE . '/CsvImporter.php';
 
 /**
  * This class contains the functions needed to import classes by a Csv-File

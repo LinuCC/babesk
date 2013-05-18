@@ -16,6 +16,7 @@ require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysFilterAndSort.php';
 require_once 'UsersPasswordResetter.php';
 require_once 'DisplayUsersWaiting.php';
 require_once 'UsersCsvImport.php';
+require_once 'UserCsvImport.php';
 require_once 'UsersCreateParticipationConfirmationPdf.php';
 require_once 'UsersEmailParticipationConfirmation.php';
 
@@ -299,10 +300,11 @@ class Users extends Module {
 	}
 
 	private function importUsersFromCsv () {
-
 		if (count($_FILES)) {
-			UsersCsvImport::classInit ($this->_interface, $this->_databaseAccessManager);
-			UsersCsvImport::import ($_FILES['csvFile']['tmp_name'], ';');
+			$importer = new UserCsvImport();
+			$importer->execute();
+			// UsersCsvImport::classInit ($this->_interface, $this->_databaseAccessManager);
+			// UsersCsvImport::import ($_FILES['csvFile']['tmp_name'], ';');
 		}
 		else {
 			$this->_interface->showSelectCsvFileForImport();
