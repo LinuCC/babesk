@@ -7,6 +7,22 @@ body, h1, h2, h3, h4, h5, h6, div, p, table, td, ul, ol, li, dd, dt, dl, blockqu
 }
 
 
+/* Clearfix */
+
+.clearfix:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+}
+.clearfix { display: inline-block; }
+* html .clearfix { height: 1%; }
+.clearfix { display: block; }
+
+/* End Clearfix */
+
 /* -- Normal link -- */
 
 body {
@@ -180,6 +196,52 @@ h3.filterBar {
 		font-size: 80%;
 		text-align: center;
 }
+
+#errorContainer {
+	color: #af2d2b;
+	background: #ffc0bf;
+	border-radius: 5px;
+	margin: 20px auto;
+	width: 700px;
+	padding: 25px;
+	border: 1px solid #af2d2b;
+}
+
+#errorContainer p {
+	font-weight: 700;
+	font-size: 15px;
+}
+
+#errorContainer a {
+	display: block;
+	position: relative;
+	float: right;
+	top: -40px;
+	right: -20px;
+	color: #af2d2b;
+	font-size: 12px;
+}
+
+#messageContainer {
+	color: #2b67af;
+	background: #acd2ff;
+	border-radius: 5px;
+	margin: 20px auto;
+	width: 700px;
+	padding: 25px;
+	border: 1px solid #2b67af;
+}
+
+#messageContainer a {
+	display: block;
+	position: relative;
+	float: right;
+	top: -40px;
+	right: -20px;
+	color: #2b67af;
+	font-size: 12px;
+}
+
 div.smallContainer,
 span.smallContainer,
 p.smallContainer {
@@ -193,17 +255,6 @@ p.smallContainer {
 
 /* General
 -------------------------------------------- */
-#menu_header {
-		text-align: center;
-		text-decoration: underline;
-		margin-bottom: 50px;
-}
-.menu_item {
-		width: 230px;
-		height: 100px;
-		text-align: center;
-		float: left;
-}
 #close {
 		clear: both;
 }

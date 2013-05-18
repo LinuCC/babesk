@@ -11,9 +11,19 @@
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.min.js"></script>
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
 <script type="text/javascript" language="JavaScript">
+
 $(document).ready(function() {
 	$('body').focus();
+
+	$('.errorContainerClose').on('click', function(event) {
+		$('#errorContainer').hide('highlight', 500);
+	});
+
+	$('.messageContainerClose').on('click', function(event) {
+		$('#messageContainer').hide('highlight', 500);
+	});
 });
 </script>
 </head>
@@ -33,20 +43,27 @@ $(document).ready(function() {
 		</div>
 	</div>
 
-	{if $_userMsgOutput or $_userErrorOutput}
-	<div id="main">
-		<div id="content">
+	<!-- Error-Output, if any exist -->
+	{if isset($_userErrorOutput)}
+	<div id="errorContainer">
 		{foreach $_userErrorOutput as $error}
-		<p class="error">{$error}</p>
+			<p>{$error}</p>
 		{/foreach}
-		{foreach $_userMsgOutput as $msg}
-		<p>{$msg}</p>
-		{/foreach}
-		</div>
+		<a class="errorContainerClose" href="#">Schließen</a>
 	</div>
 	{/if}
 
-	<div id="main">
+	<!-- Message-Output, if any exist -->
+	{if isset($_userMsgOutput)}
+	<div id="messageContainer">
+	{foreach $_userMsgOutput as $msg}
+		<p>{$msg}</p>
+		<a class="messageContainerClose" href="#">Schließen</a>
+	{/foreach}
+	</div>
+	{/if}
+
+	<div id="main" class="clearfix">
 	    <div id="content">{block name=search}{/block}</div>
 		<div id="content">{block name=content}{/block}</div>
 	</div>

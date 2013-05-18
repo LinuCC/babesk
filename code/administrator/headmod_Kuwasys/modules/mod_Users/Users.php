@@ -56,7 +56,9 @@ class Users extends Module {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	public function execute ($dataContainer) {
+
 		$this->entryPoint($dataContainer);
+
 		if (isset($_GET['action'])) {
 			switch ($_GET['action']) {
 				case 'addUser':
