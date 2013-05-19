@@ -224,4 +224,11 @@ CsvFileUploader.prototype.previewOn = function() {
 
 interface = new AdminInterface();
 
+interface.successShow('Hallo! Ich bin Schadenfroh!');
+interface.errorShow('Hallo! Ich bin Schadenfroh!');
+interface.successShow('Hallo! Ich bin Schadenfroh!');
+interface.messageShow('Hallo! Ich bin Schadenfroh!');
+interface.errorShow('Hallo! Ich bin Schadenfroh!');
+interface.successShow('Hallo! Ich bin Schadenfroh!');
+interface.errorShow('Hallo! Ich bin Schadenfroh!');
 interface.messageShow('Hallo! Ich bin Schadenfroh!');

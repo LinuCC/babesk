@@ -216,7 +216,7 @@ h3.filterBar {
 	display: block;
 	position: relative;
 	float: right;
-	top: -40px;
+	top: -20px;
 	right: -20px;
 	color: #af2d2b;
 	font-size: 12px;
@@ -236,9 +236,29 @@ h3.filterBar {
 	display: block;
 	position: relative;
 	float: right;
-	top: -40px;
+	top: -20px;
 	right: -20px;
 	color: #2b67af;
+	font-size: 12px;
+}
+
+#successContainer {
+	color: #55832f;
+	background: #e0ffc6;
+	border-radius: 15px;
+	margin: 20px auto;
+	width: 700px;
+	padding: 25px;
+	border: 1px solid #55832f;
+}
+
+#successContainer a {
+	display: block;
+	position: relative;
+	float: right;
+	top: -20px;
+	right: -20px;
+	color: #55832f;
 	font-size: 12px;
 }
 

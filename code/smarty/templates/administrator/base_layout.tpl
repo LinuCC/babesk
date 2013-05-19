@@ -26,6 +26,11 @@ $(document).ready(function() {
 		event.preventDefault();
 		$('#messageContainer').hide('highlight', 500);
 	});
+
+	$('.successContainerClose').on('click', function(event) {
+		event.preventDefault();
+		$('#successContainer').hide('highlight', 500);
+	});
 });
 </script>
 </head>
@@ -48,6 +53,7 @@ $(document).ready(function() {
 	<!-- Error-Output, if any exist -->
 	{if isset($_userErrorOutput)}
 	<div id="errorContainer">
+		<a class="errorContainerClose" href="#">Schließen</a>
 		<ul>
 		{foreach $_userErrorOutput as $error}
 			<li>
@@ -55,7 +61,6 @@ $(document).ready(function() {
 			</li>
 		{/foreach}
 		</ul>
-		<a class="errorContainerClose" href="#">Schließen</a>
 	</div>
 	{/if}
 
@@ -64,8 +69,8 @@ $(document).ready(function() {
 	<div id="messageContainer">
 	<ul>
 		{foreach $_userMsgOutput as $msg}
-			<li><p>{$msg}</p></li>
 			<a class="messageContainerClose" href="#">Schließen</a>
+			<li><p>{$msg}</p></li>
 		{/foreach}
 	</ul>
 	</div>
