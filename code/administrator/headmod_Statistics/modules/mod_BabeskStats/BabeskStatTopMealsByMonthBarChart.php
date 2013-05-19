@@ -34,7 +34,7 @@ class BabeskStatTopMealsByMonthBarChart extends StatisticsBarChart {
 	protected function dataFetch() {
 
 		$this->_mealData = TableMng::query(
-			'SELECT SUM(changed_cardID) AS summe FROM cards', true);
+			"SELECT SUM(price) FROM schbas_books WHERE class='07'", true);
 	}
 
 	protected function dataProcess() {

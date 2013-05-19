@@ -1,19 +1,6 @@
 {include file='web/header.tpl' title='Schulbuchausleihe'}
 
-<h3>{$coverLetterTitle}</h3>
-{$coverLetterText}<br/>
-
-<h3>{$textOneTitle}</h3>
-{$textOneText}<br/>
-<h3>{$textTwoTitle}</h3>
-{$textTwoText}<br/>
-<h3>{$textThreeTitle}</h3>
-{$textThreeText}<br/>
-
-<h3>B&uuml;cherliste</h3><br/> 
-{foreach $booklist as $book}
-		{$book.subject} {$book.title} {$book.price} <br/>
-{/foreach}
+<h3>Anmeldeformular</h3>
 
 <h3>Bitte Zutreffendes ankreuzen und zur&uuml;ckgeben an das Sekretariat des Lessing-Gymnasiums bis zum TT.MM.JJJJ !</h3> 
 <script type="text/javascript">
@@ -21,7 +8,7 @@
  $("#loanForm").validate();
  });
 </script>
-<form action="index.php?section=Schbas|LoanInfo" method="post" id="loanForm">
+<form action="index.php?section=Schbas|LoanSystem" method="post" id="loanForm">
     <fieldset>
       <label style="width:250px; float:left;">Vorname des/der Erziehungsberechtigten:</label>
       <input type="text" name="eb_vorname" class="required"/><br>

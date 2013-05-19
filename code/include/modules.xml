@@ -341,7 +341,7 @@
 			<active>true</active>
 			<module>
 				<ger_name>Ausleihsystem</ger_name>
-				<name>LoanInfo</name>
+				<name>LoanSystem</name>
 				<active>true</active>
 			</module>
 		</head_module>
