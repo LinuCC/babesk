@@ -21,6 +21,8 @@ $(document).ready(function() {
 	 */
 	$('.HeadItem').on('click', function(event){
 
+		event.preventDefault();
+
 		var headModule = $(this);
 
 		makeTooltipDisappear();

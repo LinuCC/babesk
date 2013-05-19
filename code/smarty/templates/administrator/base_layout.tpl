@@ -18,10 +18,12 @@ $(document).ready(function() {
 	$('body').focus();
 
 	$('.errorContainerClose').on('click', function(event) {
+		event.preventDefault();
 		$('#errorContainer').hide('highlight', 500);
 	});
 
 	$('.messageContainerClose').on('click', function(event) {
+		event.preventDefault();
 		$('#messageContainer').hide('highlight', 500);
 	});
 });

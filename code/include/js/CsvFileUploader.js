@@ -221,3 +221,7 @@ CsvFileUploader.prototype.previewOn = function() {
 
 	$('.csvUpload #infotext').html('Die Vorschaufunktion ist an. Das heißt, es wird zuerst eine Vorschau beim Dateihochladen erstellt, ohne die Datenbank zu verändern.');
 }
+
+interface = new AdminInterface();
+
+interface.messageShow('Hallo! Ich bin Schadenfroh!');

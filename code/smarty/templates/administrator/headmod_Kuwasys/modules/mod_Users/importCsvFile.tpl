@@ -1,10 +1,4 @@
 {extends file=$inh_path} {block name='content'}
-<style type='text/css'  media='all'>
-/*Table should not be over the Border of the Line of the main-block*/
-
-
-
-</style>
 
 <h2 class="moduleHeader">CSV-Import-Test</h2>
 
@@ -59,8 +53,11 @@
 </div>
 
 <script src="../include/js/jqueryFileUpload/jquery.ui.widget.js"></script>
-<script src="../include/js/jqueryFileUpload/jquery.iframe-transport.js"></script>
+<script src="../include/js/jqueryFileUpload/jquery.iframe-transport.js">
+	</script>
 <script src="../include/js/jqueryFileUpload/jquery.fileupload.js"></script>
+<script src="../smarty/templates/administrator/administratorFunctions.js">
+	</script>
 <script src="../include/js/CsvFileUploader.js"></script>
 
 <script type="text/javascript">
