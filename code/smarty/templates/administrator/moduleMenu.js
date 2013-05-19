@@ -28,9 +28,6 @@ $(document).ready(function() {
 		makeTooltipDisappear();
 		if(oldHeadModule != headModule.attr('id')) {
 			headModule.addClass('selected');
-		}
-
-		if(oldHeadModule != '') {
 			$('#' + oldHeadModule).removeClass('selected');
 		}
 

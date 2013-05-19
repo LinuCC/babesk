@@ -49,7 +49,7 @@ var AdminInterface = function() {
 	/**
 	 * Adds a MessageContainer to the Site (void, possibly hidden, too)
 	 */
-	this.messageContainerAdd = function() {
+	messageContainerAdd = function() {
 
 		html = '<div id="messageContainer"><a class="messageContainerClose" href="#">Schließen</a><ul></ul></div>';
 
@@ -64,7 +64,7 @@ var AdminInterface = function() {
 	/**
 	 * Adds an ErrorContainer to the Site (void, possibly hidden, too)
 	 */
-	this.errorContainerAdd = function() {
+	errorContainerAdd = function() {
 
 		html = '<div id="errorContainer"><a class="errorContainerClose" href="#">Schließen</a><ul></ul></div>';
 		$('#header').after(html);
@@ -73,7 +73,7 @@ var AdminInterface = function() {
 	/**
 	 * Adds a successContainer to the Site (void, possibly hidden, too)
 	 */
-	this.successContainerAdd = function() {
+	successContainerAdd = function() {
 
 		html = '<div id="successContainer"><a class="successContainerClose" href="#">Schließen</a><ul></ul></div>';
 
@@ -88,3 +88,5 @@ var AdminInterface = function() {
 		}
 	}
 }
+
+var adminInterface = new AdminInterface();

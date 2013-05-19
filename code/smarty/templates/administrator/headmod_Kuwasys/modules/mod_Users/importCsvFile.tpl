@@ -8,8 +8,6 @@
 		<input id="csvFileupload" type="file" name="files[]" data-url="index.php?section=Kuwasys|Users&amp;action=csvImport" />
 	</div>
 
-	<p>WARNUNG: Aus irgendeinem Grund funktionieren Transaktionen nicht. Deshalb wird momentan JEDER Upload auf die Datenbank sofort überspielt.</p>
-
 	<p id="infotext" class="smallContainer">Die Vorschaufunktion ist an. Das heißt, es wird zuerst eine Vorschau beim Dateihochladen erstellt, ohne die Datenbank zu verändern.</p>
 
 	<span class="accordion">
@@ -59,7 +57,6 @@
 <script src="../smarty/templates/administrator/administratorFunctions.js">
 	</script>
 <script src="../include/js/CsvFileUploader.js"></script>
-
 <script type="text/javascript">
 
 $(document).ready(function() {
@@ -77,6 +74,7 @@ $(document).ready(function() {
 			uploader.previewOn();
 		}
 	});
+	adminInterface.errorShow('WARNUNG: Aus irgendeinem Grund funktionieren Transaktionen nicht. Deshalb wird momentan JEDER Upload auf die Datenbank sofort überspielt.');
 });
 
 </script>
