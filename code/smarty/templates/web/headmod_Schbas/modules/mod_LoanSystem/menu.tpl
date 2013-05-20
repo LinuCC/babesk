@@ -3,7 +3,7 @@
 
 
 			<center><h2>Schulbuchausleihsystem</h2><br/></center>	
-			<h3>Anschreiben und Buchliste f&uuml;r das Schuljahr JJ/JJ</h3>
+			<h3>Anschreiben und Buchliste f&uuml;r das Schuljahr {$schbasYear}</h3>
 			{if $BaBeSkTerminal}
 				Hinweis: Post kann nicht am BaBeSK-Terminal <br>ge&ouml;ffnet werden!
 			{else}

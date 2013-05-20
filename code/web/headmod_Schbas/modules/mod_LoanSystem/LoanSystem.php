@@ -62,6 +62,8 @@ class LoanSystem extends Module {
 	}
 
 	private function showMainMenu() {
+		$schbasYear = TableMng::query("SELECT value FROM global_settings WHERE name='schbas_year'",true);
+		$this->_smarty->assign('schbasYear', $schbasYear[0]['value']);
 		$this->_smarty->assign('BaBeSkTerminal', $this->checkIsKioskMode());
 		$this->_smarty->display($this->_smartyPath . 'menu.tpl');
 	}
@@ -108,7 +110,8 @@ class LoanSystem extends Module {
 
 		//get gradeValue ("Klassenstufe")
 		$gradeValue = TableMng::query("SELECT gradeValue FROM grade WHERE id=(SELECT GradeID from jointusersingrade WHERE UserID='".$_SESSION['uid']."')",true);
-
+		$gradeValue[0]['gradeValue'] = strval(intval($gradeValue[0]['gradeValue'])+1);
+		
 		$text = "</h4>Bitte ausgef&uuml;llt zur&uuml;ckgeben an das Sekretariat des Lessing-Gymnasiums bis zum TT.MM.JJJJ!</h4>";
 
 		$text .= '<table border="1"><tr>';
@@ -162,7 +165,8 @@ class LoanSystem extends Module {
 
 		//get gradeValue ("Klassenstufe")
 		$gradeValue = TableMng::query("SELECT gradeValue FROM grade WHERE id=(SELECT GradeID from jointusersingrade WHERE UserID='".$_SESSION['uid']."')",true);
-
+		$gradeValue[0]['gradeValue'] = strval(intval($gradeValue[0]['gradeValue'])+1);
+		
 		// get cover letter ("Anschreiben")
 		$coverLetter = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='coverLetter'",true);
 
