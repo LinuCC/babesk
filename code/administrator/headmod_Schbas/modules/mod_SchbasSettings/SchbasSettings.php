@@ -32,8 +32,8 @@ class SchbasSettings extends Module {
 				case '1':	$SchbasSettingsInterface->GeneralSettings();break;
 				case '2':	$SchbasSettingsInterface->LoanSettings($SchbasSettingsProcessing->getLoanSettings(),false);break;
 				case '3':	$SchbasSettingsInterface->RetourSettings();break;
-				case '4':	break;
-				case '5';	TableMng::query(sprintf("UPDATE schbas_fee SET fee_normal = %s, fee_reduced = %s WHERE grade = '5'",$_POST['5norm'], $_POST['5erm']));
+				case '4':	TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", $_POST['owner']."|".$_POST['number']."|".$_POST['blz']."|".$_POST['institute'], 'bank_details'));break;
+				case '5':	TableMng::query(sprintf("UPDATE schbas_fee SET fee_normal = %s, fee_reduced = %s WHERE grade = '5'",$_POST['5norm'], $_POST['5erm']));
 							TableMng::query(sprintf("UPDATE schbas_fee SET fee_normal = %s, fee_reduced = %s WHERE grade = '6'",$_POST['6norm'], $_POST['6erm']));
 							TableMng::query(sprintf("UPDATE schbas_fee SET fee_normal = %s, fee_reduced = %s WHERE grade = '7'",$_POST['7norm'], $_POST['7erm']));
 							TableMng::query(sprintf("UPDATE schbas_fee SET fee_normal = %s, fee_reduced = %s WHERE grade = '8'",$_POST['8norm'], $_POST['8erm']));
@@ -42,6 +42,10 @@ class SchbasSettings extends Module {
 							TableMng::query(sprintf("UPDATE schbas_fee SET fee_normal = %s, fee_reduced = %s WHERE grade = '11'",$_POST['11norm'], $_POST['11erm']));
 							TableMng::query(sprintf("UPDATE schbas_fee SET fee_normal = %s, fee_reduced = %s WHERE grade = '12'",$_POST['12norm'], $_POST['12erm']));
 							$SchbasSettingsInterface->LoanSettings($SchbasSettingsProcessing->getLoanSettings(),true);break;
+				case '6':	$claim_date = $_POST['claim_Day'].".". $_POST['claim_Month'].".". $_POST['claim_Year'];
+							$transfer_date = $_POST['transfer_Day'].".". $_POST['transfer_Month'].".". $_POST['transfer_Year'];
+							TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", $claim_date,"schbasDeadlineClaim"));
+							TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", $transfer_date,"schbasDeadlineTransfer"));break;
 			}	
 		}
 	}
