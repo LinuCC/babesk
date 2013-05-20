@@ -9,6 +9,9 @@
 <form action="index.php?section=Schbas|SchbasSettings&action=3" method="post">
 	<input type="submit" value="Deadlines"><br>
 </form><br>
+<form action="index.php?section=Schbas|SchbasSettings&action=7" method="post">
+	<input type="submit" value="Formular f&uuml;r Sch&uuml;ler freischalten"><br>
+</form><br>
 
 
 {/block}
