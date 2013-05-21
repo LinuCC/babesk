@@ -257,7 +257,7 @@ class AdminUserProcessing {
 		$pdf->SetKeywords('');
 
 		// set default header data
-		$pdf->SetHeaderData('../../../../web/headmod_Messages/modules/mod_MAdmin/logo.jpg', 15, 'LeG Uelzen', "Abmeldung von: ".$user['forename']." ".$user['name']."\nKlasse: ".$user['class'], array(0,0,0), array(0,0,0));
+		$pdf->SetHeaderData('../../../../web/headmod_Messages/modules/mod_MessageAdminMenu/logo.jpg', 15, 'LeG Uelzen', "Abmeldung von: ".$user['forename']." ".$user['name']."\nKlasse: ".$user['class'], array(0,0,0), array(0,0,0));
 		$pdf->setFooterData($tc=array(0,0,0), $lc=array(0,0,0));
 
 		// set header and footer fonts
