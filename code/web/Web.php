@@ -80,7 +80,8 @@ class Web {
 
 		$this->addSessionUserdata();
 		$this->checkForMail();
-
+		
+		$userData = $this->_userManager->getUserdata($_SESSION['uid']);
 		//module-specific
 		if (isset($userData['credit'])) {
 			$_SESSION['credit'] = $userData['credit'];
