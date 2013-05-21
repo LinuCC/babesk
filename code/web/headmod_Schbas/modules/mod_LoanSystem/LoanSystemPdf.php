@@ -61,14 +61,13 @@ class LoanSystemPdf {
 		// create new PDF document
 		$this->_pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT,
 			PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
 		$this->pdfMetadataSet();
 		$this->_pdf->AddPage();
 		$this->contentPrint($this->_page1Title,$this->_page1Text);
-		if ($this->_page1Title!='') {
+		if ($this->_page2Title!='') {
 		$this->_pdf->AddPage();
 		$this->contentPrint($this->_page2Title,$this->_page2Text);
-		if ($this->_page2Title!='') {
+		if ($this->_page3Title!='') {
 		$this->_pdf->AddPage();
 		$this->contentPrint($this->_page3Title,$this->_page3Text);
 		}}

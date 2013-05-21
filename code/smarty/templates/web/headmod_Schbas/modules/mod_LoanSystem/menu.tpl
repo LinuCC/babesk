@@ -8,7 +8,7 @@
 				Hinweis: Post kann nicht am BaBeSK-Terminal <br>ge&ouml;ffnet werden!
 			{else}
 			<a href="index.php?section=Schbas|LoanSystem&action=showPdf">
-				<input type="submit" value="Bitte hier klicken!" /></a>
+				<input type="submit" value="Informationen herunterladen" /></a>
 			{/if}
 			
 	<br/>	<br/>	
@@ -96,7 +96,7 @@ div.schbasForm {
 
 <div class="schbasForm">
 <h5>In diesem gr&uuml;nen Bereich m&uuml;ssen Sie eine Auswahl treffen! Ihre Entscheidung erscheint im erstellten R&uuml;ckmeldedokument als Strichcode.<br/>
-An der entgeltlichen Ausleihe von Lernmitteln im Schuljahr JJJJ/JJ<br/>
+An der entgeltlichen Ausleihe von Lernmitteln im Schuljahr {$schbasYear}<br/>
 <input type="radio" name="loanChoice" value="noLoan" id="radio1" required /> nehmen wir nicht teil<br />
 <input type="radio" name="loanChoice" value="loan" id="radio2" checked/> nehmen wir teil und melden uns hiermit verbindlich zu den im oben abrufbaren Schreiben genannten Bedingungen an.
 
