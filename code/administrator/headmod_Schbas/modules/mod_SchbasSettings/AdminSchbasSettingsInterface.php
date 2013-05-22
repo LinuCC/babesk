@@ -32,6 +32,10 @@ class AdminSchbasSettingsInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath . 'retour.tpl');
 	}
 	
+	public function TextSettings() {
+		$this->smarty->display($this->tplFilePath . 'texts.tpl');
+	}
+	
 	/**
 	 * The Path to the Smarty-Parent-Templatefile
 	 */

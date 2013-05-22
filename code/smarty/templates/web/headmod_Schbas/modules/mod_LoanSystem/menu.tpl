@@ -51,14 +51,14 @@ Entweder geben Sie diese Daten hier online oder nach dem Ausdrucken des erstellt
          $('#div1').show();
          $('input[id=loanNormal]').prop('checked', false);
          $('input[id=loanReduced]').prop('checked', false);
+         $('input[id=loanSoli]').prop('checked', false);
      });
       $('#radio2').on('change', function () {
       $('#div3').hide();
          $divs.hide();
          $('#div2').show();
          $('input[id=loanNormal]').prop('checked', true);
-         $('input[name=noLoanFee]').prop('checked',false);
-         
+       
      });
      $('#loanReduced').on('change', function () {
          $('#div3').show();
@@ -66,7 +66,9 @@ Entweder geben Sie diese Daten hier online oder nach dem Ausdrucken des erstellt
      $('#loanNormal').on('change', function () {
          $('#div3').hide();
      });
-     
+     $('#loanSoli').on('change', function () {
+         $('#div3').hide();
+     }); 
  });
 	
 </script>
@@ -101,16 +103,16 @@ An der entgeltlichen Ausleihe von Lernmitteln im Schuljahr {$schbasYear}<br/>
 <input type="radio" name="loanChoice" value="loan" id="radio2" checked/> nehmen wir teil und melden uns hiermit verbindlich zu den im oben abrufbaren Schreiben genannten Bedingungen an.
 
 <div id="ausleihe" >
-    <div id="div1"><input type="checkbox" name="noLoanFee" value="true" /> Wir geh&ouml;ren zu dem von der Zahlung des Entgelts befreiten Personenkreis. 
-    Leistungsbescheid bzw. &auml;hnlicher Nachweis ist beigef&uuml;gt. <br /></div>
     <div id="div2">
     	Den Betrag von<br>
     	<input type="radio" name="loanFee" value="loanNormal" id="loanNormal" checked required/> 56,00 Euro <br />
-    	<input type="radio" name="loanFee" value="loanReduced" id="loanReduced" /> 45,00 Euro (bei mehr als zwei schulpflichtigen Kindern)</h5>
+    	<input type="radio" name="loanFee" value="loanReduced" id="loanReduced" /> 45,00 Euro (bei mehr als zwei schulpflichtigen Kindern)<br />
+    	<input type="radio" name="loanFee" value="loanSoli" id="loanSoli"/> Wir geh&ouml;ren zu dem von der Zahlung des Entgelts befreiten Personenkreis. 
+   															   Leistungsbescheid bzw. &auml;hnlicher Nachweis ist beigef&uuml;gt. </h5>
     	<div id="div3" class="schbasForm"  style="border-color: #df610c; width:600px;">
     	<h5>Die Eingaben in diesem orangefarbenen Rahmen sind freiwillig. Sie werden direkt in das R&uuml;ckmeldedokument ausgegeben und nicht abgespeichert. 
     	Entweder geben Sie diese Daten hier online oder nach dem Ausdrucken des erstellten R&uuml;ckmeldedokuments handschriftlich ein.<br/>
-    	Weitere schulpflichtige Kinder im Haushalt (Schuljahr JJ/JJ).<br/> Bitte pro Zeile den Namen, Vornamen und die Schule angeben, auf der das jeweilige Kind geht.</h5>
+    	Weitere schulpflichtige Kinder im Haushalt (Schuljahr {$schbasYear}).<br/> Bitte pro Zeile den Namen, Vornamen und die Schule angeben, auf der das jeweilige Kind geht.</h5>
     	<textarea name="siblings" rows=5 cols=80></textarea>
     	</div>
     </div>

@@ -46,9 +46,31 @@ class SchbasSettings extends Module {
 							$transfer_date = $_POST['transfer_Day'].".". $_POST['transfer_Month'].".". $_POST['transfer_Year'];
 							TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", $claim_date,"schbasDeadlineClaim"));
 							TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", $transfer_date,"schbasDeadlineTransfer"));break;
+				case '8':   $SchbasSettingsInterface->TextSettings();break;
+				
+				case 'fetchTextsAjax':
+					$this->fetchTextsAjax();
+					break;
 			}	
 		}
 	}
+	
+	protected function fetchTextsAjax() {
+	
+		$templateId = TableMng::getDb()->real_escape_string($_POST['templateId']);
+		$textId = TableMng::getDb()->real_escape_string($_POST['textId']);
+		try {
+			$template = TableMng::query(sprintf(
+					'SELECT * FROM schbas_texts WHERE `description` = "%s%s"',
+					$textId,$templateId), true);
+	
+		} catch (Exception $e) {
+			die('errorFetchTemplate');
+		}
+	
+		die(json_encode($template[0]));
+	}
+	
 }
 
 ?>

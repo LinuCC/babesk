@@ -148,12 +148,13 @@ class LoanSystem extends Module {
 		if ($_POST['loanChoice']=="noLoan") {
 			$feedback = "nl";
 			$text .= "nehmen wir nicht teil. ";
-			if (isset($_POST['noLoanFee']) && $_POST['noLoanFee']=="true") {
-				$feedback = "nls";
+		}
+		else if (isset($_POST['loanFee']) && $_POST['loanFee']=="loanSoli") {
+				$feedback = "ls";
+				$text .= "nehmen wir teil und melden uns hiermit verbindlich zu den in Ihrem Schreiben vom ".$letter_date[0]['value']." genannten Bedingungen an.<br/>";
 				$text .= "Wir geh&ouml;ren zu dem von der Zahlung des Entgelts befreiten Personenkreis. Leistungsbescheid bzw. &auml;hnlicher Nachweis ist beigef&uuml;gt.";
 			}
-		}
-		else {
+			else {
 			$text .= "nehmen wir teil und melden uns hiermit verbindlich zu den in Ihrem Schreiben vom ".$letter_date[0]['value']." genannten Bedingungen an.<br/>";
 			if (isset ($_POST['loanFee']) && $_POST['loanFee']=="loanNormal") {
 				$feedback = "ln";
@@ -161,7 +162,7 @@ class LoanSystem extends Module {
 			}
 			else if (isset($_POST['loanFee']) && $_POST['loanFee']=="loanReduced") { 
 				$feedback = "lr";
-				$text .= "Den Betrag von ".$fee_reduced[0]['feeReduced']." &euro; (mehr als 2 schulpflichtigen Kinder) ";
+				$text .= "Den Betrag von ".$feeReduced[0]['fee_reduced']." &euro; (mehr als 2 schulpflichtigen Kinder) ";
 			}
 			
 			//get bank account details
