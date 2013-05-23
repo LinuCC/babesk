@@ -36,6 +36,15 @@ class AdminSchbasSettingsInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath . 'texts.tpl');
 	}
 	
+	public function enableFormConfirm($enabled) {
+		$this->smarty->assign('enabled', $enabled);
+		$this->smarty->display($this->tplFilePath . 'enableConfirm.tpl');
+	}
+	
+	public function enableFormConfirmFin() {
+		$this->smarty->display($this->tplFilePath . 'enableConfirmFin.tpl');
+	}
+	
 	/**
 	 * The Path to the Smarty-Parent-Templatefile
 	 */
