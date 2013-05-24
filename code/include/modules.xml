@@ -221,9 +221,15 @@
 				<name>KuwasysStats</name>
 				<active>true</active>
 			</module>
+			
+		</head_module>
+		<head_module>
+			<ger_name>Gnissel Sprechstunde</ger_name>
+			<name>Gnissel</name>
+			<active>true</active>
 			<module>
-				<ger_name>Babesk-Statistiken</ger_name>
-				<name>BabeskStats</name>
+				<ger_name>Eine Karte wurde gefunden</ger_name>
+				<name>GCardInfo</name>
 				<active>true</active>
 			</module>
 		</head_module>
