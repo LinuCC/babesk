@@ -15,11 +15,7 @@
 			<h3>Anmeldeformular</h3>
 
 
-<script type="text/javascript">
- $(function(){
- $("#loanForm").validate();
- });
-</script>
+
 
 <div class="schbasForm"  style="border-color: #df610c;">
 <h5>Die Eingaben in diesem orangefarbenen Rahmen sind freiwillig. Sie werden direkt in das R&uuml;ckmeldedokument ausgegeben und <u>nicht</u> abgespeichert. 
@@ -124,7 +120,22 @@ An der entgeltlichen Ausleihe von Lernmitteln im Schuljahr {$schbasYear}<br/>
 </div>
 <input type="submit" value="R&uuml;ckmeldedokument erstellen" />
 </form>
-		
+	
+	
+	<script type="text/javascript">
+$('#loanForm').submit(function() {
+
+  var text = $("textarea[name=siblings]").val();
+  var lines = text.split("\n");
+  var linesLen = lines.length;
+ 
+  
+if ($("textarea[name=siblings]").val() && $('input[id=loanReduced]').prop('checked') && linesLen<2) {
+  alert('Bitte geben Sie mindestens zwei Kinder (in zwei Zeilen) ein!');
+  return false;
+  }
+});
+</script>	
 		
 
 {include file='web/footer.tpl'}
