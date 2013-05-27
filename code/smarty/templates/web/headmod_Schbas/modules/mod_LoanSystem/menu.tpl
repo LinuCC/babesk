@@ -52,12 +52,14 @@ Entweder geben Sie diese Daten hier online oder nach dem Ausdrucken des erstellt
          $('input[id=loanNormal]').prop('checked', false);
          $('input[id=loanReduced]').prop('checked', false);
          $('input[id=loanSoli]').prop('checked', false);
+         $('textarea[name=siblings]').val('');
      });
       $('#radio2').on('change', function () {
       $('#div3').hide();
          $divs.hide();
          $('#div2').show();
          $('input[id=loanNormal]').prop('checked', true);
+         $('textarea[name=siblings]').val('');
        
      });
      $('#loanReduced').on('change', function () {
@@ -65,9 +67,11 @@ Entweder geben Sie diese Daten hier online oder nach dem Ausdrucken des erstellt
      });
      $('#loanNormal').on('change', function () {
          $('#div3').hide();
+          $('textarea[name=siblings]').val('');
      });
      $('#loanSoli').on('change', function () {
          $('#div3').hide();
+       $('textarea[name=siblings]').val('');
      }); 
  });
 	
