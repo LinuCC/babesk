@@ -63,6 +63,10 @@ class AdminSchbasSettingsInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath . 'enableConfirmFin.tpl');
 	}
 	
+	public function ShowPreviewInfoTexts() {
+		$this->smarty->display($this->tplFilePath . 'showPreviewInfoTexts.tpl');
+	}
+	
 	/**
 	 * The Path to the Smarty-Parent-Templatefile
 	 */

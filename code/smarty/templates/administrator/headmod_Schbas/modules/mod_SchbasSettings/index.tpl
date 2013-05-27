@@ -18,6 +18,9 @@
 <form action="index.php?section=Schbas|SchbasSettings&action=editCoverLetter" method="post">
 	<input type="submit" value="Anschreiben editieren"><br>
 </form><br>
+<form action="index.php?section=Schbas|SchbasSettings&action=previewInfoDocs" method="post">
+	<input type="submit" value="Vorschau der Informationsschreiben"><br>
+</form><br>
 
 
 {/block}

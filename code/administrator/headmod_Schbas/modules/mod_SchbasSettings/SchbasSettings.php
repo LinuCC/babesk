@@ -52,6 +52,8 @@ class SchbasSettings extends Module {
 				break;
 				case 'editCoverLetter': $this->EditCoverLetter();
 				break;
+				case 'previewInfoDocs': $this->PreviewInfoDocs();
+				break;
 
 				case 'fetchTextsAjax':
 					$this->fetchTextsAjax();
@@ -161,6 +163,104 @@ class SchbasSettings extends Module {
 			$SchbasSettingsInterface->EditCoverLetter($title[0]['title'],$text[0]['text']);
 		}
 	}
+	
+	protected function previewInfoDocs () {
+		require_once 'AdminSchbasSettingsInterface.php';
+		$SchbasSettingsInterface = new AdminSchbasSettingsInterface($this->relPath);
+		if (isset($_POST['gradeValue'])) {
+			$this->showPdf();
+		}
+		else {
+			$SchbasSettingsInterface->ShowPreviewInfoTexts();
+		}
+	}
+	
+	private function showPdf() {
+		require_once PATH_ACCESS. '/BookManager.php';
+	
+		//get cover letter date
+		$letter_date =  TableMng::query("SELECT value FROM global_settings WHERE name='schbasDateCoverLetter'",true);
+	
+		$booklistManager = new BookManager();
+	
+		//get gradeValue ("Klassenstufe")
+		$gradeValue = $_POST['gradeValue'];
+	
+		// get cover letter ("Anschreiben")
+		$coverLetter = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='coverLetter'",true);
+	
+		// get first infotext
+		$textOne = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textOne".$gradeValue."'",true);
+	
+		// get second infotext
+		$textTwo = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textTwo".$gradeValue."'",true);
+	
+		// get third infotext
+		$textThree = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textThree".$gradeValue."'",true);
+	
+		// get booklist
+		$booklist = $booklistManager->getBooksByClass($gradeValue);
+	
+		$books = '<table border="0" bordercolor="#FFFFFF" style="background-color:#FFFFFF" width="100%" cellpadding="0" cellspacing="1">
+				<tr style="font-weight:bold; text-align:center;"><th>Fach</th><th>Titel</th><th>Verlag</th><th>ISBN-Nr.</th><th>Preis</th></tr>';
+	
+		$bookPrices = 0;
+		foreach ($booklist as $book) {
+			$bookPrices += $book['price'];
+			$books.= '<tr><td>'.$book['subject'].'</td><td>'.$book['title'].'</td><td>'.$book['publisher'].'</td><td>'.$book['isbn'].'</td><td align="right">'.$book['price'].' &euro;</td></tr>';
+		}
+		$books .= '<tr><td></td><td></td><td></td><td style="font-weight:bold; text-align:center;">Summe:</td><td align="right">'.$bookPrices.' &euro;</td></tr>';
+		$books .= '</table>';
+		$books = str_replace('ä', '&auml;', $books);
+		$books = str_replace('é', '&eacute;', $books);
+	
+		//get loan fees
+		$feeNormal = TableMng::query("SELECT fee_normal FROM schbas_fee WHERE grade=".$gradeValue,true);
+		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradeValue,true);
+	
+		//get bank account
+		$bank_account =  TableMng::query("SELECT value FROM global_settings WHERE name='bank_details'",true);
+		$bank_account = explode("|", $bank_account[0]['value']);
+	
+		//textOne[0]['title'] wird nicht ausgegeben, unter admin darauf hinweisen!
+		$pageTwo = $books.'<br/>'.$textOne[0]['text'].'<br/><br/>'.
+				'<table style="border:solid" width="75%" cellpadding="2" cellspacing="2">
+				<tr><td>Leihgeb&uuml;hr: </td><td>'.$feeNormal[0]['fee_normal'].' Euro</td></tr>
+						<tr><td>(3 und mehr schulpflichtige Kinder:</td><td>'.$feeReduced[0]['fee_reduced'].' Euro)</td></tr>
+								<tr><td>Kontoinhaber:</td><td>'.$bank_account[0].'</td></tr>
+								<tr><td>Kontonummer:</td><td>'.$bank_account[1].'</td></tr>
+								<tr><td>Bankleitzahl:</td><td>'.$bank_account[2].'</td></tr>
+								<tr><td>Kreditinstitut:</td><td>'.$bank_account[3].'</td></tr>
+								</table>';
+	
+	
+	
+	
+		$pageThree = "<h3>".$textTwo[0]['title']."</h3>".$textTwo[0]['text']."<br/><h3>".$textThree[0]['title']."</h3>".$textThree[0]['text'];
+	
+		$daterow = '<p style="text-align: right;">'.$letter_date[0]['value']."</p>";
+	
+		$this->createPdf($coverLetter[0]['title'],$daterow.$coverLetter[0]['text'],"Lehrb&uuml;cher Jahrgang ".$gradeValue,$pageTwo,
+				'Weitere Informationen',$pageThree,$gradeValue,false,"","jahrgang_".$gradeValue);
+	}
+	
+	/**
+	 * Creates a PDF for the Participation Confirmation and returns its Path
+	 */
+	private function createPdf ($page1Title,$page1Text,$page2Title,$page2Text,$page3Title,$page3Text,$gradeLevel,$msgReturn,$loanChoice,$uid) {
+	
+		require_once 'LoanSystemPdf.php';
+	
+		try {
+			$pdfCreator = new LoanSystemPdf($page1Title,$page1Text,$page2Title,$page2Text,$page3Title,$page3Text,$gradeLevel,$msgReturn,$loanChoice,$uid);
+			$pdfCreator->create();
+			$pdfCreator->output();
+	
+		} catch (Exception $e) {
+			$this->_interface->DieError('Konnte das PDF nicht erstellen!');
+		}
+	}
+	
 }
 
 ?>
