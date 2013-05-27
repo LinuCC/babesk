@@ -1,7 +1,7 @@
 {extends file=$checkoutParent}{block name=content}
 
 
-<h3>Bitte Barcode Scannen</h3>
+<h3>Formular erfassen</h3>
 
 
 
@@ -37,7 +37,7 @@
 				alert('Der Barcode enthält inkorrekte Zeichen');
 			}
 			else if(data == 'dupe') {
-				alert('Formular wurde bereits eingescannt');
+				alert(unescape('Formular wurde bereits eingescannt. Bei %C4nderungen bitte zuerst l%F6schen!'));
 			}
 			else {
 				location.reload();

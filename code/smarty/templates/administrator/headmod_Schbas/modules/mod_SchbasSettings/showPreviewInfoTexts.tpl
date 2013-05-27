@@ -18,7 +18,7 @@
 		</label>
 	
 	
-	<input id="submit"type="submit" value="Vorschau der Informationsdokumente" />
+	<input id="submit"type="submit" value="Vorschau herunterladen" />
 </form>
 
 {/block}
