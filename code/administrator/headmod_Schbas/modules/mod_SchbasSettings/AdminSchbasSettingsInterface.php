@@ -18,8 +18,12 @@ class AdminSchbasSettingsInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath . 'index.tpl');
 	}
 	
-	public function GeneralSettings() {
-		$this->smarty->display($this->tplFilePath . 'general.tpl');
+	public function EditBankAccount($owner,$number,$blz,$institute) {
+		$this->smarty->assign('owner', $owner);
+		$this->smarty->assign('number', $number);
+		$this->smarty->assign('blz', $blz);
+		$this->smarty->assign('institute', $institute);
+		$this->smarty->display($this->tplFilePath . 'editBankAccount.tpl');
 	}
 	
 	public function LoanSettings($settings, $save) {
@@ -34,6 +38,20 @@ class AdminSchbasSettingsInterface extends AdminInterface{
 	
 	public function TextSettings() {
 		$this->smarty->display($this->tplFilePath . 'texts.tpl');
+	}
+	
+	public function EditCoverLetter($title, $text) {
+		$this->smarty->assign('title', $title);
+		$this->smarty->assign('text', $text);
+		$this->smarty->display($this->tplFilePath . 'editCoverLetter.tpl');
+	}
+	
+	public function SavingSuccess() {
+		$this->smarty->display($this->tplFilePath . 'saveSuccess.tpl');
+	}
+	
+	public function SavingFailed() {
+		$this->smarty->display($this->tplFilePath . 'saveFailed.tpl');
 	}
 	
 	public function enableFormConfirm($enabled) {

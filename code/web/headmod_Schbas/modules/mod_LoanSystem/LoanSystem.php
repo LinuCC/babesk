@@ -119,7 +119,7 @@ class LoanSystem extends Module {
 		$letter_date =  TableMng::query("SELECT value FROM global_settings WHERE name='schbasDateCoverLetter'",true);
 		
 		$schbasDeadlineClaim = TableMng::query("SELECT value FROM global_settings WHERE name='schbasDeadlineClaim'",true);
-		$text = "</h4>Bitte ausgef&uuml;llt zur&uuml;ckgeben an das Sekretariat des Lessing-Gymnasiums bis zum ".$schbasDeadlineClaim[0]['value']."!</h4>";
+		$text = "</h4>Bitte ausgef&uuml;llt zur&uuml;ckgeben an die Klassen- bzw. Kursleitung des Lessing-Gymnasiums bis zum ".$schbasDeadlineClaim[0]['value']."!</h4>";
 
 		$text .= '<table border="1"><tr>';
 		if (isset($_POST['eb_name']) && $_POST['eb_name']=="" || isset($_POST['eb_vorname']) && $_POST['eb_vorname']=="") $text .= "<td>Name, Vorname des/der Erziehungsberechtigten:<br><br><br><br><br><br></td>";

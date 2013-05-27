@@ -77,12 +77,12 @@ $(function () {
 });
 </script>
 
-<form action="index.php?section=Schbas|SchbasSettings&action=9"	method="post">
+<form action="index.php?section=Schbas|SchbasSettings&action=10"	method="post">
 	
 	
 	
 		<label>Bitte Jahrgang ausw&auml;hlen:
-			<select id="gradeValueSelection" name="template">			
+			<select id="gradeValueSelection" name="grade">			
 					<option value="5">5</option>
 					<option value="6">6</option>
 					<option value="7">7</option>
@@ -97,12 +97,12 @@ $(function () {
 	<br />
 	<label>Titel erster Text:<input id="messagetitle" type="text" name="messagetitle" value="" /></label><br />
 	<label>Text 1:<textarea class="ckeditor" name="messagetext"></textarea></label><br /><br />
-	<label>Titel zweiter Text:<input id="messagetitle2" type="text" name="messagetitle" value="" /></label><br />
+	<label>Titel zweiter Text:<input id="messagetitle2" type="text" name="messagetitle2" value="" /></label><br />
 	<label>Text 2:<textarea class="ckeditor" name="messagetext2"></textarea></label><br /><br />
-	<label>Titel dritter Text:<input id="messagetitle3" type="text" name="messagetitle" value="" /></label><br />
+	<label>Titel dritter Text:<input id="messagetitle3" type="text" name="messagetitle3" value="" /></label><br />
 	<label>Text 3:<textarea class="ckeditor" name="messagetext3"></textarea></label><br /><br />
 	
-	<input id="submit"type="submit" value="Submit" />
+	<input id="submit"type="submit" value="Speichern" />
 </form>
 
 {/block}

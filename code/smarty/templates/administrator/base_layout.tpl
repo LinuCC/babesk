@@ -21,6 +21,9 @@ for (i = 0; i < document.forms[0].length; i++)
  }
 }
 </script>
+<script type="text/javascript"
+		src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+</script>
 </head>
 
 <body

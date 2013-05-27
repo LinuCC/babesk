@@ -1,4 +1,4 @@
 {extends file=$schbasSettingsParent}{block name=content}
-Einstellungen erfolgreich gespeichert!
+Einstellungen konnten nicht gespeichert werden!
 
 {/block}
