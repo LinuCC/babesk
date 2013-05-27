@@ -105,8 +105,8 @@ An der entgeltlichen Ausleihe von Lernmitteln im Schuljahr {$schbasYear}<br/>
 <div id="ausleihe" >
     <div id="div2">
     	Den Betrag von<br>
-    	<input type="radio" name="loanFee" value="loanNormal" id="loanNormal" checked required/> 56,00 Euro <br />
-    	<input type="radio" name="loanFee" value="loanReduced" id="loanReduced" /> 45,00 Euro (bei mehr als zwei schulpflichtigen Kindern)<br />
+    	<input type="radio" name="loanFee" value="loanNormal" id="loanNormal" checked required/> {$feeNormal} Euro <br />
+    	<input type="radio" name="loanFee" value="loanReduced" id="loanReduced" /> {$feeReduced} Euro (bei mehr als zwei schulpflichtigen Kindern)<br />
     	<input type="radio" name="loanFee" value="loanSoli" id="loanSoli"/> Wir geh&ouml;ren zu dem von der Zahlung des Entgelts befreiten Personenkreis. 
    															   Leistungsbescheid bzw. &auml;hnlicher Nachweis ist beigef&uuml;gt. </h5>
     	<div id="div3" class="schbasForm"  style="border-color: #df610c; width:600px;">

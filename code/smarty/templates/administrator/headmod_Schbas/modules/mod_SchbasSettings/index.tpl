@@ -7,7 +7,7 @@
 	<input type="submit" value="Ausleihgeb&uuml;hren"><br>
 </form><br>
 <form action="index.php?section=Schbas|SchbasSettings&action=3" method="post">
-	<input type="submit" value="Deadlines"><br>
+	<input type="submit" value="Termine"><br>
 </form><br>
 <form action="index.php?section=Schbas|SchbasSettings&action=7" method="post">
 	<input type="submit" value="Formular f&uuml;r Sch&uuml;ler freischalten"><br>

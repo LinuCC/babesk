@@ -63,6 +63,15 @@ class LoanSystem extends Module {
 
 	private function showMainMenu() {
 		$schbasYear = TableMng::query("SELECT value FROM global_settings WHERE name='schbas_year'",true);
+		//get gradeValue ("Klassenstufe")
+		$gradeValue = TableMng::query("SELECT gradeValue FROM grade WHERE id=(SELECT GradeID from jointusersingrade WHERE UserID='".$_SESSION['uid']."')",true);
+		$gradeValue[0]['gradeValue'] = strval(intval($gradeValue[0]['gradeValue'])+1);
+		//get loan fees
+		$feeNormal = TableMng::query("SELECT fee_normal FROM schbas_fee WHERE grade=".$gradeValue[0]['gradeValue'],true);
+		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradeValue[0]['gradeValue'],true);
+		
+		$this->_smarty->assign('feeNormal', $feeNormal[0]['fee_normal']);
+		$this->_smarty->assign('feeReduced', $feeReduced[0]['fee_reduced']);
 		$this->_smarty->assign('schbasYear', $schbasYear[0]['value']);
 		$this->_smarty->assign('BaBeSkTerminal', $this->checkIsKioskMode());
 		$this->_smarty->display($this->_smartyPath . 'menu.tpl');
