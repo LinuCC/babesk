@@ -56,6 +56,11 @@
 				</select>
 			{/if}
 		</label>
+		<label>
+			Kartennummer:
+			<a class="cardnumberAdd" href="#">hinzufügen</a>
+			<input style="display:inline" name="cardnumber" class="inputItem cardnumberAdd" type="text" size="10" maxlength="10" />
+		</label>
 	</fieldset>
 	<fieldset>
 		<legend>BaBeSK</legend>
@@ -76,11 +81,6 @@
 		</label>
 		<label>Teilhabepaket:
 			<input class="inputItem" type="checkbox" name="isSoli" />
-		</label>
-		<label>
-			Kartennummer:
-			<a class="cardnumberAdd" href="#">hinzufügen</a>
-			<input style="display:inline" name="cardnumber" class="inputItem cardnumberAdd" type="text" size="10" maxlength="10" />
 		</label>
 	</fieldset>
 	<input type="submit" value="Submit" />

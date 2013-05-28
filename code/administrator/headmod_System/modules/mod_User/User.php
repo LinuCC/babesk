@@ -153,7 +153,8 @@ class User extends Module {
 
 		try {
 			$gump->rules(self::$registerRules);
-			$gump->mysql_escape_all_elements(true);
+			$gump->html_decode_sql_escape_by_ruleset(true,
+				self::$registerRules);
 			//Set none-filled-out formelements to be at least a void string, for
 			//easier processing
 			$gump->voidVarsToStringByRuleset($_POST, self::$registerRules);

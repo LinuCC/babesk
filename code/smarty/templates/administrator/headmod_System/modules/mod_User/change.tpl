@@ -90,6 +90,13 @@
 					</select>
 				{/if}
 		</div>
+		<div class="simpleForm">
+			Kartennummer:
+				<a class="cardnumberAdd" href="#">hinzufügen</a>
+			<input style="display:inline" name="cardnumber" class="inputItem
+				cardnumberAdd" type="text" size="10" maxlength="10"
+				value="{$cardnumber}" />
+		</div>
 	</fieldset>
 	<fieldset>
 		<legend>BaBeSK</legend>
@@ -113,13 +120,6 @@
 		<div class="simpleForm">Teilhabepaket:
 			<input class="inputItem" type="checkbox" name="isSoli"
 			{if $user.soli}checked="checked"{/if}/>
-		</div>
-		<div class="simpleForm">
-			Kartennummer:
-				<a class="cardnumberAdd" href="#">hinzufügen</a>
-			<input style="display:inline" name="cardnumber" class="inputItem
-				cardnumberAdd" type="text" size="10" maxlength="10"
-				value="{$cardnumber}" />
 		</div>
 	</fieldset>
 	<input id="submit" type="submit" value="verändern" />
