@@ -18,10 +18,13 @@ class SchbasAccountingInterface extends AdminInterface {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	
+	public function MainMenu() {
+		$this->smarty->display($this->tplFilePath . '/menu.tpl');
+	}
+	
 	public function Scan() {
 		$this->smarty->display($this->tplFilePath . '/scan.tpl');
 	}
-	
 }
 
 ?>

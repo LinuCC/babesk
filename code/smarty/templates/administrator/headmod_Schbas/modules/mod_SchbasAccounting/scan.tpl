@@ -1,12 +1,12 @@
 {extends file=$checkoutParent}{block name=content}
 
 
-<h3>Formular erfassen</h3>
+<h3>Antrag erfassen</h3>
 
 
 
 		Barcode:<input id="barcodeInput" type="text" /><br />
-		<small>Enter drücken, wenn Barcode eingescannt</small>
+		<small>Enter drücken, wenn Barcode eingescannt ist.</small>
 	
 
 <script type="text/javascript" language="JavaScript">
