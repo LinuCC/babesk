@@ -20,16 +20,40 @@
 <script src="../smarty/templates/administrator/administratorFunctions.js">
 	</script>
 
+{literal}
 <script type="text/javascript" language="JavaScript">
-
 $(document).ready(function() {
 	$('body').focus();
+
+	{/literal}
+	/* Error-Output, if any exist */
+	{if isset($_userErrorOutput)}
+		{foreach $_userErrorOutput as $error}
+			adminInterface.errorShow('{$error}');
+		{/foreach}
+	{/if}
+
+	/* Message-Output, if any exist */
+	{if isset($_userMsgOutput)}
+		{foreach $_userMsgOutput as $msg}
+			adminInterface.messageShow('{$msg}');
+		{/foreach}
+	{/if}
+
+	/* Success-Output, if any exist */
+	{if isset($_userSuccessOutput)}
+		{foreach $_userSuccessOutput as $msg}
+			adminInterface.successShow('{$msg}');
+		{/foreach}
+	{/if}
+	{literal}
 
 	adminInterface.messageShow('Bitte überprüfen ob der SQL-Server Transaktionen unterstützt (Tabellen müssen InnoDB als Engine haben, kein MyISAM). Neue Funktionen benutzen diese, um unter anderem Fehler zu finden.');
 	adminInterface.successShow('Test');
 	adminInterface.successShow('You successfully logged in!');
 });
 </script>
+{/literal}
 </head>
 
 <body>
@@ -47,49 +71,23 @@ $(document).ready(function() {
 		</div>
 	</div>
 
-	<!-- Error-Output, if any exist -->
-	{if isset($_userErrorOutput)}
-	<div id="errorContainer">
-		<a class="errorContainerClose" href="#">Schließen</a>
-		<ul>
-		{foreach $_userErrorOutput as $error}
-			<li>
-				<p>{$error}</p>
-			</li>
-		{/foreach}
-		</ul>
-	</div>
-	{/if}
-
-	<!-- Message-Output, if any exist -->
-	{if isset($_userMsgOutput)}
-	<div id="messageContainer">
-	<ul>
-		{foreach $_userMsgOutput as $msg}
-			<a class="messageContainerClose" href="#">Schließen</a>
-			<li><p>{$msg}</p></li>
-		{/foreach}
-	</ul>
-	</div>
-	{/if}
-
-	<!-- Success-Output, if any exist -->
-	{if isset($_userSuccessOutput)}
-		{foreach $_userSuccessOutput as $msg}
-			<a class="successContainerClose" href="#">Schließen</a>
-			<li><p>{$msg}</p></li>
-		{/foreach}
-	</ul>
-	</div>
-	{/if}
-
 	<div id="main" class="clearfix">
-	    <div id="content">{block name=search}{/block}</div>
+		<noscript>
+		<p>
+			<b>Ihr Browser hat JavaScript ausgestellt. Diese Seite funktioniert nur dann
+			vollständig, wenn sie Javascript aktiviert haben!</b><br />
+			Ein Anleitung finden sie
+			 <a href="http://www.enable-javascript.com/de/" target="_blank">hier</a>.
+		</p>
+		<hr />
+		</noscript>
+
+		<div id="content">{block name=search}{/block}</div>
 		<div id="content">{block name=content}{/block}</div>
 	</div>
 	<div id="footer">
 		<p>{block name=signature}<div id="footer">
-    <p>BaBeSK {$babesk_version} &copy; 2011 Lessing Gymnasium Uelzen</p>
+	<p>BaBeSK {$babesk_version} &copy; 2011 Lessing Gymnasium Uelzen</p>
 </div>{/block}</p>
 		{block name=footer}{/block}
 		{block name=links}<br /><br /><a style="font-size:120%" href="index.php">Zur&uuml;ck zum Hauptmen&uuml;</a>{/block}

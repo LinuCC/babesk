@@ -27,7 +27,7 @@ class KuwasysJointUsersInGrade extends TableManager {
 		}
 
 		public function addMultipleJoint ($rows) {
-			$this->doMultiQueryManagerByRows ($DbMultiQueryManager::$Insert, $rows);
+			$this->doMultiQueryManagerByRows (DbMultiQueryManager::$Insert, $rows);
 		}
 
 		public function getAllJoints () {

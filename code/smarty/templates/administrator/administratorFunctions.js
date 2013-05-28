@@ -36,6 +36,11 @@ var AdminInterface = function() {
 		var htmlStr = listItemHtmlCreate(str);
 		$('#errorContainer ul').append(htmlStr);
 		$('#errorContainer').show();
+		$('.errorContainerClose').on('click', function(event) {
+			event.preventDefault();
+			$('#errorContainer').hide('highlight', 500);
+			$('#errorContainer ul').html('');
+		});
 	}
 
 	/**
@@ -69,7 +74,7 @@ var AdminInterface = function() {
 	 */
 	messageContainerAdd = function() {
 
-		var html = '<div id="messageContainer"><a class="messageContainerClose" href="#">Schließen</a><ul></ul></div>';
+		var html = '<div id="messageContainer"><a class="messageContainerClose" href="#" tabindex="1">Schließen</a><ul></ul></div>';
 
 		if($('#errorContainer').length) {
 			$('#errorContainer').after(html);
@@ -77,6 +82,11 @@ var AdminInterface = function() {
 		else {
 			$('#header').after(html);
 		}
+		$('.messageContainerClose').on('click', function(event) {
+		event.preventDefault();
+		$('#messageContainer').hide('highlight', 500);
+		$('#messageContainer ul').html('');
+	});
 	}
 
 	/**
@@ -84,7 +94,7 @@ var AdminInterface = function() {
 	 */
 	errorContainerAdd = function() {
 
-		var html = '<div id="errorContainer"><a class="errorContainerClose" href="#">Schließen</a><ul></ul></div>';
+		var html = '<div id="errorContainer"><a class="errorContainerClose" href="#" tabindex="1">Schließen</a><ul></ul></div>';
 		$('#header').after(html);
 	}
 
@@ -93,7 +103,7 @@ var AdminInterface = function() {
 	 */
 	successContainerAdd = function() {
 
-		var html = '<div id="successContainer"><a class="successContainerClose" href="#">Schließen</a><ul></ul></div>';
+		var html = '<div id="successContainer"><a class="successContainerClose" href="#" tabindex="1">Schließen</a><ul></ul></div>';
 
 		if($('#messageContainer').length) {
 			$('#messageContainer').after(html);
@@ -104,28 +114,12 @@ var AdminInterface = function() {
 		else {
 			$('#header').after(html);
 		}
+		$('.successContainerClose').on('click', function(event) {
+			event.preventDefault();
+			$('#successContainer').hide('highlight', 500);
+			$('#successContainer ul').html('');
+		});
 	}
 }
 
 var adminInterface = new AdminInterface();
-
-$(document).ready(function() {
-	//Add event-Handlers for hiding the Containers
-	//Containers get added in base_layout.tpl
-	$('.errorContainerClose').on('click', function(event) {
-		event.preventDefault();
-		$('#errorContainer').hide('highlight', 500);
-		$('#errorContainer ul').html('');
-	});
-
-	$('.messageContainerClose').on('click', function(event) {
-		event.preventDefault();
-		$('#messageContainer').hide('highlight', 500);
-		$('#messageContainer ul').html('');
-	});
-	$('.successContainerClose').on('click', function(event) {
-		event.preventDefault();
-		$('#successContainer').hide('highlight', 500);
-		$('#successContainer ul').html('');
-	});
-});

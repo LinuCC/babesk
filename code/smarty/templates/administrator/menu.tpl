@@ -14,7 +14,7 @@
 <div class="clearfix HeadItemContainer">
 	{foreach $head_modules as $headmod}
 		<div class="HeadItem" id="{$headmod.name}">
-			<a class="HeadItemText" href="#">{$headmod.display_name}</a>
+			<a class="HeadItemText" href="#" tabindex="1">{$headmod.display_name}</a>
 		</div>
 	{/foreach}
 </div>
@@ -27,7 +27,7 @@
 	{section name=module loop=$modules}
 	<div class="menu_item" id="{$modules[module]}">
 		<div class="menuItemCell">
-			<a href="index.php?section={$modules[module]}&{$sid}">{$module_names[$modules[module]]}</a>
+			<a href="index.php?section={$modules[module]}&{$sid}" tabindex="1">{$module_names[$modules[module]]}</a>
 		</div>
 	</div>
 	{/section}
