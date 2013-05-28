@@ -22,9 +22,10 @@ class AdminUserInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath.'user_select.tpl');
 	}
 
-	function ShowRegisterForm($ar_gid, $ar_g_names) {
-		$this->smarty->assign('gid', $ar_gid);
-		$this->smarty->assign('g_names', $ar_g_names);
+	function ShowRegisterForm($priceGroups, $grades, $schoolyears) {
+		$this->smarty->assign('priceGroups', $priceGroups);
+		$this->smarty->assign('grades', $grades);
+		$this->smarty->assign('schoolyears', $schoolyears);
 		$this->smarty->display($this->tplFilePath.'register.tpl');
 	}
 
@@ -62,13 +63,14 @@ class AdminUserInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath.'deletion_finished.tpl');
 	}
 
-	function ShowChangeUser($user, $ar_gid, $ar_g_names, $cardnumber) {
+	function ShowChangeUser($user, $cardnumber, $priceGroups, $grades, $schoolyears) {
 		$this->smarty->assign('user', $user);
-		$this->smarty->assign('g_names', $ar_g_names);
 		$this->smarty->assign('cardnumber', $cardnumber);
-		$this->smarty->assign('gid', $ar_gid);
+		$this->smarty->assign('priceGroups', $priceGroups);
+		$this->smarty->assign('grades', $grades);
+		$this->smarty->assign('schoolyears', $schoolyears);
 
-		$this->smarty->display($this->tplFilePath.'change_user.tpl');
+		$this->smarty->display($this->tplFilePath.'change.tpl');
 
 	}
 	function ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID, $locked,$soli,$class,$cardChanges) {
@@ -93,12 +95,12 @@ class AdminUserInterface extends AdminInterface{
 	public function showRemoveSpecialCharsFromUsername () {
 		$this->smarty->display ($this->tplFilePath . 'usernameRemoveSpecialChars.tpl');
 	}
-	
-	
+
+
 public function showDeletePdfSuccess () {
 		$this->smarty->display ($this->tplFilePath . 'showDeletePdfSuccess.tpl');
 	}
-	
+
 
 	/**
 	 * The Path to the Smarty-Parent-Templatefile

@@ -92,7 +92,18 @@ function hash_password($pw_str) {
  * @return boolean only when no error found
  * @throws WrongInputException if string does not match the regex
  */
-function inputcheck($str, $regex_str, $name_str = 'Input') {
+function inputcheck($str, $regex_str, $name_str = 'Input',
+	$allowedVoid = false) {
+
+	if($str == '') {
+		if(!$allowedVoid) {
+			throw new WrongInputException($str, $name_str);
+		}
+		else {
+			return;
+		}
+	}
+
 	switch ($regex_str) {
 		case 'name':
 			$regex_str = '/\A^[^\,\;\+\~]{2,30}\z/';
@@ -118,6 +129,9 @@ function inputcheck($str, $regex_str, $name_str = 'Input') {
 		case 'email':
 			$regex_str = '/\A[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}\z/';
 			break;
+	}
+	if(substr($regex_str, -1, 1) != '/' || substr($regex_str, 0, 1) != '/') {
+		throw new Exception('Wrong Regex');
 	}
 	if (!preg_match($regex_str, $str)) {
 		throw new WrongInputException($str, $name_str);

@@ -1,3 +1,7 @@
+/**
+ * @author  Pascal Ernst <pascal.cc.ernst@gmail.com>
+ */
+
 var oldHeadModule = '';
 
 function getHeadModuleIdentifier(mod_ident) {

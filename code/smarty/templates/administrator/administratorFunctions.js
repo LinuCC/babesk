@@ -2,48 +2,66 @@
  * General functions for use in the Administrator-Subprogram
  */
 
+/**
+ * Contains functions allowing to show Messages/Errors/Success-Notices
+ */
 var AdminInterface = function() {
+
+	/**
+	 * Shows a Message to the User
+	 * @param  {String} str The Message-String to be shown
+	 */
+	this.messageShow = function(str) {
+
+		//does the Message-Container exist?
+		if(!$('#messageContainer').length) {
+			messageContainerAdd();
+		}
+
+		htmlStr = listItemHtmlCreate(str);
+		$('#messageContainer ul').append(htmlStr);
+		$('#messageContainer').show();
+	}
+
+	/**
+	 * Shows an Error to the User
+	 * @param  {String} str The Message-String to be shown
+	 */
+	this.errorShow = function(str) {
+
+		if(!$('#errorContainer').length) {
+			errorContainerAdd();
+		}
+
+		var htmlStr = listItemHtmlCreate(str);
+		$('#errorContainer ul').append(htmlStr);
+		$('#errorContainer').show();
+	}
+
+	/**
+	 * Shows a Success-Notice to the User
+	 * @param  {String} str The Message-String to be shown
+	 */
+	this.successShow = function(str) {
+
+		if(!$('#successContainer').length) {
+			successContainerAdd();
+		}
+
+		var htmlStr = listItemHtmlCreate(str);
+		$('#successContainer ul').append(htmlStr);
+		$('#successContainer').show();
+	}
 
 	/**
 	 * Creates a HTML-list-item
 	 * @param  {String} str The String that should be wrapped to a list-item
 	 * @return {String} HTML-Code containing the List-Item
 	 */
-	function listItemHtmlCreate(str) {
+	var listItemHtmlCreate = function(str) {
 
-		res = '<li><p>' + str + '</p></li>';
+		var res = '<li><p>' + str + '</p></li>';
 		return res;
-	}
-
-	this.messageShow = function(str) {
-
-		//does the Message-Container exist?
-		if(!$('#messageContainer').length) {
-			this.messageContainerAdd();
-		}
-
-		htmlStr = listItemHtmlCreate(str);
-		$('#messageContainer ul').append(htmlStr);
-	}
-
-	this.errorShow = function(str) {
-
-		if(!$('#errorContainer').length) {
-			this.errorContainerAdd();
-		}
-
-		htmlStr = listItemHtmlCreate(str);
-		$('#errorContainer ul').append(htmlStr);
-	}
-
-	this.successShow = function(str) {
-
-		if(!$('#successContainer').length) {
-			this.successContainerAdd();
-		}
-
-		htmlStr = listItemHtmlCreate(str);
-		$('#successContainer ul').append(htmlStr);
 	}
 
 	/**
@@ -51,7 +69,7 @@ var AdminInterface = function() {
 	 */
 	messageContainerAdd = function() {
 
-		html = '<div id="messageContainer"><a class="messageContainerClose" href="#">Schließen</a><ul></ul></div>';
+		var html = '<div id="messageContainer"><a class="messageContainerClose" href="#">Schließen</a><ul></ul></div>';
 
 		if($('#errorContainer').length) {
 			$('#errorContainer').after(html);
@@ -66,7 +84,7 @@ var AdminInterface = function() {
 	 */
 	errorContainerAdd = function() {
 
-		html = '<div id="errorContainer"><a class="errorContainerClose" href="#">Schließen</a><ul></ul></div>';
+		var html = '<div id="errorContainer"><a class="errorContainerClose" href="#">Schließen</a><ul></ul></div>';
 		$('#header').after(html);
 	}
 
@@ -75,7 +93,7 @@ var AdminInterface = function() {
 	 */
 	successContainerAdd = function() {
 
-		html = '<div id="successContainer"><a class="successContainerClose" href="#">Schließen</a><ul></ul></div>';
+		var html = '<div id="successContainer"><a class="successContainerClose" href="#">Schließen</a><ul></ul></div>';
 
 		if($('#messageContainer').length) {
 			$('#messageContainer').after(html);
@@ -90,3 +108,24 @@ var AdminInterface = function() {
 }
 
 var adminInterface = new AdminInterface();
+
+$(document).ready(function() {
+	//Add event-Handlers for hiding the Containers
+	//Containers get added in base_layout.tpl
+	$('.errorContainerClose').on('click', function(event) {
+		event.preventDefault();
+		$('#errorContainer').hide('highlight', 500);
+		$('#errorContainer ul').html('');
+	});
+
+	$('.messageContainerClose').on('click', function(event) {
+		event.preventDefault();
+		$('#messageContainer').hide('highlight', 500);
+		$('#messageContainer ul').html('');
+	});
+	$('.successContainerClose').on('click', function(event) {
+		event.preventDefault();
+		$('#successContainer').hide('highlight', 500);
+		$('#successContainer ul').html('');
+	});
+});

@@ -42,7 +42,6 @@ class Administrator {
 		$this->_logger = new LogManager();
 		$this->_moduleManager = new ModuleManager('administrator', $this->_adminInterface);
 		$this->_moduleManager->setDataContainer(new DataContainer($this->_smarty, $this->_adminInterface));
-
 	}
 
 	////////////////////////////////////////////////////////////////////////////////

@@ -379,5 +379,15 @@
 				<active>true</active>
 			</module>
 		</head_module>
+		<head_module>
+			<ger_name>Javascript-Server-Interface für standard-Funktionen</ger_name>
+			<name>JsDataProcessor</name>
+			<active>true</active>
+			<module>
+				<ger_name>Überprüfe Benutzer-Input</ger_name>
+				<name>InputdataCheck</name>
+				<active>true</active>
+			</module>
+		</head_module>
 	</publicData>
 </modules>

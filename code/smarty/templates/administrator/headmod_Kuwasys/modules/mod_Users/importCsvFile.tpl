@@ -54,8 +54,6 @@
 <script src="../include/js/jqueryFileUpload/jquery.iframe-transport.js">
 	</script>
 <script src="../include/js/jqueryFileUpload/jquery.fileupload.js"></script>
-<script src="../smarty/templates/administrator/administratorFunctions.js">
-	</script>
 <script src="../include/js/CsvFileUploader.js"></script>
 <script type="text/javascript">
 
@@ -74,7 +72,6 @@ $(document).ready(function() {
 			uploader.previewOn();
 		}
 	});
-	adminInterface.errorShow('WARNUNG: Aus irgendeinem Grund funktionieren Transaktionen nicht. Deshalb wird momentan JEDER Upload auf die Datenbank sofort überspielt.');
 });
 
 </script>

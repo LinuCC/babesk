@@ -71,6 +71,10 @@ class AdminInterface extends GeneralInterface {
 		$this->smarty->append('_userMsgOutput', $msg);
 	}
 
+	function showSuccess ($msg) {
+		$this->smarty->append('_userSuccessOutput', $msg);
+	}
+
 	/**
 	 * dies and displays all messages which were used by showError and showMsg
 	 */

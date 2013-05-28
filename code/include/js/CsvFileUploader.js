@@ -202,7 +202,7 @@ CsvFileUploader = function () {
 
 		return ret;
 	}
-}
+};
 
 /**
  * Set the preview-Mode off and allow the User to change the Database with
@@ -211,7 +211,7 @@ CsvFileUploader = function () {
 CsvFileUploader.prototype.previewOff = function() {
 
 	$('.csvUpload #infotext').html('Die Vorschaufunktion ist aus. Das heißt, die CSV-Daten werden sofort auf die Datenbank gespielt falls keine Fehler auftreten sollten.');
-}
+};
 
 /**
  * Set the preview-Mode on and allow the User to test if the CSV is
@@ -220,4 +220,4 @@ CsvFileUploader.prototype.previewOff = function() {
 CsvFileUploader.prototype.previewOn = function() {
 
 	$('.csvUpload #infotext').html('Die Vorschaufunktion ist an. Das heißt, es wird zuerst eine Vorschau beim Dateihochladen erstellt, ohne die Datenbank zu verändern.');
-}
+};

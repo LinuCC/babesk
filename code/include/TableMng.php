@@ -115,21 +115,28 @@ class TableMng {
 		else {
 			throw new MySQLException (sprintf('Error executing a MySQL-Command: %s, because: %s', $query, self::$db->error));
 		}
+
+		if(self::$db->errno) {
+			throw new MySQLException (sprintf('Error executing a MySQL-Command: %s, because: %s', $query, self::$db->error));
+		}
+
 		return $rows;
 	}
 
 	/**
 	 * fetches the Data of the Result of a MySQL-Query
 	 */
-	protected static function getResults ($result,
-		$exceptionMessage = 'MySQL returned no data!') {
+	protected static function getResults ($result) {
+
 		while($buffer = $result->fetch_assoc()) {
 			$content [] = $buffer;
 		}
-		if(!isset($content) || !count($content)) {
-			throw new MySQLVoidDataException($exceptionMessage);
+		if(empty($content)) {
+			return array();
 		}
-		return $content;
+		else {
+			return $content;
+		}
 	}
 
 	/////////////////////////////////////////////////////////////////////

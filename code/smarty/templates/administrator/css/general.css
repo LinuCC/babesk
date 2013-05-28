@@ -23,8 +23,6 @@ body, h1, h2, h3, h4, h5, h6, div, p, table, td, ul, ol, li, dd, dt, dl, blockqu
 
 /* End Clearfix */
 
-/* -- Normal link -- */
-
 body {
 	background: #ffffff;
 }
@@ -69,6 +67,16 @@ input, select, textarea, .inputbox {
   font-size: 100%;
 }
 
+input.inputItem, select.inputItem, span.inputItem, p.inputItem {
+	position: absolute;
+	left: 300px;
+	display: inline;
+}
+
+form {
+	position: relative;
+}
+
 fieldset {
 		border: 0px;
 }
@@ -105,6 +113,18 @@ label {
 p.error {
 	color: red;
 	font-weight: bold;
+}
+
+/**
+ * Changes to the Jquery-UI-CSS for better integration into our "design"
+ */
+
+.ui-tooltip.ui-widget {
+	font-family: "Lucida Sans",
+		"Lucida Grande",
+		Lucida,
+		sans-serif;
+	font-size: 0.9em;
 }
 
 /* MAIN LAYOUT DIVS
@@ -156,7 +176,6 @@ body {
 }
 
 div.filterBar {
-
 	padding: 5px;
 	border-style: dashed;
 	border-width: 2px;
@@ -173,14 +192,13 @@ h3.filterBar {
 }
 
 #filterBarSubmitButton {
-
 	padding: 15px;
 	float: right;
 }
 
 #main {
 	width: 700px;
-	margin: 0 auto;
+	margin: 20px auto 0 auto;
 	line-height: 200%;
 	padding: 25px;
 	border: 2px solid #006699;
@@ -199,12 +217,19 @@ h3.filterBar {
 
 #errorContainer {
 	color: #af2d2b;
-	background: #ffc0bf;
+	background-color: #ffc0bf;
+	background-image: url(../../../../images/status/error_64.png);
+	background-repeat: no-repeat;
+	background-position: 5px 50%;
 	border-radius: 15px;
-	margin: 20px auto;
+	margin: 10px auto;
 	width: 700px;
 	padding: 25px;
 	border: 1px solid #af2d2b;
+}
+
+#errorContainer ul {
+	margin: 0 0 0 70px;
 }
 
 #errorContainer p {
@@ -225,11 +250,18 @@ h3.filterBar {
 #messageContainer {
 	color: #2b67af;
 	background: #acd2ff;
+	background-image: url(../../../../images/status/information_64.png);
+	background-repeat: no-repeat;
+	background-position: 5px 50%;
 	border-radius: 15px;
-	margin: 20px auto;
+	margin: 10px auto;
 	width: 700px;
 	padding: 25px;
 	border: 1px solid #2b67af;
+}
+
+#messageContainer ul {
+	margin: 0 0 0 70px;
 }
 
 #messageContainer a {
@@ -245,11 +277,18 @@ h3.filterBar {
 #successContainer {
 	color: #55832f;
 	background: #e0ffc6;
+	background-image: url(../../../../images/status/checkmark_64.png);
+	background-repeat: no-repeat;
+	background-position: 5px 50%;
 	border-radius: 15px;
-	margin: 20px auto;
+	margin: 10px auto;
 	width: 700px;
 	padding: 25px;
 	border: 1px solid #55832f;
+}
+
+#successContainer ul {
+	margin: 0 0 0 70px;
 }
 
 #successContainer a {
@@ -318,3 +357,18 @@ p.smallContainer {
 .csvUpload .errorCount.noAction {
 	color: #006699;
 }
+
+p.inputError {
+	float: right;
+}
+
+form.simpleForm label, form.simpleForm div.simpleForm {
+	display: block;
+	margin: 15px 0 15px 0;
+}
+
+form.simpleForm fieldset {
+	border: 1px solid #2e6132;
+	border-radius: 5px;
+}
+

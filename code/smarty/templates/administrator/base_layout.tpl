@@ -4,33 +4,30 @@
 <title>{block name=title}BaBeSK{/block}</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
+<!-- For the various JQuery-UI-Elements this site is using -->
+<link rel="stylesheet" href="http://code.jquery.com/ui/
+	1.10.3/themes/smoothness/jquery-ui.css" />
+
 <link rel="stylesheet"
 	href="../smarty/templates/administrator/css/general.css"
 	type="text/css" />
+
+
 {block name=html_head}{/block}
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.min.js"></script>
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script src="../smarty/templates/administrator/administratorFunctions.js">
+	</script>
 
 <script type="text/javascript" language="JavaScript">
 
 $(document).ready(function() {
 	$('body').focus();
 
-	$('.errorContainerClose').on('click', function(event) {
-		event.preventDefault();
-		$('#errorContainer').hide('highlight', 500);
-	});
-
-	$('.messageContainerClose').on('click', function(event) {
-		event.preventDefault();
-		$('#messageContainer').hide('highlight', 500);
-	});
-
-	$('.successContainerClose').on('click', function(event) {
-		event.preventDefault();
-		$('#successContainer').hide('highlight', 500);
-	});
+	adminInterface.messageShow('Bitte überprüfen ob der SQL-Server Transaktionen unterstützt (Tabellen müssen InnoDB als Engine haben, kein MyISAM). Neue Funktionen benutzen diese, um unter anderem Fehler zu finden.');
+	adminInterface.successShow('Test');
+	adminInterface.successShow('You successfully logged in!');
 });
 </script>
 </head>
@@ -70,6 +67,16 @@ $(document).ready(function() {
 	<ul>
 		{foreach $_userMsgOutput as $msg}
 			<a class="messageContainerClose" href="#">Schließen</a>
+			<li><p>{$msg}</p></li>
+		{/foreach}
+	</ul>
+	</div>
+	{/if}
+
+	<!-- Success-Output, if any exist -->
+	{if isset($_userSuccessOutput)}
+		{foreach $_userSuccessOutput as $msg}
+			<a class="successContainerClose" href="#">Schließen</a>
 			<li><p>{$msg}</p></li>
 		{/foreach}
 	</ul>
