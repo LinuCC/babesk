@@ -95,7 +95,7 @@ class LoanSystemPdf {
 	protected function pdfMetadataSet() {
 
 		$logoPath = '../../../../web/headmod_Messages/modules/mod_MessageMainMenu/logo.jpg';
-		$headerText = sprintf("Schulbuchausleihe 0.5\nJahrgang: %s", $this->_gradeLevel);
+		$headerText = sprintf("Schulbuchausleihe 1.0\nJahrgang: %s", $this->_gradeLevel);
 
 		$this->docInformationSet('LeG Uelzen');
 		$this->headerDetailsSet($logoPath, 'LeG Uelzen', $headerText);

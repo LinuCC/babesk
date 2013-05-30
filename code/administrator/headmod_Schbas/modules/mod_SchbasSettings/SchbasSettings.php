@@ -204,12 +204,12 @@ class SchbasSettings extends Module {
 		$books = '<table border="0" bordercolor="#FFFFFF" style="background-color:#FFFFFF" width="100%" cellpadding="0" cellspacing="1">
 				<tr style="font-weight:bold; text-align:center;"><th>Fach</th><th>Titel</th><th>Verlag</th><th>ISBN-Nr.</th><th>Preis</th></tr>';
 	
-		$bookPrices = 0;
+	//	$bookPrices = 0;
 		foreach ($booklist as $book) {
-			$bookPrices += $book['price'];
+			// $bookPrices += $book['price'];
 			$books.= '<tr><td>'.$book['subject'].'</td><td>'.$book['title'].'</td><td>'.$book['publisher'].'</td><td>'.$book['isbn'].'</td><td align="right">'.$book['price'].' &euro;</td></tr>';
 		}
-		$books .= '<tr><td></td><td></td><td></td><td style="font-weight:bold; text-align:center;">Summe:</td><td align="right">'.$bookPrices.' &euro;</td></tr>';
+		//$books .= '<tr><td></td><td></td><td></td><td style="font-weight:bold; text-align:center;">Summe:</td><td align="right">'.$bookPrices.' &euro;</td></tr>';
 		$books .= '</table>';
 		$books = str_replace('ä', '&auml;', $books);
 		$books = str_replace('é', '&eacute;', $books);

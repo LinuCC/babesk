@@ -66,6 +66,10 @@ class LoanSystem extends Module {
 		//get gradeValue ("Klassenstufe")
 		$gradeValue = TableMng::query("SELECT gradeValue FROM grade WHERE id=(SELECT GradeID from jointusersingrade WHERE UserID='".$_SESSION['uid']."')",true);
 		$gradeValue[0]['gradeValue'] = strval(intval($gradeValue[0]['gradeValue'])+1);
+		
+		// Filter f�r Abijahrgang
+		
+		if($gradeValue[0]['gradeValue']=="13") $this->_smarty->display($this->_smartyPath . 'lastGrade.tpl');;
 		//get loan fees
 		$feeNormal = TableMng::query("SELECT fee_normal FROM schbas_fee WHERE grade=".$gradeValue[0]['gradeValue'],true);
 		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradeValue[0]['gradeValue'],true);
@@ -152,7 +156,7 @@ class LoanSystem extends Module {
 		//get loan fees
 		$feeNormal = TableMng::query("SELECT fee_normal FROM schbas_fee WHERE grade=".$gradeValue[0]['gradeValue'],true);
 		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradeValue[0]['gradeValue'],true);
-		
+		$schbasDeadlineTransfer = TableMng::query("SELECT value FROM global_settings WHERE name='schbasDeadlineTransfer'",true);
 		$feedback = "";
 		if ($_POST['loanChoice']=="noLoan") {
 			$feedback = "nl";
@@ -161,7 +165,7 @@ class LoanSystem extends Module {
 		else if (isset($_POST['loanFee']) && $_POST['loanFee']=="loanSoli") {
 				$feedback = "ls";
 				$text .= "nehmen wir teil und melden uns hiermit verbindlich zu den in Ihrem Schreiben vom ".$letter_date[0]['value']." genannten Bedingungen an.<br/>";
-				$text .= "Wir geh&ouml;ren zu dem von der Zahlung des Entgelts befreiten Personenkreis. Leistungsbescheid bzw. &auml;hnlicher Nachweis ist beigef&uuml;gt.";
+				$text .= "Wir geh&ouml;ren zu dem von der Zahlung des Entgelts befreiten Personenkreis.<br/> Leistungsbescheid bzw. &auml;hnlicher Nachweis ist beigef&uuml;gt.";
 			}
 			else {
 			$text .= "nehmen wir teil und melden uns hiermit verbindlich zu den in Ihrem Schreiben vom ".$letter_date[0]['value']." genannten Bedingungen an.<br/>";
@@ -173,22 +177,34 @@ class LoanSystem extends Module {
 				$feedback = "lr";
 				$text .= "Den Betrag von ".$feeReduced[0]['fee_reduced']." &euro; (mehr als 2 schulpflichtigen Kinder) ";
 			}
-			
+			$text .= " wird bis sp&auml;testens ".$schbasDeadlineTransfer[0]['value']." &uuml;berwiesen.<br/><br/>";
 			//get bank account details
 			$bank_account =  TableMng::query("SELECT value FROM global_settings WHERE name='bank_details'",true);
 			$bank_account = explode("|", $bank_account[0]['value']);
-			$schbasDeadlineTransfer = TableMng::query("SELECT value FROM global_settings WHERE name='schbasDeadlineTransfer'",true);
-			$text .= "wird bis sp&auml;testens ".$schbasDeadlineTransfer[0]['value']." auf das Konto ".$bank_account[1]." bei der ".$bank_account[3]." (".$bank_account[2].") &uuml;berwiesen.<br/>";
-			$text .= "Empf&auml;nger: ".$bank_account[0].". Sollte der Betrag nicht fristgerecht eingehen, besteht kein Anspruch auf Teilnahme an der Ausleihe.<br/>";
+			
 			$username = TableMng::query("SELECT username FROM users WHERE ID=".$_SESSION['uid'],true);
-			$text .= "Verwendungszeck: ".$username[0]['username']." ".$gradeValue[0]['gradeValue'];
+			
+			$text .= 	"<table style=\"border:solid\" width=\"75%\" cellpadding=\"2\" cellspacing=\"2\">
+				<tr><td>Kontoinhaber:</td><td>".$bank_account[0]."</td></tr>
+								<tr><td>Kontonummer:</td><td>".$bank_account[1]."</td></tr>
+								<tr><td>Bankleitzahl:</td><td>".$bank_account[2]."</td></tr>
+								<tr><td>Kreditinstitut:</td><td>".$bank_account[3]."</td></tr>
+								<tr><td>Verwendungszeck:</td><td>".$username[0]['username']." JG ".$gradeValue[0]['gradeValue']." SJ ".$schbasYear[0]['value']."</td></tr>
+					
+					</table>";
+			
+			
+			$text .= "<br/><br/>Sollte der Betrag nicht fristgerecht eingehen, besteht kein Anspruch auf Teilnahme an der Ausleihe.<br/><br/>";
+			
 			if (isset($_POST['loanFee']) && $_POST['loanFee']=="loanReduced") {
-				$text .= "<u>Weitere schulpflichtige Kinder im Haushalt (Schuljahr ".$schbasYear[0]['value']."):</u><br/>Name, Vorname, Schule jedes Kindes:<br/>";
+				$text .= "<u>Weitere schulpflichtige Kinder im Haushalt (Schuljahr ".$schbasYear[0]['value']."):</u><br/><br/>";
 				if (isset($_POST['siblings']) && $_POST['siblings']=="") $text .= '<table style="border:solid" width="75%" cellpadding="2" cellspacing="2">
-						<tr><td><br><br><br><br><br><br><br></td></tr></table>';
-				else $text .=	$_POST['siblings'];
+						<tr><td>Name, Vorname, Schule jedes Kindes:<br/><br><br><br><br><br><br><br></td></tr></table>';
+				else $text .=	"<table style=\"border:solid\" width=\"75%\" cellpadding=\"2\" cellspacing=\"2\"><tr><td>Name, Vorname, Schule jedes Kindes:<br/>".nl2br($_POST['siblings'])."</td></tr></table>";
 			}
 		}	
+		
+		$text .= "<br><br><br><br><br><br><br>__________&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_______________________________<br>Ort, Datum &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unterschrift Erziehungsberechtigte/r bzw. vollj&auml;hriger Sch&uuml;ler";
 		$this->createPdf('Anmeldeformular',$text,'','','','',$gradeValue[0]['gradeValue'],true,$feedback,$_SESSION['uid']);
 	}
 
@@ -222,12 +238,12 @@ class LoanSystem extends Module {
 		$books = '<table border="0" bordercolor="#FFFFFF" style="background-color:#FFFFFF" width="100%" cellpadding="0" cellspacing="1">
 				<tr style="font-weight:bold; text-align:center;"><th>Fach</th><th>Titel</th><th>Verlag</th><th>ISBN-Nr.</th><th>Preis</th></tr>';
 
-		$bookPrices = 0;
+		//$bookPrices = 0;
 		foreach ($booklist as $book) {
-			$bookPrices += $book['price'];
+			//$bookPrices += $book['price'];
 			$books.= '<tr><td>'.$book['subject'].'</td><td>'.$book['title'].'</td><td>'.$book['publisher'].'</td><td>'.$book['isbn'].'</td><td align="right">'.$book['price'].' &euro;</td></tr>';
 		}
-		$books .= '<tr><td></td><td></td><td></td><td style="font-weight:bold; text-align:center;">Summe:</td><td align="right">'.$bookPrices.' &euro;</td></tr>';
+		//$books .= '<tr><td></td><td></td><td></td><td style="font-weight:bold; text-align:center;">Summe:</td><td align="right">'.$bookPrices.' &euro;</td></tr>';
 		$books .= '</table>';
 		$books = str_replace('ä', '&auml;', $books);
 		$books = str_replace('é', '&eacute;', $books);
