@@ -9,13 +9,8 @@ $(document).ready(function() {
 	 */
 	$('.personalData').height($('.personalData').height() + 50);
 
-	if($('input.cardnumberAdd').val()) {
-		$('a.cardnumberAdd').hide();
-	}
-	else {
-		$('input.cardnumberAdd').hide();
-	}
-	$('.inputItem[name=password]').hide();
+	$('input.cardnumberAdd').prop('disabled', true);
+	$('.inputItem[name=password]').prop('disabled', true);
 
 	/**
 	 * If link is clicked, a cardnumber shall be added
@@ -24,8 +19,9 @@ $(document).ready(function() {
 
 		event.preventDefault();
 
-		$('a.cardnumberAdd').hide(200);
-		$('input.cardnumberAdd').css({display: 'inline'}).focus();
+		$('a.cardnumberAdd').hide();
+		$('input.cardnumberAdd').prop('disabled', false);
+		$('input.cardnumberAdd').focus();
 		//register Eventhandler
 		$('input.cardnumberAdd').on('keyup', function(event) {
 			if($(this).val().length == 10) {
@@ -38,10 +34,13 @@ $(document).ready(function() {
 	$('.passwordChange').on('change', function(event) {
 
 		if($(this).prop('checked')) {
-			$('.inputItem[name=password]').css({display: 'inline'}).focus();
+			$('.inputItem[name=password]').prop('disabled', false);
+			$('.inputItem[name=password]').focus();
 		}
 		else {
-			$('.inputItem[name=password]').hide(200);
+			$('.inputItem[name=password]').prop('disabled', true);
+			$('.inputItem[name=password]')
+				.animate({"background-color": "#DDDDDD"}, 200);
 		}
 	});
 

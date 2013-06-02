@@ -29,38 +29,10 @@ class AdminUserInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath.'register.tpl');
 	}
 
-	function ShowCardidInput() {
-		$this->smarty->display($this->tplFilePath.'register_input_id.tpl');
-	}
-
-	function ShowRegisterFin($name, $forename) {
-		$this->smarty->assign('name', $name);
-		$this->smarty->assign('forename', $forename);
-		$this->smarty->display($this->tplFilePath.'register_finished.tpl');
-	}
-
 	function ShowUsers($users,$navbar) {
 		$this->smarty->assign('users', $users);
 		$this->smarty->assign('navbar', $navbar);
 		$this->smarty->display($this->tplFilePath.'show_users.tpl');
-	}
-
-	function ShowRepeatRegister() {
-		///@todo: No Constant
-		die_error('<p><a href="index.php?section=user&action=1">Bitte wiederholen sie den Vorgang</a></p>');
-	}
-
-	function ShowDeleteConfirmation($uid, $forename, $name) {
-		$this->smarty->assign('forename',$forename);
-		$this->smarty->assign('name',$name);
-		$this->smarty->assign('uid',$uid);
-		$this->smarty->display($this->tplFilePath.'deletion_confirm.tpl');
-	}
-
-	function ShowDeleteFin($uid) {
-		$this->smarty->assign('pdf','../include/pdf/tempPdf/deleted_'.$uid.'.pdf');
-		$this->smarty->assign('uid',$uid);
-		$this->smarty->display($this->tplFilePath.'deletion_finished.tpl');
 	}
 
 	function ShowChangeUser($user, $cardnumber, $priceGroups, $grades, $schoolyears) {
@@ -73,20 +45,6 @@ class AdminUserInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath.'change.tpl');
 
 	}
-	function ShowChangeUserFin($id, $name, $forename, $username, $birthday, $credits, $GID, $locked,$soli,$class,$cardChanges) {
-		$this->smarty->assign('id', $id);
-		$this->smarty->assign('name', $name);
-		$this->smarty->assign('forename', $forename);
-		$this->smarty->assign('username', $username);
-		$this->smarty->assign('birthday', $birthday);
-		$this->smarty->assign('credits', $credits);
-		$this->smarty->assign('gid', $GID);
-		$this->smarty->assign('locked', $locked);
-		$this->smarty->assign('soli',$soli);
-		$this->smarty->assign('class',$class);
-		$this->smarty->assign('cardChanges',$cardChanges);
-		$this->smarty->display($this->tplFilePath.'change_user_fin.tpl');
-	}
 
 	function showConfirmAutoChangeUsernames () {
 		$this->smarty->display ($this->tplFilePath . 'dialogAutoCreateUsernames.tpl');
@@ -97,10 +55,10 @@ class AdminUserInterface extends AdminInterface{
 	}
 
 
-public function showDeletePdfSuccess () {
-		$this->smarty->display ($this->tplFilePath . 'showDeletePdfSuccess.tpl');
+	public function showDeletePdfSuccess () {
+		$this->smarty->display ($this->tplFilePath .
+			'showDeletePdfSuccess.tpl');
 	}
-
 
 	/**
 	 * The Path to the Smarty-Parent-Templatefile

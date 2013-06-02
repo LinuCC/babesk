@@ -32,7 +32,7 @@
 			<td align="center">{$user.class}</td>
 			<td align="center" bgcolor='#FFD99'>
 			<form action="index.php?section=System|User&action=4&ID={$user.ID}" method="post"><input type='submit' value='bearbeiten'></form>
-			<form action="index.php?section=System|User&action=3&ID={$user.ID}" method="post"><input type='submit' value='löschen'></form>
+			<form action="index.php?section=System|User&action=deleteUser&ID={$user.ID}" method="post"><input type='submit' value='löschen'></form>
 			</td>
 		</tr>
 		{/foreach}

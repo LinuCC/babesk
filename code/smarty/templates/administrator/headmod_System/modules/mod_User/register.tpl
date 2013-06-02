@@ -44,6 +44,11 @@
 				</select>
 			{/if}
 		</label>
+		<label>
+			Kartennummer:
+			<a class="cardnumberAdd" href="#">hinzufügen</a>
+			<input style="display:inline" name="cardnumber" class="inputItem cardnumberAdd" type="text" size="10" maxlength="10" />
+		</label>
 		<label>Schuljahr:
 			{if empty($priceGroups)}
 				<p class="inputItem">
@@ -55,11 +60,6 @@
 					<option value="">Keins</option>
 				</select>
 			{/if}
-		</label>
-		<label>
-			Kartennummer:
-			<a class="cardnumberAdd" href="#">hinzufügen</a>
-			<input style="display:inline" name="cardnumber" class="inputItem cardnumberAdd" type="text" size="10" maxlength="10" />
 		</label>
 	</fieldset>
 	<fieldset>

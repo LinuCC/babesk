@@ -19,45 +19,27 @@
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script src="../smarty/templates/administrator/administratorFunctions.js">
 	</script>
-
-{literal}
-<script type="text/javascript" language="JavaScript">
-$(document).ready(function() {
-	$('body').focus();
-
-	{/literal}
-	/* Error-Output, if any exist */
-	{if isset($_userErrorOutput)}
-		{foreach $_userErrorOutput as $error}
-			adminInterface.errorShow('{$error}');
-		{/foreach}
-	{/if}
-
-	/* Message-Output, if any exist */
-	{if isset($_userMsgOutput)}
-		{foreach $_userMsgOutput as $msg}
-			adminInterface.messageShow('{$msg}');
-		{/foreach}
-	{/if}
-
-	/* Success-Output, if any exist */
-	{if isset($_userSuccessOutput)}
-		{foreach $_userSuccessOutput as $msg}
-			adminInterface.successShow('{$msg}');
-		{/foreach}
-	{/if}
-	{literal}
-
-	adminInterface.messageShow('Bitte überprüfen ob der SQL-Server Transaktionen unterstützt (Tabellen müssen InnoDB als Engine haben, kein MyISAM). Neue Funktionen benutzen diese, um unter anderem Fehler zu finden.');
-	adminInterface.successShow('Test');
-	adminInterface.successShow('You successfully logged in!');
-});
-</script>
-{/literal}
 </head>
 
 <body>
 	<div id="header">
+		<!-- Selector for width of page -->
+		<form>
+			<div id="pageWidthSelector">
+				<input type="radio" id="pageWidthSmall"
+					name="pageWidthSelector" checked="checked" />
+				<label for="pageWidthSmall">Schmal</label>
+				<input type="radio" id="pageWidthMedium"
+				name="pageWidthSelector" />
+				<label for="pageWidthMedium">Mittel</label>
+				<input type="radio" id="pageWidthLarge"
+					name="pageWidthSelector" />
+				<label for="pageWidthLarge">Breit</label>
+				<input type="radio" id="pageWidthVeryLarge"
+					name="pageWidthSelector" />
+				<label for="pageWidthVeryLarge">Sehr Breit</label>
+			</div>
+		</form>
 		<div id="top">
 	{nocache}
 	{block name=header}
@@ -92,5 +74,60 @@ $(document).ready(function() {
 		{block name=footer}{/block}
 		{block name=links}<br /><br /><a style="font-size:120%" href="index.php">Zur&uuml;ck zum Hauptmen&uuml;</a>{/block}
 	</div>
+
+
+
+{literal}
+<script type="text/javascript" language="JavaScript">
+$(document).ready(function() {
+	$('body').focus();
+
+	$("#pageWidthSelector").buttonset();
+
+	{/literal}
+	/* Error-Output, if any exist */
+	{if isset($_userErrorOutput)}
+		{foreach $_userErrorOutput as $error}
+			adminInterface.errorShow('{$error}');
+		{/foreach}
+	{/if}
+
+	/* Message-Output, if any exist */
+	{if isset($_userMsgOutput)}
+		{foreach $_userMsgOutput as $msg}
+			adminInterface.messageShow('{$msg}');
+		{/foreach}
+	{/if}
+
+	/* Success-Output, if any exist */
+	{if isset($_userSuccessOutput)}
+		{foreach $_userSuccessOutput as $msg}
+			adminInterface.successShow('{$msg}');
+		{/foreach}
+	{/if}
+	{literal}
+
+	$('#pageWidthSelector').on('change', function(ev) {
+		if($('#pageWidthSmall').prop('checked')) {
+			$('#main').animate({'width': 700}, 400);
+		}
+		if($('#pageWidthMedium').prop('checked')) {
+			$('#main').animate({'width': 960}, 400);
+		}
+		if($('#pageWidthLarge').prop('checked')) {
+			$('#main').animate({'width': 1200}, 400);
+		}
+		if($('#pageWidthVeryLarge').prop('checked')) {
+			$('#main').animate({'width': 1800}, 400);
+		}
+	});
+
+	adminInterface.messageShow('Bitte überprüfen ob der SQL-Server Transaktionen unterstützt (Tabellen müssen InnoDB als Engine haben, kein MyISAM). Neue Funktionen benutzen diese, um unter anderem Fehler zu finden.');
+	adminInterface.successShow('Test');
+	adminInterface.successShow('You successfully logged in!');
+});
+{/literal}
+</script>
+
 </body>
 </html>

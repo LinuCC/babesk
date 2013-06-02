@@ -6,25 +6,27 @@ require_once 'UsernameAutoCreator.php';
 require_once PATH_ACCESS . '/CardManager.php';
 require_once PATH_ACCESS . '/UserManager.php';
 require_once PATH_INCLUDE . '/Module.php';
+require_once 'UserDisplayAll.php';
+require_once 'UserDelete.php';
 
 
 class User extends Module {
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Constructor
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
 	}
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Getters and Setters
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Methods
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	public function execute($dataContainer) {
 
-		$this->entryPoint ();
+		$this->entryPoint($dataContainer);
 
 		if ('POST' == $_SERVER['REQUEST_METHOD']) {
 			$action = $_GET['action'];
@@ -36,22 +38,32 @@ class User extends Module {
 					$this->change();
 					break;
 				case 2: //show the users
-					$this->usersShow ();
+					$displayer = new UserDisplayAll($this->_smarty);
+					$displayer->displayAll();
 					break;
-				case 3: //delete the user
-					$this->userDelete ();
+				case 'fetchUserdata':
+					$displayer = new UserDisplayAll($this->_smarty);
+					$displayer->fetchUsersOrganized();
+					break;
+				case 'fetchUsercolumns':
+					$displayer = new UserDisplayAll($this->_smarty);
+					$displayer->fetchShowableColumns();
+					break;
+				case 'deleteUser': //delete the user
+					$deleter = new UserDelete($this->_smarty);
+					$deleter->deleteFromDb();
 					break;
 				case 4:
 					$this->search();
 					break;
 				case 5:
-					$this->userCreateUsernames ();
+					$this->userCreateUsernames();
 					break;
 				case 6:
-					$this->usernamesRemoveSpecialChars ();
+					$this->usernamesRemoveSpecialChars();
 					break;
 				case 7:
-					$this->deletePdf ();
+					$this->deletePdf();
 					break;
 				default:
 					die('wrongActionValue');
@@ -61,22 +73,23 @@ class User extends Module {
 			&& isset($_GET['action'])) {
 			$action = $_GET['action'];
 			switch ($action) {
-				case 2: //show the users
-					if (isset($_GET['filter'])) {
-						$this->userProcessing->ShowUsers($_GET['filter']);
-					} else {
-						$this->userProcessing->ShowUsers("name");
-					}
+				case 'changeUserDisplay':
+					$this->changeDispay();
+					break;
+				case 'deleteUser': //delete the user
+					$deleter = new UserDelete($this->_smarty);
+					$deleter->deleteFromDb();
+					break;
 			}
 		}
 		else {
 			$this->userInterface->ShowSelectionFunctionality();
 		}
 	}
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Implementations
-	////////////////////////////////////////////////////////////////////////////////
-	protected function entryPoint () {
+	///////////////////////////////////////////////////////////////////////
+	protected function entryPoint ($dataContainer) {
 		defined('_AEXEC') or die('Access denied');
 		$this->cardManager = new CardManager();
 		$this->userManager = new UserManager();
@@ -85,6 +98,7 @@ class User extends Module {
 		$this->userProcessing = new AdminUserProcessing($this->userInterface);
 		$this->messages = array(
 				'error' => array('no_id' => 'ID nicht gefunden.'));
+		$this->_smarty = $dataContainer->getSmarty();
 	}
 
 	/**
@@ -309,24 +323,6 @@ class User extends Module {
 		return $rearranged;
 	}
 
-	protected function usersShow () {
-		if (isset($_POST['filter'])) {
-			$this->userProcessing->ShowUsers($_POST['filter']);
-		} else {
-			$this->userProcessing->ShowUsers("name");
-		}
-	}
-
-	protected function userDelete () {
-		if (isset($_POST['delete'])) {
-			$this->userProcessing->DeleteUser($_GET['ID']);
-		} else if (isset($_POST['not_delete'])) {
-			$this->userInterface->ShowSelectionFunctionality();
-		} else {
-			$this->userProcessing->DeleteConfirmation($_GET['ID']);
-		}
-	}
-
 	protected function userCreateUsernames () {
 		if (isset ($_POST ['confirmed'])) {
 			$creator = new UsernameAutoCreator ();
@@ -369,18 +365,6 @@ class User extends Module {
 		}
 	}
 
-	protected function deletePdf () {
-		if (isset ($_GET['ID'])) {
-			try {
-			unlink (dirname(realpath(''))."/include/pdf/tempPdf/deleted_".$_GET['ID'].".pdf");
-			$this->userInterface->showDeletePdfSuccess ();
-			} catch (Exception $e) {
-			$this->userInterface->dieError ('Fehler beim L&ouml;schen des PDFs.');
-
-		}
-		}
-	}
-
 	/**
 	 * Fetches all of the users from the database and returns them
 	 *
@@ -417,7 +401,9 @@ class User extends Module {
 	 * Enter description here ...
 	 * @param string (numeric) $uid The ID of the User
 	 */
-	function changeDispay($uid) {
+	function changeDispay() {
+
+		$uid = mysql_real_escape_string($_GET['ID']);
 
 		try {
 			TableMng::query('SET @activeSchoolyear :=
@@ -661,8 +647,12 @@ class User extends Module {
 				return '';
 			}
 			else {
+				//Card was changed, add it to the counter
+				$countChangedCardId = $userCard[0]['changed_cardID'] + 1;
+				$cardnumber = $_POST['cardnumber'];
 				$query = "UPDATE cards
-					SET cardnumber = $userCard[0][cardnumber]
+					SET cardnumber = '$cardnumber',
+						changed_cardID = '$countChangedCardId'
 					WHERE UID = $uid;";
 			}
 		}
@@ -745,9 +735,9 @@ class User extends Module {
 		return $query;
 	}
 
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Attributes
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 
 	protected $cardManager;
 	protected $userManager;
