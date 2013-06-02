@@ -138,7 +138,7 @@ class LoanSystem extends Module {
 		if (isset($_POST['eb_name']) && $_POST['eb_name']=="" || isset($_POST['eb_vorname']) && $_POST['eb_vorname']=="") $text .= "<td>Name, Vorname des/der Erziehungsberechtigten:<br><br><br><br><br><br></td>";
 		else $text .= "<td>Name, Vorname des/der Erziehungsberechtigten:<br/>".$_POST['eb_name'].", ".$_POST['eb_vorname']."</td>";
 		if (isset($_POST['eb_adress']) && $_POST['eb_adress']=="") $text .= "<td>Anschrift: </td>";
-		else $text .= "<td>Anschrift:<br/>".$_POST['eb_adress']."</td>";
+		else $text .= "<td>Anschrift:<br/>".nl2br($_POST['eb_adress'])."</td>";
 		if (isset($_POST['eb_tel']) && $_POST['eb_tel']=="") $text .= "<td>Telefon:</td>";
 		else $text .= "<td>Telefon:<br/>".$_POST['eb_tel']."</td>";
 

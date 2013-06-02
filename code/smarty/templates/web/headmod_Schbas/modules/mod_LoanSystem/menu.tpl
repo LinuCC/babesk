@@ -22,13 +22,13 @@
 Entweder geben Sie diese Daten hier online oder nach dem Ausdrucken des erstellten R&uuml;ckmeldedokuments handschriftlich ein.
 <form action="index.php?section=Schbas|LoanSystem&action=showFormPdf" method="post" id="loanForm">
     <fieldset>
-      <label style="width:300px; float:left;">Vorname des/der Erziehungsberechtigten:</label>
-      <input type="text" name="eb_vorname"/><br>
-      <label style="width:300px;float:left;">Name des/der Erziehungsberechtigten:</label>
+      <label style="width:300px; float:left;" for="eb_vorname">Vorname des/der Erziehungsberechtigten:</label>
+      <input type="text" name="eb_vorname"/><br> 
+      <label style="width:300px;float:left;"for="eb_name">Name des/der Erziehungsberechtigten:</label>
       <input type="text" name="eb_name"/><br>
-      <label style="width:300px;float:left;">Anschrift:</label>
-      <input type="text" name="eb_adress"/><br>
-      <label style="width:300px;float:left;">Telefon:</label>
+      <label style="width:300px;float:left;" for="eb_adress">Anschrift:</label>
+      <textarea name="eb_adress" rows=2 cols=20 style="resize: none;"></textarea><br>
+      <label style="width:300px;float:left;" for="eb_tel">Telefon:</label>
       <input type="text" name="eb_tel" /><br></h5> 
     </fieldset>
 </div>
