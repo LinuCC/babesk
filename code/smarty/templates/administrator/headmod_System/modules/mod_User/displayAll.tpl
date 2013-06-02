@@ -12,8 +12,6 @@
 
 </style>
 
-<a id="wacken" href="test.html">Download Me!</a>
-
 <div class="accordion">
 
 	<h3>Filter</h3>

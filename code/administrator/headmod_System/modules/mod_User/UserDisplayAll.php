@@ -177,7 +177,7 @@ class UserDisplayAll {
 				$user['locked'] = ($user['locked']) ? $yes : $no;
 			}
 			if(isset($user['credit'])) {
-				$user['credit'] = money_format('%.2n', $user['credit']);
+				$user['credit'] = number_format($user['credit'], 2, '.', '');
 			}
 		}
 
