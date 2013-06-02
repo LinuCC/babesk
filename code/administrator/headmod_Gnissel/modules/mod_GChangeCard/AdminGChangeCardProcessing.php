@@ -97,7 +97,6 @@ class AdminGChangeCardProcessing {
 		try {
 			$data = TableMng::query(sprintf(
 					'SELECT ID FROM users  WHERE username LIKE "%s"', $username), true);
-	
 		} catch (MySQLVoidDataException $e) {
 			$this->cardInfoInterface->dieError('Der Benutzer wurde nicht gefunden');
 	
@@ -108,25 +107,24 @@ class AdminGChangeCardProcessing {
 		return $data[0];
 	}
 	
-	public function pwChange ($pwNew, $pwNewRep,$uid) {
-		require_once PATH_ACCESS . '/UserManager.php';
-		$userManager = new UserManager();		
+	public function cardChange ($cardNew,$uid) {
+		require_once PATH_ACCESS . '/CardManager.php';
+		$cardManager = new CardManager();		
 		try {
-			inputcheck ($pwNew, 'password', 'Passwort');
+			inputcheck ($cardNew, 'card_id', 'Kartennummer');
 		} catch (WrongInputException $e) {
-			$this->cardInfoInterface->DieError ('Das Passwort enthält nicht korrekte Zeichen oder ist zu kurz.');
-		}
-		if ($pwNew != $pwNewRep) {
-			$this->cardInfoInterface->DieError ('Das Passwort stimmt nicht mit der Wiederholung überein. Bitte versuche es noch einmal.');
+			$this->cardInfoInterface->DieError ('Die Kartennummer enthält nicht korrekte Zeichen oder ist zu kurz.');
 		}
 		
 		try {
-			$userManager->changePassword ($uid, $pwNew);
+			var_dump($uid);
+			$cardManager->changeCardnumber($cardManager->getIDByUserID($uid), $cardNew);
+			$cardManager->addCardIdChange($uid);
 		} catch (Exception $e) {
-			$this->cardInfoInterface->DieError ('Konnte das Passwort nicht verändern; Ein interner Fehler ist aufgetreten');
+			$this->cardInfoInterface->DieError ('Konnte die Karte nicht verändern; Ein interner Fehler ist aufgetreten');
 		}
 		
-		$this->cardInfoInterface->DieError ('Das Passwort wurde erfolgreich verändert');
+		$this->cardInfoInterface->DieMsg ('Die Kartennummer wurde erfolgreich verändert');
 	}
 }
 

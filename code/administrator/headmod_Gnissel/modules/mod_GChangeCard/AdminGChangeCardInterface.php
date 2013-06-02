@@ -20,13 +20,13 @@ class AdminGChangeCardInterface extends AdminInterface {
 	/**
 	 * Shows some generic user infos
 	 */	
-	public function ShowChangePassword($uid,$userData) {
+	public function ShowChangeCard($uid,$userData) {
 		$this->smarty->assign('uid', $uid);
 		$this->smarty->assign('name', $userData['name']);
 		$this->smarty->assign('forename', $userData['forename']);
 		$this->smarty->assign('class', $userData['class']);
 		
-		$this->smarty->display($this->tplFilePath  . '/changePassword.tpl');
+		$this->smarty->display($this->tplFilePath  . '/changeCard.tpl');
 	}
 	
 	public function Username() {
