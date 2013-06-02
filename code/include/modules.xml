@@ -237,6 +237,11 @@
 				<name>GChangePassword</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Nutzerfreischaltung</ger_name>
+				<name>GUnlockUser</name>
+				<active>true</active>
+			</module>
 		</head_module>
 	</administrator>
 	<web>
