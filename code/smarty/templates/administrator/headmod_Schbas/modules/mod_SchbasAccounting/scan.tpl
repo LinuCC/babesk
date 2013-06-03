@@ -28,7 +28,7 @@
 		},
 		success: function(data) {
 			if(data == 'error') {
-				alert('Konnte die Nachricht des Benutzers nicht als "bereits zurückgegeben" markieren');
+				alert('Der Barcode ist nicht vollständig');
 			}
 			else if(data == 'entryNotFound') {
 				alert('Der Link zwischen Nachricht und Benutzer konnte nicht gefunden werden');
@@ -40,6 +40,7 @@
 				alert(unescape('Formular wurde bereits eingescannt. Bei %C4nderungen bitte zuerst l%F6schen!'));
 			}
 			else {
+				alert('Einscannen erfolgreich!');
 				location.reload();
 			}
 		},
