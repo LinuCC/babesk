@@ -117,7 +117,7 @@ class AdminGChangeCardProcessing {
 		}
 		
 		try {
-			var_dump($uid);
+		
 			$cardManager->changeCardnumber($cardManager->getIDByUserID($uid), $cardNew);
 			$cardManager->addCardIdChange($uid);
 		} catch (Exception $e) {

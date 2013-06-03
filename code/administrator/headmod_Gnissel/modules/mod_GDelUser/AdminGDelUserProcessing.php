@@ -108,8 +108,12 @@ class AdminGDelUserProcessing {
 		$user = array();
 		
 		try {
-		
-			$user = $userManager->getEntryData($uid, 'forename', 'name','credit','birthday','class');
+			
+			$temp = $this->GetUserData($uid);
+			$bd_temp = explode('-',$temp['birthday']);
+			$temp['birthday']=$bd_temp[2].".".$bd_temp[1].".".$bd_temp[0];
+			$user = array('forename'=>$temp['forename'],'name'=>$temp['name'],'credit'=>$temp['credit'],'birthday'=>$temp['birthday'],'class'=>$temp['class']);
+			//$user = $userManager->getEntryData($uid, 'forename', 'name','credit','birthday','class');
 		
 			
 		} catch (Exception $e) {
@@ -159,7 +163,7 @@ class AdminGDelUserProcessing {
 		$pdf->SetKeywords('');
 	
 		// set default header data
-		$pdf->SetHeaderData('../../../../web/headmod_Messages/modules/mod_MessageMainMenu/logo.jpg', 15, 'LeG Uelzen', "Abmeldung von: ".$user['forename']." ".$user['name']."\nKlasse: ".$user['class'], array(0,0,0), array(0,0,0));
+		$pdf->SetHeaderData('../../../../web/headmod_Messages/modules/mod_MessageMainMenu/logo.jpg', 15, 'LeG Uelzen', "Abmeldung von: ".$user['forename']." ".$user['name']." (geb. am ".$user['birthday'].")\nKlasse: ".$user['class'], array(0,0,0), array(0,0,0));
 		$pdf->setFooterData($tc=array(0,0,0), $lc=array(0,0,0));
 	
 		// set header and footer fonts
@@ -209,13 +213,14 @@ Hiermit wird best&auml;tigt, dass s&auml;mtliche personenbezogenen Daten am '.da
 		if ($user['credit']=="0.00") $html .= 'Es liegt kein Restguthaben vor.<br/>';
 		else $html .= 'Es liegt ein Restguthaben in H&ouml;he von '.$user['credit'].' &euro; vor. Dieses muss beim Caterer abgeholt werden.<br/>';
 		$html .= 'Mit der R&uuml;ckgabe der LeG-Card kann das Pfandgeld in H&ouml;he von 3,50 &euro; zzgl. 0,50 &euro;, je nach Zustand der H&uuml;lle, ausbezahlt werden.<br/>
-<hr>
+Dieses Schreiben wurde maschinell erstellt und ist ohne Unterschrift g&uuml;ltig.
+				<hr>
 <p align="center"><h3>Auszahlung des Restguthabens</h3></p><br>
-Restguthaben in H&ouml;he von '.$user['credit'].' &euro; am ___.___.2013 erhalten.<br><br>
+Restguthaben in H&ouml;he von '.$user['credit'].' &euro; am ___.___.2013 ausgezahlt.<br><br>
 <br>						Unterschrift Caterer
 		<br><hr>
 <p align="center"><h3>Pfanderstattung</h3></p><br>
-Bitte geben Sie diesen Abschnitt im Lessing-Gymnasium ab.<br>
+Bitte geben Sie diesen Abschnitt im Gnissel-B&uuml;ro im Lessing-Gymnasium ab.<br>
 Bitte kreuzen Sie an, ob Sie den Pfandbetrag an die Sch&uuml;lergenossenschaft Gnissel des LeG Uelzen spenden m&ouml;chten
 		oder eine &Uuml;berweisung auf ein Bankkonto w&uuml;nschen.<br>
 	
@@ -227,13 +232,13 @@ BLZ:		<br>
 Kreditinstitut: <br><br>
 	
 Uelzen, den ___.___.2013
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unterschrift Elternteil bzw. vollj&auml;hriger Sch&uuml;ler<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unterschrift Sch&uuml;ler<br>
 	
 	
 <hr>
 <p align="center"><h3>Abschnitt f&uuml;r den Caterer</h3></p><br>
  Restguthaben in H&ouml;he von '.$user['credit'].' &euro; am ___.___.2013 erhalten.<br><br>
-		<br><br>Unterschrift Elternteil bzw. vollj&auml;hriger Sch&uuml;ler
+		<br><br>Unterschrift Sch&uuml;ler
 		';
 	
 		// Print text using writeHTMLCell()
