@@ -7,8 +7,9 @@
 			{if $BaBeSkTerminal}
 				Hinweis: Post kann nicht am BaBeSK-Terminal <br>ge&ouml;ffnet werden!
 			{else}
-			<a href="index.php?section=Schbas|LoanSystem&action=showPdf">
-				<input type="submit" value="Informationen herunterladen" /></a>
+			<form action="index.php?section=Schbas|LoanSystem&action=showPdf" method="post" id="loanInfo">
+				<input type="submit" value="Informationen herunterladen" />
+			</form>
 			{/if}
 			
 	<br/>	<br/>	
