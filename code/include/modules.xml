@@ -242,9 +242,14 @@
 				<name>GUnlockUser</name>
 				<active>true</active>
 			</module>
-				<module>
+			<module>
 				<ger_name>Ersatzkarte</ger_name>
 				<name>GChangeCard</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Nutzerlöschung</ger_name>
+				<name>GDelUser</name>
 				<active>true</active>
 			</module>
 		</head_module>
