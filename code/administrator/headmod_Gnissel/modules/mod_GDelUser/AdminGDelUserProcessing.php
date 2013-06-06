@@ -163,7 +163,7 @@ class AdminGDelUserProcessing {
 		$pdf->SetKeywords('');
 	
 		// set default header data
-		$pdf->SetHeaderData('../../../../web/headmod_Messages/modules/mod_MessageMainMenu/logo.jpg', 15, 'LeG Uelzen', "Abmeldung von: ".$user['forename']." ".$user['name']." (geb. am ".$user['birthday'].")\nKlasse: ".$user['class'], array(0,0,0), array(0,0,0));
+	$pdf->SetHeaderData('../../../../web/headmod_Messages/modules/mod_MessageMainMenu/logo.jpg', 15, 'LeG Uelzen', "Abmeldung von: ".$user['forename']." ".$user['name']." (geb. am ".$user['birthday'].")\nKlasse: ".$user['class'], array(0,0,0), array(0,0,0));
 		$pdf->setFooterData($tc=array(0,0,0), $lc=array(0,0,0));
 	
 		// set header and footer fonts
@@ -218,7 +218,12 @@ Dieses Schreiben wurde maschinell erstellt und ist ohne Unterschrift g&uuml;ltig
 <p align="center"><h3>Auszahlung des Restguthabens</h3></p><br>
 Restguthaben in H&ouml;he von '.$user['credit'].' &euro; am ___.___.2013 ausgezahlt.<br><br>
 <br>						Unterschrift Caterer
-		<br><hr>
+		<br>
+		<hr>
+<p align="center"><h3>Abschnitt f&uuml;r den Caterer</h3></p><br>
+ Restguthaben in H&ouml;he von '.$user['credit'].' &euro; am ___.___.2013 erhalten.<br><br>
+		<br><br>Unterschrift '.$user['forename'].' '.$user['name'].' (geb. am '.$user['birthday'].')
+		<hr>
 <p align="center"><h3>Pfanderstattung</h3></p><br>
 Bitte geben Sie diesen Abschnitt im Gnissel-B&uuml;ro im Lessing-Gymnasium ab.<br>
 Bitte kreuzen Sie an, ob Sie den Pfandbetrag an die Sch&uuml;lergenossenschaft Gnissel des LeG Uelzen spenden m&ouml;chten
@@ -232,13 +237,10 @@ BLZ:		<br>
 Kreditinstitut: <br><br>
 	
 Uelzen, den ___.___.2013
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unterschrift Sch&uuml;ler<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unterschrift '.$user['forename'].' '.$user['name'].' (geb. am '.$user['birthday'].')<br>
 	
 	
-<hr>
-<p align="center"><h3>Abschnitt f&uuml;r den Caterer</h3></p><br>
- Restguthaben in H&ouml;he von '.$user['credit'].' &euro; am ___.___.2013 erhalten.<br><br>
-		<br><br>Unterschrift Sch&uuml;ler
+
 		';
 	
 		// Print text using writeHTMLCell()
