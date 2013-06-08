@@ -40,3 +40,4 @@ templates_c
 #dynamically created code#
 ##########################
 databaseValues.php
+tmpFiles

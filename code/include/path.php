@@ -21,12 +21,12 @@ define('PATH_SMARTY_INH_PARENT', realPath($rootPath.'/smarty/templates/administr
 define('PATH_WEBROOT', $_SERVER['DOCUMENT_ROOT']);
 
 //tmp-Path
-if(!defined('PATH_TMP')) {
-	if(!($tmpDir = ini_get('upload_tmp_dir'))) {
-		$tmpDir = $ini_val ? $ini_val : sys_get_temp_dir();
-	}
-	define('PATH_TMP', $tmpDir);
-}
+// if(!defined('PATH_TMP')) {
+// 	if(!($tmpDir = ini_get('upload_tmp_dir'))) {
+// 		$tmpDir = $ini_val ? $ini_val : sys_get_temp_dir();
+// 	}
+// 	define('PATH_TMP', $tmpDir);
+// }
 
 $smartypath = $rootPath."/smarty";     //I <3 verschiedene Ordnertrennzeichen der OS's etc.
 $smartypath = str_replace(realPath(PATH_WEBROOT).DS, '', $smartypath);

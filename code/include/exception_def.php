@@ -68,7 +68,6 @@
 		}
 	}
 
-
 	class WrongInputException extends Exception{
 		function __construct($strMessage, $strFieldName = 'Input') {
 			parent::__construct($strMessage);
@@ -86,6 +85,12 @@
 	class CsvExportException extends Exception {
 		function __construct($msg) {
 			parent::__construct($msg);
+		}
+	}
+
+	class TemporaryFileException extends Exception {
+		function __construct($msg, $code = 0, $previous = NULL) {
+			parent::__construct($msg, $code, $previous);
 		}
 	}
 ?>

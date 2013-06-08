@@ -1,5 +1,6 @@
 <?php
 
+require_once PATH_INCLUDE . '/TemporaryFile.php';
 
 /**
  * Base-Class, allowing creation of Charts using pChart
@@ -243,22 +244,6 @@ abstract class StatisticsChart {
 		$this->imageLegendDraw();
 		$this->imageHeadingDraw();
 		$this->imageChartDraw();
-	}
-
-	/**
-	 * Saves the Image to a file and returns the Path
-	 *
-	 * @param string $filepath The Path to the file [optional]
-	 * @return string the path of the temporary file
-	 */
-	public function imageCacheToFile($filepath = '') {
-
-		if($filepath == '') {
-			$filepath = tempnam(PATH_TMP, 'imgChart');
-		}
-		$this->_pImage->render($filepath);
-
-		return $filepath;
 	}
 
 	/**
@@ -540,6 +525,5 @@ abstract class StatisticsChart {
 	protected $_antialias = false;
 
 }
-
 
 ?>
