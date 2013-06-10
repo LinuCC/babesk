@@ -47,6 +47,16 @@ class UserDisplayAll {
 		$userToStart = $pagenumber * $usersPerPage;
 		$filterForQuery = '';
 
+		if(empty($_POST['columnsToFetch'])) {
+			$columnsToFetch = array();
+		}
+		else {
+			$columnsToFetch = $_POST['columnsToFetch'];
+			foreach($columnsToFetch as &$col) {
+				$col = mysql_real_escape_string($col);
+			}
+		}
+
 		//When user didnt select anything to sort For, default to name
 		if(empty($sortFor)) {
 			$sortFor = 'name';
@@ -56,38 +66,16 @@ class UserDisplayAll {
 			$filterForQuery = "WHERE $filterForCol LIKE '%$filterForVal%'";
 		}
 
+
 		try {
+			$queryCreator = new UserDisplayAllQueryCreator($filterForQuery,
+				$sortFor, $userToStart, $usersPerPage);
+			$query = $queryCreator->createQuery($columnsToFetch);
+
 			//Fetch the Userdata
 			TableMng::query('SET @activeSy :=
 				(SELECT ID FROM schoolYear WHERE active = "1");');
-			$data = TableMng::query(
-				"SELECT u.*, u.ID AS userId, cards.cardnumber AS cardnumber,
-					GROUP_CONCAT(sy.label SEPARATOR '<br />') AS schoolyears,
-					GROUP_CONCAT( CONCAT(g.gradeValue, '-', g.label)
-						SEPARATOR '<br />') AS grades,
-					activeGrade.activeGrade AS activeGrade
-				FROM users u
-					LEFT JOIN (SELECT UID, cardnumber FROM cards) cards
-						ON cards.UID = u.ID
-					LEFT JOIN jointUsersInSchoolYear uisy
-						ON uisy.UserID = u.ID
-					LEFT JOIN schoolYear sy ON sy.ID = uisy.SchoolYearID
-					LEFT JOIN jointUsersInGrade uig ON uig.UserID = u.ID
-					LEFT JOIN grade g ON uig.GradeID = g.ID
-					LEFT JOIN (
-						SELECT CONCAT(gradeValue, '-', label)
-							AS activeGrade, uig.UserID AS userId
-						FROM grade g
-						JOIN jointGradeInSchoolYear gisy
-							ON gisy.GradeID = g.ID
-						JOIN jointUsersInGrade uig ON g.ID = uig.GradeID
-						WHERE gisy.SchoolYearID = @activeSy) activeGrade
-							ON u.ID = activeGrade.userId
-				$filterForQuery
-				GROUP BY u.ID
-				ORDER BY $sortFor
-				LIMIT $userToStart, $usersPerPage", true);
-
+			$data = TableMng::query($query, true);
 			$usercount = TableMng::query(
 				"SELECT COUNT(*) AS count FROM users $filterForQuery", true);
 
@@ -99,7 +87,7 @@ class UserDisplayAll {
 				$pagecount = 1;
 			}
 
-			$data = $this->fetchedDataToReadable($data);
+			$data = $this->fetchedDataToReadable($data, $columnsToFetch);
 
 		} catch (Exception $e) {
 			die(json_encode(array('value' => 'error',
@@ -140,9 +128,9 @@ class UserDisplayAll {
 			$columns['cardnumber'] = 'Kartennummer';
 		}
 		//Babesk existing
-		if(count(TableMng::query("SHOW TABLES LIKE 'orders';", true))) {
-			$columns['countOrders'] = 'Bestellungen';
-		}
+		// if(count(TableMng::query("SHOW TABLES LIKE 'orders';", true))) {
+			// $columns['countOrders'] = 'Bestellungen';
+		// }
 
 		die(json_encode(array('value' => 'data', 'message' => $columns)));
 	}
@@ -160,7 +148,7 @@ class UserDisplayAll {
 	 * @param  Array $data The data to search for
 	 * @return Array The converted data
 	 */
-	protected function fetchedDataToReadable($data) {
+	protected function fetchedDataToReadable($data, $columnsToFetch) {
 
 		$yes = 'Ja';
 		$no = 'Nein';
@@ -178,6 +166,10 @@ class UserDisplayAll {
 			}
 			if(isset($user['credit'])) {
 				$user['credit'] = number_format($user['credit'], 2, '.', '');
+			}
+			if(in_array('cardnumber', $columnsToFetch) &&
+				!isset($user['cardnumber'])) {
+				$user['cardnumber'] = 'Keine';
 			}
 		}
 
@@ -203,6 +195,147 @@ class UserDisplayAll {
 		'first_passwd' => 'ist erstes Passwort',
 		'credit' => 'Guthaben',
 		'soli' => 'ist Soli');
+}
+
+class UserDisplayAllQueryCreator {
+
+	/////////////////////////////////////////////////////////////////////
+	//Constructor
+	/////////////////////////////////////////////////////////////////////
+
+	public function __construct($filterForQuery, $sortFor, $userToStart,
+		$usersPerPage) {
+
+		$this->_filterForQuery = $filterForQuery;
+		$this->_sortFor = $sortFor;
+		$this->_userToStart = $userToStart;
+		$this->_usersPerPage = $usersPerPage;
+	}
+
+
+	/////////////////////////////////////////////////////////////////////
+	//Methods
+	/////////////////////////////////////////////////////////////////////
+
+	public function createQuery($columns) {
+
+		foreach($columns as $col) {
+			switch($col) {
+				case 'grades':
+					$this->gradeQuery();
+					break;
+				case 'cardnumber':
+					$this->cardsQuery();
+					break;
+				case 'activeGrade':
+					$this->gradeQuery();
+					break;
+				case 'schoolyears':
+					$this->schoolyearQuery();
+					break;
+			}
+		}
+
+		$this->concatQuery();
+
+		return $this->_query;
+	}
+
+	/////////////////////////////////////////////////////////////////////
+	//Implements
+	/////////////////////////////////////////////////////////////////////
+
+	protected function concatQuery() {
+
+		$this->_querySelect = rtrim($this->_querySelect, ', ');
+		if($this->_querySelect != '') {
+			$this->_querySelect = ", $this->_querySelect";
+		}
+
+		$this->_query = "SELECT u.*, u.ID AS userId $this->_querySelect
+			FROM users u
+				$this->_queryJoin
+			$this->_filterForQuery
+			GROUP BY u.ID
+			ORDER BY $this->_sortFor
+			LIMIT $this->_userToStart, $this->_usersPerPage";
+	}
+
+	protected function cardsQuery() {
+
+		if(!$this->_cardsQueryDone) {
+			$this->addSelectStatement('cards.cardnumber AS cardnumber');
+			$this->addJoinStatement('LEFT JOIN
+				(SELECT UID, cardnumber FROM cards) cards
+				ON cards.UID = u.ID');
+			$this->_cardsQueryDone = true;
+		}
+	}
+
+	protected function schoolyearQuery() {
+
+		if(!$this->_schoolyearQueryDone) {
+			$this->addSelectStatement('GROUP_CONCAT(sy.label
+					SEPARATOR "<br />")
+				AS schoolyears');
+			$this->addJoinStatement('LEFT JOIN jointUsersInSchoolYear uisy
+				ON uisy.UserID = u.ID
+			LEFT JOIN schoolYear sy ON sy.ID = uisy.SchoolYearID');
+			$this->_schoolyearQueryDone = true;
+		}
+	}
+
+	protected function gradeQuery() {
+
+		if(!$this->_gradeQueryDone) {
+			$this->addSelectStatement('GROUP_CONCAT(
+				CONCAT(g.gradeValue, "-", g.label)
+				SEPARATOR "<br />") AS grades,
+				activeGrade.activeGrade AS activeGrade');
+			$this->addJoinStatement('
+				LEFT JOIN jointUsersInGrade uig ON uig.UserID = u.ID
+				LEFT JOIN grade g ON uig.GradeID = g.ID
+				LEFT JOIN (
+					SELECT CONCAT(gradeValue, "-", label)
+						AS activeGrade, uig.UserID AS userId
+					FROM grade g
+					JOIN jointGradeInSchoolYear gisy
+						ON gisy.GradeID = g.ID
+					JOIN jointUsersInGrade uig ON g.ID = uig.GradeID
+					WHERE gisy.SchoolYearID = @activeSy) activeGrade
+						ON u.ID = activeGrade.userId');
+			$this->_gradeQueryDone = true;
+		}
+	}
+
+	protected function addSelectStatement($st) {
+
+		$this->_querySelect .= "$st, ";
+	}
+
+	protected function addJoinStatement($st) {
+
+		$this->_queryJoin .= " $st ";
+	}
+
+	/////////////////////////////////////////////////////////////////////
+	//Attributes
+	/////////////////////////////////////////////////////////////////////
+
+	protected $_querySelect = '';
+
+	protected $_queryJoin = '';
+
+	protected $_query = '';
+
+	protected $_gradeQueryDone = false;
+	protected $_schoolyearQueryDone = false;
+	protected $_cardsQueryDone = false;
+
+	protected $_filterForQuery;
+	protected $_sortFor;
+	protected $_userToStart;
+	protected $_usersPerPage;
 }
 
 ?>

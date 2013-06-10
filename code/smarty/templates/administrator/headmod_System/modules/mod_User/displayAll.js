@@ -245,8 +245,6 @@ $(document).ready(function() {
 		var sortFor = valueSortForGet();
 		var filterForColumn = valueFilterForGet();
 		var filterForValue = $('input#filterInput').val();
-		console.log(filterForValue);
-		console.log(filterForColumn);
 		if(!filterForValue || !filterForValue) {
 			filterForValue = '';
 			filterForColumn = '';
@@ -261,7 +259,7 @@ $(document).ready(function() {
 				'sortFor': sortFor,
 				'filterForCol': filterForColumn,
 				'filterForVal': filterForValue,
-				'columnsToFetch': selectedColumnsGet()
+				'columnsToFetch': selectedColumnIdsGet()
 			},
 
 			success: function(data) {
@@ -279,14 +277,12 @@ $(document).ready(function() {
 					activePage = pagenum;
 					tableRefresh(data.users);
 					pageSelectorUpdate(data.pagecount);
-					console.log(data.pagecount);
 				}
 				else if(data.value == 'error') {
 					adminInterface.errorShow(data.message);
 					fatalError();
 				}
 				else {
-					console.log(data);
 					fatalError();
 				}
 			},
@@ -353,7 +349,6 @@ $(document).ready(function() {
 				}
 				else {
 					fatalError();
-					console.log(data);
 				}
 			},
 
@@ -473,7 +468,7 @@ $(document).ready(function() {
 		var tablehead = $('table.users thead');
 
 		//Sets the TableHead
-		var columnHeader = selectedColumnsGet();
+		var columnHeader = selectedColumnLabelsGet();
 		var headRow = '<tr>';
 		$.each(columnHeader, function(index, columnName) {
 			headRow += '<th>' + columnName + '</th>';
@@ -492,10 +487,17 @@ $(document).ready(function() {
 		});
 	};
 
-	var selectedColumnsGet = function() {
-		var columns = $.map($('input.columnSelect:checked'),
-			function(el) {
+	var selectedColumnLabelsGet = function() {
+		var columns = $.map($('input.columnSelect:checked'), function(el) {
 			return $('label[for="' + $(el).attr('id') + '"]').text();
+		});
+
+		return columns;
+	}
+
+	var selectedColumnIdsGet = function() {
+		var columns = $.map($('input.columnSelect:checked'), function(el) {
+			return $(el).attr('id');
 		});
 
 		return columns;
