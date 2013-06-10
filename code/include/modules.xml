@@ -181,6 +181,11 @@
 				<name>BookInfo</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Einstellungen</ger_name>
+				<name>SchbasSettings</name>
+				<active>true</active>
+			</module>
 		</head_module>
 		<head_module>
 			<ger_name>KurswahlSystem</ger_name>
@@ -343,6 +348,16 @@
 			<module>
 				<ger_name>Übersicht</ger_name>
 				<name>MessageMainMenu</name>
+				<active>true</active>
+			</module>
+		</head_module>
+		<head_module>
+			<ger_name>Schbas</ger_name>
+			<name>Schbas</name>
+			<active>true</active>
+			<module>
+				<ger_name>Ausleihsystem</ger_name>
+				<name>LoanInfo</name>
 				<active>true</active>
 			</module>
 		</head_module>
