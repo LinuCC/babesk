@@ -317,6 +317,17 @@ class UserManager extends TableManager{
 		parent::alterEntry($uid, 'locked', '1');
 		}
 	}
+	
+	/**
+	 * Unlocks an account
+	 *
+	 *@throws MySQLConnectionException if a problem with MySQL happened
+	 */
+	function unlockAccount($uid) {
+		if(isset($uid)) {
+			parent::alterEntry($uid, 'locked', '0');
+		}
+	}
 
 	/**
 	 * sets religion

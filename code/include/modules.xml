@@ -221,6 +221,27 @@
 				<name>KuwasysStats</name>
 				<active>true</active>
 			</module>
+			
+		</head_module>
+		<head_module>
+			<ger_name>Gnissel</ger_name>
+			<name>Gnissel</name>
+			<active>true</active>
+			<module>
+				<ger_name>Kartenfund</ger_name>
+				<name>GCardInfo</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Passwortänderung</ger_name>
+				<name>GChangePassword</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Nutzerfreischaltung</ger_name>
+				<name>GUnlockUser</name>
+				<active>true</active>
+			</module>
 		</head_module>
 	</administrator>
 	<web>
