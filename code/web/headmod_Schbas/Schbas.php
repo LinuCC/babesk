@@ -22,7 +22,7 @@ class Schbas extends HeadModule {
 	//Methods
 	public function execute($moduleManager, $dataContainer) {
 		
-		$moduleManager->execute("Schbas|LoanInfo", false);
+		$moduleManager->execute("Schbas|LoanSystem", false);
 	}
 }
 ?>

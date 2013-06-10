@@ -1,9 +1,9 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
-require_once 'MessageTemplateInterface.php';
+require_once 'SchbasMessagesInterface.php';
 
-class MessageTemplate extends Module {
+class SchbasMessages extends Module {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -75,7 +75,7 @@ class MessageTemplate extends Module {
 		$data = array();
 
 		try {
-			$data = TableMng::query('SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM messagegroups WHERE name="vanilla");', true);
+			$data = TableMng::query('SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM messagegroups WHERE name="Schbas");', true);
 
 		} catch (MySQLVoidDataException $e) {
 			return array();
@@ -122,7 +122,7 @@ class MessageTemplate extends Module {
 	protected function templateAddToDb($title, $text) {
 
 		try {
-			$gid = TableMng::query('SELECT ID FROM messagegroups WHERE name LIKE "vanilla"', true);
+			$gid = TableMng::query('SELECT ID FROM messagegroups WHERE name LIKE "Schbas"', true);
 			
 			TableMng::query(sprintf('INSERT INTO MessageTemplate
 				(`title`, `text`,`GID`) VALUES ("%s", "%s", "%d");', $title, $text,$gid[0]['ID']));
