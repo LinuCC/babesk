@@ -27,7 +27,7 @@
 	{section name=module loop=$modules}
 	<div class="menu_item" id="{$modules[module]}">
 		<div class="menuItemCell">
-			<a href="index.php?section={$modules[module]}&{$sid}" tabindex="1">{$module_names[$modules[module]]}</a>
+			<a href="index.php?section={$modules[module]}" tabindex="1">{$module_names[$modules[module]]}</a>
 		</div>
 	</div>
 	{/section}
