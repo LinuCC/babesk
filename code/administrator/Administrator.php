@@ -2,6 +2,7 @@
 
 require_once "../include/path.php";
 require_once PATH_INCLUDE . '/TableMng.php';
+require_once PATH_INCLUDE . '/NModule.php';
 
 /**
  *
@@ -40,6 +41,7 @@ class Administrator {
 		$this->_adminInterface = new AdminInterface(NULL, $this->_smarty);
 
 		$this->_logger = new LogManager();
+		NModule::modulesLoad();
 		$this->_moduleManager = new ModuleManager('administrator', $this->_adminInterface);
 		$this->_moduleManager->setDataContainer(new DataContainer($this->_smarty, $this->_adminInterface));
 	}
@@ -92,18 +94,21 @@ class Administrator {
 
 	public function MainMenu () {
 
-		$allowedModules = $this->_moduleManager->getAllowedModules();
-		$headModules = $this->_moduleManager->getHeadModulesOfModules($allowedModules);
-		$head_mod_arr = array();
+		// $allowedModules = $this->_moduleManager->getAllowedModules();
+		// $headModules = $this->_moduleManager->getHeadModulesOfModules($allowedModules);
+		// $head_mod_arr = array();
 
-		foreach ($headModules as $headModule) {
-			$head_mod_arr[] = array('name' => $headModule->getName(), 'display_name' => $headModule->getDisplayName());
-		}
+		// foreach ($headModules as $headModule) {
+		// 	$head_mod_arr[] = array('name' => $headModule->getName(), 'display_name' => $headModule->getDisplayName());
+		// }
+
+
+		$headmodules = NModule::moduleChildsByPathGet('administrator');
 
 		$this->_smarty->assign('is_mainmenu', true);
-		$this->_smarty->assign('modules', $allowedModules);
-		$this->_smarty->assign('head_modules', $head_mod_arr);
-		$this->_smarty->assign('module_names', $this->_moduleManager->getModuleDisplayNames());
+		// $this->_smarty->assign('modules', $allowedModules);
+		$this->_smarty->assign('headmodules', $headmodules);
+		// $this->_smarty->assign('module_names', $this->_moduleManager->getModuleDisplayNames());
 		$this->_smarty->display('administrator/menu.tpl');
 	}
 

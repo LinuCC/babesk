@@ -12,9 +12,9 @@
 <h2 id="menu_header">Hauptmen&uuml;</h2>
 
 <div class="clearfix HeadItemContainer">
-	{foreach $head_modules as $headmod}
-		<div class="HeadItem" id="{$headmod.name}">
-			<a class="HeadItemText" href="#" tabindex="1">{$headmod.display_name}</a>
+	{foreach $headmodules as $headmodule}
+		<div class="HeadItem" id="{$headmodule->getName()}">
+			<a class="HeadItemText" href="#" tabindex="1">{$headmodule->getName()}</a>
 		</div>
 	{/foreach}
 </div>
@@ -24,13 +24,15 @@
 	<b>Bitte w&auml;hlen Sie ein Modul aus</b>
 	</div>
 
-	{section name=module loop=$modules}
-	<div class="menu_item" id="{$modules[module]}">
-		<div class="menuItemCell">
-			<a href="index.php?section={$modules[module]}" tabindex="1">{$module_names[$modules[module]]}</a>
-		</div>
-	</div>
-	{/section}
+	{foreach $headmodules as $headmodule}
+		{foreach $headmodule->getChilds() as $module}
+			<div class="menu_item" id="{$headmodule->getName()}|{$module->getName()}">
+				<div class="menuItemCell">
+					<a href="index.php?section={$headmodule->getName()}|{$module->getName()}" tabindex="1">{$module->getName()}</a>
+				</div>
+			</div>
+		{/foreach}
+	{/foreach}
 </div>
 
 {/block}

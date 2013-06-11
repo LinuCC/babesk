@@ -1,3 +1,4 @@
+
 <?php
 	/**
 	 * defines the Exceptions used in the Project
@@ -51,8 +52,8 @@
 	}
 
 	class ModuleException extends Exception {
-		function __construct($msg) {
-			parent::__construct($msg);
+		function __construct($msg, $code = 0, $previous = NULL) {
+			parent::__construct($msg, $code, $previous);
 		}
 	}
 
