@@ -56,7 +56,7 @@ class UserDisplayAll {
 		else {
 			$columnsToFetch = $_POST['columnsToFetch'];
 			foreach($columnsToFetch as &$col) {
-				$col = TableMng::sqlEscape($col);
+				TableMng::sqlEscape($col);
 			}
 		}
 
@@ -64,23 +64,18 @@ class UserDisplayAll {
 		if(empty($sortFor)) {
 			$sortFor = 'name';
 		}
-		//only add a WHERE-clause if User wants to filter something
-		if(!empty($filterForVal) && !empty($filterForCol)) {
-			$filterForQuery = "WHERE $filterForCol LIKE '%$filterForVal%'";
-		}
-
 
 		try {
 			$queryCreator = new UserDisplayAllQueryCreator($filterForQuery,
 				$sortFor, $userToStart, $usersPerPage);
-			$query = $queryCreator->createQuery($columnsToFetch);
+			$query = $queryCreator->createQuery($columnsToFetch, $sortFor, $filterForCol);
+			$countQuery = $queryCreator->createCountOfQuery($columnsToFetch, $sortFor, $filterForCol);
 
 			//Fetch the Userdata
 			TableMng::query('SET @activeSy :=
 				(SELECT ID FROM schoolYear WHERE active = "1");');
 			$data = TableMng::query($query, true);
-			$usercount = TableMng::query(
-				"SELECT COUNT(*) AS count FROM users $filterForQuery", true);
+			$usercount = TableMng::query($countQuery, true);
 
 			// No division by zero!
 			if($usersPerPage != 0) {
@@ -220,23 +215,16 @@ class UserDisplayAllQueryCreator {
 	//Methods
 	/////////////////////////////////////////////////////////////////////
 
-	public function createQuery($columns) {
+	public function createQuery($columns, $toSortFor, $toFilterFor) {
 
 		foreach($columns as $col) {
-			switch($col) {
-				case 'grades':
-					$this->gradeQuery();
-					break;
-				case 'cardnumber':
-					$this->cardsQuery();
-					break;
-				case 'activeGrade':
-					$this->gradeQuery();
-					break;
-				case 'schoolyears':
-					$this->schoolyearQuery();
-					break;
-			}
+			$this->addSubquery($col);
+		}
+		if(!empty($toSortFor)) {
+			$this->addSubquery($toSortFor);
+		}
+		if(!empty($toFilterFor)) {
+			$this->addSubquery($toFilterFor);
 		}
 
 		$this->concatQuery();
@@ -244,9 +232,43 @@ class UserDisplayAllQueryCreator {
 		return $this->_query;
 	}
 
+	public function createCountOfQuery($columns, $toSortFor, $toFilterFor) {
+
+		foreach($columns as $col) {
+			$this->addSubquery($col);
+		}
+		if(!empty($toSortFor)) {
+			$this->addSubquery($toSortFor);
+		}
+		if(!empty($toFilterFor)) {
+			$this->addSubquery($toFilterFor);
+		}
+
+		$this->concatCountQuery();
+
+		return $this->_countQuery;
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
+
+	protected function addSubquery($col) {
+		switch($col) {
+			case 'grades':
+				$this->gradeQuery();
+				break;
+			case 'cardnumber':
+				$this->cardsQuery();
+				break;
+			case 'activeGrade':
+				$this->gradeQuery();
+				break;
+			case 'schoolyears':
+				$this->schoolyearQuery();
+				break;
+		}
+	}
 
 	protected function concatQuery() {
 
@@ -262,6 +284,14 @@ class UserDisplayAllQueryCreator {
 			GROUP BY u.ID
 			ORDER BY $this->_sortFor
 			LIMIT $this->_userToStart, $this->_usersPerPage";
+	}
+
+	protected function concatCountQuery() {
+
+		$this->_countQuery = "SELECT COUNT(*) AS count
+			FROM users u
+				$this->_queryJoin
+			$this->_filterForQuery";
 	}
 
 	protected function cardsQuery() {
@@ -330,6 +360,7 @@ class UserDisplayAllQueryCreator {
 	protected $_queryJoin = '';
 
 	protected $_query = '';
+	protected $_countQuery = '';
 
 	protected $_gradeQueryDone = false;
 	protected $_schoolyearQueryDone = false;
