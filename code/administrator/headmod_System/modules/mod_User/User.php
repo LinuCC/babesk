@@ -403,7 +403,7 @@ class User extends Module {
 	 */
 	function changeDispay() {
 
-		$uid = mysql_real_escape_string($_GET['ID']);
+		$uid = TableMng::getDb()->sqlSave($_GET['ID']);
 
 		try {
 			TableMng::query('SET @activeSchoolyear :=
@@ -445,7 +445,7 @@ class User extends Module {
 	 */
 	protected function change() {
 
-		$uid = mysql_real_escape_string($_POST['ID']);
+		$uid = TableMng::getDb()->sqlSave($_POST['ID']);
 		$this->changeParseInput();
 		$this->changeCleanAndCheckInput();
 		$this->changeUpload($uid);

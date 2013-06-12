@@ -1,9 +1,5 @@
 {extends file=$UserParent}{block name=content}
 
-<script src="../smarty/templates/administrator/headmod_System/modules/
-	mod_User/displayAll.js">
-</script>
-
 <style type="text/css">
 
 .columnsToShow, .filterRow, .sortRow {
@@ -42,6 +38,9 @@
 	</tbody>
 </table>
 
-
+<link rel="stylesheet" href="/resources/demos/style.css" />
+<script src="../smarty/templates/administrator/headmod_System/modules/
+	mod_User/displayAll.js">
+</script>
 
 {/block}

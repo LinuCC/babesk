@@ -39,11 +39,14 @@ class UserDisplayAll {
 	 */
 	public function fetchUsersOrganized() {
 
-		$pagenumber = mysql_real_escape_string($_POST['pagenumber']);
-		$usersPerPage = mysql_real_escape_string($_POST['usersPerPage']);
-		$sortFor = mysql_real_escape_string($_POST['sortFor']);
-		$filterForCol = mysql_real_escape_string($_POST['filterForCol']);
-		$filterForVal = mysql_real_escape_string($_POST['filterForVal']);
+
+		$pagenumber = $_POST['pagenumber'];
+		$usersPerPage = $_POST['usersPerPage'];
+		$sortFor = $_POST['sortFor'];
+		$filterForCol = $_POST['filterForCol'];
+		$filterForVal = $_POST['filterForVal'];
+		$toEscape = array(&$pagenumber, &$usersPerPage, &$sortFor, &$filterForCol, &$filterForVal);
+		TableMng::sqlEscapeByArray($toEscape);
 		$userToStart = $pagenumber * $usersPerPage;
 		$filterForQuery = '';
 
@@ -53,7 +56,7 @@ class UserDisplayAll {
 		else {
 			$columnsToFetch = $_POST['columnsToFetch'];
 			foreach($columnsToFetch as &$col) {
-				$col = mysql_real_escape_string($col);
+				$col = TableMng::sqlEscape($col);
 			}
 		}
 
