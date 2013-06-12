@@ -10,20 +10,24 @@
 
 <div class="accordion">
 
+	<h3>Spaltenanzeige</h3>
+	<div id="columnsToShowWrapper">
+	</div>
 	<h3>Filter</h3>
 	<div class="filter">
 	</div>
 	<h3>Sortierung</h3>
 	<div class="sort">
 	</div>
-	<h3>Spaltenanzeige</h3>
-	<div id="columnsToShowWrapper">
-	</div>
 	<h3>Einstellungen</h3>
 	<div class="additionalSettings">
 		<div>
 			Benutzer pro Seite:
-			<input id="usersPerPage" type="text" size="2" value="10" /></div>
+			<input id="usersPerPage" type="text" size="2" value="10" />
+		</div>
+		<div>
+			<input id="refreshPage" type="button" size="2"
+				value="Tabelle aktualisieren" />
 		</div>
 	</div>
 </div>

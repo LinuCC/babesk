@@ -60,7 +60,7 @@ $(document).ready(function() {
 	$('.accordion').accordion({
 		collapsible: true,
 		heightStyle:"content",
-		active: 2 // Let user choose the ColumnsToShow first
+		active: 0 // Let user choose the ColumnsToShow first
 	});
 
 	/**
@@ -83,12 +83,28 @@ $(document).ready(function() {
 		newDataFetch();
 	});
 	$('div.filter').on('change', 'input.columnFilter', function(ev) {
+
+		$('.pageSelect input:checked').prop('checked', '');
+		$('.pageSelect input#pageSelectFirst').prop('checked', 'checked');
 		newDataFetch();
 	});
 	$('div.filter').on('click', 'input#filterSubmit', function(ev) {
+
+		$('.pageSelect input:checked').prop('checked', '');
+		$('.pageSelect input#pageSelectFirst').prop('checked', 'checked');
 		newDataFetch();
 	});
+
 	$('div.sort').on('change', 'input.columnSort', function(ev) {
+
+		$('.pageSelect input:checked').prop('checked', '');
+		$('.pageSelect input#pageSelectFirst').prop('checked', 'checked');
+		newDataFetch();
+	});
+
+	$('input#refreshPage').on('click', function(ev) {
+
+		event.preventDefault();
 		newDataFetch();
 	});
 
@@ -230,6 +246,13 @@ $(document).ready(function() {
 
 		return pagenum;
 	};
+
+	var firstPageSelect = function() {
+
+		$('.pageSelect input:checked').removeProp('checked', '');
+		$('.pageSelect input#pageSelect1').prop('checked', 'checked');
+		newDataFetch();
+	}
 
 	/**
 	 * Fetches userdata from the Server, takes care of filters, sortables etc

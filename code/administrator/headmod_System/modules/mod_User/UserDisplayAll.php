@@ -60,6 +60,11 @@ class UserDisplayAll {
 			}
 		}
 
+		//When joining multiple tables, we have multiple IDs
+		if($filterForVal == 'ID') {
+			$filterForVal = 'u.ID';
+		}
+
 		//When user didnt select anything to sort For, default to name
 		if(empty($sortFor)) {
 			$sortFor = 'name';
@@ -68,14 +73,18 @@ class UserDisplayAll {
 		try {
 			$queryCreator = new UserDisplayAllQueryCreator($filterForQuery,
 				$sortFor, $userToStart, $usersPerPage);
-			$query = $queryCreator->createQuery($columnsToFetch, $sortFor, $filterForCol);
-			$countQuery = $queryCreator->createCountOfQuery($columnsToFetch, $sortFor, $filterForCol);
+			$query = $queryCreator->createQuery($columnsToFetch, $sortFor,
+				$filterForCol, $filterForVal);
+			$countQuery = $queryCreator->createCountOfQuery($columnsToFetch,
+				$sortFor, $filterForCol, $filterForVal);
 
 			//Fetch the Userdata
 			TableMng::query('SET @activeSy :=
 				(SELECT ID FROM schoolYear WHERE active = "1");');
 			$data = TableMng::query($query, true);
 			$usercount = TableMng::query($countQuery, true);
+
+			// var_dump($usercount);
 
 			// No division by zero!
 			if($usersPerPage != 0) {
@@ -101,7 +110,8 @@ class UserDisplayAll {
 
 		$columns = array();
 
-		$userdata = TableMng::query("SELECT * FROM users LIMIT 1, 1", true);
+		$userdata = TableMng::query("SELECT *
+			FROM users LIMIT 1, 1", true);
 
 		foreach($userdata[0] as $key => $data) {
 			if(!empty($this->_userColumnTranslations[$key])) {
@@ -215,7 +225,7 @@ class UserDisplayAllQueryCreator {
 	//Methods
 	/////////////////////////////////////////////////////////////////////
 
-	public function createQuery($columns, $toSortFor, $toFilterFor) {
+	public function createQuery($columns, $toSortFor, $toFilterColumn, $toFilterValue) {
 
 		foreach($columns as $col) {
 			$this->addSubquery($col);
@@ -223,16 +233,17 @@ class UserDisplayAllQueryCreator {
 		if(!empty($toSortFor)) {
 			$this->addSubquery($toSortFor);
 		}
-		if(!empty($toFilterFor)) {
-			$this->addSubquery($toFilterFor);
+		if(!empty($toFilterColumn)) {
+			$this->addSubquery($toFilterColumn);
 		}
 
-		$this->concatQuery();
+		$filterQuery = $this->filterForQuery($toFilterColumn, $toFilterValue, 'HAVING');
+		$this->concatQuery($filterQuery);
 
 		return $this->_query;
 	}
 
-	public function createCountOfQuery($columns, $toSortFor, $toFilterFor) {
+	public function createCountOfQuery($columns, $toSortFor, $toFilterColumn, $toFilterValue) {
 
 		foreach($columns as $col) {
 			$this->addSubquery($col);
@@ -240,11 +251,12 @@ class UserDisplayAllQueryCreator {
 		if(!empty($toSortFor)) {
 			$this->addSubquery($toSortFor);
 		}
-		if(!empty($toFilterFor)) {
-			$this->addSubquery($toFilterFor);
+		if(!empty($toFilterColumn)) {
+			$this->addSubquery($toFilterColumn);
 		}
 
-		$this->concatCountQuery();
+		$filterQuery = $this->filterForQuery($toFilterColumn, $toFilterValue, 'HAVING');
+		$this->concatCountQuery($filterQuery);
 
 		return $this->_countQuery;
 	}
@@ -270,28 +282,43 @@ class UserDisplayAllQueryCreator {
 		}
 	}
 
-	protected function concatQuery() {
+	protected function concatQuery($filterQuery) {
 
 		$this->_querySelect = rtrim($this->_querySelect, ', ');
 		if($this->_querySelect != '') {
 			$this->_querySelect = ", $this->_querySelect";
 		}
 
-		$this->_query = "SELECT u.*, u.ID AS userId $this->_querySelect
+		$this->_query = "SELECT u.*, u.ID AS ID $this->_querySelect
 			FROM users u
 				$this->_queryJoin
-			$this->_filterForQuery
 			GROUP BY u.ID
+			$filterQuery
 			ORDER BY $this->_sortFor
 			LIMIT $this->_userToStart, $this->_usersPerPage";
 	}
 
-	protected function concatCountQuery() {
+	protected function concatCountQuery($filterQuery) {
 
-		$this->_countQuery = "SELECT COUNT(*) AS count
-			FROM users u
-				$this->_queryJoin
-			$this->_filterForQuery";
+		$this->_countQuery = "SELECT COUNT(*) AS count FROM
+		(SELECT u.ID AS userId, u.forename AS forename, u.name AS name, u.username AS username, u.password AS password, u.email AS email, u.telephone AS telephone, u.GID AS GID, u.birthday AS birthday,
+			u.soli AS soli, u.first_passwd AS first_passwd
+			$this->_querySelect
+					FROM users u
+						$this->_queryJoin
+					GROUP BY u.ID
+					$filterQuery) counting";
+	}
+
+	protected function filterForQuery($toFilterColumn, $toFilterValue,
+		$statement) {
+
+		if(!empty($toFilterColumn) && !empty($toFilterValue)) {
+			return "$statement $toFilterColumn LIKE '%$toFilterValue%'";
+		}
+		else {
+			return '';
+		}
 	}
 
 	protected function cardsQuery() {
