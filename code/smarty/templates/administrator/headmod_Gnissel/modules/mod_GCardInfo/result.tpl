@@ -3,5 +3,6 @@
 Kartennummer: {$cardID} {if $locked} <font color="red"><b>(gesperrt!)</b></font>{/if}<br>
 Vorname: {$forename}<br>
 Name: {$name}<br>
-Klasse: {$class}
+Klasse: {$class}<br>
+Benutzername: {$username}<br>
 {/block}
