@@ -79,7 +79,7 @@ $(document).ready(function() {
 		value = $(this).val();
 		$(this).val(value.replace(',', '.'));
 		addItemInterface.userInputCheckGump($(this).val(),
-			'float|min_len,1|max_len,5', $(this));
+			'numeric|min_len,1|max_len,5', $(this));
 	});
 
 	/**

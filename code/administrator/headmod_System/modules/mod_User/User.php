@@ -764,7 +764,7 @@ class User extends Module {
 		'schoolyearId' => array('numeric', '', 'SchuljahrId'),
 		'gradeId' => array('numeric', '', 'KlassenId'),
 		'cardnumber' => array('exact_len,10', '', 'Kartennummer'),
-		'credits' => array('float|min_len,1|max_len,5', '', 'Guthaben'),
+		'credits' => array('numeric|min_len,1|max_len,5', '', 'Guthaben'),
 		'isSoli' => array('boolean', '', 'ist-Soli-Benutzer'));
 
 	protected static $_changeRules = array(
@@ -779,7 +779,7 @@ class User extends Module {
 		'schoolyearId' => array('numeric', '', 'SchuljahrId'),
 		'gradeId' => array('numeric', '', 'KlassenId'),
 		'cardnumber' => array('exact_len,10', '', 'Kartennummer'),
-		'credits' => array('float|min_len,1|max_len,5', '', 'Guthaben'),
+		'credits' => array('numeric|min_len,1|max_len,5', '', 'Guthaben'),
 		'isSoli' => array('boolean', '', 'ist-Soli-Benutzer'));
 
 }
