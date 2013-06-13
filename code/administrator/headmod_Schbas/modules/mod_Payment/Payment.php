@@ -35,13 +35,24 @@ class Payment extends Module {
 			}
 	}
 	private function showUsers () {
-		
-		//$schoolyearAll = $this->_databaseAccessManager->schoolyearGetAll();
+		$schoolyearDesired = TableMng::query('SELECT ID FROM schoolYear WHERE active = 1', true);
+		$schoolyearID = $schoolyearDesired[0]['ID'];
+		$gradeID = TableMng::query("SELECT GradeID FROM jointgradeinschoolyear WHERE SchoolYearID = $schoolyearID",true);
+		foreach ($gradeID as $grade){
+			$ID = $grade['GradeID'];
+			$SaveTheCows = TableMng::query("SELECT * FROM grade WHERE ID = $ID", true);
+			// Cows stands for Code of worst systematic
+			$gradesAll[] = $SaveTheCows[0];
+		}
+		if (isset ($_GET['gradeIdDesired']))
+			$gradeDesired = $_GET['gradeIdDesired'];
+		else 
+			$gradeDesired = null;
 		$users = TableMng::query('SELECT * FROM users', true);
 		$users = $this->addGradeLabelToUsers($users);
 		$users = KuwasysFilterAndSort::elementsSort ($users);
 		$users = KuwasysFilterAndSort::elementsFilter ($users);
-		$this->PaymentInterface->showAllUsers(null,null,null,null,$users);
+		$this->PaymentInterface->showAllUsers($gradesAll,$gradeDesired,$users);
 	}
 	
 	private function showUsersFilter() {

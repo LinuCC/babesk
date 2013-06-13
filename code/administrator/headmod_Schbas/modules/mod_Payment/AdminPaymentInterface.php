@@ -18,9 +18,7 @@ class AdminPaymentInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath.'index.tpl');
 	}
 	
-	function showAllUsers($schoolyears, $schoolyearDesired, $grades, $gradeDesired, $users){
-		$this->smarty->assign('schoolyearAll', $schoolyears);
-		$this->smarty->assign('schoolyearDesired', $schoolyearDesired);
+	function showAllUsers($grades, $gradeDesired, $users){
 		$this->smarty->assign('gradeAll', $grades);
 		$this->smarty->assign('gradeDesired', $gradeDesired);
 		$this->smarty->assign('users', $users);

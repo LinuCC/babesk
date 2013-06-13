@@ -36,9 +36,10 @@ function showOptions (ID) {
 <fieldset class="selectiveLink">
 	<legend>Klasse</legend>
 	{foreach $gradeAll as $grade}
-		<a class="selectiveLink" href="index.php?section=Kuwasys|Users&action=showUsersGroupedByYearAndGrade&schoolyearIdDesired={$schoolyearDesired.ID}&gradeIdDesired={$grade.ID}"
-		{if $grade.ID == $gradeDesired.ID}style="color:rgb(150,40,40);"{/if}>
-				{$grade.gradeValue}{$grade.label}
+		<a class="selectiveLink" href="index.php?section=Schbas|Payment&action=1&gradeIdDesired={$grade.ID}"
+		{if $grade.ID == $gradeDesired}style="color:rgb(150,40,40);"{/if}
+		>
+		{$grade.gradeValue}{$grade.label}
 		</a>
 	{/foreach}
 </fieldset>
