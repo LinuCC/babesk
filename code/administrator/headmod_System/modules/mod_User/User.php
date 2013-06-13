@@ -222,7 +222,7 @@ class User extends Module {
 			}
 			if(!empty($_POST['cardnumber'])) {
 				$cardnumberQuery = "INSERT INTO cards (cardnumber, UID)
-					VALUES ($_POST[cardnumber], @uid);";
+					VALUES ('$_POST[cardnumber]', '@uid');";
 			}
 			if(!empty($_POST['gradeId'])) {
 				$gradeQuery = "INSERT INTO jointUsersInGrade (UserID, GradeID)
