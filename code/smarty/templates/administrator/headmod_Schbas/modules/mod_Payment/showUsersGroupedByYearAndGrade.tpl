@@ -32,17 +32,7 @@ function showOptions (ID) {
 <h2 class='moduleHeader'>Die Benutzer</h2>
 
 {$modAction = "showUsersGroupedByYearAndGrade"}
-{include file="$tplFilePath"|cat:"filterUsers.tpl"}
 
-<fieldset class="selectiveLink">
-<legend>Jahrgang</legend>
-{foreach $schoolyearAll as $schoolyear}
-	<a class="selectiveLink" href="index.php?section=Kuwasys|Users&action=showUsersGroupedByYearAndGrade&schoolyearIdDesired={$schoolyear.ID}"
-		{if $schoolyear.ID == $schoolyearDesired.ID}style="color:rgb(150,40,40);"{/if}>
-		{$schoolyear.label}
-	</a>
-{/foreach}
-</fieldset>
 <fieldset class="selectiveLink">
 	<legend>Klasse</legend>
 	{foreach $gradeAll as $grade}
@@ -61,10 +51,8 @@ function showOptions (ID) {
 			<th align='center'>Vorname</th>
 			<th align='center'>Name</th>
 			<th align='center'>Benutzername</th>
-			<th align='center'>Geburtstag</th>
-			<th align='center'>Email-Adresse</th>
-			<th align='center'>Telefonnummer</th>
-			<th align='center'>letzter Login</th>
+			<th align='center'>Klasse</th>
+			<th align='center'>Zahlung</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -74,21 +62,6 @@ function showOptions (ID) {
 			<td align="center">{$user.forename}</td>
 			<td align="center">{$user.name}</td>
 			<td align="center">{$user.username}</td>
-			<td align="center">{$user.birthday}</td>
-			<td align="center">{$user.email}</td>
-			<td align="center">{$user.telephone}</td>
-			<td align="center">{$user.last_login}</td>
-			<td align="center" bgcolor='#FFD99'>
-			<div id='option{$user.ID}'>
-			<form method="post"><input type='button' value='Optionen' onclick='showOptions("{$user.ID}")'></form>
-			</div>
-			<div id='optionButtons{$user.ID}' hidden>
-			<form action="index.php?section=Kuwasys|Users&action=changeUser&ID={$user.ID}" method="post"><input type='submit' value='bearbeiten'></form>
-			<form action="index.php?section=Kuwasys|Users&action=deleteUser&ID={$user.ID}" method="post"><input type='submit' value='löschen'></form>
-			<form action="index.php?section=Kuwasys|Users&action=addUserToClass&ID={$user.ID}" method="post"><input type='submit' value='zu einem Kurs hinzufügen'></form>
-			<form action="index.php?section=Kuwasys|Users&action=showUserDetails&ID={$user.ID}" method="post"><input type='submit' value='Details anzeigen'></form>
-			</div>
-			</td>
 		</tr>
 		{/foreach}
 	</tbody>

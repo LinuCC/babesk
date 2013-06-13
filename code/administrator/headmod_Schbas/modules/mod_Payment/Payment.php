@@ -24,7 +24,7 @@ class Payment extends Module {
 		$this->PaymentInterface = new AdminPaymentInterface($this->relPath);
 		
 			if(!isset($_GET['action'])){
-				$PaymentInterface->ShowSelectionFunctionality();
+				$this->PaymentInterface->ShowSelectionFunctionality();
 			}else{
 				switch ($_GET['action']){
 					case 1:
@@ -35,12 +35,13 @@ class Payment extends Module {
 			}
 	}
 	private function showUsers () {
-	
+		
+		//$schoolyearAll = $this->_databaseAccessManager->schoolyearGetAll();
 		$users = TableMng::query('SELECT * FROM users', true);
 		$users = $this->addGradeLabelToUsers($users);
 		$users = KuwasysFilterAndSort::elementsSort ($users);
 		$users = KuwasysFilterAndSort::elementsFilter ($users);
-		$this->PaymentInterface->showAllUsers($users);
+		$this->PaymentInterface->showAllUsers(null,null,null,null,$users);
 	}
 	
 	private function showUsersFilter() {
