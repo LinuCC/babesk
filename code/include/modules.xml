@@ -182,6 +182,11 @@
 				<active>true</active>
 			</module>
 			<module>
+				<ger_name>Zahlungseingang</ger_name>
+				<name>Payment</name>
+				<active>true</active>
+			</module>
+			<module>
 				<ger_name>Einstellungen</ger_name>
 				<name>SchbasSettings</name>
 				<active>true</active>
@@ -190,12 +195,7 @@
 				<ger_name>Buchhaltung</ger_name>
 				<name>SchbasAccounting</name>
 				<active>true</active>
-			</module>
-			<module>
-				<ger_name>Nachrichten</ger_name>
-				<name>SchbasMessages</name>
-				<active>true</active>
-			</module>
+		   </module>
 		</head_module>
 		<head_module>
 			<ger_name>KurswahlSystem</ger_name>
