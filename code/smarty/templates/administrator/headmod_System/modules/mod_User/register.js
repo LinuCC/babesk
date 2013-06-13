@@ -14,7 +14,7 @@ $(document).ready(function() {
 		$('input.cardnumberAdd').on('keyup', function(event) {
 			if($(this).val().length == 10) {
 				addItemInterface.userInputCheckGump($(this).val(),
-					'numeric|exact_len,10', $(this));
+					'exact_len,10', $(this));
 			}
 		});
 	});

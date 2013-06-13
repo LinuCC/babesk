@@ -763,7 +763,7 @@ class User extends Module {
 		'pricegroupId' => array('numeric', '', 'PreisgruppenId'),
 		'schoolyearId' => array('numeric', '', 'SchuljahrId'),
 		'gradeId' => array('numeric', '', 'KlassenId'),
-		'cardnumber' => array('numeric|exact_len,10', '', 'Kartennummer'),
+		'cardnumber' => array('exact_len,10', '', 'Kartennummer'),
 		'credits' => array('float|min_len,1|max_len,5', '', 'Guthaben'),
 		'isSoli' => array('boolean', '', 'ist-Soli-Benutzer'));
 
@@ -778,7 +778,7 @@ class User extends Module {
 		'pricegroupId' => array('numeric', '', 'PreisgruppenId'),
 		'schoolyearId' => array('numeric', '', 'SchuljahrId'),
 		'gradeId' => array('numeric', '', 'KlassenId'),
-		'cardnumber' => array('numeric|exact_len,10', '', 'Kartennummer'),
+		'cardnumber' => array('exact_len,10', '', 'Kartennummer'),
 		'credits' => array('float|min_len,1|max_len,5', '', 'Guthaben'),
 		'isSoli' => array('boolean', '', 'ist-Soli-Benutzer'));
 
