@@ -279,11 +279,8 @@ class MessageAdmin extends Module{
 			$templates = TableMng::query(
 				'SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM messagegroups WHERE name="vanilla");', true);
 
-		} catch (MySQLVoidDataException $e) {
-			//gets sorted out with Smarty in the tpl-File
-
 		} catch (Exception $e) {
-			$this->_interface->DieError('Konnte die nötigen Daten nicht abrufen.');
+			$this->_interface->DieError('Konnte die nötigen Daten nicht abrufen.' . $e->getMessage());
 		}
 
 		$this->_smarty->assign('grades', $grades);
@@ -577,11 +574,11 @@ class MessageAdmin extends Module{
 			TableMng::getDb()->real_escape_string($_POST['templateId']);
 		try {
 			$gid = TableMng::query('SELECT ID FROM messagegroups WHERE name LIKE "vanilla"', true);
-			
+
 			$template = TableMng::query(sprintf(
 				'SELECT * FROM MessageTemplate WHERE `ID` = "%s"',
 				$templateId), true);
-			
+
 
 		} catch (Exception $e) {
 			die('errorFetchTemplate');
