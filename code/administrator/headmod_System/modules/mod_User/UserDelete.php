@@ -1,14 +1,16 @@
 <?php
 
+require_once PATH_INCLUDE . '/TemporaryFile.php';
+
 class UserDelete {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
 	/////////////////////////////////////////////////////////////////////
 
-	public function __construct($smarty) {
+	public function __construct($interface) {
 
-		$this->_smarty = $smarty;
+		$this->_interface = $interface;
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -22,42 +24,69 @@ class UserDelete {
 
 		try {
 			$userId = $_GET['ID'];
-			$userToDeleteRes = TableMng::query(
-				"SELECT forename, name, credit, birthday,
-					CONCAT(g.gradeValue, '-', g.label) AS grade
-				FROM users u
-				LEFT JOIN jointUsersInGrade uig ON uig.UserID = u.ID
-				LEFT JOIN grade g ON uig.GradeID = g.ID
-				WHERE u.ID = $userId", true);
-			$userToDelete = $userToDeleteRes[0];
+			$userToDelete = $this->userToDeleteGet($userId);
 
-			if(count($userToDelete)) {
-				TableMng::getDb()->autocommit(false);
+			$tempId = $this->createPdf($userToDelete, $userId);
+			$this->deleteConditionsCheck($userId);
+			$this->deleteUpload($userId);
 
-				$this->deleteUpload($userId);
-				$this->deleteConditionsCheck($userId);
-
-				if(empty($userToDelete['grade'])) {
-					$userToDelete['grade'] = '---';
-				}
-				$this->createPdf($userToDelete, $userId);
-
-				TableMng::getDb()->autocommit(true);
-			}
-			else {
-				die(json_encode(array('value' => 'error', 'message' => 'Der zu löschende Benutzer konnte nicht abgerufen werden')));
+			if(empty($userToDelete['grade'])) {
+				$userToDelete['grade'] = '---';
 			}
 
 		} catch (Exception $e) {
-			die(json_encode(array('value' => 'error', 'message' => 'Ein Fehler ist beim Löschen des Benutzers aufgetreten.' . $e->getMessage())));
+			die(json_encode(array('value' => 'error', 'message' => 'Ein Fehler ist beim Löschen des Benutzers aufgetreten.')));
 		}
 		//success! yay!
-		die(json_encode(array('value' => 'success', 'message' => "Der Benutzer $userToDelete[forename] $userToDelete[name] wurde erfolgreich gelöscht")));
+		die(json_encode(array(
+			'value' => 'success',
+			'message' => "Der Benutzer $userToDelete[forename] $userToDelete[name] wurde erfolgreich gelöscht",
+			'pdfId' => $tempId,
+			'forename' => $userToDelete['forename'],
+			'name' => $userToDelete['name'])));
+	}
+
+	/**
+	 * Offers the user to download the PDF-file
+	 *
+	 * @param  numeric $pdfId the ID of the temporary file to download
+	 */
+	public function showPdfOfDeletedUser($pdfId) {
+
+		try {
+			$tmp = TemporaryFile::load($pdfId);
+			$tmp->download("${pdfId}Deleted.pdf", 'application/pdf');
+
+		} catch (Exception $e) {
+			$this->_interface->showError('ein Fehler ist aufgetreten');
+		}
 	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Returns the Data of the user that should be deleted
+	 * @return Array
+	 */
+	protected function userToDeleteGet($userId) {
+
+		$userToDeleteRes = TableMng::query(
+			"SELECT forename, name, credit, birthday,
+				CONCAT(g.gradeValue, '-', g.label) AS grade
+			FROM users u
+			LEFT JOIN jointUsersInGrade uig ON uig.UserID = u.ID
+			LEFT JOIN grade g ON uig.GradeID = g.ID
+			WHERE u.ID = $userId", true);
+
+		if(count($userToDeleteRes)) {
+			return $userToDeleteRes[0];
+		}
+		else {
+			throw new Exception('Konnte die Benutzerdaten nicht abrufen');
+		}
+	}
 
 	protected function deleteConditionsCheck($userId) {
 
@@ -74,13 +103,12 @@ class UserDelete {
 	protected function deleteUpload($uid) {
 
 		$additionalQuerys = $this->deleteQuerysCreateAdditional($uid);
-
+		TableMng::getDb()->autocommit(false);
 		TableMng::query(
 			"DELETE FROM users WHERE ID = $uid;
 			$additionalQuerys
 			", false, true);
-
-		// var_dump($additionalQuerys);
+		TableMng::getDb()->autocommit(true);
 	}
 
 	protected function deleteQuerysCreateAdditional($uid) {
@@ -251,12 +279,16 @@ Uelzen, den ___.___.2013
 
 			// Close and output PDF document
 			// This method has several options, check the source code documentation for more information.
-			$pdf->Output('deleted_'.$uid.'.pdf', 'D');
-			return true;
+			$pdfStr = $pdf->Output('deleted_'.$uid.'.pdf', 'S');
+
+			$file = TemporaryFile::init($pdfStr, time(), strtotime('+1 day'),
+				"delete-PDF for User with ID \"$uid\"");
+			$fileId = $file->store();
+			return $fileId;
 
 		} catch (Exception $e) {
 
-			die(json_encode(array('value' => 'error', 'message' => 'Konnte die Abschieds-PDF-Datei nicht generieren')));
+			die(json_encode(array('value' => 'error', 'message' => 'Konnte die Abschieds-PDF-Datei nicht generieren' . $e->getMessage())));
 		}
 	}
 

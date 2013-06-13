@@ -50,7 +50,7 @@ class User extends Module {
 					$displayer->fetchShowableColumns();
 					break;
 				case 'deleteUser': //delete the user
-					$deleter = new UserDelete($this->_smarty);
+					$deleter = new UserDelete($this->userInterface);
 					$deleter->deleteFromDb();
 					break;
 				case 4:
@@ -80,6 +80,10 @@ class User extends Module {
 					$deleter = new UserDelete($this->_smarty);
 					$deleter->deleteFromDb();
 					break;
+				case 'deletedUserShowPdf':
+					$deleter = new UserDelete($this->userInterface);
+					TableMng::sqlEscape($_GET['pdfId']);
+					$deleter->showPdfOfDeletedUser($_GET['pdfId']);
 			}
 		}
 		else {
@@ -334,7 +338,7 @@ class User extends Module {
 			$creator->schemeSet ($scheme);
 			$users = $creator->usernameCreateAll ();
 			foreach ($users as $user) {
-				///@FIXME: PURE EVIL DOOM LOOP OF LOOPING SQL-USE. Kill it with fire.
+				///@todo: PURE EVIL DOOM LOOP OF LOOPING SQL-USE. Kill it with fire.
 				$this->userManager->alterUsername ($user ['ID'], $user ['username']);
 			}
 			$this->userInterface->dieMsg ('Die Benutzernamen wurden erfolgreich geÃ¤ndert');
