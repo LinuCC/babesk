@@ -47,7 +47,7 @@ class UserDisplayAll {
 		$filterForVal = $_POST['filterForVal'];
 		$toEscape = array(&$pagenumber, &$usersPerPage, &$sortFor, &$filterForCol, &$filterForVal);
 		TableMng::sqlEscapeByArray($toEscape);
-		$userToStart = $pagenumber * $usersPerPage;
+		$userToStart = ($pagenumber - 1) * $usersPerPage;
 		$filterForQuery = '';
 
 		if(empty($_POST['columnsToFetch'])) {
@@ -86,9 +86,9 @@ class UserDisplayAll {
 
 			// var_dump($usercount);
 
-			// No division by zero!
-			if($usersPerPage != 0) {
-				$pagecount = floor((int)$usercount[0]['count'] / (int)$usersPerPage);
+			// No division by zero, never show zero sites
+			if($usersPerPage != 0 && $usercount[0]['count'] > 0) {
+				$pagecount = ceil((int)$usercount[0]['count'] / (int)$usersPerPage);
 			}
 			else {
 				$pagecount = 1;

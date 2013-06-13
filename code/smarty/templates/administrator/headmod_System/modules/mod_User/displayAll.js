@@ -22,6 +22,7 @@ $(document).ready(function() {
 						'index.php?' +
 						'section=System|User&action=deleteUser&ID={0}')
 						.format(toDelete);
+					newDataFetch(); //Refresh list
 					// deleteAjax(toDelete);
 					$(this).dialog("close");
 				},
