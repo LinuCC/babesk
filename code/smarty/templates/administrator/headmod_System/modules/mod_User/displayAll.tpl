@@ -30,6 +30,10 @@
 				value="Tabelle aktualisieren" />
 		</div>
 	</div>
+	<h3>Abschieds-PDF-Dateien der gelöschten Nutzer</h3>
+	<div class="deletedUserPdf">
+		<p class="noUsersDeleted">keine Benutzer gelöscht</p>
+	</div>
 </div>
 
 <div class="pageSelect blueButtons">

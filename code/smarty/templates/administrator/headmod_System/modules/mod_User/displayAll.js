@@ -4,56 +4,6 @@ $(document).ready(function() {
 	$("div.pageSelect").buttonset();
 	$(document).tooltip();
 
-	$('table.users.dataTable').on('click', 'a.deleteUser', function(ev) {
-
-		ev.preventDefault();
-		$(this).attr('target', '_blank');
-		toDelete = $(this).attr('id').replace('deleteUser_', '');
-
-		$('body').prepend('<div id="deleteConfirm" title="Benutzer wirklich löschen?"><p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;""></span>Der Benutzer wird dauerhaft gelöscht. Sind sie wirklich sicher?</p></div>');
-
-		$( "#deleteConfirm" ).dialog({
-			resizable: false,
-			height: 240,
-			modal: true,
-			buttons: {
-				"Benutzer löschen": function() {
-					window.location.href = String(
-						'index.php?' +
-						'section=System|User&action=deleteUser&ID={0}')
-						.format(toDelete);
-					// deleteAjax(toDelete);
-					$(this).dialog("close");
-				},
-				"doch nicht": function() {
-					$(this).dialog("close");
-				}
-			}
-		});
-	});
-
-	var deleteAjax = function(userId) {
-
-		$.ajax({
-			type: "POST",
-			url: 'index.php?section=System|User&action=deleteUser&ID={0}'.format(userId),
-			data: {
-			},
-			success: function(data) {
-				console.log(data);
-				alert(data);
-			},
-
-			error: function(error) {
-				fatalError();
-			}
-		});
-		// window.location.href = String(
-		// 	'index.php?' +
-		// 	'section=System|User&action=deleteUser&ID={0}')
-		// 	.format(userId);
-	}
-
 	/**
 	 * Hiding the settings, filters, sortables etc
 	 */
@@ -73,6 +23,63 @@ $(document).ready(function() {
 		step: 10,
 		start: 10
 	});
+
+	$('table.users.dataTable').on('click', 'a.deleteUser', function(ev) {
+
+		ev.preventDefault();
+		$(this).attr('target', '_blank');
+		toDelete = $(this).attr('id').replace('deleteUser_', '');
+
+		$('body').prepend('<div id="deleteConfirm" title="Benutzer wirklich löschen?"><p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;""></span>Der Benutzer wird dauerhaft gelöscht. Sind sie wirklich sicher?</p></div>');
+
+		$( "#deleteConfirm" ).dialog({
+			resizable: false,
+			height: 240,
+			modal: true,
+			buttons: {
+				"Benutzer löschen": function() {
+					deleteAjax(toDelete);
+					$(this).dialog("close");
+				},
+				"doch nicht": function() {
+					$(this).dialog("close");
+				}
+			}
+		});
+	});
+
+	var deleteAjax = function(userId) {
+
+		$.ajax({
+			type: "POST",
+			url: 'index.php?section=System|User&action=deleteUser&ID={0}'.format(userId),
+			data: {
+			},
+			success: function(data) {
+
+				try {
+					data = JSON.parse(data);
+				} catch(e) {
+					adminInterface.errorShow(data);
+				}
+				if(data.value == 'success') {
+					adminInterface.successShow(data.message);
+					userDeletePdf(data.pdfId, data.forename, data.name);
+					newDataFetch();
+				}
+				else if(data.value == 'error') {
+					adminInterface.errorShow(data.message);
+				}
+				else {
+					fatalError();
+				}
+			},
+
+			error: function(error) {
+				fatalError();
+			}
+		});
+	}
 
 	/**
 	 * Fetch new data and refresh the Table when different columns got
@@ -580,6 +587,19 @@ $(document).ready(function() {
 		setActivePageSelector();
 		$("div.pageSelect").buttonset('refresh');
 	};
+
+	var userDeletePdf = function(pdfId, forename, name) {
+
+		contentParent = $('.deletedUserPdf');
+
+		//if there is the yet-no-users-deleted Message, remove it
+		if($('.deletedUserPdf p.noUsersDeleted').length != 0) {
+			$('div.deletedUserPdf').show().animate(500);
+			contentParent.html('');
+		}
+
+		contentParent.append('<a href="index.php?section=System|User&action=deletedUserShowPdf&pdfId={0}" target="_blank">PDF von "{1} {2}" abrufen</a><br />'.format(pdfId, forename, name));
+	}
 
 	/**
 	 * The number of the active Page (currently displayed)

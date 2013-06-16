@@ -124,6 +124,4 @@
 	</fieldset>
 	<input id="submit" type="submit" value="verändern" />
 </form>
-<div><form style="float:right;top:-30px" action="index.php?section=System|User&action=3&ID={$user.ID}" method="post"><input type='submit' value='löschen'></form></div>
-
 {/block}

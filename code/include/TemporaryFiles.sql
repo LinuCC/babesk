@@ -3,5 +3,6 @@ CREATE TABLE IF NOT EXISTS `TemporaryFiles` (
 	`location` varchar(255) NOT NULL,
 	`created` DATETIME NOT NULL,
 	`until` DATETIME NOT NULL,
+	`usage` varchar(64) NOT NULL,
 	PRIMARY KEY (`ID`)
 ) AUTO_INCREMENT=1 ;
