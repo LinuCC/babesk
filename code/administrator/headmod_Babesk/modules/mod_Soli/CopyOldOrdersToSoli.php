@@ -56,7 +56,8 @@ class CopyOldOrdersToSoli {
 		try {
 			self::$_soliData = TableMng::query(sprintf(
 				'SELECT u.ID AS userId, o.ID AS orderId, o.fetched AS fetched,
-					m.name AS mealname, pc.price AS price, m.date AS mealdate,
+					m.ID AS mealId, m.name AS mealname, pc.price AS price,
+					m.date AS mealdate,
 					CONCAT(u.forename, " ", u.name) AS userWholename,
 					o.ordertime AS ordertime,
 					/*Does the Meal and the priceclass still exist?*/
@@ -119,9 +120,9 @@ class CopyOldOrdersToSoli {
 
 		$stmt = TableMng::getDb()->prepare(
 			'INSERT INTO `soli_orders`
-				(`UID`, `date`, `IP`, `ordertime`, `fetched`, `mealname`,
-				`mealprice`, `mealdate`, `soliprice`)
-			VALUES (?, ?, "", ?, ?, ?, ?, ?, ?)');
+				(`ID`, `UID`, `date`, `IP`, `ordertime`, `fetched`,
+					`mealname`, `mealprice`, `mealdate`, `soliprice`)
+			VALUES (?, ?, ?, "", ?, ?, ?, ?, ?, ?)');
 
 		foreach(self::$_soliData as $order) {
 			if(self::soliDataCheck($order)) {
@@ -129,7 +130,7 @@ class CopyOldOrdersToSoli {
 				$price = (isset(self::$_soliprice) && self::$_soliprice != '')
 					? self::$_soliprice : 0;
 
-				$stmt->bind_param('ssssssss', $order['userId'],
+				$stmt->bind_param('sssssssss', $order['mealId'], $order['userId'],
 					$order['mealdate'], $order['ordertime'], $order['fetched'],
 					$order['mealname'], $order['price'], $order['mealdate'],
 					$price);
