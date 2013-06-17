@@ -26,6 +26,7 @@ class AdminCardInfoInterface extends AdminInterface {
 		$this->smarty->assign('forename', $userData['forename']);
 		$this->smarty->assign('class', $userData['class']);
 		$this->smarty->assign('locked', $userData['locked']);
+		$this->smarty->assign('username',$userData['username']);
 		$this->smarty->display($this->tplFilePath  . '/result.tpl');
 	}
 	

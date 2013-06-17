@@ -195,7 +195,7 @@
 				<ger_name>Buchhaltung</ger_name>
 				<name>SchbasAccounting</name>
 				<active>true</active>
-		   </module>
+			</module>
 		</head_module>
 		<head_module>
 			<ger_name>KurswahlSystem</ger_name>

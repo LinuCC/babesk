@@ -115,7 +115,7 @@
 				{/if}
 		</div>
 		<div class="simpleForm">Guthaben:
-			<input class="inputItem" type="int" name="credits" size="5" maxlength="5" />
+			<input class="inputItem" type="int" name="credits" size="5" maxlength="5" value="{$user.credit}"/>
 		</div>
 		<div class="simpleForm">Teilhabepaket:
 			<input class="inputItem" type="checkbox" name="isSoli"
