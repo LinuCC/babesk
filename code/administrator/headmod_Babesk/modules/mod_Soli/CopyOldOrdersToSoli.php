@@ -56,8 +56,7 @@ class CopyOldOrdersToSoli {
 		try {
 			self::$_soliData = TableMng::query(sprintf(
 				'SELECT u.ID AS userId, o.ID AS orderId, o.fetched AS fetched,
-					m.ID AS mealId, m.name AS mealname, pc.price AS price,
-					m.date AS mealdate,
+					m.name AS mealname, pc.price AS price, m.date AS mealdate,
 					CONCAT(u.forename, " ", u.name) AS userWholename,
 					o.ordertime AS ordertime,
 					/*Does the Meal and the priceclass still exist?*/
@@ -75,11 +74,7 @@ class CopyOldOrdersToSoli {
 						ON pc.pc_ID = m.price_class AND pc.GID = u.GID
 				WHERE /*does the order already exist in soli_orders?*/
 						(SELECT COUNT(*) FROM soli_orders so
-					 	WHERE o.date = so.date /* Has same Date?*/
-						AND o.UID = so.UID /* Has same UserId?*/
-						AND (SELECT m.name FROM meals m WHERE o.MID = m.ID)
-							= so.mealname /* Has same mealname?*/
-					) = 0'), true);
+					 	WHERE o.ID = so.ID) = 0'), true);
 
 		} catch (MySQLVoidDataException $e) {
 			self::$_interface->dieError('Alle passenden Bestellungen wurden schon korrekt abgelegt oder es gibt keine Bestellungen mit soli-Status');
