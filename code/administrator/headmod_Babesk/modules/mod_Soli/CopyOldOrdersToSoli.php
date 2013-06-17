@@ -57,6 +57,7 @@ class CopyOldOrdersToSoli {
 			self::$_soliData = TableMng::query(sprintf(
 				'SELECT u.ID AS userId, o.ID AS orderId, o.fetched AS fetched,
 					m.name AS mealname, pc.price AS price, m.date AS mealdate,
+					m.ID AS mealId,
 					CONCAT(u.forename, " ", u.name) AS userWholename,
 					o.ordertime AS ordertime,
 					/*Does the Meal and the priceclass still exist?*/
