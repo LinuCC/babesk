@@ -25,6 +25,13 @@ class SchbasAccountingInterface extends AdminInterface {
 	public function Scan() {
 		$this->smarty->display($this->tplFilePath . '/scan.tpl');
 	}
+	
+	function showAllUsers($grades, $gradeDesired, $users){
+		$this->smarty->assign('gradeAll', $grades);
+		$this->smarty->assign('gradeDesired', $gradeDesired);
+		$this->smarty->assign('users', $users);
+		$this->smarty->display($this->tplFilePath . 'showUsersGroupedByYearAndGrade.tpl');
+	}
 }
 
 ?>

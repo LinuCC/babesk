@@ -21,12 +21,12 @@ class SchbasAccounting extends Module {
 
 		require_once 'SchbasAccountingInterface.php';
 
-		$SchbasAccountingInterface = new SchbasAccountingInterface($this->relPath);
+		$this->SchbasAccountingInterface = new SchbasAccountingInterface($this->relPath);
 		if(isset($_GET['action'])) {
 			switch($_GET['action']) {
 
 				case 'userSetReturnedFormByBarcode':
-					$SchbasAccountingInterface->Scan();
+					$this->SchbasAccountingInterface->Scan();
 					break;
 				case 'userSetReturnedFormByBarcodeAjax':
 					$this->userSetReturnedFormByBarcodeAjax();
@@ -34,6 +34,8 @@ class SchbasAccounting extends Module {
 				case 'userSetReturnedMsgByButtonAjax':
 					$this->userSetReturnedMsgByButtonAjax();
 					break;
+				case 1:
+					$this->showUsers();break;
 				default:
 					die('Wrong action-value given');
 						
@@ -41,7 +43,7 @@ class SchbasAccounting extends Module {
 			}
 		}
 		else {
-			$SchbasAccountingInterface->MainMenu();
+			$this->SchbasAccountingInterface->MainMenu();
 		}
 	}
 
@@ -82,6 +84,82 @@ class SchbasAccounting extends Module {
 		else {
 			die('error');
 		}
+	}
+	
+	private function showUsers () {
+		$schoolyearDesired = TableMng::query('SELECT ID FROM schoolYear WHERE active = 1', true);
+		$schoolyearID = $schoolyearDesired[0]['ID'];
+		$gradeID = TableMng::query("SELECT GradeID FROM jointgradeinschoolyear WHERE SchoolYearID = $schoolyearID",true);
+		foreach ($gradeID as $grade){
+			$ID = $grade['GradeID'];
+			$SaveTheCows = TableMng::query("SELECT * FROM grade WHERE ID = $ID", true);
+			// Cows stands for Code of worst systematic
+			$gradesAll[] = $SaveTheCows[0];
+		}
+		$users = TableMng::query('SELECT * FROM users', true);
+		$users = $this->addGradeLabelToUsers($users);
+		if (isset ($_GET['gradeIdDesired'])){
+			for ($i=0; $i<sizeof($gradesAll); $i++){
+				if ($gradesAll[$i]['gradeValue'].'-'.$gradesAll[$i]['label'] == $_GET['gradeIdDesired']){
+					$gradeDesired = $gradesAll[$i]['ID'];
+				}
+			}
+			for ($i=0; $i<sizeof($users); $i++){
+				if ($users[$i]["gradeLabel"] != $_GET['gradeIdDesired'])
+					unset($users[$i]);
+			}
+		}else{
+			$gradeDesired = null;
+		}
+		$this->SchbasAccountingInterface->showAllUsers($gradesAll,$gradeDesired,$users);
+	}
+	
+	private function addGradeLabelToUsers ($users) {
+	
+		$jointsUsersInGrade = $this->getAllJointsUsersInGrade();
+		$grades = $this->getAllGrades();
+		if (isset($users) && count ($users) && isset($jointsUsersInGrade) && count ($jointsUsersInGrade)) {
+			foreach ($users as & $user) {
+				foreach ($jointsUsersInGrade as $joint) {
+					if ($joint['UserID'] == $user['ID']) {
+						foreach ($grades as $grade) {
+							if ($grade['ID'] == $joint['GradeID']) {
+								$user['gradeLabel'] = $grade['gradeValue'] . '-' . $grade['label'];
+							}
+						}
+					}
+				}
+			}
+		}
+		return $users;
+	}
+	
+	private function getAllJointsUsersInGrade () {
+	
+		try {
+			$joints = TableMng::query('SELECT * FROM jointUsersInGrade', true);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->showMsg($this->_languageManager->getText('warningNoJointsUsersInGrade'));
+		}
+		catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointUsersInGrade'));
+		}
+		if(isset($joints)) {
+			return $joints;
+		}
+	}
+	
+	private function getAllGrades () {
+	
+		try {
+			$grades = TableMng::query('SELECT * FROM grade', true);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorNoGrades'));
+		}
+		catch (Exception $e) {
+			$this->_interface->dieError($this->_languageManager->getText('errorFetchGrades'));
+		}
+		return $grades;
 	}
 
 }
