@@ -36,8 +36,8 @@ class SchbasAccounting extends Module {
 					break;
 				case 1:
 					if (isset($_GET['ajax'])){
-						$this->SchbasAccountingInterface->test();
-						$this->executePayment($_GET['ID'], $_GET['payment']);
+						//$this->SchbasAccountingInterface->test();
+						$this->executePayment($_POST['ID'], $_POST['payment']);
 						break;
 					}else{
 						$this->showUsers();break;
@@ -111,8 +111,10 @@ class SchbasAccounting extends Module {
 				}
 			}
 			for ($i=0; $i<sizeof($users); $i++){
-				if ($users[$i]["gradeLabel"] != $_GET['gradeIdDesired'])
-					unset($users[$i]);
+				if (isset($users[$i]["gradeLabel"])){
+					if ($users[$i]["gradeLabel"] != $_GET['gradeIdDesired'])
+						unset($users[$i]);
+				}
 			}
 		}else{
 			$gradeDesired = null;
@@ -169,7 +171,14 @@ class SchbasAccounting extends Module {
 	}
 	
 	private function executePayment($UID, $payment){
-		TableMng::query("INSERT INTO schbas_accounting(UID, payedAmount) VALUES ($UID, $payment)");
+		$UID = str_replace("Payment", "", $UID);
+		try {
+			TableMng::query("UPDATE schbas_accounting SET payedAmount=$payment WHERE UID=$UID");
+			//die("UPDATE schbas_accounting SET payedAmount=$payment WHERE 'UID'=$UID");
+		} catch (Exception $e) {
+			//die("UPDATE schbas_accounting SET 'payedAmount'=$payment WHERE 'UID'=$UID".$e);
+		}
+		
 	}
 
 }
