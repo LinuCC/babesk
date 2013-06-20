@@ -27,6 +27,48 @@ function showOptions (ID) {
 	document.getElementById('optionButtons' + ID).hidden = false;
 	document.getElementById('option' + ID).hidden = true;
 }
+function sendPayment(ID){
+		var ajax;
+		
+	try{
+		ajax = new XMLHttpRequest();
+	} catch (e){
+		// IE
+		try{
+			ajax = new ActiveXObject("Msxml2.XMLHTTP");
+		} catch (e) {
+			try{
+				ajax = new ActiveXObject("Microsoft.XMLHTTP");
+			} catch (e){
+				alert("Browser wird nicht unterstuetzt!");
+				return false;
+			}
+		}
+	}
+	
+	ajax.onreadystatechange = function(){
+		if(ajax.readyState == 4){
+			var barcodeField = document.getElementsByName('test')[0];
+			barcodeField.value = ajax.responseText;
+			
+			
+		}
+	}
+		
+		payment = document.getElementsByName('payment' + ID)[0].value;
+		queryString = "&payment=" + encodeURIComponent(payment) + "&ID="+ ID + "&ajax=1";
+		alert("{$adress}" + queryString);
+		ajax.open("GET", "{$adress}" + queryString, true);
+		ajax.send();
+}
+
+function enter_pressed(e){
+var keycode;
+if (window.event) keycode = window.event.keyCode;
+else if (e) keycode = e.which;
+else return false;
+return (keycode == 13);
+}
 </script>
 
 <h2 class='moduleHeader'>Die Benutzer</h2>
@@ -65,14 +107,17 @@ function showOptions (ID) {
 			<td align="center">{$user.username}</td>
 			<td align="center">{$user.gradeLabel}</td>
 			<td align="center">
-			<form action="index.php?section=Schbas|SchbasAccounting" method="get">
-			<input type="text" name="username" size="10" maxlength="50" /><br />
+			<form onsubmit='return false;' >
+			<input type="text" name="payment{$user.ID}" onKeyPress='if(enter_pressed(event)) sendPayment("{$user.ID}")'/><br>
 			</form>
 			</td>
 		</tr>
 		{/foreach}
 	</tbody>
 </table>
+<form onsubmit='return false;' >
+	<input type="text" name="test" /><br>
+</form>
 
 
 {/block}

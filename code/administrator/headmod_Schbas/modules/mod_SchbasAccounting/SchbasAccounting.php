@@ -35,7 +35,13 @@ class SchbasAccounting extends Module {
 					$this->userSetReturnedMsgByButtonAjax();
 					break;
 				case 1:
-					$this->showUsers();break;
+					if (isset($_GET['ajax'])){
+						$this->SchbasAccountingInterface->test();
+						$this->executePayment($_GET['ID'], $_GET['payment']);
+						break;
+					}else{
+						$this->showUsers();break;
+					}
 				default:
 					die('Wrong action-value given');
 						
@@ -160,6 +166,10 @@ class SchbasAccounting extends Module {
 			$this->_interface->dieError($this->_languageManager->getText('errorFetchGrades'));
 		}
 		return $grades;
+	}
+	
+	private function executePayment($UID, $payment){
+		TableMng::query("INSERT INTO schbas_accounting(UID, payedAmount) VALUES ($UID, $payment)");
 	}
 
 }
