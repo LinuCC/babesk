@@ -114,6 +114,8 @@ class SchbasAccounting extends Module {
 				if (isset($users[$i]["gradeLabel"])){
 					if ($users[$i]["gradeLabel"] != $_GET['gradeIdDesired'])
 						unset($users[$i]);
+				}else{
+					unset($users[$i]);
 				}
 			}
 		}else{

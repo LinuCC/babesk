@@ -67,9 +67,6 @@ a.selectiveLink {
   {/foreach}
  </tbody>
 </table>
-<form onsubmit='return false;' >
- <input type="text" name="test" /><br>
-</form>
 
 
 <script type="text/javascript" language="JavaScript">
@@ -92,7 +89,6 @@ a.selectiveLink {
    'ID'  : uid
   },
   success: function(data) {
-  alert(data);
    if(data == 'error') {
     alert('Der Barcode ist nicht vollständig');
    }
@@ -106,7 +102,7 @@ a.selectiveLink {
     alert(unescape('Formular wurde bereits eingescannt. Bei %C4nderungen bitte zuerst l%F6schen!'));
    }
    else {
-    alert('Einscannen erfolgreich!');
+    alert('Eingabe erfolgreich!');
     location.reload();
    }
   },
