@@ -93,13 +93,11 @@ a.selectiveLink {
    'ID'  : uid
   },
   success: function(data) {
-   else {
     alert('Zahlung erfasst!');
     location.reload();
-   }
   },
   error: function(data) {
-   alert('Ein Fehler ist beim Senden des Barcodes aufgetreten!');
+   alert('Ein Fehler ist beim Senden der Zahlung aufgetreten!');
   }
  });
 }
