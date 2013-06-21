@@ -104,20 +104,24 @@ class SchbasAccounting extends Module {
 		}
 		$users = TableMng::query('SELECT * FROM users', true);
 		$users = $this->addGradeLabelToUsers($users);
+		$users = $this->addPayedAmountToUsers($users);
 		if (isset ($_GET['gradeIdDesired'])){
 			for ($i=0; $i<sizeof($gradesAll); $i++){
 				if ($gradesAll[$i]['gradeValue'].'-'.$gradesAll[$i]['label'] == $_GET['gradeIdDesired']){
 					$gradeDesired = $gradesAll[$i]['ID'];
 				}
 			}
-			for ($i=0; $i<sizeof($users); $i++){
-				if (isset($users[$i]["gradeLabel"])){
-					if ($users[$i]["gradeLabel"] != $_GET['gradeIdDesired'])
+			$i = 0;
+			foreach ($users as &$user) {
+				if (isset($user["gradeLabel"])){
+					if ($user["gradeLabel"] != $_GET['gradeIdDesired'])
 						unset($users[$i]);
 				}else{
 					unset($users[$i]);
 				}
+				$i++;
 			}
+			$users = array_values($users);
 		}else{
 			$gradeDesired = null;
 		}
@@ -126,8 +130,8 @@ class SchbasAccounting extends Module {
 	
 	private function addGradeLabelToUsers ($users) {
 	
-		$jointsUsersInGrade = $this->getAllJointsUsersInGrade();
-		$grades = $this->getAllGrades();
+		$jointsUsersInGrade = TableMng::query('SELECT * FROM jointUsersInGrade', true);
+		$grades = TableMng::query('SELECT * FROM grade', true);
 		if (isset($users) && count ($users) && isset($jointsUsersInGrade) && count ($jointsUsersInGrade)) {
 			foreach ($users as & $user) {
 				foreach ($jointsUsersInGrade as $joint) {
@@ -144,33 +148,18 @@ class SchbasAccounting extends Module {
 		return $users;
 	}
 	
-	private function getAllJointsUsersInGrade () {
+	private function addPayedAmountToUsers ($users) {
 	
-		try {
-			$joints = TableMng::query('SELECT * FROM jointUsersInGrade', true);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('warningNoJointsUsersInGrade'));
+		$payed = TableMng::query('SELECT * FROM schbas_accounting', true);
+		foreach ($users as & $user) {
+			foreach ($payed as $pay) {
+				if ($pay['UID'] == $user['ID']) 			
+					$user['payedAmount'] = $pay['payedAmount'];
+			}
 		}
-		catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchJointUsersInGrade'));
-		}
-		if(isset($joints)) {
-			return $joints;
-		}
+		return $users;
 	}
-	
-	private function getAllGrades () {
-	
-		try {
-			$grades = TableMng::query('SELECT * FROM grade', true);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorNoGrades'));
-		}
-		catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorFetchGrades'));
-		}
-		return $grades;
-	}
+
 	
 	private function executePayment($UID, $payment){
 		$UID = str_replace("Payment", "", $UID);

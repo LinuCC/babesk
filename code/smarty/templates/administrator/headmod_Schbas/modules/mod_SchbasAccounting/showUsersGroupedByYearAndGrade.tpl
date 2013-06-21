@@ -59,9 +59,13 @@ a.selectiveLink {
    <td align="center">{$user.username}</td>
    <td align="center">{$user.gradeLabel}</td>
    <td align="center">
+   {if isset($user.payedAmount)}
    <form onsubmit='return false;' >
-   <input type="text" id="Payment{$user.ID}")'/><br>
+   <input type="text" id="Payment{$user.ID}" value='{$user.payedAmount}'/><br>
    </form>
+   {else}
+   Zettel wurde noch nicht gescant
+   {/if}
    </td>
   </tr>
   {/foreach}
