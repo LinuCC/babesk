@@ -19,7 +19,9 @@ Antrag l&ouml;schen
 
 <fieldset>
 <h3>Finanzen verwalten</h3>
-Geldeingang erfassen<br/>
+<form action="index.php?section=Schbas|SchbasAccounting&action=1" method="post">
+	<input type="submit" value="Geldeingang erfassen">
+</form>
 Mahnungen versenden<br/>
 </fieldset>
 
