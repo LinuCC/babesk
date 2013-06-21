@@ -77,7 +77,7 @@ class SchbasAccounting extends Module {
 			}
 			if(is_numeric($uid) && in_array($loanChoice, $haystack,$true)) {
 				try {
-					$query = sprintf("INSERT INTO schbas_accounting (`UID`,`loanChoice`,`hasPayed`,`payedAmount`) VALUES ('%s','%s','%s','%s')",$uid,$loanChoice,"0","0.00");
+					$query = sprintf("INSERT INTO schbas_accounting (`UID`,`loanChoice`,`payedAmount`) VALUES ('%s','%s','%s')",$uid,$loanChoice,"0.00");
 
 					TableMng::query($query);
 				} catch (Exception $e) {
