@@ -107,7 +107,7 @@ class AdminGChangePasswordProcessing {
 			$this->cardInfoInterface->DieError ('Konnte das Passwort nicht verändern; Ein interner Fehler ist aufgetreten');
 		}
 		
-		$this->cardInfoInterface->DieError ('Das Passwort wurde erfolgreich verändert');
+		$this->cardInfoInterface->showMsg ('Das Passwort wurde erfolgreich verändert');
 	}
 }
 
