@@ -64,7 +64,7 @@ a.selectiveLink {
    <input type="text" id="Payment{$user.ID}" value='{$user.payedAmount}'/><br>
    </form>
    {else}
-   Zettel wurde noch nicht gescant
+   Zettel wurde noch nicht gescannt
    {/if}
    </td>
   </tr>
@@ -93,20 +93,8 @@ a.selectiveLink {
    'ID'  : uid
   },
   success: function(data) {
-   if(data == 'error') {
-    alert('Der Barcode ist nicht vollständig');
-   }
-   else if(data == 'entryNotFound') {
-    alert('Der Link zwischen Nachricht und Benutzer konnte nicht gefunden werden');
-   }
-   else if(data == 'notValid') {
-    alert('Der Barcode enthält inkorrekte Zeichen');
-   }
-   else if(data == 'dupe') {
-    alert(unescape('Formular wurde bereits eingescannt. Bei %C4nderungen bitte zuerst l%F6schen!'));
-   }
    else {
-    alert('Eingabe erfolgreich!');
+    alert('Zahlung erfasst!');
     location.reload();
    }
   },
