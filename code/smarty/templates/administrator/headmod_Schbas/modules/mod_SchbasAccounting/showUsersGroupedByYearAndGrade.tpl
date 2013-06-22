@@ -58,14 +58,28 @@ a.selectiveLink {
    <td align="center">{$user.name}</td>
    <td align="center">{$user.username}</td>
    <td align="center">{$user.gradeLabel}</td>
-   <td align="center">
-   {if isset($user.payedAmount)}
-   <form onsubmit='return false;' >
-   <input type="text" id="Payment{$user.ID}" value='{$user.payedAmount}'/><br>
-   </form>
+   <td align="left">	
+   
+   {if (isset($user.loanChoice) && $user.loanChoice=='nl')}
+   		Selbstzahler
+   {elseif (isset($user.loanChoice) && $user.loanChoice=='ls')}
+   		Von Zahlung befreit
+   {elseif (isset($user.loanChoice) && ($user.loanChoice=='ln' || $user.loanChoice=='lr'))} 
+   		<form onsubmit='return false;' >
+   		<input type="text" id="Payment{$user.ID}" value='{$user.payedAmount}' size=5/> ( von {$user.amountToPay} &euro;,
+   		{if ($user.loanChoice=='ln')} 
+   			normal 
+   		{else} 
+   			erm&auml;&szlig;igt
+   		{/if}
+   		
+   		)<br>
+   		</form>
    {else}
-   Zettel wurde noch nicht gescannt
+   		Zettel wurde noch nicht gescannt
    {/if}
+   
+   
    </td>
   </tr>
   {/foreach}
