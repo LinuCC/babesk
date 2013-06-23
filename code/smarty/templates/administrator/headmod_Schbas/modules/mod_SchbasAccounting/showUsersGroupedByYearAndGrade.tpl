@@ -47,7 +47,7 @@ a.selectiveLink {
    <th align='center'>Name</th>
    <th align='center'>Benutzername</th>
    <th align='center'>Klasse</th>
-   <th align='center'>Zahlung</th>
+   <th align='center'>Zahlung f&uuml;r kommenden Jahrgang</th>
   </tr>
  </thead>
  <tbody>
