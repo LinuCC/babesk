@@ -209,6 +209,7 @@ class TemporaryFile {
 				$this->filepathCreate();
 
 				//Update the location since only now we know the ID of the file
+				$this->_filepath = addslashes($this->_filepath);
 				TableMng::query("UPDATE TemporaryFiles
 					SET `location` = '$this->_filepath'
 					WHERE ID = $this->_fileId");
