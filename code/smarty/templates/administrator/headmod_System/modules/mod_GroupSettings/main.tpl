@@ -17,22 +17,43 @@
 
 <div>
 	<button id="groupChangeRights">Rechte abrufen / verändern</button>
-	<button id="groupSubmit" style="">
-		Gruppenänderungen ausführen
-	</button>
 </div>
 
-<fieldset class="smallContainer groupRights">
+<fieldset class="smallContainer grouprights">
 	<legend>Rechte der Gruppe <span class="selectedGroupName"></span></legend>
-	<div class="groupRights">
-		<p>Noch nicht eingebaut!</p>
+	<div class="grouprights">
 	</div>
 </fieldset>
 
 <script src="../include/js/jstree/jquery.jstree.js">
 </script>
 <script src="../smarty/templates/administrator/headmod_System/modules/
+	mod_GroupSettings/righttree.js">
+</script>
+<script src="../smarty/templates/administrator/headmod_System/modules/
+	mod_GroupSettings/grouptree.js">
+</script>
+<script src="../smarty/templates/administrator/headmod_System/modules/
 	mod_GroupSettings/main.js">
 </script>
+
+<style type="text/css">
+
+.jstree .modNotAllowed {
+	color: #8f0d0b;
+	background-color: #ffE0Df;
+}
+
+.jstree .modAllowed {
+	color: #25530f;
+	background-color: #F0ffE6;
+}
+
+.jstree .changeNotAllowed {
+	color: #777777;
+	font-style: italic;
+}
+
+</style>
 
 {/block}

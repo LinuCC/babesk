@@ -385,7 +385,8 @@ h3.filterBar {
 
 div.smallContainer,
 span.smallContainer,
-p.smallContainer {
+p.smallContainer,
+fieldset.smallContainer {
 	border: 1px solid #c1e1f2;
 	border-radius: 5px;
 	padding: 10px;

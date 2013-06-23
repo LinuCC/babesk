@@ -2,7 +2,15 @@
 
 require_once "../include/path.php";
 require_once PATH_INCLUDE . '/TableMng.php';
-require_once PATH_INCLUDE . '/NModule.php';
+require_once PATH_INCLUDE . '/Acl.php';
+require_once PATH_ADMIN . '/admin_functions.php';
+require_once PATH_ACCESS . "/LogManager.php";
+require_once PATH_INCLUDE . "/functions.php";
+require_once PATH_INCLUDE . '/exception_def.php';
+require_once PATH_INCLUDE . '/moduleManager.php';
+require_once PATH_INCLUDE . '/DataContainer.php';
+require_once 'AdminInterface.php';
+require_once 'locales.php';
 
 /**
  *
@@ -10,44 +18,33 @@ require_once PATH_INCLUDE . '/NModule.php';
  *
  */
 class Administrator {
-	////////////////////////////////////////////////////////////////////////
-	//Attributes
-	private $_moduleManager;
-	private $_adminInterface;
-	private $_userLoggedIn;
-	private $_smarty;
-	private $_logger;
 
 	////////////////////////////////////////////////////////////////////////
 	//Constructor
+	////////////////////////////////////////////////////////////////////////
+
 	public function __construct () {
 
 		if(!isset($_SESSION)) {
 			$this->initEnvironment();
 		}
 
-		require_once PATH_ADMIN . '/admin_functions.php';
-		require_once PATH_ACCESS . "/LogManager.php";
-		require_once PATH_INCLUDE . "/functions.php";
-		require_once PATH_INCLUDE . '/exception_def.php';
-		require_once PATH_INCLUDE . '/moduleManager.php';
-		require_once PATH_INCLUDE . '/DataContainer.php';
-		require_once 'AdminInterface.php';
-		require_once 'locales.php';
-
 		validSession() or die(INVALID_SESSION);
 		$this->initSmarty();
 		TableMng::init ();
 		$this->_adminInterface = new AdminInterface(NULL, $this->_smarty);
-
 		$this->_logger = new LogManager();
-		NModule::modulesLoad();
-		$this->_moduleManager = new ModuleManager('administrator', $this->_adminInterface);
-		$this->_moduleManager->setDataContainer(new DataContainer($this->_smarty, $this->_adminInterface));
+		$this->_acl = new Acl();
+		$this->_moduleManager = new ModuleManager('administrator',
+			$this->_adminInterface);
+		$this->_moduleManager->setDataContainer(new DataContainer(
+			$this->_smarty, $this->_adminInterface, $this->_acl));
 	}
 
 	////////////////////////////////////////////////////////////////////////
 	//Getters and Setters
+	////////////////////////////////////////////////////////////////////////
+
 	public function getUserLoggedIn () {
 		return $this->_userLoggedIn;
 	}
@@ -70,6 +67,8 @@ class Administrator {
 
 	////////////////////////////////////////////////////////////////////////
 	//Methods
+	////////////////////////////////////////////////////////////////////////
+
 	public function initUserInterface () {
 
 		$this->_smarty->assign('_ADMIN_USERNAME', $_SESSION['username']);
@@ -94,16 +93,8 @@ class Administrator {
 
 	public function MainMenu () {
 
-		// $allowedModules = $this->_moduleManager->getAllowedModules();
-		// $headModules = $this->_moduleManager->getHeadModulesOfModules($allowedModules);
-		// $head_mod_arr = array();
-
-		// foreach ($headModules as $headModule) {
-		// 	$head_mod_arr[] = array('name' => $headModule->getName(), 'display_name' => $headModule->getDisplayName());
-		// }
-
-
-		$headmodules = NModule::moduleChildsByPathGet('administrator');
+		$headmodules = $this->_acl->getModuleroot()->moduleByPathGet(
+			'root/administrator')->getChilds();
 
 		$this->_smarty->assign('is_mainmenu', true);
 		// $this->_smarty->assign('modules', $allowedModules);
@@ -139,6 +130,8 @@ class Administrator {
 
 	////////////////////////////////////////////////////////////////////////
 	//Implementations
+	////////////////////////////////////////////////////////////////////////
+
 	private function initEnvironment () {
 
 		$this->setPhpIni();
@@ -171,6 +164,45 @@ class Administrator {
 		ini_set('session.use_only_cookies', 0);
 		ini_set("default_charset", "utf-8");
 	}
+
+	////////////////////////////////////////////////////////////////////////
+	//Attributes
+	////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * The Modulemanager
+	 * @var ModuleManager
+	 */
+	private $_moduleManager;
+
+	/**
+	 * The Access-Control-Layer
+	 */
+	private $_acl;
+
+	/**
+	 * The Interface handling displaying stuff
+	 * @var AdminInterface
+	 */
+	private $_adminInterface;
+
+	/**
+	 * If the User is logged in or not
+	 * @var boolean
+	 */
+	private $_userLoggedIn;
+
+	/**
+	 * The Smarty-Object
+	 * @var Smarty
+	 */
+	private $_smarty;
+
+	/**
+	 * To log things
+	 * @var Logs
+	 */
+	private $_logger;
 }
 
 ?>

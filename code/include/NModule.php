@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Represents a module of the Program
+ *
+ * contains all of its childs
+ *
+ * @author  Pascal Ernst <pascal.cc.ernst@gmail.com>
+ */
 class NModule {
 
 	/////////////////////////////////////////////////////////////////////
@@ -29,14 +36,88 @@ class NModule {
 		return $this->_childs;
 	}
 
+	/**
+	 * Returns a boolean describing if the module can be used by the user
+	 *
+	 * @return Boolean true if enabled, else false
+	 */
+	public function getIsEnabled() {
+		return $this->_isEnabled;
+	}
+
+	/**
+	 * Sets a boolean describing if the module can be used by the user
+	 *
+	 * @param Boolean $isEnabled true if enabled, else false
+	 */
+	public function setIsEnabled($isEnabled) {
+		$this->_isEnabled = $isEnabled;
+		return $this;
+	}
+
+	/**
+	 * Loads the Modules from the Database
+	 *
+	 * Fetches all Modules from the Database and converts this Array into the
+	 * actual Modules
+	 */
 	public static function modulesLoad() {
 
 		try {
 			$data = self::modulesFetchAll();
-			self::$_rootModule = self::nestedSetToModules($data);
+			return self::nestedSetToModules($data);
 
 		} catch (Exception $e) {
 			throw new ModuleException("Could not fetch Modules!", 1, $e);
+		}
+	}
+
+	/**
+	 * Fetches a ModuleChild beginning by this Instance's Path
+	 * @param  String  $path      The (relative) Path of the module, for
+	 *     example administrator/Kuwasys/User
+	 * @param  boolean $checkThis If true, function checks if path starts with
+	 *     this module-instance
+	 * @return Module The Module if found, false if Path could not be resolved
+	 */
+	public function moduleByPathGet($path, $checkThis = true) {
+
+		$tree = explode('/', $path);
+		$treeIterator = $this;
+
+		if($checkThis) {
+			if(!(array_shift($tree) == $this->_name)) {
+				return false;
+			}
+		}
+
+		//check for each Module in the given path if it exists
+		foreach($tree as $wantedNodeName) {
+			foreach($treeIterator->_childs as $node) {
+				//If name of Module found
+				if($node->_name == $wantedNodeName) {
+					$treeIterator = $node;
+					continue 2;
+				}
+			}
+			return false; //Module with name not found
+		}
+		$module = $treeIterator;
+
+		return $module;
+	}
+
+	/**
+	 * Just a test-function. Echoes the Tree somewhat readable
+	 */
+	public static function treeDump($mod, $chars = '|') {
+
+		echo "$chars $mod->_name<br />";
+		if(!empty($mod->_childs)) {
+			$chars .= '|';
+			foreach($mod->_childs as $childMod) {
+				self::treeDump($childMod, $chars);
+			}
 		}
 	}
 
@@ -62,53 +143,118 @@ class NModule {
 		}
 	}
 
-	/**
-	 * Fetches the Module by its path
-	 * @param  String $path The Path of the Module
-	 * @return Module false on error else the Module
-	 */
-	public static function moduleByPathGet($path) {
+	public static function modulePathGet($module, $rootModule) {
 
-		$tree = explode('/', $path);
-		$treeIterator = self::$_rootModule;
-
-		//start Iterating from root
-		foreach($treeIterator as $iter) {
-			if($iter->_name == 'root') {
-				$treeIterator = $iter;
-			}
-		}
-
-		//check for each Module in the given path if it exists
-		foreach($tree as $wantedNodeName) {
-			foreach($treeIterator->_childs as $node) {
-				//If name of Module found
-				if($node->_name == $wantedNodeName) {
-					$treeIterator = $node;
-					continue 2;
-				}
-			}
-			return false; //Module with name not found
-		}
-		$module = $treeIterator;
-
-		return $module;
+		$path = self::modulePathGetRecHelper($module->_id, $rootModule, '');
+		return rtrim($path, '/');
 	}
 
-	public static function moduleChildsByPathGet($path) {
+	public static function modulePathGetRecHelper($moduleId,
+		$rootModule, $begPath) {
 
-		if($mod = self::moduleByPathGet($path)) {
-			return $mod->_childs;
+		if(count($rootModule->_childs)) {
+			foreach($rootModule->_childs as $mod) {
+				$path = $begPath . '/' . $mod->_name;
+				if($mod->_id == $moduleId) {
+					return $path;
+				}
+				else {
+					$retPath = self::modulePathGetRecHelper(
+						$moduleId,
+						$mod,
+						$path);
+					if($retPath) {
+						return $retPath;
+					}
+				}
+			}
 		}
 		else {
 			return false;
 		}
+	}
 
+	public static function IsEnabledStateCompare($module1, $module2) {
+
+		if($module1->_isEnabled == $module2->_isEnabled) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public function moduleAsArrayGet() {
+
+		$data = array('name' => $this->_name, 'id' => $this->_id,
+			'enabled' => $this->_isEnabled);
+		$childs = $this->childsAsArrayGet($this->_childs);
+		$data['childs'] = $childs;
+		return $data;
+	}
+
+	public function &anyChildAsReferenceByIdGet($id) {
+
+		if(!empty($this->_childs)) {
+			foreach($this->_childs as &$child) {
+				if($child->_id == $id) {
+					return $child;
+				}
+				else {
+					if(($ret = $child->anyChildByIdGet($id))) {
+						return $ret;
+					}
+				}
+			}
+		}
+		return NULL;
+	}
+
+	public function anyChildByIdGet($id) {
+
+		if(!empty($this->_childs)) {
+			foreach($this->_childs as $child) {
+				if($child->_id == $id) {
+					return $child;
+				}
+				else {
+					if(($ret = $child->anyChildByIdGet($id))) {
+						return $ret;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	public function isEnabledChangeWithChilds($isEnabled) {
+
+		$this->_isEnabled = (boolean)$isEnabled;
+		if(!empty($this->_childs)) {
+			foreach($this->_childs as $child) {
+				$child->isEnabledChangeWithChilds($isEnabled);
+			}
+		}
 	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
+
+	protected function childsAsArrayGet() {
+
+		$childArray = array();
+		if(!empty($this->_childs)) {
+			foreach($this->_childs as $child) {
+				$childArray[] = array(
+					'id' => $child->_id,
+					'name' => $child->_name,
+					'enabled' => $child->_isEnabled,
+					'childs' => $child->childsAsArrayGet());
+			}
+		}
+		return $childArray;
+	}
 
 	/**
 	 * Fetches all Modules from the Datbase and returns them
@@ -205,10 +351,10 @@ class NModule {
 
 		TableMng::query("SELECT @myRight := rgt FROM Modules
 			WHERE name = '$parentName';
-			UPDATE Modules SET rgt = rgt + 2 WHERE rgt > @myRight;
+			UPDATE Modules SET rgt = rgt + 2 WHERE rgt >= @myRight;
 			UPDATE Modules SET lft = lft + 2 WHERE lft > @myRight;
 			INSERT INTO Modules(name, lft, rgt) VALUES('$name',
-							@myRight + 1, @myRight + 2);
+							@myRight, @myRight + 1);
 			", false, true);
 
 		TableMng::getDb()->autocommit(true);

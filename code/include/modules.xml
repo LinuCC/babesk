@@ -78,6 +78,11 @@
 				<name>Schooltype</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Gruppeneinstellungen</ger_name>
+				<name>GroupSettings</name>
+				<active>true</active>
+			</module>
 		</head_module>
 		<head_module>
 			<ger_name>Bargeldloses Bestellsystem für Kantinen</ger_name>
