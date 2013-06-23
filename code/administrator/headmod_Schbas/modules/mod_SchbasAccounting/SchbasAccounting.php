@@ -95,14 +95,14 @@ class SchbasAccounting extends Module {
 	private function showUsers () {
 		$schoolyearDesired = TableMng::query('SELECT ID FROM schoolYear WHERE active = 1', true);
 		$schoolyearID = $schoolyearDesired[0]['ID'];
-		$gradeID = TableMng::query("SELECT GradeID FROM jointgradeinschoolyear WHERE SchoolYearID = $schoolyearID",true);
+		$gradeID = TableMng::query("SELECT GradeID FROM jointGradeInSchoolYear WHERE SchoolYearID = $schoolyearID",true);
 		foreach ($gradeID as $grade){
 			$ID = $grade['GradeID'];
 			$SaveTheCows = TableMng::query("SELECT * FROM grade WHERE ID = $ID", true);
 			// Cows stands for Code of worst systematic
 			$gradesAll[] = $SaveTheCows[0];
 		}
-		$users = TableMng::query('SELECT * FROM users', true);
+		$users = TableMng::query('SELECT * FROM users ORDER BY name ASC', true);
 		$users = $this->addGradeLabelToUsers($users);
 		$users = $this->addPayedAmountToUsers($users);
 		if (isset ($_GET['gradeIdDesired'])){
@@ -158,7 +158,7 @@ class SchbasAccounting extends Module {
 					$user['payedAmount'] = $pay['payedAmount'];
 					$user['loanChoice'] = $pay['loanChoice'];
 					foreach ($fees as $fee) {
-						if (isset($user['gradeLabel']) && $fee['grade']==preg_replace("/[^0-9]/", "", $user['gradeLabel'])) {
+						if (isset($user['gradeLabel']) && $fee['grade']==preg_replace("/[^0-9]/", "", $user['gradeLabel'])+1) {
 							if ($user['loanChoice']=="ln") $user['amountToPay']=$fee['fee_normal'];
 							if ($user['loanChoice']=="lr") $user['amountToPay']=$fee['fee_reduced'];
 						}

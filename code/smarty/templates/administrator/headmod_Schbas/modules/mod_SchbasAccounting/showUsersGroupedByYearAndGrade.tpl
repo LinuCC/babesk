@@ -54,9 +54,9 @@ a.selectiveLink {
   {foreach $users as $user}
   <tr>
    <td align="center">{$user.ID}</td>
-   <td align="center">{$user.forename}</td>
-   <td align="center">{$user.name}</td>
-   <td align="center">{$user.username}</td>
+   <td align="left">{$user.forename}</td>
+   <td align="left">{$user.name}</td>
+   <td align="left">{$user.username}</td>
    <td align="center">{$user.gradeLabel}</td>
    <td align="left">	
    
