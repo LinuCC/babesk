@@ -1,7 +1,6 @@
 <?php
 
 require_once PATH_INCLUDE . '/Group.php';
-require_once PATH_INCLUDE . '/Rightsmanager.php';
 require_once PATH_ADMIN . '/AdminInterface.php';
 
 class GroupSettings extends Module {
