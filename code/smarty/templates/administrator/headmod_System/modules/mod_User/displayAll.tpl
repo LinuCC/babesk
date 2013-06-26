@@ -8,6 +8,19 @@
 
 </style>
 
+  <script>
+  $(function() {
+    $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+    $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+  });
+  </script>
+
+<div id="tabs">
+  <ul>
+    <li><a href="#tabs-1">Ausgabeoptionen</a></li>
+    <li><a href="#tabs-2">Benutzerliste</a></li>
+  </ul>
+  <div id="tabs-1">
 <div class="accordion">
 
 	<h3>Spaltenanzeige</h3>
@@ -35,7 +48,8 @@
 		<p class="noUsersDeleted">keine Benutzer gelöscht</p>
 	</div>
 </div>
-
+</div>
+  <div id="tabs-2">
 <div class="pageSelect blueButtons">
 </div>
 
@@ -45,6 +59,8 @@
 	<tbody>
 	</tbody>
 </table>
+</div>
+  </div>
 
 <link rel="stylesheet" href="/resources/demos/style.css" />
 <script src="../smarty/templates/administrator/headmod_System/modules/
