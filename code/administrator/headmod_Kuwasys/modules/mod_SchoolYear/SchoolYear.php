@@ -2,6 +2,7 @@
 
 require_once 'SchoolYearInterface.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
+require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysLanguageManager.php';
 require_once PATH_INCLUDE . '/Module.php';
 
 /**
@@ -28,7 +29,6 @@ class SchoolYear extends Module {
 	public function execute ($dataContainer) {
 
 		$this->entryPoint($dataContainer);
-
 		if (isset($_GET['action'])) {
 			switch ($_GET['action']) {
 				case 'addSchoolYear':
@@ -62,11 +62,12 @@ class SchoolYear extends Module {
 
 		defined('_AEXEC') or die('Access denied');
 
+
 		$this->_dataContainer = $dataContainer;
-		$this->_languageManager = $this->_dataContainer->getLanguageManager();
+		$this->_languageManager = new KuwasysLanguageManager();
 		$this->_languageManager->setModule('SchoolYear');
-		$this->_interface = new SchoolYearInterface($this->relPath, $this->_dataContainer->getSmarty(), $this->
-			_languageManager);
+		$this->_interface = new SchoolYearInterface($this->relPath,
+			$this->_dataContainer->getSmarty(), $this->_languageManager);
 		$this->_syManager = new KuwasysSchoolYearManager();
 	}
 
@@ -137,7 +138,7 @@ class SchoolYear extends Module {
 	}
 
 	private function deleteSchoolYear () {
-		
+
 		if(isset($_POST['dialogConfirmed'])) {
 			$this->deleteSchoolYearInDatabase();
 			$this->_interface->dieMsg($this->_languageManager->getText('finishedDeleteSchoolYear'));
@@ -149,9 +150,9 @@ class SchoolYear extends Module {
 			$this->_interface->displayDeleteSchoolYearConfirmation($this->getSchoolYear());
 		}
 	}
-	
+
 	private function deleteSchoolYearInDatabase () {
-		
+
 		try {
 			$this->_syManager->deleteSchoolYear($_GET['ID']);
 		} catch (MySQLVoidDataException $e) {
@@ -160,7 +161,7 @@ class SchoolYear extends Module {
 			$this->_interface->dieError($this->_languageManager->getText('errorDeleteSchoolYear'));
 		}
 	}
-	
+
 	private function activateSchoolYear () {
 
 		if (isset($_POST['dialogConfirmed'])) {

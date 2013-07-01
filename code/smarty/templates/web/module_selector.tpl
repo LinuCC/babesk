@@ -1,15 +1,16 @@
 {literal}
 <script type="text/javascript">
 
-function setHighlighted($id) {
-	var headmod = document.getElementById('headmod_' + $id);
-	headmod.style["border"] = "5px solid orange";
-}
+$(document).ready(function() {
 
-function setNormal($id) {
-	var headmod = document.getElementById('headmod_' + $id);
-	headmod.style["border"] = "2px solid #99cc66";
-}
+	$('div.headmodule').on('mouseover', function(event) {
+		$(this).css('border', '5px solid orange');
+	});
+
+	$('div.headmodule').on('mouseout', function(event) {
+		$(this).css('border', '2px solid #99cc66');
+	});
+});
 
 </script>
 {/literal}
@@ -19,14 +20,14 @@ function setNormal($id) {
 
     <p>Willkommen! Bitte w&auml;hle ein Modul:</p>
 
-{$counter = 1}
-{foreach $head_modules as $headmod}
-{if {!$headmod.headmod_menu}}
-<div class='headmod_selector' id='headmod_{$counter}'>
-	<a id='headmod_selector_link' href="index.php?section={$headmod.name}"onmouseover='javascript:setHighlighted({$counter})'
-		 onmouseout='javascript:setNormal({$counter})'>{$headmod.display_name}</a>
-</div>
-{/if}
-{$counter = $counter + 1}
+{foreach $modules as $module}
+	{if $module->isDisplayInMenuAllowed()}
+		<a id='headmod_selector_link'
+			href="index.php?section={$module->getName()}">
+			<div class='headmodule' id='headmod_{$counter}'>
+				{$module->getName()}
+			</div>
+		</a>
+	{/if}
 {/foreach}
 </div>

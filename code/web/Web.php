@@ -11,6 +11,8 @@ class Web {
 	private $_loggedIn;
 	private $_interface;
 	private $_userManager;
+	private $_acl;
+	private $_dataContainer;
 
 	///////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -22,113 +24,57 @@ class Web {
 			$this->initEnvironment();
 			$this->initSmarty();
 		}
+
 		require_once PATH_ACCESS . '/UserManager.php';
 		require_once PATH_INCLUDE . '/moduleManager.php';
 		require_once PATH_INCLUDE . '/functions.php';
 		require_once PATH_INCLUDE . '/TableMng.php';
 		require_once PATH_ACCESS . '/LogManager.php';
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
+		require_once PATH_INCLUDE . '/Acl.php';
 
+		TableMng::init ();
 		$this->_userManager = new UserManager();
 		$this->_gsManager = new GlobalSettingsManager ();
 		$this->_moduleManager = new ModuleManager('web');
 		$this->_moduleManager->allowAllModules();
 		$this->_loggedIn = isset($_SESSION['uid']);
 		$this->_interface = new WebInterface($this->_smarty);
-		TableMng::init ();
+		$this->_acl = new Acl();
+		$this->_dataContainer = new DataContainer($this->_smarty,
+			$this->_interface, $this->_acl);
 	}
 
 	///////////////////////////////////////////////////////////////////////
 	//Getters and Setters
 	///////////////////////////////////////////////////////////////////////
-	public function getSmarty () {
+	public function getSmarty() {
 		return $this->_smarty;
 	}
 
 	///////////////////////////////////////////////////////////////////////
 	//Methods
 	///////////////////////////////////////////////////////////////////////
-	public function logOut () {
+	public function logOut() {
 
 		$this->_loggedIn = false;
 		session_destroy();
 	}
 
-	public function logIn () {
+	public function mainRoutine($moduleStr) {
 
-		require_once 'Login.php';
-		$loginManager = new Login($this->_smarty);
-		if($loginManager->login()) {
-			$this->_userManager->updateLastLoginToNow($_SESSION['uid']);
-		}
-	}
-
-	public function mainRoutine ($mod_str) {
-
-		if (!$this->_loggedIn) {
-			$this->logIn();
-			$this->redirect ();
-		}
-
-		if (isset($_GET ['webRedirect'])) { //redirect to a module
-			$this->redirect ();
-		}
-
-
-		///@fix: does this have a purpose?
-		$this->_smarty->assign('status', ''); //???
-
-		$this->addSessionUserdata();
-		$this->checkForMail();
-
-		//module-specific
-		if (isset($userData['credit'])) {
-			$_SESSION['credit'] = $userData['credit'];
-			$this->_smarty->assign('credit', $_SESSION['credit']);
-		}
-
-		//general user data for header etc
-		if ($_SESSION['login_tries'] > 3) {
-			$this->_smarty->assign('login_tries', $_SESSION['login_tries']);
-			$this->_userManager->ResetLoginTries($userData['ID']);
-			$_SESSION['login_tries'] = 0;
-		}
-
-		$this->_smarty->assign('uid', $_SESSION['uid']);
-		$this->_smarty->assign('username', $_SESSION['username']);
-		$this->_smarty->assign('last_login', $_SESSION['last_login']);
-
-		$head_modules = $this->_moduleManager->getHeadModules();
-		$head_mod_arr = array();
-
-		foreach ($head_modules as $head_module) {
-			$head_mod_arr[$head_module->getName()] = array(
-				'name' => $head_module->getName(),
-				'display_name' => $head_module->getDisplayName(),
-				'headmod_menu' => $head_module->getHeadmodMenu());
-		}
-
-		$this->_smarty->assign('head_modules', $head_mod_arr);
-		$this->checkFirstPassword ();
-		if ($mod_str) {
-			try {
-				$this->_moduleManager->execute($mod_str, false);
-			} catch (Exception $e) {
-				$this->_interface->DieError(sprintf('Probleme beim Ausführen des Moduls: %s. Weil: %s', $mod_str, $e->getMessage()));
-			}
-		}
-		else {
-			$birthday = date("m-d",strtotime($this->_userManager->getBirthday($_SESSION['uid'])));
-
-			$this->_smarty->assign('birthday',$birthday);
-			$this->_smarty->display(PATH_SMARTY . '/templates/web/main_menu.tpl');
-		}
+		$this->handleLogin();
+		$this->handleRedirect();
+		$this->initUserdata();
+		$this->loadModules();
+		$this->checkFirstPassword();
+		$this->display($moduleStr);
 	}
 
 	///////////////////////////////////////////////////////////////////////
 	//Implementations
 	///////////////////////////////////////////////////////////////////////
-	private function initEnvironment () {
+	private function initEnvironment() {
 
 		ini_set('session.use_cookies', 1);
 		ini_set('session.use_only_cookies', 0);
@@ -141,7 +87,7 @@ class Web {
 		define('_WEXEC', 1);
 	}
 
-	private function initSmarty () {
+	private function initSmarty() {
 
 		require PATH_SMARTY . "/smarty_init.php";
 		$this->_smarty = $smarty;
@@ -157,7 +103,7 @@ class Web {
 	/**
 	 * Checks if the User has a preset Password and has not changed it yet
 	 */
-	private function checkFirstPassword () {
+	private function checkFirstPassword() {
 
 		$changePasswordOnFirstLoginEnabled = TableMng::query('SELECT value
 			FROM global_settings WHERE `name` = "firstLoginChangePassword"',
@@ -178,32 +124,52 @@ class Web {
 	/**
 	 * handles if the user gets redirected after some seconds
 	 */
-	private function redirect () {
+	private function redirect() {
+
 		try {
-			$redirectDelay = $this->_gsManager->valueGet (
-				GlobalSettings::WEBHP_REDIRECT_DELAY);
-			$redirectTarget = $this->_gsManager->valueGet (
-				GlobalSettings::WEBHP_REDIRECT_TARGET);
+			$data = TableMng::query('SELECT gsDelay.value AS delay,
+					gsTarget.value AS target
+				FROM global_settings gsDelay, global_settings gsTarget
+				WHERE gsDelay.name = "webHomepageRedirectDelay" AND
+					gsTarget.name = "webHomepageRedirectTarget"', true);
+
 		} catch (Exception $e) {
 			return;
 		}
-		if ($redirectTarget != '') {
-			$red = array ('time' => $redirectDelay, 'target' => $redirectTarget
-				);
-			$this->_smarty->assign ('redirection', $red);
+		if ($data[0]['target'] != '') {
+			$red = array (
+				'time' => $data[0]['delay'],
+				'target' => $data[0]['target']);
+			$this->_smarty->assign('redirection', $red);
 		}
+	}
+
+	private function initUserdata() {
+
+		$userData = $this->_userManager->getUserdata($_SESSION['uid']);
+
+		$this->addSessionUserdata($userData);
+		$this->handleModuleSpecificData($userData);
+		$this->loginTriesHandle($userData);
+		$this->addUserdataToSmarty();
 	}
 
 	/**
 	 * Adds Session-vars containing data about the connected client
 	 */
-	private function addSessionUserdata() {
-		$userData = $this->_userManager->getUserdata($_SESSION['uid']);
+	private function addSessionUserdata($userData) {
 		$_SESSION['username'] = $userData['forename'] . ' ' . $userData['name'];
 		$_SESSION['last_login'] = formatDateTime($userData['last_login']);
 		$_SESSION['login_tries'] = $userData['login_tries'];
 		$_SESSION['IP'] = $_SERVER['REMOTE_ADDR'];
 		$_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
+	}
+
+	private function addUserdataToSmarty() {
+
+		$this->_smarty->assign('uid', $_SESSION['uid']);
+		$this->_smarty->assign('username', $_SESSION['username']);
+		$this->_smarty->assign('last_login', $_SESSION['last_login']);
 	}
 
 	/**
@@ -229,6 +195,90 @@ class Web {
 
 		if ($mailcount[0]['count'] > 0) {
 			$this->_smarty->assign('newmail', true);
+		}
+	}
+
+	private function executeModule($name) {
+
+		$path = 'root/web';
+		$modSubPath = explode('|', $name);
+		foreach($modSubPath as $mod) {
+			$path .= "/$mod";
+		}
+		try {
+			$this->_acl->moduleExecute($path, $this->_dataContainer);
+		} catch (AclException $e) {
+			if($e->getCode() == 105) { //Module-Access forbidden
+				$this->_interface->dieError(
+					'Keine Zugriffsberechtigung auf dieses Modul!');
+			}
+		}
+	}
+
+	private function handleLogin() {
+
+		if (!$this->_loggedIn) {
+			$this->logIn();
+			$this->redirect();
+		}
+	}
+
+	private function logIn() {
+
+		require_once 'Login.php';
+		$loginManager = new Login($this->_smarty);
+		if($loginManager->login()) {
+			$this->_userManager->updateLastLoginToNow($_SESSION['uid']);
+		}
+	}
+
+	private function displayCreditsWhenActive($userData) {
+
+		//module-specific
+		if (isset($userData['credit'])) {
+			$_SESSION['credit'] = $userData['credit'];
+			$this->_smarty->assign('credit', $_SESSION['credit']);
+		}
+	}
+
+	private function loginTriesHandle($userData) {
+
+		if ($_SESSION['login_tries'] > 3) {
+			$this->_smarty->assign('login_tries', $_SESSION['login_tries']);
+			$this->_userManager->ResetLoginTries($userData['ID']);
+			$_SESSION['login_tries'] = 0;
+		}
+	}
+
+	private function handleModuleSpecificData($userData) {
+
+		$this->displayCreditsWhenActive($userData);
+		$this->checkForMail();
+	}
+
+	private function loadModules() {
+
+		$this->_acl->accessControlInit($_SESSION['uid']);
+		$webModule = $this->_acl->moduleGet('root/web');
+		$this->_smarty->assign('modules', $webModule->getChilds());
+	}
+
+	private function handleRedirect() {
+		if (isset($_GET ['webRedirect'])) { //redirect to a module
+			$this->redirect();
+		}
+	}
+
+	private function display($moduleStr) {
+
+		if ($moduleStr) {
+			$this->executeModule($moduleStr);
+		}
+		else {
+			$birthday = date("m-d",strtotime($this->_userManager->getBirthday($_SESSION['uid'])));
+
+			$this->_smarty->assign('birthday',$birthday);
+			$this->_smarty->display(PATH_SMARTY . '/templates/web/main_menu.tpl');
 		}
 	}
 }

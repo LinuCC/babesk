@@ -25,8 +25,10 @@ class Kuwasys extends HeadModule {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute($moduleManager, $dataContainer) {
-		$moduleManager->execute("Kuwasys|MainMenu", false);
+	public function execute($dataContainer) {
+		$dataContainer->getAcl()->moduleExecute('root/web/Kuwasys/MainMenu',
+			$dataContainer);
+		// $moduleManager->execute("Kuwasys|MainMenu", false);
 	}
 }
 

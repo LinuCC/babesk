@@ -11,17 +11,19 @@ class Pvau extends HeadModule {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	public function __construct($name, $display_name,$headmod_menu) {
 		parent::__construct($name, $display_name,$headmod_menu);
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute($moduleManager, $dataContainer) {
-		$moduleManager->execute("Pvau|Pvp", false);
+	public function execute($dataContainer) {
+
+		$dataContainer->getAcl()->moduleExecute('root/web/Pvau/Pvp',
+			$dataContainer);
 	}
 }
 ?>

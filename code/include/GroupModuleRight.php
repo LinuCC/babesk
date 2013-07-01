@@ -27,7 +27,6 @@ class GroupModuleRight {
 				$arObj['moduleId'],
 				$arObj['groupId']);
 		}
-
 		return $rights;
 	}
 
@@ -116,6 +115,14 @@ class GroupModuleRight {
 		return $rights;
 	}
 
+	public static function rightsOfUserGet($userId) {
+
+		$res = TableMng::query("SELECT * FROM GroupModuleRights
+			WHERE `userId` = '$userId'", true);
+
+		return $res;
+	}
+
 
 	public function rightsByMultipleModulesGet($modules, $group) {
 
@@ -136,6 +143,20 @@ class GroupModuleRight {
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
+
+	protected function dbArrayConvert($array) {
+
+		$rights = array();
+
+		foreach($array as $right) {
+			$rights[] = new GroupModuleRight(
+				$array['moduleId'],
+				$array['groupId']
+			);
+		}
+
+		return $rights;
+	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Attributes

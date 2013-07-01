@@ -15,10 +15,8 @@ class Acl {
 
 	public function __construct() {
 
-		$mods = NModule::modulesLoad();
-		$this->_moduleroot = $mods[1];
-		$groups = Group::groupsLoad();
-		$this->_grouproot = $groups[1];
+		$this->_moduleroot = NModule::modulesLoad();
+		$this->_grouproot = Group::groupsLoad();
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -34,49 +32,134 @@ class Acl {
 	}
 
 	/**
-	 * Returns all Modules and sets Modules to enabled if Group is allowed to
-	 * have access to them
+	 * Sets the module-Access according to the Groups of the User
 	 *
-	 * @param Group $group The Group which rights to check for
-	 * @return Module The Root-Module containing all other Modules
+	 * @param  int $userId The ID of the User
 	 */
-	public function allowedModulesOfGroupGet($group) {
+	public function accessControlInit($userId) {
 
-		$path = $this->_grouproot->grouppathGet($group);
+		if(!$this->_accessControlInitialized) {
+			$groups = $this->groupsForAccessGet($userId);
+			$this->applyRightsByGroups($groups);
+			$this->_accessControlInitialized = true;
+		}
+		else {
+			throw new Exception('Access-Control already initialized');
+		}
+	}
 
-		$groupIds = array();
-		$groups = Group::groupsGetAllInPath($path,
-			$this->_grouproot);
-		$modRootBuffer = $this->_moduleroot;
+	/**
+	 * Sets the module-Access according to the Group
+	 *
+	 * @param  int $userId The ID of the User
+	 */
+	public function accessControlInitByGroup($group) {
 
-		$allRights = GroupModuleRight::rightsOfGroupsGet($groups);
+		if(!$this->_accessControlInitialized) {
+			$groups = Group::parentsGet($group, $this->_grouproot);
+			$groups[] = $group;
+			$this->applyRightsByGroups($groups);
+			$this->_accessControlInitialized = true;
+		}
+		else {
+			throw new Exception('Access-Control already initialized');
+		}
+	}
 
-		$allowedModuleIds = array();
 
-		foreach($groups as $group) {
-			foreach($allRights as $right) {
-				if($right['groupId'] == $group->getId()) {
-					if($modRootBuffer->getId() != $right['moduleId']) {
-						$mod = &$modRootBuffer->anyChildAsReferenceByIdGet(
-							$right['moduleId']);
-						if(!empty($mod)) {
-							$mod->isEnabledChangeWithChilds(true);
-						}
-					}
-					else {
-						//Dont try to search for root-module
-						$modRootBuffer->isEnabledChangeWithChilds(true);
-					}
-				}
+	public function moduleExecute($path, $dataContainer) {
+
+		$module = $this->_moduleroot->moduleByPathGet($path);
+		if(!empty($module)) {
+			if($module->isAccessAllowed()) {
+				$module->execute($dataContainer);
+			}
+			else {
+				throw new AclException('Module-Access forbidden', 105);
 			}
 		}
+		else {
+			throw new AclException(
+				"Module could not be loaded by path '$path'");
+		}
+	}
 
-		return $modRootBuffer;
+	public function moduleGet($path = 'root', $nonAccessGet = false) {
+
+		if($origMod = $this->_moduleroot->moduleByPathGet($path)) {
+			//Deep Clone of the object
+			$module = unserialize(serialize($origMod));
+			if(!$nonAccessGet) {
+				$module->notAllowedChildsRemove();
+			}
+			return $module;
+		}
+		else {
+			throw new AclException('Modulepath could not be resolved');
+		}
 	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Returns all Groups needed to Set the Access-Rights of the User
+	 *
+	 * @param  int $userId The ID of the User to check his access
+	 * @return Array[Group] The Group-Instances needed to set the rights
+	 */
+	protected function groupsForAccessGet($userId) {
+
+		$groupsToCheck = array();
+
+		if(($usergroups = Group::groupsGetAllOfUser($userId))) {
+
+			foreach($usergroups as $group) {
+				$groupsToCheck[] = $group;
+				//We need to combine the rights with the Parents of the Users
+				//Groups, too
+				$parents = Group::parentsGet(
+					$group,
+					$this->_grouproot);
+				foreach($parents as $parent) {
+					$groupsToCheck[] = $parent;
+				}
+			}
+		}
+		else {
+			throw new AclException('User is in no Group', 104);
+		}
+
+		return $groupsToCheck;
+	}
+
+	protected function applyRightsByGroups($groups) {
+
+		$allRights = GroupModuleRight::rightsOfGroupsGet($groups);
+
+		foreach($groups as $group) {
+			foreach($allRights as $right) {
+				if($right['groupId'] == $group->getId()) {
+					$this->applyRight($right);
+				}
+			}
+		}
+	}
+
+	protected function applyRight($right) {
+
+		try {
+			$this->_moduleroot = NModule::accessChangeWithParents(
+				$right['moduleId'], true, $this->_moduleroot);
+
+		} catch (Exception $e) {
+			throw new AclException(
+				'Could not change the Access of a module',
+				0,
+				$e);
+		}
+	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -84,6 +167,8 @@ class Acl {
 
 	protected $_moduleroot;
 	protected $_grouproot;
+
+	protected $_accessControlInitialized;
 }
 
 ?>

@@ -125,9 +125,12 @@ class GroupSettings extends Module {
 
 		$query = '';
 		$changeCounter = 0;
-		TableMng::sqlSave($_POST['data']);
 
 		if(isset($_POST['data'])) {
+
+			foreach($_POST['data'] as &$data) {
+				TableMng::sqlSave($data);
+			}
 			$query = $this->groupsChangeQuery($_POST['data']);
 		}
 		else {
@@ -294,6 +297,11 @@ class GroupSettings extends Module {
 
 		TableMng::sqlSave($_POST['grouppath']);
 
+		//errornous behavior in Javascript, dblclick executes a single click
+		//too and problems arise - Quickfix with following line
+		if(substr($_POST['grouppath'], -1) == '/') {
+			die(json_encode(array('value' => 'quickfix')));
+		}
 		//init Group
 		$group = $this->_acl->getGrouproot()->groupByPathGet(
 			$_POST['grouppath']);
@@ -308,7 +316,11 @@ class GroupSettings extends Module {
 			$rights = array();
 		}
 		//Init Modules and additional data for them
-		$mods = $this->_acl->allowedModulesOfGroupGet($group);
+		$groupAcl = new Acl();
+		$groupAcl->accessControlInitByGroup($group);
+		$mods = $groupAcl->moduleGet('root', true);
+		// var_dump($mods);
+		// $mods = $this->_acl->allowedModulesOfGroupGet($group);
 		$modulesJstree = $this->modulesFormatForJstree(
 			$mods->moduleAsArrayGet(), $rights);
 
@@ -365,7 +377,7 @@ class GroupSettings extends Module {
 						$title = 'Doppelklick um Modul zu deaktivieren';
 					}
 					else {
-						$title = 'Recht auf dieses Modul wurde von einer übergeordneten Gruppe oder Modul gesetzt; Verändern sie diesen Zugriff dort';
+						$title = 'Recht auf dieses Modul wurde von einer übergeordneten Gruppe oder untergeordnetem Modul gesetzt; Verändern sie diesen Zugriff dort';
 					}
 				}
 				else {
@@ -411,13 +423,17 @@ class GroupSettings extends Module {
 			TableMng::sqlSave($grouppath);
 
 			$group = $this->_acl->getGrouproot()->groupByPathGet($grouppath);
-			$module = $this->_acl->allowedModulesOfGroupGet($group);
+
+			$groupAcl = new Acl();
+			$groupAcl->accessControlInitByGroup($group);
+			$module = $groupAcl->moduleGet('root', true);
+
 			if($module->getId() != $moduleId) {
 				$module = $module->anyChildByIdGet($moduleId);
 			}
 
 			// Reverse the state of the module since the User wants it changed
-			$desiredState = !($module->getIsEnabled());
+			$desiredState = !($module->isAccessAllowed());
 
 			$this->modulerightStatusChangeUpload( $desiredState, $moduleId,
 				$group);

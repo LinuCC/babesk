@@ -15,7 +15,7 @@ class KuwasysDatabaseAccess {
 		require_once 'KuwasysLanguageManager.php';
 
 		$this->_interface = $interface;
-		$this->_languageManager = new KuwasysLanguageManager($this->_interface);
+		$this->_languageManager = new KuwasysLanguageManager();
 		$this->_languageManager->setModule('databaseAccess');
 		$this->initManagers();
 		self::$excOnVoidDoNothing = new DbAccExceptionMods (DbAccExceptionMods::$MySQLVoidDataException, DbAccExceptionMods::$ModDoNothing);

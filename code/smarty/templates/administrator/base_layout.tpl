@@ -88,21 +88,21 @@ $(document).ready(function() {
 	/* Error-Output, if any exist */
 	{if isset($_userErrorOutput)}
 		{foreach $_userErrorOutput as $error}
-			adminInterface.errorShow('{$error}');
+			adminInterface.errorShow('{str_replace("'", "\'", $error)}');
 		{/foreach}
 	{/if}
 
 	/* Message-Output, if any exist */
 	{if isset($_userMsgOutput)}
 		{foreach $_userMsgOutput as $msg}
-			adminInterface.messageShow('{$msg}');
+			adminInterface.messageShow('{str_replace("'", "\'", $msg)}');
 		{/foreach}
 	{/if}
 
 	/* Success-Output, if any exist */
 	{if isset($_userSuccessOutput)}
 		{foreach $_userSuccessOutput as $msg}
-			adminInterface.successShow('{$msg}');
+			adminInterface.successShow('{str_replace("'", "\'", $msg)}');
 		{/foreach}
 	{/if}
 	{literal}

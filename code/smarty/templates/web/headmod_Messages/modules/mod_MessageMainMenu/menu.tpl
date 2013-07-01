@@ -5,12 +5,11 @@
 	color: rgb(150,20,20);
 }
 </style>
-
 {*Show the messages that the user got*}
-{if count($receivedMsg)}
 <p>
 	<b>Post:</b>
 </p>
+{if count($receivedMsg)}
 <table class="dataTable">
 	<tr>
 		<th>Beschreibung</th>
@@ -44,6 +43,8 @@
 	</tr>
 	{/foreach}
 </table>
+{else}
+	<p>Keine Nachrichten erhalten</p>
 {/if}
 
 {*Show the messages that were created by the user*}

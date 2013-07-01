@@ -20,8 +20,10 @@ class Messages extends HeadModule {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute($moduleManager, $dataContainer) {
-		$moduleManager->execute("Messages|MessageMainMenu", false);
+	public function execute($dataContainer) {
+
+		$dataContainer->getAcl()->moduleExecute(
+			'root/web/Messages/MessageMainMenu', $dataContainer);
 	}
 }
 ?>

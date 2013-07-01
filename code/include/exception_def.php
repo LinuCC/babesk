@@ -94,4 +94,10 @@
 			parent::__construct($msg, $code, $previous);
 		}
 	}
+
+	class AclException extends Exception {
+		function __construct($msg, $code = 0, $previous = NULL) {
+			parent::__construct($msg, $code, $previous);
+		}
+	}
 ?>

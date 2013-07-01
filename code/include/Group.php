@@ -31,9 +31,19 @@ class Group {
 
 	public static function groupsLoad() {
 
+		$grouproot = false;
+
 		try {
 			$data = self::groupsFetchAll();
-			return self::nestedSetToGroups($data);
+			$groupArray = self::nestedSetToGroups($data);
+			//get Root
+			foreach($groupArray as $group) {
+				if($group->_name == 'root') {
+					return $group;
+				}
+			}
+
+			throw new Exception('Grouproot not found');
 
 		} catch (Exception $e) {
 			throw new ModuleException("Could not fetch Groups!", 1, $e);
@@ -74,12 +84,19 @@ class Group {
 
 	public static function groupDeleteQueryCreate($group) {
 
-		return "DELETE FROM Groups WHERE lft
-				BETWEEN $group->_lft AND $group->_rgt;
-			UPDATE Groups SET lft=lft-ROUND(( $group->_rgt - $group->_lft +1))
-				WHERE lft > $group->_rgt ;
-			UPDATE Groups SET rgt=rgt-ROUND(( $group->_rgt - $group->_lft +1))
-				WHERE rgt > $group->_rgt;";
+		if($group->_lft > 0 && $group->_rgt > 0) {
+			return "DELETE FROM Groups WHERE lft
+						BETWEEN $group->_lft AND $group->_rgt;
+				UPDATE Groups
+					SET lft=lft-ROUND(( $group->_rgt - $group->_lft +1))
+					WHERE lft > $group->_rgt ;
+				UPDATE Groups
+					SET rgt=rgt-ROUND(( $group->_rgt - $group->_lft +1))
+					WHERE rgt > $group->_rgt;";
+		}
+		else {
+			return false;
+		}
 	}
 
 	public static function groupAdd($name, $parentName) {
@@ -113,26 +130,20 @@ class Group {
 	}
 
 	/**
-	 * Returns all groups that are in the given Path
-	 *
-	 * @param  String $path      The Group-Path, for example
-	 *     'root/administrator/Kuwasys/User'
-	 * @param  Group $rootgroup The root-Element of the Group-hierarchie
-	 * @return Array An Array containing the Groups. the first element of the
-	 *     Array is the first element given in the Path. If the Group could
-	 *     not be found, the Element is false
+	 * returns all Parents of the given Group, beginning from grouproot
+	 * @param  Group $group The Group which Parents to search and return
+	 * @param  Group $grouproot The Root of the Groups from where the search
+	 *     for the parents starts
+	 * @return Array[Groups] the Parent-Groups of the Group
 	 */
-	public static function groupsGetAllInPath($path, $rootgroup) {
+	public static function parentsGet($group, $grouproot) {
 
-		$groupNames = explode('/', $path);
-		$groups = array();
-
-		//we need to get the whole path of each group because we need to check
-		//for the path, not the name
-		foreach($groupNames as $name) {
-			$grouppath = preg_replace("/(.*$name).*/", '$1', $path);
-			$groups[] = $rootgroup->groupByPathGet($grouppath);
-		}
+		$path = $grouproot->grouppathGet($group);
+		//remove last Element, we only want the Parents
+		$splitPath = explode('/', $path);
+		array_pop($splitPath);
+		$path = implode('/', $splitPath);
+		$groups = Group::groupsGetAllInPath($path, $grouproot);
 
 		return $groups;
 	}
@@ -206,6 +217,30 @@ class Group {
 		}
 	}
 
+	/**
+	 * Fetches all Groups of a User and returns them
+	 *
+	 * @param  int $userId The ID of the User
+	 * @return Array[Group] An Array of Group-Objects or false if no Groups
+	 *     found
+	 */
+	public static function groupsGetAllOfUser($userId) {
+
+		$groupArray = TableMng::query(
+			"SELECT g.* FROM Groups g
+			JOIN UserInGroups uig ON uig.groupId = g.ID
+			WHERE uig.userId = '$userId';", true);
+
+		if(count($groupArray)) {
+			$groups = self::arrayToObjects($groupArray);
+		}
+		else {
+			return false;
+		}
+
+		return $groups;
+	}
+
 	public function anyChildByIdGet($id) {
 
 		if(!empty($this->_childs)) {
@@ -226,6 +261,57 @@ class Group {
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Returns all groups that are in the given Path
+	 *
+	 * @param  String $path      The Group-Path, for example
+	 *     'root/administrator/Kuwasys/User'
+	 * @param  Group $rootgroup The root-Element of the Group-hierarchie
+	 * @return Array An Array containing the Groups. the first element of the
+	 *     Array is the first element given in the Path. If the Group could
+	 *     not be found, the Element is false
+	 */
+	protected static function groupsGetAllInPath($path, $rootgroup) {
+
+		$groupNames = explode('/', $path);
+		$groups = array();
+
+		//we need to get the whole path of each group because we need to check
+		//for the path, not the name
+		foreach($groupNames as $name) {
+			$grouppath = preg_replace("/(.*$name).*/", '$1', $path);
+			$groups[] = $rootgroup->groupByPathGet($grouppath);
+		}
+
+		return $groups;
+	}
+
+	/**
+	 * Converts an Array representing Groups to actual Group-Objects
+	 *
+	 * @param  Array $groupArray The Array containing the Group-Data
+	 * @return Array[Group] The Group-Objects or false on Error
+	 */
+	protected static function arrayToObjects($groupsArray) {
+
+		$groups = array();
+
+		foreach($groupsArray as $groupArray) {
+			if(!empty($groupArray['ID'])) {
+				$groups[] = new Group(
+					$groupArray['ID'],
+					$groupArray['name'],
+					$groupArray['lft'],
+					$groupArray['rgt']);
+			}
+			else {
+				return false;
+			}
+		}
+
+		return $groups;
+	}
 
 	protected function childsAsArrayGet() {
 

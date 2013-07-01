@@ -11,17 +11,19 @@ class Fits extends HeadModule {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	public function __construct($name, $display_name,$headmod_menu) {
 		parent::__construct($name, $display_name,$headmod_menu);
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute($moduleManager, $dataContainer) {
-		$moduleManager->execute("Fits|Fmenu", false);
+	public function execute($dataContainer) {
+
+		$dataContainer->getAcl()->moduleExecute('root/web/Fits/Fmenu',
+			$dataContainer);
 	}
 }
 ?>

@@ -19,6 +19,7 @@ require_once 'UsersCsvImport.php';
 require_once 'UserCsvImport.php';
 require_once 'UsersCreateParticipationConfirmationPdf.php';
 require_once 'UsersEmailParticipationConfirmation.php';
+require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysLanguageManager.php';
 
 /**
  * Main-Class for the Module Users
@@ -129,7 +130,7 @@ class Users extends Module {
 		$this->_classManager = new KuwasysClassManager();
 		$this->_jointUsersInClass = new KuwasysJointUsersInClass();
 		$this->_interface = new UsersInterface($this->relPath, $dataContainer->getSmarty());
-		$this->_languageManager = $dataContainer->getLanguageManager();
+		$this->_languageManager = new KuwasysLanguageManager();
 		$this->_languageManager->setModule('Users');
 		require_once PATH_ADMIN . $this->relPath . '../../KuwasysDatabaseAccess.php';
 		$this->_databaseAccessManager = new KuwasysDatabaseAccess($this->_interface);

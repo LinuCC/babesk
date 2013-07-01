@@ -56,6 +56,7 @@ class MessageMainMenu extends Module {
 	}
 
 	private function init() {
+
 		defined('_WEXEC') or die("Access denied");
 		global $smarty;
 		$this->_smarty = $smarty;

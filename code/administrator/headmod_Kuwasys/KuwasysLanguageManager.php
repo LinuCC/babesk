@@ -9,9 +9,12 @@ class KuwasysLanguageManager {
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	////////////////////////////////////////////////////////////////////////////////
-	public function __construct ($interface, $pathToXml = NULL) {
+	public function __construct ($pathToXml = NULL) {
 
-		$this->_interface = $interface;
+		if(isset($pathToXml)) {
+		throw new Exception('BLAH');
+		}
+
 		$this->unsetModule();
 		$this->initPathToXml($pathToXml);
 		$this->loadXml();
@@ -44,20 +47,14 @@ class KuwasysLanguageManager {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
-	public function getText ($nameOfTextElement, $throwWhenNotFound = False) {
+	public function getText ($nameOfTextElement) {
 
 		if (!isset($this->_xmlModuleObject)) {
 			throw new BadMethodCallException('You need to set a Module first before using the getText()-function!');
 		}
 		if (!isset($this->_xmlModuleObject->text->$nameOfTextElement)) {
 			$error = sprintf('The Text-Element "%s" does not exist. Expect missing/wrong text!', $nameOfTextElement);
-			if ($throwWhenNotFound) {
-				throw new Exception ($error);
-			}
-			else {
-				$this->_interface->showError($error);
-			}
-			return false;
+			throw new Exception ($error);
 		}
 		return $this->_xmlModuleObject->text->$nameOfTextElement;
 	}
@@ -70,7 +67,7 @@ class KuwasysLanguageManager {
 				foreach ($this->_simpleXmlObject as $xmlModule) {
 					if ($xmlModule->name == $moduleName) {
 						if (!isset($xmlModule->text->$nameOfTextElement)) {
-							$this->_interface->showError(sprintf(
+							throw new Exception(sprintf(
 								'The Text-Element "%s" does not exist. Expect missing/wrong text!', $nameOfTextElement));
 							return false;
 						}
@@ -102,7 +99,7 @@ class KuwasysLanguageManager {
 		$this->_simpleXmlObject = simplexml_load_file($this->_pathToXml);
 
 		if (!$this->_simpleXmlObject) {
-			$this->_interface->dieError(
+			throw new Exception(
 				'Could not load XML for the KuwasysLanguageManager! Please Check the Path and name of the file:<br>' .
 				$this->_pathToXml);
 		}

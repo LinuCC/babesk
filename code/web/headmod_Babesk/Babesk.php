@@ -11,25 +11,27 @@ class Babesk extends HeadModule {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	public function __construct($name, $display_name,$headmod_menu) {
 		parent::__construct($name, $display_name,$headmod_menu);
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute($moduleManager, $dataContainer) {
-		
+	public function execute($dataContainer) {
+
 		require_once PATH_ACCESS . '/UserManager.php';
 		$userManager = new UserManager();
-		
+
 		if ($userManager->firstPassword($_SESSION['uid'])) {
-			$moduleManager->execute('Babesk|ChangePassword', false);
+			$dataContainer->getAcl()->moduleExecute(
+				'root/web/Babesk/ChangePassword', $dataContainer);
 		}
 		else {
-			$moduleManager->execute("Babesk|Menu", false);
+			$dataContainer->getAcl()->moduleExecute('root/web/Babesk/Menu',
+				$dataContainer);
 		}
 	}
 }

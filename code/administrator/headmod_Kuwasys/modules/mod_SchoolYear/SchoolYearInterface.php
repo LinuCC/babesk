@@ -24,7 +24,6 @@ class SchoolYearInterface extends AdminInterface {
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
 	public function displayMainMenu () {
-
 		$this->smarty->display($this->tplFilePath . 'mainMenu.tpl');
 	}
 
@@ -69,7 +68,7 @@ class SchoolYearInterface extends AdminInterface {
 
 	public function displayChangeSchoolYear ($schoolYear) {
 
-		
+
 		$inputContainer = array(
 			0 => array(
 				'name'			 => 'label',
@@ -90,17 +89,17 @@ class SchoolYearInterface extends AdminInterface {
 		$actionString = 'changeSchoolYear&ID=' . $schoolYear['ID'];
 		$headString = $this->languageManager->getText('changeSchoolYearHead');
 		$submitString = $this->languageManager->getText('changeSchoolYearSubmit');
-		
+
 		$this->generalForm($headString, $this->sectionString, $actionString, $inputContainer, $submitString);
 	}
-	
+
 	public function displayDeleteSchoolYearConfirmation ($schoolYear) {
-		
+
 		$promptMessage = sprintf($this->languageManager->getText('deleteSchoolYearPrompt'), $schoolYear ['label']);
 		$actionString = 'deleteSchoolYear&ID=' . $schoolYear ['ID'];
 		$confirmedString = $this->languageManager->getText('deleteSchoolYearConfirm');
 		$notConfirmedString = $this->languageManager->getText('deleteSchoolYearNotConfirm');
-		
+
 		$this->confirmationDialog($promptMessage, $this->sectionString, $actionString, $confirmedString, $notConfirmedString);
 	}
 	////////////////////////////////////////////////////////////////////////////////

@@ -20,8 +20,10 @@ class Settings extends HeadModule {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute($moduleManager, $dataContainer) {
-		$moduleManager->execute("Settings|SettingsMainMenu", false);
+	public function execute($dataContainer) {
+
+		$dataContainer->getAcl()->moduleExecute(
+			'root/web/Settings/SettingsMainMenu', $dataContainer);
 	}
 }
 

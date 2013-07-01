@@ -7,22 +7,22 @@ require_once PATH_INCLUDE . '/constants.php';
  * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
  */
 class Login {
-	//////////
-	//////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////
 	//Constructor
-	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
 	public function __construct ($smarty) {
 		$this->_smarty = $smarty;
 		$this->setUpUserManager();
 		$this->setUpGlobalSettingsManager ();
 	}
-	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
 	//Getters and Setters
-	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
 
-	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
 	//Methods
-	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * login-function
@@ -32,28 +32,28 @@ class Login {
 	 * @param string $formpass
 	 * @return true if successfuly logged in
 	 */
-	public function login () {
+	public function login() {
 
 		if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['login'], $_POST['password'])) {
 			$this->entryPoint();
-			return $this->checkLogin ();
+			return $this->checkLogin();
 		}
 		else {
-			$this->dieShowLoginForm ();
+			$this->dieShowLoginForm();
 		}
 	}
-	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
 	//Implementations
-	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
 
-	private function entryPoint () {
+	private function entryPoint() {
 
 		defined('_WEXEC') or die("Access denied");
 		$this->_username = $_POST['login'];
 		$this->_password = $_POST['password'];
 	}
 
-	private function checkLogin () {
+	private function checkLogin() {
 
 		$this->easterEggLeg();
 		$this->checkLoginInput();
@@ -64,7 +64,7 @@ class Login {
 		return true;
 	}
 
-	private function setUpUserManager () {
+	private function setUpUserManager() {
 
 		require_once PATH_ACCESS . '/UserManager.php';
 		$this->_userManager = new UserManager();
@@ -75,7 +75,7 @@ class Login {
 		$this->_globalSettingsManager = new GlobalSettingsManager ();
 	}
 
-	private function setUserIdByUsername () {
+	private function setUserIdByUsername() {
 
 		try {
 			$this->_userId = $this->_userManager->getUserID($this->_username);
@@ -88,7 +88,7 @@ class Login {
 		}
 	}
 
-	private function checkLoginInput () {
+	private function checkLoginInput() {
 
 		try {
 			inputcheck($this->_username, 'name', 'Benutzername');
@@ -99,8 +99,8 @@ class Login {
 		}
 	}
 
-	private function dieShowLoginForm () {
-		if ($this->isWebloginHelptext ()) {
+	private function dieShowLoginForm() {
+		if ($this->isWebloginHelptext()) {
 			$this->_smarty->assign ('showLoginButton', true);
 		}
 		else {
@@ -113,7 +113,7 @@ class Login {
 	/**
 	 * Checks if the global Setting GlobalSettings::WEBLOGIN_HELPTEXT is existing
 	 */
-	private function isWebloginHelptext () {
+	private function isWebloginHelptext() {
 		try {
 			$txt = $this->_globalSettingsManager->valueGet (GlobalSettings::WEBLOGIN_HELPTEXT);
 		} catch (Exception $e) {
@@ -122,7 +122,7 @@ class Login {
 		return ($txt != '');
 	}
 
-	private function easterEggLeg () {
+	private function easterEggLeg() {
 
 		if ($this->_username == 'BaBeSK') {
 			$this->assignErrorToSmarty('<marquee>' . file_get_contents("../credits.txt") . '</marquee>');
@@ -130,12 +130,12 @@ class Login {
 		}
 	}
 
-	private function assignErrorToSmarty ($str) {
+	private function assignErrorToSmarty($str) {
 
 		$this->_smarty->assign('error', $str);
 	}
 
-	private function checkPassword () {
+	private function checkPassword() {
 
 		if(!$this->_userManager->checkPassword($this->_userId, $this->_password)) {
 
@@ -145,7 +145,7 @@ class Login {
 		}
 	}
 
-	private function checkLockedAccount () {
+	private function checkLockedAccount() {
 
 		if($this->_userManager->checkAccount($this->_userId)) {
 			$this->assignErrorToSmarty(ACCOUNT_LOCKED);
@@ -153,7 +153,7 @@ class Login {
 		}
 	}
 
-	private function addLoginTryToUser () {
+	private function addLoginTryToUser() {
 
 		try {
 			$this->_userManager->AddLoginTry($this->_userId);
@@ -163,14 +163,14 @@ class Login {
 		}
 	}
 
-	private function finishSuccessfulLogin () {
+	private function finishSuccessfulLogin() {
 
 		$_SESSION['uid'] = $this->_userId;
 	}
 
-	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
 	//Attributes
-	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
 
 	private $_smarty;
 

@@ -30,7 +30,7 @@ class HeadModule {
 	public function getDisplayName() {
 		return $this->displayName;
 	}
-	
+
 	public function getHeadmodMenu() {
 		return $this->headmod_menu;
 	}
@@ -73,7 +73,7 @@ class HeadModule {
 		throw new ModuleNotFoundException('ChildModule not found: "' . $mod_name . '"!');
 	}
 
-	public function execute($moduleManager, $dataContainer) {
+	public function execute($dataContainer) {
 		die('No entrypoint of this Headmodule given');
 	}
 

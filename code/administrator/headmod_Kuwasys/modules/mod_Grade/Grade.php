@@ -5,6 +5,7 @@ require_once PATH_ACCESS_KUWASYS . '/KuwasysGradeManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysJointGradeInSchoolYear.php';
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysLanguageManager.php';
 
 /**
  * Grade-Module
@@ -62,7 +63,7 @@ class Grade extends Module {
 		defined('_AEXEC') or die('Access denied');
 
 		$this->_dataContainer = $dataContainer;
-		$this->_languageManager = $this->_dataContainer->getLanguageManager();
+		$this->_languageManager = new KuwasysLanguageManager();
 		$this->_languageManager->setModule('Grade');
 		$this->_interface = new GradeInterface($this->relPath, $this->_dataContainer->getSmarty(), $this->
 			_languageManager);

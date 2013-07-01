@@ -13,11 +13,14 @@ class NModule {
 	//Constructor
 	/////////////////////////////////////////////////////////////////////
 
-	public function __construct($ID, $name, $isEnabled) {
+	public function __construct($ID, $name, $accessAllowed, $executablePath,
+		$displayInMenu) {
 
 		$this->_id = $ID;
 		$this->_name = $name;
-		$this->_isEnabled = $isEnabled;
+		$this->_accessAllowed = $accessAllowed;
+		$this->_executablePath = $executablePath;
+		$this->_displayInMenu = $displayInMenu;
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -36,22 +39,57 @@ class NModule {
 		return $this->_childs;
 	}
 
+	public function isDisplayInMenuAllowed() {
+		return (boolean) $this->_displayInMenu;
+	}
+
+	/**
+	 * Loads and Executes the Module
+	 *
+	 * @todo  Parameter are long outdated; We need to change the parameters,
+	 *     but that means changing every existing modulefile, too!
+	 */
+	public function execute($dataContainer) {
+
+		if(file_exists(PATH_CODE . "/$this->_executablePath")) {
+			require_once PATH_CODE . "/$this->_executablePath";
+
+			$executablePathPieces = explode('/', $this->_executablePath);
+			array_shift($executablePathPieces); //remove Subprogram
+			array_pop($executablePathPieces); //Remove class-File
+			$subPathPart = implode('/', $executablePathPieces);
+			$subPath = "/$subPathPart/";
+
+			if(class_exists($classname = $this->_name)) {
+				$module = new $classname($classname, $classname, $subPath);
+				$module->execute($dataContainer);
+			}
+			else {
+				throw new Exception("Could not load Module-Class $classname");
+			}
+		}
+		else {
+			throw new Exception("Could not find Module-File in Path " .
+				"'$this->_executablePath'", 104);
+		}
+	}
+
 	/**
 	 * Returns a boolean describing if the module can be used by the user
 	 *
 	 * @return Boolean true if enabled, else false
 	 */
-	public function getIsEnabled() {
-		return $this->_isEnabled;
+	public function isAccessAllowed() {
+		return $this->_accessAllowed;
 	}
 
 	/**
 	 * Sets a boolean describing if the module can be used by the user
 	 *
-	 * @param Boolean $isEnabled true if enabled, else false
+	 * @param Boolean $accessAllowed true if enabled, else false
 	 */
-	public function setIsEnabled($isEnabled) {
-		$this->_isEnabled = $isEnabled;
+	public function setAccessAllowed($accessAllowed) {
+		$this->_accessAllowed = $accessAllowed;
 		return $this;
 	}
 
@@ -65,7 +103,14 @@ class NModule {
 
 		try {
 			$data = self::modulesFetchAll();
-			return self::nestedSetToModules($data);
+			$moduleArray = self::nestedSetToModules($data);
+			//find root
+			foreach($moduleArray as $mod) {
+				if($mod->_name == 'root') {
+					return $mod;
+				}
+			}
+			throw new Exception('Root-Module not found!');
 
 		} catch (Exception $e) {
 			throw new ModuleException("Could not fetch Modules!", 1, $e);
@@ -74,11 +119,11 @@ class NModule {
 
 	/**
 	 * Fetches a ModuleChild beginning by this Instance's Path
-	 * @param  String  $path      The (relative) Path of the module, for
-	 *     example administrator/Kuwasys/User
+	 * @param  String $path The (relative) Path of the module, for
+	 *     example root/administrator/Kuwasys/User
 	 * @param  boolean $checkThis If true, function checks if path starts with
 	 *     this module-instance
-	 * @return Module The Module if found, false if Path could not be resolved
+	 * @return Module The Module if found, false if not
 	 */
 	public function moduleByPathGet($path, $checkThis = true) {
 
@@ -176,7 +221,7 @@ class NModule {
 
 	public static function IsEnabledStateCompare($module1, $module2) {
 
-		if($module1->_isEnabled == $module2->_isEnabled) {
+		if($module1->_accessAllowed == $module2->_accessAllowed) {
 			return true;
 		}
 		else {
@@ -186,28 +231,64 @@ class NModule {
 
 	public function moduleAsArrayGet() {
 
-		$data = array('name' => $this->_name, 'id' => $this->_id,
-			'enabled' => $this->_isEnabled);
+		$data = array(
+			'name' => $this->_name,
+			'id' => $this->_id,
+			'enabled' => $this->_accessAllowed,
+			'displayInMenu' => $this->_displayInMenu);
 		$childs = $this->childsAsArrayGet($this->_childs);
 		$data['childs'] = $childs;
 		return $data;
 	}
 
-	public function &anyChildAsReferenceByIdGet($id) {
+	/**
+	 * Changes the Access of the (Child-) Module with $moduleId
+	 *
+	 * @param  int $moduleId The ID of this module or any of the Childs of it
+	 * @param  boolean $accessAllowed If Module-Access is allowed or not
+	 * @throws  Exception If This Module-Instance and no Child of it has this
+	 *     module-ID
+	 */
+	public function accessChangeWithChilds($moduleId, $accessAllowed) {
 
-		if(!empty($this->_childs)) {
-			foreach($this->_childs as &$child) {
-				if($child->_id == $id) {
-					return $child;
-				}
-				else {
-					if(($ret = $child->anyChildByIdGet($id))) {
-						return $ret;
-					}
-				}
+		if($this->_id == $moduleId) {
+			$this->accessAllowedChangeWithChilds($accessAllowed);
+		}
+		else {
+			//Change the access of the Child with the ID
+			$child = &$this->anyChildByIdGetAsReference($moduleId);
+			if(!empty($child)) {
+				$child->accessAllowedChangeWithChilds($accessAllowed);
+			}
+			else {
+				throw new Exception("Module with Id $moduleId not found");
 			}
 		}
-		return NULL;
+	}
+
+	/**
+	 * Changes the Access of the Module with $moduleId and its Parents
+	 *
+	 * @param  int $moduleId The ID of the rootmodule or any of the Childs
+	 *     within it
+	 * @param  boolean $accessAllowed If Module-Access is allowed or not
+	 * @param  NModule $rootmodule The Parents gets changed and the moduleId
+	 *     gets searched from this module on
+	 * @return NModule the changed rootmodule
+	 * @throws  Exception If This Module-Instance and no Child of it has this
+	 *     module-ID
+	 */
+	public static function accessChangeWithParents(
+		$moduleId,
+		$accessAllowed,
+		$rootmodule) {
+
+		//rootmodule gets changed as reference
+		self::accessChangeWithParentsHelper($moduleId,
+											$rootmodule,
+											$accessAllowed);
+
+		return $rootmodule;
 	}
 
 	public function anyChildByIdGet($id) {
@@ -227,12 +308,26 @@ class NModule {
 		return false;
 	}
 
-	public function isEnabledChangeWithChilds($isEnabled) {
+	public function accessAllowedChangeWithChilds($accessAllowed) {
 
-		$this->_isEnabled = (boolean)$isEnabled;
+		$this->_accessAllowed = (boolean)$accessAllowed;
 		if(!empty($this->_childs)) {
 			foreach($this->_childs as $child) {
-				$child->isEnabledChangeWithChilds($isEnabled);
+				$child->accessAllowedChangeWithChilds($accessAllowed);
+			}
+		}
+	}
+
+	public function notAllowedChildsRemove() {
+
+		if(count($this->_childs)) {
+			foreach($this->_childs as $key => $child) {
+				if($child->_accessAllowed) {
+					$child->notAllowedChildsRemove();
+				}
+				else {
+					unset($this->_childs[$key]);
+				}
 			}
 		}
 	}
@@ -249,7 +344,9 @@ class NModule {
 				$childArray[] = array(
 					'id' => $child->_id,
 					'name' => $child->_name,
-					'enabled' => $child->_isEnabled,
+					'enabled' => $child->_accessAllowed,
+					'executablePath' => $child->_executablePath,
+					'displayInMenu' => $child->_displayInMenu,
 					'childs' => $child->childsAsArrayGet());
 			}
 		}
@@ -264,6 +361,8 @@ class NModule {
 
 		$data = TableMng::query("SELECT node.ID AS ID, node.lft AS lft,
 			node.rgt AS rgt, node.name AS name, node.enabled AS enabled,
+			node.executablePath AS executablePath,
+			node.displayInMenu AS displayInMenu,
 				(COUNT(parent.ID) - 1) AS level
 			FROM Modules AS node, Modules AS parent
 			WHERE node.lft BETWEEN parent.lft AND parent.rgt
@@ -304,11 +403,33 @@ class NModule {
 					$i++;
 				}
 			}
-			$helper[$item['ID']] = new NModule($item['ID'], $item['name'], $item['enabled']);
+			$helper[$item['ID']] = new NModule(
+				$item['ID'],
+				$item['name'],
+				$item['enabled'],
+				$item['executablePath'],
+				$item['displayInMenu']);
 			$level = $item['level'];
 		}
 
 		return $struct;
+	}
+
+	public function &anyChildByIdGetAsReference($id) {
+
+		if(!empty($this->_childs)) {
+			foreach($this->_childs as &$child) {
+				if($child->_id == $id) {
+					return $child;
+				}
+				else {
+					if(($ret = $child->anyChildByIdGet($id))) {
+						return $ret;
+					}
+				}
+			}
+		}
+		return NULL;
 	}
 
 	/**
@@ -360,6 +481,28 @@ class NModule {
 		TableMng::getDb()->autocommit(true);
 	}
 
+	protected static function accessChangeWithParentsHelper($searchedId,
+		&$module, $access) {
+
+		if($module->_id == $searchedId) {
+			$module->_accessAllowed = $access;
+			return true;
+		}
+		else {
+			if(count($module->_childs)) {
+				foreach($module->_childs as &$child) {
+					$ret = self::accessChangeWithParentsHelper($searchedId,
+						$child, $access);
+					if($ret) {
+						$module->_accessAllowed = $access;
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
@@ -380,7 +523,7 @@ class NModule {
 	 * If the module is Enabled in general => if it can be accessed
 	 * @var boolean
 	 */
-	protected $_isEnabled;
+	protected $_accessAllowed;
 
 	/**
 	 * The Childs of this module
@@ -392,7 +535,7 @@ class NModule {
 
 	protected $_executablePath;
 
-	protected static $_rootModule;
+	protected $_displayInMenu;
 }
 
 ?>

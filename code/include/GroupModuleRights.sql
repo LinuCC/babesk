@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS `GroupModuleRights` (
 	`groupId` int(11) NOT NULL,
 	`moduleId` int(11) NOT NULL,
 	`accessAllowed` boolean NOT NULL
-) AUTO_INCREMENT=1 ;
+);
 
 -- Some Indexing
 ALTER TABLE GroupModuleRights

@@ -6,6 +6,7 @@ require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysFilterAndSort.php';
 require_once 'ClassesCsvImport.php';
 require_once 'ClassesCreateTable.php';
 require_once 'ClassesUnregisterUser.php';
+require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysLanguageManager.php';
 
 /**
  *
@@ -82,7 +83,7 @@ class Classes extends Module {
 
 		$this->_dataContainer = $dataContainer;
 		$this->_interface = new ClassesInterface($this->relPath, $this->_dataContainer->getSmarty());
-		$this->_languageManager = $this->_dataContainer->getLanguageManager();
+		$this->_languageManager = new KuwasysLanguageManager();
 		$this->_languageManager->setModule('Classes');
 		require_once PATH_ADMIN . $this->relPath . '../../KuwasysDatabaseAccess.php';
 		$this->_databaseAccessManager = new KuwasysDatabaseAccess($this->_interface);

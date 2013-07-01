@@ -7,8 +7,10 @@ require_once PATH_ADMIN . '/admin_functions.php';
 require_once PATH_ACCESS . "/LogManager.php";
 require_once PATH_INCLUDE . "/functions.php";
 require_once PATH_INCLUDE . '/exception_def.php';
-require_once PATH_INCLUDE . '/moduleManager.php';
 require_once PATH_INCLUDE . '/DataContainer.php';
+require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_INCLUDE . '/HeadModule.php';
+require_once 'Login.php';
 require_once 'AdminInterface.php';
 require_once 'locales.php';
 
@@ -23,7 +25,7 @@ class Administrator {
 	//Constructor
 	////////////////////////////////////////////////////////////////////////
 
-	public function __construct () {
+	public function __construct() {
 
 		if(!isset($_SESSION)) {
 			$this->initEnvironment();
@@ -35,33 +37,34 @@ class Administrator {
 		$this->_adminInterface = new AdminInterface(NULL, $this->_smarty);
 		$this->_logger = new LogManager();
 		$this->_acl = new Acl();
-		$this->_moduleManager = new ModuleManager('administrator',
-			$this->_adminInterface);
-		$this->_moduleManager->setDataContainer(new DataContainer(
-			$this->_smarty, $this->_adminInterface, $this->_acl));
+		$this->loadVersion();
+		$this->_dataContainer = new DataContainer(
+			$this->_smarty,
+			$this->_adminInterface,
+			$this->_acl);
 	}
 
 	////////////////////////////////////////////////////////////////////////
 	//Getters and Setters
 	////////////////////////////////////////////////////////////////////////
 
-	public function getUserLoggedIn () {
+	public function getUserLoggedIn() {
 		return $this->_userLoggedIn;
 	}
 
-	public function setUserLoggedIn ($userLoggedIn) {
+	public function setUserLoggedIn($userLoggedIn) {
 		$this->_userLoggedIn = $userLoggedIn;
 	}
 
-	public function getSmarty () {
+	public function getSmarty() {
 		return $this->_smarty;
 	}
 
-	public function getLogger () {
+	public function getLogger() {
 		return $this->_logger;
 	}
 
-	public function getModuleManager () {
+	public function getModuleManager() {
 		return $this->_moduleManager;
 	}
 
@@ -69,7 +72,28 @@ class Administrator {
 	//Methods
 	////////////////////////////////////////////////////////////////////////
 
-	public function initUserInterface () {
+	public function run() {
+
+		$smarty = $this->_smarty;
+		$logger = $this->_logger;
+
+		$login = new Login($this->_smarty);
+		if($login->loginCheck()) {
+			$this->accessControlInit();
+			$this->initUserInterface();
+			if(isset($_GET['section'])) {
+				$this->executeModule($_GET['section'], false);
+			}
+			else {
+				$this->MainMenu();
+			}
+		}
+		else {
+			die('Not logged in');
+		}
+	}
+
+	public function initUserInterface() {
 
 		$this->_smarty->assign('_ADMIN_USERNAME', $_SESSION['username']);
 		$this->_smarty->assign('sid', htmlspecialchars(SID));
@@ -78,61 +102,36 @@ class Administrator {
 
 	}
 
-	public function userLogOut () {
+	public function executeModule($moduleName) {
 
-		$login = False;
-		session_destroy();
-		$this->showLogin();
+		$modSubPath = explode('|', $moduleName);
+		$headmod = $modSubPath[0];
+		$mod = $modSubPath[1];
+		$path = "root/administrator/$headmod/$mod";
+		try {
+			$this->_acl->moduleExecute($path, $this->_dataContainer);
+
+		} catch (Exception $e) {
+			$this->_adminInterface->dieError(
+				'Konnte das Modul nicht ausführen:' . $e->getMessage());
+		}
 	}
 
-	public function executeModule ($moduleName) {
+	public function MainMenu() {
 
-		$smarty = $this->_smarty;
-		$this->_moduleManager->execute($moduleName);
-	}
-
-	public function MainMenu () {
-
-		$headmodules = $this->_acl->getModuleroot()->moduleByPathGet(
-			'root/administrator')->getChilds();
+		$adminModule = $this->_acl->moduleGet('root/administrator');
 
 		$this->_smarty->assign('is_mainmenu', true);
-		// $this->_smarty->assign('modules', $allowedModules);
-		$this->_smarty->assign('headmodules', $headmodules);
-		// $this->_smarty->assign('module_names', $this->_moduleManager->getModuleDisplayNames());
+		$this->_smarty->assign('headmodules', $adminModule->getChilds());
 		$this->_smarty->display('administrator/menu.tpl');
 	}
 
-	public function testLogin () {
-
-		if (!$this->getUserLoggedIn()) {
-			if ($this->showLogin())
-				return true;
-			else
-				return false;
-		}
-		else {
-			return true;
-		}
-
-	}
-
-	public function showLogin () {
-
-		$smarty = $this->_smarty;
-		require_once "login.php";
-
-		if ($login) //coming from login.php, another problem...
-			return true;
-		else
-			return false;
-	}
 
 	////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////
 
-	private function initEnvironment () {
+	private function initEnvironment() {
 
 		$this->setPhpIni();
 
@@ -144,7 +143,7 @@ class Administrator {
 		error_reporting(E_ALL);
 	}
 
-	private function initSmarty () {
+	private function initSmarty() {
 
 		require_once PATH_SMARTY . "/smarty_init.php";
 
@@ -157,12 +156,41 @@ class Administrator {
 		$smarty->assign('babesk_version', $version);
 	}
 
-	private function setPhpIni () {
+	private function setPhpIni() {
 
 		ini_set('display_errors', 1);
 		ini_set('session.use_cookies', 1);
 		ini_set('session.use_only_cookies', 0);
 		ini_set("default_charset", "utf-8");
+	}
+
+	private function loadVersion() {
+
+		$version = '';
+
+		if(file_exists('../version.txt')) {
+			$version = file_get_contents('../version.txt');
+		}
+		$this->_smarty->assign('babesk_version', $version);
+	}
+
+	private function accessControlInit() {
+
+		try {
+			$this->_acl->accessControlInit($_SESSION['UID']);
+
+		} catch(AclException $e) {
+			if($e->getCode() == 104) {
+				$this->_smarty->assign('status',
+					'Account hat keine Admin-Berechtigung');
+				$this->_smarty->display('administrator/login.tpl');
+				die();
+			}
+			else {
+				$this->_adminInterface->dieError(
+					'Konnte den Zugriff nicht einrichten!');
+			}
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////
@@ -203,6 +231,10 @@ class Administrator {
 	 * @var Logs
 	 */
 	private $_logger;
+
+	private $_dataContainer;
+
+	private $_login;
 }
 
 ?>

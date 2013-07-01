@@ -279,11 +279,12 @@ var group = new function() {
 		 */
 		var onSuccess = function(data) {
 
+			console.log(data);
 			try{
 				var res = $.parseJSON(data);
 			} catch(e) {
 				adminInterface.errorShow('Could not parse Servermessage');
-				adminInterface.messageShow(reloadMessage);
+				that.fetch();
 				return false;
 			}
 			if(res.value == 'success') {
@@ -293,17 +294,9 @@ var group = new function() {
 				adminInterface.errorShow('Error:' + res.message);
 				adminInterface.errorShow('Konnte die Gruppe nicht ' +
 					'verändern');
-				adminInterface.messageShow(reloadMessage);
+				that.fetch();
 				return false;
 			}
 		};
-
-		/**
-		 * Displays a reload-Site-Message to the User
-		 */
-		var reloadMessage = function() {
-			adminInterface.noticeShow('Um den aktuellen Status der Gruppen' +
-				'zu sehen, laden sie die Seite bitte neu');
-		}
 	};
 };

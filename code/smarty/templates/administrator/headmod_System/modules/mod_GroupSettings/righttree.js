@@ -5,6 +5,7 @@ var rights = new function() {
 	var showRights = false;
 	var that = this;
 	var tree = undefined;
+	var tempScrollPos = 0;
 
 	that.update = function() {
 
@@ -13,6 +14,7 @@ var rights = new function() {
 		}
 
 		var path = group.selectedGroupPathGet();
+		tempScrollPos = $(window).scrollTop();
 
 		$('fieldset.grouprights').show(500);
 
@@ -33,6 +35,7 @@ var rights = new function() {
 						'Konnte die Rechte nicht abrufen!');
 				}
 			});
+
 		}
 		else {
 			alert('Wählen sie zuerst eine Gruppe aus!');
@@ -54,6 +57,9 @@ var rights = new function() {
 		}
 		if(res.value == 'success') {
 			treeUpdate(res.data);
+		}
+		else if(res.value == 'quickfix') {
+			//Just buggy behaviour of dblclick and jstree, ignore
 		}
 		else if(res.value == 'error') {
 			adminInterface.errorShow(res.message);
@@ -86,6 +92,7 @@ var rights = new function() {
 					$(this).children('a').addClass('changeNotAllowed');
 				}
 			});
+			$(window).scrollTop(tempScrollPos);
 		};
 
 		/**
