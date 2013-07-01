@@ -24,6 +24,12 @@ $(document).ready(function() {
 		start: 10
 	});
 
+	/**
+	 *
+	 */
+	$(".tabs").tabs();
+	$( ".tabs li" ).addClass( "ui-corner-all" );
+
 	$('table.users.dataTable').on('click', 'a.deleteUser', function(ev) {
 
 		ev.preventDefault();

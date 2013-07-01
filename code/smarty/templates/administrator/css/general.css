@@ -503,3 +503,7 @@ form.simpleForm fieldset {
 .pageSelect {
 	margin: 20px 0 5px 0;
 }
+
+.tabs.centered li {
+	margin-bottom: 5px;
+}
