@@ -145,15 +145,22 @@ $(document).ready(function() {
 			.format('appendixFor' + id));
 		var appendix = $(appendixPattern.format('appendixFor' + id));
 
+		console.log("id is");
+		console.log(id);
+
 		if(!appendix.is(':visible') || !appendix.length) {
 			if(!appendixSpoiler.length) {
 				var newAppendixSpoiler = $('<div class="tableRowAppendixSpoiler" id="appendixFor' + id + '"><div></div></div>');
-				newAppendixSpoiler.position({
-						"my": "left center",
-						"at": "right top",
-						"of": "tr[id='" + id + "']"
-					})
-					.height($(this).height() - 4);
+				var offset = $(this).offset();
+				newAppendixSpoiler.offset({
+					"top": offset.top - 192,
+					"left": offset.left + 33
+				}).height($(this).height() - 4);
+				// newAppendixSpoiler.position({
+				// 		"my": "left center",
+				// 		"at": "left top",
+				// 		"of": $(this)
+				// 	}).height($(this).height() - 4);
 				$(newAppendixSpoiler).appendTo("table.users")
 					.hide().show(appendixEffect);
 			}
@@ -194,13 +201,18 @@ $(document).ready(function() {
 				'target="_blank" title="löschen">' +
 				'<img src="../images/status/delete.png"/></a></div>')
 					.format(userId));
-			newAppendix.position({
-						"my": "left center",
-						"at": "right top",
-						"of": "tr[id='" + id + "']"
-					})
-					.height($(this).height() - 4)
-					.offset({left: 2});
+			var offset = $(this).offset();
+			newAppendix.offset({
+				"top": offset.top - 192,
+				"left": offset.left + 33
+			}).height($(this).height() - 4);
+			// newAppendix.position({
+			// 			"my": "left center",
+			// 			"at": "right top",
+			// 			"of": "tr[id='" + id + "']"
+			// 		})
+			// 		.height($(this).height() - 4)
+			// 		.offset({left: 2});
 			$(newAppendix).appendTo("table.users")
 				.hide().show(appendixEffect);
 		}
