@@ -7,7 +7,7 @@
  *
  * @author  Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
-class NModule {
+class ModuleGenerator {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -152,42 +152,6 @@ class NModule {
 		return $module;
 	}
 
-	/**
-	 * Just a test-function. Echoes the Tree somewhat readable
-	 */
-	public static function treeDump($mod, $chars = '|') {
-
-		echo "$chars $mod->_name<br />";
-		if(!empty($mod->_childs)) {
-			$chars .= '|';
-			foreach($mod->_childs as $childMod) {
-				self::treeDump($childMod, $chars);
-			}
-		}
-	}
-
-	public static function moduleAdd($name, $parentName) {
-
-		$name = mysql_real_escape_string($name);
-		$parentName = mysql_real_escape_string($parentName);
-
-		try {
-			$parent = TableMng::query("SELECT lft, rgt FROM Modules
-				WHERE `name` = '$parentName'", true);
-
-			if($parent[0]['rgt'] == $parent[0]['lft'] + 1) {
-				//No Children existing
-				self::moduleAddToNodeWithoutChildren($name, $parentName);
-			}
-			else {
-				self::moduleAddToNodeWithoutChildren($name, $parentName);
-			}
-
-		} catch (Exception $e) {
-			die('Could not add Module' . $e->getMessage());
-		}
-	}
-
 	public static function modulePathGet($module, $rootModule) {
 
 		$path = self::modulePathGetRecHelper($module->_id, $rootModule, '');
@@ -219,16 +183,6 @@ class NModule {
 		}
 	}
 
-	public static function IsEnabledStateCompare($module1, $module2) {
-
-		if($module1->_accessAllowed == $module2->_accessAllowed) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
 	public function moduleAsArrayGet() {
 
 		$data = array(
@@ -242,39 +196,14 @@ class NModule {
 	}
 
 	/**
-	 * Changes the Access of the (Child-) Module with $moduleId
-	 *
-	 * @param  int $moduleId The ID of this module or any of the Childs of it
-	 * @param  boolean $accessAllowed If Module-Access is allowed or not
-	 * @throws  Exception If This Module-Instance and no Child of it has this
-	 *     module-ID
-	 */
-	public function accessChangeWithChilds($moduleId, $accessAllowed) {
-
-		if($this->_id == $moduleId) {
-			$this->accessAllowedChangeWithChilds($accessAllowed);
-		}
-		else {
-			//Change the access of the Child with the ID
-			$child = &$this->anyChildByIdGetAsReference($moduleId);
-			if(!empty($child)) {
-				$child->accessAllowedChangeWithChilds($accessAllowed);
-			}
-			else {
-				throw new Exception("Module with Id $moduleId not found");
-			}
-		}
-	}
-
-	/**
 	 * Changes the Access of the Module with $moduleId and its Parents
 	 *
 	 * @param  int $moduleId The ID of the rootmodule or any of the Childs
 	 *     within it
 	 * @param  boolean $accessAllowed If Module-Access is allowed or not
-	 * @param  NModule $rootmodule The Parents gets changed and the moduleId
-	 *     gets searched from this module on
-	 * @return NModule the changed rootmodule
+	 * @param  ModuleGenerator $rootmodule The Parents gets changed and the
+	 *     moduleId gets searched from this module on
+	 * @return ModuleGenerator the changed rootmodule
 	 * @throws  Exception If This Module-Instance and no Child of it has this
 	 *     module-ID
 	 */
@@ -306,16 +235,6 @@ class NModule {
 			}
 		}
 		return false;
-	}
-
-	public function accessAllowedChangeWithChilds($accessAllowed) {
-
-		$this->_accessAllowed = (boolean)$accessAllowed;
-		if(!empty($this->_childs)) {
-			foreach($this->_childs as $child) {
-				$child->accessAllowedChangeWithChilds($accessAllowed);
-			}
-		}
 	}
 
 	public function notAllowedChildsRemove() {
@@ -403,7 +322,7 @@ class NModule {
 					$i++;
 				}
 			}
-			$helper[$item['ID']] = new NModule(
+			$helper[$item['ID']] = new ModuleGenerator(
 				$item['ID'],
 				$item['name'],
 				$item['enabled'],

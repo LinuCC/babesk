@@ -1,7 +1,7 @@
 <?php
 
 require_once PATH_INCLUDE . '/GroupModuleRight.php';
-require_once PATH_INCLUDE . '/NModule.php';
+require_once PATH_INCLUDE . '/ModuleGenerator.php';
 require_once PATH_INCLUDE . '/Group.php';
 
 /**
@@ -15,7 +15,7 @@ class Acl {
 
 	public function __construct() {
 
-		$this->_moduleroot = NModule::modulesLoad();
+		$this->_moduleroot = ModuleGenerator::modulesLoad();
 		$this->_grouproot = Group::groupsLoad();
 	}
 
@@ -150,7 +150,7 @@ class Acl {
 	protected function applyRight($right) {
 
 		try {
-			$this->_moduleroot = NModule::accessChangeWithParents(
+			$this->_moduleroot = ModuleGenerator::accessChangeWithParents(
 				$right['moduleId'], true, $this->_moduleroot);
 
 		} catch (Exception $e) {
