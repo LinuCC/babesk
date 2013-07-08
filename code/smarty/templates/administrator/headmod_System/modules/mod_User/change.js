@@ -10,7 +10,7 @@ $(document).ready(function() {
 	$('.personalData').height($('.personalData').height() + 50);
 
 	$('input.cardnumberAdd').prop('disabled', true);
-	$('.inputItem[name=password]').prop('disabled', true);
+	$('input[name=password]').prop('disabled', true);
 
 	/**
 	 * If link is clicked, a cardnumber shall be added
@@ -34,12 +34,13 @@ $(document).ready(function() {
 	$('.passwordChange').on('change', function(event) {
 
 		if($(this).prop('checked')) {
-			$('.inputItem[name=password]').prop('disabled', false);
-			$('.inputItem[name=password]').focus();
+			$('input[name=password]').prop('disabled', false);
+			$('input[name=password]').focus()
+				.animate({"background-color": "#FFFFFF"}, 200);
 		}
 		else {
-			$('.inputItem[name=password]').prop('disabled', true);
-			$('.inputItem[name=password]')
+			$('input[name=password]').prop('disabled', true);
+			$('input[name=password]')
 				.animate({"background-color": "#DDDDDD"}, 200);
 		}
 	});
@@ -95,6 +96,14 @@ $(document).ready(function() {
 
 		var schoolyears = JSON.stringify($('select.inputItem[name=schoolyearIds]').val());
 
+		var groups = $("input[name^='groups[']").map(function(){
+			if($(this).prop('checked')) {
+				var id = $(this).attr('name')
+							.replace('groups[', '').replace(']', '');
+				return id;
+			}
+		}).get();
+
 		$.ajax({
 			type: "POST",
 			url: "index.php?section=System|User&action=changeUser",
@@ -109,6 +118,7 @@ $(document).ready(function() {
 				'telephone': $('input.inputItem[name=telephone]').val(),
 				'birthday': $('input.inputItem[name=birthday]').val(),
 				'schoolyearIds': schoolyears,
+				'groups': groups,
 				'pricegroupId': $('select.inputItem[name=pricegroupId] option:selected').val(),
 				'gradeId': $('select.inputItem[name=gradeId] option:selected').val(),
 				'credits': $('input.inputItem[name=credits]').val(),

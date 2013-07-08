@@ -2,6 +2,7 @@
 
 require_once 'Administrator.php';
 $adminManager = new Administrator();
+$smarty = $adminManager->getSmarty();
 $adminManager->run();
 
 // $adminManager->setUserLoggedIn(isset($_SESSION['UID']));
@@ -12,7 +13,6 @@ $adminManager->run();
 // }
 // if ($adminManager->testLogin()) {
 // 	//workaround of modules using smarty, logger and modManager globally
-// 	$smarty = $adminManager->getSmarty();
 // 	$logger = $adminManager->getLogger();
 // 	$modManager = $adminManager->getModuleManager();
 // 	$adminManager->initUserInterface();

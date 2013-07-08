@@ -142,10 +142,14 @@ class Group {
 		//remove last Element, we only want the Parents
 		$splitPath = explode('/', $path);
 		array_pop($splitPath);
-		$path = implode('/', $splitPath);
-		$groups = Group::groupsGetAllInPath($path, $grouproot);
-
-		return $groups;
+		if(count($splitPath)) {
+			$path = implode('/', $splitPath);
+			$groups = Group::groupsGetAllInPath($path, $grouproot);
+			return $groups;
+		}
+		else {
+			return array();
+		}
 	}
 
 	/**

@@ -1,6 +1,22 @@
 /* COMMON STYLE
 --------------------------------------------------------- */
 
+/* Clearfix */
+
+.clearfix:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+}
+.clearfix { display: inline-block; }
+* html .clearfix { height: 1%; }
+.clearfix { display: block; }
+
+/* End Clearfix */
+
 body {
 	background-color: #ffffff;
 	margin: 0;     /* no borders */
@@ -157,12 +173,15 @@ a #header_link {
 		margin: 0 auto 30px;
 
 
-			-webkit-border-radius: 20px;
+		-webkit-border-radius: 20px;
 		-khtml-border-radius: 20px;
 		-moz-border-radius: 20px;
 		border-radius: 20px;
+}
 
-		z-index: 6;
+div.headmodule {
+	float: left;
+	width: 350px;
 }
 
 div.headmodule {
@@ -183,6 +202,16 @@ div.headmodule {
 	display: inline;
 }
 
+div.headmodule:hover {
+	border-color: #ff9900;
+	color: #ffee33;
+}
+
+#headmod_selection a {
+	display: inline;
+	color: #ff9900;
+}
+
 div.classDescription {
 
 	padding: 5px;
@@ -194,11 +223,6 @@ div.classDescription {
 	-moz-border-radius: 20px;
 	border-radius: 20px;
 	text-align: center;
-}
-
-#headmod_selector_link {
-	display: inline;
-	color: orange;
 }
 
 #main {

@@ -67,10 +67,17 @@ input, select, textarea, .inputbox {
   font-size: 100%;
 }
 
-input.inputItem, select.inputItem, span.inputItem, p.inputItem {
-	position: absolute;
-	left: 300px;
-	display: inline;
+div.inputItem,
+input.inputItem,
+select.inputItem,
+span.inputItem,
+p.inputItem,
+a.inputItem {
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+	margin: 10px 0px 10px 50px;
+	/*border: 1px solid black;*/
 }
 
 form {
@@ -441,7 +448,12 @@ p.inputError {
 	float: right;
 }
 
-form.simpleForm label, form.simpleForm div.simpleForm {
+div.simpleForm {
+	display: table-row;
+	width: 500px;
+}
+
+form.simpleForm label, form.simpleForm {
 	display: block;
 	margin: 15px 0 15px 0;
 }
@@ -503,4 +515,11 @@ form.simpleForm fieldset {
 
 .pageSelect {
 	margin: 20px 0 5px 0;
+}
+
+.scrollableCheckboxes {
+	border:2px solid #cccccc;
+	width: 300px;
+	height: 100px !important;
+	overflow-y: scroll;
 }

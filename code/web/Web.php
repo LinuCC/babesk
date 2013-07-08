@@ -7,7 +7,6 @@ class Web {
 	//Attributes
 	///////////////////////////////////////////////////////////////////////
 	private $_smarty;
-	private $_moduleManager;
 	private $_loggedIn;
 	private $_interface;
 	private $_userManager;
@@ -32,17 +31,17 @@ class Web {
 		require_once PATH_ACCESS . '/LogManager.php';
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 		require_once PATH_INCLUDE . '/Acl.php';
+		require_once 'WebInterface.php';
 
 		TableMng::init ();
 		$this->_userManager = new UserManager();
 		$this->_gsManager = new GlobalSettingsManager ();
-		$this->_moduleManager = new ModuleManager('web');
-		$this->_moduleManager->allowAllModules();
 		$this->_loggedIn = isset($_SESSION['uid']);
 		$this->_interface = new WebInterface($this->_smarty);
 		$this->_acl = new Acl();
 		$this->_dataContainer = new DataContainer($this->_smarty,
 			$this->_interface, $this->_acl);
+		$this->initLanguage();
 	}
 
 	///////////////////////////////////////////////////////////////////////
@@ -215,6 +214,20 @@ class Web {
 		}
 	}
 
+	private function initLanguage() {
+
+		$language = 'de_DE.utf-8';
+		$domain = 'messages';
+
+		putenv("LANG=$language");
+		setlocale(LC_ALL, $language);
+
+		// Set the text domain as 'messages'
+		bindtextdomain($domain, PATH_CODE . '/locale');
+		bind_textdomain_codeset($domain, "UTF-8");
+		textdomain($domain);
+	}
+
 	private function handleLogin() {
 
 		if (!$this->_loggedIn) {
@@ -258,9 +271,16 @@ class Web {
 
 	private function loadModules() {
 
-		$this->_acl->accessControlInit($_SESSION['uid']);
-		$webModule = $this->_acl->moduleGet('root/web');
-		$this->_smarty->assign('modules', $webModule->getChilds());
+		try {
+			$this->_acl->accessControlInit($_SESSION['uid']);
+			$webModule = $this->_acl->moduleGet('root/web');
+			$this->_smarty->assign('modules', $webModule->getChilds());
+
+		} catch (AclException $e) {
+			$this->_interface->dieError('Sie sind in keiner Gruppe und ' .
+				'haben daher keine Rechte! Wenden sie sich bitte an den ' .
+				'Administrator');
+		}
 	}
 
 	private function handleRedirect() {
@@ -271,6 +291,7 @@ class Web {
 
 	private function display($moduleStr) {
 
+		$this->_smarty->assign('moduleroot', $this->_acl->getModuleroot());
 		if ($moduleStr) {
 			$this->executeModule($moduleStr);
 		}

@@ -1,5 +1,6 @@
 <?php
 
+
 require_once "../include/path.php";
 require_once PATH_INCLUDE . '/TableMng.php';
 require_once PATH_INCLUDE . '/Acl.php';
@@ -108,6 +109,7 @@ class Administrator {
 		$headmod = $modSubPath[0];
 		$mod = $modSubPath[1];
 		$path = "root/administrator/$headmod/$mod";
+		$smarty = $this->_smarty;
 		try {
 			$this->_acl->moduleExecute($path, $this->_dataContainer);
 
@@ -123,6 +125,7 @@ class Administrator {
 
 		$this->_smarty->assign('is_mainmenu', true);
 		$this->_smarty->assign('headmodules', $adminModule->getChilds());
+		$this->_smarty->assign('moduleroot', $this->_acl->getModuleroot());
 		$this->_smarty->display('administrator/menu.tpl');
 	}
 
@@ -134,6 +137,7 @@ class Administrator {
 	private function initEnvironment() {
 
 		$this->setPhpIni();
+		$this->initLanguage();
 
 		//if this value is not set, the modules will not execute
 		define('_AEXEC', 1);
@@ -141,6 +145,20 @@ class Administrator {
 		session_name('sid');
 		session_start();
 		error_reporting(E_ALL);
+	}
+
+	private function initLanguage() {
+
+		$language = 'de_DE.utf-8';
+		$domain = 'messages';
+
+		putenv("LANG=$language");
+		setlocale(LC_ALL, $language);
+
+		// Set the text domain as 'messages'
+		bindtextdomain($domain, PATH_CODE . '/locale');
+		bind_textdomain_codeset($domain, "UTF-8");
+		textdomain($domain);
 	}
 
 	private function initSmarty() {

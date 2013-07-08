@@ -19,40 +19,42 @@
 	<fieldset class="personalData">
 		<legend>Persönliche Daten</legend>
 		<input class="inputItem" type="hidden" name="ID" value="{$user.ID}" />
-		<div class="simpleForm">Vorname:
+		<div class="simpleForm"><p class="inputItem">Vorname:</p>
 			<input class="inputItem" type="text" name="forename"
 			value="{$user.forename}" />
 		</div>
-		<div class="simpleForm">Name:
+		<div class="simpleForm"><p class="inputItem">Name:</p>
 			<input class="inputItem" type="text" name="name"
 			value="{$user.name}" />
 		</div>
-		<div class="simpleForm">Benutzername:
+		<div class="simpleForm"><p class="inputItem">Benutzername:</p>
 			<input class="inputItem" type="text" name="username"
 			value="{$user.username}" />
 		</div>
-		<div class="simpleForm">Passwort ändern:
-			<input class="passwordChange" type="checkbox" name="passwordChange" />
-			<input class="inputItem" type="password" name="password" value="" />
+		<div class="simpleForm"><p class="inputItem">Passwort ändern:</p>
+			<div class="inputItem">
+				<input class="passwordChange" type="checkbox" name="passwordChange" />
+				<input style="display: inline" type="password" name="password" value="" />
+			</div>
 		</div>
-		<div class="simpleForm">Emailadresse:
+		<div class="simpleForm"><p class="inputItem">Emailadresse:</p>
 			<input class="inputItem" type="text" name="email"
 			value="{$user.email}" />
 		</div>
-		<div class="simpleForm">Telefonnummer:
+		<div class="simpleForm"><p class="inputItem">Telefonnummer:</p>
 			<input class="inputItem" type="text" name="telephone"
 			value="{$user.telephone}" />
 		</div>
 		<div class="simpleForm">
-			Geburtstag :
+			<p class="inputItem">Geburtstag :</p>
 			<input class="inputItem" type="text" size="10" name="birthday" value="{$user.birthday}" />
 		</div>
 		<div class="simpleForm">
-			gesperrt :
+			<p class="inputItem">gesperrt :</p>
 			<input class="inputItem" type="checkbox" name="accountLocked"
 				{if $user.locked}checked="checked"{/if} />
 		</div>
-		<div class="simpleForm">Klasse:
+		<div class="simpleForm"><p class="inputItem">Klasse:</p>
 				{if empty($grades)}
 					<p class="inputItem">
 						keine Klassem vorhanden
@@ -65,14 +67,37 @@
 				{/if}
 		</div>
 		<div class="simpleForm">
-			Kartennummer:
+			<p class="inputItem">Kartennummer:</p>
+			<div class="inputItem">
 				<a class="cardnumberAdd" href="#">ändern</a>
 			<input style="display:inline" name="cardnumber" class="inputItem
 				cardnumberAdd" type="text" size="10" maxlength="10"
 				value="{$cardnumber}" />
+			</div>
+		</div>
+		<div class="simpleForm clearfix">
+				<p class="inputItem">Gruppen:</p>
+				{if empty($groups)}
+					<p class="inputItem">
+						keine Gruppen vorhanden
+					</p>
+				{else}
+					<div class="inputItem">
+						<div class="scrollableCheckboxes">
+							{foreach $groups as $group}
+								<input type="checkbox"
+									name="groups[{$group.ID}]"
+									{if $group.isUserIn}
+										checked="checked"
+									{/if}/>
+									{$group.name}<br />
+							{/foreach}
+						</div>
+					</div>
+				{/if}
 		</div>
 		<div class="simpleForm">
-				Schuljahre:
+				<p class="inputItem">Schuljahre:</p>
 				{if empty($schoolyears)}
 					<p class="inputItem">
 						keine Schuljahre vorhanden
@@ -82,7 +107,7 @@
 						multiple="multiple" title="Mehrfachwahlen sind durch halten der Strg
 						- (oder Ctrl-)Taste beim klicken möglich. Damit kann sich auch die
 						angewählten Schuljahre wieder abwählen lassen. Strg+A, um alle
-						Klassen auszuwählen.">
+						Schuljahre auszuwählen.">
 						<option value="NONE"
 							{if !count($schoolyears) or !$userIsInSchoolyear}
 								selected="selected"{/if}>
@@ -100,7 +125,7 @@
 	</fieldset>
 	<fieldset>
 		<legend>BaBeSK</legend>
-		<div class="simpleForm">Preisgruppen:
+		<div class="simpleForm"><p class="inputItem">Preisgruppen:</p>
 				{if empty($priceGroups)}
 					<p class="inputItem">
 						keine Preisgruppen vorhanden
@@ -114,10 +139,10 @@
 					</select>
 				{/if}
 		</div>
-		<div class="simpleForm">Guthaben:
+		<div class="simpleForm"><p class="inputItem">Guthaben:</p>
 			<input class="inputItem" type="int" name="credits" size="5" maxlength="5" />
 		</div>
-		<div class="simpleForm">Teilhabepaket:
+		<div class="simpleForm"><p class="inputItem">Teilhabepaket:</p>
 			<input class="inputItem" type="checkbox" name="isSoli"
 			{if $user.soli}checked="checked"{/if}/>
 		</div>

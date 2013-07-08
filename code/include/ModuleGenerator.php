@@ -1,9 +1,11 @@
 <?php
 
 /**
- * Represents a module of the Program
+ * Represents a module in the Database#table Modules
  *
- * contains all of its childs
+ * Since Modules are structured hierarchically, an ModuleGenerator also
+ * containsall its childs.
+ * When executed, this Class creates and executes the proper Module.
  *
  * @author  Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
@@ -152,9 +154,12 @@ class ModuleGenerator {
 		return $module;
 	}
 
-	public static function modulePathGet($module, $rootModule) {
+	public static function modulePathGet($module, $rootmodule) {
 
-		$path = self::modulePathGetRecHelper($module->_id, $rootModule, '');
+		$path = self::modulePathGetRecHelper(
+			$module->_id,
+			$rootmodule,
+			'root');
 		return rtrim($path, '/');
 	}
 

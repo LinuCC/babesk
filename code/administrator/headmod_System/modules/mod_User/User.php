@@ -74,7 +74,7 @@ class User extends Module {
 			$action = $_GET['action'];
 			switch ($action) {
 				case 'changeUserDisplay':
-					$this->changeDispay();
+					$this->changeDisplay();
 					break;
 				case 'deleteUser': //delete the user
 					$deleter = new UserDelete($this->_smarty);
@@ -128,18 +128,18 @@ class User extends Module {
 		try {
 			//---fetch data
 			try { //Babesk-specific, dont crash when table not exist
-				$priceGroups = $this->dbRowsGetArranged(
+				$priceGroups = $this->arrayGetFlattened(
 					'SELECT ID, name FROM groups');
 
 			} catch (Exception $e) {
 				$priceGroups = array();
 			}
 
-			$grades = $this->dbRowsGetArranged(
+			$grades = $this->arrayGetFlattened(
 				'SELECT ID, CONCAT(gradeValue, "-", label) AS name
 				FROM grade');
 			//ORDER BY active: Get active schoolyear to top = selected
-			$schoolyears = $this->dbRowsGetArranged(
+			$schoolyears = $this->arrayGetFlattened(
 				'SELECT ID, label AS name FROM schoolYear
 				ORDER BY active DESC;');
 
@@ -267,14 +267,14 @@ class User extends Module {
 
 		}
 
-			$this->changeDispay($userID);
+			$this->changeDisplay($userID);
 
 			break;
 		}
 
 		if (!isset($_POST['id'], $_POST['forename'], $_POST['name'], $_POST['username'], $_POST['credits'], $_POST[
 		'gid'])) {
-		$this->changeDispay($_GET['ID']);
+		$this->changeDisplay($_GET['ID']);
 		} else {
 			$soli = 0;
 			if (isset($_POST['soliAccount'])) {
@@ -308,7 +308,7 @@ class User extends Module {
 	 * @return Array The rearranged Array or a void array if SQL-Query returned
 	 * nothing
 	 */
-	protected function dbRowsGetArranged($query, $key = 'ID',
+	protected function arrayGetFlattened($query, $key = 'ID',
 		$value = 'name') {
 
 		$rearranged = array();
@@ -317,7 +317,7 @@ class User extends Module {
 
 		if(!empty($rows)) {
 			foreach($rows as $row) {
-				$rearranged[$row['ID']] = $row['name'];
+				$rearranged[$row[$key]] = $row[$value];
 			}
 		}
 		return $rearranged;
@@ -398,46 +398,92 @@ class User extends Module {
 
 	/**
 	 * This function prepares and shows the ChangeUser-Form
-	 * Enter description here ...
+	 *
 	 * @param string (numeric) $uid The ID of the User
 	 */
-	function changeDispay() {
+	protected function changeDisplay() {
 
 		$uid = mysql_real_escape_string($_GET['ID']);
 
 		try {
 			TableMng::query('SET @activeSchoolyear :=
 				(SELECT ID FROM schoolYear WHERE active = "1");');
-			$user = TableMng::query(sprintf(
-				'SELECT u.*,
-				(SELECT g.ID
-					FROM jointUsersInGrade uig
-					LEFT JOIN grade g ON uig.gradeId = g.ID
-					WHERE uig.userId = u.ID) AS gradeId
-				FROM users u WHERE `ID` = %s', $uid), true);
-			$cardnumber = TableMng::query(
-				"SELECT cardnumber FROM cards WHERE UID = $uid
-				", true);
-			$priceGroups = $this->dbRowsGetArranged(
-					'SELECT ID, name FROM groups');
-			$grades = $this->dbRowsGetArranged(
-				'SELECT ID, CONCAT(gradeValue, "-", label) AS name
-				FROM grade', true);
-			$schoolyears = TableMng::query(
-				"SELECT ID, label AS name, (
-					SELECT COUNT(*) AS count FROM jointUsersInSchoolYear uisy
-					 WHERE sy.ID = uisy.SchoolYearID
-					AND uisy.UserID = $uid) AS isUserIn
-				 FROM schoolYear sy
-				ORDER BY active DESC;", true);
-
+			$user = $this->userGet($uid);
+			$cardnumber = $this->cardnumberGetByUserId($uid);
+			$priceGroups = $this->arrayGetFlattened(
+				'SELECT ID, name FROM groups');
+			$grades = $this->gradesGetAll();
+			$schoolyears = $this->schoolyearsGetAllWithCheckIsUserIn($uid);
+			$groups = $this->groupsGetAllWithCheckIsUserIn($uid);
 			$cardnumber = (!empty($cardnumber)) ?
 				$cardnumber[0]['cardnumber'] : '';
 
 		} catch (Exception $e) {
 			$this->userInterface->dieError($e->getMessage());
 		}
-		$this->userInterface->ShowChangeUser($user[0], $cardnumber, $priceGroups, $grades, $schoolyears);
+		$this->userInterface->ShowChangeUser(
+			$user[0],
+			$cardnumber,
+			$priceGroups,
+			$grades,
+			$schoolyears,
+			$groups);
+	}
+
+	protected function userGet($uid) {
+
+		$user = TableMng::query(
+			"SELECT u.*,
+			(SELECT g.ID
+				FROM jointUsersInGrade uig
+				LEFT JOIN grade g ON uig.gradeId = g.ID
+				WHERE uig.userId = u.ID) AS gradeId
+			FROM users u WHERE `ID` = $uid", true);
+
+		return $user;
+	}
+
+	protected function cardnumberGetByUserId($userId) {
+
+		$cardnumber = TableMng::query(
+			"SELECT cardnumber FROM cards WHERE UID = $userId
+			", true);
+
+		return $cardnumber;
+	}
+
+	protected function gradesGetAll() {
+
+		$grades = $this->arrayGetFlattened(
+			'SELECT ID, CONCAT(gradeValue, "-", label) AS name
+			FROM grade');
+
+		return $grades;
+	}
+
+	protected function schoolyearsGetAllWithCheckIsUserIn($userId) {
+
+		$schoolyears = TableMng::query(
+			"SELECT ID, label AS name, (
+				SELECT COUNT(*) AS count FROM jointUsersInSchoolYear uisy
+				 WHERE sy.ID = uisy.SchoolYearID
+				AND uisy.UserID = $userId) AS isUserIn
+			 FROM schoolYear sy
+			ORDER BY active DESC;", true);
+
+		return $schoolyears;
+	}
+
+	protected function groupsGetAllWithCheckIsUserIn($userId) {
+
+		$groups = TableMng::query(
+			"SELECT ID, name,
+			(SELECT COUNT(*) AS count FROM UserInGroups uig
+				WHERE g.ID = uig.groupId AND uig.userId = $userId)
+					AS isUserIn
+			FROM Groups g", true);
+
+		return $groups;
 	}
 
 	/**
@@ -546,6 +592,7 @@ class User extends Module {
 		$cardnumberQuery = '';
 		$gradeQuery = '';
 		$passwordQuery = '';
+		$groupQuery = '';
 
 		TableMng::getDb()->autocommit(false);
 
@@ -555,6 +602,7 @@ class User extends Module {
 			$cardnumberQuery = $this->cardsQueryCreate($uid);
 			$gradeQuery = $this->gradeQueryCreate($uid);
 			$passwordQuery = $this->passwordQueryCreate($uid);
+			$groupQuery = $this->groupQueryCreate($uid);
 
 			TableMng::query("UPDATE users
 				SET `forename` = '$_POST[forename]',
@@ -572,6 +620,7 @@ class User extends Module {
 				$schoolyearQuery
 				$cardnumberQuery
 				$gradeQuery
+				$groupQuery
 				",false, true);
 
 
@@ -734,6 +783,84 @@ class User extends Module {
 
 		return $query;
 	}
+
+	/**
+	 * Creates a Query changing the Groups of the User to the Input
+	 *
+	 * Fetches the group-Ids from $_POST['groups']
+	 *
+	 * @param integer $uid The Userid of which Groups to change
+	 */
+	protected function groupQueryCreate($uid) {
+
+		$query = '';
+
+		if(!empty($_POST['groups'])) {
+			$existingGroups = $this->groupsOfUserGet($uid);
+			$query .= $this->groupAddQueryCreate($uid, $existingGroups);
+			$query .= $this->groupDeleteQueryCreate($uid, $existingGroups);
+		}
+
+		return $query;
+	}
+
+	/**
+	 * Fetches the Groups of one User and returns them
+	 *
+	 * @param  integer $userId
+	 * @return Array
+	 */
+	protected function groupsOfUserGet($userId) {
+
+		return TableMng::query("SELECT g.ID FROM Groups g
+			JOIN UserInGroups uig ON g.ID = uig.groupId
+			WHERE uig.userId = $userId", true);
+	}
+
+	/**
+	 * Creates a Query that adds Groups to a specific User
+	 * @param  integer $userId
+	 * @param  Array $existingGroups
+	 * @return string contains multiple Queries, SQL-ready separated with
+	 * Semicolon
+	 */
+	protected function groupAddQueryCreate($userId, $existingGroups) {
+
+		$query = '';
+
+		foreach($_POST['groups'] as $group) {
+			//if UserInGroup is not already in Db, add it
+			if(array_search($group,
+							array_column($existingGroups, 'ID')) === false) {
+				$query .= "INSERT INTO UserInGroups (userId, groupId)
+					VALUES ($userId, $group);";
+			}
+		}
+
+		return $query;
+	}
+
+	/**
+	 * Creates a Query that removes the User from specific Groups
+	 *
+	 * @param  integer $userId
+	 * @param  Array $existingGroups
+	 * @return string contains multiple Queries separated with semicolon
+	 */
+	protected function groupDeleteQueryCreate($userId, $existingGroups) {
+
+		$query = '';
+
+		foreach(array_column($existingGroups, 'ID') as $exGroup) {
+			if(array_search($exGroup, $_POST['groups']) === false) {
+				$query .= "DELETE FROM UserInGroups WHERE userId = $userId
+					AND groupId = $exGroup;";
+			}
+		}
+
+		return $query;
+	}
+
 
 	///////////////////////////////////////////////////////////////////////
 	//Attributes

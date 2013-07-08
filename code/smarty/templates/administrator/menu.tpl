@@ -14,7 +14,11 @@
 <div class="clearfix HeadItemContainer">
 	{foreach $headmodules as $headmodule}
 		<div class="HeadItem" id="{$headmodule->getName()}">
-			<a class="HeadItemText" href="#" tabindex="1">{$headmodule->getName()}</a>
+			<a class="HeadItemText" href="#" tabindex="1">
+				{$modulepath = ModuleGenerator::modulePathGet(
+					$headmodule, $moduleroot)}
+				{_('modulepath_'|cat:$modulepath)}
+			</a>
 		</div>
 	{/foreach}
 </div>
@@ -28,7 +32,11 @@
 		{foreach $headmodule->getChilds() as $module}
 			<div class="menu_item" id="{$headmodule->getName()}|{$module->getName()}">
 				<div class="menuItemCell">
-					<a href="index.php?section={$headmodule->getName()}|{$module->getName()}" tabindex="1">{$module->getName()}</a>
+					<a href="index.php?section={$headmodule->getName()}|{$module->getName()}" tabindex="1">
+						{$modulepath = ModuleGenerator::modulePathGet(
+							$module, $moduleroot)}
+						{_('modulepath_'|cat:$modulepath)}
+					</a>
 				</div>
 			</div>
 		{/foreach}
