@@ -15,12 +15,14 @@ class ModuleGenerator {
 	//Constructor
 	/////////////////////////////////////////////////////////////////////
 
-	public function __construct($ID, $name, $accessAllowed, $executablePath,
-		$displayInMenu) {
+	public function __construct($ID, $name, $accessAllowed, $rgt, $lft,
+		$executablePath, $displayInMenu) {
 
 		$this->_id = $ID;
 		$this->_name = $name;
 		$this->_accessAllowed = $accessAllowed;
+		$this->_rgt = $rgt;
+		$this->_lft = $lft;
 		$this->_executablePath = $executablePath;
 		$this->_displayInMenu = $displayInMenu;
 	}
@@ -225,6 +227,34 @@ class ModuleGenerator {
 		return $rootmodule;
 	}
 
+	public static function moduleAddQueryCreate($modulename, $parentmodule) {
+
+		$id = $parentmodule->getId();
+
+		return "SELECT @modRight := rgt FROM Modules WHERE ID = '$id';
+			UPDATE Modules SET rgt = rgt + 2 WHERE rgt >= @modRight;
+			UPDATE Modules SET lft = lft + 2 WHERE lft >= @modRight;
+			INSERT INTO Modules(name, lft, rgt) VALUES('$modulename',
+				@modRight, @modRight + 1);";
+	}
+
+	public static function moduleDeleteQueryCreate($module) {
+
+		if($module->_lft > 0 && $module->_rgt > 0) {
+			return "DELETE FROM Modules WHERE lft
+						BETWEEN $module->_lft AND $module->_rgt;
+				UPDATE Modules
+					SET lft=lft-ROUND(( $module->_rgt - $module->_lft +1))
+					WHERE lft > $module->_rgt ;
+				UPDATE Modules
+					SET rgt=rgt-ROUND(( $module->_rgt - $module->_lft +1))
+					WHERE rgt > $module->_rgt;";
+		}
+		else {
+			return false;
+		}
+	}
+
 	public function anyChildByIdGet($id) {
 
 		if(!empty($this->_childs)) {
@@ -269,6 +299,8 @@ class ModuleGenerator {
 					'id' => $child->_id,
 					'name' => $child->_name,
 					'enabled' => $child->_accessAllowed,
+					'rgt' => $child->_rgt,
+					'lft' => $child->_lft,
 					'executablePath' => $child->_executablePath,
 					'displayInMenu' => $child->_displayInMenu,
 					'childs' => $child->childsAsArrayGet());
@@ -331,6 +363,8 @@ class ModuleGenerator {
 				$item['ID'],
 				$item['name'],
 				$item['enabled'],
+				$item['rgt'],
+				$item['lft'],
 				$item['executablePath'],
 				$item['displayInMenu']);
 			$level = $item['level'];
@@ -454,6 +488,10 @@ class ModuleGenerator {
 	 * @var Array
 	 */
 	protected $_childs;
+
+	protected $_lft;
+
+	protected $_rgt;
 
 	protected $_smartyTemplatePath;
 

@@ -130,6 +130,7 @@ var group = new function() {
 		}
 		if(res) {
 			if(res.value == 'success') {
+				console.log(res.data);
 				update(res.data);
 			}
 			else if(res.value == 'error') {
