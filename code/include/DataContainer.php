@@ -20,36 +20,44 @@ class DataContainer {
 	////////////////////////////////////////////////////////////////////////////////
 	//Getters and Setters
 	////////////////////////////////////////////////////////////////////////////////
-	public function getSmarty () {
+	public function getSmarty() {
 		return $this->_smarty;
 	}
 
-	public function setSmarty ($smarty) {
+	public function setSmarty($smarty) {
 		$this->_smarty = $smarty;
 	}
 
-	public function setInterface ($interface) {
+	public function setInterface($interface) {
 		$this->_interface = $interface;
 	}
 
-	public function getInterface () {
+	public function getInterface() {
 		return $this->_interface;
 	}
 
-	public function getDatabase () {
+	public function getDatabase() {
 		return $this->_db;
 	}
 
-	public function setDatabase ($db) {
+	public function setDatabase($db) {
 		$this->_db = $db;
 	}
 
-	public function getAcl () {
+	public function getAcl() {
 		return $this->_acl;
 	}
 
-	public function setAcl ($acl) {
+	public function setAcl($acl) {
 		$this->_acl = $acl;
+	}
+
+	public function getModuleExecutionPath() {
+		return $this->_moduleExecutionPath;
+	}
+
+	public function setModuleExecutionPath($moduleExecutionPath) {
+		$this->_moduleExecutionPath = $moduleExecutionPath;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -74,9 +82,17 @@ class DataContainer {
 
 	/**
 	 * The AccessControlLayer
+	 *
 	 * @var Acl
 	 */
 	protected $_acl;
+
+	/**
+	 * The Module-Executionpath
+	 *
+	 * @var String
+	 */
+	protected $_moduleExecutionPath;
 }
 
 ?>

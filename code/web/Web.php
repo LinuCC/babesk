@@ -39,6 +39,7 @@ class Web {
 		$this->_loggedIn = isset($_SESSION['uid']);
 		$this->_interface = new WebInterface($this->_smarty);
 		$this->_acl = new Acl();
+		$this->_acl->setSubprogramPath('root/web');
 		$this->_dataContainer = new DataContainer($this->_smarty,
 			$this->_interface, $this->_acl);
 		$this->initLanguage();
@@ -199,13 +200,9 @@ class Web {
 
 	private function executeModule($name) {
 
-		$path = 'root/web';
-		$modSubPath = explode('|', $name);
-		foreach($modSubPath as $mod) {
-			$path .= "/$mod";
-		}
 		try {
-			$this->_acl->moduleExecute($path, $this->_dataContainer);
+			$this->_acl->moduleExecute($name, $this->_dataContainer);
+
 		} catch (AclException $e) {
 			if($e->getCode() == 105) { //Module-Access forbidden
 				$this->_interface->dieError(

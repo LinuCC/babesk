@@ -2,8 +2,8 @@
 
 require_once "../include/path.php";
 require_once 'PublicDataInterface.php';
-require_once PATH_INCLUDE . '/moduleManager.php';
 require_once PATH_INCLUDE . '/DataContainer.php';
+require_once PATH_INCLUDE . '/Acl.php';
 
 /**
  * This Class organizes the Sub-program "publicData"
@@ -24,7 +24,14 @@ class PublicData {
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
 	public function moduleExecute ($moduleName) {
-		$this->_moduleManager->execute ($moduleName);
+
+		try {
+			$this->_acl->accessControlInit($_SESSION['uid']);
+			$this->_acl->moduleExecute($moduleName, $this->_dataContainer);
+
+		} catch (Exception $e) {
+			$this->_interface->dieError('Konnte Modul nicht ausführen');
+		}
 	}
 
 	public function publicDataEntrypoint () {
@@ -50,10 +57,15 @@ class PublicData {
 
 	private function attributesInit () {
 		$this->_interface = new PublicDataInterface ();
-		$this->_dataContainer = new DataContainer ($this->_interface->getSmarty (), $this->_interface);
-		$this->_moduleManager = new ModuleManager ('publicData', $this->_interface);
-		$this->_moduleManager->setDataContainer ($this->_dataContainer);
-		$this->_moduleManager->allowAllModules ();
+		// $this->_moduleManager = new ModuleManager ('publicData', $this->_interface);
+		// $this->_moduleManager->setDataContainer ($this->_dataContainer);
+		// $this->_moduleManager->allowAllModules ();
+		$this->_acl = new Acl();
+		$this->_acl->setSubprogramPath('root/PublicData');
+		$this->_dataContainer = new DataContainer (
+			$this->_interface->getSmarty (),
+			$this->_interface,
+			$this->_acl);
 	}
 
 	private function sessionInit () {
@@ -71,7 +83,6 @@ class PublicData {
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
 	////////////////////////////////////////////////////////////////////////////////
-	private $_moduleManager;
 	private $_interface;
 	private $_dataContainer;
 }

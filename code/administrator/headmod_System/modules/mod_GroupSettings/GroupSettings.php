@@ -238,18 +238,40 @@ class GroupSettings extends Module {
 	 */
 	protected function groupChangeQuery($data) {
 
-		$oldname = TableMng::sqlSave($data['oldName']);
-		$oldname = $data['oldName'];
-		$newname = TableMng::sqlSave($data['newName']);
-		$newname = $data['newName'];
-		$parentPath = TableMng::sqlSave($data['parentPath']);
-		$parentPath = $data['parentPath'];
-
+		$escapedData = $this->groupChangeQueryEscapeInput($data);
 		$group = $this->_acl->getGrouproot()->groupByPathGet(
-			"$parentPath/$oldname");
+			"$escapedData[parentPath]/$escapedData[oldName]");
+
+		return $this->groupChangeQueryGet($group, $escapedData);
+	}
+
+	/**
+	 * Escapes the Input given for creating the groupChangeQuery
+	 *
+	 * @param  Array $data The Inputdata
+	 * @return Array The escaped Inputdata
+	 */
+	protected function groupChangeQueryEscapeInput($data) {
+
+		TableMng::sqlSave($data['oldName']);
+		TableMng::sqlSave($data['newName']);
+		TableMng::sqlSave($data['parentPath']);
+
+		return $data;
+	}
+
+	/**
+	 * Creates and returns the groupChangeQuery
+	 *
+	 * @param  Group $group The Group
+	 * @param  Array $escapedData The Escaped Inputdata
+	 * @return String The Query
+	 */
+	protected function groupChangeQueryGet($group, $escapedData) {
 
 		if($group) {
-			$query = Group::groupChangeQueryCreate($group, $newname);
+			$query = Group::groupChangeQueryCreate(
+				$group, $escapedData['newName']);
 		}
 		else {
 			die(json_encode(array(
@@ -269,13 +291,34 @@ class GroupSettings extends Module {
 	 */
 	protected function groupDeleteQuery($data) {
 
-		$name = TableMng::sqlSave($data['name']);
-		$name = $data['name'];
-		$parentPath = TableMng::sqlSave($data['parentPath']);
-		$parentPath = $data['parentPath'];
-
+		$escapedData = $this->groupDeleteQueryEscapeData($data);
 		$group = $this->_acl->getGrouproot()->groupByPathGet(
-			"$parentPath/$name");
+			"$escapedData[parentPath]/$escapedData[name]");
+
+		return $this->groupDeleteQueryCreate($group);
+	}
+
+	/**
+	 * Escapes the data given to a Group
+	 *
+	 * @param  Array $data The data
+	 * @return Array The escaped data
+	 */
+	protected function groupDeleteQueryEscapeData($data) {
+
+		TableMng::sqlSave($data['name']);
+		TableMng::sqlSave($data['parentPath']);
+
+		return $data;
+	}
+
+	/**
+	 * Creates the Query to delete the Group and returns it
+	 *
+	 * @param  Group $group The Group to delete
+	 * @return String The executable Query
+	 */
+	protected function groupDeleteQueryCreate($group) {
 
 		if($group) {
 			$query = Group::groupDeleteQueryCreate($group);
@@ -297,30 +340,11 @@ class GroupSettings extends Module {
 
 		TableMng::sqlSave($_POST['grouppath']);
 
-		//errornous behavior in Javascript, dblclick executes a single click
-		//too and problems arise - Quickfix with following line
-		if(substr($_POST['grouppath'], -1) == '/') {
-			die(json_encode(array('value' => 'quickfix')));
-		}
-		//init Group
-		$group = $this->_acl->getGrouproot()->groupByPathGet(
-			$_POST['grouppath']);
-		$groupId = $group->getId();
-		//init Rights
-		$rightArray = TableMng::query("SELECT * FROM GroupModuleRights
-			WHERE `groupId` = '$groupId'", true);
-		if(count($rightArray)) {
-			$rights = GroupModuleRight::initMultiple($rightArray);
-		}
-		else {
-			$rights = array();
-		}
-		//Init Modules and additional data for them
-		$groupAcl = new Acl();
-		$groupAcl->accessControlInitByGroup($group);
-		$mods = $groupAcl->moduleGet('root', true);
-		// var_dump($mods);
-		// $mods = $this->_acl->allowedModulesOfGroupGet($group);
+		$this->modulesFetchDoubleclickFix();
+		$group = $this->modulesFetchGroupGet($_POST['grouppath']);
+		$rights = $this->modulesFetchRightsInit($group);
+
+		$mods = $this->getAllModulesByGroup($group);
 		$modulesJstree = $this->modulesFormatForJstree(
 			$mods->moduleAsArrayGet(), $rights);
 
@@ -328,6 +352,85 @@ class GroupSettings extends Module {
 			'value' => 'success',
 			'message' => 'Die Daten wurden erfolgreich abgerufen',
 			'data' => $modulesJstree)));
+	}
+
+	/**
+	 * Fix errornous behaviour of JQuery with Doubleclick & Singleclick
+	 *
+	 * dblclick executes a single click too and problems arise.
+	 * Suppress at least an Errormessage to the User
+	 */
+	protected function modulesFetchDoubleclickFix() {
+
+		//errornous behavior in Javascript,
+		if(substr($_POST['grouppath'], -1) == '/') {
+			die(json_encode(array('value' => 'quickfix')));
+		}
+	}
+
+	protected function modulesFetchGroupGet($path) {
+
+		$group = $this->_acl->getGrouproot()->groupByPathGet($path);
+
+		if($group) {
+			return $group;
+		}
+		else {
+			die(json_encode(array('value' => 'error',
+				'message' => 'Konnte die Gruppe nicht finden')));
+		}
+	}
+
+	/**
+	 * Fetches and returns the GroupModuleRights for the given Group
+	 *
+	 * @param  Group $group The Group which rights to Fetch
+	 * @return Array An Array of GroupModuleRights
+	 */
+	protected function modulesFetchRightsInit($group) {
+
+		$groupId = $group->getId();
+		$rightDbData = $this->modulesFetchRightsFetch($groupId);
+		$rights = $this->modulesFetchDbRightsToObjects($rightDbData);
+		return $rights;
+	}
+
+	/**
+	 * Fetches the rights as an Array from the Database
+	 *
+	 * @param  int $groupId The Group-ID of the Rights
+	 * @return Array The Rights that were returned from the Server
+	 */
+	protected function modulesFetchRightsFetch($groupId) {
+
+		try {
+			$rights = TableMng::query("SELECT * FROM GroupModuleRights
+				WHERE `groupId` = '$groupId'", true);
+
+		} catch (Exception $e) {
+			die(json_encode(array('value' => 'error',
+				'message' => 'Konnte die Rechte nicht abrufen')));
+		}
+
+		return $rights;
+	}
+
+	/**
+	 * Converts the Array of Rights to GroupModuleRights
+	 *
+	 * @param  Array $rightArray The data returned from the Database
+	 * @return Array The GroupModuleRights
+	 */
+	protected function modulesFetchDbRightsToObjects($rightArray) {
+
+		if(count($rightArray)) {
+			$rights = GroupModuleRight::initMultiple($rightArray);
+		}
+		else {
+			$rights = array();
+		}
+
+		return $rights;
 	}
 
 	/**
@@ -361,43 +464,12 @@ class GroupSettings extends Module {
 		if(count($childs)) {
 			foreach($childs as &$module) {
 
-				$changeable = false;
+				$changeable = $this->modulechildsFormatForJstreeIsChangeable(
+					$module, $rights);
 
-				if(count($rights)) {
-					foreach($rights as $right) {
-						if($right->moduleId == $module['id']) {
-							$changeable = true;
-							continue;
-						}
-					}
-				}
+				$module = $this->modulechildsFormatForJstreeAdjustModuleData(
+					$module, $changeable);
 
-				if($module['enabled']) {
-					if($changeable) {
-						$title = 'Doppelklick um Modul zu deaktivieren';
-					}
-					else {
-						$title = 'Recht auf dieses Modul wurde von einer übergeordneten Gruppe oder untergeordnetem Modul gesetzt; Verändern sie diesen Zugriff dort';
-					}
-				}
-				else {
-					$title = 'Doppelklick um Modul zu aktivieren';
-				}
-
-				$changeableStr = ($changeable || !$module['enabled']) ?
-					'changeable' : 'notChangeable';
-
-				$module['children'] = $module['childs'];
-				$module['data'] = $module['name'];
-				$module['attr'] = array(
-					'id' => 'module_' . $module['id'],
-					'module_enabled' => $module['enabled'],
-					'rel' => $changeableStr,
-					'title' => $title);
-				unset($module['enabled']);
-				unset($module['childs']);
-				unset($module['name']);
-				unset($module['id']);
 				if(count($module['children'])) {
 					$module['children'] = $this->modulechildsFormatForJstree(
 						$module['children'], $rights);
@@ -408,6 +480,83 @@ class GroupSettings extends Module {
 		else {
 			return array();
 		}
+	}
+
+	/**
+	 * Changes the Array-data of the Module allowing to display them in Jstree
+	 *
+	 * @param  Array $module The Array representing the Module
+	 * @param  boolean $changeable If the Module is changeable or not
+	 * @return Array The Module with changed Arraydata
+	 */
+	protected function modulechildsFormatForJstreeAdjustModuleData(
+		$module, $changeable) {
+
+		$title = $this->modulechildsFormatForJstreeTitleCreate(
+			$module, $changeable);
+
+		$changeableStr = ($changeable || !$module['enabled']) ?
+			'changeable' : 'notChangeable';
+
+		$module['children'] = $module['childs'];
+		$module['data'] = $module['name'];
+		$module['attr'] = array(
+			'id' => 'module_' . $module['id'],
+			'module_enabled' => $module['enabled'],
+			'rel' => $changeableStr,
+			'title' => $title);
+		unset($module['enabled']);
+		unset($module['childs']);
+		unset($module['name']);
+		unset($module['id']);
+
+		return $module;
+	}
+
+	/**
+	 * Creates a description for the Module based on its data
+	 *
+	 * @param  Array $module The Module to create a description for
+	 * @param  boolean $changeable If the Module is changeable or not
+	 * @return String The description of the Module (HTML-title)
+	 */
+	protected function modulechildsFormatForJstreeTitleCreate(
+		$module, $changeable) {
+
+		if($module['enabled']) {
+			if($changeable) {
+				$title = 'Doppelklick um Modul zu deaktivieren';
+			}
+			else {
+				$title = 'Recht auf dieses Modul wurde von einer übergeordneten Gruppe oder untergeordnetem Modul gesetzt; Verändern sie diesen Zugriff dort';
+			}
+		}
+		else {
+			$title = 'Doppelklick um Modul zu aktivieren';
+		}
+
+		return $title;
+	}
+
+	/**
+	 * Checks if the Module-right is changeable or not
+	 *
+	 * @param  Array $module The module
+	 * @param  Array $rights The rights to loop
+	 * @return boolean true if it is changeable, else false
+	 */
+	protected function modulechildsFormatForJstreeIsChangeable(
+		$module, $rights) {
+
+		if(count($rights)) {
+			foreach($rights as $right) {
+				if($right->moduleId == $module['id']) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -423,14 +572,8 @@ class GroupSettings extends Module {
 			TableMng::sqlSave($grouppath);
 
 			$group = $this->_acl->getGrouproot()->groupByPathGet($grouppath);
-
-			$groupAcl = new Acl();
-			$groupAcl->accessControlInitByGroup($group);
-			$module = $groupAcl->moduleGet('root', true);
-
-			if($module->getId() != $moduleId) {
-				$module = $module->anyChildByIdGet($moduleId);
-			}
+			$module = $this->modulerightStatusChangeModuleGet(
+				$group, $moduleId);
 
 			// Reverse the state of the module since the User wants it changed
 			$desiredState = !($module->isAccessAllowed());
@@ -446,6 +589,26 @@ class GroupSettings extends Module {
 			die(json_encode(array('value' => 'error',
 				'message' => 'Zu wenig Daten gegeben!')));
 		}
+	}
+
+	/**
+	 * Gets the Module by the ModuleId with its rights set by the group
+	 *
+	 * @param  Group $group The Group to set the rights for
+	 * @return ModuleGenerator the Module
+	 */
+	protected function modulerightStatusChangeModuleGet($group, $moduleId) {
+
+		$modulerootWithRightsSet = $this->getAllModulesByGroup($group);
+
+		if($modulerootWithRightsSet->getId() != $moduleId) {
+			$module = $modulerootWithRightsSet->anyChildByIdGet($moduleId);
+		}
+		else {
+			$module = $modulerootWithRightsSet;
+		}
+
+		return $module;
 	}
 
 	/**
@@ -468,6 +631,21 @@ class GroupSettings extends Module {
 				$moduleId,
 				$group->getId());
 		}
+	}
+
+	/**
+	 * Gets all Modules and sets the rights for the given Group
+	 *
+	 * @param  Group $group The group for which the rights to set
+	 * @return Array All Modules (even the not allowed ones)
+	 */
+	protected function getAllModulesByGroup($group) {
+
+		$groupAcl = new Acl();
+		$groupAcl->accessControlInitByGroup($group);
+		$mods = $groupAcl->moduleGetWithNotAllowedModules('root');
+
+		return $mods;
 	}
 
 	/////////////////////////////////////////////////////////////////////

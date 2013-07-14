@@ -182,13 +182,10 @@ a #header_link {
 div.headmodule {
 	float: left;
 	width: 350px;
-}
-
-div.headmodule {
 	font-weight: bold;
 	background-color: #2e6132;
 	text-align: center;
-	line-height: 250%;
+	line-height: 150%;
 	padding: 5px;
 	margin: 5px;
 	border: 2px solid #99cc66;

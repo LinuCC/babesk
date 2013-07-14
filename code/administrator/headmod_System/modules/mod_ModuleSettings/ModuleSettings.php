@@ -274,7 +274,6 @@ class ModuleSettings extends Module {
 			die(json_encode(array('value' => 'error',
 				'message' => 'Konnte Modul nicht hinzufügen' . $e->getMessage())));
 		}
-
 	}
 
 	protected function moduleRemove() {

@@ -38,6 +38,7 @@ class Administrator {
 		$this->_adminInterface = new AdminInterface(NULL, $this->_smarty);
 		$this->_logger = new LogManager();
 		$this->_acl = new Acl();
+		$this->_acl->setSubprogramPath('root/administrator');
 		$this->loadVersion();
 		$this->_dataContainer = new DataContainer(
 			$this->_smarty,
@@ -103,15 +104,10 @@ class Administrator {
 
 	}
 
-	public function executeModule($moduleName) {
+	public function executeModule($section) {
 
-		$modSubPath = explode('|', $moduleName);
-		$headmod = $modSubPath[0];
-		$mod = $modSubPath[1];
-		$path = "root/administrator/$headmod/$mod";
-		$smarty = $this->_smarty;
 		try {
-			$this->_acl->moduleExecute($path, $this->_dataContainer);
+			$this->_acl->moduleExecute($section, $this->_dataContainer);
 
 		} catch (Exception $e) {
 			$this->_adminInterface->dieError(

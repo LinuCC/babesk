@@ -23,12 +23,35 @@ class Acl {
 	//Methods
 	/////////////////////////////////////////////////////////////////////
 
+	/**
+	 * Returns the Moduleroot containing its childs
+	 *
+	 * @return ModuleGenerator The Moduleroot
+	 */
 	public function getModuleroot() {
 		return $this->_moduleroot;
 	}
 
+	/**
+	 * Returns the Grouproot containing its childs
+	 *
+	 * @return Group The Grouproot
+	 */
 	public function getGrouproot() {
 		return $this->_grouproot;
+	}
+
+	/**
+	 * Sets the Subprogrampath. Needed when using the old section-styl
+	 *
+	 * When using Headmodule|Module as executionpath you need to use this
+	 * function beforehand. For example the administrator-Subprogram needs to
+	 * give the String 'root/administrator'
+	 *
+	 * @param String $path The Path to the Subprogram
+	 */
+	public function setSubProgramPath($path) {
+		$this->_subProgramPath = $path;
 	}
 
 	/**
@@ -66,10 +89,21 @@ class Acl {
 		}
 	}
 
+	/**
+	 * Executes a module
+	 *
+	 * @param  String $section       The Path to the Module. Supported are:
+	 *     "Headmodule|Module" - The old way. deprecated
+	 *     "Headmodule" - Another notation of the old way. deprecated
+	 *     "root/path/to/module" - The new way. preferred
+	 * @param  dataContainer $dataContainer The dataContainer that is given to
+	 *     the executed Module
+	 */
+	public function moduleExecute($section, $dataContainer) {
 
-	public function moduleExecute($path, $dataContainer) {
-
+		$path = $this->sectionToPath($section);
 		$module = $this->_moduleroot->moduleByPathGet($path);
+		$dataContainer->setModuleExecutionPath($path);
 		if(!empty($module)) {
 			if($module->isAccessAllowed()) {
 				$module->execute($dataContainer);
@@ -84,14 +118,42 @@ class Acl {
 		}
 	}
 
-	public function moduleGet($path = 'root', $nonAccessGet = false) {
+	/**
+	 * Returns the Module by the given path
+	 *
+	 * This function does not return the Modules that are set as not allowed
+	 *
+	 * @param  string $path The path of the Module. If not given returns the
+	 *     rootmodule
+	 * @return ModuleGenerator The Module by the Path
+	 * @throws  AclException If Modulepath could not be resolved
+	 */
+	public function moduleGet($path = 'root') {
 
 		if($origMod = $this->_moduleroot->moduleByPathGet($path)) {
 			//Deep Clone of the object
 			$module = unserialize(serialize($origMod));
-			if(!$nonAccessGet) {
-				$module->notAllowedChildsRemove();
-			}
+			$module->notAllowedChildsRemove();
+			return $module;
+		}
+		else {
+			throw new AclException('Modulepath could not be resolved');
+		}
+	}
+
+	/**
+	 * Returns all Modules, regardless of their notAllowed-Status
+	 *
+	 * @param  string $path The path of the Module. If not given returns the
+	 *     rootmodule
+	 * @return ModuleGenerator The Module by the Path
+	 * @throws  AclException If Modulepath could not be resolved
+	 */
+	public function moduleGetWithNotAllowedModules($path = 'root') {
+
+		if($origMod = $this->_moduleroot->moduleByPathGet($path)) {
+			//Deep Clone of the object
+			$module = unserialize(serialize($origMod));
 			return $module;
 		}
 		else {
@@ -134,6 +196,63 @@ class Acl {
 		return $groupsToCheck;
 	}
 
+	protected function sectionToPath($section) {
+
+		if(preg_match('/^root[^\|]*$/', $section)) {
+			return $section;
+		}
+		else if(preg_match('/^[^\/\|]+\|[^\/\|]+$/', $section)) {
+			return $this->headmoduleAndModuleToPath($section);
+		}
+		else if(preg_match('/^[a-zA-Z]+$/', $section)) {
+			return $this->headmoduleToPath($section);
+		}
+		else {
+			throw new AclException('Could not parse section!');
+		}
+	}
+
+	/**
+	 * Creates the Path to the Module from the old-style section-string
+	 *
+	 * @param  string $section Sectionstring, foramt 'Headmodule|Module'
+	 * @return string          The Path
+	 * @throws AclException If Suprogrampath not sert
+	 */
+	protected function headmoduleAndModuleToPath($section) {
+
+		if(!empty($this->_subProgramPath)) {
+			return $this->fromHeadmoduleAndModuleCreatePath($section);
+		}
+		else {
+			throw new AclException('Subprogrampath not set but old-style Sectionpath given');
+		}
+	}
+
+	/**
+	 * Creates the Path to the Module from the old-style section-string
+	 *
+	 * @param  string $section Sectionstring, foramt 'Headmodule|Module'
+	 * @return string          The Path
+	 */
+	protected function fromHeadmoduleAndModuleCreatePath($section) {
+
+		$modSubPath = explode('|', $section);
+		$headmod = $modSubPath[0];
+		$mod = $modSubPath[1];
+		return $this->_subProgramPath . "/$headmod/$mod";
+	}
+
+	protected function headmoduleToPath($section) {
+
+		if(!empty($this->_subProgramPath)) {
+			return $this->_subProgramPath . "/$section";
+		}
+		else {
+			throw new AclException('Subprogrampath not set but old-style Sectionpath given');
+		}
+	}
+
 	protected function applyRightsByGroups($groups) {
 
 		$allRights = GroupModuleRight::rightsOfGroupsGet($groups);
@@ -167,6 +286,12 @@ class Acl {
 
 	protected $_moduleroot;
 	protected $_grouproot;
+
+	/**
+	 * Used for Oldschool-section declaration: "Headmodule|Module"
+	 * @var String
+	 */
+	protected $_subProgramPath;
 
 	protected $_accessControlInitialized;
 }
