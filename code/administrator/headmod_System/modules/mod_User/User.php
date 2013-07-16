@@ -96,58 +96,6 @@ class User extends Module {
 		$this->changeDisplay();
 	}
 
-	protected function actionSwitch() {
-
-		if ('POST' == $_SERVER['REQUEST_METHOD']) {
-			$action = $_GET['action'];
-			switch ($action) {
-				case 'changeUser':
-					$this->change();
-					break;
-				case 2: //show the users
-					$displayer = new UserDisplayAll($this->_smarty);
-					$displayer->displayAll();
-					break;
-				case 'fetchUserdata':
-					$displayer = new UserDisplayAll($this->_smarty);
-					$displayer->fetchUsersOrganized();
-					break;
-				case 'fetchUsercolumns':
-					$displayer = new UserDisplayAll($this->_smarty);
-					$displayer->fetchShowableColumns();
-					break;
-				case 'deleteUser': //delete the user
-					$deleter = new UserDelete($this->_smarty);
-					$deleter->deleteFromDb();
-					break;
-				case 5:
-					$this->userCreateUsernames();
-					break;
-				case 6:
-					$this->usernamesRemoveSpecialChars();
-					break;
-				default:
-					die('wrongActionValue');
-			}
-		}
-		else if ('GET' == $_SERVER['REQUEST_METHOD']
-			&& isset($_GET['action'])) {
-			$action = $_GET['action'];
-			switch ($action) {
-				case 'changeUserDisplay':
-					$this->changeDisplay();
-					break;
-				case 'deleteUser': //delete the user
-					$deleter = new UserDelete($this->_smarty);
-					$deleter->deleteFromDb();
-					break;
-			}
-		}
-		else {
-			$this->userInterface->ShowSelectionFunctionality();
-		}
-	}
-
 	/**
 	 * Registers a user. Requests should come from Ajax
 	 *
