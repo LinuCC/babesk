@@ -26,11 +26,15 @@ class Babesk extends HeadModule {
 		$userManager = new UserManager();
 
 		if ($userManager->firstPassword($_SESSION['uid'])) {
+			$defaultMod = new ModuleExecutionInputParser(
+				'root/web/Babesk/ChangePassword');
 			$dataContainer->getAcl()->moduleExecute(
-				'root/web/Babesk/ChangePassword', $dataContainer);
+				$defaultMod, $dataContainer);
 		}
 		else {
-			$dataContainer->getAcl()->moduleExecute('root/web/Babesk/Menu',
+			$defaultMod = new ModuleExecutionInputParser(
+				'root/web/Babesk/Menu');
+			$dataContainer->getAcl()->moduleExecute($defaultMod,
 				$dataContainer);
 		}
 	}

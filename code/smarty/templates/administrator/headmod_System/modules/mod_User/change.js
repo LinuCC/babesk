@@ -106,7 +106,7 @@ $(document).ready(function() {
 
 		$.ajax({
 			type: "POST",
-			url: "index.php?section=System|User&action=changeUser",
+			url: "index.php?module=administrator|System|User|Change",
 			data: {
 				'ID': $('input.inputItem[name=ID]').val(),
 				'forename': $('input.inputItem[name=forename]').val(),

@@ -11,6 +11,7 @@ require_once PATH_INCLUDE . '/exception_def.php';
 require_once PATH_INCLUDE . '/DataContainer.php';
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/HeadModule.php';
+require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';
 require_once 'Login.php';
 require_once 'AdminInterface.php';
 require_once 'locales.php';
@@ -34,11 +35,13 @@ class Administrator {
 
 		validSession() or die(INVALID_SESSION);
 		$this->initSmarty();
-		TableMng::init ();
+		TableMng::init();
 		$this->_adminInterface = new AdminInterface(NULL, $this->_smarty);
 		$this->_logger = new LogManager();
 		$this->_acl = new Acl();
-		$this->_acl->setSubprogramPath('root/administrator');
+		$this->_moduleExecutionParser = new ModuleExecutionInputParser();
+		$this->_moduleExecutionParser->setSubprogramPath(
+			'root/administrator');
 		$this->loadVersion();
 		$this->_dataContainer = new DataContainer(
 			$this->_smarty,
@@ -83,8 +86,8 @@ class Administrator {
 		if($login->loginCheck()) {
 			$this->accessControlInit();
 			$this->initUserInterface();
-			if(isset($_GET['section'])) {
-				$this->executeModule($_GET['section'], false);
+			if($this->_moduleExecutionParser->load()) {
+				$this->executeModule();
 			}
 			else {
 				$this->MainMenu();
@@ -104,14 +107,24 @@ class Administrator {
 
 	}
 
-	public function executeModule($section) {
+	public function executeModule() {
 
 		try {
-			$this->_acl->moduleExecute($section, $this->_dataContainer);
+			$this->_acl->moduleExecute(
+				$this->_moduleExecutionParser, $this->_dataContainer);
 
 		} catch (Exception $e) {
-			$this->_adminInterface->dieError(
-				'Konnte das Modul nicht ausführen:' . $e->getMessage());
+			if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+				//It was an Ajax-Call, dont show the whole Website
+				die(json_encode(array('value' => 'error',
+					'message' => 'Konnte das Modul nicht ausführen:<br />' .
+						$e->getMessage())));
+			}
+			else {
+				$this->_adminInterface->dieError(
+					'Konnte das Modul nicht ausführen:<br />' .
+					$e->getMessage());
+			}
 		}
 	}
 

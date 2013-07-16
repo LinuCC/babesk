@@ -2,21 +2,24 @@
 
 require_once 'AdminUserInterface.php';
 require_once 'AdminUserProcessing.php';
+require_once 'UserDelete.php';
+require_once 'UserDisplayAll.php';
 require_once 'UsernameAutoCreator.php';
 require_once PATH_ACCESS . '/CardManager.php';
 require_once PATH_ACCESS . '/UserManager.php';
 require_once PATH_INCLUDE . '/Module.php';
-require_once 'UserDisplayAll.php';
-require_once 'UserDelete.php';
 
 
 class User extends Module {
+
 	///////////////////////////////////////////////////////////////////////
 	//Constructor
 	///////////////////////////////////////////////////////////////////////
+
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
 	}
+
 	///////////////////////////////////////////////////////////////////////
 	//Getters and Setters
 	///////////////////////////////////////////////////////////////////////
@@ -24,16 +27,80 @@ class User extends Module {
 	///////////////////////////////////////////////////////////////////////
 	//Methods
 	///////////////////////////////////////////////////////////////////////
+
 	public function execute($dataContainer) {
 
 		$this->entryPoint($dataContainer);
 
+		if($execReq = $dataContainer->getSubmoduleExecutionRequest()) {
+			$this->submoduleExecute($execReq);
+		}
+		else {
+			// $this->actionSwitch();
+			$this->userInterface->ShowSelectionFunctionality();
+		}
+	}
+	///////////////////////////////////////////////////////////////////////
+	//Implementations
+	///////////////////////////////////////////////////////////////////////
+	protected function entryPoint ($dataContainer) {
+
+		defined('_AEXEC') or die('Access denied');
+		$this->cardManager = new CardManager();
+		$this->userManager = new UserManager();
+		$this->userInterface = new AdminUserInterface($this->relPath);
+		$this->_interface = $this->userInterface;
+		$this->userProcessing = new AdminUserProcessing($this->userInterface);
+		$this->messages = array('error' => array(
+			'no_id' => 'ID nicht gefunden.'));
+		$this->_smarty = $dataContainer->getSmarty();
+		$this->_acl = $dataContainer->getAcl();
+	}
+
+	protected function submoduleDisplayAllExecute() {
+
+		$displayer = new UserDisplayAll($this->_smarty);
+		$displayer->displayAll();
+	}
+
+	protected function submoduleFetchUserdataExecute() {
+
+		$displayer = new UserDisplayAll($this->_smarty);
+		$displayer->fetchUsersOrganized();
+	}
+
+	protected function submoduleFetchUsercolumnsExecute() {
+
+		$displayer = new UserDisplayAll($this->_smarty);
+		$displayer->fetchShowableColumns();
+	}
+
+	protected function submoduleDeleteExecute() {
+
+		$deleter = new UserDelete($this->_smarty);
+		$deleter->deleteFromDb();
+	}
+
+	protected function submoduleCreateUsernamesExecute() {
+
+		$this->userCreateUsernames();
+	}
+
+	protected function submoduleRemoveSpecialCharsFromUsernamesExecute() {
+
+		$this->usernamesRemoveSpecialChars();
+	}
+
+	protected function submoduleDisplayChangeExecute() {
+
+		$this->changeDisplay();
+	}
+
+	protected function actionSwitch() {
+
 		if ('POST' == $_SERVER['REQUEST_METHOD']) {
 			$action = $_GET['action'];
 			switch ($action) {
-				case 'addUser': //register user
-					$this->register();
-					break;
 				case 'changeUser':
 					$this->change();
 					break;
@@ -53,17 +120,11 @@ class User extends Module {
 					$deleter = new UserDelete($this->_smarty);
 					$deleter->deleteFromDb();
 					break;
-				case 4:
-					$this->search();
-					break;
 				case 5:
 					$this->userCreateUsernames();
 					break;
 				case 6:
 					$this->usernamesRemoveSpecialChars();
-					break;
-				case 7:
-					$this->deletePdf();
 					break;
 				default:
 					die('wrongActionValue');
@@ -86,20 +147,6 @@ class User extends Module {
 			$this->userInterface->ShowSelectionFunctionality();
 		}
 	}
-	///////////////////////////////////////////////////////////////////////
-	//Implementations
-	///////////////////////////////////////////////////////////////////////
-	protected function entryPoint ($dataContainer) {
-		defined('_AEXEC') or die('Access denied');
-		$this->cardManager = new CardManager();
-		$this->userManager = new UserManager();
-		$this->userInterface = new AdminUserInterface($this->relPath);
-		$this->_interface = $this->userInterface;
-		$this->userProcessing = new AdminUserProcessing($this->userInterface);
-		$this->messages = array(
-				'error' => array('no_id' => 'ID nicht gefunden.'));
-		$this->_smarty = $dataContainer->getSmarty();
-	}
 
 	/**
 	 * Registers a user. Requests should come from Ajax
@@ -107,7 +154,7 @@ class User extends Module {
 	 * Either shows the Register-form or, if POST-Data send, tries to add the
 	 * Data-input to the Database as a new User
 	 */
-	protected function register() {
+	protected function submoduleRegisterExecute() {
 
 		if (isset($_POST['forename'], $_POST['name'])) {
 			$this->registerCheck(); //Form filled out
@@ -251,49 +298,6 @@ class User extends Module {
 
 	}
 
-	protected function search() {
-		if (isset ($_POST['user_search'])) {
-			try {
-				$userID = $this->cardManager->getUserID($_POST['user_search']);
-			} catch (Exception $e) {
-				 $userID =  $e->getMessage();
-			}
-			if ($userID == 'MySQL returned no data!') {
-			try {
-				$userID = $this->userManager->getUserID($_POST['user_search']);
-			} catch (Exception $e) {
-				$this->userInterface->dieError("Benutzer nicht gefunden!");
-			}
-
-		}
-
-			$this->changeDisplay($userID);
-
-			break;
-		}
-
-		if (!isset($_POST['id'], $_POST['forename'], $_POST['name'], $_POST['username'], $_POST['credits'], $_POST[
-		'gid'])) {
-		$this->changeDisplay($_GET['ID']);
-		} else {
-			$soli = 0;
-			if (isset($_POST['soliAccount'])) {
-				$soli = 1;
-			}
-			if (isset($_POST['lockAccount'])) {
-				$this->ChangeUser($_GET['ID'], $_POST['id'], $_POST['forename'], $_POST['name'], $_POST[
-						'username'], $_POST['passwd'], $_POST['passwd_repeat'], $_POST['Date_Year'] . '-' . $_POST[
-						'Date_Month'] . '-' . $_POST['Date_Day'], $_POST['gid'], $_POST['credits'], 1, @$_POST[
-						'cardnumber'], $soli,$_POST['class']);
-			} else {
-				$this->ChangeUser($_GET['ID'], $_POST['id'], $_POST['forename'], $_POST['name'], $_POST[
-						'username'], $_POST['passwd'], $_POST['passwd_repeat'], $_POST['Date_Year'] . '-' . $_POST[
-						'Date_Month'] . '-' . $_POST['Date_Day'], $_POST['gid'], $_POST['credits'], 0, @$_POST[
-						'cardnumber'], $soli,$_POST['class']);
-			}
-		}
-	}
-
 	/**
 	 * Fetches data from the Database and rearranges them
 	 *
@@ -361,7 +365,7 @@ class User extends Module {
 			$this->userManager->changeUsers ($rows);
 		}
 		else {
-			$this->userInterface->showRemoveSpecialCharsFromUsername ($rows);
+			$this->userInterface->showRemoveSpecialCharsFromUsername();
 		}
 	}
 
@@ -489,7 +493,7 @@ class User extends Module {
 	/**
 	 * Handles the Input from the ChangeUser-Form and changes the data
 	 */
-	protected function change() {
+	protected function submoduleChangeExecute() {
 
 		$uid = mysql_real_escape_string($_POST['ID']);
 		$this->changeParseInput();
@@ -860,7 +864,6 @@ class User extends Module {
 
 		return $query;
 	}
-
 
 	///////////////////////////////////////////////////////////////////////
 	//Attributes

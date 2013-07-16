@@ -142,11 +142,13 @@ class ModuleGenerator {
 
 		//check for each Module in the given path if it exists
 		foreach($tree as $wantedNodeName) {
-			foreach($treeIterator->_childs as $node) {
-				//If name of Module found
-				if($node->_name == $wantedNodeName) {
-					$treeIterator = $node;
-					continue 2;
+			if(!empty($treeIterator->_childs)) {
+				foreach($treeIterator->_childs as $node) {
+					//If name of Module found
+					if($node->_name == $wantedNodeName) {
+						$treeIterator = $node;
+						continue 2;
+					}
 				}
 			}
 			return false; //Module with name not found

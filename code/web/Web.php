@@ -6,12 +6,14 @@ class Web {
 	///////////////////////////////////////////////////////////////////////
 	//Attributes
 	///////////////////////////////////////////////////////////////////////
+
 	private $_smarty;
 	private $_loggedIn;
 	private $_interface;
 	private $_userManager;
 	private $_acl;
 	private $_dataContainer;
+	private $_moduleExecutionParser;
 
 	///////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -31,6 +33,7 @@ class Web {
 		require_once PATH_ACCESS . '/LogManager.php';
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 		require_once PATH_INCLUDE . '/Acl.php';
+		require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';
 		require_once 'WebInterface.php';
 
 		TableMng::init ();
@@ -39,7 +42,8 @@ class Web {
 		$this->_loggedIn = isset($_SESSION['uid']);
 		$this->_interface = new WebInterface($this->_smarty);
 		$this->_acl = new Acl();
-		$this->_acl->setSubprogramPath('root/web');
+		$this->_moduleExecutionParser = new ModuleExecutionInputParser();
+		$this->_moduleExecutionParser->setSubprogramPath('root/web');
 		$this->_dataContainer = new DataContainer($this->_smarty,
 			$this->_interface, $this->_acl);
 		$this->initLanguage();
@@ -61,14 +65,14 @@ class Web {
 		session_destroy();
 	}
 
-	public function mainRoutine($moduleStr) {
+	public function mainRoutine() {
 
 		$this->handleLogin();
 		$this->handleRedirect();
 		$this->initUserdata();
 		$this->loadModules();
 		$this->checkFirstPassword();
-		$this->display($moduleStr);
+		$this->display();
 	}
 
 	///////////////////////////////////////////////////////////////////////
@@ -198,10 +202,12 @@ class Web {
 		}
 	}
 
-	private function executeModule($name) {
+	private function executeModule() {
 
 		try {
-			$this->_acl->moduleExecute($name, $this->_dataContainer);
+			$this->_acl->moduleExecute($this->_moduleExecutionParser,
+				$this->_dataContainer);
+
 
 		} catch (AclException $e) {
 			if($e->getCode() == 105) { //Module-Access forbidden
@@ -286,11 +292,11 @@ class Web {
 		}
 	}
 
-	private function display($moduleStr) {
+	private function display() {
 
 		$this->_smarty->assign('moduleroot', $this->_acl->getModuleroot());
-		if ($moduleStr) {
-			$this->executeModule($moduleStr);
+		if ($this->_moduleExecutionParser->load()) {
+			$this->executeModule();
 		}
 		else {
 			$birthday = date("m-d",strtotime($this->_userManager->getBirthday($_SESSION['uid'])));

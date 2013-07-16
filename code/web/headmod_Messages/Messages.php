@@ -1,6 +1,7 @@
 <?php
 
 require_once PATH_INCLUDE . '/HeadModule.php';
+require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';
 
 /**
  * class for Interface web
@@ -22,8 +23,10 @@ class Messages extends HeadModule {
 	//Methods
 	public function execute($dataContainer) {
 
+		$defaultMod = new ModuleExecutionInputParser(
+			'root/web/Messages/MessageMainMenu');
 		$dataContainer->getAcl()->moduleExecute(
-			'root/web/Messages/MessageMainMenu', $dataContainer);
+			$defaultMod, $dataContainer);
 	}
 }
 ?>

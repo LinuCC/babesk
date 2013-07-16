@@ -20,7 +20,7 @@ $(document).ready(function() {
 				"Benutzer löschen": function() {
 					window.location.href = String(
 						'index.php?' +
-						'section=System|User&action=deleteUser&ID={0}')
+						'module=administrator|System|User|Delete&ID={0}')
 						.format(toDelete);
 					// deleteAjax(toDelete);
 					$(this).dialog("close");
@@ -36,7 +36,7 @@ $(document).ready(function() {
 
 		$.ajax({
 			type: "POST",
-			url: 'index.php?section=System|User&action=deleteUser&ID={0}'.format(userId),
+			url: 'index.php?module=administrator|System|User|Delete&ID={0}'.format(userId),
 			data: {
 			},
 			success: function(data) {
@@ -159,7 +159,7 @@ $(document).ready(function() {
 		if(!appendix.length) {
 			var newAppendix = $(String('<div class="tableRowAppendix" id="appendixFor' + id + '">' +
 				'<a href="index.php?' +
-				'section=System|User&action=changeUserDisplay&ID={0}" ' +
+				'module=administrator|System|User|DisplayChange&ID={0}" ' +
 				'title="ändern"><img src="../images/status/edit_16.png"/>' +
 				'</a><a id="deleteUser_{0}" href="#" class="deleteUser" ' +
 				'target="_blank" title="löschen">' +
@@ -254,7 +254,7 @@ $(document).ready(function() {
 
 		$.ajax({
 			type: "POST",
-			url: "index.php?section=System|User&action=fetchUserdata",
+			url: "index.php?module=administrator|System|User|FetchUserdata",
 			data: {
 				'usersPerPage': $('#usersPerPage').val(),
 				'pagenumber': pagenum,
@@ -335,7 +335,7 @@ $(document).ready(function() {
 
 		$.ajax({
 			type: "POST",
-			url: "index.php?section=System|User&action=fetchUsercolumns",
+			url: "index.php?module=administrator|System|User|FetchUsercolumns",
 			data: {
 			},
 

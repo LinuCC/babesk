@@ -22,7 +22,9 @@ class Fits extends HeadModule {
 	//Methods
 	public function execute($dataContainer) {
 
-		$dataContainer->getAcl()->moduleExecute('root/web/Fits/Fmenu',
+		$defaultMod = new ModuleExecutionInputParser(
+				'root/web/Fits/Fmenu');
+		$dataContainer->getAcl()->moduleExecute($defaultMod,
 			$dataContainer);
 	}
 }

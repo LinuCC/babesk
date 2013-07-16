@@ -11,12 +11,7 @@ if (isset($_GET['action']) AND $_GET['action'] == 'logout') {
 }
 $smarty = $webManager->getSmarty();
 
-if (isset($_GET['section'])) {
-	$webManager->mainRoutine($_GET['section']);
-}
-else {
-	$webManager->mainRoutine(false);
-}
+$webManager->mainRoutine();
 
 die();
 

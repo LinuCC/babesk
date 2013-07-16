@@ -6,6 +6,8 @@ require_once PATH_INCLUDE . '/Group.php';
 
 /**
  * The AccessControlLayer
+ *
+ * @author Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
 class Acl {
 
@@ -39,19 +41,6 @@ class Acl {
 	 */
 	public function getGrouproot() {
 		return $this->_grouproot;
-	}
-
-	/**
-	 * Sets the Subprogrampath. Needed when using the old section-styl
-	 *
-	 * When using Headmodule|Module as executionpath you need to use this
-	 * function beforehand. For example the administrator-Subprogram needs to
-	 * give the String 'root/administrator'
-	 *
-	 * @param String $path The Path to the Subprogram
-	 */
-	public function setSubProgramPath($path) {
-		$this->_subProgramPath = $path;
 	}
 
 	/**
@@ -98,12 +87,16 @@ class Acl {
 	 *     "root/path/to/module" - The new way. preferred
 	 * @param  dataContainer $dataContainer The dataContainer that is given to
 	 *     the executed Module
+	 * @throws AclException If ModuleAccess is forbidden
+	 * @throws AclException If Module could not be loaded by path
 	 */
-	public function moduleExecute($section, $dataContainer) {
+	public function moduleExecute($moduleExecutionParser, $dataContainer) {
 
-		$path = $this->sectionToPath($section);
-		$module = $this->_moduleroot->moduleByPathGet($path);
-		$dataContainer->setModuleExecutionPath($path);
+		$moduleToExecutePath = $moduleExecutionParser->moduleExecutionGet();
+		$subRequest = $moduleExecutionParser->submoduleExecutionGet();
+		$dataContainer->setSubmoduleExecutionRequest($subRequest);
+		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
+
 		if(!empty($module)) {
 			if($module->isAccessAllowed()) {
 				$module->execute($dataContainer);
@@ -114,7 +107,7 @@ class Acl {
 		}
 		else {
 			throw new AclException(
-				"Module could not be loaded by path '$path'");
+				"Module could not be loaded by path '$moduleToExecutePath'");
 		}
 	}
 
@@ -134,10 +127,13 @@ class Acl {
 			//Deep Clone of the object
 			$module = unserialize(serialize($origMod));
 			$module->notAllowedChildsRemove();
+			if(!$module->isAccessAllowed()) {
+				return false;
+			}
 			return $module;
 		}
 		else {
-			throw new AclException('Modulepath could not be resolved');
+			throw new AclException('Modul nicht vorhanden');
 		}
 	}
 
@@ -198,8 +194,9 @@ class Acl {
 
 	protected function sectionToPath($section) {
 
-		if(preg_match('/^root[^\|]*$/', $section)) {
-			return $section;
+		if(preg_match('/^root\|.*$/', $section)) {
+			$mods = explode('|', $section);
+			return "$mods[0]/$mods[1]/$mods[2]/$mods[3]";
 		}
 		else if(preg_match('/^[^\/\|]+\|[^\/\|]+$/', $section)) {
 			return $this->headmoduleAndModuleToPath($section);
@@ -286,12 +283,6 @@ class Acl {
 
 	protected $_moduleroot;
 	protected $_grouproot;
-
-	/**
-	 * Used for Oldschool-section declaration: "Headmodule|Module"
-	 * @var String
-	 */
-	protected $_subProgramPath;
 
 	protected $_accessControlInitialized;
 }

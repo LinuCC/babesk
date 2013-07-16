@@ -20,7 +20,7 @@ class Schbas extends HeadModule {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute($moduleManager, $dataContainer) {
+	public function execute($moduleManager) {
 		//function not needed, javascript is doing everything
 	}
 

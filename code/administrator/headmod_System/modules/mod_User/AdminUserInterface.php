@@ -51,7 +51,7 @@ class AdminUserInterface extends AdminInterface {
 		$this->smarty->display ($this->tplFilePath . 'dialogAutoCreateUsernames.tpl');
 	}
 
-	public function showRemoveSpecialCharsFromUsername () {
+	public function showRemoveSpecialCharsFromUsername() {
 		$this->smarty->display ($this->tplFilePath . 'usernameRemoveSpecialChars.tpl');
 	}
 
