@@ -41,12 +41,14 @@ class TemporaryFile {
 	 *     Date-Strings
 	 * @param  String $until Datetime until which the Temporary File is
 	 *     considered valid. Supports Timestamps and Standard Date-Strings
+	 * @param  String $usage A short description of the Temporary File
+	 * (max. 64 Characters); gets stored in the Database
 	 * @return TemporaryFile The created Instance
 	 */
-	public static function init($content, $created, $until) {
+	public static function init($content, $created, $until, $usage = '') {
 
 		$obj = new TemporaryFile();
-		$obj->setInitialValues(false, $content, $created, $until);
+		$obj->setInitialValues(false, $content, $created, $until, $usage);
 
 		return $obj;
 	}
@@ -93,7 +95,8 @@ class TemporaryFile {
 		}
 		$obj = new TemporaryFile();
 		$obj->setInitialValues($data['ID'], $data['content'],
-			$data['created'], $data['until'], $data['location']);
+			$data['created'], $data['until'], $data['usage'],
+			$data['location']);
 
 		return $obj;
 	}
@@ -126,6 +129,26 @@ class TemporaryFile {
 		$this->deleteFromDb();
 		$this->deleteFile();
 		TableMng::getDb()->autocommit(true);
+	}
+
+	/**
+	 * Provides the file as download to the User
+	 */
+	public function download($filename, $mimetype = 'test/plain') {
+
+		if(file_exists($this->_filepath)) {
+			if(!headers_sent()) {
+				header("Content-disposition: attachment; filename=\"$filename\"");
+				header("Content-type: $mimetype");
+				readfile($this->_filepath);
+			}
+			else {
+				throw new TemporaryFileException('Some data has already been output to browser', 5);
+			}
+		}
+		else {
+			throw new TemporaryFileException('File not found!', 5);
+		}
 	}
 
 	/**
@@ -177,13 +200,16 @@ class TemporaryFile {
 		if($this->_fileId === false) {
 			try {
 				TableMng::query("INSERT INTO TemporaryFiles
-						(`created`, `until`)
-					VALUES ('$this->_created', '$this->_until');");
+						(`created`, `until`, `usage`)
+					VALUES
+						('$this->_created', '$this->_until', '$this->_usage');
+						");
 				$this->_fileId = TableMng::getDb()->insert_id;
 
 				$this->filepathCreate();
 
 				//Update the location since only now we know the ID of the file
+				$this->_filepath = addslashes($this->_filepath);
 				TableMng::query("UPDATE TemporaryFiles
 					SET `location` = '$this->_filepath'
 					WHERE ID = $this->_fileId");
@@ -230,13 +256,14 @@ class TemporaryFile {
 	 * @param String $until    The time until the Temporary File is valid
 	 * @param String $location The location of the Temporary File [optional]
 	 */
-	protected function setInitialValues($id, $content, $created, $until, $location = '') {
+	protected function setInitialValues($id, $content, $created, $until, $usage, $location = '') {
 
 		$this->_fileId = $id;
 		$this->_content = $content;
 		$this->_created = self::toDatetime($created);
 		$this->_filepath = $location;
 		$this->_until = self::toDatetime($until);
+		$this->_usage = $usage;
 	}
 
 	/**
@@ -518,6 +545,8 @@ class TemporaryFile {
 	 * @var String, Format YYYY-MM-DD HH:MM:SS
 	 */
 	protected $_until;
+
+	protected $_usage;
 
 	/**
 	 * The ID of the file used in the DB and the filename

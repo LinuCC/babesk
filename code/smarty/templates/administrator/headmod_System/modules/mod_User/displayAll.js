@@ -4,6 +4,32 @@ $(document).ready(function() {
 	$("div.pageSelect").buttonset();
 	$(document).tooltip();
 
+	/**
+	 * Hiding the settings, filters, sortables etc
+	 */
+	$('.accordion').accordion({
+		collapsible: true,
+		heightStyle:"content",
+		active: 0 // Let user choose the ColumnsToShow first
+	});
+
+	/**
+	 * The Inputfield has two Arrows on the right, for incrementing and
+	 * decrementing the number in it
+	 */
+	$('#usersPerPage').spinner({
+		min: 10,
+		max: 500,
+		step: 10,
+		start: 10
+	});
+
+	/**
+	 *
+	 */
+	$(".tabs").tabs();
+	$( ".tabs li" ).addClass( "ui-corner-all" );
+
 	$('table.users.dataTable').on('click', 'a.deleteUser', function(ev) {
 
 		ev.preventDefault();
@@ -18,11 +44,7 @@ $(document).ready(function() {
 			modal: true,
 			buttons: {
 				"Benutzer löschen": function() {
-					window.location.href = String(
-						'index.php?' +
-						'module=administrator|System|User|Delete&ID={0}')
-						.format(toDelete);
-					// deleteAjax(toDelete);
+					deleteAjax(toDelete);
 					$(this).dialog("close");
 				},
 				"doch nicht": function() {
@@ -40,39 +62,30 @@ $(document).ready(function() {
 			data: {
 			},
 			success: function(data) {
-				console.log(data);
-				alert(data);
+
+				try {
+					data = JSON.parse(data);
+				} catch(e) {
+					adminInterface.errorShow(data);
+				}
+				if(data.value == 'success') {
+					adminInterface.successShow(data.message);
+					userDeletePdf(data.pdfId, data.forename, data.name);
+					newDataFetch();
+				}
+				else if(data.value == 'error') {
+					adminInterface.errorShow(data.message);
+				}
+				else {
+					fatalError();
+				}
 			},
 
 			error: function(error) {
 				fatalError();
 			}
 		});
-		// window.location.href = String(
-		// 	'index.php?' +
-		// 	'section=System|User&action=deleteUser&ID={0}')
-		// 	.format(userId);
 	}
-
-	/**
-	 * Hiding the settings, filters, sortables etc
-	 */
-	$('.accordion').accordion({
-		collapsible: true,
-		heightStyle:"content",
-		active: 2 // Let user choose the ColumnsToShow first
-	});
-
-	/**
-	 * The Inputfield has two Arrows on the right, for incrementing and
-	 * decrementing the number in it
-	 */
-	$('#usersPerPage').spinner({
-		min: 10,
-		max: 500,
-		step: 10,
-		start: 10
-	});
 
 	/**
 	 * Fetch new data and refresh the Table when different columns got
@@ -83,12 +96,28 @@ $(document).ready(function() {
 		newDataFetch();
 	});
 	$('div.filter').on('change', 'input.columnFilter', function(ev) {
+
+		$('.pageSelect input:checked').prop('checked', '');
+		$('.pageSelect input#pageSelectFirst').prop('checked', 'checked');
 		newDataFetch();
 	});
 	$('div.filter').on('click', 'input#filterSubmit', function(ev) {
+
+		$('.pageSelect input:checked').prop('checked', '');
+		$('.pageSelect input#pageSelectFirst').prop('checked', 'checked');
 		newDataFetch();
 	});
+
 	$('div.sort').on('change', 'input.columnSort', function(ev) {
+
+		$('.pageSelect input:checked').prop('checked', '');
+		$('.pageSelect input#pageSelectFirst').prop('checked', 'checked');
+		newDataFetch();
+	});
+
+	$('input#refreshPage').on('click', function(ev) {
+
+		event.preventDefault();
 		newDataFetch();
 	});
 
@@ -116,15 +145,22 @@ $(document).ready(function() {
 			.format('appendixFor' + id));
 		var appendix = $(appendixPattern.format('appendixFor' + id));
 
+		console.log("id is");
+		console.log(id);
+
 		if(!appendix.is(':visible') || !appendix.length) {
 			if(!appendixSpoiler.length) {
 				var newAppendixSpoiler = $('<div class="tableRowAppendixSpoiler" id="appendixFor' + id + '"><div></div></div>');
-				newAppendixSpoiler.position({
-						"my": "left center",
-						"at": "right top",
-						"of": "tr[id='" + id + "']"
-					})
-					.height($(this).height() - 4);
+				var offset = $(this).offset();
+				newAppendixSpoiler.offset({
+					"top": offset.top - 192,
+					"left": offset.left + 33
+				}).height($(this).height() - 4);
+				// newAppendixSpoiler.position({
+				// 		"my": "left center",
+				// 		"at": "left top",
+				// 		"of": $(this)
+				// 	}).height($(this).height() - 4);
 				$(newAppendixSpoiler).appendTo("table.users")
 					.hide().show(appendixEffect);
 			}
@@ -165,13 +201,18 @@ $(document).ready(function() {
 				'target="_blank" title="löschen">' +
 				'<img src="../images/status/delete.png"/></a></div>')
 					.format(userId));
-			newAppendix.position({
-						"my": "left center",
-						"at": "right top",
-						"of": "tr[id='" + id + "']"
-					})
-					.height($(this).height() - 4)
-					.offset({left: 2});
+			var offset = $(this).offset();
+			newAppendix.offset({
+				"top": offset.top - 192,
+				"left": offset.left + 33
+			}).height($(this).height() - 4);
+			// newAppendix.position({
+			// 			"my": "left center",
+			// 			"at": "right top",
+			// 			"of": "tr[id='" + id + "']"
+			// 		})
+			// 		.height($(this).height() - 4)
+			// 		.offset({left: 2});
 			$(newAppendix).appendTo("table.users")
 				.hide().show(appendixEffect);
 		}
@@ -231,6 +272,13 @@ $(document).ready(function() {
 		return pagenum;
 	};
 
+	var firstPageSelect = function() {
+
+		$('.pageSelect input:checked').removeProp('checked', '');
+		$('.pageSelect input#pageSelect1').prop('checked', 'checked');
+		newDataFetch();
+	}
+
 	/**
 	 * Fetches userdata from the Server, takes care of filters, sortables etc
 	 *
@@ -245,8 +293,6 @@ $(document).ready(function() {
 		var sortFor = valueSortForGet();
 		var filterForColumn = valueFilterForGet();
 		var filterForValue = $('input#filterInput').val();
-		console.log(filterForValue);
-		console.log(filterForColumn);
 		if(!filterForValue || !filterForValue) {
 			filterForValue = '';
 			filterForColumn = '';
@@ -261,7 +307,7 @@ $(document).ready(function() {
 				'sortFor': sortFor,
 				'filterForCol': filterForColumn,
 				'filterForVal': filterForValue,
-				'columnsToFetch': selectedColumnsGet()
+				'columnsToFetch': selectedColumnIdsGet()
 			},
 
 			success: function(data) {
@@ -279,14 +325,12 @@ $(document).ready(function() {
 					activePage = pagenum;
 					tableRefresh(data.users);
 					pageSelectorUpdate(data.pagecount);
-					console.log(data.pagecount);
 				}
 				else if(data.value == 'error') {
 					adminInterface.errorShow(data.message);
 					fatalError();
 				}
 				else {
-					console.log(data);
 					fatalError();
 				}
 			},
@@ -353,7 +397,6 @@ $(document).ready(function() {
 				}
 				else {
 					fatalError();
-					console.log(data);
 				}
 			},
 
@@ -466,6 +509,9 @@ $(document).ready(function() {
 	 */
 	var tableFillByUserdata = function(userData) {
 
+		console.log('SCHINKEN!');
+		console.log(userData);
+
 		var columnsToShow = $.map($('input.columnSelect:checked'), function(el) {
 			return $(el).attr('id');
 		});
@@ -473,7 +519,7 @@ $(document).ready(function() {
 		var tablehead = $('table.users thead');
 
 		//Sets the TableHead
-		var columnHeader = selectedColumnsGet();
+		var columnHeader = selectedColumnLabelsGet();
 		var headRow = '<tr>';
 		$.each(columnHeader, function(index, columnName) {
 			headRow += '<th>' + columnName + '</th>';
@@ -492,10 +538,17 @@ $(document).ready(function() {
 		});
 	};
 
-	var selectedColumnsGet = function() {
-		var columns = $.map($('input.columnSelect:checked'),
-			function(el) {
+	var selectedColumnLabelsGet = function() {
+		var columns = $.map($('input.columnSelect:checked'), function(el) {
 			return $('label[for="' + $(el).attr('id') + '"]').text();
+		});
+
+		return columns;
+	}
+
+	var selectedColumnIdsGet = function() {
+		var columns = $.map($('input.columnSelect:checked'), function(el) {
+			return $(el).attr('id');
 		});
 
 		return columns;
@@ -552,6 +605,19 @@ $(document).ready(function() {
 		setActivePageSelector();
 		$("div.pageSelect").buttonset('refresh');
 	};
+
+	var userDeletePdf = function(pdfId, forename, name) {
+
+		contentParent = $('.deletedUserPdf');
+
+		//if there is the yet-no-users-deleted Message, remove it
+		if($('.deletedUserPdf p.noUsersDeleted').length != 0) {
+			$('div.deletedUserPdf').show().animate(500);
+			contentParent.html('');
+		}
+
+		contentParent.append('<a href="index.php?section=System|User&action=deletedUserShowPdf&pdfId={0}" target="_blank">PDF von "{1} {2}" abrufen</a><br />'.format(pdfId, forename, name));
+	}
 
 	/**
 	 * The number of the active Page (currently displayed)

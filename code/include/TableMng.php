@@ -30,8 +30,22 @@ class TableMng {
 	 * @param  string $param The string to mask
 	 * @return void The parameter gets changed as pass-by-reference
 	 */
-	public static function sqlSave(&$param) {
+	public static function sqlEscape(&$param) {
 		$param = self::$db->real_escape_string($param);
+	}
+
+	/**
+	 * Escapes the Elements of an array with real_escape_string
+	 *
+	 * The Values of the Array need to be references to allow direct change
+	 * of the original values, for example
+	 * array(&$val1, &$val2, ...)
+	 * Theres no return-value, the array is passed as reference
+	 */
+	public static function sqlEscapeByArray(&$array) {
+		foreach($array as &$param) {
+			$param = self::$db->real_escape_string($param);
+		}
 	}
 
 	/////////////////////////////////////////////////////////////////////

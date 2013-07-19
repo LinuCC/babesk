@@ -123,7 +123,7 @@ class Login {
 
 	protected function userFetch() {
 
-		TableMng::sqlSave($_POST['Username']);
+		TableMng::sqlEscape($_POST['Username']);
 		$password = hash_password($_POST['Password']);
 
 		try {

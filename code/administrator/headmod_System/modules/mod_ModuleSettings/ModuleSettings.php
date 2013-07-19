@@ -85,7 +85,7 @@ class ModuleSettings extends Module {
 	protected function moduleGet() {
 
 		if(!empty($_POST['moduleId'])) {
-			TableMng::sqlSave($_POST['moduleId']);
+			TableMng::sqlEscape($_POST['moduleId']);
 			$module = $this->moduleFromDatabaseGet($_POST['moduleId']);
 			$this->moduleGottenOutput($module);
 		}
@@ -133,11 +133,11 @@ class ModuleSettings extends Module {
 
 	protected function changeInputEscape() {
 
-		TableMng::sqlSave($_POST['id']);
-		TableMng::sqlSave($_POST['name']);
-		TableMng::sqlSave($_POST['isEnabled']);
-		TableMng::sqlSave($_POST['displayInMenu']);
-		TableMng::sqlSave($_POST['executablePath']);
+		TableMng::sqlEscape($_POST['id']);
+		TableMng::sqlEscape($_POST['name']);
+		TableMng::sqlEscape($_POST['isEnabled']);
+		TableMng::sqlEscape($_POST['displayInMenu']);
+		TableMng::sqlEscape($_POST['executablePath']);
 	}
 
 	protected function changeBooleansParse() {
@@ -239,8 +239,8 @@ class ModuleSettings extends Module {
 
 	protected function moduleAddDataEscape() {
 
-		TableMng::sqlSave($_POST['name']);
-		TableMng::sqlSave($_POST['parentPath']);
+		TableMng::sqlEscape($_POST['name']);
+		TableMng::sqlEscape($_POST['parentPath']);
 	}
 
 	protected function moduleAddParentmoduleGet() {
@@ -278,7 +278,7 @@ class ModuleSettings extends Module {
 
 	protected function moduleRemove() {
 
-		TableMng::sqlSave($_POST['moduleId']);
+		TableMng::sqlEscape($_POST['moduleId']);
 		$module = $this->_acl->getModuleroot()->anyChildByIdGet(
 			$_POST['moduleId']);
 		if($module) {

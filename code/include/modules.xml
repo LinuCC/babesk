@@ -186,6 +186,16 @@
 				<name>BookInfo</name>
 				<active>true</active>
 			</module>
+			<module>
+				<ger_name>Einstellungen</ger_name>
+				<name>SchbasSettings</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Buchhaltung</ger_name>
+				<name>SchbasAccounting</name>
+				<active>true</active>
+			</module>
 		</head_module>
 		<head_module>
 			<ger_name>KurswahlSystem</ger_name>
@@ -224,6 +234,37 @@
 			<module>
 				<ger_name>Kuwasys-Statistiken</ger_name>
 				<name>KuwasysStats</name>
+				<active>true</active>
+			</module>
+			
+		</head_module>
+		<head_module>
+			<ger_name>Leg-Card (Gnissel)</ger_name>
+			<name>Gnissel</name>
+			<active>true</active>
+			<module>
+				<ger_name>Kartenfund</ger_name>
+				<name>GCardInfo</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Passwortänderung</ger_name>
+				<name>GChangePassword</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Nutzerfreischaltung</ger_name>
+				<name>GUnlockUser</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Ersatzkarte</ger_name>
+				<name>GChangeCard</name>
+				<active>true</active>
+			</module>
+			<module>
+				<ger_name>Nutzerlöschung</ger_name>
+				<name>GDelUser</name>
 				<active>true</active>
 			</module>
 		</head_module>
@@ -327,6 +368,16 @@
 			<module>
 				<ger_name>Übersicht</ger_name>
 				<name>MessageMainMenu</name>
+				<active>true</active>
+			</module>
+		</head_module>
+		<head_module>
+			<ger_name>Schbas</ger_name>
+			<name>Schbas</name>
+			<active>true</active>
+			<module>
+				<ger_name>Ausleihsystem</ger_name>
+				<name>LoanSystem</name>
 				<active>true</active>
 			</module>
 		</head_module>

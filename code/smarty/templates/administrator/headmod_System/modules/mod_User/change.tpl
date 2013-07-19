@@ -140,7 +140,7 @@
 				{/if}
 		</div>
 		<div class="simpleForm"><p class="inputItem">Guthaben:</p>
-			<input class="inputItem" type="int" name="credits" size="5" maxlength="5" />
+			<input class="inputItem" type="int" name="credits" size="5" maxlength="5" value="{$user.credit}"/>
 		</div>
 		<div class="simpleForm"><p class="inputItem">Teilhabepaket:</p>
 			<input class="inputItem" type="checkbox" name="isSoli"
@@ -149,6 +149,4 @@
 	</fieldset>
 	<input id="submit" type="submit" value="verändern" />
 </form>
-<div><form style="float:right;top:-30px" action="index.php?section=System|User&action=3&ID={$user.ID}" method="post"><input type='submit' value='löschen'></form></div>
-
 {/block}

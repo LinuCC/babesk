@@ -11,7 +11,7 @@ class AdminBookInfoInterface extends AdminInterface {
 		
 		parent::__construct($folder_path);
 		
-		$this->parentPath = $this->tplFilePath  . 'mod_Bookinfo_header.tpl';
+		$this->parentPath = $this->tplFilePath  . 'mod_bookinfo_header.tpl';
 		$this->smarty->assign('checkoutParent', $this->parentPath);
 	}
 	

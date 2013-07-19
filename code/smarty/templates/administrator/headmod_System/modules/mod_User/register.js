@@ -14,7 +14,7 @@ $(document).ready(function() {
 		$('input.cardnumberAdd').on('keyup', function(event) {
 			if($(this).val().length == 10) {
 				addItemInterface.userInputCheckGump($(this).val(),
-					'numeric|exact_len,10', $(this));
+					'exact_len,10', $(this));
 			}
 		});
 	});
@@ -67,7 +67,7 @@ $(document).ready(function() {
 		value = $(this).val();
 		$(this).val(value.replace(',', '.'));
 		addItemInterface.userInputCheckGump($(this).val(),
-			'float|min_len,1|max_len,5', $(this));
+			'numeric|min_len,1|max_len,5', $(this));
 	});
 
 	/**

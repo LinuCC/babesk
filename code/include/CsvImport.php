@@ -250,7 +250,7 @@ abstract class CsvImport {
 
 		if(isset($_POST['csvDelimiter'])) {
 			$del = $_POST['csvDelimiter'];
-			TableMng::sqlSave($del);
+			TableMng::sqlEscape($del);
 			if(!empty($del)) {
 				$this->_delimiter = $del;
 			}

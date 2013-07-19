@@ -30,9 +30,6 @@ class MessageMainMenu extends Module {
 		if (isset($_GET['action'])) {
 			$action=$_GET['action'];
 			switch ($action) {
-				case 'newMessage':
-					$this->newMessageForm();
-					break;
 				case 'deleteMessage':
 					$this->deleteMessage();
 					break;
@@ -76,6 +73,9 @@ class MessageMainMenu extends Module {
 				WHERE name = "messageEditGroupId"',true);
 			$userGID = TableMng::query('SELECT GID FROM users WHERE ID =
 				"'.$_SESSION['uid'].'"',true);
+			if(!count($contractGID)) {
+				throw new Exception('Es wurde noch keiner Gruppe erlaubt, Nachrichten zu editieren!');
+			}
 			$this->_isEditor = ($contractGID[0]['value'] == $userGID[0]['GID']);
 		} catch (MySQLVoidDataException $e) {
 			echo 'Konnte die Gruppe nicht überprüfen!';

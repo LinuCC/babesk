@@ -81,21 +81,6 @@ class User extends Module {
 		$deleter->deleteFromDb();
 	}
 
-	protected function submoduleCreateUsernamesExecute() {
-
-		$this->userCreateUsernames();
-	}
-
-	protected function submoduleRemoveSpecialCharsFromUsernamesExecute() {
-
-		$this->usernamesRemoveSpecialChars();
-	}
-
-	protected function submoduleDisplayChangeExecute() {
-
-		$this->changeDisplay();
-	}
-
 	/**
 	 * Registers a user. Requests should come from Ajax
 	 *
@@ -217,7 +202,7 @@ class User extends Module {
 			}
 			if(!empty($_POST['cardnumber'])) {
 				$cardnumberQuery = "INSERT INTO cards (cardnumber, UID)
-					VALUES ($_POST[cardnumber], @uid);";
+					VALUES ('$_POST[cardnumber]', '@uid');";
 			}
 			if(!empty($_POST['gradeId'])) {
 				$gradeQuery = "INSERT INTO jointUsersInGrade (UserID, GradeID)
@@ -275,7 +260,7 @@ class User extends Module {
 		return $rearranged;
 	}
 
-	protected function userCreateUsernames () {
+	protected function submoduleCreateUsernamesExecute() {
 		if (isset ($_POST ['confirmed'])) {
 			$creator = new UsernameAutoCreator ();
 			$scheme = new UsernameScheme ();
@@ -286,7 +271,7 @@ class User extends Module {
 			$creator->schemeSet ($scheme);
 			$users = $creator->usernameCreateAll ();
 			foreach ($users as $user) {
-				///@FIXME: PURE EVIL DOOM LOOP OF LOOPING SQL-USE. Kill it with fire.
+				///@todo: PURE EVIL DOOM LOOP OF LOOPING SQL-USE. Kill it with fire.
 				$this->userManager->alterUsername ($user ['ID'], $user ['username']);
 			}
 			$this->userInterface->dieMsg ('Die Benutzernamen wurden erfolgreich geÃ¤ndert');
@@ -296,7 +281,7 @@ class User extends Module {
 		}
 	}
 
-	protected function usernamesRemoveSpecialChars () {
+	protected function submoduleRemoveSpecialCharsFromUsernamesExecute () {
 		if (isset ($_POST ['removeSpecialChars'])) {
 			$users = $this->usersGetAll ();
 			$rows = array ();
@@ -353,9 +338,10 @@ class User extends Module {
 	 *
 	 * @param string (numeric) $uid The ID of the User
 	 */
-	protected function changeDisplay() {
+	protected function submoduleDisplayChangeExecute() {
 
-		$uid = mysql_real_escape_string($_GET['ID']);
+		$uid = $_GET['ID'];
+		TableMng::sqlEscape($uid);
 
 		try {
 			TableMng::query('SET @activeSchoolyear :=
@@ -443,7 +429,8 @@ class User extends Module {
 	 */
 	protected function submoduleChangeExecute() {
 
-		$uid = mysql_real_escape_string($_POST['ID']);
+		$uid = $_POST['ID'];
+		TableMng::sqlEscape($uid);
 		$this->changeParseInput();
 		$this->changeCleanAndCheckInput();
 		$this->changeUpload($uid);
@@ -824,7 +811,7 @@ class User extends Module {
 	protected $messages;
 	protected $_interface;
 
-	protected static $invalid = array('Å '=>'S', 'Å¡'=>'s', 'Ä�'=>'D', 'Ä‘'=>'d', 'Å½'=>'Z', 'Å¾'=>'z', 'ÄŒ'=>'C', 'Ä�'=>'c', 'Ä†'=>'C', 'Ä‡'=>'c', 'Ã€'=>'A', 'Ã�'=>'A', 'Ã‚'=>'A', 'Ãƒ'=>'A', 'Ã„'=>'A', 'Ã…'=>'A', 'Ã†'=>'A', 'Ã‡'=>'C', 'Ãˆ'=>'E', 'Ã‰'=>'E', 'ÃŠ'=>'E', 'Ã‹'=>'E', 'ÃŒ'=>'I', 'Ã�'=>'I', 'ÃŽ'=>'I', 'Ã�'=>'I', 'Ã‘'=>'N', 'Ã’'=>'O', 'Ã“'=>'O', 'Ã”'=>'O', 'Ã•'=>'O', 'Ã–'=>'O', 'Ã˜'=>'O', 'Ã™'=>'U', 'Ãš'=>'U', 'Ã›'=>'U', 'Ã�'=>'Y', 'Ãž'=>'B', 'Ã '=>'a', 'Ã¡'=>'a', 'Ã¢'=>'a', 'Ã£'=>'a', 'Ã¥'=>'a', 'Ã¦'=>'a', 'Ã§'=>'c', 'Ã¨'=>'e', 'Ã©'=>'e', 'Ãª'=>'e', 'Ã«'=>'e', 'Ã¬'=>'i', 'Ã­'=>'i', 'Ã®'=>'i', 'Ã¯'=>'i', 'Ã°'=>'o', 'Ã±'=>'n', 'Ã²'=>'o', 'Ã³'=>'o', 'Ã´'=>'o', 'Ãµ'=>'o', 'Ã¸'=>'o', 'Ã¹'=>'u', 'Ãº'=>'u', 'Ã»'=>'u', 'Ã½'=>'y', 'Ã½'=>'y', 'Ã¾'=>'b', 'Ã¿'=>'y', 'Å”'=>'R', 'Å•'=>'r');
+protected static $invalid = array('Š'=>'S', 'š'=>'s', 'Đ'=>'D', 'đ'=>'d', 'Ž'=>'Z', 'ž'=>'z', 'Č'=>'C', 'č'=>'c', 'Ć'=>'C', 'ć'=>'c', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E', 'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U', 'Ú'=>'U', 'Û'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c', 'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y', 'Ŕ'=>'R', 'ŕ'=>'r');
 
 	protected static $registerRules = array(
 		'forename' => array('required|min_len,2|max_len,64', '', 'Vorname'),
@@ -839,8 +826,8 @@ class User extends Module {
 		'pricegroupId' => array('numeric', '', 'PreisgruppenId'),
 		'schoolyearId' => array('numeric', '', 'SchuljahrId'),
 		'gradeId' => array('numeric', '', 'KlassenId'),
-		'cardnumber' => array('numeric|exact_len,10', '', 'Kartennummer'),
-		'credits' => array('float|min_len,1|max_len,5', '', 'Guthaben'),
+		'cardnumber' => array('exact_len,10', '', 'Kartennummer'),
+		'credits' => array('numeric|min_len,1|max_len,5', '', 'Guthaben'),
 		'isSoli' => array('boolean', '', 'ist-Soli-Benutzer'));
 
 	protected static $_changeRules = array(
@@ -854,8 +841,8 @@ class User extends Module {
 		'pricegroupId' => array('numeric', '', 'PreisgruppenId'),
 		'schoolyearId' => array('numeric', '', 'SchuljahrId'),
 		'gradeId' => array('numeric', '', 'KlassenId'),
-		'cardnumber' => array('numeric|exact_len,10', '', 'Kartennummer'),
-		'credits' => array('float|min_len,1|max_len,5', '', 'Guthaben'),
+		'cardnumber' => array('exact_len,10', '', 'Kartennummer'),
+		'credits' => array('numeric|min_len,1|max_len,5', '', 'Guthaben'),
 		'isSoli' => array('boolean', '', 'ist-Soli-Benutzer'));
 
 }

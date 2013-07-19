@@ -75,7 +75,7 @@ class MessageTemplate extends Module {
 		$data = array();
 
 		try {
-			$data = TableMng::query('SELECT * FROM MessageTemplate;', true);
+			$data = TableMng::query('SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM messagegroups WHERE name="vanilla");', true);
 
 		} catch (MySQLVoidDataException $e) {
 			return array();
@@ -122,8 +122,10 @@ class MessageTemplate extends Module {
 	protected function templateAddToDb($title, $text) {
 
 		try {
+			$gid = TableMng::query('SELECT ID FROM messagegroups WHERE name LIKE "vanilla"', true);
+			
 			TableMng::query(sprintf('INSERT INTO MessageTemplate
-				(`title`, `text`) VALUES ("%s", "%s");', $title, $text));
+				(`title`, `text`,`GID`) VALUES ("%s", "%s", "%d");', $title, $text,$gid[0]['ID']));
 
 		} catch (Exception $e) {
 			$this->_interface->dieError('Konnte die Vorlage nicht speichern!' . $e->getMessage());

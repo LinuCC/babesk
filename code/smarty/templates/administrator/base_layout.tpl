@@ -121,10 +121,6 @@ $(document).ready(function() {
 			$('#main').animate({'width': 1800}, 400);
 		}
 	});
-
-	adminInterface.messageShow('Bitte überprüfen ob der SQL-Server Transaktionen unterstützt (Tabellen müssen InnoDB als Engine haben, kein MyISAM). Neue Funktionen benutzen diese, um unter anderem Fehler zu finden.');
-	adminInterface.successShow('Test');
-	adminInterface.successShow('You successfully logged in!');
 });
 {/literal}
 </script>

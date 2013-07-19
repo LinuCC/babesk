@@ -71,6 +71,7 @@ class Web {
 		$this->handleRedirect();
 		$this->initUserdata();
 		$this->loadModules();
+		$userData = $this->_userManager->getUserdata($_SESSION['uid']);
 		$this->checkFirstPassword();
 		$this->display();
 	}

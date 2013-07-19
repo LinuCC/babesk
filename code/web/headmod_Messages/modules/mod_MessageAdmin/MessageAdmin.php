@@ -99,11 +99,13 @@ class MessageAdmin extends Module{
 		try {
 			//UPLOAD
 			$db->autocommit(false);
+			//get GID for vanilla message system
+			$gid = TableMng::query('SELECT ID FROM messagegroups WHERE name LIKE "vanilla"', true);
 			//Add Message itself
 			TableMng::query(sprintf('INSERT INTO Message
-					(originUserId,title,text,validFrom,validTo)
-				VALUES (%s,"%s","%s","%s","%s")',
-				$_SESSION['uid'], $msgTitle, $msgText, $startDate, $endDate));
+					(originUserId,title,text,validFrom,validTo,GID)
+				VALUES (%s,"%s","%s","%s","%s","%d")',
+				$_SESSION['uid'], $msgTitle, $msgText, $startDate, $endDate,$gid[0]['ID']));
 			$messageId = $db->insert_id;
 			$this->newMessageAddCreator($messageId);
 			//Add receivers to the receiver-list
@@ -275,13 +277,10 @@ class MessageAdmin extends Module{
 				'SELECT CONCAT(gradeValue, label) AS name, ID
 				FROM grade', true);
 			$templates = TableMng::query(
-				'SELECT * FROM MessageTemplate;', true);
-
-		} catch (MySQLVoidDataException $e) {
-			//gets sorted out with Smarty in the tpl-File
+				'SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM messagegroups WHERE name="vanilla");', true);
 
 		} catch (Exception $e) {
-			$this->_interface->DieError('Konnte die nötigen Daten nicht abrufen.');
+			$this->_interface->DieError('Konnte die nötigen Daten nicht abrufen.' . $e->getMessage());
 		}
 
 		$this->_smarty->assign('grades', $grades);
@@ -573,11 +572,13 @@ class MessageAdmin extends Module{
 
 		$templateId =
 			TableMng::getDb()->real_escape_string($_POST['templateId']);
-
 		try {
+			$gid = TableMng::query('SELECT ID FROM messagegroups WHERE name LIKE "vanilla"', true);
+
 			$template = TableMng::query(sprintf(
 				'SELECT * FROM MessageTemplate WHERE `ID` = "%s"',
 				$templateId), true);
+
 
 		} catch (Exception $e) {
 			die('errorFetchTemplate');

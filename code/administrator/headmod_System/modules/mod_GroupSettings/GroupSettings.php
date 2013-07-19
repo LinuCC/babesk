@@ -129,7 +129,7 @@ class GroupSettings extends Module {
 		if(isset($_POST['data'])) {
 
 			foreach($_POST['data'] as &$data) {
-				TableMng::sqlSave($data);
+				TableMng::sqlEscape($data);
 			}
 			$query = $this->groupsChangeQuery($_POST['data']);
 		}
@@ -253,9 +253,9 @@ class GroupSettings extends Module {
 	 */
 	protected function groupChangeQueryEscapeInput($data) {
 
-		TableMng::sqlSave($data['oldName']);
-		TableMng::sqlSave($data['newName']);
-		TableMng::sqlSave($data['parentPath']);
+		TableMng::sqlEscape($data['oldName']);
+		TableMng::sqlEscape($data['newName']);
+		TableMng::sqlEscape($data['parentPath']);
 
 		return $data;
 	}
@@ -306,8 +306,8 @@ class GroupSettings extends Module {
 	 */
 	protected function groupDeleteQueryEscapeData($data) {
 
-		TableMng::sqlSave($data['name']);
-		TableMng::sqlSave($data['parentPath']);
+		TableMng::sqlEscape($data['name']);
+		TableMng::sqlEscape($data['parentPath']);
 
 		return $data;
 	}
@@ -338,7 +338,7 @@ class GroupSettings extends Module {
 	 */
 	protected function modulesFetch() {
 
-		TableMng::sqlSave($_POST['grouppath']);
+		TableMng::sqlEscape($_POST['grouppath']);
 
 		$this->modulesFetchDoubleclickFix();
 		$group = $this->modulesFetchGroupGet($_POST['grouppath']);
@@ -568,8 +568,8 @@ class GroupSettings extends Module {
 
 			$moduleId = $_POST['moduleId'];
 			$grouppath = $_POST['grouppath'];
-			TableMng::sqlSave($moduleId);
-			TableMng::sqlSave($grouppath);
+			TableMng::sqlEscape($moduleId);
+			TableMng::sqlEscape($grouppath);
 
 			$group = $this->_acl->getGrouproot()->groupByPathGet($grouppath);
 			$module = $this->modulerightStatusChangeModuleGet(

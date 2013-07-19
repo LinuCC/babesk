@@ -101,8 +101,8 @@ class Group {
 
 	public static function groupAdd($name, $parentName) {
 
-		TableMng::sqlSave($name);
-		TableMng::sqlSave($parentName);
+		TableMng::sqlEscape($name);
+		TableMng::sqlEscape($parentName);
 
 		try {
 			$parent = TableMng::query("SELECT lft, rgt FROM Groups
