@@ -4,225 +4,400 @@ require_once PATH_INCLUDE . '/Module.php';
 
 class Order extends Module {
 
-	////////////////////////////////////////////////////////////////////////////////
-	//Attributes
-	private $smartyPath;
-	private $modulePath;
-	private $webInterface;
-
-	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
 	//Constructor
+	////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Constructs the Object
+	 */
 	public function __construct($name, $display_name, $path) {
+
 		parent::__construct($name, $display_name, $path);
 		$this->modulePath = $path;
 		$this->smartyPath = PATH_SMARTY . '/templates/web' . $path;
 		require_once PATH_CODE . '/web/WebInterface.php';
 	}
 
-	////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
 	//Methods
+	////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Executes the Object
+	 */
 	public function execute($dataContainer) {
+
 		//No direct access
 		defined('_WEXEC') or die("Access denied");
+
 		require_once 'order_constants.php';
-		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
-		require_once PATH_ACCESS . '/SoliOrderManager.php';
-		require_once PATH_ACCESS . '/SoliCouponsManager.php';
-		require_once PATH_ACCESS . '/MealManager.php';
-		require_once PATH_ACCESS . '/UserManager.php';
-		require_once PATH_ACCESS . '/OrderManager.php';
-		require_once PATH_ACCESS . '/PriceClassManager.php';
-		require_once PATH_ACCESS . '/LogManager.php';
 
-		global $smarty;
-		 $logger = new LogManager();
-
-		$this->webInterface = new WebInterface($smarty);
-
-		$mealManager = new MealManager();
-		$userManager = new UserManager();
-		$orderManager = new OrderManager();
-		$soliOrderManager = new SoliOrderManager();
-		$soliCouponManager = new SoliCouponsManager();
-		$priceClassManager = new PriceClassManager();
-		$gbManager = new GlobalSettingsManager();
-
-		$version=@file_get_contents("../version.txt");
-if ($version===FALSE) $version = "";
-$smarty->assign('babesk_version', $version);
+		$smarty = $dataContainer->getSmarty();
+		$this->_interface = $dataContainer->getInterface();
 
 		if (isset($_GET['order'])) {
-
-			$payment = NULL;
-
-			try {//checking mealdata
-				inputcheck($_GET['order'], 'id');
-				$meal = $mealManager->getEntryData($_GET['order']);
-			} catch (WrongInputException $e) {
-				$this->webInterface->dieError(ERR_INP_MID);
-			} catch (Exception $e) {
-				$logger->log('WEB|order', 'MODERATE',
-						sprintf('failed fetchign data with MID %s; %s', $_GET['order'], $e->getMessage()));
-				$this->webInterface->dieError(ERR_ORDER);
-			}
-			$meal['price'] = $priceClassManager->getPrice($_SESSION['uid'], $meal['ID']);
-
-			if ('POST' == $_SERVER['REQUEST_METHOD']) {
-				////////////////////////////////////////////////////
-				//Pay for meal
-				try {
-					try {
-						//"Pay", substract the price for the menu from the users account
-						$payment = $priceClassManager->getPrice($_SESSION['uid'], $_GET['order']);
-					} catch (Exception $e) {
-						$logger->log('WEB|order', 'MODERATE',
-								sprintf('The function getPrice failed with UID %s and order %s; %s', $_SESSION['uid'],
-										$_GET['order'], $e->getMessage()));
-						$this->webInterface->dieError(ERR_ORDER);
-						die();
-					}
-
-					if ($soliCouponManager->HasValidCoupon($_SESSION['uid'], $meal['date'])) {
-						$payment = $gbManager->getSoliPrice();
-
-					}
-
-					// 			if ($userManager->isSoli($_SESSION['uid'])) {
-					// 				$payment = $gbManager->getSoliPrice();
-					// 			}
-
-					if (!$userManager->changeBalance($_SESSION['uid'], -$payment)) {
-						$smarty->display($this->smartyPath . 'failed.tpl');
-						die();
-					}
-				} catch (Exception $e) {
-					$logger->log('WEB|order', 'MODERATE',
-							sprintf('Error while handling the order for ' . 'UID %s; Order: %s; Error: %s',
-									$_SESSION['uid'], $_GET['order'], $e->getMessage()));
-					$this->webInterface->dieError(ERR_ORDER);
-					die();
-				}
-				//////////////////////////////////////////////////
-				//add order
-				try {
-					$orderID = $orderManager->getNextAutoIncrementID();
-					$orderManager->addOrder($_GET['order'], $_SESSION['uid'], $_SERVER['REMOTE_ADDR'], $meal['date']);
-					if ($soliCouponManager->HasValidCoupon($_SESSION['uid'], $meal['date']))
-						$soliOrderManager->addSoliOrder($orderID, $_SESSION['uid'], $_SERVER['REMOTE_ADDR'], $meal['date'],
-								$meal['name'], $meal['price'], $meal['date'],
-								$gbManager->getSoliPrice());
-				} catch (Exception $e) {
-
-					//meal couldn't be ordered so give the user his money back
-					$userManager->changeBalance($_SESSION['uid'], $payment);
-					$logger->log('WEB|ORDER', 'MODERATE',
-							sprintf('Error while handling the order for ' . 'UID %s; Order: %s; Error: %s',
-									$_SESSION['uid'], $_GET['order'], $e->getMessage()));
-					$this->webInterface->dieError(ERR_ORDER);
-					die();
-				}
-				//////////////////////////////////////////////////
-				//finished
-				$smarty->display('web/header.tpl');
-				echo 'Am ' . formatDate($meal['date']) . ' das Men&uuml; ' . $meal['name']
-				. ' erfolgreich bestellt. <a href="index.php">Weiter</a>';
-				$smarty->display('web/footer.tpl');
-			} else {
-				//////////////////////////////////////////////////
-				//show confirm-order-form
-				$smarty->display('web/header.tpl');
-				if (strtotime($result['date']) < strtotime(date('Y-m-d')))
-					exit('Error: Fehlerhaftes Datum');
-				echo 'Am ' . formatDate($result['date']) . ' das Men&uuml; ' . $result['name'] . ' bestellen?<br />';
-				echo '<form method="POST" action="index.php?section=order&order=' . $_GET['order']
-				. '">
-				<input type="submit" value="Bestellen">
-				</form>';
-				$smarty->display('web/footer.tpl');
-			}
+			$this->mealOrderEntry();
 		}
-		//Show list of meals that can be ordered
 		else {
-			$mealManager = new MealManager();
-			$pcManager = new PriceClassManager();
-			$gsManager = new GlobalSettingsManager();
-			$userManager = new UserManager();
+			require_once 'MealsForOrderDisplayer.php';
 
-			$hour = date('H:i', time());
-			// To change the timewindow the orders can be ordered, just change $enddate (and $last_order_time)
-			//first date to show the meals
-			$date = time();
-			//last date where meals are shown
-			$enddate = strtotime('+2 week', strtotime('last Sunday'));
-			/*
-			 * $meallist consists of multiple arrays:
-			* 1. The weeks (The weeknumber of the week in the year; -> Compatible only when beginning of date and end of date
-					* 		is not more than 1 year (which is a pretty damn long time).
-					* 2. Every week consists of days (Here: 1 = Monday, 2 = Tuesday, ... 7 = Sunday.)
-					* 		Additionaly, there is an index named "date", which lists the dates for each individual day
-					* 3. Every day has meals
-					* 4. Every meal has mealdata (like ID, description, name, ...)
-					*/
-			//Ordering only possible until $last_order_time
-
-			$last_order_time = $gsManager->getLastOrderTime();
-			if (str_replace(":", "", $hour) > str_replace(":", "", $last_order_time)) {
-				$date += $day_in_secs;
-			}
+			$displayer = new MealsForOrderDisplayer();
 			try {
-				$sql_meals = $mealManager->get_meals_between_two_dates(date('Y-m-d', $date), date('Y-m-d', $enddate),
-						'date, price_class');
-			} catch (MySQLVoidDataException $e) {
-				$this->webInterface->dieError(ERR_NO_ORDERS);
+				$displayer->display($smarty, $this->smartyPath);
+
 			} catch (Exception $e) {
-				$smarty->assign('message', ERR_MYSQL . '<br>' . $e->getMessage());
+				$this->_interface->dieError('Ein Fehler ist beim abrufen der Mahlzeiten aufgetreten! <br />' . $e->getMessage());
 			}
-
-			//////////////////////////////////////////////////
-			//Sort the meals
-
-			foreach ($sql_meals as &$meal) {
-				$meal_day = date('N', strtotime($meal['date']));
-				$meal_weeknum = date('W', strtotime($meal['date']));
-				if ($soliCouponManager->HasValidCoupon($_SESSION['uid'], $meal['date']))
-					$meal['price'] = $gsManager->getSoliPrice();
-				else
-					$meal['price'] = $pcManager->getPrice($_SESSION['uid'], $meal['ID']);
-
-				$meallist[$meal_weeknum][$meal_day][] = $meal;
-				//The date of the beginning of the week (here monday). +7 because of negative meal_day setting the date 1 week behind
-				$meallist[$meal_weeknum]['date'][1] = date('d.m.Y',
-						strtotime(sprintf('+%s day', -$meal_day + 1),
-								strtotime($meal['date'])));
-				$meallist[$meal_weeknum]['date'][2] = date('d.m.Y',
-						strtotime(sprintf('+%s day', -$meal_day + 2),
-								strtotime($meal['date'])));
-				$meallist[$meal_weeknum]['date'][3] = date('d.m.Y',
-						strtotime(sprintf('+%s day', -$meal_day + 3),
-								strtotime($meal['date'])));
-				$meallist[$meal_weeknum]['date'][4] = date('d.m.Y',
-						strtotime(sprintf('+%s day', -$meal_day + 4),
-								strtotime($meal['date'])));
-				$meallist[$meal_weeknum]['date'][5] = date('d.m.Y',
-						strtotime(sprintf('+%s day', -$meal_day + 5),
-								strtotime($meal['date'])));
-				//Saturday and Sunday may be important in the future?
-				$meallist[$meal_weeknum]['date'][6] = date('d.m.Y',
-						strtotime(sprintf('+%s day', -$meal_day + 6),
-								strtotime($meal['date'])));
-				$meallist[$meal_weeknum]['date'][7] = date('d.m.Y',
-						strtotime(sprintf('+%s day', -$meal_day + 7),
-								strtotime($meal['date'])));
-			}
-			try {
-				$itxt_arr = $gsManager->getInfoTexts();
-			} catch (Exception $e) {
-				$this->webInterface->dieError('Error getting infotexts:' . $e->getMessage());
-			}
-			$smarty->assign('meallist', $meallist);
-			$smarty->assign('infotext', $itxt_arr);
-			$smarty->display($this->smartyPath . 'order.tpl');
 		}
 	}
+
+	/**
+	 * Creates the Meallist containing Mealweeks containing meals
+	 *
+	 * @param  Array $meals The Meals fetched from the Database
+	 * @return Array Multiple Mealweeks, each containing its Meals
+	 */
+	protected function meallistCreate($meals) {
+
+		foreach ($meals as &$meal) {
+			$meal_day = date('N', strtotime($meal['date']));
+			$meal_weeknum = date('W', strtotime($meal['date']));
+			if($this->userHasValidCoupon($_SESSION['uid'])) {
+				$meal['price'] = $this->soliPriceGet();
+			}
+			$meallist[$meal_weeknum][$meal_day][] = $meal;
+			//The date of the beginning of the week. +7 because of negative meal_day setting the date 1 week behind
+			for($i = 1; $i <= 7; $i++) {
+				$meallist[$meal_weeknum]['date'][$i] = date(
+					'd.m.Y',
+					strtotime(sprintf('+%s day', -$meal_day + $i),
+					strtotime($meal['date']))
+				);
+			}
+		}
+
+		return $meallist;
+	}
+
+	/**
+	 * The Entrypoint to ordering a meal, checks if user should confirm first
+	 */
+	protected function mealOrderEntry() {
+
+		if ('POST' == $_SERVER['REQUEST_METHOD']) {
+			if(isset($_GET['confirmed'])) {
+				$this->mealOrder();
+			}
+			else {
+				$this->mealOrderConfirm();
+			}
+		}
+	}
+
+	/**
+	 * Displays a confirm-dialog for the User to confirm the Meal-Order
+	 */
+	protected function mealOrderConfirm() {
+
+		TableMng::sqlEscape($_GET['order']);
+		$mealId = $_GET['order'];
+		$meal = $this->mealGet($mealId, $_SESSION['uid']);
+		$date = formatDate($meal['date']);
+		$this->_interface->dieMessage("Am $date das Menü $meal[name] bestellen?<br /><form method='POST' action='index.php?section=Babesk|Order&order={$_GET['order']}&confirmed' ><input type='submit' value='Bestellen' /></form>");
+	}
+
+	/**
+	 * Handles the Ordering of the Meal
+	 *
+	 * Dies displaying an Error when something has gone wrong
+	 */
+	protected function mealOrder() {
+
+		try {
+			$this->mealOrderValuesInit();
+
+			if($this->mealorderAllowedCheck()) {
+				TableMng::getDb()->autocommit(false);   // Deppenschutz
+				$this->mealPay();
+				$this->orderToDb($_SESSION['uid'], $_SERVER['REMOTE_ADDR']);
+				TableMng::getDb()->autocommit(true);
+			}
+			else {
+				$this->_interface->dieError('Es ist zu spät, diese Mahlzeit zu bestellen');
+			}
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(ERR_ORDER . ' ' . $e->getMessage());
+			die();
+		}
+
+		$this->orderSuccess();
+	}
+
+	/**
+	 * Escapes and transfers the Request-Data
+	 */
+	protected function mealOrderValuesInit() {
+
+		TableMng::sqlEscape($_GET['order']);
+		$this->_meal = $this->mealGet(
+			$_GET['order'],
+			$_SESSION['uid']);
+		$this->_hasValidCoupon = $this->userHasValidCoupon(
+			$this->_meal['ID']);
+	}
+
+	/**
+	 * Checks if ordering of the Meal is allowed
+	 * @return boolean True if it is allowed, false if it is not
+	 */
+	protected function mealorderAllowedCheck() {
+
+		$enddate = $this->orderEnddateGet();
+		$orderEnd = strtotime($enddate, strtotime($this->_meal['date']));
+
+		return (time() <= $orderEnd);
+	}
+
+	/**
+	 * Fetches the orderEnddate from the Database
+	 *
+	 * @return String The date-modifier usable in strtotime
+	 */
+	protected function orderEnddateGet() {
+
+		try {
+			$data = TableMng::query('SELECT * FROM global_settings
+				WHERE name = "orderEnddate"', true);
+			if(!isset($data[0]['value'])) {
+				throw new Exception('Could not fetch OrderEnddate');
+			}
+		} catch (Exception $e) {
+			throw new Exception('Could not fetch OrderEnddate');
+		}
+
+		return $data[0]['value'];
+	}
+
+	/**
+	 * Changes the Balance of the User to Pay for the Meal
+	 *
+	 * Dies displaying an Error when user has not enough money
+	 */
+	protected function mealPay() {
+
+		$payment = $this->paymentGet();
+		if($this->userBalanceChange($_SESSION['uid'], -$payment)) {
+			return true;
+		}
+		else {
+			$this->_interface->showMessage("Du hast zu wenig Geld! Verlangt werden {$payment}€");
+			$this->_interface->dieContent($this->smartyPath . 'failed.tpl');
+			die();
+		}
+	}
+
+	/**
+	 * Uploads the Meal-Order to the Database
+	 *
+	 * @param  int $userId The Id of the User that ordered the Meal
+	 * @param  string $ip The IP of the User
+	 */
+	protected function orderToDb($userId, $ip) {
+
+		$meal = $this->_meal;
+		$ordertime = date("Y-m-d h:i:s");
+		$soliPrice = $this->soliPriceGet();
+
+		TableMng::query("INSERT INTO orders
+			(MID, UID, date, IP, ordertime, fetched) VALUES
+			('$meal[ID]', '$userId', '$meal[date]', '$ip', '$ordertime', 0)");
+
+		$lastInsertId = TableMng::getDb()->insert_id;
+
+		if($this->_hasValidCoupon) {
+			TableMng::query("INSERT INTO soli_orders (ID, UID, date, IP,
+				ordertime, fetched, mealname, mealprice, mealdate, soliprice)
+				VALUES ('$lastInsertId', '$userId', '$date', '$ip',
+					'$ordertime, 0', '$meal[name]', '$meal[price]',
+					'$meal[date]', '$soliPrice')");
+		}
+	}
+
+	/**
+	 * Fetches the meal from the Database
+	 *
+	 * @param  int $mealId The ID of the Meal
+	 * @param  int $userId The ID of the User
+	 * @return Array The meal-data on success, else false
+	 */
+	protected function mealGet($mealId, $userId) {
+
+		try {
+			$meal = TableMng::query("SELECT pc.price AS price, m.*
+				FROM meals m
+				JOIN users u ON u.ID = $userId
+				JOIN price_classes pc
+					ON pc.GID = u.GID AND pc.pc_ID = m.price_class
+				WHERE m.ID = '$mealId';", true);
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(
+				'Konnte die Mahlzeit nicht abrufen');
+		}
+
+		if(count($meal)) {
+			return $meal[0];
+		}
+		else {
+			return false;
+		}
+	}
+
+	/**
+	 * Returns the Amount of money the User needs to Pay for the Meal
+	 *
+	 * @return int The Amount of money
+	 */
+	protected function paymentGet() {
+
+		if(!$this->_hasValidCoupon) {
+			return $this->_meal['price'];
+		}
+		else {
+			return $this->soliPriceGet();
+		}
+	}
+
+	/**
+	 * Checks if the User has a valid Solicoupon for the given Meal
+	 *
+	 * @param  int $mealId The ID of the Meal
+	 * @return boolean True if the User has a valid Coupon, else false
+	 */
+	protected function userHasValidCoupon($mealId) {
+
+		$hasCoupon = TableMng::query("SELECT COUNT(*) AS count
+			FROM soli_coupons sc
+			JOIN meals m ON m.ID = $mealId
+			WHERE m.date BETWEEN sc.startdate AND sc.enddate AND
+				UID = $_SESSION[uid]", true);
+
+		return $hasCoupon[0]['count'] != '0';
+	}
+
+	/**
+	 * Fetches the Mealprice for Soli-Users and returns it
+	 *
+	 * @throws Exception If Soliprice could not be fetched
+	 * @return string The Price of the Meal for Soli-Users
+	 */
+	protected function soliPriceGet() {
+
+		$soliPrice = TableMng::query('SELECT * FROM global_settings
+			WHERE name = "soli_price"', true);
+		if(count($soliPrice)) {
+			return $soliPrice[0]['value'];
+		}
+		else {
+			throw new Exception('Soli-Price not set, but Coupon used!');
+		}
+	}
+
+	/**
+	 * Changes the Users Credits
+	 *
+	 * @param  int $userId The ID of the User
+	 * @param  float $amount The Amount of the Credits to change
+	 * (negative means that credits will be subtracted from the Users Konto)
+	 * @return boolean True if success, when user has not enough money, false
+	 */
+	protected function userBalanceChange($userId, $amount) {
+
+		if(($newBalance = $this->userBalanceChangeCheck($userId, $amount)) !==
+				false) {
+			$balanceStr = str_replace(',', '.', (string) $newBalance);
+			TableMng::query("UPDATE users SET credit = '$balanceStr'
+				WHERE ID = $userId");
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	/**
+	 * Checks wether the User has enough money th pay for the Order
+	 *
+	 * @param  int $userId The ID of the User
+	 * @param  float $amount The Amount (for paying it should be negative)
+	 * @return int The new Amount of Credits the user has, or false if User has not enough Money
+	 */
+	protected function userBalanceChangeCheck($userId, $amount) {
+
+		$data = TableMng::query("SELECT * FROM users u
+			WHERE u.ID = $userId", true);
+
+		if(!empty($data[0]['credit'])) {
+			$res = $data[0]['credit'] + $amount;
+			if($res >= 0) {
+				return $res;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			throw new Exception('Could net check the new Balance of User!');
+		}
+	}
+
+	/**
+	 * Displays a success-Information to the User
+	 */
+	protected function orderSuccess() {
+
+		$date = formatDate($this->_meal['date']);
+		$meal = $this->_meal;
+		$this->_interface->dieMessage("Das Menü $meal[name] für den " .
+			"$date erfolgreich bestellt. <a href='index.php'>Weiter</a>");
+	}
+
+	/**
+	 * Fetches all Meals that are between the two dates
+	 *
+	 * @param  string $startdate The startdate to search for teh meals
+	 * @param  string $enddate   The enddate to search for the meals
+	 * @return Array The fetched Meals
+	 */
+	protected function mealsAllGetBetween($startdate, $enddate) {
+
+		try {
+			$meals = TableMng::query("SELECT m.*, pc.price AS price
+				FROM meals m
+				JOIN users u ON u.ID = $_SESSION[uid]
+				JOIN price_classes pc
+					ON m.price_class = pc.pc_ID AND pc.GID = u.GID
+				WHERE date BETWEEN '$startdate' AND '$enddate'
+					ORDER BY date, price_class", true);
+
+		} catch (Exception $e) {
+			throw new Exception('Konnte die Mahlzeiten nicht abrufen!', 0, $e);
+		}
+
+		return $meals;
+	}
+
+	////////////////////////////////////////////////////////////////////////
+	//Attributes
+	////////////////////////////////////////////////////////////////////////
+
+	private $smartyPath;
+	private $modulePath;
+	private $_interface;
+
+	private $_hasValidCoupon;
+	private $_meal;
 }
 ?>

@@ -8,13 +8,11 @@
 {literal}
 <style type="text/css">
 th {
-	width: 20%;
 	background-color: #84ff00;
 	text-align: center;
 }
 
 td {
-	width: 20%;
 	background-color: #f8f187;
 	text-align: center;
 }
@@ -33,84 +31,106 @@ td {
 	float: left;
 }
 
+.notOrderable {
+	color: #993333;
+}
+
 table {
 	width: 100%;
 }
 </style>
 
-{/literal} 
-<!-- for every meal-element -->
-{foreach $meallist as $mealweek} {foreach $mealweek as $mealday} {if
-count($mealday)} {foreach $mealday as $meal} {if isset($meal.ID)}
-<div class="div-info" id="MealDiv{$meal.ID}" style="display: none;">
-	<fieldset class="div-info">
-		<legend>
-			<b>Informationen zu {$meal.name}:</b>
-		</legend>
-		{$meal.description}
-		<p>
-			<b>Preis:</b> {$meal.price} &euro;
-		</p>
-	</fieldset>
-	<fieldset class="div-info">
-		<form class="div-info-submit"
-			action="index.php?section=Babesk|Order&order={$meal.ID}" method="post">
-			<input type="submit" value='{$meal.name} bestellen'>
-		</form>
-	</fieldset>
-</div>
-{/if} {/foreach} {/if} {/foreach} {/foreach}
+{/literal}
 
-{foreach $meallist as $mealweek}
-<table width="100%">
-	<tr>
-		<th>Montag<br>{$mealweek.date.1}
-		</th>
-		<th>Dienstag<br>{$mealweek.date.2}
-		</th>
-		<th>Mittwoch<br>{$mealweek.date.3}
-		</th>
-		<th>Donnerstag<br>{$mealweek.date.4}
-		</th>
-		<th>Freitag<br>{$mealweek.date.5}
-		</th>
-	</tr>
-	<tr>
-		<td>{foreach $mealweek.1 as $meal}
-			<ul>
-				<a href="javascript:switchInfo('MealDiv{$meal.ID}')">{$meal.name}</a>
-			</ul> {/foreach}
-		</td>
-		<td>{foreach $mealweek.2 as $meal}
-			<ul>
-				<a href="javascript:switchInfo('MealDiv{$meal.ID}')">{$meal.name}</a>
-			</ul> {/foreach}
-		</td>
-		<td>{foreach $mealweek.3 as $meal}
-			<ul>
-				<a href="javascript:switchInfo('MealDiv{$meal.ID}')">{$meal.name}</a>
-			</ul> {/foreach}
-		</td>
-		<td>{foreach $mealweek.4 as $meal}
-			<ul>
-				<a href="javascript:switchInfo('MealDiv{$meal.ID}')">{$meal.name}</a>
-			</ul> {/foreach}
-		</td>
-		<td>{foreach $mealweek.5 as $meal}
-			<ul>
-				<a href="javascript:switchInfo('MealDiv{$meal.ID}')">{$meal.name}</a>
-			</ul> {/foreach}
-		</td>
-	<tr>
-</table>
-
+{*
+	Creates Hidden divs containing Meal-Information and a Order-Button
+	That gets displayed when a meal in the Table is clicked
+*}
+{foreach $mealweeklist as $mealweek}
+	{foreach $mealweek->weekdayDataGet() as $day}
+		{foreach $day.meals as $meal}
+			{if isset($meal->id)}
+				<div class="div-info" id="MealDiv{$meal->id}" style="display: none;">
+					<fieldset class="div-info">
+						<legend>
+							<b>Informationen zu {$meal->name}:</b>
+						</legend>
+						{$meal->description}
+						<p>
+							<b>Preis:</b> {$meal->price} &euro;
+						</p>
+					</fieldset>
+					<fieldset class="div-info">
+						<form class="div-info-submit"
+							action="index.php?section=Babesk|Order&order={$meal->id}" method="post">
+							<input type="submit" value='{$meal->name} bestellen'>
+						</form>
+					</fieldset>
+				</div>
+			{/if}
+		{/foreach}
+	{/foreach}
 {/foreach}
 
-
+{*
+	Creates the Meal-Tables. Each Table represents a Mealweek
+*}
+{foreach $mealweeklist as $mealweek}
+	<b>Woche {$mealweek->mealweeknumberGet()}</b>
+	<table width="100%">
+		<tr>
+			<th>
+				Preisklasse
+			</th>
+			{foreach $mealweek->weekdayDataGet() as $day}
+				<th>{$day.dayname}<br />{$day.date}</th>
+			{/foreach}
+		</tr>
+		{foreach $mealweek->priceclassesGet() as $pcId => $pcName}
+		<tr>
+			<td>
+				{$pcName}
+			</td>
+			{foreach $mealweek->weekdayDataGet() as $day}
+				<td>
+					<ul>
+					{foreach $mealweek->mealsByPriceclassAndDateGet(
+						$pcId, $day.date) as $meal}
+						<li>
+							{$mealTs = strtotime($meal->date)}
+							{$orderEnd = strtotime($orderEnddate, $mealTs)}
+							{if $orderEnd >= time()}
+								<a href="javascript:switchInfo('MealDiv{$meal->id}')">
+									{$meal->name}
+								</a>
+							{else}
+								<p class="notOrderable">
+									{$meal->name}
+								</p>
+							{/if}
+						</li>
+					{foreachelse}
+						<li>
+							---
+						</li>
+					{/foreach}
+					</ul>
+				</td>
+			{/foreach}
+		</tr>
+		{foreachelse}
+		<tr>
+			<td colspan="6">
+				Keine Mahlzeiten in dieser Woche
+			</td>
+		</tr>
+		{/foreach}
+	</table>
+{/foreach}
 
 <p>
 <hr>
-{$infotext.0}
+{$infotext1}
 <hr>
 </p>
-<p>{$infotext.1}</p>
+<p>{$infotext2}</p>

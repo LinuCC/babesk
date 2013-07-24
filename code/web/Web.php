@@ -1,7 +1,5 @@
 <?php
 
-require_once 'NewWebInterface.php';
-
 class Web {
 	///////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -34,6 +32,7 @@ class Web {
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 		require_once PATH_INCLUDE . '/Acl.php';
 		require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';
+		require_once 'WebInterface.php';
 		require_once 'WebInterface.php';
 
 		TableMng::init ();

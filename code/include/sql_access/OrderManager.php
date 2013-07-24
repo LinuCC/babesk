@@ -115,9 +115,9 @@ class OrderManager extends TableManager {
 	function addOrder ($MID, $UID, $IP, $date) {
 		parent::addEntry('MID', $MID, 'UID', $UID, 'IP', $IP, 'ordertime', date("Y-m-d h:i:s"), 'date', $date);
 	}
-	
+
 	/**
-	 * Deletes all Orders which dates are smaller than the given timestamp 
+	 * Deletes all Orders which dates are smaller than the given timestamp
 	 * (yesterday or earlier, not involving hours, minutes, seconds)
 	 * @param string $timestamp
 	 * @throws MySQLConnectionException
