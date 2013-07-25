@@ -138,6 +138,9 @@ class BabeskTimeSettings extends Module {
 		$this->_smarty->display($this->_templateDir . 'changeDataForm.tpl');
 	}
 
+	/**
+	 * Uploads the changes of the TimeModification-Strings to the Database
+	 */
 	protected function submoduleChangeExecute() {
 
 		TableMng::sqlEscapeByArray($_POST);
@@ -152,6 +155,12 @@ class BabeskTimeSettings extends Module {
 		$this->_interface->dieMsg('Die Daten wurden erfolgreich verändert.');
 	}
 
+	/**
+	 * Checks for the given input describing the changes to be made
+	 *
+	 * @param  Array $data The data containing the TimeModifications
+	 * @return boolean True of the given Input is usable, else false
+	 */
 	protected function inputDataCheck($data) {
 
 		return isset($data['displayMealsStartdate'],
@@ -160,21 +169,26 @@ class BabeskTimeSettings extends Module {
 			$data['ordercancelEnddate']);
 	}
 
+	/**
+	 * Pushes the given data to the Database
+	 *
+	 * @param  Array $data An Array with the changed TimeModification-Strings
+	 */
 	protected function changeDataToDb($data) {
 
 		try {
 			TableMng::query(
 				"UPDATE global_settings
-					SET value = '$_POST[displayMealsStartdate]'
+					SET value = '$data[displayMealsStartdate]'
 					WHERE name = 'displayMealsStartdate';
 				UPDATE global_settings
-					SET value = '$_POST[displayMealsEnddate]'
+					SET value = '$data[displayMealsEnddate]'
 					WHERE name = 'displayMealsEnddate';
 				UPDATE global_settings
-					SET value = '$_POST[orderEnddate]'
+					SET value = '$data[orderEnddate]'
 					WHERE name = 'orderEnddate';
 				UPDATE global_settings
-					SET value = '$_POST[ordercancelEnddate]'
+					SET value = '$data[ordercancelEnddate]'
 					WHERE name = 'ordercancelEnddate';", true, true);
 
 		} catch (Exception $e) {
