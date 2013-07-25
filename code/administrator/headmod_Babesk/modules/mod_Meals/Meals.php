@@ -49,9 +49,6 @@ class Meals extends Module {
 				case 6:
 					$mealProcessing->EditInfotext();
 					break;
-				case 7:
-					$mealProcessing->EditLastOrderTime();
-					break;
 				case 8:
 					$mealProcessing->DuplicateMeal($_POST['name'], $_POST['description'], $_POST['pcID'], $_POST['date'], $_POST['max_orders']);
 					break;

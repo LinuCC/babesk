@@ -11,7 +11,6 @@ abstract class GlobalSettings {
 	const RELIGION = 'religion';
 	const SPECIAL_COURSE = 'special_course';
 	const FOREIGN_LANGUAGE = 'foreign_language';
-	const LAST_ORDERTIME = 'last_order_time';
 	const FITS_KEY = 'fits_key';
 	const FITS_YEAR = 'fits_year';
 	const FITS_CLASS = 'fits_class';
@@ -166,24 +165,6 @@ class GlobalSettingsManager extends TableManager {
 	function setInfoTexts($infotext1, $infotext2) {
 		$this->alterEntry($this->getIDByValue('name', 'menu_text1'), 'value', $infotext1);
 		$this->alterEntry($this->getIDByValue('name', 'menu_text2'), 'value', $infotext2);
-	}
-
-	/**
-	 * changes the Last Order Time
-	 * @param unknown_type $time
-	 */
-	function setLastOrderTime($time) {
-		$this->valueSet (GlobalSettings::LAST_ORDERTIME, $time);
-	}
-
-	/**
-	* returns the value of last_order_time
-	* @throws UnexpectedValueException when last_order_time is NULL
-	* @throws something else when MySQL has problems
-	* @return string the last_order_time
-	*/
-	function getLastOrderTime() {
-		return $this->valueGet (GlobalSettings::LAST_ORDERTIME);
 	}
 
 	/**
