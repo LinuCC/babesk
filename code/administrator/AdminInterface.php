@@ -10,7 +10,7 @@ require_once PATH_CODE . '/include/GeneralInterface.php';
  */
 class AdminInterface extends GeneralInterface {
 
-	function __construct ($mod_rel_path, $smarty = NULL) {
+	public function __construct ($mod_rel_path, $smarty = NULL) {
 
 		if ($smarty) {
 			$this->smarty = $smarty;
@@ -30,7 +30,7 @@ class AdminInterface extends GeneralInterface {
 	 * This function shows an error to the user and die()s the process.
 	 * @param string $msg The message to be shown
 	 */
-	function dieError ($msg) {
+	public function dieError ($msg) {
 
 		$this->smarty->append('_userErrorOutput', $msg);
 		$this->smarty->display(PATH_SMARTY . '/templates/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5(
@@ -43,7 +43,7 @@ class AdminInterface extends GeneralInterface {
 	 * This function shows an error to the user and die()s the process.
 	 * @param string $msg The message to be shown
 	 */
-	function dieErrorAjax ($msg) {
+	public function dieErrorAjax ($msg) {
 
 		$this->smarty->assign('error', $msg);
 		$this->smarty->display(PATH_SMARTY . '/templates/administrator/messageAjax.tpl', md5($_SERVER['REQUEST_URI']), md5(
@@ -56,29 +56,33 @@ class AdminInterface extends GeneralInterface {
 	 * This function shows a message to the user and die()s the process.
 	 * @param string $msg The message to be shown
 	 */
-	function dieMsg ($msg) {
+	public function dieMsg ($msg) {
 		$this->smarty->assign('_userMsgOutput', $msg);
 		$this->smarty->display(PATH_SMARTY . '/templates/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5(
 			$_SERVER['REQUEST_URI']));
 		die();
 	}
 
-	function showError ($msg) {
+	public function showError ($msg) {
 		$this->smarty->append('_userErrorOutput', $msg);
 	}
 
-	function showMsg ($msg) {
+	public function showWarning ($msg) {
+		$this->smarty->append('_userWarningOutput', $msg);
+	}
+
+	public function showMsg ($msg) {
 		$this->smarty->append('_userMsgOutput', $msg);
 	}
 
-	function showSuccess ($msg) {
+	public function showSuccess ($msg) {
 		$this->smarty->append('_userSuccessOutput', $msg);
 	}
 
 	/**
 	 * dies and displays all messages which were used by showError and showMsg
 	 */
-	function dieDisplay () {
+	public function dieDisplay () {
 
 		$this->smarty->display(PATH_SMARTY . '/templates/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5(
 			$_SERVER['REQUEST_URI']));
@@ -92,7 +96,7 @@ class AdminInterface extends GeneralInterface {
 	 * @param string $confirmedString The String of the "confirmed"-Button
 	 * @param string $notConfirmedString The String of the "notConfirmed"-Button
 	 */
-	function confirmationDialog ($promptMessage, $sectionString, $actionString, $confirmedString, $notConfirmedString) {
+	public function confirmationDialog ($promptMessage, $sectionString, $actionString, $confirmedString, $notConfirmedString) {
 
 		$this->smarty->assign('promptStr', $promptMessage);
 		$this->smarty->assign('sectionStr', $sectionString);

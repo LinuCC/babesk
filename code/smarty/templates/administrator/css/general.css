@@ -304,6 +304,10 @@ h3.filterBar {
 		text-align: center;
 }
 
+/**
+ * Errors
+ */
+
 #errorContainer {
 	color: #af2d2b;
 	background-color: #ffc0bf;
@@ -336,6 +340,46 @@ h3.filterBar {
 	font-size: 12px;
 }
 
+/**
+ * Warnings
+ */
+
+#warningContainer {
+	color: #686800;
+	background-color: #fff878;
+	background-image: url(../../../../images/status/warning_64.png);
+	background-repeat: no-repeat;
+	background-position: 5px 50%;
+	border-radius: 15px;
+	margin: 10px auto;
+	width: 700px;
+	padding: 25px;
+	border: 1px solid #686800;
+}
+
+#warningContainer ul {
+	margin: 0 0 0 70px;
+}
+
+#warningContainer p {
+	font-weight: 700;
+	font-size: 15px;
+}
+
+#warningContainer a {
+	display: block;
+	position: relative;
+	float: right;
+	top: -20px;
+	right: -20px;
+	color: #686800;
+	font-size: 12px;
+}
+
+/**
+ * Messages
+ */
+
 #messageContainer {
 	color: #2b67af;
 	background: #acd2ff;
@@ -362,6 +406,10 @@ h3.filterBar {
 	color: #2b67af;
 	font-size: 12px;
 }
+
+/**
+ * Success-Messages
+ */
 
 #successContainer {
 	color: #55832f;
