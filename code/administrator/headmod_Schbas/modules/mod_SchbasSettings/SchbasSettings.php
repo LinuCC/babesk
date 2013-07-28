@@ -99,7 +99,7 @@ class SchbasSettings extends Module {
 		$textTwoText = $_POST['messagetext2'];
 		$textThreeTitle = $_POST['messagetitle3'];
 		$textThreeText = $_POST['messagetext3'];
-			
+
 		if ($textOneTitle == '') $textOneTitle = '&nbsp;';
 		if ($textOneText == '') $textOneText = '&nbsp;';
 		if ($textTwoTitle == '') $textTwoTitle = '&nbsp;';
@@ -131,7 +131,7 @@ class SchbasSettings extends Module {
 			}
 		}
 		else {
-			$temp = TableMng::query('SELECT value FROM global_settings WHERE name="bank_details"',true);
+			$temp = TableMng::query('SELECT value FROM global_settings WHERE name="bank_details"');
 			$bankAccount = explode("|", $temp[0]['value']);
 			$SchbasSettingsInterface->EditBankAccount($bankAccount[0],$bankAccount[1],$bankAccount[2],$bankAccount[3]);
 		}
@@ -146,7 +146,7 @@ class SchbasSettings extends Module {
 			$coverLetterTitle = $_POST['messagetitle'];
 			$coverLetterText = $_POST['messagetext'];
 
-				
+
 			if ($coverLetterTitle == '') $coverLetterTitle = '&nbsp;';
 			if ($coverLetterText == '') $coverLetterText = '&nbsp;';
 
@@ -158,12 +158,12 @@ class SchbasSettings extends Module {
 			}
 		}
 		else {
-			$title = TableMng::query('SELECT title FROM schbas_texts WHERE description="coverLetter"',true);
-			$text = TableMng::query('SELECT text FROM schbas_texts WHERE description="coverLetter"',true);
+			$title = TableMng::query('SELECT title FROM schbas_texts WHERE description="coverLetter"');
+			$text = TableMng::query('SELECT text FROM schbas_texts WHERE description="coverLetter"');
 			$SchbasSettingsInterface->EditCoverLetter($title[0]['title'],$text[0]['text']);
 		}
 	}
-	
+
 	protected function previewInfoDocs () {
 		require_once 'AdminSchbasSettingsInterface.php';
 		$SchbasSettingsInterface = new AdminSchbasSettingsInterface($this->relPath);
@@ -174,36 +174,36 @@ class SchbasSettings extends Module {
 			$SchbasSettingsInterface->ShowPreviewInfoTexts();
 		}
 	}
-	
+
 	private function showPdf() {
 		require_once PATH_ACCESS. '/BookManager.php';
-	
+
 		//get cover letter date
-		$letter_date =  TableMng::query("SELECT value FROM global_settings WHERE name='schbasDateCoverLetter'",true);
-	
+		$letter_date =  TableMng::query("SELECT value FROM global_settings WHERE name='schbasDateCoverLetter'");
+
 		$booklistManager = new BookManager();
-	
+
 		//get gradeValue ("Klassenstufe")
 		$gradeValue = $_POST['gradeValue'];
-	
+
 		// get cover letter ("Anschreiben")
-		$coverLetter = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='coverLetter'",true);
-	
+		$coverLetter = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='coverLetter'");
+
 		// get first infotext
-		$textOne = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textOne".$gradeValue."'",true);
-	
+		$textOne = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textOne".$gradeValue."'");
+
 		// get second infotext
-		$textTwo = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textTwo".$gradeValue."'",true);
-	
+		$textTwo = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textTwo".$gradeValue."'");
+
 		// get third infotext
-		$textThree = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textThree".$gradeValue."'",true);
-	
+		$textThree = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textThree".$gradeValue."'");
+
 		// get booklist
 		$booklist = $booklistManager->getBooksByClass($gradeValue);
-	
+
 		$books = '<table border="0" bordercolor="#FFFFFF" style="background-color:#FFFFFF" width="100%" cellpadding="0" cellspacing="1">
 				<tr style="font-weight:bold; text-align:center;"><th>Fach</th><th>Titel</th><th>Verlag</th><th>ISBN-Nr.</th><th>Preis</th></tr>';
-	
+
 	//	$bookPrices = 0;
 		foreach ($booklist as $book) {
 			// $bookPrices += $book['price'];
@@ -213,15 +213,15 @@ class SchbasSettings extends Module {
 		$books .= '</table>';
 		$books = str_replace('ä', '&auml;', $books);
 		$books = str_replace('é', '&eacute;', $books);
-	
+
 		//get loan fees
-		$feeNormal = TableMng::query("SELECT fee_normal FROM schbas_fee WHERE grade=".$gradeValue,true);
-		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradeValue,true);
-	
+		$feeNormal = TableMng::query("SELECT fee_normal FROM schbas_fee WHERE grade=".$gradeValue);
+		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradeValue);
+
 		//get bank account
-		$bank_account =  TableMng::query("SELECT value FROM global_settings WHERE name='bank_details'",true);
+		$bank_account =  TableMng::query("SELECT value FROM global_settings WHERE name='bank_details'");
 		$bank_account = explode("|", $bank_account[0]['value']);
-	
+
 		//textOne[0]['title'] wird nicht ausgegeben, unter admin darauf hinweisen!
 		$pageTwo = $books.'<br/>'.$textOne[0]['text'].'<br/><br/>'.
 				'<table style="border:solid" width="75%" cellpadding="2" cellspacing="2">
@@ -232,35 +232,35 @@ class SchbasSettings extends Module {
 								<tr><td>Bankleitzahl:</td><td>'.$bank_account[2].'</td></tr>
 								<tr><td>Kreditinstitut:</td><td>'.$bank_account[3].'</td></tr>
 								</table>';
-	
-	
-	
-	
+
+
+
+
 		$pageThree = "<h3>".$textTwo[0]['title']."</h3>".$textTwo[0]['text']."<br/><h3>".$textThree[0]['title']."</h3>".$textThree[0]['text'];
-	
+
 		$daterow = '<p style="text-align: right;">'.$letter_date[0]['value']."</p>";
-	
+
 		$this->createPdf($coverLetter[0]['title'],$daterow.$coverLetter[0]['text'],"Lehrb&uuml;cher Jahrgang ".$gradeValue,$pageTwo,
 				'Weitere Informationen',$pageThree,$gradeValue,false,"","jahrgang_".$gradeValue);
 	}
-	
+
 	/**
 	 * Creates a PDF for the Participation Confirmation and returns its Path
 	 */
 	private function createPdf ($page1Title,$page1Text,$page2Title,$page2Text,$page3Title,$page3Text,$gradeLevel,$msgReturn,$loanChoice,$uid) {
-	
+
 		require_once 'LoanSystemPdf.php';
-	
+
 		try {
 			$pdfCreator = new LoanSystemPdf($page1Title,$page1Text,$page2Title,$page2Text,$page3Title,$page3Text,$gradeLevel,$msgReturn,$loanChoice,$uid);
 			$pdfCreator->create();
 			$pdfCreator->output();
-	
+
 		} catch (Exception $e) {
 			$this->_interface->DieError('Konnte das PDF nicht erstellen!');
 		}
 	}
-	
+
 }
 
 ?>

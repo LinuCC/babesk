@@ -19,7 +19,7 @@ class AdminSchbasSettingsProcessing {
 	 * Ausleihtabelle anzeigen
 	 */
 	function GetLoanSettings() {
-		$settings = TableMng::query("SELECT * FROM schbas_fee", true);
+		$settings = TableMng::query("SELECT * FROM schbas_fee");
 		return $settings;
 	}
 }

@@ -91,7 +91,7 @@ class CopyOldOrdersToSoli {
 	 */
 	protected static function couponDataFetch() {
 
-		$coupons = TableMng::query('SELECT * FROM soli_coupons', true);
+		$coupons = TableMng::query('SELECT * FROM soli_coupons');
 
 		foreach($coupons as $coupon) {
 			try {
@@ -197,7 +197,7 @@ class CopyOldOrdersToSoli {
 
 		try {
 			$res = TableMng::query('SELECT value FROM global_settings
-				WHERE name = "soli_price"', true);
+				WHERE name = "soli_price"');
 
 		} catch (Exception $e) {
 			throw new Exception('Could not fetch the soliprice');

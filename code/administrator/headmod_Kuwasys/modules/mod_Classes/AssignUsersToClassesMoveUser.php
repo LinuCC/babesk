@@ -69,7 +69,7 @@ class AssignUsersToClassesMoveUser {
 			FROM users
 			WHERE ID = "%s"', self::$_userId);
 		try {
-			$user = TableMng::query ($query, true);
+			$user = TableMng::query ($query);
 			$name = $user [0] ['fullname'];
 		} catch (Exception $e) {
 			self::$_interface->showError ('Konnte den Namen des Benutzers nicht abrufen');
@@ -86,7 +86,7 @@ class AssignUsersToClassesMoveUser {
 			JOIN jointClassInSchoolYear cisy ON c.ID = cisy.ClassID
 			WHERE cisy.SchoolYearID = (%s)', $activeSchoolyearQuery);
 		try {
-			self::$_classes = TableMng::query ($query, true);
+			self::$_classes = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {
 			self::$_interface->dieError ('Keine Kurse gefunden');
 		} catch (Exception $e) {
@@ -100,7 +100,7 @@ class AssignUsersToClassesMoveUser {
 			FROM usersInClassStatus
 			WHERE name IN ("active", "waiting")');
 		try {
-			self::$_statuses = TableMng::query ($query, true);
+			self::$_statuses = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {
 			self::$_interface->dieError ('Keine Status gefunden');
 		} catch (Exception $e) {

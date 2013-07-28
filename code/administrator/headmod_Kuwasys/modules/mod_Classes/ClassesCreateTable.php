@@ -49,7 +49,7 @@ class ClassesCreateTable {
 				LEFT JOIN kuwasysClassUnit cu ON cu.ID = c.unitId
 			WHERE  uic.statusId = (SELECT ID FROM usersInClassStatus WHERE usersInClassStatus.name="active");';
 		try {
-			$data = TableMng::query ($query, true);
+			$data = TableMng::query ($query);
 		} catch (Exception $e) {
 			self::$_interface->dieError ('Konnte die benötigten Daten nicht abrufen. Fehler:' . $e->getMessage ());
 		}

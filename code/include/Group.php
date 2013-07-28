@@ -106,7 +106,7 @@ class Group {
 
 		try {
 			$parent = TableMng::query("SELECT lft, rgt FROM Groups
-				WHERE `name` = '$parentName'", true);
+				WHERE `name` = '$parentName'");
 
 			if($parent[0]['rgt'] == $parent[0]['lft'] + 1) {
 				//No Children existing
@@ -233,7 +233,7 @@ class Group {
 		$groupArray = TableMng::query(
 			"SELECT g.* FROM Groups g
 			JOIN UserInGroups uig ON uig.groupId = g.ID
-			WHERE uig.userId = '$userId';", true);
+			WHERE uig.userId = '$userId';");
 
 		if(count($groupArray)) {
 			$groups = self::arrayToObjects($groupArray);
@@ -343,7 +343,7 @@ class Group {
 			FROM Groups AS node, Groups AS parent
 			WHERE node.lft BETWEEN parent.lft AND parent.rgt
 			GROUP BY node.ID
-			ORDER BY node.lft;", true);
+			ORDER BY node.lft;");
 
 		return $data;
 	}
@@ -404,12 +404,12 @@ class Group {
 
 		TableMng::getDb()->autocommit(false);
 
-		TableMng::query("SELECT @myLeft := lft FROM Groups
+		TableMng::queryMultiple("SELECT @myLeft := lft FROM Groups
 			WHERE name = '$parentName';
 			UPDATE Groups SET rgt = rgt + 2 WHERE rgt > @myLeft;
 			UPDATE Groups SET lft = lft + 2 WHERE lft > @myLeft;
 			INSERT INTO Groups(name, lft, rgt) VALUES('$name',
-							@myLeft + 1, @myLeft + 2);", false, true);
+							@myLeft + 1, @myLeft + 2);");
 
 		TableMng::getDb()->autocommit(true);
 	}
@@ -428,13 +428,13 @@ class Group {
 
 		TableMng::getDb()->autocommit(false);
 
-		TableMng::query("SELECT @myRight := rgt FROM Groups
+		TableMng::queryMultiple("SELECT @myRight := rgt FROM Groups
 			WHERE name = '$parentName';
 			UPDATE Groups SET rgt = rgt + 2 WHERE rgt >= @myRight;
 			UPDATE Groups SET lft = lft + 2 WHERE lft >= @myRight;
 			INSERT INTO Groups(name, lft, rgt) VALUES('$name',
 							@myRight, @myRight + 1);
-			", false, true);
+			");
 
 		TableMng::getDb()->autocommit(true);
 	}

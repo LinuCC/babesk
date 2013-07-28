@@ -34,7 +34,7 @@ class BabeskStatTopMealsByMonthBarChart extends StatisticsBarChart {
 	protected function dataFetch() {
 
 		$this->_mealData = TableMng::query(
-			"SELECT SUM(price) FROM schbas_books WHERE class='07'", true);
+			"SELECT SUM(price) FROM schbas_books WHERE class='07'");
 	}
 
 	protected function dataProcess() {
@@ -44,10 +44,10 @@ class BabeskStatTopMealsByMonthBarChart extends StatisticsBarChart {
 
 // 		foreach($this->_mealData as $schoolyear) {
 // 			$names[] = $schoolyear['summe'];
-		
+
 // 		}
 
-		
+
 		$this->_pData->addPoints($this->_mealData[0], 'schoolyearLabels');
 // 		$this->_pData->setSerieDescription('schoolyearLabels', 'Schuljahr');
 // 		$this->_pData->setAbscissa('schoolyearLabels');

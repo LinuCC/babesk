@@ -69,7 +69,7 @@ class MessageAdmin extends Module {
 	protected function messageFetchAll() {
 
 		try {
-			$data = TableMng::query('SELECT * FROM Message', true);
+			$data = TableMng::query('SELECT * FROM Message');
 
 		} catch (MySQLVoidDataException $e) {
 			return array();
@@ -210,7 +210,7 @@ class MessageAdmin extends Module {
 				DELETE FROM MessageReceivers WHERE `messageId` = %s;
 				DELETE FROM MessageManagers WHERE `messageId` = %s;',
 				$id, $id, $id);
-			TableMng::query($query, false, true);
+			TableMng::queryMultiple($query);
 			TableMng::getDb()->autocommit(true);
 
 		} catch (Exception $e) {

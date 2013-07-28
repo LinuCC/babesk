@@ -136,7 +136,7 @@ class Web {
 					gsTarget.value AS target
 				FROM global_settings gsDelay, global_settings gsTarget
 				WHERE gsDelay.name = "webHomepageRedirectDelay" AND
-					gsTarget.name = "webHomepageRedirectTarget"', true);
+					gsTarget.name = "webHomepageRedirectTarget"');
 
 		} catch (Exception $e) {
 			return;

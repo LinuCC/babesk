@@ -100,7 +100,7 @@ class ModuleSettings extends Module {
 
 		try {
 			$module = TableMng::query("SELECT * FROM Modules
-				WHERE ID = $moduleId", true);
+				WHERE ID = $moduleId");
 
 		} catch (Exception $e) {
 			die(json_encode(array('value' => 'error',
@@ -265,7 +265,7 @@ class ModuleSettings extends Module {
 
 		try {
 			TableMng::getDb()->autocommit(false);
-			TableMng::query($query, false, true);
+			TableMng::queryMultiple($query);
 			$id = TableMng::getDb()->insert_id;
 			TableMng::getDb()->autocommit(true);
 			return $id;
@@ -297,7 +297,7 @@ class ModuleSettings extends Module {
 		if($query = ModuleGenerator::moduleDeleteQueryCreate($module)) {
 			try {
 				TableMng::getDb()->autocommit(false);
-				TableMng::query($query, false, true);
+				TableMng::queryMultiple($query);
 				TableMng::getDb()->autocommit(true);
 
 			} catch (Exception $e) {

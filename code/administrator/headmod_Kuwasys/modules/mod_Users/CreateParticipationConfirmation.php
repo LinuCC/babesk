@@ -67,7 +67,7 @@ class CreateParticipationConfirmation {
 			;', $whereQuery);
 
 		try {
-			$data = TableMng::query ($query, true);
+			$data = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {
 			self::$_interface->dieError ('Es konnten keine Dokumente erstellt werden; Möglicherweise hat sich keiner der Schüler angemeldet');
 		} catch (Exception $e) {

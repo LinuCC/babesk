@@ -81,7 +81,7 @@ class UserDisplayAll {
 			//Fetch the Userdata
 			TableMng::query('SET @activeSy :=
 				(SELECT ID FROM schoolYear WHERE active = "1");');
-			$data = TableMng::query($query, true);
+			$data = TableMng::query($query);
 			$usercount = TableMng::query($countQuery, true);
 
 			// var_dump($usercount);
@@ -111,7 +111,7 @@ class UserDisplayAll {
 		$columns = array();
 
 		$userdata = TableMng::query("SELECT *
-			FROM users LIMIT 1, 1", true);
+			FROM users LIMIT 1, 1");
 
 		foreach($userdata[0] as $key => $data) {
 			if(!empty($this->_userColumnTranslations[$key])) {
@@ -123,20 +123,20 @@ class UserDisplayAll {
 		$columns['activeGrade'] = 'aktive Klasse';
 
 		// //Messages-Module existing
-		// if(count(TableMng::query("SHOW TABLES LIKE 'Message';", true))) {
+		// if(count(TableMng::query("SHOW TABLES LIKE 'Message';"))) {
 		// 	$columns['countMessageReceived'] = 'Nachrichten empfangen';
 		// 	$columns['countMessageSend'] = 'Nachrichten abgeschickt';
 		// }
 		// //Kuwasys existing
-		// if(count(TableMng::query("SHOW TABLES LIKE 'class';", true))) {
+		// if(count(TableMng::query("SHOW TABLES LIKE 'class';"))) {
 		// 	$columns['countClass'] = 'Kurse';
 		// }
 		//Cards existing
-		if(count(TableMng::query("SHOW TABLES LIKE 'cards';", true))) {
+		if(count(TableMng::query("SHOW TABLES LIKE 'cards';"))) {
 			$columns['cardnumber'] = 'Kartennummer';
 		}
 		//Babesk existing
-		// if(count(TableMng::query("SHOW TABLES LIKE 'orders';", true))) {
+		// if(count(TableMng::query("SHOW TABLES LIKE 'orders';"))) {
 			// $columns['countOrders'] = 'Bestellungen';
 		// }
 

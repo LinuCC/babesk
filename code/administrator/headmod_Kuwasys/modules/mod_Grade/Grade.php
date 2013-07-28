@@ -146,7 +146,7 @@ class Grade extends Module {
 				'SELECT g.*, st.name AS schooltypeName
 				FROM grade g
 					LEFT JOIN Schooltype st ON g.schooltypeId = st.ID
-				', true);
+				');
 
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorNoGrades'));
@@ -427,7 +427,7 @@ class Grade extends Module {
 	private function fetchAllSchooltypes() {
 
 		try {
-			$data = TableMng::query('SELECT * FROM Schooltype', true);
+			$data = TableMng::query('SELECT * FROM Schooltype');
 
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->dieError('Keine Schultypen gefunden');
@@ -448,7 +448,7 @@ class Grade extends Module {
 
 		try {
 			$data = TableMng::query('SELECT value FROM global_settings
-				WHERE name = "schooltypeEnabled"', true);
+				WHERE name = "schooltypeEnabled"');
 
 		} catch (MySQLVoidDataException $e) {
 			return false; //default to false if no entry found

@@ -73,7 +73,7 @@ class AssignUsersToClasses {
 	protected function tempTableIsExisting () {
 		$query = 'show tables like "' . self::$tableName . '";';
 		try {
-			$blubb = TableMng::query ($query, true);
+			$blubb = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {
 			return false;
 		}
@@ -125,7 +125,7 @@ class AssignUsersToClasses {
 			statusId = ' . $subQuerySelectStatus . '
 		;';
 		try {
-			$data = TableMng::query ($query, true);
+			$data = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {
 			return NULL;
 		} catch (Exception $e) {
@@ -366,7 +366,7 @@ class AssignUsersToClasses {
 			GROUP BY class.ID
 		;';
 		try {
-			$results = TableMng::query ($query, true);
+			$results = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->dieError ('Keine Kursänderungen vorhanden die angezeigt werden könnten');
 		} catch (Exception $e) {
@@ -433,7 +433,7 @@ class AssignUsersToClasses {
 		ORDER BY grade
 		;';
 		try {
-			$data = TableMng::query ($query, true);
+			$data = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {
 			return false;
 		} catch (Exception $e) {
@@ -469,7 +469,7 @@ class AssignUsersToClasses {
 	protected function getClassnameByClassId ($classId) {
 		$query = 'SELECT label FROM class WHERE ID = ' . $classId . ';';
 		try {
-			$class = TableMng::query ($query, true);
+			$class = TableMng::query ($query);
 		} catch (Exception $e) {
 			$this->_interface->showError ('Konnte den Klassennamen nicht finden');
 		}
@@ -479,7 +479,7 @@ class AssignUsersToClasses {
 	protected function origJointsChange () {
 		$query = 'SELECT * FROM ' . self::$tableName .';';
 		try {
-			$jointsAll = TableMng::query ($query, true);
+			$jointsAll = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->dieError ('Es gibt keine Veränderungen');
 		} catch (Exception $e) {
@@ -523,7 +523,7 @@ class AssignUsersToClasses {
 			$query .= sprintf ('UPDATE jointUsersInClass SET statusId = "%s" WHERE ClassID = "%s" AND UserID = "%s";', $j ['statusId'], $j ['ClassID'], $j ['UserID']);
 		}
 		try {
-			TableMng::query ($query, false, true);
+			TableMng::queryMultiple ($query );
 		} catch (Exception $e) {
 			$this->_interface->dieError ('Konnte die originalen Joints nicht vollständig verändern. Möglicherweise sind jetzt korrupte Daten vorhanden');
 		}

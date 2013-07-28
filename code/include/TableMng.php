@@ -60,7 +60,7 @@ class TableMng {
 	 * @param $isMultiple true if the query does contain multiple SQL-Querys, else false. Standard is false
 	 * @return Array () if $hasData has been set to true, it returns the fetched data as an Array
 	 */
-	public static function query ($query, $hasData = false, $isMultiple = false) {
+	public static function query ($query, $hasData = null, $isMultiple = null) {
 		if(isset($hasData) || isset($isMultiple)) {
 			trigger_error('hasData and isMultiple are deprecated! Regex: "(\'|"),(| )true"');
 		}

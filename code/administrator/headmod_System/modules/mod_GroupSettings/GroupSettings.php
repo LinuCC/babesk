@@ -140,7 +140,7 @@ class GroupSettings extends Module {
 
 		try {
 			TableMng::getDb()->autocommit(false);
-			TableMng::query($query, false, true);
+			TableMng::queryMultiple($query);
 			TableMng::getDb()->autocommit(true);
 
 		} catch (Exception $e) {
@@ -405,7 +405,7 @@ class GroupSettings extends Module {
 
 		try {
 			$rights = TableMng::query("SELECT * FROM GroupModuleRights
-				WHERE `groupId` = '$groupId'", true);
+				WHERE `groupId` = '$groupId'");
 
 		} catch (Exception $e) {
 			die(json_encode(array('value' => 'error',

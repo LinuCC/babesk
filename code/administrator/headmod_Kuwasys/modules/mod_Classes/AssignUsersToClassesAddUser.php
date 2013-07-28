@@ -89,7 +89,7 @@ class AssignUsersToClassesAddUser {
 					CONCAT(u.forename, " ", u.name) AS userFullname
 				FROM users u
 				JOIN usersInGradesAndSchoolyears uigs ON u.ID = uigs.UserID
-					AND uigs.schoolyearId = @activeSchoolyear', true);
+					AND uigs.schoolyearId = @activeSchoolyear');
 
 		} catch (MySQLVoidDataException $e) {
 			self::$_interface->dieError ('Konnte keine Benutzer finden');
@@ -105,7 +105,7 @@ class AssignUsersToClassesAddUser {
 			FROM usersInClassStatus
 			WHERE name IN ("active", "waiting")');
 		try {
-			self::$_statuses = TableMng::query ($query, true);
+			self::$_statuses = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {
 			self::$_interface->dieError ('Keine Status gefunden');
 		} catch (Exception $e) {

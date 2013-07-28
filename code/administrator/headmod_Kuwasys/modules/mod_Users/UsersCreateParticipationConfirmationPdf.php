@@ -47,7 +47,7 @@ class UsersCreateParticipationConfirmationPdf {
 			;', $whereQuery);
 
 		try {
-			$data = TableMng::query ($query, true);
+			$data = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {
 			self::$_interface->dieError ('Es wurden keine Schüler gefunden, für die man die Dokumente hätte drucken können');
 		} catch (Exception $e) {

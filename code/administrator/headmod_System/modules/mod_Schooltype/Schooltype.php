@@ -74,7 +74,7 @@ class Schooltype extends Module {
 		$data = array();
 
 		try {
-			$data = TableMng::query('SELECT * FROM Schooltype;',true);
+			$data = TableMng::query('SELECT * FROM Schooltype;');
 
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->showError('Es sind keine Schultypen vorhanden');
@@ -206,7 +206,7 @@ class Schooltype extends Module {
 	protected function isEnabled() {
 		try {
 			$data = TableMng::query('SELECT value FROM global_settings
-				WHERE name = "schooltypeEnabled"', true);
+				WHERE name = "schooltypeEnabled"');
 
 		} catch (MySQLVoidDataException $e) {
 			$this->isEnabledAddEntry();

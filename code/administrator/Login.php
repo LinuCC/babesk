@@ -129,7 +129,7 @@ class Login {
 		try {
 			$users = TableMng::query("SELECT ID, username FROM users
 				WHERE `username` = '$_POST[Username]'
-					AND `password` = '$password'", true);
+					AND `password` = '$password'");
 
 		} catch (Exception $e) {
 			$this->loginShow('Error executing Query');

@@ -238,8 +238,8 @@ class Users extends Module {
 			$userData = $this->getUserData($_GET['ID']);
 			$userForenameName = $userData['forename']." ".$userData['name'];
 
-			$gradeValue = TableMng::query("SELECT gradeValue FROM grade WHERE id=(SELECT GradeID from jointusersingrade WHERE UserID='".$_GET['ID']."')",true);
-			$gradeLabel = TableMng::query("SELECT label FROM grade WHERE id=(SELECT GradeID from jointusersingrade WHERE UserID='".$_GET['ID']."')",true);
+			$gradeValue = TableMng::query("SELECT gradeValue FROM grade WHERE id=(SELECT GradeID from jointusersingrade WHERE UserID='".$_GET['ID']."')");
+			$gradeLabel = TableMng::query("SELECT label FROM grade WHERE id=(SELECT GradeID from jointusersingrade WHERE UserID='".$_GET['ID']."')");
 
 			$gradeValueLabel=  $gradeValue[0]['gradeValue'].$gradeLabel[0]['label'];
 
@@ -300,7 +300,7 @@ class Users extends Module {
 	private function statusIdOfStatusNameGet ($statusName) {
 		$query = 'SELECT ID FROM usersInClassStatus WHERE name = "' . $statusName . '"';
 		try {
-			$id = TableMng::query ($query, true);
+			$id = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->dieError('Konnte einen Status nicht finden');
 		} catch (Exception $e) {
@@ -460,7 +460,7 @@ class Users extends Module {
 				AND c.unitId = (SELECT unitId FROM class WHERE ID = %s)
 			", $userId, $statusId, $classIdNew);
 		try {
-			$dupClass = TableMng::query ($query, true);
+			$dupClass = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {
 			throw $e;
 		} catch (Exception $e) {
@@ -479,7 +479,7 @@ class Users extends Module {
 				AND c.unitId = (SELECT unitId FROM class WHERE ID = %s)
 			", $userId, $statusId, $classId);
 		try {
-			$hasClass = TableMng::query ($query, true);
+			$hasClass = TableMng::query ($query);
 		} catch (Exception $e) {
 			$this->_interface->dieError ('Konnte nicht auf weitere Kurse mit gleichem Status und Tag überprüfen' . $e->getMessage());
 		}
@@ -616,7 +616,7 @@ class Users extends Module {
 				JOIN usersInClassStatus uics ON uic.statusId = uics.ID
 			WHERE uics.name = "active" OR uics.name = "waiting";';
 		try {
-			$data = TableMng::query ($query, true);
+			$data = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->dieError ('Es wurden keine Schüler gefunden, für die man die Dokumente hätte drucken können');
 		} catch (Exception $e) {

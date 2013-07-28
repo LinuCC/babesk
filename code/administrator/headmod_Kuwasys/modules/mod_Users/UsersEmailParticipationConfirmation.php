@@ -78,7 +78,7 @@ class UsersEmailParticipationConfirmation {
 			WHERE %s
 			;", $whereQuery);
 		try {
-			$usersWithEmail = TableMng::query ($query, true);
+			$usersWithEmail = TableMng::query ($query);
 		} catch (Exception $e) {
 			self::$_interface->dieError ('Konnte die Email-Adressen der Benutzer nicht abrufen');
 		}

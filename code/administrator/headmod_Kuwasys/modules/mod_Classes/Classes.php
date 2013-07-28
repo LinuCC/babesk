@@ -271,7 +271,7 @@ class Classes extends Module {
 			';
 		TableMng::init ();
 		try {
-			$classes = TableMng::query ($query, true);
+			$classes = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->dieError ('Konnte keine Kurse finden');
 		} catch (Exception $e) {

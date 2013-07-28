@@ -75,7 +75,7 @@ class SchbasMessages extends Module {
 		$data = array();
 
 		try {
-			$data = TableMng::query('SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM messagegroups WHERE name="Schbas");', true);
+			$data = TableMng::query('SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM messagegroups WHERE name="Schbas");');
 
 		} catch (MySQLVoidDataException $e) {
 			return array();
@@ -122,8 +122,8 @@ class SchbasMessages extends Module {
 	protected function templateAddToDb($title, $text) {
 
 		try {
-			$gid = TableMng::query('SELECT ID FROM messagegroups WHERE name LIKE "Schbas"', true);
-			
+			$gid = TableMng::query('SELECT ID FROM messagegroups WHERE name LIKE "Schbas"');
+
 			TableMng::query(sprintf('INSERT INTO MessageTemplate
 				(`title`, `text`,`GID`) VALUES ("%s", "%s", "%d");', $title, $text,$gid[0]['ID']));
 

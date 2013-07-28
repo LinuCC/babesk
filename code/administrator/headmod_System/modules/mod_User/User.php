@@ -201,7 +201,7 @@ class User extends Module {
 					VALUES ('$_POST[cardnumber]', '@uid');";
 			}
 
-			TableMng::query("INSERT INTO users
+			TableMng::queryMultiple("INSERT INTO users
 				(forename, name, username, password, email, telephone, birthday,
 					first_passwd, locked, GID, credit, soli)
 				VALUES ('$_POST[forename]', '$_POST[name]', '$_POST[username]',
@@ -212,7 +212,7 @@ class User extends Module {
 				SET @uid = LAST_INSERT_ID();
 				$gradeAndSchoolyearQuery
 				$cardnumberQuery
-				",false, true);
+				");
 
 		} catch (Exception $e) {
 			die($e->getMessage());
@@ -265,7 +265,7 @@ class User extends Module {
 		$value = 'name') {
 
 		$rearranged = array();
-		$rows = TableMng::query($query, true);
+		$rows = TableMng::query($query);
 
 
 		if(!empty($rows)) {
@@ -334,7 +334,7 @@ class User extends Module {
 					LEFT JOIN grade g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS class
-				FROM users u', true);
+				FROM users u');
 
 		} catch (Exception $e) {
 			$this->userInterface->dieError ('Konnte die Benutzer nicht abrufen');
@@ -392,7 +392,7 @@ class User extends Module {
 				LEFT JOIN grade g ON uigs.GradeID = g.ID
 				WHERE uigs.schoolyearId = @activeSchoolyear
 			) AS gradeId
-			FROM users u WHERE `ID` = $uid", true);
+			FROM users u WHERE `ID` = $uid");
 
 		return $user;
 	}
@@ -401,7 +401,7 @@ class User extends Module {
 
 		$cardnumber = TableMng::query(
 			"SELECT cardnumber FROM cards WHERE UID = $userId
-			", true);
+			");
 
 		return $cardnumber;
 	}
@@ -423,7 +423,7 @@ class User extends Module {
 				WHERE sy.ID = uigs.schoolyearId AND uigs.UserID = $userId
 			) AS isUserIn
 			FROM schoolYear sy
-			ORDER BY active DESC;", true);
+			ORDER BY active DESC;");
 
 		return $schoolyears;
 	}
@@ -435,7 +435,7 @@ class User extends Module {
 			(SELECT COUNT(*) AS count FROM UserInGroups uig
 				WHERE g.ID = uig.groupId AND uig.userId = $userId)
 					AS isUserIn
-			FROM Groups g", true);
+			FROM Groups g");
 
 		return $groups;
 	}
@@ -559,7 +559,7 @@ class User extends Module {
 			$passwordQuery = $this->passwordQueryCreate($uid);
 			$groupQuery = $this->groupQueryCreate($uid);
 
-			TableMng::query("UPDATE users
+			TableMng::queryMultiple("UPDATE users
 				SET `forename` = '$_POST[forename]',
 					`name` = '$_POST[name]',
 					`username` = '$_POST[username]',
@@ -576,7 +576,7 @@ class User extends Module {
 				$cardnumberQuery
 				$gradeQuery
 				$groupQuery
-				",false, true);
+				");
 
 
 		} catch (Exception $e) {
@@ -600,7 +600,7 @@ class User extends Module {
 		$query = '';
 
 		$existingSchoolyears = TableMng::query(
-			"SELECT * FROM usersInGradesAndSchoolyears WHERE UserID = $uid", true);
+			"SELECT * FROM usersInGradesAndSchoolyears WHERE UserID = $uid");
 
 		foreach($_POST['schoolyearIds'] as $schoolyearId) {
 			if($schoolyearId === 'NONE') {
@@ -642,7 +642,7 @@ class User extends Module {
 		$query = '';
 		//Fetch the existing cardnumber of the User
 		$userCard = TableMng::query(
-				"SELECT * FROM cards WHERE UID = $uid", true);
+				"SELECT * FROM cards WHERE UID = $uid");
 
 		if(!empty($_POST['cardnumber'])) {
 
@@ -691,7 +691,7 @@ class User extends Module {
 		//The Grade of the User before the change
 		$userGrade = TableMng::query(
 			"SELECT * FROM usersInGradesAndSchoolyears
-				WHERE UserID = $uid", true);
+				WHERE UserID = $uid");
 
 		if(!empty($_POST['gradeId'])) {
 
@@ -776,7 +776,7 @@ class User extends Module {
 
 		return TableMng::query("SELECT g.ID FROM Groups g
 			JOIN UserInGroups uig ON g.ID = uig.groupId
-			WHERE uig.userId = $userId", true);
+			WHERE uig.userId = $userId");
 	}
 
 	/**

@@ -104,10 +104,10 @@ class UserDelete {
 
 		$additionalQuerys = $this->deleteQuerysCreateAdditional($uid);
 		TableMng::getDb()->autocommit(false);
-		TableMng::query(
+		TableMng::queryMultiple(
 			"DELETE FROM users WHERE ID = $uid;
 			$additionalQuerys
-			", false, true);
+			");
 		TableMng::getDb()->autocommit(true);
 	}
 
@@ -115,41 +115,41 @@ class UserDelete {
 
 		$querys = '';
 
-		if(count(TableMng::query('SHOW TABLES LIKE "cards";', true))) {
+		if(count(TableMng::query('SHOW TABLES LIKE "cards";'))) {
 			$querys .= "DELETE FROM cards WHERE UID = $uid;";
 		}
 		if(count(TableMng::query(
-			'SHOW TABLES LIKE "jointUsersInClass";', true))) {
+			'SHOW TABLES LIKE "jointUsersInClass";'))) {
 			$querys .= "DELETE FROM jointUsersInClass WHERE UserID = $uid;";
 		}
 		if(count(TableMng::query(
-			'SHOW TABLES LIKE "usersInGradesAndSchoolyears";', true))) {
+			'SHOW TABLES LIKE "usersInGradesAndSchoolyears";'))) {
 			$querys .= "DELETE FROM usersInGradesAndSchoolyears
 				WHERE UserID = $uid;";
 		}
 		if(count(TableMng::query(
-			'SHOW TABLES LIKE "MessageReceivers";', true))) {
+			'SHOW TABLES LIKE "MessageReceivers";'))) {
 			$querys .= "DELETE FROM MessageReceivers WHERE userId = $uid;";
 		}
 		if(count(TableMng::query(
-			"SHOW TABLES LIKE 'MessageManagers';", true))) {
+			"SHOW TABLES LIKE 'MessageManagers';"))) {
 			$querys .= "DELETE FROM MessageManagers WHERE userId = $uid;";
 		}
 		if(count(TableMng::query(
-			'SHOW TABLES LIKE "soli_orders";', true))) {
+			'SHOW TABLES LIKE "soli_orders";'))) {
 			$querys .= "DELETE FROM soli_orders WHERE UID = $uid;";
 		}
 		if(count(TableMng::query(
-			'SHOW TABLES LIKE "soli_coupons";', true))) {
+			'SHOW TABLES LIKE "soli_coupons";'))) {
 			$querys .= "DELETE FROM soli_coupons WHERE UID = $uid;";
 		}
 		if(count(TableMng::query(
-			'SHOW TABLES LIKE "MessageCarbonFootprint";', true))) {
+			'SHOW TABLES LIKE "MessageCarbonFootprint";'))) {
 			$querys .= "DELETE FROM MessageCarbonFootprint
 				WHERE authorId = $uid;";
 		}
 		if(count(TableMng::query(
-			'SHOW TABLES LIKE "fits";', true))) {
+			'SHOW TABLES LIKE "fits";'))) {
 			$querys .= "DELETE FROM fits WHERE ID = $uid;";
 		}
 

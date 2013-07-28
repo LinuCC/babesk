@@ -13,7 +13,7 @@ class MessageFunctions {
 				CONCAT(u.forename, " ", u.name) AS userFullname
 			FROM users u
 				JOIN usersInGradesAndSchoolyears uigs ON u.ID = uigs.UserID
-			WHERE uigs.SchoolyearId = @activeSchoolyear', true);
+			WHERE uigs.SchoolyearId = @activeSchoolyear');
 		return $users;
 	}
 
@@ -34,7 +34,7 @@ class MessageFunctions {
 			WHERE %s = userId AND %s = messageId
 			AND SYSDATE() BETWEEN valid_from AND valid_to",
 			$escUserId, $escMessageId);
-		$isReceiving = TableMng::query($queryRec, true);
+		$isReceiving = TableMng::query($queryRec);
 		return (bool) $isReceiving[0]['count'];
 	}
 
@@ -54,7 +54,7 @@ class MessageFunctions {
 			FROM MessageManagers
 			WHERE %s = userId AND %s = messageId", $escUserId, $escMessageId);
 		try {
-			$isManaging = TableMng::query($query, true);
+			$isManaging = TableMng::query($query);
 		} catch (Exception $e) {
 			return false;
 		}
@@ -92,7 +92,7 @@ class MessageFunctions {
 			DELETE FROM MessageReceivers WHERE `messageId` = %s;
 			DELETE FROM MessageManagers WHERE `messageId` = %s;',
 			$messageId, $messageId, $messageId);
-		TableMng::query($query, false, true);
+		TableMng::queryMultiple($query);
 		$db->autocommit(true);
 	}
 

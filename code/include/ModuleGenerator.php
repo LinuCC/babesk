@@ -325,7 +325,7 @@ class ModuleGenerator {
 			FROM Modules AS node, Modules AS parent
 			WHERE node.lft BETWEEN parent.lft AND parent.rgt
 			GROUP BY node.ID
-			ORDER BY node.lft;", true);
+			ORDER BY node.lft;");
 
 		return $data;
 	}
@@ -406,12 +406,12 @@ class ModuleGenerator {
 
 		TableMng::getDb()->autocommit(false);
 
-		TableMng::query("SELECT @myLeft := lft FROM Modules
+		TableMng::queryMultiple("SELECT @myLeft := lft FROM Modules
 			WHERE name = '$parentName';
 			UPDATE Modules SET rgt = rgt + 2 WHERE rgt > @myLeft;
 			UPDATE Modules SET lft = lft + 2 WHERE lft > @myLeft;
 			INSERT INTO Modules(name, lft, rgt) VALUES('$name',
-							@myLeft + 1, @myLeft + 2);", false, true);
+							@myLeft + 1, @myLeft + 2);");
 
 		TableMng::getDb()->autocommit(true);
 	}
@@ -430,13 +430,13 @@ class ModuleGenerator {
 
 		TableMng::getDb()->autocommit(false);
 
-		TableMng::query("SELECT @myRight := rgt FROM Modules
+		TableMng::queryMultiple("SELECT @myRight := rgt FROM Modules
 			WHERE name = '$parentName';
 			UPDATE Modules SET rgt = rgt + 2 WHERE rgt >= @myRight;
 			UPDATE Modules SET lft = lft + 2 WHERE lft > @myRight;
 			INSERT INTO Modules(name, lft, rgt) VALUES('$name',
 							@myRight, @myRight + 1);
-			", false, true);
+			");
 
 		TableMng::getDb()->autocommit(true);
 	}

@@ -111,14 +111,14 @@ class GroupModuleRight {
 		$whereStr = rtrim($whereStr, ' OR');
 
 		$rights = TableMng::query(
-			"SELECT * FROM GroupModuleRights WHERE $whereStr",true);
+			"SELECT * FROM GroupModuleRights WHERE $whereStr");
 		return $rights;
 	}
 
 	public static function rightsOfUserGet($userId) {
 
 		$res = TableMng::query("SELECT * FROM GroupModuleRights
-			WHERE `userId` = '$userId'", true);
+			WHERE `userId` = '$userId'");
 
 		return $res;
 	}
@@ -135,7 +135,7 @@ class GroupModuleRight {
 		$whereStr = rtrim($whereStr, ' OR');
 
 		$rights = TableMng::query(
-			"SELECT * FROM GroupModuleRights WHERE $whereStr", true);
+			"SELECT * FROM GroupModuleRights WHERE $whereStr");
 
 		return $rights;
 	}

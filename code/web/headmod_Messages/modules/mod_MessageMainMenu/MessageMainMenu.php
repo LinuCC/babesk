@@ -70,7 +70,7 @@ class MessageMainMenu extends Module {
 
 		try {
 			$contractGID = TableMng::query('SELECT value FROM global_settings
-				WHERE name = "messageEditGroupId"',true);
+				WHERE name = "messageEditGroupId"');
 			$userGID = TableMng::query('SELECT GID FROM users WHERE ID =
 				"'.$_SESSION['uid'].'"',true);
 			if(!count($contractGID)) {
@@ -100,7 +100,7 @@ class MessageMainMenu extends Module {
 			JOIN MessageManagers mm ON m.ID = mm.messageId AND mm.userId = %s
 			', $_SESSION['uid']);
 		try {
-			$messages = TableMng::query ($query, true);
+			$messages = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {
 			$this->_smarty->append('error','Konnte keine selbst-erstellten Nachrichten finden');
 		} catch (Exception $e) {
@@ -126,7 +126,7 @@ class MessageMainMenu extends Module {
 			WHERE SYSDATE() BETWEEN m.validFrom AND m.validTo
 			', $_SESSION['uid']);
 		try {
-			$messages = TableMng::query ($query, true);
+			$messages = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {
 			$this->_smarty->assign('error','Keine Post vorhanden!');
 		} catch (Exception $e) {

@@ -25,7 +25,7 @@ class LoanSystem extends Module {
 		defined('_WEXEC') or die("Access denied");
 		$this->init();
 		//var_dump($_POST);
-		$schbasEnabled = TableMng::query("SELECT value FROM global_settings WHERE name='isSchbasClaimEnabled'",true);
+		$schbasEnabled = TableMng::query("SELECT value FROM global_settings WHERE name='isSchbasClaimEnabled'");
 		if ($schbasEnabled[0]['value']=="0") {
 			$this->showLoanList();
 		}
@@ -62,18 +62,18 @@ class LoanSystem extends Module {
 	}
 
 	private function showMainMenu() {
-		$schbasYear = TableMng::query("SELECT value FROM global_settings WHERE name='schbas_year'",true);
+		$schbasYear = TableMng::query("SELECT value FROM global_settings WHERE name='schbas_year'");
 		//get gradeValue ("Klassenstufe")
 		$gradeValue = TableMng::query("SELECT gradeValue FROM grade WHERE id=(SELECT GradeID from jointusersingrade WHERE UserID='".$_SESSION['uid']."')",true);
 		$gradeValue[0]['gradeValue'] = strval(intval($gradeValue[0]['gradeValue'])+1);
-		
+
 		// Filter für Abijahrgang
-		
+
 		if($gradeValue[0]['gradeValue']=="13") $this->_smarty->display($this->_smartyPath . 'lastGrade.tpl');;
 		//get loan fees
 		$feeNormal = TableMng::query("SELECT fee_normal FROM schbas_fee WHERE grade=".$gradeValue[0]['gradeValue'],true);
 		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradeValue[0]['gradeValue'],true);
-		
+
 		$this->_smarty->assign('feeNormal', $feeNormal[0]['fee_normal']);
 		$this->_smarty->assign('feeReduced', $feeReduced[0]['fee_reduced']);
 		$this->_smarty->assign('schbasYear', $schbasYear[0]['value']);
@@ -124,14 +124,14 @@ class LoanSystem extends Module {
 		//get gradeValue ("Klassenstufe")
 		$gradeValue = TableMng::query("SELECT gradeValue FROM grade WHERE id=(SELECT GradeID from jointusersingrade WHERE UserID='".$_SESSION['uid']."')",true);
 		$gradeValue[0]['gradeValue'] = strval(intval($gradeValue[0]['gradeValue'])+1);
-		
-		$schbasYear = TableMng::query("SELECT value FROM global_settings WHERE name='schbas_year'",true);
-		
-		
+
+		$schbasYear = TableMng::query("SELECT value FROM global_settings WHERE name='schbas_year'");
+
+
 		//get cover letter date
-		$letter_date =  TableMng::query("SELECT value FROM global_settings WHERE name='schbasDateCoverLetter'",true);
-		
-		$schbasDeadlineClaim = TableMng::query("SELECT value FROM global_settings WHERE name='schbasDeadlineClaim'",true);
+		$letter_date =  TableMng::query("SELECT value FROM global_settings WHERE name='schbasDateCoverLetter'");
+
+		$schbasDeadlineClaim = TableMng::query("SELECT value FROM global_settings WHERE name='schbasDeadlineClaim'");
 		$text = "</h4>Bitte ausgef&uuml;llt zur&uuml;ckgeben an die Klassen- bzw. Kursleitung des Lessing-Gymnasiums bis zum ".$schbasDeadlineClaim[0]['value']."!</h4>";
 
 		$text .= '<table border="1"><tr>';
@@ -152,11 +152,11 @@ class LoanSystem extends Module {
 		$text .= "</tr></table>&nbsp;<br/><br/>";
 
 		$text .= "An der entgeltlichen Ausleihe von Lernmitteln im Schuljahr ".$schbasYear[0]['value']." ";
-		
+
 		//get loan fees
 		$feeNormal = TableMng::query("SELECT fee_normal FROM schbas_fee WHERE grade=".$gradeValue[0]['gradeValue'],true);
 		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradeValue[0]['gradeValue'],true);
-		$schbasDeadlineTransfer = TableMng::query("SELECT value FROM global_settings WHERE name='schbasDeadlineTransfer'",true);
+		$schbasDeadlineTransfer = TableMng::query("SELECT value FROM global_settings WHERE name='schbasDeadlineTransfer'");
 		$feedback = "";
 		if ($_POST['loanChoice']=="noLoan") {
 			$feedback = "nl";
@@ -173,37 +173,37 @@ class LoanSystem extends Module {
 				$feedback = "ln";
 				$text .= "Der Betrag von ".$feeNormal[0]['fee_normal']." &euro; ";
 			}
-			else if (isset($_POST['loanFee']) && $_POST['loanFee']=="loanReduced") { 
+			else if (isset($_POST['loanFee']) && $_POST['loanFee']=="loanReduced") {
 				$feedback = "lr";
 				$text .= "Den Betrag von ".$feeReduced[0]['fee_reduced']." &euro; (mehr als 2 schulpflichtigen Kinder) ";
 			}
 			$text .= " wird bis sp&auml;testens ".$schbasDeadlineTransfer[0]['value']." &uuml;berwiesen.<br/><br/>";
 			//get bank account details
-			$bank_account =  TableMng::query("SELECT value FROM global_settings WHERE name='bank_details'",true);
+			$bank_account =  TableMng::query("SELECT value FROM global_settings WHERE name='bank_details'");
 			$bank_account = explode("|", $bank_account[0]['value']);
-			
-			$username = TableMng::query("SELECT username FROM users WHERE ID=".$_SESSION['uid'],true);
-			
+
+			$username = TableMng::query("SELECT username FROM users WHERE ID=".$_SESSION['uid']);
+
 			$text .= 	"<table style=\"border:solid\" width=\"75%\" cellpadding=\"2\" cellspacing=\"2\">
 				<tr><td>Kontoinhaber:</td><td>".$bank_account[0]."</td></tr>
 								<tr><td>Kontonummer:</td><td>".$bank_account[1]."</td></tr>
 								<tr><td>Bankleitzahl:</td><td>".$bank_account[2]."</td></tr>
 								<tr><td>Kreditinstitut:</td><td>".$bank_account[3]."</td></tr>
 								<tr><td>Verwendungszeck:</td><td>".$username[0]['username']." JG ".$gradeValue[0]['gradeValue']." SJ ".$schbasYear[0]['value']."</td></tr>
-					
+
 					</table>";
-			
-			
+
+
 			$text .= "<br/><br/>Sollte der Betrag nicht fristgerecht eingehen, besteht kein Anspruch auf Teilnahme an der Ausleihe.<br/><br/>";
-			
+
 			if (isset($_POST['loanFee']) && $_POST['loanFee']=="loanReduced") {
 				$text .= "<u>Weitere schulpflichtige Kinder im Haushalt (Schuljahr ".$schbasYear[0]['value']."):</u><br/><br/>";
 				if (isset($_POST['siblings']) && $_POST['siblings']=="") $text .= '<table style="border:solid" width="75%" cellpadding="2" cellspacing="2">
 						<tr><td>Name, Vorname, Schule jedes Kindes:<br/><br><br><br><br><br><br><br></td></tr></table>';
 				else $text .=	"<table style=\"border:solid\" width=\"75%\" cellpadding=\"2\" cellspacing=\"2\"><tr><td>Name, Vorname, Schule jedes Kindes:<br/>".nl2br($_POST['siblings'])."</td></tr></table>";
 			}
-		}	
-		
+		}
+
 		$text .= "<br><br><br><br><br><br><br>__________&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_______________________________<br>Ort, Datum &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unterschrift Erziehungsberechtigte/r bzw. vollj&auml;hriger Sch&uuml;ler";
 		$this->createPdf('Anmeldeformular',$text,'','','','',$gradeValue[0]['gradeValue'],true,$feedback,$_SESSION['uid']);
 	}
@@ -212,8 +212,8 @@ class LoanSystem extends Module {
 		require_once PATH_ACCESS. '/BookManager.php';
 
 		//get cover letter date
-		$letter_date =  TableMng::query("SELECT value FROM global_settings WHERE name='schbasDateCoverLetter'",true);
-		
+		$letter_date =  TableMng::query("SELECT value FROM global_settings WHERE name='schbasDateCoverLetter'");
+
 		$booklistManager = new BookManager();
 
 		//get gradeValue ("Klassenstufe")
@@ -221,7 +221,7 @@ class LoanSystem extends Module {
 		$gradeValue[0]['gradeValue'] = strval(intval($gradeValue[0]['gradeValue'])+1);
 
 		// get cover letter ("Anschreiben")
-		$coverLetter = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='coverLetter'",true);
+		$coverLetter = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='coverLetter'");
 
 		// get first infotext
 		$textOne = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textOne".$gradeValue[0]['gradeValue']."'",true);
@@ -253,9 +253,9 @@ class LoanSystem extends Module {
 		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradeValue[0]['gradeValue'],true);
 
 		//get bank account
-		$bank_account =  TableMng::query("SELECT value FROM global_settings WHERE name='bank_details'",true);
+		$bank_account =  TableMng::query("SELECT value FROM global_settings WHERE name='bank_details'");
 		$bank_account = explode("|", $bank_account[0]['value']);
-		
+
 		//textOne[0]['title'] wird nicht ausgegeben, unter admin darauf hinweisen!
 		$pageTwo = $books.'<br/>'.$textOne[0]['text'].'<br/><br/>'.
 				'<table style="border:solid" width="75%" cellpadding="2" cellspacing="2">
@@ -273,7 +273,7 @@ class LoanSystem extends Module {
 		$pageThree = "<h3>".$textTwo[0]['title']."</h3>".$textTwo[0]['text']."<br/><h3>".$textThree[0]['title']."</h3>".$textThree[0]['text'];
 
 		$daterow = '<p style="text-align: right;">'.$letter_date[0]['value']."</p>";
-		
+
 		$this->createPdf($coverLetter[0]['title'],$daterow.$coverLetter[0]['text'],"Lehrb&uuml;cher Jahrgang ".$gradeValue[0]['gradeValue'],$pageTwo,
 				'Weitere Informationen',$pageThree,$gradeValue[0]['gradeValue'],false,"",$_SESSION['uid']);
 	}

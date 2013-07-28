@@ -71,7 +71,7 @@ class SchbasAccounting extends Module {
 			$haystack = array('nl','ln','lr','ls');
 
 			$query = sprintf("SELECT COUNT(*) FROM schbas_accounting WHERE `UID`='%s'",$uid);
-			$result=TableMng::query($query,true);
+			$result=TableMng::query($query);
 			if ($result[0]['COUNT(*)']!="0") {
 				die('dupe');
 			}
@@ -96,10 +96,10 @@ class SchbasAccounting extends Module {
 
 		$gradeID = TableMng::query(
 			"SELECT GradeID FROM usersInGradesAndSchoolyears
-				WHERE schoolyearId = @activeSchoolyear",true);
+				WHERE schoolyearId = @activeSchoolyear");
 		foreach ($gradeID as $grade){
 			$ID = $grade['GradeID'];
-			$SaveTheCows = TableMng::query("SELECT * FROM grade WHERE ID = $ID", true);
+			$SaveTheCows = TableMng::query("SELECT * FROM grade WHERE ID = $ID");
 			// Cows stands for Code of worst systematic
 			$gradesAll[] = $SaveTheCows[0];
 		}
@@ -107,7 +107,7 @@ class SchbasAccounting extends Module {
 			JOIN usersInGradesAndSchoolyears uigs ON u.ID = uigs.UserID
 			JOIN grade g ON g.ID = uigs.GradeID
 			WHERE uigs.schoolyearId = @activeSchoolyear
-			ORDER BY name ASC', true);
+			ORDER BY name ASC');
 		$users = $this->addPayedAmountToUsers($users);
 
 		if (isset ($_GET['gradeIdDesired'])){
@@ -135,8 +135,8 @@ class SchbasAccounting extends Module {
 
 	private function addPayedAmountToUsers ($users) {
 
-		$payed = TableMng::query('SELECT * FROM schbas_accounting', true);
-		$fees = TableMng::query('SELECT * FROM schbas_fee', true);
+		$payed = TableMng::query('SELECT * FROM schbas_accounting');
+		$fees = TableMng::query('SELECT * FROM schbas_fee');
 		foreach ($users as & $user) {
 			foreach ($payed as $pay) {
 				if ($pay['UID'] == $user['ID'])  {

@@ -62,14 +62,14 @@ class Administrator {
 					SELECT COUNT(*) FROM usersInGradesAndSchoolyears uigs
 						WHERE uigs.UserID = u.ID
 				) = 0
-			', true);
+			');
 
 		$noGrade = TableMng::query('SELECT * FROM grade
-			WHERE gradeValue = 0', true);
+			WHERE gradeValue = 0');
 		$noGrade = $noGrade[0];
 
 		$activeSy = TableMng::query('SELECT ID  FROM schoolYear sy
-			WHERE active = 1', true);
+			WHERE active = 1');
 		$activeSy = $activeSy[0]['ID'];
 
 		$stmt = TableMng::getDb()->prepare(

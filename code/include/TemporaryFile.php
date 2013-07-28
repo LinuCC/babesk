@@ -320,7 +320,7 @@ class TemporaryFile {
 	protected function tableRowExists() {
 
 		$data = TableMng::query("SELECT COUNT(*) AS count FROM TemporaryFiles
-			WHERE ID = '$this->_fileId'", true);
+			WHERE ID = '$this->_fileId'");
 		$count = $data[0]['count'];
 		return ($count != 0);
 	}
@@ -334,7 +334,7 @@ class TemporaryFile {
 
 		try {
 			$data = TableMng::query("SELECT * FROM TemporaryFiles
-				WHERE `ID` = '$this->_fileId'", true);
+				WHERE `ID` = '$this->_fileId'");
 
 		} catch (Exception $e) {
 			throw new TemporaryFileException(
@@ -418,7 +418,7 @@ class TemporaryFile {
 	 */
 	protected static function cleanBrokenDbLinks() {
 
-		$entries = TableMng::query('SELECT * FROM TemporaryFiles', true);
+		$entries = TableMng::query('SELECT * FROM TemporaryFiles');
 		$deletedRows = 0;
 
 		if(!count($entries)) {
@@ -469,7 +469,7 @@ class TemporaryFile {
 
 		$now = self::toDatetime(time());
 		$oldEntries = TableMng::query(
-			"SELECT * FROM TemporaryFiles WHERE until < '$now'", true);
+			"SELECT * FROM TemporaryFiles WHERE until < '$now'");
 
 		$deletedEntries = 0;
 		if(count($oldEntries)) {

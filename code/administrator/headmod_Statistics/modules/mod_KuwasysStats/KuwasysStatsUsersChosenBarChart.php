@@ -47,13 +47,13 @@ class KuwasysStatsUsersChosenStackedBarChart extends StatisticsStackedBarChart {
 					AND uigs.schoolyearId = @activeSchoolyear
 				JOIN grade g ON g.ID = uigs.GradeID
 				JOIN schoolYear sy ON uigs.SchoolYearID = sy.ID
-				', true);
+				');
 	}
 
 	protected function schooltypeDataFetch() {
 
 		$this->_schooltypeData = TableMng::query(
-			'SELECT * FROM Schooltype', true);
+			'SELECT * FROM Schooltype');
 	}
 
 	protected function dataProcess() {
