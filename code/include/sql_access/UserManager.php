@@ -102,11 +102,10 @@ class UserManager extends TableManager{
 		$query = sprintf(
 			'SELECT u.*,
 			(SELECT CONCAT(g.gradeValue, g.label) AS class
-				FROM jointUsersInGrade uig
-				LEFT JOIN grade g ON uig.gradeId = g.ID
-				LEFT JOIN jointGradeInSchoolYear gisy ON gisy.gradeId = g.ID
-				LEFT JOIN schoolYear sy ON gisy.schoolyearId = sy.ID
-				WHERE uig.userId = u.ID) AS class
+					FROM usersInGradesAndSchoolyears uigs
+					LEFT JOIN grade g ON uigs.gradeId = g.ID
+					WHERE uigs.userId = u.ID AND
+						uigs.schoolyearId = @activeSchoolyear) AS class
 			FROM %s u ORDER BY %s LIMIT %s, 10',
 			$this->tablename,$orderBy,$pagePointer);
 
@@ -317,7 +316,7 @@ class UserManager extends TableManager{
 		parent::alterEntry($uid, 'locked', '1');
 		}
 	}
-	
+
 	/**
 	 * Unlocks an account
 	 *
@@ -493,7 +492,7 @@ class UserManager extends TableManager{
 		$query = sql_prev_inj(sprintf('UPDATE %s SET last_login = NOW() WHERE ID = %s', $this->tablename, $userId));
 		$this->executeQuery($query);
 	}
-	
+
 	function getClassByUsername($username) {
 		$user = parent::getTableData('username="'.$username.'"');
 		return $user[0]['class'];

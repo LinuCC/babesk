@@ -161,12 +161,10 @@ class LoanManager extends TableManager{
 		$userDetails = TableMng::query(sprintf(
 			'SELECT u.*,
 			(SELECT CONCAT(g.gradeValue, g.label) AS class
-				FROM jointUsersInGrade uig
-				LEFT JOIN grade g ON uig.gradeId = g.ID
-				LEFT JOIN jointGradeInSchoolYear gisy
-					ON gisy.gradeId = g.ID
-				LEFT JOIN schoolYear sy ON gisy.schoolyearId = sy.ID
-				WHERE uig.userId = u.ID) AS class
+				FROM usersInGradesAndSchoolyears uigs
+				LEFT JOIN grade g ON uigs.gradeId = g.ID
+				WHERE uigs.userId = u.ID AND
+					uigs.schoolyearId = @activeSchoolyear) AS class
 			FROM users u WHERE `ID` = %s', $userId), true);
 
 

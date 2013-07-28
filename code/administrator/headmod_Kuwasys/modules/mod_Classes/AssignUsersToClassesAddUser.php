@@ -82,18 +82,18 @@ class AssignUsersToClassesAddUser {
 	 * Returns all users of this schoolyear
 	 */
 	protected static function usersFetch () {
-		$activeSchoolyearQuery = sprintf (
-			'SELECT sy.ID FROM schoolYear sy WHERE sy.active = "%s"', 1);
-		$query = sprintf (
-			'SELECT u.ID AS userId,
-				CONCAT(u.forename, " ", u.name) AS userFullname
-			FROM users u
-			JOIN jointUsersInSchoolYear uisy ON u.ID = uisy.UserID
-			WHERE uisy.SchoolYearID = (%s)', $activeSchoolyearQuery);
+
 		try {
-			self::$_users = TableMng::query ($query, true);
+			self::$_users = TableMng::query (
+				'SELECT u.ID AS userId,
+					CONCAT(u.forename, " ", u.name) AS userFullname
+				FROM users u
+				JOIN usersInGradesAndSchoolyears uigs ON u.ID = uigs.UserID
+					AND uigs.schoolyearId = @activeSchoolyear', true);
+
 		} catch (MySQLVoidDataException $e) {
 			self::$_interface->dieError ('Konnte keine Benutzer finden');
+
 		} catch (Exception $e) {
 			self::$_interface->dieError ('Ein Fehler ist beim Abrufen der Benutzer aufgetreten' . $e->getMessage ());
 		}

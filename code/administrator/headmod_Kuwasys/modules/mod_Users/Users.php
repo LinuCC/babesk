@@ -190,12 +190,11 @@ class Users extends Module {
 			"INSERT INTO users (forename, name, username, password,
 				email, telephone, birthday) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s');
 			SET @last_user_id = LAST_INSERT_ID();
-			INSERT INTO jointUsersInSchoolYear (UserID, SchoolYearID)
-				VALUES (@last_user_id, '%s');
-			INSERT INTO jointUsersInGrade (UserID, GradeID)
-				VALUES (@last_user_id, '%s');",
+			INSERT INTO usersInGradesAndSchoolyears
+				(UserID, GradeID, schoolyearId) VALUES
+				(@last_user_id, '%s', '%s');",
 				$forename, $name,$username, $hashedPassword, $email,
-				$telephone, $birthday, $schoolyearId, $gradeId);
+				$telephone, $birthday, $gradeId, $schoolyearId);
 
 		$db->autocommit(false);//mySQL-transaction
 		if($db->multi_query($query)) {

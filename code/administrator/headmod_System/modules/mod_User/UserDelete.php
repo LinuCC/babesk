@@ -72,12 +72,12 @@ class UserDelete {
 	 */
 	protected function userToDeleteGet($userId) {
 
-		$userToDeleteRes = TableMng::query(
+		$userToDeleteRes = TableMng::querySingleEntry(
 			"SELECT forename, name, credit, birthday,
 				CONCAT(g.gradeValue, '-', g.label) AS grade
 			FROM users u
-			LEFT JOIN jointUsersInGrade uig ON uig.UserID = u.ID
-			LEFT JOIN grade g ON uig.GradeID = g.ID
+			LEFT JOIN usersInGradesAndSchoolyears uig ON uigs.UserID = u.ID
+			LEFT JOIN grade g ON uigs.GradeID = g.ID
 			WHERE u.ID = $userId", true);
 
 		if(count($userToDeleteRes)) {
@@ -123,12 +123,8 @@ class UserDelete {
 			$querys .= "DELETE FROM jointUsersInClass WHERE UserID = $uid;";
 		}
 		if(count(TableMng::query(
-			'SHOW TABLES LIKE "jointUsersInGrade";', true))) {
-			$querys .= "DELETE FROM jointUsersInGrade WHERE UserID = $uid;";
-		}
-		if(count(TableMng::query(
-			'SHOW TABLES LIKE "jointUsersInSchoolYear";', true))) {
-			$querys .= "DELETE FROM jointUsersInSchoolYear
+			'SHOW TABLES LIKE "usersInGradesAndSchoolyears";', true))) {
+			$querys .= "DELETE FROM usersInGradesAndSchoolyears
 				WHERE UserID = $uid;";
 		}
 		if(count(TableMng::query(

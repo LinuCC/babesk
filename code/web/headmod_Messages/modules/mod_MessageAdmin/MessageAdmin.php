@@ -299,8 +299,10 @@ class MessageAdmin extends Module{
 		if(isset($_POST['grades']) && count($_POST['grades'])) {
 			$db = TableMng::getDb();
 			$grades = $_POST['grades'];
-			$stmt =$db->prepare("SELECT UserID AS userId
-				FROM jointUsersInGrade WHERE GradeID = ?");
+			$stmt =$db->prepare("SELECT uigs.UserID AS userId
+				FROM usersInGradesAndSchoolyears uigs
+					ON uigs.schoolyearId = @activeSchoolyear
+					WHERE uigs.GradeID = ?");
 			foreach($grades as $gradeId) {
 				$stmt->bind_param("i", $gradeId);
 				$stmt->execute();

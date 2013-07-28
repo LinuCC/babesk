@@ -8,15 +8,12 @@ class MessageFunctions {
 	 * Returns all users of this schoolyear
 	 */
 	public static function usersFetch () {
-		$activeSchoolyearQuery = sprintf (
-			'SELECT sy.ID FROM schoolYear sy WHERE sy.active = "%s"', 1);
-		$query = sprintf (
+		$users = TableMng::query (
 			'SELECT u.ID AS userId,
 				CONCAT(u.forename, " ", u.name) AS userFullname
 			FROM users u
-				JOIN jointUsersInSchoolYear uisy ON u.ID = uisy.UserID
-			WHERE uisy.SchoolYearID = (%s)', $activeSchoolyearQuery);
-		$users = TableMng::query ($query, true);
+				JOIN usersInGradesAndSchoolyears uigs ON u.ID = uigs.UserID
+			WHERE uigs.SchoolyearId = @activeSchoolyear', true);
 		return $users;
 	}
 

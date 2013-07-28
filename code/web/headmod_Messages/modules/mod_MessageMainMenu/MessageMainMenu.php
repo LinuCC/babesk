@@ -184,8 +184,10 @@ class MessageMainMenu extends Module {
 				FROM users u
 				JOIN MessageReceivers mr ON mr.userId = u.ID
 				JOIN Message m ON mr.messageId = m.ID AND m.ID = ?
-				LEFT JOIN jointUsersInGrade uig ON u.ID = uig.UserID
-				LEFT JOIN grade g ON g.ID = uig.GradeID
+				LEFT JOIN usersInGradesAndSchoolyears uigs ON
+					uigs.UserID = u.ID AND
+					uigs.schoolyearId = @activeSchoolyear
+				LEFT JOIN grade g ON g.ID = uigs.GradeID
 				WHERE u.ID = ?";
 			$stmt = $db->prepare($query);
 			if($stmt) {

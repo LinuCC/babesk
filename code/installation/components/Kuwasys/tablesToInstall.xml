@@ -122,28 +122,6 @@
 		</sqlString>
 	</table>
 	<table>
-		<name>jointUsersInSchoolYear</name>
-		<sqlCommand>
-		CREATE TABLE IF NOT EXISTS `jointUsersInSchoolYear` (
-		`ID` int(11) unsigned NOT NULL auto_increment,
-		`UserID` int(11) unsigned NOT NULL,
-		`SchoolYearID` int(11) unsigned NOT NULL,
-		Primary Key (`ID`)
-		);
-		</sqlCommand>
-	</table>
-	<table>
-		<name>jointUsersInGrade</name>
-		<sqlCommand>
-		CREATE TABLE IF NOT EXISTS `jointUsersInGrade` (
-		`ID` int(11) unsigned NOT NULL auto_increment,
-		`UserID` int(11) unsigned NOT NULL,
-		`GradeID` int(11) unsigned NOT NULL,
-		Primary Key (`ID`)
-		);
-		</sqlCommand>
-	</table>
-	<table>
 		<name>jointUsersInClass</name>
 		<sqlCommand>
 		CREATE TABLE IF NOT EXISTS `jointUsersInClass` (

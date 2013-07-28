@@ -188,25 +188,17 @@ class User extends Module {
 			? hash_password($_POST['password']) : '';
 
 		//Querys
-		$schoolyearQuery = '';
 		$cardnumberQuery = '';
-		$gradeQuery = '';
 
 		TableMng::getDb()->autocommit(false);
 
 		try {
-			//check for additional Querys needed
-			if(!empty($_POST['schoolyearId'])) {
-				$schoolyearQuery = "INSERT INTO jointUsersInSchoolYear
-				(UserID, SchoolYearID) VALUES (@uid, $_POST[schoolyearId]);";
-			}
+			$gradeAndSchoolyearQuery =
+				$this->registerUploadGradeAndSchoolyearQuery($_POST);
+
 			if(!empty($_POST['cardnumber'])) {
 				$cardnumberQuery = "INSERT INTO cards (cardnumber, UID)
 					VALUES ('$_POST[cardnumber]', '@uid');";
-			}
-			if(!empty($_POST['gradeId'])) {
-				$gradeQuery = "INSERT INTO jointUsersInGrade (UserID, GradeID)
-					VALUES (@uid, $_POST[gradeId]);";
 			}
 
 			TableMng::query("INSERT INTO users
@@ -218,9 +210,8 @@ class User extends Module {
 					'$_POST[pricegroupId]', '$_POST[credits]', '$_POST[isSoli]'
 					);
 				SET @uid = LAST_INSERT_ID();
-				$schoolyearQuery
+				$gradeAndSchoolyearQuery
 				$cardnumberQuery
-				$gradeQuery
 				",false, true);
 
 		} catch (Exception $e) {
@@ -229,6 +220,31 @@ class User extends Module {
 
 		TableMng::getDb()->autocommit(true);
 
+	}
+
+	protected function registerUploadGradeAndSchoolyearQuery($container) {
+
+		$gradeAndSchoolyearQuery = '';
+
+		if(($gradeUsed = !empty($container['gradeID'])) ||
+			($syUsed = !empty($container['schoolyearId']))) {
+
+			if($gradeUsed) {
+				$gId = (!empty($_POST['gradeID'])) $_POST['gradeID'] : 0;
+			}
+			else {
+				$gId = TableMng::querySingleEntry(
+					'SELECT * FROM grades WHERE gradeValue = 0');
+			}
+			$syId = ($syUsed) ? $_POST['schoolyearId'] : 0;
+
+			$gradeAndSchoolyearQuery =
+				"INSERT INTO usersInGradesAndSchoolyears
+					(UserID, GradeID, schoolyearId) VALUES
+					(@uid, $gId, $syId)";
+		}
+
+		return $gradeAndSchoolyearQuery;
 	}
 
 	/**
@@ -314,11 +330,10 @@ class User extends Module {
 			$data = TableMng::query(
 				'SELECT u.*,
 				(SELECT CONCAT(g.gradeValue, g.label) AS class
-					FROM jointUsersInGrade uig
-					LEFT JOIN grade g ON uig.gradeId = g.ID
-					LEFT JOIN jointGradeInSchoolYear gisy ON gisy.gradeId = g.ID
-					LEFT JOIN schoolYear sy ON gisy.schoolyearId = sy.ID
-					WHERE uig.userId = u.ID) AS class
+					FROM usersInGradesAndSchoolyears uigs
+					LEFT JOIN grade g ON uigs.gradeId = g.ID
+					WHERE uigs.userId = u.ID AND
+						uigs.schoolyearId = @activeSchoolyear) AS class
 				FROM users u', true);
 
 		} catch (Exception $e) {
@@ -373,9 +388,10 @@ class User extends Module {
 		$user = TableMng::query(
 			"SELECT u.*,
 			(SELECT g.ID
-				FROM jointUsersInGrade uig
-				LEFT JOIN grade g ON uig.gradeId = g.ID
-				WHERE uig.userId = u.ID) AS gradeId
+				FROM usersInGradesAndSchoolyears uigs ON uigs.userId = u.ID
+				LEFT JOIN grade g ON uigs.GradeID = g.ID
+				WHERE uigs.schoolyearId = @activeSchoolyear
+			) AS gradeId
 			FROM users u WHERE `ID` = $uid", true);
 
 		return $user;
@@ -403,10 +419,10 @@ class User extends Module {
 
 		$schoolyears = TableMng::query(
 			"SELECT ID, label AS name, (
-				SELECT COUNT(*) AS count FROM jointUsersInSchoolYear uisy
-				 WHERE sy.ID = uisy.SchoolYearID
-				AND uisy.UserID = $userId) AS isUserIn
-			 FROM schoolYear sy
+				SELECT COUNT(*) AS count FROM usersInGradesAndSchoolyears uigs
+				WHERE sy.ID = uigs.schoolyearId AND uigs.UserID = $userId
+			) AS isUserIn
+			FROM schoolYear sy
 			ORDER BY active DESC;", true);
 
 		return $schoolyears;
@@ -573,14 +589,18 @@ class User extends Module {
 	/**
 	 * Creates a Query changing the schoolyears a User is present in
 	 * depending on the Userinput given from the Change-User-Dialog
+	 *
+	 * @todo   Schoolyears and grades should be combined!
 	 * @return String The Query that changes the Data in the Database
 	 */
 	protected function schoolyearQueryCreate($uid) {
 
+		trigger_error('This function is not changed to support the new Schoolyear-Grades-Style; change first!');
+
 		$query = '';
 
 		$existingSchoolyears = TableMng::query(
-			"SELECT * FROM jointUsersInSchoolYear WHERE UserID = $uid", true);
+			"SELECT * FROM usersInGradesAndSchoolyears WHERE UserID = $uid", true);
 
 		foreach($_POST['schoolyearIds'] as $schoolyearId) {
 			if($schoolyearId === 'NONE') {
@@ -591,7 +611,7 @@ class User extends Module {
 				return $query; //No need to process other elements
 			}
 			foreach($existingSchoolyears as $key => $eSchoolyear) {
-				if($eSchoolyear['SchoolYearID'] == $schoolyearId) {
+				if($eSchoolyear['schoolyearId'] == $schoolyearId) {
 					// User is already in Schoolyear
 					unset($existingSchoolyears[$key]);
 					continue 2;
@@ -661,6 +681,8 @@ class User extends Module {
 	/**
 	 * Creates a Query changing the Grade a User is present in depending on
 	 * the Userinput given from the Change-User-Dialog
+	 *
+	 * @todo  to refactor for usersInGradesAndSchoolyears
 	 * @return String The Query that changes the Data in the Database
 	 */
 	protected function gradeQueryCreate($uid) {
@@ -668,7 +690,8 @@ class User extends Module {
 		$query = '';
 		//The Grade of the User before the change
 		$userGrade = TableMng::query(
-			"SELECT * FROM jointUsersInGrade WHERE UserID = $uid", true);
+			"SELECT * FROM usersInGradesAndSchoolyears
+				WHERE UserID = $uid", true);
 
 		if(!empty($_POST['gradeId'])) {
 

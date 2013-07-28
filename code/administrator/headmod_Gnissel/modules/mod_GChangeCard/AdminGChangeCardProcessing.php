@@ -71,12 +71,10 @@ class AdminGChangeCardProcessing {
 			$data = TableMng::query(sprintf(
 				'SELECT u.*,
 				(SELECT CONCAT(g.gradeValue, g.label) AS class
-					FROM jointUsersInGrade uig
-					LEFT JOIN grade g ON uig.gradeId = g.ID
-					LEFT JOIN jointGradeInSchoolYear gisy
-						ON gisy.gradeId = g.ID
-					LEFT JOIN schoolYear sy ON gisy.schoolyearId = sy.ID
-					WHERE uig.userId = u.ID) AS class
+					FROM usersInGradesAndSchoolyears uigs
+					LEFT JOIN grade g ON uigs.gradeId = g.ID
+					WHERE uigs.userId = u.ID AND
+						uigs.schoolyearId = @activeSchoolyear) AS class
 				FROM users u WHERE ID = %s', $uid), true);
 
 		} catch (MySQLVoidDataException $e) {
@@ -88,42 +86,42 @@ class AdminGChangeCardProcessing {
 
 		return $data[0];
 	}
-	
+
 	/**
 	 * Returns the user ID
 	 */
 	public function GetUserID($username) {
-	
+
 		try {
 			$data = TableMng::query(sprintf(
 					'SELECT ID FROM users  WHERE username LIKE "%s"', $username), true);
 		} catch (MySQLVoidDataException $e) {
 			$this->cardInfoInterface->dieError('Der Benutzer wurde nicht gefunden');
-	
+
 		} catch (Exception $e) {
 			$this->cardInfoInterface->dieError('Der Benutzer konnte nicht von der Datenbank abgerufen werden!');
 		}
-	
+
 		return $data[0];
 	}
-	
+
 	public function cardChange ($cardNew,$uid) {
 		require_once PATH_ACCESS . '/CardManager.php';
-		$cardManager = new CardManager();		
+		$cardManager = new CardManager();
 		try {
 			inputcheck ($cardNew, 'card_id', 'Kartennummer');
 		} catch (WrongInputException $e) {
 			$this->cardInfoInterface->DieError ('Die Kartennummer enthält nicht korrekte Zeichen oder ist zu kurz.');
 		}
-		
+
 		try {
-		
+
 			$cardManager->changeCardnumber($cardManager->getIDByUserID($uid), $cardNew);
 			$cardManager->addCardIdChange($uid);
 		} catch (Exception $e) {
 			$this->cardInfoInterface->DieError ('Konnte die Karte nicht verändern; Ein interner Fehler ist aufgetreten');
 		}
-		
+
 		$this->cardInfoInterface->DieMsg ('Die Kartennummer wurde erfolgreich verändert');
 	}
 }

@@ -830,20 +830,6 @@ class KuwasysDatabaseAccess {
 		}
 	}
 
-	public function jointUserInGradeGetByUserIdWithoutDying ($userId) {
-
-		try {
-			$jointUsersInGrade = $this->_jointUserInGradeManager->getJointByUserId($userId);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('jointUserInGradeErrorNoJoints'));
-		} catch (Exception $e) {
-			$this->_interface->showMsg($this->_languageManager->getText('jointUserInGradeErrorFetch'));
-		}
-		if (isset($jointUsersInGrade)) {
-			return $jointUsersInGrade;
-		}
-	}
-
 	public function jointUserInGradeGetAllByGradeId ($gradeId) {
 
 		try {

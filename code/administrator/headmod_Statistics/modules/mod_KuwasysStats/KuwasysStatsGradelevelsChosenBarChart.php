@@ -29,18 +29,15 @@ class KuwasysStatsGradelevelsChosenBarChart extends StatisticsBarChart {
 
 	protected function dataFetch() {
 
-		TableMng::query('SET @activeSy := (SELECT ID FROM schoolYear WHERE active = "1");');
 		$this->_gradeData = TableMng::query(
-			'
-			SELECT COUNT(*) AS gradelevelCount, gradeValue AS gradelevel
+			'SELECT COUNT(*) AS gradelevelCount, gradeValue AS gradelevel
 			FROM grade g
-				JOIN jointUsersInGrade uig ON g.ID = uig.GradeID
-				JOIN jointUsersInClass uic ON uic.UserID = uig.UserID
+				JOIN usersInGradesAndSchoolyears uigs ON g.ID = uigs.GradeID
+					AND uigs.schoolyearId = @activeSchoolyear
+				JOIN jointUsersInClass uic ON uic.UserID = uigs.UserID
 				JOIN jointClassInSchoolYear cisy
 					ON uic.ClassID = cisy.ClassID
-					AND cisy.SchoolYearID = @activeSy
-				JOIN jointGradeInSchoolYear gisy ON gisy.GradeID = g.ID
-					AND gisy.SchoolYearID = @activeSy
+					AND cisy.SchoolYearID = @activeSchoolyear
 				JOIN (
 						SELECT ID
 						FROM usersInClassStatus

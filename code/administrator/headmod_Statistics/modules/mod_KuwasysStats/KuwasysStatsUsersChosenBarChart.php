@@ -43,14 +43,10 @@ class KuwasysStatsUsersChosenStackedBarChart extends StatisticsStackedBarChart {
 					JOIN schoolYear sy ON cisy.SchoolYearID = sy.ID
 				WHERE uic.userId = u.ID AND sy.active = "1") AS choiceCount
 			FROM users u
-				JOIN jointUsersInSchoolYear uisy ON u.ID = uisy.UserID
-				JOIN schoolYear sy ON uisy.SchoolYearID = sy.ID
-				JOIN jointUsersInGrade uig ON u.ID = uig.UserID
-				JOIN grade g ON g.ID = uig.GradeID
-				JOIN jointGradeInSchoolYear gisy ON gisy.GradeID = g.ID
-				JOIN schoolYear sy_g ON gisy.SchoolYearID = sy_g.ID
-			WHERE
-				sy.active = "1" AND sy_g.active = "1"
+				JOIN usersInGradesAndSchoolyears uigs ON u.ID = uigs.UserID
+					AND uigs.schoolyearId = @activeSchoolyear
+				JOIN grade g ON g.ID = uigs.GradeID
+				JOIN schoolYear sy ON uigs.SchoolYearID = sy.ID
 				', true);
 	}
 

@@ -19,6 +19,7 @@ class TableMng {
 	 */
 	public static function init () {
 		self::dbInit ();
+		self::globalVarsSet();
 	}
 
 	public static function getDb() {
@@ -60,18 +61,53 @@ class TableMng {
 	 * @return Array () if $hasData has been set to true, it returns the fetched data as an Array
 	 */
 	public static function query ($query, $hasData = false, $isMultiple = false) {
+		if(isset($hasData) || isset($isMultiple)) {
+			trigger_error('hasData and isMultiple are deprecated! Regex: "(\'|"),(| )true"');
+		}
 		if (!isset (self::$db)) {
 			throw new Exception ('TableMng hasnt been initialized yet!');
 		}
 		if (!$isMultiple) {
 			$result = self::queryExecute ($query, $isMultiple);
-			if ($hasData) {
-				$content = self::getResults ($result);
-			}
+			$content = self::getResults ($result);
 		}
 		else {
 			$content = self::queryMultiExecute ($query);
 		}
+		if (isset ($content)) {
+			return $content;
+		}
+	}
+
+	/**
+	 * Queries the Database and returns one single result
+	 *
+	 * @param  String $query The Query
+	 * @return Array or String The Query-result
+	 * @throws  Exception If Multiple Results got returned
+	 */
+	public static function querySingleEntry($query) {
+
+		$content = self::query($query);
+
+		if(!is_array($content)) {
+			throw new Exception('MySQL returned something wrong; '
+				. var_dump($content));
+		}
+		if(count($content) > 1) {
+			throw new Exception('MySQl returned multiple Entries when only one was requested!');
+		}
+		else {
+			return $content[0];
+		}
+	}
+
+	public static function queryMultiple($query) {
+
+		if (!isset (self::$db)) {
+			throw new Exception ('TableMng hasnt been initialized yet!');
+		}
+		$content = self::queryMultiExecute ($query);
 		if (isset ($content)) {
 			return $content;
 		}
@@ -142,15 +178,23 @@ class TableMng {
 	 */
 	protected static function getResults ($result) {
 
-		while($buffer = $result->fetch_assoc()) {
-			$content [] = $buffer;
+		if(is_object($result)) {
+			while($buffer = $result->fetch_assoc()) {
+				$content [] = $buffer;
+			}
+			if(empty($content)) {
+				return array();
+			}
+			else {
+				return $content;
+			}
 		}
-		if(empty($content)) {
-			return array();
-		}
-		else {
-			return $content;
-		}
+	}
+
+	protected static function globalVarsSet() {
+
+		TableMng::query('SET @activeSchoolyear :=
+			(SELECT ID FROM schoolYear WHERE active = "1");');
 	}
 
 	/////////////////////////////////////////////////////////////////////

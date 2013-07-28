@@ -71,12 +71,10 @@ class AdminGChangePasswordProcessing {
 			$data = TableMng::query(sprintf(
 				'SELECT u.*,
 				(SELECT CONCAT(g.gradeValue, g.label) AS class
-					FROM jointUsersInGrade uig
-					LEFT JOIN grade g ON uig.gradeId = g.ID
-					LEFT JOIN jointGradeInSchoolYear gisy
-						ON gisy.gradeId = g.ID
-					LEFT JOIN schoolYear sy ON gisy.schoolyearId = sy.ID
-					WHERE uig.userId = u.ID) AS class
+					FROM usersInGradesAndSchoolyears uigs
+					LEFT JOIN grade g ON uigs.gradeId = g.ID
+					WHERE uigs.userId = u.ID AND
+						uigs.schoolyearId = @activeSchoolyear) AS class
 				FROM users u WHERE ID = %s', $uid), true);
 
 		} catch (MySQLVoidDataException $e) {
@@ -88,10 +86,10 @@ class AdminGChangePasswordProcessing {
 
 		return $data[0];
 	}
-	
+
 	public function pwChange ($pwNew, $pwNewRep,$uid) {
 		require_once PATH_ACCESS . '/UserManager.php';
-		$userManager = new UserManager();		
+		$userManager = new UserManager();
 		try {
 			inputcheck ($pwNew, 'password', 'Passwort');
 		} catch (WrongInputException $e) {
@@ -100,13 +98,13 @@ class AdminGChangePasswordProcessing {
 		if ($pwNew != $pwNewRep) {
 			$this->cardInfoInterface->DieError ('Das Passwort stimmt nicht mit der Wiederholung überein. Bitte versuche es noch einmal.');
 		}
-		
+
 		try {
 			$userManager->changePassword ($uid, $pwNew);
 		} catch (Exception $e) {
 			$this->cardInfoInterface->DieError ('Konnte das Passwort nicht verändern; Ein interner Fehler ist aufgetreten');
 		}
-		
+
 		$this->cardInfoInterface->showMsg ('Das Passwort wurde erfolgreich verändert');
 	}
 }

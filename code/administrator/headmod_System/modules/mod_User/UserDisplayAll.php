@@ -338,9 +338,9 @@ class UserDisplayAllQueryCreator {
 			$this->addSelectStatement('GROUP_CONCAT(sy.label
 					SEPARATOR "<br />")
 				AS schoolyears');
-			$this->addJoinStatement('LEFT JOIN jointUsersInSchoolYear uisy
-				ON uisy.UserID = u.ID
-			LEFT JOIN schoolYear sy ON sy.ID = uisy.SchoolYearID');
+			$this->addJoinStatement('LEFT JOIN usersInGradesAndSchoolyears uigs
+				ON uigs.UserID = u.ID
+			LEFT JOIN schoolYear sy ON sy.ID = uigs.schoolyearId');
 			$this->_schoolyearQueryDone = true;
 		}
 	}
@@ -348,21 +348,23 @@ class UserDisplayAllQueryCreator {
 	protected function gradeQuery() {
 
 		if(!$this->_gradeQueryDone) {
-			$this->addSelectStatement('GROUP_CONCAT(
+			$this->addSelectStatement('GROUP_CONCAT( DISTINCT
 				CONCAT(g.gradeValue, "-", g.label)
 				SEPARATOR "<br />") AS grades,
 				activeGrade.activeGrade AS activeGrade');
+
 			$this->addJoinStatement('
-				LEFT JOIN jointUsersInGrade uig ON uig.UserID = u.ID
-				LEFT JOIN grade g ON uig.GradeID = g.ID
+				LEFT JOIN usersInGradesAndSchoolyears uigs
+					ON uigs.UserID = u.ID
+				LEFT JOIN grade g ON uigs.GradeID = g.ID
 				LEFT JOIN (
 					SELECT CONCAT(gradeValue, "-", label)
-						AS activeGrade, uig.UserID AS userId
+						AS activeGrade, uigs.UserID AS userId
 					FROM grade g
-					JOIN jointGradeInSchoolYear gisy
-						ON gisy.GradeID = g.ID
-					JOIN jointUsersInGrade uig ON g.ID = uig.GradeID
-					WHERE gisy.SchoolYearID = @activeSy) activeGrade
+					JOIN usersInGradesAndSchoolyears uigs ON
+						uigs.GradeID = g.ID AND
+						uigs.schoolyearId = @activeSchoolyear
+					) activeGrade
 						ON u.ID = activeGrade.userId');
 			$this->_gradeQueryDone = true;
 		}

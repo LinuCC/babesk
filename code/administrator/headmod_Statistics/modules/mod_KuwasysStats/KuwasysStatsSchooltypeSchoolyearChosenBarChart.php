@@ -42,19 +42,20 @@ class KuwasysStatsSchooltypeSchoolyearChosenBarChart
 				JOIN Schooltype st ON g.schooltypeId = st.ID
 				-- Fetch how many classes the user has chosen
 				JOIN (
-					SELECT COUNT(*) AS classesChosen, uig.GradeID AS GradeID
-					FROM jointUsersInGrade uig
-						JOIN jointUsersInClass uic ON uig.UserID = uic.UserID
+					SELECT COUNT(*) AS classesChosen, uigs.GradeID AS GradeID
+					FROM usersInGradesAndSchoolyears uigs
+						JOIN jointUsersInClass uic ON uigs.UserID = uic.UserID
 						-- Check for interesting status
 						JOIN (
 							SELECT ID
 							FROM usersInClassStatus
 							WHERE name="active" OR name="waiting"
 							) status ON status.ID = uic.statusId
+					WHERE uigs.schoolyearId = @activeSchoolyear
 					GROUP BY uic.UserID
 					) userChosen ON userChosen.GradeID = g.ID
-				JOIN jointGradeInSchoolYear gisy ON gisy.GradeID = g.ID
-					AND gisy.SchoolYearID = @activeSy
+				JOIN usersInGradesAndSchoolyears uigs ON
+					uigs.schoolyearId = @activeSchoolyear
 			GROUP BY st.ID, g.gradeValue, userChosen.classesChosen', true);
 	}
 
