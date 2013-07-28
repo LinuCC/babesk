@@ -82,7 +82,7 @@ class UserDisplayAll {
 			TableMng::query('SET @activeSy :=
 				(SELECT ID FROM schoolYear WHERE active = "1");');
 			$data = TableMng::query($query);
-			$usercount = TableMng::query($countQuery, true);
+			$usercount = TableMng::query($countQuery);
 
 			// var_dump($usercount);
 
@@ -335,12 +335,13 @@ class UserDisplayAllQueryCreator {
 	protected function schoolyearQuery() {
 
 		if(!$this->_schoolyearQueryDone) {
-			$this->addSelectStatement('GROUP_CONCAT(sy.label
+			$this->addSelectStatement('GROUP_CONCAT(DISTINCT sy.label
 					SEPARATOR "<br />")
 				AS schoolyears');
-			$this->addJoinStatement('LEFT JOIN usersInGradesAndSchoolyears uigs
-				ON uigs.UserID = u.ID
-			LEFT JOIN schoolYear sy ON sy.ID = uigs.schoolyearId');
+			$this->addJoinStatement(
+				'LEFT JOIN usersInGradesAndSchoolyears uigsy
+				ON uigsy.UserID = u.ID
+			LEFT JOIN schoolYear sy ON sy.ID = uigsy.schoolyearId');
 			$this->_schoolyearQueryDone = true;
 		}
 	}
@@ -354,16 +355,16 @@ class UserDisplayAllQueryCreator {
 				activeGrade.activeGrade AS activeGrade');
 
 			$this->addJoinStatement('
-				LEFT JOIN usersInGradesAndSchoolyears uigs
-					ON uigs.UserID = u.ID
-				LEFT JOIN grade g ON uigs.GradeID = g.ID
+				LEFT JOIN usersInGradesAndSchoolyears uigsg
+					ON uigsg.UserID = u.ID
+				LEFT JOIN grade g ON uigsg.GradeID = g.ID
 				LEFT JOIN (
 					SELECT CONCAT(gradeValue, "-", label)
-						AS activeGrade, uigs.UserID AS userId
+						AS activeGrade, uigsg.UserID AS userId
 					FROM grade g
-					JOIN usersInGradesAndSchoolyears uigs ON
-						uigs.GradeID = g.ID AND
-						uigs.schoolyearId = @activeSchoolyear
+					JOIN usersInGradesAndSchoolyears uigsg ON
+						uigsg.GradeID = g.ID AND
+						uigsg.schoolyearId = @activeSchoolyear
 					) activeGrade
 						ON u.ID = activeGrade.userId');
 			$this->_gradeQueryDone = true;

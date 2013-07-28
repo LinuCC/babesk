@@ -230,7 +230,7 @@ class User extends Module {
 			($syUsed = !empty($container['schoolyearId']))) {
 
 			if($gradeUsed) {
-				$gId = (!empty($_POST['gradeID'])) $_POST['gradeID'] : 0;
+				$gId = (!empty($_POST['gradeID'])) ? $_POST['gradeID'] : 0;
 			}
 			else {
 				$gId = TableMng::querySingleEntry(
