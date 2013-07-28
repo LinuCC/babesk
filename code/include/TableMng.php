@@ -63,9 +63,6 @@ class TableMng {
 	public static function query ($query, $hasData = null, $isMultiple = null) {
 		if(isset($hasData) || isset($isMultiple)) {
 			trigger_error('hasData and isMultiple are deprecated! Regex: "(\'|"),(| )true"');
-			echo '<pre>';
-			debug_print_backtrace();
-			echo '</pre>';
 		}
 		if (!isset (self::$db)) {
 			throw new Exception ('TableMng hasnt been initialized yet!');
