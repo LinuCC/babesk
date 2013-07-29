@@ -23,6 +23,9 @@ defined('PATH_INCLUDE_KUWASYS') or define('PATH_INCLUDE_KUWASYS', PATH_INCLUDE .
 
 define('PATH_WEBROOT', $_SERVER['DOCUMENT_ROOT']);
 
+defined('PCHART_PATH')
+	OR define('PCHART_PATH', PATH_INCLUDE . '/pChart');
+
 //tmp-Path
 // if(!defined('PATH_TMP')) {
 // 	if(!($tmpDir = ini_get('upload_tmp_dir'))) {

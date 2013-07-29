@@ -340,7 +340,7 @@ class UserDisplayAllQueryCreator {
 				AS schoolyears');
 			$this->addJoinStatement(
 				'LEFT JOIN usersInGradesAndSchoolyears uigsy
-				ON uigsy.UserID = u.ID
+				ON uigsy.userId = u.ID
 			LEFT JOIN schoolYear sy ON sy.ID = uigsy.schoolyearId');
 			$this->_schoolyearQueryDone = true;
 		}
@@ -356,14 +356,14 @@ class UserDisplayAllQueryCreator {
 
 			$this->addJoinStatement('
 				LEFT JOIN usersInGradesAndSchoolyears uigsg
-					ON uigsg.UserID = u.ID
-				LEFT JOIN grade g ON uigsg.GradeID = g.ID
+					ON uigsg.userId = u.ID
+				LEFT JOIN grade g ON uigsg.gradeId = g.ID
 				LEFT JOIN (
 					SELECT CONCAT(gradeValue, "-", label)
-						AS activeGrade, uigsg.UserID AS userId
+						AS activeGrade, uigsg.userId AS userId
 					FROM grade g
 					JOIN usersInGradesAndSchoolyears uigsg ON
-						uigsg.GradeID = g.ID AND
+						uigsg.gradeId = g.ID AND
 						uigsg.schoolyearId = @activeSchoolyear
 					) activeGrade
 						ON u.ID = activeGrade.userId');

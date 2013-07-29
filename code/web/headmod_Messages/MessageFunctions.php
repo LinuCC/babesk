@@ -12,8 +12,8 @@ class MessageFunctions {
 			'SELECT u.ID AS userId,
 				CONCAT(u.forename, " ", u.name) AS userFullname
 			FROM users u
-				JOIN usersInGradesAndSchoolyears uigs ON u.ID = uigs.UserID
-			WHERE uigs.SchoolyearId = @activeSchoolyear');
+				JOIN usersInGradesAndSchoolyears uigs ON u.ID = uigs.userId
+			WHERE uigs.schoolyearId = @activeSchoolyear');
 		return $users;
 	}
 

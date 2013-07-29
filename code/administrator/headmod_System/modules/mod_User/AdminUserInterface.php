@@ -35,12 +35,17 @@ class AdminUserInterface extends AdminInterface {
 		$this->smarty->display($this->tplFilePath.'show_users.tpl');
 	}
 
-	function ShowChangeUser($user, $cardnumber, $priceGroups, $grades, $schoolyears, $groups) {
+	function ShowChangeUser($user, $cardnumber, $priceGroups, $grades,
+		$schoolyears, $gradesAndSchoolyears, $groups) {
+
 		$this->smarty->assign('user', $user);
 		$this->smarty->assign('cardnumber', $cardnumber);
 		$this->smarty->assign('priceGroups', $priceGroups);
 		$this->smarty->assign('grades', $grades);
 		$this->smarty->assign('schoolyears', $schoolyears);
+		$this->smarty->assign(
+			'gradesAndSchoolyearsOfUser',
+			$gradesAndSchoolyears);
 		$this->smarty->assign('groups', $groups);
 
 		$this->smarty->display($this->tplFilePath.'change.tpl');

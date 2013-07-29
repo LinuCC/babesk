@@ -390,6 +390,28 @@ h3.filterBar {
 	font-size: 12px;
 }
 
+div.simpleForm {
+	display: table-row;
+	width: 500px;
+}
+
+form.simpleForm label, form.simpleForm {
+	display: block;
+	margin: 15px 0 15px 0;
+}
+
+/**
+ * Somehow images are displayed for too high in simpleForm, fix it
+ */
+.simpleForm input[type="image"] {
+	vertical-align: bottom;
+}
+
+.simpleForm fieldset {
+	border: 1px solid #2e6132;
+	border-radius: 5px;
+}
+
 div.smallContainer,
 span.smallContainer,
 p.smallContainer,
@@ -399,7 +421,7 @@ fieldset.smallContainer {
 	padding: 10px;
 	margin-top: 2px;
 	margin-bottom: 2px;
-	color: #555555;
+	color: #333333;
 }
 
 /* General
@@ -446,21 +468,6 @@ fieldset.smallContainer {
 
 p.inputError {
 	float: right;
-}
-
-div.simpleForm {
-	display: table-row;
-	width: 500px;
-}
-
-form.simpleForm label, form.simpleForm {
-	display: block;
-	margin: 15px 0 15px 0;
-}
-
-form.simpleForm fieldset {
-	border: 1px solid #2e6132;
-	border-radius: 5px;
 }
 
 #pageWidthSelector {

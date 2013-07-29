@@ -2,6 +2,9 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 
+defined('PATH_STATISTICS_CHART')
+	OR define('PATH_STATISTICS_CHART', realpath(dirname(__FILE__) . '/../..'));
+
 /**
  * Analyzes data of the headmodule Kuwasys and puts them out as statistics
  *
@@ -124,7 +127,8 @@ class KuwasysStats extends Module {
 			$chart->imageDisplay();
 
 		} catch (Exception $e) {
-			$this->_interface->dieError('Konnte die Statistik nicht auswerten');
+			$this->_interface->dieError(
+				'Konnte die Statistik nicht auswerten');
 		}
 	}
 

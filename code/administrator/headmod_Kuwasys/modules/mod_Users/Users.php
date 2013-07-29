@@ -191,7 +191,7 @@ class Users extends Module {
 				email, telephone, birthday) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s');
 			SET @last_user_id = LAST_INSERT_ID();
 			INSERT INTO usersInGradesAndSchoolyears
-				(UserID, GradeID, schoolyearId) VALUES
+				(userId, gradeId, schoolyearId) VALUES
 				(@last_user_id, '%s', '%s');",
 				$forename, $name,$username, $hashedPassword, $email,
 				$telephone, $birthday, $gradeId, $schoolyearId);

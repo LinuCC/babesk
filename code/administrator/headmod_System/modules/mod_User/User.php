@@ -8,6 +8,7 @@ require_once 'UsernameAutoCreator.php';
 require_once PATH_ACCESS . '/CardManager.php';
 require_once PATH_ACCESS . '/UserManager.php';
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_INCLUDE . '/ArrayFunctions.php';
 
 
 class User extends Module {
@@ -240,7 +241,7 @@ class User extends Module {
 
 			$gradeAndSchoolyearQuery =
 				"INSERT INTO usersInGradesAndSchoolyears
-					(UserID, GradeID, schoolyearId) VALUES
+					(userId, gradeId, schoolyearId) VALUES
 					(@uid, $gId, $syId)";
 		}
 
@@ -264,28 +265,20 @@ class User extends Module {
 	protected function arrayGetFlattened($query, $key = 'ID',
 		$value = 'name') {
 
-		$rearranged = array();
 		$rows = TableMng::query($query);
-
-
-		if(!empty($rows)) {
-			foreach($rows as $row) {
-				$rearranged[$row[$key]] = $row[$value];
-			}
-		}
-		return $rearranged;
+		return ArrayFunctions::arrayColumn($rows, $key, $value);
 	}
 
 	protected function submoduleCreateUsernamesExecute() {
-		if (isset ($_POST ['confirmed'])) {
-			$creator = new UsernameAutoCreator ();
-			$scheme = new UsernameScheme ();
-			$scheme->templateAdd (UsernameScheme::Forename);
-			$scheme->stringAdd ('.');
-			$scheme->templateAdd (UsernameScheme::Name);
-			$creator->usersSet ($this->userManager->getAllUsers());
-			$creator->schemeSet ($scheme);
-			$users = $creator->usernameCreateAll ();
+		if (isset($_POST['confirmed'])) {
+			$creator = new UsernameAutoCreator();
+			$scheme = new UsernameScheme();
+			$scheme->templateAdd(UsernameScheme::Forename);
+			$scheme->stringAdd('.');
+			$scheme->templateAdd(UsernameScheme::Name);
+			$creator->usersSet($this->userManager->getAllUsers());
+			$creator->schemeSet($scheme);
+			$users = $creator->usernameCreateAll();
 			foreach ($users as $user) {
 				///@todo: PURE EVIL DOOM LOOP OF LOOPING SQL-USE. Kill it with fire.
 				$this->userManager->alterUsername ($user ['ID'], $user ['username']);
@@ -359,60 +352,97 @@ class User extends Module {
 		TableMng::sqlEscape($uid);
 
 		try {
-			TableMng::query('SET @activeSchoolyear :=
-				(SELECT ID FROM schoolYear WHERE active = "1");');
-			$user = $this->userGet($uid);
-			$cardnumber = $this->cardnumberGetByUserId($uid);
-			$priceGroups = $this->arrayGetFlattened(
-				'SELECT ID, name FROM groups');
-			$grades = $this->gradesGetAll();
-			$schoolyears = $this->schoolyearsGetAllWithCheckIsUserIn($uid);
-			$groups = $this->groupsGetAllWithCheckIsUserIn($uid);
-			$cardnumber = (!empty($cardnumber)) ?
-				$cardnumber[0]['cardnumber'] : '';
-
-		} catch (Exception $e) {
-			$this->userInterface->dieError($e->getMessage());
-		}
-		$this->userInterface->ShowChangeUser(
-			$user[0],
+		list($user,
 			$cardnumber,
 			$priceGroups,
 			$grades,
 			$schoolyears,
+			$gradesAndSchoolyears,
+			$groups) = $this->changeDisplayDataFetch($uid);
+
+		} catch (Exception $e) {
+			$this->userInterface->dieError($e->getMessage());
+		}
+
+		$this->userInterface->ShowChangeUser(
+			$user,
+			$cardnumber,
+			$priceGroups,
+			$grades,
+			$schoolyears,
+			$gradesAndSchoolyears,
+			$groups);
+	}
+
+	protected function changeDisplayDataFetch($userId) {
+
+		$user = $this->userGet($userId);
+		$gradeAndSchoolyears = $this->gradeAndSchoolyearDataOfUserGet(
+			$userId);
+		$cardnumber = $this->cardnumberGetByUserId($userId);
+		$priceGroups = $this->arrayGetFlattened(
+			'SELECT ID, name FROM groups');
+		$grades = $this->gradesGetAllFlattened();
+		$schoolyears = $this->schoolyearsGetAllFlattened();
+		$groups = $this->groupsGetAllWithCheckIsUserIn($userId);
+		$cardnumber = (!empty($cardnumber)) ?
+			$cardnumber[0]['cardnumber'] : '';
+
+		return array($user,
+			$cardnumber,
+			$priceGroups,
+			$grades,
+			$schoolyears,
+			$gradeAndSchoolyears,
 			$groups);
 	}
 
 	protected function userGet($uid) {
 
-		$user = TableMng::query(
-			"SELECT u.*,
-			(SELECT g.ID
-				FROM usersInGradesAndSchoolyears uigs ON uigs.userId = u.ID
-				LEFT JOIN grade g ON uigs.GradeID = g.ID
-				WHERE uigs.schoolyearId = @activeSchoolyear
-			) AS gradeId
-			FROM users u WHERE `ID` = $uid");
+		$user = TableMng::querySingleEntry(
+			"SELECT u.* FROM users u WHERE `ID` = $uid");
 
 		return $user;
+	}
+
+	protected function gradeAndSchoolyearDataOfUserGet($uid) {
+
+		$data = TableMng::query(
+			"SELECT gradeId, schoolyearId FROM usersInGradesAndSchoolyears
+			WHERE userId = $uid");
+
+		return $data;
 	}
 
 	protected function cardnumberGetByUserId($userId) {
 
 		$cardnumber = TableMng::query(
-			"SELECT cardnumber FROM cards WHERE UID = $userId
-			");
+			"SELECT cardnumber FROM cards WHERE UID = $userId");
 
 		return $cardnumber;
 	}
 
-	protected function gradesGetAll() {
+	protected function gradesGetAllFlattened() {
 
-		$grades = $this->arrayGetFlattened(
-			'SELECT ID, CONCAT(gradeValue, "-", label) AS name
-			FROM grade');
+		$grades = TableMng::query(
+			'SELECT ID, CONCAT(gradeValue, "-", label) AS name FROM grade');
 
-		return $grades;
+		$flattenedGrades = ArrayFunctions::arrayColumn($grades, 'name', 'ID');
+
+		return $flattenedGrades;
+	}
+
+	protected function schoolyearsGetAllFlattened() {
+
+		$schoolyears = TableMng::query(
+			'SELECT ID, label AS name FROM schoolYear');
+
+		$flattenedSchoolyears = ArrayFunctions::arrayColumn(
+			$schoolyears,
+			'name',
+			'ID');
+
+		return $flattenedSchoolyears;
 	}
 
 	protected function schoolyearsGetAllWithCheckIsUserIn($userId) {
@@ -420,7 +450,7 @@ class User extends Module {
 		$schoolyears = TableMng::query(
 			"SELECT ID, label AS name, (
 				SELECT COUNT(*) AS count FROM usersInGradesAndSchoolyears uigs
-				WHERE sy.ID = uigs.schoolyearId AND uigs.UserID = $userId
+				WHERE sy.ID = uigs.schoolyearId AND uigs.userId = $userId
 			) AS isUserIn
 			FROM schoolYear sy
 			ORDER BY active DESC;");
@@ -468,24 +498,6 @@ class User extends Module {
 		//Add Password to the Inputcheck if user wants it to be changed
 		if($_POST['passwordChange'] == 'true') {
 			self::$_changeRules['password'] = array('min_len,3|max_len,64', '', 'Passwort');
-		}
-
-		if(!empty($_POST['schoolyearIds'])
-			&& $_POST['schoolyearIds'] !== 'null') {
-			$_POST['schoolyearIds'] =
-				json_decode(html_entity_decode($_POST['schoolyearIds']));
-		}
-		else { //Error; User did not even select "no Schoolyears"
-			die(json_encode(array(
-				'value' => 'inputError',
-				'message' => array('Es wurde nichts bei den Schuljahren ausgewählt; sollen dem Nutzer keine Schuljahre  zugewiesen sein, wählen sie bitte die entsprechende Option aus'))));
-		}
-
-		if(count($_POST['schoolyearIds']) > 1 && in_array('NONE',
-			$_POST['schoolyearIds'])) {
-			die(json_encode(array(
-				'value' => 'inputError',
-				'message' => array('Schuljahre können nicht gleichzeitig mit "keinem Schuljahr" ausgewählt sein!'))));
 		}
 
 		$_POST['credits'] = str_replace(',', '.', $_POST['credits']);
@@ -543,9 +555,7 @@ class User extends Module {
 	protected function changeUpload($uid) {
 
 		//Querys
-		$schoolyearQuery = '';
 		$cardnumberQuery = '';
-		$gradeQuery = '';
 		$passwordQuery = '';
 		$groupQuery = '';
 
@@ -553,11 +563,11 @@ class User extends Module {
 
 		try {
 			//check for additional Querys needed
-			$schoolyearQuery = $this->schoolyearQueryCreate($uid);
 			$cardnumberQuery = $this->cardsQueryCreate($uid);
-			$gradeQuery = $this->gradeQueryCreate($uid);
 			$passwordQuery = $this->passwordQueryCreate($uid);
 			$groupQuery = $this->groupQueryCreate($uid);
+			$schoolyearsAndGradesQuery =
+				$this->schoolyearsAndGradesQueryCreate($uid);
 
 			TableMng::queryMultiple("UPDATE users
 				SET `forename` = '$_POST[forename]',
@@ -572,12 +582,10 @@ class User extends Module {
 					`credit` = '$_POST[credits]',
 					`soli` = '$_POST[isSoli]'
 				WHERE `ID` = $uid;
-				$schoolyearQuery
 				$cardnumberQuery
-				$gradeQuery
 				$groupQuery
+				$schoolyearsAndGradesQuery
 				");
-
 
 		} catch (Exception $e) {
 			die($e->getMessage());
@@ -586,47 +594,51 @@ class User extends Module {
 		TableMng::getDb()->autocommit(true);
 	}
 
-	/**
-	 * Creates a Query changing the schoolyears a User is present in
-	 * depending on the Userinput given from the Change-User-Dialog
-	 *
-	 * @todo   Schoolyears and grades should be combined!
-	 * @return String The Query that changes the Data in the Database
-	 */
-	protected function schoolyearQueryCreate($uid) {
+	protected function schoolyearsAndGradesQueryCreate($userId) {
 
-		trigger_error('This function is not changed to support the new Schoolyear-Grades-Style; change first!');
-
-		$query = '';
-
-		$existingSchoolyears = TableMng::query(
-			"SELECT * FROM usersInGradesAndSchoolyears WHERE UserID = $uid");
-
-		foreach($_POST['schoolyearIds'] as $schoolyearId) {
-			if($schoolyearId === 'NONE') {
-				// User has chosen "no Schoolyear". so delete all entries
-				// having UserID $uid
-				$query = "DELETE FROM jointUsersInSchoolYear
-					WHERE UserID = $uid;";
-				return $query; //No need to process other elements
-			}
-			foreach($existingSchoolyears as $key => $eSchoolyear) {
-				if($eSchoolyear['schoolyearId'] == $schoolyearId) {
-					// User is already in Schoolyear
-					unset($existingSchoolyears[$key]);
-					continue 2;
-				}
-			}
-			//schoolyear does not exist in the Database yet
-			$query .= "INSERT INTO jointUsersInSchoolYear
-				(UserID, SchoolYearID) VALUES ($uid, $schoolyearId);";
+		if(empty($_POST['schoolyearAndGradeData'])) {
+			$_POST['schoolyearAndGradeData'] = array();
 		}
 
-		//Existing Schoolyears that were not unset by the loop before got
-		//unselected by the user. Remove them from the Db
-		foreach($existingSchoolyears as $key => $eSchoolyear) {
-			$query .= "DELETE FROM jointUsersInSchoolYear
-				WHERE ID = $eSchoolyear[ID];";
+		$query = $this->schoolyearsAndGradesChange(
+			$_POST['schoolyearAndGradeData'],
+			$userId);
+
+		return $query;
+	}
+
+	protected function schoolyearsAndGradesChange($requestedRows, $userId) {
+
+		$query = '';
+		$existingRows = $this->gradeAndSchoolyearDataOfUserGet($userId);
+
+		$flatExistingRows = ArrayFunctions::arrayColumn(
+			$existingRows, 'gradeId', 'schoolyearId');
+		$flatRequestedRows = ArrayFunctions::arrayColumn(
+			$requestedRows, 'gradeId', 'schoolyearId');
+
+		$toDelete = $flatExistingRows;
+
+		foreach($flatRequestedRows as $rSyId => $rGradeId) {
+
+			if(!array_key_exists($rSyId, $flatExistingRows) ||
+				$flatExistingRows[$rSyId] != $rGradeId) {
+
+				$query .= "INSERT INTO usersInGradesAndSchoolyears
+					(userId, gradeId, schoolyearId) VALUES
+					('$userId', '$rGradeId', '$rSyId');";
+			}
+			else {
+				unset($toDelete[$rSyId]);
+			}
+		}
+
+		foreach($toDelete as $schoolyearId => $gradeId) {
+
+			$query .= "DELETE FROM usersInGradesAndSchoolyears
+				WHERE userId = $userId AND
+					schoolyearId = $schoolyearId AND
+					gradeId = $gradeId;";
 		}
 
 		return $query;
@@ -671,53 +683,6 @@ class User extends Module {
 			}
 			else {
 				//No Cardnumber exists and User did not enter one
-				return '';
-			}
-		}
-
-		return $query;
-	}
-
-	/**
-	 * Creates a Query changing the Grade a User is present in depending on
-	 * the Userinput given from the Change-User-Dialog
-	 *
-	 * @todo  to refactor for usersInGradesAndSchoolyears
-	 * @return String The Query that changes the Data in the Database
-	 */
-	protected function gradeQueryCreate($uid) {
-
-		$query = '';
-		//The Grade of the User before the change
-		$userGrade = TableMng::query(
-			"SELECT * FROM usersInGradesAndSchoolyears
-				WHERE UserID = $uid");
-
-		if(!empty($_POST['gradeId'])) {
-
-			if(!count($userGrade)) {
-				//User is in no grade
-				$query = "INSERT INTO jointUsersInGrade (UserID, GradeID)
-					VALUES ($uid, $_POST[gradeId]);";
-			}
-			else if($userGrade[0]['GradeID'] == $_POST['gradeId']) {
-				//nothing changed
-				return '';
-			}
-			else {
-				//User got switched to another grade
-				$query = "UPDATE jointUsersInGrade
-					SET GradeID = $_POST[gradeId]
-					WHERE UserID = $uid;";
-			}
-		}
-		else {
-			if(count($userGrade)) {
-				//grade exists, but user deleted that
-				$query = "DELETE FROM jointUsersInGrade WHERE UserID = $uid";
-			}
-			else {
-				//No Grade exists for the User and User did not enter one
 				return '';
 			}
 		}
@@ -793,7 +758,8 @@ class User extends Module {
 		foreach($_POST['groups'] as $group) {
 			//if UserInGroup is not already in Db, add it
 			if(array_search($group,
-							array_column($existingGroups, 'ID')) === false) {
+				ArrayFunctions::arrayColumn($existingGroups, 'ID'))
+					=== false) {
 				$query .= "INSERT INTO UserInGroups (userId, groupId)
 					VALUES ($userId, $group);";
 			}
@@ -813,7 +779,8 @@ class User extends Module {
 
 		$query = '';
 
-		foreach(array_column($existingGroups, 'ID') as $exGroup) {
+		foreach(ArrayFunctions::arrayColumn($existingGroups, 'ID') as
+			$exGroup) {
 			if(array_search($exGroup, $_POST['groups']) === false) {
 				$query .= "DELETE FROM UserInGroups WHERE userId = $userId
 					AND groupId = $exGroup;";
@@ -862,8 +829,6 @@ protected static $invalid = array('Š'=>'S', 'š'=>'s', 'Đ'=>'D', 'đ'=>'d', '�
 		'telephone' => array('min_len,3|max_len,64', '', 'Telefonnummer'),
 		'birthday' => array('isoBirthday|max_len,10', '', 'Geburtstag'),
 		'pricegroupId' => array('numeric', '', 'PreisgruppenId'),
-		'schoolyearId' => array('numeric', '', 'SchuljahrId'),
-		'gradeId' => array('numeric', '', 'KlassenId'),
 		'cardnumber' => array('exact_len,10', '', 'Kartennummer'),
 		'credits' => array('numeric|min_len,1|max_len,5', '', 'Guthaben'),
 		'isSoli' => array('boolean', '', 'ist-Soli-Benutzer'));

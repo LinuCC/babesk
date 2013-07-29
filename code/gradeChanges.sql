@@ -15,3 +15,11 @@ RENAME TABLE jointUsersInGrade TO usersInGradesAndSchoolyears;
 
 INSERT INTO grade (label, gradeValue, schooltypeId)
 	VALUES ('Keine Klasse', 0, 0);
+
+ALTER TABLE usersInGradesAndSchoolyears
+	CHANGE UserID userId int(11) NOT NULL,
+	CHANGE GradeID gradeId int(11) NOT NULL,
+	MODIFY ID INT NOT NULL, -- remove autoincrement for Primary Key change
+	DROP PRIMARY KEY,
+	ADD PRIMARY KEY(userId, gradeId, schoolyearId),
+	DROP COLUMN ID;

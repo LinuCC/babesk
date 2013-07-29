@@ -29,12 +29,12 @@ class KuwasysStatsGradesChosenBarChart extends StatisticsBarChart {
 
 	protected function dataFetch() {
 
-		$this->_gradeData = TableMng::query(
+		$this->_gradeData = TableMng::queryMultiple(
 			'SELECT COUNT(*) AS gradeCount, CONCAT(g.gradeValue, "-", g.label) AS gradeName
 			FROM grade g
-				JOIN usersInGradesAndSchoolyears uigs ON g.ID = uigs.GradeID
+				JOIN usersInGradesAndSchoolyears uigs ON g.ID = uigs.gradeId
 					AND uigs.schoolyearId = @activeSchoolyear
-				JOIN jointUsersInClass uic ON uic.UserID = uig.UserID
+				JOIN jointUsersInClass uic ON uic.UserID = uigs.userId
 				JOIN jointClassInSchoolYear cisy
 					ON uic.ClassID = cisy.ClassID
 					AND cisy.SchoolYearID = @activeSchoolyear
@@ -44,7 +44,7 @@ class KuwasysStatsGradesChosenBarChart extends StatisticsBarChart {
 						WHERE name="active" OR name="waiting"
 					) status ON status.ID = uic.statusId
 				GROUP BY g.ID
-			', true, true);
+			');
 	}
 
 	protected function dataProcess() {

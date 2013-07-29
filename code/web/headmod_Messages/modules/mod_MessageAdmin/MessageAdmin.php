@@ -302,7 +302,7 @@ class MessageAdmin extends Module{
 			$stmt =$db->prepare("SELECT uigs.UserID AS userId
 				FROM usersInGradesAndSchoolyears uigs
 					ON uigs.schoolyearId = @activeSchoolyear
-					WHERE uigs.GradeID = ?");
+					WHERE uigs.gradeId = ?");
 			foreach($grades as $gradeId) {
 				$stmt->bind_param("i", $gradeId);
 				$stmt->execute();

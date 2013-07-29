@@ -76,8 +76,8 @@ class UserDelete {
 			"SELECT forename, name, credit, birthday,
 				CONCAT(g.gradeValue, '-', g.label) AS grade
 			FROM users u
-			LEFT JOIN usersInGradesAndSchoolyears uig ON uigs.UserID = u.ID
-			LEFT JOIN grade g ON uigs.GradeID = g.ID
+			LEFT JOIN usersInGradesAndSchoolyears uig ON uigs.userId = u.ID
+			LEFT JOIN grade g ON uigs.gradeId = g.ID
 			WHERE u.ID = $userId", true);
 
 		if(count($userToDeleteRes)) {
@@ -125,7 +125,7 @@ class UserDelete {
 		if(count(TableMng::query(
 			'SHOW TABLES LIKE "usersInGradesAndSchoolyears";'))) {
 			$querys .= "DELETE FROM usersInGradesAndSchoolyears
-				WHERE UserID = $uid;";
+				WHERE userId = $uid;";
 		}
 		if(count(TableMng::query(
 			'SHOW TABLES LIKE "MessageReceivers";'))) {

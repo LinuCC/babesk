@@ -1,10 +1,16 @@
 {extends file=$UserParent}{block name=content}
 
+<script>
+	var grades = {json_encode($grades)};
+	var schoolyears = {json_encode($schoolyears)};
+</script>
+
 <script src="../smarty/templates/administrator/AddItemInterface.js">
 	</script>
 <script src="../smarty/templates/administrator/headmod_System/modules/
 	mod_User/change.js">
 </script>
+
 
 {$userIsInSchoolyear = false}
 {foreach $schoolyears as $schoolyear}
@@ -54,18 +60,6 @@
 			<input class="inputItem" type="checkbox" name="accountLocked"
 				{if $user.locked}checked="checked"{/if} />
 		</div>
-		<div class="simpleForm"><p class="inputItem">Klasse:</p>
-				{if empty($grades)}
-					<p class="inputItem">
-						keine Klassem vorhanden
-					</p>
-				{else}
-					<select class="inputItem" name="gradeId">
-						<option value="">Keine</option>
-						{html_options options=$grades selected=$user.gradeId}
-					</select>
-				{/if}
-		</div>
 		<div class="simpleForm">
 			<p class="inputItem">Kartennummer:</p>
 			<div class="inputItem">
@@ -96,32 +90,42 @@
 					</div>
 				{/if}
 		</div>
-		<div class="simpleForm">
-				<p class="inputItem">Schuljahre:</p>
-				{if empty($schoolyears)}
-					<p class="inputItem">
-						keine Schuljahre vorhanden
-					</p>
-				{else}
-					<select class="inputItem" name="schoolyearIds"
-						multiple="multiple" title="Mehrfachwahlen sind durch halten der Strg
-						- (oder Ctrl-)Taste beim klicken möglich. Damit kann sich auch die
-						angewählten Schuljahre wieder abwählen lassen. Strg+A, um alle
-						Schuljahre auszuwählen.">
-						<option value="NONE"
-							{if !count($schoolyears) or !$userIsInSchoolyear}
-								selected="selected"{/if}>
-							Keine
-						</option>
-						{foreach $schoolyears as $schoolyear}
-							<option value="{$schoolyear.ID}"
-								{if !empty($schoolyear.isUserIn)}selected="selected"{/if}>
-									{$schoolyear.name}
-							</option>
+		<fieldset class="schoolyearGradeContainer smallContainer">
+			<legend>Schuljahre und Klassen:</legend>
+			{foreach $gradesAndSchoolyearsOfUser as $gas}
+				<div class="schoolyearGradeRow">
+					Im Schuljahr
+					<select name="schoolyearId">
+						{foreach $schoolyears as $syId => $syName}
+							<option value="{$syId}"
+								{if $syId == $gas.schoolyearId}
+									selected="selected"{/if}>
+									{$syName}
 						{/foreach}
 					</select>
-				{/if}
-		</div>
+					in Klasse
+					<select name="gradeId">
+						{foreach $grades as $gradeId => $gradeName}
+							<option value="{$gradeId}"
+								{if $gradeId == $gas.gradeId}
+									selected="selected"{/if}>
+									{$gradeName}
+						{/foreach}
+					</select>
+					<input type="image" src="../images/status/forbidden_32.png"
+						title="Diese Kombination entfernen"
+						class="gradeSchoolyearRemove" />
+				</div>
+				{$counter++}
+			{foreachelse}
+			<fieldset class="smallContainer">
+				Der Benutzer ist noch in keinem Schuljahr. Er wird bei einigen Funktionen nicht benutzbar sein.
+			</fieldset>
+			{/foreach}
+			<input type="image" src="../images/actions/plusbutton_32.png"
+				title="Ein neues Schuljahr mit Klasse hinzufügen"
+				class="gradeSchoolyearAdd" />
+		</fieldset>
 	</fieldset>
 	<fieldset>
 		<legend>BaBeSK</legend>

@@ -88,7 +88,7 @@ class AssignUsersToClassesAddUser {
 				'SELECT u.ID AS userId,
 					CONCAT(u.forename, " ", u.name) AS userFullname
 				FROM users u
-				JOIN usersInGradesAndSchoolyears uigs ON u.ID = uigs.UserID
+				JOIN usersInGradesAndSchoolyears uigs ON u.ID = uigs.userId
 					AND uigs.schoolyearId = @activeSchoolyear');
 
 		} catch (MySQLVoidDataException $e) {

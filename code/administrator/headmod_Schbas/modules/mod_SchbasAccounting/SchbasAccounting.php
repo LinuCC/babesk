@@ -95,17 +95,17 @@ class SchbasAccounting extends Module {
 	private function showUsers () {
 
 		$gradeID = TableMng::query(
-			"SELECT GradeID FROM usersInGradesAndSchoolyears
+			"SELECT gradeId FROM usersInGradesAndSchoolyears
 				WHERE schoolyearId = @activeSchoolyear");
 		foreach ($gradeID as $grade){
-			$ID = $grade['GradeID'];
+			$ID = $grade['gradeId'];
 			$SaveTheCows = TableMng::query("SELECT * FROM grade WHERE ID = $ID");
 			// Cows stands for Code of worst systematic
 			$gradesAll[] = $SaveTheCows[0];
 		}
 		$users = TableMng::query('SELECT u.*, CONCAT(g.gradeValue, "-", g.label) AS gradeLabel FROM users u
-			JOIN usersInGradesAndSchoolyears uigs ON u.ID = uigs.UserID
-			JOIN grade g ON g.ID = uigs.GradeID
+			JOIN usersInGradesAndSchoolyears uigs ON u.ID = uigs.userId
+			JOIN grade g ON g.ID = uigs.gradeId
 			WHERE uigs.schoolyearId = @activeSchoolyear
 			ORDER BY name ASC');
 		$users = $this->addPayedAmountToUsers($users);
