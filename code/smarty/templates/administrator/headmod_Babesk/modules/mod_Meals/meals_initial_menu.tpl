@@ -3,7 +3,7 @@
 	<form action="index.php?section=Babesk|Meals&action=1" method="post">
 		<input type="submit" value="Eine neue Mahlzeit erstellen" />
 	</form>
-	<br><br>	
+	<br><br>
 	<form action="index.php?section=Babesk|Meals&action=2" method="post">
 		<input type="submit" value="Die Mahlzeiten anzeigen" />
 	</form>
@@ -18,9 +18,5 @@
 	<br><br>
 	<form action="index.php?section=Babesk|Meals&action=6" method="post">
 	<input type="submit" value="Infotexte f&uuml;r Speiseplan editieren" />
-	</form>
-	<br><br>
-	<form action="index.php?section=Babesk|Meals&action=7" method="post">
-	<input type="submit" value="Uhrzeit f&uuml;r letzte Bestellm&ouml;glichkeit" />
 	</form>
 	{/block}

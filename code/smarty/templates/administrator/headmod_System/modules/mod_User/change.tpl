@@ -101,6 +101,7 @@
 								{if $syId == $gas.schoolyearId}
 									selected="selected"{/if}>
 									{$syName}
+							</option>
 						{/foreach}
 					</select>
 					in Klasse
@@ -110,6 +111,7 @@
 								{if $gradeId == $gas.gradeId}
 									selected="selected"{/if}>
 									{$gradeName}
+							</option>
 						{/foreach}
 					</select>
 					<input type="image" src="../images/status/forbidden_32.png"

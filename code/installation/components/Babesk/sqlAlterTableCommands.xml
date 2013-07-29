@@ -53,16 +53,6 @@
 		</sqlString>
 	</command>
 	<command>
-		<name>AddLastOrderTime</name>
-		<sqlString>
-		INSERT INTO
-		global_settings(name, value)
-		VALUES
-		("last_order_time",
-		"09:30");
-		</sqlString>
-	</command>
-	<command>
 		<name>AddHelpText</name>
 		<sqlString>
 		INSERT INTO

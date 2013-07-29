@@ -6,7 +6,7 @@ class SoliCouponsManager extends TableManager {
 	function __construct() {
 		parent::__construct('soli_coupons');
 	}
-	
+
 	/**
 	 * returns all Coupons of soli_coupons that are in the Table
 	 */
@@ -14,11 +14,11 @@ class SoliCouponsManager extends TableManager {
 		$coupons = $this->getTableData();
 		return $coupons;
 	}
-	
+
 	function addCoupon($startdate, $enddate, $uid) {
 		$this->addEntry('startdate', $startdate, 'enddate', $enddate, 'UID', $uid);
 	}
-	
+
 	/**
 	 * Checks if the User of the given UserID has a valid Coupon-Activation
 	 * @param numeric_string $UID
@@ -43,7 +43,7 @@ class SoliCouponsManager extends TableManager {
 		}
 		return false;
 	}
-	
+
 }
 
 

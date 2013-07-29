@@ -1,4 +1,3 @@
-
 <?php
 	/**
 	 * defines the Exceptions used in the Project

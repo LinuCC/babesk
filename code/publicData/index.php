@@ -9,7 +9,7 @@
 
 require_once 'PublicData.php';
 
-$publicData = new PublicData ();
-$publicData->publicDataEntrypoint ();
+$publicData = new PublicData();
+$publicData->publicDataEntrypoint();
 
 ?>

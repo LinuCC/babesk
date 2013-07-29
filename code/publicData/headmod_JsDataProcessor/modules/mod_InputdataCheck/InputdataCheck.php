@@ -1,5 +1,7 @@
 <?php
 
+require_once PATH_INCLUDE . '/Module.php';
+
 class InputdataCheck extends Module {
 
 	/////////////////////////////////////////////////////////////////////

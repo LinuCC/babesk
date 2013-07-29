@@ -93,6 +93,13 @@ $(document).ready(function() {
 		{/foreach}
 	{/if}
 
+	/* Warning-Output, if any exist */
+	{if isset($_userWarningOutput)}
+		{foreach $_userWarningOutput as $warning}
+			adminInterface.warningShow('{htmlspecialchars($warning)}');
+		{/foreach}
+	{/if}
+
 	/* Message-Output, if any exist */
 	{if isset($_userMsgOutput)}
 		{foreach $_userMsgOutput as $msg}

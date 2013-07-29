@@ -4,84 +4,251 @@ require_once PATH_INCLUDE . '/Module.php';
 
 class Cancel extends Module {
 
-	////////////////////////////////////////////////////////////////////////////////
-	//Attributes
-	private $smartyPath;
-
-	////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
 	//Constructor
+	/////////////////////////////////////////////////////////////////////
+
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
 		$this->smartyPath = PATH_SMARTY . '/templates/web' . $path;
 	}
 
-	////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
 	//Methods
+	/////////////////////////////////////////////////////////////////////
+
 	public function execute($dataContainer) {
-		error_reporting(E_ALL);
-		global $smarty;
-		global $logger;
 
-		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
-		require_once PATH_ACCESS . '/SoliCouponsManager.php';
-		require_once PATH_ACCESS . '/SoliOrderManager.php';
-		require_once PATH_ACCESS . '/MealManager.php';
-		require_once PATH_ACCESS . '/UserManager.php';
-		require_once PATH_ACCESS . '/OrderManager.php';
-		require_once PATH_ACCESS . '/PriceClassManager.php';
+		$this->entryPoint($dataContainer);
 
-		$orderManager = new OrderManager();
-		$priceClassManager = new PriceClassManager();
-		$gbManager = new GlobalSettingsManager();
-		$userManager = new UserManager();
-		$soliCouponManager = new SoliCouponsManager();
-		$soliOrderManager = new SoliOrderManager();
-		$orderUserID = $orderManager->getEntryData($_GET['id'], 'UID');
-		$orderFetched = $orderManager->getEntryData($_GET['id'], 'fetched');
-		
-		if (($_SESSION['uid'] != $orderUserID['UID'])  && !$orderFetched) {
-			$smarty->display($this->smartyPath . "illegal.tpl");
-					die();
+		TableMng::sqlEscape($_GET['id']);
+		$this->orderdataLoad($_GET['id']);
+
+		if($this->ordercancelLegalCheck()) {
+			$this->orderCancel();
 		}
 
-		try {
-			$orderData = $orderManager->getEntryData($_GET['id'], 'MID');
-			
-			$mid = $orderData['MID'];
-			$price = $priceClassManager->getPrice($_SESSION['uid'], $mid);
-		} catch (Exception $e) {
-			$logger->log('WEB|mod_cancel', 'MODERATE',
-					sprintf('Error at ID %s, canceling MID %s: %s', $_GET['id'], $orderData['MID'], $e->getMessage()));
-			die('<p class="error">Ein Fehler ist aufgetreten!</p>');
-		}
+		$this->_smarty->display($this->smartyPath . "cancel.tpl");
+	}
 
-		//"repay", add the price for the menu to the users account
-		try {
-			if($soliOrderManager->isExisting($_GET['id'])) {
-				//It is a soliOrder
-				if (!$userManager->changeBalance($_SESSION['uid'], $gbManager->getSoliPrice())) {
-					$smarty->display($this->smartyPath . "failed.tpl");
-					die();
-				}
-				//The ID of the soli_order is the same as the ID of the order;
-				//Soliorders have another entry in soli_orders, delete it too
-				$soliOrderManager->delEntry($_GET['id']);
+	/////////////////////////////////////////////////////////////////////
+	//Implements
+	/////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Initializes the Variables of this Class
+	 *
+	 * @param  dataContainer $dataContainer contains needed Data
+	 */
+	protected function entryPoint($dataContainer) {
+
+		$this->_interface = $dataContainer->getInterface();
+		$this->_smarty = $dataContainer->getSmarty();
+	}
+
+	/**
+	 * Fetches the Data of the Order from the Server
+	 *
+	 * Also contains the data of the Priceclass and the Meal
+	 *
+	 * @param  int $orderId The ID of the Order
+	 */
+	protected function orderdataLoad($orderId) {
+
+		$data = TableMng::query("SELECT o.*, u.credit AS userCredits,
+				m.ID AS mealId, sc.ID AS solicouponId,
+				pc.price AS price
+			FROM orders o
+			JOIN users u ON u.ID = $_SESSION[uid]
+			JOIN meals m ON o.MID = m.ID
+			LEFT JOIN soli_coupons sc ON sc.UID = u.ID AND
+				m.date BETWEEN sc.startdate AND sc.enddate
+			JOIN price_classes pc ON m.price_class = pc.pc_ID AND u.GID = pc.GID
+			WHERE o.ID = $orderId
+			-- If multiple soli_coupons at same time active, group to one
+			GROUP BY sc.UID;", true);
+
+		if(count($data)) {
+			$this->_orderData = $data[0];
+			$this->_orderData['hasValidCoupon'] =
+				$this->_orderData['solicouponId'] !== NULL;
+		}
+		else {
+			throw new Exception('Could not fetch the Orderdata');
+		}
+	}
+
+	/**
+	 * Checks if the cancelling of the order by the User is Allowed
+	 *
+	 * Displays an Error and dies when the ordercancelling is not allowed
+	 *
+	 * @return boolean True if the Order-Cancel is legal
+	 */
+	protected function orderCancelLegalCheck() {
+
+		if(!$this->_orderData['fetched']) {
+			if($this->ordercancelLastLegalDateCheck()) {
+				return true;
 			}
 			else {
-				//It is a normal Order
-				if (!$userManager->changeBalance($_SESSION['uid'], $priceClassManager->getPrice($_SESSION['uid'], $mid))) {
-					$smarty->display($this->smartyPath . "failed.tpl");
-					die();
-				}
+				$this->_interface->dieError('Es ist zu spät diese Bestellung abzubestellen!');
 			}
+		}
+		else {
+			$this->_interface->dieError(
+				'Die Bestellung wurde bereits abgeholt!');
+		}
+	}
+
+	/**
+	 * Checks if the User is allowed to cancel the Order at the time
+	 *
+	 * @return boolean True if he is allowed, else false
+	 */
+	protected function ordercancelLastLegalDateCheck() {
+
+		$datemod = $this->lastOrdercancelDatemodGet();
+		$mealdate = strtotime($this->_orderData['date']);
+		$timestamp = strtotime($datemod, $mealdate);
+
+		return $timestamp >= time();
+	}
+
+	/**
+	 * Fetches and returns the date-modifier the last order is allowed
+	 *
+	 * Dies displaying an Error when data could not be fetched
+	 *
+	 * @return String The date-modifier, usable by strtotime
+	 */
+	protected function lastOrdercancelDatemodGet() {
+
+		try {
+			$data = TableMng::query('SELECT * FROM global_settings
+				WHERE name = "ordercancelEnddate"', true);
+
 		} catch (Exception $e) {
-			$logger->log('WEB|mod_cancel', 'MODERATE',
-					sprintf('Error at ID %s, canceling MID %s: %s', $_GET['id'], $orderData['MID'], $e->getMessage()));
-			die('<p class="error">Ein Fehler ist aufgetreten!</p>');
+
+			$this->_interface->dieError('Error fetching ordercancelEnddate!');
 		}
 
-		$orderManager->delEntry($_GET['id']);
-		$smarty->display($this->smartyPath . "cancel.tpl");
+		if(count($data)) {
+			return $data[0]['value'];
+		}
+		else {
+			$this->_interface->dieError('ordercancelEnddate ist nicht gesetzt! Administrator verständigen.');
+		}
 	}
+
+	/**
+	 * Cancels the Order and repays the money to the User
+	 */
+	protected function orderCancel() {
+
+		$this->_isSoli = $this->userHasValidCoupon();
+
+		try {
+			$amount = $this->amountToRepayGet();
+			TableMng::getDb()->autocommit(false);
+			$this->repay($amount);
+			$this->orderDbEntryDelete($this->_orderData['ID']);
+			TableMng::getDb()->autocommit(true);
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(
+				'Konnte die Bestellung nicht abbrechen' . $e->getMessage());
+		}
+	}
+
+	/**
+	 * Calculates the Amount that should be repayed to the User
+	 *
+	 * @return int The Amount to be repayed
+	 */
+	protected function amountToRepayGet() {
+
+		if($this->_isSoli) {
+			return $this->soliPriceGet();
+		}
+		else {
+			return $this->_orderData['price'];
+		}
+	}
+
+	/**
+	 * Fetches the Mealprice for Soli-Users and returns it
+	 *
+	 * @throws Exception If Soliprice could not be fetched
+	 * @return int The Price of the Meal for Soli-Users
+	 */
+	protected function soliPriceGet() {
+
+		$soliPrice = TableMng::query('SELECT * FROM global_settings
+			WHERE name = "soli_price"', true);
+		if(count($soliPrice)) {
+			return ((int) $soliPrice[0]['value']);
+		}
+		else {
+			throw new Exception('Soli-Price not set, but Coupon used!');
+		}
+	}
+
+	/**
+	 * Checks if the User has a valid Solicoupon for the Order
+	 *
+	 * @param  int $mealId The ID of the Meal
+	 * @return boolean True if the User has a Valid Coupon, else false
+	 */
+	protected function userHasValidCoupon() {
+
+		$hasCoupon = TableMng::query("SELECT COUNT(*) AS count
+			FROM soli_coupons sc
+			JOIN meals m ON m.ID = {$this->_orderData['mealId']}
+			WHERE m.date BETWEEN sc.startdate AND sc.enddate AND
+				UID = $_SESSION[uid]", true);
+
+		return $hasCoupon[0]['count'] != '0';
+	}
+
+	/**
+	 * Repays the Money of the cancelled Order back to the User
+	 *
+	 * @param  int $amount The Amount of money to repay
+	 */
+	protected function repay($amount) {
+
+		$newBalance = $this->_orderData['userCredits'] + $amount;
+		$newBalanceStr = str_replace(',', '.', (string) $newBalance);
+		TableMng::query("UPDATE users SET credit = '$newBalanceStr'");
+	}
+
+	/**
+	 * Deletes the Order-Entry (and SoliOrder-Entry) in the Db
+	 *
+	 * @param  int $orderId The ID of the Order to delete
+	 */
+	protected function orderDbEntryDelete($orderId) {
+
+		TableMng::query("DELETE FROM orders WHERE ID = $orderId");
+
+		if($this->_isSoli) {
+			TableMng::query("DELETE FROM soli_orders WHERE ID = $orderId");
+		}
+	}
+
+	/////////////////////////////////////////////////////////////////////
+	//Attributes
+	/////////////////////////////////////////////////////////////////////
+
+	private $smartyPath;
+
+	protected $_orderData;
+
+	protected $_interface;
+
+	protected $_smarty;
+
+	protected $_isSoli;
 }
 ?>

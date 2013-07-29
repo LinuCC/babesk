@@ -1,7 +1,7 @@
 
 $(document).ready(function() {
 
-	adminInterface.messageShow('Hier verändern sie grundlegende Eigenschaften des Systems! Bitte tun sie dies nur, wenn sie genau wissen, was sie tun!');
+	adminInterface.warningShow('Hier verändern sie grundlegende Eigenschaften des Systems! Bitte tun sie dies nur, wenn sie genau wissen, was sie tun!');
 });
 
 /**

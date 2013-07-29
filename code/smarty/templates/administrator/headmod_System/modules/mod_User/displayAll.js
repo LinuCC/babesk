@@ -145,9 +145,6 @@ $(document).ready(function() {
 			.format('appendixFor' + id));
 		var appendix = $(appendixPattern.format('appendixFor' + id));
 
-		console.log("id is");
-		console.log(id);
-
 		if(!appendix.is(':visible') || !appendix.length) {
 			if(!appendixSpoiler.length) {
 				var newAppendixSpoiler = $('<div class="tableRowAppendixSpoiler" id="appendixFor' + id + '"><div></div></div>');

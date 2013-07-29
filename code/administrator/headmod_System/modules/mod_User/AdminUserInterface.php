@@ -23,6 +23,7 @@ class AdminUserInterface extends AdminInterface {
 	}
 
 	function ShowRegisterForm($priceGroups, $grades, $schoolyears) {
+
 		$this->smarty->assign('priceGroups', $priceGroups);
 		$this->smarty->assign('grades', $grades);
 		$this->smarty->assign('schoolyears', $schoolyears);

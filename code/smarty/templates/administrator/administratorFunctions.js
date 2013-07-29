@@ -21,6 +21,36 @@ if (!String.prototype.format) {
 var AdminInterface = function() {
 
 	/**
+	 * Shows an Error to the User
+	 * @param  {String} str The Message-String to be shown
+	 */
+	this.errorShow = function(str) {
+
+		if(!$('#errorContainer').length) {
+			errorContainerAdd();
+		}
+
+		var htmlStr = listItemHtmlCreate(str);
+		$('#errorContainer ul').append(htmlStr);
+		$('#errorContainer').show();
+	}
+
+	/**
+	 * Shows an Warning to the User
+	 * @param  {String} str The Message-String to be shown
+	 */
+	this.warningShow = function(str) {
+
+		if(!$('#warningContainer').length) {
+			warningContainerAdd();
+		}
+
+		var htmlStr = listItemHtmlCreate(str);
+		$('#warningContainer ul').append(htmlStr);
+		$('#warningContainer').show();
+	}
+
+	/**
 	 * Shows a Message to the User
 	 * @param  {String} str The Message-String to be shown
 	 */
@@ -34,26 +64,6 @@ var AdminInterface = function() {
 		htmlStr = listItemHtmlCreate(str);
 		$('#messageContainer ul').append(htmlStr);
 		$('#messageContainer').show();
-	}
-
-	/**
-	 * Shows an Error to the User
-	 * @param  {String} str The Message-String to be shown
-	 */
-	this.errorShow = function(str) {
-
-		if(!$('#errorContainer').length) {
-			errorContainerAdd();
-		}
-
-		var htmlStr = listItemHtmlCreate(str);
-		$('#errorContainer ul').append(htmlStr);
-		$('#errorContainer').show();
-		$('.errorContainerClose').on('click', function(event) {
-			event.preventDefault();
-			$('#errorContainer').hide('highlight', 500);
-			$('#errorContainer ul').html('');
-		});
 	}
 
 	/**
@@ -83,11 +93,26 @@ var AdminInterface = function() {
 	}
 
 	/**
-	 * Adds a MessageContainer to the Site (void, possibly hidden, too)
+	 * Adds an ErrorContainer to the Site (void, possibly hidden, too)
 	 */
-	messageContainerAdd = function() {
+	errorContainerAdd = function() {
 
-		var html = '<div id="messageContainer"><a class="messageContainerClose" href="#" tabindex="1">Schließen</a><ul></ul></div>';
+		var html = '<div id="errorContainer"><a class="errorContainerClose" href="#" tabindex="1">Schließen</a><ul></ul></div>';
+		$('#header').after(html);
+
+		$('.errorContainerClose').on('click', function(event) {
+			event.preventDefault();
+			$('#errorContainer').hide('highlight', 500);
+			$('#errorContainer ul').html('');
+		});
+	}
+
+	/**
+	 * Adds a WarningContainer to the Site (void, possibly hidden, too)
+	 */
+	warningContainerAdd = function() {
+
+		var html = '<div id="warningContainer"><a class="warningContainerClose" href="#" tabindex="1">Schließen</a><ul></ul></div>';
 
 		if($('#errorContainer').length) {
 			$('#errorContainer').after(html);
@@ -95,20 +120,31 @@ var AdminInterface = function() {
 		else {
 			$('#header').after(html);
 		}
-		$('.messageContainerClose').on('click', function(event) {
-		event.preventDefault();
-		$('#messageContainer').hide('highlight', 500);
-		$('#messageContainer ul').html('');
-	});
+		$('.warningContainerClose').on('click', function(event) {
+			event.preventDefault();
+			$('#warningContainer').hide('highlight', 500);
+			$('#warningContainer ul').html('');
+		});
 	}
 
 	/**
-	 * Adds an ErrorContainer to the Site (void, possibly hidden, too)
+	 * Adds a MessageContainer to the Site (void, possibly hidden, too)
 	 */
-	errorContainerAdd = function() {
+	messageContainerAdd = function() {
 
-		var html = '<div id="errorContainer"><a class="errorContainerClose" href="#" tabindex="1">Schließen</a><ul></ul></div>';
-		$('#header').after(html);
+		var html = '<div id="messageContainer"><a class="messageContainerClose" href="#" tabindex="1">Schließen</a><ul></ul></div>';
+
+		if($('#warningContainer').length) {
+			$('#warningContainer').after(html);
+		}
+		else {
+			$('#header').after(html);
+		}
+		$('.messageContainerClose').on('click', function(event) {
+			event.preventDefault();
+			$('#messageContainer').hide('highlight', 500);
+			$('#messageContainer ul').html('');
+		});
 	}
 
 	/**

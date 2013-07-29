@@ -119,7 +119,6 @@ var schoolyearAndGradeHandler = function() {
 	});
 
 	updateRemoveClickHandler();
-
 };
 
 $(document).ready(function() {

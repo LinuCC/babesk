@@ -1,6 +1,130 @@
+/**
+ * Handles the Input of the Schoolyears and the Grades
+ */
+var schoolyearAndGradeHandler = function() {
+
+	var that = this;
+
+	var updateRemoveClickHandler = function updateRemoveClickHandler() {
+
+		$('input.gradeSchoolyearRemove').on('click', function(event) {
+
+			event.preventDefault();
+			var toDel = $(this).parent();
+			toDel.remove();
+		});
+	};
+
+	var inputHtmlSceletonCreate = function() {
+
+		var output = $(
+			'<div class="schoolyearGradeRow">\
+				Im Schuljahr\
+				<select name="schoolyearId">\
+				</select>\
+				in Klasse\
+				<select name="gradeId">\
+				</select>\
+				<input type="image" src="../images/status/forbidden_32.png"\
+					title="Diese Kombination entfernen"\
+					class="gradeSchoolyearRemove" />\
+			</div>'
+		);
+
+		return output;
+	};
+
+	var schoolyearContainerAppend = function(parent) {
+
+		var schoolyearContainer = parent.children(
+			'select[name="schoolyearId"]');
+
+		for(var syId in schoolyears) {
+			schoolyearContainer.append(
+				'<option value="' + syId + '">' +
+				schoolyears[syId] + '</option>');
+		}
+	};
+
+	var gradeContainerAppend = function(parent) {
+
+		var gradeContainer = parent.children(
+			'select[name="gradeId"]');
+
+		for(var gradeId in grades) {
+			gradeContainer.append(
+				'<option value="' + gradeId + '">' +
+				grades[gradeId] + '</option>');
+		}
+	};
+
+	var checkForSameSchoolyearId = function(
+		schoolyearId,
+		selectedGradesAndSchoolyears) {
+
+		var syIsUnique = true;
+
+		$.each(selectedGradesAndSchoolyears, function(index, value) {
+			if(value.schoolyearId == schoolyearId) {
+				adminInterface.errorShow('Bitte wählen sie nicht zweimal\
+					das gleiche Schuljahr aus!');
+				syIsUnique = false;
+			}
+		});
+
+		return syIsUnique;
+	}
+
+	that.inputGet = function() {
+
+		var selectedGradesAndSchoolyears = [];
+		var isOkay = true;
+
+		$('.schoolyearGradeRow').each(function(index, value) {
+
+			var schoolyearId = $(this).find('select[name="schoolyearId"]')
+				.find(':selected').val();
+			var gradeId = $(this).find('select[name="gradeId"]')
+				.find(':selected').val();
+
+			if(checkForSameSchoolyearId(schoolyearId, selectedGradesAndSchoolyears)) {
+				selectedGradesAndSchoolyears.push({
+					'schoolyearId': schoolyearId,
+					'gradeId': gradeId
+				});
+			}
+			else {
+				isOkay = false;
+			}
+		});
+
+		if(isOkay) {
+			return selectedGradesAndSchoolyears;
+		}
+		else {
+			return false;
+		}
+	};
+
+	$('input.gradeSchoolyearAdd').on('click', function(event) {
+
+		event.preventDefault();
+
+		output = inputHtmlSceletonCreate();
+		schoolyearContainerAppend(output);
+		gradeContainerAppend(output);
+
+		$('.schoolyearGradeContainer input.gradeSchoolyearAdd').before(output);
+		updateRemoveClickHandler();
+	});
+
+	updateRemoveClickHandler();
+};
+
 $(document).ready(function() {
 
 	addItemInterface = new AddItemInterface();
+	sygHandler = new schoolyearAndGradeHandler();
 
 	$('input.cardnumberAdd').hide();
 
@@ -85,11 +209,17 @@ $(document).ready(function() {
 			});
 		}
 
+		var schoolyearAndGradeData = sygHandler.inputGet();
+		if(!schoolyearAndGradeData) {
+			addFatalError();
+			return false;
+		}
+
 		event.preventDefault();
 
 		$.ajax({
 			type: "POST",
-			url: "index.php?section=System|User&action=addUser",
+			url: "index.php?module=administrator|System|User|Register",
 			data: {
 				'forename': $('input.inputItem[name=forename]').val(),
 				'name': $('input.inputItem[name=name]').val(),
@@ -100,9 +230,8 @@ $(document).ready(function() {
 				'email': $('input.inputItem[name=email]').val(),
 				'telephone': $('input.inputItem[name=telephone]').val(),
 				'birthday': $('input.inputItem[name=birthday]').val(),
-				'schoolyearId': $('select.inputItem[name=schoolyearId] option:selected').val(),
 				'pricegroupId': $('select.inputItem[name=pricegroupId] option:selected').val(),
-				'gradeId': $('select.inputItem[name=gradeId] option:selected').val(),
+				'schoolyearAndGradeData': schoolyearAndGradeData,
 				'credits': $('input.inputItem[name=credits]').val(),
 				'cardnumber': $('input.inputItem[name=cardnumber]').val(),
 				'isSoli': $('input.inputItem[name=isSoli]').prop('checked'),
@@ -110,6 +239,7 @@ $(document).ready(function() {
 
 			success: function(data) {
 
+				console.log(data);
 				try {
 					var res = $.parseJSON(data);
 				}

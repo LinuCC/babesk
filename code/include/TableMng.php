@@ -41,6 +41,8 @@ class TableMng {
 	 * The Values of the Array need to be references to allow direct change
 	 * of the original values, for example
 	 * array(&$val1, &$val2, ...)
+	 * or you just use the whole array, like
+	 * sqlEscapeByArray($_POST)
 	 * Theres no return-value, the array is passed as reference
 	 */
 	public static function sqlEscapeByArray(&$array) {

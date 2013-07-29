@@ -112,6 +112,34 @@ class Acl {
 	}
 
 	/**
+	 * Executes a module, even it is not allowed
+	 *
+	 * @param  String $section       The Path to the Module. Supported are:
+	 *     "Headmodule|Module" - The old way. deprecated
+	 *     "Headmodule" - Another notation of the old way. deprecated
+	 *     "root/path/to/module" - The new way. preferred
+	 * @param  dataContainer $dataContainer The dataContainer that is given to
+	 *     the executed Module
+	 * @throws AclException If ModuleAccess is forbidden
+	 * @throws AclException If Module could not be loaded by path
+	 */
+	public function moduleNotAllowedExecute($moduleExecutionParser,
+		$dataContainer) {
+
+		$moduleToExecutePath = $moduleExecutionParser->moduleExecutionGet();
+		$subRequest = $moduleExecutionParser->submoduleExecutionGet();
+		$dataContainer->setSubmoduleExecutionRequest($subRequest);
+		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
+		if(!empty($module)) {
+			$module->execute($dataContainer);
+		}
+		else {
+			throw new AclException(
+				"Module could not be loaded by path '$moduleToExecutePath'");
+		}
+	}
+
+	/**
 	 * Returns the Module by the given path
 	 *
 	 * This function does not return the Modules that are set as not allowed

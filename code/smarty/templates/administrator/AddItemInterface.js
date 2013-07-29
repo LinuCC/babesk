@@ -33,8 +33,8 @@ var AddItemInterface = function() {
 
 	that.userInputCheckGump = function(userInput, regex, element) {
 
-		serverPath = location.pathname.replace('administrator/index.php', '');
-		var serverRequest = 'http://' + location.host + serverPath + '/publicData/index.php?section=JsDataProcessor|InputdataCheck&gump';
+		serverPath = location.pathname.replace('/administrator/index.php', '');
+		var serverRequest = 'http://' + location.host + serverPath + '/publicData/index.php?module=PublicData|JsDataProcessor|InputdataCheck&gump';
 
 		$.ajax({
 			type: 'POST',
@@ -45,8 +45,15 @@ var AddItemInterface = function() {
 				elementName: element.attr('name')
 			},
 			success: function(data) {
+				if(/\s/.test(data)) {
+					console.log('"' + data + '"');
+				}
 				userInputReturnHandle(data, element);
 			},
+			error: function(data) {
+				console.log(data);
+				adminInterface.errorShow('Konnte die eingegebenen Daten nicht überprüfen.');
+			}
 		});
 	};
 

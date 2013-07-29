@@ -35,7 +35,7 @@ class UserDelete {
 			}
 
 		} catch (Exception $e) {
-			die(json_encode(array('value' => 'error', 'message' => 'Ein Fehler ist beim Löschen des Benutzers aufgetreten.')));
+			die(json_encode(array('value' => 'error', 'message' => 'Ein Fehler ist beim Löschen des Benutzers aufgetreten.' . $e->getMessage())));
 		}
 		//success! yay!
 		die(json_encode(array(
@@ -76,12 +76,12 @@ class UserDelete {
 			"SELECT forename, name, credit, birthday,
 				CONCAT(g.gradeValue, '-', g.label) AS grade
 			FROM users u
-			LEFT JOIN usersInGradesAndSchoolyears uig ON uigs.userId = u.ID
+			LEFT JOIN usersInGradesAndSchoolyears uigs ON uigs.userId = u.ID
 			LEFT JOIN grade g ON uigs.gradeId = g.ID
 			WHERE u.ID = $userId", true);
 
 		if(count($userToDeleteRes)) {
-			return $userToDeleteRes[0];
+			return $userToDeleteRes;
 		}
 		else {
 			throw new Exception('Konnte die Benutzerdaten nicht abrufen');

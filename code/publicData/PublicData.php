@@ -4,48 +4,51 @@ require_once "../include/path.php";
 require_once 'PublicDataInterface.php';
 require_once PATH_INCLUDE . '/DataContainer.php';
 require_once PATH_INCLUDE . '/Acl.php';
+require_once PATH_INCLUDE . '/TableMng.php';
+require_once PATH_INCLUDE . '/exception_def.php';
+require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';
 
 /**
  * This Class organizes the Sub-program "publicData"
  * @author Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
 class PublicData {
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Constructor
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
+
 	public function __construct () {
+		TableMng::init();
 		$this->environmentInit ();
 	}
-	////////////////////////////////////////////////////////////////////////////////
-	//Getters and Setters
-	////////////////////////////////////////////////////////////////////////////////
 
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
+	//Getters and Setters
+	///////////////////////////////////////////////////////////////////////
+
+	///////////////////////////////////////////////////////////////////////
 	//Methods
-	////////////////////////////////////////////////////////////////////////////////
-	public function moduleExecute ($moduleName) {
+	///////////////////////////////////////////////////////////////////////
+
+	public function publicDataEntrypoint() {
 
 		try {
-			$this->_acl->accessControlInit($_SESSION['uid']);
-			$this->_acl->moduleExecute($moduleName, $this->_dataContainer);
+			$this->_moduleExecutionParser = new ModuleExecutionInputParser();
+			$this->_moduleExecutionParser->setSubprogramPath(
+				'root/PublicData');
+			$this->_moduleExecutionParser->load();
+			// $this->_acl->accessControlInit($_SESSION['UID']);
+			$this->_acl->moduleNotAllowedExecute($this->_moduleExecutionParser,
+				$this->_dataContainer);
 
 		} catch (Exception $e) {
 			$this->_interface->dieError('Konnte Modul nicht ausführen');
 		}
 	}
 
-	public function publicDataEntrypoint () {
-		if (isset ($_GET ['section'])) {
-			$this->moduleExecute ($_GET ['section']);
-		}
-		else {
-			$this->_interface->dieError ('No Module requested; Aborting');
-		}
-	}
-
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Implementations
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	private function environmentInit () {
 		$this->phpIniSet();
 		$this->sessionInit ();
@@ -61,7 +64,6 @@ class PublicData {
 		// $this->_moduleManager->setDataContainer ($this->_dataContainer);
 		// $this->_moduleManager->allowAllModules ();
 		$this->_acl = new Acl();
-		$this->_acl->setSubprogramPath('root/PublicData');
 		$this->_dataContainer = new DataContainer (
 			$this->_interface->getSmarty (),
 			$this->_interface,
@@ -80,11 +82,15 @@ class PublicData {
 		ini_set("default_charset", "utf-8");
 	}
 
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Attributes
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	private $_interface;
 	private $_dataContainer;
+
+	private $_acl;
+
+	private $_moduleExecutionParser;
 }
 
 ?>
