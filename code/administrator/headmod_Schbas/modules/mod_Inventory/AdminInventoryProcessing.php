@@ -161,10 +161,12 @@ class AdminInventoryProcessing {
 	function DeleteEntry($id) {
 		require_once PATH_ACCESS . '/InventoryManager.php';
 		$inventoryManager = new InventoryManager();
-		
+		require_once PATH_ACCESS . '/LoanManager.php';
+		$loanManager = new LoanManager();
 		
 		try {
-			$inventoryManager->delEntry($id);
+			$inventoryManager->delEntry($id);										// die Inventardaten löschen
+			$loanManager->deleteAllEntriesWithValueOfKey("inventory_id", $id);		// die Ausleihdaten löschen wir auch mit
 		} catch (Exception $e) {
 			$this->logs
 			->log('ADMIN', 'MODERATE',
@@ -173,6 +175,30 @@ class AdminInventoryProcessing {
 		}
 		$this->inventoryInterface->ShowDeleteFin();
 	}
+	
+	/**
+	 * 
+	 */
+	function GetIDFromBarcode($barcode) {
+		require_once PATH_ACCESS . '/InventoryManager.php';
+		$inventoryManager = new InventoryManager();
+		try {
+			return $inventoryManager->getInvIDByBarcode($barcode);
+		} catch (Exception $e) {
+		}
+		
+	}	
+	
+	/**
+	 * 
+	 * @var unknown
+	 */
+	function ScanForDeleteEntry() {
+		$this->inventoryInterface->ShowScanforDeleteEntry();
+	}
+	
+	
+	
 	
 	var $messages = array();
 	private $inventoryInterface;

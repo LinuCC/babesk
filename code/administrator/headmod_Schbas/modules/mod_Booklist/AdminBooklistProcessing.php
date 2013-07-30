@@ -162,10 +162,23 @@ class AdminBooklistProcessing {
 	function DeleteEntry($id) {
 		require_once PATH_ACCESS . '/BookManager.php';
 		$BookManager = new BookManager();
+		require_once PATH_ACCESS . '/InventoryManager.php';
+		$inventoryManager = new InventoryManager();
+		require_once PATH_ACCESS . '/LoanManager.php';
+		$loanManager = new LoanManager();
 	
 	
 		try {
-			$BookManager->delEntry($id);
+			
+			
+			$inv_list = $inventoryManager->getTableData('book_id = '.$id);
+			
+			foreach ($inv_list as $inv) {
+				$loanManager->deleteAllEntriesWithValueOfKey("inventory_id", $inv['id']);
+			}
+			// die Ausleihdaten löschen
+				$inventoryManager->deleteAllEntriesWithValueOfKey("book_id", $id);	// die Inventardaten löschen wir auch mit
+				$BookManager->delEntry($id);											// als letztes das Buch löschen
 		} catch (Exception $e) {
 			$this->logs
 			->log('ADMIN', 'MODERATE',
@@ -184,6 +197,29 @@ class AdminBooklistProcessing {
 		$existEntry = $inventoryManager->existsEntry('book_id', $book_id);
 		return $existEntry;
 		
+	}
+	
+	/**
+	 *
+	 */
+	function GetIDFromBarcode($isbn) {
+		require_once PATH_ACCESS . '/BookManager.php';
+		$bookManager = new BookManager();
+		try {
+			$id = $bookManager->getBookIDByISBN($isbn);
+			return $id['id'];
+		} catch (Exception $e) {
+		}
+	
+	}
+	
+	
+	/**
+	 *
+	 * @var unknown
+	 */
+	function ScanForDeleteEntry() {
+		$this->BookInterface->ShowScanforDeleteEntry();
 	}
 }
 

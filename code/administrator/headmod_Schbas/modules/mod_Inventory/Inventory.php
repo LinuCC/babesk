@@ -26,7 +26,8 @@ class Inventory extends Module {
 		$inventoryProcessing = new AdminInventoryProcessing($inventoryInterface);
 
 		$action_arr = array('show_inventory' => 1,
-							'add_inventory' => 4);
+							'add_inventory' => 4,
+							'del_inventory' => 5);
 
 			if (isset($_GET['action'])) {
 			$action = $_GET['action'];
@@ -44,7 +45,15 @@ class Inventory extends Module {
 					break;
 
 				case 3: //delete an entry
-					if (isset($_POST['delete'])) {
+					
+					if (isset($_POST['barcode'])) {
+						try {
+							$inventoryProcessing->DeleteEntry($inventoryProcessing->GetIDFromBarcode($_POST['barcode']));
+						} catch (Exception $e) {
+						}
+					}
+					
+					else if (isset($_POST['delete'])) {
 						$inventoryProcessing->DeleteEntry($_GET['ID']);
 					} else if (isset($_POST['not_delete'])) {
 						$inventoryInterface->ShowSelectionFunctionality($action_arr);
@@ -58,6 +67,11 @@ class Inventory extends Module {
 					} else {
 						$inventoryProcessing->AddEntryFin($_POST['barcode']);
 					}
+					break;
+				case 5: //search an entry for deleting
+					
+						$inventoryProcessing->ScanForDeleteEntry();
+					
 					break;
 			}
 		} else {
