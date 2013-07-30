@@ -24,7 +24,7 @@ class AdminRetourProcessing {
 		$this->RetourInterface = $RetourInterface;
 		global $logger;
 		$this->logs = $logger;
-		$this->msg = array('err_empty_books' => 'Keine ausgeliehenen B&uuml;cher vorhanden!',
+		$this->msg = array('err_empty_books' => 'keine B&uuml;cher ausgeliehen!',
 							'err_get_user_by_card' => 'Kein Benutzer gefunden!',
 							'err_card_id' => 'Die Karten-ID ist fehlerhaft!');
 	}
@@ -34,8 +34,7 @@ class AdminRetourProcessing {
 	 */
 	function RetourTableData($card_id) {
 
-		if (!$this->cardManager->valid_card_ID($card_id))
-			$this->RetourInterface->dieError(sprintf($this->msg['err_card_id']));
+		
 		$uid = $this->GetUser($card_id);
 		$loanbooks = $this->loanManager->getLoanlistByUID($uid);
 		$data = array();
@@ -44,14 +43,15 @@ class AdminRetourProcessing {
 			$bookdata = $this->bookManager->getBookDataByID($invData['book_id']);
 			$datatmp = array_merge($loanbook, $invData, $bookdata);
 			$data[] = $datatmp;
+		}
 			//$datatmp = null;
 			$class = $this->fetchUserDetails($uid);
 			// $class = $this->userManager->getUserDetails($uid);
 		$class = $class['class'];
 		$fullname = $this->userManager->getForename($uid)." ".$this->userManager->getName($uid)." (".$class.")";
-		}
+		
 		if (empty($data)) {
-			$this->RetourInterface->dieError(sprintf($this->msg['err_empty_books']));
+			$this->RetourInterface->dieError($fullname." hat ".sprintf($this->msg['err_empty_books']));
 		} else {
 			$this->RetourInterface->ShowRetourBooks($data,$card_id,$uid,$fullname);
 		}
@@ -76,7 +76,7 @@ class AdminRetourProcessing {
 		$class = $class['class'];
 		$fullname = $this->userManager->getForename($uid)." ".$this->userManager->getName($uid)." (".$class.")";
 		if (!isset($data)) {
-			$this->RetourInterface->showMsg("Keine B&uuml;cher ausgeliehen!");
+			$this->RetourInterface->showMsg($fullname." hat keine B&uuml;cher ausgeliehen!");
 		} else {
 			$this->RetourInterface->ShowRetourBooksAjax($data,$card_id,$uid,$fullname);
 		}
@@ -109,7 +109,18 @@ class AdminRetourProcessing {
 	 * @return string UserID
 	 */
 	public function GetUser ($card_id) {
-
+		$isCard = TableMng::query(sprintf(
+		'SELECT COUNT(*) FROM cards WHERE cardnumber LIKE "%s"',$card_id), true);
+		
+		$isUser = TableMng::query(sprintf(
+				'SELECT COUNT(*) FROM users WHERE username LIKE "%s"',$card_id), true);
+		
+		
+	
+		if ($isCard[0]['COUNT(*)']==="1") {
+			if (!$this->cardManager->valid_card_ID($card_id))
+				$this->RetourInterface->dieError(sprintf($this->msg['err_card_id']));
+		
 		try {
 			$uid = $this->cardManager->getUserID($card_id);
 			if ($this->userManager->checkAccount($uid)) {
@@ -117,6 +128,16 @@ class AdminRetourProcessing {
 			}
 		} catch (Exception $e) {
 			$this->RetourInterface->dieError($this->msg['err_get_user_by_card'] . ' Error:' . $e->getMessage());
+		}
+		} else if ($isUser[0]['COUNT(*)']==="1") {
+			try {
+				$uid = $this->userManager->getUserID($card_id);
+				if ($this->userManager->checkAccount($uid)) {
+					$this->RetourInterface->CardLocked();
+				}
+			} catch (Exception $e) {
+				$this->RetourInterface->dieError($this->msg['err_get_user_by_card'] . ' Error:' . $e->getMessage());
+			}	
 		}
 		return $uid;
 	}
