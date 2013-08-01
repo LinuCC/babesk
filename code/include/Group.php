@@ -153,6 +153,30 @@ class Group {
 	}
 
 	/**
+	 * Returns the Direct Parent of the given Group
+	 *
+	 * @param  Group $group     The Child of the Parent to get
+	 * @param  Group $grouproot The root to start the search from
+	 * @return Group The parent or false on Error
+	 */
+	public static function directParentGet($group, $grouproot) {
+
+		$path = $grouproot->grouppathGet($group);
+		//remove last Element, we only want the Parents
+		$splitPath = explode('/', $path);
+		array_pop($splitPath);
+
+		if(count($splitPath)) {
+			$path = implode('/', $splitPath);
+			$group = $grouproot->groupByPathGet($path);
+			return $group;
+		}
+		else {
+			return false;
+		}
+	}
+
+	/**
 	 * Fetches a GroupChild beginning by this Instance's Path
 	 * @param  String  $path      The (relative) Path of the Group, for
 	 *     example administrator/Kuwasys/User

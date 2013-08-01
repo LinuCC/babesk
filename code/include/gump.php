@@ -185,13 +185,28 @@ class GUMP
 	 * @return Array The Data with all of the Elements, that are in the ruleset
 	 * too, escaped
 	 */
-	public function html_decode_sql_escape_by_ruleset($varContainer, $ruleset)
+	public function input_preprocess_by_ruleset($varContainer, $ruleset)
 	{
 		foreach($ruleset as $element => $name) {
 			if(isset($varContainer[$element]))
 			{
 				$varContainer[$element] = mysql_real_escape_string(
-					html_entity_decode($_POST[$element]));
+					html_entity_decode($varContainer[$element]));
+			}
+		}
+		return $varContainer;
+	}
+
+	public function input_preprocess($varContainer)
+	{
+		foreach($varContainer as $key => $el) {
+			if(!is_array($el)) {
+				$varContainer[$key] = mysql_real_escape_string(
+					html_entity_decode($varContainer[$key]));
+			}
+			else {
+				//If Elements are array, preprocess the Elements in it
+				$this->input_preprocess($el);
 			}
 		}
 
@@ -547,7 +562,7 @@ class GUMP
 					case 'validate_contains':
 						$resp[] = "Das $displayName Feld muss eine der folgenden Werte beinhalten: ".implode(', ', $param);
 						break;
-					case 'validate_isobirthday':
+					case 'validate_isodate':
 						$resp[] = "Das $displayName Feld muss ein Datum im Format Jahr-Monat-Tag (Bsp:'2013-05-14') beinhalten.";
 						break;
 					default:
@@ -1045,7 +1060,7 @@ class GUMP
 	 * @param  array $input
 	 * @return mixed
 	 */
-	protected function validate_isobirthday($field, $input, $param = NULL)
+	protected function validate_isodate($field, $input, $param = NULL)
 	{
 		if(isset($input[$field]))
 		{
@@ -1143,6 +1158,24 @@ class GUMP
 		}
 
 		if(!preg_match("/^([a-z0-9ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ_-])+$/i", $input[$field]) !== FALSE)
+		{
+			return array(
+				'field' => $field,
+				'value' => $input[$field],
+				'rule'	=> __FUNCTION__,
+				'param' => $param
+			);
+		}
+	}
+
+	protected function validate_alpha_dash_space($field, $input, $param = NULL)
+	{
+		if(!isset($input[$field]))
+		{
+			return;
+		}
+
+		if(!preg_match("/^([a-z0-9ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ_- ])+$/i", $input[$field]) !== FALSE)
 		{
 			return array(
 				'field' => $field,

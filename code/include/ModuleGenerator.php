@@ -15,12 +15,13 @@ class ModuleGenerator {
 	//Constructor
 	/////////////////////////////////////////////////////////////////////
 
-	public function __construct($ID, $name, $accessAllowed, $rgt, $lft,
+	public function __construct($ID, $name, $isEnabled, $rgt, $lft,
 		$executablePath, $displayInMenu) {
 
 		$this->_id = $ID;
 		$this->_name = $name;
-		$this->_accessAllowed = $accessAllowed;
+		$this->_isEnabled = $isEnabled;
+		$this->_userHasAccess = false;
 		$this->_rgt = $rgt;
 		$this->_lft = $lft;
 		$this->_executablePath = $executablePath;
@@ -45,6 +46,33 @@ class ModuleGenerator {
 
 	public function isDisplayInMenuAllowed() {
 		return (boolean) $this->_displayInMenu;
+	}
+
+	/**
+	 * Returns a boolean describing if the module can be used by the user
+	 *
+	 * @return Boolean true if enabled, else false
+	 */
+	public function isEnabled() {
+		return $this->_isEnabled;
+	}
+
+	/**
+	 * Sets a boolean describing if the module can be used by the user
+	 *
+	 * @param Boolean $hasAccess true if enabled, else false
+	 */
+	public function setUserHasAccess($hasAccess) {
+
+		$this->_userHasAccess = $hasAccess;
+	}
+
+	/**
+	 * Returns if the User has access to this Module
+	 */
+	public function userHasAccess() {
+
+		return $this->_userHasAccess;
 	}
 
 	/**
@@ -76,25 +104,6 @@ class ModuleGenerator {
 			throw new Exception("Could not find Module-File in Path " .
 				"'$this->_executablePath'", 104);
 		}
-	}
-
-	/**
-	 * Returns a boolean describing if the module can be used by the user
-	 *
-	 * @return Boolean true if enabled, else false
-	 */
-	public function isAccessAllowed() {
-		return $this->_accessAllowed;
-	}
-
-	/**
-	 * Sets a boolean describing if the module can be used by the user
-	 *
-	 * @param Boolean $accessAllowed true if enabled, else false
-	 */
-	public function setAccessAllowed($accessAllowed) {
-		$this->_accessAllowed = $accessAllowed;
-		return $this;
 	}
 
 	/**
@@ -197,7 +206,8 @@ class ModuleGenerator {
 		$data = array(
 			'name' => $this->_name,
 			'id' => $this->_id,
-			'enabled' => $this->_accessAllowed,
+			'enabled' => $this->_isEnabled,
+			'userHasAccess' => $this->_userHasAccess,
 			'displayInMenu' => $this->_displayInMenu);
 		$childs = $this->childsAsArrayGet($this->_childs);
 		$data['childs'] = $childs;
@@ -216,13 +226,13 @@ class ModuleGenerator {
 	 * @throws  Exception If This Module-Instance and no Child of it has this
 	 *     module-ID
 	 */
-	public static function accessChangeWithParents(
+	public static function isEnabledChangeWithParents(
 		$moduleId,
 		$accessAllowed,
 		$rootmodule) {
 
 		//rootmodule gets changed as reference
-		self::accessChangeWithParentsHelper($moduleId,
+		self::isEnabledChangeWithParentsHelper($moduleId,
 											$rootmodule,
 											$accessAllowed);
 
@@ -274,11 +284,20 @@ class ModuleGenerator {
 		return false;
 	}
 
+	/**
+	 * @todo When userHasAccess not set, warning?
+	 */
 	public function notAllowedChildsRemove() {
 
 		if(count($this->_childs)) {
 			foreach($this->_childs as $key => $child) {
-				if($child->_accessAllowed) {
+				if(isset($child->userHasAccess)) {
+					$allowed = $child->_isEnabled && $child->userHasAccess;
+				}
+				else {
+					$allowed = $child->_isEnabled;
+				}
+				if($child->_isEnabled) {
 					$child->notAllowedChildsRemove();
 				}
 				else {
@@ -300,7 +319,8 @@ class ModuleGenerator {
 				$childArray[] = array(
 					'id' => $child->_id,
 					'name' => $child->_name,
-					'enabled' => $child->_accessAllowed,
+					'enabled' => $child->_isEnabled,
+					'userHasAccess' => $child->_userHasAccess,
 					'rgt' => $child->_rgt,
 					'lft' => $child->_lft,
 					'executablePath' => $child->_executablePath,
@@ -364,7 +384,7 @@ class ModuleGenerator {
 			$helper[$item['ID']] = new ModuleGenerator(
 				$item['ID'],
 				$item['name'],
-				$item['enabled'],
+				(boolean) $item['enabled'],
 				$item['rgt'],
 				$item['lft'],
 				$item['executablePath'],
@@ -441,20 +461,20 @@ class ModuleGenerator {
 		TableMng::getDb()->autocommit(true);
 	}
 
-	protected static function accessChangeWithParentsHelper($searchedId,
+	protected static function isEnabledChangeWithParentsHelper($searchedId,
 		&$module, $access) {
 
 		if($module->_id == $searchedId) {
-			$module->_accessAllowed = $access;
+			$module->_userHasAccess = $access;
 			return true;
 		}
 		else {
 			if(count($module->_childs)) {
 				foreach($module->_childs as &$child) {
-					$ret = self::accessChangeWithParentsHelper($searchedId,
+					$ret = self::isEnabledChangeWithParentsHelper($searchedId,
 						$child, $access);
 					if($ret) {
-						$module->_accessAllowed = $access;
+						$module->_userHasAccess = $access;
 						return true;
 					}
 				}
@@ -483,7 +503,12 @@ class ModuleGenerator {
 	 * If the module is Enabled in general => if it can be accessed
 	 * @var boolean
 	 */
-	protected $_accessAllowed;
+	protected $_isEnabled;
+
+	/**
+	 * If the User is allowed to access the Module
+	 */
+	protected $_userHasAccess = false;
 
 	/**
 	 * The Childs of this module

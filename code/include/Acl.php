@@ -98,7 +98,7 @@ class Acl {
 		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
 
 		if(!empty($module)) {
-			if($module->isAccessAllowed()) {
+			if($module->isEnabled()) {
 				$module->execute($dataContainer);
 			}
 			else {
@@ -155,7 +155,7 @@ class Acl {
 			//Deep Clone of the object
 			$module = unserialize(serialize($origMod));
 			$module->notAllowedChildsRemove();
-			if(!$module->isAccessAllowed()) {
+			if(!$module->isEnabled()) {
 				return false;
 			}
 			return $module;
@@ -294,7 +294,7 @@ class Acl {
 	protected function applyRight($right) {
 
 		try {
-			$this->_moduleroot = ModuleGenerator::accessChangeWithParents(
+			$this->_moduleroot = ModuleGenerator::isEnabledChangeWithParents(
 				$right['moduleId'], true, $this->_moduleroot);
 
 		} catch (Exception $e) {

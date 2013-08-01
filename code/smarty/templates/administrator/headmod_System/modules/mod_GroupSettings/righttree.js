@@ -82,13 +82,18 @@ var rights = new function() {
 				'select_node',
 				'div.grouprights ul > li:first');
 			rootnode.find('li').each(function (index, value) {
-				if($(this).attr('module_enabled') == 'true') {
+
+				if($(this).attr('user_has_access') === 'true') {
 					$(this).children('a').addClass('modAllowed');
 				}
 				else {
 					$(this).children('a').addClass('modNotAllowed');
 				}
-				if($(this).attr('rel') == 'notChangeable') {
+
+				if($(this).attr('module_enabled') === 'true') {
+					$(this).children('a').removeClass('changeNotAllowed');
+				}
+				else {
 					$(this).children('a').addClass('changeNotAllowed');
 				}
 			});
@@ -176,7 +181,7 @@ var rights = new function() {
 		tree = $('div.grouprights');
 
 		tree.on('dblclick', 'li a', function(ev) {
-			if($(this).parent().attr('rel') == 'changeable') {
+			if($(this).parent().attr('module_enabled') === 'true') {
 				var id = $(this).parent().attr('id')
 					.substring('module_'.length);
 				change(id);

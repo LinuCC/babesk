@@ -346,7 +346,7 @@ class GroupSettings extends Module {
 
 		$mods = $this->getAllModulesByGroup($group);
 		$modulesJstree = $this->modulesFormatForJstree(
-			$mods->moduleAsArrayGet(), $rights);
+			$mods->moduleAsArrayGet(), $rights, $group);
 
 		die(json_encode(array(
 			'value' => 'success',
@@ -440,9 +440,10 @@ class GroupSettings extends Module {
 	 * @param  Array $rights An Array of GroupModuleRight-Elements
 	 * @return Array The formatted modules
 	 */
-	protected function modulesFormatForJstree($moduleArray, $rights) {
+	protected function modulesFormatForJstree($moduleArray, $rights, $group) {
 
 		$recFuncHelper = array($moduleArray);
+		$this->_parentgroupModules = $this->parentgroupModulerightsGet($group);
 		$formattedModules = $this->modulechildsFormatForJstree(
 			$recFuncHelper, $rights);
 
@@ -464,8 +465,7 @@ class GroupSettings extends Module {
 		if(count($childs)) {
 			foreach($childs as &$module) {
 
-				$changeable = $this->modulechildsFormatForJstreeIsChangeable(
-					$module, $rights);
+				$changeable = $this->moduleEntryAllowedToChangeCheck($module);
 
 				$module = $this->modulechildsFormatForJstreeAdjustModuleData(
 					$module, $changeable);
@@ -495,15 +495,16 @@ class GroupSettings extends Module {
 		$title = $this->modulechildsFormatForJstreeTitleCreate(
 			$module, $changeable);
 
-		$changeableStr = ($changeable || !$module['enabled']) ?
-			'changeable' : 'notChangeable';
+		// $changeableStr = ($changeable || !$module['enabled']) ?
+			// 'changeable' : 'notChangeable';
 
 		$module['children'] = $module['childs'];
 		$module['data'] = $module['name'];
 		$module['attr'] = array(
 			'id' => 'module_' . $module['id'],
-			'module_enabled' => $module['enabled'],
-			'rel' => $changeableStr,
+			'module_enabled' => ($module['enabled'] && $changeable),
+			'user_has_access' => $module['userHasAccess'],
+			// 'rel' => $changeableStr,
 			'title' => $title);
 		unset($module['enabled']);
 		unset($module['childs']);
@@ -523,7 +524,7 @@ class GroupSettings extends Module {
 	protected function modulechildsFormatForJstreeTitleCreate(
 		$module, $changeable) {
 
-		if($module['enabled']) {
+		if($module['userHasAccess']) {
 			if($changeable) {
 				$title = 'Doppelklick um Modul zu deaktivieren';
 			}
@@ -539,24 +540,83 @@ class GroupSettings extends Module {
 	}
 
 	/**
-	 * Checks if the Module-right is changeable or not
+	 * Checks if the Moduleentry-Right is allowed to change by the User
 	 *
-	 * @param  Array $module The module
-	 * @param  Array $rights The rights to loop
-	 * @return boolean true if it is changeable, else false
+	 * @param  Array $module An Array representing the Module
+	 * @return boolean True if the Module is allowed to be changed, else false
 	 */
-	protected function modulechildsFormatForJstreeIsChangeable(
-		$module, $rights) {
+	protected function moduleEntryAllowedToChangeCheck($module) {
 
-		if(count($rights)) {
-			foreach($rights as $right) {
-				if($right->moduleId == $module['id']) {
+		$hasChildWithAccessAllowed =
+			$this->moduleArrayHasChildWithUserHasAccessAllowed($module);
+
+		return !$hasChildWithAccessAllowed &&
+			!$this->isRightSetInParentgroupModule($module);
+	}
+
+	/**
+	 * Checks if the userHasAccess-Value of the Parent module is set to true
+	 *
+	 * @return boolean true if userHasAccess set to true, else false
+	 */
+	protected function isRightSetInParentgroupModule($module) {
+
+		$parentgroupMod = $this->_parentgroupModules->anyChildByIdGet($module['id']);
+		if(is_object($parentgroupMod)) {
+			$isRightSetInParentgroupModule = $parentgroupMod->userHasAccess();
+		}
+		else {
+			/* When Root-object gets tested, nothing gets back (not a child of
+			 * anything) */
+			return false;
+		}
+
+		return $isRightSetInParentgroupModule;
+	}
+
+	/**
+	 * Checks if the Module has a Child with userHasAccess Allowed (true)
+	 *
+	 * @return boolean true if it has a child, false if not
+	 */
+	protected function moduleArrayHasChildWithUserHasAccessAllowed($module) {
+
+		if(count($module['childs'])) {
+			foreach($module['childs'] as $child) {
+				if($child['userHasAccess']) {
 					return true;
+				}
+				else {
+					if($this->moduleArrayHasChildWithUserHasAccessAllowed(
+						$child)) {
+						return true;
+					}
 				}
 			}
 		}
+		else {
+			return false;
+		}
 
 		return false;
+	}
+
+	/**
+	 * Returns the Modules with the userHasAccess-Rights set of the Parentgroup
+	 *
+	 * @param  Group $group The Group to get the Parentgroup from
+	 * @return Module The Moduleroot with all the Modules
+	 */
+	protected function parentgroupModulerightsGet($group) {
+
+		$compAcl = new Acl();
+		$parentgroup = Group::directParentGet(
+			$group,
+			$compAcl->getGrouproot());
+		$compAcl->accessControlInitByGroup($parentgroup);
+		$modules = $compAcl->getModuleroot();
+
+		return $modules;
 	}
 
 	/**
@@ -575,11 +635,18 @@ class GroupSettings extends Module {
 			$module = $this->modulerightStatusChangeModuleGet(
 				$group, $moduleId);
 
-			// Reverse the state of the module since the User wants it changed
-			$desiredState = !($module->isAccessAllowed());
+			if($module->isEnabled()) {
+				// Reverse the state of the module since the User wants
+				// it changed
+				$desiredState = !($module->userHasAccess());
 
-			$this->modulerightStatusChangeUpload( $desiredState, $moduleId,
-				$group);
+				$this->modulerightStatusChangeUpload( $desiredState, $moduleId,
+					$group);
+			}
+			else {
+				die(json_encode(array('value' => 'error',
+					'message' => _('The Module is deactivated! You need to activate it first in the ModuleSettings.'))));
+			}
 
 			die(json_encode(array(
 				'value' => 'success',
@@ -655,6 +722,14 @@ class GroupSettings extends Module {
 	protected $_acl;
 
 	protected $_interface;
+
+	/**
+	 * Used for Creating the Moduleright-Table, to determine if Module is
+	 * changeable or not
+	 *
+	 * @var Module
+	 */
+	protected $_parentgroupModules;
 }
 
 ?>

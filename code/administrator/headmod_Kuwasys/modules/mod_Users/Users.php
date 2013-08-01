@@ -6,8 +6,6 @@ require_once PATH_INCLUDE . '/CsvExporter.php';
 require_once 'UsersInterface.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysGradeManager.php';
-require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInGrade.php';
-require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInSchoolYear.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
@@ -130,8 +128,6 @@ class Users extends Module {
 		$this->_usersManager = new KuwasysUsersManager();
 		$this->_gradeManager = new KuwasysGradeManager();
 		$this->_schoolYearManager = new KuwasysSchoolYearManager();
-		$this->_jointUsersInGradeManager = new KuwasysJointUsersInGrade();
-		$this->_jointUsersInSchoolYear = new KuwasysJointUsersInSchoolYear();
 		$this->_classManager = new KuwasysClassManager();
 		$this->_jointUsersInClass = new KuwasysJointUsersInClass();
 		$this->_interface = new UsersInterface($this->relPath, $dataContainer->getSmarty());

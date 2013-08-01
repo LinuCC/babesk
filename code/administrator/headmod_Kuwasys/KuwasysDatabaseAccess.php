@@ -34,10 +34,7 @@ class KuwasysDatabaseAccess {
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysGradeManager.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysJointClassInSchoolYearManager.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysJointClassTeacherInClass.php';
-		require_once PATH_ACCESS_KUWASYS . '/KuwasysJointGradeInSchoolYear.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
-		require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInGrade.php';
-		require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInSchoolYear.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
 		require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
@@ -51,10 +48,7 @@ class KuwasysDatabaseAccess {
 		$this->_classteacherManager = new KuwasysClassTeacherManager();
 		$this->_globalSettingsManager = new GlobalSettingsManager();
 		$this->_jointUserInClassManager = new KuwasysJointUsersInClass();
-		$this->_jointUserInGradeManager = new KuwasysJointUsersInGrade();
 		$this->_jointClassInSchoolyearManager = new KuwasysJointClassInSchoolYearManager();
-		$this->_jointGradeInSchoolyearManager = new KuwasysJointGradeInSchoolYear();
-		$this->_jointUserInSchoolyearManager = new KuwasysJointUsersInSchoolYear();
 		$this->_jointClassteacherInClassManager = new KuwasysJointClassTeacherInClass();
 		$this->_usersInClassStatusManager = new KuwasysUsersInClassStatusManager ();
 		$this->_classUnitManager = new KuwasysClassUnitManager ();

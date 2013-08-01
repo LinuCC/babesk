@@ -142,10 +142,10 @@ class User extends Module {
 
 		try {
 			$gump->rules(self::$registerRules);
-			$gump->html_decode_sql_escape_by_ruleset(true,
+			$_POST = $gump->input_preprocess_by_ruleset($_POST,
 				self::$registerRules);
-			//Set none-filled-out formelements to be at least a void string, for
-			//easier processing
+			//Set none-filled-out formelements to be at least a void string,
+			//for easier processing
 			$gump->voidVarsToStringByRuleset($_POST, self::$registerRules);
 
 			//validate and MySQL-Escape the elements
@@ -513,7 +513,7 @@ class User extends Module {
 			//validate the elements
 			if($validatedData = $gump->run($_POST)) {
 				//escapes all of the elements in the ruleset
-				$_POST = $gump->html_decode_sql_escape_by_ruleset($_POST,
+				$_POST = $gump->input_preprocess_by_ruleset($_POST,
 					self::$_changeRules);
 			}
 			else {
@@ -824,7 +824,7 @@ class User extends Module {
 		'username' => array('min_len,3|max_len,64', '', 'Benutzername'),
 		'email' => array('valid_email|min_len,3|max_len,64', '', 'Email'),
 		'telephone' => array('min_len,3|max_len,64', '', 'Telefonnummer'),
-		'birthday' => array('isoBirthday|max_len,10', '', 'Geburtstag'),
+		'birthday' => array('isodate|max_len,10', '', 'Geburtstag'),
 		'pricegroupId' => array('numeric', '', 'PreisgruppenId'),
 		'cardnumber' => array('exact_len,10', '', 'Kartennummer'),
 		'credits' => array('numeric|min_len,1|max_len,5', '', 'Guthaben'),

@@ -24,9 +24,20 @@ CsvFileUploader = function () {
 		// dataType: 'text/csv',
 
 		done: function (e, data) {
+
 			console.log(data.result);
-			if(checkForErrors(data.result)) {
-				res = JSON.parse(data.result);
+
+				try {
+					res = JSON.parse(data.result);
+
+				} catch(e) {
+					adminInterface.errorShow('Ein Fehler ist beim lesen der Serverantwort aufgetreten!');
+				}
+
+				if(res.value !== undefined && res.value == 'error') {
+					adminInterface.errorShow(res.message);
+					return;
+				}
 				viewUpdate(res);
 			}
 		},
@@ -172,35 +183,6 @@ CsvFileUploader = function () {
 			}
 		}
 		return false;
-	}
-
-	/**
-	 * Checks for Errors returned by the Server and handles them
-	 * @param  {Object} res The Object returned by the Server
-	 * @return {Boolean} True if no Error occured, else false
-	 */
-	function checkForErrors(res) {
-		ret = false;
-		if(res == 'voidCsv') {
-			alert('In der CSV-Datei konnten keine Daten gefunden werden!');
-		}
-		else if(res == 'tinyCsv') {
-			alert('Die CSV-Datei hat nur eine Spalte! Falscher Delimiter?');
-		}
-		else if(res == 'errorNoFile') {
-			alert('Es wurde keine Datei hochgeladen!');
-		}
-		else if(res == 'voidCsv') {
-			alert('Es wurden falsche Einstellungen erkannt!');
-		}
-		else if(res == 'wrongCsvStructure') {
-			alert('Die CSV-Struktur ist nicht lesbar!');
-		}
-		else {
-			ret = true;
-		}
-
-		return ret;
 	}
 };
 

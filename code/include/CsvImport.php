@@ -1,6 +1,14 @@
 <?php
 
 require_once PATH_INCLUDE . '/CsvReader.php';
+require_once PATH_INCLUDE . '/gump.php';
+
+class CsvImportError {
+
+	const VOID_FIELD = 'voidField';
+	const DB_UPLOAD = 'dbUpload';
+	const FATAL_ERROR = 'fatalError';
+}
 
 /**
  * The Baseclass for importing Csv-files
@@ -33,7 +41,9 @@ abstract class CsvImport {
 		$this->uploadTake();
 		$this->parse();
 		$this->check();
+		$this->preview();
 		$this->upload();
+		$this->finalize();
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -41,9 +51,36 @@ abstract class CsvImport {
 	/////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Parses the file to an Array
+	 * Handles the Data from the Ajax-Call of the Client
+	 */
+	protected function uploadTake() {
+
+		if(count($_FILES)) {
+			$gump = new GUMP();
+			//Escapes and decodes the Input
+			$_POST = $gump->sanitize($_POST);
+			$_POST = $gump->input_preprocess($_POST);
+		}
+		else {
+			$this->errorDie(_('No File has been uploaded!'));
+		}
+	}
+
+
+	/**
+	 * Parses the data received from the calling Client
 	 */
 	protected function parse() {
+
+		$this->inputDataFetch();
+		$this->metaSettingsParse();
+		$this->csvDataParse();
+	}
+
+	/**
+	 * Parses the Data of the uploaded Csv-File
+	 */
+	protected function csvDataParse() {
 
 		try {
 			$csvReader = new CsvReader($this->_filePath, $this->_delimiter);
@@ -51,31 +88,152 @@ abstract class CsvImport {
 			$this->_csvColumns = $csvReader->getKeys();
 
 		} catch (Exception $e) {
-			die('wrongCsvStructure');
+			$this->errorDie(_('Could not parse the Csv-File!'));
 		}
 	}
 
 	/**
-	 * Checks the content of the Array for void Strings
+	 * Checks the Csv for correctness
 	 */
 	protected function check() {
 
-		if(!count($this->_contentArray)) {
-			die('voidCsv');
-		}
+		$this->csvSizeCheck();
+		$this->uploadCheck();
+		$this->validFieldDataCheck();
+	}
 
-		if(count($this->_csvColumns) == 1 && !$this->_isSingleColumnAllowed) {
-			die('tinyCsv');
+	protected function csvSizeCheck() {
+
+		if(!count($this->_contentArray)) {
+			$this->errorDie(_('The CSV-File is void!'));
 		}
+		if(count($this->_csvColumns) == 1 && !$this->_isSingleColumnAllowed) {
+			$this->errorDie(_('The CSV-File has only one column!'));
+		}
+	}
+
+	protected function uploadCheck() {
+
+		TableMng::getDb()->autocommit(false);
+		try {
+			$this->dataCommit();
+
+		} catch (Exception $e) {
+			$this->errorDie(_('Could not upload the CSV-File correctly'));
+		}
+	}
+
+	protected function validFieldDataCheck() {
+
+		$this->voidFieldsCheck();
+		$this->gumpCheck();
+	}
+
+	protected function voidFieldsCheck() {
 
 		foreach($this->_contentArray as $row) {
-			foreach($row as $key => $element) {
-				if($element == ''
-					&& !array_key_exists($key, $this->_keysAllowedVoid)) {
-					$this->_errors['voidField'][] = array(
-						'row' => $row, 'key' => $key);
-				}
+			foreach($this->_targetColumns as $wantedColumn => $name) {
+				$this->singleFieldCheckForVoid($wantedColumn, $row);
 			}
+		}
+	}
+
+
+	protected function singleFieldCheckForVoid($wantedColumn, $row) {
+
+		if(isset($row[$wantedColumn]) &&
+			$row[$wantedColumn] !== '' &&
+			$row[$wantedColumn] !== false) {
+
+			return true;
+		}
+		else {
+			if($this->isFieldAllowedVoid($wantedColumn)) {
+				return true;
+			}
+			else {
+				$this->errorAdd(
+					array(
+						'row' => $row,
+						'key' => $wantedColumn
+					),
+					'voidField');
+				return false;
+			}
+		}
+	}
+
+	protected function gumpCheck() {
+
+		$gump = new GUMP();
+
+		try {
+			$gump->rules($this->_gumpRules);
+			if(!$gump->run($_POST)) {
+				$this->errorDie($gump->get_readable_string_errors(false));
+			}
+
+		} catch (Exception $e) {
+			$this->errorDie(_('Could not check the Inputdata'));
+		}
+	}
+
+	protected function isFieldAllowedVoid($fieldname) {
+
+		return array_key_exists($fieldname, $this->_keysAllowedVoid);
+	}
+
+	/**
+	 * Creates Data allowing previewing the CSV-Import to the User
+	 *
+	 * Sets the internal _previewData
+	 */
+	protected function preview() {
+
+		$maxRows = 25;
+
+		$counter = 0;
+		foreach($this->_contentArray as $con) {
+			if($counter < $maxRows) {
+				$this->_previewData[] = $this->previewSingleRowCreate($con);
+			}
+			$counter++;
+		}
+
+		$this->previewTableCreate();
+	}
+
+	/**
+	 * Creates a single Preview-Row
+	 *
+	 * @param  array $con One Contentrow of the Csv
+	 * @return array The Row changed so that it can be used as preview
+	 */
+	protected function previewSingleRowCreate($con) {
+
+		$row = array();
+
+		foreach($this->_targetColumns as $col => $name) {
+			$row[$col] = $this->previewSingleFieldCreate($con, $col);
+		}
+
+		return $row;
+	}
+
+	/**
+	 * Creates a single DataField for previewing
+	 *
+	 * @param  array $con The ContentRow
+	 * @param  array $col The Column of the previewTable
+	 * @return string
+	 */
+	protected function previewSingleFieldCreate($con, $col) {
+
+		if(isset($con[$col])) {
+			return $con[$col];
+		}
+		else {
+			return '';
 		}
 	}
 
@@ -133,31 +291,27 @@ abstract class CsvImport {
 		}
 	}
 
-	protected function readableErrorAdd($str) {
+	private function readableErrorAdd($str) {
 
 		$this->_errorStr .= sprintf('%s%s', $str, $this->_errorDelimiter);
 	}
 
-	/**
-	 * Handles the Data from the Ajax-Call of the Client
-	 */
-	protected function uploadTake() {
+	protected function inputDataFetch() {
 
-		if(count($_FILES)) {
-			if(!empty($_FILES['csvFile']) && isset($_POST['isPreview'])) {
-				$this->_filePath = $_FILES['csvFile']['tmp_name'];
-				$this->_isPreview = ($_POST['isPreview'] == 'true');
-				$this->csvDelimiterCheck();
-				$this->isSingleColumnAllowedHandle();
-				$this->fieldsAllowedVoidParse();
-			}
-			else {
-				die('errorWrongData');
-			}
+		if(!empty($_FILES['csvFile']) && isset($_POST['isPreview'])) {
+			$this->_filePath = $_FILES['csvFile']['tmp_name'];
+			$this->_isPreview = ($_POST['isPreview'] == 'true');
 		}
 		else {
-			die('errorNoFile');
+			$this->errorDie(_('Could not parse the Input-data'));
 		}
+	}
+
+	protected function metaSettingsParse() {
+
+		$this->csvDelimiterCheck();
+		$this->isSingleColumnAllowedHandle();
+		$this->fieldsAllowedVoidParse();
 	}
 
 	/**
@@ -190,7 +344,12 @@ abstract class CsvImport {
 	/**
 	 * Puts all data into the database
 	 */
-	abstract protected function upload();
+	protected function upload() {
+
+		$this->uploadStart();
+		$this->dataCommit();
+		$this->uploadFinalize();
+	}
 
 	/**
 	 * Handles the Entry of the Data-Upload. Begins Transaction
@@ -201,37 +360,43 @@ abstract class CsvImport {
 	}
 
 	/**
+	 * Pushes the datachanges to the Database.
+	 *
+	 * Do NOT use autocommit (or Transactions in general) in this function,
+	 * this class takes care of the wrapping.
+	 */
+	abstract protected function dataCommit();
+
+	/**
 	 * Finalizes the Data-Upload. Ends Transaction and, on certain
 	 * circumstances, rolls the changes back
 	 */
 	protected function uploadFinalize() {
 
 		if($this->_isPreview) {
-			$this->uploadPreview();
 			TableMng::getDb()->rollback();
 		}
 		else {
 			if(!count($this->_errors)) {
-				var_dump('schinken');
 				TableMng::getDb()->query('COMMIT');
 			}
 			else {
-				$this->_errors['fatalError'][] = true;
-				//show errors 'n stuff'
 				TableMng::getDb()->query('ROLLBACK');
-				$this->uploadPreview();
+				$this->errorDie(_('Could not upload the CSV-File!'));
 			}
 		}
+
+		TableMng::getDb()->autocommit(true);
 	}
 
 	/**
-	 * tests if the upload to the database went good
+	 * Finalizes the CsvImport and returns data and messages back to the Client
 	 *
-	 * dies echoing a JSON-File including some previewed data and error-messages
+	 * dies echoing a JSON-File including some previewed data and
+	 * error-messages
 	 */
-	protected function uploadPreview() {
+	protected function finalize() {
 
-		$this->previewTableCreate();
 		$this->errorToReadable();
 
 		$return = array(
@@ -267,12 +432,12 @@ abstract class CsvImport {
 		$str = '';
 		$tableElements = array();
 
-		if(count($this->_previewData) && count($this->_previewDataHead)) {
+		if(count($this->_previewData) && count($this->_targetColumns)) {
 
 			//check if the Element does not screw up the Table-Column-Count
 			foreach($this->_previewData as $preview) {
 				foreach($preview as $column => $value) {
-					if(isset($this->_previewDataHead[$column])) {
+					if(isset($this->_targetColumns[$column])) {
 						$tableElements[][$column] = $value;
 					}
 				}
@@ -294,7 +459,7 @@ abstract class CsvImport {
 
 		$tableHeadStr = '<tr>';
 
-		foreach($this->_previewDataHead as $prev) {
+		foreach($this->_targetColumns as $prev) {
 			$tableHeadStr .= sprintf('<th>%s</th>', $prev);
 		}
 		$tableHeadStr .= '</tr>';
@@ -316,7 +481,7 @@ abstract class CsvImport {
 			}
 
 			//and sort it so that every column has its correct value
-			foreach($this->_previewDataHead as $previewHead) {
+			foreach($this->_targetColumns as $previewHead => $name) {
 
 				if(isset($rowValStr[$previewHead])) {
 					$tableRowStr .= $rowValStr[$previewHead];
@@ -330,6 +495,14 @@ abstract class CsvImport {
 		}
 
 		return $tableRowStr;
+	}
+
+
+	protected function errorDie($message, $type = 'error') {
+
+		die(json_encode(array(
+			'value' => $type,
+			'message' => $message)));
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -415,10 +588,12 @@ abstract class CsvImport {
 	protected $_previewData = array();
 
 	/**
-	 * Stores Data to show the User a preview-form. The Head of the table.
+	 * The columns that can be imported
 	 * @var array
 	 */
-	protected $_previewDataHead = array();
+	protected $_targetColumns = array();
+
+	protected $_gumpRules = array();
 
 }
 
