@@ -9,7 +9,7 @@
  *
  * @author Pascal Ernst <pascal.cc.ernst gmail.com>
  */
-CsvFileUploader = function () {
+CsvFileUploader = function() {
 
 	csvLimiter = '';
 
@@ -23,30 +23,30 @@ CsvFileUploader = function () {
 		paramName: "csvFile",
 		// dataType: 'text/csv',
 
-		done: function (e, data) {
+		done: function(e, data) {
 
 			console.log(data.result);
 
-				try {
-					res = JSON.parse(data.result);
+			try {
+				res = JSON.parse(data.result);
 
-				} catch(e) {
-					adminInterface.errorShow('Ein Fehler ist beim lesen der Serverantwort aufgetreten!');
-				}
-
-				if(res.value !== undefined && res.value == 'error') {
-					adminInterface.errorShow(res.message);
-					return;
-				}
-				viewUpdate(res);
+			} catch(e) {
+				adminInterface.errorShow('Ein Fehler ist beim lesen der Serverantwort aufgetreten!');
+				return;
 			}
+
+			if(res.value !== undefined && res.value == 'error') {
+				adminInterface.errorShow(res.message);
+				return;
+			}
+			viewUpdate(res);
 		},
 
 		change: function(e, data) {
 			fileuploadUpdate();
 		},
 
-		error: function (e, data) {
+		error: function(e, data) {
 			alert('Ein Fehler ist beim Hochladen der CSV-Datei aufgetreten!');
 		}
 	});
@@ -121,6 +121,7 @@ CsvFileUploader = function () {
 			$('.errorCount').removeClass('noAction');
 		}
 		else {
+			adminInterface.errorShow('Es sind Fehler aufgetreten. Bitte beheben sie diese, damit keine Fehler auftreten');
 			$('.errorCount').addClass('noError');
 			$('.errorCount').removeClass('noAction');
 		}

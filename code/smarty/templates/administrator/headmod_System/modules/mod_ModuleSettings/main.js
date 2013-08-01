@@ -161,8 +161,8 @@ var details = new function() {
 
 				var isEnabled = '<div class="simpleForm">' +
 						'<p class="inputItem">Ist aktiviert:</p>' +
-						'<input class="inputItem" type="checkbox" '+
-						'name="isEnabled" {0} /></div>';
+						'<input class="inputItem" type="checkbox" ' +
+						'name="isEnabled" {0} title="Gibt an, ob das Modul installiert ist und von verschiedenen Teilen des Programms verwendet werden kann." /></div>';
 				if(res.data.enabled != 0) {
 					var enabledChecked = 'checked="checked"';
 				}

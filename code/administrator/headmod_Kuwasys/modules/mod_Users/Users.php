@@ -42,6 +42,8 @@ class Users extends Module {
 	private $_usersInClassStatusManager;
 	private $_cardManager;
 
+	private $_dataContainer;
+
 	/**
 	 * @var KuwasysLanguageManager
 	 */
@@ -137,6 +139,7 @@ class Users extends Module {
 		$this->_databaseAccessManager = new KuwasysDatabaseAccess($this->_interface);
 		$this->_usersInClassStatusManager = new KuwasysUsersInClassStatusManager ();
 		$this->_cardManager = new CardManager();
+		$this->_dataContainer = $dataContainer;
 	}
 
 	/**-------------------------------------------------------------------------
@@ -324,7 +327,7 @@ class Users extends Module {
 	private function importUsersFromCsv () {
 		if (count($_FILES)) {
 			$importer = new UserCsvImport();
-			$importer->execute();
+			$importer->execute($this->_dataContainer);
 			// UsersCsvImport::classInit ($this->_interface, $this->_databaseAccessManager);
 			// UsersCsvImport::import ($_FILES['csvFile']['tmp_name'], ';');
 		}

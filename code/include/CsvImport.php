@@ -36,7 +36,7 @@ abstract class CsvImport {
 	//Methods
 	/////////////////////////////////////////////////////////////////////
 
-	public function execute() {
+	public function execute($dataContainer) {
 
 		$this->uploadTake();
 		$this->parse();
@@ -155,9 +155,9 @@ abstract class CsvImport {
 				$this->errorAdd(
 					array(
 						'row' => $row,
-						'key' => $wantedColumn
-					),
-					'voidField');
+						'key' => $wantedColumn,
+						'type' => 'voidField')
+				);
 				return false;
 			}
 		}
@@ -169,8 +169,14 @@ abstract class CsvImport {
 
 		try {
 			$gump->rules($this->_gumpRules);
-			if(!$gump->run($_POST)) {
-				$this->errorDie($gump->get_readable_string_errors(false));
+			foreach($this->_contentArray as $con) {
+				if(!$gump->run($con)) {
+					$this->errorAdd(array(
+						'type' => 'inputError',
+						'message' => $gump->get_readable_string_errors(true)
+						));
+				}
+
 			}
 
 		} catch (Exception $e) {
@@ -242,52 +248,30 @@ abstract class CsvImport {
 	 */
 	protected function errorToReadable() {
 
-		$voidContainer = array();
-		foreach($this->_errors as $erContainerKey => $errorContainer) {
-			foreach($errorContainer as $error) {
+		$voidColumns = array();
 
-				if($erContainerKey == 'voidField') {
-					if(isset($voidContainer[$error['key']])) {
-						$voidContainer[$error['key']] ++;
-					}
-					else {
-						$voidContainer[$error['key']] = 1;
-					}
-				}
-			}
-		}
-		foreach($voidContainer as $name => $count) {
-			if($count == 1) {
-				$str = sprintf('Die Spalte %s enthält einen leeren Wert',
-					$name);
+		foreach($this->_errors as $error) {
+			if($error['type'] != 'voidField') {
+				$this->readableErrorAdd($error['message']);
 			}
 			else {
-				$str = sprintf('Die Spalte %s enthält %s leere Werte', $name,
-					$count);
-			}
-			$this->readableErrorAdd($str);
-		}
-
-		foreach($this->_errors as $erContainerKey => $errorContainer) {
-			foreach($errorContainer as $error) {
-
-				$this->_errorCount++;
-				if($erContainerKey == 'voidField') {
-					//we did these already
-					continue;
-				}
-				else if($erContainerKey == 'dbUpload') {
-					$str = sprintf('Ein Fehler ist beim Hochladen von %s aufgetreten', $error['forename'] . $error['name']);
-				}
-				else if($erContainerKey == 'fatalError') {
-					$str = sprintf('Fehler sind aufgetreten; Konnte die CSV-Datei nicht importieren');
+				if(isset($voidColumns[$error['key']])) {
+					$voidColumns[$error['key']] ++;
 				}
 				else {
-					$str = sprintf('ein Fehler ist mit der Spalte %s aufgetreten', $error['key']);
+					$voidColumns[$error['key']] = 1;
 				}
-
-				$this->readableErrorAdd($str);
 			}
+		}
+
+		foreach($voidColumns as $name => $count) {
+			if($count == 1) {
+				$str = "Die Spalte $name enthält einen leeren Wert";
+			}
+			else {
+				$str = "Die Spalte $name enthält $count leere Werte";
+			}
+			$this->readableErrorAdd($str);
 		}
 	}
 
@@ -336,6 +320,24 @@ abstract class CsvImport {
 					if($val) {
 						$this->_keysAllowedVoid[$key] = $val;
 					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Checks that each Column to insert contains all Keys of targetColumns
+	 *
+	 * Useful when allowing not uploading all columns, so that MySQL does not
+	 * throws its hands up in despair when trying to add NULL to a NOT NULL
+	 * field
+	 */
+	protected function missingValuesAddAsVoidString() {
+
+		foreach($this->_contentArray as &$con) {
+			foreach($this->_targetColumns as $col => $colname) {
+				if(!isset($con[$col])) {
+					$con[$col] = '';
 				}
 			}
 		}
@@ -401,7 +403,7 @@ abstract class CsvImport {
 
 		$return = array(
 			'errors' => $this->_errorStr,
-			'errorCount' => $this->_errorCount,
+			'errorCount' => count($this->_errors),
 			'preview' => $this->_previewStr,
 			'csvColumns' => $this->_csvColumns,
 			'keysAllowedVoid' => $this->_keysAllowedVoid,
@@ -503,6 +505,11 @@ abstract class CsvImport {
 		die(json_encode(array(
 			'value' => $type,
 			'message' => $message)));
+	}
+
+	protected function errorAdd($data) {
+
+		$this->_errors[] = $data;
 	}
 
 	/////////////////////////////////////////////////////////////////////

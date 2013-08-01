@@ -576,7 +576,7 @@ class GUMP
 		} else {
 			$buffer = '';
 			foreach($resp as $s) {
-				$buffer .= $s;
+				$buffer .= $s . '<br />';
 			}
 			return $buffer;
 		}
@@ -1175,7 +1175,7 @@ class GUMP
 			return;
 		}
 
-		if(!preg_match("/^([a-z0-9ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ_- ])+$/i", $input[$field]) !== FALSE)
+		if(!preg_match("/^([a-z0-9ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ_\- ])+$/i", $input[$field]) !== FALSE)
 		{
 			return array(
 				'field' => $field,

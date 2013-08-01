@@ -98,7 +98,7 @@ class Acl {
 		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
 
 		if(!empty($module)) {
-			if($module->isEnabled()) {
+			if($module->isEnabled() && $module->userHasAccess()) {
 				$module->execute($dataContainer);
 			}
 			else {
@@ -155,7 +155,7 @@ class Acl {
 			//Deep Clone of the object
 			$module = unserialize(serialize($origMod));
 			$module->notAllowedChildsRemove();
-			if(!$module->isEnabled()) {
+			if(!$module->isEnabled() || !$module->userHasAccess()) {
 				return false;
 			}
 			return $module;

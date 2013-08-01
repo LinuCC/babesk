@@ -291,13 +291,13 @@ class ModuleGenerator {
 
 		if(count($this->_childs)) {
 			foreach($this->_childs as $key => $child) {
-				if(isset($child->userHasAccess)) {
-					$allowed = $child->_isEnabled && $child->userHasAccess;
+				if(isset($child->_userHasAccess)) {
+					$allowed = $child->_isEnabled && $child->_userHasAccess;
 				}
 				else {
 					$allowed = $child->_isEnabled;
 				}
-				if($child->_isEnabled) {
+				if($allowed) {
 					$child->notAllowedChildsRemove();
 				}
 				else {
