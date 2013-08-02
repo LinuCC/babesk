@@ -41,12 +41,9 @@ class AdminRetourProcessing {
 			$this->RetourInterface->dieError("Formular zur Buchausleihe wurde nicht abgegeben!");
 		$gradeID = TableMng::query(sprintf('SELECT GradeID FROM jointusersingrade WHERE UserID = "%s"', $uid), true);
 		$grade = TableMng::query(sprintf('SELECT gradeValue FROM grade WHERE ID = %s', $gradeID[0]['GradeID']), true);
-		$fee = TableMng::query(sprintf('SELECT * FROM schbas_fee WHERE grade = "%s"',$grade[0]['gradeValue']), true);
-		$payed = TableMng::query(sprintf('SELECT loanChoice, payedAmount FROM schbas_accounting WHERE UID="%s"',$uid), true);
-		if ($payed[0]['loanChoice']=="ln" && $payed[0]['payedAmount']!=$fee[0]['fee_normal'])
-			$this->RetourInterface->dieError("Geld wurde noch nicht gezahlt. Es sind bereits ".$payed[0]['payedAmount']."&euro; von ".$fee[0]['fee_normal']."&euro; eingegangen!");
-		if ($payed[0]['loanChoice']=="lr" && $payed[0]['payedAmount']!=$fee[0]['fee_reduced'])
-			$this->RetourInterface->dieError("Geld wurde noch nicht gezahlt. Es sind bereits ".$payed[0]['payedAmount']."&euro; von ".$fee[0]['fee_reduced']."&euro; eingegangen!");
+		$payed = TableMng::query(sprintf('SELECT loanChoice, payedAmount,amountToPay FROM schbas_accounting WHERE UID="%s"',$uid), true);
+		if (($payed[0]['loanChoice']=="ln" || $payed[0]['loanChoice']=="lr" )&& strcmp($payed[0]['payedAmount'],$payed[0]['amountToPay'])<0)
+			$this->RetourInterface->dieError("Geld wurde noch nicht (ausreichend) gezahlt. Es sind bisher ".$payed[0]['payedAmount']."&euro; von ".$payed[0]['amountToPay']."&euro; eingegangen!");
 		$loanbooks = $this->loanManager->getLoanlistByUID($uid);
 		$data = array();
 		foreach ($loanbooks as $loanbook){
