@@ -41,7 +41,7 @@ class TGrade {
 	public static $el = array (
 		'id' => 'ID',
 		'label' => 'label',
-		'gradeValue' => 'gradeValue',
+		'gradelevel' => 'gradelevel',
 		);
 
 	public static $tablename = 'grade';

@@ -99,20 +99,20 @@ class SchbasAccounting extends Module {
 				WHERE schoolyearId = @activeSchoolyear");
 		foreach ($gradeID as $grade){
 			$ID = $grade['gradeId'];
-			$SaveTheCows = TableMng::query("SELECT * FROM grade WHERE ID = $ID");
+			$SaveTheCows = TableMng::query("SELECT * FROM Grades WHERE ID = $ID");
 			// Cows stands for Code of worst systematic
 			$gradesAll[] = $SaveTheCows[0];
 		}
-		$users = TableMng::query('SELECT u.*, CONCAT(g.gradeValue, "-", g.label) AS gradeLabel FROM users u
+		$users = TableMng::query('SELECT u.*, CONCAT(g.gradelevel, "-", g.label) AS gradeLabel FROM users u
 			JOIN usersInGradesAndSchoolyears uigs ON u.ID = uigs.userId
-			JOIN grade g ON g.ID = uigs.gradeId
+			JOIN Grades g ON g.ID = uigs.gradeId
 			WHERE uigs.schoolyearId = @activeSchoolyear
 			ORDER BY name ASC');
 		$users = $this->addPayedAmountToUsers($users);
 
 		if (isset ($_GET['gradeIdDesired'])){
 			for ($i=0; $i<sizeof($gradesAll); $i++){
-				if ($gradesAll[$i]['gradeValue'].'-'.$gradesAll[$i]['label'] == $_GET['gradeIdDesired']){
+				if ($gradesAll[$i]['gradelevel'].'-'.$gradesAll[$i]['label'] == $_GET['gradeIdDesired']){
 					$gradeDesired = $gradesAll[$i]['ID'];
 				}
 			}

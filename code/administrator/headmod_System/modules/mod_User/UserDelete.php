@@ -74,10 +74,10 @@ class UserDelete {
 
 		$userToDeleteRes = TableMng::querySingleEntry(
 			"SELECT forename, name, credit, birthday,
-				CONCAT(g.gradeValue, '-', g.label) AS grade
+				CONCAT(g.gradelevel, '-', g.label) AS grade
 			FROM users u
 			LEFT JOIN usersInGradesAndSchoolyears uigs ON uigs.userId = u.ID
-			LEFT JOIN grade g ON uigs.gradeId = g.ID
+			LEFT JOIN Grades g ON uigs.gradeId = g.ID
 			WHERE u.ID = $userId", true);
 
 		if(count($userToDeleteRes)) {

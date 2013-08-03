@@ -36,14 +36,14 @@ class ClassesCreateTable {
 				@statusActiveId AS blubb,
 				u.telephone AS telephone, u.ID AS userId,
 				c.label AS classLabel, c.ID AS classId,
-				CONCAT(g.gradeValue, g.label) AS grade,
+				CONCAT(g.gradelevel, g.label) AS grade,
 				CONCAT(ct.forename, " ", ct.name) AS classteacherFullname,
 				cu.name as unitName
 			FROM class c
 				JOIN jointUsersInClass uic ON uic.ClassID = c.ID
 				JOIN users u ON uic.UserID = u.ID
 				LEFT JOIN jointUsersInGrade uig ON uig.UserID = u.ID
-				LEFT JOIN grade g ON uig.GradeID = g.ID
+				LEFT JOIN Grades g ON uig.GradeID = g.ID
 				LEFT JOIN jointClassTeacherInClass ctic ON ctic.ClassID = c.ID
 				LEFT JOIN classTeacher ct ON ctic.ClassTeacherID = ct.ID
 				LEFT JOIN kuwasysClassUnit cu ON cu.ID = c.unitId

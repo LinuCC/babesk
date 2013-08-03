@@ -161,7 +161,7 @@ class Grade extends Module {
 		try {
 			$grades = TableMng::query(
 				'SELECT g.*, st.name AS schooltypeName
-				FROM grade g
+				FROM Grades g
 				LEFT JOIN Schooltype st ON g.schooltypeId = st.ID
 				');
 
@@ -205,7 +205,7 @@ class Grade extends Module {
 	}
 
 	/**
-	 * deletes a link between a grade and other objects in database
+	 * deletes a link between a Grade and other objects in database
 	 *
 	 * Dies when Error occured while deleting the Items
 	 *
@@ -225,7 +225,7 @@ class Grade extends Module {
 	/**
 	 * Fetches and returns the Data for the Grade with the given ID
 	 *
-	 * Dies when the Grades could not be fetched
+	 * Dies when the Grade could not be fetched
 	 *
 	 * @param  int $gradeId The GradeID of the Grade to fetch
 	 * @return array The grade-Data

@@ -64,15 +64,15 @@ class LoanSystem extends Module {
 	private function showMainMenu() {
 		$schbasYear = TableMng::query("SELECT value FROM global_settings WHERE name='schbas_year'");
 		//get gradeValue ("Klassenstufe")
-		$gradeValue = TableMng::query("SELECT gradeValue FROM grade WHERE id=(SELECT GradeID from jointusersingrade WHERE UserID='".$_SESSION['uid']."')",true);
-		$gradeValue[0]['gradeValue'] = strval(intval($gradeValue[0]['gradeValue'])+1);
+		$gradelevel = TableMng::query("SELECT gradelevel FROM Grades WHERE id=(SELECT GradeID from jointusersingrade WHERE UserID='".$_SESSION['uid']."')",true);
+		$gradelevel[0]['gradelevel'] = strval(intval($gradelevel[0]['gradelevel'])+1);
 
 		// Filter für Abijahrgang
 
-		if($gradeValue[0]['gradeValue']=="13") $this->_smarty->display($this->_smartyPath . 'lastGrade.tpl');;
+		if($gradelevel[0]['gradelevel']=="13") $this->_smarty->display($this->_smartyPath . 'lastGrade.tpl');;
 		//get loan fees
-		$feeNormal = TableMng::query("SELECT fee_normal FROM schbas_fee WHERE grade=".$gradeValue[0]['gradeValue'],true);
-		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradeValue[0]['gradeValue'],true);
+		$feeNormal = TableMng::query("SELECT fee_normal FROM schbas_fee WHERE grade=".$gradelevel[0]['gradelevel'],true);
+		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradelevel[0]['gradelevel'],true);
 
 		$this->_smarty->assign('feeNormal', $feeNormal[0]['fee_normal']);
 		$this->_smarty->assign('feeReduced', $feeReduced[0]['fee_reduced']);
@@ -121,9 +121,9 @@ class LoanSystem extends Module {
 
 	private function showFormPdf() {
 
-		//get gradeValue ("Klassenstufe")
-		$gradeValue = TableMng::query("SELECT gradeValue FROM grade WHERE id=(SELECT GradeID from jointusersingrade WHERE UserID='".$_SESSION['uid']."')",true);
-		$gradeValue[0]['gradeValue'] = strval(intval($gradeValue[0]['gradeValue'])+1);
+		//get gradelevel ("Klassenstufe")
+		$gradelevel = TableMng::query("SELECT gradelevel FROM Grades WHERE id=(SELECT GradeID from jointusersingrade WHERE UserID='".$_SESSION['uid']."')",true);
+		$gradelevel[0]['gradelevel'] = strval(intval($gradelevel[0]['gradelevel'])+1);
 
 		$schbasYear = TableMng::query("SELECT value FROM global_settings WHERE name='schbas_year'");
 
@@ -147,15 +147,15 @@ class LoanSystem extends Module {
 		$name =  TableMng::query("SELECT forename, name FROM users WHERE ID = '".$_SESSION['uid']."'",true);
 
 		$text .= '</tr><tr><td colspan="2">Name, Vorname des Sch&uuml;lers / der Sch&uuml;lerin:<br>'.$name[0]['name'].", ".$name[0]['forename'].'</td>';
-		$text .= "<td><b>Jahrgangsstufe: ".$gradeValue[0]['gradeValue']."</b></td>";
+		$text .= "<td><b>Jahrgangsstufe: ".$gradelevel[0]['gradelevel']."</b></td>";
 
 		$text .= "</tr></table>&nbsp;<br/><br/>";
 
 		$text .= "An der entgeltlichen Ausleihe von Lernmitteln im Schuljahr ".$schbasYear[0]['value']." ";
 
 		//get loan fees
-		$feeNormal = TableMng::query("SELECT fee_normal FROM schbas_fee WHERE grade=".$gradeValue[0]['gradeValue'],true);
-		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradeValue[0]['gradeValue'],true);
+		$feeNormal = TableMng::query("SELECT fee_normal FROM schbas_fee WHERE grade=".$gradelevel[0]['gradelevel'],true);
+		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradelevel[0]['gradelevel'],true);
 		$schbasDeadlineTransfer = TableMng::query("SELECT value FROM global_settings WHERE name='schbasDeadlineTransfer'");
 		$feedback = "";
 		if ($_POST['loanChoice']=="noLoan") {
@@ -189,7 +189,7 @@ class LoanSystem extends Module {
 								<tr><td>Kontonummer:</td><td>".$bank_account[1]."</td></tr>
 								<tr><td>Bankleitzahl:</td><td>".$bank_account[2]."</td></tr>
 								<tr><td>Kreditinstitut:</td><td>".$bank_account[3]."</td></tr>
-								<tr><td>Verwendungszeck:</td><td>".$username[0]['username']." JG ".$gradeValue[0]['gradeValue']." SJ ".$schbasYear[0]['value']."</td></tr>
+								<tr><td>Verwendungszeck:</td><td>".$username[0]['username']." JG ".$gradelevel[0]['gradelevel']." SJ ".$schbasYear[0]['value']."</td></tr>
 
 					</table>";
 
@@ -205,7 +205,7 @@ class LoanSystem extends Module {
 		}
 
 		$text .= "<br><br><br><br><br><br><br>__________&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_______________________________<br>Ort, Datum &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unterschrift Erziehungsberechtigte/r bzw. vollj&auml;hriger Sch&uuml;ler";
-		$this->createPdf('Anmeldeformular',$text,'','','','',$gradeValue[0]['gradeValue'],true,$feedback,$_SESSION['uid']);
+		$this->createPdf('Anmeldeformular',$text,'','','','',$gradelevel[0]['gradelevel'],true,$feedback,$_SESSION['uid']);
 	}
 
 	private function showPdf() {
@@ -216,24 +216,24 @@ class LoanSystem extends Module {
 
 		$booklistManager = new BookManager();
 
-		//get gradeValue ("Klassenstufe")
-		$gradeValue = TableMng::query("SELECT gradeValue FROM grade WHERE id=(SELECT GradeID from jointusersingrade WHERE UserID='".$_SESSION['uid']."')",true);
-		$gradeValue[0]['gradeValue'] = strval(intval($gradeValue[0]['gradeValue'])+1);
+		//get gradelevel ("Klassenstufe")
+		$gradelevel = TableMng::query("SELECT gradelevel FROM Grades WHERE id=(SELECT GradeID from jointusersingrade WHERE UserID='".$_SESSION['uid']."')",true);
+		$gradelevel[0]['gradelevel'] = strval(intval($gradelevel[0]['gradelevel'])+1);
 
 		// get cover letter ("Anschreiben")
 		$coverLetter = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='coverLetter'");
 
 		// get first infotext
-		$textOne = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textOne".$gradeValue[0]['gradeValue']."'",true);
+		$textOne = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textOne".$gradelevel[0]['gradelevel']."'",true);
 
 		// get second infotext
-		$textTwo = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textTwo".$gradeValue[0]['gradeValue']."'",true);
+		$textTwo = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textTwo".$gradelevel[0]['gradelevel']."'",true);
 
 		// get third infotext
-		$textThree = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textThree".$gradeValue[0]['gradeValue']."'",true);
+		$textThree = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textThree".$gradelevel[0]['gradelevel']."'",true);
 
 		// get booklist
-		$booklist = $booklistManager->getBooksByClass($gradeValue[0]['gradeValue']);
+		$booklist = $booklistManager->getBooksByClass($gradelevel[0]['gradelevel']);
 
 		$books = '<table border="0" bordercolor="#FFFFFF" style="background-color:#FFFFFF" width="100%" cellpadding="0" cellspacing="1">
 				<tr style="font-weight:bold; text-align:center;"><th>Fach</th><th>Titel</th><th>Verlag</th><th>ISBN-Nr.</th><th>Preis</th></tr>';
@@ -249,8 +249,8 @@ class LoanSystem extends Module {
 		$books = str_replace('Ã©', '&eacute;', $books);
 
 		//get loan fees
-		$feeNormal = TableMng::query("SELECT fee_normal FROM schbas_fee WHERE grade=".$gradeValue[0]['gradeValue'],true);
-		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradeValue[0]['gradeValue'],true);
+		$feeNormal = TableMng::query("SELECT fee_normal FROM schbas_fee WHERE grade=".$gradelevel[0]['gradelevel'],true);
+		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradelevel[0]['gradelevel'],true);
 
 		//get bank account
 		$bank_account =  TableMng::query("SELECT value FROM global_settings WHERE name='bank_details'");
@@ -274,8 +274,8 @@ class LoanSystem extends Module {
 
 		$daterow = '<p style="text-align: right;">'.$letter_date[0]['value']."</p>";
 
-		$this->createPdf($coverLetter[0]['title'],$daterow.$coverLetter[0]['text'],"Lehrb&uuml;cher Jahrgang ".$gradeValue[0]['gradeValue'],$pageTwo,
-				'Weitere Informationen',$pageThree,$gradeValue[0]['gradeValue'],false,"",$_SESSION['uid']);
+		$this->createPdf($coverLetter[0]['title'],$daterow.$coverLetter[0]['text'],"Lehrb&uuml;cher Jahrgang ".$gradelevel[0]['gradelevel'],$pageTwo,
+				'Weitere Informationen',$pageThree,$gradelevel[0]['gradelevel'],false,"",$_SESSION['uid']);
 	}
 
 	/**

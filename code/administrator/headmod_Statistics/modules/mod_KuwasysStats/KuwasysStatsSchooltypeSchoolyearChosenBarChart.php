@@ -36,8 +36,8 @@ class KuwasysStatsSchooltypeSchoolyearChosenBarChart
 
 		$this->_data = TableMng::query(
 			'SELECT st.ID AS schooltypeId, st.token AS schooltypeToken,
-			g.gradeValue, userChosen.classesChosen, COUNT(*) AS userCount
-			FROM grade g
+			g.gradelevel, userChosen.classesChosen, COUNT(*) AS userCount
+			FROM Grades g
 				-- For checking correct Schoolyear
 				JOIN Schooltype st ON g.schooltypeId = st.ID
 				-- Fetch how many classes the user has chosen
@@ -56,7 +56,7 @@ class KuwasysStatsSchooltypeSchoolyearChosenBarChart
 					) userChosen ON userChosen.GradeID = g.ID
 				JOIN usersInGradesAndSchoolyears uigs ON
 					uigs.schoolyearId = @activeSchoolyear
-			GROUP BY st.ID, g.gradeValue, userChosen.classesChosen', true);
+			GROUP BY st.ID, g.gradelevel, userChosen.classesChosen', true);
 	}
 
 	protected function dataProcess() {
@@ -67,7 +67,7 @@ class KuwasysStatsSchooltypeSchoolyearChosenBarChart
 		$sortedAndCompleteData = $this->templateArrayCreate();
 
 		foreach($this->_data as $data) {
-			$sortedAndCompleteData[$data['schooltypeToken']][$data['gradeValue']]
+			$sortedAndCompleteData[$data['schooltypeToken']][$data['gradelevel']]
 				[$data['classesChosen']] = (int) $data['userCount'];
 		}
 
@@ -123,7 +123,7 @@ class KuwasysStatsSchooltypeSchoolyearChosenBarChart
 		$yeargroups = array();
 
 		foreach($this->_data as $data) {
-			$yeargroups[$data['gradeValue']] = true;
+			$yeargroups[$data['gradelevel']] = true;
 		}
 		ksort($yeargroups);
 

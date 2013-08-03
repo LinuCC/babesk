@@ -180,14 +180,14 @@ class MessageMainMenu extends Module {
 
 			$msgText = $msgTitle = $forename = $name = $grade = $msgRecId = $msgReturn = '';
 			$query = "SELECT m.title, m.text, mr.read, mr.ID, mr.return,
-					u.forename, u.name, CONCAT(g.gradeValue, g.label)
+					u.forename, u.name, CONCAT(g.gradelevel, g.label)
 				FROM users u
 				JOIN MessageReceivers mr ON mr.userId = u.ID
 				JOIN Message m ON mr.messageId = m.ID AND m.ID = ?
 				LEFT JOIN usersInGradesAndSchoolyears uigs ON
 					uigs.userId = u.ID AND
 					uigs.schoolyearId = @activeSchoolyear
-				LEFT JOIN grade g ON g.ID = uigs.gradeId
+				LEFT JOIN Grades g ON g.ID = uigs.gradeId
 				WHERE u.ID = ?";
 			$stmt = $db->prepare($query);
 			if($stmt) {

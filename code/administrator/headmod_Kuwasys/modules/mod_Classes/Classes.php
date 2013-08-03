@@ -196,7 +196,7 @@ class Classes extends Module {
 		$joint = $this->_databaseAccessManager->jointUserInGradeGetByUserIdWithoutDying($user ['ID']);
 		if(isset($joint) && is_array($joint)) {
 			$grade = $this->_databaseAccessManager->gradeGetById($joint ['GradeID']);
-			$user ['gradeName'] = $grade ['gradeValue'] . $grade ['label'];
+			$user ['gradeName'] = $grade ['gradelevel'] . $grade ['label'];
 		}
 		return $user;
 	}

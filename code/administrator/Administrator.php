@@ -65,7 +65,7 @@ class Administrator {
 			');
 
 		$noGrade = TableMng::query('SELECT * FROM grade
-			WHERE gradeValue = 0');
+			WHERE gradelevel = 0');
 		$noGrade = $noGrade[0];
 
 		$activeSy = TableMng::query('SELECT ID  FROM schoolYear sy
