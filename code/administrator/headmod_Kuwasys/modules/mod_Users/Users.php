@@ -237,10 +237,10 @@ class Users extends Module {
 			$userData = $this->getUserData($_GET['ID']);
 			$userForenameName = $userData['forename']." ".$userData['name'];
 
-			$gradeValue = TableMng::query("SELECT gradeValue FROM grade WHERE id=(SELECT GradeID from jointusersingrade WHERE UserID='".$_GET['ID']."')");
-			$gradeLabel = TableMng::query("SELECT label FROM grade WHERE id=(SELECT GradeID from jointusersingrade WHERE UserID='".$_GET['ID']."')");
+			$gradelevel = TableMng::query("SELECT gradelevel FROM Grades WHERE id=(SELECT GradeID from jointusersingrade WHERE UserID='".$_GET['ID']."')");
+			$gradeLabel = TableMng::query("SELECT label FROM Grades WHERE id=(SELECT GradeID from jointusersingrade WHERE UserID='".$_GET['ID']."')");
 
-			$gradeValueLabel=  $gradeValue[0]['gradeValue'].$gradeLabel[0]['label'];
+			$gradelevelLabel=  $gradelevel[0]['gradelevel'].$gradeLabel[0]['label'];
 
 
 			if ($this->hasBooks($_GET['ID'])) {
@@ -253,7 +253,7 @@ class Users extends Module {
 			$this->deleteCardFromDatabase($_GET['ID']);
 			//$this->_interface->dieMsg($this->_languageManager->getText('finDeleteUser'));
 			;
-			if ($this->createPdf($userForenameName,$gradeValueLabel,$userData['credit'])) $this->showDeleteUserSuccess();
+			if ($this->createPdf($userForenameName,$gradelevelLabel,$userData['credit'])) $this->showDeleteUserSuccess();
 			else $this->_interface->dieMsg('Fehler beim Generieren des PDFs!');
 		}
 		else if (isset($_POST['dialogNotConfirmed'])) {
@@ -507,7 +507,7 @@ class Users extends Module {
 	}
 
 	/**
-	 * shows a UserList thats grouped by Schoolyears and Grades
+	 * shows a UserList thats grouped by Schoolyears and grade
 	 */
 	private function showUsersGroupedByYearAndGrade () {
 		$schoolyearAll = $this->_databaseAccessManager->schoolyearGetAll();
@@ -570,7 +570,7 @@ class Users extends Module {
 	}
 
 	/**
-	 * returns the grade that the user has selected in the form. If no Grade has been selected by the User yet,
+	 * returns the Grade that the user has selected in the form. If no Grade has been selected by the User yet,
 	 * it returns the first grade of $gradeDesired
 	 * @param grades[grade[]] $gradeDesired
 	 */
@@ -984,7 +984,7 @@ class Users extends Module {
 	}
 
 	/**
-	 * adds a Grade-Label to the User-Array to allow displaying the grade of the User
+	 * adds a Grade-Label to the User-Array to allow displaying the Grades of the User
 	 */
 	private function addGradeLabelToUsers ($users) {
 
@@ -996,7 +996,7 @@ class Users extends Module {
 					if ($joint['UserID'] == $user['ID']) {
 						foreach ($grades as $grade) {
 							if ($grade['ID'] == $joint['GradeID']) {
-								$user['gradeLabel'] = $grade['gradeValue'] . '-' . $grade['label'];
+								$user['gradeLabel'] = $grade['gradelevel'] . '-' . $grade['label'];
 							}
 						}
 					}
@@ -1011,7 +1011,7 @@ class Users extends Module {
 		$jointUsersInGrade = $this->getJointUsersInGradeByUserId($user['ID']);
 		$grade = $this->getGradeByGradeIdWithoutDieingAtError($jointUsersInGrade['GradeID']);
 		$user['gradeLabel'] = $grade['label'];
-		$user['gradeValue'] = $grade['gradeValue'];
+		$user['gradelevel'] = $grade['gradelevel'];
 		$user['gradeId'] = $grade['ID'];
 		return $user;
 	}
@@ -1496,7 +1496,7 @@ class Users extends Module {
 	/** Creates a PDF for the Message
 	 *
 	 */
-	private function createPdf ($userForenameName,$gradeValueLabel,$credit) {
+	private function createPdf ($userForenameName,$gradelevelLabel,$credit) {
 		require_once  PATH_INCLUDE .('/pdf/tcpdf/config/lang/ger.php');
 		require_once PATH_INCLUDE . '/pdf/tcpdf/tcpdf.php';
 
@@ -1510,7 +1510,7 @@ class Users extends Module {
 		$pdf->SetKeywords('');
 
 		// set default header data
-		$pdf->SetHeaderData('../../../../web/headmod_Messages/modules/mod_MessageMainMenu/logo.jpg', 15, 'LeG Uelzen', "Abmeldung von: ".$userForenameName."\nKlasse: ".$gradeValueLabel, array(0,0,0), array(0,0,0));
+		$pdf->SetHeaderData('../../../../web/headmod_Messages/modules/mod_MessageMainMenu/logo.jpg', 15, 'LeG Uelzen', "Abmeldung von: ".$userForenameName."\nKlasse: ".$gradelevelLabel, array(0,0,0), array(0,0,0));
 		$pdf->setFooterData($tc=array(0,0,0), $lc=array(0,0,0));
 
 		// set header and footer fonts

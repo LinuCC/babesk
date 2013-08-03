@@ -350,18 +350,18 @@ class UserDisplayAllQueryCreator {
 
 		if(!$this->_gradeQueryDone) {
 			$this->addSelectStatement('GROUP_CONCAT( DISTINCT
-				CONCAT(g.gradeValue, "-", g.label)
+				CONCAT(g.gradelevel, "-", g.label)
 				SEPARATOR "<br />") AS grades,
 				activeGrade.activeGrade AS activeGrade');
 
 			$this->addJoinStatement('
 				LEFT JOIN usersInGradesAndSchoolyears uigsg
 					ON uigsg.userId = u.ID
-				LEFT JOIN grade g ON uigsg.gradeId = g.ID
+				LEFT JOIN Grades g ON uigsg.gradeId = g.ID
 				LEFT JOIN (
-					SELECT CONCAT(gradeValue, "-", label)
+					SELECT CONCAT(gradelevel, "-", label)
 						AS activeGrade, uigsg.userId AS userId
-					FROM grade g
+					FROM Grades g
 					JOIN usersInGradesAndSchoolyears uigsg ON
 						uigsg.gradeId = g.ID AND
 						uigsg.schoolyearId = @activeSchoolyear

@@ -53,7 +53,7 @@ class CreateParticipationConfirmation {
 				c.label AS classLabel,
 				cu.name AS unitName, cu.translatedName AS unitTranslatedName,
 				uics.translatedName AS statusTranslatedName,
-				CONCAT(g.gradeValue, g.label) AS gradeName
+				CONCAT(g.gradelevel, g.label) AS gradeName
 			FROM users u
 				JOIN usersInGradesAndSchoolyears uigs ON uigs.userId = u.ID
 					AND uigs.schoolyearId = @activeSchoolyear
@@ -61,7 +61,7 @@ class CreateParticipationConfirmation {
 				JOIN jointUsersInClass uic ON u.ID = uic.UserID
 				JOIN usersInClassStatus uics ON uics.ID = uic.statusId
 				JOIN class c ON c.ID = uic.ClassID
-				LEFT JOIN grade g ON g.ID = uigs.gradeId
+				LEFT JOIN Grades g ON g.ID = uigs.gradeId
 				LEFT JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
 			WHERE (%s) AND (uics.name = "active" OR uics.name = "waiting")
 			;', $whereQuery);

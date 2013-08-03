@@ -31,8 +31,8 @@ $(function () {
 				alert('Konnte das Template nicht abrufen!');
 			}
 		});
-		
-		
+
+
 		$.ajax({
 			type: "POST",
 			url: 'index.php?section=Schbas|SchbasSettings&action=fetchTextsAjax',
@@ -52,7 +52,7 @@ $(function () {
 				alert('Konnte das Template nicht abrufen!');
 			}
 		});
-		
+
 		$.ajax({
 			type: "POST",
 			url: 'index.php?section=Schbas|SchbasSettings&action=fetchTextsAjax',
@@ -72,17 +72,17 @@ $(function () {
 				alert('Konnte das Template nicht abrufen!');
 			}
 		});
-		
+
 	});
 });
 </script>
 
 <form action="index.php?section=Schbas|SchbasSettings&action=10"	method="post">
-	
-	
-	
+
+
+
 		<label>Bitte Jahrgang ausw&auml;hlen:
-			<select id="gradeValueSelection" name="grade">			
+			<select id="gradeValueSelection" name="grade">
 					<option value="5">5</option>
 					<option value="6">6</option>
 					<option value="7">7</option>
@@ -93,7 +93,7 @@ $(function () {
 					<option value="12">12</option>
 			</select>
 		</label>
-	
+
 	<br />
 	<label>Titel erster Text:<input id="messagetitle" type="text" name="messagetitle" value="" /></label><br />
 	<label>Text 1:<textarea class="ckeditor" name="messagetext"></textarea></label><br /><br />
@@ -101,7 +101,7 @@ $(function () {
 	<label>Text 2:<textarea class="ckeditor" name="messagetext2"></textarea></label><br /><br />
 	<label>Titel dritter Text:<input id="messagetitle3" type="text" name="messagetitle3" value="" /></label><br />
 	<label>Text 3:<textarea class="ckeditor" name="messagetext3"></textarea></label><br /><br />
-	
+
 	<input id="submit"type="submit" value="Speichern" />
 </form>
 

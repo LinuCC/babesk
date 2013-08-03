@@ -417,11 +417,11 @@ class AssignUsersToClasses {
 			CONCAT(u.forename, " ", u.name) AS username, u.ID AS userId,
 			u.telephone AS userTelephone,
 			cs.name AS statusName, ucs.translatedName AS origStatusName,
-			CONCAT(g.gradeValue, g.label) as grade
+			CONCAT(g.gradelevel, g.label) as grade
 		FROM ' . self::$tableName . ' t
 			LEFT JOIN users u ON u.ID = t.UserID
 			LEFT JOIN jointUsersInGrade uig ON u.ID = uig.UserID
-			LEFT JOIN grade g ON g.ID = uig.GradeID
+			LEFT JOIN Grades g ON g.ID = uig.GradeID
 			LEFT JOIN class c ON c.ID = t.ClassID
 			LEFT JOIN kuwasysClassUnit cu ON cu.ID = c.unitId
 			LEFT JOIN usersInClassStatus cs ON t.statusId = cs.ID

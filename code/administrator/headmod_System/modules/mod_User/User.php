@@ -310,9 +310,9 @@ class User extends Module {
 		try {
 			$data = TableMng::query(
 				'SELECT u.*,
-				(SELECT CONCAT(g.gradeValue, g.label) AS class
+				(SELECT CONCAT(g.gradelevel, g.label) AS class
 					FROM usersInGradesAndSchoolyears uigs
-					LEFT JOIN grade g ON uigs.gradeId = g.ID
+					LEFT JOIN Grades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS class
 				FROM users u');
@@ -413,7 +413,7 @@ class User extends Module {
 	protected function gradesGetAllFlattened() {
 
 		$grades = TableMng::query(
-			'SELECT ID, CONCAT(gradeValue, "-", label) AS name FROM grade');
+			'SELECT ID, CONCAT(gradelevel, "-", label) AS name FROM grade');
 
 		$flattenedGrades = ArrayFunctions::arrayColumn($grades, 'name', 'ID');
 

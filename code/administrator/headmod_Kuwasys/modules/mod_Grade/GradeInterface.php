@@ -27,9 +27,8 @@ class GradeInterface extends AdminInterface {
 		$this->smarty->display($this->tplFilePath . 'mainMenu.tpl');
 	}
 
-	public function displayAddGrade($schoolyears, $schooltypes) {
+	public function displayAddGrade($schooltypes) {
 
-		$this->smarty->assign('schoolyears', $schoolyears);
 		$this->smarty->assign('schooltypes', $schooltypes);
 		$this->smarty->display($this->tplFilePath . 'addGrade.tpl');
 	}
@@ -42,7 +41,7 @@ class GradeInterface extends AdminInterface {
 
 	public function displayDeleteGradeConfirmation($grade) {
 
-		$infoStr = sprintf($this->languageManager->getText('deleteGradeConfirmationString'), $grade['gradeValue'],
+		$infoStr = sprintf($this->languageManager->getText('deleteGradeConfirmationString'), $grade['gradelevel'],
 			$grade['label']);
 
 		parent::confirmationDialog($infoStr, $this->sectionString, 'deleteGrade&ID=' . $grade['ID'], $this->

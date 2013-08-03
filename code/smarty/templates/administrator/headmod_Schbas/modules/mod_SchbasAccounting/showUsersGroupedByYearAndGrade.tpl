@@ -30,10 +30,10 @@ a.selectiveLink {
 <fieldset class="selectiveLink">
  <legend>Klasse</legend>
  {foreach $gradeAll as $grade}
-  <a class="selectiveLink" href="index.php?section=Schbas|SchbasAccounting&action=1&gradeIdDesired={$grade.gradeValue}-{$grade.label}"
+  <a class="selectiveLink" href="index.php?section=Schbas|SchbasAccounting&action=1&gradeIdDesired={$grade.gradelevel}-{$grade.label}"
   {if $grade.ID == $gradeDesired}style="color:rgb(150,40,40);"{/if}
   >
-  {$grade.gradeValue}{$grade.label}
+  {$grade.gradelevel}{$grade.label}
   </a>
  {/foreach}
 </fieldset>
@@ -58,28 +58,28 @@ a.selectiveLink {
    <td align="left">{$user.name}</td>
    <td align="left">{$user.username}</td>
    <td align="center">{$user.gradeLabel}</td>
-   <td align="left">	
-   
+   <td align="left">
+
    {if (isset($user.loanChoice) && $user.loanChoice=='nl')}
    		Selbstzahler
    {elseif (isset($user.loanChoice) && $user.loanChoice=='ls')}
    		Von Zahlung befreit
-   {elseif (isset($user.loanChoice) && ($user.loanChoice=='ln' || $user.loanChoice=='lr'))} 
+   {elseif (isset($user.loanChoice) && ($user.loanChoice=='ln' || $user.loanChoice=='lr'))}
    		<form onsubmit='return false;' >
    		<input type="text" id="Payment{$user.ID}" value='{$user.payedAmount}' size=5/> ( von {$user.amountToPay} &euro;,
-   		{if ($user.loanChoice=='ln')} 
-   			normal 
-   		{else} 
+   		{if ($user.loanChoice=='ln')}
+   			normal
+   		{else}
    			erm&auml;&szlig;igt
    		{/if}
-   		
+
    		)<br>
    		</form>
    {else}
    		Zettel wurde noch nicht gescannt
    {/if}
-   
-   
+
+
    </td>
   </tr>
   {/foreach}
@@ -96,8 +96,8 @@ a.selectiveLink {
   sendUserReturnedBarcode($(this).val(),$(this).attr('id'));
  }
  });
- 
- 
+
+
  function sendUserReturnedBarcode(payment,uid) {
  $.ajax({
   'type': 'POST',
@@ -115,7 +115,7 @@ a.selectiveLink {
   }
  });
 }
- 
+
 </script>
 
 

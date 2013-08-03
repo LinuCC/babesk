@@ -78,21 +78,15 @@ class Grade extends Module {
 	protected function submoduleAddGradeExecute() {
 
 		if (isset($_POST['gradelabel'], $_POST['gradelevel'])) {
-			$this->gradeAddInputPreprocess();
+			$this->gradeInputPreprocess();
 			$this->addGradeToDatabase();
 			$this->_interface->dieMsg(
-				_g('Grade was "%1$s-%2$s" successfully added',
+				_g('Grade "%1$s-%2$s" was successfully added',
 					$_POST['gradelevel'], $_POST['gradelabel']));
 		}
 		else {
-			if($this->checkIsSchooltypeEnabled()) {
-				$schooltypes = $this->fetchAllSchooltypes();
-			}
-			else {
-				$schooltypes = array();
-			}
-			$schoolyears = $this->getAllSchoolyears();
-			$this->_interface->displayAddGrade($schoolyears, $schooltypes);
+			$schooltypes = $this->fetchAllSchooltypes();
+			$this->_interface->displayAddGrade($schooltypes);
 		}
 	}
 
@@ -130,6 +124,9 @@ class Grade extends Module {
 		$schooltypeId = (!empty($_POST['schooltype'])) ?
 			$_POST['schooltype'] : 0;
 
+		var_dump($_POST['gradelevel']);
+		die();
+
 		try {
 			TableMng::query("INSERT INTO Grades
 					(label, gradelevel, schooltypeId)
@@ -161,7 +158,7 @@ class Grade extends Module {
 		try {
 			$grades = TableMng::query(
 				'SELECT g.*, st.name AS schooltypeName
-				FROM grade g
+				FROM Grades g
 				LEFT JOIN Schooltype st ON g.schooltypeId = st.ID
 				');
 
@@ -205,7 +202,7 @@ class Grade extends Module {
 	}
 
 	/**
-	 * deletes a link between a grade and other objects in database
+	 * deletes a link between a Grade and other objects in database
 	 *
 	 * Dies when Error occured while deleting the Items
 	 *
@@ -225,7 +222,7 @@ class Grade extends Module {
 	/**
 	 * Fetches and returns the Data for the Grade with the given ID
 	 *
-	 * Dies when the Grades could not be fetched
+	 * Dies when the Grade could not be fetched
 	 *
 	 * @param  int $gradeId The GradeID of the Grade to fetch
 	 * @return array The grade-Data

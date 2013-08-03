@@ -26,7 +26,7 @@ class KuwasysGradeManager extends TableManager {
 	////////////////////////////////////////////////////////////////////////////////
 	public function addGrade ($label, $year) {
 
-		parent::addEntry('label', $label, 'gradeValue', $year);
+		parent::addEntry('label', $label, 'gradelevel', $year);
 	}
 
 	/**
@@ -43,7 +43,7 @@ class KuwasysGradeManager extends TableManager {
 
 	public function alterGrade ($ID, $label, $year) {
 
-		parent::alterEntry($ID, 'label', $label, 'gradeValue', $year);
+		parent::alterEntry($ID, 'label', $label, 'gradelevel', $year);
 	}
 
 	public function getMultipleGrades ($rows) {

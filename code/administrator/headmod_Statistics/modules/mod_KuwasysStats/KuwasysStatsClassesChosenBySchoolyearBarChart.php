@@ -35,7 +35,7 @@ class KuwasysStatsClassesChosenBySchoolyearBarChart extends StatisticsBarChart {
 
 		$this->_schoolyearData = TableMng::query(
 			'SELECT COUNT(*) AS classCount, sy.ID AS id, sy.label AS label
-			FROM grade g
+			FROM Grades g
 				JOIN usersInGradesAndSchoolyears uigs ON g.ID = uigs.gradeId
 				JOIN jointUsersInClass uic ON uic.UserID = uigs.userId
 				JOIN jointClassInSchoolYear cisy

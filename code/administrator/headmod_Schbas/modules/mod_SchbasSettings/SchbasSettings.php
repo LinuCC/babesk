@@ -167,7 +167,7 @@ class SchbasSettings extends Module {
 	protected function previewInfoDocs () {
 		require_once 'AdminSchbasSettingsInterface.php';
 		$SchbasSettingsInterface = new AdminSchbasSettingsInterface($this->relPath);
-		if (isset($_POST['gradeValue'])) {
+		if (isset($_POST['gradelabel'])) {
 			$this->showPdf();
 		}
 		else {
@@ -183,23 +183,23 @@ class SchbasSettings extends Module {
 
 		$booklistManager = new BookManager();
 
-		//get gradeValue ("Klassenstufe")
-		$gradeValue = $_POST['gradeValue'];
+		//get gradelevel ("Klassenstufe")
+		$gradelevel = $_POST['gradelabel'];
 
 		// get cover letter ("Anschreiben")
 		$coverLetter = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='coverLetter'");
 
 		// get first infotext
-		$textOne = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textOne".$gradeValue."'");
+		$textOne = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textOne".$gradelevel."'");
 
 		// get second infotext
-		$textTwo = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textTwo".$gradeValue."'");
+		$textTwo = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textTwo".$gradelevel."'");
 
 		// get third infotext
-		$textThree = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textThree".$gradeValue."'");
+		$textThree = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textThree".$gradelevel."'");
 
 		// get booklist
-		$booklist = $booklistManager->getBooksByClass($gradeValue);
+		$booklist = $booklistManager->getBooksByClass($gradelevel);
 
 		$books = '<table border="0" bordercolor="#FFFFFF" style="background-color:#FFFFFF" width="100%" cellpadding="0" cellspacing="1">
 				<tr style="font-weight:bold; text-align:center;"><th>Fach</th><th>Titel</th><th>Verlag</th><th>ISBN-Nr.</th><th>Preis</th></tr>';
@@ -215,8 +215,8 @@ class SchbasSettings extends Module {
 		$books = str_replace('é', '&eacute;', $books);
 
 		//get loan fees
-		$feeNormal = TableMng::query("SELECT fee_normal FROM schbas_fee WHERE grade=".$gradeValue);
-		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradeValue);
+		$feeNormal = TableMng::query("SELECT fee_normal FROM schbas_fee WHERE grade=".$gradelevel);
+		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradelevel);
 
 		//get bank account
 		$bank_account =  TableMng::query("SELECT value FROM global_settings WHERE name='bank_details'");
@@ -240,8 +240,8 @@ class SchbasSettings extends Module {
 
 		$daterow = '<p style="text-align: right;">'.$letter_date[0]['value']."</p>";
 
-		$this->createPdf($coverLetter[0]['title'],$daterow.$coverLetter[0]['text'],"Lehrb&uuml;cher Jahrgang ".$gradeValue,$pageTwo,
-				'Weitere Informationen',$pageThree,$gradeValue,false,"","jahrgang_".$gradeValue);
+		$this->createPdf($coverLetter[0]['title'],$daterow.$coverLetter[0]['text'],"Lehrb&uuml;cher Jahrgang ".$gradelevel,$pageTwo,
+				'Weitere Informationen',$pageThree,$gradelevel,false,"","jahrgang_".$gradelevel);
 	}
 
 	/**
