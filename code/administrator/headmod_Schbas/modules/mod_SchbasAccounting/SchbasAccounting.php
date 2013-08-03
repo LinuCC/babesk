@@ -44,7 +44,7 @@ class SchbasAccounting extends Module {
 					}
 				default:
 					die('Wrong action-value given');
-						
+
 					break;
 			}
 		}
@@ -78,10 +78,10 @@ class SchbasAccounting extends Module {
 			if(is_numeric($uid) && in_array($loanChoice, $haystack,$true)) {
 				try {
 
-					$grade = TableMng::query(sprintf("SELECT g.gradeValue FROM jointusersingrade as juig, grade as g WHERE juig.GradeID=g.ID and juig.UserID='%s'",$uid));
+					$grade = TableMng::query(sprintf("SELECT g.gradelevel FROM jointusersingrade as juig, Grades as g WHERE juig.GradeID=g.ID and juig.UserID='%s'",$uid));
 
-					if ($loanChoice=="ln")	$amountToPay = TableMng::query(sprintf("SELECT fee_normal as fee FROM schbas_fee WHERE grade='%s'",$grade[0]['gradeValue']+1));
-					if ($loanChoice=="lr")	$amountToPay = TableMng::query(sprintf("SELECT fee_reduced as fee FROM schbas_fee WHERE grade='%s'",$grade[0]['gradeValue']+1));
+					if ($loanChoice=="ln")	$amountToPay = TableMng::query(sprintf("SELECT fee_normal as fee FROM schbas_fee WHERE grade='%s'",$grade[0]['gradelevel']+1));
+					if ($loanChoice=="lr")	$amountToPay = TableMng::query(sprintf("SELECT fee_reduced as fee FROM schbas_fee WHERE grade='%s'",$grade[0]['gradelevel']+1));
 					if (!isset($amountToPay)) $amountToPay[0]['fee']="0.00";
 					$query = sprintf("INSERT INTO schbas_accounting (`UID`,`loanChoice`,`payedAmount`,`amountToPay`) VALUES ('%s','%s','%s','%s')",$uid,$loanChoice,"0.00",$amountToPay[0]['fee']);
 
@@ -98,14 +98,14 @@ class SchbasAccounting extends Module {
 			die('error');
 		}
 	}
-	
+
 	private function showUsers () {
 		$schoolyearDesired = TableMng::query('SELECT ID FROM schoolYear WHERE active = 1', true);
 		$schoolyearID = $schoolyearDesired[0]['ID'];
 		$gradeID = TableMng::query("SELECT GradeID FROM jointGradeInSchoolYear WHERE SchoolYearID = $schoolyearID",true);
 		foreach ($gradeID as $grade){
 			$ID = $grade['GradeID'];
-			$SaveTheCows = TableMng::query("SELECT * FROM grade WHERE ID = $ID", true);
+			$SaveTheCows = TableMng::query("SELECT * FROM Grades WHERE ID = $ID", true);
 			// Cows stands for Code of worst systematic
 			$gradesAll[] = $SaveTheCows[0];
 		}
@@ -114,7 +114,7 @@ class SchbasAccounting extends Module {
 		$users = $this->addPayedAmountToUsers($users);
 		if (isset ($_GET['gradeIdDesired'])){
 			for ($i=0; $i<sizeof($gradesAll); $i++){
-				if ($gradesAll[$i]['gradeValue'].'-'.$gradesAll[$i]['label'] == $_GET['gradeIdDesired']){
+				if ($gradesAll[$i]['gradelevel'].'-'.$gradesAll[$i]['label'] == $_GET['gradeIdDesired']){
 					$gradeDesired = $gradesAll[$i]['ID'];
 				}
 			}
@@ -134,9 +134,9 @@ class SchbasAccounting extends Module {
 		}
 		$this->SchbasAccountingInterface->showAllUsers($gradesAll,$gradeDesired,$users);
 	}
-	
+
 	private function addGradeLabelToUsers ($users) {
-	
+
 		$jointsUsersInGrade = TableMng::query('SELECT * FROM jointUsersInGrade', true);
 		$grades = TableMng::query('SELECT * FROM grade', true);
 		if (isset($users) && count ($users) && isset($jointsUsersInGrade) && count ($jointsUsersInGrade)) {
@@ -145,7 +145,7 @@ class SchbasAccounting extends Module {
 					if ($joint['UserID'] == $user['ID']) {
 						foreach ($grades as $grade) {
 							if ($grade['ID'] == $joint['GradeID']) {
-								$user['gradeLabel'] = $grade['gradeValue'] . '-' . $grade['label'];
+								$user['gradeLabel'] = $grade['gradelevel'] . '-' . $grade['label'];
 							}
 						}
 					}
@@ -154,14 +154,14 @@ class SchbasAccounting extends Module {
 		}
 		return $users;
 	}
-	
+
 	private function addPayedAmountToUsers ($users) {
-	
+
 		$payed = TableMng::query('SELECT * FROM schbas_accounting', true);
 	//	$fees = TableMng::query('SELECT * FROM schbas_fee', true);
 		foreach ($users as & $user) {
 			foreach ($payed as $pay) {
-				if ($pay['UID'] == $user['ID'])  {		
+				if ($pay['UID'] == $user['ID'])  {
 					$user['payedAmount'] = $pay['payedAmount'];
 					$user['amountToPay'] = $pay['amountToPay'];
 					$user['loanChoice'] = $pay['loanChoice'];
@@ -177,7 +177,7 @@ class SchbasAccounting extends Module {
 		return $users;
 	}
 
-	
+
 	private function executePayment($UID, $payment){
 		$UID = str_replace("Payment", "", $UID);
 		try {
@@ -186,7 +186,7 @@ class SchbasAccounting extends Module {
 		} catch (Exception $e) {
 			//die("UPDATE schbas_accounting SET 'payedAmount'=$payment WHERE 'UID'=$UID".$e);
 		}
-		
+
 	}
 
 }

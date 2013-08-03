@@ -177,7 +177,7 @@ class BabeskTimeSettings extends Module {
 	protected function changeDataToDb($data) {
 
 		try {
-			TableMng::query(
+			TableMng::queryMultiple(
 				"UPDATE global_settings
 					SET value = '$data[displayMealsStartdate]'
 					WHERE name = 'displayMealsStartdate';
@@ -189,7 +189,7 @@ class BabeskTimeSettings extends Module {
 					WHERE name = 'orderEnddate';
 				UPDATE global_settings
 					SET value = '$data[ordercancelEnddate]'
-					WHERE name = 'ordercancelEnddate';", true, true);
+					WHERE name = 'ordercancelEnddate';");
 
 		} catch (Exception $e) {
 			$this->_interface->dieError('Konnte die Daten nicht verändern!' . $e->getMessage());
