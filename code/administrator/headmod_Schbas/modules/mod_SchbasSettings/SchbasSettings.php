@@ -184,7 +184,11 @@ class SchbasSettings extends Module {
 		$booklistManager = new BookManager();
 
 		//get gradelevel ("Klassenstufe")
+<<<<<<< HEAD
 		$gradelevel = $_POST['gradelabel'];
+=======
+		$gradelevel = $_POST['gradeValue'];
+>>>>>>> 3fd9a4639f31bb511d68adc1b892119add45592e
 
 		// get cover letter ("Anschreiben")
 		$coverLetter = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='coverLetter'");
