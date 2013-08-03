@@ -77,11 +77,11 @@ class SchbasAccounting extends Module {
 			}
 			if(is_numeric($uid) && in_array($loanChoice, $haystack,$true)) {
 				try {
-					
-					$grade = TableMng::query(sprintf("SELECT g.gradeValue FROM jointusersingrade as juig, grade as g WHERE juig.GradeID=g.ID and juig.UserID='%s'",$uid),true);
-					
-					if ($loanChoice=="ln")	$amountToPay = TableMng::query(sprintf("SELECT fee_normal as fee FROM schbas_fee WHERE grade='%s'",$grade[0]['gradeValue']+1),true);
-					if ($loanChoice=="lr")	$amountToPay = TableMng::query(sprintf("SELECT fee_reduced as fee FROM schbas_fee WHERE grade='%s'",$grade[0]['gradeValue']+1),true);
+
+					$grade = TableMng::query(sprintf("SELECT g.gradeValue FROM jointusersingrade as juig, grade as g WHERE juig.GradeID=g.ID and juig.UserID='%s'",$uid));
+
+					if ($loanChoice=="ln")	$amountToPay = TableMng::query(sprintf("SELECT fee_normal as fee FROM schbas_fee WHERE grade='%s'",$grade[0]['gradeValue']+1));
+					if ($loanChoice=="lr")	$amountToPay = TableMng::query(sprintf("SELECT fee_reduced as fee FROM schbas_fee WHERE grade='%s'",$grade[0]['gradeValue']+1));
 					if (!isset($amountToPay)) $amountToPay[0]['fee']="0.00";
 					$query = sprintf("INSERT INTO schbas_accounting (`UID`,`loanChoice`,`payedAmount`,`amountToPay`) VALUES ('%s','%s','%s','%s')",$uid,$loanChoice,"0.00",$amountToPay[0]['fee']);
 
