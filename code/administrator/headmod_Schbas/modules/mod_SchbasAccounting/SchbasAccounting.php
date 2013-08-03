@@ -138,7 +138,7 @@ class SchbasAccounting extends Module {
 	private function addGradeLabelToUsers ($users) {
 
 		$jointsUsersInGrade = TableMng::query('SELECT * FROM jointUsersInGrade', true);
-		$grades = TableMng::query('SELECT * FROM grade', true);
+		$grades = TableMng::query('SELECT * FROM Grades', true);
 		if (isset($users) && count ($users) && isset($jointsUsersInGrade) && count ($jointsUsersInGrade)) {
 			foreach ($users as & $user) {
 				foreach ($jointsUsersInGrade as $joint) {
