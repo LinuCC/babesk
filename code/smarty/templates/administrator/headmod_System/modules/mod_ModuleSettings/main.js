@@ -124,7 +124,7 @@ var details = new function() {
 				var execPath = '<div class="simpleForm"><p class="inputItem">' +
 					'Ausführungspfad:</p>' +
 					'<input class="inputItem" type="text" name="execPath"' +
-					'value="{0}" /></div>';
+					'value="{0}" size="60" /></div>';
 
 				return execPath.format(res.data.executablePath);
 			}

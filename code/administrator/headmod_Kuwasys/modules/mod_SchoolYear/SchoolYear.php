@@ -16,7 +16,7 @@ class SchoolYear extends Module {
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	////////////////////////////////////////////////////////////////////////////////
-	public function __construct ($name, $display_name, $path) {
+	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
 	}
 	////////////////////////////////////////////////////////////////////////////////
@@ -26,11 +26,11 @@ class SchoolYear extends Module {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
-	public function execute ($dataContainer) {
+	public function execute($dataContainer) {
 
 		$this->entryPoint($dataContainer);
-		if (isset($_GET['action'])) {
-			switch ($_GET['action']) {
+		if(isset($_GET['action'])) {
+			switch($_GET['action']) {
 				case 'addSchoolYear':
 					$this->addSchoolYear();
 					break;
@@ -58,7 +58,7 @@ class SchoolYear extends Module {
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////
-	private function entryPoint ($dataContainer) {
+	private function entryPoint($dataContainer) {
 
 		defined('_AEXEC') or die('Access denied');
 
@@ -71,9 +71,9 @@ class SchoolYear extends Module {
 		$this->_syManager = new KuwasysSchoolYearManager();
 	}
 
-	private function addSchoolYear () {
+	private function addSchoolYear() {
 
-		if (isset($_POST['label'])) {
+		if(isset($_POST['label'])) {
 
 			$this->handleCheckboxActive();
 			$this->checkInput();
@@ -85,9 +85,9 @@ class SchoolYear extends Module {
 		}
 	}
 
-	private function handleCheckboxActive () {
+	private function handleCheckboxActive() {
 
-		if (!isset($_POST['active'])) {
+		if(!isset($_POST['active'])) {
 			$_POST['active'] = 0;
 		}
 		else {
@@ -95,55 +95,57 @@ class SchoolYear extends Module {
 		}
 	}
 
-	private function checkInput () {
+	private function checkInput() {
 
 		try {
 			inputcheck($_POST['label'], 'name', $this->_languageManager->getText('formLabel'));
-		} catch (WrongInputException $e) {
+		} catch(WrongInputException $e) {
 			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorInput'), $e->getFieldName()));
 		}
 	}
 
-	private function addSchoolYearToDatabase () {
+	private function addSchoolYearToDatabase() {
 
 		try {
-			$this->_syManager->addSchoolYear($_POST['label'], $_POST['active']);
-		} catch (Exception $e) {
-			$this->_interface->dieError($this->_languageManager->getText('errorAddSchoolYear') . $e->getMessage());
+			TableMng::query("INSERT INTO schoolyears(label, active)
+				VALUES ($_POST['label'], $_POST['active'])");
+
+		} catch(Exception $e) {
+			$this->_interface->dieError(_('Could not add the Schoolyear'));
 		}
 	}
 
-	private function showAddSchoolYearForm () {
+	private function showAddSchoolYearForm() {
 
 		$this->_interface->displayAddSchoolYear();
 	}
 
-	private function showSchoolYears () {
+	private function showSchoolYears() {
 
 		$schoolYears = $this->getAllSchoolYears();
 		$this->_interface->displayShowSchoolYears($schoolYears);
 	}
 
-	private function getAllSchoolYears () {
+	private function getAllSchoolYears() {
 
 		try {
 			$schoolYears = $this->_syManager->getAllSchoolYears();
-		} catch (MySQLVoidDataException $e) {
+		} catch(MySQLVoidDataException $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorNoSchoolYears'));
 		}
-		catch (Exception $e) {
+		catch(Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorFetchSchoolYears'));
 		}
 		return $schoolYears;
 	}
 
-	private function deleteSchoolYear () {
+	private function deleteSchoolYear() {
 
 		if(isset($_POST['dialogConfirmed'])) {
 			$this->deleteSchoolYearInDatabase();
 			$this->_interface->dieMsg($this->_languageManager->getText('finishedDeleteSchoolYear'));
 		}
-		else if (isset($_POST['dialogNotConfirmed'])) {
+		else if(isset($_POST['dialogNotConfirmed'])) {
 			$this->_interface->dieMsg($this->_languageManager->getText('deleteSchoolYearDeclined'));
 		}
 		else {
@@ -151,24 +153,24 @@ class SchoolYear extends Module {
 		}
 	}
 
-	private function deleteSchoolYearInDatabase () {
+	private function deleteSchoolYearInDatabase() {
 
 		try {
 			$this->_syManager->deleteSchoolYear($_GET['ID']);
-		} catch (MySQLVoidDataException $e) {
+		} catch(MySQLVoidDataException $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorNoSchoolYear'));
-		} catch (Exception $e) {
+		} catch(Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorDeleteSchoolYear'));
 		}
 	}
 
-	private function activateSchoolYear () {
+	private function activateSchoolYear() {
 
-		if (isset($_POST['dialogConfirmed'])) {
+		if(isset($_POST['dialogConfirmed'])) {
 			$this->activateSchoolYearInDatabase();
 			$this->_interface->dieMsg($this->_languageManager->getText('finishedActivateSchoolYear'));
 		}
-		else if (isset($_POST['dialogNotConfirmed'])) {
+		else if(isset($_POST['dialogNotConfirmed'])) {
 			$this->_interface->dieMsg($this->_languageManager->getText('notActivateSchoolYear'));
 		}
 		else {
@@ -176,32 +178,32 @@ class SchoolYear extends Module {
 		}
 	}
 
-	private function activateSchoolYearInDatabase () {
+	private function activateSchoolYearInDatabase() {
 
 		$this->_syManager->activateSchoolYear($_GET['ID']);
 	}
 
-	private function showActivateSchoolYearConfirmationDialog () {
+	private function showActivateSchoolYearConfirmationDialog() {
 
 		$schoolYear = $this->getSchoolYear();
 		$this->_interface->displayActivateSchoolYearConfirmation($schoolYear);
 	}
 
-	private function getSchoolYear () {
+	private function getSchoolYear() {
 
 		try {
 			$schoolYear = $this->_syManager->getSchoolYear($_GET['ID']);
-		} catch (MySQLVoidDataException $e) {
+		} catch(MySQLVoidDataException $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorNoSchoolYear'));
-		} catch (Exception $e) {
+		} catch(Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorFetchSchoolYear'));
 		}
 		return $schoolYear;
 	}
 
-	private function changeSchoolYear () {
+	private function changeSchoolYear() {
 
-		if (isset($_POST['label'])) {
+		if(isset($_POST['label'])) {
 			$this->checkInput();
 			$this->handleCheckboxActive();
 			$this->changeSchoolYearInDatabase();
@@ -212,19 +214,19 @@ class SchoolYear extends Module {
 		}
 	}
 
-	private function showChangeSchoolYear () {
+	private function showChangeSchoolYear() {
 
 		$schoolYear = $this->getSchoolYear();
 		$this->_interface->displayChangeSchoolYear($schoolYear);
 	}
 
-	private function changeSchoolYearInDatabase () {
+	private function changeSchoolYearInDatabase() {
 
 		try {
 			$this->_syManager->alterSchoolYear($_GET['ID'], $_POST['label'], $_POST['active']);
-		} catch (MySQLVoidDataException $e) {
+		} catch(MySQLVoidDataException $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorNoSchoolYear'));
-		} catch (Exception $e) {
+		} catch(Exception $e) {
 			$this->_interface->dieError($this->_languageManager->getText('errorChangeSchoolYear'));
 		}
 	}

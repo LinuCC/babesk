@@ -2,7 +2,7 @@
 
 require_once PATH_ADMIN . '/AdminInterface.php';
 
-class SchoolYearInterface extends AdminInterface {
+class SchoolyearInterface extends AdminInterface {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -12,7 +12,7 @@ class SchoolYearInterface extends AdminInterface {
 		parent::__construct($modPath, $smarty);
 		$this->parentPath = $this->tplFilePath . 'header.tpl';
 		$this->smarty->assign('inh_path', $this->parentPath);
-		$this->sectionString = 'Kuwasys|SchoolYear';
+		$this->sectionString = 'System|Schoolyear';
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -101,6 +101,13 @@ class SchoolYearInterface extends AdminInterface {
 		$notConfirmedString = _('No, I do not want to break the System and delete the Schoolyear');
 
 		$this->confirmationDialog($promptMessage, $this->sectionString, $actionString, $confirmedString, $notConfirmedString);
+	}
+
+	public function displaySelectSchoolyear($schoolyears) {
+
+		$this->smarty->assign('schoolyears', $schoolyears);
+		$this->smarty->display(
+			$this->tplFilePath . 'selectSchoolyearForSwitchSchoolyear.tpl');
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations

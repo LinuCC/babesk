@@ -47,6 +47,24 @@ abstract class Module {
 	////////////////////////////////////////////////////////////////////////
 
 	/**
+	 * Checks if the Level of Submodule exists in the SubmoduleExecutionstring
+	 * @param  integer $level The Level of Submodule
+	 * (1 for the first Submodule)
+	 * @return boolean True of it exists, else false
+	 */
+	protected function execPathHasSubmoduleLevel($level, $path) {
+
+		if($path) {
+			$elements = explode('/', $path);
+			$submodules = count($elements) - 4;
+			return $level <= $submodules;
+		}
+		else {
+			return false;
+		}
+	}
+
+	/**
 	 * Executes a Submodule by calling a Method
 	 *
 	 * The name of the called Method begins with submodule, goes on with the
@@ -54,13 +72,20 @@ abstract class Module {
 	 *
 	 * @param  String $path The Path to the Submodule, beginning from the
 	 *                      moduleroot
-	 * @return ???          Returns the value that the Submodule returns
+	 * @param  int level The level of the Submodule (The first submodule
+	 *                   is at 1)
+	 * @param  string prefix The Prefix of the Methodname to execute
+	 * @param  string postfix The Postfix of the Methodname to execute
+	 * @return ???    Returns the value that the Submodule returns
 	 */
-	protected function submoduleExecute($path) {
+	protected function submoduleExecute($path, $level = 1, $prefix = 'submodule', $postfix = "Execute") {
 
-		$submodule = $this->_acl->moduleGet($path);
+		$executePath = $this->executionPathSliceToLevels(
+			$path,
+			$level);
+		$submodule = $this->_acl->moduleGet($executePath);
 		if($submodule) {
-			$methodName = 'submodule' . $submodule->getName() . 'Execute';
+			$methodName = $prefix . $submodule->getName() . $postfix;
 			if(method_exists($this, $methodName)) {
 				return $this->$methodName();
 			}
@@ -72,6 +97,19 @@ abstract class Module {
 		else {
 			throw new Exception("Zugriff auf dieses Modul nicht erlaubt!");
 		}
+	}
+
+	private function executionPathSliceToLevels($path, $levelOfSubMod) {
+
+		//levelOfSubMod starts from the Submodule, 4 levels under root
+		$levelOfMod = $levelOfSubMod + 4;
+		$levels = explode('/', $path);
+		if(count($levels) < $levelOfMod) {
+			return false;
+		}
+		$levelsWanted = array_slice($levels, 0, $levelOfMod);
+		$executePath = implode('/', $levelsWanted);
+		return $executePath;
 	}
 }
 
