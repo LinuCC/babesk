@@ -26,7 +26,8 @@ class Booklist extends Module {
 		$BookProcessing = new AdminBooklistProcessing($BookInterface);
 
 		$action_arr = array('show_booklist' => 1,
-							'add_book' => 4);
+							'add_book' => 4,
+							'del_book' => 6);
 		
 		if ('POST' == $_SERVER['REQUEST_METHOD']){
 		if (isset($_GET['action'])) {
@@ -44,22 +45,31 @@ class Booklist extends Module {
 						$bookID = $BookProcessing->getBookIdByISBN($_POST['isbn_search']);
 						$BookProcessing->editBook($bookID);
 					}
-					if (!isset ($_POST['subject'], $_POST['class'],$_POST['title'],$_POST['author'],$_POST['publisher'],$_POST['isbn'],$_POST['price'],$_POST['bundle'])){
+					else if (!isset ($_POST['subject'], $_POST['class'],$_POST['title'],$_POST['author'],$_POST['publisher'],$_POST['isbn'],$_POST['price'],$_POST['bundle'])){
 						$BookProcessing->editBook($_GET['ID']);
 					}else{
 						$BookProcessing->changeBook($_GET['ID'],$_POST['subject'], $_POST['class'],$_POST['title'],$_POST['author'],$_POST['publisher'],$_POST['isbn'],$_POST['price'],$_POST['bundle']);
 					}
 					break;
 				case 3: //delete an entry
-					if (isset($_POST['delete'])) {
+					
+					if (isset($_POST['barcode'])) {
+						try {
+						
+							$BookProcessing->DeleteEntry($BookProcessing->GetIDFromBarcode($_POST['barcode']));
+						} catch (Exception $e) {
+						}
+					} 
+					else if (isset($_POST['delete'])) {
 						$BookProcessing->DeleteEntry($_GET['ID']);
 					} else if (isset($_POST['not_delete'])) {
 						$BookInterface->ShowSelectionFunctionality($action_arr);
 					} else {
+						
 						if (!$BookProcessing->isInvForBook($_GET['ID'])){
 							$BookProcessing->DeleteConfirmation($_GET['ID']);
 						}else{
-							$BookInterface->dieError("Es ist noch Inventar zu diesem Buch vorhanden!\nBitte l&ouml;schen Sie dies zuerst!");
+							$BookInterface->dieError("Es ist noch Inventar zu diesem Buch vorhanden! Bitte l&ouml;schen Sie dies zuerst!");
 						}
 					}
 					break;
@@ -73,6 +83,12 @@ class Booklist extends Module {
 				case 5: //filter
 					$BookProcessing->ShowBooklist("search", $_POST['search']);
 					break;
+					
+					case 6: //search an entry for deleting
+							
+						$BookProcessing->ScanForDeleteEntry();
+							
+						break;
 				break;
 			}
 		}

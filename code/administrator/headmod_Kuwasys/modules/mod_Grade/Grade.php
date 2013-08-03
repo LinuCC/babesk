@@ -78,21 +78,15 @@ class Grade extends Module {
 	protected function submoduleAddGradeExecute() {
 
 		if (isset($_POST['gradelabel'], $_POST['gradelevel'])) {
-			$this->gradeAddInputPreprocess();
+			$this->gradeInputPreprocess();
 			$this->addGradeToDatabase();
 			$this->_interface->dieMsg(
-				_g('Grade was "%1$s-%2$s" successfully added',
+				_g('Grade "%1$s-%2$s" was successfully added',
 					$_POST['gradelevel'], $_POST['gradelabel']));
 		}
 		else {
-			if($this->checkIsSchooltypeEnabled()) {
-				$schooltypes = $this->fetchAllSchooltypes();
-			}
-			else {
-				$schooltypes = array();
-			}
-			$schoolyears = $this->getAllSchoolyears();
-			$this->_interface->displayAddGrade($schoolyears, $schooltypes);
+			$schooltypes = $this->fetchAllSchooltypes();
+			$this->_interface->displayAddGrade($schooltypes);
 		}
 	}
 
@@ -129,6 +123,9 @@ class Grade extends Module {
 
 		$schooltypeId = (!empty($_POST['schooltype'])) ?
 			$_POST['schooltype'] : 0;
+
+		var_dump($_POST['gradelevel']);
+		die();
 
 		try {
 			TableMng::query("INSERT INTO Grades

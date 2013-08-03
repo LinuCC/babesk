@@ -48,7 +48,7 @@ function showOptions (ID) {
 	{foreach $gradeAll as $grade}
 		<a class="selectiveLink" href="index.php?section=Kuwasys|Users&action=showUsersGroupedByYearAndGrade&schoolyearIdDesired={$schoolyearDesired.ID}&gradeIdDesired={$grade.ID}"
 		{if $grade.ID == $gradeDesired.ID}style="color:rgb(150,40,40);"{/if}>
-				{$grade.gradeValue}{$grade.label}
+				{$grade.gradelevel}{$grade.label}
 		</a>
 	{/foreach}
 </fieldset>

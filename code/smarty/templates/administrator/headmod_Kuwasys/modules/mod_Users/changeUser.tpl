@@ -41,7 +41,7 @@ fieldset {
 				{if $user.gradeIDSelected == $grade.ID}
 					selected='selected'
 				{/if}>
-				{$grade.gradeValue} - {$grade.label}
+				{$grade.gradelevel} - {$grade.label}
 			</option>
 		{/foreach}
 	</select><br><br>

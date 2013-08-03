@@ -52,7 +52,7 @@ table.dataTable td {
 		{if $user.last_login}{$user.last_login}{else}---{/if}
 	</div></div><br>
 	{if isset($user.gradeLabel)}
-		<div><label class="left">In Klasse:</label> <div class="valueDiv"> {$user.gradeValue} {$user.gradeLabel} </div></div>
+		<div><label class="left">In Klasse:</label> <div class="valueDiv"> {$user.gradelevel} {$user.gradeLabel} </div></div>
 	{else}
 		<div><label class="left">In Klasse:</label><div class="valueDiv"> <b>keine Klasse</b></div></div>
 	{/if}<br>

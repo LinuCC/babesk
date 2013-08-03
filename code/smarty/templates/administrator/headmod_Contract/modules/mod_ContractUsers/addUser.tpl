@@ -36,7 +36,7 @@ select, input.moduleFormulars {
 		{foreach $grades as $grade}
 			<option
 				value='{$grade.ID}'{if $grade.schoolyearId != $activeSchoolyear.ID}disabled="disabled"{/if}>
-				{$grade.gradeValue} - {$grade.label}
+				{$grade.gradelevel} - {$grade.label}
 			</option>
 		{/foreach}
 	</select><br><br>

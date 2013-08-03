@@ -68,6 +68,10 @@ class AdminBooklistInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath.'add_entry_fin.tpl');
 	}
 	
+	function ShowScanForDeleteEntry() {
+		$this->smarty->display($this->tplFilePath.'delete_entry_scan.tpl');
+	}
+	
 	/**
 	 * The Path to the Smarty-Parent-Templatefile
 	 */

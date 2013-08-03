@@ -4,7 +4,7 @@
 	<fieldset>
 		<legend>Buch</legend>
 		<label>ID</label>
-			<input type="text" name="barcode" size="15" maxlength="20" /><br />
+			<input type="text" name="barcode" size="20" maxlength="30" /><br />
 	</fieldset>
 	<input type="submit" value="Senden" />
 </form>

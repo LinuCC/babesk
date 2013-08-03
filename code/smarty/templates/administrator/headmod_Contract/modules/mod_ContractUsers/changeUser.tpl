@@ -32,12 +32,12 @@ fieldset {
 		<select name='grade' size='1'>
 			<option value='NoGrade' {if (!$userHasGrade)}selected='selected'{/if}>==Keine Klasse==</option>
 		{foreach $grades as $grade}
-			<option 
-				value='{$grade.ID}' 
+			<option
+				value='{$grade.ID}'
 				{if $user.gradeIDSelected == $grade.ID}
 					selected='selected'
 				{/if}>
-				{$grade.gradeValue} - {$grade.label}
+				{$grade.gradelevel} - {$grade.label}
 			</option>
 		{/foreach}
 	</select><br><br>
@@ -45,8 +45,8 @@ fieldset {
 		<select name='schoolyear' size='1'>
 		{if !isset($user.schoolyearIdSelected)}<option value='0' selected='selected'>==Keine Schuljahr==</option>{/if}
 		{foreach $schoolyears as $schoolyear}
-			<option 
-				value='{$schoolyear.ID}' 
+			<option
+				value='{$schoolyear.ID}'
 				{if $schoolyear.ID == $user.schoolyearIdSelected}selected='selected'{/if}>
 				{$schoolyear.label}
 			</option>

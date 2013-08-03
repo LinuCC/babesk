@@ -15,7 +15,7 @@
 		{foreach $grades as $grade}
 		<tr bgcolor='#FFC33'>
 			<td align="center">{$grade.ID}</td>
-			<td align="center">{$grade.gradeValue}</td>
+			<td align="center">{$grade.gradelevel}</td>
 			<td align="center">{$grade.label}</td>
 			<td align="center">{$grade.schooltypeName}</td>
 			<td align="center" bgcolor='#FFD99'>
