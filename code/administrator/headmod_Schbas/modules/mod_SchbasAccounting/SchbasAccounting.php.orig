@@ -141,9 +141,15 @@ class SchbasAccounting extends Module {
 	}
 
 	private function addPayedAmountToUsers ($users) {
+<<<<<<< HEAD
 
 		$payed = TableMng::query('SELECT * FROM schbas_accounting');
 		$fees = TableMng::query('SELECT * FROM schbas_fee');
+=======
+	
+		$payed = TableMng::query('SELECT * FROM schbas_accounting', true);
+	//	$fees = TableMng::query('SELECT * FROM schbas_fee', true);
+>>>>>>> b55a0752a7f80606a320878fbc199f4db5494db4
 		foreach ($users as & $user) {
 			foreach ($payed as $pay) {
 				if ($pay['UID'] == $user['ID'])  {
