@@ -31,18 +31,18 @@ class SchoolYearInterface extends AdminInterface {
 		$inputContainer = array(
 			array(
 				'name'			 => 'label',
-				'displayName'	 => _('Name of the Schoolyear'),
+				'displayName'	 => _g('Name of the Schoolyear'),
 				'type'			 => 'text',
 			),
 			array(
 				'name'			 => 'active',
-				'displayName'	 => _('Is the Schoolyear active'),
+				'displayName'	 => _g('Is the Schoolyear active'),
 				'type'			 => 'checkbox',
 			),
 		);
 
-		$headString = _('Add an Schoolyear');
-		$submitString = _('Schuljahr hinzufügen');
+		$headString = _g('Add an Schoolyear');
+		$submitString = _g('Schuljahr hinzufügen');
 		$actionString = 'addSchoolYear';
 
 		$this->generalForm($headString, $this->sectionString, $actionString, $inputContainer, $submitString);
@@ -56,9 +56,9 @@ class SchoolYearInterface extends AdminInterface {
 
 	public function displayActivateSchoolYearConfirmation ($schoolYear) {
 
-		$promptMessage = sprintf(_('Do you really want to activate the Schoolyear? The other activated Schoolyear will be deactivated'), $schoolYear['label']);
+		$promptMessage = sprintf(_g('Do you really want to activate the Schoolyear? The other activated Schoolyear will be deactivated'), $schoolYear['label']);
 		$actionString = 'activateSchoolYear&ID=' . $schoolYear['ID'];
-		$confirmedString = _('Yes, I want to activate the Schoolyear');
+		$confirmedString = _g('Yes, I want to activate the Schoolyear');
 		$notConfirmedString = _(
 			'No, I do not want to activate the Schoolyear');
 
@@ -72,13 +72,13 @@ class SchoolYearInterface extends AdminInterface {
 		$inputContainer = array(
 			0 => array(
 				'name'			 => 'label',
-				'displayName'	 => _('Name of the Schoolyear'),
+				'displayName'	 => _g('Name of the Schoolyear'),
 				'type'			 => 'text',
 				'value'			 => $schoolYear['label'],
 			),
 			array(
 				'name'			 => 'active',
-				'displayName'	 => _('Is the Schoolyear active'),
+				'displayName'	 => _g('Is the Schoolyear active'),
 				'type'			 => 'checkbox',
 				'value'			 => $schoolYear['active'],
 			),
@@ -87,18 +87,18 @@ class SchoolYearInterface extends AdminInterface {
 			$inputContainer [1] ['optionString'] = 'checked';
 		}
 		$actionString = 'changeSchoolYear&ID=' . $schoolYear['ID'];
-		$headString = _('Change the Schoolyear');
-		$submitString = _('Change Schoolyear');
+		$headString = _g('Change the Schoolyear');
+		$submitString = _g('Change Schoolyear');
 
 		$this->generalForm($headString, $this->sectionString, $actionString, $inputContainer, $submitString);
 	}
 
 	public function displayDeleteSchoolYearConfirmation ($schoolYear) {
 
-		$promptMessage = sprintf(_('Do you really want to delete the Schoolyear "%s"? WARNING: Problems will occur if you do this! Not all parts of the system support this!'), $schoolYear ['label']);
+		$promptMessage = sprintf(_g('Do you really want to delete the Schoolyear "%s"? WARNING: Problems will occur if you do this! Not all parts of the system support this!'), $schoolYear ['label']);
 		$actionString = 'deleteSchoolYear&ID=' . $schoolYear ['ID'];
-		$confirmedString = _('Yes, I want to break the System and delete the Schoolyear');
-		$notConfirmedString = _('No, I do not want to break the System and delete the Schoolyear');
+		$confirmedString = _g('Yes, I want to break the System and delete the Schoolyear');
+		$notConfirmedString = _g('No, I do not want to break the System and delete the Schoolyear');
 
 		$this->confirmationDialog($promptMessage, $this->sectionString, $actionString, $confirmedString, $notConfirmedString);
 	}

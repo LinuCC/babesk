@@ -42,37 +42,37 @@ class UserCsvImport extends CsvImport {
 	protected function arrayDataInit() {
 
 		$this->_targetColumns = array(
-			'forename' => _('Forename'),
-			'name' => _('Surname'),
-			'username' => _('Username'),
-			'birthday' => _('Birthday'),
-			'email' => _('Email-Adresse'),
-			'schoolyear' => _('Schoolyear'),
-			'grade' => _('Grade'),
-			'priceclass' => _('Priceclass'),
-			'credits' => _('Credits'),
-			'soli' => _('is Soli')
+			'forename' => _g('Forename'),
+			'name' => _g('Surname'),
+			'username' => _g('Username'),
+			'birthday' => _g('Birthday'),
+			'email' => _g('Email-Adresse'),
+			'schoolyear' => _g('Schoolyear'),
+			'grade' => _g('Grade'),
+			'priceclass' => _g('Priceclass'),
+			'credits' => _g('Credits'),
+			'soli' => _g('is Soli')
 		);
 
 		$this->_gumpRules = array(
 			'forename' => array(
 				'required|alpha_dash_space|min_len,2|max_len,64',
-				'', _('Forename')
+				'', _g('Forename')
 			),
 			'name' => array(
 				'required|alpha_dash_space|min_len,2|max_len,64',
-				'', _('Surname')
+				'', _g('Surname')
 			),
-			'username' => array('alpha_dash', '', _('Username')),
-			'birthday' => array('isodate', '', _('Birthday')),
-			'email' => array('isodate', '', _('Email-Adresse')),
-			'schoolyear' => array('min_len,2|max_len,64', '', _('Schoolyear')),
-			'grade' => array('min_len,2|max_len,24', '', _('Grade')),
-			'pricegroup' => array('min_len,2|max_len,64', '', _('Priceclass')),
+			'username' => array('alpha_dash', '', _g('Username')),
+			'birthday' => array('isodate', '', _g('Birthday')),
+			'email' => array('isodate', '', _g('Email-Adresse')),
+			'schoolyear' => array('min_len,2|max_len,64', '', _g('Schoolyear')),
+			'grade' => array('min_len,2|max_len,24', '', _g('Grade')),
+			'pricegroup' => array('min_len,2|max_len,64', '', _g('Priceclass')),
 			'credits' => array(
-				'numeric|min_len,1|max_len,5', '', _('Credits')
+				'numeric|min_len,1|max_len,5', '', _g('Credits')
 			),
-			'soli' => array('boolean', '', _('is Soli'))
+			'soli' => array('boolean', '', _g('is Soli'))
 		);
 	}
 
@@ -105,7 +105,7 @@ class UserCsvImport extends CsvImport {
 			}
 			else {
 				$this->errorDie(
-					_('Could not parse the data to the Database!'));
+					_g('Could not parse the data to the Database!'));
 			}
 		}
 		$stmt->close();

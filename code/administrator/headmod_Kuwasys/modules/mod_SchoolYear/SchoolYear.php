@@ -111,7 +111,7 @@ class SchoolYear extends Module {
 				VALUES ($_POST['label'], $_POST['active'])");
 
 		} catch(Exception $e) {
-			$this->_interface->dieError(_('Could not add the Schoolyear'));
+			$this->_interface->dieError(_g('Could not add the Schoolyear'));
 		}
 	}
 

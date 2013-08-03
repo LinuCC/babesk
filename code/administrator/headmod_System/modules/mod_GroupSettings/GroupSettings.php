@@ -645,7 +645,7 @@ class GroupSettings extends Module {
 			}
 			else {
 				die(json_encode(array('value' => 'error',
-					'message' => _('The Module is deactivated! You need to activate it first in the ModuleSettings.'))));
+					'message' => _g('The Module is deactivated! You need to activate it first in the ModuleSettings.'))));
 			}
 
 			die(json_encode(array(

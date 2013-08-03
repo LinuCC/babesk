@@ -7,13 +7,12 @@ class GradeInterface extends AdminInterface {
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	////////////////////////////////////////////////////////////////////////////////
-	public function __construct ($modPath, $smarty, $languageManager) {
+	public function __construct($modPath, $smarty) {
 
 		parent::__construct($modPath, $smarty);
 		$this->parentPath = $this->tplFilePath . 'header.tpl';
 		$this->smarty->assign('inh_path', $this->parentPath);
 		$this->sectionString = 'Kuwasys|Grade';
-		$this->languageManager = $languageManager;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -23,25 +22,25 @@ class GradeInterface extends AdminInterface {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////////////
-	public function displayMainMenu () {
+	public function displayMainMenu() {
 
 		$this->smarty->display($this->tplFilePath . 'mainMenu.tpl');
 	}
 
-	public function displayAddGrade ($schoolyears, $schooltypes) {
+	public function displayAddGrade($schoolyears, $schooltypes) {
 
 		$this->smarty->assign('schoolyears', $schoolyears);
 		$this->smarty->assign('schooltypes', $schooltypes);
 		$this->smarty->display($this->tplFilePath . 'addGrade.tpl');
 	}
 
-	public function displayShowGrades ($grades) {
+	public function displayShowGrades($grades) {
 
 		$this->smarty->assign('grades', $grades);
 		$this->smarty->display($this->tplFilePath . 'showGrades.tpl');
 	}
 
-	public function displayDeleteGradeConfirmation ($grade) {
+	public function displayDeleteGradeConfirmation($grade) {
 
 		$infoStr = sprintf($this->languageManager->getText('deleteGradeConfirmationString'), $grade['gradeValue'],
 			$grade['label']);
@@ -51,10 +50,9 @@ class GradeInterface extends AdminInterface {
 			'deleteGradeConfirmationNo'));
 	}
 
-	public function displayChangeGrade ($grade, $schoolyears, $schooltypes) {
+	public function displayChangeGrade($grade, $schooltypes) {
 
 		$this->smarty->assign('grade', $grade);
-		$this->smarty->assign('schoolyears', $schoolyears);
 		$this->smarty->assign('schooltypes', $schooltypes);
 		$this->smarty->display($this->tplFilePath . 'changeGrade.tpl');
 	}
@@ -67,10 +65,6 @@ class GradeInterface extends AdminInterface {
 	//Attributes
 	////////////////////////////////////////////////////////////////////////////////
 	private $sectionString;
-	/**
-	 * @var KuwasysLanguageManager
-	 */
-	private $languageManager;
 }
 
 ?>

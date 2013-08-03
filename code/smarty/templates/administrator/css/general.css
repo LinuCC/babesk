@@ -58,7 +58,7 @@ p, pre, blockquote, ul, ol, h1, h2, h3, h4, h5, h6 {
 	padding-bottom: 20px;
 }
 
-input, select, textarea, .inputbox {
+button, input, select, textarea, .inputbox {
   padding: 3px 5px;
   font-family: Tahoma,
                Arial,

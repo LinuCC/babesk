@@ -191,4 +191,16 @@ function navBar($showPage, $table,$headmod, $mod, $action,$filter) {
 	return $string;
 }
 
+/**
+ * Gettext-function accepting multiple parameters for placeholders
+ *
+ * @param  String $id The ID of the Gettext-String
+ * @return String The fetched gettext with the placeholders repalced by
+ * additional Arguments
+ */
+function _g($id)
+{
+	return vsprintf(gettext($id), array_slice(func_get_args(), 1));
+}
+
 ?>

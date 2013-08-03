@@ -24,7 +24,7 @@ class SchoolyearSwitch {
 
 		} catch (Exception $e) {
 
-			$this->_interface->dieError(_('Could not switch the Schoolyear!'));
+			$this->_interface->dieError(_g('Could not switch the Schoolyear!'));
 		}
 	}
 

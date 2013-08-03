@@ -62,7 +62,7 @@ abstract class CsvImport {
 			$_POST = $gump->input_preprocess($_POST);
 		}
 		else {
-			$this->errorDie(_('No File has been uploaded!'));
+			$this->errorDie(_g('No File has been uploaded!'));
 		}
 	}
 
@@ -88,7 +88,7 @@ abstract class CsvImport {
 			$this->_csvColumns = $csvReader->getKeys();
 
 		} catch (Exception $e) {
-			$this->errorDie(_('Could not parse the Csv-File!'));
+			$this->errorDie(_g('Could not parse the Csv-File!'));
 		}
 	}
 
@@ -105,10 +105,10 @@ abstract class CsvImport {
 	protected function csvSizeCheck() {
 
 		if(!count($this->_contentArray)) {
-			$this->errorDie(_('The CSV-File is void!'));
+			$this->errorDie(_g('The CSV-File is void!'));
 		}
 		if(count($this->_csvColumns) == 1 && !$this->_isSingleColumnAllowed) {
-			$this->errorDie(_('The CSV-File has only one column!'));
+			$this->errorDie(_g('The CSV-File has only one column!'));
 		}
 	}
 
@@ -119,7 +119,7 @@ abstract class CsvImport {
 			$this->dataCommit();
 
 		} catch (Exception $e) {
-			$this->errorDie(_('Could not upload the CSV-File correctly'));
+			$this->errorDie(_g('Could not upload the CSV-File correctly'));
 		}
 	}
 
@@ -180,7 +180,7 @@ abstract class CsvImport {
 			}
 
 		} catch (Exception $e) {
-			$this->errorDie(_('Could not check the Inputdata'));
+			$this->errorDie(_g('Could not check the Inputdata'));
 		}
 	}
 
@@ -287,7 +287,7 @@ abstract class CsvImport {
 			$this->_isPreview = ($_POST['isPreview'] == 'true');
 		}
 		else {
-			$this->errorDie(_('Could not parse the Input-data'));
+			$this->errorDie(_g('Could not parse the Input-data'));
 		}
 	}
 
@@ -384,7 +384,7 @@ abstract class CsvImport {
 			}
 			else {
 				TableMng::getDb()->query('ROLLBACK');
-				$this->errorDie(_('Could not upload the CSV-File!'));
+				$this->errorDie(_g('Could not upload the CSV-File!'));
 			}
 		}
 

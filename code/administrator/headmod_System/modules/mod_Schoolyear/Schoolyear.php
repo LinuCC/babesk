@@ -46,7 +46,7 @@ class Schoolyear extends Module {
 					$this->deleteSchoolYear();
 					break;
 				default:
-					$this->_interface->dieError(_('Wrong action-value!'));
+					$this->_interface->dieError(_g('Wrong action-value!'));
 					break;
 			}
 		}
@@ -76,7 +76,7 @@ class Schoolyear extends Module {
 			$this->handleCheckboxActive();
 			$this->checkInput();
 			$this->addSchoolYearToDatabase();
-			$this->_interface->dieMsg(_('The Schoolyear was added successfully'));
+			$this->_interface->dieMsg(_g('The Schoolyear was added successfully'));
 		}
 		else {
 			$this->showAddSchoolYearForm();
@@ -96,7 +96,7 @@ class Schoolyear extends Module {
 	protected function checkInput() {
 
 		try {
-			inputcheck($_POST['label'], 'name', _('Name of Schoolyear'));
+			inputcheck($_POST['label'], 'name', _g('Name of Schoolyear'));
 		} catch(WrongInputException $e) {
 			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorInput'), $e->getFieldName()));
 		}
@@ -109,7 +109,7 @@ class Schoolyear extends Module {
 				VALUES ('{$_POST['label']}', '{$_POST['active']}')");
 
 		} catch(Exception $e) {
-			$this->_interface->dieError(_('Could not add the Schoolyear'));
+			$this->_interface->dieError(_g('Could not add the Schoolyear'));
 		}
 	}
 
@@ -130,7 +130,7 @@ class Schoolyear extends Module {
 			$schoolyears = TableMng::query('SELECT * FROM schoolYear');
 
 		} catch(Exception $e) {
-			$this->_interface->dieError(_('Error Fetching the Schoolyears!'));
+			$this->_interface->dieError(_g('Error Fetching the Schoolyears!'));
 		}
 
 		if(!count($schoolyears)) {
@@ -143,10 +143,10 @@ class Schoolyear extends Module {
 
 		if(isset($_POST['dialogConfirmed'])) {
 			$this->deleteSchoolYearInDatabase();
-			$this->_interface->dieMsg(_('The Schoolyear was successfully deleted'));
+			$this->_interface->dieMsg(_g('The Schoolyear was successfully deleted'));
 		}
 		else if(isset($_POST['dialogNotConfirmed'])) {
-			$this->_interface->dieMsg(_('The Schoolyear was not deleted'));
+			$this->_interface->dieMsg(_g('The Schoolyear was not deleted'));
 		}
 		else {
 			$this->_interface->displayDeleteSchoolYearConfirmation($this->getSchoolYear());
@@ -159,7 +159,7 @@ class Schoolyear extends Module {
 			TableMng::query("DELETE FROM schoolYear WHERE ID = {$_GET['ID']}");
 
 		} catch(Exception $e) {
-			$this->_interface->dieError(_('Could not delete the Schoolyear!'));
+			$this->_interface->dieError(_g('Could not delete the Schoolyear!'));
 		}
 	}
 
@@ -167,7 +167,7 @@ class Schoolyear extends Module {
 
 		if(isset($_POST['dialogConfirmed'])) {
 			$this->activateSchoolYearInDatabase();
-			$this->_interface->dieMsg(_('The Schoolyear was successfully activated'));
+			$this->_interface->dieMsg(_g('The Schoolyear was successfully activated'));
 		}
 		else if(isset($_POST['dialogNotConfirmed'])) {
 			$this->_interface->dieMsg($this->_languageManager->getText('notActivateSchoolYear'));
@@ -200,7 +200,7 @@ class Schoolyear extends Module {
 				WHERE ID = {$_GET['ID']}");
 
 		} catch(Exception $e) {
-			$this->_interface->dieError(_('Could not fetch the Schoolyear from the Database'));
+			$this->_interface->dieError(_g('Could not fetch the Schoolyear from the Database'));
 		}
 		return $schoolyear;
 	}
@@ -211,7 +211,7 @@ class Schoolyear extends Module {
 			$this->checkInput();
 			$this->handleCheckboxActive();
 			$this->changeSchoolYearInDatabase();
-			$this->_interface->dieMsg(_('The Schoolyear was successfully changed'));
+			$this->_interface->dieMsg(_g('The Schoolyear was successfully changed'));
 		}
 		else {
 			$this->showChangeSchoolYear();
@@ -231,7 +231,7 @@ class Schoolyear extends Module {
 				active = '{$_POST['active']}' WHERE ID = {$_GET['ID']}");
 
 		} catch(Exception $e) {
-			$this->_interface->dieError(_('Could not change the Schoolyear'));
+			$this->_interface->dieError(_g('Could not change the Schoolyear'));
 		}
 	}
 
@@ -264,7 +264,7 @@ class Schoolyear extends Module {
 			TableMng::sqlEscape($_POST['schoolyearId']);
 		}
 		else {
-			$this->_interface->dieError(_('No schoolyear selected!'));
+			$this->_interface->dieError(_g('No schoolyear selected!'));
 		}
 
 		return $_POST['schoolyearId'];

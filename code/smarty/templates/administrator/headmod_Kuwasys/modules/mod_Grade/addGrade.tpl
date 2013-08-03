@@ -15,20 +15,11 @@ select, input.moduleFormulars {
 <h2 class='moduleHeader'>Eine Klasse hinzufügen</h2>
 <br>
 <div class='moduleFormulars'>
-<form action='index.php?section=Kuwasys|Grade&action=addGrade' method='post'>
-	<label>Jahrgangsstufe:<input type='text' name='year' class='moduleFormulars'></label> <br><br>
-	<label>Label:<input type='text' name='label' class='moduleFormulars'></label> <br><br>
-	<label>Schuljahr:
-		<select name='schoolyear' size='1'>
-		{foreach $schoolyears as $schoolyear}
-			<option
-				value='{$schoolyear.ID}'
-				{if $schoolyear.active}selected='selected'{/if}>
-				{$schoolyear.label}
-			</option>
-		{/foreach}
-	</select>
-	</label><br /><br />
+<form action='index.php?module=administrator|Kuwasys|Grade|AddGrade' method='post'>
+	<label>Jahrgangsstufe:<input type='text' name='gradelevel' class='moduleFormulars'></label> <br><br>
+	<label>Label:
+		<input type='text' name='gradelabel' class='moduleFormulars'>
+	</label> <br /><br />
 	{if count($schooltypes)}
 	<label> Schultyp:
 		<select name='schooltype' size='1'>
