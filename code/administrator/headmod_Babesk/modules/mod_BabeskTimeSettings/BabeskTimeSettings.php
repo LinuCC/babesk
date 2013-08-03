@@ -72,7 +72,7 @@ class BabeskTimeSettings extends Module {
 				WHERE name = "displayMealsStartdate" OR
 					name = "displayMealsEnddate" OR
 					name = "orderEnddate" OR
-					name = "ordercancelEnddate";', true);
+					name = "ordercancelEnddate";');
 
 		} catch (Exception $e) {
 			throw new Exception('Could not fetch the timing-Data!');

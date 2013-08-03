@@ -174,10 +174,16 @@ class Administrator {
 
 		$adminModule = $this->_acl->moduleGet('root/administrator');
 
-		$this->_smarty->assign('is_mainmenu', true);
-		$this->_smarty->assign('headmodules', $adminModule->getChilds());
-		$this->_smarty->assign('moduleroot', $this->_acl->getModuleroot());
-		$this->_smarty->display('administrator/menu.tpl');
+		if($adminModule) {
+			$this->_smarty->assign('is_mainmenu', true);
+			$this->_smarty->assign('headmodules', $adminModule->getChilds());
+			$this->_smarty->assign('moduleroot', $this->_acl->getModuleroot());
+			$this->_smarty->display('administrator/menu.tpl');
+		}
+		else {
+			$this->_adminInterface->dieError(_g('Error Accessing the Admin-Layer; Either the Module does not exist, or you dont have the rights to access it!'));
+		}
+
 	}
 
 
