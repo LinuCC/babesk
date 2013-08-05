@@ -169,7 +169,7 @@ class Order extends Module {
 
 		try {
 			$data = TableMng::query('SELECT * FROM global_settings
-				WHERE name = "orderEnddate"', true);
+				WHERE name = "orderEnddate"');
 			if(!isset($data[0]['value'])) {
 				throw new Exception('Could not fetch OrderEnddate');
 			}
@@ -240,7 +240,7 @@ class Order extends Module {
 				JOIN users u ON u.ID = $userId
 				JOIN price_classes pc
 					ON pc.GID = u.GID AND pc.pc_ID = m.price_class
-				WHERE m.ID = '$mealId';", true);
+				WHERE m.ID = '$mealId';");
 
 		} catch (Exception $e) {
 			$this->_interface->dieError(
@@ -282,7 +282,7 @@ class Order extends Module {
 			FROM soli_coupons sc
 			JOIN meals m ON m.ID = $mealId
 			WHERE m.date BETWEEN sc.startdate AND sc.enddate AND
-				UID = $_SESSION[uid]", true);
+				UID = $_SESSION[uid]");
 
 		return $hasCoupon[0]['count'] != '0';
 	}
@@ -296,7 +296,7 @@ class Order extends Module {
 	protected function soliPriceGet() {
 
 		$soliPrice = TableMng::query('SELECT * FROM global_settings
-			WHERE name = "soli_price"', true);
+			WHERE name = "soli_price"');
 		if(count($soliPrice)) {
 			return $soliPrice[0]['value'];
 		}
@@ -337,7 +337,7 @@ class Order extends Module {
 	protected function userBalanceChangeCheck($userId, $amount) {
 
 		$data = TableMng::query("SELECT * FROM users u
-			WHERE u.ID = $userId", true);
+			WHERE u.ID = $userId");
 
 		if(!empty($data[0]['credit'])) {
 			$res = $data[0]['credit'] + $amount;
@@ -380,7 +380,7 @@ class Order extends Module {
 				JOIN price_classes pc
 					ON m.price_class = pc.pc_ID AND pc.GID = u.GID
 				WHERE date BETWEEN '$startdate' AND '$enddate'
-					ORDER BY date, price_class", true);
+					ORDER BY date, price_class");
 
 		} catch (Exception $e) {
 			throw new Exception('Konnte die Mahlzeiten nicht abrufen!', 0, $e);

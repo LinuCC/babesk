@@ -153,12 +153,24 @@ class UserManager extends TableManager{
 	 */
 	function getMaxRechargeAmount($uid) {
 		require_once PATH_ACCESS . '/GroupManager.php';
-		$userData = $this->getEntryData($uid, 'credit', 'GID');
+		$userData = $this->getEntryData($uid, 'credit');
+		
+		$query = sql_prev_inj(sprintf('SELECT groupId FROM UserInGroups WHERE userId=%s',$uid));
+		$result = $this->db->query($query);
+		if (!$result) {
+			throw DB_QUERY_ERROR.$this->db->error;
+		}
+		
+		while($buffer = $result->fetch_assoc())
+			$res_array[] = $buffer;
+		
 		$credit = $userData['credit'];
-		$gid = $userData['GID'];
+		
+		
+		$gid = $res_array[0]['groupId'];
 
 		//require_once PATH_ACCESS . '/GroupManager.php';
-		$groupManager = new GroupManager('groups');
+		$groupManager = new GroupManager('Groups');
 
 		$groupData = $groupManager->getEntryData($gid, 'max_credit');
 		if(!$groupData)die('Error in getMaxRechargeAmount');

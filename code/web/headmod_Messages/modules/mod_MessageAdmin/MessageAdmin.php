@@ -195,7 +195,7 @@ class MessageAdmin extends Module{
 			$authorEntryExists = TableMng::query(sprintf(
 				"SELECT COUNT(*) AS count FROM MessageCarbonFootprint
 				WHERE `authorId` = %s;
-				", $authorId), true);
+				", $authorId));
 			if( ( (int) $authorEntryExists [0]['count']) > 0) {
 				TableMng::query(sprintf(
 					"UPDATE MessageCarbonFootprint
@@ -349,7 +349,7 @@ class MessageAdmin extends Module{
 	 */
 	protected function smartyAssignIsCreator($userId, $origUserId) {
 		if($userId == $origUserId) {
-			$this->_smarty->assign('isCreator', true);
+			$this->_smarty->assign('isCreator');
 		}
 		else {
 			$this->_smarty->assign('isCreator', false);
@@ -366,7 +366,7 @@ class MessageAdmin extends Module{
 		try {
 			$data = TableMng::query(sprintf(
 				'SELECT * FROM Message WHERE `ID` = %s;
-				', $id), true);
+				', $id));
 		} catch (Exception $e) {
 			$this->_interface->DieError('Konnte die Nachricht nicht abrufen!');
 		}
@@ -388,7 +388,7 @@ class MessageAdmin extends Module{
 			$managerArray = TableMng::query(sprintf(
 				'SELECT *
 				FROM MessageManagers
-				WHERE messageId = %s', $id), true);
+				WHERE messageId = %s', $id));
 		} catch (MySQLVoidDataException $e) {
 			return array();
 		} catch (Exception $e) {
@@ -429,7 +429,7 @@ class MessageAdmin extends Module{
 		try {
 			$receiverArray = TableMng::query(sprintf(
 				'SELECT userId, `read`, `return` FROM MessageReceivers
-				WHERE messageId = %s;', $id), true);
+				WHERE messageId = %s;', $id));
 		} catch (MySQLVoidDataException $e) {
 			return array();
 		} catch (Exception $e) {
@@ -579,7 +579,7 @@ class MessageAdmin extends Module{
 
 			$template = TableMng::query(sprintf(
 				'SELECT * FROM MessageTemplate WHERE `ID` = "%s"',
-				$templateId), true);
+				$templateId));
 
 
 		} catch (Exception $e) {
@@ -605,7 +605,7 @@ class MessageAdmin extends Module{
 				`name` = "smtpUsername" OR
 				`name` = "smtpPassword" OR
 				`name` = "smtpFromName" OR
-				`name` = "smtpFrom"'), true);
+				`name` = "smtpFrom"'));
 
 		} catch (MySQLVoidDataException $e) {
 			return false;
@@ -716,7 +716,7 @@ class MessageAdmin extends Module{
 		$count = TableMng::query(sprintf(
 			'SELECT COUNT(*) AS `count` FROM MessageReceivers
 			WHERE `messageId` = %s AND `userId` = %s;
-			', $mid, $uid), true);
+			', $mid, $uid));
 
 		return ($count[0]['count'] > 0);
 	}

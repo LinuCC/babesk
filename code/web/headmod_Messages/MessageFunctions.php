@@ -70,7 +70,7 @@ class MessageFunctions {
 	public static function checkIsCreatorOf($messageId, $userId) {
 		try {
 			$res = TableMng::query(sprintf('SELECT originUserId FROM Message
-				WHERE `ID` = "%s"', $messageId), true);
+				WHERE `ID` = "%s"', $messageId));
 		} catch (Exception $e) {
 			return false;
 		}

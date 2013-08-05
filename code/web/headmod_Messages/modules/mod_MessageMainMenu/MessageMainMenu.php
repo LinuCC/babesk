@@ -72,7 +72,7 @@ class MessageMainMenu extends Module {
 			$contractGID = TableMng::query('SELECT value FROM global_settings
 				WHERE name = "messageEditGroupId"');
 			$userGID = TableMng::query('SELECT GID FROM users WHERE ID =
-				"'.$_SESSION['uid'].'"',true);
+				"'.$_SESSION['uid'].'"');
 			if(!count($contractGID)) {
 				throw new Exception('Es wurde noch keiner Gruppe erlaubt, Nachrichten zu editieren!');
 			}

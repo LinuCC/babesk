@@ -22,8 +22,11 @@ class Settings extends HeadModule {
 	//Methods
 	public function execute($dataContainer) {
 
-		$dataContainer->getAcl()->moduleExecute(
-			'root/web/Settings/SettingsMainMenu', $dataContainer);
+		$defaultMod = new ModuleExecutionInputParser(
+				'root/web/Settings/SettingsMainMenu');
+		$dataContainer->getAcl()->moduleExecute($defaultMod,
+				$dataContainer);
+		
 	}
 }
 
