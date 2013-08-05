@@ -39,7 +39,7 @@ class SchbasSettings extends Module {
 				$transfer_date = $_POST['transfer_Day'].".". $_POST['transfer_Month'].".". $_POST['transfer_Year'];
 				TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", $claim_date,"schbasDeadlineClaim"));
 				TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", $transfer_date,"schbasDeadlineTransfer"));break;
-				case '7':	$claimEnabled = TableMng::query(sprintf("SELECT value FROM global_settings WHERE name='isSchbasClaimEnabled'"), true);
+				case '7':	$claimEnabled = TableMng::query(sprintf("SELECT value FROM global_settings WHERE name='isSchbasClaimEnabled'"));
 				$SchbasSettingsInterface->enableFormConfirm($claimEnabled[0]['value']);break;
 				case '8':   $SchbasSettingsInterface->TextSettings();break;
 				case '9':	if (isset($_POST['enable'])){
@@ -82,7 +82,7 @@ class SchbasSettings extends Module {
 		try {
 			$template = TableMng::query(sprintf(
 					'SELECT * FROM schbas_texts WHERE `description` = "%s%s"',
-					$textId,$templateId), true);
+					$textId,$templateId));
 
 		} catch (Exception $e) {
 			die('errorFetchTemplate');
@@ -167,7 +167,7 @@ class SchbasSettings extends Module {
 	protected function previewInfoDocs () {
 		require_once 'AdminSchbasSettingsInterface.php';
 		$SchbasSettingsInterface = new AdminSchbasSettingsInterface($this->relPath);
-		if (isset($_POST['gradeValue'])) {
+		if (isset($_POST['gradelabel'])) {
 			$this->showPdf();
 		}
 		else {
@@ -184,7 +184,7 @@ class SchbasSettings extends Module {
 		$booklistManager = new BookManager();
 
 		//get gradelevel ("Klassenstufe")
-		$gradelevel = $_POST['gradeValue'];
+		$gradelevel = $_POST['gradelabel'];
 
 		// get cover letter ("Anschreiben")
 		$coverLetter = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='coverLetter'");

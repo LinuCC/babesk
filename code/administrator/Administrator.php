@@ -48,48 +48,42 @@ class Administrator {
 			$this->_adminInterface,
 			$this->_acl);
 
-		// $this->usersInGradesAndSchoolyearsUpdate();
+		// $this->vikingsSpamAndPorc();
 	}
 
-	/**
-	 * Just a testfunction
-	 */
-	protected function usersInGradesAndSchoolyearsUpdate() {
-
+	protected function vikingsSpamAndPorc() {
+	
 		TableMng::getDb()->autocommit(false);
-		$users = TableMng::query('SELECT * FROM users u
-			WHERE (
-					SELECT COUNT(*) FROM usersInGradesAndSchoolyears uigs
-						WHERE uigs.UserID = u.ID
-				) = 0
-			');
-
-		$noGrade = TableMng::query('SELECT * FROM grade
-			WHERE gradelevel = 0');
-		$noGrade = $noGrade[0];
-
+	
 		$activeSy = TableMng::query('SELECT ID  FROM schoolYear sy
-			WHERE active = 1');
-		$activeSy = $activeSy[0]['ID'];
-
+   WHERE active = 1');
+	
+		$users = TableMng::query('SELECT u.ID AS userId,
+    uig.GradeID AS gradeId
+				
+   FROM users u
+   JOIN jointUsersInGrade uig ON uig.UserID = u.ID');
+	
 		$stmt = TableMng::getDb()->prepare(
-			'INSERT INTO usersInGradesAndSchoolyears
-				(UserID, GradeID, schoolyearId) VALUES
-				(?, ?, ?);
-			');
+				'INSERT INTO usersInGradesAndSchoolyears
+    (UserID, GradeID, schoolyearId) VALUES
+    (?, ?, ?);
+   ');
+	
 		foreach($users as $user) {
-			var_dump($user);
-			$stmt->bind_param('sss', $user['ID'], $noGrade['ID'], $activeSy);
+			$stmt->bind_param('sss', $user['userId'], $user['gradeId'], $activeSy[0]['ID']);
 			if($stmt->execute()) {
 				//yay
 			}
 			else {
-				throw new Exception('Could not change things');
+				throw new Exception('Could not change things'. $stmt->error);
 			}
 		}
-
+	
 		TableMng::getDb()->autocommit(true);
 	}
+	
+
 
 	////////////////////////////////////////////////////////////////////////
 	//Getters and Setters

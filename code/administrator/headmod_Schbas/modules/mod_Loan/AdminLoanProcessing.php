@@ -129,7 +129,7 @@ class AdminLoanProcessing {
 					LEFT JOIN Grades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS class
-				FROM users u WHERE `ID` = %s', $userId), true);
+				FROM users u WHERE `ID` = %s', $userId));
 
 		} catch (Exception $e) {
 			$this->loanInterface->dieError('Konnte die Benutzer-details nicht laden');
