@@ -110,8 +110,7 @@ class Web {
 	private function checkFirstPassword() {
 
 		$changePasswordOnFirstLoginEnabled = TableMng::query('SELECT value
-			FROM global_settings WHERE `name` = "firstLoginChangePassword"',
-			true);
+			FROM global_settings WHERE `name` = "firstLoginChangePassword"');
 
 		if ($changePasswordOnFirstLoginEnabled[0]['value'] == '0') {
 			$userData = $this->_userManager->getUserdata ($_SESSION ['uid']);
@@ -188,7 +187,7 @@ class Web {
 				WHERE %s = userId
 					AND SYSDATE() BETWEEN m.validFrom AND m.validTo
 					AND mr.read = 0",
-				$_SESSION['uid']), true);
+				$_SESSION['uid']));
 
 		} catch (MySQLVoidDataException $e) {
 			return; //no new mails found

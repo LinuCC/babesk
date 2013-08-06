@@ -66,7 +66,7 @@ class Cancel extends Module {
 			JOIN price_classes pc ON m.price_class = pc.pc_ID AND u.GID = pc.GID
 			WHERE o.ID = $orderId
 			-- If multiple soli_coupons at same time active, group to one
-			GROUP BY sc.UID;", true);
+			GROUP BY sc.UID;");
 
 		if(count($data)) {
 			$this->_orderData = $data[0];
@@ -126,7 +126,7 @@ class Cancel extends Module {
 
 		try {
 			$data = TableMng::query('SELECT * FROM global_settings
-				WHERE name = "ordercancelEnddate"', true);
+				WHERE name = "ordercancelEnddate"');
 
 		} catch (Exception $e) {
 
@@ -185,7 +185,7 @@ class Cancel extends Module {
 	protected function soliPriceGet() {
 
 		$soliPrice = TableMng::query('SELECT * FROM global_settings
-			WHERE name = "soli_price"', true);
+			WHERE name = "soli_price"');
 		if(count($soliPrice)) {
 			return ((int) $soliPrice[0]['value']);
 		}
@@ -206,7 +206,7 @@ class Cancel extends Module {
 			FROM soli_coupons sc
 			JOIN meals m ON m.ID = {$this->_orderData['mealId']}
 			WHERE m.date BETWEEN sc.startdate AND sc.enddate AND
-				UID = $_SESSION[uid]", true);
+				UID = $_SESSION[uid]");
 
 		return $hasCoupon[0]['count'] != '0';
 	}

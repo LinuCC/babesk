@@ -48,7 +48,7 @@ class MealsForOrderDisplayer {
 			WHERE name = "displayMealsStartdate" OR
 				name = "displayMealsEnddate" OR
 				name = "orderEnddate" OR
-				name = "ordercancelEnddate";', true);
+				name = "ordercancelEnddate";');
 
 		$this->settingsParse($data);
 	}
@@ -146,7 +146,7 @@ class MealsForOrderDisplayer {
 				JOIN price_classes pc
 					ON m.price_class = pc.pc_ID AND pc.GID = u.GID
 				WHERE date BETWEEN '$startdate' AND '$enddate'
-					ORDER BY date, price_class", true);
+					ORDER BY date, price_class");
 
 		} catch (Exception $e) {
 			throw new Exception('Konnte die Mahlzeiten nicht abrufen!', 0, $e);
@@ -220,7 +220,7 @@ class MealsForOrderDisplayer {
 	protected function infotextsFetch() {
 
 		$data = TableMng::query('SELECT * FROM global_settings
-			WHERE name = "menu_text1" OR name = "menu_text2"', true);
+			WHERE name = "menu_text1" OR name = "menu_text2"');
 
 		if(count($data) == 2) {
 			foreach($data as $infotext) {

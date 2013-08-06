@@ -18,12 +18,13 @@ class AdminLoanInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath . 'form.tpl');
 	}
 	
-	public function ShowLoanBooks($data, $card_id, $uid,$fullname) {
+	public function ShowLoanBooks($data, $card_id, $uid,$fullname,$alert) {
 		$this->smarty->assign('cardid', $card_id);
 		$this->smarty->assign('uid', $uid);
 		$this->smarty->assign('adress', ($_SERVER['HTTP_HOST']).$_SERVER['REQUEST_URI']);
 		$this->smarty->assign('data', $data);
 		$this->smarty->assign('fullname',$fullname);
+		$this->smarty->assign('alert',$alert);
 		$this->smarty->display($this->tplFilePath . 'loanbooks.tpl');
 	}
 	

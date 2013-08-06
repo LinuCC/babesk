@@ -20,9 +20,15 @@ class Schbas extends HeadModule {
 	
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute($moduleManager, $dataContainer) {
+	public function execute( $dataContainer) {
 		
-		$moduleManager->execute("Schbas|LoanSystem", false);
+
+		$defaultMod = new ModuleExecutionInputParser(
+				'root/web/Schbas/LoanSystem');
+		$dataContainer->getAcl()->moduleExecute($defaultMod,
+				$dataContainer);
+		
+		
 	}
 }
 ?>

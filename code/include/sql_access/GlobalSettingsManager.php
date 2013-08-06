@@ -28,6 +28,7 @@ abstract class GlobalSettings {
 	const FIRST_LOGIN_CHANGE_EMAIL_FORCED = 'firstLoginForceChangeEmail';
 	const WEBHP_REDIRECT_DELAY = 'webHomepageRedirectDelay';
 	const WEBHP_REDIRECT_TARGET  = 'webHomepageRedirectTarget';
+	const ORDER_ENDDATE  = 'orderEnddate';
 }
 
 class GlobalSettingsManager extends TableManager {
@@ -255,6 +256,10 @@ class GlobalSettingsManager extends TableManager {
 	 */
 	function changeSoliPrice($value) {
 		$this->valueSet (GlobalSettings::SOLI_PRICE, $value);
+	}
+	
+	function getLastOrderTime() {
+		return $this->valueGet (GlobalSettings::ORDER_ENDDATE);
 	}
 
 	/**

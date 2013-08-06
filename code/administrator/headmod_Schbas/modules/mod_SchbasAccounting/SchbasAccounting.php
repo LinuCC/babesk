@@ -100,16 +100,16 @@ class SchbasAccounting extends Module {
 	}
 
 	private function showUsers () {
-		$schoolyearDesired = TableMng::query('SELECT ID FROM schoolYear WHERE active = 1', true);
+		$schoolyearDesired = TableMng::query('SELECT ID FROM schoolYear WHERE active = 1');
 		$schoolyearID = $schoolyearDesired[0]['ID'];
-		$gradeID = TableMng::query("SELECT GradeID FROM jointGradeInSchoolYear WHERE SchoolYearID = $schoolyearID",true);
+		$gradeID = TableMng::query("SELECT DISTINCT gradeID FROM usersInGradesAndSchoolyears WHERE schoolyearID = $schoolyearID");
 		foreach ($gradeID as $grade){
-			$ID = $grade['GradeID'];
-			$SaveTheCows = TableMng::query("SELECT * FROM Grades WHERE ID = $ID", true);
+			$ID = $grade['gradeID'];
+			$SaveTheCows = TableMng::query("SELECT * FROM Grades WHERE ID = $ID");
 			// Cows stands for Code of worst systematic
 			$gradesAll[] = $SaveTheCows[0];
 		}
-		$users = TableMng::query('SELECT * FROM users ORDER BY name ASC', true);
+		$users = TableMng::query('SELECT * FROM users ORDER BY name ASC');
 		$users = $this->addGradeLabelToUsers($users);
 		$users = $this->addPayedAmountToUsers($users);
 		if (isset ($_GET['gradeIdDesired'])){
@@ -137,14 +137,14 @@ class SchbasAccounting extends Module {
 
 	private function addGradeLabelToUsers ($users) {
 
-		$jointsUsersInGrade = TableMng::query('SELECT * FROM jointUsersInGrade', true);
-		$grades = TableMng::query('SELECT * FROM Grades', true);
+		$jointsUsersInGrade = TableMng::query('SELECT * FROM usersInGradesAndSchoolyears');
+		$grades = TableMng::query('SELECT * FROM Grades');
 		if (isset($users) && count ($users) && isset($jointsUsersInGrade) && count ($jointsUsersInGrade)) {
 			foreach ($users as & $user) {
 				foreach ($jointsUsersInGrade as $joint) {
-					if ($joint['UserID'] == $user['ID']) {
+					if ($joint['userId'] == $user['ID']) {
 						foreach ($grades as $grade) {
-							if ($grade['ID'] == $joint['GradeID']) {
+							if ($grade['ID'] == $joint['gradeId']) {
 								$user['gradeLabel'] = $grade['gradelevel'] . '-' . $grade['label'];
 							}
 						}
@@ -157,7 +157,7 @@ class SchbasAccounting extends Module {
 
 	private function addPayedAmountToUsers ($users) {
 
-		$payed = TableMng::query('SELECT * FROM schbas_accounting', true);
+		$payed = TableMng::query('SELECT * FROM schbas_accounting');
 	//	$fees = TableMng::query('SELECT * FROM schbas_fee', true);
 		foreach ($users as & $user) {
 			foreach ($payed as $pay) {
