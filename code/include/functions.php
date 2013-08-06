@@ -200,7 +200,11 @@ function navBar($showPage, $table,$headmod, $mod, $action,$filter) {
  */
 function _g($id)
 {
-	return vsprintf(gettext($id), array_slice(func_get_args(), 1));
+	$func_args=func_get_args();
+
+//	return vsprintf(gettext($id), array_slice(func_get_args(), 1));
+	return vsprintf(gettext($id), array_slice($func_args, 1));
+
 }
 
 ?>

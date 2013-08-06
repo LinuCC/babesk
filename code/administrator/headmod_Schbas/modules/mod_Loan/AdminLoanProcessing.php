@@ -39,6 +39,22 @@ class AdminLoanProcessing {
 			$this->loanInterface->dieError(sprintf($this->msg['err_card_id'], $card_id));
 
 		$uid = $this->GetUser($card_id);
+		// eingefügt 
+		$hasForm = TableMng::query(sprintf('SELECT COUNT(*) FROM schbas_accounting WHERE UID = "%s"',$uid));
+			if ($hasForm[0]['COUNT(*)']=="0")
+		$this->loanInterface->dieError("Formular zur Buchausleihe wurde nicht abgegeben!");
+		$schoolyearDesired = TableMng::query('SELECT ID FROM schoolYear WHERE active = 1');
+		$schoolyearID = $schoolyearDesired[0]['ID'];
+		$gradeID = TableMng::query(sprintf('SELECT GradeID FROM usersInGradesAndSchoolyears WHERE UserID = "%s" AND schoolyearID ="%s"', $uid,$schoolyearID));
+				$grade = TableMng::query(sprintf('SELECT gradelevel FROM Grades WHERE ID = %s', $gradeID[0]['GradeID']));
+				$payed = TableMng::query(sprintf('SELECT loanChoice, payedAmount,amountToPay FROM schbas_accounting WHERE UID="%s"',$uid));
+				if (($payed[0]['loanChoice']=="ln" || $payed[0]['loanChoice']=="lr" )&& strcmp($payed[0]['payedAmount'],$payed[0]['amountToPay'])<0)
+						$this->loanInterface->dieError("Geld wurde noch nicht (ausreichend) gezahlt. Es sind bisher ".$payed[0]['payedAmount']."&euro; von ".$payed[0]['amountToPay']."&euro; eingegangen!");
+	$hasBooks = TableMng::query(sprintf('SELECT COUNT(*) FROM schbas_lending WHERE user_id = "%s"',$uid));
+				if ($hasBooks[0]['COUNT(*)']!="0")
+					$this->loanInterface->dieError("Es sind noch B&uuml;cher ausgeliehen!");		
+//
+		
 		$loanbooks = $this->loanManager->getLoanByUID($uid, false);
 		$class = $this->fetchUserDetails($uid);
 		// $class = $this->userManager->getUserDetails($uid);
