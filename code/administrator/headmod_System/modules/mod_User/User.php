@@ -413,7 +413,7 @@ class User extends Module {
 	protected function gradesGetAllFlattened() {
 
 		$grades = TableMng::query(
-			'SELECT ID, CONCAT(gradelevel, "-", label) AS name FROM grade');
+			'SELECT ID, CONCAT(gradelevel, "-", label) AS name FROM Grades');
 
 		$flattenedGrades = ArrayFunctions::arrayColumn($grades, 'name', 'ID');
 

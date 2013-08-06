@@ -275,7 +275,7 @@ class MessageAdmin extends Module{
 		try {
 			$grades = TableMng::query(
 				'SELECT CONCAT(gradelevel, label) AS name, ID
-				FROM grade');
+				FROM Grades');
 			$templates = TableMng::query(
 				'SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM messagegroups WHERE name="vanilla");');
 
