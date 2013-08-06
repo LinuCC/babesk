@@ -63,6 +63,8 @@ return (keycode == 13);
 
 <div align="center"><h2>Ausleihliste f&uuml;r: {$fullname}</h2></div>
 <hr>
+<h3>{$alert}</h3>
+<hr>
 <form name='barcode_scan' onsubmit='return false;'>
 <b>Bitte Barcode eingeben:</b> 
 <input type='text' id='barcode' onKeyPress='if(enter_pressed(event)) ajaxFunction() '/> <br>
