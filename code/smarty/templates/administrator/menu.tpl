@@ -17,7 +17,7 @@
 			<a class="HeadItemText" href="#" tabindex="1">
 				{$modulepath = ModuleGenerator::modulePathGet(
 					$headmodule, $moduleroot)}
-				{_('modulepath_'|cat:$modulepath)}
+				{_g('modulepath_'|cat:$modulepath)}
 			</a>
 		</div>
 	{/foreach}
@@ -35,7 +35,7 @@
 					<a href="index.php?section={$headmodule->getName()}|{$module->getName()}" tabindex="1">
 						{$modulepath = ModuleGenerator::modulePathGet(
 							$module, $moduleroot)}
-						{_('modulepath_'|cat:$modulepath)}
+						{_g('modulepath_'|cat:$modulepath)}
 					</a>
 				</div>
 			</div>

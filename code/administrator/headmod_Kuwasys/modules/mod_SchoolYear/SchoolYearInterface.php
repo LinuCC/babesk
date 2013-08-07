@@ -59,7 +59,7 @@ class SchoolYearInterface extends AdminInterface {
 		$promptMessage = sprintf(_g('Do you really want to activate the Schoolyear? The other activated Schoolyear will be deactivated'), $schoolYear['label']);
 		$actionString = 'activateSchoolYear&ID=' . $schoolYear['ID'];
 		$confirmedString = _g('Yes, I want to activate the Schoolyear');
-		$notConfirmedString = _(
+		$notConfirmedString = _g(
 			'No, I do not want to activate the Schoolyear');
 
 		$this->confirmationDialog($promptMessage, $this->sectionString, $actionString, $confirmedString,
