@@ -254,7 +254,7 @@ class User extends Module {
 		$value = 'name') {
 
 		$rows = TableMng::query($query);
-		return ArrayFunctions::arrayColumn($rows, $key, $value);
+		return ArrayFunctions::arrayColumn($rows, $value, $key);
 	}
 
 	protected function submoduleCreateUsernamesExecute() {
