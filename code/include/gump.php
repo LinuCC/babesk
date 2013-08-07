@@ -190,8 +190,17 @@ class GUMP
 		foreach($ruleset as $element => $name) {
 			if(isset($varContainer[$element]))
 			{
-				$varContainer[$element] = mysql_real_escape_string(
-					html_entity_decode($varContainer[$element]));
+				echo 'test<br />';
+				$el = $varContainer[$element];
+				$varContainer[$element] = html_entity_decode($el,
+					ENT_QUOTES|ENT_COMPAT|ENT_HTML401);
+				if(class_exists('TableMng')) {
+					TableMng::sqlEscape($varContainer[$element]);
+					var_dump($varContainer[$element]);
+				}
+				else {
+					trigger_error('TableMng not existing in gump!');
+				}
 			}
 		}
 		return $varContainer;
@@ -201,8 +210,14 @@ class GUMP
 	{
 		foreach($varContainer as $key => $el) {
 			if(!is_array($el)) {
-				$varContainer[$key] = mysql_real_escape_string(
-					html_entity_decode($varContainer[$key]));
+				$varContainer[$key] =  html_entity_decode($el,
+					ENT_QUOTES|ENT_COMPAT|ENT_HTML401);
+				if(class_exists('TableMng')) {
+					TableMng::sqlEscape($varContainer[$key]);
+				}
+				else {
+					trigger_error('TableMng not existing in gump!');
+				}
 			}
 			else {
 				//If Elements are array, preprocess the Elements in it
