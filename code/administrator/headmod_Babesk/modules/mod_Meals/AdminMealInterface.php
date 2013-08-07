@@ -63,7 +63,12 @@ class AdminMealInterface extends AdminInterface {
 		$this->smarty->assign('date_str', $date);
 
 		$this->smarty->display($this->tplFilePath . 'add_meal.tpl');
+	}
 
+	public function maxOrderAmountSetting($amount) {
+
+		$this->smarty->assign('amount', $amount);
+		$this->smarty->display($this->tplFilePath . 'maxOrderAmount.tpl');
 	}
 }
 

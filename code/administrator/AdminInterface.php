@@ -63,6 +63,17 @@ class AdminInterface extends GeneralInterface {
 		die();
 	}
 
+	/**
+	 * Show a success-message to the user and dies
+	 * @param string $msg The success-message to be shown
+	 */
+	public function dieSuccess($msg) {
+		$this->smarty->assign('_userSuccessOutput', $msg);
+		$this->smarty->display(PATH_SMARTY . '/templates/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5(
+			$_SERVER['REQUEST_URI']));
+		die();
+	}
+
 	public function showError ($msg) {
 		$this->smarty->append('_userErrorOutput', $msg);
 	}
@@ -133,6 +144,12 @@ class AdminInterface extends GeneralInterface {
 		$this->smarty->assign('inputContainer', $inputContainer);
 		$this->smarty->assign('submitString', $submitString);
 		$this->smarty->display(PATH_SMARTY_ADMIN_TEMPLATES . '/generalForm.tpl');
+	}
+
+	public static function escapeForJs($msg) {
+
+		$msg = str_replace(array("\r\n", "\r", "\n"), "<br />", $msg);
+		return $msg;
 	}
 
 	protected $smarty;

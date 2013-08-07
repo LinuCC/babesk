@@ -96,11 +96,15 @@ class TableMng {
 			throw new Exception('MySQL returned something wrong; '
 				. var_dump($content));
 		}
-		if(count($content) > 1) {
+		$elCount = count($content);
+		if($elCount > 1) {
 			throw new Exception('MySQl returned multiple Entries when only one was requested!');
 		}
-		else {
+		else if($elCount == 1) {
 			return $content[0];
+		}
+		else if($elCount < 1) {
+			return array();
 		}
 	}
 

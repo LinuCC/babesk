@@ -363,7 +363,7 @@ class GUMP
 	 */
 	protected function field_void_handle($input, $field, $rules)
 	{
-		if(empty($input[$field])) {
+		if(!isset($input[$field])) {
 			if($this->isFieldAllowedVoid($field, $rules))
 			{
 				return false;

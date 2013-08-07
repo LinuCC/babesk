@@ -124,7 +124,7 @@ class Order extends Module {
 				TableMng::getDb()->autocommit(true);
 			}
 			else {
-				$this->_interface->dieError('Es ist zu spät, diese Mahlzeit zu bestellen');
+				$this->_interface->dieError('Es ist zu spät, diese Mahlzeit zu bestellen oder die maximale Anzahl an Bestellungen pro Tag wurde erreicht');
 			}
 
 		} catch (Exception $e) {
@@ -150,12 +150,24 @@ class Order extends Module {
 
 	/**
 	 * Checks if ordering of the Meal is allowed
+	 *
 	 * @return boolean True if it is allowed, false if it is not
 	 */
 	protected function mealorderAllowedCheck() {
 
 		$enddate = $this->orderEnddateGet();
 		$orderEnd = strtotime($enddate, strtotime($this->_meal['date']));
+
+		if(($max = $this->maxCountOfOrdersPerDayPerUserGet()) !== false) {
+
+			$ordersCurrentCount = $this->orderCountOfDayByUserGet(
+				$_SESSION['uid'],
+				$this->_meal['date']);
+
+			if($ordersCurrentCount + 1 > $max) {
+				return false;
+			}
+		}
 
 		return (time() <= $orderEnd);
 	}
@@ -387,6 +399,42 @@ class Order extends Module {
 		}
 
 		return $meals;
+	}
+
+	/**
+	 * Fetches and returns the Allowed maximum of Orders per day and User
+	 *
+	 * @return string The Maximum of Orders or false if setting not found
+	 */
+	protected function maxCountOfOrdersPerDayPerUserGet() {
+
+		$data = TableMng::querySingleEntry(
+			'SELECT * FROM global_settings
+				WHERE name = "maxCountOfOrdersPerDayPerUser"');
+
+		if(!count($data)) {
+			return false;
+		}
+		else {
+			return $data['value'];
+		}
+	}
+
+	/**
+	 * Returns the Count of Meals the User has ordered at that date
+	 *
+	 * @param  int    $userId The ID of the User
+	 * @param  string $date   The Date of the User, format DD-MM-YYYY
+	 * @return string         The Count of Orders
+	 */
+	protected function orderCountOfDayByUserGet($userId, $date) {
+
+		$row = TableMng::querySingleEntry(
+			"SELECT COUNT(*) AS count FROM orders o
+			JOIN meals m ON m.ID = o.MID
+			WHERE o.UID = '$userId' AND m.date = '$date'");
+
+		return $row['count'];
 	}
 
 	////////////////////////////////////////////////////////////////////////

@@ -85,34 +85,33 @@ $(document).ready(function() {
 	$("#pageWidthSelector").buttonset();
 
 	{/literal}
+
 	/* Error-Output, if any exist */
 	{if isset($_userErrorOutput)}
 		{foreach $_userErrorOutput as $error}
-			adminInterface.errorShow('{str_replace("\n", "<br />",
-				str_replace("'", "\'", $error))}');
+			adminInterface.errorShow('{AdminInterface::escapeForJs($error)}');
 		{/foreach}
 	{/if}
 
 	/* Warning-Output, if any exist */
 	{if isset($_userWarningOutput)}
 		{foreach $_userWarningOutput as $warning}
-			adminInterface.warningShow('{htmlspecialchars($warning)}');
+			adminInterface.warningShow(
+				'{AdminInterface::escapeForJs($warning)}');
 		{/foreach}
 	{/if}
 
 	/* Message-Output, if any exist */
 	{if isset($_userMsgOutput)}
 		{foreach $_userMsgOutput as $msg}
-			adminInterface.messageShow('{str_replace("\n", "<br />",
-				str_replace("'", "\'", $msg))}');
+			adminInterface.messageShow('{AdminInterface::escapeForJs($msg)}');
 		{/foreach}
 	{/if}
 
 	/* Success-Output, if any exist */
 	{if isset($_userSuccessOutput)}
 		{foreach $_userSuccessOutput as $msg}
-			adminInterface.successShow('{str_replace("\n", "<br />",
-				str_replace("'", "\'", $msg))}');
+			adminInterface.successShow('{AdminInterface::escapeForJs($msg)}');
 		{/foreach}
 	{/if}
 	{literal}
