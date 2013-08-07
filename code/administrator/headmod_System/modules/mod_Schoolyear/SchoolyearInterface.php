@@ -104,11 +104,11 @@ class SchoolyearInterface extends AdminInterface {
 		$this->confirmationDialog($promptMessage, $this->sectionString, $actionString, $confirmedString, $notConfirmedString);
 	}
 
-	public function displaySelectSchoolyear($schoolyears) {
+	public function displaySwitchSchoolyearSettings($schoolyears) {
 
 		$this->smarty->assign('schoolyears', $schoolyears);
 		$this->smarty->display(
-			$this->tplFilePath . 'selectSchoolyearForSwitchSchoolyear.tpl');
+			$this->tplFilePath . 'schoolyearSwitchSettings.tpl');
 	}
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations

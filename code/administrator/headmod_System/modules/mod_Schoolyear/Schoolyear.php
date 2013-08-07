@@ -247,7 +247,7 @@ class Schoolyear extends Module {
 				'switchSchoolyear');
 		}
 		else {
-			$this->switchSchoolyearChooseSchoolyearExecute();
+			$this->switchSchoolyearDisplaySchoolyearSettingsExecute();
 		}
 	}
 
@@ -279,10 +279,10 @@ class Schoolyear extends Module {
 		$switcher->execute($schoolyearId);
 	}
 
-	protected function switchSchoolyearChooseSchoolyearExecute() {
+	protected function switchSchoolyearDisplaySchoolyearSettingsExecute() {
 
 		$schoolyears = $this->getAllSchoolYears();
-		$this->_interface->displaySelectSchoolyear($schoolyears);
+		$this->_interface->displaySwitchSchoolyearSettings($schoolyears);
 	}
 
 	/////////////////////////////////////////////////////////////////////

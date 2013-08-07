@@ -599,7 +599,6 @@ class GUMP
 				continue;
 			}
 
-			var_dump($this->filter_rules);
 			$filters = explode('|', $filters);
 
 			foreach($filters as $filter)
@@ -683,7 +682,7 @@ class GUMP
 	 */
 	protected function filter_mysql_save($value, $params = NULL)
 	{
-		mysql_real_escape_string($value);
+		$value = mysql_real_escape_string($value);
 
 		return $value;
 	}
