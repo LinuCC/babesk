@@ -778,6 +778,17 @@ class User extends Module {
 		return $query;
 	}
 
+	/**
+	 * Just a Hotfix, should be refactored later on
+	 */
+	protected function submoduledeletedUserShowPdfExecute() {
+
+		TableMng::sqlEscape($_GET['pdfId']);
+		$fileId = $_GET['pdfId'];
+		$deleter = new UserDelete();
+		$deleter->showPdfOfDeletedUser($fileId);
+	}
+
 	///////////////////////////////////////////////////////////////////////
 	//Attributes
 	///////////////////////////////////////////////////////////////////////
