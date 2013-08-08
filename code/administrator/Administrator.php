@@ -123,6 +123,7 @@ class Administrator {
 			$this->accessControlInit();
 			$this->initUserInterface();
 			if($this->_moduleExecutionParser->load()) {
+				$this->backlink();
 				$this->moduleBacklink();
 				$this->executeModule();
 			}
@@ -271,6 +272,17 @@ class Administrator {
 		$link = str_replace('/', '|',
 			$this->_moduleExecutionParser->moduleExecutionGet());
 		$this->_smarty->assign('moduleBacklink', $link);
+	}
+
+	/**
+	 * Modules can set a manual backlink, handle it if set
+	 */
+	private function backlink() {
+
+		if(!empty($_SESSION['backlink'])) {
+			$this->_smarty->assign('backlink', $_SESSION['backlink']);
+			unset($_SESSION['backlink']);
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////
