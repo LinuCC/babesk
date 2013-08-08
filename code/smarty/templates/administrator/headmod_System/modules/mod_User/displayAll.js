@@ -88,6 +88,30 @@ $(document).ready(function() {
 	}
 
 	/**
+	 * R.I.P. Appendix - Function in remembrance of those nice slide-ups
+	 */
+	$('table.users.dataTable').on('dblclick', function(ev) {
+		$('table.users.dataTable').effect('shake');
+	});
+
+	$('table.users.dataTable').on('click', '[id^=actionDetailsForUser#]',
+		function(ev) {
+			var userId = $(this).attr('id')
+				.replace('actionDetailsForUser#', '');
+			var newContent = $(String(
+				'<div class="userOptions"><a href="index.php?' +
+				'module=administrator|System|User|DisplayChange&ID={0}" ' +
+				'title="ändern"><img src="../images/status/edit_16.png"/>' +
+				'</a><a id="deleteUser_{0}" href="#" class="deleteUser" ' +
+				'target="_blank" title="löschen">' +
+				'<img src="../images/status/delete.png"/></a></div>')
+					.format(userId));
+
+			tableentry = $(this).parent();
+			tableentry.html(newContent);
+	});
+
+	/**
 	 * Fetch new data and refresh the Table when different columns got
 	 * selected to be displayed
 	 */
@@ -126,118 +150,6 @@ $(document).ready(function() {
 	 */
 	$('div.pageSelect').on('change', function(ev) {
 		newDataFetch();
-	});
-
-	$('#pageWidthSelector').on('change', function(ev) {
-		appendixReset();
-	});
-
-	/**
-	 * Shows the Appendix-Spoiler when hovering over the tablerow
-	 *
-	 * The Appendix-Spoiler is a small Button-like element that tells the user
-	 * that the table-row is clickable
-	 */
-	$('table.users.dataTable').on('mouseover', 'tbody tr', function(ev) {
-
-		var id = $(this).attr('id');
-		var appendixSpoiler = $(appendixSpoilerPattern
-			.format('appendixFor' + id));
-		var appendix = $(appendixPattern.format('appendixFor' + id));
-
-		if(!appendix.is(':visible') || !appendix.length) {
-			if(!appendixSpoiler.length) {
-				var newAppendixSpoiler = $('<div class="tableRowAppendixSpoiler" id="appendixFor' + id + '"><div></div></div>');
-				var offset = $(this).offset();
-				newAppendixSpoiler.offset({
-					"top": offset.top - 192,
-					"left": offset.left + 33
-				}).height($(this).height() - 4);
-				// newAppendixSpoiler.position({
-				// 		"my": "left center",
-				// 		"at": "left top",
-				// 		"of": $(this)
-				// 	}).height($(this).height() - 4);
-				$(newAppendixSpoiler).appendTo("table.users")
-					.hide().show(appendixEffect);
-			}
-			else {
-				if(!appendixSpoiler.is(':animated')) {
-					appendixSpoiler.show(appendixEffect);
-				}
-			}
-		}
-		else {
-			//real appendix shown, do nothing
-		}
-	});
-
-	/**
-	 * Shows the Appendix when clicked on a tablerow
-	 *
-	 * The Appendix is a popup-menu-thing where the Admin can select actions to
-	 * be done with the user.
-	 */
-	$('table.users.dataTable').on('click', 'tbody tr', function(ev) {
-
-		var id = $(this).attr('id');
-		var userId = id.split('_').pop();
-		var appendix = $(appendixPattern.format('appendixFor' + id));
-		var appendixSpoiler = $(appendixSpoilerPattern
-			.format('appendixFor' + id));
-
-		if(appendixSpoiler.length) {
-			appendixSpoiler.hide(400);
-		}
-		if(!appendix.length) {
-			var newAppendix = $(String('<div class="tableRowAppendix" id="appendixFor' + id + '">' +
-				'<a href="index.php?' +
-				'module=administrator|System|User|DisplayChange&ID={0}" ' +
-				'title="ändern"><img src="../images/status/edit_16.png"/>' +
-				'</a><a id="deleteUser_{0}" href="#" class="deleteUser" ' +
-				'target="_blank" title="löschen">' +
-				'<img src="../images/status/delete.png"/></a></div>')
-					.format(userId));
-			var offset = $(this).offset();
-			newAppendix.offset({
-				"top": offset.top - 192,
-				"left": offset.left + 33
-			}).height($(this).height() - 4);
-			// newAppendix.position({
-			// 			"my": "left center",
-			// 			"at": "right top",
-			// 			"of": "tr[id='" + id + "']"
-			// 		})
-			// 		.height($(this).height() - 4)
-			// 		.offset({left: 2});
-			$(newAppendix).appendTo("table.users")
-				.hide().show(appendixEffect);
-		}
-		else {
-			//appendix already exists
-			if(!appendix.is(':visible')) {
-				if(!appendix.is(':animated')) {
-					appendix.show(appendixEffect);
-				}
-			}
-			else {
-				appendix.hide(appendixEffect);
-			}
-		}
-	});
-
-	var appendixReset = function() {
-		$('.tableRowAppendixSpoiler').remove();
-		$('.tableRowAppendix').remove();
-	};
-
-
-	/**
-	 * Hides the Appendix-Spoiler on mouseout
-	 */
-	$('table.users.dataTable').on('mouseout', 'tr', function(ev) {
-		var appendixSpoiler = $(appendixSpoilerPattern.format('appendixFor' + $(this).attr('id')));
-		appendixSpoiler.hide(appendixEffect);
 	});
 
 	/**
@@ -530,6 +442,9 @@ $(document).ready(function() {
 			$.each(columnsToShow, function(colIndex, column) {
 				row += '<td>' + user[column] + '</td>';
 			});
+			row += '<td class="userOptions"><a id="actionDetailsForUser#' +
+				user.ID + '"><img src="../images/actions/plusbutton_32.png"\
+				title="Optionen"/><a/></td>';
 			row += '</tr>';
 			tablebody .append(row);
 		});
@@ -642,22 +557,6 @@ $(document).ready(function() {
 	 * @type {String}
 	 */
 	var lastPageImg = '<img src="../images/pointers/arrowDoubleRight.png" />';
-
-	/**
-	 * The Animation the Appendix-thingies are doing
-	 * @type {Object}
-	 */
-	var appendixEffect = {duration: 300, effect: 'slide'};
-	/**
-	 * The Pattern for JQuery to get the appendixSpoiler-Element of a row
-	 * @type {Object}
-	 */
-	var appendixSpoilerPattern = String("table.users .tableRowAppendixSpoiler[id='{0}'] ");
-	/**
-	 * The Pattern for JQuery to get the appendix-Element of a row
-	 * @type {Object}
-	 */
-	var appendixPattern = String("table.users .tableRowAppendix[id='{0}']");
 
 
 	existingColumnsSet();
