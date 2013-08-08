@@ -190,13 +190,11 @@ class GUMP
 		foreach($ruleset as $element => $name) {
 			if(isset($varContainer[$element]))
 			{
-				echo 'test<br />';
 				$el = $varContainer[$element];
 				$varContainer[$element] = html_entity_decode($el,
 					ENT_QUOTES|ENT_COMPAT|ENT_HTML401);
 				if(class_exists('TableMng')) {
 					TableMng::sqlEscape($varContainer[$element]);
-					var_dump($varContainer[$element]);
 				}
 				else {
 					trigger_error('TableMng not existing in gump!');
@@ -363,7 +361,7 @@ class GUMP
 	 */
 	protected function field_void_handle($input, $field, $rules)
 	{
-		if(!isset($input[$field])) {
+		if(!isset($input[$field]) || trim($input[$field]) == '') {
 			if($this->isFieldAllowedVoid($field, $rules))
 			{
 				return false;

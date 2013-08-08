@@ -40,7 +40,7 @@ class UserDelete {
 		//success! yay!
 		die(json_encode(array(
 			'value' => 'success',
-			'message' => "Der Benutzer $userToDelete[forename] $userToDelete[name] wurde erfolgreich gelöscht",
+			'message' => "Der Benutzer $userToDelete[forename] $userToDelete[name] in Klasse $userToDelete[grade] wurde erfolgreich gelöscht",
 			'pdfId' => $tempId,
 			'forename' => $userToDelete['forename'],
 			'name' => $userToDelete['name'])));
@@ -76,8 +76,13 @@ class UserDelete {
 			"SELECT forename, name, credit, birthday,
 				CONCAT(g.gradelevel, '-', g.label) AS grade
 			FROM users u
-			LEFT JOIN usersInGradesAndSchoolyears uigs ON uigs.userId = u.ID
-			LEFT JOIN Grades g ON uigs.gradeId = g.ID
+			LEFT JOIN (
+					SELECT g.gradelevel AS gradelevel, g.label AS label,
+						uigs.userId AS userId
+					FROM usersInGradesAndSchoolyears uigs
+					JOIN Grades g ON uigs.gradeId = g.ID
+					WHERE uigs.schoolyearId = @activeSchoolyear
+				) g ON g.userId = u.ID
 			WHERE u.ID = $userId", true);
 
 		if(count($userToDeleteRes)) {
