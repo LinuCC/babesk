@@ -198,6 +198,7 @@ class Administrator {
 		session_name('sid');
 		session_start();
 		error_reporting(E_ALL);
+		date_default_timezone_set(date_default_timezone_get());
 	}
 
 	private function initLanguage() {
