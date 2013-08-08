@@ -566,3 +566,12 @@ p.inputError {
 	height: 100px !important;
 	overflow-y: scroll;
 }
+
+a.moduleBacklink {
+	color: #669900;
+	position: relative;
+	font-size: 75%;
+	top: 25px;
+	right: -15px;
+	float: right;
+}

@@ -52,24 +52,24 @@ class Administrator {
 	}
 
 	protected function vikingsSpamAndPorc() {
-	
+
 		TableMng::getDb()->autocommit(false);
-	
+
 		$activeSy = TableMng::query('SELECT ID  FROM schoolYear sy
    WHERE active = 1');
-	
+
 		$users = TableMng::query('SELECT u.ID AS userId,
     uig.GradeID AS gradeId
-				
+
    FROM users u
    JOIN jointUsersInGrade uig ON uig.UserID = u.ID');
-	
+
 		$stmt = TableMng::getDb()->prepare(
 				'INSERT INTO usersInGradesAndSchoolyears
     (UserID, GradeID, schoolyearId) VALUES
     (?, ?, ?);
    ');
-	
+
 		foreach($users as $user) {
 			$stmt->bind_param('sss', $user['userId'], $user['gradeId'], $activeSy[0]['ID']);
 			if($stmt->execute()) {
@@ -79,10 +79,10 @@ class Administrator {
 				throw new Exception('Could not change things'. $stmt->error);
 			}
 		}
-	
+
 		TableMng::getDb()->autocommit(true);
 	}
-	
+
 
 
 	////////////////////////////////////////////////////////////////////////
@@ -123,6 +123,7 @@ class Administrator {
 			$this->accessControlInit();
 			$this->initUserInterface();
 			if($this->_moduleExecutionParser->load()) {
+				$this->moduleBacklink();
 				$this->executeModule();
 			}
 			else {
@@ -260,6 +261,16 @@ class Administrator {
 					'Konnte den Zugriff nicht einrichten!');
 			}
 		}
+	}
+
+	/**
+	 * Adds an "Back to Module"-Link, useful if header-link couldnt be shown
+	 */
+	private function moduleBacklink() {
+
+		$link = str_replace('/', '|',
+			$this->_moduleExecutionParser->moduleExecutionGet());
+		$this->_smarty->assign('moduleBacklink', $link);
 	}
 
 	////////////////////////////////////////////////////////////////////////

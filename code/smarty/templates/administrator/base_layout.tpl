@@ -66,6 +66,9 @@
 
 		<div id="content">{block name=search}{/block}</div>
 		<div id="content">{block name=content}{/block}</div>
+		{if !empty($moduleBacklink)}
+			<a class="moduleBacklink" href="index.php?module={$moduleBacklink}">{_g('Back to the Module')}</a>
+		{/if}
 	</div>
 	<div id="footer">
 		<p>{block name=signature}<div id="footer">
