@@ -191,8 +191,8 @@ class GUMP
 			if(isset($varContainer[$element]))
 			{
 				$el = $varContainer[$element];
-				$varContainer[$element] = html_entity_decode($el,
-					ENT_QUOTES|ENT_COMPAT|ENT_HTML401);
+				// $varContainer[$element] = html_entity_decode($el,
+				// 	ENT_QUOTES|ENT_COMPAT|ENT_HTML401);
 				if(class_exists('TableMng')) {
 					TableMng::sqlEscape($varContainer[$element]);
 				}
@@ -208,8 +208,8 @@ class GUMP
 	{
 		foreach($varContainer as $key => $el) {
 			if(!is_array($el)) {
-				$varContainer[$key] =  html_entity_decode($el,
-					ENT_QUOTES|ENT_COMPAT|ENT_HTML401);
+				// $varContainer[$key] =  html_entity_decode($el,
+				// 	ENT_QUOTES|ENT_COMPAT|ENT_HTML401);
 				if(class_exists('TableMng')) {
 					TableMng::sqlEscape($varContainer[$key]);
 				}
