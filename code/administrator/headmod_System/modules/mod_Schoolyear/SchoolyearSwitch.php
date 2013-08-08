@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Handles the Switch from one Schoolyear to another with many datachanges
+ *
+ * @author  Pascal Ernst <pascal.cc.ernst@gmail.com>
+ */
 class SchoolyearSwitch {
 
 	/////////////////////////////////////////////////////////////////////
@@ -22,7 +27,6 @@ class SchoolyearSwitch {
 			$this->settingsInputHandle();
 			$this->uploadStart();
 			$this->upload();
-			die();
 			$this->uploadFinish();
 
 		} catch (Exception $e) {
@@ -69,15 +73,17 @@ class SchoolyearSwitch {
 
 	protected function upload() {
 
+		$this->activeSchoolyearChange();
 		$this->usersTransferToIncrementedGradelevel();
 	}
 
 	protected function usersTransferToIncrementedGradelevel() {
 
 		$existingEntries = $this->usersGradelevelToIncrementGet();
-		$grades = $this->gradesGetRearrangedByLevel();
+		$this->gradesSetRearrangedByLevel();
 
-		$toUpgrade = $this->usersInGradesToAddGet($existingEntries, $grades);
+		$toUpgrade = $this->usersInGradesToAddGet($existingEntries,
+			$this->_arrangedGrades);
 
 		$this->usersNewGradelevelAndSchoolyearsUpload($toUpgrade);
 	}
@@ -108,7 +114,7 @@ class SchoolyearSwitch {
 	 *
 	 * @return array An specially arranged Array with all grades in it
 	 */
-	protected function gradesGetRearrangedByLevel() {
+	protected function gradesSetRearrangedByLevel() {
 
 		$arrangedGrades = array();
 		$grades = TableMng::query('SELECT * FROM Grades');
@@ -121,7 +127,7 @@ class SchoolyearSwitch {
 				$grade['ID'];
 		}
 
-		return $arrangedGrades;
+		$this->_arrangedGrades = $arrangedGrades;
 	}
 
 	/**
@@ -151,32 +157,6 @@ class SchoolyearSwitch {
 	}
 
 	/**
-	 * Returns the GradeId for the new (incremented) Grade of the User
-	 *
-	 * @param  array  $userToUpgrade The User to Upgrade
-	 * @param  array  $grades        The grades in which to search for the
-	 *                               correct GradeId
-	 * @return string                The Grade-ID of the new Grade
-	 */
-	protected function gradeIdNewGetForUser($userToUpgrade, $grades) {
-
-		$newGradeId = $this->gradeIdByGradeDataGet(
-			$userToUpgrade['nextGradelevel'],
-			$userToUpgrade['gradelabel'],
-			$grades);
-
-		if(!$newGradeId) {
-			$this->_interface->dieError(_g(
-				'Grade %1$s-%2$s could not be found! You should add it to the Grades to allow users to be moved in there',
-					$userToUpgrade['nextGradelevel'],
-					$userToUpgrade['gradelabel'])
-			);
-		}
-
-		return $newGradeId;
-	}
-
-	/**
 	 * Searches and adds the Grade to which the User should get added
 	 *
 	 * @param  array  $toUpgrade An Array of Users to be upgraded
@@ -192,8 +172,6 @@ class SchoolyearSwitch {
 
 			if($userToUpgrade['nextGradelevel'] <= $this->_highestGradelevel &&
 				(int)$userToUpgrade['currentGradelevel'] !== 0) {
-				$userToUpgrade['newGradeId'] = $this->gradeIdNewGetForUser(
-					$userToUpgrade, $grades);
 			}
 		}
 
@@ -208,44 +186,92 @@ class SchoolyearSwitch {
 
 		foreach($toUpload as $newJoin) {
 
-			$newJoin = $gradeCreateIfMissingAndAllowed($newJoin);
+			if($newJoin['currentGradelevel'] === 0 ||
+				$newJoin['nextGradelevel'] > $this->_highestGradelevel) {
+				continue;
+			}
 
-			/**
-			 * HIER MUSS NOCH GETESTET WERDEN
-			 */
+			$newJoin = $this->gradeCreateIfMissingAndAllowed($newJoin);
 
 			if(!empty($newJoin['newGradeId'])) {
-				echo "HIN: $newJoin[currentGradelevel]-$newJoin[gradelabel] =>
-				$newJoin[nextGradelevel]-$newJoin[gradelabel]<br />";
-				$stmt->bind_param('iii', ,
-					$data['newGradeId'], $this->_schoolyearId);
+				$stmt->bind_param('iii', $newJoin['userId'],
+					$newJoin['newGradeId'], $this->_schoolyearId);
+				if(!$stmt->execute()) {
+					$this->_interface->dieError(_g('Could not add Users to their new Grade and Schoolyear!') . $stmt->error);
+				}
 			}
 			else {
-				echo "___: $newJoin[nextGradelevel]-$newJoin[gradelabel]<br />";
+				$this->_interface->dieError(_g(
+				'Grade %1$s-%2$s could not be found! You should add it to the Grades to allow users to be moved in there',
+					$newJoin['nextGradelevel'],
+					$newJoin['gradelabel'])
+			);
 			}
 		}
 	}
 
+	/**
+	 * Creates a Grade if it is missing and User wants it to be created
+	 *
+	 * @param  array  $data The Data of the Grade
+	 * @return array        The data with the key "newGradeId" added if a
+	 *                      Grade was added
+	 */
 	protected function gradeCreateIfMissingAndAllowed($data) {
 
-		if(empty($data['newGradeId']) &&
-			$this->_shouldCreateClassesIfNotExist) {
-			$data['newGradeId'] = $this->gradeCreate(
-				$data['gradelabel'],
-				$data['nextGradelevel']);
+		$newGradeId = $this->gradeIdByGradeDataGet(
+					$data['nextGradelevel'],
+					$data['gradelabel'],
+					$this->_arrangedGrades);
+		var_dump($newGradeId);
+		if($newGradeId !== false) {
+			$data['newGradeId'] = $newGradeId;
+		}
+		else {
+			if($this->_shouldCreateClassesIfNotExist) {
+				$data['newGradeId'] = $this->gradeCreate(
+					$data['gradelabel'],
+					$data['nextGradelevel']);
+				//Refresh the existing Grades
+				$this->gradesSetRearrangedByLevel();
+			}
 		}
 
 		return $data;
 	}
 
+	/**
+	 * Commits the Grade-Creation to the Database
+	 *
+	 * @param  string $label The Name of the Grade
+	 * @param  int    $level The Level of the Grade
+	 * @return int           The ID of the Grade
+ 	 */
 	protected function gradeCreate($label, $level) {
 
 		TableMng::query("INSERT INTO Grades (label, gradelevel) VALUES
-			($label, $level)");
+			('$label', '$level')");
 
-		return TableMng::getDb()->last_insert_id;
+		return TableMng::getDb()->insert_id;
 	}
 
+	/**
+	 * Changes the active Schoolyear to the new userselected Schoolyear
+	 *
+	 * @param  int    $newSyId The ID of the Schoolyear to activate
+	 */
+	protected function activeSchoolyearChange() {
+
+		$newSyId = $this->_schoolyearId;
+
+		TableMng::queryMultiple(
+			"UPDATE schoolYear SET active = 0 WHERE active = 1;
+			UPDATE schoolYear SET active = 1 WHERE ID = '$newSyId'");
+	}
+
+	/**
+	 * Finalizes the Upload, commits it if there was no error
+	 */
 	protected function uploadFinish() {
 
 		TableMng::getDb()->commit();

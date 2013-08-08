@@ -23,10 +23,6 @@ class Schoolyear extends Module {
 		$this->entryPoint($dataContainer);
 
 		$this->_subExecPath = $dataContainer->getSubmoduleExecutionRequest();
-		if($this->execPathHasSubmoduleLevel(1, $this->_subExecPath)) {
-			$this->submoduleExecute($this->_subExecPath, 1);
-			die();
-		}
 
 		if(isset($_GET['action'])) {
 			switch($_GET['action']) {
@@ -51,6 +47,10 @@ class Schoolyear extends Module {
 			}
 		}
 		else {
+			if($this->execPathHasSubmoduleLevel(1, $this->_subExecPath)) {
+				$this->submoduleExecute($this->_subExecPath, 1);
+				die();
+			}
 			$this->_interface->displayMainMenu();
 		}
 	}

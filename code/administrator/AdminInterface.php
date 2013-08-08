@@ -149,6 +149,7 @@ class AdminInterface extends GeneralInterface {
 	public static function escapeForJs($msg) {
 
 		$msg = str_replace(array("\r\n", "\r", "\n"), "<br />", $msg);
+		$msg = addslashes($msg);
 		return $msg;
 	}
 
