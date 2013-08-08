@@ -220,7 +220,7 @@ class Cancel extends Module {
 
 		$newBalance = $this->_orderData['userCredits'] + $amount;
 		$newBalanceStr = str_replace(',', '.', (string) $newBalance);
-		TableMng::query("UPDATE users SET credit = '$newBalanceStr'");
+		TableMng::query("UPDATE users SET credit = '$newBalanceStr' WHERE $_SESSION[uid] = ID");
 	}
 
 	/**
