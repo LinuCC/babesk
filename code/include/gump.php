@@ -424,6 +424,9 @@ class GUMP
 				case 'validate_required':
 					$resp[] = "The <span class=\"$field_class\">$this->display_names[$field]</span> field is required";
 					break;
+				case 'validate_disallowed':
+					$resp[] = "The $displayName field has to be void, because: '$param'";
+					break;
 				case 'validate_valid_email':
 					$resp[] = "The <span class=\"$field_class\">$this->display_names[$field]</span> field is required to be a valid email address";
 					break;
@@ -523,6 +526,9 @@ class GUMP
 				switch($e['rule']) {
 					case 'validate_required':
 						$resp[] = "Das $displayName Feld muss ausgefüllt werden";
+						break;
+					case 'validate_disallowed':
+						$resp[] = "Das $displayName Feld muss leer sein, weil: '$param'";
 						break;
 					case 'validate_valid_email':
 						$resp[] = "Das $displayName Feld muss eine korrekte Email-Adresse beinhalten";
@@ -903,6 +909,33 @@ class GUMP
 	protected function validate_required($field, $input, $param = NULL)
 	{
 		if(isset($input[$field]) && trim($input[$field]) != '')
+		{
+			return;
+		}
+		else
+		{
+			return array(
+				'field' => $field,
+				'value' => NULL,
+				'rule'	=> __FUNCTION__,
+				'param' => $param
+			);
+		}
+	}
+
+	/**
+	 * Checks if the specified key is not existing or empty
+	 *
+	 * Usage: '<index>' => 'disallowed'
+	 *
+	 * @access protected
+	 * @param  string $field
+	 * @param  array $input
+	 * @return mixed
+	 */
+	protected function validate_disallowed($field, $input, $param = NULL)
+	{
+		if(!isset($input[$field]) || trim($input[$field]) == '')
 		{
 			return;
 		}

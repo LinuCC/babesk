@@ -308,17 +308,20 @@ abstract class CsvImport {
 
 	protected function fieldsAllowedVoidParse() {
 
+
 		if(!empty($_POST['voidColumnAllowed']) &&
 			count($_POST['voidColumnAllowed'])) {
 
 			$columns = json_decode($_POST['voidColumnAllowed']);
-			foreach($columns as $col) {
-				//Incoming JSON got parsed to Objects, cast it to an array
-				$ar = (array) $col;
+			if(count($columns)) {
+				foreach($columns as $col) {
+					//Incoming JSON got parsed to Objects, cast it to an array
+					$ar = (array) $col;
 
-				foreach($ar as $key => $val) {
-					if($val) {
-						$this->_keysAllowedVoid[$key] = $val;
+					foreach($ar as $key => $val) {
+						if($val) {
+							$this->_keysAllowedVoid[$key] = $val;
+						}
 					}
 				}
 			}

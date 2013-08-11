@@ -99,4 +99,10 @@
 			parent::__construct($msg, $code, $previous);
 		}
 	}
+
+	class MultipleEntriesException extends Exception {
+		function __construct($msg, $code = 0, $previous = NULL) {
+			parent::__construct($msg, $code, $previous);
+		}
+	}
 ?>
