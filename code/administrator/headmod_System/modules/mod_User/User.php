@@ -176,7 +176,8 @@ class User extends Module {
 
 		//Standard-Values when adding a new User
 		$locked = '0';
-		$first_passwd = '0';
+		$first_passwd = ($this->isFirstPasswordEnabled()) ? 1 : 0;
+
 
 		$password = (!empty($_POST['password']))
 			? hash_password($_POST['password']) : '';
@@ -213,6 +214,33 @@ class User extends Module {
 		}
 
 		TableMng::getDb()->autocommit(true);
+	}
+
+	/**
+	 * Checks if First Password in GlobalSettings enabled
+	 *
+	 * Dies when Error occured during fetching
+	 *
+	 * @return boolean If the User should input a new Password on First Login
+	 */
+	protected function isFirstPasswordEnabled() {
+
+		try {
+			$data = TableMng::querySingleEntry('SELECT value
+				FROM global_settings
+				WHERE name = "firstLoginChangePassword"');
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(_g('Could not check if first ' .
+				'Password on Login is enabled!'));
+		}
+
+		if(!count($data)) {
+			return false;
+		}
+		else {
+			return (boolean) $data['value'];
+		}
 	}
 
 	protected function schoolyearsAndGradesRegisterQueryCreate() {
