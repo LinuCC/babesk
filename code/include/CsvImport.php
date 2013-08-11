@@ -74,6 +74,7 @@ abstract class CsvImport {
 
 		$this->inputDataFetch();
 		$this->metaSettingsParse();
+		$this->missingValuesAddAsVoidString();
 		$this->csvDataParse();
 	}
 
@@ -142,7 +143,7 @@ abstract class CsvImport {
 	protected function singleFieldCheckForVoid($wantedColumn, $row) {
 
 		if(isset($row[$wantedColumn]) &&
-			$row[$wantedColumn] !== '' &&
+			trim($row[$wantedColumn]) !== '' &&
 			$row[$wantedColumn] !== false) {
 
 			return true;
@@ -161,6 +162,11 @@ abstract class CsvImport {
 				return false;
 			}
 		}
+	}
+
+	protected function isFieldAllowedVoid($fieldname) {
+
+		return array_key_exists($fieldname, $this->_keysAllowedVoid);
 	}
 
 	protected function gumpCheck() {
@@ -182,11 +188,6 @@ abstract class CsvImport {
 		} catch (Exception $e) {
 			$this->errorDie(_g('Could not check the Inputdata'));
 		}
-	}
-
-	protected function isFieldAllowedVoid($fieldname) {
-
-		return array_key_exists($fieldname, $this->_keysAllowedVoid);
 	}
 
 	/**
@@ -312,7 +313,8 @@ abstract class CsvImport {
 		if(!empty($_POST['voidColumnAllowed']) &&
 			count($_POST['voidColumnAllowed'])) {
 
-			$columns = json_decode($_POST['voidColumnAllowed']);
+			$columns = json_decode(
+				html_entity_decode($_POST['voidColumnAllowed']));
 			if(count($columns)) {
 				foreach($columns as $col) {
 					//Incoming JSON got parsed to Objects, cast it to an array

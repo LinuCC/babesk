@@ -12,6 +12,7 @@ require_once PATH_INCLUDE . '/DataContainer.php';
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/HeadModule.php';
 require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';
+require_once PATH_INCLUDE . '/ArrayFunctions.php';
 require_once 'Login.php';
 require_once 'AdminInterface.php';
 require_once 'locales.php';

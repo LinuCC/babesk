@@ -134,10 +134,10 @@ CsvFileUploader = function() {
 	 */
 	function csvColumnsViewUpdate(res, keysAllowedVoid) {
 
-		var input = 'Bitte anwählen, welche Spalten leergelassen werden können<br />';
+		var input = '<p>Bitte anwählen, welche Spalten leergelassen werden können</p>';
 
 		for(var column in res) {
-			isChecked = voidColumnAllowedAlreadyChecked(res[column], keysAllowedVoid);
+			isChecked = voidColumnAllowedIsAlreadyChecked(res[column], keysAllowedVoid);
 			input += csvColumnsViewHtmlCreate(res[column], isChecked);
 		}
 		if(input != '') {
@@ -176,7 +176,7 @@ CsvFileUploader = function() {
 	 * @param  {string} keysAllowedVoid The Array to search the Key in
 	 * @return {boolean} true if the key was found, false if not
 	 */
-	function voidColumnAllowedAlreadyChecked(columnName, keysAllowedVoid) {
+	function voidColumnAllowedIsAlreadyChecked(columnName, keysAllowedVoid) {
 
 		for(var key in keysAllowedVoid) {
 			if(key == columnName) {

@@ -109,7 +109,6 @@ class UserCsvImport extends CsvImport {
 	protected function check() {
 
 		parent::check();
-		var_dump($this->_keysAllowedVoid);
 	}
 
 	protected function dataPrepare() {
