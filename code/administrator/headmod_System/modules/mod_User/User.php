@@ -178,7 +178,6 @@ class User extends Module {
 		$locked = '0';
 		$first_passwd = ($this->isFirstPasswordEnabled()) ? 1 : 0;
 
-
 		$password = (!empty($_POST['password']))
 			? hash_password($_POST['password']) : '';
 
@@ -193,7 +192,7 @@ class User extends Module {
 
 			if(!empty($_POST['cardnumber'])) {
 				$cardnumberQuery = "INSERT INTO cards (cardnumber, UID)
-					VALUES ('$_POST[cardnumber]', '@uid');";
+					VALUES ('$_POST[cardnumber]', @uid);";
 			}
 
 			TableMng::queryMultiple("INSERT INTO users
