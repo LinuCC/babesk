@@ -14,10 +14,12 @@ class DataContainer {
 	////////////////////////////////////////////////////////////////////////
 	//Constructor
 	////////////////////////////////////////////////////////////////////////
-	public function __construct ($smarty, $interface, $acl = NULL) {
+
+	public function __construct ($smarty, $interface, $acl = NULL, $pdo = NULL) {
 		$this->_smarty = $smarty;
 		$this->_interface = $interface;
 		$this->_acl = $acl;
+		$this->_pdo = $pdo;
 	}
 
 	////////////////////////////////////////////////////////////////////////
@@ -53,6 +55,14 @@ class DataContainer {
 
 	public function setAcl($acl) {
 		$this->_acl = $acl;
+	}
+
+	public function getPdo() {
+		return $this->_pdo;
+	}
+
+	public function setPdo($pdo) {
+		$this->_pdo = $pdo;
 	}
 
 	public function getSubmoduleExecutionRequest() {
@@ -96,6 +106,12 @@ class DataContainer {
 	 * @var String
 	 */
 	protected $_submoduleExecutionRequest;
+
+	/**
+	 * The Database-Connection
+	 * @var PDO
+	 */
+	protected $_pdo;
 }
 
 ?>

@@ -13,6 +13,7 @@ require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/HeadModule.php';
 require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';
 require_once PATH_INCLUDE . '/ArrayFunctions.php';
+require_once PATH_INCLUDE . '/sql_access/DBConnect.php';
 require_once 'Login.php';
 require_once 'AdminInterface.php';
 require_once 'locales.php';
@@ -44,10 +45,12 @@ class Administrator {
 		$this->_moduleExecutionParser->setSubprogramPath(
 			'root/administrator');
 		$this->loadVersion();
+		$this->initPdo();
 		$this->_dataContainer = new DataContainer(
 			$this->_smarty,
 			$this->_adminInterface,
-			$this->_acl);
+			$this->_acl,
+			$this->_pdo);
 
 		// $this->vikingsSpamAndPorc();
 	}
@@ -227,6 +230,18 @@ class Administrator {
 		$version=@file_get_contents("../version.txt");
 		if ($version===FALSE) $version = "";
 		$smarty->assign('babesk_version', $version);
+	}
+
+	private function initPdo() {
+
+		try {
+			$connector = new DBConnect();
+			$connector->initDatabaseFromXML();
+			$this->_pdo = $connector->getPdo();
+
+		} catch (Exception $e) {
+			trigger_error('Could not create the PDO-Object!');
+		}
 	}
 
 	private function setPhpIni() {
