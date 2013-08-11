@@ -110,7 +110,6 @@ class Grade extends Module {
 		);
 
 		$gump->rules($rules);
-		$gump->sanitize($_POST);
 
 		if(!$gump->run($_POST)) {
 			$this->_interface->dieError(

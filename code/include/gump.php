@@ -185,6 +185,9 @@ class GUMP
 	 */
 	public function sanitize(array $input, $fields = NULL)
 	{
+		trigger_error(
+			'GUMP-Method sanitize should not be used; Use the filter instead');
+
 		$magic_quotes = (bool)get_magic_quotes_gpc();
 
 		if(is_null($fields))
@@ -214,10 +217,10 @@ class GUMP
 						$value = trim($value);
 					}
 
-					if(function_exists('iconv'))
-					{
-						$value = iconv('ISO-8859-1', 'UTF-8', $value);
-					}
+					// if(function_exists('iconv'))
+					// {
+					// 	$value = iconv('ISO-8859-1', 'UTF-8', $value);
+					// }
 
 					$value = filter_var($value, FILTER_SANITIZE_STRING);
 				}

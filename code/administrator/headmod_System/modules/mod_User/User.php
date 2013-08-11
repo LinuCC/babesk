@@ -136,7 +136,6 @@ class User extends Module {
 
 		$gump = new GUMP();
 
-		// $_POST = $gump->sanitize($_POST);
 		$_POST['isSoli'] = (isset($_POST['isSoli'])
 			&& $_POST['isSoli'] == 'true');
 
@@ -503,7 +502,6 @@ class User extends Module {
 
 
 		try {
-			// $_POST = $gump->sanitize($_POST);
 			$gump->rules(self::$_changeRules);
 
 			//Set none-filled-out formelements to be at least a void string,
