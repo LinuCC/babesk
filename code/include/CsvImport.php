@@ -59,7 +59,7 @@ abstract class CsvImport {
 			$gump = new GUMP();
 			//Escapes and decodes the Input
 			$_POST = $gump->sanitize($_POST);
-			$_POST = $gump->input_preprocess($_POST);
+			// $_POST = $gump->input_preprocess($_POST);
 		}
 		else {
 			$this->errorDie(_g('No File has been uploaded!'));

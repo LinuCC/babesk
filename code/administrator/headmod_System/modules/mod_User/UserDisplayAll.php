@@ -301,7 +301,7 @@ class UserDisplayAllQueryCreator {
 	protected function concatCountQuery($filterQuery) {
 
 		$this->_countQuery = "SELECT COUNT(*) AS count FROM
-		(SELECT u.ID AS userId, u.forename AS forename, u.name AS name, u.username AS username, u.password AS password, u.email AS email, u.telephone AS telephone, u.GID AS GID, u.birthday AS birthday,
+		(SELECT u.ID AS userId, u.forename AS forename, u.name AS name, u.username AS username, u.email AS email, u.telephone AS telephone, u.GID AS GID, u.birthday AS birthday,
 			u.soli AS soli, u.first_passwd AS first_passwd
 			$this->_querySelect
 					FROM users u

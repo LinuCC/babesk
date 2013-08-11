@@ -418,7 +418,6 @@ $(document).ready(function() {
 	 */
 	var tableFillByUserdata = function(userData) {
 
-		console.log('SCHINKEN!');
 		console.log(userData);
 
 		var columnsToShow = $.map($('input.columnSelect:checked'), function(el) {

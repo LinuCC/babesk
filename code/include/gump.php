@@ -172,58 +172,8 @@ class GUMP
 		if($validated !== true) {
 			return false;
 		} else {
-		   return $data;
+			return $data;
 		}
-	}
-
-	/**
-	 * Decodes HTML-Entities and escapes strings against MySQL-Injections
-	 *
-	 * @param  Array $data The Input-data to check for
-	 * @param  Array $ruleset A ruleset for gump so that the function knows for
-	 * which variables to check
-	 * @return Array The Data with all of the Elements, that are in the ruleset
-	 * too, escaped
-	 */
-	public function input_preprocess_by_ruleset($varContainer, $ruleset)
-	{
-		foreach($ruleset as $element => $name) {
-			if(isset($varContainer[$element]))
-			{
-				$el = $varContainer[$element];
-				// $varContainer[$element] = html_entity_decode($el,
-				// 	ENT_QUOTES|ENT_COMPAT|ENT_HTML401);
-				if(class_exists('TableMng')) {
-					TableMng::sqlEscape($varContainer[$element]);
-				}
-				else {
-					trigger_error('TableMng not existing in gump!');
-				}
-			}
-		}
-		return $varContainer;
-	}
-
-	public function input_preprocess($varContainer)
-	{
-		foreach($varContainer as $key => $el) {
-			if(!is_array($el)) {
-				// $varContainer[$key] =  html_entity_decode($el,
-				// 	ENT_QUOTES|ENT_COMPAT|ENT_HTML401);
-				if(class_exists('TableMng')) {
-					TableMng::sqlEscape($varContainer[$key]);
-				}
-				else {
-					trigger_error('TableMng not existing in gump!');
-				}
-			}
-			else {
-				//If Elements are array, preprocess the Elements in it
-				$this->input_preprocess($el);
-			}
-		}
-
-		return $varContainer;
 	}
 
 	/**
@@ -691,7 +641,7 @@ class GUMP
 	/**
 	 * Escapes the string for MySQL
 	 *
-	 * Usage: '<index>' => 'mysql_save'
+	 * Usage: '<index>' => 'sql_escape'
 	 *
 	 * @access protected
 	 * @author Pascal Ernst <pascal.cc.ernst@gmail.com>
@@ -699,11 +649,17 @@ class GUMP
 	 * @param  array $params
 	 * @return string
 	 */
-	protected function filter_mysql_save($value, $params = NULL)
+	protected function filter_sql_escape($value, $params = NULL)
 	{
-		$value = mysql_real_escape_string($value);
+		$locValue = $value;
+		if(class_exists('TableMng')) {
+			TableMng::sqlEscape($locValue);
+		}
+		else {
+			trigger_error('TableMng not existing in gump!');
+		}
 
-		return $value;
+		return $locValue;
 	}
 
 	/**

@@ -142,8 +142,8 @@ class User extends Module {
 
 		try {
 			$gump->rules(self::$registerRules);
-			$_POST = $gump->input_preprocess_by_ruleset($_POST,
-				self::$registerRules);
+			// $_POST = $gump->input_preprocess_by_ruleset($_POST,
+				// self::$registerRules);
 			//Set none-filled-out formelements to be at least a void string,
 			//for easier processing
 			$gump->voidVarsToStringByRuleset($_POST, self::$registerRules);
@@ -501,6 +501,7 @@ class User extends Module {
 
 		$gump = new GUMP();
 
+
 		try {
 			$_POST = $gump->sanitize($_POST);
 			$gump->rules(self::$_changeRules);
@@ -513,8 +514,8 @@ class User extends Module {
 			//validate the elements
 			if($validatedData = $gump->run($_POST)) {
 				//escapes all of the elements in the ruleset
-				$_POST = $gump->input_preprocess_by_ruleset($_POST,
-					self::$_changeRules);
+				// $_POST = $gump->input_preprocess_by_ruleset($_POST,
+					// self::$_changeRules);
 			}
 			else {
 				die(json_encode(array(
@@ -812,34 +813,109 @@ class User extends Module {
 		'Ŕ'=>'R', 'ŕ'=>'r');
 
 	protected static $registerRules = array(
-		'forename' => array('required|min_len,2|max_len,64', '', 'Vorname'),
-		'name' => array('required|min_len,3|max_len,64', '', 'Nachname'),
-		'username' => array('min_len,3|max_len,64', '', 'Benutzername'),
-		'password' => array('min_len,3|max_len,64', '', 'Passwort'),
-		'passwordRepeat' => array('min_len,3|max_len,64', '',
-			'wiederholtes Passwort'),
-		'email' => array('valid_email|min_len,3|max_len,64', '', 'Email'),
-		'telephone' => array('min_len,3|max_len,64', '', 'Telefonnummer'),
-		'birthday' => array('max_len,10', '', 'Geburtstag'),
-		'pricegroupId' => array('numeric', '', 'PreisgruppenId'),
-		'schoolyearId' => array('numeric', '', 'SchuljahrId'),
-		'gradeId' => array('numeric', '', 'KlassenId'),
-		'cardnumber' => array('exact_len,10', '', 'Kartennummer'),
-		'credits' => array('numeric|min_len,1|max_len,5', '', 'Guthaben'),
-		'isSoli' => array('boolean', '', 'ist-Soli-Benutzer'));
+		'forename' => array(
+			'required|min_len,2|max_len,64',
+			'sql_escape',
+			'Vorname'),
+		'name' => array(
+			'required|min_len,3|max_len,64',
+			'sql_escape',
+			'Nachname'),
+		'username' => array(
+			'min_len,3|max_len,64',
+			'sql_escape',
+			'Benutzername'),
+		'password' => array(
+			'min_len,3|max_len,64',
+			'sql_escape',
+			'Passwort'),
+		'passwordRepeat' => array(
+			'min_len,3|max_len,64',
+			'sql_escape','wiederholtes Passwort'),
+		'email' => array(
+			'valid_email|min_len,3|max_len,64',
+			'sql_escape',
+			'Email'),
+		'telephone' => array(
+			'min_len,3|max_len,64',
+			'sql_escape',
+			'Telefonnummer'),
+		'birthday' => array(
+			'max_len,10',
+			'sql_escape',
+			'Geburtstag'),
+		'pricegroupId' => array(
+			'numeric',
+			'sql_escape',
+			'PreisgruppenId'),
+		'schoolyearId' => array(
+			'numeric',
+			'sql_escape',
+			'SchuljahrId'),
+		'gradeId' => array(
+			'numeric',
+			'sql_escape',
+			'KlassenId'),
+		'cardnumber' => array(
+			'exact_len,10',
+			'sql_escape',
+			'Kartennummer'),
+		'credits' => array(
+			'numeric|min_len,1|max_len,5',
+			'sql_escape',
+			'Guthaben'),
+		'isSoli' => array(
+			'boolean',
+			'sql_escape',
+			'ist-Soli-Benutzer')
+	);
 
 	protected static $_changeRules = array(
-		'ID' => array('required|numeric|min_len,1|max_len,10', '', 'ID'),
-		'forename' => array('required|min_len,2|max_len,64', '', 'Vorname'),
-		'name' => array('required|min_len,3|max_len,64', '', 'Nachname'),
-		'username' => array('min_len,3|max_len,64', '', 'Benutzername'),
-		'email' => array('valid_email|min_len,3|max_len,64', '', 'Email'),
-		'telephone' => array('min_len,3|max_len,64', '', 'Telefonnummer'),
-		'birthday' => array('isodate|max_len,10', '', 'Geburtstag'),
-		'pricegroupId' => array('numeric', '', 'PreisgruppenId'),
-		'cardnumber' => array('exact_len,10', '', 'Kartennummer'),
-		'credits' => array('numeric|min_len,1|max_len,5', '', 'Guthaben'),
-		'isSoli' => array('boolean', '', 'ist-Soli-Benutzer'));
+		'ID' => array(
+			'required|numeric|min_len,1|max_len,10',
+			'sql_escape',
+			'ID'),
+		'forename' => array(
+			'required|min_len,2|max_len,64',
+			'sql_escape',
+			'Vorname'),
+		'name' => array(
+			'required|min_len,3|max_len,64',
+			'sql_escape',
+			'Nachname'),
+		'username' => array(
+			'min_len,3|max_len,64',
+			'sql_escape',
+			'Benutzername'),
+		'email' => array(
+			'valid_email|min_len,3|max_len,64',
+			'sql_escape',
+			'Email'),
+		'telephone' => array(
+			'min_len,3|max_len,64',
+			'sql_escape',
+			'Telefonnummer'),
+		'birthday' => array(
+			'isodate|max_len,10',
+			'sql_escape',
+			'Geburtstag'),
+		'pricegroupId' => array(
+			'numeric',
+			'sql_escape',
+			'PreisgruppenId'),
+		'cardnumber' => array(
+			'exact_len,10',
+			'sql_escape',
+			'Kartennummer'),
+		'credits' => array(
+			'numeric|min_len,1|max_len,5',
+			'sql_escape',
+			'Guthaben'),
+		'isSoli' => array(
+			'boolean',
+			'sql_escape',
+			'ist-Soli-Benutzer')
+	);
 
 }
 

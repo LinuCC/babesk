@@ -288,7 +288,7 @@ class SchoolyearSwitch {
 	protected $_inputValidation = array(
 		'highestGradelevel' => array(
 			'required|numeric|min_len,1|max_len,2',
-			'mysql_save',
+			'sql_escape',
 			'Höchster Jahrgang'
 		)
 	);
