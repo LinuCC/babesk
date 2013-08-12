@@ -53,7 +53,7 @@
 			</a>
 		</li>
 		<li>
-			<a href="index.php?module=administrator|Kuwasys|Classes|ClassRegistration">
+			<a href="index.php?module=administrator|Kuwasys|Classes|GlobalClassRegistration">
 					{_g('Change if Classregistrations are enabled')}
 			</a>
 		</li>

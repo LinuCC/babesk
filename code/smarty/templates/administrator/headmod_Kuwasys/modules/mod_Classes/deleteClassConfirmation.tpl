@@ -5,7 +5,7 @@
 </h2>
 
 <p>
-	{_g('Do you really want to delete the Class "%1$s" ?', $class.label)}
+	{_g('Do you really want to delete the Class "%1$s"? All its data is inevitably lost when doing so!', $class.label)}
 </p>
 
 <form action="index.php?module=administrator|Kuwasys|Classes|DeleteClass&amp;ID={$class.ID}" method="post">

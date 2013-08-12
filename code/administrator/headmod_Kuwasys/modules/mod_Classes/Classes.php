@@ -53,6 +53,7 @@ class Classes extends Module {
 
 	/**
 	 * Initializes data needed by the Object
+	 *
 	 * @param  DataContainer $dataContainer Contains data needed by Classes
 	 */
 	protected function entryPoint($dataContainer) {
@@ -71,6 +72,9 @@ class Classes extends Module {
 	 * Dies displaying the Main Menu
 	 */
 	protected function mainMenu() {
+
+		$this->_smarty->assign('isClassRegistrationGloballyEnabled',
+			$this->globalClassRegistrationGet());
 
 		$this->_smarty->display(
 			$this->_smartyModuleTemplatesPath . 'mainmenu.tpl');
@@ -502,11 +506,7 @@ class Classes extends Module {
 	 */
 	protected function assignClassesOfSameClassunitToUsers($users, $unitId) {
 
-		$userIdString = '';
-		foreach($users as &$user) {
-			$userIdString .= $this->_pdo->quote($user['ID']) . ', ';
-		}
-		$userIdString = trim($userIdString, ', ');
+		$userIdString = $this->idStringGetFromUsers($users);
 
 		try {
 			$stmt = $this->_pdo->prepare(
@@ -518,12 +518,9 @@ class Classes extends Module {
 
 			$stmt->execute(
 				array(':unitId' => $unitId, ':classId' => $_GET['ID']));
+
 			while($row = $stmt->fetch()) {
-				foreach($users as &$user) {
-					if($user['ID'] == $row['userId']) {
-						$user['classesOfSameDay'][] = $row;
-					}
-				}
+				$users = $this->classOfSameDayAssignToUser($row, $users);
 			}
 			return $users;
 
@@ -533,10 +530,135 @@ class Classes extends Module {
 		}
 	}
 
+	/**
+	 * Creates a comma-separated String from the IDs of the given users
+	 *
+	 * @param  array  $users The Users with an ID-Key
+	 * @return string        The String containing all IDs
+	 */
+	protected function idStringGetFromUsers($users) {
+
+		$userIdString = '';
+		foreach($users as &$user) {
+			$userIdString .= $this->_pdo->quote($user['ID']) . ', ';
+		}
+		$userIdString = trim($userIdString, ', ');
+
+		return $userIdString;
+	}
+
+	/**
+	 * Assigns the Class to the fitting User in Users
+	 *
+	 * @param  array  $class The Class to Assign
+	 * @param  array  $users The users to which to assign a Class
+	 * @return array         The changed Users-Array
+	 */
+	protected function classOfSameDayAssignToUser($class, $users) {
+
+		foreach($users as &$user) {
+			if($user['ID'] == $class['userId']) {
+				$user['classesOfSameDay'][] = $class;
+			}
+		}
+
+		return $users;
+	}
+
+	/**
+	 * Lets the User toggle the Global Classregistration on and off
+	 *
+	 * Dies displaying a Message
+	 */
 	protected function submoduleGlobalClassRegistrationExecute() {
 
-		$this->_interface->dieError(
-			'Dieses Modul ist noch in Überarbeitung...');
+		if(isset($_GET['toggleFormSend'])) {
+			$this->globalClassRegistrationChange();
+			$this->_interface->dieSuccess(_g('The Global Classregistration ' .
+				'Toggle was successfully changed.'));
+		}
+		else {
+			$this->globalClassRegistrationFormDisplay();
+		}
+	}
+
+	/**
+	 * Changes the global Classregistration in the Database
+	 *
+	 * Dies displaying a Message on Error
+	 */
+	protected function globalClassRegistrationChange() {
+
+		$toggle = (isset($_POST['toggle'])) ? 1 : 0;
+
+		try {
+			$stmt = $this->_pdo->prepare('UPDATE global_settings
+				SET value = :toggle
+				WHERE name = "isClassRegistrationEnabled"');
+
+			$stmt->execute(array(':toggle' => $toggle));
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(_g('Could not change the Global Classregistration-Toggle!'));
+		}
+	}
+
+	/**
+	 * Displays a form to the User to change the Global Classregistration
+	 */
+	protected function globalClassRegistrationFormDisplay() {
+
+		$this->_smarty->assign('enabled', $this->globalClassRegistrationGet());
+		$this->_smarty->display(
+			$this->_smartyModuleTemplatesPath .
+			'toggleGlobalClassRegistrationEnabled.tpl');
+	}
+
+	/**
+	 * Fetches the setting for global Classregistration and returns it
+	 *
+	 * @return bool  If Global Classregistration is enabled or not
+	 */
+	protected function globalClassRegistrationGet() {
+
+		try {
+			$stmt = $this->_pdo->query('SELECT * FROM global_settings
+				WHERE name = "isClassRegistrationEnabled"');
+
+			$data = $stmt->fetch();
+
+			if($data === false) {
+				return $this->globalClassRegistrationAdd();
+			}
+
+			return (boolean) $data['value'];
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(
+				_g('Could not check whether the global Classregistration is' .
+					'enabled or not.'));
+		}
+	}
+
+	/**
+	 * Adds the Global Classregistration Setting to the Database
+	 *
+	 * Dies displaying a Message on Error
+	 *
+	 * @return  Returns the Value of the newly created Setting
+	 */
+	protected function globalClassRegistrationAdd() {
+
+		try {
+			$this->_pdo->exec('INSERT INTO global_settings (name, value)
+				VALUES ("isClassRegistrationEnabled", "0")');
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(_g('Could not add the Global ' .
+				'Classregistration setting!'));
+		}
+
+		return 0;
 	}
 
 	protected function submoduleAssignUsersToClassesExecute() {
@@ -552,6 +674,12 @@ class Classes extends Module {
 	}
 
 	protected function submoduleUnregisterUserExecute() {
+
+		$this->_interface->dieError(
+			'Dieses Modul ist noch in Überarbeitung...');
+	}
+
+	protected function submoduleCsvImportExecute() {
 
 		$this->_interface->dieError(
 			'Dieses Modul ist noch in Überarbeitung...');
