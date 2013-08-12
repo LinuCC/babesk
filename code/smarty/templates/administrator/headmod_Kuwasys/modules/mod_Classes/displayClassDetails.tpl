@@ -38,16 +38,16 @@ td {
 	<tr>
 		<th>Aktiv:</th>
 		<td>{if
-			isset($class.sumStatus.active)}{$class.sumStatus.active}{else}---{/if}</td>
+			isset($class.activeCount)}{$class.activeCount}{else}---{/if}</td>
 	</tr>
 	<tr>
 		<th>Wartend:</th>
-		<td>{if isset($class.sumStatus.waiting)} {$class.sumStatus.waiting}
+		<td>{if isset($class.waitingCount)} {$class.waitingCount}
 			{else}---{/if}</td>
 	</tr>
 	<tr>
 		<th>Wunsch:</th>
-		<td>{if (isset($class.sumStatus.request1) || isset($class.sumStatus.request2))} {$class.sumStatus.request1 + $class.sumStatus.request2}
+		<td>{if (isset($class.request1Count) || isset($class.request2Count))} {$class.request1Count + $class.request2Count}
 			{else}---{/if}</td>
 	</tr>
 	<tr>
@@ -58,7 +58,7 @@ td {
 	<tr>
 		<th>Veranstaltungstag:</th>
 		<td>{if
-			$class.weekdayTranslated}{$class.weekdayTranslated}{else}---{/if}</td>
+			$class.unitTranslatedName}{$class.unitTranslatedName}{else}---{/if}</td>
 	</tr>
 </table>
 
@@ -77,7 +77,7 @@ td {
 		</tr>
 	</thead>
 	<tbody>
-		{if isset($class.users) && count($class.users)} {foreach $class.users as $user}
+		{if isset($users) && count($users)} {foreach $users as $user}
 		<tr>
 			{$rowsOfSamePerson = 1}
 			<td rowspan="{$rowsOfSamePerson}">
@@ -98,19 +98,19 @@ td {
 					{else}Fehler!{/if}
 				</a>
 			</td>
-			<td rowspan="{$rowsOfSamePerson}">{$user.gradeName}</td>
+			<td rowspan="{$rowsOfSamePerson}">{$user.gradename}</td>
 			<td rowspan="{$rowsOfSamePerson}">{$user.email}</td>
 			<td rowspan="{$rowsOfSamePerson}">{$user.telephone}</td>
 						<td {if ($counter % 2)}style="background-color: #CC9933"{else}style="background-color: #DDAA33"{/if}>
 				{foreach $user.classesOfSameDay as $cKey => $otherClass}
-							<a href="index.php?section=Kuwasys|Classes&action=showClassDetails&ID={$otherClass.ID}">{$otherClass.label}</a>
+							<a href="index.php?module=administrator|Kuwasys|Classes|DisplayClassDetails&amp;ID={$otherClass.ID}">{$otherClass.label}</a>
 							{*$blubb is used so the value of end($user.classesOfSameDay) does not get outputted*}
 							{$blubb = end($user.classesOfSameDay)}
 							{*check if it is not the last element*}
 							{if $cKey ==! key($user.classesOfSameDay)}<hr />{/if}
 				{/foreach}
 						</td>
-			<td rowspan="{$rowsOfSamePerson}"><a href="index.php?section=Kuwasys|Classes&amp;action=unregisterUser&amp;jointId=	{$user.jointId}">Abmelden</a></td>
+			<td rowspan="{$rowsOfSamePerson}"><a href="index.php?module=administrator|Kuwasys|Classes|UnregisterUser&amp;jointId={$user.jointId}">Abmelden</a></td>
 		</tr>
 		{/foreach}
 		{/if}

@@ -238,6 +238,8 @@ class Administrator {
 			$connector = new DBConnect();
 			$connector->initDatabaseFromXML();
 			$this->_pdo = $connector->getPdo();
+			$this->_pdo->query('SET @activeSchoolyear :=
+				(SELECT ID FROM schoolYear WHERE active = "1");');
 
 		} catch (Exception $e) {
 			trigger_error('Could not create the PDO-Object!');

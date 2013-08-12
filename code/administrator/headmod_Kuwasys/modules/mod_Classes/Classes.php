@@ -299,34 +299,42 @@ class Classes extends Module {
 
 	protected function submoduleDisplayClassesExecute() {
 
-		$classes = $this->classesGetAllWithAdditionalReadableData();
+		$classes = $this->classesGetWithAdditionalReadableData();
 		$this->_smarty->assign('classes', $classes);
 		$this->_smarty->display(
 			$this->_smartyModuleTemplatesPath . 'displayClasses.tpl');
 	}
 
 	/**
-	 * Fetches all Classes from the Database and linked data like
+	 * Fetches one/all Classes from the Database and linked data
 	 *
 	 * Dies displaying a Message on Error
 	 *
+	 * @param  $classId If Set, only the Data for the Class will be fetched -
+	 * else all classes will be fetched
 	 * @return array The Classes
 	 */
-	protected function classesGetAllWithAdditionalReadableData() {
+	protected function classesGetWithAdditionalReadableData($classId = false) {
+
+		$whereStr = ($classId !== false) ? 'WHERE c.ID = :id' : '';
 
 		$subQueryCountUsers = '(SELECT Count(*)
 				FROM jointUsersInClass uic
 				JOIN users ON users.ID = uic.UserID
 				WHERE uic.statusId = (SELECT ID FROM usersInClassStatus
-					WHERE name="%s") AND class.ID = uic.ClassID
+					WHERE name="%s") AND c.ID = uic.ClassID
 				)
 			';
 
 		try {
-			$stmt = $this->_pdo->query(
+			$stmt = $this->_pdo->prepare(
 				'SELECT c.*, sy.label As schoolyearLabel,
 					cu.translatedName AS unitTranslatedName,
-					GROUP_CONCAT(DISTINCT ct.name SEPARATOR "; ") AS classteacherName
+					GROUP_CONCAT(DISTINCT ct.name SEPARATOR "; ") AS classteacherName,
+					'. sprintf ($subQueryCountUsers, 'active') . ' AS activeCount,
+					'. sprintf ($subQueryCountUsers, 'waiting') . ' AS waitingCount,
+					'. sprintf ($subQueryCountUsers, 'request1') . ' AS request1Count,
+					'. sprintf ($subQueryCountUsers, 'request2') . ' AS request2Count
 				FROM class c
 				LEFT JOIN schoolYear sy ON c.schoolyearId = sy.ID
 				LEFT JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
@@ -337,19 +345,109 @@ class Classes extends Module {
 						JOIN jointClassTeacherInClass ctic
 							ON ct.ID = ctic.ClassTeacherID
 					) ct ON c.ID = ct.classId
+				' . $whereStr . '
 				GROUP BY c.ID');
 
-			return $stmt->fetchAll();
+			if($classId !== false) {
+				$stmt->execute(array(':id' => $classId));
+				return $stmt->fetch();
+			}
+			else {
+				$stmt->execute();
+				return $stmt->fetchAll();
+			}
+
 
 		} catch (Exception $e) {
-			$this->_interface->dieError(_g('Could not fetch the Classes!') . $e->getMessage());
+			$this->_interface->dieError(_g('Could not fetch the Class(es)!'));
 		}
 	}
 
 	protected function submoduleDisplayClassDetailsExecute() {
 
-		$this->_interface->dieError(
-			'Dieses Modul ist noch in Überarbeitung...');
+		$class = $this->classesGetWithAdditionalReadableData($_GET['ID']);
+		$users = $this->usersByClassIdGet($_GET['ID']);
+		$users = $this->assignClassesOfSameClassunitToUsers(
+			$users, $class['unitId']);
+		$this->_smarty->assign('class', $class);
+		$this->_smarty->assign('users', $users);
+		$this->_smarty->display(
+			$this->_smartyModuleTemplatesPath . 'displayClassDetails.tpl');
+	}
+
+	/**
+	 * Returns the Users that are in the ClassId
+	 * @param  string $classId The ID of the Class
+	 * @return array           The Users that are in the Class and the Status
+	 *                         of this connection
+	 */
+	protected function usersByClassIdGet($classId) {
+
+		try {
+			$stmt = $this->_pdo->prepare(
+				'SELECT u.*, g.gradename AS gradename,
+					uics.translatedName AS statusTranslated
+				FROM users u
+				JOIN jointUsersInClass uic ON u.ID = uic.UserID
+				JOIN usersInClassStatus uics ON uic.statusId = uics.ID
+				LEFT JOIN (
+						SELECT CONCAT(label, "-", gradelevel) AS gradename,
+							uigs.UserID AS userId
+						FROM Grades g
+						JOIN usersInGradesAndSchoolyears uigs ON
+							uigs.gradeId = g.ID
+						WHERE uigs.schoolyearId = @activeSchoolyear
+					) g ON g.userId = u.ID
+				WHERE uic.ClassID = :id'
+			);
+
+			$stmt->execute(array(':id' => $classId));
+			return $stmt->fetchAll();
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(
+				_g('Could not fetch the Users by Class') . $e->getMessage());
+		}
+	}
+
+	/**
+	 * Fetches the Classes that has the UnitId and one of the User in it
+	 *
+	 * @param  string $userIds The User-IDs of the User
+	 * @param  string $unitId The Unit-ID of the Class
+	 * @return array          Returns the Classes
+	 */
+	protected function assignClassesOfSameClassunitToUsers($users, $unitId) {
+
+		$userIdString = '';
+		foreach($users as &$user) {
+			$userIdString .= $this->_pdo->quote($user['ID']) . ', ';
+		}
+		$userIdString = trim($userIdString, ', ');
+
+		try {
+			$stmt = $this->_pdo->prepare(
+				"SELECT c.*, uic.UserID AS userId FROM class c
+				JOIN jointUsersInClass uic ON c.ID = uic.ClassID
+				WHERE uic.UserID IN($userIdString) AND c.unitId = :unitId
+					AND c.ID <> :classId"
+			);
+
+			$stmt->execute(
+				array(':unitId' => $unitId, ':classId' => $_GET['ID']));
+			while($row = $stmt->fetch()) {
+				foreach($users as &$user) {
+					if($user['ID'] == $row['userId']) {
+						$user['classesOfSameDay'][] = $row;
+					}
+				}
+			}
+			return $users;
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(
+				_g('Could not fetch the Classes of the User at the same day') . $e->getMessage());
+		}
 	}
 
 	protected function submoduleGlobalClassRegistrationExecute() {
