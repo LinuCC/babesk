@@ -1,630 +1,290 @@
 <?php
 
-require_once 'ClassesInterface.php';
 require_once PATH_INCLUDE . '/Module.php';
-require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysFilterAndSort.php';
-require_once 'ClassesCsvImport.php';
-require_once 'ClassesCreateTable.php';
-require_once 'ClassesUnregisterUser.php';
-require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysLanguageManager.php';
+require_once PATH_INCLUDE . '/gump.php';
 
 /**
+ * Allows the User to use Classes. Classes as in the Workgroups in Schools
  *
- * Notice that a class has to have only one SchoolYear!
- * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
- *
+ * @author Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
 class Classes extends Module {
 
-	////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
 	//Constructor
-	////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Constructs the Module
+	 *
+	 * @param string $name         The Name of the Module
+	 * @param string $display_name The Name that should be displayed to the
+	 *                             User
+	 * @param string $path         A relative Path to the Module
+	 */
 	public function __construct ($name, $display_name, $path) {
+
 		parent::__construct($name, $display_name, $path);
 	}
-	////////////////////////////////////////////////////////////////////////////////
-	//Getters and Setters
-	////////////////////////////////////////////////////////////////////////////////
 
-	////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
 	//Methods
-	////////////////////////////////////////////////////////////////////////////////
-	public function execute ($dataContainer) {
+	/////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Executes the Module, does things based on ExecutionRequest
+	 * @param  DataContainer $dataContainer contains data needed by the Module
+	 */
+	public function execute($dataContainer) {
 
 		$this->entryPoint($dataContainer);
 
-		if (isset($_GET['action'])) {
-			switch ($_GET['action']) {
-				case 'addClass':
-					$this->addClass();
-					break;
-				case 'csvImport':
-					$this->importClassesByCsvFile();
-					break;
-				case 'showClass':
-					$this->showClasses();
-					break;
-				case 'deleteClass':
-					$this->deleteClass();
-					break;
-				case 'changeClass':
-					$this->changeClass();
-					break;
-				case 'showClassDetails':
-					$this->showClassDetails();
-					break;
-				case 'toggleGlobalClassRegistrationEnabled':
-					$this->toggleGlobalClassRegistrationEnabled();
-					break;
-				case 'assignUsersToClasses':
-					$this->assignUsersToClasses();
-					break;
-				case 'createClassTable':
-					$this->createClassTable();
-					break;
-				case 'unregisterUser':
-					$this->unregisterUser();
-					break;
-				default:
-					$this->_interface->dieError($this->_languageManager->getText('errorWrongActionValue'));
-			}
+		if($execReq = $dataContainer->getSubmoduleExecutionRequest()) {
+			$this->submoduleExecute($execReq);
 		}
 		else {
-			$this->showMainMenu();
-		}
-	}
-	////////////////////////////////////////////////////////////////////////////////
-	//Implementations
-	////////////////////////////////////////////////////////////////////////////////
-	private function entryPoint ($dataContainer) {
-
-		defined('_AEXEC') or die('Access denied');
-
-
-		$this->_dataContainer = $dataContainer;
-		$this->_interface = new ClassesInterface($this->relPath, $this->_dataContainer->getSmarty());
-		$this->_languageManager = new KuwasysLanguageManager();
-		$this->_languageManager->setModule('Classes');
-		require_once PATH_ADMIN . $this->relPath . '../../KuwasysDatabaseAccess.php';
-		$this->_databaseAccessManager = new KuwasysDatabaseAccess($this->_interface);
-
-	}
-
-	private function showMainMenu () {
-
-		$isClassRegistrationGloballyEnabled = $this->getIsClassRegistrationGloballyEnabled();
-		$this->_interface->showMainMenu($isClassRegistrationGloballyEnabled);
-	}
-
-	private function addClass () {
-
-		if (isset($_POST['label'], $_POST['maxRegistration'], $_POST['description'])) {
-			$this->checkClassInput();
-			$this->addClassToDatabaseByPost();
-			$this->addJointSchoolYearByPost();
-			$this->_interface->dieMsg($this->_languageManager->getText('finishedAddClass'));
-		}
-		else {
-			$this->showAddClass();
+			$this->mainMenu();
 		}
 	}
 
-	private function toggleGlobalClassRegistrationEnabled () {
+	/////////////////////////////////////////////////////////////////////
+	//Implements
+	/////////////////////////////////////////////////////////////////////
 
-		if(isset($_GET['toggleFormSend'])) {
-			$isToggled = isset($_POST['toggle']);
-			$this->setIsClassRegistrationGloballyEnabled($isToggled);
-			$this->_interface->dieMsg($this->_languageManager->getText('finishedChangeIsClassRegistrationEnabledGlobally'));
+	/**
+	 * Initializes data needed by the Object
+	 * @param  DataContainer $dataContainer Contains data needed by Classes
+	 */
+	protected function entryPoint($dataContainer) {
+
+		$this->_interface = $dataContainer->getInterface();
+		$this->_acl = $dataContainer->getAcl();
+		$this->_pdo = $dataContainer->getPdo();
+		$this->_smarty = $dataContainer->getSmarty();
+
+		$this->initSmartyVariables();
+	}
+
+	/**
+	 * Displays a MainMenu to the User
+	 *
+	 * Dies displaying the Main Menu
+	 */
+	protected function mainMenu() {
+
+		$this->_smarty->display(
+			$this->_smartyModuleTemplatesPath . 'mainmenu.tpl');
+	}
+
+	protected function submoduleAddClassExecute() {
+
+		if(isset($_POST['label'], $_POST['description'])) {
+			$this->addClassInputCheck();
+			$this->addClassUpload();
 		}
 		else {
-			$isGlobalClassRegistrationEnabled = $this->getIsClassRegistrationGloballyEnabled();
-			$this->_interface->showToggleGlobalClassRegistration($isGlobalClassRegistrationEnabled);
+			$this->addClassDisplay();
 		}
 	}
 
-	private function getIsClassRegistrationGloballyEnabled () {
+	/**
+	 * Displays a Form to the User which allows him to add a Class
+	 */
+	protected function addClassDisplay() {
 
-		return $this->_databaseAccessManager->classRegistrationGloballyEnabledGetAndAddingWhenVoid();
+		$this->_smarty->assign('schoolyears', $this->schoolyearsGetAll());
+		$this->_smarty->assign('classunits', $this->classunitsGetAll());
+		$this->_smarty->display(
+			$this->_smartyModuleTemplatesPath . 'addClass.tpl');
 	}
 
-	private function setIsClassRegistrationGloballyEnabled ($toggle) {
-
-		$this->_databaseAccessManager->classRegistrationGloballyIsEnabledSet($toggle);
-	}
-
-	private function showAddClass () {
-		$schoolYears = $this->getAllSchoolYears();
-		$classUnits = $this->_databaseAccessManager->kuwasysClassUnitGetAll ();
-		$this->_interface->showAddClass($schoolYears, $classUnits);
-	}
-
-	private function showClassDetails () {
-
-		$class = $this->getClass();
-		$class = $this->addUsersAndSumStatusToClass($class);
-		$class = $this->addWeekdayTranslatedToClass($class);
-		$this->_interface->showClassDetails($class);
-	}
-
-	private function addUsersAndSumStatusToClass ($class) {
-		require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
-		$usersInClassStatusManager = new KuwasysUsersInClassStatusManager ();
-		$jointsOfClass = $this->getAllJointsUsersInClassWithClassId($class['ID']);
-		if (isset($jointsOfClass)) {
-			foreach ($jointsOfClass as $joint) {
-				///@ToDo can be made faster with userIdArray!
-				$user = $this->_databaseAccessManager->userGet($joint['UserID']);
-				$user['statusId'] = $joint['statusId'];
-				$user['jointId'] = $joint['ID'];
-				$status = $this->_databaseAccessManager->usersInClassStatusGetWithoutDieing ($joint ['statusId']);
-				if ($status) {
-					$user['statusTranslated'] = $status ['translatedName'];
-				}
-				$user = $this->addChoicesOfDayToUser($user, $class ['unitId']);
-				$user = $this->addGradeLabelToUser($user);
-				$class['users'][] = $user;
-
-				if (isset($class['sumStatus'][$user['statusId']])) {
-					$class['sumStatus'][$user['statusId']] += 1;
-				}
-				else {
-					$class['sumStatus'][$user['statusId']] = 1;
-				}
-			}
-		}
-		return $class;
-	}
-
-	private function addChoicesOfDayToUser ($user, $weekday) {
-
-		$joints = $this->_databaseAccessManager->jointUserInClassGetAllByUserIdWithoutDyingWhenVoid($user ['ID']);
-		$classIdArray = array();
-		foreach ($joints as $joint) {
-			$classIdArray [] = $joint ['ClassID'];
-		}
-		$classes = $this->_databaseAccessManager->classGetByClassIdArray($classIdArray);
-		foreach ($classes as $class) {
-			if($class ['unitId'] == $weekday) {
-				$user ['classesOfSameDay'] [] = $class;
-			}
-		}
-		return $user;
-	}
-
-	private function addGradeLabelToUser ($user) {
-
-		$joint = $this->_databaseAccessManager->jointUserInGradeGetByUserIdWithoutDying($user ['ID']);
-		if(isset($joint) && is_array($joint)) {
-			$grade = $this->_databaseAccessManager->gradeGetById($joint ['GradeID']);
-			$user ['gradeName'] = $grade ['gradelevel'] . $grade ['label'];
-		}
-		return $user;
-	}
-
-	private function getAllJointsUsersInClassWithClassId ($classId) {
-
-		return $this->_databaseAccessManager->jointUserInClassGetAllByClassId($classId);
-	}
-
-	private function checkClassInput () {
+	/**
+	 * Fetches all Schoolyears and returns them
+	 *
+	 * @return array The Schoolyears as an Array
+	 */
+	protected function schoolyearsGetAll() {
 
 		try {
-			inputcheck($_POST['label'], '/\A[^~]{3,100}\z/', $this->_languageManager->getText('formLabel'));
-			inputcheck($_POST['maxRegistration'], 'number', $this->_languageManager->getText('formMaxRegistration'));
-			inputcheck($_POST['description'], '/\A[^~]{3,1024}\z/', $this->_languageManager->getText('formDescription'));
-		} catch (WrongInputException $e) {
-			$this->_interface->dieError(sprintf($this->_languageManager->getText('errorWrongInput'), $e->getFieldName())
-				);
-		}
-		if (!isset($_POST['schoolYear']) || !$_POST['schoolYear'] || $_POST['schoolYear'] == '') {
-			$this->_interface->dieError($this->_languageManager->getText('errorInputSchoolYear'));
-		}
-		$this->checkSchoolYearExisting();
-	}
+			$stmt = $this->_pdo->query('SELECT * FROM schoolYear');
+			return $stmt->fetchAll();
 
-	private function addClassToDatabaseByPost () {
-
-		$allowRegistration = (isset($_POST['allowRegistration'])) ? true : false;
-		$this->addClassToDatabase($_POST['label'], $_POST['description'], $_POST['maxRegistration'], $allowRegistration,
-			$_POST['weekday']);
-	}
-
-	private function addClassToDatabase ($label, $description, $maxRegistration, $allowRegistration, $weekday) {
-
-		$this->_databaseAccessManager->classAdd($label, $description, $maxRegistration, $allowRegistration, $weekday);
-	}
-
-	private function showClasses () {
-
-		require_once PATH_INCLUDE . '/TableMng.php';
-
-		$subQueryCountUsers = '
-			(SELECT Count(*)
-				FROM jointUsersInClass uic
-				JOIN users ON users.ID = uic.UserID
-				WHERE uic.statusId = (SELECT ID FROM usersInClassStatus
-					WHERE name="%s") AND class.ID = uic.ClassID
-				)
-			';
-
-		$query = '
-			SELECT class.ID, class.label, class.maxRegistration,
-				kuwasysClassUnit.name AS "unitName",
-				kuwasysClassUnit.translatedName AS "unitTranslatedName",
-				schoolYear.label AS schoolyearLabel,
-				CONCAT (classTeacher.forename, " ", classTeacher.name) AS classteacherName,
-				'. sprintf ($subQueryCountUsers, 'active') . ' AS activeCount,
-				'. sprintf ($subQueryCountUsers, 'waiting') . ' AS waitingCount,
-				'. sprintf ($subQueryCountUsers, 'request1') . ' AS request1Count,
-				'. sprintf ($subQueryCountUsers, 'request2') . ' AS request2Count
-			FROM class
-				LEFT JOIN jointClassTeacherInClass
-				ON class.ID = jointClassTeacherInClass.ClassID
-				LEFT JOIN classTeacher
-				ON classTeacher.ID = jointClassTeacherInClass.ClassTeacherID
-				LEFT JOIN jointClassInSchoolYear
-				ON jointClassInSchoolYear.ClassID = class.ID
-				LEFT JOIN schoolYear
-				ON jointClassInSchoolYear.SchoolYearID = schoolYear.ID
-				LEFT JOIN kuwasysClassUnit
-				ON kuwasysClassUnit.ID = class.unitId
-			';
-		TableMng::init ();
-		try {
-			$classes = TableMng::query ($query);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError ('Konnte keine Kurse finden');
 		} catch (Exception $e) {
-			$this->_interface->dieError (
-				sprintf ('Konnte die Kurse nicht abrufen!', $e->getMessage()));
+			$this->_interface->dieError(
+				_g('Could not fetch the Schoolyears!'));
 		}
-
-		$classes = KuwasysFilterAndSort::elementsFilter ($classes);
-		$classes = KuwasysFilterAndSort::elementsSort ($classes);
-		$this->_interface->showClasses($classes);
-	}
-
-	private function getAllClasses () {
-
-		return $this->_databaseAccessManager->classGetAll();
-	}
-
-	private function deleteClass () {
-
-		if (isset($_POST['dialogConfirmed'])) {
-			$classId = $_GET['ID'];
-			$this->deleteClassFromDatabase();
-			$this->deleteJointsSchoolYear();
-			$this->deleteAllJointsUsersInClassOfClass($classId);
-			$this->_interface->dieMsg($this->_languageManager->getText('finishedDeleteClass'));
-		}
-		else if (isset($_POST['dialogNotConfirmed'])) {
-			$this->_interface->dieMsg($this->_languageManager->getText('deleteClassNotConfirmed'));
-		}
-		else {
-			$this->showDeleteConfirmation();
-		}
-	}
-
-	private function showDeleteConfirmation () {
-
-		$promptMessage = sprintf($this->_languageManager->getText('confirmDeleteClass'), $this->getLabelOfClass());
-		if($this->isClassJointedWithUsers($_GET['ID'])) {$this->_interface->showError($this->_languageManager->getText('warningUsersJointedToClassToDelete'));}
-		$confirmYes = $this->_languageManager->getText('confirmDeleteClassYes');
-		$confirmNo = $this->_languageManager->getText('confirmDeleteClassNo');
-		$this->_interface->showDeleteClassConfirmation($_GET['ID'], $promptMessage, $confirmYes, $confirmNo);
-	}
-
-	private function isClassJointedWithUsers ($classId) {
-
-		return $this->_databaseAccessManager->jointUserInClassIsClassJointedWithUser($classId);
-	}
-
-	private function deleteClassFromDatabase () {
-
-		$this->_databaseAccessManager->classDelete($_GET['ID']);
-	}
-
-	private function getLabelOfClass () {
-
-		return $this->_databaseAccessManager->classLabelGet($_GET['ID']);
-	}
-
-	private function changeClass () {
-
-		if (isset($_POST['label'], $_POST['maxRegistration'])) {
-
-			$this->checkClassInput();
-			$this->changeClassInDatabase();
-			$this->changeJointSchoolYearInDatabase();
-			$this->_interface->dieMsg($this->_languageManager->getText('finishedChangeClass'));
-		}
-		else {
-			$this->showChangeClass();
-		}
-	}
-
-	private function getClass () {
-
-		return $this->_databaseAccessManager->classGet($_GET['ID']);
-	}
-
-	private function showChangeClass () {
-
-		$class = $this->getClass();
-		$nowUsedSchoolYearId = $this->getSchoolYearIdByClassId($class['ID']);
-		$schoolYears = $this->getAllSchoolYears();
-		$classUnits = $this->_databaseAccessManager->kuwasysClassUnitGetAll ();
-		$this->_interface->showChangeClass($class, $schoolYears, $nowUsedSchoolYearId, $classUnits);
-	}
-
-	private function changeClassInDatabase () {
-
-		$allowRegistration = (isset($_POST['allowRegistration'])) ? true : false;
-		$query = "UPDATE class
-			SET label = ?, description = ?, maxRegistration = ?, registrationEnabled = ?, unitId = ?
-			WHERE ID = ?";
-		if($stmt = TableMng::getDb()->prepare($query)) {
-			$stmt->bind_param('ssissi', $_POST['label'],
-				$_POST['description'], $_POST['maxRegistration'],
-				$allowRegistration, $_POST['weekday'],$_GET['ID']);
-			if($stmt->execute()) {
-				$this->_interface->dieMsg('Der Kurs wurde erfolgreich verändert');
-			}
-			else {
-				$this->_interface->dieError('Der Kurs konnte nicht verändert werden!');
-			}
-		}
-		else {
-			$this->_interface->dieError('Fehler beim Verbinden mit der Datenbank');
-		}
-	}
-
-	private function changeJointSchoolYearInDatabase () {
-
-		$this->_databaseAccessManager->jointClassInSchoolyearChangeByClassId($_GET['ID'], $_POST['schoolYear']);
-	}
-
-	private function getLastAddedClassId () {
-
-		return $this->_databaseAccessManager->classIdGetLastAdded();
-	}
-
-	/**-----------------------------------------------------------------------------
-	 * Functions for getting variables from other tables
-	 *----------------------------------------------------------------------------*/
-
-	private function getAllSchoolYears () {
-
-		return $this->_databaseAccessManager->schoolyearGetAll();
 	}
 
 	/**
-	 * @used-by Classes::checkClassInput()
+	 * Fetches all Classunits (usually days) and returns them
+	 *
+	 * @return array The Classunits
 	 */
-	private function checkSchoolYearExisting () {
+	protected function classunitsGetAll() {
 
-		$this->_databaseAccessManager->schoolyearCheckExisting($_POST['schoolYear']);
+		try {
+			$stmt = $this->_pdo->query('SELECT * FROM kuwasysClassUnit');
+			return $stmt->fetchAll();
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(
+				_g('Could not fetch the Classunits!'));
+		}
 	}
 
 	/**
-	 * connects the new Class-entry with a SchoolYear
-	 * @used-by Classes::addClass()
+	 * Checks the given Input of the Add-Class Dialog
 	 */
-	private function addJointSchoolYearByPost () {
+	protected function addClassInputCheck() {
 
-		$this->_databaseAccessManager->jointClassInSchoolyearAdd($_POST['schoolYear'], $this->getLastAddedClassId());
+		$gump = new GUMP();
+		$gump->rules(array(
+			'label' => array(
+				'required|min_len,2|max_len,64',
+				'',
+				_g('Classname')
+			),
+			'description' => array(
+				'max_len,1024',
+				'',
+				_g('Classdescription')
+			),
+			'maxRegistration' => array(
+				'required|min_len,1|max_len,4|numeric',
+				'',
+				_g('Max Amount of Registrations for this Class')
+			),
+			'classunit' => array(
+				'required|numeric',
+				'',
+				_g('Classunit')
+			),
+			'schoolyear' => array(
+				'required|numeric',
+				'',
+				_g('Schoolyear-ID')
+			),
+			'allowRegistration' => array(
+				'boolean',
+				'',
+				_g('Allow registration')
+			)
+		));
+
+		if(!($_POST = $gump->run($_POST))) {
+			$this->_interface->dieError(
+				$gump->get_readable_string_errors(true));
+		}
 	}
 
 	/**
-	 * deletes all links between the deleted class and the Schoolyear
-	 * @used-by Classes::deleteClass()
+	 * Adds all necessary data to the Database
 	 */
-	private function deleteJointsSchoolYear () {
+	protected function addClassUpload() {
 
-		$this->_databaseAccessManager->jointClassInSchoolyearDelete($_GET['ID']);
+		$this->_pdo->beginTransaction();
+		$this->newClassUpload();
+		$this->_pdo->commit();
 	}
 
 	/**
-	 * adds the labels of SchoolYear to the Class as a value in the array,
-	 * to allow showing to the User which Class is linked with which schoolYear
+	 * Adds a new Row to the class-Table
+	 *
+	 * Dies displaying a Message on Error
 	 */
-	private function addSchoolYearLabelToClasses ($classes) {
+	protected function newClassUpload() {
 
-		foreach ($classes as & $class) {
-			$class['schoolYearLabel'] = $this->getSchoolYearLabelByClassId($class['ID']);
-		}
-		return $classes;
-	}
+		try {
+			$stmt = $this->_pdo->prepare(
+				'INSERT INTO class (label, description, maxRegistration,
+					registrationEnabled, unitId, schoolyearId)
+				VALUES (:label, :description, :maxRegistration,
+					:registrationEnabled, :unitId, :schoolyearId)');
 
-	private function addRegistrationCountToClasses ($classes) {
-		foreach ($classes as & $class) {
-			$userCount = $this->getCountOfActiveUsersInClass($class['ID']);
-			$class['userCount'] = $userCount;
-		}
-		return $classes;
-	}
+			$stmt->execute(array(
+				':label' => $_POST['label'],
+				':description' => $_POST['description'],
+				':maxRegistration' => $_POST['maxRegistration'],
+				':registrationEnabled' => $_POST['allowRegistration'],
+				':unitId' => $_POST['classunit'],
+				':schoolyearId' => $_POST['schoolyear'],
+			));
 
-	private function getCountOfActiveUsersInClass ($classId) {
-
-		return $this->_databaseAccessManager->jointUserInClassGetCountOfActiveUsersOfClassId($classId);
-	}
-
-	private function getSchoolYearLabelByClassId ($classID) {
-
-		$schoolYearID = $this->getSchoolYearIdByClassId($classID);
-		if (!isset($schoolYearID)) {
-			return;
-		}
-		$schoolYear = $this->getSchoolYearById($schoolYearID);
-		return $schoolYear['label'];
-	}
-
-	/**
-	 * @used-by Classes::getSchoolYearLabelByClassId
-	 */
-	private function getSchoolYearById ($schoolyearId) {
-
-		return $this->_databaseAccessManager->schoolyearGet($schoolyearId);
-	}
-
-	/**
-	 * @used-by Classes::getSchoolYearLabelByClassId
-	 */
-	private function getSchoolYearIdByClassId ($classId) {
-
-		return $this->_databaseAccessManager->jointClassInSchoolyearGetSchoolyearIdByClassIdWithoutDyingWhenVoid($classId);
-	}
-
-	private function addWeekdayTranslatedToClasses ($classes) {
-
-		$classUnits = $this->_databaseAccessManager->kuwasysClassUnitGetAll ();
-
-		foreach ($classes as &$class) {
-			foreach ($classUnits as $unit) {
-				if ($unit ['ID'] == $class ['unitId']) {
-					$class ['weekdayTranslated'] = $unit ['translatedName'];
-				}
-			}
-		}
-		return $classes;
-	}
-
-	private function addWeekdayTranslatedToClass ($class) {
-		$classUnit = $this->_databaseAccessManager->kuwasysClassUnitGet ($class ['unitId']);
-		$class ['weekdayTranslated'] = $classUnit ['translatedName'];
-		return $class;
-	}
-
-	private function addClassteachersToClasses ($classes) {
-
-		$classteachers = $this->getClassteachersByClassesWithoutDieingWhenVoidAndUpdateClasses ($classes);
-		if (!$classteachers) return $classes;
-		foreach ($classes as &$class) {
-			foreach ($classteachers as $classteacher) {
-				if(!isset($class ['classteacher'] ['ID'])) {
-					$class ['classteacher'] = NULL;
-				}
-				if($class ['classteacher'] ['ID'] == $classteacher ['ID']) {
-					$class ['classteacher'] = $classteacher;
-				}
-			}
-		}
-		return $classes;
-	}
-
-	private function getClassteachersByClassesWithoutDieingWhenVoidAndUpdateClasses (&$classes) {
-
-		$joints = $this->getJointsClassteacherInClassByClassesWithoutDieingWhenVoid ($classes);
-		$classteacherIdArray = array();
-		if(!$joints) return;
-		foreach($joints as $joint) {
-			$classteacherIdArray [] = $joint ['ClassTeacherID'];
-			foreach ($classes as &$class) {
-				if($joint ['ClassID'] == $class ['ID']) {
-					$class ['classteacher'] ['ID'] = $joint ['ClassTeacherID'];
-				}
-			}
-		}
-		$classteachers = $this->_databaseAccessManager->classteacherGetByIdArrayWithoutDyingWhenVoid($classteacherIdArray);
-		if(is_array($classteachers)) {
-			return $classteachers;
+		} catch (Exception $e) {
+			$this->_interface->dieError(_g('Could not add the new Class!'));
 		}
 	}
 
-	private function getJointsClassteacherInClassByClassesWithoutDieingWhenVoid ($classes) {
+	protected function submoduleChangeClassExecute() {
 
-		$classIdArray = array();
-		foreach ($classes as $class) {
-			$classIdArray [] = $class ['ID'];
-		}
-
-		$joints = $this->_databaseAccessManager->jointClassteacherInClassGetByClassIdArrayWithoutDyingWhenVoid($classIdArray);
-		if(is_array($joints)) {
-			return $joints;
-		}
+		$this->_interface->dieError(
+			'Dieses Modul ist noch in Überarbeitung...');
 	}
 
-	private function getAllJointsOfUsersWaitingWithoutDieingWhenVoid () {
+	protected function submoduleDeleteClassExecute() {
 
-		return $this->_databaseAccessManager->jointUserInClassGetAllWithStatusWaitingWithoutDyingWhenVoid();
+		$this->_interface->dieError(
+			'Dieses Modul ist noch in Überarbeitung...');
 	}
 
-	private function addCountOfWaitingUsersToClasses ($classes) {
+	protected function submoduleDisplayClassesExecute() {
 
-		$joints = $this->getAllJointsOfUsersWaitingWithoutDieingWhenVoid();
-		foreach ($classes as &$class) {
-			$userCount = 0;
-			if(is_array($joints)) {
-				foreach ($joints as $joint) {
-					if($joint ['ClassID'] == $class ['ID']) {
-						$userCount++;
-					}
-				}
-			}
-			$class ['userWaitingCount'] = $userCount;
-		}
-		return $classes;
+		$this->_interface->dieError(
+			'Dieses Modul ist noch in Überarbeitung...');
 	}
 
-	private function importClassesByCsvFile () {
+	protected function submoduleDisplayClassDetailsExecute() {
 
-		if (isset($_FILES['csvFile'])) {
-			ClassesCsvImport::classInit ($this->_interface, $this->_databaseAccessManager);
-			ClassesCsvImport::csvFileImport ($_FILES['csvFile']['tmp_name'], ';');
-		}
-		else {
-			$this->_interface->showImportClassesByCsvFile();
-		}
+		$this->_interface->dieError(
+			'Dieses Modul ist noch in Überarbeitung...');
 	}
 
-	private function checkCsvImportVariable ($varName, $rowArray) {
+	protected function submoduleGlobalClassRegistrationExecute() {
 
-		if (!isset($rowArray[$varName])) {
-			$rowArray[$varName] = '';
-		}
-		return $rowArray;
+		$this->_interface->dieError(
+			'Dieses Modul ist noch in Überarbeitung...');
 	}
 
-	private function deleteAllJointsUsersInClassOfClass ($classId) {
+	protected function submoduleAssignUsersToClassesExecute() {
 
-		$this->_databaseAccessManager->jointUserInClassDeleteAllOfClassId($classId);
+		$this->_interface->dieError(
+			'Dieses Modul ist noch in Überarbeitung...');
 	}
 
-	private function assignUsersToClasses () {
-		require_once 'AssignUsersToClasses.php';
-		$utcManager = new AssignUsersToClasses($this->_interface, $this->_languageManager);
-		$utcManager->execute();
+	protected function submoduleCreateClassSummaryExecute() {
+
+		$this->_interface->dieError(
+			'Dieses Modul ist noch in Überarbeitung...');
 	}
 
-	private function createClassTable () {
-		ClassesCreateTable::init ($this->_interface);
-		ClassesCreateTable::execute ();
+	protected function submoduleUnregisterUserExecute() {
+
+		$this->_interface->dieError(
+			'Dieses Modul ist noch in Überarbeitung...');
 	}
 
-	private function unregisterUser() {
-		ClassesUnregisterUser::init($this->_interface);
-		ClassesUnregisterUser::execute($_GET['jointId']);
-	}
-
-	////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
 	//Attributes
-	////////////////////////////////////////////////////////////////////////////////
-	private $_interface;
-
-	private $_databaseAccessManager;
+	/////////////////////////////////////////////////////////////////////
 
 	/**
-	 * @var KuwasysDataContainer
+	 * Handy functions to display things to the User
+	 * @var AdminInterface
 	 */
-	private $_dataContainer;
+	protected $_interface;
 
 	/**
-	 * @var KuwasysLanguageManager
+	 * The AccessControlLayer used for getting the Submodules
+	 * @var Acl
 	 */
-	private $_languageManager;
+	protected $_acl;
 
-	private $_jointUserInClassStatusDefiner;
+	/**
+	 * The Database-Connection
+	 * @var PDO
+	 */
+	protected $_pdo;
+
 }
 
 ?>

@@ -3,15 +3,6 @@
 abstract class Module {
 
 	////////////////////////////////////////////////////////////////////////
-	//Attributes
-	////////////////////////////////////////////////////////////////////////
-
-	protected $name;
-	protected $relPath;
-	protected $displayName;
-	protected $executablePath;
-
-	////////////////////////////////////////////////////////////////////////
 	//Constructor
 	////////////////////////////////////////////////////////////////////////
 
@@ -45,6 +36,21 @@ abstract class Module {
 	////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Initializes some Smarty-Variables to display the Website
+	 *
+	 * Should get called by the Subclass using it since most Modules used
+	 * Interfaces specific to them so they dont use and have Smarty
+	 */
+	protected function initSmartyVariables() {
+
+		$this->_smartyModuleTemplatesPath =
+			PATH_SMARTY_ADMIN_TEMPLATES . $this->relPath;
+
+		$siteHeaderPath = $this->_smartyModuleTemplatesPath . 'header.tpl';
+		$this->_smarty->assign('inh_path', $siteHeaderPath);
+	}
 
 	/**
 	 * Checks if the Level of Submodule exists in the SubmoduleExecutionstring
@@ -111,6 +117,27 @@ abstract class Module {
 		$executePath = implode('/', $levelsWanted);
 		return $executePath;
 	}
+
+	////////////////////////////////////////////////////////////////////////
+	//Attributes
+	////////////////////////////////////////////////////////////////////////
+
+	protected $name;
+	protected $relPath;
+	protected $displayName;
+	protected $executablePath;
+
+	/**
+	 * The Smarty-Object used to display Information to the User
+	 * @var Smarty
+	 */
+	protected $_smarty;
+
+	/**
+	 * Contains the Path to the Templates-folder of this module
+	 * @var string
+	 */
+	protected $_smartyModuleTemplatesPath;
 }
 
 ?>
