@@ -53,6 +53,16 @@ abstract class Module {
 	}
 
 	/**
+	 * Displays a Templatefile which is in the standard templatePath
+	 *
+	 * @param  string $tplName the Name of the Template-File
+	 */
+	protected function displayTpl($tplName) {
+
+		$this->_smarty->display($this->_smartyModuleTemplatesPath . $tplName);
+	}
+
+	/**
 	 * Checks if the Level of Submodule exists in the SubmoduleExecutionstring
 	 * @param  integer $level The Level of Submodule
 	 * (1 for the first Submodule)
