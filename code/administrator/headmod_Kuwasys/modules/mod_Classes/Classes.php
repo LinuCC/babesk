@@ -299,8 +299,51 @@ class Classes extends Module {
 
 	protected function submoduleDisplayClassesExecute() {
 
-		$this->_interface->dieError(
-			'Dieses Modul ist noch in Überarbeitung...');
+		$classes = $this->classesGetAllWithAdditionalReadableData();
+		$this->_smarty->assign('classes', $classes);
+		$this->_smarty->display(
+			$this->_smartyModuleTemplatesPath . 'displayClasses.tpl');
+	}
+
+	/**
+	 * Fetches all Classes from the Database and linked data like
+	 *
+	 * Dies displaying a Message on Error
+	 *
+	 * @return array The Classes
+	 */
+	protected function classesGetAllWithAdditionalReadableData() {
+
+		$subQueryCountUsers = '(SELECT Count(*)
+				FROM jointUsersInClass uic
+				JOIN users ON users.ID = uic.UserID
+				WHERE uic.statusId = (SELECT ID FROM usersInClassStatus
+					WHERE name="%s") AND class.ID = uic.ClassID
+				)
+			';
+
+		try {
+			$stmt = $this->_pdo->query(
+				'SELECT c.*, sy.label As schoolyearLabel,
+					cu.translatedName AS unitTranslatedName,
+					GROUP_CONCAT(DISTINCT ct.name SEPARATOR "; ") AS classteacherName
+				FROM class c
+				LEFT JOIN schoolYear sy ON c.schoolyearId = sy.ID
+				LEFT JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
+				LEFT JOIN (
+						SELECT ctic.ClassID AS classId,
+							CONCAT(ct.forename, " ", ct.name) AS name
+						FROM classTeacher ct
+						JOIN jointClassTeacherInClass ctic
+							ON ct.ID = ctic.ClassTeacherID
+					) ct ON c.ID = ct.classId
+				GROUP BY c.ID');
+
+			return $stmt->fetchAll();
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(_g('Could not fetch the Classes!') . $e->getMessage());
+		}
 	}
 
 	protected function submoduleDisplayClassDetailsExecute() {
