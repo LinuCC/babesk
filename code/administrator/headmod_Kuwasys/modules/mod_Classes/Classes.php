@@ -279,6 +279,12 @@ class Classes extends Module {
 			$this->_smartyModuleTemplatesPath . 'changeClass.tpl');
 	}
 
+	/**
+	 * Fetches and returns the Class with the ID $id
+	 *
+	 * @param  string $id The ID of the Class
+	 * @return array      The Class as an Array
+	 */
 	protected function classGet($id) {
 
 		try {
@@ -291,12 +297,89 @@ class Classes extends Module {
 		}
 	}
 
+	/**
+	 * Deletes a Class
+	 */
 	protected function submoduleDeleteClassExecute() {
 
-		$this->_interface->dieError(
-			'Dieses Modul ist noch in Überarbeitung...');
+		if(isset($_POST['confirmed'])) {
+			$this->classDeletionRun();
+		}
+		else if(isset($_POST['declined'])) {
+			$this->_interface->dieMsg(_g('The Class was not deleted.'));
+		}
+		else {
+			$this->classDeletionConfirmation();
+		}
 	}
 
+	/**
+	 * Displays a Confirmation asking wether the user wants to delete the class
+	 *
+	 * Dies Displaying the Form
+	 */
+	protected function classDeletionConfirmation() {
+
+		$class = $this->classGet($_GET['ID']);
+		$this->_smarty->assign('class', $class);
+		$this->_smarty->display(
+			$this->_smartyModuleTemplatesPath . 'deleteClassConfirmation.tpl');
+	}
+
+	/**
+	 * Checks the given ID before starting the Deletion-process of the Class
+	 *
+	 * Dies displaying a message when Input not correct
+	 */
+	protected function classDeletionInputCheck() {
+
+		$gump = new GUMP();
+		$gump->rules(array('ID' => array(
+			'required|min_len,1|max_len,11|numeric', '', _g('Class-ID')
+		)));
+		if(!($_GET = $gump->run($_GET))) {
+			$this->_interface->dieError(
+				$gump->get_readable_string_errors(true));
+		}
+	}
+
+	/**
+	 * Checks the Input and deletes the Class
+	 *
+	 * Dies displaying a Message
+	 */
+	protected function classDeletionRun() {
+
+		$this->classDeletionInputCheck();
+		$this->classDeletionUpload();
+		$this->_interface->dieSuccess(_g(
+			'The Class was successfully deleted'));
+	}
+
+	/**
+	 * Deletes the Class with the given ID from the Database
+	 *
+	 * Dies displaying a Message on Error
+	 */
+	protected function classDeletionUpload() {
+
+		try {
+			$stmt = $this->_pdo->prepare(
+				'DELETE c.*, uic.*
+				FROM class c
+				LEFT JOIN jointUsersInClass uic ON c.ID = uic.ClassID
+				WHERE c.ID = :id');
+
+			$stmt->execute(array(':id' => $_GET['ID']));
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(_g('Could not delete the Class!') . $e->getMessage());
+		}
+	}
+
+	/**
+	 * Display all Classes to the User
+	 */
 	protected function submoduleDisplayClassesExecute() {
 
 		$classes = $this->classesGetWithAdditionalReadableData();
