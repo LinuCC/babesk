@@ -90,6 +90,10 @@ $(document).ready(function() {
 
 	$("#pageWidthSelector").buttonset();
 
+	// needed for cash register	
+	$('input[name=card_ID]').focus();
+	$('input[name=amount]').focus();
+
 	{/literal}
 
 	/* Error-Output, if any exist */
