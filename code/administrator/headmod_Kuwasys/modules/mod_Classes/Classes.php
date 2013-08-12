@@ -79,23 +79,16 @@ class Classes extends Module {
 	protected function submoduleAddClassExecute() {
 
 		if(isset($_POST['label'], $_POST['description'])) {
-			$this->addClassInputCheck();
+			$_POST['allowRegistration'] =
+				(isset($_POST['allowRegistration'])) ? 1 : 0;
+			$this->classInputCheck();
 			$this->addClassUpload();
+			$this->_interface->dieSuccess(
+				_g('The Class was successfully added.'));
 		}
 		else {
 			$this->addClassDisplay();
 		}
-	}
-
-	/**
-	 * Displays a Form to the User which allows him to add a Class
-	 */
-	protected function addClassDisplay() {
-
-		$this->_smarty->assign('schoolyears', $this->schoolyearsGetAll());
-		$this->_smarty->assign('classunits', $this->classunitsGetAll());
-		$this->_smarty->display(
-			$this->_smartyModuleTemplatesPath . 'addClass.tpl');
 	}
 
 	/**
@@ -133,9 +126,9 @@ class Classes extends Module {
 	}
 
 	/**
-	 * Checks the given Input of the Add-Class Dialog
+	 * Checks the given Input of the ChangeClass and AddClass Dialog
 	 */
-	protected function addClassInputCheck() {
+	protected function classInputCheck() {
 
 		$gump = new GUMP();
 		$gump->rules(array(
@@ -215,10 +208,87 @@ class Classes extends Module {
 		}
 	}
 
+	/**
+	 * Displays a Form to the User which allows him to add a Class
+	 */
+	protected function addClassDisplay() {
+
+		$this->_smarty->assign('schoolyears', $this->schoolyearsGetAll());
+		$this->_smarty->assign('classunits', $this->classunitsGetAll());
+		$this->_smarty->display(
+			$this->_smartyModuleTemplatesPath . 'addClass.tpl');
+	}
+
+	/**
+	 * Allows the User to change a Class
+	 */
 	protected function submoduleChangeClassExecute() {
 
-		$this->_interface->dieError(
-			'Dieses Modul ist noch in Überarbeitung...');
+		if(isset($_POST['label'], $_POST['description'])) {
+			$_POST['allowRegistration'] =
+				(isset($_POST['allowRegistration'])) ? 1 : 0;
+			$this->classInputCheck();
+			$this->changeClassUpload();
+			$this->_interface->dieSuccess(
+				_g('The Class was successfully changed.'));
+		}
+		else {
+			$this->changeClassDisplay();
+		}
+	}
+
+	/**
+	 * Uploads the Change of the Class
+	 *
+	 * Dies with a Message on Error
+	 */
+	protected function changeClassUpload() {
+
+		try {
+			$stmt = $this->_pdo->prepare(
+				'UPDATE class SET label = :label, description = :description,
+					maxRegistration = :maxRegistration,
+					registrationEnabled = :registrationEnabled,
+					unitId = :unitId, schoolyearId = :schoolyearId
+					WHERE ID = :id');
+
+			$stmt->execute(array(
+				':label' => $_POST['label'],
+				':description' => $_POST['description'],
+				':maxRegistration' => $_POST['maxRegistration'],
+				':registrationEnabled' => $_POST['allowRegistration'],
+				':unitId' => $_POST['classunit'],
+				':schoolyearId' => $_POST['schoolyear'],
+				':id' => $_GET['ID'],
+			));
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(_g("Could not change the Class with the ID {$_GET[ID]}!"));
+		}
+	}
+
+	/**
+	 * Displays a form allowing the User to Change the Class
+	 */
+	protected function changeClassDisplay() {
+
+		$this->_smarty->assign('schoolyears', $this->schoolyearsGetAll());
+		$this->_smarty->assign('classunits', $this->classunitsGetAll());
+		$this->_smarty->assign('class', $this->classGet($_GET['ID']));
+		$this->_smarty->display(
+			$this->_smartyModuleTemplatesPath . 'changeClass.tpl');
+	}
+
+	protected function classGet($id) {
+
+		try {
+			$stmt = $this->_pdo->prepare('SELECT * FROM class WHERE ID = :id');
+			$stmt->execute(array(':id' => $id));
+			return $stmt->fetch();
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(_g('Could not fetch the Class'));
+		}
 	}
 
 	protected function submoduleDeleteClassExecute() {
