@@ -442,10 +442,43 @@ class Classteachers extends Module {
 			'Dieses Modul ist noch in Überarbeitung...');
 	}
 
+	/**
+	 * Displays all Classteachers
+	 */
 	protected function submoduleDisplayExecute() {
 
-		$this->_interface->dieError(
-			'Dieses Modul ist noch in Überarbeitung...');
+		$this->_smarty->assign('classteachers', $this->classteachersGetAll());
+		$this->displayTpl('displayClassteachers.tpl');
+	}
+
+	/**
+	 * Fetches all Classteachers in the Table
+	 *
+	 * Dies displaying a Message on Error
+	 *
+	 * @return array All Classteachers
+	 */
+	protected function classteachersGetAll() {
+
+		$classlink = '<a href=\"index.php?module=administrator|Kuwasys|Classes|DisplayClassDetails&amp;ID=';
+
+		try {
+			$stmt = $this->_pdo->query("SELECT ct.*,
+				GROUP_CONCAT(
+					CONCAT('{$classlink}', c.ID, '\">', c.label, '</a>')
+					SEPARATOR '<hr>') AS classes
+				FROM classTeacher ct
+				LEFT JOIN jointClassTeacherInClass ctic
+					ON ct.ID = ctic.ClassTeacherID
+				LEFT JOIN class c ON ctic.ClassID = c.ID
+				GROUP BY ct.ID");
+
+			return $stmt->fetchAll();
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(
+				_g('Could not fetch the Classteachers') . $e->getMessage());
+		}
 	}
 
 	protected function submoduleCsvImportExecute() {
