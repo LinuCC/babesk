@@ -436,10 +436,45 @@ class Classteachers extends Module {
 		}
 	}
 
+	/**
+	 * Allows the User to delete A Classteacher
+	 *
+	 * Dies displaying something
+	 */
 	protected function submoduleDeleteExecute() {
 
-		$this->_interface->dieError(
-			'Dieses Modul ist noch in Überarbeitung...');
+		if(isset($_GET['ID'])) {
+
+			$this->classteacherDeleteUpload();
+
+			$this->_interface->dieSuccess(
+				_g('The Classteacher was successfully deleted!'));
+		}
+		else {
+			$this->_interface->dieError(_g('Id is not set!'));
+		}
+	}
+
+	/**
+	 * Deletes a Classteacher-Entry in the Database
+	 *
+	 * Dies displaying a Message on Error
+	 */
+	protected function classteacherDeleteUpload() {
+
+		try {
+			$stmt = $this->_pdo->prepare(
+				'DELETE ct, ctic FROM classTeacher ct
+				LEFT JOIN jointClassTeacherInClass ctic
+					ON ct.ID = ctic.ClassTeacherID
+				WHERE ct.ID = :id');
+
+			$stmt->execute(array(':id' => $_GET['ID']));
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(
+				_g('Could not delete the Classteacher!'));
+		}
 	}
 
 	/**

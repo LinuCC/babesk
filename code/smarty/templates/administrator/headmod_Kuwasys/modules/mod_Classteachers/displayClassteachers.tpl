@@ -27,7 +27,8 @@
 				<form action="index.php?module=administrator|Kuwasys|Classteachers|Change&amp;ID={$classteacher.ID}" method="post">
 					<input type='submit' value='bearbeiten'>
 				</form>
-				<form action="index.php?module=administrator|Kuwasys|Classteachers|Delete&amp;ID={$classteacher.ID}" method="post">
+				<form class="deleteClassteacher" classteacherId="{$classteacher.ID}"
+					action="#" method="post">
 					<input type='submit' value='löschen'>
 				</form>
 			</td>
@@ -35,5 +36,42 @@
 		{/foreach}
 	</tbody>
 </table>
+
+<!-- index.php?module=administrator|Kuwasys|Classteachers|Delete&amp;ID={$classteacher.ID} -->
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+	$('form.deleteClassteacher').on('submit', function(event) {
+
+		event.preventDefault();
+
+		var toDelete = $(this).attr('classteacherId');
+
+		$('body').append('<div id="delConf" title="Klassenlehrer wirklich löschen?}">\
+						<p><span class="ui-icon ui-icon-alert"\
+						style="float:left; margin: 0 7px 20px 0;"></span>\
+						Der Klassenlehrer wird dauerhaft gelöscht! Sind sie sich wirklich sicher?</p>\
+						</div>');
+		$('div#delConf').dialog({
+			height: 200,
+			width: 400,
+			modal: true,
+			buttons: {
+				'Ja, löschen!': function() {
+					window.location = "index.php?module=administrator|Kuwasys\
+					|Classteachers|Delete&ID=" + toDelete;
+				},
+				'Nein, nicht löschen': function() {
+					$('div#delConf').remove();
+					$(this).dialog('close');
+				}
+			}
+		});
+	});
+});
+
+</script>
 
 {/block}
