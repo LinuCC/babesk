@@ -120,12 +120,12 @@ class Classteachers extends Module {
 	 */
 	protected function classteacherAddRun() {
 
-		$this->classteacherAddInputCheck();
+		$this->classteacherInputCheck();
 
 		$this->_pdo->beginTransaction();
 
 		$classteacherId = $this->classteacherAddUpload();
-		if(count($_POST['class'])) {
+		if(count($_POST['classes'])) {
 			$this->classteacherAddClassesAdd($classteacherId);
 		}
 
@@ -137,11 +137,11 @@ class Classteachers extends Module {
 	}
 
 	/**
-	 * Checks the Input of the AddClassteacher-Form
+	 * Checks the Input of the AddClassteacher-Form and ChangeClassteacher-Form
 	 *
 	 * Dies displaying a Message on wrong Input
 	 */
-	protected function classteacherAddInputCheck() {
+	protected function classteacherInputCheck() {
 
 		$gump = new GUMP();
 		$gump->rules(array(
@@ -171,7 +171,7 @@ class Classteachers extends Module {
 			$this->_interface->dieError(
 				$gump->get_readable_string_errors(true));
 		}
-		if(count($_POST['class'])) {
+		if(count($_POST['classes'])) {
 			$this->classteacherAddInputInClassesCheck();
 		}
 	}
@@ -183,8 +183,8 @@ class Classteachers extends Module {
 	 */
 	protected function classteacherAddInputInClassesCheck() {
 
-		if(array_search('NoClass', $_POST['class']) !== false &&
-			count($_POST['class']) > 1) {
+		if(array_search('NoClass', $_POST['classes']) !== false &&
+			count($_POST['classes']) > 1) {
 
 			$this->_interface->dieError(_g('You cant choose that the ' .
 				'Classteacher has No Classes AND select classes!'));
@@ -230,7 +230,7 @@ class Classteachers extends Module {
 			$stmt = $this->_pdo->prepare('INSERT INTO jointClassTeacherInClass
 				(ClassTeacherID, ClassID) VALUES (:classteacherId, :classId)');
 
-		foreach($_POST['class'] as $class) {
+		foreach($_POST['classes'] as $class) {
 
 			if($class != 'NoClass') {
 				$stmt->execute(array(
@@ -244,10 +244,196 @@ class Classteachers extends Module {
 		}
 	}
 
+	/**
+	 * Allows the User to change a Classteacher
+	 */
 	protected function submoduleChangeExecute() {
 
-		$this->_interface->dieError(
-			'Dieses Modul ist noch in Überarbeitung...');
+		if(isset($_GET['ID'])) {
+			if(isset($_POST['name'])) {
+				$this->classteacherChangeRun();
+			}
+			else {
+				$this->classteacherChangeDisplay();
+			}
+		}
+		else {
+			$this->_interface->dieError(_g('No ID given!'));
+		}
+	}
+
+	/**
+	 * Changes the Classteacher
+	 *
+	 * Dies displaying a Message
+	 */
+	protected function classteacherChangeRun() {
+
+		$this->classteacherInputCheck();
+		$this->_pdo->beginTransaction();
+		$this->classteacherChangeUpload();
+		$this->classteacherChangeClassesUpload();
+		$this->_pdo->commit();
+
+		$this->_interface->dieSuccess(
+			_g('The Classteacher was successfully changed.'));
+	}
+
+	/**
+	 * Changes a Classteacher-Entry in the Database based on userinput
+	 *
+	 * Dies displaying a message on Error
+	 */
+	protected function classteacherChangeUpload() {
+
+		try {
+			$stmt = $this->_pdo->prepare('UPDATE classTeacher SET
+				forename = :forename,
+				name = :name,
+				address = :address,
+				telephone = :telephone
+				WHERE ID = :id'
+			);
+
+			$stmt->execute(array(
+				':id' => $_GET['ID'],
+				':forename' => $_POST['forename'],
+				':name' => $_POST['name'],
+				':address' => $_POST['address'],
+				':telephone' => $_POST['telephone']
+			));
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(
+				_g('Could not change the Classteacher!'));
+		}
+	}
+
+	/**
+	 * Uploads the Changes to the Classes a Classteacher is on
+	 *
+	 * Dies displaying a Message on Error
+	 */
+	protected function classteacherChangeClassesUpload() {
+
+		try {
+			$classes = $this->classesOfActiveSchoolyearAndClassteacherGet(
+				$_GET['ID']);
+			$flatClasses = ArrayFunctions::arrayColumn($classes, 'ClassID');
+
+			$this->classteacherChangeAddMissingClasses($flatClasses);
+			$this->classteacherChangeDeleteClasses($flatClasses);
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(
+				_g('Could not change the Classes of the Classteacher!') . $e->getMessage());
+		}
+	}
+
+	/**
+	 * Adds missing connections between the classteacher and the Clas on Change
+	 *
+	 * @param   $existingClasses The existing Class-IDs of the Classteacher
+	 * @throws  Exception If Error occured while adding the Connections
+	 */
+	protected function classteacherChangeAddMissingClasses($existingClasses) {
+
+		$stmtAdd = $this->_pdo->prepare('INSERT INTO
+			jointClassTeacherInClass
+			(ClassTeacherID, ClassID) VALUES (:id, :classId)');
+
+		foreach($_POST['classes'] as $class) {
+			if(array_search($class, $existingClasses) === false &&
+				$class != 'NoClass') {
+				$stmtAdd->execute(
+					array(':id' => $_GET['ID'],
+					':classId' => $class));
+			}
+		}
+	}
+
+	/**
+	 * Deletes the Classteacher from the Classes
+	 *
+	 * @param   array  $existingClasses The existing Class-IDs
+	 * @throws  Exception If The Class-Connection could not be deleted
+	 */
+	protected function classteacherChangeDeleteClasses($existingClasses) {
+
+		$stmtDelete = $this->_pdo->prepare('DELETE FROM
+				jointClassTeacherInClass
+			WHERE ClassTeacherId = :id AND classId = :classId');
+
+		foreach($existingClasses as $exClassId) {
+			if(array_search($exClassId, $_POST['classes']) === false) {
+				$stmtDelete->execute(
+					array(':id' => $_GET['ID'],
+					':classId' => $exClassId));
+			}
+		}
+	}
+
+	/**
+	 * Displays the change Classteacher form to the User
+	 *
+	 * Dies displaying the Form
+	 */
+	protected function classteacherChangeDisplay() {
+
+		$this->_smarty->assign('classteacher',
+			$this->classteacherGet($_GET['ID']));
+		$this->_smarty->assign('classesOfClassteacher',
+			ArrayFunctions::arrayColumn(
+				$this->classesOfActiveSchoolyearAndClassteacherGet(
+					$_GET['ID']), 'ClassID')
+		);
+		$this->_smarty->assign('classes',
+			$this->classesOfActiveSchoolyearGet());
+		$this->displayTpl('changeClassteacher.tpl');
+	}
+
+	/**
+	 * Fetches the Classteacher with the ID from the Database and returns it
+	 *
+	 * @param  string $id The ID of the Classteacher
+	 * @return array      The Data of the Classteacher
+	 */
+	protected function classteacherGet($id) {
+
+		try {
+			$stmt = $this->_pdo->prepare('SELECT * FROM classTeacher
+				WHERE ID = :id');
+
+			$stmt->execute(array(':id' => $id));
+			return $stmt->fetch();
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(
+				_g("Could not fetch the Classteacher with the Id $id!"));
+		}
+	}
+
+	/**
+	 * Fetches the Classes where the Classteacher is in
+	 *
+	 * @param  string $id The ID of the Classteacher
+	 * @return array      The classes
+	 */
+	protected function classesOfActiveSchoolyearAndClassteacherGet($id) {
+
+		try {
+			$stmt = $this->_pdo->prepare('SELECT * FROM class c
+				JOIN jointClassTeacherInClass ctic ON c.ID = ctic.ClassID
+				WHERE ctic.ClassTeacherID = :id AND
+					c.schoolyearId = @activeSchoolyear');
+
+			$stmt->execute(array(':id' => $id));
+			return $stmt->fetchAll();
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(
+				_g('Could not fetch the Classes of the Classteacher!'));
+		}
 	}
 
 	protected function submoduleDeleteExecute() {

@@ -9,7 +9,7 @@
 	<label>Adresse: <input type='text' name='address'></label><br><br>
 	<label>Telefon: <input type='text' name='telephone'></label><br><br>
 	<label>Welchen Kurs leitet der Kursleiter? (nur Kurse des aktivierten Jahrganges)<br>
-	<select name='class[]' size='10' multiple='multiple'>
+	<select name='classes[]' size='10' multiple='multiple'>
 			<option value='NoClass' selected='selected'>==Kein Kurs==</option>
 		{foreach $classes as $class}
 			<option
