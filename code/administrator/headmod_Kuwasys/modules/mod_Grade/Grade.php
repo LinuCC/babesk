@@ -101,17 +101,15 @@ class Grade extends Module {
 		$gump = new GUMP();
 
 		$rules = array(
-			array('label' =>
-				'required|min_len,1|max_len,255', '', _g('Gradelabel')),
-			array('gradelevel' =>
-				'required|numeric|min_len,1|max_len,3', '', _g('Gradelevel')),
-			array('schooltype' =>
-				'numeric|min_len,1|max_len,11', '', _g('Schooltype'))
+			'label' => array('required|min_len,1|max_len,255',
+				'sql_escape', _g('Gradelabel')),
+			'gradelevel' => array('required|numeric|min_len,1|max_len,3',
+				'sql_escape', _g('Gradelevel')),
+			'schooltype' => array('numeric|min_len,1|max_len,11',
+				'sql_escape', _g('Schooltype'))
 		);
 
 		$gump->rules($rules);
-		$gump->sanitize($_POST);
-		$gump->input_preprocess($_POST);
 
 		if(!$gump->run($_POST)) {
 			$this->_interface->dieError(

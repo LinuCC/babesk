@@ -47,6 +47,24 @@ class DBConnect {
 		return $this->_database;
 	}
 
+	public function getPdo() {
+
+		$host = $this->_host;
+		$username = $this->_username;
+		$password = $this->_password;
+		$databaseName = $this->_databaseName;
+
+		try {
+			$pdo = new PDO("mysql:host=$host;dbname=$databaseName",
+				$username, $password);
+
+		} catch (Exception $e) {
+			throw new Exception('Could not connect to the Database!');
+		}
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		return $pdo;
+	}
+
 	public function setDatabaseValues ($host, $username, $password, $databaseName) {
 
 		$this->_host = $host;

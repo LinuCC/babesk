@@ -28,6 +28,8 @@ class SchoolyearSwitch {
 			$this->uploadStart();
 			$this->upload();
 			$this->uploadFinish();
+			$this->_interface->dieSuccess(
+				_g('Successfully switched the Schoolyear!'));
 
 		} catch (Exception $e) {
 
@@ -45,7 +47,7 @@ class SchoolyearSwitch {
 		$this->settingsInputCheck();
 		$this->_highestGradelevel = $_POST['highestGradelevel'];
 		$this->_shouldCreateClassesIfNotExist =
-			$_POST['shouldCreateClassesIfNotExist'];
+			isset($_POST['shouldCreateClassesIfNotExist']);
 	}
 
 	protected function settingsInputCheck() {
@@ -223,7 +225,6 @@ class SchoolyearSwitch {
 					$data['nextGradelevel'],
 					$data['gradelabel'],
 					$this->_arrangedGrades);
-		var_dump($newGradeId);
 		if($newGradeId !== false) {
 			$data['newGradeId'] = $newGradeId;
 		}
@@ -287,7 +288,7 @@ class SchoolyearSwitch {
 	protected $_inputValidation = array(
 		'highestGradelevel' => array(
 			'required|numeric|min_len,1|max_len,2',
-			'mysql_save',
+			'sql_escape',
 			'Höchster Jahrgang'
 		)
 	);

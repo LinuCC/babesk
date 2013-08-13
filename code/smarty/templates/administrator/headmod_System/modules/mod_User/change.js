@@ -239,7 +239,7 @@ $(document).ready(function() {
 				'name': $('input.inputItem[name=name]').val(),
 				'username': $('input.inputItem[name=username]').val(),
 				'passwordChange': $('input.passwordChange[name=passwordChange]').prop('checked'),
-				'password': $('input.inputItem[name=password]').val(),
+				'password': $('input[name=password]').val(),
 				'email': $('input.inputItem[name=email]').val(),
 				'telephone': $('input.inputItem[name=telephone]').val(),
 				'birthday': $('input.inputItem[name=birthday]').val(),

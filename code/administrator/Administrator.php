@@ -12,6 +12,8 @@ require_once PATH_INCLUDE . '/DataContainer.php';
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/HeadModule.php';
 require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';
+require_once PATH_INCLUDE . '/ArrayFunctions.php';
+require_once PATH_INCLUDE . '/sql_access/DBConnect.php';
 require_once 'Login.php';
 require_once 'AdminInterface.php';
 require_once 'locales.php';
@@ -43,10 +45,12 @@ class Administrator {
 		$this->_moduleExecutionParser->setSubprogramPath(
 			'root/administrator');
 		$this->loadVersion();
+		$this->initPdo();
 		$this->_dataContainer = new DataContainer(
 			$this->_smarty,
 			$this->_adminInterface,
-			$this->_acl);
+			$this->_acl,
+			$this->_pdo);
 
 		// $this->vikingsSpamAndPorc();
 	}
@@ -123,6 +127,7 @@ class Administrator {
 			$this->accessControlInit();
 			$this->initUserInterface();
 			if($this->_moduleExecutionParser->load()) {
+				$this->backlink();
 				$this->moduleBacklink();
 				$this->executeModule();
 			}
@@ -197,6 +202,7 @@ class Administrator {
 		session_name('sid');
 		session_start();
 		error_reporting(E_ALL);
+		date_default_timezone_set(date_default_timezone_get());
 	}
 
 	private function initLanguage() {
@@ -224,6 +230,18 @@ class Administrator {
 		$version=@file_get_contents("../version.txt");
 		if ($version===FALSE) $version = "";
 		$smarty->assign('babesk_version', $version);
+	}
+
+	private function initPdo() {
+
+		try {
+			$connector = new DBConnect();
+			$connector->initDatabaseFromXML();
+			$this->_pdo = $connector->getPdo();
+
+		} catch (Exception $e) {
+			trigger_error('Could not create the PDO-Object!');
+		}
 	}
 
 	private function setPhpIni() {
@@ -271,6 +289,17 @@ class Administrator {
 		$link = str_replace('/', '|',
 			$this->_moduleExecutionParser->moduleExecutionGet());
 		$this->_smarty->assign('moduleBacklink', $link);
+	}
+
+	/**
+	 * Modules can set a manual backlink, handle it if set
+	 */
+	private function backlink() {
+
+		if(!empty($_SESSION['backlink'])) {
+			$this->_smarty->assign('backlink', $_SESSION['backlink']);
+			unset($_SESSION['backlink']);
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////

@@ -575,3 +575,10 @@ a.moduleBacklink {
 	right: -15px;
 	float: right;
 }
+
+a.backlink {
+	position: relative;
+	font-size: 90%;
+	top: 25px;
+	right: 15px;
+}

@@ -56,6 +56,7 @@ class PublicData {
 		//if this value is not set, the modules will not execute
 		define('_AEXEC', 1);
 		error_reporting(E_ALL);
+		date_default_timezone_set(date_default_timezone_get());
 	}
 
 	private function attributesInit () {

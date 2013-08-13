@@ -93,12 +93,13 @@ class TableMng {
 		$content = self::query($query);
 
 		if(!is_array($content)) {
-			throw new Exception('MySQL returned something wrong; '
-				. var_dump($content));
+			throw new Exception('MySQL returned something wrong; ' .
+				var_dump($content));
 		}
 		$elCount = count($content);
 		if($elCount > 1) {
-			throw new Exception('MySQl returned multiple Entries when only one was requested!');
+			throw new MultipleEntriesException('MySQl returned multiple ' .
+				'Entries when only one was requested!');
 		}
 		else if($elCount == 1) {
 			return $content[0];

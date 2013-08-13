@@ -172,58 +172,8 @@ class GUMP
 		if($validated !== true) {
 			return false;
 		} else {
-		   return $data;
+			return $data;
 		}
-	}
-
-	/**
-	 * Decodes HTML-Entities and escapes strings against MySQL-Injections
-	 *
-	 * @param  Array $data The Input-data to check for
-	 * @param  Array $ruleset A ruleset for gump so that the function knows for
-	 * which variables to check
-	 * @return Array The Data with all of the Elements, that are in the ruleset
-	 * too, escaped
-	 */
-	public function input_preprocess_by_ruleset($varContainer, $ruleset)
-	{
-		foreach($ruleset as $element => $name) {
-			if(isset($varContainer[$element]))
-			{
-				$el = $varContainer[$element];
-				// $varContainer[$element] = html_entity_decode($el,
-				// 	ENT_QUOTES|ENT_COMPAT|ENT_HTML401);
-				if(class_exists('TableMng')) {
-					TableMng::sqlEscape($varContainer[$element]);
-				}
-				else {
-					trigger_error('TableMng not existing in gump!');
-				}
-			}
-		}
-		return $varContainer;
-	}
-
-	public function input_preprocess($varContainer)
-	{
-		foreach($varContainer as $key => $el) {
-			if(!is_array($el)) {
-				// $varContainer[$key] =  html_entity_decode($el,
-				// 	ENT_QUOTES|ENT_COMPAT|ENT_HTML401);
-				if(class_exists('TableMng')) {
-					TableMng::sqlEscape($varContainer[$key]);
-				}
-				else {
-					trigger_error('TableMng not existing in gump!');
-				}
-			}
-			else {
-				//If Elements are array, preprocess the Elements in it
-				$this->input_preprocess($el);
-			}
-		}
-
-		return $varContainer;
 	}
 
 	/**
@@ -235,6 +185,9 @@ class GUMP
 	 */
 	public function sanitize(array $input, $fields = NULL)
 	{
+		trigger_error(
+			'GUMP-Method sanitize should not be used; Use the filter instead');
+
 		$magic_quotes = (bool)get_magic_quotes_gpc();
 
 		if(is_null($fields))
@@ -264,10 +217,10 @@ class GUMP
 						$value = trim($value);
 					}
 
-					if(function_exists('iconv'))
-					{
-						$value = iconv('ISO-8859-1', 'UTF-8', $value);
-					}
+					// if(function_exists('iconv'))
+					// {
+					// 	$value = iconv('ISO-8859-1', 'UTF-8', $value);
+					// }
 
 					$value = filter_var($value, FILTER_SANITIZE_STRING);
 				}
@@ -424,6 +377,9 @@ class GUMP
 				case 'validate_required':
 					$resp[] = "The <span class=\"$field_class\">$this->display_names[$field]</span> field is required";
 					break;
+				case 'validate_disallowed':
+					$resp[] = "The $displayName field has to be void, because: '$param'";
+					break;
 				case 'validate_valid_email':
 					$resp[] = "The <span class=\"$field_class\">$this->display_names[$field]</span> field is required to be a valid email address";
 					break;
@@ -523,6 +479,9 @@ class GUMP
 				switch($e['rule']) {
 					case 'validate_required':
 						$resp[] = "Das $displayName Feld muss ausgefüllt werden";
+						break;
+					case 'validate_disallowed':
+						$resp[] = "Das $displayName Feld muss leer sein, weil: '$param'";
 						break;
 					case 'validate_valid_email':
 						$resp[] = "Das $displayName Feld muss eine korrekte Email-Adresse beinhalten";
@@ -685,7 +644,7 @@ class GUMP
 	/**
 	 * Escapes the string for MySQL
 	 *
-	 * Usage: '<index>' => 'mysql_save'
+	 * Usage: '<index>' => 'sql_escape'
 	 *
 	 * @access protected
 	 * @author Pascal Ernst <pascal.cc.ernst@gmail.com>
@@ -693,11 +652,17 @@ class GUMP
 	 * @param  array $params
 	 * @return string
 	 */
-	protected function filter_mysql_save($value, $params = NULL)
+	protected function filter_sql_escape($value, $params = NULL)
 	{
-		$value = mysql_real_escape_string($value);
+		$locValue = $value;
+		if(class_exists('TableMng')) {
+			TableMng::sqlEscape($locValue);
+		}
+		else {
+			trigger_error('TableMng not existing in gump!');
+		}
 
-		return $value;
+		return $locValue;
 	}
 
 	/**
@@ -903,6 +868,33 @@ class GUMP
 	protected function validate_required($field, $input, $param = NULL)
 	{
 		if(isset($input[$field]) && trim($input[$field]) != '')
+		{
+			return;
+		}
+		else
+		{
+			return array(
+				'field' => $field,
+				'value' => NULL,
+				'rule'	=> __FUNCTION__,
+				'param' => $param
+			);
+		}
+	}
+
+	/**
+	 * Checks if the specified key is not existing or empty
+	 *
+	 * Usage: '<index>' => 'disallowed'
+	 *
+	 * @access protected
+	 * @param  string $field
+	 * @param  array $input
+	 * @return mixed
+	 */
+	protected function validate_disallowed($field, $input, $param = NULL)
+	{
+		if(!isset($input[$field]) || trim($input[$field]) == '')
 		{
 			return;
 		}
