@@ -128,6 +128,7 @@ table.dataTable tr td {
 .dataTable img {
 	vertical-align: middle;
 }
+
 .dataTable td.userOptions,
 .dataTable td.userOptions a,
 .dataTable td.userOptions img {
@@ -148,6 +149,10 @@ table.dataTable tr td {
 .dataTable div.userOptions a:first-child {
 	margin-left: 0px;
 	padding-left: 0px;
+}
+
+.dataTable hr {
+	border: 1px solid #BBCC33;
 }
 
 /* Error Messages */

@@ -442,7 +442,7 @@ $(document).ready(function() {
 				row += '<td>' + user[column] + '</td>';
 			});
 			row += '<td class="userOptions"><a id="actionDetailsForUser#' +
-				user.ID + '"><img src="../images/actions/plusbutton_32.png"\
+				user.ID + '"><img src="../images/actions/settings_24.png"\
 				title="Optionen"/><a/></td>';
 			row += '</tr>';
 			tablebody .append(row);

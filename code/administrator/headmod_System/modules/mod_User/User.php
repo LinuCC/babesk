@@ -55,23 +55,24 @@ class User extends Module {
 			'no_id' => 'ID nicht gefunden.'));
 		$this->_smarty = $dataContainer->getSmarty();
 		$this->_acl = $dataContainer->getAcl();
+		$this->_dataContainer = $dataContainer;
 	}
 
 	protected function submoduleDisplayAllExecute() {
 
-		$displayer = new UserDisplayAll($this->_smarty);
+		$displayer = new UserDisplayAll($this->_dataContainer);
 		$displayer->displayAll();
 	}
 
 	protected function submoduleFetchUserdataExecute() {
 
-		$displayer = new UserDisplayAll($this->_smarty);
+		$displayer = new UserDisplayAll($this->_dataContainer);
 		$displayer->fetchUsersOrganized();
 	}
 
 	protected function submoduleFetchUsercolumnsExecute() {
 
-		$displayer = new UserDisplayAll($this->_smarty);
+		$displayer = new UserDisplayAll($this->_dataContainer);
 		$displayer->fetchShowableColumns();
 	}
 
@@ -824,6 +825,7 @@ class User extends Module {
 	protected $userProcessing;
 	protected $messages;
 	protected $_interface;
+	protected $_dataContainer;
 
 	protected static $invalid = array('Š'=>'S', 'š'=>'s', 'Đ'=>'D', 'đ'=>'d',
 		'Ž'=>'Z', 'ž'=>'z', 'Č'=>'C', 'č'=>'c', 'Ć'=>'C', 'ć'=>'c', 'À'=>'A',
