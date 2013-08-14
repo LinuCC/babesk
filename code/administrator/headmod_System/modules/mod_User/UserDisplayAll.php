@@ -432,6 +432,7 @@ class UserDisplayAllQueryCreator {
 					ON kuwasys_uic.UserID = u.ID
 				LEFT JOIN class kuwasys_c
 					ON kuwasys_c.Id = kuwasys_uic.ClassID
+					AND kuwasys_c.schoolyearId = @activeSchoolyear
 				LEFT JOIN usersInClassStatus kuwasys_uics
 					ON kuwasys_uics.ID = kuwasys_uic.statusId
 				');

@@ -324,10 +324,6 @@ class UserCsvImport extends CsvImport {
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
 
-	protected $_targetColumns;
-
-	protected $_gumpRules;
-
 	protected $_isBabeskEnabled;
 
 	/**
