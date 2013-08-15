@@ -1,7 +1,7 @@
 /* COMMON STYLE
 --------------------------------------------------------- */
 
-body, h1, h2, h3, h4, h5, h6, div, p, table, td, ul, ol, li, dd, dt, dl, blockquote, address, hr, pre {
+body, h1, h2, h3, h4, h5, h6, div, p, table, td, ol, ul, li, dd, dt, dl, blockquote, address, hr, pre {
 	margin: 0;     /* no borders */
 	padding: 0;
 }
@@ -128,6 +128,7 @@ table.dataTable tr td {
 .dataTable img {
 	vertical-align: middle;
 }
+
 .dataTable td.userOptions,
 .dataTable td.userOptions a,
 .dataTable td.userOptions img {
@@ -148,6 +149,10 @@ table.dataTable tr td {
 .dataTable div.userOptions a:first-child {
 	margin-left: 0px;
 	padding-left: 0px;
+}
+
+.dataTable hr {
+	border: 1px solid #BBCC33;
 }
 
 /* Error Messages */
@@ -581,4 +586,18 @@ a.backlink {
 	font-size: 90%;
 	top: 25px;
 	right: 15px;
+}
+
+ul.submodulelinkList {
+	margin: 10px 20px;
+	list-style-image: none;
+}
+
+ul.submodulelinkList a {
+	font-weight: 700;
+	color: #006600;
+}
+
+ul.submodulelinkList li {
+	list-style: none;
 }

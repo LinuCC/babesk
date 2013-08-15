@@ -2,7 +2,7 @@
 
 <h2 class="moduleHeader">Erlauben der Kursregistrierungen</h2>
 
-<form action="index.php?section=Kuwasys|Classes&action=toggleGlobalClassRegistrationEnabled&toggleFormSend" method="post">
+<form action="index.php?module=administrator|Kuwasys|Classes|GlobalClassRegistration&amp;toggleFormSend" method="post">
 	<label>Kursregistrierungen erlauben: <input type="checkbox" name="toggle"
 			{if $enabled}checked="checked"{/if}
 			></label>

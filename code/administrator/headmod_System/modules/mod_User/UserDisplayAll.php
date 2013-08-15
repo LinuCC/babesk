@@ -8,9 +8,11 @@ class UserDisplayAll {
 	//Constructor
 	/////////////////////////////////////////////////////////////////////
 
-	public function __construct($smarty) {
+	public function __construct($dataContainer) {
 
-		$this->_smarty = $smarty;
+		$this->_smarty = $dataContainer->getSmarty();
+		$this->_acl = $dataContainer->getAcl();
+		$this->activeModulesAddSelectableData();
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -108,39 +110,37 @@ class UserDisplayAll {
 
 	public function fetchShowableColumns() {
 
-		$columns = array();
+		// $columns = array();
 
-		$userdata = TableMng::query("SELECT *
-			FROM users LIMIT 1, 1");
+		// $userdata = TableMng::query("SELECT *
+		// 	FROM users LIMIT 1, 1");
 
-		foreach($userdata[0] as $key => $data) {
-			if(!empty($this->_userColumnTranslations[$key])) {
-				$columns[$key] = $this->_userColumnTranslations[$key];
-			}
-		}
-		$columns['schoolyears'] = 'Schuljahre';
-		$columns['grades'] = 'Klassen';
-		$columns['activeGrade'] = 'aktive Klasse';
-
-		// //Messages-Module existing
-		// if(count(TableMng::query("SHOW TABLES LIKE 'Message';"))) {
-		// 	$columns['countMessageReceived'] = 'Nachrichten empfangen';
-		// 	$columns['countMessageSend'] = 'Nachrichten abgeschickt';
-		// }
-		// //Kuwasys existing
-		// if(count(TableMng::query("SHOW TABLES LIKE 'class';"))) {
-		// 	$columns['countClass'] = 'Kurse';
-		// }
-		//Cards existing
-		if(count(TableMng::query("SHOW TABLES LIKE 'cards';"))) {
-			$columns['cardnumber'] = 'Kartennummer';
-		}
-		//Babesk existing
-		// if(count(TableMng::query("SHOW TABLES LIKE 'orders';"))) {
-			// $columns['countOrders'] = 'Bestellungen';
+		// foreach($userdata[0] as $key => $data) {
+		// 	if(!empty($this->_selectableColumns[$key])) {
+		// 		$columns[$key] = $this->_selectableColumns[$key];
+		// 	}
 		// }
 
-		die(json_encode(array('value' => 'data', 'message' => $columns)));
+		// // //Messages-Module existing
+		// // if(count(TableMng::query("SHOW TABLES LIKE 'Message';"))) {
+		// // 	$columns['countMessageReceived'] = 'Nachrichten empfangen';
+		// // 	$columns['countMessageSend'] = 'Nachrichten abgeschickt';
+		// // }
+		// // //Kuwasys existing
+		// // if(count(TableMng::query("SHOW TABLES LIKE 'class';"))) {
+		// // 	$columns['countClass'] = 'Kurse';
+		// // }
+		// //Cards existing
+		// if(count(TableMng::query("SHOW TABLES LIKE 'cards';"))) {
+		// 	$columns['cardnumber'] = 'Kartennummer';
+		// }
+		// //Babesk existing
+		// // if(count(TableMng::query("SHOW TABLES LIKE 'orders';"))) {
+		// 	// $columns['countOrders'] = 'Bestellungen';
+		// // }
+
+		die(json_encode(array('value' => 'data',
+			'message' => $this->_selectableColumns)));
 	}
 
 
@@ -184,13 +184,48 @@ class UserDisplayAll {
 		return $data;
 	}
 
+	/**
+	 * Adds various Options for the User depending on Headmodule-Activation
+	 */
+	protected function activeModulesAddSelectableData() {
+
+		//Columns for Kuwasys
+		if($this->_acl->moduleGet('root/administrator/Kuwasys')) {
+			$this->selectableAdd(array(
+				'classes' => 'diesjährige Kurswahlen',
+			));
+		}
+
+		//Columns for Babesk
+		if($this->_acl->moduleGet('root/administrator/Babesk')) {
+
+			$this->selectableAdd(array(
+					'GID' => 'Preisgruppe',
+					'credit' => 'Guthaben',
+					'soli' => 'ist Soli'
+			));
+		}
+	}
+
+	/**
+	 * Adds the Options given so the User can select the Columns, too
+	 *
+	 * @param  array  $columns The Options to add
+	 */
+	protected function selectableAdd(array $columns) {
+
+		$this->_selectableColumns = array_merge(
+			$this->_selectableColumns,
+			$columns);
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
 
 	protected $_smarty;
 
-	protected $_userColumnTranslations = array(
+	protected $_selectableColumns = array(
 		'ID' => 'ID',
 		'forename' => 'Vorname',
 		'name' => 'Name',
@@ -198,12 +233,19 @@ class UserDisplayAll {
 		'password' => 'Passwort',
 		'email' => 'Emailadresse',
 		'telephone' => 'Telefonnummer',
-		'GID' => 'Preisgruppe',
+		'schoolyears' => 'Schuljahre',
+		'grades' => 'Klassen',
+		'activeGrade' => 'aktive Klasse',
 		'birthday' => 'Geburtstag',
-		'first_passwd' => 'ist erstes Passwort',
-		'credit' => 'Guthaben',
-		'soli' => 'ist Soli');
+		'first_passwd' => 'ist erstes Passwort'
+	);
 }
+
+
+
+/******************************************************************************
+ * Creates the Query to Display the Users
+ *****************************************************************************/
 
 class UserDisplayAllQueryCreator {
 
@@ -278,6 +320,9 @@ class UserDisplayAllQueryCreator {
 				break;
 			case 'schoolyears':
 				$this->schoolyearQuery();
+				break;
+			case 'classes':
+				$this->classesQuery();
 				break;
 		}
 	}
@@ -371,6 +416,30 @@ class UserDisplayAllQueryCreator {
 		}
 	}
 
+	protected function classesQuery() {
+
+		if(!$this->_classesQueryDone) {
+			$this->addSelectStatement(
+				'GROUP_CONCAT(
+					kuwasys_c.label, "  <i>(", kuwasys_uics.translatedName,
+						")</i>"
+					SEPARATOR "<hr/>"
+				) AS classes'
+				);
+
+			$this->addJoinStatement('
+				LEFT JOIN jointUsersInClass kuwasys_uic
+					ON kuwasys_uic.UserID = u.ID
+				LEFT JOIN class kuwasys_c
+					ON kuwasys_c.Id = kuwasys_uic.ClassID
+					AND kuwasys_c.schoolyearId = @activeSchoolyear
+				LEFT JOIN usersInClassStatus kuwasys_uics
+					ON kuwasys_uics.ID = kuwasys_uic.statusId
+				');
+			$this->_classesQueryDone = true;
+		}
+	}
+
 	protected function addSelectStatement($st) {
 
 		$this->_querySelect .= "$st, ";
@@ -395,11 +464,18 @@ class UserDisplayAllQueryCreator {
 	protected $_gradeQueryDone = false;
 	protected $_schoolyearQueryDone = false;
 	protected $_cardsQueryDone = false;
+	protected $_classesQueryDone = false;
 
 	protected $_filterForQuery;
 	protected $_sortFor;
 	protected $_userToStart;
 	protected $_usersPerPage;
+
+	/**
+	 * The Accesscontrollayer, To find out what Headmodules are active
+	 * @var Acl
+	 */
+	protected $_acl;
 }
 
 ?>

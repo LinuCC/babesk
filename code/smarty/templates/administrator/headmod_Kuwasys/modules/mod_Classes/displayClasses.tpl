@@ -56,14 +56,23 @@ filtern.
 			<td align="center">{$class.schoolyearLabel}</td>
 			<td align="center">{$class.unitTranslatedName}</td>
 			<td align="center" bgcolor='#FFD99'>
-			<div id='option{$class.ID}'>
-			<form method="post"><input type='button' value='Optionen' onclick='showOptions("{$class.ID}")'></form>
-			</div>
-			<div id='optionButtons{$class.ID}' hidden>
-			<form action="index.php?section=Kuwasys|Classes&action=changeClass&ID={$class.ID}" method="post"><input type='submit' value='bearbeiten'></form>
-			<form action="index.php?section=Kuwasys|Classes&action=deleteClass&ID={$class.ID}" method="post"><input type='submit' value='löschen'></form>
-			<form action="index.php?section=Kuwasys|Classes&action=showClassDetails&ID={$class.ID}" method="post"><input type='submit' value='Details anzeigen'></form>
-			</div>
+				<div id='option{$class.ID}'>
+
+				<form method="post">
+					<input type='button' value='Optionen' onclick='showOptions("{$class.ID}")'>
+				</form>
+				</div>
+				<div id='optionButtons{$class.ID}' hidden="hidden" >
+					<form action="index.php?module=administrator|Kuwasys|Classes|ChangeClass&amp;ID={$class.ID}" method="post">
+						<input type='submit' value='bearbeiten'>
+					</form>
+					<form action="index.php?module=administrator|Kuwasys|Classes|DeleteClass&amp;ID={$class.ID}" method="post">
+						<input type='submit' value='löschen'>
+					</form>
+					<form action="index.php?module=administrator|Kuwasys|Classes|DisplayClassDetails&ID={$class.ID}" method="post">
+						<input type='submit' value='Details anzeigen'>
+					</form>
+				</div>
 			</td>
 		</tr>
 		{/foreach}

@@ -1,145 +1,158 @@
 <?php
 
-// require_once PATH_INCLUDE . '/CsvImporter.php';
+require_once PATH_INCLUDE . '/CsvImportTableData.php';
 
-/**
- * This class contains the functions needed to import classes by a Csv-File
- */
-class ClassesCsvImport {
-	////////////////////////////////////////////////////////////////////////////////
+class ClassesCsvImport extends CsvImportTableData {
+
+	/////////////////////////////////////////////////////////////////////
 	//Constructor
-	////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
 
-	////////////////////////////////////////////////////////////////////////////////
-	//Getters and Setters
-	////////////////////////////////////////////////////////////////////////////////
+	/**
+	 * Constructs this Class
+	 */
+	public function __construct() {
 
-	////////////////////////////////////////////////////////////////////////////////
+		parent::__construct();
+	}
+
+	/////////////////////////////////////////////////////////////////////
 	//Methods
-	////////////////////////////////////////////////////////////////////////////////
-	public static function classInit ($interface, $databaseAccessManager) {
-		self::$_interface = $interface;
-		self::$_databaseAccessManager = $databaseAccessManager;
+	/////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Executes the ClassesCsvImport
+	 *
+	 * @param  DataContainer $dataContainer Contains data needed by the Class
+	 */
+	public function execute($dataContainer) {
+
+		$this->entryPoint($dataContainer);
+		parent::execute($dataContainer);
 	}
 
-	public static function csvFileImport ($filePath, $delimiter) {
-		$csvManager = new CsvImporter($filePath, $delimiter);
-		$contentArray = $csvManager->getContents();
-		$contentArray = self::cellsMissingHandle($contentArray);
-		$contentArray = self::schoolyearIdAddByName ($contentArray);
-		$contentArray = self::classUnitIdAddByName ($contentArray);
-		$contentArray = self::classteacherIdAddByName ($contentArray);
-		self::dataToDb ($contentArray);
-	}
-	////////////////////////////////////////////////////////////////////////////////
-	//Implementations
-	////////////////////////////////////////////////////////////////////////////////
-	protected static function dataToDb ($contentArray) {
-		foreach ($contentArray as $rowArray) {
-			$classId = self::$_databaseAccessManager->classNextAutoincrementIdGet();
-			self::classToDb($rowArray);
-			self::jointClassInSchoolyearToDb ($rowArray, $classId);
-			self::jointClassteacherInClassToDb ($rowArray, $classId);
-		}
+	/////////////////////////////////////////////////////////////////////
+	//Implements
+	/////////////////////////////////////////////////////////////////////
+
+	/**
+	 * The Entrypoint of the Execution of the Importer
+	 *
+	 * @param  DataContainer $dataContainer Contains data needed by the Class
+	 */
+	protected function entryPoint($dataContainer) {
+
+		$moduleroot = $dataContainer->getAcl()->getModuleroot();
+		$this->arrayDataInit();
 	}
 
-	protected static function cellsMissingHandle ($contentArray) {
-		foreach ($contentArray as & $rowArray) {
-			foreach (self::$_csvStructure as $cell) {
-				$rowArray = self::cellMissingHandle ($cell, $rowArray);
-			}
-		}
-		return $contentArray;
+	/**
+	 * Initializes the array-Data needed describing how to handle the Columns
+	 */
+	protected function arrayDataInit() {
+
+		$this->_targetColumns = array(
+			'label' => _g('Label'),
+			'description' => _g('Description'),
+			'unit' => _g('Day'),
+			'schoolyear' => _g('Schoolyear'),
+			'maxRegistration' => _g('Maximum Amount of Registrations'),
+			'registrationEnabled' => _g('Registration Enabled for this Class')
+		);
+
+		$this->_gumpRules = array(
+			'label' => array(
+				'required|alpha_dash_space|min_len,2|max_len,255',
+				'', _g('Label')
+			),
+			'description' => array(
+				'min_len,2|max_len,1024',
+				'', _g('Description')
+			),
+			'unit' => array('min_len,2|max_len,64', '', _g('Day')),
+			'schoolyear' => array(
+				'min_len,2|max_len,64', '', _g('Schoolyear')),
+			'maxRegistration' => array(
+				'numeric|min_len,1|max_len,10', '', _g('Email-Adresse')),
+			'registrationEnabled' => array(
+				'numeric|min_len,1|max_len,1', '',
+				_g('Registration Enabled for this Class'))
+		);
 	}
 
-	protected static function schoolyearIdAddByName ($contentArray) {
-		foreach ($contentArray as &$rowArray) {
-			$name = $rowArray [self::$_csvStructure ['SchoolyearName']];
-			$schoolyearId = self::$_databaseAccessManager->schoolyearIdGetBySchoolyearNameWithoutDying ($name);
-			$rowArray [self::$_csvStructure ['SchoolyearId']] = $schoolyearId;
-		}
-		return $contentArray;
+	/**
+	 * Prepares the Data so it can be uploaded to the Database
+	 */
+	protected function dataPrepare() {
+
+		$this->missingValuesAddAsVoidString();
+		$this->schoolyearIdsAppendToColumns();
 	}
 
-	protected static function classUnitIdAddByName ($contentArray) {
-		foreach ($contentArray as &$rowArray) {
-			if ($rowArray [self::$_csvStructure ['ClassUnit']] != '') {
-				$classUnit = self::$_databaseAccessManager->kuwasysClassUnitGetByName ($rowArray['weekday']);
-				$rowArray [self::$_csvStructure ['ClassUnit']] = $classUnit ['ID'];
-			}
-		}
-		return $contentArray;
-	}
+	/**
+	 * Tries to get the ID of given unitnames allowing to upload it
+	 *
+	 * Dies displaying a message on Error
+	 * Adds the pair 'ID' => <schoolyearId> to each array-Element
+	 */
+	protected function unitIdsAddToColumns() {
 
-	protected static function classteacherIdAddByName ($contentArray) {
-		$classteachers = self::$_databaseAccessManager->classteacherGetAllWithoutDieingWhenVoid ();
-		if (isset ($classteachers)) {
-			foreach ($contentArray as &$rowArray) {
-				if ($rowArray [self::$_csvStructure ['ClassteacherName']] != '') {
-					$rowArray = self::classteacherIdAddByNameRoutine ($rowArray, $classteachers);
+		$units = $this->unitsGetAll();
+		foreach($this->_contentArray as &$con) {
+
+			if(!empty($con['day'])) {
+				$id = $this->unitIdGetByName(
+					$con['day'], $units);
+
+				if($id !== false) {
+					$con['unitId'] = $id;
+				}
+				else {
+					$this->errorDie(
+						_g('Could not find the Unit "%1$s"',
+							$con['day']));
 				}
 			}
 		}
-		return $contentArray;
 	}
 
-	protected static function classteacherIdAddByNameRoutine ($rowArray, $classteachers) {
-		foreach ($classteachers as $classteacher) {
-			$ctName = $classteacher ['forename'] . ' ' . $classteacher ['name'];
-			if ($rowArray [self::$_csvStructure ['ClassteacherName']] == $ctName) {
-				$rowArray [self::$_csvStructure ['ClassteacherId']] = $classteacher ['ID'];
+	/**
+	 * Fetches all Units and returns them
+	 *
+	 * @return array  The fetched Units
+	 */
+	private function unitsGetAll() {
+
+		$units = TableMng::query('SELECT * FROM kuwasysClassUnit');
+
+		return $units;
+	}
+
+	/**
+	 * Returns the Unit-ID of the Unit that has the Label
+	 *
+	 * @param  string $name  The Label of the Unit to search for
+	 * @param  array  $units The Units to search in
+	 * @return string        The ID if found, else false
+	 */
+	private function unitIdGetByName($name, $units) {
+
+		foreach ($units as $unit) {
+			if($unit['translatedName'] == $name) {
+				return $unit['ID'];
 			}
 		}
-		return $rowArray;
+
+		return false;
 	}
 
-	protected static function cellMissingHandle ($varName, $rowArray) {
-		if (!isset($rowArray[$varName])) {
-			$rowArray[$varName] = '';
-		}
-		return $rowArray;
+	protected function dataCommit() {
+
 	}
 
-	protected static function classToDb ($rowArray) {
-		self::$_databaseAccessManager->classAdd (
-			$rowArray [self::$_csvStructure ['Label']],
-			$rowArray [self::$_csvStructure ['Description']],
-			$rowArray [self::$_csvStructure ['MaxRegistration']],
-			$rowArray [self::$_csvStructure ['IsRegistrationEnabled']],
-			$rowArray [self::$_csvStructure ['ClassUnit']]);
-	}
-
-	protected static function jointClassInSchoolyearToDb ($rowArray, $classId) {
-		if($rowArray [self::$_csvStructure ['SchoolyearId']] != '') {
-			self::$_databaseAccessManager->jointClassInSchoolyearAdd($rowArray ['schoolyearId'], $classId);
-		}
-	}
-
-	protected static function jointClassteacherInClassToDb ($rowArray, $classId) {
-		$ctId = $rowArray [self::$_csvStructure ['ClassteacherId']];
-		if ($ctId != '') {
-			self::$_databaseAccessManager->jointClassteacherInClassAdd ($ctId, $classId);
-		}
-	}
-
-
-	////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
 	//Attributes
-	////////////////////////////////////////////////////////////////////////////////
-
-	protected static $_interface;
-	protected static $_databaseAccessManager;
-	protected static $_csvStructure = array (
-		'Label' => 'label',
-		'Description' => 'description',
-		'MaxRegistration' => 'maxRegistration',
-		'IsRegistrationEnabled' => 'registrationEnabled',
-		'ClassUnit' => 'weekday',
-		'SchoolyearName' => 'schoolyearName',
-		'SchoolyearId' => 'schoolyearId',
-		'ClassteacherName' => 'classteacherName',
-		'ClassteacherId' => 'classteacherId',
-		);
+	/////////////////////////////////////////////////////////////////////
 }
 
 ?>

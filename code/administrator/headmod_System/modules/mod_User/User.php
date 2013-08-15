@@ -55,23 +55,25 @@ class User extends Module {
 			'no_id' => 'ID nicht gefunden.'));
 		$this->_smarty = $dataContainer->getSmarty();
 		$this->_acl = $dataContainer->getAcl();
+		$this->_pdo = $dataContainer->getPdo();
+		$this->_dataContainer = $dataContainer;
 	}
 
 	protected function submoduleDisplayAllExecute() {
 
-		$displayer = new UserDisplayAll($this->_smarty);
+		$displayer = new UserDisplayAll($this->_dataContainer);
 		$displayer->displayAll();
 	}
 
 	protected function submoduleFetchUserdataExecute() {
 
-		$displayer = new UserDisplayAll($this->_smarty);
+		$displayer = new UserDisplayAll($this->_dataContainer);
 		$displayer->fetchUsersOrganized();
 	}
 
 	protected function submoduleFetchUsercolumnsExecute() {
 
-		$displayer = new UserDisplayAll($this->_smarty);
+		$displayer = new UserDisplayAll($this->_dataContainer);
 		$displayer->fetchShowableColumns();
 	}
 
@@ -366,13 +368,21 @@ class User extends Module {
 		TableMng::sqlEscape($uid);
 
 		try {
-		list($user,
-			$cardnumber,
-			$priceGroups,
-			$grades,
-			$schoolyears,
-			$gradesAndSchoolyears,
-			$groups) = $this->changeDisplayDataFetch($uid);
+			list($user,
+				$cardnumber,
+				$priceGroups,
+				$grades,
+				$schoolyears,
+				$gradesAndSchoolyears,
+				$groups,
+				$modsActivated) = $this->changeDisplayDataFetch($uid);
+
+			if($modsActivated['Kuwasys']) {
+				list($classes,
+					$statuses,
+					$classesOfUser
+					) = $this->userChangeDisplayKuwasysDataFetch($uid);
+			}
 
 		} catch (Exception $e) {
 			$this->userInterface->dieError($e->getMessage());
@@ -385,7 +395,11 @@ class User extends Module {
 			$grades,
 			$schoolyears,
 			$gradesAndSchoolyears,
-			$groups);
+			$groups,
+			$modsActivated,
+			$classes,
+			$statuses,
+			$classesOfUser);
 	}
 
 	protected function changeDisplayDataFetch($userId) {
@@ -401,6 +415,7 @@ class User extends Module {
 		$groups = $this->groupsGetAllWithCheckIsUserIn($userId);
 		$cardnumber = (!empty($cardnumber)) ?
 			$cardnumber[0]['cardnumber'] : '';
+		$modsActivated = $this->userChangeModuleActivationGet();
 
 		return array($user,
 			$cardnumber,
@@ -408,7 +423,96 @@ class User extends Module {
 			$grades,
 			$schoolyears,
 			$gradeAndSchoolyears,
-			$groups);
+			$groups,
+			$modsActivated);
+	}
+
+	/**
+	 * Fetches data specific to the Kuwasys Headmodule
+	 *
+	 * @return array The Data needed to change the User for Kuwasys
+	 */
+	protected function userChangeDisplayKuwasysDataFetch($uid) {
+
+		$classes = $this->classesGetAll();
+		$statuses = $this->usersInClassStatusGetAll();
+		$classesOfUser = $this->classesOfUserGet($uid);
+
+		return array($classes, $statuses, $classesOfUser);
+	}
+
+	/**
+	 * Fetches and returns all Classes in the Database
+	 *
+	 * @return Array The Classes as an Array
+	 */
+	protected function classesGetAll() {
+
+		try {
+			$data = TableMng::query('SELECT * FROM class');
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(_g('Could not fetch the Classes!'));
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Fetches all Statuses of a User-in-Class-Registration and returns them
+	 *
+	 * @return array The Statuses as an Array
+	 */
+	protected function usersInClassStatusGetAll() {
+
+		try {
+			$data = TableMng::query('SELECT * FROM usersInClassStatus');
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(
+				_g('Could not fetch the User-in-Class-Statuses!'));
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Checks if Headmodules are active to display / hide Input-fields
+	 *
+	 * @return array An Array containing if the Headmodules are activated or
+	 * not
+	 */
+	protected function userChangeModuleActivationGet() {
+
+		$modsActivated = array();
+		$modsActivated['Kuwasys'] =
+			(boolean) $this->_acl->moduleGet('root/administrator/Kuwasys');
+
+		$modsActivated['Babesk'] =
+			(boolean) $this->_acl->moduleGet('root/administrator/Babesk');
+
+		return $modsActivated;
+	}
+
+	/**
+	 * Fetches all Classes of a User
+	 *
+	 * @return array The Classes of a user of all Schoolyears
+	 */
+	protected function classesOfUserGet($id) {
+
+		try {
+			$data = TableMng::query("SELECT c.*, uic.statusId AS statusId
+				FROM class c
+				JOIN jointUsersInClass uic ON c.ID = uic.ClassID
+				WHERE uic.UserID = '$id'");
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(
+				_g('Could not fetch the Classes of the User'));
+		}
+
+		return $data;
 	}
 
 	protected function userGet($uid) {
@@ -574,6 +678,7 @@ class User extends Module {
 		$groupQuery = '';
 
 		TableMng::getDb()->autocommit(false);
+		$this->_pdo->beginTransaction();
 
 		try {
 			//check for additional Querys needed
@@ -582,6 +687,7 @@ class User extends Module {
 			$groupQuery = $this->groupQueryCreate($uid);
 			$schoolyearsAndGradesQuery =
 				$this->schoolyearsAndGradesQueryCreate($uid);
+			$this->userChangeKuwasysData($uid);
 
 			TableMng::queryMultiple("UPDATE users
 				SET `forename` = '$_POST[forename]',
@@ -606,6 +712,7 @@ class User extends Module {
 		}
 
 		TableMng::getDb()->autocommit(true);
+		$this->_pdo->commit();
 	}
 
 	protected function schoolyearsAndGradesQueryCreate($userId) {
@@ -746,6 +853,105 @@ class User extends Module {
 	}
 
 	/**
+	 * Creates a Query that Updates the Tables belonging to the Kuwasys-Module
+	 *
+	 * Dies displaying a Message on Error
+	 */
+	protected function userChangeKuwasysData($userId) {
+
+		if($this->_acl->moduleGet('root/administrator/Kuwasys')) {
+
+			$this->userChangeKuwasysDataInputCheck();
+
+			$classes = $this->classesOfUserGet($userId);
+			$flatClasses = ArrayFunctions::arrayColumn(
+				$classes, 'unitId', 'ID');
+
+			$this->classesChangeDeleteDeleted($userId, $flatClasses);
+			$this->classesChangeAddMissing($userId, $flatClasses);
+		}
+	}
+
+	/**
+	 * Checks if the Kuwasys-Input is correct
+	 *
+	 * Dies displaying a Message in Error
+	 */
+	protected function userChangeKuwasysDataInputCheck() {
+
+		foreach($_POST['schoolyearAndClassData'] as $key1 => $class1) {
+			foreach($_POST['schoolyearAndClassData'] as $key2 =>$class2) {
+				if($class1['classId'] == $class2['classId'] &&
+					$key1 !== $key2) {
+					die(json_encode(array('value' => 'error',
+						'message' => 'Der Benutzer kann nicht zweimal gleichzeitig in derselben Klasse sein!')));
+				}
+			}
+		}
+	}
+
+	/**
+	 * Adds the Classes that were added in the Change-User-dialog
+	 *
+	 * @param  string $userId          The User-ID
+	 * @param  array  $existingClasses A flattened array of classes that the
+	 * User already has
+	 */
+	protected function classesChangeAddMissing($userId, $existingClasses) {
+
+		if(!isset($_POST['schoolyearAndClassData']) ||
+				!count($_POST['schoolyearAndClassData'])) {
+			return;
+		}
+
+		$stmtAdd = $this->_pdo->prepare('INSERT INTO
+			jointUsersInClass (UserID, ClassID, statusId) VALUES
+			(:id, :classId, :statusId)');
+
+		foreach($_POST['schoolyearAndClassData'] as $join) {
+			if(!isset($existingClasses[$join['classId']]) ||
+				$existingClasses[$join['classId']] != $join['statusId']) {
+				$stmtAdd->execute(array(
+					':id' => $userId,
+					':classId' => $join['classId'],
+					':statusId' => $join['statusId']
+				));
+			}
+		}
+	}
+
+	/**
+	 * Deletes the Classes that were removed in the Change-User-dialog
+	 *
+	 * @param  string $userId          The User-ID
+	 * @param  array  $existingClasses A flattened array of classes that the
+	 * User already has
+	 */
+	protected function classesChangeDeleteDeleted($userId, $existingClasses) {
+
+		if(isset($_POST['schoolyearAndClassData'])) {
+			$flatClassInput = ArrayFunctions::arrayColumn(
+				$_POST['schoolyearAndClassData'], 'statusId', 'classId');
+		}
+		else {
+			$flatClassInput = array();
+		}
+
+		$stmtDelete = $this->_pdo->prepare('DELETE FROM
+			jointUsersInClass WHERE UserID = :id AND ClassID = :classId');
+
+		foreach($existingClasses as $exClassId => $exStatusId) {
+			if(!isset($flatClassInput[$exClassId]) ||
+				$flatClassInput[$exClassId] != $exStatusId) {
+				$stmtDelete->execute(array(
+					':id' => $userId,
+					':classId' => $exClassId
+				));
+			}
+		}
+	}
+
+	/**
 	 * Fetches the Groups of one User and returns them
 	 *
 	 * @param  integer $userId
@@ -824,6 +1030,8 @@ class User extends Module {
 	protected $userProcessing;
 	protected $messages;
 	protected $_interface;
+	protected $_dataContainer;
+	protected $_pdo;
 
 	protected static $invalid = array('Š'=>'S', 'š'=>'s', 'Đ'=>'D', 'đ'=>'d',
 		'Ž'=>'Z', 'ž'=>'z', 'Č'=>'C', 'č'=>'c', 'Ć'=>'C', 'ć'=>'c', 'À'=>'A',

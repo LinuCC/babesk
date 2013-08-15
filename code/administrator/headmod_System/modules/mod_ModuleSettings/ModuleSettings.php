@@ -311,8 +311,11 @@ class ModuleSettings extends Module {
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
 
-	private $_acl;
-
+	/**
+	 * The AccessControlLayer used for getting the Submodules
+	 * @var Acl
+	 */
+	protected $_acl;
 }
 
 ?>

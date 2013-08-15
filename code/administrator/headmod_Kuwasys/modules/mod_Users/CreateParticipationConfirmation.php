@@ -144,6 +144,8 @@ class CreateParticipationConfirmation {
 
 }
 
+
+
 class CpcUser {
 	public function __construct ($id, $fullname, $schoolyear, $grade) {
 		$this->id = $id;
@@ -164,6 +166,8 @@ class CpcUser {
 	public $participationConfirmationPath;
 
 }
+
+
 
 class CpcClass {
 

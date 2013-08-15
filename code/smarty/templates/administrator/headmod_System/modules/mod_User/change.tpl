@@ -3,6 +3,8 @@
 <script>
 	var grades = {json_encode($grades)};
 	var schoolyears = {json_encode($schoolyears)};
+	var classes = {json_encode($classes)};
+	var statuses = {json_encode($statuses)};
 </script>
 
 <script src="../smarty/templates/administrator/AddItemInterface.js">
@@ -10,7 +12,6 @@
 <script src="../smarty/templates/administrator/headmod_System/modules/
 	mod_User/change.js">
 </script>
-
 
 {$userIsInSchoolyear = false}
 {foreach $schoolyears as $schoolyear}
@@ -129,6 +130,8 @@
 				class="gradeSchoolyearAdd" />
 		</fieldset>
 	</fieldset>
+
+	{if $modsActivated.Babesk}
 	<fieldset>
 		<legend>BaBeSK</legend>
 		<div class="simpleForm"><p class="inputItem">Preisgruppen:</p>
@@ -153,6 +156,67 @@
 			{if $user.soli}checked="checked"{/if}/>
 		</div>
 	</fieldset>
+	{/if}
+	{if $modsActivated.Kuwasys}
+	<fieldset>
+		<legend>Kuwasys</legend>
+		<fieldset class="schoolyearClassContainer smallContainer">
+			<legend>Schuljahre und Kurse:</legend>
+			{foreach $classesOfUser as $cas}
+				<fieldset class="smallContainer schoolyearClassRow">
+					<legend>
+						{foreach $classes as $class}
+							{if $class.ID == $cas.ID}
+								{$class.label}
+							{/if}
+						{/foreach}
+					</legend>
+					<p>Im Schuljahr</p>
+					<select name="schoolyearId">
+						{foreach $schoolyears as $syId => $syName}
+							<option value="{$syId}"
+								{if $syId == $cas.schoolyearId}
+									selected="selected"{/if}>
+									{$syName}
+							</option>
+						{/foreach}
+					</select>
+					<p>in Kurs</p>
+					<select name="classId">
+						{foreach $classes as $class}
+							<option value="{$class.ID}"
+								{if $class.ID == $cas.ID}
+									selected="selected"{/if}>
+									{$class.label}
+							</option>
+						{/foreach}
+					</select>
+					<p>mit Status</p>
+					<select name="statusId">
+						{foreach $statuses as $status}
+							<option value="{$status.ID}"
+								{if $status.ID == $cas.statusId}
+									selected="selected"{/if}>
+									{$status.translatedName}
+							</option>
+						{/foreach}
+					</select>
+					<input type="image"
+						src="../images/status/forbidden_32.png"
+						title="Diese Kombination entfernen"
+						class="classSchoolyearRemove" />
+				</fieldset>
+				{$counter++}
+			{foreachelse}
+				Der Benutzer ist noch in keinem Kurs.
+			{/foreach}
+			<input type="image" src="../images/actions/plusbutton_32.png"
+				title="Den Schüler einen Kurs zuweisen"
+				class="classSchoolyearAdd" />
+		</fieldset>
+	</fieldset>
+	{/if}
+
 	<input id="submit" type="submit" value="verändern" />
 </form>
 {/block}

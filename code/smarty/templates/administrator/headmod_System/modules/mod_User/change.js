@@ -121,10 +121,180 @@ var schoolyearAndGradeHandler = function() {
 	updateRemoveClickHandler();
 };
 
+
+
+/************************************************************************
+ * Handles the Input of the Schoolyears and the Classes
+ ************************************************************************/
+var schoolyearAndClassHandler = function() {
+
+	var that = this;
+
+	var updateRemoveClickHandler = function updateRemoveClickHandler() {
+
+		$('input.classSchoolyearRemove').on('click', function(event) {
+
+			event.preventDefault();
+			var toDel = $(this).parent();
+			toDel.remove();
+		});
+	};
+
+	var inputHtmlSceletonCreate = function() {
+
+		var output = $(
+			'<fieldset class="smallContainer schoolyearClassRow">\
+				<legend>Neuer Kurs</legend>\
+				<p>Im Schuljahr</p>\
+				<select name="schoolyearId">\
+				</select>\
+				<p>in Kurs</p>\
+				<select name="classId">\
+				</select>\
+				<p>mit Status</p>\
+				<select name="statusId">\
+				</select>\
+				<input type="image" src="../images/status/forbidden_32.png"\
+					title="Diese Kombination entfernen"\
+					class="classSchoolyearRemove" />\
+			</fieldset>'
+		);
+
+		return output;
+	};
+
+	var selectedSchoolyearIdGet = function(container) {
+
+		var id = container.find('select[name="schoolyearId"] option:selected')
+			.attr('value');
+
+		return id;
+	}
+
+	var schoolyearContainerAppend = function(parent) {
+
+		var schoolyearContainer = parent.children(
+			'select[name="schoolyearId"]');
+
+		for(var syId in schoolyears) {
+			schoolyearContainer.append(
+				'<option value="' + syId + '">' +
+				schoolyears[syId] + '</option>');
+		}
+	};
+
+	var classContainerAppend = function(parent) {
+
+		var classContainer = parent.children(
+			'select[name="classId"]');
+
+		var schoolyearId = selectedSchoolyearIdGet(parent);
+
+		$.each(classes, function(index, element) {
+
+			if(element.schoolyearId == schoolyearId) {
+				classContainer.append(
+					'<option value="' + element.ID + '">' +
+					element.label + '</option>');
+			}
+		});
+	};
+
+	var statusContainerAppend = function(parent) {
+
+		var statusContainer = parent.children(
+			'select[name="statusId"]');
+
+		$.each(statuses, function(index, element) {
+
+			statusContainer.append(
+				'<option value="' + element.ID + '">' +
+				element.translatedName + '</option>');
+		});
+	};
+
+	/**
+	 * Updates the ClassContainer when the Schoolyear changed
+	 *
+	 * @param  {$} parent The Parentfield where the Schoolyear got changed
+	 */
+	var classContainerUpdate = function(parent) {
+
+		var classContainer = parent.find('select[name="classId"]');
+		classContainer.html('');
+
+		classContainerAppend(parent);
+	}
+
+	that.inputGet = function() {
+
+		var selectedClassesAndSchoolyears = [];
+		var isOkay = true;
+
+		$('.schoolyearClassRow').each(function(index, value) {
+
+			var schoolyearId = $(this).find('select[name="schoolyearId"]')
+				.find(':selected').val();
+			var classId = $(this).find('select[name="classId"]')
+				.find(':selected').val();
+			var statusId = $(this).find('select[name="statusId"]')
+				.find(':selected').val();
+
+			if(classId == undefined) {
+				isOkay = false;
+			}
+
+			selectedClassesAndSchoolyears.push({
+				'schoolyearId': schoolyearId,
+				'classId': classId,
+				'statusId': statusId
+			});
+		});
+
+		if(isOkay) {
+			return selectedClassesAndSchoolyears;
+		}
+		else {
+			return false;
+		}
+	};
+
+	/**
+	 * Updates the displayed Classes on a SchoolyearChange
+	 */
+	$('.schoolyearClassContainer').on(
+		'change',
+		'select[name=schoolyearId]',
+		function(event) {
+
+			classContainerUpdate($(this).parent());
+	});
+
+	/**
+	 * Create a new User-In-Class-Value
+	 */
+	$('input.classSchoolyearAdd').on('click', function(event) {
+
+		event.preventDefault();
+
+		output = inputHtmlSceletonCreate();
+		schoolyearContainerAppend(output);
+		classContainerAppend(output);
+		statusContainerAppend(output);
+
+		$('.schoolyearClassContainer input.classSchoolyearAdd').before(output);
+		updateRemoveClickHandler();
+	});
+
+	updateRemoveClickHandler();
+};
+
+
+
 $(document).ready(function() {
 
-
 	var sygHandler = new schoolyearAndGradeHandler();
+	var sycHandler = new schoolyearAndClassHandler();
 	addItemInterface = new AddItemInterface();
 
 	$(document).tooltip();
@@ -230,6 +400,13 @@ $(document).ready(function() {
 			return false;
 		}
 
+		var schoolyearAndClassData = sycHandler.inputGet();
+		if(!schoolyearAndClassData) {
+			adminInterface.errorShow('Ein Fehler ist beim lesen der Kurswahlen aufgetreten; Ist ein Kursfeld leer?');
+			fatalError();
+			return false;
+		}
+
 		$.ajax({
 			type: "POST",
 			url: "index.php?module=administrator|System|User|Change",
@@ -249,7 +426,8 @@ $(document).ready(function() {
 				'cardnumber': $('input.inputItem[name=cardnumber]').val(),
 				'isSoli': $('input.inputItem[name=isSoli]').prop('checked'),
 				'accountLocked': $('input.inputItem[name=accountLocked]').prop('checked'),
-				'schoolyearAndGradeData': schoolyearAndGradeData
+				'schoolyearAndGradeData': schoolyearAndGradeData,
+				'schoolyearAndClassData': schoolyearAndClassData
 			},
 
 			success: function(data) {
@@ -275,6 +453,7 @@ $(document).ready(function() {
 					fatalError();
 				}
 				else if(res.value == 'error') {
+					adminInterface.errorShow(res.message);
 					fatalError();
 				}
 				else {
