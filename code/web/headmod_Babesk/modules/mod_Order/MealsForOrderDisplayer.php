@@ -133,12 +133,34 @@ class MealsForOrderDisplayer {
 		return $now;
 	}
 
+	
+	/**
+	 * Checks if the User has a valid Solicoupon for the given Meal
+	 *
+	 * @param  int $mealId The ID of the Meal
+	 * @return boolean True if the User has a valid Coupon, else false
+	 */
+	protected function userHasValidCoupon($mealId) {
+	
+		$hasCoupon = TableMng::query("SELECT COUNT(*) AS count
+				FROM soli_coupons sc
+				JOIN meals m ON m.ID = $mealId
+				WHERE m.date BETWEEN sc.startdate AND sc.enddate AND
+				UID = $_SESSION[uid]");
+	
+		return $hasCoupon[0]['count'] != '0';
+	}
+	
 	protected function mealsToBeDisplayedGet() {
 
 		$startdate = $this->_displayMealsStartdate;
 		$enddate = $this->_displayMealsEnddate;
-
+		
 		try {
+			
+			$hasSoli = TableMng::query("SELECT soli FROM users
+					WHERE ID = $_SESSION[uid]");
+			
 			$meals = TableMng::query("SELECT m.*, pc.price AS price,
 					pc.pc_ID AS priceclassId, pc.name AS priceclassName
 				FROM meals m
@@ -147,6 +169,17 @@ class MealsForOrderDisplayer {
 					ON m.price_class = pc.pc_ID AND pc.GID = u.GID
 				WHERE date BETWEEN '$startdate' AND '$enddate'
 					ORDER BY date, price_class");
+			
+			if ($hasSoli[0]['soli']=="1") {
+				
+				$soliPrice = TableMng::query('SELECT value FROM global_settings
+				WHERE name LIKE "soli_price"');
+				
+				foreach ($meals as &$meal) {
+				if ($this->userHasValidCoupon($meal['ID'])) $meal['price'] = $soliPrice[0]['value'];
+				}
+				unset($meal);
+			}
 
 		} catch (Exception $e) {
 			throw new Exception('Konnte die Mahlzeiten nicht abrufen!', 0, $e);

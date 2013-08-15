@@ -232,7 +232,7 @@ class Order extends Module {
 			TableMng::query("INSERT INTO soli_orders (ID, UID, date, IP,
 				ordertime, fetched, mealname, mealprice, mealdate, soliprice)
 				VALUES ('$lastInsertId', '$userId', '$date', '$ip',
-					'$ordertime, 0', '$meal[name]', '$meal[price]',
+					'$ordertime', '0', '$meal[name]', '$meal[price]',
 					'$meal[date]', '$soliPrice')");
 		}
 	}
