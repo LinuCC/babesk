@@ -1,8 +1,8 @@
 <?php
 
-require_once PATH_INCLUDE . '/CsvImport.php';
+require_once PATH_INCLUDE . '/CsvImportTableData.php';
 
-class UserCsvImport extends CsvImport {
+class UserCsvImport extends CsvImportTableData {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -40,18 +40,9 @@ class UserCsvImport extends CsvImport {
 	protected function entryPoint($dataContainer) {
 
 		$moduleroot = $dataContainer->getAcl()->getModuleroot();
-		$this->enabledHeadmodulesCheck($moduleroot);
+		list($this->_isBabeskEnabled) = $this->enabledHeadmodulesCheck(
+			array('Babesk'));
 		$this->arrayDataInit();
-	}
-
-	protected function enabledHeadmodulesCheck($mr) {
-
-		$this->_isBabeskEnabled = false;
-		if(($babesk = $mr->moduleByPathGet('administrator/Babesk'))) {
-			if($babesk->isEnabled()) {
-				$this->_isBabeskEnabled = true;
-			}
-		}
 	}
 
 	protected function arrayDataInit() {
@@ -96,7 +87,7 @@ class UserCsvImport extends CsvImport {
 	protected function inputRulesBabeskActivationCheck() {
 
 		if(!$this->_isBabeskEnabled) {
-			$deact = 'Could not add Pricegroups, %s are deactivated!';
+			$deact = 'Could not add %1$s, %1$s are deactivated!';
 			$this->_gumpRules['pricegroup'][0] = 'disallowed,' .
 				_g($deact, _('Pricegroups'));
 			$this->_gumpRules['credits'][0] = 'disallowed,' .
@@ -117,112 +108,6 @@ class UserCsvImport extends CsvImport {
 		$this->schoolyearIdsAppendToColumns();
 		$this->pricegroupIdsAppendToColumns();
 		$this->gradeIdsAppendToColumns();
-	}
-
-	protected function schoolyearIdsAppendToColumns() {
-
-		$schoolyears = $this->schoolyearsGetAll();
-		foreach($this->_contentArray as &$con) {
-
-			if(!empty($con['schoolyear'])) {
-				$id = $this->schoolyearIdGetByLabel(
-					$con['schoolyear'], $schoolyears);
-
-				if($id !== false) {
-					$con['schoolyearId'] = $id;
-				}
-				else {
-					$this->errorDie(
-						_g('Could not find the Schoolyear "%1$s"',
-							$con['schoolyear']));
-				}
-			}
-		}
-	}
-
-	protected function schoolyearIdGetByLabel($name, $schoolyears) {
-
-		foreach ($schoolyears as $schoolyear) {
-			if($schoolyear['label'] == $name) {
-				return $schoolyear['ID'];
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * adds 'pricegroupId' to the Array
-	 */
-	protected function pricegroupIdsAppendToColumns() {
-
-		$allPricegroups = TableMng::query('SELECT * FROM groups');
-		foreach($this->_contentArray as &$con) {
-
-			if(!empty($con['pricegroup'])) {
-
-				$id = $this->pricegroupIdGetByName(
-					$con['pricegroup'], $allPricegroups);
-
-				if($id !== false) {
-					$con['pricegroupId'] = $id;
-				}
-				else {
-					$this->errorDie(
-						_g('Could not find the Pricegroup "%1$s"',
-							$con['pricegroup']));
-				}
-			}
-			else {
-				// Field GID in Table users is required
-				$con['pricegroupId'] = 0;
-			}
-		}
-	}
-
-	/**
-	 * Returns the ID of the Pricegroup-Name given
-	 *
-	 * @param  string $name        The Name of the Pricegroup
-	 * @param  Array  $pricegroups The Pricegroups in which to search
-	 * @return string              The ID of the pricegroup or false if not
-	 * found
-	 */
-	protected function pricegroupIdGetByName($name, $pricegroups) {
-
-		foreach($pricegroups as $pricegroup) {
-			if($schoolyear['label'] == $name) {
-				return $schoolyear['ID'];
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * If grades set, it adds 'gradeID' to the Array
-	 */
-	protected function gradeIdsAppendToColumns() {
-
-		$allGrades = TableMng::query('SELECT ID,
-			CONCAT(g.gradelevel, "-", LOWER(g.label)) AS name FROM Grades g');
-		$flatGrades = ArrayFunctions::arrayColumn($allGrades, 'name', 'ID');
-
-		foreach($this->_contentArray as &$con) {
-
-			$grade = $con['grade'];
-			if(!empty($grade)) {
-
-				$id = array_search(strtolower($grade), $flatGrades);
-				if($id !== false) {
-					$con['gradeId'] = $id;
-				}
-				else {
-					$this->errorDie(
-						_g('Could not find the Grade "%1$s"', $grade));
-				}
-			}
-		}
 	}
 
 	/**
@@ -287,37 +172,6 @@ class UserCsvImport extends CsvImport {
 					_g('Could not add the Schoolyear and the Grade to the User "%1$s" "%2$s"', $entry['forename'], $entry['name']));
 			}
 		}
-	}
-
-	protected function schoolyearsGetAll() {
-
-		$schoolyears = TableMng::query('SELECT * FROM schoolYear');
-
-		return $schoolyears;
-	}
-
-	/**
-	 * Returns the ID of the "NoGrade"-Grade
-	 *
-	 * Dies if Grade not found or multiple Entries returned
-	 *
-	 * @return string The ID of the Grade
-	 */
-	protected function noGradeIdGet() {
-
-		try {
-			$row = TableMng::querySingleEntry('SELECT ID FROM Grades
-				WHERE gradelevel = 0');
-
-		} catch(MultipleEntriesException $e) {
-			$this->errorDie(_g('Multiple Grades with gradelevel "0" found!'));
-
-		} catch (Exception $e) {
-			$this->errorDie(
-				_g('Could not find the ID of the "NoGrade"-Grade'));
-		}
-
-		return $row['ID'];
 	}
 
 	/////////////////////////////////////////////////////////////////////

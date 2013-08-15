@@ -1,8 +1,8 @@
 <?php
 
-require_once PATH_INCLUDE . '/CsvImport.php';
+require_once PATH_INCLUDE . '/CsvImportTableData.php';
 
-class ClassesCsvImport extends CsvImport {
+class ClassesCsvImport extends CsvImportTableData {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -78,6 +78,72 @@ class ClassesCsvImport extends CsvImport {
 				'numeric|min_len,1|max_len,1', '',
 				_g('Registration Enabled for this Class'))
 		);
+	}
+
+	/**
+	 * Prepares the Data so it can be uploaded to the Database
+	 */
+	protected function dataPrepare() {
+
+		$this->missingValuesAddAsVoidString();
+		$this->schoolyearIdsAppendToColumns();
+	}
+
+	/**
+	 * Tries to get the ID of given unitnames allowing to upload it
+	 *
+	 * Dies displaying a message on Error
+	 * Adds the pair 'ID' => <schoolyearId> to each array-Element
+	 */
+	protected function unitIdsAddToColumns() {
+
+		$units = $this->unitsGetAll();
+		foreach($this->_contentArray as &$con) {
+
+			if(!empty($con['day'])) {
+				$id = $this->unitIdGetByName(
+					$con['day'], $units);
+
+				if($id !== false) {
+					$con['unitId'] = $id;
+				}
+				else {
+					$this->errorDie(
+						_g('Could not find the Unit "%1$s"',
+							$con['day']));
+				}
+			}
+		}
+	}
+
+	/**
+	 * Fetches all Units and returns them
+	 *
+	 * @return array  The fetched Units
+	 */
+	private function unitsGetAll() {
+
+		$units = TableMng::query('SELECT * FROM kuwasysClassUnit');
+
+		return $units;
+	}
+
+	/**
+	 * Returns the Unit-ID of the Unit that has the Label
+	 *
+	 * @param  string $name  The Label of the Unit to search for
+	 * @param  array  $units The Units to search in
+	 * @return string        The ID if found, else false
+	 */
+	private function unitIdGetByName($name, $units) {
+
+		foreach ($units as $unit) {
+			if($unit['translatedName'] == $name) {
+				return $unit['ID'];
+			}
+		}
+
+		return false;
 	}
 
 	protected function dataCommit() {
