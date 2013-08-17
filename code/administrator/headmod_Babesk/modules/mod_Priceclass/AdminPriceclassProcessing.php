@@ -120,6 +120,8 @@ class AdminPriceclassProcessing {
 			$pc_price = $_POST['price'];
 			$pc_GID = $_POST['group_id'];
 
+			$pc_price = str_replace(',', '.', $pc_price);
+
 			if (!preg_match('/\A^[0-9]{0,2}((,|\.)[0-9]{2})?\z/', $pc_price))
 				$this->pcInterface->dieError($this->msg['err_inp_price']);
 			else if (!preg_match('/\A^[0-9]{1,5}\z/', $pc_ID))
