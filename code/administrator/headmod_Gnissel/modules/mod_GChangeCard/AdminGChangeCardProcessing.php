@@ -75,7 +75,7 @@ class AdminGChangeCardProcessing {
 					LEFT JOIN Grades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS class
-				FROM users u WHERE ID = %s', $uid), true);
+				FROM users u WHERE ID = %s', $uid));
 
 		} catch (MySQLVoidDataException $e) {
 			$this->cardInfoInterface->dieError('Der Benutzer wurde nicht gefunden');
@@ -94,12 +94,14 @@ class AdminGChangeCardProcessing {
 
 		try {
 			$data = TableMng::query(sprintf(
-					'SELECT ID FROM users  WHERE username LIKE "%s"', $username), true);
-		} catch (MySQLVoidDataException $e) {
-			$this->cardInfoInterface->dieError('Der Benutzer wurde nicht gefunden');
+					'SELECT ID FROM users  WHERE username LIKE "%s"', $username));
 
 		} catch (Exception $e) {
 			$this->cardInfoInterface->dieError('Der Benutzer konnte nicht von der Datenbank abgerufen werden!');
+		}
+
+		if(!count($data)) {
+			$this->cardInfoInterface->dieError("Der Benutzer '$username' wurde nicht gefunden");
 		}
 
 		return $data[0];

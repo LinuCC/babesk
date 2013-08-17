@@ -21,7 +21,7 @@ class GChangeCard extends Module {
 
 		require_once 'AdminGChangeCardProcessing.php';
 		require_once 'AdminGChangeCardInterface.php';
-		
+
 		$changeCardInterface = new AdminGChangeCardInterface($this->relPath);
 		$changeCardProcessing = new AdminGChangeCardProcessing($changeCardInterface);
 
@@ -30,13 +30,13 @@ class GChangeCard extends Module {
 				case 'changeCard':
 					$changeCardProcessing->cardChange ($_POST ['newCard'],$_POST['uid']);
 				break;
-				
+
 				default:
 					;
 				break;
 			}
 		}
-		
+
 		if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['username'])) {
 			$uid = $changeCardProcessing->GetUserID($_POST['username']);
 			$userData = $changeCardProcessing->GetUserData($uid['ID']);
