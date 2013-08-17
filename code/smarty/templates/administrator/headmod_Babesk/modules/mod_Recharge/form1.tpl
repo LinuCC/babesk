@@ -8,4 +8,10 @@
 	<input type="submit" value="Submit" />
 </form>
 
+<script type="text/javascript">
+$(document).ready(function() {
+	$('input[name=card_ID]').focus();
+});
+</script>
+
 {/block}
