@@ -108,23 +108,58 @@ class AdminGChangeCardProcessing {
 	}
 
 	public function cardChange ($cardNew,$uid) {
+
 		require_once PATH_ACCESS . '/CardManager.php';
 		$cardManager = new CardManager();
+		TableMng::sqlEscape($uid);
+
 		try {
 			inputcheck ($cardNew, 'card_id', 'Kartennummer');
+
 		} catch (WrongInputException $e) {
 			$this->cardInfoInterface->DieError ('Die Kartennummer enthält nicht korrekte Zeichen oder ist zu kurz.');
 		}
 
 		try {
+			$card = $this->getCardDataByUserId($uid);
 
-			$cardManager->changeCardnumber($cardManager->getIDByUserID($uid), $cardNew);
+			if(!$card) {
+				$this->cardInfoInterface->dieError(_g('The User had no cardnumber in the first place; Card not changed!'));
+			}
+			$cardManager->changeCardnumber($card['ID'], $cardNew);
 			$cardManager->addCardIdChange($uid);
+
 		} catch (Exception $e) {
 			$this->cardInfoInterface->DieError ('Konnte die Karte nicht verändern; Ein interner Fehler ist aufgetreten');
 		}
 
-		$this->cardInfoInterface->DieMsg ('Die Kartennummer wurde erfolgreich verändert');
+		$this->cardInfoInterface->DieSuccess(
+			'Die Kartennummer wurde erfolgreich verändert');
+	}
+
+	/**
+	 * Fetches the data of the Card that belongs to the User
+	 *
+	 * Dies displaying an Error when multiple Entries found
+	 *
+	 * @param  int    $userId The ID of the User
+	 * @return array          The Carddata if found, else false
+	 */
+	public function getCardDataByUserId($userId) {
+
+		$res = TableMng::query("SELECT * FROM cards WHERE UID = $userId");
+
+		if(!empty($res)) {
+			if(count($res) > 1) {
+				$this->cardInfoInterface->dieError(_g('The User has two or more cardnumbers!'));
+			}
+			else {
+				return $res[0];
+			}
+		}
+		else {
+			return false;
+		}
 	}
 }
 

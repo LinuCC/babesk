@@ -157,19 +157,19 @@ class CardManager extends TableManager {
 		return $card['ID'];
 	}
 
-	function getIDByUserID($uid) {
-		require PATH_ACCESS . '/databaseDistributor.php';
-		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE UID=%s',$this->tablename, $uid));
-		$result = $this->db->query($query);
-		$card = $result->fetch_assoc();
-		if(!$card) {
-			throw new MySQLVoidDataException('MySQL returned no data!');
-		}
-		if($result->fetch_assoc() && $result != NULL) {
-			//MySQL found two entries with the same user. Bad!
-			throw new UnexpectedValueException('The User has two or more cardnumbers! fix it first!');
-		}
-		return $card['ID'];
-	}
+	// function getIDByUserID($uid) {
+	// 	require PATH_ACCESS . '/databaseDistributor.php';
+	// 	$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE UID=%s',$this->tablename, $uid));
+	// 	$result = $this->db->query($query);
+	// 	$card = $result->fetch_assoc();
+	// 	if(!$card) {
+	// 		throw new MySQLVoidDataException('MySQL returned no data!');
+	// 	}
+	// 	if($result->fetch_assoc() && $result != NULL) {
+	// 		//MySQL found two entries with the same user. Bad!
+	// 		throw new UnexpectedValueException('The User has two or more cardnumbers! fix it first!');
+	// 	}
+	// 	return $card['ID'];
+	// }
 }
 ?>
