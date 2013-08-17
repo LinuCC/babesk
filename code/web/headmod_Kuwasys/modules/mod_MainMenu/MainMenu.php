@@ -172,7 +172,7 @@ class MainMenu extends Module {
 	private $_jointUsersInClassManager;
 	protected $_classUnitManager;
 	private $_usersInClassStatusManager;
-	private $_smarty;
+	protected $_smarty;
 	private $_smartyPath;
 }
 

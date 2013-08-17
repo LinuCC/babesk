@@ -140,7 +140,7 @@ class Web {
 		} catch (Exception $e) {
 			return;
 		}
-		if (isset($data[0]['target'] && $data[0]['target'] != '') {
+		if(isset($data[0]['target']) && $data[0]['target'] != '') {
 			$red = array (
 				'time' => $data[0]['delay'],
 				'target' => $data[0]['target']);

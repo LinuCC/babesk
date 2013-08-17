@@ -7,7 +7,7 @@
 	{if isset($redirection)}
 		{*If this Var is set, redirect the user to another Website*}
 		<meta HTTP-EQUIV="REFRESH" content="{$redirection.time};
-		url=index.php?section={$redirection.target}">
+		url=index.php?section={$redirection.target}" />
 	{/if}
 
 

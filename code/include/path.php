@@ -34,9 +34,6 @@ defined('PCHART_PATH')
 // 	define('PATH_TMP', $tmpDir);
 // }
 
-$smartypath = $rootPath."/smarty";     //I <3 verschiedene Ordnertrennzeichen der OS's etc.
-$smartypath = str_replace(realPath(PATH_WEBROOT).DS, '', $smartypath);
-
 define('REL_PATH_SMARTY', '/'.$smartypath);    //the relative path to /smarty starting at the webroot
 
 ?>
