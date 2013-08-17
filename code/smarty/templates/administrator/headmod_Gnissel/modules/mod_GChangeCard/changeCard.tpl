@@ -10,5 +10,10 @@
 	<input type='submit' value="Karte ändern">
 </form>
 
+<script type="text/javascript">
+$(document).ready(function() {
+	$('input[name=newCard]').focus();
+});
+</script>
 
 {/block}

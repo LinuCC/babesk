@@ -879,7 +879,8 @@ class User extends Module {
 	 */
 	protected function userChangeKuwasysDataInputCheck() {
 
-		if(!count($_POST['schoolyearAndClassData'])) {
+		if(!isset($_POST['schoolyearAndClassData']) ||
+			!count($_POST['schoolyearAndClassData'])) {
 			return;
 		}
 		foreach($_POST['schoolyearAndClassData'] as $key1 => $class1) {

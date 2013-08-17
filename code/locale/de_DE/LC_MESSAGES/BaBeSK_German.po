@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
-"POT-Creation-Date: 2013-08-15 04:41+0100\n"
-"PO-Revision-Date: 2013-08-15 04:41+0100\n"
+"POT-Creation-Date: 2013-08-17 13:32+0100\n"
+"PO-Revision-Date: 2013-08-17 13:33+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: Deutsch\n"
@@ -23,6 +23,15 @@ msgstr ""
 "Ein Fehler ist beim benutzen des Administrator-Interface aufgetreten; "
 "Entweder existiert das Modul nicht, oder sie haben keine Rechte es zu "
 "benutzen!"
+
+#: ../../../administrator/headmod_Gnissel/modules/mod_GChangeCard/AdminGChangeCardProcessing.php:127
+msgid "The User had no cardnumber in the first place; Card not changed!"
+msgstr ""
+"Der Benutzer hatte noch keine Kartennummer; Karte wurde nicht geändert!"
+
+#: ../../../administrator/headmod_Gnissel/modules/mod_GChangeCard/AdminGChangeCardProcessing.php:154
+msgid "The User has two or more cardnumbers!"
+msgstr "Der Benutzer hat zwei oder mehr Kartennummern!"
 
 #: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:51
 #: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:66
@@ -351,6 +360,11 @@ msgstr "Die Klasse wurde erfolgreich verändert"
 #: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:278
 msgid "Could not change the Grade!"
 msgstr "Konnte die Klasse nicht verändern!"
+
+#: ../../../administrator/headmod_Babesk/modules/mod_Checkout/AdminCheckoutProcessing.php:77
+#, php-format
+msgid "Could not find the User by Cardnumber %1$s"
+msgstr "Konnte den Nutzer anhand der Kartennummer \"%1$s\" nicht finden"
 
 #: ../../../administrator/headmod_Babesk/modules/mod_Meals/Meals.php:89
 msgid ""
@@ -957,11 +971,15 @@ msgstr "Konnte die ID der \"KeineKlasse\"-Kasse nicht finden!"
 #: ../../../smarty/templates_c/50e926003e260ac03eeb383ac999be3d^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/45b8cb0aabceecff17b2ae26e6419674^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/abac30fa7990a32ae4b19e2843f492a3^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
+#: ../../../smarty/templates_c/4c74163afbc88b8af40ef661ca822b28^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/5205630910627d7b30771f29339592d83d742f1c.file.changeClassteacher.tpl.php:150
+#: ../../../smarty/templates_c/8a8cd14bb0795af39313c395dd0aa85a4966f845.file.changeCard.tpl.php:126
 #: ../../../smarty/templates_c/664c01597200c1a7ae5862799806ad03^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/a137e87953f56d8cb5c72fe4a53298037e150752.file.addClassTeacher.tpl.php:136
 #: ../../../smarty/templates_c/eec614214544ef742787201c0eac6ded^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
+#: ../../../smarty/templates_c/306f600db800299a6ad3ab912cd0c78b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/46f40261e8d998087e47d767566ae8da12c1f6be.file.showClassTeachers.tpl.php:158
+#: ../../../smarty/templates_c/14e4210eabe8e0b4fc471c0255d612065c60917c.file.show_meals.tpl.php:157
 #: ../../../smarty/templates_c/198a72121709680142960e7c6523f621deaac438.file.show_groups.tpl.php:140
 #: ../../../smarty/templates_c/ac66eb3046185faca4c08ad954108340^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/d925ccfd02616368489173c0239296c41d838a43.file.displayClasses.tpl.php:204
@@ -976,26 +994,31 @@ msgstr "Konnte die ID der \"KeineKlasse\"-Kasse nicht finden!"
 #: ../../../smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:126
 #: ../../../smarty/templates_c/e6acba5d80501462a2fc3f6485a60f2dc1e9d6e1.file.moveUserToClass.tpl.php:146
 #: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:119
+#: ../../../smarty/templates_c/f192c0b6d274b2dabfa2ab4496db5562^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/731ff09f81602aebb943ce188e400886^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/248e7ab1b5be504bb24fee628ae9858b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:101
 #: ../../../smarty/templates_c/cf0d094d9c4584318b6f76fe71bea06b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/93a3e3199d7ff96d94834ef3b2dbffe8^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/00877b926b1f71360abb9c7161d45f532f3e4356.file.displayAll.tpl.php:166
 #: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:255
+#: ../../../smarty/templates_c/43a8069f84474c8edc46222d28c6a436b14f42a7.file.getUsername.tpl.php:120
 #: ../../../smarty/templates_c/e0f27c1eda0ee57a96fc9ea5f23d0ff87467220e.file.importCsvFile.tpl.php:182
 #: ../../../smarty/templates_c/5f5cc045c2a4bca7ede41bd4bca1c11e14f3159f.file.changeClass.tpl.php:148
 #: ../../../smarty/templates_c/aa42d7ed24f43d736e58e142af6a9221^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/2e5e96497bf9e65f0d33355b1eb22cb0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:101
 #: ../../../smarty/templates_c/d686400357de6981c313f550a86efbb0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/867348a3ee66937aa7e42422287e9a2b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
+#: ../../../smarty/templates_c/5219913f09f1279f345ac25596bc0565^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:101
 #: ../../../smarty/templates_c/277023282b4cc18ca18acb57da7166581f1aee33.file.addClass.tpl.php:148
 #: ../../../smarty/templates_c/8e27f200dd94a5e9f763300237fd3f11^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/ddb0d0ba8ee9fdf4e444b4e7b21ba5fa679b1c85.file.addClassteacher.tpl.php:136
 #: ../../../smarty/templates_c/be79683c6cae1e59fe577e2ea6108b30afd67616.file.menu.tpl.php:155
 #: ../../../smarty/templates_c/f531db0c8d39f285e60aa959db59594faf0a5e6e.file.form_new_group.tpl.php:137
+#: ../../../smarty/templates_c/b9ef676150afe51b0b71e54ccaf8fce10e61ecd1.file.form.tpl.php:115
 #: ../../../smarty/templates_c/c931dc528d505c072d9728a2ec07fb024059e5f7.file.mainmenu.tpl.php:122
 #: ../../../smarty/templates_c/041bb2b9e67254c2f66c2761a57e4251^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/16a9cbca6d289057a828201b2f3994c5^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
+#: ../../../smarty/templates_c/61767cbc64649c69bd673494ca137082a25c84f0.file.meals_initial_menu.tpl.php:130
 #: ../../../smarty/templates_c/3266fc8f1560d681dc8ece178a2e516e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/8ddb22e5e357533c950d110d870863b5^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/d5bd7be426d163f094c82f8882c3badf^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
@@ -1005,6 +1028,8 @@ msgstr "Konnte die ID der \"KeineKlasse\"-Kasse nicht finden!"
 #: ../../../smarty/templates_c/3a2f75ea979a961e0e90243618a8d1e82c2749f8.file.mainMenu.tpl.php:152
 #: ../../../smarty/templates_c/dd6a4c9ae2e9736ac87d90a0d4685400^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/093f9544da95a056df6939dd5f74bc4bdae08a7e.file.main.tpl.php:151
+#: ../../../smarty/templates_c/d204f5a78a2c54aaf0be5e199eaeed92^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:101
+#: ../../../smarty/templates_c/a36df7097db7dd11efa890e7d63becd2^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/6ba05b2a6e26275e4c7751028654e4b2^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/587d07c5d0c54d54ca93576150e63890^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/86bf34d24014cad2acc7f1654b22fea51a8685fb.file.new_priceclass_all_groups.tpl.php:124
@@ -1012,26 +1037,36 @@ msgstr "Konnte die ID der \"KeineKlasse\"-Kasse nicht finden!"
 #: ../../../smarty/templates_c/31df771bdf5a774ea2ebebc952f7d7b4^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/67a95664148b1988649289e19fb272c4^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/0419308ad9b0321608637b0e3822a4962659f3ac.file.toggleGlobalClassRegistrationEnabled.tpl.php:115
+#: ../../../smarty/templates_c/7b415d4d25227cfd1604ce5f60bafd2a^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:101
 #: ../../../smarty/templates_c/cb65614fd1a86c7b62ff801f0b9dee91^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/dcf6016dbe083a161c5be3cfba1d23ba5a9bb63a.file.mainMenu.tpl.php:118
 #: ../../../smarty/templates_c/3518926c1f20343e3ecc3f0590bd3001^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/cc2679dc023c9c0bbb06f136df24f47e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
+#: ../../../smarty/templates_c/ed644aaaf5fefb2a842bebba2040e0f3f62a171d.file.add_meal.tpl.php:130
 #: ../../../smarty/templates_c/9eb111b5be8559be63c33100f9210c2e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/96c7be0a38d11f4c59e8d0e03e8af275^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/9deef66c23b6596da86dfd8e51f271bf^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/1b545d44b0a0623299d3305753b50bf1111e2703.file.showGrades.tpl.php:204
+#: ../../../smarty/templates_c/ff2dc585d32d39fe88f4d4dc8855a13dcb87b733.file.scanCard.tpl.php:114
 #: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:178
+#: ../../../smarty/templates_c/1e3dbc5247bf8a44d36892940a1f2eccddf694a2.file.form.tpl.php:115
 #: ../../../smarty/templates_c/f1e802a676a5c76661a9e8298874a95933384924.file.mainmenu.tpl.php:147
 #: ../../../smarty/templates_c/e808dee41c53387cddd5887cf5a140925e83b28d.file.showSchoolYears.tpl.php:168
+#: ../../../smarty/templates_c/ec7fc1a634882c020f4a8c7f7b396bc5^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:101
 #: ../../../smarty/templates_c/d210ba27d8cb6d4530dfebfb555c96568bb48a67.file.group_menu.tpl.php:113
 #: ../../../smarty/templates_c/ecd658c57e483a6db9df2990ac115b16692d8ae2.file.generalForm.tpl.php:143
 #: ../../../smarty/templates_c/4c3577b6952e07ee02b042f81e383c19^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/37af09ed0b1bcbbe0c7b1b3cd2c578a7^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
+#: ../../../smarty/templates_c/bfdce0ce780f1b921d0f5d0f77d3a41e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/54357cbff38bb9a56a3f0320b4a11859bfb76f9e.file.addGrade.tpl.php:146
+#: ../../../smarty/templates_c/44238ca8d518270a98644887f90dbe9ed035afb8.file.formatted_menu_table.tpl.php:97
 #: ../../../smarty/templates_c/f9c0e58ff04ca4588441559b182d5ae7^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
+#: ../../../smarty/templates_c/aa7d2ff2b8fb842123c927e95ca84e6cd06b1e4b.file.scanCard.tpl.php:114
 #: ../../../smarty/templates_c/dde7325276ade8d537dd62598b37f1f6^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/b8290a55c06d0c945dc0c9d45c953257472a419f.file.changePresetPassword.tpl.php:133
 #: ../../../smarty/templates_c/136a618377301c6707f9824ec6651ea4b670658e.file.mainMenu.tpl.php:133
+#: ../../../smarty/templates_c/444f02589d84445f411eed476648ebe2^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:101
+#: ../../../smarty/templates_c/ec84ab963ebe9613284e1db0d3673ef21d8bdca8.file.changeDataForm.tpl.php:149
 #: ../../../smarty/templates_c/d95c219a8fb7baf56d0061d297771ed0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:101
 #: ../../../smarty/templates_c/defd47c62f23b1a13e0c80f093ff8f8a621e9129.file.change.tpl.php:401
 msgid "Back"
@@ -1044,13 +1079,16 @@ msgstr "zurück"
 #: ../../../smarty/templates_c/50e926003e260ac03eeb383ac999be3d^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/45b8cb0aabceecff17b2ae26e6419674^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/abac30fa7990a32ae4b19e2843f492a3^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
-#: ../../../smarty/templates_c/4c74163afbc88b8af40ef661ca822b28^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
+#: ../../../smarty/templates_c/4c74163afbc88b8af40ef661ca822b28^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/5205630910627d7b30771f29339592d83d742f1c.file.changeClassteacher.tpl.php:155
 #: ../../../smarty/templates_c/f7b87120f81370a946a9773bd032dfde22e602d2.file.schoolyearSwitchSettings.tpl.php:157
+#: ../../../smarty/templates_c/8a8cd14bb0795af39313c395dd0aa85a4966f845.file.changeCard.tpl.php:131
 #: ../../../smarty/templates_c/664c01597200c1a7ae5862799806ad03^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/a137e87953f56d8cb5c72fe4a53298037e150752.file.addClassTeacher.tpl.php:141
 #: ../../../smarty/templates_c/eec614214544ef742787201c0eac6ded^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
+#: ../../../smarty/templates_c/306f600db800299a6ad3ab912cd0c78b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/46f40261e8d998087e47d767566ae8da12c1f6be.file.showClassTeachers.tpl.php:163
+#: ../../../smarty/templates_c/14e4210eabe8e0b4fc471c0255d612065c60917c.file.show_meals.tpl.php:162
 #: ../../../smarty/templates_c/198a72121709680142960e7c6523f621deaac438.file.show_groups.tpl.php:145
 #: ../../../smarty/templates_c/ac66eb3046185faca4c08ad954108340^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/d925ccfd02616368489173c0239296c41d838a43.file.displayClasses.tpl.php:209
@@ -1065,26 +1103,31 @@ msgstr "zurück"
 #: ../../../smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:131
 #: ../../../smarty/templates_c/e6acba5d80501462a2fc3f6485a60f2dc1e9d6e1.file.moveUserToClass.tpl.php:151
 #: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:124
+#: ../../../smarty/templates_c/f192c0b6d274b2dabfa2ab4496db5562^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/731ff09f81602aebb943ce188e400886^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/248e7ab1b5be504bb24fee628ae9858b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:106
 #: ../../../smarty/templates_c/cf0d094d9c4584318b6f76fe71bea06b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/93a3e3199d7ff96d94834ef3b2dbffe8^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/00877b926b1f71360abb9c7161d45f532f3e4356.file.displayAll.tpl.php:171
 #: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:260
+#: ../../../smarty/templates_c/43a8069f84474c8edc46222d28c6a436b14f42a7.file.getUsername.tpl.php:125
 #: ../../../smarty/templates_c/e0f27c1eda0ee57a96fc9ea5f23d0ff87467220e.file.importCsvFile.tpl.php:187
 #: ../../../smarty/templates_c/5f5cc045c2a4bca7ede41bd4bca1c11e14f3159f.file.changeClass.tpl.php:153
 #: ../../../smarty/templates_c/aa42d7ed24f43d736e58e142af6a9221^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/2e5e96497bf9e65f0d33355b1eb22cb0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:106
 #: ../../../smarty/templates_c/d686400357de6981c313f550a86efbb0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/867348a3ee66937aa7e42422287e9a2b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
+#: ../../../smarty/templates_c/5219913f09f1279f345ac25596bc0565^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:106
 #: ../../../smarty/templates_c/277023282b4cc18ca18acb57da7166581f1aee33.file.addClass.tpl.php:153
 #: ../../../smarty/templates_c/8e27f200dd94a5e9f763300237fd3f11^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/ddb0d0ba8ee9fdf4e444b4e7b21ba5fa679b1c85.file.addClassteacher.tpl.php:141
 #: ../../../smarty/templates_c/be79683c6cae1e59fe577e2ea6108b30afd67616.file.menu.tpl.php:160
 #: ../../../smarty/templates_c/f531db0c8d39f285e60aa959db59594faf0a5e6e.file.form_new_group.tpl.php:142
+#: ../../../smarty/templates_c/b9ef676150afe51b0b71e54ccaf8fce10e61ecd1.file.form.tpl.php:120
 #: ../../../smarty/templates_c/c931dc528d505c072d9728a2ec07fb024059e5f7.file.mainmenu.tpl.php:127
 #: ../../../smarty/templates_c/041bb2b9e67254c2f66c2761a57e4251^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/16a9cbca6d289057a828201b2f3994c5^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
+#: ../../../smarty/templates_c/61767cbc64649c69bd673494ca137082a25c84f0.file.meals_initial_menu.tpl.php:135
 #: ../../../smarty/templates_c/3266fc8f1560d681dc8ece178a2e516e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/8ddb22e5e357533c950d110d870863b5^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/d5bd7be426d163f094c82f8882c3badf^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
@@ -1094,6 +1137,8 @@ msgstr "zurück"
 #: ../../../smarty/templates_c/3a2f75ea979a961e0e90243618a8d1e82c2749f8.file.mainMenu.tpl.php:157
 #: ../../../smarty/templates_c/dd6a4c9ae2e9736ac87d90a0d4685400^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/093f9544da95a056df6939dd5f74bc4bdae08a7e.file.main.tpl.php:156
+#: ../../../smarty/templates_c/d204f5a78a2c54aaf0be5e199eaeed92^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:106
+#: ../../../smarty/templates_c/a36df7097db7dd11efa890e7d63becd2^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/6ba05b2a6e26275e4c7751028654e4b2^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/587d07c5d0c54d54ca93576150e63890^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/86bf34d24014cad2acc7f1654b22fea51a8685fb.file.new_priceclass_all_groups.tpl.php:129
@@ -1101,28 +1146,38 @@ msgstr "zurück"
 #: ../../../smarty/templates_c/31df771bdf5a774ea2ebebc952f7d7b4^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/67a95664148b1988649289e19fb272c4^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/0419308ad9b0321608637b0e3822a4962659f3ac.file.toggleGlobalClassRegistrationEnabled.tpl.php:120
+#: ../../../smarty/templates_c/7b415d4d25227cfd1604ce5f60bafd2a^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:106
 #: ../../../smarty/templates_c/cb65614fd1a86c7b62ff801f0b9dee91^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/dcf6016dbe083a161c5be3cfba1d23ba5a9bb63a.file.mainMenu.tpl.php:123
 #: ../../../smarty/templates_c/3518926c1f20343e3ecc3f0590bd3001^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/cc2679dc023c9c0bbb06f136df24f47e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
+#: ../../../smarty/templates_c/ed644aaaf5fefb2a842bebba2040e0f3f62a171d.file.add_meal.tpl.php:135
 #: ../../../smarty/templates_c/9eb111b5be8559be63c33100f9210c2e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/96c7be0a38d11f4c59e8d0e03e8af275^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/9deef66c23b6596da86dfd8e51f271bf^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/1b545d44b0a0623299d3305753b50bf1111e2703.file.showGrades.tpl.php:209
+#: ../../../smarty/templates_c/ff2dc585d32d39fe88f4d4dc8855a13dcb87b733.file.scanCard.tpl.php:119
 #: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:183
+#: ../../../smarty/templates_c/1e3dbc5247bf8a44d36892940a1f2eccddf694a2.file.form.tpl.php:120
 #: ../../../smarty/templates_c/71da674793257ac3fd126d90ca4bdffeb0bc7c83.file.foreignlanguage_select.tpl.php:115
 #: ../../../smarty/templates_c/f1e802a676a5c76661a9e8298874a95933384924.file.mainmenu.tpl.php:152
 #: ../../../smarty/templates_c/e808dee41c53387cddd5887cf5a140925e83b28d.file.showSchoolYears.tpl.php:173
+#: ../../../smarty/templates_c/ec7fc1a634882c020f4a8c7f7b396bc5^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:106
 #: ../../../smarty/templates_c/636441a92bd78923471ca1393e876607^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/d210ba27d8cb6d4530dfebfb555c96568bb48a67.file.group_menu.tpl.php:118
 #: ../../../smarty/templates_c/ecd658c57e483a6db9df2990ac115b16692d8ae2.file.generalForm.tpl.php:148
 #: ../../../smarty/templates_c/4c3577b6952e07ee02b042f81e383c19^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/37af09ed0b1bcbbe0c7b1b3cd2c578a7^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
+#: ../../../smarty/templates_c/bfdce0ce780f1b921d0f5d0f77d3a41e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/54357cbff38bb9a56a3f0320b4a11859bfb76f9e.file.addGrade.tpl.php:151
+#: ../../../smarty/templates_c/44238ca8d518270a98644887f90dbe9ed035afb8.file.formatted_menu_table.tpl.php:102
 #: ../../../smarty/templates_c/f9c0e58ff04ca4588441559b182d5ae7^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
+#: ../../../smarty/templates_c/aa7d2ff2b8fb842123c927e95ca84e6cd06b1e4b.file.scanCard.tpl.php:119
 #: ../../../smarty/templates_c/dde7325276ade8d537dd62598b37f1f6^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/b8290a55c06d0c945dc0c9d45c953257472a419f.file.changePresetPassword.tpl.php:138
 #: ../../../smarty/templates_c/136a618377301c6707f9824ec6651ea4b670658e.file.mainMenu.tpl.php:138
+#: ../../../smarty/templates_c/444f02589d84445f411eed476648ebe2^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:106
+#: ../../../smarty/templates_c/ec84ab963ebe9613284e1db0d3673ef21d8bdca8.file.changeDataForm.tpl.php:154
 #: ../../../smarty/templates_c/d95c219a8fb7baf56d0061d297771ed0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:106
 #: ../../../smarty/templates_c/defd47c62f23b1a13e0c80f093ff8f8a621e9129.file.change.tpl.php:406
 msgid "Back to the Module"

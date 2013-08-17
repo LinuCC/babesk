@@ -8,4 +8,10 @@
 	</fieldset>
 	<input type="submit" value="Senden" />
 </form>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$('input[name=username]').focus();
+});
+</script>
 {/block}

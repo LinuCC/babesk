@@ -74,7 +74,7 @@ class AdminCheckoutProcessing {
 				$this->checkoutInterface->CardLocked();
 			}
 		} catch (Exception $e) {
-			$this->checkoutInterface->dieError($this->msg['err_get_user_by_card'] . ' Error:' . $e->getMessage());
+			$this->checkoutInterface->dieError(_g('Could not find the User by Cardnumber %1$s', $card_id));
 		}
 		return $uid;
 	}
