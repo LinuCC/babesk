@@ -33,13 +33,43 @@ class AdminRechargeProcessing {
 		}
 
 		try {
-			$max_amount = $this->userManager->getMaxRechargeAmount($uid);
+			// $max_amount = $this->userManager->getMaxRechargeAmount($uid);
+			$max_amount = $this->getMaxRechargeAmountOfUser($uid);
 			$max_amount = sprintf('%01.2f', $max_amount);
 		} catch (Exception $e) {
 			$this->rechargeInterface->dieError($this->msg['err_fetch_max_credit']);
 		}
 
 		$this->rechargeInterface->ChangeAmount($max_amount, $uid);
+	}
+
+	/**
+	 * Fetches the Max allowed Amount that the user can recharge
+	 *
+	 * @param  int    $userId The ID of the User
+	 * @return int            The Maximum allowed amount to recharge
+	 */
+	protected function getMaxRechargeAmountOfUser($userId) {
+
+		try {
+			$data = TableMng::querySingleEntry(
+				"SELECT g.max_credit AS maxCredits, u.credit AS credits
+				FROM users u
+				JOIN groups g ON u.GID = g.ID
+				WHERE u.ID = $userId");
+
+		} catch (Exception $e) {
+			$this->rechargeInterface->dieError(_g('Could not fetch the Max ' .
+				'Credits for the User with the ID %1$s', $userId));
+		}
+
+		if(!isset($data) || !count($data)) {
+			$this->rechargeInterface->dieError(_g('Could not fetch the Max ' .
+				'Credits for the User with the ID %1$s; It looks like ' .
+				'the User is not in any Pricegroup?', $userId));
+		}
+
+		return $data['maxCredits'] - $data['credits'];
 	}
 
 	/**

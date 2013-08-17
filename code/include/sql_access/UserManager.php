@@ -151,32 +151,32 @@ class UserManager extends TableManager{
 	 * @param numeric string $uid the userID
 	 * @return number
 	 */
-	function getMaxRechargeAmount($uid) {
-		require_once PATH_ACCESS . '/GroupManager.php';
-		$userData = $this->getEntryData($uid, 'credit');
-		
-		$query = sql_prev_inj(sprintf('SELECT groupId FROM UserInGroups WHERE userId=%s',$uid));
-		$result = $this->db->query($query);
-		if (!$result) {
-			throw DB_QUERY_ERROR.$this->db->error;
-		}
-		
-		while($buffer = $result->fetch_assoc())
-			$res_array[] = $buffer;
-		
-		$credit = $userData['credit'];
-		
-		
-		$gid = $res_array[0]['groupId'];
+	// function getMaxRechargeAmount($uid) {
+	// 	require_once PATH_ACCESS . '/GroupManager.php';
+	// 	$userData = $this->getEntryData($uid, 'credit');
 
-		//require_once PATH_ACCESS . '/GroupManager.php';
-		$groupManager = new GroupManager('Groups');
+	// 	$query = sql_prev_inj(sprintf('SELECT groupId FROM UserInGroups WHERE userId=%s',$uid));
+	// 	$result = $this->db->query($query);
+	// 	if (!$result) {
+	// 		throw DB_QUERY_ERROR.$this->db->error;
+	// 	}
 
-		$groupData = $groupManager->getEntryData($gid, 'max_credit');
-		if(!$groupData)die('Error in getMaxRechargeAmount');
-		$max_credit = $groupData['max_credit'];
-		return $max_credit - $credit;
-	}
+	// 	while($buffer = $result->fetch_assoc())
+	// 		$res_array[] = $buffer;
+
+	// 	$credit = $userData['credit'];
+
+
+	// 	$gid = $res_array[0]['groupId'];
+
+	// 	//require_once PATH_ACCESS . '/GroupManager.php';
+	// 	$groupManager = new GroupManager('Groups');
+
+	// 	$groupData = $groupManager->getEntryData($gid, 'max_credit');
+	// 	if(!$groupData)die('Error in getMaxRechargeAmount');
+	// 	$max_credit = $groupData['max_credit'];
+	// 	return $max_credit - $credit;
+	// }
 
 	function changeBalance($id, $amount) {
 		if($amount > $this->getMaxRechargeAmount($id)) {
