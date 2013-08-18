@@ -11,7 +11,7 @@ class InstallKuwasys extends InstallationComponent {
 	//Attributes
 	////////////////////////////////////////////////////////////////////////////////
 	private $_db;
-	private $_smarty;
+	protected $_smarty;
 	private $_templatePath;
 	private $_flagAddAdmin;
 

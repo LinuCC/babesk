@@ -293,7 +293,7 @@ class MessageMainMenu extends Module {
 	/**
 	 * An Smarty-Object, used to Output data
 	 */
-	private $_smarty;
+	protected $_smarty;
 
 	/**
 	 * Stores the Interface of this Module

@@ -1,4 +1,4 @@
-{include file='web/header.tpl' title='Hauptmenü des Kurswahlsystems'}
+{extends file=$inh_path}{block name='content'}
 
 <script type="text/javascript" src="../smarty/templates/web/headmod_Kuwasys/classDescriptionSwitch.js">
 </script>
@@ -69,4 +69,4 @@ Keine Kurse wurden ausgewählt.
 	<input type="submit" value="Zur Kurswahlliste">
 </form>
 </div>
-{include file='web/footer.tpl'}
+{/block}

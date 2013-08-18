@@ -164,7 +164,7 @@ class ChangePresetPassword extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
-	private $_smarty;
+	protected $_smarty;
 	private $_smartyPath;
 	private $_interface;
 	private $_userManager;
