@@ -575,7 +575,7 @@ class Classes extends Module {
 		if(isset($_GET['toggleFormSend'])) {
 			$this->globalClassRegistrationChange();
 			$this->_interface->dieSuccess(_g('The Global Classregistration ' .
-				'Toggle was successfully changed.'));
+				'was successfully changed.'));
 		}
 		else {
 			$this->globalClassRegistrationFormDisplay();
@@ -599,7 +599,7 @@ class Classes extends Module {
 			$stmt->execute(array(':toggle' => $toggle));
 
 		} catch (Exception $e) {
-			$this->_interface->dieError(_g('Could not change the Global Classregistration-Toggle!'));
+			$this->_interface->dieError(_g('Could not change the Global Classregistration!'));
 		}
 	}
 

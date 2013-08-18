@@ -413,7 +413,7 @@ class ClassList extends Module {
 
 	private $_databaseAccessManager;
 	private $_interface;
-	private $_smarty;
+	protected $_smarty;
 	private $_smartyPath;
 
 	private $_selections;

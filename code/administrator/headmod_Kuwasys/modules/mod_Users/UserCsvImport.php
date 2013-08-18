@@ -56,10 +56,8 @@ class UserCsvImport extends CsvImportTableData {
 			'email' => _g('Email-Adresse'),
 			'schoolyear' => _g('Schoolyear'),
 			'grade' => _g('Grade'),
-			'gradeId' => _g('Grades'),
 			'credits' => _g('Credits'),
 			'pricegroupId' => _g('PricegroupId'),
-			'usergroupIds' => _g('usergroupIds'),
 			'soli' => _g('is Soli')
 		);
 
@@ -77,7 +75,6 @@ class UserCsvImport extends CsvImportTableData {
 			'email' => array('email', '', _g('Email-Adresse')),
 			'schoolyear' => array('min_len,2|max_len,64', '', _g('Schoolyear')),
 			'grade' => array('min_len,2|max_len,24', '', _g('Grade')),
-			'pricegroupId' => array('min_len,1|max_len,64', '', _g('Pricegroup')),
 			'credits' => array(
 				'numeric|min_len,1|max_len,5', '', _g('Credits')
 			),
