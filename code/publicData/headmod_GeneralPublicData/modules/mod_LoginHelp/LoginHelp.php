@@ -2,6 +2,7 @@
 
 require_once 'LoginHelpInterface.php';
 require_once PATH_ACCESS . '/GlobalSettingsManager.php';
+require_once PATH_INCLUDE . '/Module.php';
 
 class LoginHelp extends Module {
 	/////////////////////////////////////////////////////////////////////
