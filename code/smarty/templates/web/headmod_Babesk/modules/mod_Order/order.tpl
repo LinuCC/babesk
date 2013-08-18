@@ -83,7 +83,10 @@ table {
 				Preisklasse
 			</th>
 			{foreach $mealweek->weekdayDataGet() as $day}
-				<th>{$day.dayname}<br />{$day.date}</th>
+				<th>
+					{$day.dayname}<br />
+					{date('d.m.Y', strtotime($day.date))}
+				</th>
 			{/foreach}
 		</tr>
 		{foreach $mealweek->priceclassesGet() as $pcId => $pcName}
