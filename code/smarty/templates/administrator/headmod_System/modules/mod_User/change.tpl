@@ -61,6 +61,8 @@
 			<input class="inputItem" type="checkbox" name="accountLocked"
 				{if $user.locked}checked="checked"{/if} />
 		</div>
+
+		{if $modsActivated.Babesk}
 		<div class="simpleForm">
 			<p class="inputItem">Kartennummer:</p>
 			<div class="inputItem">
@@ -70,6 +72,8 @@
 				value="{$cardnumber}" />
 			</div>
 		</div>
+		{/if}
+
 		<div class="simpleForm clearfix">
 				<p class="inputItem">Gruppen:</p>
 				{if empty($groups)}

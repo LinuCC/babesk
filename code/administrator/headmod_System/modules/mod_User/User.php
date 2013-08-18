@@ -407,15 +407,23 @@ class User extends Module {
 		$user = $this->userGet($userId);
 		$gradeAndSchoolyears = $this->gradeAndSchoolyearDataOfUserGet(
 			$userId);
-		$cardnumber = $this->cardnumberGetByUserId($userId);
-		$priceGroups = $this->arrayGetFlattened(
-			'SELECT ID, name FROM groups');
 		$grades = $this->gradesGetAllFlattened();
 		$schoolyears = $this->schoolyearsGetAllFlattened();
 		$groups = $this->groupsGetAllWithCheckIsUserIn($userId);
-		$cardnumber = (!empty($cardnumber)) ?
-			$cardnumber[0]['cardnumber'] : '';
 		$modsActivated = $this->userChangeModuleActivationGet();
+
+		if($modsActivated['Babesk']) {
+			$priceGroups = $this->arrayGetFlattened(
+				'SELECT ID, name FROM groups');
+			$cardnumber = $this->cardnumberGetByUserId($userId);
+			$cardnumber = (!empty($cardnumber)) ?
+				$cardnumber[0]['cardnumber'] : '';
+
+		}
+		else {
+			$cardnumber = '';
+			$priceGroups = array();
+		}
 
 		return array($user,
 			$cardnumber,
