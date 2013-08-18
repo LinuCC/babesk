@@ -178,6 +178,7 @@ class Group {
 
 	/**
 	 * Fetches a GroupChild beginning by this Instance's Path
+	 *
 	 * @param  String  $path      The (relative) Path of the Group, for
 	 *     example administrator/Kuwasys/User
 	 * @param  boolean $checkThis If true, function checks if path starts with

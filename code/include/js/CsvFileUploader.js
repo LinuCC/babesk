@@ -117,11 +117,17 @@ CsvFileUploader = function() {
 		}
 
 		if(res.errorCount > 0) {
+			// adminInterface.errorShow('Es sind Fehler aufgetreten. Bitte beheben sie diese bevor die Datei hochgeladen werden kann');
 			$('.errorCount').removeClass('noError');
 			$('.errorCount').removeClass('noAction');
 		}
 		else {
-			adminInterface.errorShow('Es sind Fehler aufgetreten. Bitte beheben sie diese, damit keine Fehler auftreten');
+			if(res.wasUploaded) {
+				adminInterface.successShow('Die CSV-Daten wurden erfolgreich hochgeladen');
+			}
+			else {
+				adminInterface.successShow('Keine Fehler gefunden. Die Datei kann hochgeladen werden.');
+			}
 			$('.errorCount').addClass('noError');
 			$('.errorCount').removeClass('noAction');
 		}
@@ -130,6 +136,7 @@ CsvFileUploader = function() {
 
 	/**
 	 * Updates the User's form of csvColumns that are allowed to be void
+	 *
 	 * @param  {Object} res A result-Object from the Ajax-Call
 	 */
 	function csvColumnsViewUpdate(res, keysAllowedVoid) {

@@ -38,12 +38,13 @@ abstract class CsvImport {
 
 	public function execute($dataContainer) {
 
+		$this->_pdo = $dataContainer->getPdo();
 		$this->uploadTake();
 		$this->parse();
 		$this->check();
 		$this->preview();
-		$this->upload();
-		$this->finalize();
+		$wasUploaded = $this->upload();
+		$this->finalize($wasUploaded);
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -350,12 +351,15 @@ abstract class CsvImport {
 
 	/**
 	 * Puts all data into the database
+	 *
+	 * @return boolean True if CSV-File successfully uploaded, false on Error
+	 * or when it was just a preview
 	 */
 	protected function upload() {
 
 		$this->uploadStart();
 		$this->dataCommit();
-		$this->uploadFinalize();
+		return $this->uploadFinalize();
 	}
 
 	/**
@@ -386,6 +390,7 @@ abstract class CsvImport {
 		else {
 			if(!count($this->_errors)) {
 				TableMng::getDb()->query('COMMIT');
+				return true;
 			}
 			else {
 				TableMng::getDb()->query('ROLLBACK');
@@ -394,6 +399,7 @@ abstract class CsvImport {
 		}
 
 		TableMng::getDb()->autocommit(true);
+		return false;
 	}
 
 	/**
@@ -402,7 +408,7 @@ abstract class CsvImport {
 	 * dies echoing a JSON-File including some previewed data and
 	 * error-messages
 	 */
-	protected function finalize() {
+	protected function finalize($wasUploaded) {
 
 		$this->errorToReadable();
 
@@ -410,8 +416,9 @@ abstract class CsvImport {
 			'errors' => $this->_errorStr,
 			'errorCount' => count($this->_errors),
 			'preview' => $this->_previewStr,
-			'csvColumns' => $this->_csvColumns,
+			'csvColumns' => array_flip($this->_targetColumns),
 			'keysAllowedVoid' => $this->_keysAllowedVoid,
+			'wasUploaded' => $wasUploaded
 			);
 
 		$return = json_encode($return);
@@ -606,6 +613,12 @@ abstract class CsvImport {
 	protected $_targetColumns = array();
 
 	protected $_gumpRules = array();
+
+	/**
+	 * The PDO-Database-Object
+	 * @var PDO
+	 */
+	protected $_pdo;
 
 }
 

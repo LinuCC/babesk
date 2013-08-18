@@ -7,7 +7,7 @@ require_once PATH_INCLUDE . '/CsvImport.php';
  *
  * Allows to convert for example schoolyear-names to schoolyearIds
  */
-class CsvImportTableData extends CsvImport {
+abstract class CsvImportTableData extends CsvImport {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -24,8 +24,8 @@ class CsvImportTableData extends CsvImport {
 
 	public function execute($dataContainer) {
 
-		parent::execute($dataContainer);
 		$this->_acl = $dataContainer->getAcl();
+		parent::execute($dataContainer);
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -89,61 +89,6 @@ class CsvImportTableData extends CsvImport {
 		return false;
 	}
 
-
-	/**
-	 * Adds Grade-IDs to the elements of they contain grade-names
-	 *
-	 * Dies displaying a Message on Error
-	 * Uses 'grade' => <gradevalue>
-	 * Adds 'gradeId' => <gradeId>
-	 */
-	protected function gradeIdsAppendToColumns() {
-
-		$allGrades = TableMng::query('SELECT ID,
-			CONCAT(g.gradelevel, "-", LOWER(g.label)) AS name FROM Grades g');
-		$flatGrades = ArrayFunctions::arrayColumn($allGrades, 'name', 'ID');
-
-		foreach($this->_contentArray as &$con) {
-
-			$grade = $con['grade'];
-			if(!empty($grade)) {
-
-				$id = array_search(strtolower($grade), $flatGrades);
-				if($id !== false) {
-					$con['gradeId'] = $id;
-				}
-				else {
-					$this->errorDie(
-						_g('Could not find the Grade "%1$s"', $grade));
-				}
-			}
-		}
-	}
-
-	/**
-	 * Returns the ID of the "NoGrade"-Grade
-	 *
-	 * Dies if Grade not found or multiple Entries returned
-	 *
-	 * @return string The ID of the Grade
-	 */
-	protected function noGradeIdGet() {
-
-		try {
-			$row = TableMng::querySingleEntry('SELECT ID FROM Grades
-				WHERE gradelevel = 0');
-
-		} catch(MultipleEntriesException $e) {
-			$this->errorDie(_g('Multiple Grades with gradelevel "0" found!'));
-
-		} catch (Exception $e) {
-			$this->errorDie(
-				_g('Could not find the ID of the "NoGrade"-Grade'));
-		}
-
-		return $row['ID'];
-	}
-
 	/**
 	 * Checks if the given Headmodules are enabled or not
 	 *
@@ -156,8 +101,8 @@ class CsvImportTableData extends CsvImport {
 
 		$moduleroot = $this->_acl->getModuleroot();
 		foreach($headmodules as $name => $mod) {
-			$act = $moduleroot->moduleByPathGet('administrator/' . $mod));
-			$headmodules[$name] = $act;
+			$act = $moduleroot->moduleByPathGet('root/administrator/' . $mod);
+			$headmodules[$name] = (boolean) $act;
 		}
 
 		return $headmodules;
@@ -171,7 +116,7 @@ class CsvImportTableData extends CsvImport {
 	 * The AccessControlLayer used to check if the Headmodules are enabled
 	 * @var Acl
 	 */
-	private $_acl;
+	protected $_acl;
 
 }
 
