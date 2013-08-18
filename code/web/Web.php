@@ -137,13 +137,16 @@ class Web {
 		$changePasswordOnFirstLoginEnabled = TableMng::query('SELECT value
 			FROM global_settings WHERE `name` = "firstLoginChangePassword"');
 
-		if ($changePasswordOnFirstLoginEnabled[0]['value'] == '0') {
+		if ($changePasswordOnFirstLoginEnabled[0]['value'] == '1') {
 			$userData = $this->_userManager->getUserdata ($_SESSION ['uid']);
 			$firstPassword = $userData ['first_passwd'];
 
 			if ($firstPassword != '0') {
-				$this->_moduleManager->execute
-					('Settings|ChangePresetPassword');
+				$this->_smarty->assign('moduleroot',
+					$this->_acl->getModuleroot());
+				$pwChange = new ModuleExecutionInputParser(
+					'root/web/Settings/ChangePresetPassword');
+				$this->_acl->moduleExecute($pwChange, $this->_dataContainer);
 				die ();
 			}
 		}

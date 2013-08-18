@@ -102,7 +102,7 @@ class SchoolyearSwitch {
 				g.label AS gradelabel
 			FROM usersInGradesAndSchoolyears uigs
 			JOIN Grades g ON uigs.gradeId = g.ID
-			WHERE schoolyearId = @activeSchoolyear');
+			WHERE uigs.schoolyearId = @activeSchoolyear');
 
 		return $toUpgrade;
 	}

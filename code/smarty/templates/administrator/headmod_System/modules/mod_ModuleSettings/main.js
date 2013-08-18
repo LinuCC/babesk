@@ -883,7 +883,6 @@ var moduletree = new function() {
 			}
 		}).bind("select_node.jstree", onSelect)
 		.bind("loaded.jstree", function() {
-			tree.jstree('open_all');
 		}).bind("create.jstree", onCreate
 		).bind("remove.jstree", onRemove
 		).bind("before.jstree", function(event, data) {

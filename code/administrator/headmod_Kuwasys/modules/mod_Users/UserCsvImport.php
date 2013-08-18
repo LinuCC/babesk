@@ -106,9 +106,11 @@ class UserCsvImport extends CsvImportTableData {
 
 		$this->missingValuesAddAsVoidString();
 		$this->schoolyearIdsAppendToColumns();
-		$this->pricegroupIdsAppendToColumns();
 		$this->usergroupIdsAppendToColumns();
 		$this->gradeIdsAppendToColumns();
+		if($this->_isBabeskEnabled) {
+			$this->pricegroupIdsAppendToColumns();
+		}
 	}
 
 	/**

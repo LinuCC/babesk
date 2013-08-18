@@ -99,9 +99,8 @@ abstract class CsvImportTableData extends CsvImport {
 	 */
 	protected function enabledHeadmodulesCheck(array $headmodules) {
 
-		$moduleroot = $this->_acl->getModuleroot();
 		foreach($headmodules as $name => $mod) {
-			$act = $moduleroot->moduleByPathGet('root/administrator/' . $mod);
+			$act = $this->_acl->moduleGet('root/administrator/' . $mod);
 			$headmodules[$name] = (boolean) $act;
 		}
 
