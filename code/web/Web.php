@@ -88,7 +88,7 @@ class Web {
 		ini_set('session.use_only_cookies', 0);
 		error_reporting(E_ALL);
 		ini_set('display_errors', 1);
-		date_default_timezone_set(date_default_timezone_get());
+		date_default_timezone_set('Europe/Berlin');
 
 		session_start();
 
