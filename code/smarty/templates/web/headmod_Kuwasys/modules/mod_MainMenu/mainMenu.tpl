@@ -56,9 +56,11 @@ Keine Kurse wurden ausgewählt.
 		</div>
 	{/foreach}
 	{*Cancel all registrations for the User that are in this Unit*}
+	{* Button not needed anymore, User should be able to click at two Classes
 	<form action="index.php?section=Kuwasys|MainMenu&amp;action=cancelClassRegOfDay&amp;unitId={$unit->unit.ID}" method="post">
 		<input type="submit" value="alle Kurse an diesem Tag abmelden">
 	</form>
+	*}
 {/foreach}
 {/if}
 

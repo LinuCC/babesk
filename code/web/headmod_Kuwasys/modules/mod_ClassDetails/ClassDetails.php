@@ -7,6 +7,7 @@ require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
 require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 require_once PATH_WEB . '/WebInterface.php';
+require_once PATH_WEB . '/headmod_Kuwasys/Kuwasys.php';
 
 class ClassDetails extends Module {
 
@@ -151,7 +152,7 @@ class ClassDetails extends Module {
 	private $_globalSettingsManager;
 	private $_usersInClassStatusManager;
 	private $_interface;
-	private $_smarty;
+	protected $_smarty;
 	private $_smartyPath;
 }
 
