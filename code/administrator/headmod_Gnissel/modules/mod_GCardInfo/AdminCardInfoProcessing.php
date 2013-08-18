@@ -75,7 +75,7 @@ class AdminCardInfoProcessing {
 					LEFT JOIN Grades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS class
-				FROM users u WHERE ID = %s', $uid), true);
+				FROM users u WHERE ID = %s', $uid));
 
 		} catch (MySQLVoidDataException $e) {
 			$this->cardInfoInterface->dieError('Der Benutzer wurde nicht gefunden');
