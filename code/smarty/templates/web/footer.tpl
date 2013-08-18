@@ -9,7 +9,7 @@
    <img src="../smarty/templates/web/images/welcome_background.png" class="center" />
 {/if}
    <div id="footer">
-    <p>BaBeSK {$babesk_version} &copy; 2011 Lessing Gymnasium Uelzen</p>
+    <p>BaBeSK {$babesk_version}</p>
 </div>
 </div>
 
