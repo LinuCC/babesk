@@ -41,10 +41,14 @@ class Web {
 		$this->_loggedIn = isset($_SESSION['uid']);
 		$this->_interface = new WebInterface($this->_smarty);
 		$this->_acl = new Acl();
+		$this->initPdo();
 		$this->_moduleExecutionParser = new ModuleExecutionInputParser();
 		$this->_moduleExecutionParser->setSubprogramPath('root/web');
-		$this->_dataContainer = new DataContainer($this->_smarty,
-			$this->_interface, $this->_acl);
+		$this->_dataContainer = new DataContainer(
+			$this->_smarty,
+			$this->_interface,
+			$this->_acl,
+			$this->_pdo);
 		$this->initLanguage();
 	}
 
@@ -103,6 +107,25 @@ class Web {
 		}
 		$smarty->assign('babesk_version', $version);
 		$this->_smarty->assign('error', '');
+	}
+
+	/**
+	 * Initializes the PDO-Object, used for Database-Queries
+	 *
+	 * triggers an error when the PDO-Object could not be created
+	 */
+	private function initPdo() {
+
+		try {
+			$connector = new DBConnect();
+			$connector->initDatabaseFromXML();
+			$this->_pdo = $connector->getPdo();
+			$this->_pdo->query('SET @activeSchoolyear :=
+				(SELECT ID FROM schoolYear WHERE active = "1");');
+
+		} catch (Exception $e) {
+			trigger_error('Could not create the PDO-Object!');
+		}
 	}
 
 	/**

@@ -232,6 +232,11 @@ class Administrator {
 		$smarty->assign('babesk_version', $version);
 	}
 
+	/**
+	 * Initializes the PDO-Object, used for Database-Queries
+	 *
+	 * triggers an error when
+	 */
 	private function initPdo() {
 
 		try {

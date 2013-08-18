@@ -1,171 +1,107 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
-require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
 require_once 'MainMenuCancelClassRegOfDay.php';
 
 class MainMenu extends Module {
 
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Constructor
-	////////////////////////////////////////////////////////////////////////////////
-	public function __construct ($name, $display_name, $path) {
+	///////////////////////////////////////////////////////////////////////
+
+	public function __construct($name, $display_name, $path) {
 
 		parent::__construct($name, $display_name, $path);
 		$this->_smartyPath = PATH_SMARTY . '/templates/web' . $path;
 	}
-	////////////////////////////////////////////////////////////////////////////////
+
+	///////////////////////////////////////////////////////////////////////
 	//Getters and Setters
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Methods
-	////////////////////////////////////////////////////////////////////////////////
-	public function execute ($dataContainer) {
-		$this->entryPoint();
+	///////////////////////////////////////////////////////////////////////
 
-		if (isset ($_GET ['action'])) {
-			if ($_GET ['action'] == 'cancelClassRegOfDay') {
-				$this->cancelClassRegOfDay ();
-				die ();
+	public function execute($dataContainer) {
+
+		$this->entryPoint($dataContainer);
+
+		if(isset($_GET ['action'])) {
+			if($_GET ['action'] == 'cancelClassRegOfDay') {
+				$this->cancelClassRegOfDay();
+				die();
 			}
 		}
 
 		$classes = $this->getAllClassesOfUser();
-		$classes = $this->sortClassesByUnit ($classes);
 		$this->displayMainMenu($classes);
 	}
-	////////////////////////////////////////////////////////////////////////////////
+
+	///////////////////////////////////////////////////////////////////////
 	//Implementations
-	////////////////////////////////////////////////////////////////////////////////
-	private function entryPoint () {
+	///////////////////////////////////////////////////////////////////////
+	private function entryPoint($dataContainer) {
 
 		defined('_WEXEC') or die("Access denied");
-		$this->initManagers();
-		global $smarty;
-		$this->_smarty = $smarty;
+		$this->_smarty = $dataContainer->getSmarty();
+		$this->_pdo = $dataContainer->getPdo();
+		$this->_interface = $dataContainer->getInterface();
 	}
 
-	private function initManagers () {
+	/**
+	 * Fetches all Classes of the User in this Schoolyear from the Database
+	 *
+	 * @return array  All Classes with additional useful information such as
+	 * Classstatus and ClassUnit
+	 */
+	private function getAllClassesOfUser() {
 
-		require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
-		require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
-		require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
-		require_once PATH_ACCESS_KUWASYS . '/KuwasysClassUnitManager.php';
-
-		$this->_classManager = new KuwasysClassManager();
-		$this->_userManager = new KuwasysUsersManager();
-		$this->_jointUsersInClassManager = new KuwasysJointUsersInClass();
-		$this->_usersInClassStatusManager = new KuwasysUsersInClassStatusManager ();
-		$this->_classUnitManager = new KuwasysClassUnitManager ();
-	}
-
-	private function getAllClassesOfUser () {
-		$classes = array();
-		$jointsUsersInClass = $this->getAllJointsUsersInClassOfUser();
-		if (isset($jointsUsersInClass)) {
-			foreach ($jointsUsersInClass as $joint) {
-				$class = $this->getClassFromDatabase($joint['ClassID']);
-				$status = $this->usersInClassStatusGet ($joint['statusId']);
-				$unit = $this->unitOfClassGet ($class ['unitId']);
-				if ($status)
-					$class['statusTranslated'] = $status ['translatedName'];
-				if ($unit)
-					{$class ['unit'] = $unit;}
-				$classes[] = $class;
-			}
-			return $classes;
-		}
-	}
-
-	protected function sortClassesByUnit ($classes) {
-		if (!$classes)
-			{return;}
-		$sorted = array ();
-		foreach ($classes as $class) {
-			foreach ($sorted as $unit) {
-				if ($unit->unit ['ID'] == $class ['unit'] ['ID']) {
-					$unit->classes [] = $class;
-					continue 2;
-				}
-			}
-			$sorted [] = new SortedClassesByUnits ($class ['unit'], $class);
-		}
-		return $sorted;
-	}
-
-	private function usersInClassStatusGet ($statusId) {
 		try {
-			$status = $this->_usersInClassStatusManager->statusGet($statusId);
-		} catch (MySQLVoidDataException $e) {
-			return false;
-		}
-		return $status;
-	}
+			$stmt = $this->_pdo->prepare(
+				'SELECT cu.translatedName AS unitname, c.*,
+					uics.translatedName AS status
+				FROM class c
+				JOIN jointUsersInClass uic ON uic.ClassID = c.ID
+				JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
+				JOIN usersInClassStatus uics ON uic.statusId = uics.ID
+				WHERE uic.UserID = :userId AND c.schoolyearId = @activeSchoolyear
+				ORDER BY cu.ID
+				-- The ID of the ClassUnits states the Order of the Units');
 
-	protected function unitOfClassGet ($unitId) {
-		try {
-			$unit = $this->_classUnitManager->unitGet ($unitId);
+			$stmt->execute(array('userId' => $_SESSION['uid']));
+
+			return $stmt->fetchAll(PDO::FETCH_GROUP);
+
 		} catch (Exception $e) {
-			$this->dieErrorMsg ('Konnte bestimmten Kursen keine Tage zuordnen');
-		}
-		return $unit;
-	}
-
-	private function getAllJointsUsersInClassOfUser () {
-
-		try {
-			$joints = $this->_jointUsersInClassManager->getAllJointsOfUserId($_SESSION['uid']);
-		} catch (MySQLVoidDataException $e) {
-			$this->addErrorMsg('Es wurden noch keine Kurse ausgewählt.');
-		}
-		catch (Exception $e) {
-			$this->dieErrorMsg('error fetching ClassLinks from the Database');
-		}
-		if(isset($joints)) {
-			return $joints;
+			$this->_interface->dieError(_g('Could not fetch your Classes!'));
 		}
 	}
 
-	private function getClassFromDatabase ($classId) {
-		try {
-			$class = $this->_classManager->getClass($classId);
-		} catch (MySQLVoidDataException $e) {
-			$this->addErrorMsg(
-				'Ein Kurs ist seltsamerweise nicht mehr vorhanden, aber du bist dort immer noch angemeldet.');
-		}
-		catch (Exception $e) {
-			$this->addErrorMsg('error fetching ClassData from the Database.');
-		}
-		if (isset($class)) {
-			return $class;
-		}
-	}
-
-	private function addErrorMsg ($str) {
+	private function addErrorMsg($str) {
 
 		$this->_smarty->append('error', $str . '<br>');
 	}
 
-	private function dieErrorMsg ($str) {
+	private function dieErrorMsg($str) {
 
 		$this->_smarty->append('error', $str . '<br>');
 		$this->displayMainMenu(NULL);
 	}
 
-	private function displayMainMenu ($classes) {
+	private function displayMainMenu($classes) {
 
 		$this->_smarty->assign('classes', $classes);
 		$this->_smarty->display($this->_smartyPath . 'mainMenu.tpl');
 	}
 
-	private function cancelClassRegOfDay () {
-		MainMenuCancelClassRegOfDay::init ($this->_smarty, $this->_smartyPath);
-		MainMenuCancelClassRegOfDay::execute ();
+	private function cancelClassRegOfDay() {
+		MainMenuCancelClassRegOfDay::init($this->_smarty, $this->_smartyPath);
+		MainMenuCancelClassRegOfDay::execute();
 	}
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Attributes
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 
 	private $_classManager;
 	private $_userManager;
@@ -174,10 +110,11 @@ class MainMenu extends Module {
 	private $_usersInClassStatusManager;
 	protected $_smarty;
 	private $_smartyPath;
+	protected $_pdo;
 }
 
 class SortedClassesByUnits {
-	public function __construct ($unit, $class) {
+	public function __construct($unit, $class) {
 		$this->unit = $unit;
 		$this->classes [] = $class;
 	}

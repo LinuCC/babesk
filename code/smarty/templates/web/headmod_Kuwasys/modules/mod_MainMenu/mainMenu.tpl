@@ -34,24 +34,24 @@ div.classListing {
 {if !count($classes)}
 Keine Kurse wurden ausgewählt.
 {else}
-{foreach $classes as $unit}
-	<b>{$unit->unit.translatedName}:</b><br>
-	{foreach $unit->classes as $class}
+{foreach $classes as $unitname => $classesAtUnit}
+	<b>{$unitname}:</b><br>
+	{foreach $classesAtUnit as $class}
 		<b>&nbsp;&nbsp;&nbsp;&nbsp;
 		{if $class.registrationEnabled}
 			<a class="classListing" onmouseover="displayClassDescription('{$class.ID}')" onmouseout="hideClassDescription('{$class.ID}')"
 				{if $class.status == 'Aktiv'} style="color: rgb(255, 50, 50);"
 				{else if $class.status == 'waiting'} style="color: rgb(50, 255, 50);"{/if}
-				href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}">{$class.label} ({$class.statusTranslated})</a>
+				href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}">{$class.label} ({$class.status})</a>
 		{else}
 			<p class="classListing" onmouseover="displayClassDescription('{$class.ID}')" onmouseout="hideClassDescription('{$class.ID}')"
-				{if $class.statusTranslated == 'Aktiv'} style="color: rgb(255, 50, 50);"
+				{if $class.status == 'Aktiv'} style="color: rgb(255, 50, 50);"
 				{else if $class.status == 'Wartend'} style="color: rgb(50, 255, 50);"{/if}
-				href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}">{$class.label} ({$class.statusTranslated})</p>
+				href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}">{$class.label} ({$class.status})</p>
 		{/if}</b>
 		<br>
 		<div id="classDescription#{$class.ID}" class="classDescription" hidden="hidden">
-			<p>{$class.statusTranslated}</p>
+			<p>{$class.status}</p>
 			<p>{$class.description}</p>
 		</div>
 	{/foreach}
