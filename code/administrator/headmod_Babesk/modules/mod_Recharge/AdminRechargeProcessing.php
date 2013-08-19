@@ -77,23 +77,87 @@ class AdminRechargeProcessing {
 	 * @param string $uid The User-ID
 	 * @param string $recharge_amount The Amount of Money to recharge
 	 */
-	public function RechargeCard($uid, $recharge_amount) {
+	// public function RechargeCard($uid, $recharge_amount) {
 
-		$recharge_amount = str_replace(',', '.', $recharge_amount);
-		$recharge_amount = floatval($recharge_amount);
-		try {
-			$this->userManager->changeBalance($uid, $recharge_amount);
-		} catch (Exception $e) {
-			$this->rechargeInterface->dieError(
-				$this->msg['err_change_balance']);
+	// 	$recharge_amount = str_replace(',', '.', $recharge_amount);
+	// 	$recharge_amount = floatval($recharge_amount);
+	// 	try {
+	// 		$this->userManager->changeBalance($uid, $recharge_amount);
+	// 	} catch (Exception $e) {
+	// 		$this->rechargeInterface->dieError(
+	// 			$this->msg['err_change_balance']);
+	// 	}
+	// 	try {
+	// 		$username = $this->userManager->getUsername($uid);
+	// 	} catch (Exception $e) {
+	// 		$username = 'ERROR';
+	// 	}
+
+	// 	$this->rechargeInterface->RechargeCard($username, $recharge_amount);
+	// }
+
+	/**
+	 * Recharges the Card of the User by the $rechargeAmount
+	 *
+	 * Dies displaying a Message on Error
+	 *
+	 * @param  int    $userId         The ID of the User which Card to recharge
+	 * @param  float  $rechargeAmount The Amount to recharge [add]
+	 */
+	public function rechargeCard($userId, $rechargeAmount) {
+
+		$rechargeAmount = floatval(str_replace(',', '.', $rechargeAmount));
+
+		if($rechargeAmount <= $this->getMaxRechargeAmountOfUser($userId)) {
+			$this->addAmountToUserCredits($rechargeAmount, $userId);
 		}
-		try {
-			$username = $this->userManager->getUsername($uid);
-		} catch (Exception $e) {
-			$username = 'ERROR';
+		else {
+			$this->rechargeInterface->dieError(_g('The given amount to recharge added to the Credits is more than the Maximum Amount of Credits allowed for the Users Pricegroup!'));
 		}
 
-		$this->rechargeInterface->RechargeCard($username, $recharge_amount);
+		$this->rechargeSuccessDisplay($rechargeAmount, $userId);
+	}
+
+	/**
+	 * Adds the given Amount to the Users Credits
+	 *
+	 * Dies displaying a Message on Error
+	 *
+	 * @param float  $amount The Amount of Credits to add
+	 * @param int    $userId The ID of the User which credits to change
+	 */
+	public function addAmountToUserCredits($amount, $userId) {
+
+		try {
+			TableMng::query("UPDATE users SET credit = credit + '$amount'
+				WHERE ID = $userId");
+
+		} catch (Exception $e) {
+			$this->rechargeInterface->dieError(_g('Could not upload the recharge of the credits!'));
+		}
+	}
+
+	/**
+	 * Displays a Success-Message to the User that the Recharge was successfull
+	 *
+	 * Dies displaying a Message
+	 *
+	 * @param  float  $amount The Amount that was reloaded
+	 * @param  int    $userId The ID of the User
+	 */
+	public function rechargeSuccessDisplay($amount, $userId) {
+
+		$data = TableMng::querySingleEntry("SELECT username FROM users
+			WHERE ID = $userId");
+
+		if(isset($data) && count($data)) {
+			$username = $data['username'];
+		}
+		else {
+			$username = 'Username not found!';
+		}
+
+		$this->rechargeInterface->RechargeCard($username, $amount);
 	}
 
 

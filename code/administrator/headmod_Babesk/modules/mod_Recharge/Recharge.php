@@ -31,7 +31,10 @@ class Recharge extends Module {
 				$rechargeProcessing->ChangeAmount($_POST['card_ID']);
 			}
 			else if(isset($_POST['amount'], $_POST['uid'])) {
-				$rechargeProcessing->RechargeCard($_POST['uid'], $_POST['amount']);
+				TableMng::sqlEscape($_POST['uid']);
+				TableMng::sqlEscape($_POST['amount']);
+				$rechargeProcessing->rechargeCard(
+					$_POST['uid'], $_POST['amount']);
 			}
 		}
 		else {

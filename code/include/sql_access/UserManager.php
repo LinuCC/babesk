@@ -178,26 +178,30 @@ class UserManager extends TableManager{
 	// 	return $max_credit - $credit;
 	// }
 
-	function changeBalance($id, $amount) {
-		if($amount > $this->getMaxRechargeAmount($id)) {
-			return false;
-		}
-		$userData = parent::getEntryData($id, 'credit');
-		$oldCredit = $userData['credit'];
+	// function changeBalance($id, $amount) {
 
-		if($oldCredit + $amount < 0) {
-			//credit can't be negative
-			throw new BadMethodCallException('Final Amount of money is negative!');
-		}
-		$credit = $oldCredit + $amount;
+	// 	//Check for Max Recharge
+	// 	if($amount > $this->getMaxRechargeAmount($id)) {
+	// 		return false;
+	// 	}
+	// 	$userData = parent::getEntryData($id, 'credit');
+	// 	$oldCredit = $userData['credit'];
 
-		$query = sql_prev_inj(sprintf('UPDATE users SET credit = %s WHERE ID = %s;', $credit, $id));
-		$result = $this->db->query($query);
-		if (!$result) {
-			throw new MySQLConnectionException(DB_QUERY_ERROR.$this->db->error);
-		}
-		return true;
-	}
+	// 	//Check for negative money
+	// 	if($oldCredit + $amount < 0) {
+	// 		//credit can't be negative
+	// 		throw new BadMethodCallException('Final Amount of money is negative!');
+	// 	}
+	// 	$credit = $oldCredit + $amount;
+
+	// 	//Upload
+	// 	$query = sql_prev_inj(sprintf('UPDATE users SET credit = %s WHERE ID = %s;', $credit, $id));
+	// 	$result = $this->db->query($query);
+	// 	if (!$result) {
+	// 		throw new MySQLConnectionException(DB_QUERY_ERROR.$this->db->error);
+	// 	}
+	// 	return true;
+	// }
 
 	/**
 	 * Check whether the password for the given user is correct
