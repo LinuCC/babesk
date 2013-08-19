@@ -39,10 +39,12 @@
 		<div id="top">
 		<div id="top_left">
 			<p>Name: {$username}</p>
-			{if isset($credit)}<p>Guthaben: {$credit} Euro</p>{/if}
+			{if $babeskActivated && isset($credit)}<p>Guthaben: {$credit} Euro</p>{/if}
 			<a href="javascript:switchInfo('account')">Kontoeinstellungen</a><br />
 			<div id="account" style="display: none;">
+				{if $babeskActivated}
 				<a href="index.php?section=Babesk|Account">Karte sperren</a>
+				{/if}
 				<br>
 				<a href="index.php?section=Settings">Daten &auml;ndern</a>
 			</div>

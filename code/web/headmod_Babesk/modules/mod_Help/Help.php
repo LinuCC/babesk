@@ -34,9 +34,11 @@ class Help extends Module {
 		} catch (Exception $e) {
 			die('Ein Fehler ist aufgetreten:'.$e->getMessage());
 		}
-		// set {cardid} in helptext administration to replace it with the cardnumber
+		if($dataContainer->getAcl()->moduleGet('root/web/Babesk')) {
+			// set {cardid} in helptext administration to replace it with the cardnumber
+			$help_str = str_replace("{cardid}", $cm->getCardnumberByUserID($_SESSION['uid']), $help_str);
+		}
 		//set {login} in helptext administration to replace it with the login name
-		$help_str = str_replace("{cardid}", $cm->getCardnumberByUserID($_SESSION['uid']), $help_str);
 		$help_str = str_replace("{login}", $um->getUsername($_SESSION['uid']), $help_str);
 		$smarty->assign('help_str', $help_str);
 		$smarty->display($this->smartyPath . "help.tpl");

@@ -74,6 +74,8 @@ class Web {
 		$this->handleRedirect();
 		$this->initUserdata();
 		$this->loadModules();
+		$this->_smarty->assign('babeskActivated',
+			(boolean) $this->_acl->moduleGet('root/web/Babesk'));
 		$userData = $this->_userManager->getUserdata($_SESSION['uid']);
 		$this->checkFirstPassword();
 		$this->display();
