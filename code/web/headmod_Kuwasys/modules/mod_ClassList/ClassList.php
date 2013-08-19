@@ -6,8 +6,10 @@ require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysJointClassTeacherInClass.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
 require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysDatabaseAccess.php';
+require_once PATH_WEB . '/headmod_Kuwasys/Kuwasys.php';
 require_once PATH_WEB . '/WebInterface.php';
 require_once 'ClRegSelection.php';
+
 
 class ClassList extends Module {
 

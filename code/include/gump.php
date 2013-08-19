@@ -468,6 +468,7 @@ class GUMP
 
 				$field = $e['field'];
 				$param = $e['param'];
+				$value = $e['value'];
 				$displayName = $this->display_names[$field];
 				// $field = ucwords(str_replace(array('_','-'), chr(32), $e['field']));
 
@@ -536,6 +537,9 @@ class GUMP
 						break;
 					case 'validate_isodate':
 						$resp[] = "Das $displayName Feld muss ein Datum im Format Jahr-Monat-Tag (Bsp:'2013-05-14') beinhalten.";
+						break;
+					case 'validate_alpha_dash_space':
+						$resp[] = "Das $displayName Feld $value darf nur aus Leerzeichen, Unterstrich, Minus und Buchstaben bestehen";
 						break;
 					default:
 						$resp[] = "Das $displayName Feld wurde falsch eingegeben, genauer Grund ist aber unbekannt";
@@ -1161,7 +1165,7 @@ class GUMP
 			return;
 		}
 
-		if(!preg_match("/^([a-z0-9ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ_-])+$/i", $input[$field]) !== FALSE)
+		if(!preg_match("/^([a-z0-9ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿß_-])+$/i", $input[$field]) !== FALSE)
 		{
 			return array(
 				'field' => $field,
@@ -1179,7 +1183,7 @@ class GUMP
 			return;
 		}
 
-		if(!preg_match("/^([a-z0-9ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ_\- ])+$/i", $input[$field]) !== FALSE)
+		if(!preg_match("/^([a-z0-9ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿß_\- ])+$/i", $input[$field]) !== FALSE)
 		{
 			return array(
 				'field' => $field,

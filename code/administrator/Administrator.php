@@ -224,7 +224,7 @@ class Administrator {
 		require_once PATH_SMARTY . "/smarty_init.php";
 
 		$this->_smarty = $smarty;
-		$this->_smarty->assign('smarty_path', REL_PATH_SMARTY);
+		// $this->_smarty->assign('smarty_path', REL_PATH_SMARTY);
 		$this->_smarty->assign('status', '');
 
 		$version=@file_get_contents("../version.txt");

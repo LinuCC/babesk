@@ -34,6 +34,6 @@ defined('PCHART_PATH')
 // 	define('PATH_TMP', $tmpDir);
 // }
 
-define('REL_PATH_SMARTY', '/'.$smartypath);    //the relative path to /smarty starting at the webroot
+// define('REL_PATH_SMARTY', '/'.$smartypath);    //the relative path to /smarty starting at the webroot
 
 ?>

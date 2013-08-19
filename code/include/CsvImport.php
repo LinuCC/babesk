@@ -117,11 +117,16 @@ abstract class CsvImport {
 	protected function uploadCheck() {
 
 		TableMng::getDb()->autocommit(false);
+		$this->_pdo->beginTransaction();
 		try {
 			$this->dataCommit();
+			TableMng::getDb()->rollback();
+			TableMng::getDb()->autocommit(true);
+			$this->_pdo->rollBack();
+
 
 		} catch (Exception $e) {
-			$this->errorDie(_g('Could not upload the CSV-File correctly'));
+			$this->errorDie(_g('Could not upload the CSV-File correctly') . $e->getMessage());
 		}
 	}
 
@@ -358,7 +363,11 @@ abstract class CsvImport {
 	protected function upload() {
 
 		$this->uploadStart();
-		$this->dataCommit();
+		try {
+			$this->dataCommit();
+		} catch (Exception $e) {
+			$this->errorDie(_g('Could not commit the Data') . $e->getMessage());
+		}
 		return $this->uploadFinalize();
 	}
 
@@ -368,6 +377,7 @@ abstract class CsvImport {
 	protected function uploadStart() {
 
 		TableMng::getDb()->autocommit(false);
+		$this->_pdo->beginTransaction();
 	}
 
 	/**
@@ -385,15 +395,18 @@ abstract class CsvImport {
 	protected function uploadFinalize() {
 
 		if($this->_isPreview) {
-			TableMng::getDb()->rollback();
+			TableMng::getDb()->query('ROLLBACK');
+			$this->_pdo->rollBack();
 		}
 		else {
 			if(!count($this->_errors)) {
 				TableMng::getDb()->query('COMMIT');
+				$this->_pdo->commit();
 				return true;
 			}
 			else {
 				TableMng::getDb()->query('ROLLBACK');
+				$this->_pdo->rollBack();
 				$this->errorDie(_g('Could not upload the CSV-File!'));
 			}
 		}

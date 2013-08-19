@@ -120,27 +120,27 @@ class UserCsvImport extends CsvImportTableData {
 
 		$this->dataPrepare();
 
-		// var_dump($this->_contentArray);
-
-		$stmt = TableMng::getDb()->prepare(sprintf(
-			'INSERT INTO users (forename, name, username, birthday, email, GID, credit, soli)
+		$stmt = $this->_pdo->prepare(
+			'INSERT INTO users (forename, name, username, birthday, email,
+				GID, credit, soli)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-			'));
+			');
+
+		// $stmt = TableMng::getDb()->prepare(sprintf(
+		// 	'INSERT INTO users (forename, name, username, birthday, email, GID, credit, soli)
+		// 		VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+		// 	'));
 
 		$this->additionalUserQuerysInit();
 
 		foreach($this->_contentArray as $con) {
 			extract($con);
-			$stmt->bind_param('ssssssss', $forename, $name, $username, $birthday, $email, $pricegroupId, $credits, $soli);
-			if($stmt->execute()) {
-				$this->additionalUserQueriesRun($con, $stmt->insert_id);
-			}
-			else {
-				$this->errorDie(
-					_g('Could not parse the data to the Database!') . $stmt->error);
-			}
+			// $stmt->bind_param('ssssssss', $forename, $name, $username, $birthday, $email, $pricegroupId, $credits, $soli);
+			$stmt->execute(array($forename, $name, $username, $birthday, $email, $pricegroupId, $credits, $soli));
+			$this->additionalUserQueriesRun($con, $this->_pdo->lastInsertId());
+				// $this->errorDie(
+				// 	_g('Could not parse the data to the Database!') . $stmt->error);
 		}
-		$stmt->close();
 	}
 
 	protected function additionalUserQuerysInit() {
@@ -175,8 +175,8 @@ class UserCsvImport extends CsvImportTableData {
 
 		if(!empty($entry['schoolyearId'])) {
 
-			$entry['grade'] = (!empty($entry['grade'])) ?
-				$entry['grade'] : $this->_noGradeId;
+			$entry['gradeId'] = (!empty($entry['gradeId'])) ?
+				$entry['gradeId'] : $this->_noGradeId;
 
 			$this->_stmtSchoolyearAndGrade->bind_param(
 				'sss', $userId, $entry['gradeId'], $entry['schoolyearId']);
@@ -188,6 +188,10 @@ class UserCsvImport extends CsvImportTableData {
 				$this->errorDie(
 					_g('Could not add the Schoolyear and the Grade to the User "%1$s" "%2$s"', $entry['forename'], $entry['name']));
 			}
+		}
+		else if(!empty($entry['grade'])) {
+			$this->errorAdd(array('type' => 'missingColumn',
+				'message' => _g('The User "%1$s %2$s" has a Grade, but no Schoolyear defined! Define a Schoolyear for Users with a Grade!')));
 		}
 	}
 
@@ -234,8 +238,8 @@ class UserCsvImport extends CsvImportTableData {
 
 		foreach($this->_contentArray as &$con) {
 
-			$grade = $con['grade'];
-			if(!empty($grade)) {
+			if(!empty($con['grade'])) {
+				$grade = $con['grade'];
 
 				$id = array_search(strtolower($grade), $flatGrades);
 				if($id !== false) {
@@ -308,6 +312,11 @@ class UserCsvImport extends CsvImportTableData {
 			$this->errorDie(_g('Multiple Grades with gradelevel "0" found!'));
 
 		} catch (Exception $e) {
+			$this->errorDie(
+				_g('Could not find the ID of the "NoGrade"-Grade'));
+		}
+
+		if(!isset($row) || !count($row)) {
 			$this->errorDie(
 				_g('Could not find the ID of the "NoGrade"-Grade'));
 		}
