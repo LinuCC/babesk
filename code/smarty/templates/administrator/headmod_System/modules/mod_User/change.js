@@ -302,6 +302,14 @@ $(document).ready(function() {
 	$('input.cardnumberAdd').prop('disabled', true);
 	$('input[name=password]').prop('disabled', true);
 
+	$('form').on('keypress', 'input[name=cardnumber]', function(event) {
+
+		if(event.which == 13) {
+			event.preventDefault();
+			return false;
+		}
+	});
+
 	/**
 	 * If link is clicked, a cardnumber shall be added
 	 */
