@@ -626,7 +626,12 @@ class User extends Module {
 			self::$_changeRules['password'] = array('min_len,3|max_len,64', '', 'Passwort');
 		}
 
-		$_POST['credits'] = str_replace(',', '.', $_POST['credits']);
+		if(isset($_POST['credits'])) {
+			$_POST['credits'] = str_replace(',', '.', $_POST['credits']);
+		}
+		else {
+			$_POST['credits'] = 0;
+		}
 	}
 
 	/**
@@ -690,7 +695,9 @@ class User extends Module {
 
 		try {
 			//check for additional Querys needed
-			$cardnumberQuery = $this->cardsQueryCreate($uid);
+			if($this->_acl->moduleGet('root/administrator/Babesk')) {
+				$cardnumberQuery = $this->cardsQueryCreate($uid);
+			}
 			$passwordQuery = $this->passwordQueryCreate($uid);
 			$groupQuery = $this->groupQueryCreate($uid);
 			$schoolyearsAndGradesQuery =
@@ -789,7 +796,7 @@ class User extends Module {
 
 			if(!count($userCard)) {
 				$query = "INSERT INTO cards (cardnumber, UID)
-					VALUES ($_POST[cardnumber], $uid);";
+					VALUES ('$_POST[cardnumber]', $uid);";
 			}
 			else if($userCard[0]['cardnumber'] == $_POST['cardnumber']) {
 				//nothing changed
