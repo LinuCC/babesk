@@ -364,28 +364,59 @@ class ClassList extends Module {
 	/**
 	 * Checks if there are already Classes selected for that day
 	 */
-	private function checkClassListInputForExistingJoints() {
+	// private function checkClassListInputForExistingJoints() {
+	// 	try {
+	// 		$joints = ClRegSelection::jUserInClassGetByStatus($this->_selections, $this->_databaseAccessManager);
+	// 	} catch(MySQLVoidDataException $e) {
+	// 		return; //no joints existing, no problems
+	// 	}
+	// 	if(!count($joints)) {
+	// 		return; //workaround for bug, DbMultiQueryManager not throwing when void
+	// 	}
+	// 	$classIds = array();
+	// 	foreach($joints as $joint) {
+	// 		$classIds [] = $joint ['ClassID'];
+	// 	}
+	// 	//get all classes of classIds
+	// 	$classes = $this->_databaseAccessManager->dbAccessExec(
+	// 		KuwasysDatabaseAccess::ClassManager, 'getClassesByClassIdArray',
+	// 		array($classIds));
+	// 	foreach($this->_selections as $sel) {
+	// 		$extrClasses = $this->extrElements($classes, 'unitId', $sel->class ['unitId']); //Classes with the same unitId
+	// 		if(count($extrClasses)) {
+	// 			$this->_interface->DieError(sprintf('Du bist am %s schon für Kurse angemeldet! %s', $sel->unit ['translatedName'], Kuwasys::$buttonBackToMM));
+	// 		}
+	// 	}
+	// }
+
+	protected function checkClassListInputForExistingJoints() {
+
 		try {
-			$joints = ClRegSelection::jUserInClassGetByStatus($this->_selections, $this->_databaseAccessManager);
-		} catch(MySQLVoidDataException $e) {
-			return; //no joints existing, no problems
-		}
-		if(!count($joints)) {
-			return; //workaround for bug, DbMultiQueryManager not throwing when void
-		}
-		$classIds = array();
-		foreach($joints as $joint) {
-			$classIds [] = $joint ['ClassID'];
-		}
-		//get all classes of classIds
-		$classes = $this->_databaseAccessManager->dbAccessExec(
-			KuwasysDatabaseAccess::ClassManager, 'getClassesByClassIdArray',
-			array($classIds));
-		foreach($this->_selections as $sel) {
-			$extrClasses = $this->extrElements($classes, 'unitId', $sel->class ['unitId']); //Classes with the same unitId
-			if(count($extrClasses)) {
-				$this->_interface->DieError(sprintf('Du bist am %s schon für Kurse angemeldet! %s', $sel->unit ['translatedName'], Kuwasys::$buttonBackToMM));
+			$stmt = $this->_pdo->prepare(
+				'SELECT COUNT(*) FROM jointUsersInClass uic
+				JOIN class c ON uic.ClassID = c.ID
+				WHERE uic.UserID = :userId AND c.unitId = :unitId
+					AND c.schoolyearId = :schoolyearId');
+
+			foreach($this->_selections as $classSelection) {
+				$stmt->execute(array(
+					'userId' => $_SESSION['uid'],
+					'unitId' => $classSelection->unitId,
+					'schoolyearId' => $classSelection->class['schoolyearId']
+				));
+
+				if((int) $stmt->fetchColumn() > 0) {
+					$this->_interface->dieError(_g('You have already chosen ' .
+						'a class at %1$s! %2$s',
+						$classSelection->unit['translatedName'],
+						Kuwasys::$buttonBackToMM
+					));
+				}
 			}
+
+		} catch (PDOException $e) {
+			$this->_interface->dieError(
+				_g('Could not check if you already selected classes!') . $e->getMessage());
 		}
 	}
 
