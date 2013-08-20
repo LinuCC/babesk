@@ -84,10 +84,10 @@ p.helpTextLockedClasses {
 					</div>
 				</th>
 				<td class="classListCheckbox">
-					<input class="classListCheckbox" type="radio" name="firstChoice{$classUnit.ID}" value="{$class.ID}" {if !$class.registrationForUserAllowed}disabled="disabled"{/if}>
+					<input class="classListCheckbox" type="checkbox" name="firstChoice{$classUnit.ID}" value="{$class.ID}" {if !$class.registrationForUserAllowed}disabled="disabled"{/if} />
 				</td>
 				<td class="classListCheckbox">
-					<input class="classListCheckbox" type="radio" name="secondChoice{$classUnit.ID}" value="{$class.ID}" {if !$class.registrationForUserAllowed}disabled="disabled"{/if}>
+					<input class="classListCheckbox" type="checkbox" name="secondChoice{$classUnit.ID}" value="{$class.ID}" {if !$class.registrationForUserAllowed}disabled="disabled"{/if} />
 				</td>
 			</tr>
 			{/if}
@@ -113,6 +113,18 @@ $(document).ready(function() {
 		event.preventDefault();
 		$(this).parent().children('div.classDescription').toggle();
 	});
+
+	$('input.classListCheckbox').on('click', function(event) {
+
+		var nameBeginning = $(this).attr('name').replace(/Choice.*/, 'Choice');
+
+		$(this).parent().siblings().children('input').attr('checked', false);
+		$(this).parents('table').
+			find('input.classListCheckbox[name^=' + nameBeginning + ']')
+			.not($(this)).attr('checked', false);
+	});
+
+
 });
 
 </script>
