@@ -438,6 +438,13 @@ form.simpleForm label, form.simpleForm {
 	margin: 15px 0 15px 0;
 }
 
+div.simpleForm p {
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+	margin: 10px 0px 10px 50px;
+}
+
 /**
  * Somehow images are displayed for too high in simpleForm, fix it
  */
