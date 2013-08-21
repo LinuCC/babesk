@@ -14,26 +14,12 @@ p.classListing {
 
 .classlistingContainer {
 	margin-left: 4em;
-}
-
-div.classListing {
-
-	border-style: solid;
-	border-width: 1px;
-	border-color: #2e6132;
-	-webkit-border-radius: 20px;
-  -khtml-border-radius: 20px;
-  -moz-border-radius: 20px;
-	border-radius: 20px;
-	margin: 0 auto;
-	padding: 15px;
-	width: 650px;
+	margin-bottom: 20px;
 }
 
 </style>
 
 <h2>Hauptmenü des Kurswahlsystems</h2><br>
-<div class="classListing">
 <h4 style="text-align:center">Übersicht der Kurse</h4>
 {if !count($classes)}
 Keine Kurse wurden ausgewählt.
@@ -46,14 +32,22 @@ Keine Kurse wurden ausgewählt.
 			<b>
 			{if $class.registrationEnabled}
 				<a class="classListing" classId="{$class.ID}"
-					{if $class.status == 'Aktiv'} style="color: rgb(255, 50, 50);"
-					{else if $class.status == 'waiting'} style="color: rgb(50, 255, 50);"{/if}
+					{if $class.status == 'Aktiv'}
+						style="color: rgb(255, 50, 50);"
+					{else if $class.status == 'waiting'}
+						style="color: rgb(50, 255, 50);"
+					{/if}
+					title="Klicken für Optionen"
 					href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}">{$class.label} ({$class.status})</a>
 			{else}
 				<p class="classListing" classId="{$class.ID}"
-					{if $class.status == 'Aktiv'} style="color: rgb(255, 50, 50);"
-					{else if $class.status == 'Wartend'} style="color: rgb(50, 255, 50);"{/if}
-					href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}">{$class.label} ({$class.status})</p>
+					{if $class.status == 'Aktiv'}
+						style="color: rgb(255, 50, 50);"
+					{else if $class.status == 'Wartend'}
+						style="color: rgb(50, 255, 50);"
+					{/if}
+					href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}"
+					>{$class.label} ({$class.status})</p>
 			{/if}
 			</b>
 			<div id="classDescription_{$class.ID}" class="classDescription" hidden="hidden">
@@ -70,5 +64,4 @@ Keine Kurse wurden ausgewählt.
 <form action="index.php?section=Kuwasys|ClassList" method="post">
 	<input type="submit" value="Zur Kurswahlliste">
 </form>
-</div>
 {/block}
