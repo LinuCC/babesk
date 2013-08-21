@@ -1,21 +1,11 @@
 <?php
 
 class Web {
-	///////////////////////////////////////////////////////////////////////
-	//Attributes
-	///////////////////////////////////////////////////////////////////////
-
-	private $_smarty;
-	private $_loggedIn;
-	private $_interface;
-	private $_userManager;
-	private $_acl;
-	private $_dataContainer;
-	private $_moduleExecutionParser;
 
 	///////////////////////////////////////////////////////////////////////
 	//Constructor
 	///////////////////////////////////////////////////////////////////////
+
 	public function __construct () {
 
 		if (!isset($_SESSION)) {
@@ -29,15 +19,12 @@ class Web {
 		require_once PATH_INCLUDE . '/functions.php';
 		require_once PATH_INCLUDE . '/TableMng.php';
 		require_once PATH_ACCESS . '/LogManager.php';
-		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 		require_once PATH_INCLUDE . '/Acl.php';
 		require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';
-		require_once 'WebInterface.php';
 		require_once 'WebInterface.php';
 
 		TableMng::init ();
 		$this->_userManager = new UserManager();
-		$this->_gsManager = new GlobalSettingsManager ();
 		$this->_loggedIn = isset($_SESSION['uid']);
 		$this->_interface = new WebInterface($this->_smarty);
 		$this->_acl = new Acl();
@@ -324,6 +311,7 @@ class Web {
 	private function display() {
 
 		$this->_smarty->assign('moduleroot', $this->_acl->getModuleroot());
+		$this->footerImagePath();
 		if ($this->_moduleExecutionParser->load()) {
 			$this->executeModule();
 		}
@@ -334,6 +322,81 @@ class Web {
 			$this->_smarty->display(PATH_SMARTY . '/templates/web/main_menu.tpl');
 		}
 	}
+
+	/**
+	 * Loads the Path to the Footer-Image, so that it is not that buggy anymore
+	 *
+	 * Sets a Smarty-Variable when a background-Image is found
+	 */
+	private function footerImagePath() {
+
+		$this->_moduleExecutionParser->load();
+		$modpath = $this->_moduleExecutionParser->executionGet();
+		$modpath = preg_replace('/.*?\/web\//', '', $modpath);
+		$path = '';
+
+		if($modpath) {
+			$path = $this->footerImagePathLoadByModulepath($modpath);
+		}
+
+		if(empty($path)) {
+			$path = "{$this->_imagepathPrefix}defaultImage.png";
+			if(file_exists($path)) {
+				$this->_smarty->assign('footerBackground', $path);
+			}
+		}
+		else {
+			$this->_smarty->assign('footerBackground', $path);
+		}
+	}
+
+	/**
+	 * Loads the Path of the Footer-Image by the Module-Path given
+	 *
+	 * @param  string $modpath The Path of the Module
+	 * @return string          The Path to the Image to display or false if no
+	 * Image by Modulepath found
+	 */
+	private function footerImagePathLoadByModulepath($modpath) {
+
+		$filename = str_replace('/', '_', $modpath) . '_footer.png';
+		//Relative Path form this is different than the path from Smarty
+		$path = $this->_imagepathPrefix . $filename;
+
+		if(file_exists($path)) {
+			return $path;
+		}
+		else {
+			$mods = explode('_', $modpath);
+			array_pop($mods);
+
+			if(count($mods) > 1) {
+				$nModPath = implode('_', $mods);
+				return $this->footerImagePathLoadByModulepath($nModPath);
+			}
+			else {
+				return false;
+			}
+		}
+	}
+
+	///////////////////////////////////////////////////////////////////////
+	//Attributes
+	///////////////////////////////////////////////////////////////////////
+
+	private $_smarty;
+	private $_loggedIn;
+	private $_interface;
+	private $_userManager;
+	private $_acl;
+	private $_dataContainer;
+	private $_moduleExecutionParser;
+
+	/**
+	 * The Prefix to the location where the Images are
+	 * @var string
+	 */
+	private $_imagepathPrefix = '../images/moduleBackgrounds/';
 }
 
 ?>

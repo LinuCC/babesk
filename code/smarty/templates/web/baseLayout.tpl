@@ -113,18 +113,19 @@
 			<p id="last_login">Letzter Login: {$last_login}</p>
 		</div>
 		<div id="background">
-			{if isset($smarty.get.section)}
-				<img src="../smarty/templates/web/images/{$smarty.get.section|replace:"|":"_"}_background.png" class="center" onerror='this.style.display = "none"'/>
-			{else}
-				<img src="../smarty/templates/web/images/welcome_background.png" class="center" />
+
+			{if isset($footerBackground)}
+				<img src="{$footerBackground}" class="center" />
 			{/if}
-			<div id="footer">
-				<p>
-					BaBeSK {$babesk_version}
-				</p>
-			</div>
+
 		</div>
 	</div>
+</div>
+
+<div id="footer">
+	<p>
+		BaBeSK {$babesk_version}
+	</p>
 </div>
 </body>
 </html>
