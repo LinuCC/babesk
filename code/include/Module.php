@@ -37,6 +37,14 @@ abstract class Module {
 	//Implementations
 	////////////////////////////////////////////////////////////////////////
 
+	protected function entryPoint($dataContainer) {
+
+		defined('_AEXEC') or die("Access denied");
+		$this->_pdo = $dataContainer->getPdo();
+		$this->_smarty = $dataContainer->getSmarty();
+		$this->_acl = $dataContainer->getAcl();
+	}
+
 	/**
 	 * Initializes some Smarty-Variables to display the Website
 	 *
@@ -148,6 +156,18 @@ abstract class Module {
 	 * @var string
 	 */
 	protected $_smartyModuleTemplatesPath;
+
+	/**
+	 * The Connection to the Database
+	 * @var Pdo
+	 */
+	protected $_pdo;
+
+	/**
+	 * Allows for checking if the User has access to the Submodules
+	 * @var Acl
+	 */
+	protected $_acl;
 }
 
 ?>

@@ -33,6 +33,7 @@ class Classes extends Module {
 
 	/**
 	 * Executes the Module, does things based on ExecutionRequest
+	 *
 	 * @param  DataContainer $dataContainer contains data needed by the Module
 	 */
 	public function execute($dataContainer) {

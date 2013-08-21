@@ -1,7 +1,7 @@
 {extends file=$base_path}{block name=content}
 <h3>Bitte Betrag Eingeben</h3>
 <p>Der Benutzer kann maximal noch {$max_amount}&euro; aufladen!</p>
-<form action="index.php?section=Babesk|Recharge&{$sid}" method="post">
+<form action="index.php?module=administrator|Babesk|Recharge|RechargeCard" method="post">
 	<fieldset>
 		<label>Betrag</label>
 			<input type="text" name="amount" /><br />
