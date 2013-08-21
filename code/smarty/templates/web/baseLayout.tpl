@@ -10,29 +10,46 @@
 		url=index.php?section={$redirection.target}" />
 	{/if}
 
+	<script type="text/javascript"
+		src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<!-- <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.js"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/localization/messages_de.js"></script> -->
 
-	{literal}
-	<script type="text/javascript">
-	var oldDiv = '';
+{literal}
+<script type="text/javascript">
+var oldDiv = '';
 
-	function switchInfo(divName) {
+function switchInfo(divName) {
 
-		if(oldDiv == divName) {
-			if(document.getElementById(divName).style.display == 'inline')
-				document.getElementById(divName).style.display = 'none';
-			else
-				document.getElementById(divName).style.display = 'inline';
-		}
-		else {
+	if(oldDiv == divName) {
+		if(document.getElementById(divName).style.display == 'inline')
+			document.getElementById(divName).style.display = 'none';
+		else
 			document.getElementById(divName).style.display = 'inline';
-			if(oldDiv != '') {
-				document.getElementById(oldDiv).style.display = 'none';
-			}
-		}
-		oldDiv = divName;
 	}
-	</script>
-	{/literal}
+	else {
+		document.getElementById(divName).style.display = 'inline';
+		if(oldDiv != '') {
+			document.getElementById(oldDiv).style.display = 'none';
+		}
+	}
+	oldDiv = divName;
+}
+
+jQuery.fn.outerHtml = function() {
+	return jQuery('<div />').append(this.eq(0).clone()).html();
+};
+
+$(document).ready(function() {
+	$('#content').hide();
+	$('#content').show(300);
+});
+
+</script>
+{/literal}
+
+
+
 </head>
 <body>
 	<div id="header">

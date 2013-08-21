@@ -221,8 +221,13 @@ class Web {
 	private function executeModule() {
 
 		try {
-			$this->_acl->moduleExecute($this->_moduleExecutionParser,
-				$this->_dataContainer);
+			try {
+				$this->_acl->moduleExecute($this->_moduleExecutionParser,
+					$this->_dataContainer);
+
+			} catch (Exception $e) {
+				$this->_interface->dieError(_g('Error executing the Module!'));
+			}
 
 
 		} catch (AclException $e) {
