@@ -4,9 +4,9 @@
 	{_g('Print Recharge Balance')}
 </h2>
 
-<form action="index.php?module=administrator|Babesk|Recharge|PrintRechargeBalance">
+<form action="index.php?module=administrator|Babesk|Recharge|PrintRechargeBalance" method="post">
 	<div class="simpleForm">
-		<p>{_g('Zeitspanne:')}</p>
+		<p>{_g('Interval:')}</p>
 		<select name="interval" class="inputItem">
 			{foreach $intervals as $intervalId => $intervalname}
 				<option value="{$intervalId}">{$intervalname}</option>
@@ -15,10 +15,13 @@
 	</div>
 
 	<div class="simpleForm">
-		<p>gett</p>
+		<p>{_g('At:')}</p>
 		<input class="inputItem" type="text" name="date" size="10"
-				value="{date('Y-m-d')}" />
+				value="{date('d.m.Y')}" />
 	</div>
+	<br />
+	<input type="submit" value="{_g('Download Pdf')}" />
+
 </form>
 
 
@@ -30,7 +33,7 @@ $(document).ready(function() {
 		dateFormat: 'dd.mm.yy',
 		changeMonth: true,
 		changeYear: true,
-		yearRange: "2013:+10"
+		yearRange: "2013:now"
 	});
 });
 

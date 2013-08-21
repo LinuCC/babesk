@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS usercreditsRecharges (
+CREATE TABLE IF NOT EXISTS UsercreditsRecharges (
 `ID` int(11) unsigned NOT NULL auto_increment,
 `userId` int(11) unsigned NOT NULL,
 `rechargingUserId` int(11) unsigned NOT NULL,
