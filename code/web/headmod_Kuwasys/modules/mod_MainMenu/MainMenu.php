@@ -41,7 +41,7 @@ class MainMenu extends Module {
 	///////////////////////////////////////////////////////////////////////
 	//Implementations
 	///////////////////////////////////////////////////////////////////////
-	private function entryPoint($dataContainer) {
+	protected function entryPoint($dataContainer) {
 
 		defined('_WEXEC') or die("Access denied");
 		$this->_smarty = $dataContainer->getSmarty();

@@ -124,7 +124,7 @@ class Users extends Module {
 
 	////////////////////////////////////////////////////////////////////////////
 	//Implements
-	private function entryPoint ($dataContainer) {
+	protected function entryPoint ($dataContainer) {
 
 		defined('_AEXEC') or die('Access denied');
 		$this->_usersManager = new KuwasysUsersManager();

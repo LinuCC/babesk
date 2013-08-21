@@ -46,7 +46,7 @@ class PresetPassword extends Module {
 	/**
 	 * Sets the Classes Variables
 	 */
-	private function entryPoint ($dataContainer) {
+	protected function entryPoint ($dataContainer) {
 		defined('_AEXEC') or die('Access denied');
 		$this->_interface = new PresetPasswordInterface ($this->relPath, $dataContainer->getSmarty());
 		$this->_globalSettingsManager = new GlobalSettingsManager ();

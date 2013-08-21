@@ -40,7 +40,7 @@ class EmailConfiguration extends Module {
 	/** Sets the Classes Variables
 	 *
 	 */
-	private function entryPoint ($dataContainer) {
+	protected function entryPoint ($dataContainer) {
 		defined('_AEXEC') or die('Access denied');
 
 		require_once 'EmailConfigurationInterface.php';

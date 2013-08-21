@@ -46,7 +46,7 @@ class Login {
 	//Implementations
 	////////////////////////////////////////////////////////////////////////
 
-	private function entryPoint() {
+	protected function entryPoint() {
 
 		defined('_WEXEC') or die("Access denied");
 		$this->_username = $_POST['login'];

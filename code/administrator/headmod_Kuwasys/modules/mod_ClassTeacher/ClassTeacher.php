@@ -67,7 +67,7 @@ class ClassTeacher extends Module {
 	* This function initializes Data like the MySQL-Connection for this Class
 	* @param unknown_type $dataContainer
 	*/
-	private function entryPoint ($dataContainer) {
+	protected function entryPoint ($dataContainer) {
 
 		defined('_AEXEC') or die('Access denied');
 
