@@ -12,6 +12,10 @@ p.classListing {
 	color: maroon;
 }
 
+.classlistingContainer {
+	margin-left: 4em;
+}
+
 div.classListing {
 
 	border-style: solid;
@@ -35,32 +39,30 @@ div.classListing {
 Keine Kurse wurden ausgewählt.
 {else}
 {foreach $classes as $unitname => $classesAtUnit}
-	<b>{$unitname}:</b><br>
+	<h4>{$unitname}:</h4>
+	<ul>
 	{foreach $classesAtUnit as $class}
-		<b>&nbsp;&nbsp;&nbsp;&nbsp;
-		{if $class.registrationEnabled}
-			<a class="classListing" onmouseover="displayClassDescription('{$class.ID}')" onmouseout="hideClassDescription('{$class.ID}')"
-				{if $class.status == 'Aktiv'} style="color: rgb(255, 50, 50);"
-				{else if $class.status == 'waiting'} style="color: rgb(50, 255, 50);"{/if}
-				href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}">{$class.label} ({$class.status})</a>
-		{else}
-			<p class="classListing" onmouseover="displayClassDescription('{$class.ID}')" onmouseout="hideClassDescription('{$class.ID}')"
-				{if $class.status == 'Aktiv'} style="color: rgb(255, 50, 50);"
-				{else if $class.status == 'Wartend'} style="color: rgb(50, 255, 50);"{/if}
-				href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}">{$class.label} ({$class.status})</p>
-		{/if}</b>
-		<br>
-		<div id="classDescription#{$class.ID}" class="classDescription" hidden="hidden">
-			<p>{$class.status}</p>
-			<p>{$class.description}</p>
-		</div>
+		<li class="classlistingContainer" classId="{$class.ID}">
+			<b>
+			{if $class.registrationEnabled}
+				<a class="classListing" classId="{$class.ID}"
+					{if $class.status == 'Aktiv'} style="color: rgb(255, 50, 50);"
+					{else if $class.status == 'waiting'} style="color: rgb(50, 255, 50);"{/if}
+					href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}">{$class.label} ({$class.status})</a>
+			{else}
+				<p class="classListing" classId="{$class.ID}"
+					{if $class.status == 'Aktiv'} style="color: rgb(255, 50, 50);"
+					{else if $class.status == 'Wartend'} style="color: rgb(50, 255, 50);"{/if}
+					href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}">{$class.label} ({$class.status})</p>
+			{/if}
+			</b>
+			<div id="classDescription_{$class.ID}" class="classDescription" hidden="hidden">
+				<p>{$class.status}</p>
+				<p class="quotebox">{$class.description}</p>
+			</div>
+		</li>
 	{/foreach}
-	{*Cancel all registrations for the User that are in this Unit*}
-	{* Button not needed anymore, User should be able to click at two Classes
-	<form action="index.php?section=Kuwasys|MainMenu&amp;action=cancelClassRegOfDay&amp;unitId={$unit->unit.ID}" method="post">
-		<input type="submit" value="alle Kurse an diesem Tag abmelden">
-	</form>
-	*}
+	</ul>
 {/foreach}
 {/if}
 

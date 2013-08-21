@@ -410,3 +410,12 @@ div.popup {
 	-moz-border-radius: 20px;
 	border-radius: 20px;
 }
+
+div.quotebox, p.quotebox {
+
+	border-left: 4px solid #005506;
+	margin: 5px 5px 5px 5px;
+	padding: 5px;
+	background-color: #EEEEEE;
+	border-radius: 10px;
+}

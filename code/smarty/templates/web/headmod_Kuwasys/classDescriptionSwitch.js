@@ -15,3 +15,17 @@ function switchClassDescriptionOfLink(classDescrId) {
 		document.getElementById('classDescription#' + classDescrId).hidden = true;
 	}
 }
+
+$(document).ready(function() {
+
+	$('[id^=classDescription_]').hide();
+
+	$('.classlistingContainer').hover(
+		function(event) {
+			$(this).children('.classDescription').stop().show(200);
+		},
+		function(event) {
+			$(this).children('.classDescription').stop().hide(200);
+		}
+	);
+});
