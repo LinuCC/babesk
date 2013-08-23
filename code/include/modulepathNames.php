@@ -49,7 +49,7 @@ _g("modulepath_root/administrator/Gnissel");
 _g("modulepath_root/administrator/Gnissel/GDelUser");
 _g("modulepath_root/administrator/Gnissel/GChangeCard");
 _g("modulepath_root/administrator/Gnissel/GUnlockUser");
-_g("modulepath_root/administrator/Gnissel/ChangePassword");
+_g("modulepath_root/administrator/Gnissel/GChangePassword");
 _g("modulepath_root/administrator/Gnissel/GCardInfo");
 _g("modulepath_root/administrator/Statistics");
 _g("modulepath_root/administrator/Statistics/KuwasysStats");
