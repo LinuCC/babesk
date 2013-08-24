@@ -44,7 +44,8 @@ class User extends Module {
 	///////////////////////////////////////////////////////////////////////
 	//Implementations
 	///////////////////////////////////////////////////////////////////////
-	protected function entryPoint ($dataContainer) {
+
+	protected function entryPoint($dataContainer) {
 
 		defined('_AEXEC') or die('Access denied');
 		$this->userManager = new UserManager();
@@ -53,9 +54,8 @@ class User extends Module {
 		$this->userProcessing = new AdminUserProcessing($this->userInterface);
 		$this->messages = array('error' => array(
 			'no_id' => 'ID nicht gefunden.'));
-		$this->_smarty = $dataContainer->getSmarty();
-		$this->_acl = $dataContainer->getAcl();
-		$this->_pdo = $dataContainer->getPdo();
+		parent::entryPoint($dataContainer);
+		parent::initSmartyVariables();
 		$this->_dataContainer = $dataContainer;
 	}
 
@@ -1038,6 +1038,22 @@ class User extends Module {
 		$fileId = $_GET['pdfId'];
 		$deleter = new UserDelete();
 		$deleter->showPdfOfDeletedUser($fileId);
+	}
+
+	/**
+	 * Allows the User to Import the Csv-Files of a User
+	 */
+	protected function submoduleUserCsvImportExecute() {
+
+		require_once 'UserCsvImport.php';
+
+		if(count($_FILES)) {
+			$importer = new UserCsvImport();
+			$importer->execute($this->_dataContainer);
+		}
+		else {
+			$this->displayTpl('importCsvFile.tpl');
+		}
 	}
 
 	///////////////////////////////////////////////////////////////////////

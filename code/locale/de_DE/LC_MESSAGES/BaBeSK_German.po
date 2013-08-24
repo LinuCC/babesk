@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
-"POT-Creation-Date: 2013-08-21 16:01+0100\n"
-"PO-Revision-Date: 2013-08-23 10:29+0100\n"
-"Last-Translator: Mirek Hancl <mirek@hancl.de>\n"
+"POT-Creation-Date: 2013-08-24 13:31+0100\n"
+"PO-Revision-Date: 2013-08-24 13:34+0100\n"
+"Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: Deutsch\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 1.5.4\n"
 "X-Poedit-KeywordsList: _g;_;gettext;gettext_noop\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -33,109 +33,6 @@ msgstr ""
 msgid "The User has two or more cardnumbers!"
 msgstr "Der Benutzer hat zwei oder mehr Kartennummern!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:52
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:67
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:151
-msgid "Forename"
-msgstr "Vorname"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:53
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:71
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:156
-msgid "Surname"
-msgstr "Nachname"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:54
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:73
-msgid "Username"
-msgstr "Benutzername"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:55
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:74
-msgid "Birthday"
-msgstr "Geburtstag"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:56
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:75
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/ClassesCsvImport.php:76
-msgid "Email-Adresse"
-msgstr "Email-Adresse"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:57
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:76
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/ClassesCsvImport.php:58
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/ClassesCsvImport.php:74
-msgid "Schoolyear"
-msgstr "Schuljahr"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:58
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:77
-msgid "Grade"
-msgstr "Klasse"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:59
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:79
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:94
-msgid "Credits"
-msgstr "Guthaben"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:60
-msgid "PricegroupId"
-msgstr "Preisgruppen-ID"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:61
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:81
-msgid "is Soli"
-msgstr "ist Soli"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:90
-msgid "Babesk is deactivated!"
-msgstr "Babesk ist deaktiviert!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:92
-msgid "Pricegroups"
-msgstr "Preisgruppen"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:96
-msgid "Soli"
-msgstr "Soli"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:189
-#, php-format
-msgid ""
-"Could not add the Schoolyear and the Grade to the User \"%1$s\" \"%2$s\""
-msgstr ""
-"Konnte das Schuljahr und die Klasse nicht zu dem Benutzer \"%1$s\" \"%2$s\" "
-"hinzufügen"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:194
-#, php-format
-msgid ""
-"The User \"%1$s %2$s\" has a Grade, but no Schoolyear defined! Define a "
-"Schoolyear for Users with a Grade!"
-msgstr ""
-"Der Benutzer \"%1$s %2$s\" hat eine Klasse, aber kein Schuljahr definiert! "
-"Definieren sie ein Schuljahr mit Klasse für Benutzer!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:312
-msgid "Multiple Grades with gradelevel \"0\" found!"
-msgstr "Mehrere Klassen mit Jahrgang \"0\" gefunden!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:316
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:321
-msgid "Could not find the ID of the \"NoGrade\"-Grade"
-msgstr "Konnte die ID der \"KeineKlasse\"-Kasse nicht finden!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:352
-#, php-format
-msgid "Could not find the Pricegroup %1$s!"
-msgstr "Konnte die Preisgruppen \"%1$s\" nicht finden!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Users/UserCsvImport.php:403
-#, php-format
-msgid "Could not find the Usergroup by Path \"%1$s\""
-msgstr "Konnte die Nutzergruppe anhand des Pfads \"%1$s\" nicht finden"
-
 #: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/ClassesCsvImport.php:55
 #: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/ClassesCsvImport.php:66
 msgid "Label"
@@ -152,6 +49,13 @@ msgstr "Beschreibung"
 msgid "Day"
 msgstr "Tag"
 
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/ClassesCsvImport.php:58
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/ClassesCsvImport.php:74
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:57
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:76
+msgid "Schoolyear"
+msgstr "Schuljahr"
+
 #: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/ClassesCsvImport.php:59
 msgid "Maximum Amount of Registrations"
 msgstr "Maximale Anzahl Registrierungen"
@@ -160,6 +64,12 @@ msgstr "Maximale Anzahl Registrierungen"
 #: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/ClassesCsvImport.php:79
 msgid "Registration Enabled for this Class"
 msgstr "Registrierungen erlaubt für diesen Kurs"
+
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/ClassesCsvImport.php:76
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:56
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:75
+msgid "Email-Adresse"
+msgstr "Email-Adresse"
 
 #: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/ClassesCsvImport.php:112
 #, php-format
@@ -268,6 +178,18 @@ msgstr "Konnte nicht die Kurse des aktiven Schuljahres abrufen"
 #: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:135
 msgid "The Classteacher was successfully added."
 msgstr "Der Kurslehrer wurde erfolgreich hinzugefügt"
+
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:151
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:52
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:67
+msgid "Forename"
+msgstr "Vorname"
+
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:156
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:53
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:71
+msgid "Surname"
+msgstr "Nachname"
 
 #: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:161
 msgid "Address"
@@ -497,6 +419,84 @@ msgstr ""
 #: ../../../administrator/headmod_Babesk/modules/mod_Meals/Meals.php:137
 msgid "Could not change the Max Amount of Orders per day per User."
 msgstr "Konnte die Maximale Anzahl an Bestellungen pro Tag nicht ändern."
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:54
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:73
+msgid "Username"
+msgstr "Benutzername"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:55
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:74
+msgid "Birthday"
+msgstr "Geburtstag"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:58
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:77
+msgid "Grade"
+msgstr "Klasse"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:59
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:79
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:94
+msgid "Credits"
+msgstr "Guthaben"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:60
+msgid "PricegroupId"
+msgstr "Preisgruppen-ID"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:61
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:81
+msgid "is Soli"
+msgstr "ist Soli"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:90
+msgid "Babesk is deactivated!"
+msgstr "Babesk ist deaktiviert!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:92
+msgid "Pricegroups"
+msgstr "Preisgruppen"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:96
+msgid "Soli"
+msgstr "Soli"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:189
+#, php-format
+msgid ""
+"Could not add the Schoolyear and the Grade to the User \"%1$s\" \"%2$s\""
+msgstr ""
+"Konnte das Schuljahr und die Klasse nicht zu dem Benutzer \"%1$s\" \"%2$s\" "
+"hinzufügen"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:194
+#, php-format
+msgid ""
+"The User \"%1$s %2$s\" has a Grade, but no Schoolyear defined! Define a "
+"Schoolyear for Users with a Grade!"
+msgstr ""
+"Der Benutzer \"%1$s %2$s\" hat eine Klasse, aber kein Schuljahr definiert! "
+"Definieren sie ein Schuljahr mit Klasse für Benutzer!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:312
+msgid "Multiple Grades with gradelevel \"0\" found!"
+msgstr "Mehrere Klassen mit Jahrgang \"0\" gefunden!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:316
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:321
+msgid "Could not find the ID of the \"NoGrade\"-Grade"
+msgstr "Konnte die ID der \"KeineKlasse\"-Kasse nicht finden!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:352
+#, php-format
+msgid "Could not find the Pricegroup %1$s!"
+msgstr "Konnte die Preisgruppen \"%1$s\" nicht finden!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:403
+#, php-format
+msgid "Could not find the Usergroup by Path \"%1$s\""
+msgstr "Konnte die Nutzergruppe anhand des Pfads \"%1$s\" nicht finden"
 
 #: ../../../administrator/headmod_System/modules/mod_User/User.php:235
 msgid "Could not check if first Password on Login is enabled!"
@@ -819,15 +819,12 @@ msgid "modulepath_root/administrator/Gnissel/GUnlockUser"
 msgstr "Benutzer freischalten"
 
 #: ../../../include/modulepathNames.php:52
-msgid "modulepath_root/administrator/Gnissel/ChangePassword"
+msgid "modulepath_root/administrator/Gnissel/GChangePassword"
 msgstr "Passwort ändern"
 
 #: ../../../include/modulepathNames.php:53
 msgid "modulepath_root/administrator/Gnissel/GCardInfo"
 msgstr "Karteninfo"
-
-msgid "modulepath_root/administrator/Gnissel/GChangePassword"
-msgstr "Passwort ändern"
 
 #: ../../../include/modulepathNames.php:54
 msgid "modulepath_root/administrator/Statistics"
@@ -1092,22 +1089,28 @@ msgid "Could not check if you already selected classes!"
 msgstr "Konntenicht überprüfen ob du schon Kurse selektiert hast!"
 
 #: ../../../smarty/templates_c/eb4bd6e3e4dbbad921ca508b55f22332^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
+#: ../../../smarty/templates_c/6e93ce41688c3bcfc0089012bee0b7ed56c4a5db.file.register.tpl.php:254
+#: ../../../smarty/templates_c/97dd776ccc42d799232d77d2d7eadbdb2087af4c.file.dialogAutoCreateUsernames.tpl.php:116
 #: ../../../smarty/templates_c/2ca92fd8323335f226298095835d98ca262d96a5.file.mainMenu.tpl.php:110
 #: ../../../smarty/templates_c/d925ccfd02616368489173c0239296c41d838a43.file.displayClasses.tpl.php:204
+#: ../../../smarty/templates_c/23319d8ef0a908c25db037491895a5965906a6ca.file.mainMenu.tpl.php:118
 #: ../../../smarty/templates_c/8d66d1a054b0c89822a7d5a7b45022381d461f62.file.confirmationDialog.tpl.php:115
 #: ../../../smarty/templates_c/69ef1474499747a738f5d4a1531c6368^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/81af9d8a0076e390a700db80fd40b609^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:101
 #: ../../../smarty/templates_c/5714db0a103e440b4fe3f335c35f52b92e0e5c80.file.main.tpl.php:111
 #: ../../../smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:126
-#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:119
+#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:157
 #: ../../../smarty/templates_c/00877b926b1f71360abb9c7161d45f532f3e4356.file.displayAll.tpl.php:166
+#: ../../../smarty/templates_c/1081a3ef152a60fd6957b974abb091ce54e7d1f4.file.importLocalCsvFile.tpl.php:136
 #: ../../../smarty/templates_c/43a8069f84474c8edc46222d28c6a436b14f42a7.file.getUsername.tpl.php:120
+#: ../../../smarty/templates_c/e819f7f99ecd450a383ffdfbb8dfbf425712c54b.file.usernameRemoveSpecialChars.tpl.php:114
 #: ../../../smarty/templates_c/818149c8372c3fa5e5e32c9cd62bc5d894003dc9.file.mainmenu.tpl.php:131
 #: ../../../smarty/templates_c/277023282b4cc18ca18acb57da7166581f1aee33.file.addClass.tpl.php:148
 #: ../../../smarty/templates_c/be79683c6cae1e59fe577e2ea6108b30afd67616.file.menu.tpl.php:155
 #: ../../../smarty/templates_c/c931dc528d505c072d9728a2ec07fb024059e5f7.file.mainmenu.tpl.php:122
 #: ../../../smarty/templates_c/61767cbc64649c69bd673494ca137082a25c84f0.file.meals_initial_menu.tpl.php:130
 #: ../../../smarty/templates_c/8c8b534d695ba143ddb57dc057a0c5d0e8505d3f.file.mainMenu.tpl.php:113
+#: ../../../smarty/templates_c/3a2f75ea979a961e0e90243618a8d1e82c2749f8.file.mainMenu.tpl.php:152
 #: ../../../smarty/templates_c/4d022996272f352d84190722f66bc1ed^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/093f9544da95a056df6939dd5f74bc4bdae08a7e.file.main.tpl.php:151
 #: ../../../smarty/templates_c/587d07c5d0c54d54ca93576150e63890^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
@@ -1115,6 +1118,7 @@ msgstr "Konntenicht überprüfen ob du schon Kurse selektiert hast!"
 #: ../../../smarty/templates_c/b4b50b6349ab533465158747cdc7260d^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/67a95664148b1988649289e19fb272c4^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/dcf6016dbe083a161c5be3cfba1d23ba5a9bb63a.file.mainMenu.tpl.php:118
+#: ../../../smarty/templates_c/ad60e971e39e02d8ef91e8131eb32470^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/d9ae2e659e39b51da4b84a100552c0b5c94fb34c.file.printRechargeBalanceSelect.tpl.php:158
 #: ../../../smarty/templates_c/6819e4ee18e749c9a4e594e249811227^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:101
 #: ../../../smarty/templates_c/1b545d44b0a0623299d3305753b50bf1111e2703.file.showGrades.tpl.php:204
@@ -1125,28 +1129,35 @@ msgstr "Konntenicht überprüfen ob du schon Kurse selektiert hast!"
 #: ../../../smarty/templates_c/9c43cff433cc0199a399a11eaed29f0edaeaaad9.file.form1.tpl.php:110
 #: ../../../smarty/templates_c/b8290a55c06d0c945dc0c9d45c953257472a419f.file.changePresetPassword.tpl.php:133
 #: ../../../smarty/templates_c/de82f2924405730175362278d7381ed1^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
+#: ../../../smarty/templates_c/7c862a52e499efd71d661ed80448e866ab3cba91.file.importCsvFile.tpl.php:182
 #: ../../../smarty/templates_c/defd47c62f23b1a13e0c80f093ff8f8a621e9129.file.change.tpl.php:405
 #: ../../../smarty/templates_c/ceaf0ad7d9fe554cda482d67b1c284e9cd3a25d6.file.recharge_success.tpl.php:111
 msgid "Back"
 msgstr "zurück"
 
 #: ../../../smarty/templates_c/eb4bd6e3e4dbbad921ca508b55f22332^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
+#: ../../../smarty/templates_c/6e93ce41688c3bcfc0089012bee0b7ed56c4a5db.file.register.tpl.php:259
+#: ../../../smarty/templates_c/97dd776ccc42d799232d77d2d7eadbdb2087af4c.file.dialogAutoCreateUsernames.tpl.php:121
 #: ../../../smarty/templates_c/2ca92fd8323335f226298095835d98ca262d96a5.file.mainMenu.tpl.php:115
 #: ../../../smarty/templates_c/d925ccfd02616368489173c0239296c41d838a43.file.displayClasses.tpl.php:209
+#: ../../../smarty/templates_c/23319d8ef0a908c25db037491895a5965906a6ca.file.mainMenu.tpl.php:123
 #: ../../../smarty/templates_c/8d66d1a054b0c89822a7d5a7b45022381d461f62.file.confirmationDialog.tpl.php:120
 #: ../../../smarty/templates_c/69ef1474499747a738f5d4a1531c6368^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/81af9d8a0076e390a700db80fd40b609^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:106
 #: ../../../smarty/templates_c/5714db0a103e440b4fe3f335c35f52b92e0e5c80.file.main.tpl.php:116
 #: ../../../smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:131
-#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:124
+#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:162
 #: ../../../smarty/templates_c/00877b926b1f71360abb9c7161d45f532f3e4356.file.displayAll.tpl.php:171
+#: ../../../smarty/templates_c/1081a3ef152a60fd6957b974abb091ce54e7d1f4.file.importLocalCsvFile.tpl.php:141
 #: ../../../smarty/templates_c/43a8069f84474c8edc46222d28c6a436b14f42a7.file.getUsername.tpl.php:125
+#: ../../../smarty/templates_c/e819f7f99ecd450a383ffdfbb8dfbf425712c54b.file.usernameRemoveSpecialChars.tpl.php:119
 #: ../../../smarty/templates_c/818149c8372c3fa5e5e32c9cd62bc5d894003dc9.file.mainmenu.tpl.php:136
 #: ../../../smarty/templates_c/277023282b4cc18ca18acb57da7166581f1aee33.file.addClass.tpl.php:153
 #: ../../../smarty/templates_c/be79683c6cae1e59fe577e2ea6108b30afd67616.file.menu.tpl.php:160
 #: ../../../smarty/templates_c/c931dc528d505c072d9728a2ec07fb024059e5f7.file.mainmenu.tpl.php:127
 #: ../../../smarty/templates_c/61767cbc64649c69bd673494ca137082a25c84f0.file.meals_initial_menu.tpl.php:135
 #: ../../../smarty/templates_c/8c8b534d695ba143ddb57dc057a0c5d0e8505d3f.file.mainMenu.tpl.php:118
+#: ../../../smarty/templates_c/3a2f75ea979a961e0e90243618a8d1e82c2749f8.file.mainMenu.tpl.php:157
 #: ../../../smarty/templates_c/4d022996272f352d84190722f66bc1ed^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/093f9544da95a056df6939dd5f74bc4bdae08a7e.file.main.tpl.php:156
 #: ../../../smarty/templates_c/587d07c5d0c54d54ca93576150e63890^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
@@ -1154,6 +1165,7 @@ msgstr "zurück"
 #: ../../../smarty/templates_c/b4b50b6349ab533465158747cdc7260d^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/67a95664148b1988649289e19fb272c4^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/dcf6016dbe083a161c5be3cfba1d23ba5a9bb63a.file.mainMenu.tpl.php:123
+#: ../../../smarty/templates_c/ad60e971e39e02d8ef91e8131eb32470^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/d9ae2e659e39b51da4b84a100552c0b5c94fb34c.file.printRechargeBalanceSelect.tpl.php:163
 #: ../../../smarty/templates_c/6819e4ee18e749c9a4e594e249811227^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:106
 #: ../../../smarty/templates_c/1b545d44b0a0623299d3305753b50bf1111e2703.file.showGrades.tpl.php:209
@@ -1164,6 +1176,7 @@ msgstr "zurück"
 #: ../../../smarty/templates_c/9c43cff433cc0199a399a11eaed29f0edaeaaad9.file.form1.tpl.php:115
 #: ../../../smarty/templates_c/b8290a55c06d0c945dc0c9d45c953257472a419f.file.changePresetPassword.tpl.php:138
 #: ../../../smarty/templates_c/de82f2924405730175362278d7381ed1^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
+#: ../../../smarty/templates_c/7c862a52e499efd71d661ed80448e866ab3cba91.file.importCsvFile.tpl.php:187
 #: ../../../smarty/templates_c/defd47c62f23b1a13e0c80f093ff8f8a621e9129.file.change.tpl.php:410
 #: ../../../smarty/templates_c/ceaf0ad7d9fe554cda482d67b1c284e9cd3a25d6.file.recharge_success.tpl.php:116
 msgid "Back to the Module"
@@ -1193,6 +1206,38 @@ msgstr "Ja"
 #: ../../../smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:118
 msgid "No, I dont want to delete the Class"
 msgstr "Nein, ich will den Kurs nicht löschen"
+
+#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:103
+msgid "Usersettings-Mainmenu"
+msgstr "Benutzereinstellungs-Hauptmenü"
+
+#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:108
+msgid "General"
+msgstr "Allgemein"
+
+#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:114
+msgid "Register a User"
+msgstr "Benutzer registrieren"
+
+#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:120
+msgid "Show Users"
+msgstr "Benutzer anzeigen"
+
+#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:129
+msgid "Bulk-Changes"
+msgstr "Massenveränderungen"
+
+#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:135
+msgid "Assign Usernames to User automatically"
+msgstr "Benutzernamen der Benutzer automatisch erstellen"
+
+#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:141
+msgid "Remove Specialcharacters from Usernames"
+msgstr "Spezialcharaktere von den Benutzernamen entfernen"
+
+#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:147
+msgid "Import Users by a CSV-File"
+msgstr "Benutzer mit einer CSV-Datei importieren"
 
 #: ../../../smarty/templates_c/818149c8372c3fa5e5e32c9cd62bc5d894003dc9.file.mainmenu.tpl.php:109
 msgid "Standard Actions"
@@ -1288,6 +1333,9 @@ msgstr "Alle Kursleiter anzeigen"
 #: ../../../smarty/templates_c/f1e802a676a5c76661a9e8298874a95933384924.file.mainmenu.tpl.php:137
 msgid "Import Classteachers by a CSV-file"
 msgstr "Kursleiter mit einer CSV-Datei importieren"
+
+#~ msgid "modulepath_root/administrator/Gnissel/ChangePassword"
+#~ msgstr "Passwort ändern"
 
 #~ msgid "back"
 #~ msgstr "zurück"
