@@ -3,17 +3,14 @@
 <head>
 	<title>{$title|default:'BaBeSK'}</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<link rel="stylesheet" href="../smarty/templates/web/css/general.css" type="text/css" />
 	{if isset($redirection)}
 		{*If this Var is set, redirect the user to another Website*}
 		<meta HTTP-EQUIV="REFRESH" content="{$redirection.time};
 		url=index.php?section={$redirection.target}" />
 	{/if}
 
-	<script type="text/javascript"
-		src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<!-- <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.js"></script>
-	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/localization/messages_de.js"></script> -->
+	<link rel="stylesheet" href="../smarty/templates/web/css/general.css" type="text/css" />
+	<script src="../include/js/jquery.min.js"></script>
 
 {literal}
 <script type="text/javascript">

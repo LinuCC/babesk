@@ -4,9 +4,15 @@
 <title>{block name=title}BaBeSK{/block}</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
-<!-- For the various JQuery-UI-Elements this site is using -->
-<link rel="stylesheet" href="http://code.jquery.com/ui/
-	1.10.3/themes/smoothness/jquery-ui.css" />
+<link rel="stylesheet"
+	href="../include/js/jquery-ui-smoothness.css"
+	type="text/css"
+/>
+<script src="../include/js/jquery.min.js"></script>
+<script src="../include/js/json2.min.js"></script>
+<script src="../include/js/jquery-ui.min.js"></script>
+<script src="../smarty/templates/administrator/administratorFunctions.js">
+</script>
 
 <link rel="stylesheet"
 	href="../smarty/templates/administrator/css/general.css"
@@ -14,11 +20,6 @@
 
 
 {block name=html_head}{/block}
-<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-<script src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.min.js"></script>
-<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-<script src="../smarty/templates/administrator/administratorFunctions.js">
-	</script>
 </head>
 
 <body>
@@ -90,7 +91,7 @@ $(document).ready(function() {
 
 	$("#pageWidthSelector").buttonset();
 
-	// needed for cash register	
+	// needed for cash register
 	$('input[name=card_ID]').focus();
 	$('input[name=amount]').focus();
 
