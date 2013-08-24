@@ -26,9 +26,7 @@ class ModuleSettings extends Module {
 			$this->executeByAction($_GET['action']);
 		}
 		else {
-			$this->_smarty->display(
-				PATH_SMARTY .
-				"/templates/administrator{$this->relPath}main.tpl");
+			$this->displayTpl('main.tpl');
 		}
 	}
 
@@ -45,10 +43,10 @@ class ModuleSettings extends Module {
 
 		defined('_AEXEC') or die('Access denied');
 
-		$this->_smarty = $dataContainer->getSmarty();
+		parent::entryPoint($dataContainer);
+		parent::initSmartyVariables();
 		$this->_interface = new AdminInterface($this->relPath,
 			$this->_smarty);
-		$this->_acl = $dataContainer->getAcl();
 	}
 
 	protected function executeByAction($action) {
