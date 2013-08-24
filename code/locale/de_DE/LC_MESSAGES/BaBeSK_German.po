@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
 "POT-Creation-Date: 2013-08-24 13:31+0100\n"
-"PO-Revision-Date: 2013-08-24 13:34+0100\n"
+"PO-Revision-Date: 2013-08-24 13:52+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: Deutsch\n"
@@ -980,7 +980,7 @@ msgstr "Logeinstellungen"
 
 #: ../../../include/modulepathNames.php:92
 msgid "modulepath_root/administrator/System/Groups"
-msgstr "Gruppeneinstellungen"
+msgstr "Preisgruppen"
 
 #: ../../../include/modulepathNames.php:93
 msgid "modulepath_root/administrator/System/Admin"
@@ -1020,7 +1020,7 @@ msgstr "FITS Einstellungen"
 
 #: ../../../include/modulepathNames.php:102
 msgid "modulepath_root/administrator/System/GroupSettings"
-msgstr "Fruppeneinstellungen"
+msgstr "Benutzergruppen"
 
 #: ../../../include/modulepathNames.php:103
 msgid "modulepath_root/administrator/System/ModuleSettings"
