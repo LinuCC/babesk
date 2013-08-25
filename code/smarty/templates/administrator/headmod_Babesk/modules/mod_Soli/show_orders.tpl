@@ -25,7 +25,7 @@ td {
 	<tbody>
 	{foreach $orders as $order}
 		<tr bgcolor="#FFC33">
-			<td>{$order.date}</td>
+			<td>{$order.mealdate|date_format:"%d.%m.%Y"}</td>
 			<td>{$order.mealname}</td>
 			<td>{sprintf("%01.2f", $order.mealprice)}€</td>
 			<td>{sprintf("%01.2f", $order.soliprice)}€</td>
