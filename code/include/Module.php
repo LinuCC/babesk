@@ -43,6 +43,8 @@ abstract class Module {
 		$this->_pdo = $dataContainer->getPdo();
 		$this->_smarty = $dataContainer->getSmarty();
 		$this->_acl = $dataContainer->getAcl();
+		$this->_submoduleExecutionpath =
+			$dataContainer->getSubmoduleExecutionRequest();
 	}
 
 	/**

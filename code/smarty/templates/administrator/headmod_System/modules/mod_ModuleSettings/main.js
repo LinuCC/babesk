@@ -195,6 +195,7 @@ var details = new function() {
 				container.append(isEnabledHtml(res));
 				container.append(displayInMenuHtml(res));
 				container.append(change);
+				container.attr('moduleId', res.data.ID);
 				changeHandlerAdd();
 			}
 			else {
@@ -331,7 +332,10 @@ var details = new function() {
 						case 'success':
 							adminInterface.successShow(
 									'Das Modul wurde erfolgreich verändert');
-							moduletree.fetch();
+							var moduleBefore = moduletree.selectedModuleGet();
+							$("div.moduletree").jstree(
+								"rename_node",
+								moduleBefore, module.name);
 							container.html('');
 							return true;
 							break;
@@ -428,6 +432,17 @@ var moduletree = new function() {
 
 		var id = $(tree.jstree('get_selected')).data('id');
 		return id;
+	};
+
+	/**
+	 * Returns the selected Module
+	 *
+	 * @return {Object} The Module
+	 */
+	that.selectedModuleGet = function() {
+
+		var data = tree.jstree('get_selected');
+		return data;
 	};
 
 	/**
