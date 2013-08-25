@@ -332,10 +332,10 @@ var details = new function() {
 						case 'success':
 							adminInterface.successShow(
 									'Das Modul wurde erfolgreich verändert');
-							var module = moduletree.selectedModuleGet();
+							var moduleBefore = moduletree.selectedModuleGet();
 							$("div.moduletree").jstree(
 								"rename_node",
-								module, module.name);
+								moduleBefore, module.name);
 							container.html('');
 							return true;
 							break;
