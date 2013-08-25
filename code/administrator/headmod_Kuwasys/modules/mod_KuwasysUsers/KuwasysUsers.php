@@ -118,11 +118,12 @@ class KuwasysUsers extends Module {
 
 		try {
 			$stmt = $this->_pdo->query(
-				'SHOW TABLES LIKE TemporaryUsersToClassesAssign');
+				'SHOW TABLES LIKE "TemporaryUsersToClassesAssign";');
 
 		} catch (PDOException $e) {
 			$this->_interface->dieError(
-				_g('Could not check if the UsersToClasses-Table exists!'));
+				_g('Could not check if the UsersToClasses-Table exists!') .
+				$e->getMessage());
 		}
 
 		return (boolean) $stmt->fetch();
