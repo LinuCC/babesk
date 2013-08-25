@@ -246,6 +246,9 @@ Uelzen, den ___.___.2013
 
 		// ---------------------------------------------------------
 
+		if(!is_dir('../include/pdf/tempPdf')) {
+			mkdir('../include/pdf/tempPdf');
+		}
 		// Close and output PDF document
 		// This method has several options, check the source code documentation for more information.
 		$pdf->Output('../include/pdf/tempPdf/deleted_'.$uid.'.pdf', 'F');
