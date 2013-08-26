@@ -10,7 +10,8 @@
 	</legend>
 	<ul class="submodulelinkList">
 		<li>
-			<a class="submodulelink" href="index.php?module=administrator|Kuwasys|KuwasysUsers|PrintParticipationConfirmation">
+			<a class="submodulelink" href="index.php?module=administrator|Kuwasys|KuwasysUsers|PrintParticipationConfirmation"
+			title="{_g('Here you can Print PDFs confirming the Participation of Users at their Classes of this Year')}">
 				{_g('Print Participation Confirmation')}
 			</a>
 		</li>
