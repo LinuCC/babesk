@@ -457,8 +457,10 @@ class Classes extends Module {
 		$users = $this->usersByClassIdGet($_GET['ID']);
 		$users = $this->assignClassesOfSameClassunitToUsers(
 			$users, $class['unitId']);
+		$statuses = $this->statusesGetAll();
 		$this->_smarty->assign('class', $class);
 		$this->_smarty->assign('users', $users);
+		$this->_smarty->assign('statuses', $statuses);
 		$this->_smarty->display(
 			$this->_smartyModuleTemplatesPath . 'displayClassDetails.tpl');
 	}
@@ -508,12 +510,18 @@ class Classes extends Module {
 	protected function assignClassesOfSameClassunitToUsers($users, $unitId) {
 
 		$userIdString = $this->idStringGetFromUsers($users);
+		if(!empty($userIdString)) {
+			$userIdPart = "uic.UserID IN($userIdString) AND";
+		}
+		else {
+			$userIdPart = '';
+		}
 
 		try {
 			$stmt = $this->_pdo->prepare(
 				"SELECT c.*, uic.UserID AS userId FROM class c
 				JOIN jointUsersInClass uic ON c.ID = uic.ClassID
-				WHERE uic.UserID IN($userIdString) AND c.unitId = :unitId
+				WHERE $userIdPart c.unitId = :unitId
 					AND c.ID <> :classId"
 			);
 
@@ -528,6 +536,25 @@ class Classes extends Module {
 		} catch (Exception $e) {
 			$this->_interface->dieError(
 				_g('Could not fetch the Classes of the User at the same day') . $e->getMessage());
+		}
+	}
+
+	/**
+	 * Fetches all existing Statuses
+	 *
+	 * Dies displaying a Message on Error
+	 *
+	 * @return array  All existing Statuses
+	 */
+	protected function statusesGetAll() {
+
+		try {
+			$stmt = $this->_pdo->query('SELECT * FROM usersInClassStatus');
+			$stmt->execute();
+			return $stmt->fetchAll();
+
+		} catch (PDOException $e) {
+			$this->_interface->dieError(_g('Error fetching the Statuses!'));
 		}
 	}
 

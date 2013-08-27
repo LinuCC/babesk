@@ -72,17 +72,17 @@ class KuwasysUsers extends Module {
 		$this->displayTpl('mainmenu.tpl');
 	}
 
-	/********************************************************************
-	 * Allows the User to Print Participation-Confirmations
-	 */
+	/**====================================================**
+	 * Allows the User to Print Participation-Confirmations *
+	 **====================================================**/
 	protected function submodulePrintParticipationConfirmationExecute() {
 
 		$this->_interface->dieError('Modul wird momentan überarbeitet...');
 	}
 
-	/********************************************************************
-	 * Allows the User to Assign Users to Classes
-	 */
+	/**==========================================**
+	 * Allows the User to Assign Users to Classes *
+	 **==========================================**/
 	protected function submoduleAssignUsersToClassesExecute() {
 
 		if($this->execPathHasSubmoduleLevel(
@@ -200,6 +200,77 @@ class KuwasysUsers extends Module {
 		$this->_smarty->assign('tableExists',
 			$this->assignUsersToClassesTableExists());
 		$this->displayTpl('AssignUsersToClasses/mainmenu.tpl');
+	}
+
+	/**=========================================**
+	 * Allows the Admin to add a User to a Class *
+	 **=========================================**/
+	protected function submoduleAddUserToClassExecute() {
+
+		$userId = $this->userIdGetByUsername($_POST['username']);
+
+		try {
+			$this->userAssignToClass(
+				$userId, $_POST['classId'], $_POST['statusId']);
+
+		} catch (PDOException $e) {
+			die(json_encode(array('value' => 'error',
+				'message' => _g('Could not newly assign the User to the Class!'))));
+		}
+
+		die(json_encode(array('value' => 'success',
+			'message' => _g('The User was successfully assigned to the Class.'))));
+	}
+
+	/**
+	 * Returns a Userid found by the Username
+	 *
+	 * Dies displaying a Nessage on Not found or Error
+	 *
+	 * @return int    The ID of found
+	 */
+	protected function userIdGetByUsername($username) {
+
+		try {
+			$stmt = $this->_pdo->prepare('SELECT ID FROM users
+				WHERE username = :username');
+
+			$stmt->execute(array('username' => $username));
+
+			if($id = $stmt->fetchColumn()) {
+				return $id;
+			}
+			else {
+				die(json_encode(array('value' => 'error',
+					'message' => _g('No User found by the Username!'))));
+			}
+
+		} catch (PDOException $e) {
+			die(json_encode(array('value' => 'error',
+				'message' => _g(
+					'Error while fetching the User from the Database!'))));
+		}
+	}
+
+	/**
+	 * Assigns the User to a Class
+	 *
+	 * @param  int    $userId   The ID of the User to assign
+	 * @param  int    $classId  The ID of the Class to assign the User to
+	 * @param  int    $statusId The ID of the Status
+	 * @throws PDOException If Things didnt work out
+	 */
+	protected function userAssignToClass($userId, $classId, $statusId) {
+
+		$stmt = $this->_pdo->prepare('INSERT INTO jointUsersInClass
+			(UserID, ClassID, statusId) VALUES
+			(:userId, :classId, :statusId);');
+
+		$stmt->execute(array(
+			'userId' => $userId,
+			'classId' => $classId,
+			'statusId' => $statusId,
+		));
 	}
 
 	/////////////////////////////////////////////////////////////////////

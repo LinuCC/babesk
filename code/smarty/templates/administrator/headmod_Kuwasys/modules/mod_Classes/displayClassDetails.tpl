@@ -14,6 +14,15 @@ td {
 	text-align: center;
 }
 
+#addUserDialog input, #addUserDialog label, #addUserDialog select {
+	display: block;
+	width: 95%;
+}
+
+#addUserDialog label {
+	font-size: 80%;
+}
+
 </style>
 {/literal}
 
@@ -92,7 +101,7 @@ td {
 				{/if}
 				>
 				<!-- Link to "move user to another Class" -->
-				<a href="index.php?section=Kuwasys|Users&action=moveUserByClass&classIdOld={$class.ID}&userId={$user.ID}">
+				<a href="index.php?section=Kuwasys|Users&amp;action=moveUserByClass&amp;classIdOld={$class.ID}&amp;userId={$user.ID}">
 					{if $user.statusTranslated}
 						{$user.statusTranslated}
 					{else}Fehler!{/if}
@@ -116,4 +125,87 @@ td {
 		{/if}
 	</tbody>
 </table>
+
+<button id="assignUser">{_g('Assign a User to the Class')}</button>
+
+<div id="addUserDialog" title="{_g('Assign a User to this Class')}">
+	<p>{_g('Please select the User and the Status of the Assignment')}</p>
+<form>
+	<fieldset>
+	<label for="username">{_g('Username')}</label>
+	<input type="text" name="username" id="username" class="text ui-widget-content ui-corner-all" />
+	<label for="status">{_g('Status')}</label>
+		<select name="status" id="status">
+			{foreach $statuses as $status}
+			<option value="{$status.ID}" >
+				{$status.translatedName}
+			</option>
+			{/foreach}
+		</select>
+	</fieldset>
+	</form>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+	$('#username').autocomplete({
+		source: "index.php?module=administrator|System|User|JsSearchForUsername",
+	});
+
+	$('#addUserDialog').dialog({
+		autoOpen: false,
+		height: 300,
+		width: 350,
+		modal: true,
+		buttons: {
+			"{_g('Assign User')}": function() {
+				$.ajax({
+					type: 'POST',
+					url: 'index.php?module=administrator|Kuwasys|KuwasysUsers|AddUserToClass',
+					data: {
+						'username': $('#username').val(),
+						'statusId': $('#status').val(),
+						'classId': {$class.ID}
+					},
+
+					success: function(data) {
+
+						console.log(data);
+
+						try {
+							data = JSON.parse(data);
+						} catch(e) {
+							adminInterface.errorShow(data);
+						}
+
+						if(data.value == 'error') {
+							adminInterface.errorShow(data.message);
+						}
+						else if(data.value == 'success') {
+							adminInterface.successShow(data.message);
+						}
+						else {
+							adminInterface.errorShow("{_g('Could not parse the Serveranswer!')}");
+						}
+					},
+
+					error: function(data) {
+						adminInterface.errorShow("{_g('Could not Assign the User to the Class!')}");
+					}
+				});
+				$(this).dialog('close');
+			},
+			"{{_g('Cancel')}}": function() {
+				$(this).dialog('close');
+			}
+		}
+	});
+
+	$('#assignUser').on('click', function(event) {
+		$('#addUserDialog').dialog('open');
+	});
+});
+</script>
+
 {/block}

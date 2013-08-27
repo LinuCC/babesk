@@ -206,6 +206,13 @@ p.error {
 	border-bottom-right-radius: 10px;
 }
 
+/**
+ * Autocompletion should work in Popups too (Popups having z-Index 100)
+ */
+.ui-autocomplete {
+	z-index: 101;
+}
+
 /* MAIN LAYOUT DIVS
 -------------------------------------------- */
 
