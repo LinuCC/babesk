@@ -126,7 +126,7 @@ td {
 	</tbody>
 </table>
 
-<button id="assignUser">{_g('Assign a User to the Class')}</button>
+<button id="assignUser">{_g("Assign a User to this Class")}</button>
 
 <div id="addUserDialog" title="{_g('Assign a User to this Class')}">
 	<p>{_g('Please select the User and the Status of the Assignment')}</p>
