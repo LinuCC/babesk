@@ -1127,7 +1127,7 @@ class User extends Module {
 					      END WHILE;
 					    END IF;
 					    RETURN c;
-  						END
+  						END;
   						CREATE FUNCTION `levenshtein_ratio`( s1 text, s2 text ) RETURNS int(11)
   						    DETERMINISTIC
   						BEGIN

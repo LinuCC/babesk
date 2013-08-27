@@ -183,7 +183,7 @@ $(document).ready(function() {
 							adminInterface.errorShow(data.message);
 						}
 						else if(data.value == 'success') {
-							adminInterface.successShow(data.message);
+							window.location.reload();
 						}
 						else {
 							adminInterface.errorShow("{_g('Could not parse the Serveranswer!')}");
