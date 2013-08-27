@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
-"POT-Creation-Date: 2013-08-27 03:47+0100\n"
-"PO-Revision-Date: 2013-08-27 03:48+0100\n"
+"POT-Creation-Date: 2013-08-27 12:19+0100\n"
+"PO-Revision-Date: 2013-08-27 12:21+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: Deutsch\n"
@@ -315,66 +315,79 @@ msgstr "Die Klasse wurde erfolgreich verändert"
 msgid "Could not change the Grade!"
 msgstr "Konnte die Klasse nicht verändern!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:126
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:110
+msgid ""
+"The Data was successfully Assigned. You can now go back and view and edit "
+"the temporary changes"
+msgstr ""
+"Die Daten wurden erfolgreich zugewiesen. Sie können jetzt zurückgehen und "
+"die temporären Veränderungen einsehen und bearbeiten."
+
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:128
 #, fuzzy
 msgid "Could not check if the UsersToClasses-Table exists!"
 msgstr "Konnte die Benutzer-In-Klasse-Status nicht ändern!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:145
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:147
 #, fuzzy
 msgid "Could not delete the UsersToClasses-Table!"
 msgstr "Konnte den Kursleiter nicht löschen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:170
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:172
 #, fuzzy
 msgid "Could not create the UsersToClasses-Table!"
 msgstr "Konnte die Kurse nicht abrufen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:191
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:198
 msgid "No Requests of Users found!"
 msgstr "Keine Wünsche der Benutzer gefunden!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:218
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:233
 #, fuzzy
 msgid "Could not newly assign the User to the Class!"
 msgstr "Die Benutzer den Kursen zuordnen"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:222
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:237
 #, fuzzy
 msgid "The User was successfully assigned to the Class."
 msgstr "Der Kurs wurde erfolgreich geändert."
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:245
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:260
 msgid "No User found by the Username!"
 msgstr "Keinen Benutzer bei seinem Benutzernamen gefunden!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:251
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:266
 #, fuzzy
 msgid "Error while fetching the User from the Database!"
 msgstr "Kontne das Schuljahr nicht von der Datenbank abrufen"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:400
-#, fuzzy
-msgid "Could not Shuffle the Requests!"
-msgstr "Konnte die Aufladungen nicht abrufen!"
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:402
+msgid "Error while uploading the Request-Assignments!"
+msgstr ""
+"Ein Fehler ist beim Hochladen der Benutzerwahlen-Zuweisungen aufgetreten!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:433
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:436
 #, fuzzy
 msgid "Error fetching the Choices of the Users!"
 msgstr "Konnte die Schuljahre nicht abrufen"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:460
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:463
 #, fuzzy
 msgid "Could not fetch the StatusIds!"
 msgstr "Konnte den Kurs nicht abrufen"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:483
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:486
 #, php-format
 msgid ""
 "The User-in-Class-Status %1$s is missing! Cannot process the data without it!"
 msgstr ""
 "Der Benutzer-In-Klasse-Status %1$s fehlt! Kann die Daten nicht ohne "
 "verarbeiten!"
+
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:617
+#, fuzzy
+msgid "Could not Shuffle the Requests!"
+msgstr "Konnte die Aufladungen nicht abrufen!"
 
 #: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:100
 msgid "Useraccount is locked!"
@@ -1171,7 +1184,7 @@ msgstr "Konntenicht überprüfen ob du schon Kurse selektiert hast!"
 #: ../../../smarty/templates_c/8d66d1a054b0c89822a7d5a7b45022381d461f62.file.confirmationDialog.tpl.php:115
 #: ../../../smarty/templates_c/69ef1474499747a738f5d4a1531c6368^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/81af9d8a0076e390a700db80fd40b609^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:101
-#: ../../../smarty/templates_c/fab3158d2a06945dfdc78fcd022950cac87fd008.file.mainmenu.tpl.php:135
+#: ../../../smarty/templates_c/fab3158d2a06945dfdc78fcd022950cac87fd008.file.mainmenu.tpl.php:168
 #: ../../../smarty/templates_c/5714db0a103e440b4fe3f335c35f52b92e0e5c80.file.main.tpl.php:112
 #: ../../../smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:126
 #: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:158
@@ -1228,7 +1241,7 @@ msgstr "zurück"
 #: ../../../smarty/templates_c/8d66d1a054b0c89822a7d5a7b45022381d461f62.file.confirmationDialog.tpl.php:120
 #: ../../../smarty/templates_c/69ef1474499747a738f5d4a1531c6368^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/81af9d8a0076e390a700db80fd40b609^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:106
-#: ../../../smarty/templates_c/fab3158d2a06945dfdc78fcd022950cac87fd008.file.mainmenu.tpl.php:140
+#: ../../../smarty/templates_c/fab3158d2a06945dfdc78fcd022950cac87fd008.file.mainmenu.tpl.php:173
 #: ../../../smarty/templates_c/5714db0a103e440b4fe3f335c35f52b92e0e5c80.file.main.tpl.php:117
 #: ../../../smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:131
 #: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:163
@@ -1287,11 +1300,38 @@ msgstr "Mehr Aktionen"
 msgid "Go to the existing Assignment-Process"
 msgstr "Zum existierendend Zuweisungs-Prozess gehen"
 
-#: ../../../smarty/templates_c/fab3158d2a06945dfdc78fcd022950cac87fd008.file.mainmenu.tpl.php:124
+#: ../../../smarty/templates_c/fab3158d2a06945dfdc78fcd022950cac87fd008.file.mainmenu.tpl.php:125
 msgid "Start a new Assignment-Process"
 msgstr ""
 "Einen neuen Zuweisungsprozess starten (Warnung - löscht den alten Prozess, "
 "falls vorhanden)"
+
+#: ../../../smarty/templates_c/fab3158d2a06945dfdc78fcd022950cac87fd008.file.mainmenu.tpl.php:133
+#, fuzzy
+msgid "Really start a new Assignment-Process?"
+msgstr ""
+"Einen neuen Zuweisungsprozess starten (Warnung - löscht den alten Prozess, "
+"falls vorhanden)"
+
+#: ../../../smarty/templates_c/fab3158d2a06945dfdc78fcd022950cac87fd008.file.mainmenu.tpl.php:135
+msgid ""
+"If you have already started an Assignment-Process, the Data will be "
+"inevitably lost. Are you sure?"
+msgstr ""
+"Wenn sie bereits einen Zuweisungsprozess gestarted haben, werden die Daten "
+"verloren gehen. Sind sie sicher?"
+
+#: ../../../smarty/templates_c/fab3158d2a06945dfdc78fcd022950cac87fd008.file.mainmenu.tpl.php:146
+#, fuzzy
+msgid "Start a new Process"
+msgstr ""
+"Einen neuen Zuweisungsprozess starten (Warnung - löscht den alten Prozess, "
+"falls vorhanden)"
+
+#: ../../../smarty/templates_c/fab3158d2a06945dfdc78fcd022950cac87fd008.file.mainmenu.tpl.php:150
+#: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:348
+msgid "Cancel"
+msgstr "Abbrechen"
 
 #: ../../../smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:104
 msgid "Class-Deletion"
@@ -1348,9 +1388,6 @@ msgid "Import Users by a CSV-File"
 msgstr "Benutzer mit einer CSV-Datei importieren"
 
 #: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:263
-msgid "Assign a User to the Class"
-msgstr "Die Benutzer dem Kurs zuordnen"
-
 #: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:266
 msgid "Assign a User to this Class"
 msgstr "Einen Benutzer den Kursen zuordnen"
@@ -1378,10 +1415,6 @@ msgstr "Konne die gegebene Zeitspanne nicht nutzen!!"
 #, fuzzy
 msgid "Could not Assign the User to the Class!"
 msgstr "Die Benutzer den Kursen zuordnen"
-
-#: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:348
-msgid "Cancel"
-msgstr "Abbrechen"
 
 #: ../../../smarty/templates_c/818149c8372c3fa5e5e32c9cd62bc5d894003dc9.file.mainmenu.tpl.php:109
 msgid "Standard Actions"
@@ -1496,6 +1529,9 @@ msgstr "Alle Kursleiter anzeigen"
 #: ../../../smarty/templates_c/f1e802a676a5c76661a9e8298874a95933384924.file.mainmenu.tpl.php:138
 msgid "Import Classteachers by a CSV-file"
 msgstr "Kursleiter mit einer CSV-Datei importieren"
+
+#~ msgid "Assign a User to the Class"
+#~ msgstr "Die Benutzer dem Kurs zuordnen"
 
 #~ msgid "modulepath_root/administrator/Gnissel/ChangePassword"
 #~ msgstr "Passwort ändern"

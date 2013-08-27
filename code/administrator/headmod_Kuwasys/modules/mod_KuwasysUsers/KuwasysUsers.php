@@ -96,7 +96,7 @@ class KuwasysUsers extends Module {
 		}
 	}
 
-	/**------------------------------------------------------------------
+	/*********************************************************************
 	 * Creates the new Assignments from the data and deletes the old, if exists
 	 */
 	protected function assignUsersToClassesResetExecute() {
@@ -106,6 +106,8 @@ class KuwasysUsers extends Module {
 		}
 		$this->assignUsersToClassesTableCreate();
 		$this->assignUsersToClassesTableFill();
+		$this->_smarty->assign('backlink', 'javascript:history.back()');
+		$this->_interface->dieSuccess(_g('The Data was successfully Assigned. You can now go back and view and edit the temporary changes'));
 	}
 
 	/**
@@ -119,7 +121,7 @@ class KuwasysUsers extends Module {
 
 		try {
 			$stmt = $this->_pdo->query(
-				'SHOW TABLES LIKE "TemporaryUsersToClassesAssign";');
+				'SHOW TABLES LIKE "KuwasysTemporaryRequestsAssign";');
 
 		} catch (PDOException $e) {
 			$this->_interface->dieError(
@@ -138,7 +140,7 @@ class KuwasysUsers extends Module {
 	protected function assignUsersToClassesTableDrop() {
 
 		try {
-			$this->_pdo->exec('DROP TABLE TemporaryUsersToClassesAssign');
+			$this->_pdo->exec('DROP TABLE KuwasysTemporaryRequestsAssign');
 
 		} catch (PDOException $e) {
 			$this->_interface->dieError(
@@ -155,7 +157,7 @@ class KuwasysUsers extends Module {
 
 		try {
 			$this->_pdo->exec('CREATE TABLE IF NOT EXISTS
-				`TemporaryUsersToClassesAssign` (
+				`KuwasysTemporaryRequestsAssign` (
 					`userId` int(11) unsigned NOT NULL,
 					`classId` int(11) unsigned NOT NULL,
 					`statusId` int(11) unsigned NOT NULL,
@@ -185,7 +187,12 @@ class KuwasysUsers extends Module {
 		$requests = RequestsOfClass::requestsGet($this->_pdo);
 
 		if(count($requests)) {
-
+			$this->_pdo->beginTransaction();
+			foreach($requests as $request) {
+				$request->usersToClassAssign();
+				$request->assignedDataToTemporaryTable($this->_pdo);
+			}
+			$this->_pdo->commit();
 		}
 		else {
 			$this->_interface->dieError(_g('No Requests of Users found!'));
@@ -200,6 +207,96 @@ class KuwasysUsers extends Module {
 		$this->_smarty->assign('tableExists',
 			$this->assignUsersToClassesTableExists());
 		$this->displayTpl('AssignUsersToClasses/mainmenu.tpl');
+	}
+
+	/*********************************************************************
+	 * Allows the User to view, change and upload the temporary Assignments
+	 */
+	protected function assignUsersToClassesOverviewExecute() {
+
+		$classes = $this->temporaryAssignmentsClassdataGet();
+		$this->_smarty->assign('classes', $classes);
+		$this->displayTpl('AssignUsersToClasses/classlist.tpl');
+	}
+
+	/**
+	 * Fetches the Temporary Assignments Grouped by Classes
+	 *
+	 * @return array  The Classes and some more information
+	 */
+	protected function temporaryAssignmentsClassdataGet() {
+
+		try {
+			$data = $this->_pdo->query('SELECT cu.translatedName AS weekday,
+					COUNT(*) AS usercount, c.label AS classlabel,
+					c.ID AS classId
+				FROM KuwasysTemporaryRequestsAssign ra
+				JOIN class c ON ra.classId = c.ID
+				JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
+				GROUP BY ra.classId ORDER BY cu.ID');
+
+			return $data;
+
+		} catch (PDOException $e) {
+			$this->_interface->dieError(_g('Could not fetch the Temporary Assignments!'));
+		}
+	}
+
+	/*********************************************************************
+	 * Allows the User to view and edit the Requests of one Class
+	 */
+	protected function assignUsersToClassesClassdetailsExecute() {
+
+		$this->_smarty->assign('classId', $_GET['classId']);
+		$this->displayTpl('AssignUsersToClasses/classdetails.tpl');
+	}
+
+	/*********************************************************************
+	 * Allows JS to fill its tables with the Data
+	 */
+	protected function assignUsersToClassesClassdetailsGetExecute() {
+
+		try {
+			$data = $this->temporaryAssignmentsRequestsOfClassGet(
+				$_POST['classId']);
+
+		} catch(PDOException $e) {
+			die(json_encode(array('value' => 'error',
+				'message' => _g('Could not fetch the User-Assignments') . $e->getMessage())));
+		}
+		die(json_encode($data));
+	}
+
+	/**
+	 * Fetches all Userrequests of a Class
+	 *
+	 * @param  int    $classId The ID of the Class
+	 * @return array           The Userrequests
+	 * @throws PDOException If Error happened when fetching the Data
+	 */
+	protected function temporaryAssignmentsRequestsOfClassGet($classId) {
+
+		$stmt = $this->_pdo->prepare(
+			'SELECT IF(ra.statusId <> 0, uics.name, "removed") statusname,
+				ra.statusId AS statusId, ra.classId AS classId,
+				ra.userId AS userId,
+				origuics.name AS origStatusname,
+				CONCAT(u.forename, " ", u.name) AS username,
+				CONCAT(g.gradelevel, "-", g.label) AS grade
+			FROM KuwasysTemporaryRequestsAssign ra
+			JOIN users u ON ra.userId = u.ID
+			LEFT JOIN usersInGradesAndSchoolyears uigsy
+				ON ra.userId = uigsy.userId
+					AND uigsy.schoolyearId = @activeSchoolyear
+			LEFT JOIN Grades g ON uigsy.gradeId = g.ID
+			LEFT JOIN usersInClassStatus uics ON ra.statusId = uics.ID
+			LEFT JOIN usersInClassStatus origuics ON ra.statusId = origuics.ID
+			WHERE ra.classId = :classId
+		');
+
+		$stmt->execute(array('classId' => $classId));
+
+		return $stmt->fetchAll(PDO::FETCH_GROUP);
 	}
 
 	/**=========================================**
@@ -342,8 +439,7 @@ class RequestsOfClass {
 		self::$_statusIds = self::assignUsersToClassesStatusIdsGet($pdo);
 		$requests = self::requestsFromDatabaseGet($pdo);
 		$classRequests = self::requestDataToClasses($requests);
-		$classRequests[2]->usersToClassAssign($classRequests[2]->_primaryRequests);
-		return ;
+		return $classRequests;
 	}
 
 	/**
@@ -351,53 +447,41 @@ class RequestsOfClass {
 	 */
 	public function usersToClassAssign() {
 
+		$this->_changedRequests = array();
+
 		if(!isset(self::$_statusIds)) {
 			self::$_statusIds = self::assignUsersToClassesStatusIdsGet($pdo);
 		}
 
-		$count = count($this->_primaryRequests);
-		var_dump($this->_remainingRegistrations);
-		$this->_remainingRegistrations = 4;
-		if($count > $this->_remainingRegistrations) {
-			$this->requestsOverflowRandomAssignment($this->_primaryRequests);
-		}
-		else {
-			/********************************************************
-			 * NEEEEEEEEEEEEEEEEEEEEDS MOAR HERE
-			 *********************************************************/
-		}
-
-		foreach($this->_primaryRequests as $request) {
-
-		}
+		$this->requestsAssign($this->_primaryRequests);
+		$this->requestsAssign($this->_secondaryRequests);
 	}
 
 	/**
-	 * Assigns Users to the Class at Random
+	 * Uploads the Assigned data to the Database
 	 *
-	 * @param  array  $requests The Requests of one Status
-	 * @return array            The randomized Requests
+	 * Dies displaying a Message on Error
+	 *
+	 * @param  PDO    $pdo The PDO-Object for uploading stuff
 	 */
-	public function requestsOverflowRandomAssignment($requests) {
+	public function assignedDataToTemporaryTable($pdo) {
 
-		if(shuffle($requests)) {
+		try {
+			$stmt = $pdo->prepare(
+				'INSERT INTO KuwasysTemporaryRequestsAssign
+				(`userId`, `classId`, `statusId`, `origUserId`, `origClassId`,
+					`origStatusId`) VALUES
+				(:userId, :classId, :statusId, :userId, :classId,
+					:statusId);
+			');
 
-			$active = array_slice(
-				$requests, 0, $this->_remainingRegistrations, true);
-			$active = $this->statusIdOfRequestsChangeTo(
-				self::$_statusIds['active'], $active);
+			foreach($this->_changedRequests as $request) {
+				$stmt->execute($request);
+			}
 
-			//leftover users go to the waiting-list
-			$waiting = array_slice(
-				$requests, $this->_remainingRegistrations, NULL, true);
-			$waiting = $this->statusIdOfRequestsChangeTo(
-				self::$_statusIds['waiting'], $waiting);
-
-			$this->_changedRequests = array_merge($active, $waiting);
-			$this->_remainingRegistrations -= count($randRequests);
-		}
-		else {
-			$this->_interface->dieError(_g('Could not Shuffle the Requests!'));
+		} catch (PDOException $e) {
+			$this->_interface->dieError(
+				_g('Error while uploading the Request-Assignments!'));
 		}
 	}
 
@@ -416,7 +500,8 @@ class RequestsOfClass {
 			$statusIds = self::$_statusIds;
 
 			$stmt = $pdo->query(
-				"SELECT uic.*, c.maxRegistration AS maxRegistration
+				"SELECT uic.ClassID AS classId,uic.statusId AS statusId,
+					uic.UserID AS userId, c.maxRegistration AS maxRegistration
 				FROM jointUsersInClass uic
 				JOIN class c ON uic.ClassID = c.ID
 				WHERE c.schoolyearId = @activeSchoolyear
@@ -497,11 +582,11 @@ class RequestsOfClass {
 		foreach($data as $request) {
 
 			if($class = self::classGetById(
-				$request['ClassID'], $classesRequests)) {
+				$request['classId'], $classesRequests)) {
 				$class->requestAdd($request);
 			}
 			else {
-				$class = new RequestsOfClass($request['ClassID']);
+				$class = new RequestsOfClass($request['classId']);
 				$class->requestAdd($request);
 				$classesRequests[] = $class;
 			}
@@ -565,6 +650,57 @@ class RequestsOfClass {
 	}
 
 	/**
+	 * Assigns the Given Userrequests either as Waiting or Active
+	 *
+	 * @param  array  $requests The Requests to assign
+	 */
+	protected function requestsAssign($requests) {
+
+		if(count($requests) > 0) {
+			if(count($requests) > $this->_remainingRegistrations) {
+				$this->requestsOverflowRandomAssignment($requests);
+			}
+			else {
+				$this->requestsAllAssignableAssignment($requests);
+			}
+		}
+	}
+
+	/**
+	 * Assigns Users to the Class at Random
+	 *
+	 * @param  array  $requests The Requests of one Status
+	 * @return array            The randomized Requests
+	 */
+	protected function requestsOverflowRandomAssignment($requests) {
+
+		$active = array();
+		$waiting = array();
+
+		if(shuffle($requests)) {
+
+			$active = array_slice(
+				$requests, 0, $this->_remainingRegistrations, true);
+			$active = $this->statusIdOfRequestsChangeTo(
+				self::$_statusIds['active'], $active);
+
+			//leftover users go to the waiting-list
+			$waiting = array_slice(
+				$requests, $this->_remainingRegistrations, NULL, true);
+			$waiting = $this->statusIdOfRequestsChangeTo(
+				self::$_statusIds['waiting'], $waiting);
+
+			$this->_changedRequests = array_merge(
+				$this->_changedRequests, $active, $waiting);
+
+			$this->_remainingRegistrations -= count($active);
+		}
+		else {
+			$this->_interface->dieError(_g('Could not Shuffle the Requests!'));
+		}
+	}
+
+	/**
 	 * Changes the StatusIds of all the given Requests
 	 *
 	 * @param  int    $statusId The Status-ID to change to
@@ -574,11 +710,27 @@ class RequestsOfClass {
 	 */
 	protected function statusIdOfRequestsChangeTo($statusId, $requests) {
 
-		foreach($requests as $request) {
+		foreach($requests as &$request) {
 			$request['statusId'] = $statusId;
 		}
 
 		return $requests;
+	}
+
+	/**
+	 * Assigns all of the Requests to the Class as active
+	 *
+	 * Subtracts the Count of the Assigned Requests from remainingRegistrations
+	 *
+	 * @param  array  $requests The Requests to add
+	 */
+	protected function requestsAllAssignableAssignment($requests) {
+
+		$active = $this->statusIdOfRequestsChangeTo(
+			self::$_statusIds['active'], $requests);
+		$this->_changedRequests = array_merge(
+			$this->_changedRequests, $active);
+		$this->_remainingRegistrations -= count($active);
 	}
 
 	/////////////////////////////////////////////////////////////////////

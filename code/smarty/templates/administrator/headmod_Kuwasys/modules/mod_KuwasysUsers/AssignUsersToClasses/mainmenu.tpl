@@ -10,14 +10,15 @@
 
 		{if $tableExists}
 		<li>
-			<a href="index.php?module=administrator|Kuwasys|KuwasysUsers|AssignUsersToClasses|Reset">
+			<a href="index.php?module=administrator|Kuwasys|KuwasysUsers|AssignUsersToClasses|Overview">
 				{_g('Go to the existing Assignment-Process')}
 			</a>
 		</li>
 		{/if}
 
 		<li>
-			<a href="index.php?module=administrator|Kuwasys|KuwasysUsers|AssignUsersToClasses|Reset">
+			<a id="resetAssignment"
+			href="#">
 				{_g('Start a new Assignment-Process')}
 			</a>
 		</li>
@@ -25,4 +26,9 @@
 	</ul>
 </fieldset>
 
+<div id="confirmReset" title="{_g('Really start a new Assignment-Process?')}">
+  <p>{_g('If you have already started an Assignment-Process, the Data will be inevitably lost. Are you sure?')}</p>
+</div>
+<script src="../smarty/templates/administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/mainmenu.js">
+</script>
 {/block}
