@@ -1,6 +1,6 @@
 {extends file=$inh_path}{block name="content"}
 
-<h2 class="moduleHeader">Klassenübersicht über temporäre Zuweisungen</h2>
+<h2 class="moduleHeader">Kursübersicht über temporäre Zuweisungen</h2>
 
 <table class="dataTable">
 	<tr>

@@ -20,8 +20,28 @@ $(document).ready(function() {
 		}
 	});
 
+	$('#confirmAssignment').dialog({
+		modal: true,
+		autoOpen: false,
+		width:400,
+		buttons: {
+			"Zuweisungen durchführen": function() {
+				window.location.href = 'index.php?module=administrator|Kuwasys|KuwasysUsers|AssignUsersToClasses|ApplyChanges';
+			},
+			"Abbrechen": function() {
+
+				$(this).dialog('close');
+			}
+		}
+	});
+
 	$('#resetAssignment').on('click', function(event) {
 		event.preventDefault();
 		$('#confirmReset').dialog('open');
+	});
+
+	$('#applyAssignment').on('click', function(event) {
+		event.preventDefault();
+		$('#confirmAssignment').dialog('open');
 	});
 });

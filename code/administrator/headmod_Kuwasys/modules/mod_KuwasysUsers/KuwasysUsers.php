@@ -216,6 +216,7 @@ class KuwasysUsers extends Module {
 
 		$classes = $this->temporaryAssignmentsClassdataGet();
 		$this->_smarty->assign('classes', $classes);
+		$this->assignUsersToClassesSetHeader();
 		$this->displayTpl('AssignUsersToClasses/classlist.tpl');
 	}
 
@@ -228,7 +229,10 @@ class KuwasysUsers extends Module {
 
 		try {
 			$data = $this->_pdo->query('SELECT cu.translatedName AS weekday,
-					COUNT(*) AS usercount, c.label AS classlabel,
+					COUNT(*) - (
+						SELECT COUNT(*) FROM KuwasysTemporaryRequestsAssign rad
+						WHERE ra.classId = rad.classId AND rad.statusId = 0
+					) AS usercount, c.label AS classlabel,
 					c.ID AS classId
 				FROM KuwasysTemporaryRequestsAssign ra
 				JOIN class c ON ra.classId = c.ID
@@ -247,7 +251,12 @@ class KuwasysUsers extends Module {
 	 */
 	protected function assignUsersToClassesClassdetailsExecute() {
 
+		$class = $this->classGet($_GET['classId']);
+		$classes = $this->classesGetAllOfActiveSchoolyear();
+		$this->assignUsersToClassesSetHeader();
 		$this->_smarty->assign('classId', $_GET['classId']);
+		$this->_smarty->assign('class', $class);
+		$this->_smarty->assign('classes', $classes);
 		$this->displayTpl('AssignUsersToClasses/classdetails.tpl');
 	}
 
@@ -264,6 +273,7 @@ class KuwasysUsers extends Module {
 			die(json_encode(array('value' => 'error',
 				'message' => _g('Could not fetch the User-Assignments') . $e->getMessage())));
 		}
+
 		die(json_encode($data));
 	}
 
@@ -280,7 +290,7 @@ class KuwasysUsers extends Module {
 			'SELECT IF(ra.statusId <> 0, uics.name, "removed") statusname,
 				ra.statusId AS statusId, ra.classId AS classId,
 				ra.userId AS userId,
-				origuics.name AS origStatusname,
+				IF(origuics.ID, origuics.translatedName, "N/A") AS origStatusname,
 				CONCAT(u.forename, " ", u.name) AS username,
 				CONCAT(g.gradelevel, "-", g.label) AS grade
 			FROM KuwasysTemporaryRequestsAssign ra
@@ -290,13 +300,238 @@ class KuwasysUsers extends Module {
 					AND uigsy.schoolyearId = @activeSchoolyear
 			LEFT JOIN Grades g ON uigsy.gradeId = g.ID
 			LEFT JOIN usersInClassStatus uics ON ra.statusId = uics.ID
-			LEFT JOIN usersInClassStatus origuics ON ra.statusId = origuics.ID
+			LEFT JOIN usersInClassStatus origuics
+				ON ra.origStatusId = origuics.ID
 			WHERE ra.classId = :classId
 		');
 
 		$stmt->execute(array('classId' => $classId));
 
 		return $stmt->fetchAll(PDO::FETCH_GROUP);
+	}
+
+	/**
+	 * Fetches a Class from the Database
+	 *
+	 * @param  int    $classId The ID of the Class to fetch
+	 * @return array           The Class-Data
+	 */
+	protected function classGet($classId) {
+
+		try {
+			$stmt = $this->_pdo->prepare('SELECT * FROM class
+				WHERE ID = :classId');
+
+			$stmt->execute(array('classId' => $classId));
+			return $stmt->fetch();
+
+		} catch (PDOException $e) {
+			die(json_encode(array('value' => 'error',
+				'message' => _g('Could not fetch the Class'))));
+		}
+	}
+
+	/*********************************************************************
+	 * Allows the Admin to change the Status of UserToClass-Assignments
+	 */
+	protected function assignUsersToClassesChangeStatusOfUserExecute() {
+
+		try {
+			$statusId = ($_POST['statusname'] != 'removed') ?
+				$this->statusIdGetByName($_POST['statusname']) : 0;
+
+		} catch (PDOException $e) {
+			die(json_encode(array('value' => 'error',
+				'message' => _g('Could not fetch the Status'))));
+		}
+
+		$this->temporaryRequestChangeStatus($_POST['userId'],
+			$_POST['classId'], $statusId);
+
+		die(json_encode(array('value' => 'success',
+			'message' => _g('The Status of the User was successfully changed')
+		)));
+	}
+
+	/**
+	 * Changes the Status of a Temporary Request Entry
+	 *
+	 * Dies with Json on Error
+	 */
+	protected function temporaryRequestChangeStatus(
+		$userId, $classId, $statusId) {
+
+		try {
+			$stmt = $this->_pdo->prepare('UPDATE KuwasysTemporaryRequestsAssign
+				SET statusId = :statusId
+				WHERE classId = :classId AND userId = :userId');
+
+			$stmt->execute(array(
+				'statusId' => $statusId,
+				'classId' => $classId,
+				'userId' => $userId
+			));
+
+		} catch (PDOException $e) {
+			die(json_encode(array('value' => 'error',
+				'message' => _g('Could not change the Status of the User'))));
+		}
+	}
+
+	/**
+	 * Fetches the Status with the given Name
+	 *
+	 * Returns false if Status not found
+	 *
+	 * @param  string $statusName The Name of the Status to fetch
+	 * @return array              The Fetched data of the Status
+	 * @throws PDOException If Status could not be fetched
+	 */
+	protected function statusIdGetByName($statusName) {
+
+		$stmt = $this->_pdo->prepare('SELECT ID FROM usersInClassStatus
+			WHERE name = :name');
+
+		$stmt->execute(array('name' => $statusName));
+
+		return $stmt->fetchColumn();
+	}
+
+	/*********************************************************************
+	 * Allows the Admin to change the Class of a UserToClass-Assignment
+	 */
+	protected function assignUsersToClassesChangeClassOfUserExecute() {
+
+		try {
+			$stmt = $this->_pdo->prepare('UPDATE KuwasysTemporaryRequestsAssign
+				SET classId = :newClassId
+				WHERE userId = :userId AND classId = :classId');
+
+			$stmt->execute(array(
+				'userId' => $_POST['userId'],
+				'classId' => $_POST['classId'],
+				'newClassId' => $_POST['newClassId']
+			));
+
+		} catch (PDOException $e) {
+			die(json_encode(array('value' => 'error',
+				'message' => _g('Could not move the User to the other Class!')
+			)));
+		}
+
+		die(json_encode(array('value' => 'success',
+			'message' => _g('The User was successfully moved.'))));
+	}
+
+	/**
+	 * Fetches all Classes that are in the active Schoolyear
+	 *
+	 * Dies displaying a Message on Error
+	 *
+	 * @return array  The Classes
+	 */
+	protected function classesGetAllOfActiveSchoolyear() {
+
+		try {
+			$classes = $this->_pdo->query('SELECT * FROM class
+				WHERE schoolyearId = @activeSchoolyear');
+
+			return $classes;
+
+		} catch (PDOException $e) {
+			$this->_interface->dieError(
+				_g('Could not fetch the User-Assignments'));
+		}
+	}
+
+	/**
+	 * Sets the Header of the Templates to allow the User a better overview
+	 */
+	protected function assignUsersToClassesSetHeader() {
+
+		$siteHeaderPath = $this->_smartyModuleTemplatesPath .
+			'AssignUsersToClasses/header.tpl';
+		$this->_smarty->assign('inh_path', $siteHeaderPath);
+	}
+
+	/*********************************************************************
+	 * Allows the Admin to Add a User to the Class to the Temp-Table
+	 */
+	protected function assignUsersToClassesAddUserToClassExecute() {
+
+		$userId = $this->userIdGetByUsername($_POST['username']);
+		$statusId = $this->statusIdGetByName($_POST['statusname']);
+
+		try {
+			$stmt = $this->_pdo->prepare(
+				'INSERT INTO KuwasysTemporaryRequestsAssign
+				(userId, classId, statusId, origUserId, origClassId, origStatusId) VALUES
+				(:userId, :classId, :statusId, 0, 0, 0)');
+
+			$stmt->execute(array(
+				'userId' => $userId,
+				'classId' => $_POST['classId'],
+				'statusId' => $statusId,
+			));
+
+		} catch (PDOException $e) {
+			die(json_encode(array('value' => 'error',
+				'message' => _g('Could not add the User to the Class'))));
+		}
+
+		die(json_encode(array('value' => 'success',
+			'message' => _g('The User was successfully added'))));
+	}
+
+	/*********************************************************************
+	 * This Submodule applys the changes temp. made to the UsersInClass-Table
+	 */
+	protected function assignUsersToClassesApplyChangesExecute() {
+
+		$this->_pdo->beginTransaction();
+		$this->usersInClassJointDeleteByNewAssignments();
+		$this->newAssignmentsAddToJoints();
+		// $this->assignUsersToClassesTableDrop();
+		$this->_pdo->commit();
+	}
+
+	/**
+	 * Deletes all UsersInClass-Joints which got changed by the new Assignments
+	 *
+	 * Dies displaying a Message on Error
+	 */
+	protected function usersInClassJointDeleteByNewAssignments() {
+
+		try {
+			$this->_pdo->exec('DELETE uic.* FROM jointUsersInClass_ uic
+				JOIN KuwasysTemporaryRequestsAssign ra
+					ON uic.ClassID = ra.origClassId
+						AND uic.userId = ra.origUserId');
+
+		} catch (PDOException $e) {
+			$this->_interface->dieError(
+				_g('Could not delete the old Joints!'));
+		}
+	}
+
+	/**
+	 * Adds the temporary assignments to the jointUsersInClass-Table
+	 *
+	 * Dies displaying a Message on Error.
+	 * Only Entries with an StatusId that is not Zero will be added.
+	 */
+	protected function newAssignmentsAddToJoints() {
+
+		try {
+			$this->_pdo->exec('INSERT INTO jointUsersInClass_
+				(UserID, ClassID, statusId)
+				SELECT userId, classId, statusId
+					FROM KuwasysTemporaryRequestsAssign re
+					WHERE statusId <> 0');
+
+		} catch (PDOException $e) {
+			$this->_interface->dieError(_g('Could not add the new Joints!') . $e->getMessage());
+		}
 	}
 
 	/**=========================================**
@@ -466,22 +701,16 @@ class RequestsOfClass {
 	 */
 	public function assignedDataToTemporaryTable($pdo) {
 
-		try {
-			$stmt = $pdo->prepare(
-				'INSERT INTO KuwasysTemporaryRequestsAssign
-				(`userId`, `classId`, `statusId`, `origUserId`, `origClassId`,
-					`origStatusId`) VALUES
-				(:userId, :classId, :statusId, :userId, :classId,
-					:statusId);
-			');
+		$stmt = $pdo->prepare(
+			'INSERT INTO KuwasysTemporaryRequestsAssign
+			(`userId`, `classId`, `statusId`, `origUserId`, `origClassId`,
+				`origStatusId`) VALUES
+			(:userId, :classId, :statusId, :userId, :classId,
+				:origStatusId);
+		');
 
-			foreach($this->_changedRequests as $request) {
-				$stmt->execute($request);
-			}
-
-		} catch (PDOException $e) {
-			$this->_interface->dieError(
-				_g('Error while uploading the Request-Assignments!'));
+		foreach($this->_changedRequests as $request) {
+			$stmt->execute($request);
 		}
 	}
 
@@ -711,6 +940,7 @@ class RequestsOfClass {
 	protected function statusIdOfRequestsChangeTo($statusId, $requests) {
 
 		foreach($requests as &$request) {
+			$request['origStatusId'] = $request['statusId'];
 			$request['statusId'] = $statusId;
 		}
 

@@ -26,7 +26,7 @@
 		<li>
 			<a class="submodulelink" href="index.php?module=administrator|Kuwasys|KuwasysUsers|AssignUsersToClasses"
 			title="{_g('Here you can assign the Users that submitted requests to Classes of the active Year')}">
-				{_g('Assign the Users to Classes')}
+				{_g('Assign the Users to the Classes')}
 			</a>
 		</li>
 	</ul>
