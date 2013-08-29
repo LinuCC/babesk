@@ -213,6 +213,18 @@ p.error {
 	z-index: 101;
 }
 
+/**
+ * Better look for Popup-Formulars
+ */
+.ui-dialog input, .ui-dialog label, .ui-dialog select {
+	display: block;
+	width: 95%;
+}
+
+#addUserDialog label {
+	font-size: 80%;
+}
+
 /* MAIN LAYOUT DIVS
 -------------------------------------------- */
 

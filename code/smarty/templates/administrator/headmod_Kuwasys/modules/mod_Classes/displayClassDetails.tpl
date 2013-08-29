@@ -14,15 +14,6 @@ td {
 	text-align: center;
 }
 
-#addUserDialog input, #addUserDialog label, #addUserDialog select {
-	display: block;
-	width: 95%;
-}
-
-#addUserDialog label {
-	font-size: 80%;
-}
-
 </style>
 {/literal}
 

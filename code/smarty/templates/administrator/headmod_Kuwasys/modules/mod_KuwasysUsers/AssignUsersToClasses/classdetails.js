@@ -73,6 +73,7 @@ $(document).ready(function() {
 				'classId': classId
 			},
 			success: function(res) {
+				console.log(res);
 				try {
 					var data = JSON.parse(res);
 				} catch(e) {
@@ -96,8 +97,10 @@ $(document).ready(function() {
 				container.append(
 					'<tr><td>' + request.username + '</td><td>' +
 					request.grade + '</td><td>' + request.origStatusname +
-					'</td><td>\
-					<a class="moveStatus" userId="' + request.userId +
+					'</td><td><a href="index.php?module=administrator|Kuwasys|KuwasysUsers|AssignUsersToClasses|Classdetails&classId='+
+					request.otherClassId +'">' +
+					request.otherClassLabel + '</a></td><td>' +
+					'<a class="moveStatus" userId="' + request.userId +
 					'" href="#">Status verändern</a>\
 					<a class="moveClass" userId="' + request.userId +
 					'" href="#">Kurs verändern</a>\
@@ -114,6 +117,7 @@ $(document).ready(function() {
 			<th>Name</th>\
 			<th>Klasse</th>\
 			<th>Wahlstatus</th>\
+			<th>Anderer Kurs desselben Tages</th>\
 			<th>Optionen</th>\
 			</tr>'
 			);

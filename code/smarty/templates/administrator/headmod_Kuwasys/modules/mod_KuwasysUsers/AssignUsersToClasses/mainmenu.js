@@ -27,6 +27,7 @@ $(document).ready(function() {
 		buttons: {
 			"Zuweisungen durchführen": function() {
 				window.location.href = 'index.php?module=administrator|Kuwasys|KuwasysUsers|AssignUsersToClasses|ApplyChanges';
+				$(this).dialog('close');
 			},
 			"Abbrechen": function() {
 

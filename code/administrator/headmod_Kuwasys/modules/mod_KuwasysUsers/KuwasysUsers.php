@@ -69,6 +69,9 @@ class KuwasysUsers extends Module {
 	 */
 	protected function mainMenu() {
 
+		$grades = $this->gradesGetAll();
+		$this->_smarty->assign('grades', ArrayFunctions::arrayColumn(
+			$grades, 'gradename', 'ID'));
 		$this->displayTpl('mainmenu.tpl');
 	}
 
@@ -77,7 +80,54 @@ class KuwasysUsers extends Module {
 	 **====================================================**/
 	protected function submodulePrintParticipationConfirmationExecute() {
 
+		/**
+		 * @todo  this is old and outdated stuff, rework it
+		 */
+		require_once 'KuwasysUsersCreateParticipationConfirmation.php';
+
+		$gradeId = $_GET['gradeId'];
+		$query = "SELECT u.ID as userId
+			FROM users u
+				JOIN usersInGradesAndSchoolyears uigsy ON uigsy.UserID = u.ID
+			WHERE uigsy.schoolyearId = @activeSchoolyear AND
+				uigsy.gradeId = {$gradeId}
+			";
+		try {
+			$data = TableMng::query ($query);
+		} catch (MySQLVoidDataException $e) {
+			$this->_interface->dieError ('Es wurden keine Schüler gefunden, für die man die Dokumente hätte drucken können');
+		} catch (Exception $e) {
+			$this->_interface->dieError ('konnte die Daten der Schüler nicht abrufen' . $e->getMessage ());
+		}
+		$userIds = array ();
+		foreach ($data as $row) {
+			$userIds [] = $row ['userId'];
+		}
+		KuwasysUsersCreateParticipationConfirmationPdf::init ($this->_interface);
+		KuwasysUsersCreateParticipationConfirmationPdf::execute ($userIds);
+
 		$this->_interface->dieError('Modul wird momentan überarbeitet...');
+	}
+
+	/**
+	 * Fetches all Grades in the Database
+	 *
+	 * Dies displaying a Message on Error
+	 *
+	 * @return array The Grades
+	 */
+	protected function gradesGetAll() {
+
+		try {
+			$stmt = $this->_pdo->query(
+				'SELECT *, CONCAT(gradelevel, "-", label) AS gradename
+				FROM Grades');
+
+			return $stmt->fetchAll();
+
+		} catch (PDOException $e) {
+			$this->_interface->dieError(_g('Could not fetch the Grades') . $e->getMessage());
+		}
 	}
 
 	/**==========================================**
@@ -231,7 +281,7 @@ class KuwasysUsers extends Module {
 			$data = $this->_pdo->query('SELECT cu.translatedName AS weekday,
 					COUNT(*) - (
 						SELECT COUNT(*) FROM KuwasysTemporaryRequestsAssign rad
-						WHERE ra.classId = rad.classId AND rad.statusId = 0
+						WHERE ra.classId = rad.classId AND (rad.statusId = 0 OR rad.statusId = 2)
 					) AS usercount, c.label AS classlabel,
 					c.ID AS classId
 				FROM KuwasysTemporaryRequestsAssign ra
@@ -292,7 +342,17 @@ class KuwasysUsers extends Module {
 				ra.userId AS userId,
 				IF(origuics.ID, origuics.translatedName, "N/A") AS origStatusname,
 				CONCAT(u.forename, " ", u.name) AS username,
-				CONCAT(g.gradelevel, "-", g.label) AS grade
+				CONCAT(g.gradelevel, "-", g.label) AS grade,
+				(SELECT c2.ID FROM class c2
+					JOIN KuwasysTemporaryRequestsAssign ra2
+						ON ra2.classId = c2.ID
+					WHERE c2.unitId = c.unitId AND ra2.userId = ra.userId AND ra2.classId <> ra.classId
+				) AS otherClassId,
+			(SELECT c2.label FROM class c2
+				JOIN KuwasysTemporaryRequestsAssign ra2
+					ON ra2.classId = c2.ID
+				WHERE c2.unitId = c.unitId AND ra2.userId = ra.userId AND ra2.classId <> ra.classId
+			) AS otherClassLabel
 			FROM KuwasysTemporaryRequestsAssign ra
 			JOIN users u ON ra.userId = u.ID
 			LEFT JOIN usersInGradesAndSchoolyears uigsy
@@ -300,6 +360,7 @@ class KuwasysUsers extends Module {
 					AND uigsy.schoolyearId = @activeSchoolyear
 			LEFT JOIN Grades g ON uigsy.gradeId = g.ID
 			LEFT JOIN usersInClassStatus uics ON ra.statusId = uics.ID
+			LEFT JOIN class c ON ra.classId = c.ID
 			LEFT JOIN usersInClassStatus origuics
 				ON ra.origStatusId = origuics.ID
 			WHERE ra.classId = :classId
@@ -491,8 +552,21 @@ class KuwasysUsers extends Module {
 		$this->_pdo->beginTransaction();
 		$this->usersInClassJointDeleteByNewAssignments();
 		$this->newAssignmentsAddToJoints();
+		$this->assignUsersToClassesParticipationConfirmation();
 		// $this->assignUsersToClassesTableDrop();
 		$this->_pdo->commit();
+		$this->assignUsersToClassesParticipationConfirmation();
+	}
+
+	/**
+	 * Lets the Admin Download Participation Confirmations for the Assignments
+	 */
+	protected function assignUsersToClassesParticipationConfirmation() {
+
+		require_once 'AssignUsersInClassParticipationConfirmation.php';
+
+		AssignUsersInClassParticipationConfirmation::init($this->_interface);
+		AssignUsersInClassParticipationConfirmation::execute(NULL);
 	}
 
 	/**
@@ -503,7 +577,7 @@ class KuwasysUsers extends Module {
 	protected function usersInClassJointDeleteByNewAssignments() {
 
 		try {
-			$this->_pdo->exec('DELETE uic.* FROM jointUsersInClass_ uic
+			$this->_pdo->exec('DELETE uic.* FROM jointUsersInClass uic
 				JOIN KuwasysTemporaryRequestsAssign ra
 					ON uic.ClassID = ra.origClassId
 						AND uic.userId = ra.origUserId');
@@ -523,7 +597,7 @@ class KuwasysUsers extends Module {
 	protected function newAssignmentsAddToJoints() {
 
 		try {
-			$this->_pdo->exec('INSERT INTO jointUsersInClass_
+			$this->_pdo->exec('INSERT INTO jointUsersInClass
 				(UserID, ClassID, statusId)
 				SELECT userId, classId, statusId
 					FROM KuwasysTemporaryRequestsAssign re
@@ -1008,6 +1082,7 @@ class RequestsOfClass {
 	 * @var array
 	 */
 	protected $_changedRequests;
+
 }
 
 ?>

@@ -1,45 +1,26 @@
 <?php
 
-class CreateParticipationConfirmation {
-
-	/////////////////////////////////////////////////////////////////////
-	//Constructor
-	/////////////////////////////////////////////////////////////////////
-
-	public static function init ($interface, $pdfFilename = 'userConfirmations.pdf') {
-		self::$_interface = $interface;
-		self::$_pdfFilename = $pdfFilename;
-	}
+class KuwasysUsersCreateParticipationConfirmationPdf {
 
 	/////////////////////////////////////////////////////////////////////
 	//Methods
 	/////////////////////////////////////////////////////////////////////
 
-	/**
-	 * Creates the participation-confirmations for each user
-	 * @return array(CpcUsers) multiple Objects; each one represents one user
-	 * with the PDF-File.
-	 */
-	public static function create ($userIds) {
-		if (count ($userIds)) {
-			$data = self::dataFetch ($userIds);
-			self::usersFill ($data);
-			self::pdfCreate ();
-			return self::$_users;
-		}
-		else {
-			throw new Exception ('No userIds given');
-		}
+	public static function init ($interface) {
+		self::$_interface = $interface;
 	}
 
+	public static function execute ($userIds) {
+		$data = self::dataFetch ($userIds);
+		self::usersFill ($data);
+		$pdfPaths = self::pdfCreate ();
+		self::pdfCombineAndOut ($pdfPaths);
+	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
 
-	/**
-	 * Fetches the data for the users allowing to create the PDFs
-	 */
 	protected static function dataFetch ($userIds) {
 		$whereQuery = '';
 		foreach ($userIds as $uid) {
@@ -53,24 +34,25 @@ class CreateParticipationConfirmation {
 				c.label AS classLabel,
 				cu.name AS unitName, cu.translatedName AS unitTranslatedName,
 				uics.translatedName AS statusTranslatedName,
-				CONCAT(g.gradelevel, g.label) AS gradeName
+				CONCAT(g.gradelevel, g.label) AS gradeName,
+				IF(c.ID, CONCAT(u.ID, "-", c.ID), CONCAT(u.ID, "-")) AS grouper
 			FROM users u
 				JOIN usersInGradesAndSchoolyears uigs ON uigs.userId = u.ID
-					AND uigs.schoolyearId = @activeSchoolyear
-				JOIN schoolYear sy ON sy.ID = uigs.schoolyearId
-				JOIN jointUsersInClass uic ON u.ID = uic.UserID
-				JOIN usersInClassStatus uics ON uics.ID = uic.statusId
-				JOIN class c ON c.ID = uic.ClassID
+				JOIN schoolYear sy ON sy.ID = uigs.SchoolYearID
+				LEFT JOIN jointUsersInClass uic ON u.ID = uic.UserID
+				LEFT JOIN usersInClassStatus uics ON uics.ID = uic.statusId
+				LEFT JOIN class c ON c.ID = uic.ClassID AND c.schoolyearId = @activeSchoolyear
 				LEFT JOIN Grades g ON g.ID = uigs.gradeId
 				LEFT JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
-			WHERE (%s) AND (uics.name = "active" OR uics.name = "waiting")
-			AND c.schoolyearId = @activeSchoolyear
+			WHERE (%s)
+				AND uigs.schoolyearId = @activeSchoolyear
+				GROUP BY grouper
 			;', $whereQuery);
 
 		try {
 			$data = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {
-			self::$_interface->dieError ('Es konnten keine Dokumente erstellt werden; Möglicherweise hat sich keiner der Schüler angemeldet');
+			self::$_interface->dieError ('Es wurden keine Schüler gefunden, für die man die Dokumente hätte drucken können');
 		} catch (Exception $e) {
 			self::$_interface->dieError ('konnte die Daten der Schüler nicht abrufen' . $e->getMessage ());
 		}
@@ -80,9 +62,11 @@ class CreateParticipationConfirmation {
 	protected static function usersFill ($data) {
 		foreach ($data as $row) {
 			if (!$user = self::usersHas ($row ['userId'])) {
-				$user = new CpcUser ($row ['userId'], $row ['userFullname'],
+				$user = new UcpcPdfUser ($row ['userId'], $row ['userFullname'],
 					$row ['schoolyear'], $row ['gradeName']);
-				$user->addClass ($row ['classLabel'], $row ['unitName'], $row ['unitTranslatedName'], $row ['statusTranslatedName']);
+				if(!empty($row ['classLabel'])) {
+					$user->addClass ($row ['classLabel'], $row ['unitName'], $row ['unitTranslatedName'], $row ['statusTranslatedName']);
+				}
 				self::$_users [] = $user;
 			}
 			else {
@@ -104,10 +88,11 @@ class CreateParticipationConfirmation {
 
 	protected static function pdfCreate () {
 		require_once PATH_INCLUDE . '/pdf/HtmlToPdfImporter.php';
-		$confTemplatePath = PATH_INCLUDE . '/pdf/printTemplates/printTemplateTest.html';
+		$pdfPaths = array ();
+		$confTemplatePath = PATH_INCLUDE . '/pdf/printTemplates/KuwasysParticipationConfirmation.html';
 		if(!file_exists($confTemplatePath))
 			$this->_interface->dieError($this->_languageManager->getText('errorPdfHtmlTemplateMissing') . $confTemplatePath);
-		foreach (self::$_users as &$user) {
+		foreach (self::$_users as $user) {
 			$pdf = new HtmlToPdfImporter ();
 			$pdf->htmlImport ($confTemplatePath, true);
 			$pdf->tempVarReplaceInHtml('fullname', $user->fullname, '#!%s#!');
@@ -116,21 +101,38 @@ class CreateParticipationConfirmation {
 			$pdf->tempVarReplaceInHtml('classList',
 				self::pdfClassListCreate ($user), '#!%s#!');
 			$pdf->htmlToPdfConvert();
-			$user->participationConfirmationPath = $pdf->pdfSaveTemporaryAndGetFilename ();
+			$pdfPaths [] = $pdf->pdfSaveTemporaryAndGetFilename ();
 		}
+		return $pdfPaths;
 	}
 
 	protected static function pdfClassListCreate ($user) {
-		$str = '<ul>';
-		foreach ($user->classes as $unitTranslatedName => $unit) {
-			$str .= sprintf ('<li>%s:<br /><ul>', $unitTranslatedName);
-			foreach ($unit as $class) {
-				$str .= sprintf ('<li>%s (%s)</li>', $class->label, $class->statusTranslatedName);
+		if(count($user->classes)) {
+			$str = '<ul>';
+			foreach ($user->classes as $unitTranslatedName => $unit) {
+				$str .= sprintf ('<li>%s:<br /><ul>', $unitTranslatedName);
+				foreach ($unit as $class) {
+					$str .= sprintf ('<li>%s (%s)<p style="font-size:70%%">Unterschrift Kursleiter, Anmeldung zur Kenntnis genommen:_________________________________________</p></li>', $class->label, $class->statusTranslatedName);
+				}
+				$str .= '</ul>';
 			}
 			$str .= '</ul>';
 		}
-		$str .= '</ul>';
+		else {
+			$str = 'Dir wurden leider keine Kurse zugewiesen.';
+		}
 		return $str;
+	}
+
+	protected static function pdfCombineAndOut ($pdfPaths) {
+		require_once PATH_INCLUDE . '/pdf/joinMultiplePdf.php';
+		$pdfCombiner = new joinMultiplePdf ();
+		foreach ($pdfPaths as $tmpPath) {
+			$pdfCombiner->pdfAdd ($tmpPath);
+		}
+		$pdfCombiner->pdfCombine ();
+		$pdfCombiner->pdfCombinedProvideAsDownload (self::$_pdfFilename);
+		$pdfCombiner->pdfTempDirClean ();
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -141,13 +143,12 @@ class CreateParticipationConfirmation {
 
 	protected static $_users;
 
-	protected static $_pdfFilename;
+	protected static $_pdfFilename = 'userConfirmations.pdf';
 
 }
 
+class UcpcPdfUser {
 
-
-class CpcUser {
 	public function __construct ($id, $fullname, $schoolyear, $grade) {
 		$this->id = $id;
 		$this->fullname = $fullname;
@@ -156,7 +157,7 @@ class CpcUser {
 	}
 
 	public function addClass ($label, $unitName, $unitTranslatedName, $statusTranslatedName) {
-		$this->classes [$unitTranslatedName] [] = new CpcClass ($label, $unitName, $unitTranslatedName, $statusTranslatedName);
+		$this->classes [$unitTranslatedName] [] = new UcpcPdfClass ($label, $unitName, $unitTranslatedName, $statusTranslatedName);
 	}
 
 	public $id;
@@ -164,13 +165,10 @@ class CpcUser {
 	public $schoolyear;
 	public $classes;
 	public $grade;
-	public $participationConfirmationPath;
 
 }
 
-
-
-class CpcClass {
+class UcpcPdfClass {
 
 	public function __construct ($label, $unitName, $unitTranslatedName, $statusTranslatedName) {
 		$this->label = $label;

@@ -613,7 +613,9 @@ class Users extends Module {
 			FROM users u
 				JOIN jointUsersInClass uic ON u.ID = uic.UserID
 				JOIN usersInClassStatus uics ON uic.statusId = uics.ID
-			WHERE uics.name = "active" OR uics.name = "waiting";';
+				JOIN jointUsersInSchoolYear uisy ON uisy.UserID = u.ID
+			WHERE (uics.name = "active" OR uics.name = "waiting") AND
+				uisy.ID = @activeSchoolyear;';
 		try {
 			$data = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {

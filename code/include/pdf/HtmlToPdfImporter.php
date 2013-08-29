@@ -46,16 +46,16 @@ class HtmlToPdfImporter extends TCPDF {
 	 * @param string $str the SurroundPattern-String
 	 */
 	public function tempVarSurroundingPatternSet ($str) {
-	
+
 		$this->_tempVarSurroundPattern = $str;
 	}
-	
+
 	/**
 	 * returns the Pdf as a string
 	 * @return string The PDF-String
 	 */
 	public function pdfGet () {
-		
+
 		return $this->Output('', 'S');
 	}
 
@@ -88,7 +88,7 @@ class HtmlToPdfImporter extends TCPDF {
 
 		$this->Output('schinken.pdf', 'I');
 	}
-	
+
 	/**
 	 * This function imports the Html-Code into the Class, to use it later on.
 	 * @param string $htmlString The Path to the HTML-File or the html-string
@@ -104,7 +104,7 @@ class HtmlToPdfImporter extends TCPDF {
 			$this->_htmlCode = $htmlString;
 		}
 	}
-	
+
 	/**
 	 * This function replaces a Temporary Variable in the HtmlCode with a Value.
 	 * @param string $varName The Name of the Temporary Variable to search for
@@ -115,7 +115,7 @@ class HtmlToPdfImporter extends TCPDF {
 	 * called previously
 	 */
 	public function tempVarReplaceInHtml ($varName, $replaceValue, $surroundPattern = false) {
-		
+
 		if(!$surroundPattern) {
 			if($this->_tempVarSurroundPattern == '') {
 				throw new InvalidArgumentException('Could not define surroundPattern; call tempVarSurroundingPatternSet() first!');
@@ -123,7 +123,7 @@ class HtmlToPdfImporter extends TCPDF {
 			$searchString = sprintf($this->_tempVarSurroundPattern, $varName); // the string to search for
 		}
 		else {
-			$searchString = sprintf($surroundPattern, $varName); // the string to search for	
+			$searchString = sprintf($surroundPattern, $varName); // the string to search for
 		}
 		//check if String is existing
 		if(strpos($this->_htmlCode, $searchString) === false) {
@@ -131,24 +131,24 @@ class HtmlToPdfImporter extends TCPDF {
 		}
 		$this->_htmlCode = str_replace($searchString, $replaceValue, $this->_htmlCode);
 	}
-	
+
 	/**
 	 * Converts the Html-Code into a PDF-file.
 	 */
 	public function htmlToPdfConvert () {
-		
+
 		$this->AddPage();
 		$this->writeHTML($this->_htmlCode);
 	}
-	
+
 	/**
-	 * This method acts as a link to the tcpdf-class. You can call a function of the tcpdf-class to change and add 
+	 * This method acts as a link to the tcpdf-class. You can call a function of the tcpdf-class to change and add
 	 * data to the Pdf-file, like the author, or setting the font. Use it like call_user_func().
 	 * Example: 'tcpdfCommandUse("SetAuthor", "Pascal Ernst")', and the Pdf-File will be changed based on that.
 	 * @param string $functionCall the function to call
 	 */
 	public function tcpdfCommandUse ($functionCall) {
-		
+
 		$funcParameter = func_get_args();
 		unset($funcParameter [0]);//first Parameter is functionname, we only want the parameter as an array
 		call_user_func_array(array($this, $functionCall), $funcParameter);
@@ -158,11 +158,11 @@ class HtmlToPdfImporter extends TCPDF {
 	 * Returns the Count of Sites of the Pdf-File
 	 */
 	public function getCountOfPdfSites () {
-		
+
 		return $this->getNumPages();
 	}
-	
-	
+
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////
@@ -195,7 +195,7 @@ class HtmlToPdfImporter extends TCPDF {
 		fwrite($handle, $string);
 		fclose($handle);
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
 	////////////////////////////////////////////////////////////////////////////////
@@ -211,7 +211,7 @@ class HtmlToPdfImporter extends TCPDF {
 	 * @var string
 	 */
 	private $_tempVarSurroundPattern;
-	
+
 	private $_tempDirName;
 }
 

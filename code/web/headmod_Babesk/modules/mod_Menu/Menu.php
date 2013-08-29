@@ -8,6 +8,12 @@ class Menu extends Module {
 	//Attributes
 	private $smartyPath;
 
+	/**
+	 * The DateModifier for strtotime
+	 * @var [type]
+	 */
+	protected $_lastCancel;
+
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
 	public function __construct($name, $display_name, $path) {
@@ -46,6 +52,7 @@ class Menu extends Module {
 		if ($orders_existing) {
 			$today = date('Y-m-d');
 			$hour = date('H', time());
+			$this->_lastCancel = $this->lastOrdercancelDatemodGet();
 			foreach ($orders as $order) {
 				try {
 					$mealname = $mealManager->getEntryData($order['MID'], 'name');
@@ -59,17 +66,14 @@ class Menu extends Module {
 				if (!$order['fetched'] AND $order['date'] >= $today) {
 
 					//fetch last_order_time from database and compare with actual time
-					$gsManager = new GlobalSettingsManager();
 					$hour = date('H:i', time());
-					$last_order_time = $gsManager->getLastOrderTime();
-					if ((str_replace(":", "", $hour) > str_replace(":", "", $last_order_time)) AND ($order['date'] == $today)) {
+					$cancelAllowed = $this->isAllowedToCancel($order['date']);
 
-						$meal[] = array('date' => formatDate($order["date"]), 'name' => $mealname["name"],
-								'orderID' => $order['ID'], 'cancel' => false);
-					} else {
-						$meal[] = array('date' => formatDate($order["date"]), 'name' => $mealname["name"],
-								'orderID' => $order['ID'], 'cancel' => true);
-					}
+					$meal[] = array(
+						'date' => formatDate($order["date"]),
+						'name' => $mealname["name"],
+						'orderID' => $order['ID'],
+						'cancel' => $cancelAllowed);
 				}
 			}
 		}
@@ -79,6 +83,44 @@ class Menu extends Module {
 		}
 		$smarty->assign('meal', $meal);
 		$smarty->display($this->smartyPath . 'menu.tpl');
+	}
+
+	/**
+	 * Fetches a date-modifier indicating when the Orders are canceable
+	 *
+	 * @return string The Date
+	 */
+	protected function lastOrdercancelDatemodGet() {
+
+
+		try {
+			$data = TableMng::query('SELECT * FROM global_settings
+				WHERE name = "ordercancelEnddate"');
+
+		} catch (Exception $e) {
+
+			$this->_interface->dieError('Error fetching ordercancelEnddate!');
+		}
+
+		if(count($data)) {
+			return $data[0]['value'];
+		}
+		else {
+			$this->_interface->dieError('ordercancelEnddate ist nicht gesetzt! Administrator verständigen.');
+		}
+	}
+
+	/**
+	 * Checks if the User is allowed to Cancel the Order
+	 * @param  date    $mealdate The date of the meal
+	 * @return boolean           if the User is allowed to cancel this Meal
+	 */
+	protected function isAllowedToCancel($mealdate) {
+
+		$mealdate = strtotime($mealdate);
+		$timestamp = strtotime($this->_lastCancel, $mealdate);
+
+		return $timestamp >= time();
 	}
 }
 ?>

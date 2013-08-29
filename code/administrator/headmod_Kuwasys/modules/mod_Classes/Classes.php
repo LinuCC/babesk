@@ -697,8 +697,9 @@ class Classes extends Module {
 
 	protected function submoduleCreateClassSummaryExecute() {
 
-		$this->_interface->dieError(
-			'Dieses Modul ist noch in Überarbeitung...');
+		require_once 'SummaryOfClassesPdf.php';
+		SummaryOfClassesPdf::init($this->_interface);
+		SummaryOfClassesPdf::execute($_GET['startdate'], $_GET['enddate']);
 	}
 
 	protected function submoduleUnregisterUserExecute() {

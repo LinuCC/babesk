@@ -3,7 +3,7 @@
 require_once PATH_INCLUDE . '/phpExcel/PHPExcel.php';
 require_once 'CctClass.php';
 
-class ClassesCreateTable {
+class SummaryOfClassesPdf {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -17,10 +17,10 @@ class ClassesCreateTable {
 	//Methods
 	/////////////////////////////////////////////////////////////////////
 
-	public static function execute () {
-		$data = self::dataFetch ();
-		self::classesFill ($data);
-		self::tablesheetsCreate ();
+	public static function execute($startdate, $enddate) {
+		$data = self::dataFetch();
+		self::classesFill($data);
+		self::tablesheetsCreate($startdate, $enddate);
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -33,7 +33,6 @@ class ClassesCreateTable {
 	 */
 	protected static function dataFetch () {
 		$query = 'SELECT CONCAT(u.forename, " ", u.name) AS userFullname,
-				@statusActiveId AS blubb,
 				u.telephone AS telephone, u.ID AS userId,
 				c.label AS classLabel, c.ID AS classId,
 				CONCAT(g.gradelevel, g.label) AS grade,
@@ -42,12 +41,15 @@ class ClassesCreateTable {
 			FROM class c
 				JOIN jointUsersInClass uic ON uic.ClassID = c.ID
 				JOIN users u ON uic.UserID = u.ID
-				LEFT JOIN jointUsersInGrade uig ON uig.UserID = u.ID
-				LEFT JOIN Grades g ON uig.GradeID = g.ID
+				LEFT JOIN usersInGradesAndSchoolyears uigs
+					ON uigs.UserID = u.ID
+				LEFT JOIN Grades g ON uigs.gradeId = g.ID
 				LEFT JOIN jointClassTeacherInClass ctic ON ctic.ClassID = c.ID
 				LEFT JOIN classTeacher ct ON ctic.ClassTeacherID = ct.ID
 				LEFT JOIN kuwasysClassUnit cu ON cu.ID = c.unitId
-			WHERE  uic.statusId = (SELECT ID FROM usersInClassStatus WHERE usersInClassStatus.name="active");';
+			WHERE  uic.statusId = (SELECT ID FROM usersInClassStatus WHERE usersInClassStatus.name="active")
+				AND uigs.schoolyearId = @activeSchoolyear
+				AND c.schoolyearId = @activeSchoolyear;';
 		try {
 			$data = TableMng::query ($query);
 		} catch (Exception $e) {
@@ -81,11 +83,11 @@ class ClassesCreateTable {
 		}
 	}
 
-	protected static function tablesheetsCreate () {
+	protected static function tablesheetsCreate($startdate, $enddate) {
 		self::phpExcelInit ();
 		foreach (self::$classes as $class) {
 			$sheet = self::getNewSheet ();
-			CctContent::fill ($sheet, $class);
+			CctContent::fill ($sheet, $class, $startdate, $enddate);
 		}
 		self::phpExcelOut ();
 	}
@@ -143,11 +145,11 @@ class ClassesCreateTable {
 
 class CctContent {
 
-	public static function fill (&$sheet, $class) {
+	public static function fill (&$sheet, $class, $startdate, $enddate) {
 		self::sheetPropertiesSet ($sheet, $class);
 		self::headFill ($sheet, $class);
 		self::mainHeadFill ($sheet, $class);
-		self::occurDaysSet ($sheet, $class);
+		self::occurDaysSet ($sheet, $class, $startdate, $enddate);
 		self::mainFill ($sheet, $class);
 		self::styleSet ($sheet, $class);
 	}
@@ -219,31 +221,71 @@ class CctContent {
 			// getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 	}
 
-	protected static function occurDaysSet (&$sheet, $class) {
-		switch ($class->getUnitName ()) {
-			case 'monday':
-				$start = strtotime(date(self::$firstMon));
-				break;
-			case 'tuesday':
-				$start = strtotime(date(self::$firstMon) . "+1 day");
-				break;
-			case 'wednesday':
-				$start = strtotime(date(self::$firstMon) . "+2 day");
-				break;
-			case 'thursday':
-				$start = strtotime(date(self::$firstMon) . "+3 day");
-				break;
-		}
-		for ($i = 0; $i < 23; $i++) {
-			$ts = strtotime (date ('Y-m-d', $start) . sprintf('+%s week', $i));
-			$cell = self::getCharAtNum ($i + 3) . '4';
-			$sheet->getCell ($cell)->setValueExplicit (date ('d.m', $ts), PHPExcel_Cell_DataType::TYPE_STRING);
-			$sheet->getStyle ($cell)->applyFromArray (self::$rotateStyle);
-		}
+	// protected static function occurDaysSet (&$sheet, $class) {
+	// 	switch ($class->getUnitName ()) {
+	// 		case 'monday':
+	// 			$start = strtotime(date(self::$firstMon));
+	// 			break;
+	// 		case 'tuesday':
+	// 			$start = strtotime(date(self::$firstMon) . "+1 day");
+	// 			break;
+	// 		case 'wednesday':
+	// 			$start = strtotime(date(self::$firstMon) . "+2 day");
+	// 			break;
+	// 		case 'thursday':
+	// 			$start = strtotime(date(self::$firstMon) . "+3 day");
+	// 			break;
+	// 	}
+	// 	for ($i = 0; $i < 23; $i++) {
+	// 		$ts = strtotime (date ('Y-m-d', $start) . sprintf('+%s week', $i));
+	// 		$cell = self::getCharAtNum ($i + 3) . '4';
+	// 		$sheet->getCell ($cell)->setValueExplicit (date ('d.m', $ts), PHPExcel_Cell_DataType::TYPE_STRING);
+	// 		$sheet->getStyle ($cell)->applyFromArray (self::$rotateStyle);
+	// 	}
+	// }
 
+	protected static function occurDaysSet(
+		&$sheet, $class, $startdate, $enddate) {
+
+		$dates = self::getAllOccurencesOfWeekdayBetween(
+			$startdate, $enddate, $class->getUnitName());
+
+		for($i = 0; $i < count($dates); $i++) {
+
+			$shortDate = date('d.m', strtotime($dates[$i]));
+
+			$cell = $sheet->getCell(self::getCharAtNum($i + 3) . '4');
+			$cell->setValueExplicit(
+				$shortDate, PHPExcel_Cell_DataType::TYPE_STRING);
+
+			$cellStyle = $sheet->getStyle(self::getCharAtNum($i + 3) . '4');
+			$cellStyle->applyFromArray(self::$rotateStyle);
+		}
 	}
 
-	protected $userRowCount;
+	/**
+	 * Searches all occurences of a Weekday between two dates
+	 *
+	 * @param  string $start   The Startdate
+	 * @param  string $end     The Enddate
+	 * @param  string $weekday The Weekday in English
+	 * @return array           The occurences found as dates
+	 */
+	protected static function getAllOccurencesOfWeekdayBetween(
+		$start, $end, $weekday) {
+
+		$occurences = array();
+		$dateIter = strtotime("next $weekday", strtotime($start));
+		$endTimestamp = strtotime($end);
+
+		while($dateIter <= $endTimestamp) {
+			$occurences[] = date('Y-m-d', $dateIter);
+			$dateIter = strtotime("next $weekday", $dateIter);
+		}
+
+		return $occurences;
+	}
+
 	protected static $rotateStyle = array (
 		'alignment' => array (
 			'rotation' => 90,
@@ -253,7 +295,7 @@ class CctContent {
 
 
 	public static function getCharAtNum ($number) {
-		return self::$numchar [$number % 26];
+		return self::$numchar [$number % 51];
 	}
 
 	protected static $numchar = array (
@@ -283,6 +325,32 @@ class CctContent {
 		23 => 'X',
 		24 => 'Y',
 		25 => 'Z',
+		26 => 'AA',
+		27 => 'AB',
+		28 => 'AC',
+		29 => 'AD',
+		30 => 'AE',
+		31 => 'AF',
+		32 => 'AG',
+		33 => 'AH',
+		34 => 'AI',
+		35 => 'AJ',
+		36 => 'AK',
+		37 => 'AL',
+		38 => 'AM',
+		39 => 'AN',
+		40 => 'AO',
+		41 => 'AP',
+		42 => 'AQ',
+		43 => 'AR',
+		44 => 'AS',
+		45 => 'AT',
+		46 => 'AU',
+		47 => 'AV',
+		48 => 'AW',
+		49 => 'AX',
+		50 => 'AY',
+		51 => 'AZ',
 		);
 
 	protected static $firstMon = '2013-02-04';
