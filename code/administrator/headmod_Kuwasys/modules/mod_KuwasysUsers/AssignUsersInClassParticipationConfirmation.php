@@ -39,11 +39,14 @@ class AssignUsersInClassParticipationConfirmation
 				JOIN usersInGradesAndSchoolyears uigs ON uigs.userId = u.ID
 				JOIN schoolYear sy ON sy.ID = uigs.SchoolYearID
 				JOIN KuwasysTemporaryRequestsAssign uic
-					ON u.ID = uic.userId
+					ON u.ID = uic.userId AND (
+						uic.statusId = 1 OR uic.statusId = 0
+					)
 				LEFT JOIN usersInClassStatus uics ON uics.ID = uic.statusId
 				LEFT JOIN class c ON c.ID = uic.classId AND c.schoolyearId = @activeSchoolyear
 				LEFT JOIN Grades g ON g.ID = uigs.gradeId
 				LEFT JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
+			WHERE uigs.schoolyearId = @activeSchoolyear
 			GROUP BY grouper
 			;';
 
