@@ -171,7 +171,7 @@ class Recharge extends Module {
 			$stmt = $this->_pdo->prepare(
 				'SELECT g.max_credit AS maxCredits, u.credit AS credits
 				FROM users u
-				JOIN groups g ON u.GID = g.ID
+				JOIN priceGroups g ON u.GID = g.ID
 				WHERE u.ID = :userId');
 
 			$stmt->execute(array('userId' => $userId));
