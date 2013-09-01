@@ -34,6 +34,15 @@ class SchbasAccountingInterface extends AdminInterface {
 		$this->smarty->display($this->tplFilePath . 'showUsersGroupedByYearAndGrade.tpl');
 	}
 	
+	public function showRememberList($schueler1, $class, $title, $date, $schuelerTotalNr){
+		$this->smarty->assign('schuelerTotalNr', $schuelerTotalNr);
+		$this->smarty->assign('schueler1', $schueler1);
+		$this->smarty->assign('class', $class);
+		$this->smarty->assign('title', $title);
+		$this->smarty->assign('date', $date);
+		$this->smarty->display($this->tplFilePath . 'showRememberList.tpl');
+	}
+	
 	function test(){
 		$this->smarty->display($this->tplFilePath . 'test.tpl');
 	}
