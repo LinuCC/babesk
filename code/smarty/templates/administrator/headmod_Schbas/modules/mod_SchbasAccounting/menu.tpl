@@ -25,6 +25,13 @@ Antrag l&ouml;schen
 Mahnungen versenden<br/>
 </fieldset>
 
+<fieldset>
+<h3>Noch abzugebende B&uuml;cher</h3>
+<form action="index.php?section=Schbas|SchbasAccounting&action=remember" method="post">
+	<input type="submit" value="Liste mit allen Schülern erstellen">
+</form>
+Liste nach Klassen<br/>
+</fieldset>
 
 
 {/block}
