@@ -92,8 +92,12 @@ class Recharge extends Module {
 			$maxRechargeAmount = $this->getMaxRechargeAmountOfUser($userId);
 			$maxRechargeAmount = sprintf('%01.2f', $maxRechargeAmount);
 
+			$isSoliRecharge = $this->userHasValidSoliCoupon(
+				$userId, date('Y-m-d'));
+
 			$this->_smarty->assign('max_amount', $maxRechargeAmount);
 			$this->_smarty->assign('uid', $userId);
+			$this->_smarty->assign('isSoliRecharge', $isSoliRecharge);
 			$this->displayTpl('form2.tpl');
 		}
 		else {
@@ -451,6 +455,37 @@ class Recharge extends Module {
 			'year' => _g('Year')
 		));
 		$this->displayTpl('printRechargeBalanceSelect.tpl');
+	}
+
+	/**
+	 * Checks if the User has a valid Solicoupon at the given Date
+	 *
+	 * @param int $userId The ID of the User
+	 * @param string $date The Date to check
+	 * @return boolean True if the User has a Valid Coupon at that date, else
+	 * false
+	 */
+	protected function userHasValidSoliCoupon($userId, $date) {
+
+		try {
+			$stmt = $this->_pdo->prepare(
+				'SELECT IF(COUNT(*) > 0, 1, 0) AS hasValidCoupon
+				FROM soli_coupons sc
+				JOIN users u ON u.ID = :userId
+				WHERE sc.UID = :userId
+					AND :date BETWEEN sc.startdate AND sc.enddate
+					AND u.soli = 1
+				');
+
+			$stmt->execute(array('userId' => $userId, 'date' => $date));
+
+			return $stmt->fetchColumn() == 1;
+
+		} catch (PDOException $e) {
+			$this->_interface->showError(
+				_g('Could not check if the User is Soli or not.'));
+			return false;
+		}
 	}
 
 	/////////////////////////////////////////////////////////////////////
