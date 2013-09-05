@@ -11,6 +11,7 @@
 
 	<link rel="stylesheet" href="../smarty/templates/web/css/general.css" type="text/css" />
 	<script src="../include/js/jquery.min.js"></script>
+	<script src="../include/js/jquery.cookie.js"></script>
 
 {literal}
 <script type="text/javascript">

@@ -13,6 +13,7 @@
 
 	{literal}
 	<script src="../include/js/jquery.min.js"></script>
+	<script src="../include/js/jquery.cookie.js"></script>
 
 <script type="text/javascript">
 

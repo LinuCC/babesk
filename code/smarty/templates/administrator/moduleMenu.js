@@ -18,16 +18,7 @@ $(document).ready(function() {
 
 	oldHeadModule = '';
 
-	/**
-	 * If clicked on the Headmodul-Button, Show all Modules available
-	 * @param  {[type]} event [description]
-	 * @return {[type]}       [description]
-	 */
-	$('.HeadItem').on('click', function(event){
-
-		event.preventDefault();
-
-		var headModule = $(this);
+	var activateHeadmodule = function(headModule) {
 
 		makeTooltipDisappear();
 		if(oldHeadModule != headModule.attr('id')) {
@@ -46,5 +37,21 @@ $(document).ready(function() {
 		});
 
 		oldHeadModule = headModule.attr('id');
+	};
+
+	var moduleId = $.cookie('adminMainmenuLastClicked');
+	if(moduleId !== undefined) {
+		activateHeadmodule($('.HeadItem#' + moduleId));
+	}
+	delete moduleId;
+
+	/**
+	 * If clicked on the Headmodul-Button, Show all Modules available
+	 */
+	$('.HeadItem').on('click', function(event){
+
+		event.preventDefault();
+		activateHeadmodule($(this));
+		$.cookie('adminMainmenuLastClicked', $(this).attr('id'));
 	});
 });
