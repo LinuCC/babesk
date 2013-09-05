@@ -111,7 +111,7 @@ class User extends Module {
 			//---fetch data
 			try { //Babesk-specific, dont crash when table not exist
 				$priceGroups = $this->arrayGetFlattened(
-					'SELECT ID, name FROM groups');
+					'SELECT ID, name FROM priceGroups');
 
 			} catch (Exception $e) {
 				$priceGroups = array();
@@ -414,7 +414,7 @@ class User extends Module {
 
 		if($modsActivated['Babesk']) {
 			$priceGroups = $this->arrayGetFlattened(
-				'SELECT ID, name FROM groups');
+				'SELECT ID, name FROM priceGroups');
 			$cardnumber = $this->cardnumberGetByUserId($userId);
 			$cardnumber = (!empty($cardnumber)) ?
 				$cardnumber[0]['cardnumber'] : '';
