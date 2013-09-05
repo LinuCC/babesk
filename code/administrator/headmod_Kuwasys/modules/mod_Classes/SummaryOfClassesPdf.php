@@ -275,7 +275,7 @@ class CctContent {
 		$start, $end, $weekday) {
 
 		$occurences = array();
-		$dateIter = strtotime("next $weekday", strtotime($start));
+		$dateIter = strtotime($start);
 		$endTimestamp = strtotime($end);
 
 		while($dateIter <= $endTimestamp) {
