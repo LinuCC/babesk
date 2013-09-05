@@ -255,22 +255,57 @@ class Recharge extends Module {
 	 */
 	protected function trackRechargeAdd($amount, $userId) {
 
+		$isSoli = $this->userHasValidSoliCoupon($userId);
+
 		try {
 			$stmt = $this->_pdo->prepare('INSERT INTO UsercreditsRecharges
-				(userId, rechargingUserId, rechargeAmount, datetime) VALUES
-				(:userId, :rechargingUserId, :rechargeAmount, :datetime)');
-
+				(userId, rechargingUserId, rechargeAmount, datetime, isSoli)
+				VALUES (:userId, :rechargingUserId, :rechargeAmount,
+					:datetime, :isSoli
+				)');
 			$stmt->execute(array(
 				'userId' => $userId,
 				'rechargingUserId' => $_SESSION['UID'],
 				'rechargeAmount' => $amount,
-				'datetime' => date( 'Y-m-d H:i:s')
+				'datetime' => date( 'Y-m-d H:i:s'),
+				'isSoli' => ($isSoli) ? 1 : 0
 			));
 
 		} catch (PDOException $e) {
 
 			$this->_interface->dieError(_g('Could not track the Recharge!'));
 		}
+	}
+
+	/**
+	 * Checks if the User is Soli and has a Valid Solicoupon
+	 *
+	 * @param  int    $userId The ID of the User
+	 * @return bool           True if User is Soli and has a Valid Solicoupon,
+	 *                        else false
+	 */
+	protected function userHasValidSoliCoupon($userId) {
+
+		try {
+			$stmt = $this->_pdo->prepare(
+				'SELECT u.soli AS isSoli, IF(sc.ID, 1, 0) AS validCoupon
+				FROM users u
+				LEFT JOIN soli_coupons sc ON sc.UID = u.ID
+					AND NOW() BETWEEN sc.startdate AND sc.enddate
+				WHERE u.ID = :userId
+			');
+
+			$stmt->execute(array('userId' => $userId));
+			$data = $stmt->fetch();
+
+		} catch (PDOException $e) {
+			$this->_interface->dieError(_g('Error checking whether the User has a valid Solicoupon'));
+		}
+
+		return (
+			$data &&
+			$data['isSoli'] == 1 &&
+			$data['validCoupon'] == 1);
 	}
 
 	/**
@@ -375,7 +410,8 @@ class Recharge extends Module {
 		try {
 			$stmt = $this->_pdo->prepare('SELECT ur.*,
 				CONCAT(u.forename, " ", u.name) AS name,
-				CONCAT(ru.forename, " ", ru.name) AS rechargedBy
+				CONCAT(ru.forename, " ", ru.name) AS rechargedBy,
+				isSoli
 				FROM UsercreditsRecharges ur
 				JOIN users u ON ur.userId = u.ID
 				JOIN users ru ON ur.rechargingUserId = ru.ID
@@ -407,15 +443,18 @@ class Recharge extends Module {
 				<th><b>Betrag</b></th>
 				<th><b>Datum</b></th>
 				<th><b>aufgeladen von</b></th>
+				<th><b>Teilhabepaket</b></th>
 			</tr>';
 
 		foreach($recharges as $recharge) {
+			$soliStr = ($recharge['isSoli']) ? _g('Yes') : _g('No');
 			$html .= "
 				<tr>
 					<td>$recharge[name]</td>
 					<td>$recharge[rechargeAmount]</td>
 					<td>$recharge[datetime]</td>
 					<td>$recharge[rechargedBy]</td>
+					<td>$soliStr</td>
 				</tr>";
 		}
 

@@ -20,22 +20,28 @@ class MealsForOrderDisplayer {
 	//Methods
 	/////////////////////////////////////////////////////////////////////
 
-	public function display($smarty, $smartyPath) {
+	public function display($dataContainer, $smartypath) {
 
+		$this->_pdo = $dataContainer->getPdo();
+		$this->_interface = $dataContainer->getInterface();
+		$this->_smarty = $dataContainer->getSmarty();
+		$this->_isSolipriceEnabled = $this->isSolipriceEnabledGet();
 		$this->settingsFetch();
 		$this->infotextsFetch();
 		$meals = $this->mealsToBeDisplayedGet();
 		$this->meallistCreate($meals);
-		$smarty->assign("displayMealsStartdate",
-						$this->_displayMealsStartdate);
-		$smarty->assign("displayMealsEnddate", $this->_displayMealsEnddate);
-		$smarty->assign("orderEnddate", $this->_orderEnddate);
-		$smarty->assign("ordercancelEnddate", $this->_ordercancelEnddate);
-		$smarty->assign("mealweeklist", $this->_mealweeklist);
-		$smarty->assign("infotext1", $this->_infotext1);
-		$smarty->assign("infotext2", $this->_infotext2);
+		$this->_smarty->assign("displayMealsStartdate",
+			$this->_displayMealsStartdate);
+		$this->_smarty->assign("displayMealsEnddate",
+			$this->_displayMealsEnddate);
+		$this->_smarty->assign("orderEnddate", $this->_orderEnddate);
+		$this->_smarty->assign("ordercancelEnddate",
+			$this->_ordercancelEnddate);
+		$this->_smarty->assign("mealweeklist", $this->_mealweeklist);
+		$this->_smarty->assign("infotext1", $this->_infotext1);
+		$this->_smarty->assign("infotext2", $this->_infotext2);
 
-		$smarty->display($smartyPath . 'order.tpl');
+		$this->_smarty->display($smartypath . 'order.tpl');
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -133,7 +139,7 @@ class MealsForOrderDisplayer {
 		return $now;
 	}
 
-	
+
 	/**
 	 * Checks if the User has a valid Solicoupon for the given Meal
 	 *
@@ -141,26 +147,26 @@ class MealsForOrderDisplayer {
 	 * @return boolean True if the User has a valid Coupon, else false
 	 */
 	protected function userHasValidCoupon($mealId) {
-	
+
 		$hasCoupon = TableMng::query("SELECT COUNT(*) AS count
 				FROM soli_coupons sc
 				JOIN meals m ON m.ID = $mealId
 				WHERE m.date BETWEEN sc.startdate AND sc.enddate AND
 				UID = $_SESSION[uid]");
-	
+
 		return $hasCoupon[0]['count'] != '0';
 	}
-	
+
 	protected function mealsToBeDisplayedGet() {
 
 		$startdate = $this->_displayMealsStartdate;
 		$enddate = $this->_displayMealsEnddate;
-		
+
 		try {
-			
+
 			$hasSoli = TableMng::query("SELECT soli FROM users
 					WHERE ID = $_SESSION[uid]");
-			
+
 			$meals = TableMng::query("SELECT m.*, pc.price AS price,
 					pc.pc_ID AS priceclassId, pc.name AS priceclassName
 				FROM meals m
@@ -169,14 +175,16 @@ class MealsForOrderDisplayer {
 					ON m.price_class = pc.pc_ID AND pc.GID = u.GID
 				WHERE date BETWEEN '$startdate' AND '$enddate'
 					ORDER BY date, price_class");
-			
-			if ($hasSoli[0]['soli']=="1") {
-				
+
+			if ($this->_isSolipriceEnabled && $hasSoli[0]['soli']=="1") {
+
 				$soliPrice = TableMng::query('SELECT value FROM global_settings
 				WHERE name LIKE "soli_price"');
-				
+
 				foreach ($meals as &$meal) {
-				if ($this->userHasValidCoupon($meal['ID'])) $meal['price'] = $soliPrice[0]['value'];
+					if ($this->userHasValidCoupon($meal['ID'])) {
+						$meal['price'] = $soliPrice[0]['value'];
+					}
 				}
 				unset($meal);
 			}
@@ -270,6 +278,25 @@ class MealsForOrderDisplayer {
 		}
 	}
 
+	/**
+	 * Fetches if the soliprice is enabled
+	 *
+	 * Dies displaying a Message on Error
+	 */
+	protected function isSolipriceEnabledGet() {
+
+		try {
+			$stmt = $this->_pdo->query("SELECT `value` FROM `global_settings`
+				WHERE `name` = 'solipriceEnabled'");
+
+			return $stmt->fetchColumn() == '1';
+
+		} catch (PDOException $e) {
+			$this->_interface->dieError(
+				_g('Could not check if the Soliprice is enabled!'));
+		}
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
@@ -285,6 +312,8 @@ class MealsForOrderDisplayer {
 	protected $_mealweeklist;
 
 	protected $_nowWithoutHoursMinsSecs;
+
+	protected $_isSolipriceEnabled;
 }
 
 ?>

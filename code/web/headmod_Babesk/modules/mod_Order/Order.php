@@ -36,6 +36,8 @@ class Order extends Module {
 		$smarty = $dataContainer->getSmarty();
 		$this->_interface = $dataContainer->getInterface();
 
+		parent::entryPoint($dataContainer);
+
 		if (isset($_GET['order'])) {
 			$this->mealOrderEntry();
 		}
@@ -44,7 +46,7 @@ class Order extends Module {
 
 			$displayer = new MealsForOrderDisplayer();
 			try {
-				$displayer->display($smarty, $this->smartyPath);
+				$displayer->display($dataContainer, $this->smartyPath);
 
 			} catch (Exception $e) {
 				$this->_interface->dieError('Ein Fehler ist beim abrufen der Mahlzeiten aufgetreten! <br />' . $e->getMessage());
@@ -231,7 +233,7 @@ class Order extends Module {
 		if($this->_hasValidCoupon) {
 			TableMng::query("INSERT INTO soli_orders (ID, UID, date, IP,
 				ordertime, fetched, mealname, mealprice, mealdate, soliprice)
-				VALUES ('$lastInsertId', '$userId', '$date', '$ip',
+				VALUES ('$lastInsertId', '$userId', '$meal[date]', '$ip',
 					'$ordertime', '0', '$meal[name]', '$meal[price]',
 					'$meal[date]', '$soliPrice')");
 		}
@@ -274,11 +276,32 @@ class Order extends Module {
 	 */
 	protected function paymentGet() {
 
-		if(!$this->_hasValidCoupon) {
+		$solipriceEnabled = $this->isSolipriceEnabledGet();
+
+		if(!$this->_hasValidCoupon || !$solipriceEnabled) {
 			return $this->_meal['price'];
 		}
 		else {
 			return $this->soliPriceGet();
+		}
+	}
+
+	/**
+	 * Fetches if the soliprice is enabled
+	 *
+	 * Dies displaying a Message on Error
+	 */
+	protected function isSolipriceEnabledGet() {
+
+		try {
+			$stmt = $this->_pdo->query("SELECT `value` FROM `global_settings`
+				WHERE `name` = 'solipriceEnabled'");
+
+			return $stmt->fetchColumn() == '1';
+
+		} catch (PDOException $e) {
+			$this->_interface->dieError(
+				_g('Could not check if the Soliprice is enabled!'));
 		}
 	}
 
@@ -293,8 +316,9 @@ class Order extends Module {
 		$hasCoupon = TableMng::query("SELECT COUNT(*) AS count
 			FROM soli_coupons sc
 			JOIN meals m ON m.ID = $mealId
+			JOIN users u ON u.ID = sc.UID
 			WHERE m.date BETWEEN sc.startdate AND sc.enddate AND
-				UID = $_SESSION[uid]");
+				sc.UID = $_SESSION[uid] AND u.soli = 1");
 
 		return $hasCoupon[0]['count'] != '0';
 	}

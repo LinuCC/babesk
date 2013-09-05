@@ -39,7 +39,6 @@ abstract class Module {
 
 	protected function entryPoint($dataContainer) {
 
-		defined('_AEXEC') or die("Access denied");
 		$this->_pdo = $dataContainer->getPdo();
 		$this->_smarty = $dataContainer->getSmarty();
 		$this->_acl = $dataContainer->getAcl();

@@ -1,6 +1,6 @@
 	{extends file=$soliParent}{block name=content}
 	<!-- the initial menu-->
-	
+
 	<fieldset>
 	<legend><b>Gutscheinverwaltung</b></legend>
 	<form action="index.php?section=Babesk|Soli&action=1" method="post">
@@ -24,7 +24,8 @@
 	</fieldset>
 	<fieldset>
 	<legend><b>Einstellungen</b></legend>
-	<form action="index.php?section=Babesk|Soli&action=6" method="post">
+	<form action="index.php?module=administrator|Babesk|Soli|Settings"
+			method="post">
 		<input type="submit" value="Die Soli-Einstellungen verändern" />
 	</form>
 	</fieldset>

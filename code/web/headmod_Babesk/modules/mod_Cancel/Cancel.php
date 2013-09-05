@@ -42,8 +42,8 @@ class Cancel extends Module {
 	 */
 	protected function entryPoint($dataContainer) {
 
+		parent::entryPoint($dataContainer);
 		$this->_interface = $dataContainer->getInterface();
-		$this->_smarty = $dataContainer->getSmarty();
 	}
 
 	/**
@@ -147,6 +147,7 @@ class Cancel extends Module {
 	protected function orderCancel() {
 
 		$this->_isSoli = $this->userHasValidCoupon();
+		$this->_isSolipriceEnabled = $this->isSolipriceEnabledGet();
 
 		try {
 			$amount = $this->amountToRepayGet();
@@ -168,7 +169,7 @@ class Cancel extends Module {
 	 */
 	protected function amountToRepayGet() {
 
-		if($this->_isSoli) {
+		if($this->_isSoli && $this->_isSolipriceEnabled) {
 			return $this->soliPriceGet();
 		}
 		else {
@@ -205,8 +206,9 @@ class Cancel extends Module {
 		$hasCoupon = TableMng::query("SELECT COUNT(*) AS count
 			FROM soli_coupons sc
 			JOIN meals m ON m.ID = {$this->_orderData['mealId']}
+			JOIN users u ON u.ID = sc.UID
 			WHERE m.date BETWEEN sc.startdate AND sc.enddate AND
-				UID = $_SESSION[uid]");
+				sc.UID = $_SESSION[uid] AND u.soli = 1");
 
 		return $hasCoupon[0]['count'] != '0';
 	}
@@ -237,6 +239,25 @@ class Cancel extends Module {
 		}
 	}
 
+	/**
+	 * Fetches if the soliprice is enabled
+	 *
+	 * Dies displaying a Message on Error
+	 */
+	protected function isSolipriceEnabledGet() {
+
+		try {
+			$stmt = $this->_pdo->query("SELECT `value` FROM `global_settings`
+				WHERE `name` = 'solipriceEnabled'");
+
+			return $stmt->fetchColumn() == '1';
+
+		} catch (PDOException $e) {
+			$this->_interface->dieError(_g(
+				'Could not check if the Soliprice is enabled!'));
+		}
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
@@ -250,5 +271,7 @@ class Cancel extends Module {
 	protected $_smarty;
 
 	protected $_isSoli;
+
+	protected $_isSolipriceEnabled;
 }
 ?>

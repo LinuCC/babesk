@@ -457,7 +457,7 @@ form.simpleForm label, form.simpleForm {
 	margin: 15px 0 15px 0;
 }
 
-div.simpleForm p {
+div.simpleForm p, div.simpleForm label {
 	display: table-cell;
 	text-align: center;
 	vertical-align: middle;
