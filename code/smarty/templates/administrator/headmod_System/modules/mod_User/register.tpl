@@ -11,6 +11,7 @@
 </script>
 
 <form class="simpleForm" action="#" method="post">
+
 	<fieldset>
 		<legend>Persönliche Daten</legend>
 		<label>Vorname:
@@ -38,34 +39,31 @@
 			Geburtstag :
 			<input class="inputItem" type="text" size="10" name="birthday" />
 		</label>
-<!-- 		<label>Klasse:
-			{if empty($grades)}
-				<p class="inputItem">
-					keine Klassen vorhanden
-				</p>
-			{else}
-				<select name="gradeId" class="inputItem">
-					{html_options options=$grades selected="1"}
-				</select>
-			{/if}
-		</label> -->
 		<label>
 			Kartennummer:
 			<a class="cardnumberAdd" href="#">hinzufügen</a>
 			<input style="display:inline" name="cardnumber" class="inputItem cardnumberAdd" type="text" size="10" maxlength="10" />
 		</label>
-<!-- 		<label>Schuljahr:
-			{if empty($priceGroups)}
-				<p class="inputItem">
-					keine Schuljahre vorhanden, wird höchstwahrscheinlich Probleme bereiten!
-				</p>
-			{else}
-				<select class="inputItem" name="schoolyearId">
-					{html_options options=$schoolyears}
-					<option value="">Keins</option>
-				</select>
-			{/if} -->
-		</label>
+
+		<div class="simpleForm clearfix">
+				<p class="inputItem">Gruppen:</p>
+				{if empty($usergroups)}
+					<p class="inputItem">
+						keine Gruppen vorhanden
+					</p>
+				{else}
+					<div class="inputItem">
+						<div class="scrollableCheckboxes">
+							{foreach $usergroups as $id => $name}
+								<input type="checkbox"
+									name="groups[{$id}]"/>
+									{$name}<br />
+							{/foreach}
+						</div>
+					</div>
+				{/if}
+		</div>
+
 		<fieldset class="schoolyearGradeContainer smallContainer">
 			<legend>Schuljahre und Klassen:</legend>
 			{foreach $gradesAndSchoolyearsOfUser as $gas}
@@ -96,6 +94,7 @@
 				title="Ein neues Schuljahr mit Klasse hinzufügen"
 				class="gradeSchoolyearAdd" />
 		</fieldset>
+
 	</fieldset>
 	<fieldset>
 		<legend>BaBeSK</legend>

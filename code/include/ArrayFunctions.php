@@ -37,6 +37,26 @@ class ArrayFunctions {
 
 		return $array;
 	}
+
+	/**
+	 * Checks if the Keys exist in the Container-Array, when not adds them
+	 *
+	 * @param  array  $container The Container with (or without) the Keys
+	 * @param  array  $keys      An Array containing the Keys to check for
+	 * @param  string $value     The Value of the newly added Keys
+	 * @return array             The changed Container-Array
+	 */
+	public static function arrayKeysCreateIfNotExist(
+		array $container, array $keys, $value = '') {
+
+		foreach($keys as $key) {
+			if(!isset($container[$key])) {
+				$container[$key] = $value;
+			}
+		}
+
+		return $container;
+	}
 }
 
 ?>

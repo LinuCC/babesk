@@ -215,6 +215,14 @@ $(document).ready(function() {
 			return false;
 		}
 
+		var groups = $("input[name^='groups[']").map(function(){
+			if($(this).prop('checked')) {
+				var id = $(this).attr('name')
+							.replace('groups[', '').replace(']', '');
+				return id;
+			}
+		}).get();
+
 		event.preventDefault();
 
 		$.ajax({
@@ -231,6 +239,7 @@ $(document).ready(function() {
 				'telephone': $('input.inputItem[name=telephone]').val(),
 				'birthday': $('input.inputItem[name=birthday]').val(),
 				'pricegroupId': $('select.inputItem[name=pricegroupId] option:selected').val(),
+				'groups': groups,
 				'schoolyearAndGradeData': schoolyearAndGradeData,
 				'credits': $('input.inputItem[name=credits]').val(),
 				'cardnumber': $('input.inputItem[name=cardnumber]').val(),

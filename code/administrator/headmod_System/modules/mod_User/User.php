@@ -117,12 +117,14 @@ class User extends Module {
 				$priceGroups = array();
 			}
 
-			$grades = $this->gradesGetAllFlattened();
-			$schoolyears = $this->schoolyearsGetAllFlattened();
-
 			//---display
-			$this->userInterface->ShowRegisterForm($priceGroups, $grades,
-				$schoolyears);
+			$this->_smarty->assign('grades', $this->gradesGetAllFlattened());
+			$this->_smarty->assign('schoolyears',
+				$this->schoolyearsGetAllFlattened());
+			$this->_smarty->assign('usergroups',
+				$this->usergroupsGetAllFlattened());
+
+			$this->displayTpl('register.tpl');
 
 		} catch (Exception $e) {
 			$this->_interface->dieError('Ein Fehler ist beim Abrufen der Daten aufgetreten!');
@@ -191,6 +193,10 @@ class User extends Module {
 		try {
 			$gradeAndSchoolyearQuery =
 				$this->schoolyearsAndGradesRegisterQueryCreate();
+			$usergroupsQuery = $this->registerUserUsergroupQueryCreate();
+
+			$_POST = ArrayFunctions::arrayKeysCreateIfNotExist(
+				$_POST, array('pricegroupId', 'credits', 'isSoli'));
 
 			if(!empty($_POST['cardnumber'])) {
 				$cardnumberQuery = "INSERT INTO cards (cardnumber, UID)
@@ -208,6 +214,7 @@ class User extends Module {
 				SET @uid = LAST_INSERT_ID();
 				$gradeAndSchoolyearQuery
 				$cardnumberQuery
+				$usergroupsQuery
 				");
 
 		} catch (Exception $e) {
@@ -259,6 +266,24 @@ class User extends Module {
 			$query .= "INSERT INTO usersInGradesAndSchoolyears
 				(userId, gradeId, schoolyearId) VALUES
 				(@uid, '$rGradeId', '$rSyId');";
+		}
+
+		return $query;
+	}
+
+	/**
+	 * Creates Queries that adds the newly added User to the Selected Groups
+	 */
+	protected function registerUserUsergroupQueryCreate() {
+
+		$query = '';
+
+		if(isset($_POST['groups']) && count($_POST['groups'])) {
+			foreach($_POST['groups'] as $group) {
+				TableMng::sqlEscape($group);
+				$query .= "INSERT INTO UserInGroups (userId, groupId)
+					VALUES (@uid, '$group');";
+			}
 		}
 
 		return $query;
@@ -569,6 +594,23 @@ class User extends Module {
 			'ID');
 
 		return $flattenedSchoolyears;
+	}
+
+	/**
+	 * Fetches all Usergroups from the Database
+	 *
+	 * @return array  The Usergroups as an Array: '<ID>' => '<name>'
+	 */
+	protected function usergroupsGetAllFlattened() {
+
+		try {
+			$stmt = $this->_pdo->query('SELECT ID, name FROM Groups');
+
+			return $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+
+		} catch (PDOException $e) {
+			$this->_interface->dieError(_g('Error fetching the Usergroups'));
+		}
 	}
 
 	protected function schoolyearsGetAllWithCheckIsUserIn($userId) {
