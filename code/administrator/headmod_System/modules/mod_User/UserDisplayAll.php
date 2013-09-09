@@ -202,6 +202,7 @@ class UserDisplayAll {
 			$this->selectableAdd(array(
 					'GID' => 'Preisgruppe',
 					'credit' => 'Guthaben',
+					'cardnumber' => 'Kartennummer',
 					'soli' => 'ist Soli'
 			));
 		}
