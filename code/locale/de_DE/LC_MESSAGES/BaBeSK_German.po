@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
-"POT-Creation-Date: 2013-09-05 23:47+0100\n"
-"PO-Revision-Date: 2013-09-05 23:48+0100\n"
+"POT-Creation-Date: 2013-09-09 05:11+0100\n"
+"PO-Revision-Date: 2013-09-09 05:11+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: Deutsch\n"
@@ -535,7 +535,7 @@ msgstr ""
 msgid "Could not find the User by Cardnumber %1$s"
 msgstr "Konnte den Nutzer anhand der Kartennummer \"%1$s\" nicht finden"
 
-#: ../../../administrator/headmod_Babesk/modules/mod_Meals/Meals.php:89
+#: ../../../administrator/headmod_Babesk/modules/mod_Meals/Meals.php:90
 msgid ""
 "The value for the maximum amount of orders per Day for a User was "
 "successfully changed"
@@ -543,13 +543,26 @@ msgstr ""
 "Der Wert für die Maximale Anzahl an Bestellung pro Tag für die Benutzer "
 "wurden erfolgreich geändet"
 
-#: ../../../administrator/headmod_Babesk/modules/mod_Meals/Meals.php:107
+#: ../../../administrator/headmod_Babesk/modules/mod_Meals/Meals.php:108
 msgid "Anzahl maximaler Bestellungen pro Tag"
 msgstr ""
 
-#: ../../../administrator/headmod_Babesk/modules/mod_Meals/Meals.php:137
+#: ../../../administrator/headmod_Babesk/modules/mod_Meals/Meals.php:138
 msgid "Could not change the Max Amount of Orders per day per User."
 msgstr "Konnte die Maximale Anzahl an Bestellungen pro Tag nicht ändern."
+
+#: ../../../administrator/headmod_Babesk/modules/mod_Meals/Meals.php:208
+msgid "An Error occured while fetching the infotexts!"
+msgstr "Ein Fehler ist beim Abrufen der Infotexte aufgetreten!"
+
+#: ../../../administrator/headmod_Babesk/modules/mod_Meals/Meals.php:245
+msgid "The Infotexts where successfully changed!"
+msgstr "Die Infotexte wurden erfolgreich geändert"
+
+#: ../../../administrator/headmod_Babesk/modules/mod_Meals/Meals.php:287
+#: ../../../administrator/headmod_Babesk/modules/mod_Meals/Meals.php:309
+msgid "Could not change the Infotext!"
+msgstr "Konnte die Infotexte nicht verändern!"
 
 #: ../../../administrator/headmod_Babesk/modules/mod_Soli/Soli.php:111
 msgid "The Settings were successfully changed"
@@ -564,8 +577,6 @@ msgid "Could not initialize the Soliprice!"
 msgstr "Konnte den Solipreis nicht setzen!"
 
 #: ../../../administrator/headmod_Babesk/modules/mod_Soli/Soli.php:266
-#: ../../../web/headmod_Babesk/modules/mod_Order/MealsForOrderDisplayer.php:293
-#: ../../../web/headmod_Babesk/modules/mod_Cancel/Cancel.php:255
 msgid "Could not change the Soliprice!"
 msgstr "Konnte den SoliPreis nicht verändern!"
 
@@ -1251,7 +1262,9 @@ msgstr "Sie haben bereits einen Kurs am %1$s gewählt! %2$s"
 msgid "Could not check if you already selected classes!"
 msgstr "Konntenicht überprüfen ob du schon Kurse selektiert hast!"
 
-#: ../../../web/headmod_Babesk/modules/mod_Order/Order.php:302
+#: ../../../web/headmod_Babesk/modules/mod_Order/Order.php:304
+#: ../../../web/headmod_Babesk/modules/mod_Order/MealsForOrderDisplayer.php:296
+#: ../../../web/headmod_Babesk/modules/mod_Cancel/Cancel.php:257
 msgid "Could not check if the Soliprice is enabled!"
 msgstr "Konnte nicht überprüfen ob der Teilhabepaket-Preis aktiviert ist!"
 
@@ -1260,12 +1273,13 @@ msgstr "Konnte nicht überprüfen ob der Teilhabepaket-Preis aktiviert ist!"
 #: ../../../smarty/templates_c/9c8559733c7c6f94d36879f24d405c45ea03136c.file.show_priceclasses.tpl.php:147
 #: ../../../smarty/templates_c/7daf5c5b3a90bf9cf067ed525a1eb0ce^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
 #: ../../../smarty/templates_c/abac30fa7990a32ae4b19e2843f492a3^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
+#: ../../../smarty/templates_c/dfe2673619baad8cf532069545f6444f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
 #: ../../../smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:147
 #: ../../../smarty/templates_c/97dd776ccc42d799232d77d2d7eadbdb2087af4c.file.dialogAutoCreateUsernames.tpl.php:116
 #: ../../../smarty/templates_c/664c01597200c1a7ae5862799806ad03^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
 #: ../../../smarty/templates_c/2ca92fd8323335f226298095835d98ca262d96a5.file.mainMenu.tpl.php:110
 #: ../../../smarty/templates_c/0cd7c5a039495beac1f26ece05193e06^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../smarty/templates_c/14e4210eabe8e0b4fc471c0255d612065c60917c.file.show_meals.tpl.php:158
+#: ../../../smarty/templates_c/14e4210eabe8e0b4fc471c0255d612065c60917c.file.show_meals.tpl.php:159
 #: ../../../smarty/templates_c/d925ccfd02616368489173c0239296c41d838a43.file.displayClasses.tpl.php:205
 #: ../../../smarty/templates_c/23319d8ef0a908c25db037491895a5965906a6ca.file.mainMenu.tpl.php:118
 #: ../../../smarty/templates_c/8d66d1a054b0c89822a7d5a7b45022381d461f62.file.confirmationDialog.tpl.php:115
@@ -1275,12 +1289,12 @@ msgstr "Konnte nicht überprüfen ob der Teilhabepaket-Preis aktiviert ist!"
 #: ../../../smarty/templates_c/83acc38b8be114f6de986e149986d28dc9513209.file.add_coupon.tpl.php:131
 #: ../../../smarty/templates_c/81af9d8a0076e390a700db80fd40b609^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:101
 #: ../../../smarty/templates_c/fab3158d2a06945dfdc78fcd022950cac87fd008.file.mainmenu.tpl.php:164
-#: ../../../smarty/templates_c/5714db0a103e440b4fe3f335c35f52b92e0e5c80.file.main.tpl.php:112
+#: ../../../smarty/templates_c/5714db0a103e440b4fe3f335c35f52b92e0e5c80.file.main.tpl.php:113
 #: ../../../smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:126
 #: ../../../smarty/templates_c/547e8385236d7d6dff30a14f19a0711ca5772983.file.classlist.tpl.php:150
-#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:158
+#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:159
 #: ../../../smarty/templates_c/9b176697e9c01ab28e9a627b7e206875^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../smarty/templates_c/00877b926b1f71360abb9c7161d45f532f3e4356.file.displayAll.tpl.php:167
+#: ../../../smarty/templates_c/00877b926b1f71360abb9c7161d45f532f3e4356.file.displayAll.tpl.php:168
 #: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:365
 #: ../../../smarty/templates_c/4b1fe40eacb5550dfde823402c417039^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:102
 #: ../../../smarty/templates_c/48c6d6c3c8d49d53db66eafdca634838^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
@@ -1289,22 +1303,23 @@ msgstr "Konnte nicht überprüfen ob der Teilhabepaket-Preis aktiviert ist!"
 #: ../../../smarty/templates_c/3f871ee107ca834b153f9721ce3cb611^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
 #: ../../../smarty/templates_c/e819f7f99ecd450a383ffdfbb8dfbf425712c54b.file.usernameRemoveSpecialChars.tpl.php:114
 #: ../../../smarty/templates_c/1dfa2a88ec6648ede5006d985c146e61^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../smarty/templates_c/5219913f09f1279f345ac25596bc0565^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:102
+#: ../../../smarty/templates_c/5219913f09f1279f345ac25596bc0565^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
 #: ../../../smarty/templates_c/818149c8372c3fa5e5e32c9cd62bc5d894003dc9.file.mainmenu.tpl.php:132
 #: ../../../smarty/templates_c/3eb0db64f553de2c6d2b3cfcf12fb33948f1ba0a.file.show_soli.tpl.php:153
 #: ../../../smarty/templates_c/277023282b4cc18ca18acb57da7166581f1aee33.file.addClass.tpl.php:148
 #: ../../../smarty/templates_c/535a254aa55c8e371fd9ffa70cfb696f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:102
-#: ../../../smarty/templates_c/be79683c6cae1e59fe577e2ea6108b30afd67616.file.menu.tpl.php:156
+#: ../../../smarty/templates_c/be79683c6cae1e59fe577e2ea6108b30afd67616.file.menu.tpl.php:157
+#: ../../../smarty/templates_c/06dd0d9732ef303ee29fef713e85b555^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
 #: ../../../smarty/templates_c/c931dc528d505c072d9728a2ec07fb024059e5f7.file.mainmenu.tpl.php:203
 #: ../../../smarty/templates_c/4131376768aeda7dc9af28fc0cab0af7^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:102
 #: ../../../smarty/templates_c/e29344e5fddedce49eda85e42920220e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:102
-#: ../../../smarty/templates_c/61767cbc64649c69bd673494ca137082a25c84f0.file.meals_initial_menu.tpl.php:131
+#: ../../../smarty/templates_c/61767cbc64649c69bd673494ca137082a25c84f0.file.meals_initial_menu.tpl.php:133
 #: ../../../smarty/templates_c/d5bd7be426d163f094c82f8882c3badf^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
 #: ../../../smarty/templates_c/3fe3cd4fe2198d402677adeafdbd993c923a8f2b.file.priceclass_menu.tpl.php:113
 #: ../../../smarty/templates_c/8c8b534d695ba143ddb57dc057a0c5d0e8505d3f.file.mainMenu.tpl.php:114
 #: ../../../smarty/templates_c/3a2f75ea979a961e0e90243618a8d1e82c2749f8.file.mainMenu.tpl.php:152
 #: ../../../smarty/templates_c/4d022996272f352d84190722f66bc1ed^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../smarty/templates_c/093f9544da95a056df6939dd5f74bc4bdae08a7e.file.main.tpl.php:152
+#: ../../../smarty/templates_c/093f9544da95a056df6939dd5f74bc4bdae08a7e.file.main.tpl.php:153
 #: ../../../smarty/templates_c/587d07c5d0c54d54ca93576150e63890^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
 #: ../../../smarty/templates_c/a1c6b6c80b42f8498abfb006fd1e9d1e5e250c41.file.classdetails.tpl.php:230
 #: ../../../smarty/templates_c/08f09ebdf491fb65de6505244c66b2022d891c8a.file.form2.tpl.php:126
@@ -1317,15 +1332,16 @@ msgstr "Konnte nicht überprüfen ob der Teilhabepaket-Preis aktiviert ist!"
 #: ../../../smarty/templates_c/ed644aaaf5fefb2a842bebba2040e0f3f62a171d.file.add_meal.tpl.php:131
 #: ../../../smarty/templates_c/d9ae2e659e39b51da4b84a100552c0b5c94fb34c.file.printRechargeBalanceSelect.tpl.php:159
 #: ../../../smarty/templates_c/6819e4ee18e749c9a4e594e249811227^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:101
-#: ../../../smarty/templates_c/9eb111b5be8559be63c33100f9210c2e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
+#: ../../../smarty/templates_c/9eb111b5be8559be63c33100f9210c2e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
 #: ../../../smarty/templates_c/96c7be0a38d11f4c59e8d0e03e8af275^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
 #: ../../../smarty/templates_c/1b545d44b0a0623299d3305753b50bf1111e2703.file.showGrades.tpl.php:204
-#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:240
+#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:241
 #: ../../../smarty/templates_c/f1e802a676a5c76661a9e8298874a95933384924.file.mainmenu.tpl.php:148
 #: ../../../smarty/templates_c/e808dee41c53387cddd5887cf5a140925e83b28d.file.showSchoolYears.tpl.php:168
 #: ../../../smarty/templates_c/8aa904b2039d13bed04c64e858656380^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:101
 #: ../../../smarty/templates_c/598e6acc5f3bcd6b3615f13c309eaebd^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
 #: ../../../smarty/templates_c/bfdce0ce780f1b921d0f5d0f77d3a41e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
+#: ../../../smarty/templates_c/4d797408ac0de3b6aa7c65dc5ffba2ebd1793600.file.edit_infotext.tpl.php:128
 #: ../../../smarty/templates_c/44238ca8d518270a98644887f90dbe9ed035afb8.file.formatted_menu_table.tpl.php:98
 #: ../../../smarty/templates_c/9c43cff433cc0199a399a11eaed29f0edaeaaad9.file.form1.tpl.php:111
 #: ../../../smarty/templates_c/2f878d67f74ddacb6e56554edac41c2b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
@@ -1345,12 +1361,13 @@ msgstr "zurück"
 #: ../../../smarty/templates_c/9c8559733c7c6f94d36879f24d405c45ea03136c.file.show_priceclasses.tpl.php:152
 #: ../../../smarty/templates_c/7daf5c5b3a90bf9cf067ed525a1eb0ce^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
 #: ../../../smarty/templates_c/abac30fa7990a32ae4b19e2843f492a3^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
+#: ../../../smarty/templates_c/dfe2673619baad8cf532069545f6444f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
 #: ../../../smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:152
 #: ../../../smarty/templates_c/97dd776ccc42d799232d77d2d7eadbdb2087af4c.file.dialogAutoCreateUsernames.tpl.php:121
 #: ../../../smarty/templates_c/664c01597200c1a7ae5862799806ad03^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
 #: ../../../smarty/templates_c/2ca92fd8323335f226298095835d98ca262d96a5.file.mainMenu.tpl.php:115
 #: ../../../smarty/templates_c/0cd7c5a039495beac1f26ece05193e06^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../smarty/templates_c/14e4210eabe8e0b4fc471c0255d612065c60917c.file.show_meals.tpl.php:163
+#: ../../../smarty/templates_c/14e4210eabe8e0b4fc471c0255d612065c60917c.file.show_meals.tpl.php:164
 #: ../../../smarty/templates_c/d925ccfd02616368489173c0239296c41d838a43.file.displayClasses.tpl.php:210
 #: ../../../smarty/templates_c/23319d8ef0a908c25db037491895a5965906a6ca.file.mainMenu.tpl.php:123
 #: ../../../smarty/templates_c/8d66d1a054b0c89822a7d5a7b45022381d461f62.file.confirmationDialog.tpl.php:120
@@ -1360,12 +1377,12 @@ msgstr "zurück"
 #: ../../../smarty/templates_c/83acc38b8be114f6de986e149986d28dc9513209.file.add_coupon.tpl.php:136
 #: ../../../smarty/templates_c/81af9d8a0076e390a700db80fd40b609^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:106
 #: ../../../smarty/templates_c/fab3158d2a06945dfdc78fcd022950cac87fd008.file.mainmenu.tpl.php:169
-#: ../../../smarty/templates_c/5714db0a103e440b4fe3f335c35f52b92e0e5c80.file.main.tpl.php:117
+#: ../../../smarty/templates_c/5714db0a103e440b4fe3f335c35f52b92e0e5c80.file.main.tpl.php:118
 #: ../../../smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:131
 #: ../../../smarty/templates_c/547e8385236d7d6dff30a14f19a0711ca5772983.file.classlist.tpl.php:155
-#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:163
+#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:164
 #: ../../../smarty/templates_c/9b176697e9c01ab28e9a627b7e206875^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../smarty/templates_c/00877b926b1f71360abb9c7161d45f532f3e4356.file.displayAll.tpl.php:172
+#: ../../../smarty/templates_c/00877b926b1f71360abb9c7161d45f532f3e4356.file.displayAll.tpl.php:173
 #: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:370
 #: ../../../smarty/templates_c/4b1fe40eacb5550dfde823402c417039^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:107
 #: ../../../smarty/templates_c/48c6d6c3c8d49d53db66eafdca634838^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
@@ -1374,22 +1391,23 @@ msgstr "zurück"
 #: ../../../smarty/templates_c/3f871ee107ca834b153f9721ce3cb611^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
 #: ../../../smarty/templates_c/e819f7f99ecd450a383ffdfbb8dfbf425712c54b.file.usernameRemoveSpecialChars.tpl.php:119
 #: ../../../smarty/templates_c/1dfa2a88ec6648ede5006d985c146e61^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../smarty/templates_c/5219913f09f1279f345ac25596bc0565^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:107
+#: ../../../smarty/templates_c/5219913f09f1279f345ac25596bc0565^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
 #: ../../../smarty/templates_c/818149c8372c3fa5e5e32c9cd62bc5d894003dc9.file.mainmenu.tpl.php:137
 #: ../../../smarty/templates_c/3eb0db64f553de2c6d2b3cfcf12fb33948f1ba0a.file.show_soli.tpl.php:158
 #: ../../../smarty/templates_c/277023282b4cc18ca18acb57da7166581f1aee33.file.addClass.tpl.php:153
 #: ../../../smarty/templates_c/535a254aa55c8e371fd9ffa70cfb696f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:107
-#: ../../../smarty/templates_c/be79683c6cae1e59fe577e2ea6108b30afd67616.file.menu.tpl.php:161
+#: ../../../smarty/templates_c/be79683c6cae1e59fe577e2ea6108b30afd67616.file.menu.tpl.php:162
+#: ../../../smarty/templates_c/06dd0d9732ef303ee29fef713e85b555^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
 #: ../../../smarty/templates_c/c931dc528d505c072d9728a2ec07fb024059e5f7.file.mainmenu.tpl.php:208
 #: ../../../smarty/templates_c/4131376768aeda7dc9af28fc0cab0af7^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:107
 #: ../../../smarty/templates_c/e29344e5fddedce49eda85e42920220e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:107
-#: ../../../smarty/templates_c/61767cbc64649c69bd673494ca137082a25c84f0.file.meals_initial_menu.tpl.php:136
+#: ../../../smarty/templates_c/61767cbc64649c69bd673494ca137082a25c84f0.file.meals_initial_menu.tpl.php:138
 #: ../../../smarty/templates_c/d5bd7be426d163f094c82f8882c3badf^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
 #: ../../../smarty/templates_c/3fe3cd4fe2198d402677adeafdbd993c923a8f2b.file.priceclass_menu.tpl.php:118
 #: ../../../smarty/templates_c/8c8b534d695ba143ddb57dc057a0c5d0e8505d3f.file.mainMenu.tpl.php:119
 #: ../../../smarty/templates_c/3a2f75ea979a961e0e90243618a8d1e82c2749f8.file.mainMenu.tpl.php:157
 #: ../../../smarty/templates_c/4d022996272f352d84190722f66bc1ed^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../smarty/templates_c/093f9544da95a056df6939dd5f74bc4bdae08a7e.file.main.tpl.php:157
+#: ../../../smarty/templates_c/093f9544da95a056df6939dd5f74bc4bdae08a7e.file.main.tpl.php:158
 #: ../../../smarty/templates_c/587d07c5d0c54d54ca93576150e63890^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
 #: ../../../smarty/templates_c/a1c6b6c80b42f8498abfb006fd1e9d1e5e250c41.file.classdetails.tpl.php:235
 #: ../../../smarty/templates_c/08f09ebdf491fb65de6505244c66b2022d891c8a.file.form2.tpl.php:131
@@ -1402,15 +1420,16 @@ msgstr "zurück"
 #: ../../../smarty/templates_c/ed644aaaf5fefb2a842bebba2040e0f3f62a171d.file.add_meal.tpl.php:136
 #: ../../../smarty/templates_c/d9ae2e659e39b51da4b84a100552c0b5c94fb34c.file.printRechargeBalanceSelect.tpl.php:164
 #: ../../../smarty/templates_c/6819e4ee18e749c9a4e594e249811227^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:106
-#: ../../../smarty/templates_c/9eb111b5be8559be63c33100f9210c2e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
+#: ../../../smarty/templates_c/9eb111b5be8559be63c33100f9210c2e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
 #: ../../../smarty/templates_c/96c7be0a38d11f4c59e8d0e03e8af275^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
 #: ../../../smarty/templates_c/1b545d44b0a0623299d3305753b50bf1111e2703.file.showGrades.tpl.php:209
-#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:245
+#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:246
 #: ../../../smarty/templates_c/f1e802a676a5c76661a9e8298874a95933384924.file.mainmenu.tpl.php:153
 #: ../../../smarty/templates_c/e808dee41c53387cddd5887cf5a140925e83b28d.file.showSchoolYears.tpl.php:173
 #: ../../../smarty/templates_c/8aa904b2039d13bed04c64e858656380^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:106
 #: ../../../smarty/templates_c/598e6acc5f3bcd6b3615f13c309eaebd^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
 #: ../../../smarty/templates_c/bfdce0ce780f1b921d0f5d0f77d3a41e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
+#: ../../../smarty/templates_c/4d797408ac0de3b6aa7c65dc5ffba2ebd1793600.file.edit_infotext.tpl.php:133
 #: ../../../smarty/templates_c/44238ca8d518270a98644887f90dbe9ed035afb8.file.formatted_menu_table.tpl.php:103
 #: ../../../smarty/templates_c/9c43cff433cc0199a399a11eaed29f0edaeaaad9.file.form1.tpl.php:116
 #: ../../../smarty/templates_c/2f878d67f74ddacb6e56554edac41c2b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
@@ -1508,36 +1527,36 @@ msgstr ""
 msgid "No, I dont want to delete the Class"
 msgstr "Nein, ich will den Kurs nicht löschen"
 
-#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:104
+#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:105
 msgid "Usersettings-Mainmenu"
 msgstr "Benutzereinstellungs-Hauptmenü"
 
-#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:109
+#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:110
 msgid "General"
 msgstr "Allgemein"
 
-#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:115
+#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:116
 msgid "Register a User"
 msgstr "Benutzer registrieren"
 
-#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:121
+#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:122
 msgid "Show Users"
 msgstr "Benutzer anzeigen"
 
-#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:130
+#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:131
 #: ../../../smarty/templates_c/c931dc528d505c072d9728a2ec07fb024059e5f7.file.mainmenu.tpl.php:129
 msgid "Bulk-Changes"
 msgstr "Massenveränderungen"
 
-#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:136
+#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:137
 msgid "Assign Usernames to User automatically"
 msgstr "Benutzernamen der Benutzer automatisch erstellen"
 
-#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:142
+#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:143
 msgid "Remove Specialcharacters from Usernames"
 msgstr "Spezialcharaktere von den Benutzernamen entfernen"
 
-#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:148
+#: ../../../smarty/templates_c/9bc97577817d85534d862dd35f17bb32f86dbe31.file.user_select.tpl.php:149
 msgid "Import Users by a CSV-File"
 msgstr "Benutzer mit einer CSV-Datei importieren"
 
@@ -1614,7 +1633,7 @@ msgid ""
 msgstr "Hier können sie Nutzer den von ihnen gewünschten Kursen zuweisen."
 
 #: ../../../smarty/templates_c/c931dc528d505c072d9728a2ec07fb024059e5f7.file.mainmenu.tpl.php:137
-#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:161
+#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:162
 msgid "Assign the Users to the Classes"
 msgstr "Die Benutzer den Kursen zuordnen"
 
@@ -1638,41 +1657,41 @@ msgstr "Am:"
 msgid "Download Pdf"
 msgstr "PDF herunterladen"
 
-#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:109
+#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:110
 msgid "Classregistrations are not allowed"
 msgstr "Kursregistrierungen sind nicht erlaubt"
 
-#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:114
+#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:115
 msgid "Classregistrations are allowed"
 msgstr "Kursregistruerungen sind erlaubt"
 
-#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:122
+#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:123
 #: ../../../smarty/templates_c/f1e802a676a5c76661a9e8298874a95933384924.file.mainmenu.tpl.php:111
 msgid "Standard-Actions"
 msgstr "Standard-Aktionen"
 
-#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:128
+#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:129
 msgid "Add a Class"
 msgstr "Ein Kurs hinzufügen"
 
-#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:134
+#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:135
 msgid "Display all Classes"
 msgstr "Alle Kurse anzeigen"
 
-#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:143
+#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:144
 #: ../../../smarty/templates_c/f1e802a676a5c76661a9e8298874a95933384924.file.mainmenu.tpl.php:132
 msgid "More Actions"
 msgstr "Mehr Aktionen"
 
-#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:149
+#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:150
 msgid "Import Classes with a CSV-File"
 msgstr "Kurse mit einer CSV-Datei importieren"
 
-#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:155
+#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:156
 msgid "Create Class-Summaries"
 msgstr "Klassenübersichten erstellen"
 
-#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:167
+#: ../../../smarty/templates_c/0ea2ecb8dcee2756584f354c62c75975b82673c7.file.mainmenu.tpl.php:168
 msgid "Change if Classregistrations are enabled"
 msgstr "Ändern, ob Kursregistrierungen erlaubt sind"
 

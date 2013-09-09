@@ -29,8 +29,9 @@ class Meals extends Module {
 		$mealInterface = new AdminMealInterface($this->relPath);
 		$mealProcessing = new AdminMealProcessing($mealInterface);
 
-		$this->_acl = $dataContainer->getAcl();
-		$this->_mealInterface = $mealInterface;
+		parent::entryPoint($dataContainer);
+		parent::initSmartyVariables();
+		$this->_interface = $mealInterface;
 
 		if (isset($_GET["action"])) {
 
@@ -86,7 +87,7 @@ class Meals extends Module {
 
 		$this->maxOrderAmountInputCheck();
 		$this->maxOrderAmountUpload($_POST['maxOrderAmount']);
-		$this->_mealInterface->dieSuccess(_g('The value for the maximum amount of orders per Day for a User was successfully changed'));
+		$this->_interface->dieSuccess(_g('The value for the maximum amount of orders per Day for a User was successfully changed'));
 	}
 
 	/**
@@ -110,7 +111,7 @@ class Meals extends Module {
 		$gump->rules($rules);
 
 		if(!$gump->run($_POST)) {
-			$this->_mealInterface->dieError(
+			$this->_interface->dieError(
 				$gump->get_readable_string_errors(true));
 		}
 	}
@@ -134,7 +135,7 @@ class Meals extends Module {
 					VALUES ('maxCountOfOrdersPerDayPerUser', '$amount');");
 			}
 		} catch (Exception $e) {
-			$this->_mealInterface->dieError(_g('Could not change the Max Amount of Orders per day per User.') . $e->getMessage());
+			$this->_interface->dieError(_g('Could not change the Max Amount of Orders per day per User.') . $e->getMessage());
 		}
 	}
 
@@ -151,7 +152,7 @@ class Meals extends Module {
 		else {
 			$amount = 0;
 		}
-		$this->_mealInterface->maxOrderAmountSetting($amount);
+		$this->_interface->maxOrderAmountSetting($amount);
 	}
 
 	/**
@@ -173,13 +174,147 @@ class Meals extends Module {
 		}
 	}
 
+	/**==========================================**
+	 * Allows the User to edit the Menu-Infotexts *
+	 **==========================================**/
+	protected function submoduleEditMenuInfotextsExecute() {
+
+		if(!isset($_POST['infotext1'], $_POST['infotext2'])) {
+			$this->menuInfotextsEditDisplay();
+		}
+		else {
+			$this->menuInfotextsChange(
+				$_POST['infotext1'], $_POST['infotext2']);
+		}
+	}
+
+	/**
+	 * Fetches the Infotexts from the Database
+	 *
+	 * @return Array The Infotexts in the Format '<name>' => '<value>'
+	 */
+	protected function menuInfotextsFetch() {
+
+		try {
+			$stmt = $this->_pdo->query(
+				'SELECT name, value FROM global_settings
+					WHERE name IN("menu_text1", "menu_text2")');
+
+			$data = $stmt->fetchAll();
+			return ArrayFunctions::arrayColumn($data, 'value', 'name');
+
+		} catch (PDOException $e) {
+			$this->_interface->dieError(
+				_g('An Error occured while fetching the infotexts!'));
+		}
+	}
+
+	/**
+	 * Displays the Infotexts for the Meals-Menu and allows to edit them
+	 */
+	protected function menuInfotextsEditDisplay() {
+
+		$infotexts = $this->menuInfotextsFetch();
+
+		if(!isset($infotexts['menu_text1'])) {
+			$infotexts['menu_text1'] = '';
+		}
+		if(!isset($infotexts['menu_text2'])) {
+			$infotexts['menu_text2'] = '';
+		}
+		$this->_smarty->assign('infotexts', $infotexts);
+		$this->displayTpl('edit_infotext.tpl');
+	}
+
+	/**
+	 * Changes the MenuInfotexts
+	 *
+	 * @param  string $text1 The Value of the first Infotext
+	 * @param  string $text2 The Valie of the second Infotext
+	 */
+	protected function menuInfotextsChange($text1, $text2) {
+
+		$infotexts = $this->menuInfotextsFetch();
+
+		$this->menuInfotextChangeConsideringEntryExistence(
+			$infotexts, 'menu_text1', $text1);
+		$this->menuInfotextChangeConsideringEntryExistence(
+			$infotexts, 'menu_text2', $text2);
+
+		$this->_interface->dieSuccess(
+			_g('The Infotexts where successfully changed!'));
+	}
+
+	/**
+	 * Changes or adds the MenuInfotexts to the Database
+	 *
+	 * Checks if the infotext-Entry exists, if not adds it
+	 *
+	 * @param  array  $infotexts     The existing infotexts fetched from the
+	 * Database, allows for checking if they exist or not
+	 * @param  string $infotextName  The name of the infotext
+	 * @param  string $infotextValue The Infotext itself
+	 */
+	protected function menuInfotextChangeConsideringEntryExistence(
+		$infotexts, $infotextName, $infotextValue) {
+
+		if(isset($infotexts[$infotextName])) {
+			$this->menuInfotextChange($infotextName, $infotextValue);
+		}
+		else {
+			$this->menuInfotextAdd($infotextName, $infotextValue);
+		}
+	}
+
+	/**
+	 * Adds a MenuInfotext to the global_settings-Table
+	 *
+	 * Dies displaying a Message on Error
+	 *
+	 * @param  string $name     The Name of the Infotext
+	 * @param  string $infotext The actual Infotext
+	 */
+	protected function menuInfotextAdd($name, $infotext) {
+
+		try {
+			$stmt = $this->_pdo->prepare(
+				'INSERT INTO global_settings (name, value) VALUES
+					(:name, :infotext)');
+
+			$stmt->execute(array('name' => $name, 'infotext' => $infotext));
+
+		} catch (PDOException $e) {
+			$this->_interface->dieError(_g('Could not change the Infotext!'));
+		}
+	}
+
+	/**
+	 * Changes a MenuInfotext in the global_settings-Table
+	 *
+	 * Dies displaying a Message on Error
+	 *
+	 * @param  string $name     The Name of the Infotext
+	 * @param  string $infotext The actual Infotext
+	 */
+	protected function menuInfotextChange($name, $infotext) {
+
+		try {
+			$stmt = $this->_pdo->prepare(
+				'UPDATE global_settings SET
+					value = :infotext WHERE name = :name');
+
+			$stmt->execute(array('name' => $name, 'infotext' => $infotext));
+
+		} catch (PDOException $e) {
+			$this->_interface->dieError(_g('Could not change the Infotext!'));
+		}
+	}
+
 	///////////////////////////////////////////////////////////////////////
 	//Attributes
 	///////////////////////////////////////////////////////////////////////
 
-	protected $_acl;
-
-	protected $mealInterface;
+	protected $_interface;
 }
 
 

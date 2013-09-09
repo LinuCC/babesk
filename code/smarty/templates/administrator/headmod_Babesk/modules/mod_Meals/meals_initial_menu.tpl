@@ -16,7 +16,8 @@
 <input type="submit" value="Alte Mahlzeiten und Bestellungen löschen" />
 </form>
 <br />
-<form action="index.php?section=Babesk|Meals&action=6" method="post">
+<form action="index.php?module=administrator|Babesk|Meals|EditMenuInfotexts"
+	method="post">
 <input type="submit" value="Infotexte f&uuml;r Speiseplan editieren" />
 </form>
 <br />
