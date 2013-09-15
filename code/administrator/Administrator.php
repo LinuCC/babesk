@@ -45,6 +45,7 @@ class Administrator {
 		$this->loadVersion();
 		$this->initPdo();
 		$this->_logger = new Logger($this->_pdo);
+		$this->_logger->categorySet('Administrator');
 		$this->_dataContainer = new DataContainer(
 			$this->_smarty,
 			$this->_adminInterface,
@@ -115,6 +116,13 @@ class Administrator {
 				$this->_moduleExecutionParser, $this->_dataContainer);
 
 		} catch (Exception $e) {
+			$this->_logger->log(
+				'Error executing a Module', 'Notice', Null,
+				json_encode(array(
+					'userId' => $_SESSION['UID'],
+					'msg' => $e->getMessage()
+			)));
+
 			if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 				//It was an Ajax-Call, dont show the whole Website
 				die(json_encode(array('value' => 'error',
@@ -140,6 +148,10 @@ class Administrator {
 			$this->_smarty->display('administrator/menu.tpl');
 		}
 		else {
+			$this->_logger->log('Administrator-Layer access denied.',
+				'Notice', null, json_encode(array(
+					'userId' => $_SESSION['UID']))
+			);
 			$this->_adminInterface->dieError(_g('Error Accessing the Admin-Layer; Either the Module does not exist, or you dont have the rights to access it!'));
 		}
 

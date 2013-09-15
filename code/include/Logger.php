@@ -83,8 +83,13 @@ class Logger {
 		$additionalData) {
 
 		try {
-			$this->_pdo->exec("CALL loggerAddLog(
-				'$message', '$category', '$severity', '$additionalData')");
+			$stmt = $this->_pdo->prepare("CALL loggerAddLog(
+				:message, :category, :severity, :additionalData)");
+
+			$stmt->execute(array(':message' => $message,
+				':category' => $category,
+				':severity' => $severity,
+				':additionalData' => $additionalData));
 
 		} catch (PDOException $e) {
 			error_log(
