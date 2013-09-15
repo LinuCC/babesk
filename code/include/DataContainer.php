@@ -15,11 +15,14 @@ class DataContainer {
 	//Constructor
 	////////////////////////////////////////////////////////////////////////
 
-	public function __construct ($smarty, $interface, $acl = NULL, $pdo = NULL) {
+	public function __construct ($smarty, $interface, $acl = NULL, $pdo = NULL,
+		$logger = NULL) {
+
 		$this->_smarty = $smarty;
 		$this->_interface = $interface;
 		$this->_acl = $acl;
 		$this->_pdo = $pdo;
+		$this->_logger = $logger;
 	}
 
 	////////////////////////////////////////////////////////////////////////
@@ -64,6 +67,15 @@ class DataContainer {
 	public function setPdo($pdo) {
 		$this->_pdo = $pdo;
 	}
+
+	public function getLogger() {
+		return $this->_logger;
+	}
+
+	public function setLogger($logger) {
+		$this->_logger = $logger;
+	}
+
 
 	public function getSubmoduleExecutionRequest() {
 		return $this->_submoduleExecutionRequest;
@@ -112,6 +124,12 @@ class DataContainer {
 	 * @var PDO
 	 */
 	protected $_pdo;
+
+	/**
+	 * Allows to Log Errors, notices and other stuff
+	 * @var Logger
+	 */
+	protected $_logger;
 }
 
 ?>

@@ -16,7 +16,6 @@ require_once PATH_INCLUDE . '/sql_access/DBConnect.php';
 require_once PATH_INCLUDE . '/Logger.php';
 require_once 'Login.php';
 require_once 'AdminInterface.php';
-require_once 'locales.php';
 
 /**
  *
@@ -39,55 +38,20 @@ class Administrator {
 		$this->initSmarty();
 		TableMng::init();
 		$this->_adminInterface = new AdminInterface(NULL, $this->_smarty);
-		$this->_logger = new Logger();
 		$this->_acl = new Acl();
 		$this->_moduleExecutionParser = new ModuleExecutionInputParser();
 		$this->_moduleExecutionParser->setSubprogramPath(
 			'root/administrator');
 		$this->loadVersion();
 		$this->initPdo();
+		$this->_logger = new Logger($this->_pdo);
 		$this->_dataContainer = new DataContainer(
 			$this->_smarty,
 			$this->_adminInterface,
 			$this->_acl,
-			$this->_pdo);
-
-		// $this->vikingsSpamAndPorc();
+			$this->_pdo,
+			$this->_logger);
 	}
-
-	protected function vikingsSpamAndPorc() {
-
-		TableMng::getDb()->autocommit(false);
-
-		$activeSy = TableMng::query('SELECT ID  FROM schoolYear sy
-   WHERE active = 1');
-
-		$users = TableMng::query('SELECT u.ID AS userId,
-    uig.GradeID AS gradeId
-
-   FROM users u
-   JOIN jointUsersInGrade uig ON uig.UserID = u.ID');
-
-		$stmt = TableMng::getDb()->prepare(
-				'INSERT INTO usersInGradesAndSchoolyears
-    (UserID, GradeID, schoolyearId) VALUES
-    (?, ?, ?);
-   ');
-
-		foreach($users as $user) {
-			$stmt->bind_param('sss', $user['userId'], $user['gradeId'], $activeSy[0]['ID']);
-			if($stmt->execute()) {
-				//yay
-			}
-			else {
-				throw new Exception('Could not change things'. $stmt->error);
-			}
-		}
-
-		TableMng::getDb()->autocommit(true);
-	}
-
-
 
 	////////////////////////////////////////////////////////////////////////
 	//Getters and Setters
