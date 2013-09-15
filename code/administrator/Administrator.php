@@ -5,7 +5,6 @@ require_once "../include/path.php";
 require_once PATH_INCLUDE . '/TableMng.php';
 require_once PATH_INCLUDE . '/Acl.php';
 require_once PATH_ADMIN . '/admin_functions.php';
-require_once PATH_ACCESS . "/LogManager.php";
 require_once PATH_INCLUDE . "/functions.php";
 require_once PATH_INCLUDE . '/exception_def.php';
 require_once PATH_INCLUDE . '/DataContainer.php';
@@ -14,6 +13,7 @@ require_once PATH_INCLUDE . '/HeadModule.php';
 require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';
 require_once PATH_INCLUDE . '/ArrayFunctions.php';
 require_once PATH_INCLUDE . '/sql_access/DBConnect.php';
+require_once PATH_INCLUDE . '/Logger.php';
 require_once 'Login.php';
 require_once 'AdminInterface.php';
 require_once 'locales.php';
@@ -39,7 +39,7 @@ class Administrator {
 		$this->initSmarty();
 		TableMng::init();
 		$this->_adminInterface = new AdminInterface(NULL, $this->_smarty);
-		$this->_logger = new LogManager();
+		$this->_logger = new Logger();
 		$this->_acl = new Acl();
 		$this->_moduleExecutionParser = new ModuleExecutionInputParser();
 		$this->_moduleExecutionParser->setSubprogramPath(
@@ -105,10 +105,6 @@ class Administrator {
 		return $this->_smarty;
 	}
 
-	public function getLogger() {
-		return $this->_logger;
-	}
-
 	public function getModuleManager() {
 		return $this->_moduleManager;
 	}
@@ -120,7 +116,6 @@ class Administrator {
 	public function run() {
 
 		$smarty = $this->_smarty;
-		$logger = $this->_logger;
 
 		$login = new Login($this->_smarty);
 		if($login->loginCheck()) {

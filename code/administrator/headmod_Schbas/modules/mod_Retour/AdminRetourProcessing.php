@@ -5,8 +5,6 @@ class AdminRetourProcessing {
 	var $messages = array();
 	private $RetourInterface;
 
-	protected $logs;
-
 	function __construct($RetourInterface) {
 
 
@@ -22,8 +20,6 @@ class AdminRetourProcessing {
 		$this->inventoryManager = new InventoryManager();
 		$this->bookManager = new BookManager();
 		$this->RetourInterface = $RetourInterface;
-		global $logger;
-		$this->logs = $logger;
 		$this->msg = array('err_empty_books' => 'keine B&uuml;cher ausgeliehen!',
 							'err_get_user_by_card' => 'Kein Benutzer gefunden!',
 							'err_card_id' => 'Die Karten-ID ist fehlerhaft!');
@@ -34,7 +30,7 @@ class AdminRetourProcessing {
 	 */
 	function RetourTableData($card_id) {
 
-		
+
 		$uid = $this->GetUser($card_id);
 		//$hasForm = TableMng::query(sprintf('SELECT COUNT(*) FROM schbas_accounting WHERE UID = "%s"',$uid));
 	//	if ($hasForm[0]['COUNT(*)']=="0")
@@ -57,7 +53,7 @@ class AdminRetourProcessing {
 			// $class = $this->userManager->getUserDetails($uid);
 		$class = $class['class'];
 		$fullname = $this->userManager->getForename($uid)." ".$this->userManager->getName($uid)." (".$class.")";
-		
+
 		if (empty($data)) {
 			$this->RetourInterface->dieError($fullname." hat ".sprintf($this->msg['err_empty_books']));
 		} else {
@@ -119,16 +115,16 @@ class AdminRetourProcessing {
 	public function GetUser ($card_id) {
 		$isCard = TableMng::query(sprintf(
 		'SELECT COUNT(*) FROM cards WHERE cardnumber LIKE "%s"',$card_id));
-		
+
 		$isUser = TableMng::query(sprintf(
 				'SELECT COUNT(*) FROM users WHERE username LIKE "%s"',$card_id));
-		
-		
-	
+
+
+
 		if ($isCard[0]['COUNT(*)']==="1") {
 			if (!$this->cardManager->valid_card_ID($card_id))
 				$this->RetourInterface->dieError(sprintf($this->msg['err_card_id']));
-		
+
 		try {
 			$uid = $this->cardManager->getUserID($card_id);
 			if ($this->userManager->checkAccount($uid)) {
@@ -145,7 +141,7 @@ class AdminRetourProcessing {
 				}
 			} catch (Exception $e) {
 				$this->RetourInterface->dieError($this->msg['err_get_user_by_card'] . ' Error:' . $e->getMessage());
-			}	
+			}
 		}
 		return $uid;
 	}

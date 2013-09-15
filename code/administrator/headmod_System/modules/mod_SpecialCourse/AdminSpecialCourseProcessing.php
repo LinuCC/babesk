@@ -3,8 +3,6 @@ class AdminSpecialCourseProcessing {
 	function __construct($SpecialCourseInterface) {
 
 		$this->SpecialCourseInterface = $SpecialCourseInterface;
-		global $logger;
-		$this->logs = $logger;
 		$this->messages = array(
 				'error' => array('max_credits' => 'Maximales Guthaben der Gruppe überschritten.',
 						'mysql_register' => 'Problem bei dem Versuch, den neuen Benutzer in MySQL einzutragen.',
@@ -22,14 +20,14 @@ class AdminSpecialCourseProcessing {
 				'get_data_failed' => 'Ein Fehler ist beim fetchen der Daten aufgetreten',
 				'notice' => array('please_repeat' => 'Bitte wiederholen sie den Vorgang.'));
 	}
-	
+
 	function EditSpecialCourses($editOrShow) {
-		
+
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
-		
+
 		$globalSettingsManager = new globalSettingsManager();
-		
-		
+
+
 		if(!$editOrShow) {
 			$specialCourses = $globalSettingsManager->getSpecialCourses();
 			$specialCourses_exploded = explode("|", $specialCourses);
@@ -40,16 +38,16 @@ class AdminSpecialCourseProcessing {
 			for ($i = 1; $i <= $editOrShow['relcounter']; $i++) {
 				if (!$editOrShow['rel'.$i]=="") {
 					$specialCourses.=$editOrShow['rel'.$i]."|";
-				}	
+				}
 			}
-			if(sizeof($specialCourses)>0) $specialCourses = substr($specialCourses, 0,strlen($specialCourses)-1); 
+			if(sizeof($specialCourses)>0) $specialCourses = substr($specialCourses, 0,strlen($specialCourses)-1);
 			$globalSettingsManager->setSpecialCourses($specialCourses);
 			$this->SpecialCourseInterface->ShowSpecialCoursesSet($specialCourses);
 		}
-		
+
 	}
-	
-	
+
+
 
 	//////////////////////////////////////////////////
 	//--------------------Show Users--------------------
@@ -58,7 +56,7 @@ class AdminSpecialCourseProcessing {
 		require_once PATH_ACCESS . '/UserManager.php';
 		require_once PATH_ACCESS . '/GroupManager.php';
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
-		
+
 		$globalSettingsManager = new globalSettingsManager();
 		$userManager = new UserManager();
 		$groupManager = new GroupManager();
@@ -100,14 +98,14 @@ class AdminSpecialCourseProcessing {
 		require_once PATH_ACCESS . '/UserManager.php';
 		require_once PATH_ACCESS . '/GroupManager.php';
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
-	
+
 		$globalSettingsManager = new globalSettingsManager();
 		$userManager = new UserManager();
 		$groupManager = new GroupManager();
-	
+
 		try {
-			
-			
+
+
 			$users = $userManager->getSingleUser($uid);
 		} catch (Exception $e) {
 			$this->logs
@@ -115,42 +113,38 @@ class AdminSpecialCourseProcessing {
 					sprintf('Error while getting Data from MySQL:%s in %s', $e->getMessage(), __METHOD__));
 			$this->userInterface->dieError($this->messages['error']['get_data_failed']);
 		}
-	
-		
-		
-		
+
+
+
+
 		$specialCourses = $globalSettingsManager->getSpecialCourses();
 		$specialCourses_exploded = explode("|", $specialCourses);
-		
+
 		$this->SpecialCourseInterface->ShowUsers($users,$specialCourses_exploded,'');
 	}
-	
-	
-	
-	
+
+
+
+
 	function SaveUsers($post_vars) {
 		require_once PATH_ACCESS . '/UserManager.php';
 		$userManager = new UserManager();
 		foreach($post_vars as $key => $value) {
 			try {
-				$userManager->SetSpecialCourse($key, $value);		
+				$userManager->SetSpecialCourse($key, $value);
 			} catch (Exception $e) {
 				$this->userInterface->dieError($this->messages['error']['change'] . $e->getMessage());
 			}
 		}
 		$this->SpecialCourseInterface->ShowUsersSuccess();
 	}
-	
 
-	
+
+
 
 	var $messages = array();
 	private $userInterface;
 
-	/**
-	 *@var Logger
-	 */
-	protected $logs;
 }
 
 ?>

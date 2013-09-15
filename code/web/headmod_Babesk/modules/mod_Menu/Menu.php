@@ -32,7 +32,6 @@ class Menu extends Module {
 		require_once PATH_ACCESS . '/MealManager.php';
 
 		global $smarty;
-		global $logger;
 
 		$orderManager = new OrderManager('orders');
 		$mealManager = new MealManager('meals');
@@ -59,8 +58,6 @@ class Menu extends Module {
 				} catch (MySQLVoidDataException $e) {
 					$meal_problems = true;
 					$smarty->assign('error', '<p class="error">Zu bestimmten Bestellung(-en) fehlen Daten einer Mahlzeit! Bitte benachrichtigen sie den Administrator!</p>');
-					$logger->log(WEB, CRITICAL,
-							sprintf('Order does not point on correct Meal! Exception: %s', $e->getMessage()));
 					continue;
 				}
 				if (!$order['fetched'] AND $order['date'] >= $today) {

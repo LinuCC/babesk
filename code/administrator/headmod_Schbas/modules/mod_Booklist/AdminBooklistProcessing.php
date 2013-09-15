@@ -3,32 +3,25 @@ class AdminBooklistProcessing {
 	function __construct($BookInterface) {
 
 		$this->BookInterface = $BookInterface;
-		global $logger;
-		$this->logs = $logger;
 		$this->messages = array(
 				'error' => array('no_books' => 'Keine B&uuml;cher gefunden.','notFound' => 'Buch nicht gefunden!'));
 	}
-	
+
 	var $messages = array();
 	private $bookInterface;
 
-	/**
-	 *@var Logger
-	 */
-	protected $logs;
-	
 	/**
 	 * Shows booklist
 	 * @param $filter
 	 */
 	function ShowBooklist($option, $filter) {
-	
+
 		require_once PATH_ACCESS . '/BookManager.php';
 		require_once PATH_ACCESS . '/UserManager.php';
-	
+
 		$booklistManager = new BookManager();
 		$userManager = new UserManager();
-	
+
 		try {
 			isset($_GET['sitePointer'])?$showPage = $_GET['sitePointer'] + 0:$showPage = 1;
 			$nextPointer = $showPage*10-10;
@@ -58,32 +51,32 @@ class AdminBooklistProcessing {
 		$navbar = navBar($showPage, 'schbas_books', 'Schbas', 'Booklist', '1',$filter);
 		$this->BookInterface->ShowBooklist($booklist,$navbar);
 	}
-	
+
 	/**
 	 * Edits an entry in book list.
 	 * Function to show the template.
 	 */
-	
+
 	function editBook($id) {
-	
+
 		require_once PATH_ACCESS . '/BookManager.php';
-	
+
 		$bookManager = new BookManager();
-	
+
 		try {
 			$bookData = $bookManager->getBookDataByID($id);
 		} catch (Exception $e) {
 			$this->BookInterface->dieError($this->messages['error']['uid_get_param'] . $e->getMessage());
 		}
-	
+
 		$this->BookInterface->ShowChangeBook($bookData);
 	}
-	
+
 	/**
 	 * Edits an entry in book list.
 	 * Changes the MySQL entry
 	 */
-	
+
 	function changeBook($id, $subject, $class, $title, $author, $publisher, $isbn, $price, $bundle) {
 		require_once PATH_ACCESS . '/BookManager.php';
 		$bookManager = new BookManager();
@@ -95,7 +88,7 @@ class AdminBooklistProcessing {
 		}
 		$this->BookInterface->ShowChangeBookFin($id, $subject, $class, $title, $author, $publisher, $isbn, $price, $bundle);
 	}
-	
+
 	/**
 	 * Returns the book ID by a given ISBN
 	 */
@@ -116,7 +109,7 @@ class AdminBooklistProcessing {
 	function AddEntry() {
 		$this->BookInterface->ShowAddEntry();
 	}
-	
+
 	/**
 	 * Adds an entry into Book list.
 	 * @param $barcode
@@ -142,10 +135,10 @@ class AdminBooklistProcessing {
 				$this->BookInterface->dieError($this->messages['error']['get_data_failed']);
 			}
 		}
-	
+
 		$this->BookInterface->showAddEntryFin($subject, $class, $title, $author, $publisher, $isbn, $price, $bundle);
 	}
-	
+
 	/**
 	 * Shows the template for confirmation of an delete request.
 	 * @param $id
@@ -153,8 +146,8 @@ class AdminBooklistProcessing {
 	function DeleteConfirmation($id) {
 		$this->BookInterface->ShowDeleteConfirmation($id);
 	}
-	
-	
+
+
 	/**
 	 * Deletes an entry from MySQL.
 	 * @param $id
@@ -166,13 +159,13 @@ class AdminBooklistProcessing {
 		$inventoryManager = new InventoryManager();
 		require_once PATH_ACCESS . '/LoanManager.php';
 		$loanManager = new LoanManager();
-	
-	
+
+
 		try {
-			
-			
+
+
 			$inv_list = $inventoryManager->getTableData('book_id = '.$id);
-			
+
 			foreach ($inv_list as $inv) {
 				$loanManager->deleteAllEntriesWithValueOfKey("inventory_id", $inv['id']);
 			}
@@ -187,18 +180,18 @@ class AdminBooklistProcessing {
 		}
 		$this->BookInterface->ShowDeleteFin();
 	}
-	
+
 	function isInvForBook($book_id) {
 		require_once PATH_ACCESS . '/BookManager.php';
 		require_once PATH_ACCESS . '/InventoryManager.php';
 		$bookManager = new BookManager();
 		$inventoryManager = new InventoryManager();
-		
+
 		$existEntry = $inventoryManager->existsEntry('book_id', $book_id);
 		return $existEntry;
-		
+
 	}
-	
+
 	/**
 	 *
 	 */
@@ -210,10 +203,10 @@ class AdminBooklistProcessing {
 			return $id['id'];
 		} catch (Exception $e) {
 		}
-	
+
 	}
-	
-	
+
+
 	/**
 	 *
 	 * @var unknown

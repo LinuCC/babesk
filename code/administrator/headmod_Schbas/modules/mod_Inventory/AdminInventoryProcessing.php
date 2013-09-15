@@ -3,8 +3,6 @@ class AdminInventoryProcessing {
 	function __construct($inventoryInterface) {
 
 		$this->inventoryInterface = $inventoryInterface;
-		global $logger;
-		$this->logs = $logger;
 		$this->messages = array(
 				'error' => array('get_data_failed' => 'Ein Fehler ist beim fetchen der Daten aufgetreten',
 								'input1' => 'Ein Feld wurde falsch mit ', 'input2' => ' ausgefÃ¼llt',
@@ -14,12 +12,12 @@ class AdminInventoryProcessing {
 								'uid_get'=> 'Konnte keinen Inventareintrag finden'),
 				'notice' => array());
 	}
-	
+
 	//////////////////////////////////////////////////
 	//--------------------Show inventory--------------------
 	//////////////////////////////////////////////////
 	function ShowInventory($filter) {
-		
+
 		require_once PATH_ACCESS . '/InventoryManager.php';
 
 		$inventoryManager = new InventoryManager();
@@ -34,7 +32,7 @@ class AdminInventoryProcessing {
 							sprintf('Error while getting Data from MySQL:%s in %s', $e->getMessage(), __METHOD__));
 			$this->inventoryInterface->dieError($this->messages['error']['get_data_failed']);
 		}
-		
+
 		try {
 			$bookcodes = $inventoryManager->getBookCodesByInvData($inventory);
 		} catch (Exception $e) {
@@ -46,21 +44,21 @@ class AdminInventoryProcessing {
 		$navbar = navBar($showPage, 'schbas_inventory', 'Schbas', 'Inventory', '1',$filter);
 		$this->inventoryInterface->ShowInventory($bookcodes,$navbar);
 	}
-	
+
 	/**
 	 * Edits an entry in inventory list.
 	 * Function to show the template.
 	 * @param $id
 	 */
-	
+
 	function editInventory($id) {
-		
+
 		require_once PATH_ACCESS . '/InventoryManager.php';
 		require_once PATH_ACCESS . '/BookManager.php';
-		
+
 		$inventoryManager = new InventoryManager();
 		$bookManager = new BookManager();
-		
+
 		try {
 			$invData = $inventoryManager->getInvDataByID($_GET['ID']);
 		} catch (Exception $e) {
@@ -72,7 +70,7 @@ class AdminInventoryProcessing {
 
 		$this->inventoryInterface->ShowChangeInv($bookdata, $invData);
 	}
-	
+
 	/**
 	 * Edits an entry in inventory list.
 	 * Changes the MySQL entry
@@ -80,7 +78,7 @@ class AdminInventoryProcessing {
 	 * @param $purchase
 	 * @param $exemplar
 	 */
-	
+
 	function changeInventory($id, $purchase, $exemplar) {
 		require_once PATH_ACCESS . '/InventoryManager.php';
 		$inventoryManager = new InventoryManager();
@@ -92,17 +90,17 @@ class AdminInventoryProcessing {
 		$this->inventoryInterface->dieError($this->messages['error']['change'] . $e->getMessage());
 	}
 	$this->inventoryInterface->ShowChangeInvFin($id, $purchase, $exemplar);
-	
+
 	}
-	
-	
+
+
 	/**
 	 * Show template for adding an entry in inventory list.
 	 */
 	function AddEntry() {
 		$this->inventoryInterface->showAddEntry();
 	}
-	
+
 	/**
 	 * Adds an entry into inventory list.
 	 * @param $barcode
@@ -132,7 +130,7 @@ class AdminInventoryProcessing {
 		if($search) {
 				$this->inventoryInterface->dieError($this->messages['error']['duplicate']);
 			} else {
-				try {			
+				try {
 					$inventoryManager->addEntry('book_id',$book_info['id'],'year_of_purchase',$barcode_exploded[1],'exemplar',$barcode_exploded[5]);
 				}catch (Exception $e) {
 					$this->logs
@@ -141,10 +139,10 @@ class AdminInventoryProcessing {
 					$this->inventoryInterface->dieError($this->messages['error']['get_data_failed']);
 				}
 			}
-		
+
 		$this->inventoryInterface->showAddEntryFin($book_info,$barcode_exploded[1],$barcode_exploded[5]);
 	}
-	
+
 	/**
 	 * Shows the template for confirmation of an delete request.
 	 * @param $id
@@ -152,8 +150,8 @@ class AdminInventoryProcessing {
 	function DeleteConfirmation($id) {
 		$this->inventoryInterface->ShowDeleteConfirmation($id);
 	}
-	
-	
+
+
 	/**
 	 * Deletes an entry from MySQL.
 	 * @param $id
@@ -163,7 +161,7 @@ class AdminInventoryProcessing {
 		$inventoryManager = new InventoryManager();
 		require_once PATH_ACCESS . '/LoanManager.php';
 		$loanManager = new LoanManager();
-		
+
 		try {
 			$inventoryManager->delEntry($id);										// die Inventardaten löschen
 			$loanManager->deleteAllEntriesWithValueOfKey("inventory_id", $id);		// die Ausleihdaten löschen wir auch mit
@@ -175,9 +173,9 @@ class AdminInventoryProcessing {
 		}
 		$this->inventoryInterface->ShowDeleteFin();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	function GetIDFromBarcode($barcode) {
 		require_once PATH_ACCESS . '/InventoryManager.php';
@@ -186,27 +184,20 @@ class AdminInventoryProcessing {
 			return $inventoryManager->getInvIDByBarcode($barcode);
 		} catch (Exception $e) {
 		}
-		
-	}	
-	
+
+	}
+
 	/**
-	 * 
+	 *
 	 * @var unknown
 	 */
 	function ScanForDeleteEntry() {
 		$this->inventoryInterface->ShowScanforDeleteEntry();
 	}
-	
-	
-	
-	
+
+
 	var $messages = array();
 	private $inventoryInterface;
-
-	/**
-	 *@var Logger
-	 */
-	protected $logs;
 }
 
 ?>

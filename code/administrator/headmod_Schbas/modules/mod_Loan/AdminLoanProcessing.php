@@ -7,8 +7,6 @@ class AdminLoanProcessing {
 							'duplicate' => 'Dieses Buch ist bereits vergeben'));
 	private $loanInterface;
 
-	protected $logs;
-
 	function __construct($loanInterface) {
 
 
@@ -24,8 +22,6 @@ class AdminLoanProcessing {
 		$this->inventoryManager = new InventoryManager();
 		$this->bookManager = new BookManager();
 		$this->loanInterface = $loanInterface;
-		global $logger;
-		$this->logs = $logger;
 		$this->msg = array('err_card_id' => 'Dies ist keine gÃ¼ltige Karten-ID ("%s")',
 				'err_get_user_by_card' => 'Anhand der Kartennummer konnte kein Benutzer gefunden werden.');
 	}
@@ -39,7 +35,7 @@ $alert="<font color=#ff0000>";
 			$this->loanInterface->dieError(sprintf($this->msg['err_card_id'], $card_id));
 
 		$uid = $this->GetUser($card_id);
-		// eingefügt 
+		// eingefügt
 		$hasForm = TableMng::query(sprintf('SELECT COUNT(*) FROM schbas_accounting WHERE UID = "%s"',$uid));
 			if ($hasForm[0]['COUNT(*)']=="0")
 		$alert .= "Formular zur Buchausleihe wurde nicht abgegeben!<br>";
@@ -60,8 +56,8 @@ $alert="<font color=#ff0000>";
 						$alert .= $book_title[0]['title']."<br>";
 					}
 					$alert.="<br>";
-						
-				}	
+
+				}
 //
 		$alert .="</font>";
 		$loanbooks = $this->loanManager->getLoanByUID($uid, false);
