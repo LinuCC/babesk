@@ -118,13 +118,17 @@ $(document).ready(function() {
 	$('div#columnsToShowWrapper').on('change', 'input.columnSelect',
 		function(ev) {
 		newDataFetch();
+		cols = selectedColumnIdsGet();
+		$.cookie('selectedDisplayColumns', cols.join(','));
 	});
+
 	$('div.filter').on('change', 'input.columnFilter', function(ev) {
 
 		$('.pageSelect input:checked').prop('checked', '');
 		$('.pageSelect input#pageSelectFirst').prop('checked', 'checked');
 		newDataFetch();
 	});
+
 	$('div.filter').on('click', 'input#filterSubmit', function(ev) {
 
 		$('.pageSelect input:checked').prop('checked', '');
@@ -220,8 +224,6 @@ $(document).ready(function() {
 			},
 
 			success: function(data) {
-
-				console.log(data);
 
 				try {
 					data = JSON.parse(data);
@@ -324,27 +326,35 @@ $(document).ready(function() {
 		var menuButton = String('<label for="{0}">{1}</label>' +
 				'<input type="checkbox" class="columnSelect" id="{0}"' +
 				'name="columnSelect" />');
-		var buttons = Array();
 		var maxButtonsOnOneLine = 4;
+		var rowHelper;
 		var counter = 0;
-		var wholeColHtml = '';
+		var colsPreselected = $.cookie('selectedDisplayColumns');
+		if(colsPreselected != undefined) {
+			var columnsToPreselect = colsPreselected.split(',');
+		}
+		var buttons = Array();
 
 		$.each(data, function(colId, colName) {
-			buttons.push(menuButton.format(colId, colName));
+			var button = $(menuButton.format(colId, colName));
+			if($.inArray(colId, columnsToPreselect) != -1) {
+				button.prop('checked', 'checked');
+			}
+			buttons.push(button);
 		});
 
-		$.each(buttons, function(index, htmlButton) {
+		$("div#columnsToShowWrapper").html('');
+		$.each(buttons, function(index, button) {
 			if(counter == 0) {
-				wholeColHtml += '<div class="columnsToShow blueButtons">';
+				rowHelper = $('<div class="columnsToShow blueButtons"></div>');
 			}
-			wholeColHtml += htmlButton;
+			rowHelper.append(button)
 			counter += 1;
 			if(counter >= 4) {
-				wholeColHtml += '</div>';
+				$("div#columnsToShowWrapper").append(rowHelper);
 				counter = 0;
 			}
 		});
-		$("div#columnsToShowWrapper").html(wholeColHtml);
 		$("div.columnsToShow").buttonset();
 	}
 
@@ -417,8 +427,6 @@ $(document).ready(function() {
 	 * @param  {Array} userData The Userdata fetched from the server
 	 */
 	var tableFillByUserdata = function(userData) {
-
-		console.log(userData);
 
 		var columnsToShow = $.map($('input.columnSelect:checked'), function(el) {
 			return $(el).attr('id');

@@ -5,7 +5,6 @@
 	type="text/css" />
 
 <script src="../smarty/templates/administrator/moduleMenu.js"></script>
-<style type='text/css'></style>
 
 <!-- ACTUAL HTML -->
 
