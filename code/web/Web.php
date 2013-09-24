@@ -15,8 +15,8 @@ class Web {
 		}
 
 		require_once PATH_ACCESS . '/UserManager.php';
-		require_once PATH_INCLUDE . '/moduleManager.php';
 		require_once PATH_INCLUDE . '/functions.php';
+		require_once PATH_INCLUDE . '/DataContainer.php';
 		require_once PATH_INCLUDE . '/TableMng.php';
 		require_once PATH_INCLUDE . '/Acl.php';
 		require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';

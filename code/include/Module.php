@@ -44,6 +44,7 @@ abstract class Module {
 		$this->_acl = $dataContainer->getAcl();
 		$this->_submoduleExecutionpath =
 			$dataContainer->getSubmoduleExecutionRequest();
+		$this->_logger = $dataContainer->getLogger();
 	}
 
 	/**
@@ -169,6 +170,12 @@ abstract class Module {
 	 * @var Acl
 	 */
 	protected $_acl;
+
+	/**
+	 * Allows for logging problems or notices to the Database
+	 * @var Logger
+	 */
+	protected $_logger;
 }
 
 ?>

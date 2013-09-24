@@ -59,10 +59,13 @@ class Classes extends Module {
 	 */
 	protected function entryPoint($dataContainer) {
 
+		parent::entryPoint($dataContainer);
+
 		$this->_interface = $dataContainer->getInterface();
 		$this->_acl = $dataContainer->getAcl();
 		$this->_pdo = $dataContainer->getPdo();
 		$this->_smarty = $dataContainer->getSmarty();
+		$this->_logger->categorySet('administrator/Babesk/Classes');
 
 		$this->initSmartyVariables();
 	}
@@ -108,6 +111,24 @@ class Classes extends Module {
 			return $stmt->fetchAll();
 
 		} catch (Exception $e) {
+			$this->_interface->dieError(
+				_g('Could not fetch the Schoolyears!'));
+		}
+	}
+
+	protected function schoolyearsIdNamePairsGetAll() {
+
+		try {
+			$stmt = $this->_pdo->query('SELECT ID, label FROM schoolYear');
+
+			$stmt->execute();
+			return $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+
+		} catch (PDOException $e) {
+			$this->_logger->log('Could not fetch the Schoolyear-ID-Name-Pairs',
+				'Notice', Null,
+				json_encode(array('Exception' => $e->getMessage()
+			)));
 			$this->_interface->dieError(
 				_g('Could not fetch the Schoolyears!'));
 		}
@@ -387,11 +408,136 @@ class Classes extends Module {
 	 */
 	protected function submoduleDisplayClassesExecute() {
 
-		$classes = $this->classesGetWithAdditionalReadableData();
+		$schoolyearId = $this->displayClassesDesiredSchoolyearGet();
+		$classes = $this->displayClassesClassesGet($schoolyearId);
+		$schoolyears = $this->schoolyearsIdNamePairsGetAll();
+
 		$this->_smarty->assign('classes', $classes);
-		$this->_smarty->assign('schoolyears', $this->schoolyearsGetAll());
+		$this->_smarty->assign('schoolyears', $schoolyears);
+		$this->_smarty->assign('activeSchoolyearId', $schoolyearId);
 		$this->_smarty->display(
 			$this->_smartyModuleTemplatesPath . 'displayClasses.tpl');
+	}
+
+	/**
+	 * Returns the SchoolyearId the classes being displayed are in
+	 *
+	 * @return string The SchoolyearId
+	 */
+	protected function displayClassesDesiredSchoolyearGet() {
+
+		if(isset($_GET['schoolyearId'])) {
+			$schoolyearId = $_GET['schoolyearId'];
+		}
+		else {
+			$schoolyearId = $this->activeSchoolyearGet();
+		}
+
+		return $schoolyearId;
+	}
+
+	/**
+	 * Fetches the ID of the active Schoolyear from the Server
+	 *
+	 * @return string the ID of the Active Schoolyear
+	 */
+	protected function activeSchoolyearGet() {
+
+		try {
+			$stmt = $this->_pdo->query(
+				'SELECT ID FROM schoolYear WHERE active = 1');
+
+			$stmt->execute();
+			return $stmt->fetchColumn();
+
+		} catch (PDOException $e) {
+			$this->_interface->dieError(
+				_g('Could not fetch the active Schoolyear!'));
+		}
+	}
+
+	/**
+	 * Returns the Classes to be displayed
+	 *
+	 * @return array The Classes
+	 */
+	protected function displayClassesClassesGet($schoolyearId) {
+
+		if($this->schoolyearIdCheck($schoolyearId)) {
+			$classes = $this->classesGetAllBySchoolyearId($schoolyearId);
+		}
+		else {
+			$classes = array();
+		}
+
+		return $classes;
+	}
+
+	/**
+	 * Checks if the Fetched SchoolyearId has a correct value
+	 *
+	 * @param  int    $id The SchoolyearID
+	 * @return bool       If the ID is a correct value true, else false
+	 */
+	protected function schoolyearIdCheck($id) {
+
+		if(empty($id)) {
+			$this->_interface->showError(
+				_g('There is no active Schoolyear set!'));
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
+	/**
+	 * Fetches all Classes with additional Data that are in the Schoolyear
+	 *
+	 * @param  int    $schoolyearId The ID of the Schoolyear
+	 * @return array                The Fetched Classes
+	 */
+	protected function classesGetAllBySchoolyearId($schoolyearId) {
+
+		try {
+			$subQueryCountUsers = '(SELECT Count(*)
+					FROM jointUsersInClass uic
+					JOIN users ON users.ID = uic.UserID
+					WHERE uic.statusId = (SELECT ID FROM usersInClassStatus
+						WHERE name="%s") AND c.ID = uic.ClassID
+					)
+				';
+
+			$stmt = $this->_pdo->prepare(
+				'SELECT c.*, sy.label As schoolyearLabel,
+					cu.translatedName AS unitTranslatedName,
+					GROUP_CONCAT(DISTINCT ct.name SEPARATOR "; ") AS classteacherName,
+					'. sprintf ($subQueryCountUsers, 'active') . ' AS activeCount,
+					'. sprintf ($subQueryCountUsers, 'waiting') . ' AS waitingCount,
+					'. sprintf ($subQueryCountUsers, 'request1') . ' AS request1Count,
+					'. sprintf ($subQueryCountUsers, 'request2') . ' AS request2Count
+				FROM class c
+				LEFT JOIN schoolYear sy ON c.schoolyearId = sy.ID
+				LEFT JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
+				LEFT JOIN (
+						SELECT ctic.ClassID AS classId,
+							CONCAT(ct.forename, " ", ct.name) AS name
+						FROM classTeacher ct
+						JOIN jointClassTeacherInClass ctic
+							ON ct.ID = ctic.ClassTeacherID
+					) ct ON c.ID = ct.classId
+				WHERE sy.ID = :schoolyearId
+				GROUP BY c.ID');
+
+			$stmt->execute(array('schoolyearId' => $schoolyearId));
+
+			return $stmt->fetchAll();
+
+		} catch (PDOException $e) {
+			$this->_interface->dieError(
+				_g('Could not fetch the Classes by SchoolyearId $1%s',
+					$schoolyearId));
+		}
 	}
 
 	/**

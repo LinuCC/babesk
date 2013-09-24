@@ -7,8 +7,19 @@ function showOptions (ID) {
 	document.getElementById('optionButtons' + ID).hidden = false;
 	document.getElementById('option' + ID).hidden = true;
 }
+
+$(document).ready(function() {
+
+	$('#schoolyearSelector').on('change', function(event) {
+		var id = $('#schoolyearSelector option:selected').val();
+		window.location.href = 'index.php?module=administrator|Kuwasys|\
+			Classes|DisplayClasses&schoolyearId=' + id;
+	});
+});
+
 </script>
 
+<!--
 <div class="filterBar">
 <h3>Filter</h3>
 <form action="index.php?section=Kuwasys|Classes&action=showClass" method="post">
@@ -28,6 +39,19 @@ nach
 filtern.
 </form>
 </div><br>
+-->
+
+<div class="filterBar">
+	<label for="schoolyearSelector">Kurse für welches Schuljahr?</label>
+	<select id="schoolyearSelector" name="schoolyearId">
+		{foreach $schoolyears as $schoolyearId => $schoolyearLabel}
+			<option value="{$schoolyearId}"
+				{if $schoolyearId == $activeSchoolyearId}selected="selected"{/if}
+				>{$schoolyearLabel}</option>
+
+		{/foreach}
+	</select>
+</div>
 
 <table>
 	<thead>
@@ -39,7 +63,6 @@ filtern.
 			<th align='center'>Wartende Teilnehmer</th>
 			<th align='center'>Wünschende Teilnehmer</th>
 			<th align='center'>Maximale Registrierungen</th>
-			<th align='center'>Schuljahr</th>
 			<th align='center'>Veranstaltungstag</th>
 		</tr>
 	</thead>
@@ -53,7 +76,6 @@ filtern.
 			<td align="center">{$class.waitingCount}</td>
 			<td align="center">{$class.request1Count + $class.request2Count}</td>
 			<td align="center">{$class.maxRegistration}</td>
-			<td align="center">{$class.schoolyearLabel}</td>
 			<td align="center">{$class.unitTranslatedName}</td>
 			<td align="center" bgcolor='#FFD99'>
 				<div id='option{$class.ID}'>
