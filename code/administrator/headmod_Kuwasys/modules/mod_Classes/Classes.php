@@ -389,6 +389,7 @@ class Classes extends Module {
 
 		$classes = $this->classesGetWithAdditionalReadableData();
 		$this->_smarty->assign('classes', $classes);
+		$this->_smarty->assign('schoolyears', $this->schoolyearsGetAll());
 		$this->_smarty->display(
 			$this->_smartyModuleTemplatesPath . 'displayClasses.tpl');
 	}
@@ -402,9 +403,17 @@ class Classes extends Module {
 	 * else all classes will be fetched
 	 * @return array The Classes
 	 */
-	protected function classesGetWithAdditionalReadableData($classId = false) {
+	protected function classesGetWithAdditionalReadableData(
+		$classId = false, $filterBySchoolyear = false) {
 
-		$whereStr = ($classId !== false) ? 'WHERE c.ID = :id' : '';
+		$whereStr = '';
+
+		if($classId) {
+			$whereStr = 'WHERE c.ID = :id';
+		}
+		else if($filterBySchoolyear) {
+			$whereStr = 'WHERE sy.ID = :id';
+		}
 
 		$subQueryCountUsers = '(SELECT Count(*)
 				FROM jointUsersInClass uic
@@ -438,6 +447,10 @@ class Classes extends Module {
 
 			if($classId !== false) {
 				$stmt->execute(array(':id' => $classId));
+				return $stmt->fetch();
+			}
+			else if($filterBySchoolyear !== false) {
+				$stmt->execute(array(':id' => $filterBySchoolyear));
 				return $stmt->fetch();
 			}
 			else {
