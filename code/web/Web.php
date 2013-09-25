@@ -20,6 +20,7 @@ class Web {
 		require_once PATH_INCLUDE . '/TableMng.php';
 		require_once PATH_INCLUDE . '/Acl.php';
 		require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';
+		require_once PATH_INCLUDE . '/Logger.php';
 		require_once 'WebInterface.php';
 
 		TableMng::init ();
@@ -28,13 +29,16 @@ class Web {
 		$this->_interface = new WebInterface($this->_smarty);
 		$this->_acl = new Acl();
 		$this->initPdo();
+		$this->_logger = new Logger($this->_pdo);
+		$this->_logger->categorySet('Administrator');
 		$this->_moduleExecutionParser = new ModuleExecutionInputParser();
 		$this->_moduleExecutionParser->setSubprogramPath('root/web');
 		$this->_dataContainer = new DataContainer(
 			$this->_smarty,
 			$this->_interface,
 			$this->_acl,
-			$this->_pdo);
+			$this->_pdo,
+			$this->_logger);
 		$this->initLanguage();
 	}
 
@@ -401,6 +405,12 @@ class Web {
 	 * @var string
 	 */
 	private $_imagepathPrefix = '../images/moduleBackgrounds/';
+
+	/**
+	 * Allows to log errors and other things
+	 * @var Logger
+	 */
+	private $_logger;
 }
 
 ?>
