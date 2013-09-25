@@ -31,8 +31,11 @@ class Logger {
 	 * the function will use the preset Category.
 	 *
 	 * @param  string $message        The message to log
-	 * @param  string $severity       The severity of the message
-	 * @param  string $category       The category of the message
+	 * @param  string $severity       The severity of the message. If not
+	 *                                given, the severity "Notice" is assumed
+	 * @param  string $category       The category of the message. If not
+	 *                                given and not preset with categorySet(),
+	 *                                the category "Undefined" is assumed
 	 * @param  string $additionalData Additional Data usable to track bugs etc,
 	 *                                formatted as JSON
 	 * @return boolean                True on Success, False if an Error
@@ -40,11 +43,11 @@ class Logger {
 	 */
 	public function log(
 		$message,
-		$severity = '',
-		$category = '',
+		$severity = 'Notice',
+		$category = 'Undefined',
 		$additionalData = '') {
 
-		if($category == '' && !empty($this->_presetCategory)) {
+		if($category == 'Undefined' && !empty($this->_presetCategory)) {
 			$category = $this->_presetCategory;
 		}
 
