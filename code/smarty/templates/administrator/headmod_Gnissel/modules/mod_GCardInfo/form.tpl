@@ -4,7 +4,7 @@
 	<fieldset>
 		<legend>Karte</legend>
 		<label>ID</label>
-			<input type="text" name="card_ID" size="10" maxlength="10" /><br />
+			<input type="text" name="card_ID" size="10" maxlength="10" autofocus /><br />
 	</fieldset>
 	<input type="submit" value="Senden" />
 </form>
