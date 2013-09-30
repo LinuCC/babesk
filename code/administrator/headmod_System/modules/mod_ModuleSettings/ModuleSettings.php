@@ -274,23 +274,57 @@ class ModuleSettings extends Module {
 		}
 	}
 
+	/**
+	 * Removes the Module from the Database
+	 */
 	protected function moduleRemove() {
 
 		TableMng::sqlEscape($_POST['moduleId']);
-		$module = $this->_acl->getModuleroot()->anyChildByIdGet(
-			$_POST['moduleId']);
-		if($module) {
-			$this->moduleRemoveFromDb($module);
-		}
-		else {
+		$module = $this->moduleByIdGet($_POST['moduleId']);
+
+		try {
+			$this->linksOfModuleRemove($_POST['moduleId']);
+			$this->moduleEntryRemoveFromDb($module);
+
+		} catch (Exception $e) {
+			$this->_logger->log(
+				"Could not delete the Module with Id $_POST[moduleId]",
+				'Moderate'
+			);
 			die(json_encode(array('value' => 'error',
-				'message' => 'konnte das Modul nicht finden')));
+				'message' => _g('Could not remove the Module from ' .
+					'the Database!'))));
 		}
+
+		$this->_logger->log("Deleted Module with ID $_POST[moduleId]");
 		die(json_encode(array('value' => 'success',
 			'message' => 'Das Modul wurde erfolgreich entfernt')));
 	}
 
-	protected function moduleRemoveFromDb($module) {
+	/**
+	 * Gets the Module by Id from the AccessControlLayer
+	 *
+	 * Dies displaying an Error if the Module could not be fetched
+	 *
+	 * @param  int    $moduleId The ID of the Module
+	 * @return ModuleGenerator  The Module
+	 */
+	protected function moduleByIdGet($moduleId) {
+
+		$module = $this->_acl->getModuleroot()->anyChildByIdGet(
+			$moduleId);
+
+		if($module) {
+			return $module;
+		}
+		else {
+			$this->_logger->log("Could not find the Module with Id $moduleId in " . __METHOD__);
+			die(json_encode(array('value' => 'error',
+				'message' => 'konnte das Modul nicht finden')));
+		}
+	}
+
+	protected function moduleEntryRemoveFromDb($module) {
 
 		if($query = ModuleGenerator::moduleDeleteQueryCreate($module)) {
 			try {
@@ -302,6 +336,29 @@ class ModuleSettings extends Module {
 				die(json_encode(array('value' => 'error',
 					'message' => 'Konnte das Modul nicht von der Datenbank löschen!')));
 			}
+		}
+	}
+
+	/**
+	 * Removes Entries in other Tables linking to the Module
+	 *
+	 * Logs on Error
+	 *
+	 * @param  int    $moduleId The Id of the module
+	 * @throws PDOException If links could not be deleted
+	 */
+	protected function linksOfModuleRemove($moduleId) {
+
+		try {
+			$stmt = $this->_pdo->prepare(
+				'DELETE FROM GroupModuleRights WHERE moduleId = :moduleId');
+
+			$stmt->execute(array('moduleId' => $moduleId));
+
+		} catch (PDOException $e) {
+			$this->_logger->log(
+				"Could not remove the Links of Module $moduleId");
+			throw $e;
 		}
 	}
 

@@ -44,11 +44,16 @@ class Logger {
 	public function log(
 		$message,
 		$severity = 'Notice',
-		$category = 'Undefined',
+		$category = Null,
 		$additionalData = '') {
 
-		if($category == 'Undefined' && !empty($this->_presetCategory)) {
-			$category = $this->_presetCategory;
+		if(!isset($category)) {
+			if(!empty($this->_presetCategory)) {
+				$category = $this->_presetCategory;
+			}
+			else {
+				$category = 'Undefined';
+			}
 		}
 
 		return $this->logUpload(
