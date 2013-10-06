@@ -9,7 +9,6 @@ require_once PATH_INCLUDE . "/functions.php";
 require_once PATH_INCLUDE . '/exception_def.php';
 require_once PATH_INCLUDE . '/DataContainer.php';
 require_once PATH_INCLUDE . '/Module.php';
-require_once PATH_INCLUDE . '/HeadModule.php';
 require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';
 require_once PATH_INCLUDE . '/ArrayFunctions.php';
 require_once PATH_INCLUDE . '/sql_access/DBConnect.php';

@@ -29,13 +29,26 @@ abstract class Module {
 	//Methods
 	////////////////////////////////////////////////////////////////////////
 
+
 	public function execute ($dataContainer) {
+
 		require $this->executablePath;
+	}
+
+	public function initAndExecute($dataContainer) {
+
+		$dataContainer = $this->preExecution($dataContainer);
+		$this->execute($dataContainer);
 	}
 
 	////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////
+
+	protected function preExecution($dataContainer) {
+
+		return $dataContainer;
+	}
 
 	protected function entryPoint($dataContainer) {
 

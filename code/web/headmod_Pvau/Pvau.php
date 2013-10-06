@@ -1,13 +1,13 @@
 <?php
 
-require_once PATH_INCLUDE . '/HeadModule.php';
+require_once PATH_INCLUDE . '/Module.php';
 
 /**
  * class for Interface web
  * @author Mirek Hancl
  *
  */
-class Pvau extends HeadModule {
+class Pvau extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes

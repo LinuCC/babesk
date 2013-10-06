@@ -1,11 +1,11 @@
 <?php
 
-require_once PATH_INCLUDE . '/HeadModule.php';
+require_once PATH_INCLUDE . '/Module.php';
 
 /**
  * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
  */
-class GeneralPublicData extends HeadModule {
+class GeneralPublicData extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes

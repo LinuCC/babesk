@@ -1,13 +1,13 @@
 <?php
 
-require_once PATH_INCLUDE . '/HeadModule.php';
+require_once PATH_INCLUDE . '/Module.php';
 
 /**
  * class for Interface web
  * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
  *
  */
-class Settings extends HeadModule {
+class Settings extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -26,7 +26,7 @@ class Settings extends HeadModule {
 				'root/web/Settings/SettingsMainMenu');
 		$dataContainer->getAcl()->moduleExecute($defaultMod,
 				$dataContainer);
-		
+
 	}
 }
 

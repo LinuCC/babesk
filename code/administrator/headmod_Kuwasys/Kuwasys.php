@@ -1,6 +1,6 @@
 <?php
 
-require_once PATH_INCLUDE . '/HeadModule.php';
+require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/exception_def.php';
 require_once 'KuwasysDataContainer.php';
 require_once 'KuwasysLanguageManager.php';
@@ -10,7 +10,7 @@ require_once 'KuwasysLanguageManager.php';
  * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
  *
  */
-class Kuwasys extends HeadModule {
+class Kuwasys extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes

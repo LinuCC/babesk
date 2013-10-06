@@ -1,6 +1,6 @@
 <?php
 
-require_once PATH_INCLUDE . '/HeadModule.php';
+require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';
 
 /**
@@ -8,7 +8,7 @@ require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';
  * @author Mirek Hancl
  *
  */
-class Messages extends HeadModule {
+class Messages extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes

@@ -94,7 +94,7 @@ class ModuleGenerator {
 
 			if(class_exists($classname = $this->_name)) {
 				$module = new $classname($classname, $classname, $subPath);
-				$module->execute($dataContainer);
+				$module->initAndExecute($dataContainer);
 			}
 			else {
 				throw new Exception("Could not load Module-Class $classname");

@@ -1,13 +1,13 @@
 <?php
 
-require_once PATH_INCLUDE . '/HeadModule.php';
+require_once PATH_INCLUDE . '/Module.php';
 
 /**
  * class for Interface administrator
  * @author Mirek Hancl
  *
  */
-class Schbas extends HeadModule {
+class Schbas extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes

@@ -1,12 +1,12 @@
 <?php
 
-require_once PATH_INCLUDE . '/HeadModule.php';
+require_once PATH_INCLUDE . '/Module.php';
 
 /**
  * class for Interface administrator
  * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
  */
-class Statistics extends HeadModule {
+class Statistics extends Module {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
