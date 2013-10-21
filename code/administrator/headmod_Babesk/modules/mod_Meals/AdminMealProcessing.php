@@ -71,7 +71,10 @@ class AdminMealProcessing {
 				inputcheck($price_class, 'id', $this->msg['field_pc']);
 				inputcheck($max_orders, 'id', $this->msg['field_max_orders']);
 				inputcheck($name, '/\A^.{0,255}\z/', $this->msg['field_name']);
-				inputcheck($description, '/\A^.{0,1000}\z/', $this->msg['field_description']);
+				if(strlen($description) > 1000) {
+					throw new WrongInputException($description,
+						$this->msg['field_description']);
+				}
 			} catch (WrongInputException $e) {
 				$this->mealInterface->dieError(sprintf($this->msg['err_inp'], $e->getFieldName()));
 			}
