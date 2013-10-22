@@ -38,6 +38,8 @@ abstract class Module {
 	public function initAndExecute($dataContainer) {
 
 		$dataContainer = $this->preExecution($dataContainer);
+		var_dump($this->modulePositionInExecutionPathGet(
+			$dataContainer->getSubmoduleExecutionRequest()));
 		$this->execute($dataContainer);
 	}
 
@@ -119,6 +121,8 @@ abstract class Module {
 	 */
 	protected function submoduleExecute($path, $level = 1, $prefix = 'submodule', $postfix = "Execute") {
 
+		echo('submoduleExecute is deprecated. ' .
+			'Use submoduleExecuteAsMethod instead!');
 		$executePath = $this->executionPathSliceToLevels(
 			$path,
 			$level);
@@ -138,6 +142,82 @@ abstract class Module {
 		}
 	}
 
+	/**
+	 * Executes a Submodule by calling a Method
+	 *
+	 * The name of the called Method begins with submodule, goes on with the
+	 * modules name and ends with Execute. For Example submoduleUserExecute()
+	 *
+	 * @param  String $path The Path to the Submodule, beginning from the
+	 *                      moduleroot
+	 * @param  int level The level of the Submodule (The first submodule
+	 *                   is at 1)
+	 * @param  string prefix The Prefix of the Methodname to execute
+	 * @param  string postfix The Postfix of the Methodname to execute
+	 * @return ???    Returns the value that the Submodule returns
+	 */
+	protected function submoduleExecuteAsMethod($path, $level = 1,
+		$prefix = 'submodule', $postfix = "Execute") {
+
+		$executePath = $this->executionPathSliceToLevels(
+			$path,
+			$level);
+		$submodule = $this->_acl->moduleGet($executePath);
+		if($submodule) {
+			$methodName = $prefix . $submodule->getName() . $postfix;
+			if(method_exists($this, $methodName)) {
+				return $this->$methodName();
+			}
+			else {
+				throw new SubmoduleNotExistingException(
+					_g("Submodule-Method $methodName does not exist."));
+			}
+		}
+		else {
+			throw new SubmoduleAccessDeniedException(
+				"Access to this Module not allowed!");
+		}
+	}
+
+	protected function submoduleCountGet($moduleExecutionPath) {
+
+		$pos = $this->modulePositionInExecutionPathGet($moduleExecutionPath);
+		$levels = explode('/', $moduleExecutionPath);
+
+	}
+
+	/**
+	 * Returns the Position of this Module in the ModuleExecutionPath
+	 *
+	 * Counting starts from 0 (the Element root is at position 0)
+	 *
+	 * @param  string $execPath The ExecutionPath
+	 * @return int              The position of the Module in the Executionpath
+	 *                          returns false on Error. Be aware that it also
+	 *                          can return zero, so check for false correctly!
+	 */
+	protected function modulePositionInExecutionPathGet($execPath) {
+
+		$classes = array_reverse($this->getAncestors());
+		array_shift($classes);   // We dont want the "Module"-Class
+		$modulePath = implode('/', $classes);
+
+		if(strpos($execPath, $modulePath) !== false) {
+			/**
+			 * The position of the Module is the Count of its parents and
+			 * itself added with 2, since the Executionpath has 2 Elements
+			 * preceding the modules (root/administrator or root/web)
+			 * minus one to begin the count from 0 instead of one
+			 */
+			$position = count($classes) + 1;
+
+			return $position;
+		}
+		else {
+			return false;
+		}
+	}
+
 	private function executionPathSliceToLevels($path, $levelOfSubMod) {
 
 		//levelOfSubMod starts from the Submodule, 4 levels under root
@@ -149,6 +229,23 @@ abstract class Module {
 		$levelsWanted = array_slice($levels, 0, $levelOfMod);
 		$executePath = implode('/', $levelsWanted);
 		return $executePath;
+	}
+
+
+	/**
+	 * Returns all Ancestors of the Module and itself starting by the lowest
+	 *
+	 * @return array  The Ancestors and the Class itself
+	 */
+	private function getAncestors() {
+
+		$class = get_class($this);
+
+		for($classes[] = $class;
+			$class = get_parent_class($class);
+			$classes[] = $class);
+
+		return $classes;
 	}
 
 	////////////////////////////////////////////////////////////////////////

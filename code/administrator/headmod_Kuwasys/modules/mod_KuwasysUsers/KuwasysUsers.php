@@ -1,13 +1,14 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_Kuwasys/Kuwasys.php';
 
 /**
  * Allows the User to change Kuwasys-specific Userdata
  *
  * @author Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
-class KuwasysUsers extends Module {
+class KuwasysUsers extends Kuwasys {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor

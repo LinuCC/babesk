@@ -50,15 +50,9 @@
 		}
 	}
 
-	class ModuleException extends Exception {
+	class ModulesException extends Exception {
 		function __construct($msg, $code = 0, $previous = NULL) {
 			parent::__construct($msg, $code, $previous);
-		}
-	}
-
-	class ModuleNotFoundException extends ModuleException {
-		function __construct($msg) {
-			parent::__construct($msg);
 		}
 	}
 
@@ -98,5 +92,35 @@
 		function __construct($msg, $code = 0, $previous = NULL) {
 			parent::__construct($msg, $code, $previous);
 		}
+	}
+
+	class ModuleException extends Exception {
+
+		function __construct($msg, $moduleName, $code = 0, $previous = NULL) {
+			parent::__construct($msg, $code, $previous);
+			$this->_moduleName = $moduleName;
+		}
+
+		public function getModuleName() {
+			return $this->_moduleName;
+		}
+
+		/**
+		 * The name of the Module that caused the Exception
+		 * @var string
+		 */
+		protected $_moduleName;
+	}
+
+	class SubmoduleException extends ModuleException {
+
+	}
+
+	class SubmoduleNotExistingException extends SubmoduleException {
+
+	}
+
+	class ModuleAccessDeniedException extends ModuleException {
+
 	}
 ?>

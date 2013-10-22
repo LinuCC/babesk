@@ -126,7 +126,7 @@ class ModuleGenerator {
 			throw new Exception('Root-Module not found!');
 
 		} catch (Exception $e) {
-			throw new ModuleException("Could not fetch Modules!", 1, $e);
+			throw new ModulesException("Could not fetch Modules!", 1, $e);
 		}
 	}
 
