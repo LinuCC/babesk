@@ -8,8 +8,6 @@ defined('PATH_STATISTICS_CHART')
 
 /**
  * Analyzes data of the headmodule Kuwasys and puts them out as statistics
- *
- * @author  Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
 class KuwasysStats extends Statistics {
 

@@ -4,7 +4,6 @@ require_once PATH_INCLUDE . '/Module.php';
 
 /**
  * class for Interface administrator
- * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
  */
 class Statistics extends Module {
 

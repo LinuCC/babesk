@@ -18,8 +18,6 @@ require_once 'AdminInterface.php';
 
 /**
  *
- * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
- *
  */
 class Administrator {
 

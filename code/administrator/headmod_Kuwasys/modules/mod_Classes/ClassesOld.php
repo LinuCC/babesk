@@ -12,8 +12,6 @@ require_once PATH_ADMIN . '/headmod_Kuwasys/Kuwasys.php';
 /**
  *
  * Notice that a class has to have only one SchoolYear!
- * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
- *
  */
 class Classes extends Kuwasys {
 

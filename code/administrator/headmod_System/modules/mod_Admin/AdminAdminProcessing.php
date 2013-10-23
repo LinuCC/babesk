@@ -3,8 +3,6 @@
  * This class processes the Administrator-module
  * AdminAdminProcessing chooses which formular to show and connects to the access-files
  * to change data in the MySQL-Server.
- * @author voelkerball
- *
  */
 class AdminAdminProcessing {
 
@@ -286,11 +284,11 @@ class AdminAdminProcessing {
 		} catch (Exception $e) {
 			$this->adminInterface->dieError($this->msg['err_get_modules']);
 		}
-		
+
 		foreach($module_arr as $module) {
 			$modules [$module->getName()] = $module->getDisplayName();
 		}
-		
+
 		return $modules;
 	}
 

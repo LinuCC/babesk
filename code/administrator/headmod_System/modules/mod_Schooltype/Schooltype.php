@@ -6,8 +6,6 @@ require_once PATH_ADMIN . '/headmod_System/System.php';
 
 /**
  * Allows the Administrator to configure the Schooltypes
- *
- * @author Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
 class Schooltype extends System {
 

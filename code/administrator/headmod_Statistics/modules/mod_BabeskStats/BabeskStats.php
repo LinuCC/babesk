@@ -6,7 +6,6 @@ require_once PATH_ADMIN . '/headmod_Statistics/Statistics.php';
 /**
  * Analyzes data of the headmodule Kuwasys and puts them out as statistics
  *
- * @author  Pascal Ernst <pascal.cc.ernst@gmail.com>
  * @author Mirek Hancl <mirek@hancl.de>
  */
 class BabeskStats extends Statistics {

@@ -6,9 +6,6 @@ require_once 'AssignUsersToClassesAddUser.php';
 /**
  * This Class contains the algorythm to assign Users to the requested Class of theirs.
  * It handles things like too many Users requested a Class, Users that are on the waiting-list etc.
- *
- * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
- *
  */
 class AssignUsersToClasses {
 

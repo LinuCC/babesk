@@ -9,9 +9,6 @@ require_once PATH_ADMIN . '/headmod_Kuwasys/Kuwasys.php';
 
 /**
  * Grade-Module
- *
- * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
- *
  */
 class Grade extends Kuwasys {
 

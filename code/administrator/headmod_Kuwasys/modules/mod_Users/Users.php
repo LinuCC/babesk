@@ -24,8 +24,6 @@ require_once PATH_ADMIN . '/headmod_Kuwasys/Kuwasys.php';
 /**
  * Main-Class for the Module Users
  * allows adding, changing, showing and deleting Users
- * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
- *
  */
 class Users extends Kuwasys {
 

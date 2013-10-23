@@ -2,8 +2,6 @@
 
 /**
  * Handles the Switch from one Schoolyear to another with many datachanges
- *
- * @author  Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
 class SchoolyearSwitch {
 

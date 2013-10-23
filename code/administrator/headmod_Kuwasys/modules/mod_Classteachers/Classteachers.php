@@ -6,8 +6,6 @@ require_once PATH_ADMIN . '/headmod_Kuwasys/Kuwasys.php';
 
 /**
  * Allows the User to change Classteacher-data
- *
- * @author Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
 class Classteachers extends Kuwasys {
 

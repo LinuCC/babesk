@@ -3,8 +3,6 @@
 /**
  * This class acts as the central point for accessing data of the database. Additionally, it does most of the
  * Exceptionhandling.
- * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
- *
  */
 class KuwasysDatabaseAccess {
 	////////////////////////////////////////////////////////////////////////////////
