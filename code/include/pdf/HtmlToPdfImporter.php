@@ -70,7 +70,10 @@ class HtmlToPdfImporter extends TCPDF {
 		$filePrefix = 'kuwasysPdf';
 
 		if(!is_dir($tempDirPath)) {
-			mkdir($tempDirPath, '0777');
+			if(!mkdir($tempDirPath, '0777')) {
+				throw new Exception('Could not create the Temporary Dir! ' .
+					'Check permissions of ' . $tempDirPath);
+			}
 		}
 		$tmpFilePath = tempnam($tempDirPath, $filePrefix);
 		if(!$tmpFilePath) {

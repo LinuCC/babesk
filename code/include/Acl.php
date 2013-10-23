@@ -328,7 +328,8 @@ class Acl {
 					$modsWithoutLast = explode('/', $moduleToExecutePath);
 					array_pop($modsWithoutLast);
 					$pathWithoutLast = implode('/', $modsWithoutLast);
-					$this->moduleBla($pathWithoutLast, $dataContainer);
+					$this->moduleExecuteHelper(
+						$pathWithoutLast, $dataContainer);
 				}
 			}
 			else {

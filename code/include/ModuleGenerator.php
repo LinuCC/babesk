@@ -104,6 +104,8 @@ class ModuleGenerator {
 		else {
 			return false;
 		}
+
+		return true;
 	}
 
 	/**

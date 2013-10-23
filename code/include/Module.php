@@ -221,7 +221,12 @@ abstract class Module {
 		$strippedPath = ltrim($strippedPath, '/');
 
 		if(!$replaceCount < 1) {
-			return count(explode('/', $strippedPath));
+			if(empty($strippedPath)) {
+				return 0;
+			}
+			else {
+				return count(explode('/', $strippedPath));
+			}
 		}
 		else {
 			throw new SubmoduleException('Module does not exist in the ' .

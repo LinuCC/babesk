@@ -38,7 +38,7 @@ class KuwasysUsers extends Kuwasys {
 	public function execute($dataContainer) {
 
 		$this->entryPoint($dataContainer);
-AsMethod
+
 		if($execReq = $dataContainer->getModuleExecutionRequest()) {
 			$this->submoduleExecuteAsMethod($execReq);
 		}
