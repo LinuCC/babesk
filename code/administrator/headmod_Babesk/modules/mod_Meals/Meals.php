@@ -61,7 +61,7 @@ class Meals extends Module {
 		} else {
 
 			//Check if new-style Submoduleexecution is used
-			if($execReq = $dataContainer->getSubmoduleExecutionRequest()) {
+			if($execReq = $dataContainer->getModuleExecutionRequest()) {
 				$this->submoduleExecute($execReq);
 				die();
 			}

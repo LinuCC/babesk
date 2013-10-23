@@ -39,7 +39,7 @@ class KuwasysUsers extends Kuwasys {
 
 		$this->entryPoint($dataContainer);
 AsMethod
-		if($execReq = $dataContainer->getSubmoduleExecutionRequest()) {
+		if($execReq = $dataContainer->getModuleExecutionRequest()) {
 			$this->submoduleExecuteAsMethod($execReq);
 		}
 		else {

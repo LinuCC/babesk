@@ -97,12 +97,11 @@ class ModuleGenerator {
 				$module->initAndExecute($dataContainer);
 			}
 			else {
-				throw new Exception("Could not load Module-Class $classname");
+				return false;
 			}
 		}
 		else {
-			throw new Exception("Could not find Module-File in Path " .
-				"'$this->_executablePath'", 104);
+			return false;
 		}
 	}
 

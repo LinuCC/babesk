@@ -42,13 +42,13 @@ abstract class Module {
 			echo 'DebugData:<pre>';
 			echo 'ModuleName: ' . $this->name . '<br />';
 			echo 'ExecutionRequest: ';
-			var_dump($dataContainer->getSubmoduleExecutionRequest());
-			if($dataContainer->getSubmoduleExecutionRequest()) {
+			var_dump($dataContainer->getModuleExecutionRequest());
+			if($dataContainer->getModuleExecutionRequest()) {
 				echo 'ModulePosition: ';
 				var_dump($this->modulePositionInExecutionPathGet(
-					$dataContainer->getSubmoduleExecutionRequest()));
+					$dataContainer->getModuleExecutionRequest()));
 				echo 'SubmoduleCount: ';
-				var_dump($this->submoduleCountGet($dataContainer->getSubmoduleExecutionRequest()));
+				var_dump($this->submoduleCountGet($dataContainer->getModuleExecutionRequest()));
 			}
 
 		} catch (SubmoduleException $e) {
@@ -73,7 +73,7 @@ abstract class Module {
 		$this->_smarty = $dataContainer->getSmarty();
 		$this->_acl = $dataContainer->getAcl();
 		$this->_submoduleExecutionpath =
-			$dataContainer->getSubmoduleExecutionRequest();
+			$dataContainer->getModuleExecutionRequest();
 		$this->_logger = $dataContainer->getLogger();
 	}
 

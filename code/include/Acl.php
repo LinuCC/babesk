@@ -94,12 +94,14 @@ class Acl {
 
 		$moduleToExecutePath = $moduleExecutionParser->moduleExecutionGet();
 		$subRequest = $moduleExecutionParser->submoduleExecutionGet();
-		$dataContainer->setSubmoduleExecutionRequest($subRequest);
+		$dataContainer->setModuleExecutionRequest($subRequest);
 		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
 
 		if(!empty($module)) {
 			if($module->isEnabled() && $module->userHasAccess()) {
-				$module->execute($dataContainer);
+				if(!$module->execute($dataContainer)) {
+					// Execute one Module higher
+				}
 			}
 			else {
 				throw new AclException('Module-Access forbidden', 105);

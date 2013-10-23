@@ -33,7 +33,7 @@ class User extends Module {
 
 		$this->entryPoint($dataContainer);
 
-		if($execReq = $dataContainer->getSubmoduleExecutionRequest()) {
+		if($execReq = $dataContainer->getModuleExecutionRequest()) {
 			$this->submoduleExecute($execReq);
 		}
 		else {

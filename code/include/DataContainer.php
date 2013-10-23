@@ -77,12 +77,12 @@ class DataContainer {
 	}
 
 
-	public function getSubmoduleExecutionRequest() {
-		return $this->_submoduleExecutionRequest;
+	public function getModuleExecutionRequest() {
+		return $this->_moduleExecutionRequest;
 	}
 
-	public function setSubmoduleExecutionRequest($submoduleExecutionRequest) {
-		$this->_submoduleExecutionRequest = $submoduleExecutionRequest;
+	public function setModuleExecutionRequest($moduleExecutionRequest) {
+		$this->_moduleExecutionRequest = $moduleExecutionRequest;
 	}
 
 	////////////////////////////////////////////////////////////////////////
@@ -117,7 +117,7 @@ class DataContainer {
 	 *
 	 * @var String
 	 */
-	protected $_submoduleExecutionRequest;
+	protected $_moduleExecutionRequest;
 
 	/**
 	 * The Database-Connection
