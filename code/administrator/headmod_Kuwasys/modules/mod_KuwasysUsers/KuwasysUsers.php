@@ -37,7 +37,8 @@ class KuwasysUsers extends Kuwasys {
 
 		$this->entryPoint($dataContainer);
 
-		if($execReq = $dataContainer->getModuleExecutionRequest()) {
+		$execReq = $dataContainer->getModuleExecutionRequest();
+		if($this->submoduleCountGet($execReq)) {
 			$this->submoduleExecuteAsMethod($execReq);
 		}
 		else {
@@ -137,7 +138,7 @@ class KuwasysUsers extends Kuwasys {
 		if($this->execPathHasSubmoduleLevel(
 			2, $this->_submoduleExecutionpath)) {
 
-			$this->submoduleExecute($this->_submoduleExecutionpath, 2,
+			$this->submoduleExecuteAsMethod($this->_submoduleExecutionpath, 2,
 				'assignUsersToClasses');
 		}
 		else {

@@ -35,8 +35,9 @@ class Recharge extends Babesk {
 
 		$this->entryPoint($dataContainer);
 
-		if($execReq = $dataContainer->getModuleExecutionRequest()) {
-			$this->submoduleExecute($execReq);
+		$execReq = $dataContainer->getModuleExecutionRequest();
+		if($this->submoduleCountGet($execReq)) {
+			$this->submoduleExecuteAsMethod($execReq);
 		}
 		else {
 			$this->displayTpl('mainmenu.tpl');

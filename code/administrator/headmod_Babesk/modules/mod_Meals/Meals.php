@@ -62,8 +62,9 @@ class Meals extends Babesk {
 		} else {
 
 			//Check if new-style Submoduleexecution is used
-			if($execReq = $dataContainer->getModuleExecutionRequest()) {
-				$this->submoduleExecute($execReq);
+			$execReq = $dataContainer->getModuleExecutionRequest();
+			if($this->submoduleCountGet($execReq)) {
+				$this->submoduleExecuteAsMethod($execReq);
 				die();
 			}
 			$mealInterface->Menu();

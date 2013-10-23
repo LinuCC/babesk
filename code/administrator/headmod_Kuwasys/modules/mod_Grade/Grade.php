@@ -29,7 +29,7 @@ class Grade extends Kuwasys {
 		$this->entryPoint($dataContainer);
 
 		if($this->execPathHasSubmoduleLevel(1, $this->_subExecPath)) {
-			$this->submoduleExecute($this->_subExecPath, 1);
+			$this->submoduleExecuteAsMethod($this->_subExecPath, 1);
 		}
 		else {
 			$this->_interface->displayMainMenu();

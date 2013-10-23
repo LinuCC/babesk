@@ -89,7 +89,8 @@ class Soli extends Babesk {
 			if(parent::execPathHasSubmoduleLevel(
 				1, $this->_submoduleExecutionpath)) {
 
-				$this->submoduleExecute($this->_submoduleExecutionpath);
+				$this->submoduleExecuteAsMethod(
+					$this->_submoduleExecutionpath);
 			}
 			else {
 				$soliInterface->ShowInitialMenu();

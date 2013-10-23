@@ -128,43 +128,6 @@ abstract class Module {
 	 *
 	 * @param  String $path The Path to the Submodule, beginning from the
 	 *                      moduleroot
-	 * @param  int level The level of the Submodule (The first submodule
-	 *                   is at 1)
-	 * @param  string prefix The Prefix of the Methodname to execute
-	 * @param  string postfix The Postfix of the Methodname to execute
-	 * @return ???    Returns the value that the Submodule returns
-	 */
-	protected function submoduleExecute($path, $level = 1, $prefix = 'submodule', $postfix = "Execute") {
-
-		echo('submoduleExecute is deprecated. ' .
-			'Use submoduleExecuteAsMethod instead!');
-		$executePath = $this->executionPathSliceToLevels(
-			$path,
-			$level);
-		$submodule = $this->_acl->moduleGet($executePath);
-		if($submodule) {
-			$methodName = $prefix . $submodule->getName() . $postfix;
-			if(method_exists($this, $methodName)) {
-				return $this->$methodName();
-			}
-			else {
-				throw new Exception(
-					"Submodul-Methode $methodName existiert nicht.<br />");
-			}
-		}
-		else {
-			throw new Exception("Zugriff auf dieses Modul nicht erlaubt!");
-		}
-	}
-
-	/**
-	 * Executes a Submodule by calling a Method
-	 *
-	 * The name of the called Method begins with submodule, goes on with the
-	 * modules name and ends with Execute. For Example submoduleUserExecute()
-	 *
-	 * @param  String $path The Path to the Submodule, beginning from the
-	 *                      moduleroot
 	 * @param  int sublevel The level of the Submodule (The first submodule
 	 *                   is at 1)
 	 * @param  string prefix The Prefix of the Methodname to execute
