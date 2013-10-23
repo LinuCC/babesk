@@ -95,8 +95,7 @@ class ModuleExecutionInputParser {
 	 */
 	public function moduleExecutionGet() {
 
-		$path = $this->pathStripToModuleExecutionpath($this->_executionPath);
-		return $this->internalDelimReplaceWithStandard($path);
+		return $this->internalDelimReplaceWithStandard($this->_executionPath);
 	}
 
 	/////////////////////////////////////////////////////////////////////

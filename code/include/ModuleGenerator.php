@@ -83,7 +83,8 @@ class ModuleGenerator {
 	 */
 	public function execute($dataContainer) {
 
-		if(file_exists(PATH_CODE . "/$this->_executablePath")) {
+		if(!empty($this->_executablePath) &&
+			file_exists(PATH_CODE . "/$this->_executablePath")) {
 			require_once PATH_CODE . "/$this->_executablePath";
 
 			$executablePathPieces = explode('/', $this->_executablePath);

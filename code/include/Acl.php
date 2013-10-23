@@ -93,15 +93,13 @@ class Acl {
 	public function moduleExecute($moduleExecutionParser, $dataContainer) {
 
 		$moduleToExecutePath = $moduleExecutionParser->moduleExecutionGet();
-		$subRequest = $moduleExecutionParser->moduleExecutionGet();
-		$dataContainer->setModuleExecutionRequest($subRequest);
+		$dataContainer->setModuleExecutionRequest($moduleToExecutePath);
 		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
 
 		if(!empty($module)) {
 			if($module->isEnabled() && $module->userHasAccess()) {
-				if(!$module->execute($dataContainer)) {
-					// Execute one Module higher
-				}
+				$this->moduleExecuteHelper(
+					$moduleToExecutePath, $dataContainer);
 			}
 			else {
 				throw new AclException('Module-Access forbidden', 105);
@@ -133,7 +131,7 @@ class Acl {
 		$dataContainer->setSubmoduleExecutionRequest($subRequest);
 		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
 		if(!empty($module)) {
-			$module->execute($dataContainer);
+			$this->moduleExecuteHelper($moduleToExecutePath, $dataContainer);
 		}
 		else {
 			throw new AclException(
@@ -304,6 +302,42 @@ class Acl {
 				'Could not change the Access of a module',
 				0,
 				$e);
+		}
+	}
+
+	/**
+	 * Helps in executing the Modules.
+	 *
+	 * If one Module is not found, this function tries to go up the hierarchy
+	 * and tries to execute the Module above, and so on
+	 *
+	 * @param  string $moduleToExecutePath The Path of the Module to execute
+	 * @param  Object $dataContainer       The DataContainer for the Module
+	 */
+	protected function moduleExecuteHelper(
+		$moduleToExecutePath, $dataContainer) {
+
+		echo "Trying to execute '$moduleToExecutePath'<br />";
+
+		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
+
+		if(!empty($module)) {
+			if($module->isEnabled() && $module->userHasAccess()) {
+				if(!$module->execute($dataContainer)) {
+					//Removes last element in the Path
+					$modsWithoutLast = explode('/', $moduleToExecutePath);
+					array_pop($modsWithoutLast);
+					$pathWithoutLast = implode('/', $modsWithoutLast);
+					$this->moduleBla($pathWithoutLast, $dataContainer);
+				}
+			}
+			else {
+				throw new AclException('Module-Access forbidden', 105);
+			}
+		}
+		else {
+			throw new AclException(
+				"Module could not be loaded by path '$moduleToExecutePath'");
 		}
 	}
 
