@@ -1,8 +1,9 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_WEB . '/headmod_Babesk/Babesk.php';
 
-class Account extends Module {
+class Account extends Babesk {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes

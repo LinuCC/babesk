@@ -2,8 +2,9 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_WEB . '/WebInterface.php';
+require_once PATH_WEB . '/headmod_Schbas/Schbas.php';
 
-class LoanSystem extends Module {
+class LoanSystem extends Schbas {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes

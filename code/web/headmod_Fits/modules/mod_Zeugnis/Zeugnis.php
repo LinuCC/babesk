@@ -1,8 +1,9 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_WEB . '/headmod_Fits/Fits.php';
 
-class Zeugnis extends Module {
+class Zeugnis extends Fits {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes

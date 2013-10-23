@@ -8,8 +8,9 @@ require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
 require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 require_once PATH_WEB . '/WebInterface.php';
 require_once PATH_WEB . '/headmod_Kuwasys/Kuwasys.php';
+require_once PATH_WEB . '/headmod_Kuwasys/Kuwasys.php';
 
-class ClassDetails extends Module {
+class ClassDetails extends Kuwasys {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor
