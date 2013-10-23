@@ -38,8 +38,23 @@ abstract class Module {
 	public function initAndExecute($dataContainer) {
 
 		$dataContainer = $this->preExecution($dataContainer);
-		var_dump($this->modulePositionInExecutionPathGet(
-			$dataContainer->getSubmoduleExecutionRequest()));
+		try {
+			echo 'DebugData:<pre>';
+			echo 'ModuleName: ' . $this->name . '<br />';
+			echo 'ExecutionRequest: ';
+			var_dump($dataContainer->getSubmoduleExecutionRequest());
+			if($dataContainer->getSubmoduleExecutionRequest()) {
+				echo 'ModulePosition: ';
+				var_dump($this->modulePositionInExecutionPathGet(
+					$dataContainer->getSubmoduleExecutionRequest()));
+				echo 'SubmoduleCount: ';
+				var_dump($this->submoduleCountGet($dataContainer->getSubmoduleExecutionRequest()));
+			}
+
+		} catch (SubmoduleException $e) {
+			echo 'NOPE';
+		}
+		echo '</pre>';
 		$this->execute($dataContainer);
 	}
 
@@ -150,19 +165,22 @@ abstract class Module {
 	 *
 	 * @param  String $path The Path to the Submodule, beginning from the
 	 *                      moduleroot
-	 * @param  int level The level of the Submodule (The first submodule
+	 * @param  int sublevel The level of the Submodule (The first submodule
 	 *                   is at 1)
 	 * @param  string prefix The Prefix of the Methodname to execute
 	 * @param  string postfix The Postfix of the Methodname to execute
 	 * @return ???    Returns the value that the Submodule returns
 	 */
-	protected function submoduleExecuteAsMethod($path, $level = 1,
+	protected function submoduleExecuteAsMethod($path, $sublevel = 1,
 		$prefix = 'submodule', $postfix = "Execute") {
 
-		$executePath = $this->executionPathSliceToLevels(
-			$path,
-			$level);
-		$submodule = $this->_acl->moduleGet($executePath);
+		$pos = $this->modulePositionInExecutionPathGet($path);
+		$submodPos = $pos + $sublevel;
+		//Remove not wanted deeper submodules
+		$mods = explode('/', $path);
+		$slicedPath = implode('/', array_splice($mods, 0, $submodPos + 1));
+
+		$submodule = $this->_acl->moduleGet($slicedPath);
 		if($submodule) {
 			$methodName = $prefix . $submodule->getName() . $postfix;
 			if(method_exists($this, $methodName)) {
@@ -179,11 +197,58 @@ abstract class Module {
 		}
 	}
 
+	/**
+	 * Gets the Count of submodule-levels of this Object in the ModulePath
+	 *
+	 * All Modules that are in the moduleExecutionPath and hierarchially under
+	 * this module will be counted.
+	 *
+	 * @param  string $moduleExecutionPath The Module Execution Path to check
+	 * @return int                         The count of the submodules
+	 * @throws ModuleException If This Module does not exist in the
+	 *         moduleExecutionPath
+	 */
 	protected function submoduleCountGet($moduleExecutionPath) {
 
-		$pos = $this->modulePositionInExecutionPathGet($moduleExecutionPath);
-		$levels = explode('/', $moduleExecutionPath);
+		// $pos = $this->modulePositionInExecutionPathGet($moduleExecutionPath);
 
+		$modulesOnlyPath = $this->moduleExecutionPathStripToModulesOnly(
+			$moduleExecutionPath);
+		$moduleClassPath = $this->ancestorModulePathGet();
+
+		$strippedPath = str_replace($moduleClassPath, '', $modulesOnlyPath,
+			$replaceCount);
+		$strippedPath = ltrim($strippedPath, '/');
+
+		if(!$replaceCount < 1) {
+			return count(explode('/', $strippedPath));
+		}
+		else {
+			throw new SubmoduleException('Module does not exist in the ' .
+				'Executionpath, cant find a startingpoint to count the ' .
+				'Submodules');
+		}
+	}
+
+	/**
+	 * Strips the ModuleExecutionPath of the not-Moduly part
+	 *
+	 * The ModuleExecutionPath gets preceded by the root-element
+	 * (conveniently named root) and the Program-Part (web or administrator).
+	 * This function removes them.
+	 *
+	 * @param  string $path The whole ModuleExecutionPath
+	 * @return string       The Path without the Non-Module preceding elements
+	 */
+	private function moduleExecutionPathStripToModulesOnly($path) {
+
+		$levels = explode('/', $path);
+
+		for($i = 0; $i < 2; $i++) {
+			array_shift($levels);
+		}
+
+		return implode('/', $levels);
 	}
 
 	/**
@@ -198,9 +263,7 @@ abstract class Module {
 	 */
 	protected function modulePositionInExecutionPathGet($execPath) {
 
-		$classes = array_reverse($this->getAncestors());
-		array_shift($classes);   // We dont want the "Module"-Class
-		$modulePath = implode('/', $classes);
+		$modulePath = $this->ancestorModulePathGet();
 
 		if(strpos($execPath, $modulePath) !== false) {
 			/**
@@ -209,13 +272,22 @@ abstract class Module {
 			 * preceding the modules (root/administrator or root/web)
 			 * minus one to begin the count from 0 instead of one
 			 */
-			$position = count($classes) + 1;
+			$position = count(explode('/', $modulePath)) + 1;
 
 			return $position;
 		}
 		else {
 			return false;
 		}
+	}
+
+	private function ancestorModulePathGet() {
+
+		$classes = array_reverse($this->ancestorsGet());
+		array_shift($classes);   // We dont want the "Module"-Class
+		$modulePath = implode('/', $classes);
+
+		return $modulePath;
 	}
 
 	private function executionPathSliceToLevels($path, $levelOfSubMod) {
@@ -237,7 +309,7 @@ abstract class Module {
 	 *
 	 * @return array  The Ancestors and the Class itself
 	 */
-	private function getAncestors() {
+	private function ancestorsGet() {
 
 		$class = get_class($this);
 

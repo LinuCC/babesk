@@ -96,7 +96,7 @@
 
 	class ModuleException extends Exception {
 
-		function __construct($msg, $moduleName, $code = 0, $previous = NULL) {
+		function __construct($msg, $moduleName = '', $code = 0, $previous = NULL) {
 			parent::__construct($msg, $code, $previous);
 			$this->_moduleName = $moduleName;
 		}
