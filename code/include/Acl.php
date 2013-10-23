@@ -93,7 +93,7 @@ class Acl {
 	public function moduleExecute($moduleExecutionParser, $dataContainer) {
 
 		$moduleToExecutePath = $moduleExecutionParser->moduleExecutionGet();
-		$subRequest = $moduleExecutionParser->submoduleExecutionGet();
+		$subRequest = $moduleExecutionParser->moduleExecutionGet();
 		$dataContainer->setModuleExecutionRequest($subRequest);
 		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
 
@@ -129,7 +129,7 @@ class Acl {
 		$dataContainer) {
 
 		$moduleToExecutePath = $moduleExecutionParser->moduleExecutionGet();
-		$subRequest = $moduleExecutionParser->submoduleExecutionGet();
+		$subRequest = $moduleExecutionParser->moduleExecutionGet();
 		$dataContainer->setSubmoduleExecutionRequest($subRequest);
 		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
 		if(!empty($module)) {

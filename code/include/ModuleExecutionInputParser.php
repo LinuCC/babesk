@@ -99,23 +99,6 @@ class ModuleExecutionInputParser {
 		return $this->internalDelimReplaceWithStandard($path);
 	}
 
-	/**
-	 * Returns the Path of only the execution of Submodules and below levels
-	 *
-	 * @return String The SubmoduleExecutionPath
-	 */
-	public function submoduleExecutionGet() {
-
-		$path = $this->_executionPath;
-		if(count(explode($this->_pathDelim, $path)) - 1 >=
-			ModulepathLevel::SUBMODULE) {
-			return $this->internalDelimReplaceWithStandard($path);
-		}
-		else {
-			return false;
-		}
-	}
-
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
