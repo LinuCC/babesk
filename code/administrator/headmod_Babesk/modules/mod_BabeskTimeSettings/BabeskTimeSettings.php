@@ -1,8 +1,9 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_Babesk/Babesk.php';
 
-class BabeskTimeSettings extends Module {
+class BabeskTimeSettings extends Babesk {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor

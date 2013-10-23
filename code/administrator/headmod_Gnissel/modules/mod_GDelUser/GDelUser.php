@@ -1,8 +1,9 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_Gnissel/Gnissel.php';
 
-class GDelUser extends Module {
+class GDelUser extends Gnissel {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -21,7 +22,7 @@ class GDelUser extends Module {
 
 		require_once 'AdminGDelUserProcessing.php';
 		require_once 'AdminGDelUserInterface.php';
-		
+
 		$DelUserInterface = new AdminGDelUserInterface($this->relPath);
 		$DelUserProcessing = new AdminGDelUserProcessing($DelUserInterface);
 
@@ -30,17 +31,17 @@ class GDelUser extends Module {
 				case 'delUser':
 					$DelUserProcessing->delUser ($_POST['uid']);
 				break;
-				
+
 				case 'delPdf':
 					$DelUserProcessing->deletePdf();
 				break;
-				
+
 				default:
 					;
 				break;
 			}
 		}
-		
+
 		if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['card_ID'])) {
 			$uid = $DelUserProcessing->CheckCard($_POST['card_ID']);
 			$userData = $DelUserProcessing->GetUserData($uid);

@@ -1,8 +1,9 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_Schbas/Schbas.php';
 
-class SchbasAccounting extends Module {
+class SchbasAccounting extends Schbas {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -191,13 +192,13 @@ class SchbasAccounting extends Module {
 		}
 
 	}
-	
+
 	private function remember(){	// function prints lend books
-		
+
 		$showIdAfterName = false;				// to enable the id after name set this value to true
-		
+
 		$lending = TableMng::query('SELECT * FROM schbas_lending');
-		
+
 		for ($i=0; $i < (count($lending)); $i++){	// one loop prodices one line of the table
 			//name
 			$id = (int) $lending[$i]["user_id"];
@@ -211,7 +212,7 @@ class SchbasAccounting extends Module {
 				$schueler = ("$forename $name");
 			}
 			$schueler_arr[] = $schueler;
-			
+
 			//class
 			try{
 				$schoolyearDesired = TableMng::query('SELECT ID FROM schoolYear WHERE active = 1');
@@ -227,18 +228,18 @@ class SchbasAccounting extends Module {
 			}
 			$class = "$grade-$label";
 			$class_arr[]= $class;
-		
+
 			//book
 			$bookid = (int) $lending[$i]["inventory_id"];
 			$title = TableMng::query("SELECT title FROM schbas_books WHERE id=$bookid");
 			$book[] = $title[0]["title"];
-			
+
 			//date
 			$date[] = $lending[$i]["lend_date"];
 			//$date = date_format('%d.%m.%Y');
 			//$date[] = $date;
 			//$date[] = date_format(strtodate($lending[$i]["lend_date"]),"%d.%m.%Y");
-			
+
 		}
 		$this->SchbasAccountingInterface->showRememberList($schueler_arr, $class_arr, $book, $date, count($lending)-1);
 	}

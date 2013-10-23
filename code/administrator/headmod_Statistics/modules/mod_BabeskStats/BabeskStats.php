@@ -1,6 +1,7 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_Statistics/Statistics.php';
 
 /**
  * Analyzes data of the headmodule Kuwasys and puts them out as statistics
@@ -8,7 +9,7 @@ require_once PATH_INCLUDE . '/Module.php';
  * @author  Pascal Ernst <pascal.cc.ernst@gmail.com>
  * @author Mirek Hancl <mirek@hancl.de>
  */
-class BabeskStats extends Module {
+class BabeskStats extends Statistics {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -28,7 +29,7 @@ class BabeskStats extends Module {
 
 		$this->entryPoint($dataContainer);
 
-					
+
 		if(isset($_GET['action'])) {
 			switch($_GET['action']) {
 				case 'chooseChart':

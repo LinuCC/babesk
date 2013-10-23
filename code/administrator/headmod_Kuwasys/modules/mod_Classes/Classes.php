@@ -2,13 +2,14 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/gump.php';
+require_once PATH_ADMIN . '/headmod_Kuwasys/Kuwasys.php';
 
 /**
  * Allows the User to use Classes. Classes as in the Workgroups in Schools
  *
  * @author Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
-class Classes extends Module {
+class Classes extends Kuwasys {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor

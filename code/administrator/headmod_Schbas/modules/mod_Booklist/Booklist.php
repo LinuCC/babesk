@@ -1,8 +1,9 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_Schbas/Schbas.php';
 
-class Booklist extends Module {
+class Booklist extends Schbas {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -28,7 +29,7 @@ class Booklist extends Module {
 		$action_arr = array('show_booklist' => 1,
 							'add_book' => 4,
 							'del_book' => 6);
-		
+
 		if ('POST' == $_SERVER['REQUEST_METHOD']){
 		if (isset($_GET['action'])) {
 			$action = $_GET['action'];
@@ -52,20 +53,20 @@ class Booklist extends Module {
 					}
 					break;
 				case 3: //delete an entry
-					
+
 					if (isset($_POST['barcode'])) {
 						try {
-						
+
 							$BookProcessing->DeleteEntry($BookProcessing->GetIDFromBarcode($_POST['barcode']));
 						} catch (Exception $e) {
 						}
-					} 
+					}
 					else if (isset($_POST['delete'])) {
 						$BookProcessing->DeleteEntry($_GET['ID']);
 					} else if (isset($_POST['not_delete'])) {
 						$BookInterface->ShowSelectionFunctionality($action_arr);
 					} else {
-						
+
 						if (!$BookProcessing->isInvForBook($_GET['ID'])){
 							$BookProcessing->DeleteConfirmation($_GET['ID']);
 						}else{
@@ -83,11 +84,11 @@ class Booklist extends Module {
 				case 5: //filter
 					$BookProcessing->ShowBooklist("search", $_POST['search']);
 					break;
-					
+
 					case 6: //search an entry for deleting
-							
+
 						$BookProcessing->ScanForDeleteEntry();
-							
+
 						break;
 				break;
 			}

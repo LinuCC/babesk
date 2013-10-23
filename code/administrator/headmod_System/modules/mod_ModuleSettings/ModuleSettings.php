@@ -2,8 +2,9 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ADMIN . '/AdminInterface.php';
+require_once PATH_ADMIN . '/headmod_System/System.php';
 
-class ModuleSettings extends Module {
+class ModuleSettings extends System {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor

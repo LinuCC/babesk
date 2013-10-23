@@ -19,6 +19,7 @@ require_once 'UsersCreateParticipationConfirmationPdf.php';
 require_once 'UsersEmailParticipationConfirmation.php';
 require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysLanguageManager.php';
 require_once PATH_ACCESS . '/CardManager.php';
+require_once PATH_ADMIN . '/headmod_Kuwasys/Kuwasys.php';
 
 /**
  * Main-Class for the Module Users
@@ -26,7 +27,7 @@ require_once PATH_ACCESS . '/CardManager.php';
  * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
  *
  */
-class Users extends Module {
+class Users extends Kuwasys {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes

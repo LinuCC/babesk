@@ -1,8 +1,9 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_Gnissel/Gnissel.php';
 
-class GChangePassword extends Module {
+class GChangePassword extends Gnissel {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -21,7 +22,7 @@ class GChangePassword extends Module {
 
 		require_once 'AdminGChangePasswordProcessing.php';
 		require_once 'AdminGChangePasswordInterface.php';
-		
+
 		$changePasswordInterface = new AdminGChangePasswordInterface($this->relPath);
 		$changePasswordProcessing = new AdminGChangePasswordProcessing($changePasswordInterface);
 
@@ -30,13 +31,13 @@ class GChangePassword extends Module {
 				case 'changePassword':
 					$changePasswordProcessing->pwChange ($_POST ['newPassword'], $_POST ['newPasswordRepeat'],$_POST['uid']);
 				break;
-				
+
 				default:
 					;
 				break;
 			}
 		}
-		
+
 		if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['card_ID'])) {
 			$uid = $changePasswordProcessing->CheckCard($_POST['card_ID']);
 			$userData = $changePasswordProcessing->GetUserData($uid);

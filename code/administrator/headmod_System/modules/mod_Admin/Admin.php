@@ -1,8 +1,9 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_System/System.php';
 
-class Admin extends Module {
+class Admin extends System {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes

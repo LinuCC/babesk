@@ -2,8 +2,9 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once 'SchbasMessagesInterface.php';
+require_once PATH_ADMIN . '/headmod_Schbas/Schbas.php';
 
-class SchbasMessages extends Module {
+class SchbasMessages extends Schbas {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor

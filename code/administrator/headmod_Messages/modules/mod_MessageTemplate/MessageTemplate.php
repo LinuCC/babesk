@@ -2,8 +2,9 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once 'MessageTemplateInterface.php';
+require_once PATH_ADMIN . '/headmod_Messages/Messages.php';
 
-class MessageTemplate extends Module {
+class MessageTemplate extends Messages {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor

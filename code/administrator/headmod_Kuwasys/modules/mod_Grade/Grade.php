@@ -5,6 +5,7 @@ require_once PATH_ACCESS_KUWASYS . '/KuwasysGradeManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysLanguageManager.php';
+require_once PATH_ADMIN . '/headmod_Kuwasys/Kuwasys.php';
 
 /**
  * Grade-Module
@@ -12,7 +13,7 @@ require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysLanguageManager.php';
  * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
  *
  */
-class Grade extends Module {
+class Grade extends Kuwasys {
 
 	///////////////////////////////////////////////////////////////////////
 	//Constructor

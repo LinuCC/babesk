@@ -1,8 +1,9 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_System/System.php';
 
-class SpecialCourse extends Module {
+class SpecialCourse extends System {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -39,7 +40,7 @@ class SpecialCourse extends Module {
 					$SpecialCourseProcessing->EditSpecialCourses($_POST);
 				break;
 				case 3: //edit the users
-					
+
 					$userID = null;
 					if (isset ($_POST['user_search'])) {
 						try {
@@ -53,11 +54,11 @@ class SpecialCourse extends Module {
 							} catch (Exception $e) {
 								$this->userInterface->dieError("Benutzer nicht gefunden!");
 							}
-					
+
 						}
-					
+
 						$SpecialCourseProcessing->ShowSingleUser($userID);
-					
+
 						break;
 					}
 					if (isset($_POST['filter'])) {

@@ -1,8 +1,9 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_Schbas/Schbas.php';
 
-class BookInfo extends Module {
+class BookInfo extends Schbas {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes

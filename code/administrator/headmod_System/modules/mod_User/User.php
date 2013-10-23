@@ -9,9 +9,9 @@ require_once PATH_ACCESS . '/CardManager.php';
 require_once PATH_ACCESS . '/UserManager.php';
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/ArrayFunctions.php';
+require_once PATH_ADMIN . '/headmod_System/System.php';
 
-
-class User extends Module {
+class User extends System {
 
 	///////////////////////////////////////////////////////////////////////
 	//Constructor

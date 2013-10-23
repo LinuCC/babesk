@@ -4,8 +4,9 @@
  */
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_Babesk/Babesk.php';
 
-class Meals extends Module {
+class Meals extends Babesk {
 
 	///////////////////////////////////////////////////////////////////////
 	//Constructor

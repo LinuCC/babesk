@@ -7,6 +7,7 @@ require_once 'ClassesCsvImport.php';
 require_once 'ClassesCreateTable.php';
 require_once 'ClassesUnregisterUser.php';
 require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysLanguageManager.php';
+require_once PATH_ADMIN . '/headmod_Kuwasys/Kuwasys.php';
 
 /**
  *
@@ -14,7 +15,7 @@ require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysLanguageManager.php';
  * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
  *
  */
-class Classes extends Module {
+class Classes extends Kuwasys {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor

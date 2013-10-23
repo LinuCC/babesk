@@ -6,8 +6,9 @@
  */
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_Babesk^/Babesk^.php';
 
-class Menu extends Module {
+class Menu extends Babesk {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
