@@ -28,7 +28,7 @@ class ClassDetails extends Module {
 	////////////////////////////////////////////////////////////////////////////////
 	public function execute ($dataContainer) {
 
-		$this->entryPoint();
+		$this->entryPoint($dataContainer);
 		if (isset($_GET['action'])) {
 			switch ($_GET['action']) {
 				case 'deRegisterClassConfirmation':
@@ -46,7 +46,7 @@ class ClassDetails extends Module {
 	////////////////////////////////////////////////////////////////////////////////
 	//Implementations
 	////////////////////////////////////////////////////////////////////////////////
-	protected function entryPoint () {
+	protected function entryPoint($dataContainer) {
 
 		global $smarty;
 		$this->_smarty = $smarty;
