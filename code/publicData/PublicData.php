@@ -36,10 +36,15 @@ class PublicData {
 			$this->_moduleExecutionParser = new ModuleExecutionInputParser();
 			$this->_moduleExecutionParser->setSubprogramPath(
 				'root/PublicData');
-			$this->_moduleExecutionParser->load();
-			// $this->_acl->accessControlInit($_SESSION['UID']);
-			$this->_acl->moduleNotAllowedExecute($this->_moduleExecutionParser,
-				$this->_dataContainer);
+			if($this->_moduleExecutionParser->load()) {
+				$this->_acl->accessControlInitAllowAll();
+				$this->_acl->moduleExecute(
+					$this->_moduleExecutionParser->executionCommandGet(),
+					$this->_dataContainer);
+			}
+			else {
+				die('Kein Modul zum Ausführen übergeben!');
+			}
 
 		} catch (Exception $e) {
 			$this->_interface->dieError('Konnte Modul nicht ausführen');

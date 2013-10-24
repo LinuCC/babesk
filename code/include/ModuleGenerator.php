@@ -309,6 +309,18 @@ class ModuleGenerator {
 		}
 	}
 
+	public function allowAll() {
+
+		$this->_userHasAccess = true;
+
+		if(count($this->_childs)) {
+			foreach($this->_childs as $child) {
+				$child->_userHasAccess = true;
+				$child->allowAll();
+			}
+		}
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
