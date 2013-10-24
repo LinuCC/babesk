@@ -1,14 +1,13 @@
 <?php
 
-
 require_once "../include/path.php";
+
 require_once PATH_INCLUDE . '/TableMng.php';
 require_once PATH_INCLUDE . '/Acl.php';
 require_once PATH_ADMIN . '/admin_functions.php';
 require_once PATH_INCLUDE . "/functions.php";
 require_once PATH_INCLUDE . '/exception_def.php';
 require_once PATH_INCLUDE . '/DataContainer.php';
-require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';
 require_once PATH_INCLUDE . '/ArrayFunctions.php';
 require_once PATH_INCLUDE . '/sql_access/DBConnect.php';
@@ -65,10 +64,6 @@ class Administrator {
 
 	public function getSmarty() {
 		return $this->_smarty;
-	}
-
-	public function getModuleManager() {
-		return $this->_moduleManager;
 	}
 
 	////////////////////////////////////////////////////////////////////////
@@ -280,12 +275,6 @@ class Administrator {
 	////////////////////////////////////////////////////////////////////////
 	//Attributes
 	////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * The Modulemanager
-	 * @var ModuleManager
-	 */
-	private $_moduleManager;
 
 	/**
 	 * The Access-Control-Layer
