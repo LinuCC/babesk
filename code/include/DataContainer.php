@@ -85,6 +85,14 @@ class DataContainer {
 		$this->_moduleExecutionRequest = $moduleExecutionRequest;
 	}
 
+	public function getExecutionCommand() {
+		return $this->_executionCommand;
+	}
+
+	public function setExecutionCommand($executionCommand) {
+		$this->_executionCommand = $executionCommand;
+	}
+
 	////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////
@@ -118,6 +126,12 @@ class DataContainer {
 	 * @var String
 	 */
 	protected $_moduleExecutionRequest;
+
+	/**
+	 * Represents the Execution-Command suggesting what Module to be executed
+	 * @var ModuleExecutionCommand
+	 */
+	protected $_executionCommand;
 
 	/**
 	 * The Database-Connection

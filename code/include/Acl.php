@@ -104,6 +104,7 @@ class Acl {
 
 		$moduleToExecutePath = $moduleCommand->pathGet();
 		$dataContainer->setModuleExecutionRequest($moduleToExecutePath);
+		$dataContainer->setExecutionCommand($moduleCommand);
 		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
 
 		if(!empty($module)) {
