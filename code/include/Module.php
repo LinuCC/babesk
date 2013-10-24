@@ -38,23 +38,7 @@ abstract class Module {
 	public function initAndExecute($dataContainer) {
 
 		$dataContainer = $this->preExecution($dataContainer);
-		try {
-			echo 'DebugData:<pre>';
-			echo 'ModuleName: ' . $this->name . '<br />';
-			echo 'ExecutionRequest: ';
-			var_dump($dataContainer->getModuleExecutionRequest());
-			if($dataContainer->getModuleExecutionRequest()) {
-				echo 'ModulePosition: ';
-				var_dump($this->modulePositionInExecutionPathGet(
-					$dataContainer->getModuleExecutionRequest()));
-				echo 'SubmoduleCount: ';
-				var_dump($this->submoduleCountGet($dataContainer->getModuleExecutionRequest()));
-			}
-
-		} catch (SubmoduleException $e) {
-			echo 'NOPE';
-		}
-		echo '</pre>';
+		// $this->debugDataPrint($dataContainer);
 		$this->execute($dataContainer);
 	}
 
@@ -75,6 +59,27 @@ abstract class Module {
 		$this->_submoduleExecutionpath =
 			$dataContainer->getModuleExecutionRequest();
 		$this->_logger = $dataContainer->getLogger();
+	}
+
+	protected function debugDataPrint($dataContainer) {
+
+		try {
+			echo 'DebugData:<pre>';
+			echo 'ModuleName: ' . $this->name . '<br />';
+			echo 'ExecutionRequest: ';
+			var_dump($dataContainer->getModuleExecutionRequest());
+			if($dataContainer->getModuleExecutionRequest()) {
+				echo 'ModulePosition: ';
+				var_dump($this->modulePositionInExecutionPathGet(
+					$dataContainer->getModuleExecutionRequest()));
+				echo 'SubmoduleCount: ';
+				var_dump($this->submoduleCountGet($dataContainer->getModuleExecutionRequest()));
+			}
+
+		} catch (SubmoduleException $e) {
+			echo 'NOPE';
+		}
+		echo '</pre>';
 	}
 
 	/**

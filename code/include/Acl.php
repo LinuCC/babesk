@@ -317,8 +317,6 @@ class Acl {
 	protected function moduleExecuteHelper(
 		$moduleToExecutePath, $dataContainer) {
 
-		echo "Trying to execute '$moduleToExecutePath'<br />";
-
 		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
 
 		if(!empty($module)) {
