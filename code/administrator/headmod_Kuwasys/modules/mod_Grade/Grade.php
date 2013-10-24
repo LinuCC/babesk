@@ -69,7 +69,7 @@ class Grade extends Kuwasys {
 
 		$this->_dataContainer = $dataContainer;
 		$this->_interface = new GradeInterface($this->relPath, $this->_dataContainer->getSmarty());
-		$this->_subExecPath = $dataContainer->getModuleExecutionRequest();
+		$this->_subExecPath = $dataContainer->getExecutionCommand()->pathGet();
 		$this->_acl = $dataContainer->getAcl();
 	}
 

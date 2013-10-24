@@ -23,7 +23,7 @@ class Schoolyear extends System {
 
 		$this->entryPoint($dataContainer);
 
-		$this->_subExecPath = $dataContainer->getModuleExecutionRequest();
+		$this->_subExecPath = $dataContainer->getExecutionCommand()->pathGet();
 
 		if(isset($_GET['action'])) {
 			switch($_GET['action']) {

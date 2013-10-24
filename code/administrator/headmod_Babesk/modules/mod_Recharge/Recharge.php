@@ -35,7 +35,7 @@ class Recharge extends Babesk {
 
 		$this->entryPoint($dataContainer);
 
-		$execReq = $dataContainer->getModuleExecutionRequest();
+		$execReq = $dataContainer->getExecutionCommand()->pathGet();
 		if($this->submoduleCountGet($execReq)) {
 			$this->submoduleExecuteAsMethod($execReq);
 		}

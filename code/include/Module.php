@@ -57,7 +57,7 @@ abstract class Module {
 		$this->_smarty = $dataContainer->getSmarty();
 		$this->_acl = $dataContainer->getAcl();
 		$this->_submoduleExecutionpath =
-			$dataContainer->getModuleExecutionRequest();
+			$dataContainer->getExecutionCommand()->pathGet();
 		$this->_logger = $dataContainer->getLogger();
 	}
 
@@ -67,13 +67,13 @@ abstract class Module {
 			echo 'DebugData:<pre>';
 			echo 'ModuleName: ' . $this->name . '<br />';
 			echo 'ExecutionRequest: ';
-			var_dump($dataContainer->getModuleExecutionRequest());
-			if($dataContainer->getModuleExecutionRequest()) {
+			var_dump($dataContainer->getExecutionCommand()->pathGet());
+			if($dataContainer->getExecutionCommand()->pathGet()) {
 				echo 'ModulePosition: ';
 				var_dump($this->modulePositionInExecutionPathGet(
-					$dataContainer->getModuleExecutionRequest()));
+					$dataContainer->getExecutionCommand()->pathGet()));
 				echo 'SubmoduleCount: ';
-				var_dump($this->submoduleCountGet($dataContainer->getModuleExecutionRequest()));
+				var_dump($this->submoduleCountGet($dataContainer->getExecutionCommand()->pathGet()));
 			}
 
 		} catch (SubmoduleException $e) {

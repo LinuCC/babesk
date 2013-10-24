@@ -76,15 +76,6 @@ class DataContainer {
 		$this->_logger = $logger;
 	}
 
-
-	public function getModuleExecutionRequest() {
-		return $this->_moduleExecutionRequest;
-	}
-
-	public function setModuleExecutionRequest($moduleExecutionRequest) {
-		$this->_moduleExecutionRequest = $moduleExecutionRequest;
-	}
-
 	public function getExecutionCommand() {
 		return $this->_executionCommand;
 	}
@@ -119,13 +110,6 @@ class DataContainer {
 	 * @var Acl
 	 */
 	protected $_acl;
-
-	/**
-	 * Requesting what Submodule of the Module should be executed
-	 *
-	 * @var String
-	 */
-	protected $_moduleExecutionRequest;
 
 	/**
 	 * Represents the Execution-Command suggesting what Module to be executed

@@ -101,14 +101,13 @@ class Acl {
 	public function moduleExecute($moduleCommand, $dataContainer) {
 
 		$moduleToExecutePath = $moduleCommand->pathGet();
-
-		$dataContainer->setModuleExecutionRequest($moduleToExecutePath);
-		$dataContainer->setExecutionCommand($moduleCommand);
-
 		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
 
 		if(!empty($module)) {
 			if($module->isEnabled() && $module->userHasAccess()) {
+
+				$dataContainer->setExecutionCommand($moduleCommand);
+
 				$this->moduleExecuteHelper(
 					$moduleToExecutePath, $dataContainer);
 			}
