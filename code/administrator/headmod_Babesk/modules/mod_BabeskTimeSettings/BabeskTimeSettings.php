@@ -22,7 +22,8 @@ class BabeskTimeSettings extends Babesk {
 
 		$this->entryPoint($dataContainer);
 
-		if($execReq = $dataContainer->getModuleExecutionRequest()) {
+		$execReq = $dataContainer->getModuleExecutionRequest();
+		if($this->submoduleCountGet($execReq)) {
 			$this->submoduleExecuteAsMethod($execReq);
 		}
 		else {
