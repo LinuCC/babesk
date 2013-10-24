@@ -33,12 +33,6 @@ class Web {
 		$this->_logger->categorySet('Administrator');
 		$this->_moduleExecutionParser = new ModuleExecutionInputParser();
 		$this->_moduleExecutionParser->setSubprogramPath('root/web');
-		$this->_dataContainer = new DataContainer(
-			$this->_smarty,
-			$this->_interface,
-			$this->_acl,
-			$this->_pdo,
-			$this->_logger);
 		$this->initLanguage();
 	}
 
@@ -138,7 +132,8 @@ class Web {
 					$this->_acl->getModuleroot());
 				$pwChange = new ModuleExecutionInputParser(
 					'root/web/Settings/ChangePresetPassword');
-				$this->_acl->moduleExecute($pwChange, $this->_dataContainer);
+				$this->_acl->moduleExecute(
+					$pwChange, $this->dataContainerCreate());
 				die ();
 			}
 		}
@@ -226,7 +221,7 @@ class Web {
 		try {
 			try {
 				$this->_acl->moduleExecute($this->_moduleExecutionParser,
-					$this->_dataContainer);
+					$this->dataContainerCreate());
 
 			} catch (Exception $e) {
 				$this->_interface->dieError(_g('Error executing the Module!'));
@@ -388,17 +383,26 @@ class Web {
 		}
 	}
 
+	/**
+	 * Creates a DataContainer and returns it
+	 * @return Object DataContainer A Container containing general data needed
+	 *                by the Modules
+	 */
+	private function dataContainerCreate() {
+
+		$dataContainer = new DataContainer(
+			$this->_smarty,
+			$this->_interface,
+			$this->_acl,
+			$this->_pdo,
+			$this->_logger);
+
+		return $dataContainer;
+	}
+
 	///////////////////////////////////////////////////////////////////////
 	//Attributes
 	///////////////////////////////////////////////////////////////////////
-
-	private $_smarty;
-	private $_loggedIn;
-	private $_interface;
-	private $_userManager;
-	private $_acl;
-	private $_dataContainer;
-	private $_moduleExecutionParser;
 
 	/**
 	 * The Prefix to the location where the Images are
@@ -411,6 +415,21 @@ class Web {
 	 * @var Logger
 	 */
 	private $_logger;
+
+	private $_pdo;
+
+	private $_smarty;
+
+	private $_loggedIn;
+
+	private $_interface;
+
+	private $_userManager;
+
+	private $_acl;
+
+	private $_moduleExecutionParser;
+
 }
 
 ?>

@@ -42,12 +42,6 @@ class Administrator {
 		$this->initPdo();
 		$this->_logger = new Logger($this->_pdo);
 		$this->_logger->categorySet('Administrator');
-		$this->_dataContainer = new DataContainer(
-			$this->_smarty,
-			$this->_adminInterface,
-			$this->_acl,
-			$this->_pdo,
-			$this->_logger);
 	}
 
 	////////////////////////////////////////////////////////////////////////
@@ -104,8 +98,9 @@ class Administrator {
 	public function executeModule() {
 
 		try {
+
 			$this->_acl->moduleExecute(
-				$this->_moduleExecutionParser, $this->_dataContainer);
+				$this->_moduleExecutionParser, $this->dataContainerCreate());
 
 		} catch (Exception $e) {
 			$this->_logger->log(
@@ -272,6 +267,23 @@ class Administrator {
 		}
 	}
 
+	/**
+	 * Creates a DataContainer and returns it
+	 * @return Object DataContainer A Container containing general data needed
+	 *                by the Modules
+	 */
+	private function dataContainerCreate() {
+
+		$dataContainer = new DataContainer(
+			$this->_smarty,
+			$this->_adminInterface,
+			$this->_acl,
+			$this->_pdo,
+			$this->_logger);
+
+		return $dataContainer;
+	}
+
 	////////////////////////////////////////////////////////////////////////
 	//Attributes
 	////////////////////////////////////////////////////////////////////////
@@ -305,9 +317,11 @@ class Administrator {
 	 */
 	private $_logger;
 
-	private $_dataContainer;
-
 	private $_login;
+
+	private $_moduleExecutionParser;
+
+	private $_pdo;
 }
 
 ?>
