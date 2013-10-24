@@ -91,20 +91,20 @@ class Acl {
 	/**
 	 * Executes a module
 	 *
-	 * @param  String $section       The Path to the Module. Supported are:
-	 *     "Headmodule|Module" - The old way. deprecated
-	 *     "Headmodule" - Another notation of the old way. deprecated
-	 *     "root/path/to/module" - The new way. preferred
-	 * @param  dataContainer $dataContainer The dataContainer that is given to
-	 *     the executed Module
+	 * @param  Object $moduleCommand The ModuleExecutionCommand that knows
+	 *                               which Module to execute
+	 * @param  Object $dataContainer The DataContainer that is given to
+	 *                               the executed Module
 	 * @throws AclException If ModuleAccess is forbidden
 	 * @throws AclException If Module could not be loaded by path
 	 */
 	public function moduleExecute($moduleCommand, $dataContainer) {
 
 		$moduleToExecutePath = $moduleCommand->pathGet();
+
 		$dataContainer->setModuleExecutionRequest($moduleToExecutePath);
 		$dataContainer->setExecutionCommand($moduleCommand);
+
 		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
 
 		if(!empty($module)) {
