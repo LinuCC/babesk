@@ -22,8 +22,7 @@ class Pvau extends Module {
 	//Methods
 	public function execute($dataContainer) {
 
-		$defaultMod = new ModuleExecutionInputParser(
-				'root/web/Pvau/Pvp');
+		$defaultMod = new ModuleExecutionCommand('root/web/Pvau/Pvp');
 		$dataContainer->getAcl()->moduleExecute($defaultMod,
 				$dataContainer);
 	}

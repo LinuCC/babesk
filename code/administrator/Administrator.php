@@ -91,7 +91,8 @@ class Administrator {
 		$this->_smarty->assign('_ADMIN_USERNAME', $_SESSION['username']);
 		$this->_smarty->assign('sid', htmlspecialchars(SID));
 
-			$this->_smarty->assign('base_path', PATH_SMARTY . '/templates/administrator/base_layout.tpl');
+		$this->_smarty->assign('base_path',
+			PATH_SMARTY . '/templates/administrator/base_layout.tpl');
 
 	}
 
@@ -100,7 +101,8 @@ class Administrator {
 		try {
 
 			$this->_acl->moduleExecute(
-				$this->_moduleExecutionParser, $this->dataContainerCreate());
+				$this->_moduleExecutionParser->executionCommandGet(),
+				$this->dataContainerCreate());
 
 		} catch (Exception $e) {
 			$this->_logger->log(
@@ -251,8 +253,10 @@ class Administrator {
 	 */
 	private function moduleBacklink() {
 
-		$link = str_replace('/', '|',
-			$this->_moduleExecutionParser->moduleExecutionGet());
+		$modCommand = clone(
+			$this->_moduleExecutionParser->executionCommandGet());
+		$modCommand->delim = '|';
+		$link = $modCommand->pathGet();
 		$this->_smarty->assign('moduleBacklink', $link);
 	}
 

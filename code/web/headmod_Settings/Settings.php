@@ -22,8 +22,8 @@ class Settings extends Module {
 	//Methods
 	public function execute($dataContainer) {
 
-		$defaultMod = new ModuleExecutionInputParser(
-				'root/web/Settings/SettingsMainMenu');
+		$defaultMod = new ModuleExecutionCommand(
+			'root/web/Settings/SettingsMainMenu');
 		$dataContainer->getAcl()->moduleExecute($defaultMod,
 				$dataContainer);
 

@@ -130,7 +130,7 @@ class Web {
 			if ($firstPassword != '0') {
 				$this->_smarty->assign('moduleroot',
 					$this->_acl->getModuleroot());
-				$pwChange = new ModuleExecutionInputParser(
+				$pwChange = new ModuleExecutionCommand(
 					'root/web/Settings/ChangePresetPassword');
 				$this->_acl->moduleExecute(
 					$pwChange, $this->dataContainerCreate());
@@ -220,7 +220,8 @@ class Web {
 
 		try {
 			try {
-				$this->_acl->moduleExecute($this->_moduleExecutionParser,
+				$this->_acl->moduleExecute(
+					$this->_moduleExecutionParser->executionCommandGet(),
 					$this->dataContainerCreate());
 
 			} catch (Exception $e) {
@@ -333,12 +334,17 @@ class Web {
 	 */
 	private function footerImagePath() {
 
-		$this->_moduleExecutionParser->load();
-		$modpath = $this->_moduleExecutionParser->executionGet();
-		$modpath = preg_replace('/.*?\/web\//', '', $modpath);
 		$path = '';
+		$modpath = '';
 
-		if($modpath) {
+		if($this->_moduleExecutionParser->load()) {
+			$moduleCommand =
+				$this->_moduleExecutionParser->executionCommandGet();
+			$modpath = $moduleCommand->pathGet();
+			$modpath = preg_replace('/.*?\/web\//', '', $modpath);
+		}
+
+		if(!empty($modpath)) {
 			$path = $this->footerImagePathLoadByModulepath($modpath);
 		}
 

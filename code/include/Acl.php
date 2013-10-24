@@ -90,9 +90,9 @@ class Acl {
 	 * @throws AclException If ModuleAccess is forbidden
 	 * @throws AclException If Module could not be loaded by path
 	 */
-	public function moduleExecute($moduleExecutionParser, $dataContainer) {
+	public function moduleExecute($moduleCommand, $dataContainer) {
 
-		$moduleToExecutePath = $moduleExecutionParser->moduleExecutionGet();
+		$moduleToExecutePath = $moduleCommand->pathGet();
 		$dataContainer->setModuleExecutionRequest($moduleToExecutePath);
 		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
 

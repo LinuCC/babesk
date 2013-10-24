@@ -26,8 +26,7 @@ class Kuwasys extends Module {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	public function execute($dataContainer) {
-		$defaultMod = new ModuleExecutionInputParser(
-				'root/web/Kuwasys/MainMenu');
+		$defaultMod = new ModuleExecutionCommand('root/web/Kuwasys/MainMenu');
 		$dataContainer->getAcl()->moduleExecute($defaultMod,
 			$dataContainer);
 		// $moduleManager->execute("Kuwasys|MainMenu", false);

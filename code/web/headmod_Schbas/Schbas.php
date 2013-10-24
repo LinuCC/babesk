@@ -23,8 +23,7 @@ class Schbas extends Module {
 	public function execute( $dataContainer) {
 
 
-		$defaultMod = new ModuleExecutionInputParser(
-				'root/web/Schbas/LoanSystem');
+		$defaultMod = new ModuleExecutionCommand('root/web/Schbas/LoanSystem');
 		$dataContainer->getAcl()->moduleExecute($defaultMod,
 				$dataContainer);
 

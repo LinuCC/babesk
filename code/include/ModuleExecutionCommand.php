@@ -1,5 +1,7 @@
 <?php
 
+require_once PATH_INCLUDE . '/Module.php';
+
 /**
  * Wraps the Module-Execution-Command (a Path) in a Class
  *
@@ -27,10 +29,10 @@ class ModuleExecutionCommand {
 	 */
 	public function pathGet() {
 
-		$prePath = implode($this->_delim, $this->_execPathPreElements);
-		$modPath = implode($this->_delim, $this->_execPathModules);
+		$prePath = implode($this->delim, $this->_execPathPreElements);
+		$modPath = implode($this->delim, $this->_execPathModules);
 
-		return $prePath . $this->_delim . $modPath;
+		return $prePath . $this->delim . $modPath;
 	}
 
 	/**
@@ -40,7 +42,7 @@ class ModuleExecutionCommand {
 	 */
 	public function modulePathGet() {
 
-		return implode($this->_delim, $this->_execPathModules);
+		return implode($this->delim, $this->_execPathModules);
 	}
 
 	/**
@@ -82,7 +84,7 @@ class ModuleExecutionCommand {
 	 */
 	protected function modExecPathParse($modExecPath) {
 
-		$elements = explode('/', $modExecPath);
+		$elements = explode($this->delim, $modExecPath);
 
 		if($elements[0] == 'root') {
 
@@ -110,7 +112,7 @@ class ModuleExecutionCommand {
 		$classes = array_reverse($this->ancestorsGet($module));
 		// We dont want the "Module"-Class, not needed in the Path
 		array_shift($classes);
-		$modulePath = implode($this->_delim, $classes);
+		$modulePath = implode($this->delim, $classes);
 
 		return $modulePath;
 	}
@@ -147,7 +149,7 @@ class ModuleExecutionCommand {
 	 */
 	protected $_execPathModules;
 
-	static protected $_delim = '/';
+	public $delim = '/';
 }
 
 ?>

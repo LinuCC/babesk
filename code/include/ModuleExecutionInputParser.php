@@ -1,5 +1,7 @@
 <?php
 
+require_once PATH_INCLUDE . '/ModuleExecutionCommand.php';
+
 class ModulepathLevel {
 
 	const ROOT = 0;
@@ -27,10 +29,13 @@ class ModuleExecutionInputParser {
 	public function __construct($manualPath = '') {
 
 		if(!empty($manualPath)) {
-			$this->_executionPath = str_replace(
-				'/',
-				$this->_pathDelim,
-				$manualPath);
+
+			$this->_executionCommand = new ModuleExecutionCommand($manualPath);
+
+			// $this->_executionPath = str_replace(
+			// 	'/',
+			// 	$this->_pathDelim,
+			// 	$manualPath);
 		}
 	}
 
@@ -39,7 +44,7 @@ class ModuleExecutionInputParser {
 	/////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Sets the Subprogrampath. Needed when using the old section-styl
+	 * Sets the Subprogrampath. Needed when using the old section-style
 	 *
 	 * When using old-style Headmodule|Module as executionpath you need to use
 	 * this function beforehand. For example the administrator-Subprogram needs
@@ -63,9 +68,15 @@ class ModuleExecutionInputParser {
 
 		try {
 			if($this->_usedContainer = $this->usedContainerGet()) {
+
 				$path = $this->_usedContainer['module'];
-				$this->_executionPath =
-					$this->rootAddToExecutionpathIfNotExists($path);
+
+				$exePath = str_replace('|', '/',
+					$this->rootAddToExecutionpathIfNotExists($path));
+				$this->_executionCommand = new ModuleExecutionCommand(
+					$exePath);
+				// $this->_executionPath =
+				// 	$this->rootAddToExecutionpathIfNotExists($path);
 			}
 			else {
 				return false;
@@ -78,25 +89,30 @@ class ModuleExecutionInputParser {
 		return true;
 	}
 
-	/**
-	 * Returns the whole Executionpath
-	 *
-	 * @return String The Path of the Execution
-	 */
-	public function executionGet() {
+	public function executionCommandGet() {
 
-		return $this->internalDelimReplaceWithStandard($this->_executionPath);
+		return $this->_executionCommand;
 	}
 
-	/**
-	 * Returns the Path executing the Module
-	 *
-	 * @return String Moduleexecutionpath
-	 */
-	public function moduleExecutionGet() {
+	// /**
+	//  * Returns the whole Executionpath
+	//  *
+	//  * @return String The Path of the Execution
+	//  */
+	// public function executionGet() {
 
-		return $this->internalDelimReplaceWithStandard($this->_executionPath);
-	}
+	// 	return $this->internalDelimReplaceWithStandard($this->_executionPath);
+	// }
+
+	// /**
+	//  * Returns the Path executing the Module
+	//  *
+	//  * @return String Moduleexecutionpath
+	//  */
+	// public function moduleExecutionGet() {
+
+	// 	return $this->internalDelimReplaceWithStandard($this->_executionPath);
+	// }
 
 	/////////////////////////////////////////////////////////////////////
 	//Implements
@@ -178,9 +194,9 @@ class ModuleExecutionInputParser {
 		$mod = $modSubPath[1];
 		$createdPath = $this->_subProgramPath . "{$this->_pathDelim}$headmod" .
 			"{$this->_pathDelim}$mod";
-		if(!empty($_GET['action'])) {
-			$createdPath .= "{$this->_pathDelim}$_GET[action]";
-		}
+		// if(!empty($_GET['action'])) {
+		// 	$createdPath .= "{$this->_pathDelim}$_GET[action]";
+		// }
 		return $createdPath;
 	}
 
@@ -206,24 +222,24 @@ class ModuleExecutionInputParser {
 	 * @param  String $path The Path to strip
 	 * @return String The stripped Path
 	 */
-	protected function pathStripToModuleExecutionpath($path) {
+	// protected function pathStripToModuleExecutionpath($path) {
 
-		$levels = explode($this->_pathDelim, $path);
-		$lastLevel = $this->lowestModuleExecutionOfPathGet($levels);
-		$strippedPath = '';
+	// 	$levels = explode($this->_pathDelim, $path);
+	// 	$lastLevel = $this->lowestModuleExecutionOfPathGet($levels);
+	// 	$strippedPath = '';
 
-		if($lastLevel) {
-			for($i = ModulepathLevel::ROOT; $i <= $lastLevel; $i++) {
-				$strippedPath .= $levels[$i] . $this->_pathDelim;
-			}
-			$strippedPath = rtrim($strippedPath, $this->_pathDelim);
+	// 	if($lastLevel) {
+	// 		for($i = ModulepathLevel::ROOT; $i <= $lastLevel; $i++) {
+	// 			$strippedPath .= $levels[$i] . $this->_pathDelim;
+	// 		}
+	// 		$strippedPath = rtrim($strippedPath, $this->_pathDelim);
 
-			return $strippedPath;
-		}
-		else {
-			return false;
-		}
-	}
+	// 		return $strippedPath;
+	// 	}
+	// 	else {
+	// 		return false;
+	// 	}
+	// }
 
 	/**
 	 * Strips the Executionpath from the Elements before the SubmoduleExecution
@@ -255,21 +271,21 @@ class ModuleExecutionInputParser {
 	 * @return integer Returns the level of the Module if one is executed or
 	 * the level of an Headmodule
 	 */
-	protected function lowestModuleExecutionOfPathGet($levels) {
+	// protected function lowestModuleExecutionOfPathGet($levels) {
 
-		$maxLevel = count($levels) - 1;
+	// 	$maxLevel = count($levels) - 1;
 
-		//Check if only an Headmodule gets executed or an Module, too
-		if($maxLevel == ModulepathLevel::HEADMODULE) {
-			return ModulepathLevel::HEADMODULE;
-		}
-		else if($maxLevel >= ModulepathLevel::MODULE) {
-			return ModulepathLevel::MODULE;
-		}
-		else {
-			return false;
-		}
-	}
+	// 	//Check if only an Headmodule gets executed or an Module, too
+	// 	if($maxLevel == ModulepathLevel::HEADMODULE) {
+	// 		return ModulepathLevel::HEADMODULE;
+	// 	}
+	// 	else if($maxLevel >= ModulepathLevel::MODULE) {
+	// 		return ModulepathLevel::MODULE;
+	// 	}
+	// 	else {
+	// 		return false;
+	// 	}
+	// }
 
 	protected function rootAddToExecutionpathIfNotExists($path) {
 
@@ -312,7 +328,7 @@ class ModuleExecutionInputParser {
 	 *
 	 * @var string
 	 */
-	protected $_executionPath = '';
+	// protected $_executionPath = '';
 
 	/**
 	 * Used for Oldschool-section declaration: "Headmodule|Module"
@@ -320,6 +336,8 @@ class ModuleExecutionInputParser {
 	 * @var String
 	 */
 	protected $_subProgramPath;
+
+	protected $_executionCommand;
 }
 
 ?>
