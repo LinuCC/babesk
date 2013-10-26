@@ -603,7 +603,7 @@ abstract class CsvImport {
 	 * Contains the preview of the import of the CSV-File
 	 * @var string
 	 */
-	protected $_previewStr = 'Not coded (yet)';
+	protected $_previewStr = '';
 
 	/**
 	 * Contains the Columns of the CSV-File
