@@ -1,0 +1,20 @@
+CREATE TABLE `users` (
+  `ID` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) COLLATE latin1_german2_ci NOT NULL,
+  `forename` varchar(64) COLLATE latin1_german2_ci NOT NULL,
+  `username` varchar(64) COLLATE latin1_german2_ci NOT NULL,
+  `password` varchar(64) COLLATE latin1_german2_ci NOT NULL,
+  `email` varchar(64) COLLATE latin1_german2_ci NOT NULL,
+  `telephone` varchar(64) COLLATE latin1_german2_ci NOT NULL,
+  `birthday` varchar(11) COLLATE latin1_german2_ci NOT NULL,
+  `last_login` varchar(11) COLLATE latin1_german2_ci NOT NULL,
+  `login_tries` smallint(5) DEFAULT NULL,
+  `first_passwd` tinyint(1) NOT NULL DEFAULT '0',
+  `locked` tinyint(1) NOT NULL,
+  `GID` int(5) unsigned NOT NULL,
+  `credit` decimal(6,2) NOT NULL,
+  `soli` tinyint(1) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `ID` (`ID`),
+  KEY `username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci
