@@ -1,1 +1,0 @@
-Die Installation wurde fertiggestellt.
