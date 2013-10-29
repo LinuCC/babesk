@@ -1,13 +1,6 @@
 <?php
 
-class ModulepathLevel {
-
-	const ROOT = 0;
-	const SUBPROGRAM = 1;
-	const HEADMODULE = 2;
-	const MODULE = 3;
-	const SUBMODULE = 4;
-}
+require_once PATH_INCLUDE . '/ModuleExecutionCommand.php';
 
 /**
  * Parses the Input stating which Module should be executed
@@ -27,10 +20,7 @@ class ModuleExecutionInputParser {
 	public function __construct($manualPath = '') {
 
 		if(!empty($manualPath)) {
-			$this->_executionPath = str_replace(
-				'/',
-				$this->_pathDelim,
-				$manualPath);
+			$this->_executionCommand = new ModuleExecutionCommand($manualPath);
 		}
 	}
 
@@ -39,7 +29,7 @@ class ModuleExecutionInputParser {
 	/////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Sets the Subprogrampath. Needed when using the old section-styl
+	 * Sets the Subprogrampath. Needed when using the old section-style
 	 *
 	 * When using old-style Headmodule|Module as executionpath you need to use
 	 * this function beforehand. For example the administrator-Subprogram needs
@@ -63,9 +53,13 @@ class ModuleExecutionInputParser {
 
 		try {
 			if($this->_usedContainer = $this->usedContainerGet()) {
+
 				$path = $this->_usedContainer['module'];
-				$this->_executionPath =
-					$this->rootAddToExecutionpathIfNotExists($path);
+
+				$exePath = str_replace('|', '/',
+					$this->rootAddToExecutionpathIfNotExists($path));
+				$this->_executionCommand = new ModuleExecutionCommand(
+					$exePath);
 			}
 			else {
 				return false;
@@ -78,42 +72,9 @@ class ModuleExecutionInputParser {
 		return true;
 	}
 
-	/**
-	 * Returns the whole Executionpath
-	 *
-	 * @return String The Path of the Execution
-	 */
-	public function executionGet() {
+	public function executionCommandGet() {
 
-		return $this->internalDelimReplaceWithStandard($this->_executionPath);
-	}
-
-	/**
-	 * Returns the Path executing the Module
-	 *
-	 * @return String Moduleexecutionpath
-	 */
-	public function moduleExecutionGet() {
-
-		$path = $this->pathStripToModuleExecutionpath($this->_executionPath);
-		return $this->internalDelimReplaceWithStandard($path);
-	}
-
-	/**
-	 * Returns the Path of only the execution of Submodules and below levels
-	 *
-	 * @return String The SubmoduleExecutionPath
-	 */
-	public function submoduleExecutionGet() {
-
-		$path = $this->_executionPath;
-		if(count(explode($this->_pathDelim, $path)) - 1 >=
-			ModulepathLevel::SUBMODULE) {
-			return $this->internalDelimReplaceWithStandard($path);
-		}
-		else {
-			return false;
-		}
+		return $this->_executionCommand;
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -138,11 +99,6 @@ class ModuleExecutionInputParser {
 		else {
 			return false;
 		}
-	}
-
-	protected function internalDelimReplaceWithStandard($string) {
-
-		return str_replace($this->_pathDelim, '/', $string);
 	}
 
 	/**
@@ -196,9 +152,6 @@ class ModuleExecutionInputParser {
 		$mod = $modSubPath[1];
 		$createdPath = $this->_subProgramPath . "{$this->_pathDelim}$headmod" .
 			"{$this->_pathDelim}$mod";
-		if(!empty($_GET['action'])) {
-			$createdPath .= "{$this->_pathDelim}$_GET[action]";
-		}
 		return $createdPath;
 	}
 
@@ -215,77 +168,6 @@ class ModuleExecutionInputParser {
 		}
 		else {
 			throw new Exception('Subprogrampath not set but old-style Sectionpath given');
-		}
-	}
-
-	/**
-	 * Strips the whole Executionpath to only the path executing the Module
-	 *
-	 * @param  String $path The Path to strip
-	 * @return String The stripped Path
-	 */
-	protected function pathStripToModuleExecutionpath($path) {
-
-		$levels = explode($this->_pathDelim, $path);
-		$lastLevel = $this->lowestModuleExecutionOfPathGet($levels);
-		$strippedPath = '';
-
-		if($lastLevel) {
-			for($i = ModulepathLevel::ROOT; $i <= $lastLevel; $i++) {
-				$strippedPath .= $levels[$i] . $this->_pathDelim;
-			}
-			$strippedPath = rtrim($strippedPath, $this->_pathDelim);
-
-			return $strippedPath;
-		}
-		else {
-			return false;
-		}
-	}
-
-	/**
-	 * Strips the Executionpath from the Elements before the SubmoduleExecution
-	 *
-	 * @param  String $path The whole Executionpath
-	 * @return String The Executionpath starting from the Submodule or false
-	 * if given path had no Submodule-Execution
-	 */
-	// protected function pathStripToOnlySubmoduleExecutionpath($path) {
-
-	// 	$levels = explode($this->_pathDelim, $path);
-	// 	if(count($levels) >= ModulepathLevel::SUBMODULE) {
-	// 		for($i = ModulepathLevel::ROOT; $i <= ModulepathLevel::MODULE;
-	// 			$i++) {
-	// 			unset($levels[$i]);
-	// 		}
-
-	// 		return implode($this->_pathDelim, $levels);
-	// 	}
-	// 	else {
-	// 		return false;
-	// 	}
-	// }
-
-	/**
-	 * Check if only an Headmodule gets executed or an Module, too
-	 *
-	 * @param  Array $levels The levels of the Path
-	 * @return integer Returns the level of the Module if one is executed or
-	 * the level of an Headmodule
-	 */
-	protected function lowestModuleExecutionOfPathGet($levels) {
-
-		$maxLevel = count($levels) - 1;
-
-		//Check if only an Headmodule gets executed or an Module, too
-		if($maxLevel == ModulepathLevel::HEADMODULE) {
-			return ModulepathLevel::HEADMODULE;
-		}
-		else if($maxLevel >= ModulepathLevel::MODULE) {
-			return ModulepathLevel::MODULE;
-		}
-		else {
-			return false;
 		}
 	}
 
@@ -326,18 +208,13 @@ class ModuleExecutionInputParser {
 	protected $_pathDelim = '|';
 
 	/**
-	 * The Path of the Module-Execution
-	 *
-	 * @var string
-	 */
-	protected $_executionPath = '';
-
-	/**
 	 * Used for Oldschool-section declaration: "Headmodule|Module"
 	 *
 	 * @var String
 	 */
 	protected $_subProgramPath;
+
+	protected $_executionCommand;
 }
 
 ?>

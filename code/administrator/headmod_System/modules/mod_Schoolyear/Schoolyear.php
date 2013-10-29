@@ -2,8 +2,9 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once 'SchoolyearInterface.php';
+require_once PATH_ADMIN . '/headmod_System/System.php';
 
-class Schoolyear extends Module {
+class Schoolyear extends System {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -22,7 +23,7 @@ class Schoolyear extends Module {
 
 		$this->entryPoint($dataContainer);
 
-		$this->_subExecPath = $dataContainer->getSubmoduleExecutionRequest();
+		$this->_subExecPath = $dataContainer->getExecutionCommand()->pathGet();
 
 		if(isset($_GET['action'])) {
 			switch($_GET['action']) {
@@ -241,7 +242,7 @@ class Schoolyear extends Module {
 	protected function submoduleSwitchSchoolyearExecute() {
 
 		if($this->execPathHasSubmoduleLevel(2, $this->_subExecPath)) {
-			$this->submoduleExecute(
+			$this->submoduleExecuteAsMethod(
 				$this->_subExecPath,
 				2,
 				'switchSchoolyear');

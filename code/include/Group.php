@@ -46,7 +46,7 @@ class Group {
 			throw new Exception('Grouproot not found');
 
 		} catch (Exception $e) {
-			throw new ModuleException("Could not fetch Groups!", 1, $e);
+			throw new Exception("Could not fetch Groups!", 1, $e);
 		}
 	}
 

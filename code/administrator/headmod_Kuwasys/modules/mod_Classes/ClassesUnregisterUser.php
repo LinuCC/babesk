@@ -2,7 +2,6 @@
 
 /**
  * Handles things to allow the User to Unregister someone from a Class
- * @author Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
 class ClassesUnregisterUser {
 	/////////////////////////////////////////////////////////////////////

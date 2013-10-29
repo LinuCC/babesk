@@ -3,8 +3,6 @@ class AdminReligionProcessing {
 	function __construct($ReligionInterface) {
 
 		$this->ReligionInterface = $ReligionInterface;
-		global $logger;
-		$this->logs = $logger;
 		$this->messages = array(
 				'error' => array('max_credits' => 'Maximales Guthaben der Gruppe überschritten.',
 						'mysql_register' => 'Problem bei dem Versuch, den neuen Benutzer in MySQL einzutragen.',
@@ -22,14 +20,14 @@ class AdminReligionProcessing {
 				'get_data_failed' => 'Ein Fehler ist beim fetchen der Daten aufgetreten',
 				'notice' => array('please_repeat' => 'Bitte wiederholen sie den Vorgang.'));
 	}
-	
+
 	function EditReligions($editOrShow) {
-		
+
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
-		
+
 		$globalSettingsManager = new globalSettingsManager();
-		
-		
+
+
 		if(!$editOrShow) {
 			$religions = $globalSettingsManager->getReligion();
 			$religions_exploded = explode("|", $religions);
@@ -40,16 +38,16 @@ class AdminReligionProcessing {
 			for ($i = 1; $i <= $editOrShow['relcounter']; $i++) {
 				if (!$editOrShow['rel'.$i]=="") {
 					$religions.=$editOrShow['rel'.$i]."|";
-				}	
+				}
 			}
-			if(sizeof($religions)>0) $religions = substr($religions, 0,strlen($religions)-1); 
+			if(sizeof($religions)>0) $religions = substr($religions, 0,strlen($religions)-1);
 			$globalSettingsManager->setReligion($religions);
 			$this->ReligionInterface->ShowReligionsSet($religions);
 		}
-		
+
 	}
-	
-	
+
+
 
 	//////////////////////////////////////////////////
 	//--------------------Show Users--------------------
@@ -58,7 +56,7 @@ class AdminReligionProcessing {
 		require_once PATH_ACCESS . '/UserManager.php';
 		require_once PATH_ACCESS . '/GroupManager.php';
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
-		
+
 		$globalSettingsManager = new globalSettingsManager();
 		$userManager = new UserManager();
 		$groupManager = new GroupManager();
@@ -93,20 +91,20 @@ class AdminReligionProcessing {
 		$this->ReligionInterface->ShowUsers($users,$religions_exploded,$navbar);
 	}
 
-	
+
 	function SaveUsers($post_vars) {
 		require_once PATH_ACCESS . '/UserManager.php';
 		$userManager = new UserManager();
 		foreach($post_vars as $key => $value) {
 			try {
-				$userManager->SetReligion($key, $value);		
+				$userManager->SetReligion($key, $value);
 			} catch (Exception $e) {
 				$this->userInterface->dieError($this->messages['error']['change'] . $e->getMessage());
 			}
 		}
 		$this->ReligionInterface->ShowUsersSuccess();
 	}
-	
+
 	function AssignConfessionWithCardscan($postvars) {
 		require_once PATH_ACCESS . '/CardManager.php';
 		require_once PATH_ACCESS . '/UserManager.php';
@@ -138,18 +136,18 @@ class AdminReligionProcessing {
 		else{
 			$this->ReligionInterface->ShowCardscan();
 		}
-	
+
 	}
 
 	public function CheckCard ($card_id) {
-	
+
 		if (!$this->cardManager->valid_card_ID($card_id))
 			$this->cardInfoInterface->dieError(sprintf($this->msg['err_card_id'], $card_id));
-	
+
 		$uid = $this->GetUser($card_id);
 		return  $uid;
 	}
-	
+
 	public function GetUser ($card_id) {
 		try {
 			return $this->cardManager->getUserID($card_id);
@@ -160,10 +158,6 @@ class AdminReligionProcessing {
 	var $messages = array();
 	private $userInterface;
 
-	/**
-	 *@var Logger
-	 */
-	protected $logs;
 }
 
 ?>

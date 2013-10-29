@@ -2,8 +2,9 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once 'MainMenuCancelClassRegOfDay.php';
+require_once PATH_WEB . '/headmod_Kuwasys/Kuwasys.php';
 
-class MainMenu extends Module {
+class MainMenu extends Kuwasys {
 
 	///////////////////////////////////////////////////////////////////////
 	//Constructor

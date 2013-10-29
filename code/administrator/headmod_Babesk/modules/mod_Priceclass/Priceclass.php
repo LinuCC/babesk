@@ -7,8 +7,9 @@
  */
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_Babesk/Babesk.php';
 
-class Priceclass extends Module {
+class Priceclass extends Babesk {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes

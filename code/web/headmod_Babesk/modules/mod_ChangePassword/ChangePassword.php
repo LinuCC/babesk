@@ -1,8 +1,9 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_WEB . '/headmod_Babesk/Babesk.php';
 
-class ChangePassword extends Module {
+class ChangePassword extends Babesk {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -24,13 +25,10 @@ class ChangePassword extends Module {
 		require_once 'change_password_constants.php';
 		require_once PATH_INCLUDE.'/functions.php';
 		global $smarty;
-		global $logger;
 		$userManager = new UserManager();
 		try {
 			$userData = $userManager->getEntryData($_SESSION['uid'], '*');
 		} catch (Exception $e) {
-			$logger->log('WEB|change_password', 'MODERATE', sprintf('Unable to get Entry Data; UID:%s; %s',
-					$_SESSION['uid'], $e->getMessage()));
 			die(ERR);
 		}
 		$smarty->assign('username', $userData['forename'].' '.$userData['name']);

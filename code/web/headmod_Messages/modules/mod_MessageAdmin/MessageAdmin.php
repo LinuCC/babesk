@@ -2,8 +2,9 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_WEB . '/headmod_Messages/MessageFunctions.php';
+require_once PATH_WEB . '/headmod_Messages/Messages.php';
 
-class MessageAdmin extends Module{
+class MessageAdmin extends Messages {
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
 	/////////////////////////////////////////////////////////////////////

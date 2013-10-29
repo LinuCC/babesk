@@ -2,8 +2,9 @@
 
 require_once PATH_INCLUDE . '/Group.php';
 require_once PATH_ADMIN . '/AdminInterface.php';
+require_once PATH_ADMIN . '/headmod_System/System.php';
 
-class GroupSettings extends Module {
+class GroupSettings extends System {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor

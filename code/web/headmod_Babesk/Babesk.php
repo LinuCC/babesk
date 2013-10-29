@@ -1,13 +1,13 @@
 <?php
 
-require_once PATH_INCLUDE . '/HeadModule.php';
+require_once PATH_INCLUDE . '/Module.php';
 
 /**
  * class for Interface web
  * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
  *
  */
-class Babesk extends HeadModule {
+class Babesk extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -26,14 +26,13 @@ class Babesk extends HeadModule {
 		$userManager = new UserManager();
 
 		if ($userManager->firstPassword($_SESSION['uid'])) {
-			$defaultMod = new ModuleExecutionInputParser(
+			$defaultMod = new ModuleExecutionCommand(
 				'root/web/Babesk/ChangePassword');
 			$dataContainer->getAcl()->moduleExecute(
 				$defaultMod, $dataContainer);
 		}
 		else {
-			$defaultMod = new ModuleExecutionInputParser(
-				'root/web/Babesk/Menu');
+			$defaultMod = new ModuleExecutionCommand('root/web/Babesk/Menu');
 			$dataContainer->getAcl()->moduleExecute($defaultMod,
 				$dataContainer);
 		}

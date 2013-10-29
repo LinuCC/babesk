@@ -43,6 +43,16 @@ class Acl {
 		return $this->_grouproot;
 	}
 
+	public function accessControlInitAllowAll() {
+
+		if(!$this->_accessControlInitialized) {
+			$this->_moduleroot->allowAll();
+		}
+		else {
+			throw new Exception('Access-Control already initialized');
+		}
+	}
+
 	/**
 	 * Sets the module-Access according to the Groups of the User
 	 *
@@ -81,57 +91,29 @@ class Acl {
 	/**
 	 * Executes a module
 	 *
-	 * @param  String $section       The Path to the Module. Supported are:
-	 *     "Headmodule|Module" - The old way. deprecated
-	 *     "Headmodule" - Another notation of the old way. deprecated
-	 *     "root/path/to/module" - The new way. preferred
-	 * @param  dataContainer $dataContainer The dataContainer that is given to
-	 *     the executed Module
+	 * @param  Object $moduleCommand The ModuleExecutionCommand that knows
+	 *                               which Module to execute
+	 * @param  Object $dataContainer The DataContainer that is given to
+	 *                               the executed Module
 	 * @throws AclException If ModuleAccess is forbidden
 	 * @throws AclException If Module could not be loaded by path
 	 */
-	public function moduleExecute($moduleExecutionParser, $dataContainer) {
+	public function moduleExecute($moduleCommand, $dataContainer) {
 
-		$moduleToExecutePath = $moduleExecutionParser->moduleExecutionGet();
-		$subRequest = $moduleExecutionParser->submoduleExecutionGet();
-		$dataContainer->setSubmoduleExecutionRequest($subRequest);
+		$moduleToExecutePath = $moduleCommand->pathGet();
 		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
 
 		if(!empty($module)) {
 			if($module->isEnabled() && $module->userHasAccess()) {
-				$module->execute($dataContainer);
+
+				$dataContainer->setExecutionCommand($moduleCommand);
+
+				$this->moduleExecuteHelper(
+					$moduleToExecutePath, $dataContainer);
 			}
 			else {
 				throw new AclException('Module-Access forbidden', 105);
 			}
-		}
-		else {
-			throw new AclException(
-				"Module could not be loaded by path '$moduleToExecutePath'");
-		}
-	}
-
-	/**
-	 * Executes a module, even it is not allowed
-	 *
-	 * @param  String $section       The Path to the Module. Supported are:
-	 *     "Headmodule|Module" - The old way. deprecated
-	 *     "Headmodule" - Another notation of the old way. deprecated
-	 *     "root/path/to/module" - The new way. preferred
-	 * @param  dataContainer $dataContainer The dataContainer that is given to
-	 *     the executed Module
-	 * @throws AclException If ModuleAccess is forbidden
-	 * @throws AclException If Module could not be loaded by path
-	 */
-	public function moduleNotAllowedExecute($moduleExecutionParser,
-		$dataContainer) {
-
-		$moduleToExecutePath = $moduleExecutionParser->moduleExecutionGet();
-		$subRequest = $moduleExecutionParser->submoduleExecutionGet();
-		$dataContainer->setSubmoduleExecutionRequest($subRequest);
-		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
-		if(!empty($module)) {
-			$module->execute($dataContainer);
 		}
 		else {
 			throw new AclException(
@@ -302,6 +284,41 @@ class Acl {
 				'Could not change the Access of a module',
 				0,
 				$e);
+		}
+	}
+
+	/**
+	 * Helps in executing the Modules.
+	 *
+	 * If one Module is not found, this function tries to go up the hierarchy
+	 * and tries to execute the Module above, and so on
+	 *
+	 * @param  string $moduleToExecutePath The Path of the Module to execute
+	 * @param  Object $dataContainer       The DataContainer for the Module
+	 */
+	protected function moduleExecuteHelper(
+		$moduleToExecutePath, $dataContainer) {
+
+		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
+
+		if(!empty($module)) {
+			if($module->isEnabled() && $module->userHasAccess()) {
+				if(!$module->execute($dataContainer)) {
+					//Removes last element in the Path
+					$modsWithoutLast = explode('/', $moduleToExecutePath);
+					array_pop($modsWithoutLast);
+					$pathWithoutLast = implode('/', $modsWithoutLast);
+					$this->moduleExecuteHelper(
+						$pathWithoutLast, $dataContainer);
+				}
+			}
+			else {
+				throw new AclException('Module-Access forbidden', 105);
+			}
+		}
+		else {
+			throw new AclException(
+				"Module could not be loaded by path '$moduleToExecutePath'");
 		}
 	}
 

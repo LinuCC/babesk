@@ -1,14 +1,14 @@
 <?php
 
-require_once PATH_INCLUDE . '/HeadModule.php';
-require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';
+require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_INCLUDE . '/ModuleExecutionCommand.php';
 
 /**
  * class for Interface web
  * @author Mirek Hancl
  *
  */
-class Messages extends HeadModule {
+class Messages extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -23,7 +23,7 @@ class Messages extends HeadModule {
 	//Methods
 	public function execute($dataContainer) {
 
-		$defaultMod = new ModuleExecutionInputParser(
+		$defaultMod = new ModuleExecutionCommand(
 			'root/web/Messages/MessageMainMenu');
 		$dataContainer->getAcl()->moduleExecute(
 			$defaultMod, $dataContainer);

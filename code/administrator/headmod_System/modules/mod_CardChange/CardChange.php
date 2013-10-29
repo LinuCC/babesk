@@ -1,8 +1,9 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_System/System.php';
 
-class CardChange extends Module {
+class CardChange extends System {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -25,9 +26,9 @@ class CardChange extends Module {
 		$cardChangeInterface = new AdminCardChangeInterface($this->relPath);
 		$cardChangeProcessing = new AdminCardChangeProcessing($cardChangeInterface);
 
-	
+
 			$cardChangeInterface->ShowCardChangeStats($cardChangeProcessing->GetSumOfCardChanges());
-		
+
 	}
 }
 

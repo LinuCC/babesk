@@ -1,8 +1,9 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_Schbas/Schbas.php';
 
-class Inventory extends Module {
+class Inventory extends Schbas {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -45,14 +46,14 @@ class Inventory extends Module {
 					break;
 
 				case 3: //delete an entry
-					
+
 					if (isset($_POST['barcode'])) {
 						try {
 							$inventoryProcessing->DeleteEntry($inventoryProcessing->GetIDFromBarcode($_POST['barcode']));
 						} catch (Exception $e) {
 						}
 					}
-					
+
 					else if (isset($_POST['delete'])) {
 						$inventoryProcessing->DeleteEntry($_GET['ID']);
 					} else if (isset($_POST['not_delete'])) {
@@ -69,9 +70,9 @@ class Inventory extends Module {
 					}
 					break;
 				case 5: //search an entry for deleting
-					
+
 						$inventoryProcessing->ScanForDeleteEntry();
-					
+
 					break;
 			}
 		} else {

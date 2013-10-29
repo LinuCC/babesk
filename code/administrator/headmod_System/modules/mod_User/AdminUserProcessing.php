@@ -3,8 +3,6 @@ class AdminUserProcessing {
 	function __construct($userInterface) {
 
 		$this->userInterface = $userInterface;
-		global $logger;
-		$this->logs = $logger;
 		$this->messages = array(
 				'error' => array('max_credits' => 'Maximales Guthaben der Gruppe überschritten.',
 						'mysql_register' => 'Problem bei dem Versuch, den neuen Benutzer in MySQL einzutragen.',
@@ -114,10 +112,6 @@ class AdminUserProcessing {
 	var $messages = array();
 	private $userInterface;
 
-	/**
-	 *@var Logger
-	 */
-	protected $logs;
 }
 
 ?>

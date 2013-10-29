@@ -1,8 +1,9 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_WEB . '/headmod_Babesk/Babesk.php';
 
-class Cancel extends Module {
+class Cancel extends Babesk {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor

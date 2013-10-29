@@ -3,8 +3,6 @@ require_once PATH_ADMIN.'/AdminInterface.php';
 /**
  * AdminUserInterface is to output the Interface
  * Enter description here ...
- * @author voelkerball
- *
  */
 class AdminUserInterface extends AdminInterface {
 

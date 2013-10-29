@@ -83,7 +83,8 @@ class ModuleGenerator {
 	 */
 	public function execute($dataContainer) {
 
-		if(file_exists(PATH_CODE . "/$this->_executablePath")) {
+		if(!empty($this->_executablePath) &&
+			file_exists(PATH_CODE . "/$this->_executablePath")) {
 			require_once PATH_CODE . "/$this->_executablePath";
 
 			$executablePathPieces = explode('/', $this->_executablePath);
@@ -94,16 +95,17 @@ class ModuleGenerator {
 
 			if(class_exists($classname = $this->_name)) {
 				$module = new $classname($classname, $classname, $subPath);
-				$module->execute($dataContainer);
+				$module->initAndExecute($dataContainer);
 			}
 			else {
-				throw new Exception("Could not load Module-Class $classname");
+				return false;
 			}
 		}
 		else {
-			throw new Exception("Could not find Module-File in Path " .
-				"'$this->_executablePath'", 104);
+			return false;
 		}
+
+		return true;
 	}
 
 	/**
@@ -126,7 +128,7 @@ class ModuleGenerator {
 			throw new Exception('Root-Module not found!');
 
 		} catch (Exception $e) {
-			throw new ModuleException("Could not fetch Modules!", 1, $e);
+			throw new ModulesException("Could not fetch Modules!", 1, $e);
 		}
 	}
 
@@ -303,6 +305,18 @@ class ModuleGenerator {
 				else {
 					unset($this->_childs[$key]);
 				}
+			}
+		}
+	}
+
+	public function allowAll() {
+
+		$this->_userHasAccess = true;
+
+		if(count($this->_childs)) {
+			foreach($this->_childs as $child) {
+				$child->_userHasAccess = true;
+				$child->allowAll();
 			}
 		}
 	}

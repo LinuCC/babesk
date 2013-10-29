@@ -2,13 +2,12 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once 'SchooltypeInterface.php';
+require_once PATH_ADMIN . '/headmod_System/System.php';
 
 /**
  * Allows the Administrator to configure the Schooltypes
- *
- * @author Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
-class Schooltype extends Module {
+class Schooltype extends System {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor

@@ -1,13 +1,13 @@
 <?php
 
-require_once PATH_INCLUDE . '/HeadModule.php';
+require_once PATH_INCLUDE . '/Module.php';
 
 /**
  * class for Interface web
  * @author Mirek Hancl
  *
  */
-class Pvau extends HeadModule {
+class Pvau extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -22,8 +22,7 @@ class Pvau extends HeadModule {
 	//Methods
 	public function execute($dataContainer) {
 
-		$defaultMod = new ModuleExecutionInputParser(
-				'root/web/Pvau/Pvp');
+		$defaultMod = new ModuleExecutionCommand('root/web/Pvau/Pvp');
 		$dataContainer->getAcl()->moduleExecute($defaultMod,
 				$dataContainer);
 	}

@@ -5,14 +5,12 @@ require_once PATH_ACCESS_KUWASYS . '/KuwasysGradeManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysLanguageManager.php';
+require_once PATH_ADMIN . '/headmod_Kuwasys/Kuwasys.php';
 
 /**
  * Grade-Module
- *
- * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
- *
  */
-class Grade extends Module {
+class Grade extends Kuwasys {
 
 	///////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -31,7 +29,7 @@ class Grade extends Module {
 		$this->entryPoint($dataContainer);
 
 		if($this->execPathHasSubmoduleLevel(1, $this->_subExecPath)) {
-			$this->submoduleExecute($this->_subExecPath, 1);
+			$this->submoduleExecuteAsMethod($this->_subExecPath, 1);
 		}
 		else {
 			$this->_interface->displayMainMenu();
@@ -71,7 +69,7 @@ class Grade extends Module {
 
 		$this->_dataContainer = $dataContainer;
 		$this->_interface = new GradeInterface($this->relPath, $this->_dataContainer->getSmarty());
-		$this->_subExecPath = $dataContainer->getSubmoduleExecutionRequest();
+		$this->_subExecPath = $dataContainer->getExecutionCommand()->pathGet();
 		$this->_acl = $dataContainer->getAcl();
 	}
 

@@ -4,7 +4,7 @@
 	method="post">
 	<fieldset>
 		<label>Karten ID</label>
-			<input type="text" name="card_ID" maxlength="10"/><br />
+			<input type="text" name="card_ID" maxlength="10" autofocus /><br />
 	</fieldset>
 	<input type="submit" value="Submit" />
 </form>

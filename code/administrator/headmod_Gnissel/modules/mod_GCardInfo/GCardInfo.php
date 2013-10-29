@@ -1,8 +1,9 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_Gnissel/Gnissel.php';
 
-class GCardInfo extends Module {
+class GCardInfo extends Gnissel {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes

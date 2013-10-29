@@ -2,11 +2,12 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once 'CopyOldOrdersToSoli.php';
+require_once PATH_ADMIN . '/headmod_Babesk/Babesk.php';
 
 /**
  * This Class is partially refactored, so some things might look odd/duplicated
  */
-class Soli extends Module {
+class Soli extends Babesk {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -88,7 +89,8 @@ class Soli extends Module {
 			if(parent::execPathHasSubmoduleLevel(
 				1, $this->_submoduleExecutionpath)) {
 
-				$this->submoduleExecute($this->_submoduleExecutionpath);
+				$this->submoduleExecuteAsMethod(
+					$this->_submoduleExecutionpath);
 			}
 			else {
 				$soliInterface->ShowInitialMenu();

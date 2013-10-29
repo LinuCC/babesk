@@ -4,8 +4,6 @@ require_once 'StatisticsChart.php';
 
 /**
  * BaseClass to create BarCharts with pChart
- *
- * @author  Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
 abstract class StatisticsBarChart extends StatisticsChart {
 

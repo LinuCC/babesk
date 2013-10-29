@@ -4,9 +4,6 @@ require_once PATH_CODE . '/include/GeneralInterface.php';
 
 /**
  * The class the Interface-classes in the modules base on
- * Enter description here ...
- * @author Pascal Ernst
- *
  */
 class AdminInterface extends GeneralInterface {
 

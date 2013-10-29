@@ -9,9 +9,9 @@ require_once PATH_ACCESS . '/CardManager.php';
 require_once PATH_ACCESS . '/UserManager.php';
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/ArrayFunctions.php';
+require_once PATH_ADMIN . '/headmod_System/System.php';
 
-
-class User extends Module {
+class User extends System {
 
 	///////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -33,8 +33,9 @@ class User extends Module {
 
 		$this->entryPoint($dataContainer);
 
-		if($execReq = $dataContainer->getSubmoduleExecutionRequest()) {
-			$this->submoduleExecute($execReq);
+		$execReq = $dataContainer->getExecutionCommand()->pathGet();
+		if($this->submoduleCountGet($execReq)) {
+			$this->submoduleExecuteAsMethod($execReq);
 		}
 		else {
 			// $this->actionSwitch();
@@ -182,8 +183,12 @@ class User extends Module {
 		$locked = '0';
 		$first_passwd = ($this->isFirstPasswordEnabled()) ? 1 : 0;
 
-		$password = (!empty($_POST['password']))
-			? hash_password($_POST['password']) : '';
+		if(!empty($_POST['password'])) {
+			$password = hash_password($_POST['password']);
+		}
+		else {
+			$password = $this->presetPasswordGet();
+		}
 
 		//Querys
 		$cardnumberQuery = '';
@@ -248,6 +253,35 @@ class User extends Module {
 		}
 		else {
 			return (boolean) $data['value'];
+		}
+	}
+
+	/**
+	 * Fetches the presetPassword set in GlobalSettings
+	 *
+	 * @return string The hashed Password or a void string if no
+	 *                PresetPassword is set or it could not be fetched
+	 */
+	protected function presetPasswordGet() {
+
+		try {
+			$stmt = $this->_pdo->query(
+				'SELECT value FROM global_settings
+				WHERE name = "presetPassword"');
+			$stmt->execute();
+			$res = $stmt->fetchColumn();
+
+		} catch (PDOException $e) {
+			$this->_logger->log(
+				'Could not fetch the Preset Password! ' . __METHOD__);
+			return '';
+		}
+
+		if(empty($res)) {
+			return '';
+		}
+		else {
+			return $res;
 		}
 	}
 

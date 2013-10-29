@@ -1,13 +1,13 @@
 <?php
 
-require_once PATH_INCLUDE . '/HeadModule.php';
+require_once PATH_INCLUDE . '/Module.php';
 
 /**
  * class for Interface web
  * @author Mirek Hancl
  *
  */
-class Fits extends HeadModule {
+class Fits extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -22,8 +22,7 @@ class Fits extends HeadModule {
 	//Methods
 	public function execute($dataContainer) {
 
-		$defaultMod = new ModuleExecutionInputParser(
-				'root/web/Fits/Fmenu');
+		$defaultMod = new ModuleExecutionCommand('root/web/Fits/Fmenu');
 		$dataContainer->getAcl()->moduleExecute($defaultMod,
 			$dataContainer);
 	}

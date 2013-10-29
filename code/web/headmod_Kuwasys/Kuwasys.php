@@ -1,13 +1,13 @@
 <?php
 
-require_once PATH_INCLUDE . '/HeadModule.php';
+require_once PATH_INCLUDE . '/Module.php';
 
 /**
  * class for Interface web
  * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
  *
  */
-class Kuwasys extends HeadModule {
+class Kuwasys extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -26,8 +26,7 @@ class Kuwasys extends HeadModule {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	public function execute($dataContainer) {
-		$defaultMod = new ModuleExecutionInputParser(
-				'root/web/Kuwasys/MainMenu');
+		$defaultMod = new ModuleExecutionCommand('root/web/Kuwasys/MainMenu');
 		$dataContainer->getAcl()->moduleExecute($defaultMod,
 			$dataContainer);
 		// $moduleManager->execute("Kuwasys|MainMenu", false);

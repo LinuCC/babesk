@@ -4,8 +4,9 @@
  */
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_Babesk/Babesk.php';
 
-class Meals extends Module {
+class Meals extends Babesk {
 
 	///////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -61,8 +62,9 @@ class Meals extends Module {
 		} else {
 
 			//Check if new-style Submoduleexecution is used
-			if($execReq = $dataContainer->getSubmoduleExecutionRequest()) {
-				$this->submoduleExecute($execReq);
+			$execReq = $dataContainer->getExecutionCommand()->pathGet();
+			if($this->submoduleCountGet($execReq)) {
+				$this->submoduleExecuteAsMethod($execReq);
 				die();
 			}
 			$mealInterface->Menu();

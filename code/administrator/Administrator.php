@@ -1,26 +1,21 @@
 <?php
 
-
 require_once "../include/path.php";
+
 require_once PATH_INCLUDE . '/TableMng.php';
 require_once PATH_INCLUDE . '/Acl.php';
 require_once PATH_ADMIN . '/admin_functions.php';
-require_once PATH_ACCESS . "/LogManager.php";
 require_once PATH_INCLUDE . "/functions.php";
 require_once PATH_INCLUDE . '/exception_def.php';
 require_once PATH_INCLUDE . '/DataContainer.php';
-require_once PATH_INCLUDE . '/Module.php';
-require_once PATH_INCLUDE . '/HeadModule.php';
 require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';
 require_once PATH_INCLUDE . '/ArrayFunctions.php';
 require_once PATH_INCLUDE . '/sql_access/DBConnect.php';
+require_once PATH_INCLUDE . '/Logger.php';
 require_once 'Login.php';
 require_once 'AdminInterface.php';
-require_once 'locales.php';
 
 /**
- *
- * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
  *
  */
 class Administrator {
@@ -39,55 +34,15 @@ class Administrator {
 		$this->initSmarty();
 		TableMng::init();
 		$this->_adminInterface = new AdminInterface(NULL, $this->_smarty);
-		$this->_logger = new LogManager();
 		$this->_acl = new Acl();
 		$this->_moduleExecutionParser = new ModuleExecutionInputParser();
 		$this->_moduleExecutionParser->setSubprogramPath(
 			'root/administrator');
 		$this->loadVersion();
 		$this->initPdo();
-		$this->_dataContainer = new DataContainer(
-			$this->_smarty,
-			$this->_adminInterface,
-			$this->_acl,
-			$this->_pdo);
-
-		// $this->vikingsSpamAndPorc();
+		$this->_logger = new Logger($this->_pdo);
+		$this->_logger->categorySet('Administrator');
 	}
-
-	protected function vikingsSpamAndPorc() {
-
-		TableMng::getDb()->autocommit(false);
-
-		$activeSy = TableMng::query('SELECT ID  FROM schoolYear sy
-   WHERE active = 1');
-
-		$users = TableMng::query('SELECT u.ID AS userId,
-    uig.GradeID AS gradeId
-
-   FROM users u
-   JOIN jointUsersInGrade uig ON uig.UserID = u.ID');
-
-		$stmt = TableMng::getDb()->prepare(
-				'INSERT INTO usersInGradesAndSchoolyears
-    (UserID, GradeID, schoolyearId) VALUES
-    (?, ?, ?);
-   ');
-
-		foreach($users as $user) {
-			$stmt->bind_param('sss', $user['userId'], $user['gradeId'], $activeSy[0]['ID']);
-			if($stmt->execute()) {
-				//yay
-			}
-			else {
-				throw new Exception('Could not change things'. $stmt->error);
-			}
-		}
-
-		TableMng::getDb()->autocommit(true);
-	}
-
-
 
 	////////////////////////////////////////////////////////////////////////
 	//Getters and Setters
@@ -105,14 +60,6 @@ class Administrator {
 		return $this->_smarty;
 	}
 
-	public function getLogger() {
-		return $this->_logger;
-	}
-
-	public function getModuleManager() {
-		return $this->_moduleManager;
-	}
-
 	////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////
@@ -120,7 +67,6 @@ class Administrator {
 	public function run() {
 
 		$smarty = $this->_smarty;
-		$logger = $this->_logger;
 
 		$login = new Login($this->_smarty);
 		if($login->loginCheck()) {
@@ -145,17 +91,27 @@ class Administrator {
 		$this->_smarty->assign('_ADMIN_USERNAME', $_SESSION['username']);
 		$this->_smarty->assign('sid', htmlspecialchars(SID));
 
-			$this->_smarty->assign('base_path', PATH_SMARTY . '/templates/administrator/base_layout.tpl');
+		$this->_smarty->assign('base_path',
+			PATH_SMARTY . '/templates/administrator/base_layout.tpl');
 
 	}
 
 	public function executeModule() {
 
 		try {
+
 			$this->_acl->moduleExecute(
-				$this->_moduleExecutionParser, $this->_dataContainer);
+				$this->_moduleExecutionParser->executionCommandGet(),
+				$this->dataContainerCreate());
 
 		} catch (Exception $e) {
+			$this->_logger->log(
+				'Error executing a Module', 'Notice', Null,
+				json_encode(array(
+					'userId' => $_SESSION['UID'],
+					'msg' => $e->getMessage()
+			)));
+
 			if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 				//It was an Ajax-Call, dont show the whole Website
 				die(json_encode(array('value' => 'error',
@@ -181,6 +137,10 @@ class Administrator {
 			$this->_smarty->display('administrator/menu.tpl');
 		}
 		else {
+			$this->_logger->log('Administrator-Layer access denied.',
+				'Notice', null, json_encode(array(
+					'userId' => $_SESSION['UID']))
+			);
 			$this->_adminInterface->dieError(_g('Error Accessing the Admin-Layer; Either the Module does not exist, or you dont have the rights to access it!'));
 		}
 
@@ -293,8 +253,10 @@ class Administrator {
 	 */
 	private function moduleBacklink() {
 
-		$link = str_replace('/', '|',
-			$this->_moduleExecutionParser->moduleExecutionGet());
+		$modCommand = clone(
+			$this->_moduleExecutionParser->executionCommandGet());
+		$modCommand->delim = '|';
+		$link = $modCommand->pathGet();
 		$this->_smarty->assign('moduleBacklink', $link);
 	}
 
@@ -309,15 +271,26 @@ class Administrator {
 		}
 	}
 
+	/**
+	 * Creates a DataContainer and returns it
+	 * @return Object DataContainer A Container containing general data needed
+	 *                by the Modules
+	 */
+	private function dataContainerCreate() {
+
+		$dataContainer = new DataContainer(
+			$this->_smarty,
+			$this->_adminInterface,
+			$this->_acl,
+			$this->_pdo,
+			$this->_logger);
+
+		return $dataContainer;
+	}
+
 	////////////////////////////////////////////////////////////////////////
 	//Attributes
 	////////////////////////////////////////////////////////////////////////
-
-	/**
-	 * The Modulemanager
-	 * @var ModuleManager
-	 */
-	private $_moduleManager;
 
 	/**
 	 * The Access-Control-Layer
@@ -348,9 +321,11 @@ class Administrator {
 	 */
 	private $_logger;
 
-	private $_dataContainer;
-
 	private $_login;
+
+	private $_moduleExecutionParser;
+
+	private $_pdo;
 }
 
 ?>

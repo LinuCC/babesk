@@ -1,8 +1,9 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_Gnissel/Gnissel.php';
 
-class GUnlockUser extends Module {
+class GUnlockUser extends Gnissel {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -21,7 +22,7 @@ class GUnlockUser extends Module {
 
 		require_once 'AdminGUnlockUserProcessing.php';
 		require_once 'AdminGUnlockUserInterface.php';
-		
+
 		$unlockUserInterface = new AdminGUnlockUserInterface($this->relPath);
 		$unlockUserProcessing = new AdminGUnlockUserProcessing($unlockUserInterface);
 
@@ -30,13 +31,13 @@ class GUnlockUser extends Module {
 				case 'unlockUser':
 					$unlockUserProcessing->unlockUser ($_POST['uid']);
 				break;
-				
+
 				default:
 					;
 				break;
 			}
 		}
-		
+
 		if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['card_ID'])) {
 			$uid = $unlockUserProcessing->CheckCard($_POST['card_ID']);
 			$userData = $unlockUserProcessing->GetUserData($uid);

@@ -15,12 +15,12 @@ class Web {
 		}
 
 		require_once PATH_ACCESS . '/UserManager.php';
-		require_once PATH_INCLUDE . '/moduleManager.php';
 		require_once PATH_INCLUDE . '/functions.php';
+		require_once PATH_INCLUDE . '/DataContainer.php';
 		require_once PATH_INCLUDE . '/TableMng.php';
-		require_once PATH_ACCESS . '/LogManager.php';
 		require_once PATH_INCLUDE . '/Acl.php';
 		require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';
+		require_once PATH_INCLUDE . '/Logger.php';
 		require_once 'WebInterface.php';
 
 		TableMng::init ();
@@ -29,13 +29,10 @@ class Web {
 		$this->_interface = new WebInterface($this->_smarty);
 		$this->_acl = new Acl();
 		$this->initPdo();
+		$this->_logger = new Logger($this->_pdo);
+		$this->_logger->categorySet('Administrator');
 		$this->_moduleExecutionParser = new ModuleExecutionInputParser();
 		$this->_moduleExecutionParser->setSubprogramPath('root/web');
-		$this->_dataContainer = new DataContainer(
-			$this->_smarty,
-			$this->_interface,
-			$this->_acl,
-			$this->_pdo);
 		$this->initLanguage();
 	}
 
@@ -133,9 +130,10 @@ class Web {
 			if ($firstPassword != '0') {
 				$this->_smarty->assign('moduleroot',
 					$this->_acl->getModuleroot());
-				$pwChange = new ModuleExecutionInputParser(
+				$pwChange = new ModuleExecutionCommand(
 					'root/web/Settings/ChangePresetPassword');
-				$this->_acl->moduleExecute($pwChange, $this->_dataContainer);
+				$this->_acl->moduleExecute(
+					$pwChange, $this->dataContainerCreate());
 				die ();
 			}
 		}
@@ -222,8 +220,9 @@ class Web {
 
 		try {
 			try {
-				$this->_acl->moduleExecute($this->_moduleExecutionParser,
-					$this->_dataContainer);
+				$this->_acl->moduleExecute(
+					$this->_moduleExecutionParser->executionCommandGet(),
+					$this->dataContainerCreate());
 
 			} catch (Exception $e) {
 				$this->_interface->dieError(_g('Error executing the Module!'));
@@ -335,12 +334,17 @@ class Web {
 	 */
 	private function footerImagePath() {
 
-		$this->_moduleExecutionParser->load();
-		$modpath = $this->_moduleExecutionParser->executionGet();
-		$modpath = preg_replace('/.*?\/web\//', '', $modpath);
 		$path = '';
+		$modpath = '';
 
-		if($modpath) {
+		if($this->_moduleExecutionParser->load()) {
+			$moduleCommand =
+				$this->_moduleExecutionParser->executionCommandGet();
+			$modpath = $moduleCommand->pathGet();
+			$modpath = preg_replace('/.*?\/web\//', '', $modpath);
+		}
+
+		if(!empty($modpath)) {
 			$path = $this->footerImagePathLoadByModulepath($modpath);
 		}
 
@@ -385,23 +389,53 @@ class Web {
 		}
 	}
 
+	/**
+	 * Creates a DataContainer and returns it
+	 * @return Object DataContainer A Container containing general data needed
+	 *                by the Modules
+	 */
+	private function dataContainerCreate() {
+
+		$dataContainer = new DataContainer(
+			$this->_smarty,
+			$this->_interface,
+			$this->_acl,
+			$this->_pdo,
+			$this->_logger);
+
+		return $dataContainer;
+	}
+
 	///////////////////////////////////////////////////////////////////////
 	//Attributes
 	///////////////////////////////////////////////////////////////////////
-
-	private $_smarty;
-	private $_loggedIn;
-	private $_interface;
-	private $_userManager;
-	private $_acl;
-	private $_dataContainer;
-	private $_moduleExecutionParser;
 
 	/**
 	 * The Prefix to the location where the Images are
 	 * @var string
 	 */
 	private $_imagepathPrefix = '../images/moduleBackgrounds/';
+
+	/**
+	 * Allows to log errors and other things
+	 * @var Logger
+	 */
+	private $_logger;
+
+	private $_pdo;
+
+	private $_smarty;
+
+	private $_loggedIn;
+
+	private $_interface;
+
+	private $_userManager;
+
+	private $_acl;
+
+	private $_moduleExecutionParser;
+
 }
 
 ?>

@@ -2,8 +2,9 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/functions.php';
+require_once PATH_ADMIN . '/headmod_System/System.php';
 
-class EmailConfiguration extends Module {
+class EmailConfiguration extends System {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor

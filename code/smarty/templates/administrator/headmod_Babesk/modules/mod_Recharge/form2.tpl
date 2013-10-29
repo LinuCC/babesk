@@ -4,7 +4,7 @@
 <form action="index.php?module=administrator|Babesk|Recharge|RechargeCard" method="post">
 	<fieldset>
 		<label>Betrag</label>
-			<input type="text" name="amount" /><br />
+			<input type="text" name="amount" autofocus /><br />
 	</fieldset>
 	<input type="hidden" value="{$uid}" name="uid">
 	<input type="submit" value="Submit" />

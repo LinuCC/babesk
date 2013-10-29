@@ -2,6 +2,7 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_WEB . '/headmod_Messages/MessageFunctions.php';
+require_once PATH_WEB . '/headmod_Messages/Messages.php';
 
 /**
  * Entry-Point for the User to display, print and create new messages
@@ -10,7 +11,7 @@ require_once PATH_WEB . '/headmod_Messages/MessageFunctions.php';
  * @author Mirek Hancl
  * @author Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
-class MessageMainMenu extends Module {
+class MessageMainMenu extends Messages {
 
 
 	///////////////////////////////////////////////////////////////////////

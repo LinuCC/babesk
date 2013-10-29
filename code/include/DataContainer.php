@@ -15,11 +15,14 @@ class DataContainer {
 	//Constructor
 	////////////////////////////////////////////////////////////////////////
 
-	public function __construct ($smarty, $interface, $acl = NULL, $pdo = NULL) {
+	public function __construct ($smarty, $interface, $acl = NULL, $pdo = NULL,
+		$logger = NULL) {
+
 		$this->_smarty = $smarty;
 		$this->_interface = $interface;
 		$this->_acl = $acl;
 		$this->_pdo = $pdo;
+		$this->_logger = $logger;
 	}
 
 	////////////////////////////////////////////////////////////////////////
@@ -65,12 +68,20 @@ class DataContainer {
 		$this->_pdo = $pdo;
 	}
 
-	public function getSubmoduleExecutionRequest() {
-		return $this->_submoduleExecutionRequest;
+	public function getLogger() {
+		return $this->_logger;
 	}
 
-	public function setSubmoduleExecutionRequest($submoduleExecutionRequest) {
-		$this->_submoduleExecutionRequest = $submoduleExecutionRequest;
+	public function setLogger($logger) {
+		$this->_logger = $logger;
+	}
+
+	public function getExecutionCommand() {
+		return $this->_executionCommand;
+	}
+
+	public function setExecutionCommand($executionCommand) {
+		$this->_executionCommand = $executionCommand;
 	}
 
 	////////////////////////////////////////////////////////////////////////
@@ -101,17 +112,22 @@ class DataContainer {
 	protected $_acl;
 
 	/**
-	 * Requesting what Submodule of the Module should be executed
-	 *
-	 * @var String
+	 * Represents the Execution-Command suggesting what Module to be executed
+	 * @var ModuleExecutionCommand
 	 */
-	protected $_submoduleExecutionRequest;
+	protected $_executionCommand;
 
 	/**
 	 * The Database-Connection
 	 * @var PDO
 	 */
 	protected $_pdo;
+
+	/**
+	 * Allows to Log Errors, notices and other stuff
+	 * @var Logger
+	 */
+	protected $_logger;
 }
 
 ?>

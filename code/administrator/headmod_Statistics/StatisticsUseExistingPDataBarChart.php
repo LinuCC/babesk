@@ -8,8 +8,6 @@ require_once PATH_STATISTICS_CHART . '/StatisticsBarChart.php';
  * This class expects that the pData-Object is set with setPData() before the
  * Image gets drawn. The reason is that it allows to fetch a single Datablock
  * for creating multiple Charts in one go, saving Database-Traffic
- *
- * @author Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
 class StatisticsUseExistingPDataBarChart extends StatisticsBarChart {
 

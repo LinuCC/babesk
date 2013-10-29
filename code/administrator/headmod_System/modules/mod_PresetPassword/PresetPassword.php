@@ -4,8 +4,9 @@ require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/functions.php';
 require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 require_once 'PresetPasswordInterface.php';
+require_once PATH_ADMIN . '/headmod_System/System.php';
 
-class PresetPassword extends Module {
+class PresetPassword extends System {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor

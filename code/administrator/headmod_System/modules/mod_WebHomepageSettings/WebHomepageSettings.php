@@ -3,8 +3,9 @@
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 require_once 'WebHomepageSettingsInterface.php';
+require_once PATH_ADMIN . '/headmod_System/System.php';
 
-class WebHomepageSettings extends Module {
+class WebHomepageSettings extends System {
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
 	/////////////////////////////////////////////////////////////////////
@@ -88,7 +89,7 @@ class WebHomepageSettings extends Module {
 			$this->dieError ('Konnte die Weiterleitungs-Einstellungen nicht ändern');
 		}
 	}
-	
+
 	/**
 	 * Settings for helptext in web, before the user logged in
 	 */
@@ -101,9 +102,9 @@ class WebHomepageSettings extends Module {
 			$this->_interface->helptext ($this->_globalSettingsMng->valueGet(GlobalSettings::WEBLOGIN_HELPTEXT));
 		}
 	}
-	
 
-	
+
+
 	/**
 	 * Uploads the Changes to the Db
 	 */

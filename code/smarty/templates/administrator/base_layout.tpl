@@ -85,19 +85,15 @@
 
 
 
-{literal}
 <script type="text/javascript" language="JavaScript">
+{literal}
 $(document).ready(function() {
 	$('body').focus();
 
 	$("#pageWidthSelector").buttonset();
 	$(document).tooltip();
 
-	// needed for cash register
-	$('input[name=card_ID]').focus();
-	$('input[name=amount]').focus();
-
-	{/literal}
+{/literal}
 
 	/* Error-Output, if any exist */
 	{if isset($_userErrorOutput)}
@@ -127,7 +123,7 @@ $(document).ready(function() {
 			adminInterface.successShow('{AdminInterface::escapeForJs($msg)}');
 		{/foreach}
 	{/if}
-	{literal}
+{literal}
 
 	$('#pageWidthSelector').on('change', function(ev) {
 		if($('#pageWidthSmall').prop('checked')) {

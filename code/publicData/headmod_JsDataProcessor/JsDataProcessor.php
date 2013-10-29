@@ -1,6 +1,6 @@
 <?php
 
-require_once PATH_INCLUDE . '/HeadModule.php';
+require_once PATH_INCLUDE . '/Module.php';
 
 /**
  * Processes Data from Javascript-Requests
@@ -10,7 +10,7 @@ require_once PATH_INCLUDE . '/HeadModule.php';
  *
  * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
  */
-class JsDataProcessor extends HeadModule {
+class JsDataProcessor extends Module {
 
 	////////////////////////////////////////////////////////////////////////
 	//Attributes

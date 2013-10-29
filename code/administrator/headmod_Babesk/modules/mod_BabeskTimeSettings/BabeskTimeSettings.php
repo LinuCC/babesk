@@ -1,8 +1,9 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_Babesk/Babesk.php';
 
-class BabeskTimeSettings extends Module {
+class BabeskTimeSettings extends Babesk {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -21,8 +22,9 @@ class BabeskTimeSettings extends Module {
 
 		$this->entryPoint($dataContainer);
 
-		if($execReq = $dataContainer->getSubmoduleExecutionRequest()) {
-			$this->submoduleExecute($execReq);
+		$execReq = $dataContainer->getExecutionCommand()->pathGet();
+		if($this->submoduleCountGet($execReq)) {
+			$this->submoduleExecuteAsMethod($execReq);
 		}
 		else {
 			$this->changeDataForm();

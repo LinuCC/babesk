@@ -26,6 +26,7 @@ class UserCsvImport extends CsvImportTableData {
 
 		$this->entryPoint($dataContainer);
 		$this->arrayDataInit();
+		$this->_presetPassword = $this->presetPasswordGet();
 		parent::execute($dataContainer);
 	}
 
@@ -40,6 +41,7 @@ class UserCsvImport extends CsvImportTableData {
 	 */
 	protected function entryPoint($dataContainer) {
 
+		parent::entryPoint($dataContainer);
 		$this->_acl = $dataContainer->getAcl();
 		$moduleroot = $this->_acl->getModuleroot();
 		list($this->_isBabeskEnabled) = $this->enabledHeadmodulesCheck(
@@ -53,7 +55,8 @@ class UserCsvImport extends CsvImportTableData {
 			'name' => _g('Surname'),
 			'username' => _g('Username'),
 			'birthday' => _g('Birthday'),
-			'email' => _g('Email-Adresse'),
+			'email' => _g('Email-Address'),
+			'password' => _g('Password'),
 			'schoolyear' => _g('Schoolyear'),
 			'grade' => _g('Grade'),
 			'credits' => _g('Credits'),
@@ -72,7 +75,8 @@ class UserCsvImport extends CsvImportTableData {
 			),
 			'username' => array('min_len,2|max_len,64', '', _g('Username')),
 			'birthday' => array('isodate', '', _g('Birthday')),
-			'email' => array('email', '', _g('Email-Adresse')),
+			'email' => array('email', '', _g('Email-Address')),
+			'password' => array('', '', _g('Password')),
 			'schoolyear' => array('min_len,2|max_len,64', '', _g('Schoolyear')),
 			'grade' => array('min_len,2|max_len,24', '', _g('Grade')),
 			'credits' => array(
@@ -122,24 +126,24 @@ class UserCsvImport extends CsvImportTableData {
 
 		$stmt = $this->_pdo->prepare(
 			'INSERT INTO users (forename, name, username, birthday, email,
-				GID, credit, soli)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+				GID, credit, soli, password)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
 			');
-
-		// $stmt = TableMng::getDb()->prepare(sprintf(
-		// 	'INSERT INTO users (forename, name, username, birthday, email, GID, credit, soli)
-		// 		VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-		// 	'));
 
 		$this->additionalUserQuerysInit();
 
 		foreach($this->_contentArray as $con) {
 			extract($con);
-			// $stmt->bind_param('ssssssss', $forename, $name, $username, $birthday, $email, $pricegroupId, $credits, $soli);
-			$stmt->execute(array($forename, $name, $username, $birthday, $email, $pricegroupId, $credits, $soli));
+			if($password == '') {
+				if($this->_presetPassword != '') {
+					$password = $this->_presetPassword;
+				}
+			}
+			else {
+				$password = hash_password($password);
+			}
+			$stmt->execute(array($forename, $name, $username, $birthday, $email, $pricegroupId, $credits, $soli, $password));
 			$this->additionalUserQueriesRun($con, $this->_pdo->lastInsertId());
-				// $this->errorDie(
-				// 	_g('Could not parse the data to the Database!') . $stmt->error);
 		}
 	}
 
@@ -334,7 +338,7 @@ class UserCsvImport extends CsvImportTableData {
 	protected function pricegroupIdsAppendToColumns() {
 
 		$allPricegroups = TableMng::query('SELECT ID, LOWER(name) AS name
-			FROM groups pg');
+			FROM priceGroups pg');
 		$flatPricegroups = ArrayFunctions::arrayColumn(
 			$allPricegroups, 'name', 'ID');
 
@@ -407,6 +411,34 @@ class UserCsvImport extends CsvImportTableData {
 		return implode('|', $ids);
 	}
 
+	/**
+	 * Fetches the presetPassword set in GlobalSettings
+	 *
+	 * @return string The hashed Password or a void string if no
+	 *                PresetPassword is set or it could not be fetched
+	 */
+	protected function presetPasswordGet() {
+
+		try {
+			$stmt = $this->_pdo->query(
+				'SELECT value FROM global_settings
+				WHERE name = "presetPassword"');
+			$stmt->execute();
+			$res = $stmt->fetchColumn();
+
+		} catch (PDOException $e) {
+			$this->_logger->log(
+				'Could not fetch the Preset Password! ' . __METHOD__);
+			return '';
+		}
+		if(empty($res)) {
+			return '';
+		}
+		else {
+			return $res;
+		}
+	}
+
 
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
@@ -423,6 +455,8 @@ class UserCsvImport extends CsvImportTableData {
 	protected $_noGradeId;
 
 	protected $_gradesToAdd;
+
+	protected $_presetPassword;
 }
 
 

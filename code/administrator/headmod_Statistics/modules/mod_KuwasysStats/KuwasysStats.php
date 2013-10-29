@@ -1,16 +1,15 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_Statistics/Statistics.php';
 
 defined('PATH_STATISTICS_CHART')
 	OR define('PATH_STATISTICS_CHART', realpath(dirname(__FILE__) . '/../..'));
 
 /**
  * Analyzes data of the headmodule Kuwasys and puts them out as statistics
- *
- * @author  Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
-class KuwasysStats extends Module {
+class KuwasysStats extends Statistics {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor

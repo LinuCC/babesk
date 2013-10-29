@@ -8,14 +8,12 @@ require_once PATH_ACCESS_KUWASYS . '/KuwasysJointClassTeacherInClass.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysSchoolYearManager.php';
 require_once PATH_ACCESS_KUWASYS . '/KuwasysJointClassInSchoolYearManager.php';
 require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysLanguageManager.php';
+require_once PATH_ADMIN . '/headmod_Kuwasys/Kuwasys.php';
 
 /**
  * Grade-Module
- *
- * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
- *
  */
-class ClassTeacher extends Module {
+class ClassTeacher extends Kuwasys {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor

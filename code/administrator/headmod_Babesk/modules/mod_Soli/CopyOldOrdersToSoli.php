@@ -4,8 +4,6 @@
  * A class containing functionality that Copies orders of Soli-using Users
  * from orders to soli_orders, solving conflicts caused by adding soli_coupons
  * afterwards
- *
- * @author  Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
 class CopyOldOrdersToSoli {
 

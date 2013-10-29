@@ -1,8 +1,9 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_Schbas/Schbas.php';
 
-class Retour extends Module {
+class Retour extends Schbas {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes

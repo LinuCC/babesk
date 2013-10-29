@@ -18,8 +18,6 @@ require_once PATH_INCLUDE . '/TemporaryFile.php';
  * into _externalData. dataProcess() makes a pData-Object (saved in _pData)
  * from the raw data in _externalData. You can overwrite any
  * function-definition you want to change the way the Chart gets drawn.
- *
- * @author  Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
 abstract class StatisticsChart {
 	/////////////////////////////////////////////////////////////////////

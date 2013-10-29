@@ -1,11 +1,11 @@
 <?php
 
-require_once PATH_INCLUDE . '/HeadModule.php';
+require_once PATH_INCLUDE . '/Module.php';
 
 /**
  * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
  */
-class Babesk extends HeadModule {
+class Babesk extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes

@@ -2,13 +2,12 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/gump.php';
+require_once PATH_ADMIN . '/headmod_Kuwasys/Kuwasys.php';
 
 /**
  * Allows the User to change Classteacher-data
- *
- * @author Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
-class Classteachers extends Module {
+class Classteachers extends Kuwasys {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -40,8 +39,9 @@ class Classteachers extends Module {
 
 		$this->entryPoint($dataContainer);
 
-		if($execReq = $dataContainer->getSubmoduleExecutionRequest()) {
-			$this->submoduleExecute($execReq);
+		$execReq = $dataContainer->getExecutionCommand()->pathGet();
+		if($this->submoduleCountGet($execReq)) {
+			$this->submoduleExecuteAsMethod($execReq);
 		}
 		else {
 			$this->mainMenu();

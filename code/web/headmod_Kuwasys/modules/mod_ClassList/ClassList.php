@@ -9,9 +9,9 @@ require_once PATH_ADMIN . '/headmod_Kuwasys/KuwasysDatabaseAccess.php';
 require_once PATH_WEB . '/headmod_Kuwasys/Kuwasys.php';
 require_once PATH_WEB . '/WebInterface.php';
 require_once 'ClRegSelection.php';
+require_once PATH_WEB . '/headmod_Kuwasys/Kuwasys.php';
 
-
-class ClassList extends Module {
+class ClassList extends Kuwasys {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor

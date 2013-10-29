@@ -1,8 +1,9 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_ADMIN . '/headmod_Babesk/Babesk.php';
 
-class Recharge extends Module {
+class Recharge extends Babesk {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -33,9 +34,9 @@ class Recharge extends Module {
 	public function execute($dataContainer) {
 
 		$this->entryPoint($dataContainer);
-
-		if($execReq = $dataContainer->getSubmoduleExecutionRequest()) {
-			$this->submoduleExecute($execReq);
+		$execReq = $dataContainer->getExecutionCommand()->pathGet();
+		if($this->submoduleCountGet($execReq)) {
+			$this->submoduleExecuteAsMethod($execReq);
 		}
 		else {
 			$this->displayTpl('mainmenu.tpl');
@@ -255,7 +256,7 @@ class Recharge extends Module {
 	 */
 	protected function trackRechargeAdd($amount, $userId) {
 
-		$isSoli = $this->userHasValidSoliCoupon($userId);
+		$isSoli = $this->userHasValidSoliCoupon($userId, date('Y-m-d'));
 
 		try {
 			$stmt = $this->_pdo->prepare('INSERT INTO UsercreditsRecharges
@@ -275,37 +276,6 @@ class Recharge extends Module {
 
 			$this->_interface->dieError(_g('Could not track the Recharge!'));
 		}
-	}
-
-	/**
-	 * Checks if the User is Soli and has a Valid Solicoupon
-	 *
-	 * @param  int    $userId The ID of the User
-	 * @return bool           True if User is Soli and has a Valid Solicoupon,
-	 *                        else false
-	 */
-	protected function userHasValidSoliCoupon($userId) {
-
-		try {
-			$stmt = $this->_pdo->prepare(
-				'SELECT u.soli AS isSoli, IF(sc.ID, 1, 0) AS validCoupon
-				FROM users u
-				LEFT JOIN soli_coupons sc ON sc.UID = u.ID
-					AND NOW() BETWEEN sc.startdate AND sc.enddate
-				WHERE u.ID = :userId
-			');
-
-			$stmt->execute(array('userId' => $userId));
-			$data = $stmt->fetch();
-
-		} catch (PDOException $e) {
-			$this->_interface->dieError(_g('Error checking whether the User has a valid Solicoupon'));
-		}
-
-		return (
-			$data &&
-			$data['isSoli'] == 1 &&
-			$data['validCoupon'] == 1);
 	}
 
 	/**
