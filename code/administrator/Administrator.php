@@ -33,6 +33,8 @@ class Administrator {
 		$this->initSmarty();
 		TableMng::init();
 		$this->_adminInterface = new AdminInterface(NULL, $this->_smarty);
+		// AdminInterface has used global $smarty, workaround
+		AdminInterface::$smartyHelper = $this->_smarty;
 		$this->_acl = new Acl();
 		$this->_moduleExecutionParser = new ModuleExecutionInputParser();
 		$this->_moduleExecutionParser->setSubprogramPath(
@@ -44,28 +46,10 @@ class Administrator {
 	}
 
 	////////////////////////////////////////////////////////////////////////
-	//Getters and Setters
-	////////////////////////////////////////////////////////////////////////
-
-	public function getUserLoggedIn() {
-		return $this->_userLoggedIn;
-	}
-
-	public function setUserLoggedIn($userLoggedIn) {
-		$this->_userLoggedIn = $userLoggedIn;
-	}
-
-	public function getSmarty() {
-		return $this->_smarty;
-	}
-
-	////////////////////////////////////////////////////////////////////////
 	//Methods
 	////////////////////////////////////////////////////////////////////////
 
 	public function run() {
-
-		$smarty = $this->_smarty;
 
 		$login = new Login($this->_smarty);
 		if($login->loginCheck()) {

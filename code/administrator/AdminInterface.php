@@ -13,8 +13,7 @@ class AdminInterface extends GeneralInterface {
 			$this->smarty = $smarty;
 		}
 		else {
-			global $smarty;
-			$this->smarty = $smarty;
+			$this->smarty = self::$smartyHelper;
 		}
 		$this->tplFilePath = PATH_SMARTY_ADMIN_TEMPLATES . $mod_rel_path;
 		$this->parentPath = PATH_SMARTY . '/templates/administrator/base_layout.tpl';
@@ -161,6 +160,14 @@ class AdminInterface extends GeneralInterface {
 	 * The Path to the Smarty-Templates of the Module
 	 */
 	protected $tplFilePath;
+
+	/**
+	 * Workaround for the usage of global $smarty; to remove this, you need
+	 * to change every Interface inheriting from this Class and every Module
+	 * using these inheriting Interfaces
+	 * @var Smarty
+	 */
+	public static $smartyHelper;
 
 }
 ?>
