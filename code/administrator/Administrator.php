@@ -4,7 +4,6 @@ require_once "../include/path.php";
 
 require_once PATH_INCLUDE . '/TableMng.php';
 require_once PATH_INCLUDE . '/Acl.php';
-require_once PATH_ADMIN . '/admin_functions.php';
 require_once PATH_INCLUDE . "/functions.php";
 require_once PATH_INCLUDE . '/exception_def.php';
 require_once PATH_INCLUDE . '/DataContainer.php';
