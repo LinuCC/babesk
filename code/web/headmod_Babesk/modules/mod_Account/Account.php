@@ -22,7 +22,7 @@ class Account extends Babesk {
 		//No direct access
 		defined('_WEXEC') or die("Access denied");
 
-		global $smarty;
+		$smarty = $dataContainer->getSmarty();
 
 		$userManager = new UserManager();
 

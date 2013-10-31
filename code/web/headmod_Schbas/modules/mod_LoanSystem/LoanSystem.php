@@ -22,10 +22,9 @@ class LoanSystem extends Schbas {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	public function execute($dataContainer) {
-		//No direct access
-		defined('_WEXEC') or die("Access denied");
-		$this->init();
-		//var_dump($_POST);
+
+		$this->init($dataContainer);
+
 		$schbasEnabled = TableMng::query("SELECT value FROM global_settings WHERE name='isSchbasClaimEnabled'");
 		if ($schbasEnabled[0]['value']=="0") {
 			$this->showLoanList();
@@ -52,11 +51,13 @@ class LoanSystem extends Schbas {
 		}
 	}
 
-	private function init() {
+	private function init($dataContainer) {
+
 		defined('_WEXEC') or die("Access denied");
-		global $smarty;
-		$this->_smarty = $smarty;
-		$this->_interface = new WebInterface($smarty);
+
+		$this->_smarty = $dataContainer->getSmarty();
+		$this->_interface = new WebInterface($this->_smarty);
+
 		require_once PATH_INCLUDE . '/TableMng.php';
 		TableMng::init();
 

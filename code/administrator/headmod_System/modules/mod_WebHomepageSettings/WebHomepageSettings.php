@@ -19,7 +19,7 @@ class WebHomepageSettings extends System {
 	/////////////////////////////////////////////////////////////////////
 
 	public function execute ($dataContainer) {
-		$this->entry ();
+		$this->entry($dataContainer);
 		if (isset ($_GET ['action'])) {
 			switch ($_GET ['action']) {
 				case 'redirect':
@@ -42,10 +42,14 @@ class WebHomepageSettings extends System {
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
-	protected function entry () {
+
+	protected function entry($dataContainer) {
+
 		defined('_AEXEC') or die("Access denied");
-		global $smarty;
-		$this->_interface = new WebHomepageSettingsInterface ($this->relPath, $smarty);
+
+		$this->_interface = new WebHomepageSettingsInterface (
+			$this->relPath, $dataContainer->getSmarty());
+
 		$this->_globalSettingsMng = new GlobalSettingsManager ();
 	}
 

@@ -26,8 +26,9 @@ class MessageMainMenu extends Messages {
 	//Methods
 	///////////////////////////////////////////////////////////////////////
 	public function execute($dataContainer) {
-		//No direct access
-		$this->init();
+
+		$this->init($dataContainer);
+
 		if (isset($_GET['action'])) {
 			$action=$_GET['action'];
 			switch ($action) {
@@ -53,12 +54,11 @@ class MessageMainMenu extends Messages {
 		}
 	}
 
-	private function init() {
+	private function init($dataContainer) {
 
 		defined('_WEXEC') or die("Access denied");
-		global $smarty;
-		$this->_smarty = $smarty;
-		$this->_interface = new WebInterface($smarty);
+		$this->_smarty = $dataContainer->getSmarty();
+		$this->_interface = new WebInterface($this->_smarty);
 		require_once PATH_INCLUDE . '/TableMng.php';
 		TableMng::init();
 		$this->setEditor();

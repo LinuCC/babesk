@@ -20,7 +20,7 @@ class MessageAdmin extends Messages {
 
 	public function execute($dataContainer) {
 
-		$this->init();
+		$this->init($dataContainer);
 
 		if(isset($_GET['action'])) {
 			switch($_GET['action']) {
@@ -71,9 +71,9 @@ class MessageAdmin extends Messages {
 	//Implements
 	/////////////////////////////////////////////////////////////////////
 
-	protected function init() {
-		global $smarty;
-		$this->_smarty = $smarty;
+	protected function init($dataContainer) {
+
+		$this->_smarty = $dataContainer->getSmarty();
 		$this->_interface = new WebInterface($this->_smarty);
 	}
 

@@ -32,7 +32,7 @@ class Menu extends Babesk {
 		require_once PATH_ACCESS . '/OrderManager.php';
 		require_once PATH_ACCESS . '/MealManager.php';
 
-		global $smarty;
+		$smarty = $dataContainer->getSmarty();
 
 		$orderManager = new OrderManager('orders');
 		$mealManager = new MealManager('meals');

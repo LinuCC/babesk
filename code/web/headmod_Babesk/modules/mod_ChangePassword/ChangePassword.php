@@ -24,7 +24,9 @@ class ChangePassword extends Babesk {
 		echo 'schinken';
 		require_once 'change_password_constants.php';
 		require_once PATH_INCLUDE.'/functions.php';
-		global $smarty;
+
+		$smarty = $dataContainer->getSmarty();
+
 		$userManager = new UserManager();
 		try {
 			$userData = $userManager->getEntryData($_SESSION['uid'], '*');

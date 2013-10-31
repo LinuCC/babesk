@@ -11,7 +11,8 @@ class SettingsMainMenu extends Settings {
 	}
 
 	public function execute ($dataContainer) {
-		global $smarty;
+
+		$smarty = $dataContainer->getSmarty();
 		$smarty->display ($this->_smartyPath . 'mainMenu.tpl');
 	}
 

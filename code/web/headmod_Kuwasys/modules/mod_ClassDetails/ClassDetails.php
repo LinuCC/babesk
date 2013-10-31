@@ -49,9 +49,8 @@ class ClassDetails extends Kuwasys {
 	////////////////////////////////////////////////////////////////////////////////
 	protected function entryPoint($dataContainer) {
 
-		global $smarty;
-		$this->_smarty = $smarty;
-		$this->_interface = new WebInterface($smarty);
+		$this->_smarty = $dataContainer->getSmarty();
+		$this->_interface = new WebInterface($this->_smarty);
 		$this->_classManager = new KuwasysClassManager();
 		$this->_jointUsersInClass = new KuwasysJointUsersInClass();
 		$this->_globalSettingsManager = new GlobalSettingsManager();

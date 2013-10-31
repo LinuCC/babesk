@@ -21,7 +21,8 @@ class Help extends Babesk {
 	public function execute($dataContainer) {
 		//No direct access
 		defined('_WEXEC') or die("Access denied");
-		global $smarty;
+
+		$smarty = $dataContainer->getSmarty();
 
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 		require_once PATH_ACCESS . '/CardManager.php';

@@ -22,7 +22,8 @@ class Pvp extends Pvau {
 		//No direct access
 		defined('_WEXEC') or die("Access denied");
 
-		global $smarty;
+		$smarty = $dataContainer->getSmarty();
+
 		require_once PATH_ACCESS .'/PVauManager.php';
 		$this->pvm = new PVauManager();
 

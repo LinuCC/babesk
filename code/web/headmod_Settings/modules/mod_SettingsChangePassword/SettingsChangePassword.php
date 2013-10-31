@@ -14,15 +14,16 @@ class SettingsChangePassword extends Settings {
 	/////////////////////////////////////////////////////////////////////
 	//Methods
 	/////////////////////////////////////////////////////////////////////
-	public function execute ($dataContainer) {
-		$this->entry ();
-		if (!isset ($_GET ['action'])) {
-			$this->menuShow ();
+	public function execute($dataContainer) {
+
+		$this->entry($dataContainer);
+		if(!isset($_GET ['action'])) {
+			$this->menuShow();
 			return;
 		}
-		switch ($_GET ['action']) {
+		switch($_GET ['action']) {
 			case 'changePassword':
-				$this->pwChange ($_POST ['newPassword'], $_POST ['newPasswordRepeat']);
+				$this->pwChange($_POST ['newPassword'], $_POST ['newPasswordRepeat']);
 				break;
 		}
 	}
@@ -30,43 +31,45 @@ class SettingsChangePassword extends Settings {
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
-	protected function entry () {
+
+	protected function entry($dataContainer) {
+
 		defined('_WEXEC') or die("Access denied");
 		self::$_uid = $_SESSION ['uid'];
-		global $smarty;
-		$this->_smarty = $smarty;
-		$this->_interface = new WebInterface ($this->_smarty);
-		$this->_userManager = new UserManager ();
+
+		$this->_smarty = $dataContainer->getSmarty();
+		$this->_interface = new WebInterface($this->_smarty);
+		$this->_userManager = new UserManager();
 	}
 
-	protected function menuShow () {
-		$this->_smarty->display ($this->_smartyPath . 'changePasswordDialog.tpl');
+	protected function menuShow() {
+		$this->_smarty->display($this->_smartyPath . 'changePasswordDialog.tpl');
 	}
 
-	protected function pwChange ($pwNew, $pwNewRep) {
+	protected function pwChange($pwNew, $pwNewRep) {
 		$this->_pwNew = $pwNew;
 		$this->_pwNewRep = $pwNewRep;
-		$this->pwInpCheck ();
-		$this->pwToDb ();
-		$this->_interface->DieMessage ('Das Passwort wurde erfolgreich verändert');
+		$this->pwInpCheck();
+		$this->pwToDb();
+		$this->_interface->DieMessage('Das Passwort wurde erfolgreich verändert');
 	}
 
-	protected function pwToDb () {
+	protected function pwToDb() {
 		try {
-			$this->_userManager->changePassword (self::$_uid, $this->_pwNew);
-		} catch (Exception $e) {
-			$this->_interface->DieError ('Konnte das Passwort nicht verändern; Ein interner Fehler ist aufgetreten');
+			$this->_userManager->changePassword(self::$_uid, $this->_pwNew);
+		} catch(Exception $e) {
+			$this->_interface->DieError('Konnte das Passwort nicht verändern; Ein interner Fehler ist aufgetreten');
 		}
 	}
 
-	protected function pwInpCheck () {
-		if ($this->_pwNew != $this->_pwNewRep) {
-			$this->_interface->DieError ('Das Passwort stimmt nicht mit der Wiederholung überein. Bitte versuche es noch einmal.');
+	protected function pwInpCheck() {
+		if($this->_pwNew != $this->_pwNewRep) {
+			$this->_interface->DieError('Das Passwort stimmt nicht mit der Wiederholung überein. Bitte versuche es noch einmal.');
 		}
 		try {
-			inputcheck ($this->_pwNew, 'password', 'Passwort');
-		} catch (WrongInputException $e) {
-			$this->_interface->DieError ('Das Passwort enthält nicht korrekte Zeichen oder ist zu kurz.');
+			inputcheck($this->_pwNew, 'password', 'Passwort');
+		} catch(WrongInputException $e) {
+			$this->_interface->DieError('Das Passwort enthält nicht korrekte Zeichen oder ist zu kurz.');
 		}
 	}
 

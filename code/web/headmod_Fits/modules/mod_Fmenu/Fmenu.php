@@ -26,7 +26,7 @@ class Fmenu extends Fits {
 		require_once PATH_ACCESS . '/FitsManager.php';
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 
-		global $smarty;
+		$smarty = $dataContainer->getSmarty();
 		$userManager = new UserManager();
 		$fitsManager = new FitsManager();
 		$gsm = new GlobalSettingsManager();
