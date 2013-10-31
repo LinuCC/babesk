@@ -258,15 +258,14 @@ class ModuleSettings extends System {
 
 	protected function moduleAddToDb($parentmodule) {
 
-		$query = ModuleGenerator::moduleAddQueryCreate(
-			$_POST['name'],
-			$parentmodule);
-
 		try {
-			TableMng::getDb()->autocommit(false);
-			TableMng::queryMultiple($query);
-			$id = TableMng::getDb()->insert_id;
-			TableMng::getDb()->autocommit(true);
+
+			$parentId = $parentmodule->getId();
+			$stmt = $this->_pdo->query(
+				"CALL moduleAddNew('$_POST[name]', $parentId)");
+
+			$id = $stmt->fetchColumn();
+
 			return $id;
 
 		} catch(Exception $e) {
@@ -285,19 +284,20 @@ class ModuleSettings extends System {
 
 		try {
 			$this->linksOfModuleRemove($_POST['moduleId']);
-			$this->moduleEntryRemoveFromDb($module);
+			$this->_pdo->query("CALL moduleDelete($_POST[moduleId])");
 
 		} catch (Exception $e) {
-			$this->_logger->log(
-				"Could not delete the Module with Id $_POST[moduleId]",
-				'Moderate'
+			$this->_logger->log("Error deleting module {$toDel}.", 'Moderate',
+				NULL, json_encode(array('error' => $e->getMessage()))
 			);
 			die(json_encode(array('value' => 'error',
 				'message' => _g('Could not remove the Module from ' .
-					'the Database!'))));
+					'the Database!')))
+			);
 		}
 
-		$this->_logger->log("Deleted Module with ID $_POST[moduleId]");
+		$this->_logger->log("Deleted Module $_POST[moduleId]", 'Notice',
+			NULL, json_encode(array('module' => $module->infoJsonGet())));
 		die(json_encode(array('value' => 'success',
 			'message' => 'Das Modul wurde erfolgreich entfernt')));
 	}
@@ -322,21 +322,6 @@ class ModuleSettings extends System {
 			$this->_logger->log("Could not find the Module with Id $moduleId in " . __METHOD__);
 			die(json_encode(array('value' => 'error',
 				'message' => 'konnte das Modul nicht finden')));
-		}
-	}
-
-	protected function moduleEntryRemoveFromDb($module) {
-
-		if($query = ModuleGenerator::moduleDeleteQueryCreate($module)) {
-			try {
-				TableMng::getDb()->autocommit(false);
-				TableMng::queryMultiple($query);
-				TableMng::getDb()->autocommit(true);
-
-			} catch (Exception $e) {
-				die(json_encode(array('value' => 'error',
-					'message' => 'Konnte das Modul nicht von der Datenbank löschen!')));
-			}
 		}
 	}
 
