@@ -58,7 +58,9 @@ abstract class Module {
 		$this->_acl = $dataContainer->getAcl();
 		$this->_submoduleExecutionpath =
 			$dataContainer->getExecutionCommand()->pathGet();
+		$this->_modExecCommand = $dataContainer->getExecutionCommand();
 		$this->_logger = $dataContainer->getLogger();
+		$this->_logger->categorySet($this->_modExecCommand->pathGet());
 	}
 
 	protected function debugDataPrint($dataContainer) {
@@ -331,6 +333,12 @@ abstract class Module {
 	 * @var Logger
 	 */
 	protected $_logger;
+
+	/**
+	 * Wraps what Module should be executed
+	 * @var Object ModuleExecutionCommnad
+	 */
+	protected $_modExecCommand;
 }
 
 ?>

@@ -241,34 +241,6 @@ class ModuleGenerator {
 		return $rootmodule;
 	}
 
-	public static function moduleAddQueryCreate($modulename, $parentmodule) {
-
-		$id = $parentmodule->getId();
-
-		return "SELECT @modRight := rgt FROM Modules WHERE ID = '$id';
-			UPDATE Modules SET rgt = rgt + 2 WHERE rgt >= @modRight;
-			UPDATE Modules SET lft = lft + 2 WHERE lft >= @modRight;
-			INSERT INTO Modules(name, lft, rgt) VALUES('$modulename',
-				@modRight, @modRight + 1);";
-	}
-
-	public static function moduleDeleteQueryCreate($module) {
-
-		if($module->_lft > 0 && $module->_rgt > 0) {
-			return "DELETE FROM Modules WHERE lft
-						BETWEEN $module->_lft AND $module->_rgt;
-				UPDATE Modules
-					SET lft=lft-ROUND(( $module->_rgt - $module->_lft +1))
-					WHERE lft > $module->_rgt ;
-				UPDATE Modules
-					SET rgt=rgt-ROUND(( $module->_rgt - $module->_lft +1))
-					WHERE rgt > $module->_rgt;";
-		}
-		else {
-			return false;
-		}
-	}
-
 	public function anyChildByIdGet($id) {
 
 		if(!empty($this->_childs)) {
@@ -319,6 +291,20 @@ class ModuleGenerator {
 				$child->allowAll();
 			}
 		}
+	}
+
+	public function infoJsonGet() {
+
+		$inf = array('Id' => $this->_id,
+			'Name' => $this->_name,
+			'isEnabled' => $this->_isEnabled,
+			'lft' => $this->_lft,
+			'rgt' => $this->_rgt,
+			'executablePath' => $this->_executablePath,
+			'displayInMenu' => $this->_displayInMenu
+			);
+
+		return $inf;
 	}
 
 	/////////////////////////////////////////////////////////////////////
