@@ -535,7 +535,10 @@ $(document).ready(function() {
 			contentParent.html('');
 		}
 
-		contentParent.append('<a href="index.php?section=System|User&action=deletedUserShowPdf&pdfId={0}" target="_blank">PDF von "{1} {2}" abrufen</a><br />'.format(pdfId, forename, name));
+		contentParent.append('<a href="index.php?\
+			module=administrator|System|User|DeletedUserShowPdf&pdfId={0}"\
+			target="_blank">PDF von "{1} {2}" abrufen</a><br />'
+			.format(pdfId, forename, name));
 	}
 
 	/**

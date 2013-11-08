@@ -1108,7 +1108,7 @@ class User extends System {
 	/**
 	 * Just a Hotfix, should be refactored later on
 	 */
-	protected function submoduledeletedUserShowPdfExecute() {
+	protected function submoduleDeletedUserShowPdfExecute() {
 
 		TableMng::sqlEscape($_GET['pdfId']);
 		$fileId = $_GET['pdfId'];

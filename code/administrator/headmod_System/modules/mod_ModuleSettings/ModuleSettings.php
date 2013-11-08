@@ -261,16 +261,27 @@ class ModuleSettings extends System {
 		try {
 
 			$parentId = $parentmodule->getId();
-			$stmt = $this->_pdo->query(
-				"CALL moduleAddNew('$_POST[name]', $parentId)");
+			$stmt = $this->_pdo->prepare(
+				'CALL moduleAddNew(?, 0, 0, "", ?, @id);SELECT @id;');
+
+			$stmt->bindParam(1, $_POST['name']);
+			$stmt->bindParam(2, $parentId);
+
+			$stmt->execute();
 
 			$id = $stmt->fetchColumn();
 
 			return $id;
 
 		} catch(Exception $e) {
+			$this->_logger->log("Could not add Module $_POST[name]",
+				'Moderate', NULL,
+				json_encode(array(
+					'error' => $e->getMessage(),
+					'moduleParentId' => $parentId
+			)));
 			die(json_encode(array('value' => 'error',
-				'message' => 'Konnte Modul nicht hinzufügen' . $e->getMessage())));
+				'message' => 'Konnte Modul nicht hinzufügen!')));
 		}
 	}
 

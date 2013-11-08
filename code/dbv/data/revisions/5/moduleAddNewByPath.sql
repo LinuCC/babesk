@@ -1,7 +1,11 @@
 CREATE PROCEDURE `moduleAddNewByPath` (
 	IN modulename varchar(255),
+	IN isEnabled int(1),
+	IN displayInMenu int(1),
+	IN executablePath text,
 	IN directParentName varchar(255) CHARSET utf8,
-	IN directParentPath text
+	IN directParentPath text,
+	OUT newModId int(11)
 	)
 BEGIN
 
@@ -48,9 +52,8 @@ BEGIN
 
 	-- Now add the new Module to the Parent
 	IF resId IS NOT NULL THEN
-		CALL moduleAddNew(modulename, resId);
+		CALL moduleAddNew(modulename, isEnabled, displayInMenu, executablePath, resId, newModId);
 	ELSE
 		CALL raise_error;
 	END IF;
-
 END
