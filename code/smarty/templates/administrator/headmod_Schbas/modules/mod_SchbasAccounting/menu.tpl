@@ -30,7 +30,8 @@ Mahnungen versenden<br/>
 <form action="index.php?section=Schbas|SchbasAccounting&action=remember" method="post">
 	<input type="submit" value="Liste mit allen Schülern erstellen">
 </form>
-Liste nach Klassen<br/>
+Liste nach Klassen:<br/>
+{$listOfClasses}
 </fieldset>
 
 

@@ -38,6 +38,9 @@ class SchbasAccounting extends Schbas {
 				case 'remember':
 					$this->remember();
 					break;
+				case 'remember2':
+					$this->remember2();
+					break;
 				case 1:
 					if (isset($_GET['ajax'])){
 						//$this->SchbasAccountingInterface->test();
@@ -53,7 +56,9 @@ class SchbasAccounting extends Schbas {
 			}
 		}
 		else {
-			$this->SchbasAccountingInterface->MainMenu();
+			
+			$listOfClasses = $this->getListOfClasses();
+			$this->SchbasAccountingInterface->MainMenu($listOfClasses);
 		}
 	}
 
@@ -242,6 +247,147 @@ class SchbasAccounting extends Schbas {
 
 		}
 		$this->SchbasAccountingInterface->showRememberList($schueler_arr, $class_arr, $book, $date, count($lending)-1);
+	}
+	
+	private function getStudentIDsOfClass($gradeId){
+		$ids = TableMng::query("SELECT userId FROM usersInGradesAndSchoolyears WHERE gradeId='$gradeId'");
+		$nr = count($ids);
+		$studentIDs;
+		for($i=0;$i<$nr;$i++){
+			$studentIDs[$i] = $ids[$i]["userId"];
+		}
+		return $studentIDs;
+	}
+	
+	private function getNameOfStudentId($studentId){
+		$name = TableMng::query("SELECT name FROM users WHERE ID='$studentId'");
+		$name = $name[0]["name"];
+		return $name;
+	}
+	
+	private function getForenameOfStudentId($studentId){
+		$forename = TableMng::query("SELECT forename FROM users WHERE ID='$studentId'");
+		$forename = $forename[0]["forename"];
+		return $forename;
+	}
+	
+	private function getBooksOfStudentId($studentId){
+		$books = TableMng::query("SELECT inventory_id FROM schbas_lending WHERE user_id='$studentId'");
+		$booklist = "";
+		$nr = count($books);
+		for($i=0;$i<$nr;$i++){
+			$bookid = $books[$i]["inventory_id"];
+			$bookIDs[] = $bookid;
+		}
+		
+		for ($i=0;$i<$nr;$i++){
+			$bookName = TableMng::query("SELECT title FROM schbas_books WHERE id='$bookIDs[$i]'");
+			$bookName = $bookName[0]["title"];
+			if ($i==0){
+				$booklist = "$bookName";
+			}else{
+				$booklist = "$booklist </br> $bookName";
+			}
+		}
+		
+		return $booklist;
+	}
+	
+	
+	private function remember2(){	// function prints lend books
+	
+		if(!isset($_GET['class'])){
+			die("ERROR: No Class selected.");
+		}else{
+			
+			$classId = $_GET['class'];
+			
+			$classNamelabel = TableMng::query("SELECT label FROM Grades WHERE ID='$classId'");
+			$classNamelabel = $classNamelabel[0]["label"];
+			$classNamelevel = TableMng::query("SELECT gradelevel FROM Grades WHERE ID='$classId'");
+			$classNamelevel = $classNamelevel[0]["gradelevel"];
+			$className = "$classNamelevel$classNamelabel";
+			
+			$studentIDs = $this->getStudentIDsOfClass($classId);
+			
+			$nrOfStudentIDs = count($studentIDs);
+			for($i=0; $i<$nrOfStudentIDs; $i++){
+				$name[] = $this->getNameOfStudentId($studentIDs[$i]);
+				$forename[] = $this->getForenameOfStudentId($studentIDs[$i]);
+				$books[] = $this->getBooksOfStudentID($studentIDs[$i]);
+			}
+			
+			$listOfClasses = $this->getListOfClasses();
+			
+		}
+		$this->SchbasAccountingInterface->showRememberList2($name, $forename, $books, $nrOfStudentIDs-1, $className, $listOfClasses);
+		
+		
+		/*
+		$showIdAfterName = false;				// to enable the id after name set this value to true
+	
+		$lending = TableMng::query('SELECT * FROM schbas_lending');
+	
+		for ($i=0; $i < (count($lending)); $i++){	// one loop prodices one line of the table
+			//name
+			$id = (int) $lending[$i]["user_id"];
+			$name = TableMng::query("SELECT name FROM users WHERE ID=$id");
+			$name = $name[0]["name"];
+			$forename = TableMng::query("SELECT forename FROM users WHERE ID=$id");
+			$forename = $forename[0]["forename"];
+			if($showIdAfterName == true){
+				$schueler = ("$forename $name($id)");
+			}else{
+				$schueler = ("$forename $name");
+			}
+			$schueler_arr[] = $schueler;
+	
+			//class
+			try{
+				$schoolyearDesired = TableMng::query('SELECT ID FROM schoolYear WHERE active = 1');
+				$schoolyearID = $schoolyearDesired[0]['ID'];
+				$gradeID = TableMng::query(sprintf("SELECT GradeID FROM usersInGradesAndSchoolyears WHERE UserID = '$id' AND schoolyearID = $schoolyearID"));
+				$gradeIDtemp = (int)$gradeID[0]['GradeID'];
+				$gradelevel = TableMng::query(sprintf("SELECT gradelevel FROM Grades WHERE ID = $gradeIDtemp"));
+				$grade = $gradelevel[0]['gradelevel'];
+				$label = TableMng::query(sprintf("SELECT label FROM Grades WHERE ID = $gradeIDtemp"));
+				$label = $label[0]['label'];
+			}catch (Exception $e){
+				$grade = 0;
+			}
+			$class = "$grade-$label";
+			$class_arr[]= $class;
+	
+			//book
+			$bookid = (int) $lending[$i]["inventory_id"];
+			$title = TableMng::query("SELECT title FROM schbas_books WHERE id=$bookid");
+			$book[] = $title[0]["title"];
+	
+			//date
+			$date[] = $lending[$i]["lend_date"];
+			//$date = date_format('%d.%m.%Y');
+			//$date[] = $date;
+			//$date[] = date_format(strtodate($lending[$i]["lend_date"]),"%d.%m.%Y");
+	
+		}
+		$this->SchbasAccountingInterface->showRememberList($schueler_arr, $class_arr, $book, $date, count($lending)-1);
+		*/
+	}
+	
+	private function getListOfClasses(){
+		$gradesTbl = TableMng::query("SELECT * FROM Grades");
+		$nr = count($gradesTbl);
+		
+		$listOfClasses="";
+		
+		for ($i=0; $i<$nr; $i++){
+			$gradesTblLine = $gradesTbl[$i];
+			$gradeId = $gradesTblLine["ID"];
+			$gradelabel = $gradesTblLine["label"];
+			$gradelevel = $gradesTblLine["gradelevel"];
+			$listOfClasses = "$listOfClasses <a href='./index.php?section=Schbas|SchbasAccounting&action=remember2&class=$gradeId'>$gradelevel$gradelabel</a>";
+		}
+		return $listOfClasses;
 	}
 }
 ?>
