@@ -27,7 +27,7 @@ INSERT INTO `Modules` (`name`, `lft`, `rgt`, `enabled`, `executablePath`, `displ
 	('Soli', 222, 225, 1, 'administrator/headmod_Babesk/modules/mod_Soli/Soli.php', 1),
 	('Fits', 215, 220, 1, 'administrator/headmod_Fits/Fits.php', 1),
 	('FitsCheck', 218, 219, 1, 'administrator/headmod_Fits/modules/mod_FitsCheck/FitsCheck.php', 1),
-	('FitsSettings', 216, 217, 1, 'administrator/headmod_Fits/modules/mod_FitsSettins/FitsSettings.php', 1),
+	('FitsSettings', 216, 217, 1, 'administrator/headmod_Fits/modules/mod_FitsSettings/FitsSettings.php', 1),
 	('Messages', 207, 214, 1, 'administrator/headmod_Messages/Messages.php', 1),
 	('MessageAuthor', 212, 213, 1, 'administrator/headmod_Messages/modules/mod_MessageAuthor/MessageAuthor.php', 1),
 	('MessageTemplate', 210, 211, 1, 'administrator/headmod_Messages/modules/mod_MessageTemplate/MessageTemplate.php', 1),

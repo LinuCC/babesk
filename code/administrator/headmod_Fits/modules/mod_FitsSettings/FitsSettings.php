@@ -17,8 +17,10 @@ class FitsSettings extends Fits {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	public function execute($dataContainer) {
+		echo 'test';
 		//no direct access
 		defined('_AEXEC') or die("Access denied");
+
 
 		require_once 'AdminFitsSettingsProcessing.php';
 		require_once 'AdminFitsSettingsInterface.php';
