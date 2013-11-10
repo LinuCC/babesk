@@ -17,7 +17,6 @@ class FitsSettings extends Fits {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	public function execute($dataContainer) {
-		echo 'test';
 		//no direct access
 		defined('_AEXEC') or die("Access denied");
 

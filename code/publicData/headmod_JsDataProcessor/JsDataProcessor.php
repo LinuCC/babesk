@@ -29,9 +29,5 @@ class JsDataProcessor extends Module {
 	public function execute($dataContainer) {
 		$dataContainer->getInterface()->dieError('No direct Access to Headmod');
 	}
-
-	public function executeModule($mod_name, $dataContainer) {
-		parent::executeModule($mod_name, $dataContainer);
-	}
 }
 ?>

@@ -18,12 +18,8 @@ class GeneralPublicData extends Module {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
-	public function execute($moduleManager) {
+	public function execute($dataContainer) {
 		$dataContainer->getInterface()->dieError ('No direct Access to Login');
-	}
-
-	public function executeModule($mod_name, $dataContainer) {
-		parent::executeModule($mod_name, $dataContainer);
 	}
 }
 ?>

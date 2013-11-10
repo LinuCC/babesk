@@ -19,14 +19,8 @@ class Statistics extends Module {
 	//Methods
 	/////////////////////////////////////////////////////////////////////
 
-	public function execute($moduleManager) {
+	public function execute($dataContainer) {
 		//function not needed, javascript is doing everything
 	}
-
-	public function executeModule($mod_name, $dataContainer) {
-
-		parent::executeModule($mod_name, $dataContainer);
-	}
-
 }
 ?>
