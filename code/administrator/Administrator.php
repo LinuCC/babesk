@@ -35,7 +35,6 @@ class Administrator {
 		$this->_adminInterface = new AdminInterface(NULL, $this->_smarty);
 		// AdminInterface has used global $smarty, workaround
 		AdminInterface::$smartyHelper = $this->_smarty;
-		$this->_acl = new Acl();
 		$this->_moduleExecutionParser = new ModuleExecutionInputParser();
 		$this->_moduleExecutionParser->setSubprogramPath(
 			'root/administrator');
@@ -43,6 +42,7 @@ class Administrator {
 		$this->initPdo();
 		$this->_logger = new Logger($this->_pdo);
 		$this->_logger->categorySet('Administrator');
+		$this->_acl = new Acl($this->_logger);
 	}
 
 	////////////////////////////////////////////////////////////////////////

@@ -3,6 +3,7 @@
 require_once PATH_INCLUDE . '/GroupModuleRight.php';
 require_once PATH_INCLUDE . '/ModuleGenerator.php';
 require_once PATH_INCLUDE . '/Group.php';
+require_once PATH_INCLUDE . '/ModuleGeneratorManager.php';
 
 /**
  * The AccessControlLayer
@@ -15,10 +16,12 @@ class Acl {
 	//Constructor
 	/////////////////////////////////////////////////////////////////////
 
-	public function __construct() {
+	public function __construct($logger) {
 
 		$this->_moduleroot = ModuleGenerator::modulesLoad();
 		$this->_grouproot = Group::groupsLoad();
+
+		$this->_moduleGenManager = new ModuleGeneratorManager($logger);
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -328,6 +331,8 @@ class Acl {
 
 	protected $_moduleroot;
 	protected $_grouproot;
+
+	protected $_moduleGenManager;
 
 	protected $_accessControlInitialized;
 }

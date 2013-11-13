@@ -27,10 +27,10 @@ class Web {
 		$this->_userManager = new UserManager();
 		$this->_loggedIn = isset($_SESSION['uid']);
 		$this->_interface = new WebInterface($this->_smarty);
-		$this->_acl = new Acl();
 		$this->initPdo();
 		$this->_logger = new Logger($this->_pdo);
-		$this->_logger->categorySet('Administrator');
+		$this->_logger->categorySet('Web');
+		$this->_acl = new Acl($this->_logger);
 		$this->_moduleExecutionParser = new ModuleExecutionInputParser();
 		$this->_moduleExecutionParser->setSubprogramPath('root/web');
 		$this->initLanguage();
