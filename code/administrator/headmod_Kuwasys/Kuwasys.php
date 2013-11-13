@@ -30,6 +30,33 @@ class Kuwasys extends Module {
 	//Implements
 	/////////////////////////////////////////////////////////////////////
 
+	/**===============================**
+	 * Functions usable by Submodules *
+	 **===============================**/
+
+	/**
+	 * Fetches a Class from the Database
+	 *
+	 * @param  int    $classId The ID of the Class to fetch
+	 * @return array           The Class-Data
+	 */
+	protected function classGet($classId) {
+
+		try {
+			$stmt = $this->_pdo->prepare('SELECT * FROM class
+				WHERE ID = :classId');
+
+			$stmt->execute(array('classId' => $classId));
+			return $stmt->fetch();
+
+		} catch (PDOException $e) {
+			$msg = "Could not fetch the Class with Id $classId.";
+			$this->_logger->log(__METHOD__ . ": $msg", 'Moderate', NULL,
+				json_encode(array('error' => $e->getMessage())));
+			throw new PDOException($msg, 0, $e);
+		}
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
