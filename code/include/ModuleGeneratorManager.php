@@ -39,6 +39,8 @@ class ModuleGeneratorManager {
 
 	public function moduleExecute($command, $dataContainerForModule) {
 
+		$module = $this->moduleByCommandGet($command);
+		return $module->execute($dataContainerForModule);
 	}
 
 	public function modulePathGet($module) {

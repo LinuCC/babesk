@@ -97,13 +97,11 @@ class Administrator {
 			if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 				//It was an Ajax-Call, dont show the whole Website
 				die(json_encode(array('value' => 'error',
-					'message' => 'Konnte das Modul nicht ausführen:<br />' .
-						$e->getMessage())));
+					'message' => 'Konnte das Modul nicht ausführen!')));
 			}
 			else {
 				$this->_adminInterface->dieError(
-					'Konnte das Modul nicht ausführen:<br />' .
-					$e->getMessage());
+					'Konnte das Modul nicht ausführen!');
 			}
 		}
 	}
@@ -262,7 +260,7 @@ class Administrator {
 	private function dataContainerCreate() {
 
 		$dataContainer = new DataContainer(
-			clone($this->_smarty),
+			$this->_smarty,
 			clone($this->_adminInterface),
 			clone($this->_acl),
 			clone($this->_pdo),

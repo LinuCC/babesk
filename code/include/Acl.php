@@ -305,48 +305,28 @@ class Acl {
 	 * @param  string $moduleToExecutePath The Path of the Module to execute
 	 * @param  Object $dataContainer       The DataContainer for the Module
 	 */
-	protected function moduleExecuteHelper($moduleCommand, $dataContainer) {
+	protected function moduleExecuteHelper($command, $dataContainer) {
 
-		$module = $this->_moduleGenManager->moduleByCommandGet($moduleCommand);
+		if($this->moduleExecutionIsAllowed($command)) {
+			if($this->_moduleGenManager->moduleExecute(
+				$command, $dataContainer)) {
 
-		if($this->moduleExecutionIsAllowed($moduleCommand)) {
-			if($module->execute($dataContainer)) {
 				exit(0); // Everything fine, quit the program
 			}
 			else {
 				// Module could not be executed, try executing a higher Module
-				if($moduleCommand->lastModuleElementRemove()) {
-					$this->moduleExecuteHelper($moduleCommand, $dataContainer);
+				if($command->lastModuleElementRemove()) {
+					$this->moduleExecuteHelper($command, $dataContainer);
 				}
 				else {
 					$this->_logger->log(__METHOD__ . ': ' .
 						'None of the Modules in Path found!','Moderate', NULL,
-						json_encode(array('path' => $moduleCommand->pathGet()))
+						json_encode(array('path' => $command->pathGet()))
 					);
 					throw new AclException(
 						'None of the Modules in Path found!');
 				}
 			}
-		}
-
-		if(!empty($module)) {
-			if($module->isEnabled() && $module->userHasAccess()) {
-				if(!$module->execute($dataContainer)) {
-					//Removes last element in the Path
-					$modsWithoutLast = explode('/', $moduleToExecutePath);
-					array_pop($modsWithoutLast);
-					$pathWithoutLast = implode('/', $modsWithoutLast);
-					$this->moduleExecuteHelper(
-						$pathWithoutLast, $dataContainer);
-				}
-			}
-			else {
-				throw new AclException('Module-Access forbidden', 105);
-			}
-		}
-		else {
-			throw new AclException(
-				"Module could not be loaded by path '$moduleToExecutePath'");
 		}
 	}
 
