@@ -392,11 +392,11 @@ class Web {
 	private function dataContainerCreate() {
 
 		$dataContainer = new DataContainer(
-			$this->_smarty,
-			$this->_interface,
-			$this->_acl,
-			$this->_pdo,
-			$this->_logger);
+			clone($this->_smarty),
+			clone($this->_adminInterface),
+			clone($this->_acl),
+			clone($this->_pdo),
+			clone($this->_logger));
 
 		return $dataContainer;
 	}

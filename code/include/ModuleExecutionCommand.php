@@ -72,6 +72,22 @@ class ModuleExecutionCommand {
 		}
 	}
 
+	/**
+	 * Removes the last Module-Element in the Command
+	 * @return bool  true on success, false if no Elements are in the Command
+	 */
+	public function lastModuleElementRemove() {
+
+		if(count($this->_execPathModules)) {
+			array_pop($this->_execPathModules);
+			return true;
+		}
+		else {
+			return false;
+		}
+
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////

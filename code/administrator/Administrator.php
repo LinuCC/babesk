@@ -82,7 +82,6 @@ class Administrator {
 	public function executeModule() {
 
 		try {
-
 			$this->_acl->moduleExecute(
 				$this->_moduleExecutionParser->executionCommandGet(),
 				$this->dataContainerCreate());
@@ -263,11 +262,11 @@ class Administrator {
 	private function dataContainerCreate() {
 
 		$dataContainer = new DataContainer(
-			$this->_smarty,
-			$this->_adminInterface,
-			$this->_acl,
-			$this->_pdo,
-			$this->_logger);
+			clone($this->_smarty),
+			clone($this->_adminInterface),
+			clone($this->_acl),
+			clone($this->_pdo),
+			clone($this->_logger));
 
 		return $dataContainer;
 	}

@@ -37,6 +37,10 @@ class ModuleGeneratorManager {
 		}
 	}
 
+	public function moduleExecute($command, $dataContainerForModule) {
+
+	}
+
 	public function modulePathGet($module) {
 
 		$path = $this->modulePathGetRecHelper(
@@ -49,6 +53,11 @@ class ModuleGeneratorManager {
 	public function moduleByPathGet($path) {
 
 		return $this->_moduleRoot->childByPathGet($path, true);
+	}
+
+	public function moduleByCommandGet($moduleCommand) {
+
+		return $this->moduleByPathGet($moduleCommand->pathGet());
 	}
 
 	public function moduleGet($id) {
