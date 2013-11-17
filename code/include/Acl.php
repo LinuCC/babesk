@@ -21,7 +21,8 @@ class Acl {
 
 		$this->_grouproot = Group::groupsLoad();
 
-		$this->_logger = $logger;
+		$this->_logger = clone($logger);
+		$this->_logger->categorySet('Acl');
 		$this->_moduleGenManager = new ModuleGeneratorManager($logger, $pdo);
 		$this->_moduleGenManager->modulesLoad();
 	}
@@ -314,6 +315,9 @@ class Acl {
 				exit(0); // Everything fine, quit the program
 			}
 			else {
+				$this->_logger->log(__METHOD__ . ': Module"' .
+					$command->pathGet() . '" could not be executed! '.
+					'Trying to execute higher Module.', 'Notice');
 				// Module could not be executed, try executing a higher Module
 				if($command->lastModuleElementRemove()) {
 					$this->moduleExecuteHelper($command, $dataContainer);

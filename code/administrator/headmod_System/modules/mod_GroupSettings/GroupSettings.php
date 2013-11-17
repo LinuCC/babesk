@@ -62,6 +62,7 @@ class GroupSettings extends System {
 
 		defined('_AEXEC') or die('Access denied');
 
+		parent::entryPoint($dataContainer);
 		$this->_smarty = $dataContainer->getSmarty();
 		$this->_acl = $dataContainer->getAcl();
 		$this->_interface = new AdminInterface($this->relPath,
@@ -615,7 +616,7 @@ class GroupSettings extends System {
 			$group,
 			$compAcl->getGrouproot());
 		$compAcl->accessControlInitByGroup($parentgroup);
-		$modules = $compAcl->getModuleroot();
+		$modules = $compAcl->moduleGeneratorManagerGet()->moduleRootGet();
 
 		return $modules;
 	}
