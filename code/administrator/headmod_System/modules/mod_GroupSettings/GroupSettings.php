@@ -709,7 +709,7 @@ class GroupSettings extends System {
 	 */
 	protected function getAllModulesByGroup($group) {
 
-		$groupAcl = new Acl($this->_logger, , $this->_pdo);
+		$groupAcl = new Acl($this->_logger, $this->_pdo);
 		$groupAcl->accessControlInitByGroup($group);
 		$mods = $groupAcl->moduleGetWithNotAllowedModules('root');
 
