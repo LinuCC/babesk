@@ -8,7 +8,7 @@ class ModuleGeneratorManager {
 
 	public function __construct($logger, $pdo) {
 
-		$this->_logger = $logger;
+		$this->_logger = clone($logger);
 		$this->_logger->categorySet('ModuleGeneratorManager');
 
 		$this->_pdo = $pdo;
@@ -17,6 +17,10 @@ class ModuleGeneratorManager {
 	/////////////////////////////////////////////////////////////////////
 	//Methods
 	/////////////////////////////////////////////////////////////////////
+
+	public function moduleRootGet() {
+		return $this->_moduleRoot;
+	}
 
 	public function modulesLoad() {
 
