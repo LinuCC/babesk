@@ -81,7 +81,7 @@ class ModuleGenerator {
 	 * @todo  Parameter are long outdated; We need to change the parameters,
 	 *     but that means changing every existing modulefile, too!
 	 */
-	public function execute($dataContainer) {
+	public function execute($command, $dataContainer) {
 
 		if(!empty($this->_executablePath) &&
 			file_exists(PATH_CODE . "/$this->_executablePath")) {
@@ -93,7 +93,13 @@ class ModuleGenerator {
 			$subPath = "/$subPathPart/";
 
 			if(class_exists($classname = $this->_name)) {
-				$module = new $classname($classname, $classname, $subPath);
+				$module = new $classname($this->_name, $this->_name, $subPath);
+				$module->initAndExecute($dataContainer);
+			}
+			else if($classname = $this->namespacedClassToExecuteCheck(
+				$command)) {
+
+				$module = new $classname($this->_name, $this->_name, $subPath);
 				$module->initAndExecute($dataContainer);
 			}
 			else {
@@ -103,7 +109,6 @@ class ModuleGenerator {
 		else {
 			return false;
 		}
-
 		return true;
 	}
 
@@ -226,6 +231,39 @@ class ModuleGenerator {
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Checks if the Modules Class to execute uses a namespace
+	 *
+	 * The Modules are allowed to use Namespaces; When using class_exists(),
+	 * we also need to check for tose Namespaces.
+	 * Example: When Modulepath is "web/Babesk/Order/Accept",
+	 * following namespaces will be tried:
+	 * "web\Babesk\Order\Accept","web\Babesk\Accept", "web\Accept"
+	 *
+	 * @param  object $command ModuleExecutionCommand
+	 * @return string          the string containing the namespaced Path to
+	 *                         the Class, or false if class could not be found
+	 */
+	protected function namespacedClassToExecuteCheck($command) {
+
+		$path = $command->pathGetWithoutRoot();
+		$namespacePath = str_replace('/', '\\', $path);
+		if(!empty($namespacePath)) {
+			if(class_exists($namespacePath)) {
+				return $namespacePath;
+			}
+			else {
+				if(!$command->parentOfLastModuleElementRemove()) {
+					return false;
+				}
+				return $this->namespacedClassToExecuteCheck($command);
+			}
+		}
+		else {
+			return false;
+		}
+	}
 
 	protected function childsAsArrayGet() {
 
