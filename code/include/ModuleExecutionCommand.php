@@ -36,6 +36,19 @@ class ModuleExecutionCommand {
 	}
 
 	/**
+	 * Returns the path for the module-execution
+	 *
+	 * @return string The module-path preceded with <subprogram>
+	 */
+	public function pathGetWithoutRoot() {
+
+		$subprogram = $this->_execPathPreElements[1];
+		$modPath = implode($this->delim, $this->_execPathModules);
+
+		return $subprogram . $this->delim . $modPath;
+	}
+
+	/**
 	 * Returns only the module-part of the execution-path
 	 *
 	 * @return string the module-path
@@ -66,6 +79,39 @@ class ModuleExecutionCommand {
 			$position = count(explode('/', $modulePath)) + 1;
 
 			return $position;
+		}
+		else {
+			return false;
+		}
+	}
+
+	/**
+	 * Removes the last Module-Element in the Command
+	 * @return bool  true on success, false if no Elements are in the Command
+	 */
+	public function lastModuleElementRemove() {
+
+		if(count($this->_execPathModules)) {
+			array_pop($this->_execPathModules);
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	/**
+	 * Removes the last Module-Element in the Command
+	 * @return bool  true on success, false if no Elements are in the Command
+	 */
+	public function parentOfLastModuleElementRemove() {
+
+		$modCount = count($this->_execPathModules);
+		if($modCount >= 2) {
+			unset($this->_execPathModules[$modCount - 2]);
+			//Normalize index
+			$this->_execPathModules = array_values($this->_execPathModules);
+			return true;
 		}
 		else {
 			return false;

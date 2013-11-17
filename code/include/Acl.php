@@ -1,8 +1,10 @@
 <?php
 
+
 require_once PATH_INCLUDE . '/GroupModuleRight.php';
 require_once PATH_INCLUDE . '/ModuleGenerator.php';
 require_once PATH_INCLUDE . '/Group.php';
+require_once PATH_INCLUDE . '/ModuleGeneratorManager.php';
 
 /**
  * The AccessControlLayer
@@ -15,24 +17,18 @@ class Acl {
 	//Constructor
 	/////////////////////////////////////////////////////////////////////
 
-	public function __construct() {
+	public function __construct($logger, $pdo) {
 
-		$this->_moduleroot = ModuleGenerator::modulesLoad();
 		$this->_grouproot = Group::groupsLoad();
+
+		$this->_logger = $logger;
+		$this->_moduleGenManager = new ModuleGeneratorManager($logger, $pdo);
+		$this->_moduleGenManager->modulesLoad();
 	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Methods
 	/////////////////////////////////////////////////////////////////////
-
-	/**
-	 * Returns the Moduleroot containing its childs
-	 *
-	 * @return ModuleGenerator The Moduleroot
-	 */
-	public function getModuleroot() {
-		return $this->_moduleroot;
-	}
 
 	/**
 	 * Returns the Grouproot containing its childs
@@ -41,6 +37,10 @@ class Acl {
 	 */
 	public function getGrouproot() {
 		return $this->_grouproot;
+	}
+
+	public function moduleGeneratorManagerGet() {
+		return $this->_moduleGenManager;
 	}
 
 	public function accessControlInitAllowAll() {
@@ -100,24 +100,14 @@ class Acl {
 	 */
 	public function moduleExecute($moduleCommand, $dataContainer) {
 
-		$moduleToExecutePath = $moduleCommand->pathGet();
-		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
+		if($this->moduleExecutionIsAllowed($moduleCommand)) {
 
-		if(!empty($module)) {
-			if($module->isEnabled() && $module->userHasAccess()) {
-
-				$dataContainer->setExecutionCommand($moduleCommand);
-
-				$this->moduleExecuteHelper(
-					$moduleToExecutePath, $dataContainer);
-			}
-			else {
-				throw new AclException('Module-Access forbidden', 105);
-			}
+			$dataContainer->setExecutionCommand($moduleCommand);
+			$this->moduleExecuteHelper(
+				$moduleCommand, $dataContainer);
 		}
 		else {
-			throw new AclException(
-				"Module could not be loaded by path '$moduleToExecutePath'");
+			throw new AclException('Module-Access forbidden', 105);
 		}
 	}
 
@@ -133,7 +123,9 @@ class Acl {
 	 */
 	public function moduleGet($path = 'root') {
 
-		if($origMod = $this->_moduleroot->moduleByPathGet($path)) {
+		$origMod = $this->_moduleGenManager->moduleByPathGet($path);
+		if($origMod) {
+		// if($origMod = $this->_moduleroot->moduleByPathGet($path)) {
 			//Deep Clone of the object
 			$module = unserialize(serialize($origMod));
 			$module->notAllowedChildsRemove();
@@ -157,7 +149,7 @@ class Acl {
 	 */
 	public function moduleGetWithNotAllowedModules($path = 'root') {
 
-		if($origMod = $this->_moduleroot->moduleByPathGet($path)) {
+		if($origMod = $this->_moduleGenManager->moduleByPathGet($path)) {
 			//Deep Clone of the object
 			$module = unserialize(serialize($origMod));
 			return $module;
@@ -276,14 +268,31 @@ class Acl {
 	protected function applyRight($right) {
 
 		try {
-			$this->_moduleroot = ModuleGenerator::isEnabledChangeWithParents(
-				$right['moduleId'], true, $this->_moduleroot);
+			$this->_moduleGenManager->moduleEnabledStatusChange($right['moduleId'], true);
+			// $this->_moduleroot = ModuleGenerator::isEnabledChangeWithParents(
+				// $right['moduleId'], true, $this->_moduleroot);
 
 		} catch (Exception $e) {
 			throw new AclException(
 				'Could not change the Access of a module',
 				0,
 				$e);
+		}
+	}
+
+	protected function moduleExecutionIsAllowed($command) {
+
+		$moduleToExecutePath = $command->pathGet();
+		$module = $this->_moduleGenManager->moduleByPathGet($moduleToExecutePath);
+
+		if(!empty($module)) {
+			return ($module->isEnabled() && $module->userHasAccess());
+		}
+		else {
+			$this->_logger->log("Module could not be loaded by path!",
+				'Moderate', NULL,
+				json_encode(array('path' => $moduleToExecutePath)));
+			return false;
 		}
 	}
 
@@ -296,29 +305,28 @@ class Acl {
 	 * @param  string $moduleToExecutePath The Path of the Module to execute
 	 * @param  Object $dataContainer       The DataContainer for the Module
 	 */
-	protected function moduleExecuteHelper(
-		$moduleToExecutePath, $dataContainer) {
+	protected function moduleExecuteHelper($command, $dataContainer) {
 
-		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
+		if($this->moduleExecutionIsAllowed($command)) {
+			if($this->_moduleGenManager->moduleExecute(
+				$command, $dataContainer)) {
 
-		if(!empty($module)) {
-			if($module->isEnabled() && $module->userHasAccess()) {
-				if(!$module->execute($dataContainer)) {
-					//Removes last element in the Path
-					$modsWithoutLast = explode('/', $moduleToExecutePath);
-					array_pop($modsWithoutLast);
-					$pathWithoutLast = implode('/', $modsWithoutLast);
-					$this->moduleExecuteHelper(
-						$pathWithoutLast, $dataContainer);
-				}
+				exit(0); // Everything fine, quit the program
 			}
 			else {
-				throw new AclException('Module-Access forbidden', 105);
+				// Module could not be executed, try executing a higher Module
+				if($command->lastModuleElementRemove()) {
+					$this->moduleExecuteHelper($command, $dataContainer);
+				}
+				else {
+					$this->_logger->log(__METHOD__ . ': ' .
+						'None of the Modules in Path found!','Moderate', NULL,
+						json_encode(array('path' => $command->pathGet()))
+					);
+					throw new AclException(
+						'None of the Modules in Path found!');
+				}
 			}
-		}
-		else {
-			throw new AclException(
-				"Module could not be loaded by path '$moduleToExecutePath'");
 		}
 	}
 
@@ -326,8 +334,11 @@ class Acl {
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
 
-	protected $_moduleroot;
 	protected $_grouproot;
+
+	protected $_logger;
+
+	protected $_moduleGenManager;
 
 	protected $_accessControlInitialized;
 }

@@ -35,7 +35,6 @@ class Administrator {
 		$this->_adminInterface = new AdminInterface(NULL, $this->_smarty);
 		// AdminInterface has used global $smarty, workaround
 		AdminInterface::$smartyHelper = $this->_smarty;
-		$this->_acl = new Acl();
 		$this->_moduleExecutionParser = new ModuleExecutionInputParser();
 		$this->_moduleExecutionParser->setSubprogramPath(
 			'root/administrator');
@@ -43,6 +42,7 @@ class Administrator {
 		$this->initPdo();
 		$this->_logger = new Logger($this->_pdo);
 		$this->_logger->categorySet('Administrator');
+		$this->_acl = new Acl($this->_logger, $this->_pdo);
 	}
 
 	////////////////////////////////////////////////////////////////////////
@@ -82,7 +82,6 @@ class Administrator {
 	public function executeModule() {
 
 		try {
-
 			$this->_acl->moduleExecute(
 				$this->_moduleExecutionParser->executionCommandGet(),
 				$this->dataContainerCreate());
@@ -98,13 +97,11 @@ class Administrator {
 			if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 				//It was an Ajax-Call, dont show the whole Website
 				die(json_encode(array('value' => 'error',
-					'message' => 'Konnte das Modul nicht ausführen:<br />' .
-						$e->getMessage())));
+					'message' => 'Konnte das Modul nicht ausführen!')));
 			}
 			else {
 				$this->_adminInterface->dieError(
-					'Konnte das Modul nicht ausführen:<br />' .
-					$e->getMessage());
+					'Konnte das Modul nicht ausführen!');
 			}
 		}
 	}
@@ -116,7 +113,8 @@ class Administrator {
 		if($adminModule) {
 			$this->_smarty->assign('is_mainmenu', true);
 			$this->_smarty->assign('headmodules', $adminModule->getChilds());
-			$this->_smarty->assign('moduleroot', $this->_acl->getModuleroot());
+			$this->_smarty->assign(
+				'moduleGenMan', $this->_acl->moduleGeneratorManagerGet());
 			$this->_smarty->display('administrator/menu.tpl');
 		}
 		else {
@@ -263,10 +261,10 @@ class Administrator {
 
 		$dataContainer = new DataContainer(
 			$this->_smarty,
-			$this->_adminInterface,
-			$this->_acl,
+			clone($this->_adminInterface),
+			clone($this->_acl),
 			$this->_pdo,
-			$this->_logger);
+			clone($this->_logger));
 
 		return $dataContainer;
 	}

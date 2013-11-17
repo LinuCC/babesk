@@ -81,12 +81,11 @@ class ModuleGenerator {
 	 * @todo  Parameter are long outdated; We need to change the parameters,
 	 *     but that means changing every existing modulefile, too!
 	 */
-	public function execute($dataContainer) {
+	public function execute($command, $dataContainer) {
 
 		if(!empty($this->_executablePath) &&
 			file_exists(PATH_CODE . "/$this->_executablePath")) {
 			require_once PATH_CODE . "/$this->_executablePath";
-
 			$executablePathPieces = explode('/', $this->_executablePath);
 			array_shift($executablePathPieces); //remove Subprogram
 			array_pop($executablePathPieces); //Remove class-File
@@ -94,7 +93,13 @@ class ModuleGenerator {
 			$subPath = "/$subPathPart/";
 
 			if(class_exists($classname = $this->_name)) {
-				$module = new $classname($classname, $classname, $subPath);
+				$module = new $classname($this->_name, $this->_name, $subPath);
+				$module->initAndExecute($dataContainer);
+			}
+			else if($classname = $this->namespacedClassToExecuteCheck(
+				$command)) {
+
+				$module = new $classname($this->_name, $this->_name, $subPath);
 				$module->initAndExecute($dataContainer);
 			}
 			else {
@@ -104,32 +109,7 @@ class ModuleGenerator {
 		else {
 			return false;
 		}
-
 		return true;
-	}
-
-	/**
-	 * Loads the Modules from the Database
-	 *
-	 * Fetches all Modules from the Database and converts this Array into the
-	 * actual Modules
-	 */
-	public static function modulesLoad() {
-
-		try {
-			$data = self::modulesFetchAll();
-			$moduleArray = self::nestedSetToModules($data);
-			//find root
-			foreach($moduleArray as $mod) {
-				if($mod->_name == 'root') {
-					return $mod;
-				}
-			}
-			throw new Exception('Root-Module not found!');
-
-		} catch (Exception $e) {
-			throw new ModulesException("Could not fetch Modules!", 1, $e);
-		}
 	}
 
 	/**
@@ -140,7 +120,7 @@ class ModuleGenerator {
 	 *     this module-instance
 	 * @return Module The Module if found, false if not
 	 */
-	public function moduleByPathGet($path, $checkThis = true) {
+	public function childByPathGet($path, $checkThis = true) {
 
 		$tree = explode('/', $path);
 		$treeIterator = $this;
@@ -169,40 +149,6 @@ class ModuleGenerator {
 		return $module;
 	}
 
-	public static function modulePathGet($module, $rootmodule) {
-
-		$path = self::modulePathGetRecHelper(
-			$module->_id,
-			$rootmodule,
-			'root');
-		return rtrim($path, '/');
-	}
-
-	public static function modulePathGetRecHelper($moduleId,
-		$rootModule, $begPath) {
-
-		if(count($rootModule->_childs)) {
-			foreach($rootModule->_childs as $mod) {
-				$path = $begPath . '/' . $mod->_name;
-				if($mod->_id == $moduleId) {
-					return $path;
-				}
-				else {
-					$retPath = self::modulePathGetRecHelper(
-						$moduleId,
-						$mod,
-						$path);
-					if($retPath) {
-						return $retPath;
-					}
-				}
-			}
-		}
-		else {
-			return false;
-		}
-	}
-
 	public function moduleAsArrayGet() {
 
 		$data = array(
@@ -214,31 +160,6 @@ class ModuleGenerator {
 		$childs = $this->childsAsArrayGet($this->_childs);
 		$data['childs'] = $childs;
 		return $data;
-	}
-
-	/**
-	 * Changes the Access of the Module with $moduleId and its Parents
-	 *
-	 * @param  int $moduleId The ID of the rootmodule or any of the Childs
-	 *     within it
-	 * @param  boolean $accessAllowed If Module-Access is allowed or not
-	 * @param  ModuleGenerator $rootmodule The Parents gets changed and the
-	 *     moduleId gets searched from this module on
-	 * @return ModuleGenerator the changed rootmodule
-	 * @throws  Exception If This Module-Instance and no Child of it has this
-	 *     module-ID
-	 */
-	public static function isEnabledChangeWithParents(
-		$moduleId,
-		$accessAllowed,
-		$rootmodule) {
-
-		//rootmodule gets changed as reference
-		self::isEnabledChangeWithParentsHelper($moduleId,
-											$rootmodule,
-											$accessAllowed);
-
-		return $rootmodule;
 	}
 
 	public function anyChildByIdGet($id) {
@@ -311,6 +232,39 @@ class ModuleGenerator {
 	//Implements
 	/////////////////////////////////////////////////////////////////////
 
+	/**
+	 * Checks if the Modules Class to execute uses a namespace
+	 *
+	 * The Modules are allowed to use Namespaces; When using class_exists(),
+	 * we also need to check for tose Namespaces.
+	 * Example: When Modulepath is "web/Babesk/Order/Accept",
+	 * following namespaces will be tried:
+	 * "web\Babesk\Order\Accept","web\Babesk\Accept", "web\Accept"
+	 *
+	 * @param  object $command ModuleExecutionCommand
+	 * @return string          the string containing the namespaced Path to
+	 *                         the Class, or false if class could not be found
+	 */
+	protected function namespacedClassToExecuteCheck($command) {
+
+		$path = $command->pathGetWithoutRoot();
+		$namespacePath = str_replace('/', '\\', $path);
+		if(!empty($namespacePath)) {
+			if(class_exists($namespacePath)) {
+				return $namespacePath;
+			}
+			else {
+				if(!$command->parentOfLastModuleElementRemove()) {
+					return false;
+				}
+				return $this->namespacedClassToExecuteCheck($command);
+			}
+		}
+		else {
+			return false;
+		}
+	}
+
 	protected function childsAsArrayGet() {
 
 		$childArray = array();
@@ -331,70 +285,6 @@ class ModuleGenerator {
 		return $childArray;
 	}
 
-	/**
-	 * Fetches all Modules from the Datbase and returns them
-	 * @return Array The Modules as an Array
-	 */
-	protected static function modulesFetchAll() {
-
-		$data = TableMng::query("SELECT node.ID AS ID, node.lft AS lft,
-			node.rgt AS rgt, node.name AS name, node.enabled AS enabled,
-			node.executablePath AS executablePath,
-			node.displayInMenu AS displayInMenu,
-				(COUNT(parent.ID) - 1) AS level
-			FROM Modules AS node, Modules AS parent
-			WHERE node.lft BETWEEN parent.lft AND parent.rgt
-			GROUP BY node.ID
-			ORDER BY node.lft;");
-
-		return $data;
-	}
-
-	/**
-	 * Converts the nested set Array to modules
-	 *
-	 * Code shamelessly stolen from http://www.tutorials.de/php/312024-verschachteltes-array-aus-nested-sets.html and changed
-	 *
-	 * @param  Array $nestedSetArr An Array of Modules, each represented by
-	 * another Array. These need to contain the following keys:
-	 * ['lft', 'rgt', 'ID', 'name', 'enabled']
-	 * @return Module the Module with all Childs
-	 */
-	protected static function nestedSetToModules($nestedSetArr) {
-
-		$struct = array();
-		$level = 0;
-		$helper =& $struct;
-
-		foreach($nestedSetArr as $item) {
-			if($level < $item['level']) {
-				$keys = array_keys($helper);
-				$buffer = $helper[$keys[count($keys)-1]];
-				$helper =& $buffer->_childs;
-			} else if($level > $item['level']) {
-				$helper =& $struct;
-				$i=0;
-				while($i < $item['level']) {
-					$keys = array_keys($helper);
-					$buffer = $helper[$keys[count($keys)-1]];
-					$helper =& $buffer->_childs;
-					$i++;
-				}
-			}
-			$helper[$item['ID']] = new ModuleGenerator(
-				$item['ID'],
-				$item['name'],
-				(boolean) $item['enabled'],
-				$item['rgt'],
-				$item['lft'],
-				$item['executablePath'],
-				$item['displayInMenu']);
-			$level = $item['level'];
-		}
-
-		return $struct;
-	}
-
 	public function &anyChildByIdGetAsReference($id) {
 
 		if(!empty($this->_childs)) {
@@ -412,77 +302,6 @@ class ModuleGenerator {
 		return NULL;
 	}
 
-	/**
-	 * Adds a new module to the DatabaseTable
-	 *
-	 * Requirement is that the Parent has no childs
-	 *
-	 * @param String $name The name of the new Module
-	 * @param String $parentName The name of the parent-Module
-	 * @todo  if multiple parents with this name exist, problem!
-	 */
-	protected static function moduleAddToNodeWithoutChildren($name,
-		$parentName) {
-
-		TableMng::getDb()->autocommit(false);
-
-		TableMng::queryMultiple("SELECT @myLeft := lft FROM Modules
-			WHERE name = '$parentName';
-			UPDATE Modules SET rgt = rgt + 2 WHERE rgt > @myLeft;
-			UPDATE Modules SET lft = lft + 2 WHERE lft > @myLeft;
-			INSERT INTO Modules(name, lft, rgt) VALUES('$name',
-							@myLeft + 1, @myLeft + 2);");
-
-		TableMng::getDb()->autocommit(true);
-	}
-
-	/**
-	 * Adds a new module to the DatabaseTable
-	 *
-	 * Requirement: the Parent has childs
-	 *
-	 * @param String $name The name of the new Module
-	 * @param String $parentName The name of the parent-Module
-	 * @todo  if multiple parents with this name exist, problem!
-	 */
-	protected static function moduleAddToNodeWithChildren($name,
-		$parentName) {
-
-		TableMng::getDb()->autocommit(false);
-
-		TableMng::queryMultiple("SELECT @myRight := rgt FROM Modules
-			WHERE name = '$parentName';
-			UPDATE Modules SET rgt = rgt + 2 WHERE rgt >= @myRight;
-			UPDATE Modules SET lft = lft + 2 WHERE lft > @myRight;
-			INSERT INTO Modules(name, lft, rgt) VALUES('$name',
-							@myRight, @myRight + 1);
-			");
-
-		TableMng::getDb()->autocommit(true);
-	}
-
-	protected static function isEnabledChangeWithParentsHelper($searchedId,
-		&$module, $access) {
-
-		if($module->_id == $searchedId) {
-			$module->_userHasAccess = $access;
-			return true;
-		}
-		else {
-			if(count($module->_childs)) {
-				foreach($module->_childs as &$child) {
-					$ret = self::isEnabledChangeWithParentsHelper($searchedId,
-						$child, $access);
-					if($ret) {
-						$module->_userHasAccess = $access;
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
-
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
@@ -491,40 +310,40 @@ class ModuleGenerator {
 	 * The ID that is representing the Element in the Database-Table
 	 * @var numeric
 	 */
-	protected $_id;
+	public $_id;
 
 	/**
 	 * The name of the Module
 	 * @var String
 	 */
-	protected $_name;
+	public $_name;
 
 	/**
 	 * If the module is Enabled in general => if it can be accessed
 	 * @var boolean
 	 */
-	protected $_isEnabled;
+	public $_isEnabled;
 
 	/**
 	 * If the User is allowed to access the Module
 	 */
-	protected $_userHasAccess = false;
+	public $_userHasAccess = false;
 
 	/**
 	 * The Childs of this module
 	 * @var Array
 	 */
-	protected $_childs;
+	public $_childs;
 
-	protected $_lft;
+	public $_lft;
 
-	protected $_rgt;
+	public $_rgt;
 
-	protected $_smartyTemplatePath;
+	public $_smartyTemplatePath;
 
-	protected $_executablePath;
+	public $_executablePath;
 
-	protected $_displayInMenu;
+	public $_displayInMenu;
 }
 
 ?>

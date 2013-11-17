@@ -43,7 +43,6 @@ class UserCsvImport extends CsvImportTableData {
 
 		parent::entryPoint($dataContainer);
 		$this->_acl = $dataContainer->getAcl();
-		$moduleroot = $this->_acl->getModuleroot();
 		list($this->_isBabeskEnabled) = $this->enabledHeadmodulesCheck(
 			array('Babesk'));
 	}

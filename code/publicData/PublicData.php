@@ -69,7 +69,7 @@ class PublicData {
 		// $this->_moduleManager = new ModuleManager ('publicData', $this->_interface);
 		// $this->_moduleManager->setDataContainer ($this->_dataContainer);
 		// $this->_moduleManager->allowAllModules ();
-		$this->_acl = new Acl();
+		$this->_acl = new Acl(NULL, NULL);
 		$this->_dataContainer = new DataContainer (
 			$this->_interface->getSmarty (),
 			$this->_interface,

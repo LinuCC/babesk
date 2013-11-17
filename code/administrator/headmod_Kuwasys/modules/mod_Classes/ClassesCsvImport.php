@@ -42,7 +42,6 @@ class ClassesCsvImport extends CsvImportTableData {
 	 */
 	protected function entryPoint($dataContainer) {
 
-		$moduleroot = $dataContainer->getAcl()->getModuleroot();
 		$this->arrayDataInit();
 	}
 

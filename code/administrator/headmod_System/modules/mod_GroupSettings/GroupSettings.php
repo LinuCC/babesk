@@ -610,7 +610,7 @@ class GroupSettings extends System {
 	 */
 	protected function parentgroupModulerightsGet($group) {
 
-		$compAcl = new Acl();
+		$compAcl = new Acl($this->_logger, $this->_pdo);
 		$parentgroup = Group::directParentGet(
 			$group,
 			$compAcl->getGrouproot());
@@ -709,7 +709,7 @@ class GroupSettings extends System {
 	 */
 	protected function getAllModulesByGroup($group) {
 
-		$groupAcl = new Acl();
+		$groupAcl = new Acl($this->_logger, , $this->_pdo);
 		$groupAcl->accessControlInitByGroup($group);
 		$mods = $groupAcl->moduleGetWithNotAllowedModules('root');
 
