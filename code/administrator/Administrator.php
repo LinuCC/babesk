@@ -42,7 +42,7 @@ class Administrator {
 		$this->initPdo();
 		$this->_logger = new Logger($this->_pdo);
 		$this->_logger->categorySet('Administrator');
-		$this->_acl = new Acl($this->_logger);
+		$this->_acl = new Acl($this->_logger, $this->_pdo);
 	}
 
 	////////////////////////////////////////////////////////////////////////
@@ -116,7 +116,8 @@ class Administrator {
 		if($adminModule) {
 			$this->_smarty->assign('is_mainmenu', true);
 			$this->_smarty->assign('headmodules', $adminModule->getChilds());
-			$this->_smarty->assign('moduleroot', $this->_acl->getModuleroot());
+			$this->_smarty->assign(
+				'moduleGenMan', $this->_acl->moduleGeneratorManagerGet());
 			$this->_smarty->display('administrator/menu.tpl');
 		}
 		else {

@@ -3,6 +3,7 @@
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ADMIN . '/AdminInterface.php';
 require_once PATH_ADMIN . '/headmod_System/System.php';
+require_once PATH_INCLUDE . '/ModuleGenerator.php';
 
 class ModuleSettings extends System {
 
@@ -76,9 +77,9 @@ class ModuleSettings extends System {
 
 	protected function modulesFetch() {
 
-		$moduleroot = $this->_acl->getModuleroot();
+		$modMan = $this->_acl->moduleGeneratorManagerGet();
 		die(json_encode(array('value' => 'success',
-			'data' => $moduleroot->moduleAsArrayGet())));
+			'data' => $modMan->modulesAsArrayGetAll())));
 	}
 
 	protected function moduleGet() {
@@ -217,12 +218,16 @@ class ModuleSettings extends System {
 	protected function moduleAdd() {
 
 		if($this->moduleAddDataExist()) {
-			$this->moduleAddDataEscape();
-			$parentmodule = $this->moduleAddParentmoduleGet();
-			$moduleId = $this->moduleAddToDb($parentmodule);
+
+			$module = new ModuleGenerator(0, $_POST['name'], 0, 0, 0, '', 0);
+
+			$modMan = $this->_acl->moduleGeneratorManagerGet();
+			$id = $modMan->moduleAddNewToParent(
+					$_POST['parentPath'], $module, $this->_pdo);
+
 			die(json_encode(array('value' => 'success',
 				'message' => 'Das Modul wurde erfolgreich hinzugefügt!',
-				'data' => array('moduleId' => $moduleId))));
+				'data' => array('moduleId' => $id))));
 		}
 		else {
 			die(json_encode(array('value' => 'error',
@@ -236,75 +241,19 @@ class ModuleSettings extends System {
 			!empty($_POST['parentPath']);
 	}
 
-	protected function moduleAddDataEscape() {
-
-		TableMng::sqlEscape($_POST['name']);
-		TableMng::sqlEscape($_POST['parentPath']);
-	}
-
-	protected function moduleAddParentmoduleGet() {
-
-		$parentmodule =  $this->_acl->getModuleroot()->moduleByPathGet(
-			$_POST['parentPath']);
-
-		if(!$parentmodule) {
-			die(json_encode(array('value' => 'error',
-				'message' => 'Konnte ParentPath nicht auflösen!')));
-		}
-		else {
-			return $parentmodule;
-		}
-	}
-
-	protected function moduleAddToDb($parentmodule) {
-
-		try {
-
-			$parentId = $parentmodule->getId();
-			$stmt = $this->_pdo->prepare(
-				'CALL moduleAddNew(?, 0, 0, "", ?, @id);SELECT @id;');
-
-			$stmt->bindParam(1, $_POST['name']);
-			$stmt->bindParam(2, $parentId);
-
-			$stmt->execute();
-
-			$id = $stmt->fetchColumn();
-
-			return $id;
-
-		} catch(Exception $e) {
-			$this->_logger->log("Could not add Module $_POST[name]",
-				'Moderate', NULL,
-				json_encode(array(
-					'error' => $e->getMessage(),
-					'moduleParentId' => $parentId
-			)));
-			die(json_encode(array('value' => 'error',
-				'message' => 'Konnte Modul nicht hinzufügen!')));
-		}
-	}
-
 	/**
 	 * Removes the Module from the Database
 	 */
 	protected function moduleRemove() {
 
-		TableMng::sqlEscape($_POST['moduleId']);
-		$module = $this->moduleByIdGet($_POST['moduleId']);
-
 		try {
-			$this->linksOfModuleRemove($_POST['moduleId']);
-			$this->_pdo->query("CALL moduleDelete($_POST[moduleId])");
+			$module = $this->moduleByIdGet($_POST['moduleId']);
+			$this->_acl->moduleGeneratorManagerGet()->moduleRemove($module);
 
 		} catch (Exception $e) {
-			$this->_logger->log("Error deleting module {$toDel}.", 'Moderate',
-				NULL, json_encode(array('error' => $e->getMessage()))
-			);
 			die(json_encode(array('value' => 'error',
 				'message' => _g('Could not remove the Module from ' .
-					'the Database!')))
-			);
+				'the Database!'))));
 		}
 
 		$this->_logger->log("Deleted Module $_POST[moduleId]", 'Notice',
@@ -323,8 +272,8 @@ class ModuleSettings extends System {
 	 */
 	protected function moduleByIdGet($moduleId) {
 
-		$module = $this->_acl->getModuleroot()->anyChildByIdGet(
-			$moduleId);
+		$module = $this->_acl->moduleGeneratorManagerGet()->
+			moduleGet($moduleId);
 
 		if($module) {
 			return $module;

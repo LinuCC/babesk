@@ -30,7 +30,7 @@ class Web {
 		$this->initPdo();
 		$this->_logger = new Logger($this->_pdo);
 		$this->_logger->categorySet('Web');
-		$this->_acl = new Acl($this->_logger);
+		$this->_acl = new Acl($this->_logger, $this->_pdo);
 		$this->_moduleExecutionParser = new ModuleExecutionInputParser();
 		$this->_moduleExecutionParser->setSubprogramPath('root/web');
 		$this->initLanguage();
@@ -307,7 +307,9 @@ class Web {
 
 	private function display() {
 
-		$this->_smarty->assign('moduleroot', $this->_acl->getModuleroot());
+		// $this->_smarty->assign('moduleroot', $this->_acl->getModuleroot());
+		$this->_smarty->assign(
+			'moduleGenMan', $this->_acl->moduleGeneratorManagerGet());
 		$this->footerImagePath();
 		if ($this->_moduleExecutionParser->load()) {
 			$this->executeModule();

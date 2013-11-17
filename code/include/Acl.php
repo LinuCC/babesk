@@ -1,5 +1,6 @@
 <?php
 
+
 require_once PATH_INCLUDE . '/GroupModuleRight.php';
 require_once PATH_INCLUDE . '/ModuleGenerator.php';
 require_once PATH_INCLUDE . '/Group.php';
@@ -16,26 +17,17 @@ class Acl {
 	//Constructor
 	/////////////////////////////////////////////////////////////////////
 
-	public function __construct($logger) {
+	public function __construct($logger, $pdo) {
 
-		$this->_moduleroot = ModuleGenerator::modulesLoad();
 		$this->_grouproot = Group::groupsLoad();
 
-		$this->_moduleGenManager = new ModuleGeneratorManager($logger);
+		$this->_moduleGenManager = new ModuleGeneratorManager($logger, $pdo);
+		$this->_moduleGenManager->modulesLoad();
 	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Methods
 	/////////////////////////////////////////////////////////////////////
-
-	/**
-	 * Returns the Moduleroot containing its childs
-	 *
-	 * @return ModuleGenerator The Moduleroot
-	 */
-	public function getModuleroot() {
-		return $this->_moduleroot;
-	}
 
 	/**
 	 * Returns the Grouproot containing its childs
@@ -44,6 +36,10 @@ class Acl {
 	 */
 	public function getGrouproot() {
 		return $this->_grouproot;
+	}
+
+	public function moduleGeneratorManagerGet() {
+		return $this->_moduleGenManager;
 	}
 
 	public function accessControlInitAllowAll() {
@@ -104,7 +100,8 @@ class Acl {
 	public function moduleExecute($moduleCommand, $dataContainer) {
 
 		$moduleToExecutePath = $moduleCommand->pathGet();
-		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
+		// $module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
+		$module = $this->_moduleGenManager->moduleByPathGet($moduleToExecutePath);
 
 		if(!empty($module)) {
 			if($module->isEnabled() && $module->userHasAccess()) {
@@ -136,7 +133,9 @@ class Acl {
 	 */
 	public function moduleGet($path = 'root') {
 
-		if($origMod = $this->_moduleroot->moduleByPathGet($path)) {
+		$origMod = $this->_moduleGenManager->moduleByPathGet($path);
+		if($origMod) {
+		// if($origMod = $this->_moduleroot->moduleByPathGet($path)) {
 			//Deep Clone of the object
 			$module = unserialize(serialize($origMod));
 			$module->notAllowedChildsRemove();
@@ -160,7 +159,7 @@ class Acl {
 	 */
 	public function moduleGetWithNotAllowedModules($path = 'root') {
 
-		if($origMod = $this->_moduleroot->moduleByPathGet($path)) {
+		if($origMod = $this->_moduleGenManager->moduleByPathGet($path)) {
 			//Deep Clone of the object
 			$module = unserialize(serialize($origMod));
 			return $module;
@@ -279,8 +278,9 @@ class Acl {
 	protected function applyRight($right) {
 
 		try {
-			$this->_moduleroot = ModuleGenerator::isEnabledChangeWithParents(
-				$right['moduleId'], true, $this->_moduleroot);
+			$this->_moduleGenManager->moduleEnabledStatusChange($right['moduleId'], true);
+			// $this->_moduleroot = ModuleGenerator::isEnabledChangeWithParents(
+				// $right['moduleId'], true, $this->_moduleroot);
 
 		} catch (Exception $e) {
 			throw new AclException(
@@ -300,9 +300,9 @@ class Acl {
 	 * @param  Object $dataContainer       The DataContainer for the Module
 	 */
 	protected function moduleExecuteHelper(
-		$moduleToExecutePath, $dataContainer) {
+		$modulePath, $dataContainer) {
 
-		$module = $this->_moduleroot->moduleByPathGet($moduleToExecutePath);
+		$module = $this->_moduleGenManager->moduleByPathGet($modulePath);
 
 		if(!empty($module)) {
 			if($module->isEnabled() && $module->userHasAccess()) {
@@ -329,7 +329,6 @@ class Acl {
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
 
-	protected $_moduleroot;
 	protected $_grouproot;
 
 	protected $_moduleGenManager;
