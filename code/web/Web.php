@@ -393,9 +393,9 @@ class Web {
 
 		$dataContainer = new DataContainer(
 			$this->_smarty,
-			clone($this->_adminInterface),
+			clone($this->_interface),
 			clone($this->_acl),
-			clone($this->_pdo),
+			$this->_pdo,
 			clone($this->_logger));
 
 		return $dataContainer;
