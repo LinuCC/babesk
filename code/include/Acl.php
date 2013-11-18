@@ -25,6 +25,9 @@ class Acl {
 		$this->_logger->categorySet('Acl');
 		$this->_moduleGenManager = new ModuleGeneratorManager($logger, $pdo);
 		$this->_moduleGenManager->modulesLoad();
+
+		$this->_maxExecutionTries = 20;
+		$this->_executionTries = 0;
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -92,20 +95,29 @@ class Acl {
 	/**
 	 * Executes a module
 	 *
-	 * @param  Object $moduleCommand The ModuleExecutionCommand that knows
+	 * @param  Object $command The ModuleExecutionCommand that knows
 	 *                               which Module to execute
 	 * @param  Object $dataContainer The DataContainer that is given to
 	 *                               the executed Module
 	 * @throws AclException If ModuleAccess is forbidden
 	 * @throws AclException If Module could not be loaded by path
 	 */
-	public function moduleExecute($moduleCommand, $dataContainer) {
+	public function moduleExecute($command, $dataContainer) {
 
-		if($this->moduleExecutionIsAllowed($moduleCommand)) {
+		// Check for infinite loop
+		if($this->_executionTries > $this->_maxExecutionTries) {
+			$this->_logger->log('Too many module-Executions!', 'Moderate',
+				NULL, json_encode(array('modulepath' => $command->pathGet()))
+			);
+			throw new AclException('Too many ModuleExecutions!', 105);
+		}
 
-			$dataContainer->setExecutionCommand($moduleCommand);
+		if($this->moduleExecutionIsAllowed($command)) {
+
+			$this->_executionTries += 1;
+			$dataContainer->setExecutionCommand($command);
 			$this->moduleExecuteHelper(
-				$moduleCommand, $dataContainer);
+				$command, $dataContainer);
 		}
 		else {
 			throw new AclException('Module-Access forbidden', 105);
@@ -306,7 +318,9 @@ class Acl {
 	 * @param  string $moduleToExecutePath The Path of the Module to execute
 	 * @param  Object $dataContainer       The DataContainer for the Module
 	 */
-	protected function moduleExecuteHelper($command, $dataContainer) {
+	protected function moduleExecuteHelper($moduleCommand, $dataContainer) {
+
+		$command = clone($moduleCommand);
 
 		if($this->moduleExecutionIsAllowed($command)) {
 			if($this->_moduleGenManager->moduleExecute(
@@ -315,9 +329,9 @@ class Acl {
 				exit(0); // Everything fine, quit the program
 			}
 			else {
-				$this->_logger->log(__METHOD__ . ': Module"' .
-					$command->pathGet() . '" could not be executed! '.
-					'Trying to execute higher Module.', 'Notice');
+				// $this->_logger->log('A module could not be executed!' .
+				// 	'Trying to execute higher Module.', 'Notice', NULL,
+				// 	json_encode(array('modulepath' => $command->pathGet())));
 				// Module could not be executed, try executing a higher Module
 				if($command->lastModuleElementRemove()) {
 					$this->moduleExecuteHelper($command, $dataContainer);
@@ -345,6 +359,10 @@ class Acl {
 	protected $_moduleGenManager;
 
 	protected $_accessControlInitialized;
+
+	protected $_executionTries;
+
+	protected $_maxExecutionTries;
 }
 
 ?>

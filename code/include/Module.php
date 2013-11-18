@@ -59,7 +59,7 @@ abstract class Module {
 		$this->_submoduleExecutionpath =
 			$dataContainer->getExecutionCommand()->pathGet();
 		$this->_modExecCommand = $dataContainer->getExecutionCommand();
-		$this->_logger = $dataContainer->getLogger();
+		$this->_logger = clone($dataContainer->getLogger());
 		$this->_logger->categorySet($this->_modExecCommand->pathGet());
 	}
 
