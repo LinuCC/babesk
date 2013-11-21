@@ -55,7 +55,7 @@ class Review extends \administrator\Kuwasys\Classes\CsvImport {
 
 		try {
 			$stmt = $this->_pdo->query(
-				'SELECT ID, CONCAT(forename, name) AS name
+				'SELECT ID, CONCAT(forename, " ", name) AS name
 				FROM classTeacher WHERE 1'
 			);
 			return $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);
@@ -95,10 +95,11 @@ class Review extends \administrator\Kuwasys\Classes\CsvImport {
 	private function dataToDisplayCreate($csvContent) {
 
 		$newData = array();
+		$this->_classteachers = $this->classteachersGetAll();
 
 		foreach($csvContent as $row) {
 			$newRow = array();
-			$this->classteachersEntryHandle($row, $newRow);
+			$this->classteacherEntryHandle($row, $newRow);
 			$this->classUnitEntryHandle($row, $newRow);
 			$newRow['name'] = $row['name'];
 			$newData[] = $newRow;
@@ -107,31 +108,71 @@ class Review extends \administrator\Kuwasys\Classes\CsvImport {
 		$this->_smarty->assign('classes', $newData);
 	}
 
-	private function classteachersEntryHandle($csvRow, &$newRow) {
+	private function classteacherEntryHandle($csvRow, &$displayData) {
 
-		$classteachers = $this->classteachersGetAll();
+		foreach(explode(',', $csvRow['classteacher']) as $name) {
+			$this->classteacherDataCreate($name, $displayData['classteacher']);
+		}
+	}
 
-		$ctId = array_search($csvRow['classteacher'], $classteachers);
-		if($ctId !== false && $ctId !== NULL) {
-			// Classteacher found
-			$newRow['classteacher'] = array(
-				'ID' => $ctId, 'name' => $newRow['classteacher']);
+	private function classteacherDataCreate($classteacherName, &$data) {
+
+		$ctId = array_search($classteacherName, $this->_classteachers);
+		if($ctId !== false) {
+			$data[] = array(
+				'ID' => $ctId,
+				'displayOptions' => false,
+				'name' => $classteacherName
+			);
 		}
 		else {
-			// Classteacher not found, suggest a Classteacher
-			$similar = array('ID' => 0, 'dist' => 36767, 'name' => '');
-
-			foreach($classteachers as $ctId => $ctName) {
-				$dist = levenshtein($csvRow['classteacher'], $ctName);
-
-				if($dist < $similar['dist']) {
-					$similar = array(
-						'ID' => $ctId, 'dist' => $dist, 'name' => $ctName,
-						'origName' => $csvRow['classteacher']);
-				}
+			$simCt = $this->mostSimilarClassteacherGet($classteacherName);
+			if($simCt) {
+				$data[] = array(
+					'ID' => $simCt['ID'],
+					'displayOptions' => true,
+					'name' => $simCt['name'],
+					'origName' => $classteacherName
+				);
 			}
-			$newRow['classteacherOption'] = $similar;
+			else {
+				$data[] = array(
+					'ID' => 0,
+					'displayOptions' => true,
+					'name' => '',
+					'origName' => $classteacherName
+				);
+			}
 		}
+	}
+
+	/**
+	 * Returns the most similar Classteacher that has the name $toSearch
+	 *
+	 * @param  string $toSearch The string to compare the classteacher-names to
+	 * @return array            an array containing the data of the most
+	 *                          similar classteacher or false on error
+	 *                          <classteacherId>, <classteacherName>
+	 */
+	private function mostSimilarClassteacherGet($toSearch) {
+
+		$bestDist = 99999;
+		$mostSim = array('ID' => 0, 'name' => '');
+
+		if(!count($this->_classteachers)) {
+			return false;
+		}
+		foreach($this->_classteachers as $ctId => $ctName) {
+
+			$dist = levenshtein($toSearch, $ctName);
+
+			if($dist < $bestDist) {
+				$mostSim = array('ID' => $ctId, 'name' => $ctName);
+				$bestDist = $dist;
+			}
+		}
+
+		return $mostSim;
 	}
 
 	private function classUnitEntryHandle($csvRow, &$newRow) {
@@ -143,7 +184,7 @@ class Review extends \administrator\Kuwasys\Classes\CsvImport {
 		if($cuId !== false && $cuId !== NULL) {
 			// Classunit found
 			$newRow['classUnit'] = array(
-				'ID' => $cuId, 'name' => $newRow['classUnit']);
+				'ID' => $cuId, 'name' => $csvRow['day']);
 		}
 		else {
 			// Classunit not found, suggest one
@@ -166,6 +207,7 @@ class Review extends \administrator\Kuwasys\Classes\CsvImport {
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
 
-}
+	private $_classteachers;
 
+}
 ?>
