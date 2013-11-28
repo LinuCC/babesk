@@ -19,7 +19,7 @@
 			<td align="center">{$grade.label}</td>
 			<td align="center">{$grade.schooltypeName}</td>
 			<td align="center" bgcolor='#FFD99'>
-			<form action="index.php?module=administrator|Kuwasys|Grade|changeGrade&amp;ID={$grade.ID}" method="post"><input type='submit' value='bearbeiten'></form>
+			<form action="index.php?module=administrator|Kuwasys|Grade|ChangeGrade&amp;ID={$grade.ID}" method="post"><input type='submit' value='bearbeiten'></form>
 			<button id='delete#{$grade.ID}'>löschen</button>
 			</td>
 		</tr>

@@ -16,8 +16,6 @@ class CsvImportError {
  * This Class for itself already can accept files uploaded from the client and
  * convert them into an Array. Also it checks every Entry if it is void, and
  * fills the error-log when data is void.
- *
- * @author Pascal Ernst <pascal.cc.ernst@gmail.com>
  */
 abstract class CsvImport {
 

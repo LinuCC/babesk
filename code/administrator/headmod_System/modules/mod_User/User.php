@@ -49,13 +49,13 @@ class User extends System {
 	protected function entryPoint($dataContainer) {
 
 		defined('_AEXEC') or die('Access denied');
+		parent::entryPoint($dataContainer);
 		$this->userManager = new UserManager();
 		$this->userInterface = new AdminUserInterface($this->relPath);
 		$this->_interface = $this->userInterface;
 		$this->userProcessing = new AdminUserProcessing($this->userInterface);
 		$this->messages = array('error' => array(
 			'no_id' => 'ID nicht gefunden.'));
-		parent::entryPoint($dataContainer);
 		parent::initSmartyVariables();
 		$this->_dataContainer = $dataContainer;
 	}

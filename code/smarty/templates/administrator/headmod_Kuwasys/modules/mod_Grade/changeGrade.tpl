@@ -19,7 +19,7 @@ select, input.moduleFormulars {
 	<label>Label:
 		<input type='text' name='gradelabel' value='{$grade.label}' class='moduleFormulars'>
 	</label> <br><br>
-	<label>Jahrgangsstufe:<input type='text' name='year' value='{$grade.gradelevel}' class='moduleFormulars'></label> <br><br>
+	<label>Jahrgangsstufe:<input type='text' name='gradelevel' value='{$grade.gradelevel}' class='moduleFormulars'></label> <br><br>
 	{if count($schooltypes)}
 	<label>
 		Schultyp:

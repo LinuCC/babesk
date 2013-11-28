@@ -92,7 +92,7 @@ class Schooltype extends System {
 
 		try {
 			$data = TableMng::query(sprintf(
-				'SELECT * FROM Schooltype WHERE `ID` = "%s"', $id), true);
+				'SELECT * FROM Schooltype WHERE `ID` = "%s"', $id));
 
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->dieError('Der Schultyp konnte nicht gefunden werden');

@@ -857,7 +857,7 @@ class RequestsOfClass {
 			return $id;
 		}
 		else {
-			$this->_interface->dieError(_g('The User-in-Class-Status %1$s is missing! Cannot process the data without it!'));
+			throw new Exception("The User-in-Class-Status $name is missing! Cannot process the data without it!");
 		}
 	}
 

@@ -74,7 +74,6 @@ class ImportExecute extends \administrator\Kuwasys\Classes\CsvImport {
 		$query = '';
 
 		foreach($classteachers as &$ct) {
-			var_dump($ct['ID']);
 			if($ct['ID'] == 'CREATE_NEW') {
 				$query .= $this->newClassteacherQueryGenerate($ct);
 				$query .= 'INSERT INTO jointClassTeacherInClass

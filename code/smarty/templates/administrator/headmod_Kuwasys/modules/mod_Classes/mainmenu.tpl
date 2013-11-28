@@ -48,11 +48,6 @@
 			</a>
 		</li>
 		<li>
-			<a href="index.php?module=administrator|Kuwasys|Classes|AssignUsersToClasses">
-					{_g('Assign the Users to the Classes')}
-			</a>
-		</li>
-		<li>
 			<a href="index.php?module=administrator|Kuwasys|Classes|GlobalClassRegistration">
 					{_g('Change if Classregistrations are enabled')}
 			</a>
