@@ -120,7 +120,8 @@ class AdminRetourProcessing {
 		$isUser = TableMng::query(sprintf(
 				'SELECT COUNT(*) FROM users WHERE username LIKE "%s"',$card_id));
 
-
+		if ($isCard[0]['COUNT(*)']==="0") 
+				$this->RetourInterface->dieError(sprintf($this->msg['err_get_user_by_card']));
 
 		if ($isCard[0]['COUNT(*)']==="1") {
 			if (!$this->cardManager->valid_card_ID($card_id))
