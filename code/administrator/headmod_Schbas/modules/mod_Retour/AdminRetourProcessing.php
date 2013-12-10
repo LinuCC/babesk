@@ -22,7 +22,8 @@ class AdminRetourProcessing {
 		$this->RetourInterface = $RetourInterface;
 		$this->msg = array('err_empty_books' => 'keine B&uuml;cher ausgeliehen!',
 							'err_get_user_by_card' => 'Kein Benutzer gefunden!',
-							'err_card_id' => 'Die Karten-ID ist fehlerhaft!');
+							'err_card_id' => 'Die Karten-ID ist fehlerhaft!',
+							'err_usr_locked' =>'Der Benutzer ist gesperrt!');
 	}
 
 	/**
@@ -128,7 +129,7 @@ class AdminRetourProcessing {
 		try {
 			$uid = $this->cardManager->getUserID($card_id);
 			if ($this->userManager->checkAccount($uid)) {
-				$this->RetourInterface->CardLocked();
+				$this->RetourInterface->dieError(sprintf($this->msg['err_usr_locked']));
 			}
 		} catch (Exception $e) {
 			$this->RetourInterface->dieError($this->msg['err_get_user_by_card'] . ' Error:' . $e->getMessage());
@@ -137,7 +138,7 @@ class AdminRetourProcessing {
 			try {
 				$uid = $this->userManager->getUserID($card_id);
 				if ($this->userManager->checkAccount($uid)) {
-					$this->RetourInterface->CardLocked();
+					$this->RetourInterface->dieError(sprintf($this->msg['err_usr_locked']));
 				}
 			} catch (Exception $e) {
 				$this->RetourInterface->dieError($this->msg['err_get_user_by_card'] . ' Error:' . $e->getMessage());
