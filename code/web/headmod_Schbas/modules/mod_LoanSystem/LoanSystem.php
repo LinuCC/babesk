@@ -10,7 +10,7 @@ class LoanSystem extends Schbas {
 	//Attributes
 	private $_smartyPath;
 	protected $_smarty;
-	private $_interface;
+	protected $_interface;
 
 	////////////////////////////////////////////////////////////////////////////////
 	//Constructor

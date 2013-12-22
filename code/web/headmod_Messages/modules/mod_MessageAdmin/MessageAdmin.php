@@ -178,8 +178,9 @@ class MessageAdmin extends Messages {
 	 */
 	private function newMessageAddCreator($messageId) {
 		TableMng::query(sprintf(
-			'INSERT INTO MessageManagers (messageId, userId)
-			VALUES (%s, %s)', $messageId, $_SESSION['uid']));
+			"INSERT INTO MessageManagers (`messageId`, `userId`)
+			VALUES (%s, %s)", $messageId, $_SESSION['uid']));
+		
 	}
 
 	/**
@@ -302,8 +303,8 @@ class MessageAdmin extends Messages {
 			$grades = $_POST['grades'];
 			$stmt =$db->prepare("SELECT uigs.UserID AS userId
 				FROM usersInGradesAndSchoolyears uigs
-					ON uigs.schoolyearId = @activeSchoolyear
-					WHERE uigs.gradeId = ?");
+					WHERE uigs.schoolyearId = @activeSchoolyear
+					AND uigs.gradeId = ?");
 			foreach($grades as $gradeId) {
 				$stmt->bind_param("i", $gradeId);
 				$stmt->execute();
@@ -330,8 +331,7 @@ class MessageAdmin extends Messages {
 			//format dateformat ISO 8601 into european-friendly Date
 			$messageData['validTo'] = formatDate($messageData['validTo']);
 			$messageData['validFrom'] = formatDate($messageData['validFrom']);
-			$this->smartyAssignIsCreator($userId,
-				$messageData ['originUserId']);
+			$this->_smarty->assign('isCreator', $userId ===	$messageData ['originUserId']);
 			$shouldReturn = $this->shouldUsersReturn($receivers);
 			$this->_smarty->assign('shouldReturn', $shouldReturn);
 			$this->_smarty->assign('receivers', $receivers);
@@ -344,18 +344,18 @@ class MessageAdmin extends Messages {
 		}
 	}
 
-	/**
-	 * Assigns a Var to Smarty based on the check if the user is the creator of
-	 * the message or not
-	 */
-	protected function smartyAssignIsCreator($userId, $origUserId) {
-		if($userId == $origUserId) {
-			$this->_smarty->assign('isCreator');
-		}
-		else {
-			$this->_smarty->assign('isCreator', false);
-		}
-	}
+// 	/**
+// 	 * Assigns a Var to Smarty based on the check if the user is the creator of
+// 	 * the message or not
+// 	 */
+// 	protected function smartyAssignIsCreator($userId, $origUserId) {
+// 		if($userId === $origUserId) {
+// 			$this->_smarty->assign('isCreator');
+// 		}
+// 		else {
+// 			$this->_smarty->assign('isCreator', false);
+// 		}
+// 	}
 
 	/**
 	 * Fetches the Data of a Message from the Database and returns them

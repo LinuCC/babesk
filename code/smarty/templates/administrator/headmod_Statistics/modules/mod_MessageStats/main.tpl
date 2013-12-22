@@ -10,15 +10,15 @@
 </style>
 {/literal}
 
-<h2 class="moduleHeader">Statistiken zu Babesk</h2>
+<h2 class="moduleHeader">Statistiken zu Nachrichten</h2>
 
 <p>Wählen sie eine Statistikanzeige aus:</p>
 
-<form action="index.php?section=Statistics|BabeskStats&amp;action=chooseChart" method="POST">
+<form action="index.php?section=Statistics|MessageStats&amp;action=chooseChart" method="POST">
 	<select name="chartName" size="1">
 		
-		<option value="gradelevelsChosen">
-			Wahlen nach Jahrgängen
+		<option value="savedCopiesByTeachers">
+			Gespartes Papier je Lehrer
 		</option>
 		
 	</select>
@@ -27,6 +27,6 @@
 
 {if isset($chartName)}
 <br /><br />
-<img src="index.php?section=Statistics|BabeskStats&amp;action=showChart&amp;chart={$chartName}" />
+<img src="index.php?section=Statistics|MessageStats&amp;action=showChart&amp;chart={$chartName}" />
 {/if}
 {/block}
