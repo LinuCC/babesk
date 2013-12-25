@@ -23,7 +23,7 @@ class LoginHelp extends Module {
 	//Implements
 	/////////////////////////////////////////////////////////////////////
 	protected function entry ($dataContainer) {
-		self::$_interface = new LoginHelpInterface ($dataContainer->getSmarty (), $this->relPath);
+		$this->_interface = new LoginHelpInterface ($dataContainer->getSmarty (), $this->relPath);
 		self::$_globalSettingsManager = new GlobalSettingsManager ();
 	}
 
@@ -31,19 +31,19 @@ class LoginHelp extends Module {
 		try {
 			$txt = self::$_globalSettingsManager->valueGet (GlobalSettings::WEBLOGIN_HELPTEXT);
 		} catch (Exception $e) {
-			self::$_interface->dieMsg ('Konnte den Hilfetext nicht anzeigen');
+			$this->_interface->dieMsg ('Konnte den Hilfetext nicht anzeigen');
 		}
 		return $txt;
 	}
 
 	protected function helptextShow () {
 		$txt = $this->helptextFetch ();
-		self::$_interface->helptextShow ($txt);
+		$this->_interface->helptextShow ($txt);
 	}
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
-	protected static $_interface;
+
 	protected static $_globalSettingsManager;
 }
 

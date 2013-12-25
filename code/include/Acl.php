@@ -50,7 +50,7 @@ class Acl {
 	public function accessControlInitAllowAll() {
 
 		if(!$this->_accessControlInitialized) {
-			$this->_moduleroot->allowAll();
+			$this->_moduleGenManager->moduleEnableStatusAllowAll();
 		}
 		else {
 			throw new Exception('Access-Control already initialized');
