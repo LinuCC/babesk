@@ -52,7 +52,7 @@ class SchbasMessages extends Schbas {
 		defined('_AEXEC') or die('Access denied');
 
 		$this->_dataContainer = $dataContainer;
-		$this->_interface = new MessageTemplateInterface($this->relPath,
+		$this->_interface = new SchbasMessagesInterface($this->relPath,
 			$this->_dataContainer->getSmarty());
 	}
 

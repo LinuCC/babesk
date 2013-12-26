@@ -35,6 +35,9 @@ class SchbasAccounting extends Schbas {
 				case 'userSetReturnedMsgByButtonAjax':
 					$this->userSetReturnedMsgByButtonAjax();
 					break;
+				case 'sendReminder':
+					$this->sendReminder();
+					break;
 				case 'remember':
 					$this->remember();
 					break;
@@ -62,6 +65,29 @@ class SchbasAccounting extends Schbas {
 		}
 	}
 
+	/**
+	 * send reminders via the message module to all users who haven't payed the 
+	 * complete fee yet. this function uses the selected reminder template for usage.
+	 */
+	protected function sendReminder () {
+		try {
+			$template= TableMng::query("SELECT mt.title, mt.text FROM MessageTemplate AS mt WHERE mt.ID=(SELECT value FROM global_settings WHERE name='schbasReminderMessageID')");
+			$author = TableMng::query("SELECT value FROM global_settings WHERE name='schbasReminderAuthorID'");
+			$group = TableMng::query("SELECT ID FROM MessageGroups WHERE name='schbas'");
+			TableMng::query("INSERT INTO Message (`ID`, `title`, `text`, `validFrom`, `validTo`, `originUserId`, `GID`) VALUES (NULL, '".$template[0]['title']."', '".$template [0]['text']."', '".date("Y-m-d")."', '".date("Y-m-d",strtotime("+4 weeks"))."', '".$author[0]['value']."', '".$group[0]['ID']."');");
+			$messageID = TableMng::$db->insert_id;
+			TableMng::query("INSERT INTO MessageManagers (`ID`, `messageID`, `userId`) VALUES (NULL, '".$messageID."','".$author[0]['value']."')");
+			$usersToRemind = TableMng::query("SELECT * FROM schbas_accounting WHERE payedAmount < amountToPay");
+			foreach ($usersToRemind as $user) {
+				TableMng::query("INSERT INTO MessageReceivers (`ID`, `messageID`, `userID`, `read`, `return`) VALUES (NULL, '".$messageID."', '".$user['UID']."', '0', 'noReturn');");
+					
+			}
+		}
+		catch (Exception $e) {	
+		}
+		$this->SchbasAccountingInterface->reminderSent();
+	}
+	
 	/**
 	 * based on the post-values given from Ajax, this function sets the
 	 * has-user-returned-the-message-value to "hasReturned"

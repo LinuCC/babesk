@@ -33,10 +33,11 @@ fieldset {
 <form action="index.php?section=Schbas|SchbasSettings&action=8" method="post">
 	<input type="submit" value="Informationstexte">
 </form>
-
-
 <form action="index.php?section=Schbas|SchbasSettings&action=previewInfoDocs" method="post">
 	<input type="submit" value="Vorschau der Informationsschreiben"><br>
+</form>
+<form action="index.php?section=Schbas|SchbasSettings&action=setReminder" method="post">
+	<input type="submit" value="Mahnung">
 </form>
 </fieldset>
 

@@ -166,10 +166,12 @@ class MessageMainMenu extends Messages {
 			$this->_smarty->assign('editor',true);
 			$createdMsg = $this->fetchManagedMessages();
 		}
+		$schbasID = MessageFunctions::getMessageGroupID('schbas');
 		$receivedMsg = $this->fetchReceivedMessages();
 		$this->_smarty->assign('createdMsg', $createdMsg);
 		$this->_smarty->assign('receivedMsg', $receivedMsg);
 		$this->_smarty->assign('BaBeSkTerminal', $this->checkIsKioskMode());
+		$this->_smarty->assign('schbasID',$schbasID);
 		$this->_smarty->display($this->_smartyPath . 'menu.tpl');
 	}
 

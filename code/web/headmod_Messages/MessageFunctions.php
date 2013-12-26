@@ -34,7 +34,7 @@ class MessageFunctions {
 			WHERE %s = userId AND %s = messageId
 			AND SYSDATE() BETWEEN valid_from AND valid_to",
 			$escUserId, $escMessageId);
-		$isReceiving = TableMng::query($queryRec);
+		$isReceiving = TableMng::query($query);
 		return (bool) $isReceiving[0]['count'];
 	}
 
@@ -149,6 +149,15 @@ class MessageFunctions {
 		else if ($user1 ['percentage'] > $user2 ['percentage']) {
 			return -1;
 		}
+	}
+	
+	/**
+	 * returns the ID for the given message group name
+	 * @param String $groupName
+	 */
+	public static function getMessageGroupID($groupName) {
+		$groupID = TableMng::query(sprintf(	'SELECT ID FROM MessageGroups WHERE `name` = "%s" ',  $groupName));	
+		return $groupID[0]['ID'];	
 	}
 }
 

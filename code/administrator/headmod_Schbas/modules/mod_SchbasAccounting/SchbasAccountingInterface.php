@@ -54,8 +54,8 @@ class SchbasAccountingInterface extends AdminInterface {
 		$this->smarty->display($this->tplFilePath . 'showRememberList2.tpl');
 	}
 	
-	function test(){
-		$this->smarty->display($this->tplFilePath . 'test.tpl');
+	function reminderSent(){
+		$this->smarty->display($this->tplFilePath . 'reminderSent.tpl');
 	}
 }
 

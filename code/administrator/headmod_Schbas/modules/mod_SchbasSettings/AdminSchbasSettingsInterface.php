@@ -63,8 +63,15 @@ class AdminSchbasSettingsInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath . 'enableConfirmFin.tpl');
 	}
 	
-	public function ShowPreviewInfoTexts() {
+	public function showPreviewInfoTexts() {
 		$this->smarty->display($this->tplFilePath . 'showPreviewInfoTexts.tpl');
+	}
+	
+	public function showReminderSelection($activeReminderID,$reminderAuthorID,$allSchbasMessages) {
+		$this->smarty->assign('activeReminderID', $activeReminderID[0]['value']);
+		$this->smarty->assign('reminderAuthorID', $reminderAuthorID[0]['value']);
+		$this->smarty->assign('allSchbasMessage', $allSchbasMessages);
+		$this->smarty->display($this->tplFilePath . 'showReminderSettings.tpl');
 	}
 	
 	/**

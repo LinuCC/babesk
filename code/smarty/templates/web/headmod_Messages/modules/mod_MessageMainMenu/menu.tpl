@@ -20,7 +20,7 @@
 	{foreach $receivedMsg as $message}
 	<tr>
 		<td>
-			<p>{$message.title}</p>
+			{if count($schbasID)}<img src="../smarty/templates/web/images/schbas.png" title="Schulbuchausleihe-Nachricht">{/if}<p>{$message.title}</p>
 		</td>
 		<td>
 			{if $message.return == 'noReturn'}
@@ -67,7 +67,7 @@
 			{$message.ID}
 		</td>
 		<td>
-			{$message.title}
+			{if count($schbasID)}<img src="../smarty/templates/web/images/schbas.png" title="Schulbuchausleihe-Nachricht">{/if}{$message.title}
 		</td>
 		<td>
 			{$message.validFrom}

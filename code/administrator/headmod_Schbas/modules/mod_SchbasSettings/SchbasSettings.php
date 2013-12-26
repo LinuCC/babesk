@@ -51,9 +51,15 @@ class SchbasSettings extends Schbas {
 				$SchbasSettingsInterface->enableFormConfirmFin();break;
 				case '10': $this->saveTexts();
 				break;
-				case 'editCoverLetter': $this->EditCoverLetter();
+				case 'editCoverLetter': $this->editCoverLetter();
 				break;
-				case 'previewInfoDocs': $this->PreviewInfoDocs();
+				case 'previewInfoDocs': $this->previewInfoDocs();
+				break;
+				case 'setReminder': if (isset($_POST['templateID']) && isset($_POST['authorID'])){
+					TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", $_POST['templateID'], 'schbasReminderMessageID'));
+					TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", $_POST['authorID'], 'schbasReminderAuthorID'));
+					$SchbasSettingsInterface->enableFormConfirmFin();break;
+				} else $this->setReminder();
 				break;
 
 				case 'fetchTextsAjax':
@@ -137,7 +143,43 @@ class SchbasSettings extends Schbas {
 			$SchbasSettingsInterface->EditBankAccount($bankAccount[0],$bankAccount[1],$bankAccount[2],$bankAccount[3]);
 		}
 	}
-
+	
+	/**
+	 * sets the schbas message template for the payment reminder
+	 */
+	protected function setReminder() {
+		require_once 'AdminSchbasSettingsInterface.php';
+		$SchbasSettingsInterface = new AdminSchbasSettingsInterface($this->relPath);
+		
+		$activeReminderID = TableMng::query('SELECT value FROM global_settings WHERE name="schbasReminderMessageID"');
+		$reminderAuthorID = TableMng::query('SELECT value FROM global_settings WHERE name="schbasReminderAuthorID"');
+		$SchbasSettingsInterface->showReminderSelection($activeReminderID,$reminderAuthorID,$this->templatesFetchSchbas());	
+	}
+	
+	/**
+	 * Fetches all of the Templates from the database and returns them
+	 *
+	 * @return array() An Array of Elements represented as arrays themselfs or
+	 * a void Array if no elements where found
+	 */
+	protected function templatesFetchSchbas() {
+	
+		$data = array();
+	
+		try {
+			$data = TableMng::query('SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM messagegroups WHERE name="Schbas");');
+	
+		} catch (MySQLVoidDataException $e) {
+			return array();
+	
+		} catch (Exception $e) {
+			$this->_interface->dieError('Konnte die Vorlagen nicht abrufen');
+		}
+	
+		return $data;
+	}
+	
+	
 	protected function editCoverLetter () {
 
 		require_once 'AdminSchbasSettingsInterface.php';

@@ -337,6 +337,11 @@ class MessageAdmin extends Messages {
 			$this->_smarty->assign('receivers', $receivers);
 			$this->_smarty->assign('managers', $managers);
 			$this->_smarty->assign('messageData', $messageData);
+			
+			$schbasID = MessageFunctions::getMessageGroupID('schbas');
+			
+			$this->_smarty->assign('schbasID',$schbasID);
+			
 			$this->_smarty->display($this->_smartyPath . '/showMessage.tpl');
 		}
 		else {
