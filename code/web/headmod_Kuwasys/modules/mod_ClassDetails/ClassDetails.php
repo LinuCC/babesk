@@ -146,14 +146,13 @@ class ClassDetails extends Kuwasys {
 	//Attributes
 	////////////////////////////////////////////////////////////////////////////////
 
-	private $_jointUsersInClass;
-	private $_classManager;
-	private $_usersManager;
-	private $_globalSettingsManager;
-	private $_usersInClassStatusManager;
-	private $_interface;
+	protected $_jointUsersInClass;
+	protected $_classManager;
+	protected $_globalSettingsManager;
+	protected $_usersInClassStatusManager;
+	protected $_interface;
 	protected $_smarty;
-	private $_smartyPath;
+	protected $_smartyPath;
 }
 
 ?>

@@ -451,10 +451,10 @@ class ClassList extends Kuwasys {
 	//Attributes
 	////////////////////////////////////////////////////////////////////////////////
 
-	private $_databaseAccessManager;
-	private $_interface;
+	protected $_databaseAccessManager;
+	protected $_interface;
 	protected $_smarty;
-	private $_smartyPath;
+	protected $_smartyPath;
 
 	private $_selections;
 	private $_userId;

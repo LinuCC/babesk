@@ -245,8 +245,8 @@ class DisplayUsersWaiting {
 
 	private $_databaseAccessManager;
 
-	private $_interface;
-	private $_languageManager;
+	protected $_interface;
+	protected $_languageManager;
 }
 
 

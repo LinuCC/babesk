@@ -289,7 +289,7 @@ class MessageMainMenu extends Messages {
 	/**
 	 * The path to the Smarty-templates of this module
 	 */
-	private $_smartyPath;
+	protected $_smartyPath;
 
 	/**
 	 * An Smarty-Object, used to Output data
@@ -299,7 +299,7 @@ class MessageMainMenu extends Messages {
 	/**
 	 * Stores the Interface of this Module
 	 */
-	private $_interface;
+	protected $_interface;
 
 	/**
 	 * Saves if the User is allowed to send Messages

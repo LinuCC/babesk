@@ -75,9 +75,9 @@ class UsersPasswordResetter {
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
 	////////////////////////////////////////////////////////////////////////////////
-	private $_interface;
-	private $_databaseAccessManager;
-	private $_languageManager;
+	protected $_interface;
+	protected $_databaseAccessManager;
+	protected $_languageManager;
 
 	private $_activeSchoolyear;
 }

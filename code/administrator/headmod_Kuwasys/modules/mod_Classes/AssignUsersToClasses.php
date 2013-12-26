@@ -535,9 +535,9 @@ class AssignUsersToClasses {
 	 */
 	private $_users;
 
-	private $_interface;
+	protected $_interface;
 
-	private $_languageManager;
+	protected $_languageManager;
 
 	protected static $tableName = 'assignUsersToClassesTemp';
 

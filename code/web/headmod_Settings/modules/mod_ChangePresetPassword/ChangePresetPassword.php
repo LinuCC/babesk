@@ -169,10 +169,10 @@ class ChangePresetPassword extends Settings {
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
 	protected $_smarty;
-	private $_smartyPath;
-	private $_interface;
-	private $_userManager;
-	private $_globalSettingsManager;
+	protected $_smartyPath;
+	protected $_interface;
+	protected $_userManager;
+	protected $_globalSettingsManager;
 }
 
 ?>

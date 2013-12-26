@@ -447,7 +447,7 @@ class ClassTeacher extends Kuwasys {
 	////////////////////////////////////////////////////////////////////////////////
 	//Attributes
 	////////////////////////////////////////////////////////////////////////////////
-	private $_interface;
+	protected $_interface;
 	private $_classTeacherManager;
 	private $_classJointManager;
 	private $_classManager;
@@ -456,14 +456,14 @@ class ClassTeacher extends Kuwasys {
 	/**
 	 * @var KuwasysDataContainer
 	 */
-	private $_dataContainer;
+	protected $_dataContainer;
 
 	/**
 	 * @var KuwasysLanguageManager
 	 */
-	private $_languageManager;
+	protected $_languageManager;
 
-	private $_databaseAccessManager;
+	protected $_databaseAccessManager;
 }
 
 ?>
