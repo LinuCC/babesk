@@ -158,8 +158,8 @@ class PresetPassword extends System {
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
 
-	private $_interface;
-	private $_globalSettingsManager;
+	protected $_interface;
+	protected $_globalSettingsManager;
 }
 
 ?>
