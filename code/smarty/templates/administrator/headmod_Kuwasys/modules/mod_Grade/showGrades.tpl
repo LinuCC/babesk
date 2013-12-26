@@ -65,10 +65,12 @@ $(document).ready(function() {
 						<p><span class="ui-icon ui-icon-alert"\
 						style="float:left; margin: 0 7px 20px 0;"></span>\
 						Die Klasse und die dazugehörigen Daten werden\
-						dauerhaft gelöscht! Sind sie sich sicher?</p>\
+						dauerhaft gelöscht! Dazu gehören auch Historie-Daten\
+						von vorherigen Schuljahren, die mit dieser Klasse in\
+						Verbindung stehen! Sind sie sich sicher?</p>\
 						</div>');
 		$('div#delConf').dialog({
-			height: 200,
+			height: 300,
 			width: 400,
 			modal: true,
 			buttons: {
