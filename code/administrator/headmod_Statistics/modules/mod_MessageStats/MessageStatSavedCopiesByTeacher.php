@@ -2,7 +2,7 @@
 
 require_once PATH_STATISTICS_CHART . '/StatisticsBarChart.php';
 
-class BabeskStatTopMealsByMonthBarChart extends StatisticsBarChart {
+class MessageStatSavedCopiesByTeacher extends StatisticsBarChart {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -19,7 +19,7 @@ class BabeskStatTopMealsByMonthBarChart extends StatisticsBarChart {
 
 	public function imageDraw($externalData = NULL) {
 
-		$this->_heading['text'] = 'Beliebteste Mahlzeiten pro Monat';
+		$this->_heading['text'] = 'Eingespartes Papier';
 		$this->setMarginRatio(array('X' => 0.15, 'Y' => 0.15));
 		$this->setScale(array("GridR" => 200, "GridG" => 200,"GridB" => 200,
 			"DrawSubTicks" => TRUE, 'LabelRotation'  =>  45,
@@ -33,31 +33,34 @@ class BabeskStatTopMealsByMonthBarChart extends StatisticsBarChart {
 
 	protected function dataFetch() {
 
-		$this->_mealData = TableMng::query(
-			"SELECT SUM(price) FROM schbas_books WHERE class='07'");
+		$this->_savedCopiesData = TableMng::query(
+			"SELECT u.forename, u.name, m.authorId, m.savedCopies FROM MessageCarbonFootprint AS m, users as u WHERE u.ID=m.authorId ORDER BY m.savedCopies DESC");
 	}
 
 	protected function dataProcess() {
 
-		$names = array();
+		$authorIds = array();
+		$copiesSaved = array();
 		$this->_pData = new pData();
 
-// 		foreach($this->_mealData as $schoolyear) {
-// 			$names[] = $schoolyear['summe'];
+ 		foreach($this->_savedCopiesData as $savedCopies) {
+ 		
+ 			$authorIds[] = $savedCopies['forename']." ".$savedCopies['name'];
+ 			$copiesSaved[] = $savedCopies['savedCopies']; 	
 
-// 		}
-
-
-		$this->_pData->addPoints($this->_mealData[0], 'schoolyearLabels');
-// 		$this->_pData->setSerieDescription('schoolyearLabels', 'Schuljahr');
-// 		$this->_pData->setAbscissa('schoolyearLabels');
+ 		}
+		
+ 		$this->_pData->addPoints($copiesSaved, 'Blatt DIN A4');
+ 		$this->_pData->addPoints($authorIds, 'Autor-ID');
+ 		$this->_pData->setAbscissa('Autor-ID');
+ 			
 	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
 
-	protected $_mealData;
+	protected $_savedCopiesData;
 }
 
 ?>

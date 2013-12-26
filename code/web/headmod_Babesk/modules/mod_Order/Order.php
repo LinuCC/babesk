@@ -466,8 +466,8 @@ class Order extends Babesk {
 	//Attributes
 	////////////////////////////////////////////////////////////////////////
 
-	protected $smartyPath;
-	protected $modulePath;
+	private $smartyPath;
+	private $modulePath;
 	protected $_interface;
 
 	private $_hasValidCoupon;

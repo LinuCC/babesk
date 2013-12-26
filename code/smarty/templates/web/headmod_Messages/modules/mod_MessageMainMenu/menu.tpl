@@ -7,7 +7,7 @@
 </style>
 {*Show the messages that the user got*}
 <p>
-	<b>Post:</b>
+	<b>Posteingang:</b>
 </p>
 {if count($receivedMsg)}
 <table class="dataTable">
@@ -50,7 +50,7 @@
 {*Show the messages that were created by the user*}
 {if count($createdMsg) and $editor}
 <br /><h4>
-	Selbst-erstellte Nachrichten:
+	Postausgang:
 </h4>
 <table class="dataTable">
 	<tr>
@@ -98,7 +98,7 @@
 {/if}
 {if $editor}
 	<a href="index.php?section=Messages|MessageAdmin&amp;action=newMessageForm">
-		Neue Vorlage erstellen
+		Neue Nachricht erstellen
 	</a>
 {/if}
 {include file='web/footer.tpl'}

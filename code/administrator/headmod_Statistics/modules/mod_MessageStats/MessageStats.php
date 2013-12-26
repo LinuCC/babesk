@@ -2,13 +2,16 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ADMIN . '/headmod_Statistics/Statistics.php';
+defined('PATH_STATISTICS_CHART')
+OR define('PATH_STATISTICS_CHART', realpath(dirname(__FILE__) . '/../..'));
+
 
 /**
- * Analyzes data of the headmodule Kuwasys and puts them out as statistics
+ * Analyzes data of the headmodule Message and puts them out as statistics
  *
  * @author Mirek Hancl <mirek@hancl.de>
  */
-class BabeskStats extends Statistics {
+class MessageStats extends Statistics {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -80,9 +83,9 @@ class BabeskStats extends Statistics {
 		require_once PCHART_PATH . '/pImage.class.php';
 
 		switch ($switch) {
-			case 'gradelevelsChosen':
-				require_once 'BabeskStatTopMealsByMonthBarChart.php';
-				$chart = new BabeskStatTopMealsByMonthBarChart();
+			case 'savedCopiesByTeachers':
+				require_once 'MessageStatSavedCopiesByTeacher.php';
+				$chart = new MessageStatSavedCopiesByTeacher();
 				break;
 			default:
 				die('Wrong Chart-Switch given');

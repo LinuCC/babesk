@@ -53,6 +53,7 @@ _g("modulepath_root/administrator/Gnissel/GChangePassword");
 _g("modulepath_root/administrator/Gnissel/GCardInfo");
 _g("modulepath_root/administrator/Statistics");
 _g("modulepath_root/administrator/Statistics/KuwasysStats");
+_g("modulepath_root/administrator/Statistics/MessageStats");
 _g("modulepath_root/administrator/Kuwasys");
 _g("modulepath_root/administrator/Kuwasys/Classteachers");
 _g("modulepath_root/administrator/Kuwasys/Grade");

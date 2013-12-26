@@ -11,14 +11,16 @@ fieldset {
 
 {/literal}
 
-<h3>Neue Mitteilung erstellen:</h3>
+<h3>Neue Nachricht erstellen:</h3>
 
 <form id="addMessage"
 	action='index.php?section=Messages|MessageAdmin&amp;action=newMessage'
 	method="post">
+	<fieldset>
+		<legend>Nachricht</legend>
 	<label>Titel:<input id="messagetitle" type="text" name="messagetitle" value="" /></label><br />
 	{if isset($templates) and count($templates)}
-		<label>Template:
+		<label>Vorlage:
 			<select id="templateSelection" name="template">
 				{foreach $templates as $template}
 					<option value="{$template.ID}">{$template.title}</option>
@@ -27,7 +29,8 @@ fieldset {
 		</label>
 	{/if}
 	<br />
-	<label>Text:<textarea class="ckeditor" name="messagetext"></textarea></label><br /><br />
+	<label>Text:<textarea class="ckeditor" name="messagetext"></textarea></label>
+	</fieldset>
 	<fieldset>
 		<legend>Einstellungen</legend>
 		<label>
@@ -59,9 +62,9 @@ fieldset {
 		</label><br /><br />
 	</fieldset>
 	<fieldset>
-		<legend>An spezifische Benutzer senden</legend>
+		<legend>Info-Mail an spezifische Benutzer senden</legend>
 		<input id="searchUserInp" type="text" name="searchUserInp"
-			value="Benutzer suchen...">
+			value="">
 		<div id="userSelection">
 		</div>
 		Einzelne Benutzer, an die die Email geschickt wird:

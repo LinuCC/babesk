@@ -72,12 +72,13 @@ class MessageMainMenu extends Messages {
 		try {
 			$contractGID = TableMng::query('SELECT value FROM global_settings
 				WHERE name = "messageEditGroupId"');
-			$userGID = TableMng::query('SELECT GID FROM users WHERE ID =
+			$userGID = TableMng::query('SELECT groupId FROM UserInGroups WHERE userId =
 				"'.$_SESSION['uid'].'"');
 			if(!count($contractGID)) {
 				throw new Exception('Es wurde noch keiner Gruppe erlaubt, Nachrichten zu editieren!');
 			}
-			$this->_isEditor = ($contractGID[0]['value'] == $userGID[0]['GID']);
+			
+			$this->_isEditor = $this->searchInMultiDimArray($contractGID[0]['value'],$userGID);
 		} catch (MySQLVoidDataException $e) {
 			echo 'Konnte die Gruppe nicht überprüfen!';
 			$this->_isEditor = false;
@@ -86,6 +87,25 @@ class MessageMainMenu extends Messages {
 			$this->_interface->DieError('Konnte keine Überprüfung der Gruppe vornehmen!');
 		}
 	}
+	
+	/**
+	 * Workaround for the problem that a user can be in more than one group.
+	 * If one of the group ids has the right to create messages, return this group id.
+	 * @param unknown $search
+	 * @param unknown $array
+	 * @return unknown|boolean
+	 */
+	private function searchInMultiDimArray($search, $array)
+			{
+				foreach($array as $key => $values)
+				{
+					if(in_array($search, $values))
+					{
+						return $key;
+					}
+				}
+				return false;
+			}
 
 	/**
 	 * Fetches the messages that the User is allowed to manage
