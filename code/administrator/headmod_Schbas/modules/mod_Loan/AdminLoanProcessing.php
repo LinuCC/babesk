@@ -46,6 +46,8 @@ $alert="<font color=#ff0000>";
 				$payed = TableMng::query(sprintf('SELECT loanChoice, payedAmount,amountToPay FROM schbas_accounting WHERE UID="%s"',$uid));
 				if (($payed[0]['loanChoice']=="ln" || $payed[0]['loanChoice']=="lr" )&& strcmp($payed[0]['payedAmount'],$payed[0]['amountToPay'])<0)
 						$alert .="Geld wurde noch nicht (ausreichend) gezahlt. Es sind bisher ".$payed[0]['payedAmount']."&euro; von ".$payed[0]['amountToPay']."&euro; eingegangen!<br>";
+		
+		if($payed[0]['loanChoice']=="nl") $alert .= "Achtung: Selbstzahler! Keine B&uuml;cher ausleihen!";		
 		$hasBooks = TableMng::query(sprintf('SELECT COUNT(*) FROM schbas_lending WHERE user_id = "%s"',$uid));
 		$hasBooksID = TableMng::query(sprintf('SELECT inventory_id FROM schbas_lending WHERE user_id = "%s"',$uid));
 				if ($hasBooks[0]['COUNT(*)']!="0"){
