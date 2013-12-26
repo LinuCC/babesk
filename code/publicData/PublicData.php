@@ -7,6 +7,7 @@ require_once PATH_INCLUDE . '/Acl.php';
 require_once PATH_INCLUDE . '/TableMng.php';
 require_once PATH_INCLUDE . '/exception_def.php';
 require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';
+require_once PATH_INCLUDE . '/Logger.php';
 
 /**
  * This Class organizes the Sub-program "publicData"
@@ -69,11 +70,16 @@ class PublicData {
 		// $this->_moduleManager = new ModuleManager ('publicData', $this->_interface);
 		// $this->_moduleManager->setDataContainer ($this->_dataContainer);
 		// $this->_moduleManager->allowAllModules ();
-		$this->_acl = new Acl(NULL, NULL);
+		$this->_logger = new Logger($this->_pdo);
+		$this->_logger->categorySet('PublicData');
+		$this->initPdo();
+		$this->_acl = new Acl($this->_logger, $this->_pdo);
 		$this->_dataContainer = new DataContainer (
 			$this->_interface->getSmarty (),
 			$this->_interface,
-			$this->_acl);
+			$this->_acl,
+			$this->_pdo,
+			$this->_logger);
 	}
 
 	private function sessionInit () {
@@ -88,6 +94,25 @@ class PublicData {
 		ini_set("default_charset", "utf-8");
 	}
 
+	/**
+	 * Initializes the PDO-Object, used for Database-Queries
+	 *
+	 * triggers an error when the PDO-Object could not be created
+	 */
+	private function initPdo() {
+
+		try {
+			$connector = new DBConnect();
+			$connector->initDatabaseFromXML();
+			$this->_pdo = $connector->getPdo();
+			$this->_pdo->query('SET @activeSchoolyear :=
+				(SELECT ID FROM schoolYear WHERE active = "1");');
+
+		} catch (Exception $e) {
+			trigger_error('Could not create the PDO-Object!');
+		}
+	}
+
 	///////////////////////////////////////////////////////////////////////
 	//Attributes
 	///////////////////////////////////////////////////////////////////////
@@ -95,6 +120,10 @@ class PublicData {
 	private $_dataContainer;
 
 	private $_acl;
+
+	private $_pdo;
+
+	private $_logger;
 
 	private $_moduleExecutionParser;
 }

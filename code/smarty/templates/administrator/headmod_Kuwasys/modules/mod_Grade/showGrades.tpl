@@ -19,7 +19,7 @@
 			<td align="center">{$grade.label}</td>
 			<td align="center">{$grade.schooltypeName}</td>
 			<td align="center" bgcolor='#FFD99'>
-			<form action="index.php?module=administrator|Kuwasys|Grade|changeGrade&amp;ID={$grade.ID}" method="post"><input type='submit' value='bearbeiten'></form>
+			<form action="index.php?module=administrator|Kuwasys|Grade|ChangeGrade&amp;ID={$grade.ID}" method="post"><input type='submit' value='bearbeiten'></form>
 			<button id='delete#{$grade.ID}'>löschen</button>
 			</td>
 		</tr>
@@ -65,10 +65,12 @@ $(document).ready(function() {
 						<p><span class="ui-icon ui-icon-alert"\
 						style="float:left; margin: 0 7px 20px 0;"></span>\
 						Die Klasse und die dazugehörigen Daten werden\
-						dauerhaft gelöscht! Sind sie sich sicher?</p>\
+						dauerhaft gelöscht! Dazu gehören auch Historie-Daten\
+						von vorherigen Schuljahren, die mit dieser Klasse in\
+						Verbindung stehen! Sind sie sich sicher?</p>\
 						</div>');
 		$('div#delConf').dialog({
-			height: 200,
+			height: 300,
 			width: 400,
 			modal: true,
 			buttons: {

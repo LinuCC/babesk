@@ -75,9 +75,33 @@ class KuwasysUsers extends Kuwasys {
 		$this->displayTpl('mainmenu.tpl');
 	}
 
-	/**====================================================**
-	 * Allows the User to Print Participation-Confirmations *
-	 **====================================================**/
+	/**
+	 * Fetches all Grades in the Database
+	 *
+	 * Dies displaying a Message on Error
+	 *
+	 * @return array The Grades
+	 */
+	protected function gradesGetAll() {
+
+		try {
+			$stmt = $this->_pdo->query(
+				'SELECT *, CONCAT(gradelevel, "-", label) AS gradename
+				FROM Grades');
+
+			return $stmt->fetchAll();
+
+		} catch (PDOException $e) {
+			$msg = 'Could not fetch all Grades.';
+			$this->_logger->log(__METHOD__ . ": $msg", 'Moderate', NULL,
+				json_encode(array('error' => $e->getMessage())));
+			throw new PDOException($msg, 0, $e);
+		}
+	}
+
+	/*********************************************************************
+	 * Allows the User to Print Participation-Confirmations
+	 */
 	protected function submodulePrintParticipationConfirmationExecute() {
 
 		/**
@@ -107,27 +131,6 @@ class KuwasysUsers extends Kuwasys {
 		KuwasysUsersCreateParticipationConfirmationPdf::execute ($userIds);
 
 		$this->_interface->dieError('Modul wird momentan überarbeitet...');
-	}
-
-	/**
-	 * Fetches all Grades in the Database
-	 *
-	 * Dies displaying a Message on Error
-	 *
-	 * @return array The Grades
-	 */
-	protected function gradesGetAll() {
-
-		try {
-			$stmt = $this->_pdo->query(
-				'SELECT *, CONCAT(gradelevel, "-", label) AS gradename
-				FROM Grades');
-
-			return $stmt->fetchAll();
-
-		} catch (PDOException $e) {
-			$this->_interface->dieError(_g('Could not fetch the Grades') . $e->getMessage());
-		}
 	}
 
 	/**==========================================**
@@ -301,8 +304,15 @@ class KuwasysUsers extends Kuwasys {
 	 */
 	protected function assignUsersToClassesClassdetailsExecute() {
 
-		$class = $this->classGet($_GET['classId']);
-		$classes = $this->classesGetAllOfActiveSchoolyear();
+		try {
+			$class = $this->classGet($_GET['classId']);
+			$classes = $this->classesGetAllOfActiveSchoolyear();
+
+		} catch (PDOException $e) {
+			$this->_logger->log('Could not fetch the data of class' .
+				"$_GET[classId] in " . __METHOD__, 'Moderate');
+			$this->_interface->dieError(_g('Error while fetching the data!'));
+		}
 		$this->assignUsersToClassesSetHeader();
 		$this->_smarty->assign('classId', $_GET['classId']);
 		$this->_smarty->assign('class', $class);
@@ -369,27 +379,6 @@ class KuwasysUsers extends Kuwasys {
 		$stmt->execute(array('classId' => $classId));
 
 		return $stmt->fetchAll(PDO::FETCH_GROUP);
-	}
-
-	/**
-	 * Fetches a Class from the Database
-	 *
-	 * @param  int    $classId The ID of the Class to fetch
-	 * @return array           The Class-Data
-	 */
-	protected function classGet($classId) {
-
-		try {
-			$stmt = $this->_pdo->prepare('SELECT * FROM class
-				WHERE ID = :classId');
-
-			$stmt->execute(array('classId' => $classId));
-			return $stmt->fetch();
-
-		} catch (PDOException $e) {
-			die(json_encode(array('value' => 'error',
-				'message' => _g('Could not fetch the Class'))));
-		}
 	}
 
 	/*********************************************************************
@@ -868,7 +857,7 @@ class RequestsOfClass {
 			return $id;
 		}
 		else {
-			$this->_interface->dieError(_g('The User-in-Class-Status %1$s is missing! Cannot process the data without it!'));
+			throw new Exception("The User-in-Class-Status $name is missing! Cannot process the data without it!");
 		}
 	}
 

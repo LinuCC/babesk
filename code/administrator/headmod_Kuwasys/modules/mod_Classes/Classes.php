@@ -298,28 +298,17 @@ class Classes extends Kuwasys {
 	 */
 	protected function changeClassDisplay() {
 
-		$this->_smarty->assign('schoolyears', $this->schoolyearsGetAll());
-		$this->_smarty->assign('classunits', $this->classunitsGetAll());
-		$this->_smarty->assign('class', $this->classGet($_GET['ID']));
-		$this->_smarty->display(
-			$this->_smartyModuleTemplatesPath . 'changeClass.tpl');
-	}
-
-	/**
-	 * Fetches and returns the Class with the ID $id
-	 *
-	 * @param  string $id The ID of the Class
-	 * @return array      The Class as an Array
-	 */
-	protected function classGet($id) {
-
 		try {
-			$stmt = $this->_pdo->prepare('SELECT * FROM class WHERE ID = :id');
-			$stmt->execute(array(':id' => $id));
-			return $stmt->fetch();
+			$this->_smarty->assign('schoolyears', $this->schoolyearsGetAll());
+			$this->_smarty->assign('classunits', $this->classunitsGetAll());
+			$this->_smarty->assign('class', $this->classGet($_GET['ID']));
+			$this->_smarty->display(
+				$this->_smartyModuleTemplatesPath . 'changeClass.tpl');
 
-		} catch (Exception $e) {
-			$this->_interface->dieError(_g('Could not fetch the Class'));
+		} catch (PDOException $e) {
+			$this->_logger->log(__METHOD__ . ': ' . $e->getMessage(),
+				'Moderate');
+			$this->_interface->dieError(_g('Could not fetch the data!'));
 		}
 	}
 
@@ -346,10 +335,21 @@ class Classes extends Kuwasys {
 	 */
 	protected function classDeletionConfirmation() {
 
-		$class = $this->classGet($_GET['ID']);
-		$this->_smarty->assign('class', $class);
-		$this->_smarty->display(
-			$this->_smartyModuleTemplatesPath . 'deleteClassConfirmation.tpl');
+		try {
+			$class = $this->classGet($_GET['ID']);
+			if(count($class)) {
+				$this->_smarty->assign('class', $class);
+				$this->displayTpl('deleteClassConfirmation.tpl');
+			}
+			else {
+				$this->_interface->dieError(_g('Class to delete not found!'));
+			}
+
+		} catch (PDOException $e) {
+			$this->_logger->log("Error fetching Class with Id $_GET[ID] " .
+				'in ' . __METHOD__, 'Moderate');
+			$this->_interface->dieError(_g('Could not fetch the data!'));
+		}
 	}
 
 	/**

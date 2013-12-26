@@ -71,6 +71,11 @@ class ModuleGeneratorManager {
 		return $this->_moduleRoot->anyChildByIdGet($id);
 	}
 
+	public function moduleEnableStatusAllowAll() {
+
+		$this->_moduleRoot->allowAll();
+	}
+
 	public function moduleEnabledStatusChange($moduleId, $accessAllowed) {
 
 		//rootmodule gets changed as reference

@@ -1,7 +1,7 @@
 /* COMMON STYLE
 --------------------------------------------------------- */
 
-body, h1, h2, h3, h4, h5, h6, div, p, table, td, ol, ul, li, dd, dt, dl, blockquote, address, hr, pre {
+body, h1, h2, h3, h4, h5, h6, div, p, table, td, ol, dd, dt, dl, blockquote, address, hr, pre {
 	margin: 0;     /* no borders */
 	padding: 0;
 }

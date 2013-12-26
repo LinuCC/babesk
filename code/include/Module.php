@@ -59,8 +59,9 @@ abstract class Module {
 		$this->_submoduleExecutionpath =
 			$dataContainer->getExecutionCommand()->pathGet();
 		$this->_modExecCommand = $dataContainer->getExecutionCommand();
-		$this->_logger = $dataContainer->getLogger();
+		$this->_logger = clone($dataContainer->getLogger());
 		$this->_logger->categorySet($this->_modExecCommand->pathGet());
+		$this->_interface = $dataContainer->getInterface();
 	}
 
 	protected function debugDataPrint($dataContainer) {
@@ -339,6 +340,12 @@ abstract class Module {
 	 * @var Object ModuleExecutionCommnad
 	 */
 	protected $_modExecCommand;
+
+	/**
+	 * Allows easy displaying of errors, messages, ...
+	 * @var Interface
+	 */
+	protected $_interface;
 }
 
 ?>

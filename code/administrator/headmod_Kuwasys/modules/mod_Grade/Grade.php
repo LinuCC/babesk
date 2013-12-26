@@ -65,12 +65,10 @@ class Grade extends Kuwasys {
 
 	protected function entryPoint ($dataContainer) {
 
-		defined('_AEXEC') or die('Access denied');
-
+		parent::entryPoint($dataContainer);
 		$this->_dataContainer = $dataContainer;
 		$this->_interface = new GradeInterface($this->relPath, $this->_dataContainer->getSmarty());
 		$this->_subExecPath = $dataContainer->getExecutionCommand()->pathGet();
-		$this->_acl = $dataContainer->getAcl();
 	}
 
 	protected function submoduleAddGradeExecute() {
@@ -93,13 +91,13 @@ class Grade extends Kuwasys {
 	 *
 	 * Dies if User submitted incorrect data
 	 */
-	protected function gradeInputPreprocess () {
+	protected function gradeInputPreprocess() {
 
 		require_once PATH_INCLUDE . '/gump.php';
 		$gump = new GUMP();
 
 		$rules = array(
-			'label' => array('required|min_len,1|max_len,255',
+			'gradelabel' => array('required|min_len,1|max_len,255',
 				'sql_escape', _g('Gradelabel')),
 			'gradelevel' => array('required|numeric|min_len,1|max_len,3',
 				'sql_escape', _g('Gradelevel')),
@@ -119,9 +117,6 @@ class Grade extends Kuwasys {
 
 		$schooltypeId = (!empty($_POST['schooltype'])) ?
 			$_POST['schooltype'] : 0;
-
-		var_dump($_POST['gradelevel']);
-		die();
 
 		try {
 			TableMng::query("INSERT INTO Grades
@@ -226,10 +221,14 @@ class Grade extends Kuwasys {
 	protected function getGrade($gradeId) {
 
 		try {
-			TableMng::querySingleEntry("SELECT * FROM Grades
-				WHERE ID = $gradeId");
+			$stmt = $this->_pdo->prepare(
+				'SELECT * FROM Grades WHERE ID = ?');
+			$stmt->execute(array($_GET['ID']));
+			return $stmt->fetch();
 
-		} catch (Exception $e) {
+		} catch (PDOException $e) {
+			$this->_logger->log('Could not fetch the Grade', 'Moderate', NULL,
+				json_encode(array('error' => $e->getMessage())));
 			$this->_interface->dieError(_g('Could not fetch the Grade'));
 		}
 
@@ -242,8 +241,6 @@ class Grade extends Kuwasys {
 	 * Dies on everything
 	 */
 	protected function submoduleChangeGradeExecute() {
-
-		TableMng::sqlEscape($_GET['ID']);
 
 		if (isset($_POST['gradelabel'], $_POST['gradelevel'])) {
 
@@ -268,11 +265,15 @@ class Grade extends Kuwasys {
 			? $_POST['schooltype'] : 0;
 
 		try {
-			TableMng::query("UPDATE Grades SET label = '$_POST[gradelabel]',
-				gradelevel = '$_POST[gradelevel]', '$schooltypeId'
-				WHERE ID = $_GET[ID]");
+			$stmt = $this->_pdo->prepare('UPDATE Grades SET label = ?,
+				gradelevel = ? WHERE ID = ?');
 
-		} catch (Exception $e) {
+			$stmt->execute(array($_POST['gradelabel'], $_POST['gradelevel'],
+				$_GET['ID']));
+
+		} catch (PDOException $e) {
+			$this->_logger->log('Error changing a Grade', 'Moderate', Null,
+				json_encode(array('error' => $e->getMessage())));
 			$this->_interface->dieError(_g('Could not change the Grade!'));
 		}
 	}
@@ -280,9 +281,9 @@ class Grade extends Kuwasys {
 	/**
 	 * Displays a dialog in which the User can change the data of the Grade
 	 */
-	protected function showChangeGrade () {
+	protected function showChangeGrade() {
 
-		$grade = $this->getGrade();
+		$grade = $this->getGrade($_GET['ID']);
 		$schooltypes = $this->fetchAllSchooltypes();
 		$this->_interface->displayChangeGrade($grade, $schooltypes);
 	}
@@ -311,21 +312,11 @@ class Grade extends Kuwasys {
 	//Attributes
 	///////////////////////////////////////////////////////////////////////
 
-	protected $_interface;
-	protected $_gradeManager;
-	protected $_schoolyearManager;
-	protected $_jointGradeInSchoolyear;
 	/**
 	 * @var KuwasysDataContainer
 	 */
 	protected $_dataContainer;
 
-	/**
-	 * @var KuwasysLanguageManager
-	 */
-	protected $_languageManager;
-
-	protected $_acl;
 	protected $_subExecPath;
 }
 
