@@ -90,6 +90,9 @@ class Booklist extends Schbas {
 						$BookProcessing->ScanForDeleteEntry();
 
 						break;
+					case 'showBooksFNY':
+						$BookProcessing->showBooksForNextYear();
+						break;
 				break;
 			}
 		}

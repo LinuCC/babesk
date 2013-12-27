@@ -53,6 +53,81 @@ class AdminBooklistProcessing {
 	}
 
 	/**
+	 * Show list of books which students can keep for next schoolyear, ordered by schoolyear.
+	 */
+	 function showBooksForNextYear() {
+	 	
+	 	require_once 'AdminBooklistInterface.php';
+	 	if (isset($_POST['grade'])) {
+	 		require_once PATH_ACCESS . '/BookManager.php';
+	 		$booklistManager = new BookManager();
+	 		$booklist_act = $booklistManager->getBooksByClass($_POST['grade']);
+	 		$booklist_nxt = $booklistManager->getBooksByClass($_POST['grade']+1);
+	 		
+	 		
+	 		$booklistFNY = array();
+	 		$booklistFNY = array_map("unserialize", array_intersect($this->serialize_array_values($booklist_act),$this->serialize_array_values($booklist_nxt)));
+	 		
+	 		$this->showPdf($booklistFNY);
+	 	}
+	 	else {
+	 		$this->BookInterface->ShowSelectionForBooksToKeep();
+	 	}
+	 	
+		
+	}
+	
+	function serialize_array_values($arr){
+		foreach($arr as $key=>$val){
+			//sort($val);
+			$arr[$key]=serialize($val);
+		}
+	
+		return $arr;
+	}
+	
+	private function showPdf($booklist) {
+	
+	
+		
+	
+		$books = '<table border="0" bordercolor="#FFFFFF" style="background-color:#FFFFFF" width="100%" cellpadding="0" cellspacing="1">
+				
+				<tr style="font-weight:bold; text-align:center;"><th>Fach</th><th>Titel</th><th>Verlag</th><th>ISBN-Nr.</th><th>Preis</th></tr>';
+	
+		//	$bookPrices = 0;
+		foreach ($booklist as $book) {
+			// $bookPrices += $book['price'];
+			$books.= '<tr><td>'.$book["subject"].'</td><td>'.$book["title"].'</td><td>'.$book["publisher"].'</td><td>'.$book["isbn"].'</td><td align="right">'.$book["price"].' &euro;</td></tr>';
+		}
+		//$books .= '<tr><td></td><td></td><td></td><td style="font-weight:bold; text-align:center;">Summe:</td><td align="right">'.$bookPrices.' &euro;</td></tr>';
+		$books .= '</table>';
+		$books = str_replace('ä', '&auml;', $books);
+		$books = str_replace('é', '&eacute;', $books);
+	
+		
+	
+		$this->createPdf("Lehrb&uuml;cher, die f&uuml;r Jahrgang ".($_POST['grade']+1)." behalten werden k&ouml;nnen",$books);
+	}
+	
+	/**
+	 * Creates a PDF for the Participation Confirmation and returns its Path
+	 */
+	private function createPdf ($page1Title,$page1Text) {
+	
+		require_once 'LoanSystemPdf.php';
+	
+		try {
+			$pdfCreator = new LoanSystemPdf($page1Title,$page1Text,$_POST['grade']);
+			$pdfCreator->create();
+			$pdfCreator->output();
+	
+		} catch (Exception $e) {
+			$this->_interface->DieError('Konnte das PDF nicht erstellen!');
+		}
+	}
+	
+	/**
 	 * Edits an entry in book list.
 	 * Function to show the template.
 	 */
@@ -60,7 +135,6 @@ class AdminBooklistProcessing {
 	function editBook($id) {
 
 		require_once PATH_ACCESS . '/BookManager.php';
-
 		$bookManager = new BookManager();
 
 		try {

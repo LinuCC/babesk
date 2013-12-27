@@ -25,6 +25,11 @@ class AdminBooklistInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath.'show_booklist.tpl');
 	}
 	
+	function ShowSelectionForBooksToKeep() {
+		$this->smarty->display($this->tplFilePath.'showGradeSelection.tpl');
+	}
+	
+	
 	function ShowChangeBook($bookdata) {
 		$this->smarty->assign('bookdata', $bookdata);
 		$this->smarty->display($this->tplFilePath.'change_book.tpl');
