@@ -41,6 +41,16 @@ class SchbasAccounting extends Schbas {
 				case 'remember':
 					$this->remember();
 					break;
+				case 'userRemoveByID':
+					if (isset($_POST['UserID'])){		
+						$this->userRemoveByID();
+						
+					}else{
+						$this->SchbasAccountingInterface->showDelete();
+						
+					}
+					
+					break;
 				case 'remember2':
 					$this->remember2();
 					break;
@@ -224,6 +234,39 @@ class SchbasAccounting extends Schbas {
 
 	}
 
+	
+	function userRemoveByID() {
+		$uid = TableMng::getDb()->real_escape_string($_POST['UserID']);
+		$uidArray = explode(' ', $uid);
+		
+		if(count($uidArray) == 2) {
+		
+			$uid = $uidArray[0];
+			
+			$query = sprintf("SELECT COUNT(*) FROM schbas_accounting WHERE `UID`='%s'",$uid);
+			$result=TableMng::query($query);
+			if (!$result[0]['COUNT(*)']!="0") {
+				$this->SchbasAccountingInterface->dieError('Benutzer hat noch keinen Antrag abgegeben!');
+			}
+			if(is_numeric($uid)) {
+				try {
+					$query = sprintf("DELETE FROM schbas_accounting WHERE `UID`='%s'",$uid);
+		
+					TableMng::query($query);
+					$this->SchbasAccountingInterface->showDeleteSuccess();
+				} catch (Exception $e) {
+					var_dump($e->getMessage());
+				}
+			}
+			else {
+				$this->SchbasAccountingInterface->dieError('Benutzer-ID nicht g&uuml;ltig');
+			}
+		}
+		else {
+			$this->SchbasAccountingInterface->dieError('Bitte auszutauschenden oder neuen Antrag einscannen!');
+		}
+	}
+	
 	private function remember(){	// function prints lend books
 
 		$showIdAfterName = false;				// to enable the id after name set this value to true

@@ -32,7 +32,9 @@ EnableSubmit = function(val)
 <form action="index.php?section=Schbas|SchbasAccounting&action=userSetReturnedFormByBarcode" method="post">
 	<input type="submit" value="Antrag erfassen">
 </form>
-Antrag l&ouml;schen
+<form action="index.php?section=Schbas|SchbasAccounting&action=userRemoveByID" method="post">
+	<input type="submit" value="Antrag l&ouml;schen">
+</form>
 </fieldset>
 
 <fieldset>

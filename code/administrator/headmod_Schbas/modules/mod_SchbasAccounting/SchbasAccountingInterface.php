@@ -57,6 +57,13 @@ class SchbasAccountingInterface extends AdminInterface {
 	function reminderSent(){
 		$this->smarty->display($this->tplFilePath . 'reminderSent.tpl');
 	}
+	
+	function showDelete(){
+		$this->smarty->display($this->tplFilePath . 'scanForRemoving.tpl');
+	}
+	function showDeleteSuccess(){
+		$this->dieSuccess("Antrag erfolgreich gel&ouml;scht!");
+	}
 }
 
 ?>
