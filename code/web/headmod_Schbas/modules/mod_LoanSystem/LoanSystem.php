@@ -40,6 +40,9 @@ class LoanSystem extends Schbas {
 					case 'showFormPdf':
 						$this->showFormPdf();
 						break;
+					case 'loanShowBuy':
+						$this->saveSelfBuy();
+						break;
 					default:
 						die('wrong Action-value');
 						break;
@@ -63,6 +66,18 @@ class LoanSystem extends Schbas {
 
 	}
 
+	private function searchInMultiDimArray($search, $array)
+	{
+		foreach($array as $key => $values)
+		{
+			if(in_array($search, $values))
+			{
+				return $key;
+			}
+		}
+		return false;
+	}
+	
 	private function showMainMenu() {
 		$schbasYear = TableMng::query("SELECT value FROM global_settings WHERE name='schbas_year'");
 		//get gradeValue ("Klassenstufe")
@@ -76,13 +91,35 @@ class LoanSystem extends Schbas {
 		$feeNormal = TableMng::query("SELECT fee_normal FROM schbas_fee WHERE grade=".$gradelevel[0]['gradelevel']);
 		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradelevel[0]['gradelevel']);
 
+		$loanbooks = array();
+		
+		if(isset($_POST['loanShowBuy'])) {
+			require_once PATH_ACCESS . '/LoanManager.php';
+			$lm = new LoanManager();
+			$loanbooks = $lm->getLoanByUID($_SESSION['uid'], false);
+			$loanbooksSelfBuy = TableMng::query("SELECT BID FROM schbas_selfpayer WHERE UID=".$_SESSION['uid']);
+			$loanbooksSelfBuy = array_map('current',$loanbooksSelfBuy); 
+			
+			$checkedBooks = array();
+			foreach ($loanbooks as $book) {
+				if (in_array($book['id'],$loanbooksSelfBuy)) $book['selected']=true;
+				$checkedBooks[] = $book;
+			}
+			$this->_smarty->assign('loanbooks', $checkedBooks);
+		}
 		$this->_smarty->assign('feeNormal', $feeNormal[0]['fee_normal']);
 		$this->_smarty->assign('feeReduced', $feeReduced[0]['fee_reduced']);
 		$this->_smarty->assign('schbasYear', $schbasYear[0]['value']);
 		$this->_smarty->assign('BaBeSkTerminal', $this->checkIsKioskMode());
+		$this->_smarty->assign('loanShowForm', isset($_POST['loanShowForm']));
+		$this->_smarty->assign('loanShowBuy', isset($_POST['loanShowBuy']));
+		
+		
 		$this->_smarty->display($this->_smartyPath . 'menu.tpl');
 	}
 
+
+	
 	private function showLoanList() {
 		require_once PATH_ACCESS . '/LoanManager.php';
 		require_once PATH_ACCESS . '/InventoryManager.php';
@@ -120,7 +157,16 @@ class LoanSystem extends Schbas {
 		return preg_match("/BaBeSK/i", $_SERVER['HTTP_USER_AGENT']);
 	}
 
-
+	private function saveSelfBuy() {
+		TableMng::query("DELETE FROM schbas_selfpayer WHERE UID=".$_SESSION['uid']);
+		if (isset($_POST['bookID'])) {
+			foreach ($_POST['bookID'] as $book) {
+				TableMng::query("INSERT IGNORE INTO schbas_selfpayer (UID, BID) VALUES (".$_SESSION['uid'].",".$book.")");
+			}
+		}
+		$this->_smarty->display($this->_smartyPath . 'saved.tpl');
+	}
+	
 	private function showFormPdf() {
 
 		//get gradelevel ("Klassenstufe")

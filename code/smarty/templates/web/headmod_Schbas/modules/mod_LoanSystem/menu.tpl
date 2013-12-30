@@ -2,17 +2,48 @@
 
 
 
-			<center><h2>Schulbuchausleihsystem</h2><br/></center>	
-			<h3>Anschreiben und Buchliste f&uuml;r das Schuljahr {$schbasYear}</h3>
+			<center><h2>Schulbuchausleihsystem f&uuml;r das Schuljahr {$schbasYear}</h2></center>	
+		<div align="center">
 			{if $BaBeSkTerminal}
 				Hinweis: Post kann nicht am BaBeSK-Terminal <br>ge&ouml;ffnet werden!
 			{else}
-			<form action="index.php?section=Schbas|LoanSystem&action=showPdf" method="post" id="loanInfo">
-				<input type="submit" value="Informationen herunterladen" />
+			<table cellspacing="20"><tr><td>
+			<div id="order">
+			<form action="index.php?section=Schbas|LoanSystem&action=showPdf" method="post" name="loanInfo" id="loanInfo">		
+				<h3><a href="javascript:document.loanInfo.submit()">Informationen</a></h3>
 			</form>
+			</div></td><td>
+			<div id="order">
+			<form action="index.php?section=Schbas|LoanSystem" method="post" name="loanShowForm" id="loanShowForm">	
+			<input type="hidden" name="loanShowForm">	
+				<h3><a href="javascript:document.loanShowForm.submit()">Anmeldeformular</a></h3>
+			</form>
+			</div>
+			</td>
+			<td>
+			<div id="order">
+			<form action="index.php?section=Schbas|LoanSystem" method="post" name="loanShowBuy" id="loanShowBuy">	
+			<input type="hidden" name="loanShowBuy">	
+				<h3><a href="javascript:document.loanShowBuy.submit()">Selbstk&auml;ufe</a></h3>
+			</form>
+			</div>
+			</td>
+			</tr></table>
 			{/if}
+    </div>
+{if $loanShowBuy}
+<form action="index.php?section=Schbas|LoanSystem&action=loanShowBuy" method="post" id="loanShowBuy">
+<input type="hidden" name="loanShowBuySave">
+<h5>Folgende B&uuml;cher werden f&uuml;r das kommende Schuljahr ben&ouml;tigt. Sie k&ouml;nnen in der Liste angeklickt werden, wenn sie selbst angeschafft werden. Bei der Buchausgabe werden sie dann nicht ausgegeben.</h5>
+{foreach from=$loanbooks item=book}
+<input type="checkbox" name="bookID[]" value="{$book.id}" {if $book.selected}checked{/if}>{$book.subject}: {$book.title} ({$book.author}, {$book.publisher}. ISBN: {$book.isbn})<br>
+{/foreach}
+<input type="submit" value="Selbstk&auml;ufe abspeichern" />
+</form>
+
+{/if}
 			
-	<br/>	<br/>	
+{if $loanShowForm}
 			<h3>Anmeldeformular</h3>
 
 
@@ -138,5 +169,5 @@ if ($("textarea[name=siblings]").val() && $('input[id=loanReduced]').prop('check
 });
 </script>	
 		
-
+{/if}
 {include file='web/footer.tpl'}
