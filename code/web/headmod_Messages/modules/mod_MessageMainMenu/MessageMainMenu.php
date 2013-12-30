@@ -116,7 +116,7 @@ class MessageMainMenu extends Messages {
 		$messages = array();
 		$query = sprintf(
 			'SELECT m.ID AS ID,m.title AS title,m.validFrom AS validFrom,
-				m.validTo AS validTo
+				m.validTo AS validTo, m.GID as GID
 			FROM Message m
 			JOIN MessageManagers mm ON m.ID = mm.messageId AND mm.userId = %s
 			', $_SESSION['uid']);
@@ -140,7 +140,7 @@ class MessageMainMenu extends Messages {
 		$messages = array();
 		$query = sprintf(
 			'SELECT m.id AS ID,m.title AS title,m.validFrom AS validFrom,
-			m.validTo AS validTo, mr.return AS "return"
+			m.validTo AS validTo, mr.return AS "return", m.GID as GID
 			FROM Message m
 			JOIN MessageReceivers mr ON mr.userId = %s
 				AND m.ID = mr.messageId

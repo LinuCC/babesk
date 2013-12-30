@@ -62,12 +62,12 @@ fieldset {
 		</label><br /><br />
 	</fieldset>
 	<fieldset>
-		<legend>Info-Mail an spezifische Benutzer senden</legend>
+		<legend>Nachricht an einzelne Benutzer senden</legend>
 		<input id="searchUserInp" type="text" name="searchUserInp"
 			value="">
 		<div id="userSelection">
 		</div>
-		Einzelne Benutzer, an die die Email geschickt wird:
+		Einzelne Benutzer, an die die Nachricht geschickt wird:
 		<ul id="userSelected">
 		</ul>
 	</fieldset>
