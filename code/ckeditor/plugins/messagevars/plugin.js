@@ -16,6 +16,13 @@ CKEDITOR.plugins.add( 'messagevars',
 								editor.insertHtml( "{name}" );
 						}
 					});
+				editor.addCommand( 'grade',
+						{
+							exec : function( editor )
+							{
+									editor.insertHtml( "{klasse}" );
+							}
+						});
 				editor.addCommand( 'messageBarcode',
 					{
 						exec:function(editor)
@@ -35,5 +42,11 @@ CKEDITOR.plugins.add( 'messagevars',
 						command: 'name',
 						icon: this.path + 'name.png'
 					});
+				editor.ui.addButton( 'messageGrade',
+						{
+							label: 'Platzhalter f&#252;r: Klasse',
+							command: 'grade',
+							icon: this.path + 'grade.png'
+						});
 			}
 		} );

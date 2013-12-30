@@ -217,6 +217,7 @@ class MessageMainMenu extends Messages {
 				$stmt->bind_param('ii', $messageId, $_SESSION['uid']);
 				$stmt->bind_result($msgTitle, $msgText, $isRead, $msgRecId, $msgReturn,
 					$forename, $name, $grade);
+				
 				$stmt->execute();
 				while($stmt->fetch()) {
 					// User got multiple messages of the same kind, select only
@@ -227,7 +228,7 @@ class MessageMainMenu extends Messages {
 				}
 				$msgText = str_replace("{vorname}", $forename, $msgText);
 				$msgText = str_replace("{name}", $name, $msgText);
-
+				$msgText = str_replace("{klasse}", $grade, $msgText);
 
 				$this->createPdf($msgTitle, $msgText, $grade, $msgReturn,$messageId,$_SESSION['uid']);
 			}

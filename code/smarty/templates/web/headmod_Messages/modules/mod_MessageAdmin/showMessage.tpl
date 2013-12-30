@@ -22,7 +22,7 @@
 <table class="dataTable">
 	<tr>
 		<th>Titel</th>
-		<td>{if count($schbasID)}<img src="../smarty/templates/web/images/schbas.png" title="Schulbuchausleihe-Nachricht">{/if}{$messageData.title}</td>
+		<td>{if $message.GID eq $schbasID}<img src="../smarty/templates/web/images/schbas.png" title="Schulbuchausleihe-Nachricht">{/if}{$messageData.title}</td>
 	</tr>
 	<tr>
 		<th>Text</th>
