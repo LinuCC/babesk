@@ -107,7 +107,20 @@ abstract class Module {
 	 */
 	protected function displayTpl($tplName) {
 
-		$this->_smarty->display($this->_smartyModuleTemplatesPath . $tplName);
+		$path = $this->_smartyModuleTemplatesPath . $tplName;
+		try {
+			$this->_smarty->display($path);
+
+		} catch (SmartyException $e) {
+			$errorMsg = 'Could not display a Smarty-Template.';
+			if(!file_exists($path)) {
+				$errorMsg .= ' File does not exist.';
+			}
+			$this->_logger->log($errorMsg, 'Moderate', 'Smarty',
+				json_encode(array('path' => $path,
+					'error' => $e->getMessage())));
+			throw $e;
+		}
 	}
 
 	/**

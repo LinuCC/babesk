@@ -40,6 +40,11 @@
 				{_g('Import Users by a CSV-File')}
 			</a>
 		</li>
+		<li>
+			<a href="index.php?module=administrator|System|User|ResetAllUserPasswords">
+				{_g('Reset passwords of users to preset passwords')}
+			</a>
+		</li>
 	</ul>
 </fieldset>
 
