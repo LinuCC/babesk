@@ -627,3 +627,7 @@ ul.submodulelinkList a {
 ul.submodulelinkList li {
 	list-style: none;
 }
+
+button.isolated, input.isolated {
+	margin: 30px 5px 30px 5px;
+}

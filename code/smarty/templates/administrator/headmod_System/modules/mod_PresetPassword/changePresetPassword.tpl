@@ -5,8 +5,7 @@
 <p>
 Hier können sie das Passwort verändern, dass Schüler bekommen, bevor sie sich zum ersten mal eingeloggt haben. Außerdem können sie verändern, ob die Schüler beim ersten mal einloggen ihr Passwort verändern müssen.
 Das voreingestellte Passwort wird nur bei neu importierten Schülern übernommen.
-Um für bereits bestehende Schüler das Passwort zurückzusetzen, gehen sie bitte auf
-"Passwörter zurücksetzen" <b> (noch nicht implementiert!) </b>
+Um für bereits bestehende Schüler das Passwort zurückzusetzen, gehen sie bitte auf <a href="http://localhost/babesk/code/administrator/index.php?module=administrator|System|User|ResetAllUserPasswords">Passwörter zurücksetzen</a>.
 </p>
 
 <form action='index.php?section=System|PresetPassword&action=changePassword&webRedirect=1' method='post'>

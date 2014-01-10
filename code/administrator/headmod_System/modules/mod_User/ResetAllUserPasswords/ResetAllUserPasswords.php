@@ -18,7 +18,7 @@ class ResetAllUserPasswords extends User {
 			$this->resetUserPasswords();
 		}
 		else {
-			$this->mainMenuDisplay();
+			$this->confirmationDialogDisplay();
 		}
 	}
 
@@ -35,14 +35,16 @@ class ResetAllUserPasswords extends User {
 		$presetPassword = $this->presetPasswordGet();
 
 		if($presetPassword) {
-			$sql = "UPDATE users
+			$this->_pdo->query("UPDATE users
 				SET password = '$presetPassword'
-				WHERE ID <> 1";
+				WHERE ID <> 1");
 		}
 		else {
 			$this->_interface->dieError(_g('Please set the preset password ' .
 				'before reseting the users passwords.'));
 		}
+
+		$this->_interface->dieSuccess(_g('The passwords were successfully resetted to the preset password.'));
 	}
 
 	/**
@@ -64,7 +66,10 @@ class ResetAllUserPasswords extends User {
 		}
 	}
 
-	protected function mainMenuDisplay() {
+	protected function confirmationDialogDisplay() {
+
+		$presetPassword = $this->presetPasswordGet();
+		$this->_smarty->assign('presetPassword', $presetPassword);
 		$this->displayTpl('confirmReset.tpl');
 	}
 
