@@ -18,6 +18,7 @@ class Review extends \administrator\Kuwasys\Classes\CsvImport {
 
 		parent::entryPoint($dataContainer);
 		$content = $this->csvParse();
+		$this->csvDataCheck($content);
 		$this->dataToDisplayCreate($content);
 		$this->displayTpl('review.tpl');
 	}
@@ -106,6 +107,23 @@ class Review extends \administrator\Kuwasys\Classes\CsvImport {
 		}
 
 		$this->_smarty->assign('classes', $newData);
+	}
+
+	/**
+	 * Checks if the CSV-File contains the needed columns
+	 *
+	 * It is okay for the fields to be void, but just to be sure check that the user knows what he is doing and only import stuff when CSV-File
+	 *
+	 * @param  [type] $csvContent [description]
+	 * @return [type]             [description]
+	 */
+	private function csvDataCheck($csvContent) {
+
+		if(!isset($csvContent[0]['classteacher'],
+			$csvContent[0]['day'],
+			$csvContent[0]['name'])) {
+			$this->_interface->dieError(_g('The CSV-File uploaded has not all columns it needs to have. Please upload a CSV-File with all columns!'));
+		}
 	}
 
 	private function classteacherEntryHandle($csvRow, &$displayData) {

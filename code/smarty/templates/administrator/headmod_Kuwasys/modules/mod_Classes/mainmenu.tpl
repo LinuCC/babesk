@@ -38,7 +38,7 @@
 	</legend>
 	<ul class="submodulelinkList">
 		<li>
-			<a href="index.php?module=administrator|Kuwasys|Classes|CsvImport">
+			<a href="index.php?module=administrator|Kuwasys|Classes|CsvImport|FileUploadForm">
 					{_g('Import Classes with a CSV-File')}
 			</a>
 		</li>
