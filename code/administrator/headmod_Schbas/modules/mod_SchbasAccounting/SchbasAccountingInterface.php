@@ -18,8 +18,9 @@ class SchbasAccountingInterface extends AdminInterface {
 	////////////////////////////////////////////////////////////////////////////////
 	//Methods
 	
-	public function MainMenu($listOfClasses) {
+	public function MainMenu($listOfClasses, $listOfClassesRebmemer) {
 		$this->smarty->assign('listOfClasses', $listOfClasses);
+		$this->smarty->assign('listOfClassesRebmemer', $listOfClassesRebmemer);
 		$this->smarty->display($this->tplFilePath . '/menu.tpl');
 	}
 	
@@ -52,6 +53,16 @@ class SchbasAccountingInterface extends AdminInterface {
 		$this->smarty->assign('className', $className);
 		$this->smarty->assign('listOfClasses', $listOfClasses);
 		$this->smarty->display($this->tplFilePath . 'showRememberList2.tpl');
+	}
+	
+	public function showRebmemerList2($name, $forename, $books, $nr, $className, $listOfClasses){
+		$this->smarty->assign('name', $name);
+		$this->smarty->assign('forename', $forename);
+		$this->smarty->assign('books', $books);
+		$this->smarty->assign('nr', $nr);
+		$this->smarty->assign('className', $className);
+		$this->smarty->assign('listOfClasses', $listOfClasses);
+		$this->smarty->display($this->tplFilePath . 'showRebmemerList2.tpl');
 	}
 	
 	function reminderSent(){

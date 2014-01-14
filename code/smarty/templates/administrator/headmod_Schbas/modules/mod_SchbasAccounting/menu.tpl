@@ -57,5 +57,11 @@ Liste nach Klassen:<br/>
 {$listOfClasses}
 </fieldset>
 
+<fieldset>
+<h3>Noch auszuleihende B&uuml;cher</h3>
+Liste nach Klassen:<br/>
+{$listOfClassesRebmemer}
+</fieldset>
+
 
 {/block}
