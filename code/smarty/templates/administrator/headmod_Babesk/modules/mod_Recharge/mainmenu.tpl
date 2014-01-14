@@ -6,17 +6,17 @@
 
 <fieldset class="smallContainer">
 	<legend>
-		{_g('Standard Actions')}
+		{t}Standard Actions{/t}
 	</legend>
 	<ul class="submodulelinkList">
 		<li>
 			<a href="index.php?module=administrator|Babesk|Recharge|RechargeCard">
-				{_g('Recharge a Card')}
+			{t}Recharge a Card{/t}
 			</a>
 		</li>
 		<li>
 			<a href="index.php?module=administrator|Babesk|Recharge|PrintRechargeBalance">
-				{_g('Print Recharge Balance')}
+				{t}Print Recharge Balance{/t}
 			</a>
 		</li>
 	</ul>

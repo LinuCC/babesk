@@ -32,6 +32,9 @@ templates_c
 /code/smarty/templates_c_default/
 /code/smarty/configs/
 
+#Smarty to Gettext compiled file
+*smarty2c*.c
+
 #For files that are only for testing purposes#
 #and shouldnt be uploaded                     #
 ##############################################

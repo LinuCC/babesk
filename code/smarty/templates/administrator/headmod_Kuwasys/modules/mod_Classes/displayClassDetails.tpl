@@ -117,15 +117,15 @@ td {
 	</tbody>
 </table>
 
-<button id="assignUser">{_g("Assign a User to this Class")}</button>
+<button id="assignUser">{t}Assign a User to this Class{/t}</button>
 
-<div id="addUserDialog" title="{_g('Assign a User to this Class')}">
-	<p>{_g('Please select the User and the Status of the Assignment')}</p>
+<div id="addUserDialog" title="{t}Assign a User to this Class{/t}">
+	<p>{t}Please select the User and the Status of the Assignment{/t}</p>
 <form>
 	<fieldset>
-	<label for="username">{_g('Username')}</label>
+	<label for="username">{t}Username{/t}</label>
 	<input type="text" name="username" id="username" class="text ui-widget-content ui-corner-all" />
-	<label for="status">{_g('Status')}</label>
+	<label for="status">{t}Status{/t}</label>
 		<select name="status" id="status">
 			{foreach $statuses as $status}
 			<option value="{$status.ID}" >
@@ -150,7 +150,7 @@ $(document).ready(function() {
 		width: 350,
 		modal: true,
 		buttons: {
-			"{_g('Assign User')}": function() {
+			"{t}Assign User{/t}": function() {
 				$.ajax({
 					type: 'POST',
 					url: 'index.php?module=administrator|Kuwasys|KuwasysUsers|AddUserToClass',
@@ -177,17 +177,17 @@ $(document).ready(function() {
 							window.location.reload();
 						}
 						else {
-							adminInterface.errorShow("{_g('Could not parse the Serveranswer!')}");
+							adminInterface.errorShow("{t}Could not parse the Serveranswer!{/t}");
 						}
 					},
 
 					error: function(data) {
-						adminInterface.errorShow("{_g('Could not Assign the User to the Class!')}");
+						adminInterface.errorShow("{t}Could not Assign the User to the Class!{/t}");
 					}
 				});
 				$(this).dialog('close');
 			},
-			"{{_g('Cancel')}}": function() {
+			"{t}Cancel{/t}": function() {
 				$(this).dialog('close');
 			}
 		}

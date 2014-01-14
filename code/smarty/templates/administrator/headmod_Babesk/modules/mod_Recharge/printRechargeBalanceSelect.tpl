@@ -1,12 +1,12 @@
 {extends file=$inh_path}{block name="content"}
 
 <h2 class="moduleHeader">
-	{_g('Print Recharge Balance')}
+	{t}Print Recharge Balance{/t}
 </h2>
 
 <form action="index.php?module=administrator|Babesk|Recharge|PrintRechargeBalance" method="post">
 	<div class="simpleForm">
-		<p>{_g('Interval:')}</p>
+		<p>{t}Print Recharge Balance{/t}</p>
 		<select name="interval" class="inputItem">
 			{foreach $intervals as $intervalId => $intervalname}
 				<option value="{$intervalId}">{$intervalname}</option>
@@ -15,12 +15,12 @@
 	</div>
 
 	<div class="simpleForm">
-		<p>{_g('At:')}</p>
+		<p>{t}At:{/t}</p>
 		<input class="inputItem" type="text" name="date" size="10"
 				value="{date('d.m.Y')}" />
 	</div>
 	<br />
-	<input type="submit" value="{_g('Download Pdf')}" />
+	<input type="submit" value="{t}Download Pdf{/t}" />
 
 </form>
 

@@ -1,7 +1,7 @@
 {extends file=$inh_path} {block name="content"}
 
 <h2 class="moduleHeader">
-	{_g('Delete a Classteacher')}
+	{t}Delete a Classteacher{/t}
 </h2>
 
 {/block}

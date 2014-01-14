@@ -1,20 +1,20 @@
 {extends file=$UserParent}{block name=content}
 
-<h2 class="moduleHeader">{_g('Usersettings-Mainmenu')}</h2>
+<h2 class="moduleHeader">{t}Usersettings-Mainmenu{/t}</h2>
 
 <fieldset class="smallContainer">
 	<legend>
-		{_g('General')}
+		{t}General{/t}
 	</legend>
 	<ul class="submodulelinkList" >
 		<li>
 			<a href="index.php?module=administrator|System|User|Register">
-				{_g('Register a User')}
+				{t}Register a User{/t}
 			</a>
 		</li>
 		<li>
 			<a href="index.php?module=administrator|System|User|DisplayAll">
-				{_g('Show Users')}
+				{t}Show Users{/t}
 			</a>
 		</li>
 	</ul>
@@ -22,27 +22,27 @@
 
 <fieldset class="smallContainer">
 	<legend>
-		{_g('Bulk-Changes')}
+		{t}Bulk-Changes{/t}
 	</legend>
 	<ul class="submodulelinkList" >
 		<li>
 			<a href="index.php?module=administrator|System|User|CreateUsernames">
-				{_g('Assign Usernames to User automatically')}
+				{t}Assign Usernames to User automatically{/t}
 			</a>
 		</li>
 		<li>
 			<a href="index.php?module=administrator|System|User|RemoveSpecialCharsFromUsernames">
-				{_g('Remove Specialcharacters from Usernames')}
+				{t}Remove Specialcharacters from Usernames{/t}
 			</a>
 		</li>
 		<li>
 			<a href="index.php?module=administrator|System|User|UserCsvImport">
-				{_g('Import Users by a CSV-File')}
+				{t}Import Users by a CSV-File{/t}
 			</a>
 		</li>
 		<li>
 			<a href="index.php?module=administrator|System|User|ResetAllUserPasswords">
-				{_g('Reset passwords of users to preset passwords')}
+				{t}Reset passwords of users to preset passwords{/t}
 			</a>
 		</li>
 	</ul>

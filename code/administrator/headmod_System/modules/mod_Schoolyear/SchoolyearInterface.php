@@ -42,7 +42,7 @@ class SchoolyearInterface extends AdminInterface {
 		);
 
 		$headString = _g('Add an Schoolyear');
-		$submitString = _g('Schuljahr hinzufügen');
+		$submitString = _g('Add an Schoolyear');
 		$actionString = 'addSchoolYear';
 
 		$this->generalForm($headString, $this->sectionString, $actionString, $inputContainer, $submitString);

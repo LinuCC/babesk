@@ -5,28 +5,28 @@
 <div>
 	{if !$isClassRegistrationGloballyEnabled}
 		<p>
-			{_g('Classregistrations are not allowed')}
+			{t}Classregistrations are not allowed{/t}
 		</p>
 	{else}
 		<p>
-			{_g('Classregistrations are allowed')}
+			{t}Classregistrations are allowed{/t}
 		</p>
 	{/if}
 </div>
 
 <fieldset class="smallContainer">
 	<legend>
-		{_g('Standard-Actions')}
+		{t}Standard-Actions{/t}
 	</legend>
 	<ul class="submodulelinkList">
 		<li>
 			<a href="index.php?module=administrator|Kuwasys|Classes|AddClass">
-					{_g('Add a Class')}
+					{t}Add a Class{/t}
 			</a>
 		</li>
 		<li>
 			<a href="index.php?module=administrator|Kuwasys|Classes|DisplayClasses">
-					{_g('Display all Classes')}
+					{t}Display all Classes{/t}
 			</a>
 		</li>
 	</ul>
@@ -34,22 +34,22 @@
 
 <fieldset class="smallContainer">
 	<legend>
-		{_g('More Actions')}
+		{t}More Actions{/t}
 	</legend>
 	<ul class="submodulelinkList">
 		<li>
 			<a href="index.php?module=administrator|Kuwasys|Classes|CsvImport|FileUploadForm">
-					{_g('Import Classes with a CSV-File')}
+					{t}Import Classes with a CSV-File{/t}
 			</a>
 		</li>
 		<li>
 			<a id="createClassSummaries" href="index.php?module=administrator|Kuwasys|Classes|CreateClassSummary">
-					{_g('Create Class-Summaries')}
+					{t}Create Class-Summaries{/t}
 			</a>
 		</li>
 		<li>
 			<a href="index.php?module=administrator|Kuwasys|Classes|GlobalClassRegistration">
-					{_g('Change if Classregistrations are enabled')}
+					{t}Change if Classregistrations are enabled{/t}
 			</a>
 		</li>
 	</ul>

@@ -5,13 +5,13 @@
 </h2>
 
 <fieldset class="smallContainer">
-	<legend>{_g('Actions')}</legend>
+	<legend>{t}Actions{/t}</legend>
 	<ul class="submodulelinkList">
 
 		{if $tableExists}
 		<li>
 			<a href="index.php?module=administrator|Kuwasys|KuwasysUsers|AssignUsersToClasses|Overview">
-				{_g('Go to the existing Assignment-Process')}
+				{t}Go to the existing Assignment-Process{/t}
 			</a>
 		</li>
 		{/if}
@@ -19,17 +19,17 @@
 </fieldset>
 
 <fieldset class="smallContainer">
-	<legend>{_g('Bulk-Actions')}</legend>
+	<legend>{t}Bulk-Actions{/t}</legend>
 	<ul class="submodulelinkList">
 		<li>
 			<a id="resetAssignment" href="#">
-				{_g('Start a new Assignment-Process')}
+				{t}Start a new Assignment-Process{/t}
 			</a>
 		</li>
 		{if $tableExists}
 		<li>
 			<a id="applyAssignment" href="#">
-				{_g('Assign all Users to their Classes')}
+				{t}Assign all Users to their Classes{/t}
 			</a>
 		</li>
 		{/if}
@@ -37,8 +37,8 @@
 </fieldset>
 
 
-<div id="confirmReset" title="{_g('Really start a new Assignment-Process?')}">
-  <p>{_g('If you have already started an Assignment-Process, the Data will be inevitably lost. Are you sure?')}</p>
+<div id="confirmReset" title="{t}Really start a new Assignment-Process?{/t}">
+  <p>{t}If you have already started an Assignment-Process, the Data will be inevitably lost. Are you sure?{/t}</p>
 </div>
 
 <div id="confirmAssignment" title="Zuweisungen durchführen?">

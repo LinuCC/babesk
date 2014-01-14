@@ -1,17 +1,17 @@
 {extends file=$inh_path} {block name='content'}
 
-<h2 class="moduleHeader">{_g('Upload a file')}</h2>
+<h2 class="moduleHeader">{t}Upload a file{/t}</h2>
 
 <form action="index.php?module=administrator|Kuwasys|Classes|CsvImport|Review"
 	method="post" enctype="multipart/form-data">
 
-	<label for="csvFile">{_g('File:')}</label>
+	<label for="csvFile">{t}File:{/t}</label>
 	<input type="file" name="csvFile" id="csvFile"><br />
-	<input type="submit" value="{_g('Create Preview')}">
+	<input type="submit" value="{t}Create Preview{/t}">
 </form>
 
 <fieldset class="smallContainer">
-	<legend>{_g('Help:')}</legend>
+	<legend>{t}Help:{/t}</legend>
 	<p>
 		Hier können sie Kurse mithilfe einer CSV-Datei importieren.<br />
 		Diese lassen sich zum Beispiel von Microsoft Excel exportieren.<br />

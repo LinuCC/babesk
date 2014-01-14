@@ -1,22 +1,22 @@
 {extends file=$inh_path} {block name='content'}
 
 <h2 class='moduleHeader'>
-	{_g('Mainmenu of the Classteacher-Module')}
+	{t}Mainmenu of the Classteacher-Module{/t}
 </h2>
 
 <fieldset class="smallContainer">
 	<legend>
-		{_g('Standard-Actions')}
+		{t}Standard-Actions{/t}
 	</legend>
 	<ul class="submodulelinkList">
 		<li>
 			<a href="index.php?module=administrator|Kuwasys|Classteachers|Add">
-				{_g('Add a Classteacher')}
+				{t}Add a Classteacher{/t}
 			</a>
 		</li>
 		<li>
 			<a href="index.php?module=administrator|Kuwasys|Classteachers|Display">
-				{_g('Display all Classteachers')}
+				{t}Display all Classteachers{/t}
 			</a>
 		</li>
 	</ul>
@@ -24,12 +24,12 @@
 
 <fieldset class="smallContainer">
 	<legend>
-		{_g('More Actions')}
+		{t}More Actions{/t}
 	</legend>
 	<ul class="submodulelinkList">
 		<li>
 			<a href="index.php?module=administrator|Kuwasys|Classteachers|CsvImport">
-				{_g('Import Classteachers by a CSV-file')}
+				{t}Import Classteachers by a CSV-file{/t}
 			</a>
 		</li>
 	</ul>

@@ -69,10 +69,10 @@
 		<div id="content">{block name=search}{/block}</div>
 		<div id="content">{block name=content}{/block}</div>
 		{if !empty($backlink)}
-			<a class="backlink" href="{$backlink}">{_g('Back')}</a>
+			<a class="backlink" href="{$backlink}">{t}Back{/t}</a>
 		{/if}
 		{if !empty($moduleBacklink)}
-			<a class="moduleBacklink" href="index.php?module={$moduleBacklink}">{_g('Back to the Module')}</a>
+			<a class="moduleBacklink" href="index.php?module={$moduleBacklink}">{t}Back to the Module{/t}</a>
 		{/if}
 	</div>
 	<div id="footer">

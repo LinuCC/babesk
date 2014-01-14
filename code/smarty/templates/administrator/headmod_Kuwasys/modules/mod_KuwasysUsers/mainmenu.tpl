@@ -1,19 +1,19 @@
 {extends file=$inh_path} {block name="content"}
 
 <h2 class="moduleHeader">
-	{_g('Kuwasys User-Mainmenu')}
+	{t}Kuwasys User-Mainmenu{/t}
 </h2>
 
 <fieldset class="smallContainer">
 	<legend>
-		{_g('Printables')}
+		{t}Printables{/t}
 	</legend>
 	<ul class="submodulelinkList">
 		<li>
 			<a id="printParticipationConfirmation" class="submodulelink"
 			href="#"
-			title="{_g('Here you can Print PDFs confirming the Participation of Users at their Classes of this Year')}">
-				{_g('Print Participation Confirmation')}
+			title="{t}Here you can Print PDFs confirming the Participation of Users at their Classes of this Year{/t}">
+				{t}Print Participation Confirmation{/t}
 			</a>
 		</li>
 	</ul>
@@ -21,13 +21,13 @@
 
 <fieldset class="smallContainer">
 	<legend>
-		{_g('Bulk-Changes')}
+		{t}Bulk-Changes{/t}
 	</legend>
 	<ul class="submodulelinkList">
 		<li>
 			<a class="submodulelink" href="index.php?module=administrator|Kuwasys|KuwasysUsers|AssignUsersToClasses"
-			title="{_g('Here you can assign the Users that submitted requests to Classes of the active Year')}">
-				{_g('Assign the Users to the Classes')}
+			title="{t}Here you can assign the Users that submitted requests to Classes of the active Year{/t}">
+				{t}Assign the Users to the Classes{/t}
 			</a>
 		</li>
 	</ul>

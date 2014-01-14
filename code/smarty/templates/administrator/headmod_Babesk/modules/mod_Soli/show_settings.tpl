@@ -1,16 +1,16 @@
 {extends file=$base_path}{block name=content}
 
-<h2 class="moduleHeader">{_g('Soli-Settings')}</h2>
+<h2 class="moduleHeader">{t}Soli-Settings{/t}</h2>
 
 <form action="index.php?module=administrator|Babesk|Soli|Settings"
 	class="simpleForm" method="post">
 
 	<!--
 	<fieldset class="smallContainer">
-		<legend>{_g('Enable Soli')}</legend>
+		<legend>{t}Enable Soli{/t}</legend>
 		<div class="simpleForm">
 			<label for="soliEnabled">
-				{_g('Is the Soli-Module enabled:')}
+				{t}Is the Soli-Module enabled:{/t}
 			</label>
 			<input id="soliEnabled" class="inpuItem" type="checkbox"
 				name="soliEnabled" {if $soliEnabled}checked="checked"{/if} />
@@ -20,12 +20,12 @@
 
 	<fieldset class="smallContainer">
 		<legend>
-			{_g("Soliprice")}
+			{t}Soliprice{/t}
 		</legend>
 
 		<div class="simpleForm">
 			<label for="solipriceEnabled">
-				{_g("Is Soliprice Enabled:")}
+				{t}Is Soliprice Enabled:{/t}
 			</label>
 			<input id="solipriceEnabled" class="inputItem" type="checkbox"
 				name="solipriceEnabled"
@@ -34,13 +34,13 @@
 
 		<div class="simpleForm">
 			<label for="soliprice">
-				{_g("Amount to Pay:")}
+				{t}Amount to Pay:{/t}
 			</label>
 			<input id="soliprice" class="inputItem" type="text" maxlength="5"
 				size="5" name="soliprice" value="{$soliprice|number_format:2}" /> €
 		</div>
 	</fieldset>
-	<input type="submit" value="{_g('Commit Changes')}" />
+	<input type="submit" value="{t}Commit Changes{/t}" />
 </form>
 
 {/block}

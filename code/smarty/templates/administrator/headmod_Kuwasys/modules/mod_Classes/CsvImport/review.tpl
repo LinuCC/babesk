@@ -10,7 +10,7 @@
 		{foreach $classes as $class}
 		<tr>
 			<th>
-				{_g('Name')}
+				{t}Name{/t}
 			</th>
 			<th>{$class.name}</th>
 			<input type="hidden" name="classes[{$tempId}][name]"
@@ -23,7 +23,7 @@
 
 		<tr>
 			<td>
-				{_g('Classteacher')}
+				{t}Classteacher{/t}
 			</td>
 			<td>
 				{* For every Classteacher *}
@@ -62,7 +62,7 @@
 		</tr>
 		<tr>
 			<td>
-				{_g('Day')}
+				{t}Day{/t}
 				{if $class.classUnitOption.origName}
 				<br />(Eingabe: "{$class.classUnitOption.origName}")
 				{/if}
@@ -86,13 +86,13 @@
 		{$tempId = $tempId + 1}
 		{/foreach}
 	</table>
-	<input type="submit" value="{_g('execute Changes')}">
+	<input type="submit" value="{t}execute Changes{/t}">
 </form>
 {else}
 	<p>
-		{_g('The uploaded file did not contain any usable data.')}
+		{t}The uploaded file did not contain any usable data.{/t}
 		<a href="index.php?administrator|Kuwasys|Classes|CsvImport">
-			{_g("click here to go back")}
+			{t}click here to go back{/t}
 		</a>
 	</p>
 {/if}

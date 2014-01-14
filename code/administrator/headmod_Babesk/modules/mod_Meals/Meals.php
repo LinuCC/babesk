@@ -107,7 +107,7 @@ class Meals extends Babesk {
 			'maxOrderAmount' => array(
 				'required|min_len,1|max_len,2|numeric',
 				'',
-				_g('Anzahl maximaler Bestellungen pro Tag')
+				_g('Maximum number of orders per day')
 			)
 		);
 		$gump->rules($rules);

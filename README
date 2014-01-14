@@ -15,8 +15,8 @@ Have fun!
 ----------------------------------
 Requirements:
 
-BaBeSK needs a Server running 
- * PHP Version 5.1 or higher
+BaBeSK needs a Server running
+ * PHP Version 5.3 or higher
  * MySQL-Server (3.3 or higher)
  * GD library
 
@@ -24,6 +24,8 @@ BaBeSK needs a Server running
 ----------------------------------
 Installation:
 
-Copy the sourcode to your Server, then open 
+** OUTDATED **
+
+Copy the sourcode to your Server, then open
 babesk/code/installation/index.php with your favourite webbrowser.
 After that, follow the instructions displayed.

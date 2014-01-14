@@ -21,7 +21,7 @@ table a {
 </style>
 
 <h2 class="moduleHeader">
-	{_g('Classdetails of Class')}<br />
+	{t}Classdetails of Class{/t}<br />
 	{$class.label}
 </h2>
 <br /><br />
@@ -46,9 +46,9 @@ table a {
 	<p>Bitte suchen und wählen sie den Benutzer und den Status</p>
 	<form>
 		<fieldset>
-		<label for="username">{_g('Username')}</label>
+		<label for="username">{t}Username{/t}</label>
 		<input type="text" name="username" id="username" class="text ui-widget-content ui-corner-all" />
-		<label for="status">{_g('Status')}</label>
+		<label for="status">{t}Status{/t}</label>
 			<select name="status">
 				<option value="active" >
 					Aktiv
@@ -69,7 +69,7 @@ table a {
 	<p>Bitte wählen sie den neuen Status</p>
 	<form>
 		<fieldset>
-		<label for="status">{_g('Status')}</label>
+		<label for="status">{t}Status{/t}</label>
 			<select name="status">
 				<option value="active" >
 					Aktiv
@@ -90,7 +90,7 @@ table a {
 	<p>Bitte wählen sie den neuen Kurs</p>
 	<form>
 		<fieldset>
-		<label for="class">{_g('Class')}</label>
+		<label for="class">{t}Class{/t}</label>
 			<select name="class">
 				{foreach $classes as $class}
 				<option value="{$class.ID}">
