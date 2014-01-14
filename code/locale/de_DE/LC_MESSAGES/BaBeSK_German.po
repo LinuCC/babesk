@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-01-14 17:38+0100\n"
-"PO-Revision-Date: 2014-01-14 17:45+0100\n"
+"PO-Revision-Date: 2014-01-14 18:27+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: de\n"
@@ -23,7 +23,7 @@ msgstr "Kursregistrierungen sind nicht erlaubt"
 
 #: ../../../include/smarty3-i18n/smarty2c.c:5
 msgid "Classregistrations are allowed"
-msgstr "Kursregistruerungen sind erlaubt"
+msgstr "Kursregistrierungen sind erlaubt"
 
 #: ../../../include/smarty3-i18n/smarty2c.c:8
 #: ../../../include/smarty3-i18n/smarty2c.c:101
@@ -149,7 +149,7 @@ msgstr "Nein, ich will den Kurs nicht löschen"
 
 #: ../../../include/smarty3-i18n/smarty2c.c:98
 msgid "Mainmenu of the Classteacher-Module"
-msgstr "hauptmenü des Kursleiter-Moduls"
+msgstr "Hauptmenü des Kursleiter-Moduls"
 
 #: ../../../include/smarty3-i18n/smarty2c.c:104
 msgid "Add a Classteacher"
@@ -177,11 +177,11 @@ msgstr "Druckbares"
 
 #: ../../../include/smarty3-i18n/smarty2c.c:125
 msgid "Here you can Print PDFs confirming the Participation of Users at their Classes of this Year"
-msgstr "Hier können sie PDF-Dateien drucken die die Teilnahme der Nutzer an Kursen in diesem Jahr bestätigt."
+msgstr "Hier können sie PDF-Dateien drucken die die Teilnahmen der Nutzer an Kursen in diesem Jahr bestätigen."
 
 #: ../../../include/smarty3-i18n/smarty2c.c:128
 msgid "Print Participation Confirmation"
-msgstr "Telnahmebestätigung ausdrucken"
+msgstr "Teilnahmebestätigung ausdrucken"
 
 #: ../../../include/smarty3-i18n/smarty2c.c:131
 #: ../../../include/smarty3-i18n/smarty2c.c:188
@@ -222,7 +222,7 @@ msgstr "Wollen sie wirklich einen neuen Zuweisungsprozess starten?"
 
 #: ../../../include/smarty3-i18n/smarty2c.c:158
 msgid "If you have already started an Assignment-Process, the Data will be inevitably lost. Are you sure?"
-msgstr "Wenn sie bereits einen Zuweisungsprozess gestarted haben, werden die Daten verloren gehen. Sind sie sicher?"
+msgstr "Wenn sie bereits einen Zuweisungsprozess gestartet haben, werden die Daten verloren gehen. Sind sie sicher?"
 
 #: ../../../include/smarty3-i18n/smarty2c.c:161
 msgid "Classdetails of Class"
@@ -254,7 +254,7 @@ msgstr "Benutzernamen der Benutzer automatisch erstellen"
 
 #: ../../../include/smarty3-i18n/smarty2c.c:194
 msgid "Remove Specialcharacters from Usernames"
-msgstr "Spezialcharaktere von den Benutzernamen entfernen"
+msgstr "Spezialschriftzeichen von den Benutzernamen entfernen"
 
 #: ../../../include/smarty3-i18n/smarty2c.c:197
 msgid "Import Users by a CSV-File"
@@ -324,7 +324,7 @@ msgstr "zurück zum Modul"
 
 #: ../../../administrator/Administrator.php:125
 msgid "Error Accessing the Admin-Layer; Either the Module does not exist, or you dont have the rights to access it!"
-msgstr "Ein Fehler ist beim benutzen des Administrator-Interface aufgetreten; Entweder existiert das Modul nicht, oder sie haben keine Rechte es zu benutzen!"
+msgstr "Ein Fehler ist beim Benutzen des Administrator-Interface aufgetreten; Entweder existiert das Modul nicht, oder sie haben keine Rechte es zu benutzen!"
 
 #: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:53
 msgid "wrong action-value!"
