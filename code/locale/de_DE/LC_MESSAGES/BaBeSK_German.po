@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-14 19:52+0100\n"
-"PO-Revision-Date: 2014-01-14 19:53+0100\n"
+"POT-Creation-Date: 2014-01-15 14:11+0100\n"
+"PO-Revision-Date: 2014-01-15 14:13+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: de\n"
@@ -310,59 +310,80 @@ msgstr "Die Passwörter von Nutzern zum voreingestellten Passwort zurücksetzen.
 
 #: ../../../include/smarty3-i18n/smarty2c.c:236
 #: ../../../include/smarty3-i18n/smarty2c.c:239
+msgid "Update users with Schoolyear-change"
+msgstr "Benutzer mit Schuljahreswechsel aktualisieren"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:242
+msgid "Back to Useradministration"
+msgstr "Zurück zur Benutzerverwaltung"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:245
+msgid "Update users and change the schoolyear"
+msgstr "Benutzer aktualisieren und Schuljahr verändern"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:248
+msgid "Here you can change the schoolyear and at the same time update the grades of the users with a csv-file."
+msgstr "Hier können sie das Schuljahr verändern und gleichzeitig die Klassen der Benutzer mit einer CSV-Datei aktualisieren."
+
+#: ../../../include/smarty3-i18n/smarty2c.c:251
+msgid "Begin change"
+msgstr "Mit Veränderungen starten"
+
 #: ../../../include/smarty3-i18n/smarty2c.c:254
+#: ../../../include/smarty3-i18n/smarty2c.c:257
+#: ../../../include/smarty3-i18n/smarty2c.c:272
 msgid "Print Recharge Balance"
 msgstr "Die Aufladungen ausdrucken"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:242
+#: ../../../include/smarty3-i18n/smarty2c.c:260
 msgid "At:"
 msgstr "Am:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:245
+#: ../../../include/smarty3-i18n/smarty2c.c:263
 msgid "Download Pdf"
 msgstr "PDF herunterladen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:248
+#: ../../../include/smarty3-i18n/smarty2c.c:266
 msgid "Standard Actions"
 msgstr "Standardaktionen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:251
+#: ../../../include/smarty3-i18n/smarty2c.c:269
 msgid "Recharge a Card"
 msgstr "Eine Karte aufladen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:257
+#: ../../../include/smarty3-i18n/smarty2c.c:275
 msgid "Soli-Settings"
 msgstr "Teilhabepaket-Einstellungen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:260
+#: ../../../include/smarty3-i18n/smarty2c.c:278
 msgid "Enable Soli"
 msgstr "Teilhabepaket aktivieren"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:263
+#: ../../../include/smarty3-i18n/smarty2c.c:281
 msgid "Is the Soli-Module enabled:"
 msgstr "Ist das Soli-Modul aktiviert:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:266
+#: ../../../include/smarty3-i18n/smarty2c.c:284
 msgid "Soliprice"
 msgstr "Teilhabepaketpreis"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:269
+#: ../../../include/smarty3-i18n/smarty2c.c:287
 msgid "Is Soliprice Enabled:"
 msgstr "Sind Teilhabepaket-Preise aktiviert:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:272
+#: ../../../include/smarty3-i18n/smarty2c.c:290
 msgid "Amount to Pay:"
 msgstr "Zu bezahlender Betrag:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:275
+#: ../../../include/smarty3-i18n/smarty2c.c:293
 msgid "Commit Changes"
 msgstr "Änderungen hochladen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:278
+#: ../../../include/smarty3-i18n/smarty2c.c:296
 msgid "Back"
 msgstr "zurück"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:281
+#: ../../../include/smarty3-i18n/smarty2c.c:299
 msgid "Back to the Module"
 msgstr "zurück zum Modul"
 
@@ -1143,6 +1164,8 @@ msgid "Could not check if you already selected classes!"
 msgstr "Konntenicht überprüfen ob du schon Kurse selektiert hast!"
 
 #: ../../../web/headmod_Babesk/modules/mod_Order/Order.php:305
+#: ../../../web/headmod_Babesk/modules/mod_Order/MealsForOrderDisplayer.php:296
+#: ../../../web/headmod_Babesk/modules/mod_Cancel/Cancel.php:258
 msgid "Could not check if the Soliprice is enabled!"
 msgstr "Konnte nicht überprüfen ob der Teilhabepaket-Preis aktiviert ist!"
 

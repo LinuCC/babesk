@@ -45,6 +45,11 @@
 				{t}Reset passwords of users to preset passwords{/t}
 			</a>
 		</li>
+		<li>
+			<a href="index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange">
+				{t}Update users with Schoolyear-change{/t}
+			</a>
+		</li>
 	</ul>
 </fieldset>
 
