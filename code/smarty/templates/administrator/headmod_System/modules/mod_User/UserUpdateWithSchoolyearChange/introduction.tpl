@@ -7,7 +7,7 @@
 </p>
 
 <form action="index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange|NewSession" method="post">
-	<input type="submit" value="{t}Begin change{/t}" name="kindOfChange" />
+	<input type="submit" value="{t}Begin change{/t}" name="schoolyearSelect" />
 </form>
 
 {/block}

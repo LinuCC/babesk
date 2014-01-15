@@ -122,7 +122,7 @@ $(document).ready(function() {
 		{/block}
 		{*A Link back*}
 		{if isset($backlink)}
-			<a href='{$backlink}'>zurück</a>
+			<a href='{$backlink}'>{t}back{/t}</a>
 		{/if}
 		<div>
 			<p id="last_login">Letzter Login: {$last_login}</p>
