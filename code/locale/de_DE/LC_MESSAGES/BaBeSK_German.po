@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-14 17:38+0100\n"
-"PO-Revision-Date: 2014-01-14 18:27+0100\n"
+"POT-Creation-Date: 2014-01-14 19:52+0100\n"
+"PO-Revision-Date: 2014-01-14 19:53+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: de\n"
@@ -184,7 +184,7 @@ msgid "Print Participation Confirmation"
 msgstr "Teilnahmebestätigung ausdrucken"
 
 #: ../../../include/smarty3-i18n/smarty2c.c:131
-#: ../../../include/smarty3-i18n/smarty2c.c:188
+#: ../../../include/smarty3-i18n/smarty2c.c:221
 msgid "Bulk-Changes"
 msgstr "Massenveränderungen"
 
@@ -233,92 +233,136 @@ msgid "Class"
 msgstr "Kurs"
 
 #: ../../../include/smarty3-i18n/smarty2c.c:176
+msgid "Reset passwords of all users"
+msgstr "Passwörter aller Nutzer zurücksetzen"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:179
+msgid "Here you can reset the passwords of all users to the preset password."
+msgstr "Hier können sie die Passwörter aller Nutzer zu den voreingestellten Passwort zurücksetzen."
+
+#: ../../../include/smarty3-i18n/smarty2c.c:182
+msgid "You will reset the passwords of all users (but the one which id is 1, usually the Superadmin) to the preset password. Thus this may be true for your password, too! If you can't log in after resetting the passwords, try the preset password."
+msgstr "Sie werden Passwörter aller Benutzer (außer Benutzer mit ID=1, welcher normalerweise der SuperAdmin ist) auf das voreingestellte Passwort zurücksetzen. Dies gilt somit wahrscheinlich auch für ihr Passwort! Falls sie sich nach dem Zurücksetzen also nicht mehr einloggen können, probieren sie das voreingestellte Passwort aus."
+
+#: ../../../include/smarty3-i18n/smarty2c.c:185
+msgid "Click here"
+msgstr "Klicken sie hier"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:188
+msgid "to change the preset password."
+msgstr "um das voreingestellte Passwort zu verändern."
+
+#: ../../../include/smarty3-i18n/smarty2c.c:191
+msgid "!!!Important!!!"
+msgstr "!!!WICHTIG!!!"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:194
+msgid "After the reset manually change the passwords of all accounts that have access to the Administrator-Section, else everyone can log themselfes into the Administrator-Section if they know the username!"
+msgstr "Ändern sie nach dem Zurücksetzen manuell für alle wichtigen Accounts (diejenigen, die Zugriff auf den Administratorbereich haben) die Passwörter, da sonst jeder sich mit dem Passwort einloggen kann!"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:197
+msgid "At the moment the preset password is not set. Please"
+msgstr "Momentan ist kein voreingestelltes Passwort gesetzt. Bitte"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:200
+msgid "click here"
+msgstr "klicken sie hier"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:203
+msgid "to set a preset password."
+msgstr "um ein voreingestelltes Passwort zu setzen."
+
+#: ../../../include/smarty3-i18n/smarty2c.c:206
+msgid "Yes, I want to reset the passwords!"
+msgstr "Ja, ich möchte die Passwörter zurücksetzen!"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:209
 msgid "Usersettings-Mainmenu"
 msgstr "Benutzereinstellungs-Hauptmenü"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:179
+#: ../../../include/smarty3-i18n/smarty2c.c:212
 msgid "General"
 msgstr "Allgemein"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:182
+#: ../../../include/smarty3-i18n/smarty2c.c:215
 msgid "Register a User"
 msgstr "Benutzer registrieren"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:185
+#: ../../../include/smarty3-i18n/smarty2c.c:218
 msgid "Show Users"
 msgstr "Benutzer anzeigen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:191
+#: ../../../include/smarty3-i18n/smarty2c.c:224
 msgid "Assign Usernames to User automatically"
 msgstr "Benutzernamen der Benutzer automatisch erstellen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:194
+#: ../../../include/smarty3-i18n/smarty2c.c:227
 msgid "Remove Specialcharacters from Usernames"
 msgstr "Spezialschriftzeichen von den Benutzernamen entfernen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:197
+#: ../../../include/smarty3-i18n/smarty2c.c:230
 msgid "Import Users by a CSV-File"
 msgstr "Benutzer mit einer CSV-Datei importieren"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:200
+#: ../../../include/smarty3-i18n/smarty2c.c:233
 msgid "Reset passwords of users to preset passwords"
 msgstr "Die Passwörter von Nutzern zum voreingestellten Passwort zurücksetzen."
 
-#: ../../../include/smarty3-i18n/smarty2c.c:203
-#: ../../../include/smarty3-i18n/smarty2c.c:206
-#: ../../../include/smarty3-i18n/smarty2c.c:221
+#: ../../../include/smarty3-i18n/smarty2c.c:236
+#: ../../../include/smarty3-i18n/smarty2c.c:239
+#: ../../../include/smarty3-i18n/smarty2c.c:254
 msgid "Print Recharge Balance"
 msgstr "Die Aufladungen ausdrucken"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:209
+#: ../../../include/smarty3-i18n/smarty2c.c:242
 msgid "At:"
 msgstr "Am:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:212
+#: ../../../include/smarty3-i18n/smarty2c.c:245
 msgid "Download Pdf"
 msgstr "PDF herunterladen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:215
+#: ../../../include/smarty3-i18n/smarty2c.c:248
 msgid "Standard Actions"
 msgstr "Standardaktionen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:218
+#: ../../../include/smarty3-i18n/smarty2c.c:251
 msgid "Recharge a Card"
 msgstr "Eine Karte aufladen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:224
+#: ../../../include/smarty3-i18n/smarty2c.c:257
 msgid "Soli-Settings"
 msgstr "Teilhabepaket-Einstellungen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:227
+#: ../../../include/smarty3-i18n/smarty2c.c:260
 msgid "Enable Soli"
 msgstr "Teilhabepaket aktivieren"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:230
+#: ../../../include/smarty3-i18n/smarty2c.c:263
 msgid "Is the Soli-Module enabled:"
 msgstr "Ist das Soli-Modul aktiviert:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:233
+#: ../../../include/smarty3-i18n/smarty2c.c:266
 msgid "Soliprice"
 msgstr "Teilhabepaketpreis"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:236
+#: ../../../include/smarty3-i18n/smarty2c.c:269
 msgid "Is Soliprice Enabled:"
 msgstr "Sind Teilhabepaket-Preise aktiviert:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:239
+#: ../../../include/smarty3-i18n/smarty2c.c:272
 msgid "Amount to Pay:"
 msgstr "Zu bezahlender Betrag:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:242
+#: ../../../include/smarty3-i18n/smarty2c.c:275
 msgid "Commit Changes"
 msgstr "Änderungen hochladen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:245
+#: ../../../include/smarty3-i18n/smarty2c.c:278
 msgid "Back"
 msgstr "zurück"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:248
+#: ../../../include/smarty3-i18n/smarty2c.c:281
 msgid "Back to the Module"
 msgstr "zurück zum Modul"
 
@@ -1547,6 +1591,9 @@ msgstr "Konnte die Daten nicht hochladen!"
 #: ../../../include/CsvImport.php:412
 msgid "Could not upload the CSV-File!"
 msgstr "Konnte die CSV-Datei nicht hochladen!"
+
+#~ msgid "Password reset"
+#~ msgstr "Passwort zurücksetzen"
 
 #~ msgid "Back (\"%1\")"
 #~ msgstr "Zurück (\"%1\")"
