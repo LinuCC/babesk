@@ -631,3 +631,7 @@ ul.submodulelinkList li {
 button.isolated, input.isolated {
 	margin: 30px 5px 30px 5px;
 }
+
+*.highlighted {
+	color: #006600;
+}
