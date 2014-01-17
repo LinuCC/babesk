@@ -4,7 +4,12 @@
 
 <fieldset class="smallContainer">
 	<legend>{t}Conflicts{/t}</legend>
-	{t escape=no open=$openConflictsCount solved=$solvedConflictsCount}<span class="highlighted">%1</span> conflicts open / <span class="highlighted">%2</span> conflicts solved{/t}<br />
+
+	<span class="highlighted">{$openConflictsCount}</span>
+	{t}conflicts open{/t} /
+	<span class="highlighted">{$solvedConflictsCount}</span>
+	{t}conflicts resolved{/t}<br />
+
 	<a href="index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange|ConflictsResolve">
 		{t}Resolve conflicts{/t}
 	</a>
@@ -12,14 +17,14 @@
 
 <fieldset class="smallContainer">
 	<legend>{t}Actions{/t}</legend>
+
 	<a href="index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange|ChangesList">
 		{t}Display changes-overview{/t}
-	</a>
-	<br />
+	</a><br />
+
 	<a href="index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange|ChangeExecute">
 		{t}Execute changes{/t}
 	</a>
 </fieldset>
-<br /><br />
 
 {/block}
