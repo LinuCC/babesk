@@ -118,7 +118,7 @@ class ImportExecute extends \administrator\Kuwasys\Classes\CsvImport {
 		try {
 			$stmt = $this->_pdo->exec($query);
 
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			$this->_logger->log('Could not execute the Query!', 'Notice',
 				Null, json_encode(array('error' => $e->getMessage()))
 			);

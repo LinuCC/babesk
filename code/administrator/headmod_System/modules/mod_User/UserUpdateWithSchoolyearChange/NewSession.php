@@ -1,6 +1,6 @@
 <?php
 
-namespace administrator\System\User\UserUpdateWithSchoolyearchange;
+namespace administrator\System\User\UserUpdateWithSchoolyearChange;
 
 require_once 'UserUpdateWithSchoolyearChange.php';
 
@@ -76,13 +76,15 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 
 		$this->schoolyearSelectedCheckInput();
 
-		$_SESSION['administrator|System|User|UserUpdateWithSchoolyearchange']['schoolyearId'] = $_POST['schoolyear'];
-		$_SESSION['administrator|System|User|UserUpdateWithSchoolyearchange']['switchType'] = $_POST['switchType'];
+		$_SESSION['UserUpdateWithSchoolyearChange']['schoolyearId'] = $_POST['schoolyear'];
+		$_SESSION['UserUpdateWithSchoolyearChange']['switchType'] = $_POST['switchType'];
 
 		//Now execute the CsvImport-Module
 		$mod = new \ModuleExecutionCommand('root/administrator/System/' .
 			'User/UserUpdateWithSchoolyearChange/CsvImport');
-		$dataContainer->getAcl()->moduleExecute($mod, $dataContainer);
+		$this->_dataContainer->getAcl()->moduleExecute(
+			$mod, $this->_dataContainer
+		);
 	}
 
 	/**

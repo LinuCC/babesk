@@ -22,6 +22,9 @@ class GUMP
 
 	protected $display_names = array();
 
+	protected $validation_rule_delimiter = '|';
+	protected $validation_rule_param_delimiter = ',';
+
 	// ** ------------------------- Validation Data ------------------------------- ** //
 
 	public static $basic_tags	  = "<br><p><a><strong><b><i><em><img><blockquote><code><dd><dl><hr><h1><h2><h3><h4><h5><h6><label><ul><li><span><sub><sup>";
@@ -63,6 +66,16 @@ class GUMP
 		}
 
 		return $data;
+	}
+
+	public function set_validation_rule_delimiter($delim)
+	{
+		$this->validation_rule_delimiter = $delim;
+	}
+
+	public function set_validation_rule_param_delimiter($delim)
+	{
+		$this->validation_rule_param_delimiter = $delim;
 	}
 
 	/**
@@ -261,7 +274,7 @@ class GUMP
 			#	continue;
 			#}
 
-			$rules = explode('|', $rules);
+			$rules = explode($this->validation_rule_delimiter, $rules);
 
 			if(!$this->field_void_handle($input, $field, $rules))
 			{
@@ -275,7 +288,8 @@ class GUMP
 
 				if(strstr($rule, ',') !== FALSE) // has params
 				{
-					$rule   = explode(',', $rule);
+					$rule   = explode($this->validation_rule_param_delimiter,
+						$rule);
 					$method = 'validate_'.$rule[0];
 					$param  = $rule[1];
 				}
@@ -479,70 +493,70 @@ class GUMP
 
 				switch($e['rule']) {
 					case 'validate_required':
-						$resp[] = "Das $displayName Feld muss ausgefüllt werden";
+						$resp[] = "Das \"$displayName\" Feld muss ausgefüllt werden";
 						break;
 					case 'validate_disallowed':
-						$resp[] = "Das $displayName Feld muss leer sein, weil: '$param'";
+						$resp[] = "Das \"$displayName\" Feld muss leer sein, weil: '$param'";
 						break;
 					case 'validate_valid_email':
-						$resp[] = "Das $displayName Feld muss eine korrekte Email-Adresse beinhalten";
+						$resp[] = "Das \"$displayName\" Feld muss eine korrekte Email-Adresse beinhalten";
 						break;
 					case 'validate_max_len':
-						$resp[] = "Das $displayName Feld muss kürzer oder gleich lang wie $param Zeichen sein";
+						$resp[] = "Das \"$displayName\" Feld muss kürzer oder gleich lang wie $param Zeichen sein";
 						break;
 					case 'validate_min_len':
-						$resp[] = "Das $displayName Feld muss länger oder gleich lang wie $param Zeichen sein";
+						$resp[] = "Das \"$displayName\" Feld muss länger oder gleich lang wie $param Zeichen sein";
 						break;
 					case 'validate_exact_len':
-						$resp[] = "Das $displayName Feld muss genau $param Zeichen lang sein";
+						$resp[] = "Das \"$displayName\" Feld muss genau $param Zeichen lang sein";
 						break;
 					case 'validate_alpha':
-						$resp[] = "Das $displayName Feld Kann nur Buchstaben enthalten (A-Z)";
+						$resp[] = "Das \"$displayName\" Feld Kann nur Buchstaben enthalten (A-Z)";
 						break;
 					case 'validate_alpha_numeric':
-						$resp[] = "Das $displayName Feld kann nur Buchstaben und Zahlen beinhalten";
+						$resp[] = "Das \"$displayName\" Feld kann nur Buchstaben und Zahlen beinhalten";
 						break;
 					case 'validate_alpha_dash':
-						$resp[] = "Das $displayName Feld kann nur Buchstaben und &amp; Striche beinhalten";
+						$resp[] = "Das \"$displayName\" Feld kann nur Buchstaben und &amp; Striche beinhalten";
 						break;
 					case 'validate_numeric':
-						$resp[] = "Das $displayName Feld kann nur Zahlen beinhalten";
+						$resp[] = "Das \"$displayName\" Feld kann nur Zahlen beinhalten";
 						break;
 					case 'validate_integer':
-						$resp[] = "Das $displayName Feld kann nur Zahlen beinhalten";
+						$resp[] = "Das \"$displayName\" Feld kann nur Zahlen beinhalten";
 						break;
 					case 'validate_boolean':
-						$resp[] = "Das $displayName Feld kann nur einen true oder false Wert beinhalten";
+						$resp[] = "Das \"$displayName\" Feld kann nur einen true oder false Wert beinhalten";
 						break;
 					case 'validate_float':
-						$resp[] = "Das $displayName Feld kann nur eine Komma-Nummer enthalten";
+						$resp[] = "Das \"$displayName\" Feld kann nur eine Komma-Nummer enthalten";
 						break;
 					case 'validate_valid_url':
-						$resp[] = "Das $displayName Feld muss eine gültige URL sein";
+						$resp[] = "Das \"$displayName\" Feld muss eine gültige URL sein";
 						break;
 					case 'validate_url_exists':
-						$resp[] = "Die $displayName URL existiert nicht";
+						$resp[] = "Die \"$displayName\" URL existiert nicht";
 						break;
 					case 'validate_valid_ip':
-						$resp[] = "Das $displayName Feld muss eine korrekte IP-Adresse beinhalten";
+						$resp[] = "Das \"$displayName\" Feld muss eine korrekte IP-Adresse beinhalten";
 						break;
 					case 'validate_valid_cc':
-						$resp[] = "Das $displayName Feld muss eine korrekte Kreditkartennummer beinhalten";
+						$resp[] = "Das \"$displayName\" Feld muss eine korrekte Kreditkartennummer beinhalten";
 						break;
 					case 'validate_valid_name':
-						$resp[] = "Das $displayName Feld muss ein korrekten menschlichen Namen beinhalten";
+						$resp[] = "Das \"$displayName\" Feld muss ein korrekten menschlichen Namen beinhalten";
 						break;
 					case 'validate_contains':
-						$resp[] = "Das $displayName Feld muss eine der folgenden Werte beinhalten: ".implode(', ', $param);
+						$resp[] = "Das \"$displayName\" Feld muss eine der folgenden Werte beinhalten: ".implode(', ', $param);
 						break;
 					case 'validate_isodate':
-						$resp[] = "Das $displayName Feld muss ein Datum im Format Jahr-Monat-Tag (Bsp:'2013-05-14') beinhalten.";
+						$resp[] = "Das \"$displayName\" Feld muss ein Datum im Format Jahr-Monat-Tag (Bsp:'2013-05-14') beinhalten.";
 						break;
 					case 'validate_alpha_dash_space':
-						$resp[] = "Das $displayName Feld $value darf nur aus Leerzeichen, Unterstrich, Minus und Buchstaben bestehen";
+						$resp[] = "Das \"$displayName\" Feld $value darf nur aus Leerzeichen, Unterstrich, Minus und Buchstaben bestehen";
 						break;
 					default:
-						$resp[] = "Das $displayName Feld wurde falsch eingegeben, genauer Grund ist aber unbekannt";
+						$resp[] = "Das \"$displayName\" Feld wurde falsch eingegeben, genauer Grund ist aber unbekannt";
 						break;
 				}
 			}
