@@ -370,13 +370,13 @@ class SchbasAccounting extends Schbas {
 	
 	private function getBooksOfStudentIdRebmemer($studentId, $class){
 		$books = TableMng::query("SELECT inventory_id FROM schbas_lending WHERE user_id='".$studentId."'");
-		
-		
+		$booklist = "";
+		if (!empty($books)) {
 		// format class to right format (in table int(7) is string(2)"07" )
 		if ($class < 10)
 			$class = "0".$class;
 		
-		$booklist = "";
+		
 		for($i=0;$i<count($books); $i++){
 			$bookIDs[] = $books[$i]["inventory_id"];
 		}
@@ -386,7 +386,7 @@ class SchbasAccounting extends Schbas {
 		for ($i=0; $i<count($should); $i++){
 			$shouldIDs[] = $should[$i]["id"];
 		}
-				
+		
 		$bookIDs1 = array_diff($shouldIDs, $bookIDs);
 		
 		// FINDING THE NAMES
@@ -401,7 +401,7 @@ class SchbasAccounting extends Schbas {
 				$booklist .= "</br>".$bookName;
 			}
 		}
-		
+		}
 		return $booklist;
 	}
 	
