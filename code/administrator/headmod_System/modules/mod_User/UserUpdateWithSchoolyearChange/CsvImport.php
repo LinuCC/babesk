@@ -225,6 +225,7 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 		$dbUsers = $this->usersOfActiveYearGet();
 
 		foreach($dbUsers as $dbUser) {
+			$found = false;
 			foreach($content as $csvUser) {
 				if($dbUser['forename'] == $csvUser['forename'] &&
 					$dbUser['name'] == $csvUser['name']
@@ -232,13 +233,13 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 					//user is in both the csv and database
 					$entry = array('db' => $dbUser, 'csv' => $csvUser);
 					$this->_usersInBoth[] = $entry;
+					$found = true;
 					break;
 				}
-				else {
-					//user is in database but not in csv
-					$this->_usersInDb[] = $dbUser;
-					break;
-				}
+			}
+			if(!$found) {
+				//user is in database but not in csv
+				$this->_usersInDb[] = $dbUser;
 			}
 		}
 
@@ -397,7 +398,7 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 
 			$stmtc = $this->_pdo->prepare(
 				'INSERT INTO `UserUpdateTempConflicts`
-					(userId, type, solved) VALUES (?,?,?)
+					(origUserId, tempUserId, type, solved) VALUES (?,?,?,?)
 			');
 
 			foreach($this->_usersInBoth as $user) {
@@ -408,11 +409,13 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 					$user['db']['userId'], $user['db']['forename'],
 					$user['db']['name'], $level, $label
 				));
-				if(array_search($user['db']['userId'],
+				if(in_array(
+					$user['db']['userId'],
 					$this->_usersWithGradeConflicts)
-					) {   // User has grade-conflict
+				) {
+					// User has grade-conflict
 					$uid = $this->_pdo->lastInsertId();
-					$stmtc->execute(array($uid, 'GradelevelConflict', 0));
+					$stmtc->execute(array($user['db']['userId'], $uid, 'GradelevelConflict', 0));
 				}
 			}
 
@@ -437,7 +440,7 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 			');
 			$stmtc = $this->_pdo->prepare(
 				'INSERT INTO `UserUpdateTempConflicts`
-					(userId, type, solved) VALUES (?,?,?)
+					(tempUserId, type, solved) VALUES (?,?,?)
 			');
 
 			foreach($this->_usersInCsv as $user) {
@@ -469,7 +472,7 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 		try {
 			$stmtc = $this->_pdo->prepare(
 				'INSERT INTO `UserUpdateTempConflicts`
-					(userId, type, solved) VALUES (?,?,?)
+					(origUserId, type, solved) VALUES (?,?,?)
 			');
 
 			foreach($this->_usersInDb as $user) {
@@ -488,22 +491,52 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 	 */
 	private function userDbTableCreate() {
 
-		$res = $this->_pdo->query(
-			'DROP TABLE IF EXISTS `UserUpdateTempUsers`;
-			CREATE TABLE `UserUpdateTempUsers` (
-				`ID` int(11) unsigned NOT NULL AUTO_INCREMENT,
-				`origUserId` int(11) unsigned NOT NULL,
-				`forename` varchar(64) NOT NULL,
-				`name` varchar(64) NOT NULL,
-				`gradelevel` int(3) NOT NULL,
-				`label` varchar(255) NOT NULL,
-				PRIMARY KEY (`ID`)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8;'
-		);
+		try {
+			$res = $this->_pdo->query(
+				'DROP TABLE IF EXISTS `UserUpdateTempUsers`;
+				CREATE TABLE `UserUpdateTempUsers` (
+					`ID` int(11) unsigned NOT NULL AUTO_INCREMENT,
+					`origUserId` int(11) unsigned NOT NULL,
+					`forename` varchar(64) NOT NULL,
+					`name` varchar(64) NOT NULL,
+					`gradelevel` int(3) NOT NULL,
+					`label` varchar(255) NOT NULL,
+					PRIMARY KEY (`ID`)
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8;'
+			);
+			$res->closeCursor();
 
-		if(!$res) {
-			$this->_logger->log('Error creating table UserUpdateTempUsers',
-				'Notice', Null);
+			if(!$res) {
+				$this->_logger->log('Error creating table UserUpdateTempUsers',
+					'Notice', Null
+				);
+				$this->_interface->dieError(_g('Could not upload the data!'));
+			}
+
+			$res = $this->_pdo->query(
+				'DROP TABLE IF EXISTS `UserUpdateTempSolvedUsers`;
+				CREATE TABLE `UserUpdateTempSolvedUsers` (
+					`ID` int(11) unsigned NOT NULL AUTO_INCREMENT,
+					`origUserId` int(11) unsigned NOT NULL,
+					`forename` varchar(64) NOT NULL,
+					`name` varchar(64) NOT NULL,
+					`gradelevel` int(3) NOT NULL,
+					`label` varchar(255) NOT NULL,
+					PRIMARY KEY (`ID`)
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8;'
+			);
+
+			if(!$res) {
+				$this->_logger->log(
+					'Error creating table UserUpdateTempSolvedUsers',
+					'Notice', Null
+				);
+				$this->_interface->dieError(_g('Could not upload the data!'));
+			}
+
+		} catch (\PDOException $e) {
+			$this->_logger->log('Error adding the user-table', 'Notice', Null,
+				json_encode(array('msg' => $e->getMessage())));
 			$this->_interface->dieError(_g('Could not upload the data!'));
 		}
 	}
@@ -519,7 +552,8 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 			'DROP TABLE IF EXISTS `UserUpdateTempConflicts`;
 			CREATE TABLE `UserUpdateTempConflicts` (
 				`ID` int(11) unsigned NOT NULL AUTO_INCREMENT,
-				`userId` int(11) unsigned NOT NULL,
+				`tempUserId` int(11) unsigned NOT NULL,
+				`origUserId` int(11) unsigned NOT NULL,
 				`type` enum(
 					"CsvOnlyConflict", "DbOnlyConflict", "GradelevelConflict"
 				) NOT NULL,

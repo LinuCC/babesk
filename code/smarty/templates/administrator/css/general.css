@@ -635,3 +635,17 @@ button.isolated, input.isolated {
 *.highlighted {
 	color: #006600;
 }
+
+ul.inputFormList {
+	list-style: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+ul.inputFormList li {
+	border: 1px solid #AAAAAA;
+	border-radius: 5px;
+	margin: 10px 0;
+	padding: 5px;
+	background-color: #c1e1f2;
+}

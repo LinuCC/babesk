@@ -29,6 +29,9 @@ class SessionMenu extends \administrator\System\User\UserUpdateWithSchoolyearCha
 		parent::entryPoint($dataContainer);
 	}
 
+	/**
+	 * Displays the menu
+	 */
 	protected function menuDisplay() {
 
 		$values = $this->conflictCountGet();
@@ -39,6 +42,11 @@ class SessionMenu extends \administrator\System\User\UserUpdateWithSchoolyearCha
 		$this->displayTpl('menu.tpl');
 	}
 
+	/**
+	 * Returns the count of conflicts solved and still open
+	 * Dies displaying a message on error
+	 * @return array Two elements, one with open and one with solved conflicts
+	 */
 	protected function conflictCountGet() {
 
 		try {

@@ -10,7 +10,7 @@
 	<span class="highlighted">{$solvedConflictsCount}</span>
 	{t}conflicts resolved{/t}<br />
 
-	<a href="index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange|ConflictsResolve">
+	<a href="index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange|SessionMenu|ConflictsResolve">
 		{t}Resolve conflicts{/t}
 	</a>
 </fieldset>
@@ -18,7 +18,7 @@
 <fieldset class="smallContainer">
 	<legend>{t}Actions{/t}</legend>
 
-	<a href="index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange|ChangesList">
+	<a href="index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange|SessionMenu|ChangesList">
 		{t}Display changes-overview{/t}
 	</a><br />
 
