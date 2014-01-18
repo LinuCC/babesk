@@ -96,7 +96,7 @@ class SchoolyearInterface extends AdminInterface {
 
 	public function displayDeleteSchoolYearConfirmation ($schoolYear) {
 
-		$promptMessage = sprintf(_g('Do you really want to delete the Schoolyear "%s"? WARNING: Problems will occur if you do this! Not all parts of the system support this!'), $schoolYear ['label']);
+		$promptMessage = sprintf(_g('Do you really want to delete the Schoolyear "%s"? WARNING: Problems will occur if you do this! Not all parts of the system support this!', $schoolYear ['label']));
 		$actionString = 'deleteSchoolYear&ID=' . $schoolYear ['ID'];
 		$confirmedString = _g('Yes, I want to break the System and delete the Schoolyear');
 		$notConfirmedString = _g('No, I do not want to break the System and delete the Schoolyear');

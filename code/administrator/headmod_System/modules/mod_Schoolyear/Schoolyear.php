@@ -63,6 +63,7 @@ class Schoolyear extends System {
 	protected function entryPoint($dataContainer) {
 
 		defined('_AEXEC') or die('Access denied');
+		parent::entryPoint($dataContainer);
 
 		$this->_dataContainer = $dataContainer;
 		$this->_interface = new SchoolyearInterface($this->relPath,
@@ -87,10 +88,36 @@ class Schoolyear extends System {
 	protected function handleCheckboxActive() {
 
 		if(!isset($_POST['active'])) {
-			$_POST['active'] = 0;
+			$_POST['active'] = false;
 		}
 		else {
+			if($this->schoolyearActiveExists()) {
+				$this->_interface->dieError(_g('An active schoolyear already exists! Please add the schoolyear without it being active and then activate it in the menu.')
+				);
+			}
 			$_POST['active'] = true;
+		}
+	}
+
+	/**
+	 * Checks if an active schoolyear already exists
+	 * @return bool  true if an active schoolyear exists, false if not
+	 */
+	private function schoolyearActiveExists() {
+
+		try {
+			$res = $this->_pdo->query(
+				'SELECT COUNT(*) FROM schoolYear WHERE active = 1'
+			);
+			return $res->fetchColumn() != '0';
+
+		} catch (PDOException $e) {
+			$this->_logger->log(
+				'Could not check if an active schoolyear already exists',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage()))
+			);
+			$this->_interface->dieError(_g('Could not check if an active ' .
+				'schoolyear already exists'));
 		}
 	}
 
