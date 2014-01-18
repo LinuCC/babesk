@@ -21,8 +21,11 @@ class SchbasAccounting extends Schbas {
 		defined('_AEXEC') or die("Access denied");
 
 		require_once 'SchbasAccountingInterface.php';
+		require_once PATH_ACCESS.'/LoanManager.php';
 
 		$this->SchbasAccountingInterface = new SchbasAccountingInterface($this->relPath);
+		$this->lm = new LoanManager();
+		
 		if(isset($_GET['action'])) {
 			switch($_GET['action']) {
 
@@ -369,39 +372,52 @@ class SchbasAccounting extends Schbas {
 	}
 	
 	private function getBooksOfStudentIdRebmemer($studentId, $class){
-		$books = TableMng::query("SELECT inventory_id FROM schbas_lending WHERE user_id='".$studentId."'");
+		$books = $this->lm->getLoanByUID($studentId, false);
+		$loanbooksSelfBuy = TableMng::query("SELECT BID FROM schbas_selfpayer WHERE UID=".$studentId);
+		$loanbooksSelfBuy = array_map('current',$loanbooksSelfBuy);
+		$checkedBooks = array();
+		foreach ($books as $book) {
+			if (!in_array($book['id'],$loanbooksSelfBuy)) $checkedBooks[] = $book;
+				
+		}
+		
 		$booklist = "";
-		if (!empty($books)) {
-		// format class to right format (in table int(7) is string(2)"07" )
-		if ($class < 10)
-			$class = "0".$class;
-		
-		
-		for($i=0;$i<count($books); $i++){
-			$bookIDs[] = $books[$i]["inventory_id"];
+		foreach ($checkedBooks as $book) {
+			$booklist .= "<li>".$book["title"];
 		}
+// 		$books = TableMng::query("SELECT inventory_id FROM schbas_lending WHERE user_id='".$studentId."'");
+// 		$booklist = "";
+// 		if (!empty($books)) {
+// 		// format class to right format (in table int(7) is string(2)"07" )
+// 		if ($class < 10)
+// 			$class = "0".$class;
 		
-		$should = TableMng::query("SELECT id FROM schbas_books WHERE class='".$class."'");
 		
-		for ($i=0; $i<count($should); $i++){
-			$shouldIDs[] = $should[$i]["id"];
-		}
+// 		for($i=0;$i<count($books); $i++){
+// 			$bookIDs[] = $books[$i]["inventory_id"];
+// 		}
 		
-		$bookIDs1 = array_diff($shouldIDs, $bookIDs);
+// 		$should = TableMng::query("SELECT id FROM schbas_books WHERE class='".$class."'");
 		
-		// FINDING THE NAMES
+// 		for ($i=0; $i<count($should); $i++){
+// 			$shouldIDs[] = $should[$i]["id"];
+// 		}
 		
-		for ($i=0;$i<count($bookIDs1);$i++){
-			$bookName = TableMng::query("SELECT title FROM schbas_books WHERE id='$bookIDs1[$i]'");
-			//var_dump($bookName);echo "<br>";
-			$bookName = $bookName[0]["title"];
-			if ($i==0){
-				$booklist = $bookName;
-			}else{
-				$booklist .= "</br>".$bookName;
-			}
-		}
-		}
+// 		$bookIDs1 = array_diff($shouldIDs, $bookIDs);
+		
+// 		// FINDING THE NAMES
+		
+// 		for ($i=0;$i<count($bookIDs1);$i++){
+// 			$bookName = TableMng::query("SELECT title FROM schbas_books WHERE id='$bookIDs1[$i]'");
+// 			//var_dump($bookName);echo "<br>";
+// 			$bookName = $bookName[0]["title"];
+// 			if ($i==0){
+// 				$booklist = $bookName;
+// 			}else{
+// 				$booklist .= "</br>".$bookName;
+// 			}
+// 		}
+// 		}
 		return $booklist;
 	}
 	

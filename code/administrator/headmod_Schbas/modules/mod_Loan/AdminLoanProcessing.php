@@ -49,8 +49,9 @@ $alert="<font color=#ff0000>";
 		
 		if($payed[0]['loanChoice']=="nl") $alert .= "<u>Buchhaltungshinweis:</u><br><li><h5>Achtung: Selbstzahler! Keine B&uuml;cher ausleihen!</h5></li><br>";		
 		$hasBooks = TableMng::query(sprintf('SELECT COUNT(*) FROM schbas_lending WHERE user_id = "%s"',$uid));
-		$hasBooksID = TableMng::query(sprintf('SELECT inventory_id FROM schbas_lending WHERE user_id = "%s"',$uid));
+		
 				if ($hasBooks[0]['COUNT(*)']!="0"){
+					$hasBooksID = TableMng::query(sprintf('SELECT inventory_id FROM schbas_lending WHERE user_id = "%s"',$uid));
 					$alert .= "<u>Es sind noch B&uuml;cher ausgeliehen:</u><br>";
 					foreach ($hasBooksID as $hasBook){
 						$book_id = TableMng::query(sprintf("SELECT book_id FROM schbas_inventory WHERE id = %s",$hasBook['inventory_id']));
