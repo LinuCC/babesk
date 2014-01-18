@@ -23,7 +23,7 @@ a.selectiveLink {
 </style>
 
 
-<h2 class='moduleHeader'>Liste der ausgeliehenden B&uuml;cher ({$className})</h2>
+<h2 class='moduleHeader'>Liste der ausgeliehenen B&uuml;cher ({$className})</h2>
 
 <p>{$listOfClasses}</p>
 

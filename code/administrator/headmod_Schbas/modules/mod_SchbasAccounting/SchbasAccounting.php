@@ -349,17 +349,19 @@ class SchbasAccounting extends Schbas {
 		$booklist = "";
 		$nr = count($books);
 		for($i=0;$i<$nr;$i++){
-			$bookid = $books[$i]["inventory_id"];
-			$bookIDs[] = $bookid;
+			$bookid = TableMng::query("SELECT book_id FROM schbas_inventory WHERE id='".$books[$i]["inventory_id"]."'");
+			$bookIDs[] = $bookid[0]["book_id"];
 		}
 		
 		for ($i=0;$i<$nr;$i++){
 			$bookName = TableMng::query("SELECT title FROM schbas_books WHERE id='$bookIDs[$i]'");
+			if (!empty($bookName)) {
 			$bookName = $bookName[0]["title"];
 			if ($i==0){
 				$booklist = "$bookName";
 			}else{
 				$booklist = "$booklist </br> $bookName";
+			}
 			}
 		}
 		
