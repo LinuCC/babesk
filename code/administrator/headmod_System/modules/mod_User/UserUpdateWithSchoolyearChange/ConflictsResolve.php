@@ -25,7 +25,12 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 			$this->conflictsResolveByInput();
 		}
 		else if(isset($_POST['cancel'])) {
-			echo 'lol';
+			//Now execute the SessionMenu-Module
+			$mod = new \ModuleExecutionCommand('root/administrator/System/' .
+				'User/UserUpdateWithSchoolyearChange/SessionMenu');
+			$this->_dataContainer->getAcl()->moduleExecute(
+				$mod, $this->_dataContainer
+			);
 		}
 		else {
 			$this->conflictResolveFormDisplay();
@@ -138,9 +143,9 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 		try {
 			$this->userSolveStmt = $this->_pdo->prepare(
 				'INSERT INTO UserUpdateTempSolvedUsers
-					(origUserId, forename, name, gradelevel, gradelabel)
+					(origUserId, forename, name, gradelevel, gradelabel, birthday)
 					VALUES (
-						:origUserId, :forename, :name, :gradelevel, :gradelabel
+						:origUserId, :forename, :name, :gradelevel, :gradelabel, :birthday
 					)'
 			);
 			$this->conflictResolveStmt = $this->_pdo->prepare(
@@ -197,6 +202,7 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 		$query = 'SELECT tc.ID as conflictId, tc.tempUserId AS tempUserId,
 					tc.origUserId AS origUserId,
 					tc.tempUserId AS tempUserId,
+					tu.birthday AS birthday,
 					tc.type AS type,
 					IFNULL(u.forename, tu.forename) AS forename,
 					IFNULL(u.name, tu.name) AS name,
@@ -253,7 +259,9 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 				'forename' => $conflict['forename'],
 				'name' => $conflict['name'],
 				'gradelevel' => $conflict['newGradelevel'],
-				'gradelabel' => $conflict['newGradelabel']);
+				'gradelabel' => $conflict['newGradelabel'],
+				'birthday' => $conflict['birthday'],
+			);
 			$this->userSolveStmt->execute($data);
 			$this->conflictResolveStmt->execute(
 				array(':id' => $conflict['conflictId'])
@@ -272,7 +280,9 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 				'forename' => $conflict['forename'],
 				'name' => $conflict['name'],
 				'gradelevel' => $conflict['newGradelevel'],
-				'gradelabel' => $conflict['newGradelabel']);
+				'gradelabel' => $conflict['newGradelabel'],
+				'birthday' => $conflict['birthday']
+			);
 			$this->userSolveStmt->execute($data);
 			$this->conflictResolveStmt->execute(
 				array(':id' => $conflict['conflictId'])

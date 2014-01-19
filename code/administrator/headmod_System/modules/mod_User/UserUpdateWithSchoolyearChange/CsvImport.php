@@ -67,12 +67,16 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 
 		$this->_gumpRules = array(
 				'forename' => array(
-					'required||alpha_dash_space||min_len,,2||max_len,,64',
+					'required||min_len,,2||max_len,,64',
 					'', 'forename'
 				),
 				'name' => array(
-					'required||alpha_dash_space||min_len,,2||max_len,,64',
+					'required||min_len,,2||max_len,,64',
 					'', 'name'
+				),
+				'birthday' => array(
+					'required||min_len,,0||max_len,,10',
+					'', 'birthday'
 				),
 				'grade' => array(
 					'required||min_len,,2||max_len,,24||regex,,' .
@@ -228,7 +232,9 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 			$found = false;
 			foreach($content as $csvUser) {
 				if($dbUser['forename'] == $csvUser['forename'] &&
-					$dbUser['name'] == $csvUser['name']
+					$dbUser['name'] == $csvUser['name'] &&
+					strtotime($dbUser['birthday']) ===
+						strtotime($csvUser['birthday'])
 					) {
 					//user is in both the csv and database
 					$entry = array('db' => $dbUser, 'csv' => $csvUser);
@@ -246,10 +252,16 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 		//Indexing for faster searches
 		$dbUserForenames = \ArrayFunctions::arrayColumn($dbUsers, 'forename');
 		$dbUserSurnames = \ArrayFunctions::arrayColumn($dbUsers, 'name');
+		$dbUserBirthdays = \ArrayFunctions::arrayColumn($dbUsers, 'birthday');
+		foreach ($dbUserBirthdays as &$birthday) {
+			$birthday = strtotime($birthday);
+		}
+
 		foreach($content as $index => $user) {
 			//Check if users are in csv but not in database
 			if(!in_array($user['forename'], $dbUserForenames, true) ||
-				!in_array($user['name'], $dbUserSurnames, true)
+				!in_array($user['name'], $dbUserSurnames, true) ||
+				!in_array(strtotime($user['birthday']), $dbUserBirthdays, true)
 				) {
 				$this->_usersInCsv[] = $user;
 			}
@@ -265,7 +277,7 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 		try {
 			$res = $this->_pdo->query(
 				'SELECT u.ID AS userId, u.forename AS forename, u.name AS name,
-					g.gradelevel AS gradelevel
+					u.birthday AS birthday, g.gradelevel AS gradelevel
 				FROM users u
 					JOIN usersInGradesAndSchoolyears uigs ON u.ID = uigs.userId
 					JOIN Grades g ON g.ID = uigs.gradeId
@@ -393,30 +405,57 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 		}
 
 		try {
-			$stmtu = $this->_pdo->prepare('INSERT INTO `UserUpdateTempUsers`
-				(origUserId, forename, name, gradelevel, label) VALUES
-				(?, ?, ?, ?, ?)');
-
+			$stmtsu = $this->_pdo->prepare(
+				'INSERT INTO `UserUpdateTempSolvedUsers`
+					(origUserId, forename, name, birthday, gradelevel,
+						gradelabel)
+				VALUES (?, ?, ?, ?, ?, ?)');
+			$stmtu = $this->_pdo->prepare(
+				'INSERT INTO `UserUpdateTempUsers`
+					(origUserId, forename, name, birthday, gradelevel, label)
+				VALUES (?, ?, ?, ?, ?, ?)');
 			$stmtc = $this->_pdo->prepare(
 				'INSERT INTO `UserUpdateTempConflicts`
 					(origUserId, tempUserId, type, solved) VALUES (?,?,?,?)
 			');
 
 			foreach($this->_usersInBoth as $user) {
+
 				list($level, $label) = $this->gradeStringSplit(
 					$user['csv']['grade']
 				);
-				$stmtu->execute(array(
-					$user['db']['userId'], $user['db']['forename'],
-					$user['db']['name'], $level, $label
-				));
-				if(in_array(
-					$user['db']['userId'],
-					$this->_usersWithGradeConflicts)
-				) {
+				if(!empty($user['db']['birthday'])) {
+					$birthday = date('Y-m-d',
+						strtotime($user['db']['birthday'])
+					);
+				}
+				else {
+					$birthday = Null;
+				}
+
+				if(!empty($this->_usersWithGradeConflicts) &&
+					in_array(
+						$user['db']['userId'],
+						$this->_usersWithGradeConflicts)
+					) {
 					// User has grade-conflict
+					$stmtu->execute(array(
+						$user['db']['userId'], $user['db']['forename'],
+						$user['db']['name'],
+						$birthday,
+						$level, $label
+					));
 					$uid = $this->_pdo->lastInsertId();
 					$stmtc->execute(array($user['db']['userId'], $uid, 'GradelevelConflict', 0));
+				}
+				else {
+					//User has no conflict
+					$stmtsu->execute(array(
+						$user['db']['userId'], $user['db']['forename'],
+						$user['db']['name'],
+						$birthday,
+						$level, $label
+					));
 				}
 			}
 
@@ -432,6 +471,10 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 	 * Dies displaying a message on error
 	 */
 	private function usersCsvOnlyUpload() {
+
+		if(!count($this->_usersInCsv)) {
+			return;
+		}
 
 		try {
 			$stmtu = $this->_pdo->prepare(
@@ -504,6 +547,7 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 					`origUserId` int(11) unsigned NOT NULL,
 					`forename` varchar(64) NOT NULL,
 					`name` varchar(64) NOT NULL,
+					`birthday` date,
 					`gradelevel` int(3) NOT NULL,
 					`label` varchar(255) NOT NULL,
 					PRIMARY KEY (`ID`)
@@ -535,6 +579,7 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 					`origUserId` int(11) unsigned NOT NULL,
 					`forename` varchar(64) NOT NULL,
 					`name` varchar(64) NOT NULL,
+					`birthday` date,
 					`gradelevel` int(3) NOT NULL,
 					`gradelabel` varchar(255) NOT NULL,
 					PRIMARY KEY (`ID`)
