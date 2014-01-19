@@ -3,7 +3,6 @@
 namespace administrator\System\User\UserUpdateWithSchoolyearChange;
 
 require_once 'UserUpdateWithSchoolyearChange.php';
-require_once 'Conflict.php';
 
 /**
  * Allows the user to resolve the conflicts
@@ -92,7 +91,7 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 	private function conflictsResolveByInput() {
 
 		if(empty($_POST['conflict'])) {
-			$this->_interface->backlink('index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange|SessionMenu|ConflictsResolve');
+			$this->_interface->backlink('administrator|System|User|UserUpdateWithSchoolyearChange|SessionMenu|ConflictsResolve');
 			$this->_interface->dieError(_g('Please answer the questions given to resolve the conflicts.'));
 		}
 

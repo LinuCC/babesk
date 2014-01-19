@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-15 14:11+0100\n"
-"PO-Revision-Date: 2014-01-15 14:13+0100\n"
+"POT-Creation-Date: 2014-01-19 23:23+0100\n"
+"PO-Revision-Date: 2014-01-19 23:37+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: de\n"
@@ -140,6 +140,9 @@ msgid "Do you really want to delete the Class \"%1\"? All its data is inevitably
 msgstr "Wollen sie wirklich den Kurs \"%1\" löschen? Alle Daten gehen unwiederbringlich verloren!"
 
 #: ../../../include/smarty3-i18n/smarty2c.c:92
+#: ../../../include/smarty3-i18n/smarty2c.c:305
+#: ../../../include/smarty3-i18n/smarty2c.c:314
+#: ../../../include/smarty3-i18n/smarty2c.c:323
 msgid "Yes"
 msgstr "Ja"
 
@@ -197,6 +200,7 @@ msgid "Assign the Users to the Classes"
 msgstr "Die Benutzer den Kursen zuordnen"
 
 #: ../../../include/smarty3-i18n/smarty2c.c:140
+#: ../../../include/smarty3-i18n/smarty2c.c:275
 msgid "Actions"
 msgstr "Aktionen"
 
@@ -309,83 +313,204 @@ msgid "Reset passwords of users to preset passwords"
 msgstr "Die Passwörter von Nutzern zum voreingestellten Passwort zurücksetzen."
 
 #: ../../../include/smarty3-i18n/smarty2c.c:236
-#: ../../../include/smarty3-i18n/smarty2c.c:239
+#: ../../../include/smarty3-i18n/smarty2c.c:254
 msgid "Update users with Schoolyear-change"
 msgstr "Benutzer mit Schuljahreswechsel aktualisieren"
 
+#: ../../../include/smarty3-i18n/smarty2c.c:239
+#, fuzzy
+msgid "Select schoolyear"
+msgstr "Schuljahr"
+
 #: ../../../include/smarty3-i18n/smarty2c.c:242
+msgid "Please select a schoolyear to switch to when changes get applied:"
+msgstr "Bitte wählen sie ein Schuljahr aus zu dem gewechselt werden soll, wenn die Änderungen angewendet werden:"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:245
+msgid "When full-year switch get selected, it will be assumed that the normal behaviour is that the users move one gradelevel up."
+msgstr "Wenn Schuljahreswechsel ausgewählt wird wird angenommen dass normalerweise die Benutzer einen Jahrgang höher versetzt werden."
+
+#: ../../../include/smarty3-i18n/smarty2c.c:248
+msgid "Is it a half-year switch or a full-year switch?"
+msgstr "Ist es ein Halbjahres- oder Schuljahreswechsel?"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:251
+msgid "continue"
+msgstr "weiter"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:257
 msgid "Back to Useradministration"
 msgstr "Zurück zur Benutzerverwaltung"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:245
+#: ../../../include/smarty3-i18n/smarty2c.c:260
+msgid "User-update menu"
+msgstr "Benutzeraktualisierungsmenü"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:263
+msgid "Conflicts"
+msgstr "Konflikte"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:266
+msgid "conflicts open"
+msgstr "offene Konflikte"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:269
+msgid "conflicts resolved"
+msgstr "gelöste Konflikte"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:272
+#: ../../../include/smarty3-i18n/smarty2c.c:299
+msgid "Resolve conflicts"
+msgstr "Konflikte lösen"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:278
+msgid "Display changes-overview"
+msgstr "Veränderungsübersicht anzeigen"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:281
+#, fuzzy
+msgid "Execute changes"
+msgstr "Änderungen ausführen"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:284
 msgid "Update users and change the schoolyear"
 msgstr "Benutzer aktualisieren und Schuljahr verändern"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:248
+#: ../../../include/smarty3-i18n/smarty2c.c:287
 msgid "Here you can change the schoolyear and at the same time update the grades of the users with a csv-file."
 msgstr "Hier können sie das Schuljahr verändern und gleichzeitig die Klassen der Benutzer mit einer CSV-Datei aktualisieren."
 
-#: ../../../include/smarty3-i18n/smarty2c.c:251
+#: ../../../include/smarty3-i18n/smarty2c.c:290
 msgid "Begin change"
 msgstr "Mit Veränderungen starten"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:254
-#: ../../../include/smarty3-i18n/smarty2c.c:257
-#: ../../../include/smarty3-i18n/smarty2c.c:272
+#: ../../../include/smarty3-i18n/smarty2c.c:293
+#, fuzzy
+msgid "Import userdata with a csv-file"
+msgstr "Kurse mit einer CSV-Datei importieren"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:296
+#, fuzzy
+msgid "Upload"
+msgstr "Datei hochladen"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:302
+msgid "The user <span class=\"highlighted\">\"%1 %2\"</span>, that will be in grade <span class=\"highlighted\">\"%3\"</span>, is new. Is that correct?"
+msgstr "Der Nutzer <span class=\"highlighted\">\"%1 %2\"</span>, der in der Klasse <span class=\"highlighted\">\"%3\"</span> sein wird, ist neu. Ist das korrekt?"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:308
+#: ../../../include/smarty3-i18n/smarty2c.c:317
+#: ../../../include/smarty3-i18n/smarty2c.c:326
+msgid "No"
+msgstr "Nein"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:311
+msgid "The user <span class=\"highlighted\">\"%1 %2\"</span> is not in the upcoming schoolyear. Is that correct?"
+msgstr "Der Nutzer <span class=\"highlighted\">\"%1 %2\"</span> ist nicht im neuen Schuljahr. Ist das korrekt?"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:320
+msgid "The grade of the user <span class=\"highlighted\">\"%1 %2\"</span> changed from \"%3\" to \"%4\". Is that correct?"
+msgstr "Die Klasse vom Benutzer <span class=\"highlighted\">\"%1 %2\"</span> hat sich von \"%3\" auf \"%4\" verändert. Ist das korrekt?"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:329
+#, fuzzy
+msgid "Submit changes"
+msgstr "Änderungen hochladen"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:332
+#, fuzzy
+msgid "Cancel changes"
+msgstr "Änderungen ausführen"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:335
+msgid "No conflicts exist."
+msgstr "Es existieren keine Konflikte."
+
+#: ../../../include/smarty3-i18n/smarty2c.c:338
+msgid "Answered with yes"
+msgstr "Mit Ja beantwortet"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:341
+msgid "Answered with no"
+msgstr "Mit nein beantwortet"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:344
+msgid "changed to user: "
+msgstr "geändert zu Benutzer:"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:347
+msgid "Please give the correct new grade of the user:"
+msgstr "Bitte geben sie die korrekte neue Klasse des Benutzers an:"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:350
+msgid "finished"
+msgstr "fertig"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:353
+msgid "The new grade of the user will be:"
+msgstr "Die neue Klasse des Benutzers wird sein:"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:356
+#: ../../../include/smarty3-i18n/smarty2c.c:359
+#: ../../../include/smarty3-i18n/smarty2c.c:374
 msgid "Print Recharge Balance"
 msgstr "Die Aufladungen ausdrucken"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:260
+#: ../../../include/smarty3-i18n/smarty2c.c:362
 msgid "At:"
 msgstr "Am:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:263
+#: ../../../include/smarty3-i18n/smarty2c.c:365
 msgid "Download Pdf"
 msgstr "PDF herunterladen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:266
+#: ../../../include/smarty3-i18n/smarty2c.c:368
 msgid "Standard Actions"
 msgstr "Standardaktionen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:269
+#: ../../../include/smarty3-i18n/smarty2c.c:371
 msgid "Recharge a Card"
 msgstr "Eine Karte aufladen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:275
+#: ../../../include/smarty3-i18n/smarty2c.c:377
 msgid "Soli-Settings"
 msgstr "Teilhabepaket-Einstellungen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:278
+#: ../../../include/smarty3-i18n/smarty2c.c:380
 msgid "Enable Soli"
 msgstr "Teilhabepaket aktivieren"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:281
+#: ../../../include/smarty3-i18n/smarty2c.c:383
 msgid "Is the Soli-Module enabled:"
 msgstr "Ist das Soli-Modul aktiviert:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:284
+#: ../../../include/smarty3-i18n/smarty2c.c:386
 msgid "Soliprice"
 msgstr "Teilhabepaketpreis"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:287
+#: ../../../include/smarty3-i18n/smarty2c.c:389
 msgid "Is Soliprice Enabled:"
 msgstr "Sind Teilhabepaket-Preise aktiviert:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:290
+#: ../../../include/smarty3-i18n/smarty2c.c:392
 msgid "Amount to Pay:"
 msgstr "Zu bezahlender Betrag:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:293
+#: ../../../include/smarty3-i18n/smarty2c.c:395
 msgid "Commit Changes"
 msgstr "Änderungen hochladen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:296
+#: ../../../include/smarty3-i18n/smarty2c.c:398
 msgid "Back"
 msgstr "zurück"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:299
+#: ../../../include/smarty3-i18n/smarty2c.c:401
 msgid "Back to the Module"
 msgstr "zurück zum Modul"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:404
+msgid "back"
+msgstr "zurück"
 
 #: ../../../administrator/Administrator.php:125
 msgid "Error Accessing the Admin-Layer; Either the Module does not exist, or you dont have the rights to access it!"
@@ -884,6 +1009,121 @@ msgstr "Bitte setzen sie das voreingestellte Passwort bevor sie die Passwörter 
 msgid "The passwords were successfully resetted to the preset password."
 msgstr "Die Passwörter wurden erfolgreich zu dem voreingestellten Passwort zurückgesetzt."
 
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:44
+msgid "Full year"
+msgstr "Schuljahr"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:44
+msgid "Half year"
+msgstr "Halbjahr"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:67
+#, fuzzy
+msgid "Could not fetch the schoolyears!"
+msgstr "Konnte die Schuljahre nicht abrufen!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:108
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:157
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:186
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:55
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:463
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:504
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:531
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:560
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:566
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:592
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:598
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:626
+#, fuzzy
+msgid "Could not upload the data!"
+msgstr "Konnte die CSV-Datei nicht hochladen!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:123
+#, fuzzy
+msgid "Wrong type of switch-type of schoolyear!"
+msgstr "Konnte nicht zu dem Schuljahr wechseln!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:128
+#, fuzzy
+msgid "The Schoolyear with this Id does not exist!"
+msgstr "Das Schuljahr wurde nicht gelöscht"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:132
+msgid "The formular was not filled out completely. Please correct your mistakes and try again."
+msgstr "Das Formular wurde nicht vollständig ausgefüllt. Bitte korrigieren sie ihre Fehler und versuchen sie es nochmal."
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:95
+msgid "Please answer the questions given to resolve the conflicts."
+msgstr "Bitte beantworten sie die Fragen um die Konflikte zu lösen."
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:132
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:236
+#, fuzzy
+msgid "Error fetching the data!"
+msgstr "Ein Fehler ist beim Abrufen der Daten aufgetreten!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:180
+msgid "Wrong type?!"
+msgstr "Falscher Typ?!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:249
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:270
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:291
+msgid "Not implemented yet!"
+msgstr "Noch nicht implementiert!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:31
+msgid "Please resolve the conflicts before comitting the changes"
+msgstr "Bitte lösen sie die Konflikte bevor sie die Veränderungen durchführen"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:81
+#, fuzzy
+msgid "Could not upload the userchanges!"
+msgstr "Konnte die Aufladung nicht hochladen!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:114
+msgid "A grade should be uploaded that does not already exist. Please add the grade manually and try again."
+msgstr "Es soll eine Klasse hochgeladen werden, die noch nicht existiert. Bitte fügen sie diese Klasse manuell hinzu und versuchen sie es nochmal."
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:128
+#, fuzzy
+msgid "Could not commit the new users!"
+msgstr "Konnte die Daten nicht hochladen!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:151
+#, fuzzy
+msgid "Could not fetch the new users!"
+msgstr "Konnte die Kurse nicht abrufen!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:38
+msgid "Missing Session-Variable! Please begin again."
+msgstr "Die Session-Variable fehlt! Bitte fangen sie von vorne an."
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:140
+#, fuzzy, php-format
+msgid "An error occured while parsing the csvfile: %1$s"
+msgstr "Ein Fehler ist beim Abrufen der Infotexte aufgetreten!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:178
+#, php-format
+msgid "An error occured while importing the csv-file. The file is missing the column \"%1$s\"!"
+msgstr "Ein Fehler ist beim Importieren der CSV-Datei aufgetreten. Es fehlt die Spalte \"%1$s\"!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:213
+#, php-format
+msgid "Errors occured while importing the csv-file. Please correct them and try again.<br />%1$s"
+msgstr "Es sind Fehler beim Importieren der CSV-Datei aufgetreten. Bitte korrigieren sie diese und versuchen sie es nochmal.<br />%1$s"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:288
+#, fuzzy
+msgid "Could not fetch the users!"
+msgstr "Konnte die Kurse nicht abrufen!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:380
+#, fuzzy
+msgid "Could not fetch the conflict scope from server!"
+msgstr "Konnte die Schuljahre nicht abrufen!"
+
 #: ../../../administrator/headmod_System/modules/mod_Schoolyear/SchoolyearInterface.php:34
 #: ../../../administrator/headmod_System/modules/mod_Schoolyear/SchoolyearInterface.php:76
 msgid "Name of the Schoolyear"
@@ -1071,10 +1311,6 @@ msgstr "Konne die gegebene Zeitspanne nicht nutzen!!"
 #: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:398
 msgid "Could not fetch the Recharges!"
 msgstr "Konnte die Aufladungen nicht abrufen!"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:420
-msgid "No"
-msgstr "Nein"
 
 #: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:462
 msgid "Week"
@@ -1666,9 +1902,6 @@ msgstr "Konnte die CSV-Datei nicht hochladen!"
 
 #~ msgid "modulepath_root/administrator/Gnissel/ChangePassword"
 #~ msgstr "Passwort ändern"
-
-#~ msgid "back"
-#~ msgstr "zurück"
 
 #~ msgid "Priceclass"
 #~ msgstr "Preisklasse"

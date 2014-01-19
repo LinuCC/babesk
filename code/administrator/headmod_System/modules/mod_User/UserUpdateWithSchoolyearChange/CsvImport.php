@@ -34,10 +34,8 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 
 	public function execute($dataContainer) {
 
-		if(!isset($_SESSION['UserUpdateWithSchoolyearChange']['switchType']) ||
-			!isset($_SESSION['UserUpdateWithSchoolyearChange']['schoolyearId'])
-			) {
-			$this->_interface->dieError(_g('Missing Session-Variables! ' .
+		if(!isset($_SESSION['UserUpdateWithSchoolyearChange']['switchType'])) {
+			$this->_interface->dieError(_g('Missing Session-Variable! ' .
 				'Please begin again.'));
 		}
 

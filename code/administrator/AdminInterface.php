@@ -143,7 +143,7 @@ class AdminInterface extends GeneralInterface {
 	}
 
 	public function backlink($link) {
-		$this->smarty->assign('backlink', $link);
+		$this->smarty->assign('backlink', 'index.php?module=' . $link);
 	}
 
 	public static function escapeForJs($msg) {

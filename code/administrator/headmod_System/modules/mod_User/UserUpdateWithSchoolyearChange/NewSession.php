@@ -76,8 +76,9 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 
 		$this->schoolyearSelectedCheckInput();
 
-		$_SESSION['UserUpdateWithSchoolyearChange']['schoolyearId'] = $_POST['schoolyear'];
 		$_SESSION['UserUpdateWithSchoolyearChange']['switchType'] = $_POST['switchType'];
+
+		$this->schoolyearIdUpload($_POST['schoolyear']);
 
 		//Now execute the CsvImport-Module
 		$mod = new \ModuleExecutionCommand('root/administrator/System/' .
@@ -85,6 +86,27 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 		$this->_dataContainer->getAcl()->moduleExecute(
 			$mod, $this->_dataContainer
 		);
+	}
+
+	/**
+	 * Sets the schoolyearId for later use
+	 * Dies displaying a message on error
+	 * @param  int    $id the schoolyearId
+	 */
+	private function schoolyearIdUpload($id) {
+
+		try {
+			$stmt = $this->_pdo->prepare(
+				'UPDATE global_settings SET value = ?
+				WHERE name = "userUpdateWithSchoolyearChangeNewSchoolyearId"'
+			);
+			$stmt->execute(array($id));
+
+		} catch (\PDOException $e) {
+			$this->_logger->log('could not set the schoolyear-Id',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieError(_g('Could not upload the data!'));
+		}
 	}
 
 	/**
