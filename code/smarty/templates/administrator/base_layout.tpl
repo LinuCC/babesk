@@ -12,8 +12,41 @@
 <script src="../include/js/json2.min.js"></script>
 <script src="../include/js/jquery-ui.min.js"></script>
 <script src="../include/js/jquery.cookie.js"></script>
-<script src="../smarty/templates/administrator/administratorFunctions.js">
+<script src="../smarty/templates/administrator/administratorFunctions.js"></script>
+
+{literal}	
+<script>
+	
+	$(document).ready(function(){
+		$('#bm').click(function(e) {
+			bookmark($(this).find('img').attr("id"));
+		});
+	});
+	
+	
+	function bookmark(mid) {
+	$.ajax({
+		'type': 'POST',
+		'url': 'index.php?section=System|PersonalBookmarks&action=save',
+		data: {
+			'mid': mid
+		},
+		success: function(data) {
+			if(data == 'error') {
+				alert('Fehler beim Speichern des Lesezeichens!');
+			}
+			else {
+				alert('Lesezeichen erfolgreich gespeichert!');
+				location.reload();
+			}
+		},
+		error: function(data) {
+			alert('Ein Fehler ist beim Senden der Modul-ID aufgetreten!');
+		}
+	});
+}
 </script>
+{/literal}
 
 <link rel="stylesheet"
 	href="../smarty/templates/administrator/css/general.css"
@@ -24,6 +57,7 @@
 </head>
 
 <body>
+	
 	<div id="header">
 		<!-- Selector for width of page -->
 		<form>
@@ -42,6 +76,18 @@
 				<label for="pageWidthVeryLarge">Sehr Breit</label>
 			</div>
 		</form>
+		<div id="adminBookmarks">
+				{t}Bookmarks{/t}<br/>
+				{if $bm1!=""}<a href="index.php{$bm1}"><img src="../images/bookmarks/flag_red.png"></a>
+				{else}  <img src="../images/bookmarks/flag_red.png" style="opacity:0.4;">{/if}
+				{if $bm2!=""}<a href="{$bm2}"><img src="../images/bookmarks/flag_yellow.png"></a>
+				{else}  <img src="../images/bookmarks/flag_yellow.png" style="opacity:0.4;">{/if}
+				{if $bm3!=""}<a href="{$bm3}"><img src="../images/bookmarks/flag_blue.png"></a>
+				{else}  <img src="../images/bookmarks/flag_blue.png" style="opacity:0.4;">{/if}
+				{if $bm4!=""}<a href="{$bm4}"><img src="../images/bookmarks/flag_green.png"></a>
+				{else}  <img src="../images/bookmarks/flag_green.png" style="opacity:0.4;">{/if}
+			</div>
+		
 		<div id="top">
 	{nocache}
 	{block name=header}
@@ -65,8 +111,15 @@
 		</p>
 		<hr />
 		</noscript>
-
+		
+		<div align="right" id="bm">
+		{if !empty($moduleBacklink)}
+			<img src="../images/actions/award_star_add.png" id="{$moduleBacklink}">
+		{/if}
+		</div>
+		
 		<div id="content">{block name=search}{/block}</div>
+		
 		<div id="content">{block name=content}{/block}</div>
 		{if !empty($backlink)}
 			<a class="backlink" href="{$backlink}">{t}Back{/t}</a>

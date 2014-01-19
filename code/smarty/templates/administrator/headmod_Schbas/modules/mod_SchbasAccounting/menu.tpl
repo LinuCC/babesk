@@ -50,9 +50,11 @@ EnableSubmit = function(val)
 
 <fieldset>
 <h3>Noch abzugebende B&uuml;cher</h3>
+{hide}
 <form action="index.php?section=Schbas|SchbasAccounting&action=remember" method="post">
 	<input type="submit" value="Liste mit allen Schülern erstellen">
 </form>
+{/hide}
 Liste nach Klassen:<br/>
 {$listOfClasses}
 </fieldset>

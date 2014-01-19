@@ -55,10 +55,12 @@ class Administrator {
 		if($login->loginCheck()) {
 			$this->accessControlInit();
 			$this->initUserInterface();
+			$this->adminBookmarks();
 			if($this->_moduleExecutionParser->load()) {
 				$this->backlink();
 				$this->moduleBacklink();
 				$this->executeModule();
+				
 			}
 			else {
 				$this->MainMenu();
@@ -226,6 +228,23 @@ class Administrator {
 				$this->_adminInterface->dieError(
 					'Konnte den Zugriff nicht einrichten!');
 			}
+		}
+	}
+	
+	/**
+	 * Retrieves max. 4 bookmarks for the admin user
+	 */
+	private function adminBookmarks() {
+		$bookmarks = $this->_pdo->query("SELECT mid,bmid FROM adminBookmarks WHERE uid=".$_SESSION['UID']);
+		foreach ($bookmarks->fetchAll() as $bookmark) {
+			$moduleExecutablePath = $this->_pdo->query("SELECT executablePath FROM Modules WHERE ID=".$bookmark['mid']);
+			$moduleExecutablePath = $moduleExecutablePath->fetchAll();
+			$moduleExecutablePath = str_replace("administrator/headmod_", "?section=", $moduleExecutablePath[0]);
+			$moduleExecutablePath = str_replace("/modules/mod_", "|", $moduleExecutablePath[0]);
+			
+			$moduleExecutablePath = substr($moduleExecutablePath, 0, strpos( $moduleExecutablePath, "/"));
+
+			$this->_smarty->assign('bm'.$bookmark['bmid'],$moduleExecutablePath);
 		}
 	}
 

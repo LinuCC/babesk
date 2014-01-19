@@ -542,6 +542,14 @@ p.inputError {
 	margin: 10px;
 }
 
+#adminBookmarks {
+	position: absolute;
+	float:right;
+	top: 0px;
+	left: 10px;
+	margin: 15px;
+}
+
 .blueButtons {
 	display: table;
 	width: 100%;
