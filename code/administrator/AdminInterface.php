@@ -142,6 +142,10 @@ class AdminInterface extends GeneralInterface {
 		$this->smarty->display(PATH_SMARTY_ADMIN_TEMPLATES . '/generalForm.tpl');
 	}
 
+	public function backlink($link) {
+		$this->smarty->assign('backlink', $link);
+	}
+
 	public static function escapeForJs($msg) {
 
 		$msg = str_replace(array("\r\n", "\r", "\n"), "<br />", $msg);

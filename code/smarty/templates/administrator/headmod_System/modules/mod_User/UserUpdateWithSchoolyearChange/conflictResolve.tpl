@@ -5,6 +5,7 @@
 {$lastType = ''}
 {$listStarted = false}
 
+{if count($conflicts)}
 <form action="index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange|SessionMenu|ConflictsResolve" method="post">
 
 	{foreach $conflicts as $conflict}
@@ -23,7 +24,7 @@
 
 		<li>
 			{if $conflict.type == "CsvOnlyConflict"}
-				{t escape=no forename=$conflict.forename name=$conflict.name}The user <span class="highlighted">"%1 %2"</span> is new. Is that correct?{/t}
+				{t escape=no forename=$conflict.forename name=$conflict.name newGrade=$conflict.newGrade}The user <span class="highlighted">"%1 %2"</span>, that will be in grade <span class="highlighted">"%3"</span>, is new. Is that correct?{/t}
 				<br />
 				<button id="Yes_{$conflict.userId}_{$conflict.type}"
 				class="conflict_{$conflict.type} conflictAnswerYes" conflictId="{$conflict.conflictId}" >
@@ -47,13 +48,20 @@
 			{/if}
 			{if $conflict.type == "GradelevelConflict"}
 				{t escape=no forename=$conflict.forename name=$conflict.name origGrade=$conflict.origGrade newGrade=$conflict.newGrade}The grade of the user <span class="highlighted">"%1 %2"</span> changed from "%3" to "%4". Is that correct?{/t}<br />
+
 				<button id="Yes_{$conflict.userId}_{$conflict.type}"
-				class="conflict_{$conflict.type}  conflictAnswerYes" conflictId="{$conflict.conflictId}" >
+					class="conflict_{$conflict.type}  conflictAnswerYes"
+					conflictId="{$conflict.conflictId}" >
 					{t}Yes{/t}
 				</button>
-				<button id="No_{$conflict.userId}_{$conflict.type}" conflictType="{$conflict.type}"
-				class="conflict_{$conflict.type} conflictAnswerNo" conflictId="{$conflict.conflictId}" username="{$conflict.forename} {$conflict.name}" >
+
+				<button id="No_{$conflict.userId}_{$conflict.type}"
+					conflictType="{$conflict.type}"
+					class="conflict_{$conflict.type} conflictAnswerNo"
+					conflictId="{$conflict.conflictId}"
+					username="{$conflict.forename} {$conflict.name}" >
 					{t}No{/t}
+				</button>
 			{/if}
 		</li>
 
@@ -69,6 +77,11 @@
 	<input type="submit" name="cancel" value="{t}Cancel changes{/t}" />
 
 </form>
+{else}{*no conflicts existing*}
+{t}No conflicts exist.{/t}
+{$backlink = "index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange|SessionMenu"}
+{/if}
+
 
 <script type="text/javascript">
 	var translations = {

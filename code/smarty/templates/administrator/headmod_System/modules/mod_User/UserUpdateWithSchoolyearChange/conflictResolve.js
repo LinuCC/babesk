@@ -6,8 +6,9 @@ $(document).ready(function() {
 		var parent = button.parent();
 		parent.children("button").remove();
 		parent.append(translations.answeredWithYes);
-		parent.append("<input type='hidden' value='confirmed' name=" +
-			button.attr("conflictId") + " />");
+		//append hidden input to know what was changed
+		parent.append("<input type='hidden' value='confirmed' name='"
+			 + "conflict[" + button.attr("conflictId") + "][status]' />");
 	});
 
 	$("button.conflictAnswerNo").on('click', function(event) {
@@ -19,7 +20,8 @@ $(document).ready(function() {
 		}
 		else {
 			parent.append('<div id="lol"></div>');
-			alert("Dann korrigieren sie den Fehler bitte in der CSV-Datei und laden die CSV-Datei nochmals hoch. Eine bessere Lösung wird noch kommen.");
+			//Finding similar usernames is not implemented yet
+			alert("Dann korrigieren sie den Fehler bitte in der CSV-Datei und laden die CSV-Datei nochmals hoch.");
 		}
 	});
 

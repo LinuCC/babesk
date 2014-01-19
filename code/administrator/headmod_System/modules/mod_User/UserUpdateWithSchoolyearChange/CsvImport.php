@@ -375,6 +375,7 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 	private function dataUpload() {
 
 		$this->userDbTableCreate();
+		$this->userSolvedDbTableCreate();
 		$this->conflictDbTableCreate();
 		$this->usersDbOnlyUpload();
 		$this->usersInBothUpload();
@@ -475,8 +476,12 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 					(origUserId, type, solved) VALUES (?,?,?)
 			');
 
-			foreach($this->_usersInDb as $user) {
-				$stmtc->execute(array($user['userId'], 'DbOnlyConflict', 0));
+			if(count($this->_usersInDb)) {
+				foreach($this->_usersInDb as $user) {
+					$stmtc->execute(
+						array($user['userId'], 'DbOnlyConflict', 0)
+					);
+				}
 			}
 
 		} catch (\PDOException $e) {
@@ -513,6 +518,16 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 				$this->_interface->dieError(_g('Could not upload the data!'));
 			}
 
+		} catch (\PDOException $e) {
+			$this->_logger->log('Error adding the user-table', 'Notice', Null,
+				json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieError(_g('Could not upload the data!'));
+		}
+	}
+
+	private function userSolvedDbTableCreate() {
+
+		try {
 			$res = $this->_pdo->query(
 				'DROP TABLE IF EXISTS `UserUpdateTempSolvedUsers`;
 				CREATE TABLE `UserUpdateTempSolvedUsers` (
@@ -521,7 +536,7 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 					`forename` varchar(64) NOT NULL,
 					`name` varchar(64) NOT NULL,
 					`gradelevel` int(3) NOT NULL,
-					`label` varchar(255) NOT NULL,
+					`gradelabel` varchar(255) NOT NULL,
 					PRIMARY KEY (`ID`)
 				) ENGINE=MyISAM DEFAULT CHARSET=utf8;'
 			);
@@ -535,8 +550,8 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 			}
 
 		} catch (\PDOException $e) {
-			$this->_logger->log('Error adding the user-table', 'Notice', Null,
-				json_encode(array('msg' => $e->getMessage())));
+			$this->_logger->log('Error adding the solved user-table',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
 			$this->_interface->dieError(_g('Could not upload the data!'));
 		}
 	}
