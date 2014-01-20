@@ -535,7 +535,7 @@ p.inputError {
 }
 
 #pageWidthSelector {
-	position: absolute;
+	position: relative;
 	float:right;
 	top: 0px;
 	right: 10px;
@@ -543,8 +543,8 @@ p.inputError {
 }
 
 #adminBookmarks {
-	position: absolute;
-	float:right;
+	position: relative;
+	float:left;
 	top: 0px;
 	left: 10px;
 	margin: 15px;
