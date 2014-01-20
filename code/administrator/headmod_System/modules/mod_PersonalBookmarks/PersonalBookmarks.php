@@ -17,13 +17,14 @@ class PersonalBookmarks extends System {
 	/////////////////////////////////////////////////////////////////////
 
 	public function execute ($dataContainer) {
-	
+
 		defined('_AEXEC') or die("Access denied");
 		if (isset ($_GET['action'])) {
 			switch ($_GET['action']) {
-				case 'save':		
+				case 'save':
 					$this->saveBookmark ();
-				break;
+					die('success');
+					break;
 				default:
 					die('error');
 					break;
@@ -45,11 +46,11 @@ class PersonalBookmarks extends System {
 	 * Result is stored in adminBookmarks
 	 * @todo: Works with one sublevel only. Have to extend it... (count the pipes, make things relative to that...)
 	 * @todo: 4 bookmarks possible atm. more?
-	 * @todo: no drag&drop sortable for bookmark list 
+	 * @todo: no drag&drop sortable for bookmark list
 	 */
 	protected function saveBookmark () {
-		
-	
+
+
 		if (isset ($_POST['mid'])) {
 			$mid = TableMng::getDb()->real_escape_string($_POST['mid']);
 			$mid = str_replace("|", "/", $mid);
@@ -60,7 +61,7 @@ class PersonalBookmarks extends System {
 			$mid = substr_replace($mid, "/modules/mod_",$secondSlash,1 );
 			$mid = substr_replace($mid, "/headmod_",$firstSlash,1 );
 			$mid .= $fileName.".php";
-			
+
 			$id = TableMng::query("SELECT ID FROM Modules WHERE executablePath LIKE '$mid'");
 			TableMng::query("update adminBookmarks set bmid = '0' WHERE bmid='1' AND uid=".$_SESSION['UID']);
 			TableMng::query("update adminBookmarks set bmid = '1' WHERE bmid='2' AND uid=".$_SESSION['UID']);
@@ -68,7 +69,7 @@ class PersonalBookmarks extends System {
 			TableMng::query("update adminBookmarks set bmid = '3' WHERE bmid='4' AND uid=".$_SESSION['UID']);
 			TableMng::query("INSERT INTO adminBookmarks (uid,bmid,mid) VALUES ('".$_SESSION['UID']."','4','".$id[0]['ID']."')");
 			TableMng::query("delete from adminBookmarks WHERE bmid = '0' AND uid=".$_SESSION['UID']);
-			
+
 		}
 	}
 }

@@ -14,16 +14,16 @@
 <script src="../include/js/jquery.cookie.js"></script>
 <script src="../smarty/templates/administrator/administratorFunctions.js"></script>
 
-{literal}	
+{literal}
 <script>
-	
+
 	$(document).ready(function(){
 		$('#bm').click(function(e) {
 			bookmark($(this).find('img').attr("id"));
 		});
 	});
-	
-	
+
+
 	function bookmark(mid) {
 	$.ajax({
 		'type': 'POST',
@@ -35,9 +35,15 @@
 			if(data == 'error') {
 				alert('Fehler beim Speichern des Lesezeichens!');
 			}
-			else {
+			else if(data == 'success') {
 				alert('Lesezeichen erfolgreich gespeichert!');
 				location.reload();
+			}
+			else {
+				alert(
+					'Ein unbekannter Fehler ist aufgetreten!' +
+					' (Kein Zugriff zum Modul?)'
+				);
 			}
 		},
 		error: function(data) {
@@ -57,7 +63,7 @@
 </head>
 
 <body>
-	
+
 	<div id="header">
 		<!-- Selector for width of page -->
 		<form>
@@ -87,7 +93,7 @@
 				{if $bm4!=""}<a href="{$bm4}"><img src="../images/bookmarks/flag_green.png"></a>
 				{else}  <img src="../images/bookmarks/flag_green.png" style="opacity:0.4;">{/if}
 			</div>
-		
+
 		<div id="top">
 	{nocache}
 	{block name=header}
@@ -111,15 +117,15 @@
 		</p>
 		<hr />
 		</noscript>
-		
+
 		<div align="right" id="bm">
 		{if !empty($moduleBacklink)}
 			<img src="../images/actions/award_star_add.png" id="{$moduleBacklink}">
 		{/if}
 		</div>
-		
+
 		<div id="content">{block name=search}{/block}</div>
-		
+
 		<div id="content">{block name=content}{/block}</div>
 		{if !empty($backlink)}
 			<a class="backlink" href="{$backlink}">{t}Back{/t}</a>
