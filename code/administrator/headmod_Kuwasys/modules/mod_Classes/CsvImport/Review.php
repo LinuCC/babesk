@@ -81,7 +81,7 @@ class Review extends \administrator\Kuwasys\Classes\CsvImport {
 				FROM kuwasysClassUnit');
 			return $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);
 
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			$this->_logger->log('Could not fetch the Classunits.', 'Notice');
 			$this->_interface->dieError(_g('Could not fetch the days.'));
 		}
