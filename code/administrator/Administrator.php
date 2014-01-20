@@ -8,7 +8,6 @@ require_once PATH_INCLUDE . "/functions.php";
 require_once PATH_INCLUDE . '/exception_def.php';
 require_once PATH_INCLUDE . '/DataContainer.php';
 require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';
-require_once PATH_INCLUDE . '/ModuleExecutionCommand.php';
 require_once PATH_INCLUDE . '/ArrayFunctions.php';
 require_once PATH_INCLUDE . '/sql_access/DBConnect.php';
 require_once PATH_INCLUDE . '/Logger.php';
@@ -85,9 +84,13 @@ class Administrator {
 	public function executeModule() {
 
 		try {
+			$execCom = $this->_moduleExecutionParser->executionCommandGet();
+			$genManager = $this->_acl->moduleGeneratorManagerGet();
+			$module = $genManager->moduleByPathGet($execCom->pathGet());
+			$this->_smarty->assign('moduleExecutedId', $module->getId());
 			$this->_acl->moduleExecute(
-				$this->_moduleExecutionParser->executionCommandGet(),
-				$this->dataContainerCreate());
+				$execCom, $this->dataContainerCreate()
+			);
 
 		} catch (Exception $e) {
 			$this->_logger->log(

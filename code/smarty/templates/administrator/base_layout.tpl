@@ -18,18 +18,18 @@
 <script>
 
 	$(document).ready(function(){
-		$('#bm').click(function(e) {
-			bookmark($(this).find('img').attr("id"));
+		$('#addBookmark').click(function(event) {
+			bookmark($(this).attr("moduleId"));
 		});
 	});
 
 
-	function bookmark(mid) {
+	function bookmark(moduleId) {
 		$.ajax({
 			'type': 'POST',
 			'url': 'index.php?module=administrator|System|PersonalBookmarks&action=save',
 			data: {
-				'mid': mid
+				'moduleId': moduleId
 			},
 			success: function(data) {
 				if(data == 'error') {
@@ -88,7 +88,7 @@
 				{t}Bookmarks{/t}<br/>
 				{$flagColors = [0 => 'red', 1 => 'yellow', 2 => 'blue', 3 => 'green']}
 				{foreach $bookmarks as $index => $bm}
-					<a href="index.php?module={$bm.modulePath}">
+					<a href="index.php?module={$bm.modulePath}" title="{$bm.modulePath}">
 						{$col = $index % 4}
 						<img src="../images/bookmarks/flag_{$flagColors.$col}.png">
 					</a>
@@ -122,8 +122,9 @@
 		</noscript>
 
 		<div align="right" id="bm">
-		{if !empty($moduleBacklink)}
-			<img src="../images/actions/award_star_add.png" id="{$moduleBacklink}">
+		{if $moduleExecutedId}
+			<img src="../images/actions/award_star_add.png"
+				id="addBookmark" moduleId="{$moduleExecutedId}">
 		{/if}
 		</div>
 

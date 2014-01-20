@@ -19,6 +19,8 @@ class PersonalBookmarks extends System {
 	public function execute ($dataContainer) {
 
 		defined('_AEXEC') or die("Access denied");
+
+		$this->entryPoint($dataContainer);
 		if (isset ($_GET['action'])) {
 			switch ($_GET['action']) {
 				case 'save':
@@ -51,26 +53,26 @@ class PersonalBookmarks extends System {
 	protected function saveBookmark () {
 
 
-		if (isset ($_POST['mid'])) {
-			$mid = TableMng::getDb()->real_escape_string($_POST['mid']);
-			$mid = str_replace("|", "/", $mid);
-			$mid = str_replace("root/", "", $mid);
-			$firstSlash = strpos($mid, "/");
-			$secondSlash = strpos($mid,"/",$firstSlash+1);
-			$fileName = substr($mid, $secondSlash);
-			$mid = substr_replace($mid, "/modules/mod_",$secondSlash,1 );
-			$mid = substr_replace($mid, "/headmod_",$firstSlash,1 );
-			$mid .= $fileName.".php";
+		if (!isset ($_POST['moduleId'])) {
+			die('error');
+		}
 
-			$id = TableMng::query("SELECT ID FROM Modules WHERE executablePath LIKE '$mid'");
+		try {
 			TableMng::query("update adminBookmarks set bmid = '0' WHERE bmid='1' AND uid=".$_SESSION['UID']);
 			TableMng::query("update adminBookmarks set bmid = '1' WHERE bmid='2' AND uid=".$_SESSION['UID']);
 			TableMng::query("update adminBookmarks set bmid = '2' WHERE bmid='3' AND uid=".$_SESSION['UID']);
 			TableMng::query("update adminBookmarks set bmid = '3' WHERE bmid='4' AND uid=".$_SESSION['UID']);
-			TableMng::query("INSERT INTO adminBookmarks (uid,bmid,mid) VALUES ('".$_SESSION['UID']."','4','".$id[0]['ID']."')");
+			$stmt = $this->_pdo->prepare('INSERT INTO adminBookmarks
+				(uid, bmid, mid) VALUES (?, "4", ?)');
+			$stmt->execute(array($_SESSION['UID'], $_POST['moduleId']));
 			TableMng::query("delete from adminBookmarks WHERE bmid = '0' AND uid=".$_SESSION['UID']);
 
+		} catch (Exception $e) {
+			$this->_logger->log('Could not add a bookmark',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			die('error');
 		}
+
 	}
 }
 

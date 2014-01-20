@@ -25,14 +25,19 @@ class ModuleExecutionCommand {
 	/**
 	 * Returns the path for the module-execution
 	 *
+	 * @param string $delimiter Optional delimiter; If set, will delimit the
+	 *                          path with this delimiter and not the delimiter
+	 *                          set for this object
 	 * @return string The module-path preceded with root/<subprogram>
 	 */
-	public function pathGet() {
+	public function pathGet($delimiter = NULL) {
 
-		$prePath = implode($this->delim, $this->_execPathPreElements);
-		$modPath = implode($this->delim, $this->_execPathModules);
+		$delim = (!empty($delimiter)) ? $delimiter : $this->delim;
 
-		return $prePath . $this->delim . $modPath;
+		$prePath = implode($delim, $this->_execPathPreElements);
+		$modPath = implode($delim, $this->_execPathModules);
+
+		return $prePath . $delim . $modPath;
 	}
 
 	/**
