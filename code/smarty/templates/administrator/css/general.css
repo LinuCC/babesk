@@ -550,6 +550,11 @@ p.inputError {
 	margin: 15px;
 }
 
+#addBookmark {
+	position: relative;
+	float:right;
+}
+
 .blueButtons {
 	display: table;
 	width: 100%;

@@ -121,12 +121,11 @@
 		<hr />
 		</noscript>
 
-		<div align="right" id="bm">
 		{if $moduleExecutedId}
 			<img src="../images/actions/award_star_add.png"
-				id="addBookmark" moduleId="{$moduleExecutedId}">
+				title="{t}Add bookmark{/t}" id="addBookmark"
+				moduleId="{$moduleExecutedId}">
 		{/if}
-		</div>
 
 		<div id="content">{block name=search}{/block}</div>
 

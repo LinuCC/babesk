@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-20 17:05+0100\n"
-"PO-Revision-Date: 2014-01-20 17:09+0100\n"
+"POT-Creation-Date: 2014-01-20 17:17+0100\n"
+"PO-Revision-Date: 2014-01-20 17:17+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: de\n"
@@ -513,14 +513,18 @@ msgid "No Bookmarks added"
 msgstr "Keine Leszeichen hinzugefügt"
 
 #: ../../../include/smarty3-i18n/smarty2c.c:416
+msgid "Add bookmark"
+msgstr "Lesezeichen hinzufügen"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:419
 msgid "Back"
 msgstr "zurück"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:419
+#: ../../../include/smarty3-i18n/smarty2c.c:422
 msgid "Back to the Module"
 msgstr "zurück zum Modul"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:422
+#: ../../../include/smarty3-i18n/smarty2c.c:425
 msgid "back"
 msgstr "zurück"
 
