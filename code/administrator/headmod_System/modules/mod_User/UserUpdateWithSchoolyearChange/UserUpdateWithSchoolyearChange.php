@@ -13,14 +13,37 @@ class UserUpdateWithSchoolyearChange extends \User {
 
 	public function execute($dataContainer) {
 
-		$mod = new \ModuleExecutionCommand('root/administrator/System/' .
-			'User/UserUpdateWithSchoolyearChange/NewSession');
-		$dataContainer->getAcl()->moduleExecute($mod, $dataContainer);
+		$this->entryPoint($dataContainer);
+
+		$this->_smarty->assign('sessionExists', $this->sessionExists());
+		$this->displayTpl('start_menu.tpl');
 	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Checks if a session already exists
+	 * @return bool  true when a session already exists
+	 */
+	private function sessionExists() {
+
+		try {
+			$res = $this->_pdo->query(
+				'SHOW TABLES LIKE "UserUpdateTempUsers"'
+			);
+			return (count($res->fetchAll()) > 0);
+
+		} catch (\PDOException $e) {
+			$this->_logger->log('Error checking for already existing Session',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieError(_g(
+				'Could not check if this has done before!'
+			));
+		}
+
+	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Attributes

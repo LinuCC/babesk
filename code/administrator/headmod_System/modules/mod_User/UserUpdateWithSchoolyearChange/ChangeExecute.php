@@ -4,6 +4,9 @@ namespace administrator\System\User\UserUpdateWithSchoolyearChange;
 
 require_once 'UserUpdateWithSchoolyearChange.php';
 
+/**
+ * Executes the changes made beforehand.
+ */
 class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearChange {
 
 	/////////////////////////////////////////////////////////////////////
@@ -57,6 +60,10 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 		}
 	}
 
+	/**
+	 * Commits the changes to the users to the real users-table
+	 * Dies displaying a message on error
+	 */
 	private function userChangesCommit() {
 
 		try {
@@ -84,6 +91,10 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 		}
 	}
 
+	/**
+	 * Adds the users that are new to the database (were in csv but not in db)
+	 * Dies displaying a message on error.
+	 */
 	private function usersNewCommit() {
 
 		try {
@@ -111,9 +122,8 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 					$user['birthday'] = '';
 				}
 				if(empty($user['gradeId'])) {
-					$this->_interface->dieError(_g(
-						'A grade should be uploaded that does not already ' .
-						'exist. Please add the grade manually and try again.')
+					$user['gradeId'] = $this->gradeAdd(
+						$user['gradelevel'], $user['gradelabel']
 					);
 				}
 				$stmtu->execute(
@@ -127,6 +137,35 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 			$this->_logger->log('Could not commit the new users',
 				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
 			$this->_interface->dieError(_g('Could not commit the new users!' . $e->getMessage()));
+		}
+	}
+
+	/**
+	 * Adds a grade and returns its new Id
+	 * Dies displaying a message on error
+	 * @param  int    $level The gradelevel
+	 * @param  string $label The gradelabel
+	 * @return int           The Id of the new grade
+	 */
+	private function gradeAdd($level, $label) {
+
+		try {
+			if(empty($this->_gradeStmt)) {
+				$this->_gradeStmt = $this->_pdo->prepare(
+					'INSERT INTO Grades (label, gradelevel) VALUES (?,?)'
+				);
+			}
+			$this->_gradeStmt->execute(array($level, $label));
+			return $this->_pdo->lastInsertId();
+
+		} catch (\PDOException $e) {
+			$this->_logger->log('Error adding the grade', 'Notice', Null,
+				json_encode(array(
+					'msg' => $e->getMessage(),
+					'level' => $level,
+					'label' => $label))
+			);
+			$this->_interface->dieError(_g('Could not add the grade!'));
 		}
 	}
 
@@ -180,6 +219,12 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Use a prepared statement, so if multiple grades are added, its faster
+	 * @var PDOStatement
+	 */
+	private $_gradeStmt;
 }
 
 ?>
