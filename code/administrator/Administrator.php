@@ -8,6 +8,7 @@ require_once PATH_INCLUDE . "/functions.php";
 require_once PATH_INCLUDE . '/exception_def.php';
 require_once PATH_INCLUDE . '/DataContainer.php';
 require_once PATH_INCLUDE . '/ModuleExecutionInputParser.php';
+require_once PATH_INCLUDE . '/ModuleExecutionCommand.php';
 require_once PATH_INCLUDE . '/ArrayFunctions.php';
 require_once PATH_INCLUDE . '/sql_access/DBConnect.php';
 require_once PATH_INCLUDE . '/Logger.php';
@@ -60,7 +61,7 @@ class Administrator {
 				$this->backlink();
 				$this->moduleBacklink();
 				$this->executeModule();
-				
+
 			}
 			else {
 				$this->MainMenu();
@@ -230,21 +231,36 @@ class Administrator {
 			}
 		}
 	}
-	
+
 	/**
-	 * Retrieves max. 4 bookmarks for the admin user
+	 * Retrieves the bookmarks for the admin user
 	 */
 	private function adminBookmarks() {
-		$bookmarks = $this->_pdo->query("SELECT mid,bmid FROM adminBookmarks WHERE uid=".$_SESSION['UID']);
-		foreach ($bookmarks->fetchAll() as $bookmark) {
-			$moduleExecutablePath = $this->_pdo->query("SELECT executablePath FROM Modules WHERE ID=".$bookmark['mid']);
-			$moduleExecutablePath = $moduleExecutablePath->fetchAll();
-			$moduleExecutablePath = str_replace("administrator/headmod_", "?section=", $moduleExecutablePath[0]);
-			$moduleExecutablePath = str_replace("/modules/mod_", "|", $moduleExecutablePath[0]);
-			
-			$moduleExecutablePath = substr($moduleExecutablePath, 0, strpos( $moduleExecutablePath, "/"));
 
-			$this->_smarty->assign('bm'.$bookmark['bmid'],$moduleExecutablePath);
+		try {
+			$stmt = $this->_pdo->prepare(
+				'SELECT bmid, (
+						SELECT GROUP_CONCAT(parent.name ORDER BY parent.lft ASC SEPARATOR "|")
+						FROM Modules AS node,
+							Modules AS parent
+						WHERE node.lft BETWEEN parent.lft AND parent.rgt
+							AND node.ID = mid
+					) AS modulePath
+				FROM adminBookmarks WHERE uid = :userId
+				-- Order it so we dont need to order manually in PHP or Smarty
+				ORDER BY bmid'
+			);
+
+			$stmt->execute(array('userId' => $_SESSION['UID']));
+			$bookmarks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			$this->_smarty->assign('bookmarks', $bookmarks);
+
+		} catch (PDOException $e) {
+			$this->_logger->log('Error fetching the bookmarks',
+				'Notice', Null, json_encode(array(
+					'msg' => $e->getMessage(),
+					'user' => $_SESSION['UID']))
+			);
 		}
 	}
 

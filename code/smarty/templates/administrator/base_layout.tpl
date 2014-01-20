@@ -25,32 +25,32 @@
 
 
 	function bookmark(mid) {
-	$.ajax({
-		'type': 'POST',
-		'url': 'index.php?section=System|PersonalBookmarks&action=save',
-		data: {
-			'mid': mid
-		},
-		success: function(data) {
-			if(data == 'error') {
-				alert('Fehler beim Speichern des Lesezeichens!');
+		$.ajax({
+			'type': 'POST',
+			'url': 'index.php?module=administrator|System|PersonalBookmarks&action=save',
+			data: {
+				'mid': mid
+			},
+			success: function(data) {
+				if(data == 'error') {
+					alert('Fehler beim Speichern des Lesezeichens!');
+				}
+				else if(data == 'success') {
+					alert('Lesezeichen erfolgreich gespeichert!');
+					location.reload();
+				}
+				else {
+					alert(
+						'Ein unbekannter Fehler ist aufgetreten!' +
+						' (Kein Zugriff zum Modul?)'
+					);
+				}
+			},
+			error: function(data) {
+				alert('Ein Fehler ist beim Senden der Modul-ID aufgetreten!');
 			}
-			else if(data == 'success') {
-				alert('Lesezeichen erfolgreich gespeichert!');
-				location.reload();
-			}
-			else {
-				alert(
-					'Ein unbekannter Fehler ist aufgetreten!' +
-					' (Kein Zugriff zum Modul?)'
-				);
-			}
-		},
-		error: function(data) {
-			alert('Ein Fehler ist beim Senden der Modul-ID aufgetreten!');
-		}
-	});
-}
+		});
+	}
 </script>
 {/literal}
 
@@ -82,17 +82,20 @@
 				<label for="pageWidthVeryLarge">Sehr Breit</label>
 			</div>
 		</form>
+
+
 		<div id="adminBookmarks">
 				{t}Bookmarks{/t}<br/>
-				{if $bm1!=""}<a href="index.php{$bm1}"><img src="../images/bookmarks/flag_red.png"></a>
-				{else}  <img src="../images/bookmarks/flag_red.png" style="opacity:0.4;">{/if}
-				{if $bm2!=""}<a href="{$bm2}"><img src="../images/bookmarks/flag_yellow.png"></a>
-				{else}  <img src="../images/bookmarks/flag_yellow.png" style="opacity:0.4;">{/if}
-				{if $bm3!=""}<a href="{$bm3}"><img src="../images/bookmarks/flag_blue.png"></a>
-				{else}  <img src="../images/bookmarks/flag_blue.png" style="opacity:0.4;">{/if}
-				{if $bm4!=""}<a href="{$bm4}"><img src="../images/bookmarks/flag_green.png"></a>
-				{else}  <img src="../images/bookmarks/flag_green.png" style="opacity:0.4;">{/if}
-			</div>
+				{$flagColors = [0 => 'red', 1 => 'yellow', 2 => 'blue', 3 => 'green']}
+				{foreach $bookmarks as $index => $bm}
+					<a href="index.php?module={$bm.modulePath}">
+						{$col = $index % 4}
+						<img src="../images/bookmarks/flag_{$flagColors.$col}.png">
+					</a>
+				{foreachelse}
+					<p>{t}No Bookmarks added{/t}</p>
+				{/foreach}
+		</div>
 
 		<div id="top">
 	{nocache}
