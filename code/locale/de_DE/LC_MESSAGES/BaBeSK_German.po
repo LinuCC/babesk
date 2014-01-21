@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-20 17:17+0100\n"
-"PO-Revision-Date: 2014-01-20 17:17+0100\n"
+"POT-Creation-Date: 2014-01-21 12:47+0100\n"
+"PO-Revision-Date: 2014-01-21 12:47+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: de\n"
@@ -140,9 +140,9 @@ msgid "Do you really want to delete the Class \"%1\"? All its data is inevitably
 msgstr "Wollen sie wirklich den Kurs \"%1\" löschen? Alle Daten gehen unwiederbringlich verloren!"
 
 #: ../../../include/smarty3-i18n/smarty2c.c:92
-#: ../../../include/smarty3-i18n/smarty2c.c:317
-#: ../../../include/smarty3-i18n/smarty2c.c:326
-#: ../../../include/smarty3-i18n/smarty2c.c:335
+#: ../../../include/smarty3-i18n/smarty2c.c:320
+#: ../../../include/smarty3-i18n/smarty2c.c:329
+#: ../../../include/smarty3-i18n/smarty2c.c:338
 msgid "Yes"
 msgstr "Ja"
 
@@ -401,130 +401,134 @@ msgid "Upload"
 msgstr "hochladen"
 
 #: ../../../include/smarty3-i18n/smarty2c.c:314
+msgid "Yes to all"
+msgstr "Ja zu allem"
+
+#: ../../../include/smarty3-i18n/smarty2c.c:317
 msgid "The user <span class=\"highlighted\">\"%1 %2\"</span>, that will be in grade <span class=\"highlighted\">\"%3\"</span>, is new. Is that correct?"
 msgstr "Der Nutzer <span class=\"highlighted\">\"%1 %2\"</span>, der in der Klasse <span class=\"highlighted\">\"%3\"</span> sein wird, ist neu. Ist das korrekt?"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:320
-#: ../../../include/smarty3-i18n/smarty2c.c:329
-#: ../../../include/smarty3-i18n/smarty2c.c:338
+#: ../../../include/smarty3-i18n/smarty2c.c:323
+#: ../../../include/smarty3-i18n/smarty2c.c:332
+#: ../../../include/smarty3-i18n/smarty2c.c:341
 msgid "No"
 msgstr "Nein"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:323
+#: ../../../include/smarty3-i18n/smarty2c.c:326
 msgid "The user <span class=\"highlighted\">\"%1 %2\"</span> is not in the upcoming schoolyear. Is that correct?"
 msgstr "Der Nutzer <span class=\"highlighted\">\"%1 %2\"</span> ist nicht im neuen Schuljahr. Ist das korrekt?"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:332
+#: ../../../include/smarty3-i18n/smarty2c.c:335
 msgid "The grade of the user <span class=\"highlighted\">\"%1 %2\"</span> changed from \"%3\" to \"%4\". Is that correct?"
 msgstr "Die Klasse vom Benutzer <span class=\"highlighted\">\"%1 %2\"</span> hat sich von \"%3\" auf \"%4\" verändert. Ist das korrekt?"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:341
+#: ../../../include/smarty3-i18n/smarty2c.c:344
 msgid "Submit changes"
 msgstr "Änderungen hochladen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:344
+#: ../../../include/smarty3-i18n/smarty2c.c:347
 msgid "Cancel changes"
 msgstr "Änderungen abbrechen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:347
+#: ../../../include/smarty3-i18n/smarty2c.c:350
 msgid "No conflicts exist."
 msgstr "Es existieren keine Konflikte."
 
-#: ../../../include/smarty3-i18n/smarty2c.c:350
+#: ../../../include/smarty3-i18n/smarty2c.c:353
 msgid "Answered with yes"
 msgstr "Mit Ja beantwortet"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:353
+#: ../../../include/smarty3-i18n/smarty2c.c:356
 msgid "Answered with no"
 msgstr "Mit nein beantwortet"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:356
+#: ../../../include/smarty3-i18n/smarty2c.c:359
 msgid "changed to user: "
 msgstr "geändert zu Benutzer:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:359
+#: ../../../include/smarty3-i18n/smarty2c.c:362
 msgid "Please give the correct new grade of the user:"
 msgstr "Bitte geben sie die korrekte neue Klasse des Benutzers an:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:362
+#: ../../../include/smarty3-i18n/smarty2c.c:365
 msgid "finished"
 msgstr "fertig"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:365
+#: ../../../include/smarty3-i18n/smarty2c.c:368
 msgid "The new grade of the user will be:"
 msgstr "Die neue Klasse des Benutzers wird sein:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:368
 #: ../../../include/smarty3-i18n/smarty2c.c:371
-#: ../../../include/smarty3-i18n/smarty2c.c:386
+#: ../../../include/smarty3-i18n/smarty2c.c:374
+#: ../../../include/smarty3-i18n/smarty2c.c:389
 msgid "Print Recharge Balance"
 msgstr "Die Aufladungen ausdrucken"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:374
+#: ../../../include/smarty3-i18n/smarty2c.c:377
 msgid "At:"
 msgstr "Am:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:377
+#: ../../../include/smarty3-i18n/smarty2c.c:380
 msgid "Download Pdf"
 msgstr "PDF herunterladen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:380
+#: ../../../include/smarty3-i18n/smarty2c.c:383
 msgid "Standard Actions"
 msgstr "Standardaktionen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:383
+#: ../../../include/smarty3-i18n/smarty2c.c:386
 msgid "Recharge a Card"
 msgstr "Eine Karte aufladen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:389
+#: ../../../include/smarty3-i18n/smarty2c.c:392
 msgid "Soli-Settings"
 msgstr "Teilhabepaket-Einstellungen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:392
+#: ../../../include/smarty3-i18n/smarty2c.c:395
 msgid "Enable Soli"
 msgstr "Teilhabepaket aktivieren"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:395
+#: ../../../include/smarty3-i18n/smarty2c.c:398
 msgid "Is the Soli-Module enabled:"
 msgstr "Ist das Soli-Modul aktiviert:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:398
+#: ../../../include/smarty3-i18n/smarty2c.c:401
 msgid "Soliprice"
 msgstr "Teilhabepaketpreis"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:401
+#: ../../../include/smarty3-i18n/smarty2c.c:404
 msgid "Is Soliprice Enabled:"
 msgstr "Sind Teilhabepaket-Preise aktiviert:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:404
+#: ../../../include/smarty3-i18n/smarty2c.c:407
 msgid "Amount to Pay:"
 msgstr "Zu bezahlender Betrag:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:407
+#: ../../../include/smarty3-i18n/smarty2c.c:410
 msgid "Commit Changes"
 msgstr "Änderungen hochladen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:410
+#: ../../../include/smarty3-i18n/smarty2c.c:413
 msgid "Bookmarks"
 msgstr "Lesezeichen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:413
+#: ../../../include/smarty3-i18n/smarty2c.c:416
 msgid "No Bookmarks added"
 msgstr "Keine Leszeichen hinzugefügt"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:416
+#: ../../../include/smarty3-i18n/smarty2c.c:419
 msgid "Add bookmark"
 msgstr "Lesezeichen hinzufügen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:419
+#: ../../../include/smarty3-i18n/smarty2c.c:422
 msgid "Back"
 msgstr "zurück"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:422
+#: ../../../include/smarty3-i18n/smarty2c.c:425
 msgid "Back to the Module"
 msgstr "zurück zum Modul"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:425
+#: ../../../include/smarty3-i18n/smarty2c.c:428
 msgid "back"
 msgstr "zurück"
 

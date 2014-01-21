@@ -1,5 +1,12 @@
 $(document).ready(function() {
 
+	$("button#YesToAllConflicts").on('click', function(event) {
+		event.preventDefault();
+		$.each($('#conflictForm').find('button.conflictAnswerYes'),
+			function(index, val) {
+				val.click();
+		});
+	});
 
 	$("button.conflictAnswerYes").on('click', function(event) {
 		var button = $(event.target);

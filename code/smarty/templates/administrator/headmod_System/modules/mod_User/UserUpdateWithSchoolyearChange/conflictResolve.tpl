@@ -6,7 +6,8 @@
 {$listStarted = false}
 
 {if count($conflicts)}
-<form action="index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange|SessionMenu|ConflictsResolve" method="post">
+<button id="YesToAllConflicts">{t}Yes to all{/t}</button>
+<form id="conflictForm" action="index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange|SessionMenu|ConflictsResolve" method="post">
 
 	{foreach $conflicts as $conflict}
 		{if $conflict.type != $lastType}
