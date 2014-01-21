@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-21 12:47+0100\n"
-"PO-Revision-Date: 2014-01-21 12:47+0100\n"
+"POT-Creation-Date: 2014-01-21 12:53+0100\n"
+"PO-Revision-Date: 2014-01-21 12:53+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: de\n"
@@ -1044,7 +1044,7 @@ msgstr "Konnte die Schuljahre nicht abrufen!"
 #: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:108
 #: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:157
 #: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:186
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:59
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:63
 #: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:463
 #: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:504
 #: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:531
@@ -1087,27 +1087,31 @@ msgstr "Falscher Typ?!"
 msgid "Not implemented yet!"
 msgstr "Noch nicht implementiert!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:35
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:31
+msgid "The userdata were changed successfully."
+msgstr "Die Benutzerdaten wurden erfolgreich verändert."
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:39
 msgid "Please resolve the conflicts before comitting the changes"
 msgstr "Bitte lösen sie die Konflikte bevor sie die Veränderungen durchführen"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:89
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:93
 msgid "Could not upload the userchanges!"
 msgstr "Konnte die Benutzerveränderungen nicht hochladen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:139
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:143
 msgid "Could not commit the new users!"
 msgstr "Konnte die neuen Benutzer nicht hochladen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:168
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:172
 msgid "Could not add the grade!"
 msgstr "Konnte die Klasse nicht hinzufügen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:191
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:195
 msgid "Could not fetch the new users!"
 msgstr "Konnte die neuen Nutzer nicht abrufen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:213
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:217
 msgid "Could not switch to the new Schoolyear!"
 msgstr "Konnte nicht zu dem neuen Schuljahr wechseln!"
 

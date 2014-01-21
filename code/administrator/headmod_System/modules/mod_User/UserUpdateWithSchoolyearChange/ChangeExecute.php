@@ -26,6 +26,10 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 			$this->usersNewCommit();
 			$this->schoolyearNewSwitchTo();
 			$this->_pdo->commit();
+			$this->_interface->backlink('administrator|System|User');
+			$this->_interface->dieSuccess(_g(
+				'The userdata were changed successfully.'
+			));
 		}
 		else {
 			$this->_interface->backlink(
