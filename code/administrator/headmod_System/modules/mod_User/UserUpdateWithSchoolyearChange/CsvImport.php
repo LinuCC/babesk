@@ -78,7 +78,7 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 				),
 				'grade' => array(
 					'required||min_len,,2||max_len,,24||regex,,' .
-					'/^\d{1,2}-\w{1,21}|\d{1,2}[a-zA-Z]{1,21}$/',
+					'/^\d{1,2}-[^\d-]{1,21}|\d{1,2}[^\d-]{1,21}$/',
 					'', 'grade'
 				)
 			);
