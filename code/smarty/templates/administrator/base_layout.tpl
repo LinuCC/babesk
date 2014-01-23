@@ -8,11 +8,11 @@
 	href="../include/js/jquery-ui-smoothness.css"
 	type="text/css"
 />
-<script src="../include/js/jquery.min.js"></script>
-<script src="../include/js/json2.min.js"></script>
-<script src="../include/js/jquery-ui.min.js"></script>
-<script src="../include/js/jquery.cookie.js"></script>
-<script src="../smarty/templates/administrator/administratorFunctions.js"></script>
+<script type="text/javascript" src="../include/js/jquery.min.js"></script>
+<script type="text/javascript" src="../include/js/json2.min.js"></script>
+<script type="text/javascript" src="../include/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../include/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="../smarty/templates/administrator/administratorFunctions.js"></script>
 
 {literal}
 <script>

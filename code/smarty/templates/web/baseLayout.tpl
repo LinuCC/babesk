@@ -10,8 +10,8 @@
 	{/if}
 	<link rel="shortcut icon" href="webicon.ico" />
 	<link rel="stylesheet" href="../smarty/templates/web/css/general.css" type="text/css" />
-	<script src="../include/js/jquery.min.js"></script>
-	<script src="../include/js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="../include/js/jquery.min.js"></script>
+	<script type="text/javascript" src="../include/js/jquery.cookie.js"></script>
 
 {literal}
 <script type="text/javascript">
