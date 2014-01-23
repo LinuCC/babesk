@@ -505,7 +505,7 @@ class UserManager extends TableManager{
 
 	public function updateLastLoginToNow ($userId) {
 
-		$query = sql_prev_inj(sprintf('UPDATE %s SET last_login = NOW() WHERE ID = %s', $this->tablename, $userId));
+		$query = sql_prev_inj(sprintf('UPDATE %s SET last_login = CAST(NOW() AS varchar(11)) WHERE ID = %s', $this->tablename, $userId));
 		$this->executeQuery($query);
 	}
 
