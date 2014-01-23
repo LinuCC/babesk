@@ -528,7 +528,7 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 		} catch (\PDOException $e) {
 			$this->_logger->log('Error uploading the DbOnlyConflict-users',
 				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
-			$this->_interface->dieError(_g('Could not upload the data!'));
+			$this->_interface->dieError(_g('Could not upload the data!') . $e->getMessage());
 		}
 	}
 
@@ -542,11 +542,11 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 				'DROP TABLE IF EXISTS `UserUpdateTempUsers`;
 				CREATE TABLE `UserUpdateTempUsers` (
 					`ID` int(11) unsigned NOT NULL AUTO_INCREMENT,
-					`origUserId` int(11) unsigned NOT NULL,
+					`origUserId` int(11) unsigned NOT NULL DEFAULT 0,
 					`forename` varchar(64) NOT NULL,
 					`name` varchar(64) NOT NULL,
 					`birthday` date,
-					`gradelevel` int(3) NOT NULL,
+					`gradelevel` int(3) NOT NULL DEFAULT 0,
 					`label` varchar(255) NOT NULL,
 					PRIMARY KEY (`ID`)
 				) ENGINE=MyISAM DEFAULT CHARSET=utf8;'
@@ -574,7 +574,7 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 				'DROP TABLE IF EXISTS `UserUpdateTempSolvedUsers`;
 				CREATE TABLE `UserUpdateTempSolvedUsers` (
 					`ID` int(11) unsigned NOT NULL AUTO_INCREMENT,
-					`origUserId` int(11) unsigned NOT NULL,
+					`origUserId` int(11) unsigned NOT NULL DEFAULT 0,
 					`forename` varchar(64) NOT NULL,
 					`name` varchar(64) NOT NULL,
 					`birthday` date,
@@ -610,12 +610,12 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 			'DROP TABLE IF EXISTS `UserUpdateTempConflicts`;
 			CREATE TABLE `UserUpdateTempConflicts` (
 				`ID` int(11) unsigned NOT NULL AUTO_INCREMENT,
-				`tempUserId` int(11) unsigned NOT NULL,
-				`origUserId` int(11) unsigned NOT NULL,
+				`tempUserId` int(11) unsigned NOT NULL DEFAULT 0,
+				`origUserId` int(11) unsigned NOT NULL DEFAULT 0,
 				`type` enum(
 					"CsvOnlyConflict", "DbOnlyConflict", "GradelevelConflict"
 				) NOT NULL,
-				`solved` int(1) unsigned NOT NULL,
+				`solved` int(1) unsigned NOT NULL DEFAULT 0,
 				PRIMARY KEY (`ID`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8'
 		);
