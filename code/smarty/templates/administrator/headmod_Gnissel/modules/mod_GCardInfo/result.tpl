@@ -5,4 +5,6 @@ Vorname: {$forename}<br>
 Name: {$name}<br>
 Klasse: {$class}<br>
 Benutzername: {$username}<br>
+<form action="index.php?section=Gnissel|GCardInfo&lostcard={$cardID}" method="post">
+<input type="submit" value="Als Verloren melden" />
 {/block}
