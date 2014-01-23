@@ -3,7 +3,7 @@
 <head>
 <title>{block name=title}BaBeSK{/block}</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-
+<link rel="shortcut icon" href="adminicon.ico" />
 <link rel="stylesheet"
 	href="../include/js/jquery-ui-smoothness.css"
 	type="text/css"

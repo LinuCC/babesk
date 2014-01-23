@@ -8,7 +8,7 @@
 		<meta HTTP-EQUIV="REFRESH" content="{$redirection.time};
 		url=index.php?section={$redirection.target}" />
 	{/if}
-
+	<link rel="shortcut icon" href="webicon.ico" />
 	<link rel="stylesheet" href="../smarty/templates/web/css/general.css" type="text/css" />
 	<script src="../include/js/jquery.min.js"></script>
 	<script src="../include/js/jquery.cookie.js"></script>

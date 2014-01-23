@@ -3,6 +3,7 @@
 <head>
 <title>{$title|default:'BaBeSK Login'}</title>
 <link rel="stylesheet" href="../smarty/templates/web/css/general.css" type="text/css" />
+<link rel="shortcut icon" href="webicon.ico" />
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 </head>
 <body>

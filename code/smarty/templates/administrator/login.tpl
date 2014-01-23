@@ -3,6 +3,7 @@
 <head>
 	<title>BaBeSK Login</title>
 	<link rel="stylesheet" href="../smarty/templates/administrator/css/general.css" type="text/css" />
+	<link rel="shortcut icon" href="adminicon.ico" />
 </head>
 
 <body onload="x = document.getElementsByTagName('input')[0];if(x)if (x.value == '') x.focus();">
