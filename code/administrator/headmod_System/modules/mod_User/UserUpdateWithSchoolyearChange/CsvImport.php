@@ -405,13 +405,14 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 		try {
 			$stmtsu = $this->_pdo->prepare(
 				'INSERT INTO `UserUpdateTempSolvedUsers`
-					(origUserId, forename, name, birthday, gradelevel,
-						gradelabel)
-				VALUES (?, ?, ?, ?, ?, ?)');
+					(origUserId, forename, name, newUsername, newTelephone,
+						newEmail, birthday, gradelevel, gradelabel)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
 			$stmtu = $this->_pdo->prepare(
 				'INSERT INTO `UserUpdateTempUsers`
-					(origUserId, forename, name, birthday, gradelevel, label)
-				VALUES (?, ?, ?, ?, ?, ?)');
+					(origUserId, forename, name, newUsername, newTelephone,
+						newEmail, birthday, gradelevel, label)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
 			$stmtc = $this->_pdo->prepare(
 				'INSERT INTO `UserUpdateTempConflicts`
 					(origUserId, tempUserId, type, solved) VALUES (?,?,?,?)
@@ -431,15 +432,26 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 					$birthday = Null;
 				}
 
+				$newUsername = (isset($user['csv']['username'])) ?
+					$user['csv']['username'] : NULL;
+				$newTelephone = (isset($user['csv']['telephone'])) ?
+					$user['csv']['telephone'] : NULL;
+				$newEmail = (isset($user['csv']['email'])) ?
+					$user['csv']['email'] : NULL;
+
 				if(!empty($this->_usersWithGradeConflicts) &&
 					in_array(
 						$user['db']['userId'],
 						$this->_usersWithGradeConflicts)
 					) {
+
 					// User has grade-conflict
 					$stmtu->execute(array(
 						$user['db']['userId'], $user['db']['forename'],
 						$user['db']['name'],
+						$newUsername,
+						$newTelephone,
+						$newEmail,
 						$birthday,
 						$level, $label
 					));
@@ -451,6 +463,9 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 					$stmtsu->execute(array(
 						$user['db']['userId'], $user['db']['forename'],
 						$user['db']['name'],
+						$newUsername,
+						$newTelephone,
+						$newEmail,
 						$birthday,
 						$level, $label
 					));
@@ -477,8 +492,9 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 		try {
 			$stmtu = $this->_pdo->prepare(
 				'INSERT INTO `UserUpdateTempUsers`
-					(origUserId, forename, name, gradelevel, label) VALUES
-					(?, ?, ?, ?, ?)
+					(origUserId, forename, name, newUsername, newTelephone,
+						newEmail, birthday, gradelevel, label) VALUES
+					(?, ?, ?, ?, ?, ?, ?, ?, ?)
 			');
 			$stmtc = $this->_pdo->prepare(
 				'INSERT INTO `UserUpdateTempConflicts`
@@ -489,9 +505,20 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 				list($level, $label) = $this->gradeStringSplit(
 					$user['grade']
 				);
+
+				$newUsername = (isset($user['username'])) ?
+					$user['username'] : NULL;
+				$newTelephone = (isset($user['telephone'])) ?
+					$user['telephone'] : NULL;
+				$newEmail = (isset($user['email'])) ?
+					$user['email'] : NULL;
+				$birthday = (!empty($user['birthday'])) ?
+					date('Y-m-d', strtotime($user['birthday'])) : NULL;
+
 				//Add user-entry
 				$stmtu->execute(array(
-					'0', $user['forename'], $user['name'], $level, $label
+					'0', $user['forename'], $user['name'], $newUsername,
+					$newTelephone, $newEmail, $birthday, $level, $label
 				));
 				$uid = $this->_pdo->lastInsertId();
 				//Add conflict
@@ -545,6 +572,9 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 					`origUserId` int(11) unsigned NOT NULL DEFAULT 0,
 					`forename` varchar(64) NOT NULL,
 					`name` varchar(64) NOT NULL,
+					`newUsername` varchar(64) DEFAULT NULL,
+					`newTelephone` varchar(64) DEFAULT NULL,
+					`newEmail` varchar(64) DEFAULT NULL,
 					`birthday` date,
 					`gradelevel` int(3) NOT NULL DEFAULT 0,
 					`label` varchar(255) NOT NULL,
@@ -577,6 +607,9 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 					`origUserId` int(11) unsigned NOT NULL DEFAULT 0,
 					`forename` varchar(64) NOT NULL,
 					`name` varchar(64) NOT NULL,
+					`newUsername` varchar(64) DEFAULT NULL,
+					`newTelephone` varchar(64) DEFAULT NULL,
+					`newEmail` varchar(64) DEFAULT NULL,
 					`birthday` date,
 					`gradelevel` int(3) NOT NULL,
 					`gradelabel` varchar(255) NOT NULL,

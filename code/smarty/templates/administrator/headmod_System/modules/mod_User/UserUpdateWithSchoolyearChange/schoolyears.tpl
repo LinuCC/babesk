@@ -2,6 +2,7 @@
 
 <h2 class="moduleHeader">{t}Select schoolyear{/t}</h2>
 
+{if count($schoolyears)}
 <form class="simpleForm" action="" method="post">
 	<div class="simpleForm">
 		<label class="simpleForm" for="schoolyear">
@@ -21,6 +22,12 @@
 		value="{t}continue{/t}"
 	/>
 </form>
+{else}
+{t}There is no schoolyear you can switch to. Please add a schoolyear and then try again.{/t}
+<form action="index.php?module=administrator|System|Schoolyear&action=addSchoolYear" method="post">
+	<input type="submit" value="{t}Add a schoolyear{/t}" />
+</form>
+{/if}
 
 
 {/block}
