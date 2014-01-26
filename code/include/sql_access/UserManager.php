@@ -505,7 +505,14 @@ class UserManager extends TableManager{
 
 	public function updateLastLoginToNow ($userId) {
 
-		$query = sql_prev_inj(sprintf('UPDATE %s SET last_login = NOW() WHERE ID = %s', $this->tablename, $userId));
+		/**
+		 * @todo In database: set type of last_login to DATETIME
+		 * because SUBSTRING(CAST(NOW() AS char), 0, 11) is ugly.
+		 */
+		$query = sql_prev_inj(sprintf('UPDATE %s
+				SET last_login = SUBSTRING(CAST(NOW() AS char), 0, 11)
+				WHERE ID = %s',
+			$this->tablename, $userId));
 		$this->executeQuery($query);
 	}
 

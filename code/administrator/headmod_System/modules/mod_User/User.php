@@ -742,6 +742,10 @@ class User extends System {
 					)));
 			}
 
+			if(empty($_POST['pricegroupId'])) {
+				$_POST['pricegroupId'] = 0;
+			}
+
 		} catch(Exception $e) {
 			die(json_encode(array(
 				'value' => 'inputError',
@@ -774,36 +778,55 @@ class User extends System {
 			if($this->_acl->moduleGet('root/administrator/Babesk')) {
 				$cardnumberQuery = $this->cardsQueryCreate($uid);
 			}
-			$passwordQuery = $this->passwordQueryCreate($uid);
 			$groupQuery = $this->groupQueryCreate($uid);
 			$schoolyearsAndGradesQuery =
 				$this->schoolyearsAndGradesQueryCreate($uid);
 			$this->userChangeKuwasysData($uid);
 
-			TableMng::queryMultiple("UPDATE users
-				SET `forename` = '$_POST[forename]',
-					`name` = '$_POST[name]',
-					`username` = '$_POST[username]',
-					`email` = '$_POST[email]',
-					$passwordQuery
-					`telephone` = '$_POST[telephone]',
-					`birthday` = '$_POST[birthday]',
-					`locked` = $_POST[accountLocked],
-					`GID` = '$_POST[pricegroupId]',
-					`credit` = '$_POST[credits]',
-					`soli` = '$_POST[isSoli]'
-				WHERE `ID` = $uid;
+			$this->changeUploadUserTableData($uid);
+
+			TableMng::queryMultiple("
 				$cardnumberQuery
 				$groupQuery
 				$schoolyearsAndGradesQuery
-				");
+			");
 
 		} catch (Exception $e) {
-			die($e->getMessage());
+			$this->_logger->log('Could not change the user',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			die(json_encode(array('value' => 'error',
+				'message' => _g('Could not update the user!'))));
 		}
 
 		TableMng::getDb()->autocommit(true);
 		$this->_pdo->commit();
+	}
+
+	private function changeUploadUserTableData($uid) {
+
+		$passwordQuery = $this->passwordQueryCreate($uid);
+
+		try {
+			$userQuery = "UPDATE users
+				SET `forename` = ?, `name` = ?, `username` = ?, `email` = ?,
+				$passwordQuery `telephone` = ?, `birthday` = ?, `locked` = ?,
+				`GID` = ?, `credit` = ?, `soli` = ?
+				WHERE `ID` = ?";
+
+			$stmtu = $this->_pdo->prepare($userQuery);
+			$stmtu->execute(array(
+				$_POST['forename'], $_POST['name'], $_POST['username'],
+				$_POST['email'], $_POST['telephone'], $_POST['birthday'],
+				$_POST['accountLocked'], $_POST['pricegroupId'],
+				$_POST['credits'], $_POST['isSoli'], $uid
+			));
+
+		} catch (PDOException $e) {
+			$this->_logger->log('Could not change the user: ' .
+				'error changing the usertable-data', 'Notice', Null,
+				json_encode(array('msg' => $e->getMessage())));
+			throw $e;
+		}
 	}
 
 	protected function schoolyearsAndGradesQueryCreate($userId) {
@@ -838,7 +861,8 @@ class User extends System {
 
 				$query .= "INSERT INTO usersInGradesAndSchoolyears
 					(userId, gradeId, schoolyearId) VALUES
-					('$userId', '$rGradeId', '$rSyId');";
+					('$userId', '$rGradeId', '$rSyId')
+					ON DUPLICATE KEY UPDATE gradeId = '$rGradeId', schoolyearId = '$rSyId';";
 			}
 			else {
 				unset($toDelete[$rSyId]);

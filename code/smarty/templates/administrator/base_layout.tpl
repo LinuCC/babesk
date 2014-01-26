@@ -3,16 +3,16 @@
 <head>
 <title>{block name=title}BaBeSK{/block}</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-
+<link rel="shortcut icon" href="adminicon.ico" />
 <link rel="stylesheet"
 	href="../include/js/jquery-ui-smoothness.css"
 	type="text/css"
 />
-<script src="../include/js/jquery.min.js"></script>
-<script src="../include/js/json2.min.js"></script>
-<script src="../include/js/jquery-ui.min.js"></script>
-<script src="../include/js/jquery.cookie.js"></script>
-<script src="../smarty/templates/administrator/administratorFunctions.js"></script>
+<script type="text/javascript" src="../include/js/jquery.min.js"></script>
+<script type="text/javascript" src="../include/js/json2.min.js"></script>
+<script type="text/javascript" src="../include/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../include/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="../smarty/templates/administrator/administratorFunctions.js"></script>
 
 {literal}
 <script>

@@ -58,6 +58,7 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 					tc.type AS type,
 					IFNULL(u.forename, tu.forename) AS forename,
 					IFNULL(u.name, tu.name) AS name,
+					IFNULL(tu.birthday, u.birthday) AS birthday,
 					CONCAT(g.gradelevel, "-", g.label) AS origGrade,
 					CONCAT(tu.gradelevel, "-", tu.label) AS newGrade
 				FROM UserUpdateTempConflicts tc
@@ -70,7 +71,8 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 				WHERE solved = 0
 					ORDER BY type LIMIT 10'
 			);
-			return $res->fetchAll(\PDO::FETCH_ASSOC);
+			$data = $res->fetchAll(\PDO::FETCH_ASSOC);
+			return $data;
 
 		} catch (\PDOException $e) {
 			$this->_logger->log('Error fetching conflicts to resolve',
@@ -142,9 +144,12 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 		try {
 			$this->userSolveStmt = $this->_pdo->prepare(
 				'INSERT INTO UserUpdateTempSolvedUsers
-					(origUserId, forename, name, gradelevel, gradelabel, birthday)
+					(origUserId, forename, name, newUsername, newTelephone,
+						newEmail, gradelevel, gradelabel, birthday)
 					VALUES (
-						:origUserId, :forename, :name, :gradelevel, :gradelabel, :birthday
+						:origUserId, :forename, :name, :newUsername,
+						:newTelephone, :newEmail, :gradelevel, :gradelabel,
+						:birthday
 					)'
 			);
 			$this->conflictResolveStmt = $this->_pdo->prepare(
@@ -201,7 +206,10 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 		$query = 'SELECT tc.ID as conflictId, tc.tempUserId AS tempUserId,
 					tc.origUserId AS origUserId,
 					tc.tempUserId AS tempUserId,
-					tu.birthday AS birthday,
+					IFNULL(tu.birthday, u.birthday) AS birthday,
+					tu.newUsername AS newUsername,
+					tu.newTelephone AS newTelephone,
+					tu.newEmail AS newEmail,
 					tc.type AS type,
 					IFNULL(u.forename, tu.forename) AS forename,
 					IFNULL(u.name, tu.name) AS name,
@@ -253,10 +261,16 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 	private function csvOnlyResolve($conflict) {
 
 		if($conflict['status'] == 'confirmed') {
+			if(empty($conflict['birthday'])) {
+				$conflict['birthday'] = NULL;
+			}
 			$data = array(
 				'origUserId' => 0,
 				'forename' => $conflict['forename'],
 				'name' => $conflict['name'],
+				'newUsername' => $conflict['newUsername'],
+				'newTelephone' => $conflict['newTelephone'],
+				'newEmail' => $conflict['newEmail'],
 				'gradelevel' => $conflict['newGradelevel'],
 				'gradelabel' => $conflict['newGradelabel'],
 				'birthday' => $conflict['birthday'],
@@ -274,10 +288,16 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 	private function gradelevelResolve($conflict) {
 
 		if($conflict['status'] == 'confirmed') {
+			if(empty($conflict['birthday'])) {
+				$conflict['birthday'] = NULL;
+			}
 			$data = array(
 				'origUserId' => $conflict['origUserId'],
 				'forename' => $conflict['forename'],
 				'name' => $conflict['name'],
+				'newUsername' => $conflict['newUsername'],
+				'newTelephone' => $conflict['newTelephone'],
+				'newEmail' => $conflict['newEmail'],
 				'gradelevel' => $conflict['newGradelevel'],
 				'gradelabel' => $conflict['newGradelabel'],
 				'birthday' => $conflict['birthday']

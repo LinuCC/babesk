@@ -10,6 +10,11 @@
 <form id="conflictForm" action="index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange|SessionMenu|ConflictsResolve" method="post">
 
 	{foreach $conflicts as $conflict}
+		{if not empty($conflict.birthday)}
+			{$conflict.birthday = date('d.m.Y', strtotime($conflict.birthday))}
+		{else}
+			{$conflict.birthday = '---'}
+		{/if}
 		{if $conflict.type != $lastType}
 			{if $listStarted}
 				{*Stop old list if started*}
@@ -22,10 +27,9 @@
 			<ul class="inputFormList">
 			{$listStarted = true}
 		{/if}
-
 		<li>
 			{if $conflict.type == "CsvOnlyConflict"}
-				{t escape=no forename=$conflict.forename name=$conflict.name newGrade=$conflict.newGrade}The user <span class="highlighted">"%1 %2"</span>, that will be in grade <span class="highlighted">"%3"</span>, is new. Is that correct?{/t}
+				{t escape=no forename=$conflict.forename name=$conflict.name birthday=$conflict.birthday newGrade=$conflict.newGrade}The user <span class="highlighted">"%1 %2"</span> (birthday: <span class="highlighted">"%3"</span>), that will be in grade <span class="highlighted">"%3"</span>, is new. Is that correct?{/t}
 				<br />
 				<button id="Yes_{$conflict.userId}_{$conflict.type}"
 				class="conflict_{$conflict.type} conflictAnswerYes" conflictId="{$conflict.conflictId}" >
@@ -37,7 +41,7 @@
 				</button>
 			{/if}
 			{if $conflict.type == "DbOnlyConflict"}
-				{t escape=no forename=$conflict.forename name=$conflict.name}The user <span class="highlighted">"%1 %2"</span> is not in the upcoming schoolyear. Is that correct?{/t}<br />
+				{t escape=no forename=$conflict.forename name=$conflict.name birthday=$conflict.birthday}The user <span class="highlighted">"%1 %2"</span> (birthday: <span class="highlighted">"%3"</span>) is not in the upcoming schoolyear. Is that correct?{/t}<br />
 				<button id="Yes_{$conflict.userId}_{$conflict.type}"
 				class="conflict_{$conflict.type}  conflictAnswerYes" conflictId="{$conflict.conflictId}" >
 					{t}Yes{/t}
@@ -48,7 +52,7 @@
 				</button>
 			{/if}
 			{if $conflict.type == "GradelevelConflict"}
-				{t escape=no forename=$conflict.forename name=$conflict.name origGrade=$conflict.origGrade newGrade=$conflict.newGrade}The grade of the user <span class="highlighted">"%1 %2"</span> changed from "%3" to "%4". Is that correct?{/t}<br />
+				{t escape=no forename=$conflict.forename name=$conflict.name birthday=$conflict.birthday origGrade=$conflict.origGrade newGrade=$conflict.newGrade}The grade of the user <span class="highlighted">"%1 %2"</span> (birthday: <span class="highlighted">"%3"</span>) changed from "%4" to "%5". Is that correct?{/t}<br />
 
 				<button id="Yes_{$conflict.userId}_{$conflict.type}"
 					class="conflict_{$conflict.type}  conflictAnswerYes"

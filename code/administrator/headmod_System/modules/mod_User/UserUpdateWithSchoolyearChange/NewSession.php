@@ -55,7 +55,7 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 
 		try {
 			$res = $this->_pdo->query(
-				'SELECT ID, label FROM schoolYear WHERE 1'
+				'SELECT ID, label FROM schoolYear WHERE ID <> @activeSchoolyear'
 			);
 			return $res->fetchAll(\PDO::FETCH_KEY_PAIR);
 
@@ -76,6 +76,13 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 
 		$this->schoolyearSelectedCheckInput();
 
+		if($this->schoolyearAlreadyUsedCheck($_POST['schoolyear'])) {
+			$this->_interface->showError(_g('This schoolyear was already ' .
+				'used! Please select one that was not used yet.'));
+			$this->schoolyearSelectDisplay();
+			die();
+		}
+
 		$_SESSION['UserUpdateWithSchoolyearChange']['switchType'] = $_POST['switchType'];
 
 		$this->schoolyearIdUpload($_POST['schoolyear']);
@@ -86,6 +93,27 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 		$this->_dataContainer->getAcl()->moduleExecute(
 			$mod, $this->_dataContainer
 		);
+	}
+
+	/**
+	 * Checks if the schoolyear has already been used
+	 * @return bool   true if it has already been used
+	 */
+	private function schoolyearAlreadyUsedCheck($schoolyearId) {
+
+		try {
+			$stmt = $this->_pdo->prepare('SELECT COUNT(*)
+				FROM usersInGradesAndSchoolyears WHERE schoolyearId = ?');
+			$stmt->execute(array($schoolyearId));
+			return (bool)(int)$stmt->fetchColumn();
+
+		} catch (\PDOException $e) {
+			$this->_logger->log(
+				'Could not check if the schoolyear has already been used',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieError(_g('Could not check if the ' .
+				'schoolyear has already been used'));
+		}
 	}
 
 	/**

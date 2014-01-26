@@ -87,7 +87,9 @@ class Administrator {
 			$execCom = $this->_moduleExecutionParser->executionCommandGet();
 			$genManager = $this->_acl->moduleGeneratorManagerGet();
 			$module = $genManager->moduleByPathGet($execCom->pathGet());
-			$this->_smarty->assign('moduleExecutedId', $module->getId());
+			if($module) {
+				$this->_smarty->assign('moduleExecutedId', $module->getId());
+			}
 			$this->_acl->moduleExecute(
 				$execCom, $this->dataContainerCreate()
 			);
