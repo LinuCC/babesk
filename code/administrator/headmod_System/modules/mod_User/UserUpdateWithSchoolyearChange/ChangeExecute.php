@@ -21,7 +21,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 
 		$this->entryPoint($dataContainer);
 		if($this->conflictsSolvedCheck()) {
-			$this->_addedGrades = array();
+			$this->_existingGrades = $this->gradesFetch();
 			$this->_pdo->beginTransaction();
 			$this->userChangesCommit();
 			$this->usersNewCommit();
@@ -74,7 +74,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 		$this->usersToChangeCheckGrades();
 
 		try {
-			$query = 'INSERT INTO usersInGradesAndSchoolyears (
+			$queryJoints = 'INSERT INTO usersInGradesAndSchoolyears (
 					userId, gradeId, schoolyearId
 				) SELECT su.origUserId, g.ID,
 					(SELECT value FROM global_settings
@@ -85,9 +85,17 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 					LEFT JOIN Grades g ON g.gradelevel = su.gradelevel AND
 						g.label = su.gradelabel
 					WHERE su.origUserId <> 0
-				';
+			';
+			//Update user-entries if data is given
+			$queryUsers = 'UPDATE users u
+				LEFT JOIN UserUpdateTempSolvedUsers su ON u.ID = su.origUserId
+				SET u.email = IFNULL(su.newEmail, u.email),
+					u.telephone = IFNULL(su.newTelephone, u.telephone),
+					u.username = IFNULL(su.newUsername, u.username)
+			';
 
-			$this->_pdo->query($query);
+			$this->_pdo->query($queryJoints);
+			$this->_pdo->query($queryUsers);
 
 		} catch (\PDOException $e) {
 			$this->_logger->log('Could not commit the user Changes',
@@ -110,13 +118,33 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 		foreach($grades as $grade) {
 			$existingGradeId = array_search(
 				$grade['gradelevel'] . $grade['gradelabel'],
-				$this->_addedGrades
+				$this->_existingGrades
 			);
 			if($existingGradeId === FALSE) {
 				$this->gradeAdd($grade['gradelevel'], $grade['gradelabel']);
-				$this->_addedGrades[$grade['gradeId']] =
+				$this->_existingGrades[$grade['gradeId']] =
 					$grade['gradelevel'] . $grade['gradelabel'];
 			}
+		}
+	}
+
+	/**
+	 * Fetches the grades already existing in the Database
+	 * @return array '<gradeId>' => '<gradelevel.gradelabel>'
+	 */
+	private function gradesFetch() {
+
+		try {
+			$stmt = $this->_pdo->query(
+				'SELECT ID, CONCAT(gradelevel, label) AS name
+				FROM Grades WHERE 1'
+			);
+			return $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);
+
+		} catch (\PDOException $e) {
+			$this->_logger->log('Could not fetch the grades',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieError(_g('Could not fetch the grades!'));
 		}
 	}
 
@@ -136,7 +164,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 				'INSERT INTO users
 					(forename, name, username, password, email, telephone,
 						last_login, locked, GID, credit, soli, birthday)
-				VALUES (?, ?, CONCAT(forename, ".", name), "", "", "", "", 0, 0, 0, 0, ?)'
+				VALUES (?, ?, IFNULL(?, CONCAT(forename, ".", name)), "", IFNULL(?, ""), IFNULL(?, ""), "", 0, 0, 0, 0, ?)'
 			);
 			$stmtg = $this->_pdo->prepare(
 				'INSERT INTO usersInGradesAndSchoolyears (
@@ -152,9 +180,11 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 					$user['birthday'] = '';
 				}
 				$user = $this->userNewGradeCheckAndAdd($user);
-				$stmtu->execute(
-					array($user['forename'], $user['name'], $user['birthday'])
-				);
+				$stmtu->execute(array(
+					$user['forename'], $user['name'], $user['newUsername'],
+					$user['newEmail'], $user['newTelephone'],
+					$user['birthday']
+				));
 				$userId = $this->_pdo->lastInsertId();
 				$stmtg->execute(array($userId, $user['gradeId']));
 			}
@@ -176,14 +206,14 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 			//userentry
 			$existingGradeId = array_search(
 				$user['gradelevel'] . $user['gradelabel'],
-				$this->_addedGrades
+				$this->_existingGrades
 			);
 			if($existingGradeId === FALSE) {
 				$gradeId = $this->gradeAdd(
 					$user['gradelevel'], $user['gradelabel']
 				);
 				$user['gradeId'] = $gradeId;
-				$this->_addedGrades[$gradeId] =
+				$this->_existingGrades[$gradeId] =
 					$user['gradelevel'] . $user['gradelabel'];
 			}
 			else {
@@ -247,7 +277,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 
 	/**
 	 * Fetches the users that will be changed when comitting
-	 * @return array  '<userId>' => [gradeStuff]
+	 * @return array  '<index>' => [userId, gradeStuff]
 	 */
 	private function usersToChangeGradeIdsCommitFetch() {
 
@@ -303,7 +333,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 	 */
 	private $_gradeStmt;
 
-	private $_addedGrades;
+	private $_existingGrades;
 }
 
 ?>
