@@ -355,7 +355,7 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 			return array((int)$data[0], $data[1]);
 		}
 		else {
-			$level = preg_replace('/[A-Za-z]+/', '', $grade);
+			$level = preg_replace('/[^0-9]+/', '', $grade);
 			$label = str_replace($level, '', $grade);
 			return array((int)$level, $label);
 		}
