@@ -25,6 +25,8 @@ INSERT INTO `global_settings`
 	('smtpPassword', ''),
 	('smtpFromName', ''),
 	('smtpFrom', ''),
+	('webHomepageRedirectTarget', ''),
+	('webHomepageRedirectDelay', '0'),
 	-- Settings for Creating PDFs
 	-- The Logo of the PDF-File
 	('pdfDefaultLogopath', ''),
