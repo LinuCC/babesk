@@ -46,6 +46,7 @@ class KuwasysUsersCreateParticipationConfirmationPdf {
 				LEFT JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
 			WHERE (%s)
 				AND uigs.schoolyearId = @activeSchoolyear
+				AND uics.name = "active"
 				GROUP BY grouper
 			;', $whereQuery);
 
@@ -110,9 +111,9 @@ class KuwasysUsersCreateParticipationConfirmationPdf {
 		if(count($user->classes)) {
 			$str = '<ul>';
 			foreach ($user->classes as $unitTranslatedName => $unit) {
-				$str .= sprintf ('<li>%s:<br /><ul>', $unitTranslatedName);
+				$str .= sprintf ('<li>%s:<ul>', $unitTranslatedName);
 				foreach ($unit as $class) {
-					$str .= sprintf ('<li>%s (%s)<p style="font-size:70%%">Unterschrift Kursleiter, Anmeldung zur Kenntnis genommen:_________________________________________</p></li>', $class->label, $class->statusTranslatedName);
+					$str .= sprintf ('<li>%s</li>', $class->label);
 				}
 				$str .= '</ul>';
 			}
