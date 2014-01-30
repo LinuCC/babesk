@@ -785,11 +785,12 @@ class User extends System {
 
 			$this->changeUploadUserTableData($uid);
 
-			TableMng::queryMultiple("
-				$cardnumberQuery
-				$groupQuery
-				$schoolyearsAndGradesQuery
-			");
+			$query = "{$cardnumberQuery}{$groupQuery}" .
+				"{$schoolyearsAndGradesQuery}";
+
+			if(!empty($query)) {
+				TableMng::queryMultiple($query);
+			}
 
 		} catch (Exception $e) {
 			$this->_logger->log('Could not change the user',

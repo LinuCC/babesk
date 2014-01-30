@@ -73,12 +73,12 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 					'', 'name'
 				),
 				'birthday' => array(
-					'required||min_len,,0||max_len,,10',
+					'min_len,,0||max_len,,10',
 					'', 'birthday'
 				),
 				'grade' => array(
 					'required||min_len,,2||max_len,,24||regex,,' .
-					'/^\d{1,2}-[^\d-]{1,21}|\d{1,2}[^\d-]{1,21}$/',
+					'/^\d{1,2}-[^\d-]{1,21}$|^\d{1,2}[^\d-]{1,21}$|^\d{1,5}$/',
 					'', 'grade'
 				)
 			);
@@ -153,6 +153,7 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 
 		$this->csvCheckColumns($content);
 		$this->csvCheckGump($content);
+		$this->addVoidBirthdaysIfNotExist($content);
 	}
 
 	/**
@@ -179,6 +180,21 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 				' the csv-file. The file is missing the column "%1$s"!',
 				$errorcol));
 		}
+	}
+
+	/**
+	 * Adds void birthdays to the users if they are not given
+	 * Allows to upload the data without problems
+	 * @param array $users The given users
+	 */
+	private function addVoidBirthdaysIfNotExist($users) {
+
+		foreach($users as &$user) {
+			if(empty($user['birthday'])) {
+				$user['birthday'] = 0;
+			}
+		}
+		return $users;
 	}
 
 	/**
@@ -350,6 +366,9 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 	 */
 	private function gradeStringSplit($grade) {
 
+		if(is_numeric($grade)) {   //gradelevel only, no label
+			return array((int)$grade, '');
+		}
 		if(strpos($grade, '-') !== False) {
 			$data = explode('-', $grade);
 			return array((int)$data[0], $data[1]);

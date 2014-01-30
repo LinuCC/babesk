@@ -23,7 +23,15 @@
 			{/if}
 			{*Begin a new list*}
 			<fieldset class="smallContainer">
-			<legend>{$conflict.type}</legend>
+			<legend>
+				{if $conflict.type == "CsvOnlyConflict"}
+					{t}User not found in program{/t}
+				{elseif $conflict.type == "DbOnlyConflict"}
+					{t}User existing but not found in new file{/t}
+				{elseif $conflict.type == "GradelevelConflict"}
+					{t}Users old and new gradelevels differ too much{/t}
+				{/if}
+			</legend>
 			<ul class="inputFormList">
 			{$listStarted = true}
 		{/if}
