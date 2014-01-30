@@ -130,13 +130,22 @@ class Schoolyear extends System {
 		}
 	}
 
+	/**
+	 * Adds the schoolyear to the database
+	 */
 	protected function addSchoolYearToDatabase() {
 
-		try {
-			TableMng::query("INSERT INTO schoolYear (label, active)
-				VALUES ('{$_POST['label']}', '{$_POST['active']}')");
+		//MariaDB does not implicitly convert boolean to int
+		$active = (int)$_POST['active'];
 
-		} catch(Exception $e) {
+		try {
+			$stmt = $this->_pdo->prepare('INSERT INTO schoolYear
+				(label, active) VALUES (?, ?)');
+			$stmt->execute(array($_POST['label'], $active));
+
+		} catch(PDOException $e) {
+			$this->_logger->log('Error adding a new Schoolyear',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
 			$this->_interface->dieError(_g('Could not add the Schoolyear'));
 		}
 	}
