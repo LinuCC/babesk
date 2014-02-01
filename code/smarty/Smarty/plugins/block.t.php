@@ -28,7 +28,7 @@
  * @copyright 2004-2005 Sagi Bashari
  * @copyright 2013 FusionDirectory Project
  */
- 
+
 /**
  * Replaces arguments in a string with their values.
  * Arguments are represented by % followed by their number.
@@ -44,7 +44,7 @@ function smarty_gettext_strarg($str)
 
 	for ($i=1; $i < func_num_args(); $i++) {
 		$arg = func_get_arg($i);
-		
+
 		if (is_array($arg)) {
 			foreach ($arg as $aarg) {
 				$tr['%'.++$p] = $aarg;
@@ -53,8 +53,20 @@ function smarty_gettext_strarg($str)
 			$tr['%'.++$p] = $arg;
 		}
 	}
-	
+
 	return strtr($str, $tr);
+}
+
+// "fix" string - strip slashes, escape and condense whitespaces to one space.
+// Useful when formatting the text inside the gettext-tags like normal
+// html-code
+function fsc($str)
+{
+	$str = stripslashes($str);
+	$str = str_replace('"', '\"', $str);
+	$str = preg_replace('!\s+!', ' ', trim($str));
+
+	return $str;
 }
 
 /**
@@ -62,7 +74,7 @@ function smarty_gettext_strarg($str)
  *
  * The block content is the text that should be translated.
  *
- * Any parameter that is sent to the function will be represented as %n in the translation text, 
+ * Any parameter that is sent to the function will be represented as %n in the translation text,
  * where n is 1 for the first parameter. The following parameters are reserved:
  *   - escape - sets escape mode:
  *       - 'html' for HTML escaping, this is the default.
@@ -77,27 +89,32 @@ function smarty_block_t($params, $text, &$smarty)
 	if ( ! isset($text) ) {
 		return $text;
 	}
-	
+
 	$text = stripslashes($text);
-	
+
+	if(isset($params['condense'])) {
+		$text = fsc($text);
+		unset($params['condense']);
+	}
+
 	// set escape mode
 	if (isset($params['escape'])) {
 		$escape = $params['escape'];
 		unset($params['escape']);
 	}
-	
+
 	// set plural version
 	if (isset($params['plural'])) {
 		$plural = $params['plural'];
 		unset($params['plural']);
-		
+
 		// set count
 		if (isset($params['count'])) {
 			$count = $params['count'];
 			unset($params['count']);
 		}
 	}
-	
+
 	// use plural if required parameters are set
 	if (isset($count) && isset($plural)) {
 		$text = ngettext($text, $plural, $count);
@@ -125,7 +142,7 @@ function smarty_block_t($params, $text, &$smarty)
 				break;
 		}
 	}
-	
+
 	return $text;
 }
 

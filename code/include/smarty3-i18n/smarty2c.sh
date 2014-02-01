@@ -1,1 +1,0 @@
-php -q tsmarty2c.php ../.. > smarty2c.c

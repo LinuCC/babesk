@@ -23,6 +23,9 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 		else if(isset($_POST['schoolyearSelected'])) {
 			$this->schoolyearSelected();
 		}
+		else if(isset($_POST['csvHelp'])) {
+			$this->csvHelpDisplay();
+		}
 		else {
 			$this->introductionDisplay();
 		}
@@ -163,6 +166,12 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 			$this->_smarty->assign('backlink', 'index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange|NewSession');
 			$this->_interface->dieError($error);
 		}
+	}
+
+	private function csvHelpDisplay() {
+		$this->_interface->backlink('administrator|System|User|' .
+			'UserUpdateWithSchoolyearChange|NewSession');
+		$this->displayTpl('csvhelp.tpl');
 	}
 
 	/////////////////////////////////////////////////////////////////////

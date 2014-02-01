@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-31 00:05+0100\n"
-"PO-Revision-Date: 2014-01-31 00:07+0100\n"
+"POT-Creation-Date: 2014-02-01 17:16+0100\n"
+"PO-Revision-Date: 2014-02-01 17:16+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: de\n"
@@ -17,15 +17,15 @@ msgstr ""
 "X-Poedit-Bookmarks: 121,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 "X-Poedit-SearchPath-0: ../../..\n"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:2
+#: ../../../include/smarty-gettext/smarty2c.c:2
 msgid "Kuwasys User-Mainmenu"
 msgstr "Kuwasys Benutzer-Hauptmenü"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:5
+#: ../../../include/smarty-gettext/smarty2c.c:5
 msgid "Printables"
 msgstr "Druckbares"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:8
+#: ../../../include/smarty-gettext/smarty2c.c:8
 msgid ""
 "Here you can Print PDFs confirming the Participation of Users at their "
 "Classes of this Year"
@@ -33,54 +33,54 @@ msgstr ""
 "Hier können sie PDF-Dateien drucken die die Teilnahmen der Nutzer an Kursen "
 "in diesem Jahr bestätigen."
 
-#: ../../../include/smarty3-i18n/smarty2c.c:11
+#: ../../../include/smarty-gettext/smarty2c.c:11
 msgid "Print Participation Confirmation"
 msgstr "Teilnahmebestätigung ausdrucken"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:14
-#: ../../../include/smarty3-i18n/smarty2c.c:263
+#: ../../../include/smarty-gettext/smarty2c.c:14
+#: ../../../include/smarty-gettext/smarty2c.c:263
 msgid "Bulk-Changes"
 msgstr "Massenveränderungen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:17
+#: ../../../include/smarty-gettext/smarty2c.c:17
 msgid ""
 "Here you can assign the Users that submitted requests to Classes of the "
 "active Year"
 msgstr "Hier können sie Nutzer den von ihnen gewünschten Kursen zuweisen."
 
-#: ../../../include/smarty3-i18n/smarty2c.c:20
+#: ../../../include/smarty-gettext/smarty2c.c:20
 msgid "Assign the Users to the Classes"
 msgstr "Die Benutzer den Kursen zuordnen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:23
-#: ../../../include/smarty3-i18n/smarty2c.c:296
-#: ../../../include/smarty3-i18n/smarty2c.c:422
+#: ../../../include/smarty-gettext/smarty2c.c:23
+#: ../../../include/smarty-gettext/smarty2c.c:296
+#: ../../../include/smarty-gettext/smarty2c.c:461
 msgid "Actions"
 msgstr "Aktionen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:26
+#: ../../../include/smarty-gettext/smarty2c.c:26
 msgid "Go to the existing Assignment-Process"
 msgstr "Zum existierenden Zuweisungs-Prozess gehen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:29
+#: ../../../include/smarty-gettext/smarty2c.c:29
 msgid "Bulk-Actions"
 msgstr "Massenänderungnen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:32
+#: ../../../include/smarty-gettext/smarty2c.c:32
 msgid "Start a new Assignment-Process"
 msgstr ""
 "Einen neuen Zuweisungsprozess starten (Warnung - löscht den alten Prozess, "
 "falls vorhanden)"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:35
+#: ../../../include/smarty-gettext/smarty2c.c:35
 msgid "Assign all Users to their Classes"
 msgstr "Alle Benutzer ihren Kursen zuordnen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:38
+#: ../../../include/smarty-gettext/smarty2c.c:38
 msgid "Really start a new Assignment-Process?"
 msgstr "Wollen sie wirklich einen neuen Zuweisungsprozess starten?"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:41
+#: ../../../include/smarty-gettext/smarty2c.c:41
 msgid ""
 "If you have already started an Assignment-Process, the Data will be "
 "inevitably lost. Are you sure?"
@@ -88,13 +88,13 @@ msgstr ""
 "Wenn sie bereits einen Zuweisungsprozess gestartet haben, werden die Daten "
 "verloren gehen. Sind sie sicher?"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:44
+#: ../../../include/smarty-gettext/smarty2c.c:44
 #: ../../../smarty/templates_c/a1c6b6c80b42f8498abfb006fd1e9d1e5e250c41.file.classdetails.tpl.php:125
 msgid "Classdetails of Class"
 msgstr "Details des Kurses"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:47
-#: ../../../include/smarty3-i18n/smarty2c.c:95
+#: ../../../include/smarty-gettext/smarty2c.c:47
+#: ../../../include/smarty-gettext/smarty2c.c:95
 #: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:55
 #: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:75
 #: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:264
@@ -102,149 +102,149 @@ msgstr "Details des Kurses"
 msgid "Username"
 msgstr "Benutzername"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:50
-#: ../../../include/smarty3-i18n/smarty2c.c:53
-#: ../../../include/smarty3-i18n/smarty2c.c:98
+#: ../../../include/smarty-gettext/smarty2c.c:50
+#: ../../../include/smarty-gettext/smarty2c.c:53
+#: ../../../include/smarty-gettext/smarty2c.c:98
 #: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:267
 #: ../../../smarty/templates_c/a1c6b6c80b42f8498abfb006fd1e9d1e5e250c41.file.classdetails.tpl.php:155
 #: ../../../smarty/templates_c/a1c6b6c80b42f8498abfb006fd1e9d1e5e250c41.file.classdetails.tpl.php:177
 msgid "Status"
 msgstr "Status"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:56
+#: ../../../include/smarty-gettext/smarty2c.c:56
 #: ../../../smarty/templates_c/a1c6b6c80b42f8498abfb006fd1e9d1e5e250c41.file.classdetails.tpl.php:199
 msgid "Class"
 msgstr "Kurs"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:59
+#: ../../../include/smarty-gettext/smarty2c.c:59
 msgid "Classregistrations are not allowed"
 msgstr "Kursregistrierungen sind nicht erlaubt"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:62
+#: ../../../include/smarty-gettext/smarty2c.c:62
 msgid "Classregistrations are allowed"
 msgstr "Kursregistrierungen sind erlaubt"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:65
-#: ../../../include/smarty3-i18n/smarty2c.c:158
+#: ../../../include/smarty-gettext/smarty2c.c:65
+#: ../../../include/smarty-gettext/smarty2c.c:158
 msgid "Standard-Actions"
 msgstr "Standard-Aktionen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:68
+#: ../../../include/smarty-gettext/smarty2c.c:68
 msgid "Add a Class"
 msgstr "Ein Kurs hinzufügen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:71
+#: ../../../include/smarty-gettext/smarty2c.c:71
 msgid "Display all Classes"
 msgstr "Alle Kurse anzeigen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:74
-#: ../../../include/smarty3-i18n/smarty2c.c:167
+#: ../../../include/smarty-gettext/smarty2c.c:74
+#: ../../../include/smarty-gettext/smarty2c.c:167
 msgid "More Actions"
 msgstr "Mehr Aktionen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:77
+#: ../../../include/smarty-gettext/smarty2c.c:77
 msgid "Import Classes with a CSV-File"
 msgstr "Kurse mit einer CSV-Datei importieren"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:80
+#: ../../../include/smarty-gettext/smarty2c.c:80
 msgid "Create Class-Summaries"
 msgstr "Klassenübersichten erstellen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:83
+#: ../../../include/smarty-gettext/smarty2c.c:83
 msgid "Change if Classregistrations are enabled"
 msgstr "Ändern, ob Kursregistrierungen erlaubt sind"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:86
-#: ../../../include/smarty3-i18n/smarty2c.c:89
+#: ../../../include/smarty-gettext/smarty2c.c:86
+#: ../../../include/smarty-gettext/smarty2c.c:89
 #: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:255
 #: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:258
 msgid "Assign a User to this Class"
 msgstr "Einen Benutzer den Kursen zuordnen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:92
+#: ../../../include/smarty-gettext/smarty2c.c:92
 #: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:260
 msgid "Please select the User and the Status of the Assignment"
 msgstr ""
 "Bitte geben sie den Benutzernamen des Nutzers und den Status der Zuweisung "
 "ein."
 
-#: ../../../include/smarty3-i18n/smarty2c.c:101
+#: ../../../include/smarty-gettext/smarty2c.c:101
 #: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:299
 msgid "Assign User"
 msgstr "Benutzer zuweisen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:104
+#: ../../../include/smarty-gettext/smarty2c.c:104
 #: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:328
 msgid "Could not parse the Serveranswer!"
 msgstr "Konne die Serveratnwort nicht lesen!"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:107
+#: ../../../include/smarty-gettext/smarty2c.c:107
 #: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:334
 msgid "Could not Assign the User to the Class!"
 msgstr "Konnte die Benutzer nicht zu den Kursen zuweisen!"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:110
+#: ../../../include/smarty-gettext/smarty2c.c:110
 #: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:340
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:113
+#: ../../../include/smarty-gettext/smarty2c.c:113
 #: ../../../smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:123
 msgid "Name"
 msgstr "Name"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:116
+#: ../../../include/smarty-gettext/smarty2c.c:116
 #: ../../../smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:144
 msgid "Classteacher"
 msgstr "Kursleiter"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:119
+#: ../../../include/smarty-gettext/smarty2c.c:119
 #: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:461
 #: ../../../smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:208
 msgid "Day"
 msgstr "Tag"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:122
+#: ../../../include/smarty-gettext/smarty2c.c:122
 #: ../../../smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:241
 msgid "execute Changes"
 msgstr "Änderungen ausführen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:125
+#: ../../../include/smarty-gettext/smarty2c.c:125
 #: ../../../smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:246
 msgid "The uploaded file did not contain any usable data."
 msgstr "Die hochgeladene Datei besaß keine nutzbaren Daten."
 
-#: ../../../include/smarty3-i18n/smarty2c.c:128
+#: ../../../include/smarty-gettext/smarty2c.c:128
 #: ../../../smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:249
 msgid "click here to go back"
 msgstr "Hier klicken um zurückzukehren."
 
-#: ../../../include/smarty3-i18n/smarty2c.c:131
+#: ../../../include/smarty-gettext/smarty2c.c:131
 #: ../../../smarty/templates_c/653313aa093ae5dd2ab742df89f4d5ce8fe3c030.file.fileUploadForm.tpl.php:108
 msgid "Upload a file"
 msgstr "Datei hochladen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:134
+#: ../../../include/smarty-gettext/smarty2c.c:134
 #: ../../../smarty/templates_c/653313aa093ae5dd2ab742df89f4d5ce8fe3c030.file.fileUploadForm.tpl.php:114
 msgid "File:"
 msgstr "Datei:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:137
+#: ../../../include/smarty-gettext/smarty2c.c:137
 #: ../../../smarty/templates_c/653313aa093ae5dd2ab742df89f4d5ce8fe3c030.file.fileUploadForm.tpl.php:117
 msgid "Create Preview"
 msgstr "Vorschau erstellen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:140
+#: ../../../include/smarty-gettext/smarty2c.c:140
 #: ../../../smarty/templates_c/653313aa093ae5dd2ab742df89f4d5ce8fe3c030.file.fileUploadForm.tpl.php:122
 msgid "Help:"
 msgstr "Hilfe:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:143
+#: ../../../include/smarty-gettext/smarty2c.c:143
 #: ../../../smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:106
 msgid "Class-Deletion"
 msgstr "Kurs-Löschung"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:146
+#: ../../../include/smarty-gettext/smarty2c.c:146
 msgid ""
 "Do you really want to delete the Class \"%1\"? All its data is inevitably "
 "lost when doing so!"
@@ -252,114 +252,114 @@ msgstr ""
 "Wollen sie wirklich den Kurs \"%1\" löschen? Alle Daten gehen "
 "unwiederbringlich verloren!"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:149
-#: ../../../include/smarty3-i18n/smarty2c.c:362
-#: ../../../include/smarty3-i18n/smarty2c.c:371
-#: ../../../include/smarty3-i18n/smarty2c.c:380
+#: ../../../include/smarty-gettext/smarty2c.c:149
+#: ../../../include/smarty-gettext/smarty2c.c:401
+#: ../../../include/smarty-gettext/smarty2c.c:410
+#: ../../../include/smarty-gettext/smarty2c.c:419
 #: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:420
 #: ../../../smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:117
 msgid "Yes"
 msgstr "Ja"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:152
+#: ../../../include/smarty-gettext/smarty2c.c:152
 #: ../../../smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:120
 msgid "No, I dont want to delete the Class"
 msgstr "Nein, ich will den Kurs nicht löschen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:155
+#: ../../../include/smarty-gettext/smarty2c.c:155
 msgid "Mainmenu of the Classteacher-Module"
 msgstr "Hauptmenü des Kursleiter-Moduls"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:161
+#: ../../../include/smarty-gettext/smarty2c.c:161
 msgid "Add a Classteacher"
 msgstr "Einen Kursleiter hinzufügen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:164
+#: ../../../include/smarty-gettext/smarty2c.c:164
 msgid "Display all Classteachers"
 msgstr "Alle Kursleiter anzeigen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:170
+#: ../../../include/smarty-gettext/smarty2c.c:170
 msgid "Import Classteachers by a CSV-file"
 msgstr "Kursleiter mit einer CSV-Datei importieren"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:173
+#: ../../../include/smarty-gettext/smarty2c.c:173
 msgid "Delete a Classteacher"
 msgstr "Einen Kursleiter löschen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:176
+#: ../../../include/smarty-gettext/smarty2c.c:176
 #: ../../../smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:93
 msgid "Soli-Settings"
 msgstr "Teilhabepaket-Einstellungen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:179
+#: ../../../include/smarty-gettext/smarty2c.c:179
 #: ../../../smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:101
 msgid "Enable Soli"
 msgstr "Teilhabepaket aktivieren"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:182
+#: ../../../include/smarty-gettext/smarty2c.c:182
 #: ../../../smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:105
 msgid "Is the Soli-Module enabled:"
 msgstr "Ist das Soli-Modul aktiviert:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:185
+#: ../../../include/smarty-gettext/smarty2c.c:185
 #: ../../../smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:116
 msgid "Soliprice"
 msgstr "Teilhabepaketpreis"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:188
+#: ../../../include/smarty-gettext/smarty2c.c:188
 #: ../../../smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:122
 msgid "Is Soliprice Enabled:"
 msgstr "Sind Teilhabepaket-Preise aktiviert:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:191
+#: ../../../include/smarty-gettext/smarty2c.c:191
 #: ../../../smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:132
 msgid "Amount to Pay:"
 msgstr "Zu bezahlender Betrag:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:194
+#: ../../../include/smarty-gettext/smarty2c.c:194
 #: ../../../smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:140
 msgid "Commit Changes"
 msgstr "Änderungen hochladen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:197
+#: ../../../include/smarty-gettext/smarty2c.c:197
 #: ../../../smarty/templates_c/818149c8372c3fa5e5e32c9cd62bc5d894003dc9.file.mainmenu.tpl.php:111
 msgid "Standard Actions"
 msgstr "Standardaktionen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:200
+#: ../../../include/smarty-gettext/smarty2c.c:200
 #: ../../../smarty/templates_c/818149c8372c3fa5e5e32c9cd62bc5d894003dc9.file.mainmenu.tpl.php:117
 msgid "Recharge a Card"
 msgstr "Eine Karte aufladen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:203
-#: ../../../include/smarty3-i18n/smarty2c.c:206
-#: ../../../include/smarty3-i18n/smarty2c.c:209
+#: ../../../include/smarty-gettext/smarty2c.c:203
+#: ../../../include/smarty-gettext/smarty2c.c:206
+#: ../../../include/smarty-gettext/smarty2c.c:209
 #: ../../../smarty/templates_c/818149c8372c3fa5e5e32c9cd62bc5d894003dc9.file.mainmenu.tpl.php:123
 #: ../../../smarty/templates_c/d9ae2e659e39b51da4b84a100552c0b5c94fb34c.file.printRechargeBalanceSelect.tpl.php:105
 msgid "Print Recharge Balance"
 msgstr "Die Aufladungen ausdrucken"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:212
+#: ../../../include/smarty-gettext/smarty2c.c:212
 #: ../../../smarty/templates_c/d9ae2e659e39b51da4b84a100552c0b5c94fb34c.file.printRechargeBalanceSelect.tpl.php:129
 msgid "At:"
 msgstr "Am:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:215
+#: ../../../include/smarty-gettext/smarty2c.c:215
 #: ../../../smarty/templates_c/d9ae2e659e39b51da4b84a100552c0b5c94fb34c.file.printRechargeBalanceSelect.tpl.php:136
 msgid "Download Pdf"
 msgstr "PDF herunterladen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:218
+#: ../../../include/smarty-gettext/smarty2c.c:218
 msgid "Reset passwords of all users"
 msgstr "Passwörter aller Nutzer zurücksetzen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:221
+#: ../../../include/smarty-gettext/smarty2c.c:221
 msgid "Here you can reset the passwords of all users to the preset password."
 msgstr ""
 "Hier können sie die Passwörter aller Nutzer zu den voreingestellten Passwort "
 "zurücksetzen."
 
-#: ../../../include/smarty3-i18n/smarty2c.c:224
+#: ../../../include/smarty-gettext/smarty2c.c:224
 msgid ""
 "You will reset the passwords of all users (but the one which id is 1, "
 "usually the Superadmin) to the preset password. Thus this may be true for "
@@ -372,19 +372,19 @@ msgstr ""
 "sie sich nach dem Zurücksetzen also nicht mehr einloggen können, probieren "
 "sie das voreingestellte Passwort aus."
 
-#: ../../../include/smarty3-i18n/smarty2c.c:227
+#: ../../../include/smarty-gettext/smarty2c.c:227
 msgid "Click here"
 msgstr "Klicken sie hier"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:230
+#: ../../../include/smarty-gettext/smarty2c.c:230
 msgid "to change the preset password."
 msgstr "um das voreingestellte Passwort zu verändern."
 
-#: ../../../include/smarty3-i18n/smarty2c.c:233
+#: ../../../include/smarty-gettext/smarty2c.c:233
 msgid "!!!Important!!!"
 msgstr "!!!WICHTIG!!!"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:236
+#: ../../../include/smarty-gettext/smarty2c.c:236
 msgid ""
 "After the reset manually change the passwords of all accounts that have "
 "access to the Administrator-Section, else everyone can log themselfes into "
@@ -394,94 +394,94 @@ msgstr ""
 "(diejenigen, die Zugriff auf den Administratorbereich haben) die Passwörter, "
 "da sonst jeder sich mit dem Passwort einloggen kann!"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:239
+#: ../../../include/smarty-gettext/smarty2c.c:239
 msgid "At the moment the preset password is not set. Please"
 msgstr "Momentan ist kein voreingestelltes Passwort gesetzt. Bitte"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:242
+#: ../../../include/smarty-gettext/smarty2c.c:242
 msgid "click here"
 msgstr "klicken sie hier"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:245
+#: ../../../include/smarty-gettext/smarty2c.c:245
 msgid "to set a preset password."
 msgstr "um ein voreingestelltes Passwort zu setzen."
 
-#: ../../../include/smarty3-i18n/smarty2c.c:248
+#: ../../../include/smarty-gettext/smarty2c.c:248
 msgid "Yes, I want to reset the passwords!"
 msgstr "Ja, ich möchte die Passwörter zurücksetzen!"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:251
+#: ../../../include/smarty-gettext/smarty2c.c:251
 msgid "Usersettings-Mainmenu"
 msgstr "Benutzereinstellungs-Hauptmenü"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:254
+#: ../../../include/smarty-gettext/smarty2c.c:254
 msgid "General"
 msgstr "Allgemein"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:257
+#: ../../../include/smarty-gettext/smarty2c.c:257
 msgid "Register a User"
 msgstr "Benutzer registrieren"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:260
+#: ../../../include/smarty-gettext/smarty2c.c:260
 msgid "Show Users"
 msgstr "Benutzer anzeigen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:266
+#: ../../../include/smarty-gettext/smarty2c.c:266
 msgid "Assign Usernames to User automatically"
 msgstr "Benutzernamen der Benutzer automatisch erstellen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:269
+#: ../../../include/smarty-gettext/smarty2c.c:269
 msgid "Remove Specialcharacters from Usernames"
 msgstr "Spezialschriftzeichen von den Benutzernamen entfernen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:272
+#: ../../../include/smarty-gettext/smarty2c.c:272
 msgid "Import Users by a CSV-File"
 msgstr "Benutzer mit einer CSV-Datei importieren"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:275
+#: ../../../include/smarty-gettext/smarty2c.c:275
 msgid "Reset passwords of users to preset passwords"
 msgstr "Die Passwörter von Nutzern zum voreingestellten Passwort zurücksetzen."
 
-#: ../../../include/smarty3-i18n/smarty2c.c:278
-#: ../../../include/smarty3-i18n/smarty2c.c:413
-#: ../../../include/smarty3-i18n/smarty2c.c:419
+#: ../../../include/smarty-gettext/smarty2c.c:278
+#: ../../../include/smarty-gettext/smarty2c.c:452
+#: ../../../include/smarty-gettext/smarty2c.c:458
 msgid "Update users with Schoolyear-change"
 msgstr "Benutzer mit Schuljahreswechsel aktualisieren"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:281
+#: ../../../include/smarty-gettext/smarty2c.c:281
 msgid "User-update menu"
 msgstr "Benutzeraktualisierungsmenü"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:284
+#: ../../../include/smarty-gettext/smarty2c.c:284
 msgid "Conflicts"
 msgstr "Konflikte"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:287
+#: ../../../include/smarty-gettext/smarty2c.c:287
 msgid "conflicts open"
 msgstr "offene Konflikte"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:290
+#: ../../../include/smarty-gettext/smarty2c.c:290
 msgid "conflicts resolved"
 msgstr "gelöste Konflikte"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:293
-#: ../../../include/smarty3-i18n/smarty2c.c:344
+#: ../../../include/smarty-gettext/smarty2c.c:293
+#: ../../../include/smarty-gettext/smarty2c.c:383
 msgid "Resolve conflicts"
 msgstr "Konflikte lösen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:299
+#: ../../../include/smarty-gettext/smarty2c.c:299
 msgid "Display changes-overview"
 msgstr "Veränderungsübersicht anzeigen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:302
+#: ../../../include/smarty-gettext/smarty2c.c:302
 msgid "Execute changes"
 msgstr "Änderungen ausführen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:305
+#: ../../../include/smarty-gettext/smarty2c.c:305
 msgid "Update users and change the schoolyear"
 msgstr "Benutzer aktualisieren und Schuljahr verändern"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:308
+#: ../../../include/smarty-gettext/smarty2c.c:308
 msgid ""
 "Here you can change the schoolyear and at the same time update the grades of "
 "the users with a csv-file."
@@ -489,21 +489,25 @@ msgstr ""
 "Hier können sie das Schuljahr verändern und gleichzeitig die Klassen der "
 "Benutzer mit einer CSV-Datei aktualisieren."
 
-#: ../../../include/smarty3-i18n/smarty2c.c:311
+#: ../../../include/smarty-gettext/smarty2c.c:311
 msgid "Begin change"
 msgstr "Mit Veränderungen starten"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:314
+#: ../../../include/smarty-gettext/smarty2c.c:314
+msgid "Csv-file help"
+msgstr "Hilfe zur Csv-Datei"
+
+#: ../../../include/smarty-gettext/smarty2c.c:317
 msgid "Select schoolyear"
 msgstr "Schuljahr auswählen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:317
+#: ../../../include/smarty-gettext/smarty2c.c:320
 msgid "Please select a schoolyear to switch to when changes get applied:"
 msgstr ""
 "Bitte wählen sie ein Schuljahr aus zu dem gewechselt werden soll, wenn die "
 "Änderungen angewendet werden:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:320
+#: ../../../include/smarty-gettext/smarty2c.c:323
 msgid ""
 "When full-year switch get selected, it will be assumed that the normal "
 "behaviour is that the users move one gradelevel up."
@@ -511,15 +515,15 @@ msgstr ""
 "Wenn Schuljahreswechsel ausgewählt wird wird angenommen dass normalerweise "
 "die Benutzer einen Jahrgang höher versetzt werden."
 
-#: ../../../include/smarty3-i18n/smarty2c.c:323
+#: ../../../include/smarty-gettext/smarty2c.c:326
 msgid "Is it a half-year switch or a full-year switch?"
 msgstr "Ist es ein Halbjahres- oder Schuljahreswechsel?"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:326
+#: ../../../include/smarty-gettext/smarty2c.c:329
 msgid "continue"
 msgstr "weiter"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:329
+#: ../../../include/smarty-gettext/smarty2c.c:332
 msgid ""
 "There is no schoolyear you can switch to. Please add a schoolyear and then "
 "try again."
@@ -527,41 +531,107 @@ msgstr ""
 "Es gibt kein Schuljahr zu dem sie wechseln könnten. Bitte fügen sie ein "
 "Schuljahr hinzu und versuchen sie es nochmal."
 
-#: ../../../include/smarty3-i18n/smarty2c.c:332
+#: ../../../include/smarty-gettext/smarty2c.c:335
 msgid "Add a schoolyear"
 msgstr "Ein Schuljahr hinzufügen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:335
+#: ../../../include/smarty-gettext/smarty2c.c:338
 msgid "Import userdata with a csv-file"
 msgstr "Benutzerdaten mit einer CSV-Datei importieren"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:338
+#: ../../../include/smarty-gettext/smarty2c.c:341
 msgid "Please select the csv-file that contains the data of the users:"
 msgstr ""
 "Bitte wählen sie die CSV-Datei aus welche die Daten der Nutzer beinhaltet:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:341
+#: ../../../include/smarty-gettext/smarty2c.c:344
 msgid "Upload"
 msgstr "hochladen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:347
+#: ../../../include/smarty-gettext/smarty2c.c:347
+msgid "Help for formatting the csv-file to update users"
+msgstr "Hilfe zur Formatierung der Csv-Datei zur Benutzeraktualisierung"
+
+#: ../../../include/smarty-gettext/smarty2c.c:350
+msgid ""
+"Use the semicolon (;) as a separator. Make sure the csv-file contains the "
+"following columns:"
+msgstr ""
+"Benutzen sie das Semikolon (;) als Separator. Stellen sie sicher dass die "
+"Csv-Datei die folgenden Spalten besitzt:"
+
+#: ../../../include/smarty-gettext/smarty2c.c:353
+msgid "The forename of the user"
+msgstr "Der Vorname des Benutzers"
+
+#: ../../../include/smarty-gettext/smarty2c.c:356
+msgid "The lastname of the user"
+msgstr "Der Nachname des Benutzers"
+
+#: ../../../include/smarty-gettext/smarty2c.c:359
+msgid "The grade the user should be switched to"
+msgstr "Die Klasse zu der der Benutzer wechselt"
+
+#: ../../../include/smarty-gettext/smarty2c.c:362
+msgid "Additionally, following columns can be added:"
+msgstr "Zusätzlich können noch folgende Spalten hinzugefügt werden:"
+
+#: ../../../include/smarty-gettext/smarty2c.c:365
+msgid "Neccessary if the birthdays of the users are already in the program!"
+msgstr "Nötig wenn die Geburtstage der Benutzer bereits im Programm sind!"
+
+#: ../../../include/smarty-gettext/smarty2c.c:368
+msgid ""
+"The birthday of the user. Used to distinguish users with the same forename "
+"and name."
+msgstr ""
+"Der Geburtstag des Benutzers. Benutzt um Nutzer mit demselben Vor- und "
+"Nachnamen zu unterscheiden."
+
+#: ../../../include/smarty-gettext/smarty2c.c:371
+msgid ""
+"The new telephone-number of the user. When this column exists, the old "
+"entries will be overridden, even if the new telephone-number is void!"
+msgstr ""
+"Die neue Telefonnummer des Nutzers. Wenn diese Spalte existiert, werden die "
+"vorhandenen Einträge überschrieben, selbst wenn die neue telefonnummer leer "
+"ist!"
+
+#: ../../../include/smarty-gettext/smarty2c.c:374
+msgid ""
+"The new username of the user. When this column exists, the old entries will "
+"be overridden, even if the new username is void!"
+msgstr ""
+"Der neue Nutzername des Nutzers. Wenn diese Spalte existiert, werden die "
+"bereits vorhandenen Einträge überschrieben, selbst wenn der neue Nutzername "
+"leer ist!"
+
+#: ../../../include/smarty-gettext/smarty2c.c:377
+msgid "Example of a csv-file:"
+msgstr "Beispiel einer Csv-Datei:"
+
+#: ../../../include/smarty-gettext/smarty2c.c:380
+msgid "Another example:"
+msgstr "Weiteres Beispiel:"
+
+#: ../../../include/smarty-gettext/smarty2c.c:386
 msgid "Yes to all"
 msgstr "Ja zu allem"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:350
+#: ../../../include/smarty-gettext/smarty2c.c:389
 msgid "User not found in program"
 msgstr "Benutzer im Programm nicht gefunden"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:353
+#: ../../../include/smarty-gettext/smarty2c.c:392
 msgid "User existing but not found in new file"
 msgstr "Benutzer existiert, wurde aber nicht in der neuen Datei gefunden"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:356
+#: ../../../include/smarty-gettext/smarty2c.c:395
 msgid "Users old and new gradelevels differ too much"
 msgstr ""
 "Die Differenz zwischen altem und neuem Jahrgang des Nutzers ist zu groß"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:359
+#: ../../../include/smarty-gettext/smarty2c.c:398
 msgid ""
 "The user <span class=\"highlighted\">\"%1 %2\"</span> (birthday: <span class="
 "\"highlighted\">\"%3\"</span>), that will be in grade <span class="
@@ -571,14 +641,14 @@ msgstr ""
 "class=\"highlighted\">\"%3\"</span>), der in der Klasse <span class="
 "\"highlighted\">\"%4\"</span> sein wird, ist neu. Ist das korrekt?"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:365
-#: ../../../include/smarty3-i18n/smarty2c.c:374
-#: ../../../include/smarty3-i18n/smarty2c.c:383
+#: ../../../include/smarty-gettext/smarty2c.c:404
+#: ../../../include/smarty-gettext/smarty2c.c:413
+#: ../../../include/smarty-gettext/smarty2c.c:422
 #: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:420
 msgid "No"
 msgstr "Nein"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:368
+#: ../../../include/smarty-gettext/smarty2c.c:407
 msgid ""
 "The user <span class=\"highlighted\">\"%1 %2\"</span> (birthday: <span class="
 "\"highlighted\">\"%3\"</span>) is not in the upcoming schoolyear. Is that "
@@ -588,7 +658,7 @@ msgstr ""
 "class=\"highlighted\">\"%3\"</span>) ist nicht im neuen Schuljahr. Ist das "
 "korrekt?"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:377
+#: ../../../include/smarty-gettext/smarty2c.c:416
 msgid ""
 "The grade of the user <span class=\"highlighted\">\"%1 %2\"</span> "
 "(birthday: <span class=\"highlighted\">\"%3\"</span>) changed from \"%4\" to "
@@ -598,67 +668,67 @@ msgstr ""
 "(Geburtstag: <span class=\"highlighted\">\"%3\"</span>) hat sich von \"%4\" "
 "auf \"%5\" verändert. Ist das korrekt?"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:386
+#: ../../../include/smarty-gettext/smarty2c.c:425
 msgid "Submit changes"
 msgstr "Änderungen hochladen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:389
+#: ../../../include/smarty-gettext/smarty2c.c:428
 msgid "Cancel changes"
 msgstr "Änderungen abbrechen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:392
+#: ../../../include/smarty-gettext/smarty2c.c:431
 msgid "No conflicts exist."
 msgstr "Es existieren keine Konflikte."
 
-#: ../../../include/smarty3-i18n/smarty2c.c:395
+#: ../../../include/smarty-gettext/smarty2c.c:434
 msgid "Answered with yes"
 msgstr "Mit Ja beantwortet"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:398
+#: ../../../include/smarty-gettext/smarty2c.c:437
 msgid "Answered with no"
 msgstr "Mit nein beantwortet"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:401
+#: ../../../include/smarty-gettext/smarty2c.c:440
 msgid "changed to user: "
 msgstr "geändert zu Benutzer:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:404
+#: ../../../include/smarty-gettext/smarty2c.c:443
 msgid "Please give the correct new grade of the user:"
 msgstr "Bitte geben sie die korrekte neue Klasse des Benutzers an:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:407
+#: ../../../include/smarty-gettext/smarty2c.c:446
 msgid "finished"
 msgstr "fertig"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:410
+#: ../../../include/smarty-gettext/smarty2c.c:449
 msgid "The new grade of the user will be:"
 msgstr "Die neue Klasse des Benutzers wird sein:"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:416
+#: ../../../include/smarty-gettext/smarty2c.c:455
 msgid "Back to Useradministration"
 msgstr "Zurück zur Benutzerverwaltung"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:425
+#: ../../../include/smarty-gettext/smarty2c.c:464
 msgid "Go to the existing update-Process"
 msgstr "Zum existierenden Aktualisierungsprozess gehen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:428
+#: ../../../include/smarty-gettext/smarty2c.c:467
 msgid "Start a new update-process"
 msgstr "Einen neuen Aktualisierungsprozess starten"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:431
+#: ../../../include/smarty-gettext/smarty2c.c:470
 msgid "Bookmarks"
 msgstr "Lesezeichen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:434
+#: ../../../include/smarty-gettext/smarty2c.c:473
 msgid "No Bookmarks added"
 msgstr "Keine Leszeichen hinzugefügt"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:437
+#: ../../../include/smarty-gettext/smarty2c.c:476
 msgid "Add bookmark"
 msgstr "Lesezeichen hinzufügen"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:440
+#: ../../../include/smarty-gettext/smarty2c.c:479
 #: ../../../smarty/templates_c/61311f7f7fb60d3dae427fe42bb0cc9d^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
 #: ../../../smarty/templates_c/3eb0db64f553de2c6d2b3cfcf12fb33948f1ba0a.file.show_soli.tpl.php:153
 #: ../../../smarty/templates_c/598e6acc5f3bcd6b3615f13c309eaebd^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
@@ -823,7 +893,7 @@ msgstr "Lesezeichen hinzufügen"
 msgid "Back"
 msgstr "zurück"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:443
+#: ../../../include/smarty-gettext/smarty2c.c:482
 #: ../../../smarty/templates_c/61311f7f7fb60d3dae427fe42bb0cc9d^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
 #: ../../../smarty/templates_c/3eb0db64f553de2c6d2b3cfcf12fb33948f1ba0a.file.show_soli.tpl.php:158
 #: ../../../smarty/templates_c/598e6acc5f3bcd6b3615f13c309eaebd^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
@@ -988,7 +1058,7 @@ msgstr "zurück"
 msgid "Back to the Module"
 msgstr "zurück zum Modul"
 
-#: ../../../include/smarty3-i18n/smarty2c.c:446
+#: ../../../include/smarty-gettext/smarty2c.c:485
 msgid "back"
 msgstr "zurück"
 
@@ -1866,7 +1936,7 @@ msgstr "Ein Fehler ist beim Abrufen der Daten aufgetreten!"
 #: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:650
 #: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:678
 #: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:64
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:136
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:139
 msgid "Could not upload the data!"
 msgstr "Konnte die Daten nicht hochladen!"
 
@@ -1948,38 +2018,38 @@ msgstr "Konnte die neuen Nutzer nicht abrufen!"
 msgid "Could not switch to the new Schoolyear!"
 msgstr "Konnte nicht zu dem neuen Schuljahr wechseln!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:44
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:47
 msgid "Full year"
 msgstr "Schuljahr"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:44
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:47
 msgid "Half year"
 msgstr "Halbjahr"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:67
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:70
 msgid "Could not fetch the schoolyears!"
 msgstr "Konnte die Schuljahre nicht abrufen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:80
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:83
 msgid ""
 "This schoolyear was already used! Please select one that was not used yet."
 msgstr ""
 "Dieses Schuljahr wurde bereits benutzt! Bitte wählen sie eins aus dass noch "
 "nicht benutzt wurde."
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:114
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:117
 msgid "Could not check if the schoolyear has already been used"
 msgstr "Konnte nicht überprüfen ob das Schuljahr bereits benutzt wurde"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:151
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:154
 msgid "Wrong type of switch-type of schoolyear!"
 msgstr "Falscher Wechsel-Typ des Schuljahres!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:156
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:159
 msgid "The Schoolyear with this Id does not exist!"
 msgstr "Ein Schuljahr mit dieser Id existiert nicht!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:160
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:163
 msgid ""
 "The formular was not filled out completely. Please correct your mistakes and "
 "try again."
@@ -2460,6 +2530,30 @@ msgstr "Konntenicht überprüfen ob du schon Kurse selektiert hast!"
 #: ../../../web/headmod_Babesk/modules/mod_Cancel/Cancel.php:258
 msgid "Could not check if the Soliprice is enabled!"
 msgstr "Konnte nicht überprüfen ob der Teilhabepaket-Preis aktiviert ist!"
+
+#, fuzzy
+#~ msgid "forename"
+#~ msgstr "Vorname"
+
+#, fuzzy
+#~ msgid "name"
+#~ msgstr "Nachname"
+
+#, fuzzy
+#~ msgid "grade"
+#~ msgstr "Klasse"
+
+#, fuzzy
+#~ msgid "birthday"
+#~ msgstr "Geburtstag"
+
+#, fuzzy
+#~ msgid "telephone"
+#~ msgstr "Telefonnummer"
+
+#, fuzzy
+#~ msgid "username"
+#~ msgstr "Benutzername"
 
 #~ msgid ""
 #~ "The user <span class=\"highlighted\">\"%1 %2\"</span> is not in the "

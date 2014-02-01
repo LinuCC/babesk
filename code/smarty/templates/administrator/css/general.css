@@ -61,18 +61,13 @@ p, pre, blockquote, ul, ol, h1, h2, h3, h4, h5, h6 {
 button, input, select, textarea, .inputbox {
   padding: 3px 5px;
   font-family: Tahoma,
-               Arial,
-               Helvetica,
-               sans-serif;
+			   Arial,
+			   Helvetica,
+			   sans-serif;
   font-size: 100%;
 }
 
-div.inputItem,
-input.inputItem,
-select.inputItem,
-span.inputItem,
-p.inputItem,
-a.inputItem {
+*.inputItem {
 	display: table-cell;
 	text-align: center;
 	vertical-align: middle;
@@ -229,7 +224,7 @@ p.error {
 -------------------------------------------- */
 
 body {
-    color: #000000;
+	color: #000000;
 }
 
 
@@ -661,4 +656,11 @@ ul.inputFormList li {
 	margin: 10px 0;
 	padding: 5px;
 	background-color: #c1e1f2;
+}
+
+div.example-container, p.example-container {
+	background-color: #F0F0F0;
+	padding: 5px 5px 5px 20px;
+	margin: 0px;
+	border-left: 7px solid #006699;
 }
