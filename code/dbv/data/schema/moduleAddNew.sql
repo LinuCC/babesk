@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`localhost` PROCEDURE `moduleAddNew`(
+CREATE PROCEDURE `moduleAddNew`(
 	IN modulename varchar(255),
 	IN parentmoduleId int(11)
 	)

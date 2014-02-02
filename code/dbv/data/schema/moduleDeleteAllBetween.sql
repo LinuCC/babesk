@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`localhost` PROCEDURE `moduleDeleteAllBetween`(
+CREATE PROCEDURE `moduleDeleteAllBetween`(
 	leftEnd int(11),
 	rightEnd int(11)
 	)

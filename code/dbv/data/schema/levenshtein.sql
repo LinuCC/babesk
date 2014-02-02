@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`localhost` FUNCTION `levenshtein`( s1 text, s2 text) RETURNS int(11)
+CREATE FUNCTION `levenshtein`( s1 text, s2 text) RETURNS int(11)
     DETERMINISTIC
 BEGIN
 	DECLARE s1_len, s2_len, i, j, c, c_temp, cost INT;

@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`localhost` PROCEDURE `moduleDelete`(
+CREATE PROCEDURE `moduleDelete`(
 	IN id int(11)
 	)
 BEGIN

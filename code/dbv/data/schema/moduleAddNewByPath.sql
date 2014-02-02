@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`localhost` PROCEDURE `moduleAddNewByPath`(
+CREATE PROCEDURE `moduleAddNewByPath`(
 	IN modulename varchar(255),
 	IN isEnabled int(1),
 	IN displayInMenu int(1),

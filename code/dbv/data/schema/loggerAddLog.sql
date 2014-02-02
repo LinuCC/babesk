@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`localhost` PROCEDURE `loggerAddLog`(
+CREATE PROCEDURE `loggerAddLog`(
 	IN message text,
 	IN categoryName varchar(255),
 	IN severityName varchar(255),
