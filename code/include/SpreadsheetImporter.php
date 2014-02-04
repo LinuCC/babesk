@@ -23,13 +23,7 @@ class SpreadsheetImporter implements IDataImporter {
 
 	public function openFile() {
 
-		if(strstr($this->_filePath, 'csv') !== false) {
-			$reader = PHPExcel_IOFactory::createReader('CSV');
-			$this->_objPhpExcel = $reader->load($this->_filePath);
-		}
-		else {
-			$this->_objPhpExcel = PHPExcel_IOFactory::load($this->_filePath);
-		}
+		$this->_objPhpExcel = PHPExcel_IOFactory::load($this->_filePath);
 	}
 
 	public function parseFile() {
@@ -37,7 +31,8 @@ class SpreadsheetImporter implements IDataImporter {
 		$this->_content = $this->_objPhpExcel->getActiveSheet()->toArray(
 			null, true, false, false
 		);
-		$this->_mappedContent = $this->mapContent($this->_content);
+		$con = $this->mapContent($this->_content);
+		$this->_mappedContent = $this->voidRowsRemove($con);
 	}
 
 	public function getKeys() {
@@ -71,6 +66,23 @@ class SpreadsheetImporter implements IDataImporter {
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Removes void rows that are added by (buggy?) PhpExcel
+	 */
+	protected function voidRowsRemove($rows) {
+
+		foreach($rows as $index => $row) {
+			foreach($row as $rowElement) {
+				if($rowElement !== NULL) {
+					continue 2;
+				}
+			}
+			unset($rows[$index]);
+		}
+
+		return $rows;
 	}
 
 	/////////////////////////////////////////////////////////////////////

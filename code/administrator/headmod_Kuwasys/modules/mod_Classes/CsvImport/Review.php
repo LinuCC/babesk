@@ -4,6 +4,7 @@ namespace administrator\Kuwasys\Classes\CsvImport;
 
 require_once 'CsvImport.php';
 require_once PATH_INCLUDE . '/CsvReader.php';
+require_once PATH_INCLUDE . '/SpreadsheetImporter.php';
 
 /**
  * Allows the User to review the changes before committing changes to Classes
@@ -35,7 +36,16 @@ class Review extends \administrator\Kuwasys\Classes\CsvImport {
 	private function csvParse() {
 
 		if(!empty($_FILES['csvFile']['tmp_name'])) {
-			$reader = new \CsvReader($_FILES['csvFile']['tmp_name'], ';');
+
+			$fileWithExtension = $_FILES['csvFile']['tmp_name']  . '.' .
+				pathinfo($_FILES['csvFile']['name'], PATHINFO_EXTENSION);
+			rename($_FILES['csvFile']['tmp_name'], $fileWithExtension);
+			$reader = new \SpreadsheetImporter($fileWithExtension);
+			$reader->openFile();
+			$reader->parseFile();
+			return $reader->getContent();
+
+			// $reader = new \CsvReader($_FILES['csvFile']['tmp_name'], ';');
 		}
 		else {
 			$this->_logger->log(__METHOD__ . ': Could not find uploaded file',
@@ -43,8 +53,8 @@ class Review extends \administrator\Kuwasys\Classes\CsvImport {
 			$this->_interface->dieError(_g('Could not find uploaded file'));
 		}
 
-		$reader->readContents();
-		return $reader->getContents();
+		// $reader->readContents();
+		// return $reader->getContents();
 	}
 
 	/**
