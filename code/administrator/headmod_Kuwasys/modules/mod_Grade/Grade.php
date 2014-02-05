@@ -266,10 +266,10 @@ class Grade extends Kuwasys {
 
 		try {
 			$stmt = $this->_pdo->prepare('UPDATE Grades SET label = ?,
-				gradelevel = ? WHERE ID = ?');
+				gradelevel = ?, schooltypeId = ? WHERE ID = ?');
 
 			$stmt->execute(array($_POST['gradelabel'], $_POST['gradelevel'],
-				$_GET['ID']));
+				$schooltypeId, $_GET['ID']));
 
 		} catch (PDOException $e) {
 			$this->_logger->log('Error changing a Grade', 'Moderate', Null,

@@ -24,9 +24,14 @@ select, input.moduleFormulars {
 	<label>
 		Schultyp:
 		<select name='schooltype' size='1'>
+		<option value='0'>
+			Kein Schultyp
+		</option>
 		{foreach $schooltypes as $schooltype}
+		{var_dump($schooltype.ID)}
+		{var_dump($grade.schooltypeId)}
 		<option value='{$schooltype.ID}'
-			{if $schooltype.ID = $grade.schooltypeId}
+			{if $schooltype.ID == $grade.schooltypeId}
 				selected='selected'
 			{/if}>
 			{$schooltype.name}
