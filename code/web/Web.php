@@ -121,8 +121,12 @@ class Web {
 			$firstPassword = $userData ['first_passwd'];
 
 			if ($firstPassword != '0') {
+				$modGen = $this->_acl->moduleGeneratorManagerGet();
+				$this->_smarty->assign(
+					'moduleGenMan', $modGen);
 				$this->_smarty->assign('moduleroot',
-					$this->_acl->getModuleroot());
+					$modGen->moduleRootGet());
+
 				$pwChange = new ModuleExecutionCommand(
 					'root/web/Settings/ChangePresetPassword');
 				$this->_acl->moduleExecute(
