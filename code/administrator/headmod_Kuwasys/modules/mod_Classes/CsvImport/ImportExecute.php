@@ -54,11 +54,13 @@ class ImportExecute extends \administrator\Kuwasys\Classes\CsvImport {
 	private function classQueryGenerate($class) {
 
 		$classQuery = 'INSERT INTO `class`
-			(label, description, maxRegistration, unitId, schoolyearId)
+			(label, description, maxRegistration, registrationEnabled,
+				unitId, schoolyearId)
 			VALUES (
 				' . $this->_pdo->quote($class['name']) . ',
 				' . $this->_pdo->quote($class['description']) . ',
-				' . $this->_pdo->quote($class['maxRegistration']) . ',
+				' . $this->_pdo->quote((int)$class['maxRegistration']) . ',
+				' . $this->_pdo->quote((int)$class['registrationEnabled']) . ',
 				' . $this->_pdo->quote($class['classUnit']) . ',
 				@activeSchoolyear);
 			SELECT LAST_INSERT_ID() INTO @newClassId;';

@@ -113,6 +113,13 @@ class Review extends \administrator\Kuwasys\Classes\CsvImport {
 			$this->classteacherEntryHandle($row, $newRow);
 			$this->classUnitEntryHandle($row, $newRow);
 			$newRow['name'] = $row['name'];
+			$newRow['description'] = (isset($row['description'])) ?
+				$row['description'] : null;
+			$newRow['maxRegistration'] = (isset($row['maxRegistration'])) ?
+				$row['maxRegistration'] : null;
+			$newRow['registrationEnabled'] =
+				(isset($row['registrationEnabled'])) ?
+				$row['registrationEnabled'] : null;
 			$newData[] = $newRow;
 		}
 

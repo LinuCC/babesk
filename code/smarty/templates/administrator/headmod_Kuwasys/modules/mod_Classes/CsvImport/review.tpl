@@ -19,6 +19,8 @@
 				value="{$class.description|escape}">
 			<input type="hidden" name="classes[{$tempId}][maxRegistration]"
 				value="{$class.maxRegistration}">
+			<input type="hidden" name="classes[{$tempId}][registrationEnabled]"
+				value="{$class.registrationEnabled}">
 		</tr>
 
 		<tr>
