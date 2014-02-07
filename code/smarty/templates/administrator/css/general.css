@@ -471,6 +471,46 @@ div.simpleForm p, div.simpleForm label {
 	border-radius: 5px;
 }
 
+
+/*
+ * Simple Formular with items aligned in a table
+ * Like simpleForm, but with better (easier) syntax
+ */
+
+form.tableForm {
+	display: table;
+	margin: 15px 0 15px 0;
+}
+
+form.tableForm > div {
+	display: table-row;
+	width: 500px;
+}
+
+form.tableForm > div > input, form.tableForm > div > label {
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+	margin: 15px 0px 15px 50px;
+	line-height: 130%;
+}
+
+form.tableForm > input[type=submit] {
+	margin-top: 20px;
+}
+
+
+.tableForm input[type="image"] {
+	vertical-align: bottom;
+}
+
+.tableForm fieldset {
+	border: 1px solid #2e6132;
+	border-radius: 5px;
+}
+
+/* A visible container */
+
 div.smallContainer,
 span.smallContainer,
 p.smallContainer,
@@ -663,4 +703,9 @@ div.example-container, p.example-container {
 	padding: 5px 5px 5px 20px;
 	margin: 0px;
 	border-left: 7px solid #006699;
+}
+
+*.functionalityDescription {
+	font-size: 15px;
+	line-height: 130%;
 }
