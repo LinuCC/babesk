@@ -174,7 +174,7 @@ class Web {
 	 */
 	private function addSessionUserdata($userData) {
 		$_SESSION['username'] = $userData['forename'] . ' ' . $userData['name'];
-		$_SESSION['last_login'] = formatDateTime($userData['last_login']);
+		$_SESSION['last_login'] = $userData['last_login'];
 		$_SESSION['login_tries'] = $userData['login_tries'];
 		$_SESSION['IP'] = $_SERVER['REMOTE_ADDR'];
 		$_SESSION['HTTP_USER_AGENT'] = $_SERVER['HTTP_USER_AGENT'];
@@ -184,7 +184,10 @@ class Web {
 
 		$this->_smarty->assign('uid', $_SESSION['uid']);
 		$this->_smarty->assign('username', $_SESSION['username']);
-		$this->_smarty->assign('last_login', $_SESSION['last_login']);
+		if(!empty($_SESSION['last_login'])) {
+			$this->_smarty->assign(
+				'last_login', formatDateTime($_SESSION['last_login']));
+		}
 	}
 
 	/**
