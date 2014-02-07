@@ -23,7 +23,18 @@ class SpreadsheetImporter implements IDataImporter {
 
 	public function openFile() {
 
-		$this->_objPhpExcel = PHPExcel_IOFactory::load($this->_filePath);
+		if(pathinfo(strtolower($this->_filePath), PATHINFO_EXTENSION)
+			!= 'csv'
+		) {
+			$this->_objPhpExcel = PHPExcel_IOFactory::load($this->_filePath);
+			//Workaround for loading .ods-files
+			$this->_objPhpExcel->setActiveSheetIndex(0);
+		}
+		else {
+			//Workaround for PHPExcel not autoloading Csv-files
+			$reader = PHPExcel_IOFactory::createReader('CSV');
+			$this->_objPhpExcel = $reader->load($this->_filePath);
+		}
 	}
 
 	public function parseFile() {
