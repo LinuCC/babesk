@@ -38,25 +38,25 @@ class KuwasysStatsSchooltypeSchoolyearChosenBarChart
 			'SELECT st.ID AS schooltypeId, st.token AS schooltypeToken,
 			g.gradelevel, userChosen.classesChosen, COUNT(*) AS userCount
 			FROM Grades g
-				-- For checking correct Schoolyear
-				JOIN Schooltype st ON g.schooltypeId = st.ID
+				-- Schooltype (optional, splits gradelevels in schooltypes if
+				-- needed)
+				LEFT JOIN Schooltype st ON g.schooltypeId = st.ID
 				-- Fetch how many classes the user has chosen
-				JOIN (
+				INNER JOIN (
 					SELECT COUNT(*) AS classesChosen, uigs.gradeId AS GradeID
 					FROM usersInGradesAndSchoolyears uigs
-						JOIN jointUsersInClass uic ON uigs.userId = uic.UserID
+						INNER JOIN jointUsersInClass uic
+							ON uigs.userId = uic.UserID
 						-- Check for interesting status
-						JOIN (
+						INNER JOIN (
 							SELECT ID
 							FROM usersInClassStatus
-							WHERE name="active" OR name="waiting"
+							WHERE name="active"
 							) status ON status.ID = uic.statusId
 					WHERE uigs.schoolyearId = @activeSchoolyear
 					GROUP BY uic.UserID
 					) userChosen ON userChosen.GradeID = g.ID
-				JOIN usersInGradesAndSchoolyears uigs ON
-					uigs.schoolyearId = @activeSchoolyear
-			GROUP BY st.ID, g.gradelevel, userChosen.classesChosen', true);
+			GROUP BY st.ID, g.gradelevel, userChosen.classesChosen');
 	}
 
 	protected function dataProcess() {

@@ -53,7 +53,7 @@ class KuwasysStats extends Statistics {
 
 	protected function entryPoint($dataContainer) {
 
-		defined('_AEXEC') or die("Access denied");
+		parent::entryPoint($dataContainer);
 
 		$this->_smarty = $dataContainer->getSmarty();
 		$this->_interface = $dataContainer->getInterface();
@@ -126,8 +126,9 @@ class KuwasysStats extends Statistics {
 			$chart->imageDisplay();
 
 		} catch (Exception $e) {
-			$this->_interface->dieError(
-				'Konnte die Statistik nicht auswerten');
+			$this->_logger->log('Error analyzing the statistics',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieError(_g('Error analyzing the statistics!'));
 		}
 	}
 
