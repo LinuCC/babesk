@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-01 17:16+0100\n"
-"PO-Revision-Date: 2014-02-01 17:16+0100\n"
+"POT-Creation-Date: 2014-02-08 03:43+0100\n"
+"PO-Revision-Date: 2014-02-08 03:44+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: de\n"
@@ -1275,37 +1275,41 @@ msgstr ""
 msgid "Error fetching the Statuses!"
 msgstr "Konnte die Statuse nicht abrufen"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:764
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:769
 msgid "The Global Classregistration was successfully changed."
 msgstr "Die Kursregistrationen wurde erfolgreich verändert."
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:789
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:796
 msgid "Could not change the Global Classregistration!"
 msgstr "Konnte die Kursregistrationen nicht verändern!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:825
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:816
+msgid "Could not change the individual classregistrations!"
+msgstr "Konnte die Kursregistrationen der jeweiligen Kurse nicht verändern!"
+
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:853
 msgid "Could not check whether the global Classregistration isenabled or not."
 msgstr ""
 "Konnte nicht herausfinden ob der \"ist Kursregistration erlaubt\"-Schalter "
 "aktiviert ist oder nicht."
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:844
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:872
 msgid "Could not add the Global Classregistration setting!"
 msgstr "Konnte den \"ist Kursregistration erlaubt\"-Schalter nicht hinzufügen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/CsvImport/Review.php:43
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/CsvImport/Review.php:53
 msgid "Could not find uploaded file"
 msgstr "Konnte die hochgeladene Datei nicht finden"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/CsvImport/Review.php:68
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/CsvImport/Review.php:78
 msgid "Could not fetch the Classteachers."
 msgstr "Konnte die Kursleiter nicht abrufen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/CsvImport/Review.php:86
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/CsvImport/Review.php:96
 msgid "Could not fetch the days."
 msgstr "Konnte die Tage nicht abrufen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/CsvImport/Review.php:125
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/CsvImport/Review.php:142
 msgid ""
 "The CSV-File uploaded has not all columns it needs to have. Please upload a "
 "CSV-File with all columns!"
@@ -1321,7 +1325,7 @@ msgstr "Die Kurse wurden erfolgreich importiert."
 msgid "No classes given."
 msgstr "Keine Kurse gegeben."
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/CsvImport/ImportExecute.php:125
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/CsvImport/ImportExecute.php:127
 msgid "Could not execute the Query!"
 msgstr "Konnte die Query nicht ausführen!"
 
@@ -1625,6 +1629,10 @@ msgid "Could not check if the User is Soli or not."
 msgstr ""
 "Konnte nicht überprüfen ob der Benutzer Teilhabepaketberechtigt ist oder "
 "nicht"
+
+#: ../../../administrator/headmod_Statistics/modules/mod_KuwasysStats/KuwasysStats.php:131
+msgid "Error analyzing the statistics!"
+msgstr "Ein Fehler ist beim analysieren der Statistiken aufgetreten!"
 
 #: ../../../administrator/headmod_System/modules/mod_ModuleSettings/ModuleSettings.php:255
 msgid "Could not remove the Module from the Database!"
@@ -2508,7 +2516,7 @@ msgstr ""
 "Wollen sie wirklich den Kurs \"%1$s\" löschen? Alle Daten gehen "
 "unwiederbringlich verloren!"
 
-#: ../../../web/Web.php:221
+#: ../../../web/Web.php:228
 msgid "Error executing the Module!"
 msgstr "Konnte das Modul nicht ausführen!"
 
