@@ -39,15 +39,17 @@ class KuwasysStatsUsersChosenStackedBarChart extends StatisticsStackedBarChart {
 		$this->_userData = TableMng::query(
 			'SELECT g.schooltypeId AS schooltypeId,
 				(SELECT COUNT(*) FROM jointUsersInClass uic
-					JOIN jointClassInSchoolYear cisy ON uic.ClassID = cisy.ClassID
-					JOIN schoolYear sy ON cisy.SchoolYearID = sy.ID
-				WHERE uic.userId = u.ID AND sy.active = "1") AS choiceCount
+					INNER JOIN schoolYear sy ON sy.active = 1
+					INNER JOIN class c ON c.ID = uic.ClassID
+						AND c.schoolyearId = sy.ID
+				WHERE uic.userId = u.ID) AS choiceCount
 			FROM users u
-				JOIN usersInGradesAndSchoolyears uigs ON u.ID = uigs.userId
+				INNER JOIN usersInGradesAndSchoolyears uigs
+					ON u.ID = uigs.userId
 					AND uigs.schoolyearId = @activeSchoolyear
-				JOIN Grades g ON g.ID = uigs.gradeId
-				JOIN schoolYear sy ON uigs.SchoolYearID = sy.ID
-				');
+				INNER JOIN Grades g ON g.ID = uigs.gradeId
+				INNER JOIN schoolYear sy ON uigs.SchoolYearID = sy.ID
+		');
 	}
 
 	protected function schooltypeDataFetch() {
@@ -121,12 +123,17 @@ class KuwasysStatsUsersChosenStackedBarChart extends StatisticsStackedBarChart {
 
 	protected function dataProcessSchooltypeNameGet($schooltypeId) {
 
+		if($schooltypeId == 0) {
+			return _g('No ST');
+		}
+
 		foreach($this->_schooltypeData as $data) {
 			if($data['ID'] == $schooltypeId) {
-				return $data['name'];
+				return $data['token'];
 			}
 		}
-		throw new Exception('Could not process the Schooltype-Name' . $schooltypeId);
+		throw new Exception('Could not process the Schooltype-Name :' .
+			$schooltypeId);
 	}
 
 	/////////////////////////////////////////////////////////////////////

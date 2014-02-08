@@ -104,6 +104,11 @@ class KuwasysStats extends Statistics {
 					'KuwasysStatsSchooltypeSchoolyearChosenBarChart.php';
 				$chart = new KuwasysStatsSchooltypeSchoolyearChosenBarChart();
 				break;
+			case 'allUsersInSchooltypes':
+				require_once
+					'KuwasysStatsUsersChosenStackedBarChart.php';
+				$chart = new KuwasysStatsUsersChosenStackedBarChart();
+				break;
 			default:
 				die('Wrong Chart-Switch given');
 				break;
