@@ -12,6 +12,9 @@
 <form action="index.php?section=Schbas|Booklist&action=showBooksFNY" method="post">
 	<input type="submit" value="B&uuml;cher zeigen, die f&uuml;r n&auml;chstes Jahr behalten werden k&ouml;nnen">
 </form><br>
+<form action="index.php?section=Schbas|Booklist&action=showBooksBT" method="post">
+    <input type="submit" value="B&uuml;cher zeigen, die f&uuml;r ein Fach ben&ouml;tigt werden">
+</form><br>
 
 
 

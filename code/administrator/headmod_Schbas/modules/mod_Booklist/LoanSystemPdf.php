@@ -66,8 +66,8 @@ class LoanSystemPdf {
 	 *
 	 * @return void
 	 */
-	public function output() {
-		$pdfName = sprintf('schbasBooklistForNextSchoolyear_%s.pdf', $this->_gradeLevel);
+	public function output($filename) {
+		$pdfName = $filename.'.pdf';
 		$this->_pdf->Output($pdfName, 'D');
 	}
 

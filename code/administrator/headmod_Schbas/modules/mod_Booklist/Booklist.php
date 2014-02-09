@@ -93,6 +93,9 @@ class Booklist extends Schbas {
 					case 'showBooksFNY':
 						$BookProcessing->showBooksForNextYear();
 						break;
+                                            case 'showBooksBT':
+						$BookProcessing->showBooksByTopic();
+						break;
 				break;
 			}
 		}
