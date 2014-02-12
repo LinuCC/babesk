@@ -276,28 +276,6 @@ class KuwasysUsers extends Kuwasys {
 		die(json_encode($data));
 	}
 
-	/*********************************************************************
-	 * Allows the Admin to change the Status of UserToClass-Assignments
-	 */
-	protected function assignUsersToClassesChangeStatusOfUserExecute() {
-
-		try {
-			$statusId = ($_POST['statusname'] != 'removed') ?
-				$this->statusIdGetByName($_POST['statusname']) : 0;
-
-		} catch (PDOException $e) {
-			die(json_encode(array('value' => 'error',
-				'message' => _g('Could not fetch the Status'))));
-		}
-
-		$this->temporaryRequestChangeStatus($_POST['userId'],
-			$_POST['classId'], $statusId);
-
-		die(json_encode(array('value' => 'success',
-			'message' => _g('The Status of the User was successfully changed')
-		)));
-	}
-
 	/**
 	 * Changes the Status of a Temporary Request Entry
 	 *
@@ -342,9 +320,6 @@ class KuwasysUsers extends Kuwasys {
 		return $stmt->fetchColumn();
 	}
 
-
-
-
 	/**
 	 * Sets the Header of the Templates to allow the User a better overview
 	 */
@@ -353,35 +328,6 @@ class KuwasysUsers extends Kuwasys {
 		$siteHeaderPath = $this->_smartyModuleTemplatesPath .
 			'AssignUsersToClasses/header.tpl';
 		$this->_smarty->assign('inh_path', $siteHeaderPath);
-	}
-
-	/*********************************************************************
-	 * Allows the Admin to Add a User to the Class to the Temp-Table
-	 */
-	protected function assignUsersToClassesAddUserToClassExecute() {
-
-		$userId = $this->userIdGetByUsername($_POST['username']);
-		$statusId = $this->statusIdGetByName($_POST['statusname']);
-
-		try {
-			$stmt = $this->_pdo->prepare(
-				'INSERT INTO KuwasysTemporaryRequestsAssign
-				(userId, classId, statusId, origUserId, origClassId, origStatusId) VALUES
-				(:userId, :classId, :statusId, 0, 0, 0)');
-
-			$stmt->execute(array(
-				'userId' => $userId,
-				'classId' => $_POST['classId'],
-				'statusId' => $statusId,
-			));
-
-		} catch (PDOException $e) {
-			die(json_encode(array('value' => 'error',
-				'message' => _g('Could not add the User to the Class'))));
-		}
-
-		die(json_encode(array('value' => 'success',
-			'message' => _g('The User was successfully added'))));
 	}
 
 	/*********************************************************************
@@ -506,7 +452,7 @@ class KuwasysUsers extends Kuwasys {
 	 * @param  int    $statusId The ID of the Status
 	 * @throws PDOException If Things didnt work out
 	 */
-	protected function userAssignToClass($userId, $classId, $statusId) {
+	private function userAssignToClass($userId, $classId, $statusId) {
 
 		$stmt = $this->_pdo->prepare('INSERT INTO jointUsersInClass
 			(UserID, ClassID, statusId) VALUES
