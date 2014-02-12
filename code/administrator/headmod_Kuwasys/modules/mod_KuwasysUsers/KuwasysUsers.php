@@ -262,67 +262,6 @@ class KuwasysUsers extends Kuwasys {
 		$this->displayTpl('AssignUsersToClasses/mainmenu.tpl');
 	}
 
-	/*********************************************************************
-	 * Allows the User to view, change and upload the temporary Assignments
-	 */
-	protected function assignUsersToClassesOverviewExecute() {
-
-		$classes = $this->temporaryAssignmentsClassdataGet();
-		$this->_smarty->assign('classes', $classes);
-		$this->assignUsersToClassesSetHeader();
-		$this->displayTpl('AssignUsersToClasses/classlist.tpl');
-	}
-
-	/**
-	 * Fetches the Temporary Assignments Grouped by Classes
-	 *
-	 * @return array  The Classes and some more information
-	 */
-	protected function temporaryAssignmentsClassdataGet() {
-
-		try {
-			$data = $this->_pdo->query('SELECT cu.translatedName AS weekday,
-					COUNT(*) - (
-						SELECT COUNT(*) FROM KuwasysTemporaryRequestsAssign rad
-						WHERE ra.classId = rad.classId AND (rad.statusId = 0 OR rad.statusId = 2)
-					) AS usercount, c.label AS classlabel,
-					c.ID AS classId
-				FROM KuwasysTemporaryRequestsAssign ra
-				JOIN class c ON ra.classId = c.ID
-				JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
-				GROUP BY ra.classId ORDER BY cu.ID');
-
-			return $data;
-
-		} catch (PDOException $e) {
-			$this->_interface->dieError(_g('Could not fetch the Temporary Assignments!'));
-		}
-	}
-
-	/*********************************************************************
-	 * Allows the User to view and edit the Requests of one Class
-	 */
-	protected function assignUsersToClassesClassdetailsExecute() {
-
-		try {
-			$class = $this->classGet($_GET['classId']);
-			$classes = $this->classesGetAllOfActiveSchoolyear();
-
-		} catch (PDOException $e) {
-			$this->_logger->log('Could not fetch the data of class' .
-				"$_GET[classId] in " . __METHOD__, 'Moderate');
-			$this->_interface->dieError(_g('Error while fetching the data!'));
-		}
-		$this->assignUsersToClassesSetHeader();
-		$this->_smarty->assign('classId', $_GET['classId']);
-		$this->_smarty->assign('class', $class);
-		$this->_smarty->assign('classes', $classes);
-		$this->displayTpl('AssignUsersToClasses/classdetails.tpl');
-	}
-
-	/*********************************************************************
-	 * Allows JS to fill its tables with the Data
-	 */
 	protected function assignUsersToClassesClassdetailsGetExecute() {
 
 		try {
@@ -335,50 +274,6 @@ class KuwasysUsers extends Kuwasys {
 		}
 
 		die(json_encode($data));
-	}
-
-	/**
-	 * Fetches all Userrequests of a Class
-	 *
-	 * @param  int    $classId The ID of the Class
-	 * @return array           The Userrequests
-	 * @throws PDOException If Error happened when fetching the Data
-	 */
-	protected function temporaryAssignmentsRequestsOfClassGet($classId) {
-
-		$stmt = $this->_pdo->prepare(
-			'SELECT IF(ra.statusId <> 0, uics.name, "removed") statusname,
-				ra.statusId AS statusId, ra.classId AS classId,
-				ra.userId AS userId,
-				IF(origuics.ID, origuics.translatedName, "N/A") AS origStatusname,
-				CONCAT(u.forename, " ", u.name) AS username,
-				CONCAT(g.gradelevel, "-", g.label) AS grade,
-				(SELECT c2.ID FROM class c2
-					JOIN KuwasysTemporaryRequestsAssign ra2
-						ON ra2.classId = c2.ID
-					WHERE c2.unitId = c.unitId AND ra2.userId = ra.userId AND ra2.classId <> ra.classId
-				) AS otherClassId,
-			(SELECT c2.label FROM class c2
-				JOIN KuwasysTemporaryRequestsAssign ra2
-					ON ra2.classId = c2.ID
-				WHERE c2.unitId = c.unitId AND ra2.userId = ra.userId AND ra2.classId <> ra.classId
-			) AS otherClassLabel
-			FROM KuwasysTemporaryRequestsAssign ra
-			JOIN users u ON ra.userId = u.ID
-			LEFT JOIN usersInGradesAndSchoolyears uigsy
-				ON ra.userId = uigsy.userId
-					AND uigsy.schoolyearId = @activeSchoolyear
-			LEFT JOIN Grades g ON uigsy.gradeId = g.ID
-			LEFT JOIN usersInClassStatus uics ON ra.statusId = uics.ID
-			LEFT JOIN class c ON ra.classId = c.ID
-			LEFT JOIN usersInClassStatus origuics
-				ON ra.origStatusId = origuics.ID
-			WHERE ra.classId = :classId
-		');
-
-		$stmt->execute(array('classId' => $classId));
-
-		return $stmt->fetchAll(PDO::FETCH_GROUP);
 	}
 
 	/*********************************************************************
@@ -471,27 +366,6 @@ class KuwasysUsers extends Kuwasys {
 
 		die(json_encode(array('value' => 'success',
 			'message' => _g('The User was successfully moved.'))));
-	}
-
-	/**
-	 * Fetches all Classes that are in the active Schoolyear
-	 *
-	 * Dies displaying a Message on Error
-	 *
-	 * @return array  The Classes
-	 */
-	protected function classesGetAllOfActiveSchoolyear() {
-
-		try {
-			$classes = $this->_pdo->query('SELECT * FROM class
-				WHERE schoolyearId = @activeSchoolyear');
-
-			return $classes;
-
-		} catch (PDOException $e) {
-			$this->_interface->dieError(
-				_g('Could not fetch the User-Assignments'));
-		}
 	}
 
 	/**

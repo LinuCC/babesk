@@ -30,11 +30,10 @@ class Classdetails extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClas
 				"$_GET[classId] in " . __METHOD__, 'Moderate');
 			$this->_interface->dieError(_g('Error while fetching the data!'));
 		}
-		$this->assignUsersToClassesSetHeader();
 		$this->_smarty->assign('classId', $_GET['classId']);
 		$this->_smarty->assign('class', $class);
 		$this->_smarty->assign('classes', $classes);
-		$this->displayTpl('AssignUsersToClasses/classdetails.tpl');
+		$this->displayTpl('classdetails.tpl');
 	}
 
 	/////////////////////////////////////////////////////////////////////
