@@ -52,6 +52,25 @@ class AssignUsersToClasses extends \KuwasysUsers {
 		return (boolean) $stmt->fetch();
 	}
 
+	/**
+	 * Fetches the Status with the given Name
+	 *
+	 * Returns false if Status not found
+	 *
+	 * @param  string $statusName The Name of the Status to fetch
+	 * @return array              The Fetched data of the Status
+	 * @throws PDOException If Status could not be fetched
+	 */
+	protected function statusIdGetByNameWoException($statusName) {
+
+		$stmt = $this->_pdo->prepare('SELECT ID FROM usersInClassStatus
+			WHERE name = :name');
+
+		$stmt->execute(array('name' => $statusName));
+
+		return $stmt->fetchColumn();
+	}
+
 
 	/////////////////////////////////////////////////////////////////////
 	//Attributes

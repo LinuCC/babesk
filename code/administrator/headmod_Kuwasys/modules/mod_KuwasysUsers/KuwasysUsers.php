@@ -342,31 +342,8 @@ class KuwasysUsers extends Kuwasys {
 		return $stmt->fetchColumn();
 	}
 
-	/*********************************************************************
-	 * Allows the Admin to change the Class of a UserToClass-Assignment
-	 */
-	protected function assignUsersToClassesChangeClassOfUserExecute() {
 
-		try {
-			$stmt = $this->_pdo->prepare('UPDATE KuwasysTemporaryRequestsAssign
-				SET classId = :newClassId
-				WHERE userId = :userId AND classId = :classId');
 
-			$stmt->execute(array(
-				'userId' => $_POST['userId'],
-				'classId' => $_POST['classId'],
-				'newClassId' => $_POST['newClassId']
-			));
-
-		} catch (PDOException $e) {
-			die(json_encode(array('value' => 'error',
-				'message' => _g('Could not move the User to the other Class!')
-			)));
-		}
-
-		die(json_encode(array('value' => 'success',
-			'message' => _g('The User was successfully moved.'))));
-	}
 
 	/**
 	 * Sets the Header of the Templates to allow the User a better overview
