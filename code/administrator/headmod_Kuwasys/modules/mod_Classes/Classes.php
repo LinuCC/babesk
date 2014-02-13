@@ -681,7 +681,8 @@ class Classes extends Kuwasys {
 				"SELECT c.*, uic.UserID AS userId FROM class c
 				JOIN jointUsersInClass uic ON c.ID = uic.ClassID
 				WHERE $userIdPart c.unitId = :unitId
-					AND c.ID <> :classId"
+					AND c.ID <> :classId
+					AND c.schoolyearId = @activeSchoolyear"
 			);
 
 			$stmt->execute(
