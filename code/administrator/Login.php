@@ -122,19 +122,46 @@ class Login {
 	}
 
 	protected function userFetch() {
-
+        require_once PATH_INCLUDE.'/PasswordHash.php';
 		TableMng::sqlEscape($_POST['Username']);
-		$password = hash_password($_POST['Password']);
+        TableMng::sqlEscape($_POST['Password']);
+		//$password = hash_password($_POST['Password']);
 
+
+        try {
+            $password = TableMng::query("SELECT ID, password FROM users
+				WHERE `username` = '$_POST[Username]'");
+        } catch (Exception $e) {
+            $this->loginShow('Error executing Query');
+        }
+        $users = array();
+
+        if (strlen($password[0]['password'])==32 && md5($_POST['Password']) == $password[0]['password']) {
+            $convert = convert_md5_to_bcrypt($_POST['Password']);
+            try {
+                TableMng::query(sprintf("UPDATE users SET password = '%s' WHERE ID='%s'",$convert,$password[0]['ID']));
+            } catch (Exception $e) {
+                $this->loginShow('Error executing Query');
+            }
+        }
+
+        try {
+            $password = TableMng::query("SELECT password FROM users
+				WHERE `username` = '$_POST[Username]'");
+        } catch (Exception $e) {
+            $this->loginShow('Error executing Query');
+        }
+
+        if (validate_password($_POST['Password'],$password[0]['password'])) {
 		try {
 			$users = TableMng::query("SELECT ID, username FROM users
-				WHERE `username` = '$_POST[Username]'
-					AND `password` = '$password'");
+				WHERE `username` = '$_POST[Username]'");
 
 		} catch (Exception $e) {
 			$this->loginShow('Error executing Query');
 		}
-
+        }
+ ;
 		return $users;
 	}
 

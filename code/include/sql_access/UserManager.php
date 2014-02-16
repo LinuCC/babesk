@@ -210,6 +210,7 @@ class UserManager extends TableManager{
 	 */
 	function checkPassword($uid, $password) {
 		require_once PATH_INCLUDE.'/functions.php';
+        require_once PATH_INCLUDE.'/PasswordHash.php';
 		$sql = ('SELECT password FROM users WHERE ID = ?');
 		$stmt = $this->db->prepare($sql);
 
@@ -226,7 +227,27 @@ class UserManager extends TableManager{
 			return false;
 		}
 		$stmt->close();
-		if (hash_password($password) == $result) {
+
+	//	if (hash_password($password) == $result) {
+		if (strlen($result)==32 && md5($password) == $result) {
+            $convert = convert_md5_to_bcrypt($password);
+            $sql = 'UPDATE users SET password = ? WHERE ID=?' ;
+            $stmt = $this->db->prepare($sql);
+
+            if (!$stmt) {
+                exit($this->db->error);
+            }
+            $stmt->bind_param('si', $convert,$uid);
+
+            if (!$stmt->execute()) {
+                exit($stmt->error);
+            }
+            $stmt->close();
+            return true;
+        }
+
+
+        if (validate_password($password,$result)) {
 			return true;
 		} else {
 			$sql = 'UPDATE users SET login_tries = login_tries + 1 WHERE ID = ?';
