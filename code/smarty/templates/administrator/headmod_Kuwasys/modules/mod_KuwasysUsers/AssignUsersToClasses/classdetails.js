@@ -73,7 +73,6 @@ $(document).ready(function() {
 				'classId': classId
 			},
 			success: function(res) {
-				console.log(res);
 				try {
 					var data = JSON.parse(res);
 				} catch(e) {
@@ -92,14 +91,21 @@ $(document).ready(function() {
 	var tablesFill = function(data) {
 		for(var statusIndex in data) {
 			var container = $('table#' + statusIndex + 'Users');
+
 			for(var requestIndex in data[statusIndex]) {
 				request = data[statusIndex][requestIndex];
+				if(request.otherClassId) {
+					classlink = '<a href="index.php?module=administrator|Kuwasys|KuwasysUsers|AssignUsersToClasses|Classdetails&classId='+
+							request.otherClassId +'">' +
+							request.otherClassLabel + '</a>';
+				}
+				else {
+					classlink = '---';
+				}
 				container.append(
 					'<tr><td>' + request.username + '</td><td>' +
 					request.grade + '</td><td>' + request.origStatusname +
-					'</td><td><a href="index.php?module=administrator|Kuwasys|KuwasysUsers|AssignUsersToClasses|Classdetails&classId='+
-					request.otherClassId +'">' +
-					request.otherClassLabel + '</a></td><td>' +
+					'</td><td>' + classlink + '</td><td>' +
 					'<a class="moveStatus" userId="' + request.userId +
 					'" href="#">Status verändern</a>\
 					<a class="moveClass" userId="' + request.userId +
