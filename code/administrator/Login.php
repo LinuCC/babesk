@@ -6,9 +6,11 @@ class Login {
 	//Constructor
 	/////////////////////////////////////////////////////////////////////
 
-	public function __construct($smarty) {
+	public function __construct($smarty, $pdo, $logger) {
 
 		$this->_smarty = $smarty;
+		$this->_pdo = $pdo;
+		$this->_logger = $logger;
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -101,10 +103,21 @@ class Login {
 
 	protected function loginDataVerify() {
 
-		$user = $this->userFetch();
-		$this->userCheckDieOnError($user);
+		$this->usernameNotDuplicatedCheck($_POST['Username']);
+		$userData = $this->userDataFetch($_POST['Username']);
 
-		$this->_user = $user[0];
+		if(empty($userData)) {
+			$this->loginShow('Der Benutzer wurde nicht gefunden.');
+		}
+		else {
+			if(!$this->passwordCheck(
+					$userData['ID'], $userData['password'], $_POST['Password']
+			)) {
+				$this->loginShow(INVALID_LOGIN);
+			}
+		}
+
+		$this->_user = $userData;
 		return true;
 	}
 
@@ -121,57 +134,105 @@ class Login {
 		}
 	}
 
-	protected function userFetch() {
-        require_once PATH_INCLUDE.'/PasswordHash.php';
-		TableMng::sqlEscape($_POST['Username']);
-        TableMng::sqlEscape($_POST['Password']);
-		//$password = hash_password($_POST['Password']);
+	/**
+	 * Fetches and returns the data of the user with username $username
+	 * @param  string $username The username of the user
+	 * @return array            An array of data
+	 * ['ID' => '<Id of user>', 'password' => '<hashed password of user>',
+	 *  'username' => 'username']
+	 */
+	protected function userDataFetch($username) {
 
-
-        try {
-            $password = TableMng::query("SELECT ID, password FROM users
-				WHERE `username` = '$_POST[Username]'");
-        } catch (Exception $e) {
-            $this->loginShow('Error executing Query');
-        }
-        $users = array();
-
-        if (strlen($password[0]['password'])==32 && md5($_POST['Password']) == $password[0]['password']) {
-            $convert = convert_md5_to_bcrypt($_POST['Password']);
-            try {
-                TableMng::query(sprintf("UPDATE users SET password = '%s' WHERE ID='%s'",$convert,$password[0]['ID']));
-            } catch (Exception $e) {
-                $this->loginShow('Error executing Query');
-            }
-        }
-
-        try {
-            $password = TableMng::query("SELECT password FROM users
-				WHERE `username` = '$_POST[Username]'");
-        } catch (Exception $e) {
-            $this->loginShow('Error executing Query');
-        }
-
-        if (validate_password($_POST['Password'],$password[0]['password'])) {
 		try {
-			$users = TableMng::query("SELECT ID, username FROM users
-				WHERE `username` = '$_POST[Username]'");
+			$stmt = $this->_pdo->prepare(
+				'SELECT ID, password, username FROM users
+					WHERE username LIKE ?'
+			);
+			$stmt->execute(array($username));
+			return $stmt->fetch();
 
-		} catch (Exception $e) {
+		} catch (PDOException $e) {
 			$this->loginShow('Error executing Query');
 		}
-        }
- ;
-		return $users;
 	}
 
-	protected function userCheckDieOnError($users) {
+	/**
+	 * Checks if a username exists multiple times in the users-table
+	 * Dies displaying a message if username exists multiple times
+	 * @param  string $username The username to check for
+	 */
+	protected function usernameNotDuplicatedCheck($username) {
 
-		if(empty($users)) {
-			$this->loginShow(INVALID_LOGIN);
-		}
-		else if(count($users) > 1) {
+		if($this->usernameCountGet($username) > 1) {
+			$this->_logger->log('multiple users with same username found!',
+				'Problematic', Null, json_encode(array(
+					'username' => $username
+			)));
 			$this->loginShow('Error: multiple fitting users found');
+		}
+	}
+
+	/**
+	 * Checks how often the given username exists
+	 * @return int    the count of the users having this username
+	 */
+	protected function usernameCountGet($username) {
+
+		try {
+			$stmt = $this->_pdo->prepare(
+				'SELECT COUNT(*) FROM users WHERE username = ?'
+			);
+			$stmt->execute(array($username));
+			return $stmt->fetchColumn();
+
+		} catch (PDOException $e) {
+			$this->_logger->log('Could not fetch the username-Count',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+		}
+	}
+
+	/**
+	 * Checks if the password is the correct one for the user
+	 * Also checks if the hashed password is hashed in the old md5-way and
+	 * converts it if necessary
+	 * @param  int    $userId          The Id of the user
+	 * @param  string $password        The hashed password
+	 * @param  string $passwordToCheck The password given by the user to check
+	 * @return bool                    true if it is the correct password,
+	 *                                 else false
+	 */
+	protected function passwordCheck($userId, $password, $passwordToCheck) {
+
+		if (strlen(trim($password)) == 32 &&
+			md5($passwordToCheck) == $password
+		) {
+			//Convert old-style md5-hashed password to new hash-method
+			$this->passwordOfUserUpdate($userId, $passwordToCheck);
+			return true;
+		}
+		else {
+			return validate_password($passwordToCheck, $password);
+		}
+	}
+
+	/**
+	 * Updates the users password
+	 * Dies displaying a message on error
+	 * @param  int    $userId   The Id of the user to change the password
+	 * @param  string $password The password (not hashed)
+	 */
+	protected function passwordOfUserUpdate($userId, $password) {
+
+		$newHash = convert_md5_to_bcrypt($password);
+
+		try {
+			$stmt = $this->_pdo->prepare(
+				'UPDATE users SET password = ? WHERE ID = ?'
+			);
+			$stmt->execute(array($newHash, $userId));
+
+		} catch (PDOException $e) {
+			$this->loginShow('Error executing Query');
 		}
 	}
 
@@ -184,6 +245,10 @@ class Login {
 	protected $_smarty;
 
 	protected $_user;
+
+	protected $_pdo;
+
+	protected $_logger;
 }
 
 ?>
