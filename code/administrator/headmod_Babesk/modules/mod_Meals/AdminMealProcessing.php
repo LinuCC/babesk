@@ -82,6 +82,9 @@ class AdminMealProcessing {
 			//convert the date for MySQL-Server
 			$date_conv = $date_ar["year"] . "-" . $date_ar["month"] . "-" . $date_ar["day"];
 
+            //check if weekday is saturday or sunday
+            if (date('N', strtotime($date_conv)) >= 5) $this->mealInterface->dieError(gettext("Mealdate at weekend not valid!"));
+
 			//and add the meal
 			try {
 
