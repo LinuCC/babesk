@@ -121,6 +121,21 @@ class BookManager extends TableManager{
 			$res_array[] = $buffer;
 		return $res_array;
 	}
+        
+        function getBooksByTopic($topic) {
+            require_once PATH_ACCESS . '/DBConnect.php';
+		$query = sql_prev_inj(sprintf("SELECT * FROM %s WHERE `subject` LIKE '%s' ORDER BY `class`", $this->tablename, $topic));
+		
+                $result = $this->db->query($query);
+		if (!$result) {
+			die(DB_QUERY_ERROR.$this->db->error);
+		}
+		$res_array = NULL;
+		while($buffer = $result->fetch_assoc())
+			$res_array[] = $buffer;
+		return $res_array;
+            
+        }
 
 }
 ?>

@@ -36,7 +36,7 @@
 <input type="hidden" name="loanShowBuySave">
 <h5>Folgende B&uuml;cher werden f&uuml;r das kommende Schuljahr ben&ouml;tigt. Sie k&ouml;nnen in der Liste angeklickt werden, wenn sie selbst angeschafft werden. Bei der Buchausgabe werden sie dann nicht ausgegeben.</h5>
 {foreach from=$loanbooks item=book}
-<input type="checkbox" name="bookID[]" value="{$book.id}" {if $book.selected}checked{/if}>{$book.subject}: {$book.title} ({$book.author}, {$book.publisher}. ISBN: {$book.isbn})<br>
+    <input type="checkbox" name="bookID[]" value="{$book.id}" {if $book.selected}checked{/if}><b>{$book.subject}: {$book.title} </b><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({$book.author}, {$book.publisher}. ISBN: {$book.isbn}. {$book.price} &euro;)<br>
 {/foreach}
 <input type="submit" value="Selbstk&auml;ufe abspeichern" />
 </form>

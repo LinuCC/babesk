@@ -2,6 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 require_once "constants.php";
+require_once "PasswordHash.php";
 
 /**
  * Checks if the session is valid
@@ -64,13 +65,23 @@ function sql_prev_inj($str) {
 }
 
 /**
- * hash_password returns the md5-hash of the string
- * Enter description here ...
+ * hash_password returns the hashed string
+ * SHA265, PBKDF2 with 24 bytes
  * @param $pw_str the string to hash
  * @return string
  */
 function hash_password($pw_str) {
-	return md5($pw_str);
+	//return md5($pw_str);
+    return create_hash($pw_str);
+}
+
+/**
+ * converts old passwords from md5 hash to the more secure bcrypt/sha265 with key stretching
+ */
+function convert_md5_to_bcrypt($pw_str) {
+
+        return create_hash($pw_str);
+
 }
 
 /**
