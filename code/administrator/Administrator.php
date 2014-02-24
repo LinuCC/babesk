@@ -51,7 +51,7 @@ class Administrator {
 
 	public function run() {
 
-		$login = new Login($this->_smarty);
+		$login = new Login($this->_smarty, $this->_pdo, $this->_logger);
 		if($login->loginCheck()) {
 			$this->accessControlInit();
 			$this->initUserInterface();
