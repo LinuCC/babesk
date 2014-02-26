@@ -57,6 +57,57 @@ class ArrayFunctions {
 
 		return $container;
 	}
+
+	/**
+	 * Converts a nested set to a multidimensional array
+	 * For this function to work properly it is important that the nodes are
+	 * sorted by their left value in ascending order!
+	 * @param  array  $arrData  The nested set to convert
+	 * '<index>' = [
+	 *     '<opening tag name>' => '<opening tag number>',
+	 *     '<closing tag name>' => '<closing tag number>',
+	 *     '<user-defined key>' => '<user-defined value>', ...
+	 * ]
+	 * @param  string $tagOpen  default 'lft', the name of the opening tag
+	 * @param  string $tagClose default 'rgt', the name of the closing tag
+	 * @return array            a hierarchically ordered array
+	 * '<index>' = [
+	 *     'item'              => [
+	 *         '<opening tag name>' => '<opening tag number>',
+	 *         '<closing tag name>' => '<closing tag number>',
+	 *         '<user-defined key>' => '<user-defined value>', ...
+	 *     ],
+	 *     'children'           => [
+	 *         (The children of the node, with the same structure)
+	 *     ]
+	 * ]
+	 */
+	public static function nestedSetToArray(
+		array $arrData, $tagOpen = 'lft', $tagClose = 'rgt'
+	) {
+		$stack = array();
+		$arraySet = array();
+
+		foreach( $arrData as $intKey=>$arrValues) {
+			$stackSize = count($stack); //how many opened tags?
+			while(
+				$stackSize > 0 &&
+				$stack[$stackSize-1][$tagClose] < $arrValues[$tagOpen]
+			) {
+				array_pop($stack); //close sibling and his childrens
+				$stackSize--;
+			}
+
+			$link =& $arraySet;
+			for($i=0;$i<$stackSize;$i++) {
+				$link =& $link[$stack[$i]['index']]["children"]; //navigate to the proper children array
+			}
+			$tmp = array_push($link,  array ('item'=>$arrValues,'children'=>array()));
+			array_push($stack, array('index' => $tmp-1, $tagClose => $arrValues[$tagClose]));
+		}
+
+		return $arraySet;
+	}
 }
 
 ?>

@@ -19,6 +19,7 @@ class Group {
 		$this->_name = $name;
 		$this->_lft = $lft;
 		$this->_rgt = $rgt;
+		$this->_childs = array();
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -27,6 +28,18 @@ class Group {
 
 	public function getId() {
 		return $this->_id;
+	}
+
+	public function childAdd($groupChild) {
+		$this->_childs[] = $groupChild;
+	}
+
+	public function childsGet() {
+		return $this->_childs;
+	}
+
+	public function childsRemove() {
+		$this->_childs = array();
 	}
 
 	public static function groupsLoad() {
