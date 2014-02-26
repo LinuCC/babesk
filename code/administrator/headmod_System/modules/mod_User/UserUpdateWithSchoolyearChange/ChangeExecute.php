@@ -156,6 +156,8 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 
 		try {
 			$users = $this->usersNewToCommitFetch();
+			$groupId = $this->groupIdToAddNewUsersToGet();
+
 			if(empty($users) || !count($users)) {
 				return;
 			}
@@ -174,6 +176,10 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 						"userUpdateWithSchoolyearChangeNewSchoolyearId"
 				))'
 			);
+			$stmtgroups = $this->_pdo->prepare(
+				'INSERT INTO UserInGroups (userId, groupId) VALUES
+				(?, ?)'
+			);
 
 			foreach($users as $user) {
 				if(empty($user['birthday'])) {
@@ -187,12 +193,43 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 				));
 				$userId = $this->_pdo->lastInsertId();
 				$stmtg->execute(array($userId, $user['gradeId']));
+				if($groupId != 0) {
+					$stmtgroups->execute(array($userId, $groupId));
+				}
 			}
 
 		} catch (\PDOException $e) {
 			$this->_logger->log('Could not commit the new users',
 				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
 			$this->_interface->dieError(_g('Could not commit the new users!' . $e->getMessage()));
+		}
+	}
+
+	/**
+	 * Fetches the id of the group to assign the newly added users to
+	 * @return int    The groupId
+	 */
+	private function groupIdToAddNewUsersToGet() {
+
+		try {
+			$res = $this->_pdo->query(
+				'SELECT value FROM global_settings WHERE
+					name = "UserUpdateWithSchoolyearChangeGroupOfNewUser"'
+			);
+			$data = $res->fetchColumn();
+			if(isset($data) && $data !== FALSE) {
+				return (int)$data;
+			}
+			else {
+				throw Exception('globalSettings-Entry not existing!');
+			}
+
+		} catch (\PDOException $e) {
+			$this->_logger->log('Error fetching the group-id for the newly ' .
+				'imported users','Notice', Null,
+				json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieError(_g('Could not get the group for the ' .
+				'new users!'));
 		}
 	}
 

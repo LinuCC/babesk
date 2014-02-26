@@ -30,6 +30,10 @@ class Group {
 		return $this->_id;
 	}
 
+	public function getName() {
+		return $this->_name;
+	}
+
 	public function childAdd($groupChild) {
 		$this->_childs[] = $groupChild;
 	}
