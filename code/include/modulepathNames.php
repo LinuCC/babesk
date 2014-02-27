@@ -3,7 +3,7 @@
 /**
  * This file is used for gettext-Editors that fetch the elements automatically
  * from the Sourcecode. Since the Modulepaths are created from a database the
- * editors delete the translations every time the autoupdate.
+ * editors delete the translations every time they autoupdate.
  * This file prevents it
  */
 
