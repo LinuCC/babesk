@@ -123,19 +123,47 @@ class SchbasAccounting extends Schbas {
 			$haystack = array('nl','ln','lr','ls');
 
 			$query = sprintf("SELECT COUNT(*) FROM schbas_accounting WHERE `UID`='%s'",$uid);
-			$result=TableMng::query($query,true);
+			$result=TableMng::query($query);
 			if ($result[0]['COUNT(*)']!="0") {
 				die('dupe');
 			}
 			if(is_numeric($uid) && in_array($loanChoice, $haystack,$true)) {
 				try {
 
-					$grade = TableMng::query(sprintf("SELECT g.gradelevel FROM jointusersingrade as juig, Grades as g WHERE juig.GradeID=g.ID and juig.UserID='%s'",$uid));
+                    $loanbooks = array();
 
-					if ($loanChoice=="ln")	$amountToPay = TableMng::query(sprintf("SELECT fee_normal as fee FROM schbas_fee WHERE grade='%s'",$grade[0]['gradelevel']+1));
-					if ($loanChoice=="lr")	$amountToPay = TableMng::query(sprintf("SELECT fee_reduced as fee FROM schbas_fee WHERE grade='%s'",$grade[0]['gradelevel']+1));
-					if (!isset($amountToPay)) $amountToPay[0]['fee']="0.00";
-					$query = sprintf("INSERT INTO schbas_accounting (`UID`,`loanChoice`,`payedAmount`,`amountToPay`) VALUES ('%s','%s','%s','%s')",$uid,$loanChoice,"0.00",$amountToPay[0]['fee']);
+                    require_once PATH_ACCESS . '/LoanManager.php';
+                    $lm = new LoanManager();
+                    $loanbooks = $lm->getLoanByUID($uid, false);
+                    $loanbooksSelfBuy = TableMng::query("SELECT BID FROM schbas_selfpayer WHERE UID=".$uid);
+                    $loanbooksSelfBuy = array_map('current',$loanbooksSelfBuy);
+
+                    $checkedBooks = array();
+                    $feeNormal = 0.00;
+                    foreach ($loanbooks as $book) {
+                        if (!in_array($book['id'],$loanbooksSelfBuy)) {
+                            if(in_array($book['class'],[05,06,07,08,09])) $feeNormal += $book['price'];
+                            if(in_array($book['class'],[56,67,78,89,90,12,13])) $feeNormal += $book['price']/2;
+                            if(in_array($book['class'],[79,91])) $feeNormal += $book['price']/3;
+                            if(in_array($book['class'],[69,92])) $feeNormal += $book['price']/4;
+                        }
+                    }
+
+
+                    //get loan fees
+                    //gesamtausleihpreis dritteln
+                    $feeNormal /=3;
+
+                    //für reduzierten Preis vom gedrittelten preis 20% abziehen
+                    $feeReduced = $feeNormal * 0.8;
+                    $feeNormal = number_format( round($feeNormal,0) , 2, ',','.'); //preise auf volle
+                    $feeReduced = number_format( round($feeReduced,0) , 2, ',','.');//betraege runden
+				//	$grade = TableMng::query(sprintf("SELECT g.gradelevel FROM jointusersingrade as juig, Grades as g WHERE juig.GradeID=g.ID and juig.UserID='%s'",$uid));
+
+					if ($loanChoice=="ln")	$amountToPay = $feeNormal;
+					if ($loanChoice=="lr")	$amountToPay = $feeReduced;
+					if (!isset($amountToPay)) $amountToPay="0.00";
+					$query = sprintf("INSERT INTO schbas_accounting (`UID`,`loanChoice`,`payedAmount`,`amountToPay`) VALUES ('%s','%s','%s','%s')",$uid,$loanChoice,"0.00",$amountToPay);
 
 					TableMng::query($query);
 				} catch (Exception $e) {
