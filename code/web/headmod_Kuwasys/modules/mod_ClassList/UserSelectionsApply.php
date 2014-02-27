@@ -3,7 +3,7 @@
 namespace web\Kuwasys\ClassList;
 
 require_once PATH_INCLUDE . '/Module.php';
-require_once PATH_WEB . '/headmod_Kuwasys/mod_ClassList/ClassList.php';
+require_once PATH_WEB . '/headmod_Kuwasys/modules/mod_ClassList/ClassList.php';
 
 class UserSelectionsApply extends \web\Kuwasys\ClassList {
 

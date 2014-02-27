@@ -44,7 +44,9 @@ p.helpTextLockedClasses {
 </style>
 
 <h2>Kursliste</h2><br>
-<form action="index.php?section=Kuwasys|ClassList&action=formSubmitted" method="post">
+<form action="index.php?module=web|Kuwasys|ClassList|UserSelectionsApply"
+	method="post"
+>
 	{foreach $classUnits as $classUnit}
 		<p class="weekdayHeading">
 			{$classUnit.translatedName}
@@ -61,17 +63,10 @@ p.helpTextLockedClasses {
 				<th class="classListClassLabel">
 					<a href="#" class="classlabel" title="klicken um Details anzuzeigen">
 						{$class.label}
-						{if !$class.registrationForUserAllowed}
+						{if !$class.registrationEnabled}
 							(gesperrt)
 						{/if}
 					</a>
-					<!-- <div id="classDescription#{$class.ID}" class="classDescription">
-						<p>{$class.description}</p>
-						<p>{if isset($class.classteacher)}Kursleiter: {$class.classteacher.forename} {$class.classteacher.name}{/if}</p>
-						<script type="text/javascript">
-							switchClassDescriptionOfLink('{$class.ID}');
-						</script>
-					</div> -->
 					<div class="classDescription">
 						<p>
 							{$class.description}
@@ -79,15 +74,16 @@ p.helpTextLockedClasses {
 						<p>
 							{if isset($class.classteacher)}
 							Kursleiter:
-								{$class.classteacher.forename} {$class.classteacher.name}{/if}
+								{$class.classteacher}
+							{/if}
 						</p>
 					</div>
 				</th>
 				<td class="classListCheckbox">
-					<input class="classListCheckbox" type="checkbox" name="firstChoice{$classUnit.ID}" value="{$class.ID}" {if !$class.registrationForUserAllowed}disabled="disabled"{/if} />
+					<input class="classListCheckbox" type="checkbox" name="firstChoice{$classUnit.ID}" value="{$class.ID}" {if !$class.registrationEnabled}disabled="disabled"{/if} />
 				</td>
 				<td class="classListCheckbox">
-					<input class="classListCheckbox" type="checkbox" name="secondChoice{$classUnit.ID}" value="{$class.ID}" {if !$class.registrationForUserAllowed}disabled="disabled"{/if} />
+					<input class="classListCheckbox" type="checkbox" name="secondChoice{$classUnit.ID}" value="{$class.ID}" {if !$class.registrationEnabled}disabled="disabled"{/if} />
 				</td>
 			</tr>
 			{/if}
