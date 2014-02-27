@@ -1,1 +1,2 @@
 DROP TABLE IF EXISTS assignUsersToClassesTemp;
+DROP TABLE IF EXISTS ip;
