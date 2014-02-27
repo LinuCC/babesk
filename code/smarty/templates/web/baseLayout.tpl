@@ -124,9 +124,11 @@ $(document).ready(function() {
 		{if isset($backlink)}
 			<a href='{$backlink}'>{t}back{/t}</a>
 		{/if}
+		{if $last_login}
 		<div>
 			<p id="last_login">Letzter Login: {$last_login}</p>
 		</div>
+		{/if}
 		<div id="background">
 
 			{if isset($footerBackground)}

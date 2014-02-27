@@ -39,21 +39,17 @@ class KuwasysStatsUsersChosenBySchoolyearBarChart extends StatisticsBarChart {
 			FROM
 			(SELECT sy.ID AS id, uic.UserID as userId, sy.label AS label
 				FROM schoolYear sy
-				JOIN jointClassInSchoolYear cisy ON cisy.SchoolYearID  = sy.ID
-				JOIN jointUsersInClass uic ON uic.ClassID = cisy.ClassID
+				INNER JOIN jointUsersInClass uic
+				INNER JOIN class c ON c.ID = uic.ClassID
+					AND c.schoolyearId = sy.ID
 				WHERE
 					uic.statusId = (
 						SELECT ID FROM usersInClassStatus uics
 						WHERE name = "active"
 					)
-					OR
-					uic.statusId = (
-						SELECT ID FROM usersInClassStatus uics
-						WHERE name = "waiting"
-					)
 				GROUP BY uic.userId, sy.ID
 				) uniqueUsersPerSchoolyear
-			GROUP BY uniqueUsersPerSchoolyear.id', true);
+			GROUP BY uniqueUsersPerSchoolyear.id');
 	}
 
 	protected function dataProcess() {

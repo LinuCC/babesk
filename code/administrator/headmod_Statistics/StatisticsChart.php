@@ -9,7 +9,7 @@ require_once PATH_INCLUDE . '/TemporaryFile.php';
  *
  * The Statistics-Chart-Classes should be used like this: StatisticsChart is the
  * Parent-Class, every class should inherit from it. The class inheriting from
- * this class should only specifiy which kind of Chart to draw (see
+ * this class should only specify which kind of Chart to draw (see
  * StatisticsBarChart as an Example). Create a child-class extending from that
  * parentClass. This draws the Image. Overview:
  * [StatisticsChart > Statistics{kindOfChart}Chart > Class drawing the chart]
@@ -385,7 +385,8 @@ abstract class StatisticsChart {
 		'Dash' => 1,
 		'DashR' => 190,
 		'DashG' => 203,
-		'DashB' => 107);
+		'DashB' => 107
+	);
 
 	/**
 	 * Settings defining the background-Gradient of the Image
@@ -398,7 +399,8 @@ abstract class StatisticsChart {
 		'EndR' => 1,
 		'EndG' => 138,
 		'EndB' => 68,
-		'Alpha' => 50);
+		'Alpha' => 50
+	);
 
 	/**
 	 * Default drawing direction of the Gradient in the background
@@ -413,7 +415,8 @@ abstract class StatisticsChart {
 	protected $_border = array(
 		'R' => 0,
 		'G' => 0,
-		'B' => 0);
+		'B' => 0
+	);
 
 	/**
 	 * Settings defining the Shadow of the Chart
@@ -425,7 +428,8 @@ abstract class StatisticsChart {
 		'R' => 0,
 		'G' => 0,
 		'B' => 0,
-		'Alpha' => 10);
+		'Alpha' => 10
+	);
 
 	/**
 	 * Settings defining the Scale of the Chart
@@ -437,7 +441,8 @@ abstract class StatisticsChart {
 		'GridB' => 200,
 		'DrawSubTicks' => TRUE,
 		// 'CycleBackground' => FALSE,
-		'LabelRotation'  =>  45);
+		'LabelRotation'  =>  45
+	);
 
 	/**
 	 * Settings defining how the legend should be drawn onto the image
@@ -445,7 +450,8 @@ abstract class StatisticsChart {
 	 */
 	protected $_legend = array(
 		'Style' => LEGEND_NOBORDER,
-		'Mode' => LEGEND_VERTICAL);
+		'Mode' => LEGEND_VERTICAL
+	);
 
 	/**
 	 * Styles the Heading of the Image
@@ -457,7 +463,8 @@ abstract class StatisticsChart {
 		'Align' => TEXT_ALIGN_BOTTOMMIDDLE,
 		'X' => -1,
 		'Y' => 45,
-		'text' => '');
+		'text' => ''
+	);
 
 	/**
 	 * A color-palette, allowing a different color for graphs
@@ -466,7 +473,7 @@ abstract class StatisticsChart {
 	protected $_palette = array(
 		"0"=>array("R"=>188,"G"=>224,"B"=>46,"Alpha"=>100),
 		"1"=>array("R"=>150,"G"=>200,"B"=>46,"Alpha"=>100),
-		);
+	);
 
 	/**
 	 * The Width of the created Image

@@ -3,6 +3,7 @@
 namespace administrator\System\User\UserUpdateWithSchoolyearChange;
 
 require_once 'UserUpdateWithSchoolyearChange.php';
+require_once PATH_INCLUDE . '/System/UserGroupsManager.php';
 
 class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChange {
 
@@ -47,6 +48,7 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 		$switchTypes = array(0 => _g('Full year'), 1 => _g('Half year'));
 		$this->_smarty->assign('schoolyears', $this->schoolyearsGet());
 		$this->_smarty->assign('switchTypes', $switchTypes);
+		$this->_smarty->assign('usergroups', $this->groupsGet());
 		$this->displayTpl('schoolyears.tpl');
 	}
 
@@ -73,6 +75,33 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 	}
 
 	/**
+	 * Fetches the user-groups and returns them
+	 * @return array  The groups or void array on error/not found
+	 */
+	private function groupsGet() {
+
+		try {
+			$manager = new \Babesk\System\UserGroupsManager(
+				$this->_pdo, $this->_logger
+			);
+			if($manager->groupsLoad()) {
+				$userGroup = $manager->userGroupGet();
+				return $manager->flatGroupsGet();
+			}
+			else {
+				throw new \Exception('General error occured');
+			}
+
+		} catch (\Exception $e) {
+			$this->_logger->log('Error loading the groups',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->showError(_g('Could not load the user-' .
+				'groups. Adding new users to groups is disabled!'));
+			return array();
+		}
+	}
+
+	/**
 	 * User finished selecting the schoolyear, move on
 	 */
 	private function schoolyearSelected() {
@@ -89,6 +118,8 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 		$_SESSION['UserUpdateWithSchoolyearChange']['switchType'] = $_POST['switchType'];
 
 		$this->schoolyearIdUpload($_POST['schoolyear']);
+		$groupId = (!empty($_POST['usergroup'])) ? $_POST['usergroup'] : 0;
+		$this->groupToAddNewUsersToSet($groupId);
 
 		//Now execute the CsvImport-Module
 		$mod = new \ModuleExecutionCommand('root/administrator/System/' .
@@ -96,6 +127,29 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 		$this->_dataContainer->getAcl()->moduleExecute(
 			$mod, $this->_dataContainer
 		);
+	}
+
+	/**
+	 * Sets the id of the group every newly added user will be assigned to
+	 * Dies displaying a message on error
+	 * @param  int    $groupId The id of the group
+	 */
+	private function groupToAddNewUsersToSet($groupId) {
+
+		try {
+			$stmt = $this->_pdo->prepare(
+				'UPDATE global_settings SET value = ?
+				WHERE name = "UserUpdateWithSchoolyearChangeGroupOfNewUser"'
+			);
+			$stmt->execute(array($groupId));
+
+		} catch (\Exception $e) {
+			$this->_logger->log('Error changing the groupOfNewUser-value',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieError(_g(
+				'Could not initialize the process!')
+			);
+		}
 	}
 
 	/**

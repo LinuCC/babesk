@@ -681,7 +681,8 @@ class Classes extends Kuwasys {
 				"SELECT c.*, uic.UserID AS userId FROM class c
 				JOIN jointUsersInClass uic ON c.ID = uic.ClassID
 				WHERE $userIdPart c.unitId = :unitId
-					AND c.ID <> :classId"
+					AND c.ID <> :classId
+					AND c.schoolyearId = @activeSchoolyear"
 			);
 
 			$stmt->execute(
@@ -760,7 +761,12 @@ class Classes extends Kuwasys {
 	protected function submoduleGlobalClassRegistrationExecute() {
 
 		if(isset($_GET['toggleFormSend'])) {
+			$this->_pdo->beginTransaction();
 			$this->globalClassRegistrationChange();
+			if(isset($_POST['activateIndividualClassregistrations'])) {
+				$this->individalClassRegistrationsEnable();
+			}
+			$this->_pdo->commit();
 			$this->_interface->dieSuccess(_g('The Global Classregistration ' .
 				'was successfully changed.'));
 		}
@@ -776,7 +782,7 @@ class Classes extends Kuwasys {
 	 */
 	protected function globalClassRegistrationChange() {
 
-		$toggle = (isset($_POST['toggle'])) ? 1 : 0;
+		$toggle = (isset($_POST['toggleGlobalClassregistration'])) ? 1 : 0;
 
 		try {
 			$stmt = $this->_pdo->prepare('UPDATE global_settings
@@ -785,8 +791,31 @@ class Classes extends Kuwasys {
 
 			$stmt->execute(array(':toggle' => $toggle));
 
-		} catch (Exception $e) {
-			$this->_interface->dieError(_g('Could not change the Global Classregistration!'));
+		} catch (PDOException $e) {
+			$this->_logger->log('error changing global classregistrations',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieError(_g('Could not change the Global ' .
+				'Classregistration!'));
+		}
+	}
+
+	/**
+	 * Enables class-registrations for all classes of the active schoolyear
+	 * Dies displaying a message on PDOException
+	 */
+	protected function individalClassRegistrationsEnable() {
+
+		try {
+			$this->_pdo->exec(
+				'UPDATE class SET registrationEnabled = 1
+					WHERE schoolyearId = @activeSchoolyear'
+			);
+
+		} catch (PDOException $e) {
+			$this->_logger->log('error changing individual classregistrations',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieError(_g('Could not change the individual ' .
+				'classregistrations!'));
 		}
 	}
 

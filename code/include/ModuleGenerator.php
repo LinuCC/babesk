@@ -77,9 +77,6 @@ class ModuleGenerator {
 
 	/**
 	 * Loads and Executes the Module
-	 *
-	 * @todo  Parameter are long outdated; We need to change the parameters,
-	 *     but that means changing every existing modulefile, too!
 	 */
 	public function execute($command, $dataContainer) {
 
@@ -240,6 +237,8 @@ class ModuleGenerator {
 	 * Example: When Modulepath is "web/Babesk/Order/Accept",
 	 * following namespaces will be tried:
 	 * "web\Babesk\Order\Accept","web\Babesk\Accept", "web\Accept"
+	 * (with the last element being the classname, not part of the namespace
+	 * itself)
 	 *
 	 * @param  object $command ModuleExecutionCommand
 	 * @return string          the string containing the namespaced Path to

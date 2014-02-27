@@ -22,6 +22,9 @@
 		<option value="gradelevelsChosen">
 			Wahlen nach Jahrgängen
 		</option>
+		<option value="allUsersInSchooltypes">
+			Wahlen nach Schultypen
+		</option>
 		<option value="usersChosenInSchoolyears">
 			Schüler die gewählt haben in Schuljahre aufgeteilt
 		</option>
