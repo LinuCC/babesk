@@ -1,11 +1,11 @@
 <?php
 
-namespace web\Kuwasys;
+namespace web\Kuwasys\ClassList;
 
 require_once PATH_INCLUDE . '/Module.php';
-require_once PATH_WEB . '/headmod_Kuwasys/Kuwasys.php';
+require_once PATH_WEB . '/headmod_Kuwasys/modules/mod_ClassList/ClassList.php';
 
-class ClassList extends \Kuwasys {
+class Show extends \web\Kuwasys\ClassList {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -34,14 +34,22 @@ class ClassList extends \Kuwasys {
 	 */
 	public function execute($dataContainer) {
 
-		//Execute submodule "Show" to show the classlist
-		$mod = new \ModuleExecutionCommand('root/web/Kuwasys/ClassList/Show');
-		$dataContainer->getAcl()->moduleExecute($mod, $dataContainer);
+		$this->entryPoint($dataContainer);
 	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Initializes data needed by the Object
+	 *
+	 * @param  DataContainer $dataContainer Contains data needed by Classes
+	 */
+	protected function entryPoint($dataContainer) {
+
+		parent::entryPoint($dataContainer);
+	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
