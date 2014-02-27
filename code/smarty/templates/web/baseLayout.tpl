@@ -52,28 +52,28 @@ $(document).ready(function() {
 <body>
 	<div id="header">
 		<div id="top">
-		<div id="top_left">
-			<p>Name: {$username}</p>
-			{if $babeskActivated && isset($credit)}<p>Guthaben: {$credit} Euro</p>{/if}
-			<a href="javascript:switchInfo('account')">Kontoeinstellungen</a><br />
-			<div id="account" style="display: none;">
-				{if $babeskActivated}
-				<a href="index.php?section=Babesk|Account">Karte sperren</a>
-				{/if}
-				<br>
-				<a href="index.php?section=Settings">Daten &auml;ndern</a>
+			<div id="top_left">
+				<p>Name: {$username}</p>
+				{if $babeskActivated && isset($credit)}<p>Guthaben: {$credit} Euro</p>{/if}
+				<a href="javascript:switchInfo('account')">Kontoeinstellungen</a><br />
+				<div id="account" style="display: none;">
+					{if $babeskActivated}
+					<a href="index.php?section=Babesk|Account">Karte sperren</a>
+					{/if}
+					<br>
+					<a href="index.php?section=Settings">Daten &auml;ndern</a>
+				</div>
+			</div>
+
+			<div id="top_right">
+				{if $newmail}<a href="index.php?section=Messages"><img src="../smarty/templates/web/images/email.png"></a>{/if}<br />
+				<a href="index.php?section=Babesk|Help">Hilfe</a><br />
+				<a href="index.php?action=logout">Ausloggen</a>
+			</div>
+			<div id="heading">
+				<a href="index.php"><h1>LeGeria Online</h1></a>
 			</div>
 		</div>
-
-		<div id="top_right">
-		{if $newmail}<a href="index.php?section=Messages"><img src="../smarty/templates/web/images/email.png"></a>{/if}<br />
-		<a href="index.php?section=Babesk|Help">Hilfe</a><br />
-		<a href="index.php?action=logout">Ausloggen</a>
-		</div>
-		<div id="heading">
-		<a href="index.php"><h1>LeGeria Online</h1></a>
-		</div>
-	</div>
 	</div>
 
 {include file='web/module_selector.tpl' title='Modul Wählen'}

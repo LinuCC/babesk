@@ -93,8 +93,9 @@ abstract class Module {
 	 */
 	protected function initSmartyVariables() {
 
+		$subprogram = $this->_modExecCommand->subprogramGet();
 		$this->_smartyModuleTemplatesPath =
-			PATH_SMARTY_ADMIN_TEMPLATES . $this->relPath;
+			PATH_SMARTY . '/templates/' . $subprogram . $this->relPath;
 
 		$siteHeaderPath = $this->_smartyModuleTemplatesPath . 'header.tpl';
 		$this->_smarty->assign('inh_path', $siteHeaderPath);
@@ -350,7 +351,7 @@ abstract class Module {
 
 	/**
 	 * Wraps what Module should be executed
-	 * @var Object ModuleExecutionCommnad
+	 * @var Object ModuleExecutionCommand
 	 */
 	protected $_modExecCommand;
 

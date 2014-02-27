@@ -54,6 +54,15 @@ class ModuleExecutionCommand {
 	}
 
 	/**
+	 * Returns the Subprogram of the ModuleExecutionCommand
+	 * @return string the subprogram
+	 */
+	public function subprogramGet() {
+
+		return $this->_execPathPreElements[1];
+	}
+
+	/**
 	 * Returns only the module-part of the execution-path
 	 *
 	 * @return string the module-path
