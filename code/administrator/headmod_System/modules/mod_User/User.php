@@ -436,6 +436,16 @@ class User extends System {
 				$groups,
 				$modsActivated) = $this->changeDisplayDataFetch($uid);
 
+			//If Kuwasys does not exist, we still need those variables for
+			//the ShowChangeUser-function
+			/**
+			 * @todo  this has to be done better at some time
+			 *        (when more modules come around...)
+			 */
+			$classes = array();
+			$statuses = array();
+			$classesOfUser = array();
+
 			if($modsActivated['Kuwasys']) {
 				list($classes,
 					$statuses,
