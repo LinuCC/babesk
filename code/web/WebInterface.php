@@ -47,6 +47,16 @@ class WebInterface {
 	////////////////////////////////////////////////////////////////////////
 
 	/**
+	 * Adds a button to the bottom of the main content that links to somewhere
+	 * @param string $name The text of the button
+	 * @param string $link Where the button should link to (like
+	 * 'index.php?YourParamsHere')
+	 */
+	public function addButton($name, $link) {
+		$this->_buttonlinks[] = array('name' => $name, 'link' => $link);
+	}
+
+	/**
 	 * Parses and displays the Content of the file $fileLink within the normal Webpage-Layout and dies
 	 * @param string $fileLink The Link
 	 */
@@ -104,6 +114,7 @@ class WebInterface {
 	 * @return [type] [description]
 	 */
 	protected function display() {
+		$this->_smarty->assign('buttonlinks', $this->_buttonlinks);
 		$this->_smarty->display('web/baseLayout.tpl');
 	}
 
@@ -115,9 +126,11 @@ class WebInterface {
 
 	/**
 	 * A link back, usable for example if the program dies with an error
-	 * @var [type]
+	 * @var string
 	 */
 	protected $_backlink;
+
+	protected $_buttonlinks;
 }
 
 ?>

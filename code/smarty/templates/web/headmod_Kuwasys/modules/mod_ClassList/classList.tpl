@@ -80,10 +80,14 @@ p.helpTextLockedClasses {
 					</div>
 				</th>
 				<td class="classListCheckbox">
-					<input class="classListCheckbox" type="checkbox" name="firstChoice{$classUnit.ID}" value="{$class.ID}" {if !$class.registrationEnabled}disabled="disabled"{/if} />
+					<input class="classListCheckbox" type="checkbox"
+					name="choices[{$classUnit.ID}][request1]" value="{$class.ID}"
+					{if !$class.registrationEnabled}disabled="disabled"{/if} />
 				</td>
 				<td class="classListCheckbox">
-					<input class="classListCheckbox" type="checkbox" name="secondChoice{$classUnit.ID}" value="{$class.ID}" {if !$class.registrationEnabled}disabled="disabled"{/if} />
+					<input class="classListCheckbox" type="checkbox"
+					name="choices[{$classUnit.ID}][request2]" value="{$class.ID}"
+					{if !$class.registrationEnabled}disabled="disabled"{/if} />
 				</td>
 			</tr>
 			{/if}

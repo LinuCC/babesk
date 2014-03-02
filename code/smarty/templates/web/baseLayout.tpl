@@ -120,10 +120,23 @@ $(document).ready(function() {
 				{$content}
 			{/if}
 		{/block}
+		<div class="buttons">
 		{*A Link back*}
-		{if isset($backlink)}
-			<a href='{$backlink}'>{t}back{/t}</a>
-		{/if}
+			<div class="button_back">
+				{if isset($backlink)}
+				<form action="{$backlink}" method="post">
+					<input type="submit" value="{t}back{/t}" />
+				</form>
+				{/if}
+			</div>
+			<div class="linking_buttons">
+				{foreach $buttonlinks as $button}
+					<form action="{$button.link}" method="post">
+						<input type="submit" value="{$button.name}" />
+					</form>
+				{/foreach}
+			</div>
+		</div>
 		{if $last_login}
 		<div>
 			<p id="last_login">Letzter Login: {$last_login}</p>

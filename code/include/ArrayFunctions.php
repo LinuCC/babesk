@@ -108,6 +108,22 @@ class ArrayFunctions {
 
 		return $arraySet;
 	}
+
+	/**
+	 * Returns the first value of the array
+	 * @return mixed the first value, or false if not exists
+	 */
+	public static function firstValue(array $arr) {
+
+		if(!count($arr)) {
+			return false;
+		}
+		else {
+			foreach($arr as $el) {
+				return $el;
+			}
+		}
+	}
 }
 
 ?>

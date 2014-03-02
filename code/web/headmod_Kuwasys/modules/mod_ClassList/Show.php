@@ -71,7 +71,7 @@ class Show extends \web\Kuwasys\ClassList {
 	 * Fetches the data necessary to display the class-list
 	 * @return array  the fetched data
 	 */
-	protected function classesFetch() {
+	private function classesFetch() {
 
 		try {
 			$res = $this->_pdo->query(
@@ -99,7 +99,7 @@ class Show extends \web\Kuwasys\ClassList {
 	 * Fetches the class-units from the database
 	 * @return array  The class-units
 	 */
-	protected function unitsFetch() {
+	private function unitsFetch() {
 
 		try {
 			$res = $this->_pdo->query(
@@ -110,28 +110,6 @@ class Show extends \web\Kuwasys\ClassList {
 
 		} catch (\PDOException $e) {
 			$this->_logger->log('Error fetching the units to display',
-				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
-			throw $e;
-		}
-	}
-
-	/**
-	 * Checks if the global class-registrations are allowed or not
-	 * @return bool   true if they are enabled, false if not
-	 */
-	protected function globalClassRegistrationsAllowed() {
-
-		try {
-			$res = $this->_pdo->query(
-				'SELECT value FROM global_settings
-					WHERE name = "isClassRegistrationEnabled"'
-			);
-			$value = $res->fetchColumn();
-			return $value != 0;
-
-		} catch (\PDOException $e) {
-			$this->_logger->log(
-				'Error checking if globalClassRegistrations are enabled',
 				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
 			throw $e;
 		}

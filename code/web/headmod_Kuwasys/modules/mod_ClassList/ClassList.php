@@ -39,6 +39,28 @@ class ClassList extends \Kuwasys {
 		$dataContainer->getAcl()->moduleExecute($mod, $dataContainer);
 	}
 
+	/**
+	 * Checks if the global class-registrations are allowed or not
+	 * @return bool   true if they are enabled, false if not
+	 */
+	protected function globalClassRegistrationsAllowed() {
+
+		try {
+			$res = $this->_pdo->query(
+				'SELECT value FROM global_settings
+					WHERE name = "isClassRegistrationEnabled"'
+			);
+			$value = $res->fetchColumn();
+			return $value != 0;
+
+		} catch (\PDOException $e) {
+			$this->_logger->log(
+				'Error checking if globalClassRegistrations are enabled',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			throw $e;
+		}
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////

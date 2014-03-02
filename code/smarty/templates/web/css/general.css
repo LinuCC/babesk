@@ -418,3 +418,16 @@ div.quotebox, p.quotebox {
 	background-color: #EEEEEE;
 	border-radius: 10px;
 }
+
+div.buttons {
+	display: table-row;
+}
+
+div.button_back {
+	display: table-cell;
+}
+
+div.linking_buttons {
+	display: table-cell;
+	padding-left: 10%;
+}
