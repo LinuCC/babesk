@@ -99,14 +99,18 @@ class LoanSystem extends Schbas {
 			
 			$checkedBooks = array();
             $feeNormal = 0.00;
+            $oneYear = array(05,06,07,08,09);
+            $twoYears = array(56,67,78,89,90,12,13);
+            $threeYears = array(79,91);
+            $fourYears = array(69,92);
 			foreach ($loanbooks as $book) {
 				if (in_array($book['id'],$loanbooksSelfBuy)) {
                     $book['selected']=true;
                 } else {
-                    if(in_array($book['class'],[05,06,07,08,09])) $feeNormal += $book['price'];
-                    if(in_array($book['class'],[56,67,78,89,90,12,13])) $feeNormal += $book['price']/2;
-                    if(in_array($book['class'],[79,91])) $feeNormal += $book['price']/3;
-                    if(in_array($book['class'],[69,92])) $feeNormal += $book['price']/4;
+                    if(in_array($book['class'],$oneYear)) $feeNormal += $book['price'];
+                    if(in_array($book['class'],$twoYears)) $feeNormal += $book['price']/2;
+                    if(in_array($book['class'],$threeYears)) $feeNormal += $book['price']/3;
+                    if(in_array($book['class'],$fourYears)) $feeNormal += $book['price']/4;
                 }
 				$checkedBooks[] = $book;
 			}
@@ -229,13 +233,17 @@ class LoanSystem extends Schbas {
 
         $checkedBooks = array();
         $feeNormal = 0.00;
+        $oneYear = array(05,06,07,08,09);
+            $twoYears = array(56,67,78,89,90,12,13);
+            $threeYears = array(79,91);
+            $fourYears = array(69,92);
         foreach ($loanbooks as $book) {
             if (!in_array($book['id'],$loanbooksSelfBuy)) {
 
-                if(in_array($book['class'],[05,06,07,08,09])) $feeNormal += $book['price'];
-                if(in_array($book['class'],[56,67,78,89,90,12,13])) $feeNormal += $book['price']/2;
-                if(in_array($book['class'],[79,91])) $feeNormal += $book['price']/3;
-                if(in_array($book['class'],[69,92])) $feeNormal += $book['price']/4;
+                if(in_array($book['class'],$oneYear)) $feeNormal += $book['price'];
+                if(in_array($book['class'],$twoYears)) $feeNormal += $book['price']/2;
+                if(in_array($book['class'],$threeYears)) $feeNormal += $book['price']/3;
+                if(in_array($book['class'],$fourYears)) $feeNormal += $book['price']/4;
 
         }}
 
