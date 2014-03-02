@@ -223,7 +223,7 @@ class Login {
 	 */
 	protected function passwordOfUserUpdate($userId, $password) {
 
-		$newHash = convert_md5_to_bcrypt($password);
+		$newHash = hash_password($password);
 
 		try {
 			$stmt = $this->_pdo->prepare(

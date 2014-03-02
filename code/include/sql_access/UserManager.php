@@ -230,7 +230,7 @@ class UserManager extends TableManager{
 
 	//	if (hash_password($password) == $result) {
 		if (strlen($result)==32 && md5($password) == $result) {
-            $convert = convert_md5_to_bcrypt($password);
+            $convert = hash_password($password);
             $sql = 'UPDATE users SET password = ? WHERE ID=?' ;
             $stmt = $this->db->prepare($sql);
 

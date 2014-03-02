@@ -72,16 +72,7 @@ function sql_prev_inj($str) {
  */
 function hash_password($pw_str) {
 	//return md5($pw_str);
-    return create_hash($pw_str);
-}
-
-/**
- * converts old passwords from md5 hash to the more secure bcrypt/sha265 with key stretching
- */
-function convert_md5_to_bcrypt($pw_str) {
-
-        return create_hash($pw_str);
-
+	return create_hash($pw_str);
 }
 
 /**
