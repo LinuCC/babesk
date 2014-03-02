@@ -3,7 +3,6 @@
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/exception_def.php';
 require_once 'KuwasysDataContainer.php';
-require_once 'KuwasysLanguageManager.php';
 
 class Kuwasys extends Module {
 
