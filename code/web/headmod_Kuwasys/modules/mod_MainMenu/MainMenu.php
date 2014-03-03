@@ -1,7 +1,6 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
-require_once 'MainMenuCancelClassRegOfDay.php';
 require_once PATH_WEB . '/headmod_Kuwasys/Kuwasys.php';
 
 class MainMenu extends Kuwasys {
@@ -27,13 +26,6 @@ class MainMenu extends Kuwasys {
 	public function execute($dataContainer) {
 
 		$this->entryPoint($dataContainer);
-
-		if(isset($_GET ['action'])) {
-			if($_GET ['action'] == 'cancelClassRegOfDay') {
-				$this->cancelClassRegOfDay();
-				die();
-			}
-		}
 
 		$classes = $this->getAllClassesOfUser();
 		$this->displayMainMenu($classes);
@@ -96,10 +88,6 @@ class MainMenu extends Kuwasys {
 		$this->_smarty->display($this->_smartyPath . 'mainMenu.tpl');
 	}
 
-	private function cancelClassRegOfDay() {
-		MainMenuCancelClassRegOfDay::init($this->_smarty, $this->_smartyPath);
-		MainMenuCancelClassRegOfDay::execute();
-	}
 	///////////////////////////////////////////////////////////////////////
 	//Attributes
 	///////////////////////////////////////////////////////////////////////
