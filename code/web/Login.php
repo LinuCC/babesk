@@ -1,7 +1,5 @@
 <?php
 
-require_once PATH_INCLUDE . '/constants.php';
-
 /**
  * Handles the Login for the Web-program
  * @author Pascal Ernst <pascal.cc.ernst@googlemail.com>
@@ -80,7 +78,9 @@ class Login {
 		try {
 			$this->_userId = $this->_userManager->getUserID($this->_username);
 		} catch (MySQLVoidDataException $e) {
-			$this->assignErrorToSmarty(INVALID_LOGIN);
+			$this->assignErrorToSmarty(
+				_g('User not found or incorrect password')
+			);
 			$this->dieShowLoginForm();
 		} catch (Exception $e) {
 			$this->assignErrorToSmarty('ERROR:' . $e->getMessage());
@@ -90,11 +90,21 @@ class Login {
 
 	private function checkLoginInput() {
 
+		if(empty($this->_username) || empty($this->_password)) {
+			$this->assignErrorToSmarty(
+				_g('Please input both username and password!')
+			);
+			$this->dieShowLoginForm();
+		}
+
 		try {
-			inputcheck($this->_username, 'name', 'Benutzername');
-			inputcheck($this->_password, 'password', 'Passwort');
+			inputcheck($this->_username, 'name', _g('Username'));
+			inputcheck($this->_password, 'password', _g('Password'));
 		} catch (WrongInputException $e) {
-			$this->assignErrorToSmarty(sprintf('%s in %s', INVALID_CHARS, $e->getFieldName()));
+			$this->assignErrorToSmarty(
+				_g('Invalid characters were used in field %1$s',
+					$e->getFieldName())
+			);
 			$this->dieShowLoginForm();
 		}
 	}
@@ -139,7 +149,9 @@ class Login {
 
 		if(!$this->_userManager->checkPassword($this->_userId, $this->_password)) {
 
-			$this->assignErrorToSmarty(INVALID_LOGIN);
+			$this->assignErrorToSmarty(
+				_g('User not found or incorrect password')
+			);
 			$this->addLoginTryToUser();
 			$this->dieShowLoginForm();
 		}
@@ -148,7 +160,7 @@ class Login {
 	private function checkLockedAccount() {
 
 		if($this->_userManager->checkAccount($this->_userId)) {
-			$this->assignErrorToSmarty(ACCOUNT_LOCKED);
+			$this->assignErrorToSmarty(_g('Account is locked!'));
 			$this->dieShowLoginForm();
 		}
 	}

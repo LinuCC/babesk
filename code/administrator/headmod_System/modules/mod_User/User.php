@@ -366,20 +366,36 @@ class User extends System {
 	}
 
 	protected function submoduleRemoveSpecialCharsFromUsernamesExecute () {
+
 		if (isset ($_POST ['removeSpecialChars'])) {
-			$users = $this->usersGetAll ();
-			$rows = array ();
-			foreach ($users as $user) {
-				$name = $user ['username'];
-				$nameChanged = $this->specialCharsRemove ($name);
-				if ($name != $nameChanged) {
-					$row = new DbAMRow ();
-					$row->searchFieldAdd ('ID', $user ['ID']);
-					$row->processFieldAdd ('username', $nameChanged);
-					$rows [] = $row;
+			try {
+				$users = $this->usersGetAll();
+				$this->_pdo->beginTransaction();
+				$stmt = $this->_pdo->prepare(
+					'UPDATE users SET username = ? WHERE ID = ?'
+				);
+				foreach($users as $user) {
+					$stmt->execute(array(
+						$this->specialCharsRemove($user['username']),
+						$user['ID']
+					));
 				}
+				$this->_pdo->commit();
+
+			} catch (\PDOException $e) {
+				$this->_pdo->rollback();
+				$this->_logger->log(
+					'Error removing special characters from usernames',
+					'Notice', Null, json_encode(array(
+						'msg' => $e->getMessage()
+				)));
+				$this->_interface->dieError(
+					_g('Could not remove the special characters!')
+				);
 			}
-			$this->userManager->changeUsers ($rows);
+			$this->_interface->dieSuccess(
+				_g('The special characters were successfully removed!')
+			);
 		}
 		else {
 			$this->userInterface->showRemoveSpecialCharsFromUsername();

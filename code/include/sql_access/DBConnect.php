@@ -1,7 +1,5 @@
 <?php
 
-require_once dirname(__FILE__) . '/../constants.php';
-
 /**
  * Handles the connection to the Database
  * @author voelkerball

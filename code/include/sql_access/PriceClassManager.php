@@ -21,7 +21,6 @@ class PriceClassManager extends TableManager {
 	 *returns false if nothing found, else the priceData
 	 */
 	function getPrice ($uid, $mid) {
-		require_once PATH_INCLUDE . '/constants.php';
 		require_once PATH_ACCESS . '/UserManager.php';
 		require_once PATH_ACCESS . '/MealManager.php';
 
@@ -106,7 +105,7 @@ class PriceClassManager extends TableManager {
 	public function getHighestPriceclassID () {
 
 		$highest_pc_ID = 0;
-		
+
 		try {
 			$priceclasses = $this->getTableData();
 		} catch (MySQLVoidDataException $e) {
@@ -118,7 +117,7 @@ class PriceClassManager extends TableManager {
 				$highest_pc_ID = $priceclass['pc_ID'];
 			}
 		}
-		
+
 		return $highest_pc_ID;
 	}
 }

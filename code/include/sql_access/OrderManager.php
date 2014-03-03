@@ -126,7 +126,7 @@ class OrderManager extends TableManager {
 		$query = sql_prev_inj(sprintf('DELETE FROM %s WHERE date < "%s"', $this->tablename, date('Y-m-d',$timestamp)));
 		$result = $this->db->query($query);
 		if(!$result)
-			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error);
+			throw new MySQLConnectionException($this->db->error);
 	}
 
 	/**

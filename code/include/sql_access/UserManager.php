@@ -18,14 +18,6 @@ class UserManager extends TableManager{
 		return $this->getEntryData($uid, '*');
 	}
 
-	public function changeUsers ($rows) {
-		$qMng = $this->getMultiQueryManager ();
-		foreach ($rows as $row) {
-			$qMng->rowAdd ($row);
-		}
-		$qMng->dbExecute (DbMultiQueryManager::$Alter);
-	}
-
 	/**
 	 * Returns the id of the user with the given username
 	 *
@@ -83,7 +75,10 @@ class UserManager extends TableManager{
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE ID=%s', $this->tablename,$uid));
 		$result = $this->db->query($query);
 		if (!$result) {
-			throw DB_QUERY_ERROR.$this->db->error;
+			/**
+			 * @todo Proper Errorhandling here, not this: (wouldnt even execute)
+			 * throw DB_QUERY_ERROR.$this->db->error;
+			 */
 		}
 		while($buffer = $result->fetch_assoc())
 			$res_array[] = $buffer;
@@ -114,7 +109,10 @@ class UserManager extends TableManager{
 		$result = $this->db->query($query);
 
 		if (!$result) {
-			throw DB_QUERY_ERROR.$this->db->error;
+			/**
+			 * @todo Proper Errorhandling here, not this: (wouldnt even execute)
+			 * throw DB_QUERY_ERROR.$this->db->error;
+			 */
 		}
 
 		while($buffer = $result->fetch_assoc())
@@ -144,64 +142,6 @@ class UserManager extends TableManager{
 		}
 		return true;
 	}
-
-	/**
-	 * Looks if the Amount of Credits the user has exeeds the maximum Amount of the group of the user
-	 * Enter description here ...
-	 * @param numeric string $uid the userID
-	 * @return number
-	 */
-	// function getMaxRechargeAmount($uid) {
-	// 	require_once PATH_ACCESS . '/GroupManager.php';
-	// 	$userData = $this->getEntryData($uid, 'credit');
-
-	// 	$query = sql_prev_inj(sprintf('SELECT groupId FROM UserInGroups WHERE userId=%s',$uid));
-	// 	$result = $this->db->query($query);
-	// 	if (!$result) {
-	// 		throw DB_QUERY_ERROR.$this->db->error;
-	// 	}
-
-	// 	while($buffer = $result->fetch_assoc())
-	// 		$res_array[] = $buffer;
-
-	// 	$credit = $userData['credit'];
-
-
-	// 	$gid = $res_array[0]['groupId'];
-
-	// 	//require_once PATH_ACCESS . '/GroupManager.php';
-	// 	$groupManager = new GroupManager('Groups');
-
-	// 	$groupData = $groupManager->getEntryData($gid, 'max_credit');
-	// 	if(!$groupData)die('Error in getMaxRechargeAmount');
-	// 	$max_credit = $groupData['max_credit'];
-	// 	return $max_credit - $credit;
-	// }
-
-	// function changeBalance($id, $amount) {
-
-	// 	//Check for Max Recharge
-	// 	if($amount > $this->getMaxRechargeAmount($id)) {
-	// 		return false;
-	// 	}
-	// 	$userData = parent::getEntryData($id, 'credit');
-	// 	$oldCredit = $userData['credit'];
-
-	// 	//Check for negative money
-	// 	if($oldCredit + $amount < 0) {
-	// 		//credit can't be negative
-	// 		throw new BadMethodCallException('Final Amount of money is negative!');
-	// 	}
-	// 	$credit = $oldCredit + $amount;
-
-	// 	//Upload
-	// 	$query = sql_prev_inj(sprintf('UPDATE users SET credit = %s WHERE ID = %s;', $credit, $id));
-	// 	$result = $this->db->query($query);
-	// 	if (!$result) {
-	// 		throw new MySQLConnectionException(DB_QUERY_ERROR.$this->db->error);
-	// 	}
-	// 	return true;
-	// }
 
 	/**
 	 * Check whether the password for the given user is correct
@@ -426,7 +366,7 @@ class UserManager extends TableManager{
 		$query = sql_prev_inj(sprintf('SELECT class, religion, foreign_language, special_course FROM %s WHERE ID = %s', $this->tablename, $uid));
 		$result = $this->db->query($query);
 		if (!$result) {
-			throw new Exception(DB_QUERY_ERROR.$this->db->error);
+			throw new Exception($this->db->error);
 		}
 		$result = $result->fetch_assoc();
 		return $result;
@@ -460,7 +400,7 @@ class UserManager extends TableManager{
 			return;
 		}
 		//username exists
-		throw new Exception(USERNAME_EXISTS);
+		throw new Exception('The username already exists!');
 	}
 	/**
 	 * Alters the Userdata of a given User

@@ -14,7 +14,7 @@ class InventoryManager extends TableManager{
 	public function __construct() {
 		parent::__construct('schbas_inventory');
 	}
-	
+
 	/**
 	 * Sorts the book inventory it gets from MySQL-table and returns them.
 	 */
@@ -24,18 +24,21 @@ class InventoryManager extends TableManager{
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY id LIMIT %s,10', $this->tablename,$nextPointer));
 		$result = $this->db->query($query);
 		if (!$result) {
-			throw DB_QUERY_ERROR.$this->db->error;
+			/**
+			 * @todo Proper Errorhandling here, not this: (wouldnt even execute)
+			 * throw DB_QUERY_ERROR.$this->db->error;
+			 */
 		}
 		while($buffer = $result->fetch_assoc())
 			$res_array[] = $buffer;
 		return $res_array;
 	}
-	
+
 	/**
 	 * Returns the specify bookdata foreach element of an array with the inventory data.
 	 * @param $inventory
 	 */
-	
+
 	function getBookCodesByInvData($inventory) {
 		$bookmanager = new BookManager;
 		require_once PATH_ACCESS . '/DBConnect.php';
@@ -52,31 +55,34 @@ class InventoryManager extends TableManager{
 		return $bookcode;
 		}
 		}
-		
+
 		/**
 		 * Get inventory data by inventory id.
 		 * @param $id
 		 */
-		
+
 	function getInvDataByID($id) {
 		require_once PATH_ACCESS . '/DBConnect.php';
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE id=%s', $this->tablename, $id));
 		$result = $this->db->query($query);
 		if (!$result) {
-			throw DB_QUERY_ERROR.$this->db->error;
+			/**
+			 * @todo Proper Errorhandling here, not this: (wouldnt even execute)
+			 * throw DB_QUERY_ERROR.$this->db->error;
+			 */
 		}
 		while($buffer = $result->fetch_assoc())
 			$res_array = $buffer;
 		return $res_array;
 	}
-	
+
 	function getInvIDByBarcode($barcode) {
 		require_once PATH_ACCESS . '/DBConnect.php';
 		$bookmanager = new BookManager;
 		$barcode = str_replace("-", "/", $barcode); // replace - with /
 		$barcode = preg_replace("/\/([0-9])/", "/ $1", $barcode); //add space after / when it's missing
 		$barcode = str_replace("  ", " ", $barcode); // remove two empty spaces
-		
+
 		$bookData = $bookmanager->getBookDataByBarcode($barcode);
 		try {
 			$barcode_exploded = explode(' ', $barcode);
@@ -88,7 +94,7 @@ class InventoryManager extends TableManager{
 		return $result['id'];
 		}
 	}
-	
+
 	/**
 	 * Gets the book id by the inventory id.
 	 */
@@ -96,18 +102,24 @@ class InventoryManager extends TableManager{
 		$query = sql_prev_inj(sprintf('SELECT book_id FROM %s WHERE id=%s', $this->tablename, $inv_id));
 		$result = $this->db->query($query);
 		if (!$result) {
-			throw DB_QUERY_ERROR.$this->db->error;
+			/**
+			 * @todo Proper Errorhandling here, not this: (wouldnt even execute)
+			 * throw DB_QUERY_ERROR.$this->db->error;
+			 */
 		}
 		while($buffer = $result->fetch_assoc())
 			$book_id = $buffer['book_id'];
 		return $book_id;
 	}
-	
+
 	function getHighestNumberByBookId($book_id) {
 		$query = sql_prev_inj(sprintf('SELECT MAX(`exemplar`) AS number FROM `%s` WHERE book_id=%s', $this->tablename, $book_id));
 		$result = $this->db->query($query);
 		if (!$result) {
-			throw DB_QUERY_ERROR.$this->db->error;
+			/**
+			 * @todo Proper Errorhandling here, not this: (wouldnt even execute)
+			 * throw DB_QUERY_ERROR.$this->db->error;
+			 */
 		}
 		while($buffer = $result->fetch_assoc()){
 			$exemplar = $buffer['number'];

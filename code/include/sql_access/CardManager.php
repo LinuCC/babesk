@@ -19,10 +19,8 @@ class CardManager extends TableManager {
 		/**
 		 * @todo rename this function. this valids the cardnumber not the cardid
 		 */
-		require_once PATH_INCLUDE . '/constants.php';
 
 		if(!preg_match('/\A[0-9a-zA-Z]{10}\z/',$card_ID)){
-			//echo INVALID_CARD_ID."<br>";
 			return false;
 		}
 		return true;

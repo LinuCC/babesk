@@ -28,8 +28,9 @@ class Administrator {
 		if(!isset($_SESSION)) {
 			$this->initEnvironment();
 		}
-
-		validSession() or die(INVALID_SESSION);
+		else if(!validSession()) {
+			die(_g('The session is invalid, please login again'));
+		}
 		$this->initSmarty();
 		TableMng::init();
 		$this->_adminInterface = new AdminInterface(NULL, $this->_smarty);

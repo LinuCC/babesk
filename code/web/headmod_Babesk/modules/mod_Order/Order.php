@@ -32,8 +32,6 @@ class Order extends Babesk {
 		//No direct access
 		defined('_WEXEC') or die("Access denied");
 
-		require_once 'order_constants.php';
-
 		$smarty = $dataContainer->getSmarty();
 		$this->_interface = $dataContainer->getInterface();
 

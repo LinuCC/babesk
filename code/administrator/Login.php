@@ -113,7 +113,7 @@ class Login {
 			if(!$this->passwordCheck(
 					$userData['ID'], $userData['password'], $_POST['Password']
 			)) {
-				$this->loginShow(INVALID_LOGIN);
+				$this->loginShow(_g('User not found or incorrect password'));
 			}
 		}
 
@@ -125,12 +125,12 @@ class Login {
 	protected function emptyLoginCheckDieOnError() {
 
 		if(!isset($_POST['Username'], $_POST['Password'])) {
-			$this->loginShow(INVALID_FORM);
+			$this->loginShow('Please Log in');
 		}
 
 		if(trim($_POST['Username']) == '' ||
 			trim($_POST['Password']) == '') {
-			$this->loginShow(EMPTY_FORM);
+			$this->loginShow(_g('Please fill out the form completely.'));
 		}
 	}
 

@@ -3,7 +3,6 @@
  * Provides a class to manage the meals of the system
  */
 
-require_once PATH_INCLUDE . '/constants.php';
 require_once PATH_ACCESS . '/TableManager.php';
 
 /**
@@ -78,7 +77,7 @@ class MealManager extends TableManager {
 
 		$result = $this->db->query($query);
 		if (!$result) {
-			echo DB_CONNECT_ERROR . $this->db->error;
+			echo _g('Error occured while fetching the meals');
 			exit;
 		}
 		$is_void = true;
@@ -105,7 +104,7 @@ class MealManager extends TableManager {
 			);
 		$result = $this->db->query($query);
 		if (!$result) {
-			echo DB_CONNECT_ERROR . $this->db->error;
+			echo _g('Error occured while fetching the meal-ids at date');
 			exit;
 		}
 		while ($buffer = $result->fetch_assoc())
@@ -118,7 +117,7 @@ class MealManager extends TableManager {
 	 * @param id the menu id
 	 */
 	public function GetMealName ($id) {
-		
+
 		$name = $this->getEntryValue($id, 'name');
 		return $name;
 	}
@@ -146,7 +145,7 @@ class MealManager extends TableManager {
 		$query = sql_prev_inj(sprintf('DELETE FROM %s WHERE date < "%s"', $this->tablename, date('Y-m-d', $timestamp)));
 		$result = $this->db->query($query);
 		if (!$result)
-			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error);
+			throw new MySQLConnectionException($this->db->error);
 	}
 }
 

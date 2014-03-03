@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-02 16:56+0100\n"
-"PO-Revision-Date: 2014-03-02 17:12+0100\n"
+"POT-Creation-Date: 2014-03-03 22:37+0100\n"
+"PO-Revision-Date: 2014-03-03 22:37+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: de\n"
@@ -99,6 +99,7 @@ msgstr "Details des Kurses"
 #: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:75
 #: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:264
 #: ../../../smarty/templates_c/a1c6b6c80b42f8498abfb006fd1e9d1e5e250c41.file.classdetails.tpl.php:152
+#: ../../../web/Login.php:101
 msgid "Username"
 msgstr "Benutzername"
 
@@ -1074,7 +1075,20 @@ msgstr "zurück zum Modul"
 msgid "back"
 msgstr "zurück"
 
-#: ../../../administrator/Administrator.php:133
+#: ../../../administrator/Login.php:116 ../../../web/Login.php:82
+#: ../../../web/Login.php:153
+msgid "User not found or incorrect password"
+msgstr "Benutzer nicht gefunden oder inkorrektes Passwort"
+
+#: ../../../administrator/Login.php:133
+msgid "Please fill out the form completely."
+msgstr "Bitte fülle das Formular komplett aus."
+
+#: ../../../administrator/Administrator.php:32
+msgid "The session is invalid, please login again"
+msgstr "Die Sitzung ist abgelaufen, bitte logge dich nochmal ein."
+
+#: ../../../administrator/Administrator.php:134
 msgid ""
 "Error Accessing the Admin-Layer; Either the Module does not exist, or you "
 "dont have the rights to access it!"
@@ -1437,63 +1451,63 @@ msgstr "Konnte den Kursleiter nicht löschen!"
 msgid "Could not fetch the Classteachers"
 msgstr "Konnte die Kursleiter nicht abrufen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:53
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:50
 msgid "wrong action-value!"
 msgstr "Falsche action-value!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:80
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:77
 #, php-format
 msgid "Grade \"%1$s-%2$s\" was successfully added"
 msgstr "Die Klasse \"%1$s-%2$s\" wurde erfolgreich hinzugefügt"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:101
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:98
 msgid "Gradelabel"
 msgstr "Klassenbezeichnung"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:103
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:100
 msgid "Gradelevel"
 msgstr "Klassenjahrgang"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:105
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:102
 msgid "Schooltype"
 msgstr "Schultyp"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:129
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:126
 #, php-format
 msgid "Error adding the Grade \"%1$s-%2$s\""
 msgstr "Konnte die Klasse \"%1$s-%2$s\" nicht hinzufügen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:157
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:154
 msgid "Could not fetch the Grades"
 msgstr "Konnte die Klassen nicht abrufen"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:160
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:157
 msgid "No Grades found"
 msgstr "Keine Klassen gefunden"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:176
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:173
 msgid "The Grade was successfully deleted"
 msgstr "Die Klassen wurden erfolgreich gelöscht"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:191
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:188
 #, php-format
 msgid "Error deleting the Grade with the ID %1$s!"
 msgstr "Konnte die Klasse mit der ID %1$s nicht löschen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:209
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:206
 #, php-format
 msgid "Could not delete the Joins of the GradeId \"%1$s\""
 msgstr "Konnte die Verbindungen zur KlassenID \"%1$s\" nicht löschen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:232
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:229
 msgid "Could not fetch the Grade"
 msgstr "Konnte die Klasse nicht abrufen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:250
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:247
 msgid "The Grade was successfully changed"
 msgstr "Die Klasse wurde erfolgreich verändert"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:277
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:274
 msgid "Could not change the Grade!"
 msgstr "Konnte die Klasse nicht verändern!"
 
@@ -1839,6 +1853,7 @@ msgstr "Email-Adresse"
 
 #: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:58
 #: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:78
+#: ../../../web/Login.php:102
 msgid "Password"
 msgstr "Passwort"
 
@@ -1921,23 +1936,31 @@ msgstr ""
 "Konnte nicht überprüfen ob das passwort beim ersten Login verändert werden "
 "soll!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/User.php:522
+#: ../../../administrator/headmod_System/modules/mod_User/User.php:393
+msgid "Could not remove the special characters!"
+msgstr "Konnte die Spezialzeichen nicht entfernen!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/User.php:397
+msgid "The special characters were successfully removed!"
+msgstr "Die Sonderzeichen wurden erfolgreich entfernt!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/User.php:538
 msgid "Could not fetch the Classes!"
 msgstr "Konnte die Kurse nicht abrufen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/User.php:540
+#: ../../../administrator/headmod_System/modules/mod_User/User.php:556
 msgid "Could not fetch the User-in-Class-Statuses!"
 msgstr "Konnte die Benutzer-In-Klasse-Status nicht ändern!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/User.php:579
+#: ../../../administrator/headmod_System/modules/mod_User/User.php:595
 msgid "Could not fetch the Classes of the User"
 msgstr "Konnte die Kurse des Benutzers nicht abrufen"
 
-#: ../../../administrator/headmod_System/modules/mod_User/User.php:646
+#: ../../../administrator/headmod_System/modules/mod_User/User.php:662
 msgid "Error fetching the Usergroups"
 msgstr "Konnte die Benutzergruppen nicht abrufen"
 
-#: ../../../administrator/headmod_System/modules/mod_User/User.php:799
+#: ../../../administrator/headmod_System/modules/mod_User/User.php:815
 msgid "Could not update the user!"
 msgstr "Konnte die Benutzer nicht aktualisieren!"
 
@@ -2514,6 +2537,22 @@ msgstr "Moduleinstellungen"
 msgid "modulepath_root/administrator/System/Schoolyear"
 msgstr "Schuljahr"
 
+#: ../../../include/sql_access/MealManager.php:80
+msgid "Error occured while fetching the meals"
+msgstr "Ein Fehler ist beim Abrufen der Mahlzeiten aufgetreten"
+
+#: ../../../include/sql_access/MealManager.php:107
+msgid "Error occured while fetching the meal-ids at date"
+msgstr "Ein Fehler ist beim Abrufen der Mahlzeiten am Datum aufgetreten"
+
+#: ../../../include/sql_access/BookManager.php:129
+msgid "Error occured while fetching the books by class"
+msgstr "Ein Fehler ist beim Abrufen der Bücher nach Klassen aufgetreten"
+
+#: ../../../include/sql_access/BookManager.php:143
+msgid "Error occured while fetching the books by topic"
+msgstr "Ein Fehler ist beim Abrufen der Bücher nach Thema aufgetreten"
+
 #: ../../../dbv/DBV.php:58
 msgid "Access denied"
 msgstr "Zugriff verweigert"
@@ -2548,13 +2587,39 @@ msgstr ""
 "Wollen sie wirklich den Kurs \"%1$s\" löschen? Alle Daten gehen "
 "unwiederbringlich verloren!"
 
+#: ../../../web/Login.php:95
+msgid "Please input both username and password!"
+msgstr "Bitte geben sie sowohl Benutzername als auch Passwort ein!"
+
+#: ../../../web/Login.php:105
+#, php-format
+msgid "Invalid characters were used in field %1$s"
+msgstr "In Feld %1$s wurden ungültige Zeichen benutzt"
+
+#: ../../../web/Login.php:163
+msgid "Account is locked!"
+msgstr "Der Account ist gesperrt!"
+
 #: ../../../web/Web.php:228
 msgid "Error executing the Module!"
 msgstr "Konnte das Modul nicht ausführen!"
 
-#: ../../../web/headmod_Kuwasys/modules/mod_MainMenu/MainMenu.php:78
+#: ../../../web/headmod_Kuwasys/modules/mod_MainMenu/MainMenu.php:70
 msgid "Could not fetch your Classes!"
 msgstr "Konnte deine Kurse nicht abrufen!"
+
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassDetails/ClassDetails.php:58
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:79
+msgid "Go to Main menu"
+msgstr "Zum Hauptmenü"
+
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassDetails/ClassDetails.php:78
+msgid "Could not fetch the class!"
+msgstr "Konnte die den Kurs nicht abrufen!"
+
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassDetails/ClassDetails.php:146
+msgid "Could not display the class-details!"
+msgstr "Konnte die Kursdetails nicht anzeigen!"
 
 #: ../../../web/headmod_Kuwasys/modules/mod_ClassList/Show.php:48
 msgid "Registrations are not allowed for the moment!"
@@ -2578,10 +2643,6 @@ msgid ""
 msgstr ""
 "Deine Wahlen wurden hinzugefügt. Du kannst die Registrationen im Hauptmenü "
 "einsehen."
-
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:79
-msgid "Go to Main menu"
-msgstr "Zum Hauptmenü"
 
 #: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:113
 msgid "You did not make any selection. Nothing will be changed."
@@ -2627,7 +2688,7 @@ msgstr ""
 msgid "Could not commit your choices!"
 msgstr "Konnte deine Wahlen nicht hochladen!"
 
-#: ../../../web/headmod_Babesk/modules/mod_Order/Order.php:305
+#: ../../../web/headmod_Babesk/modules/mod_Order/Order.php:303
 #: ../../../web/headmod_Babesk/modules/mod_Order/MealsForOrderDisplayer.php:296
 #: ../../../web/headmod_Babesk/modules/mod_Cancel/Cancel.php:258
 msgid "Could not check if the Soliprice is enabled!"

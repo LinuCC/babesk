@@ -1,7 +1,6 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-require_once "constants.php";
 require_once "PasswordHash.php";
 
 /**
@@ -167,7 +166,10 @@ function navBar($showPage, $table,$headmod, $mod, $action,$filter) {
 	$query = sql_prev_inj(sprintf('SELECT COUNT(*) AS total FROM %s', $table));
 	$result = $db->query($query);
 	if (!$result) {
-		throw DB_QUERY_ERROR.$db->error;
+		/**
+		 * @todo Proper Errorhandling here, not this: (wouldnt even execute)
+		 * throw DB_QUERY_ERROR.$db->error;
+		 */
 	}
 
 	$row = $result->fetch_array(MYSQLI_ASSOC);

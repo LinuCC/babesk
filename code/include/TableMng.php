@@ -142,7 +142,7 @@ class TableMng {
 	protected static function queryExecute ($query) {
 		$result = self::$db->query($query);
 		if (!$result) {
-			throw new MySQLConnectionException(DB_QUERY_ERROR . self::$db->error . "<br />" . $query);
+			throw new MySQLConnectionException(self::$db->error . "<br />" . $query);
 		}
 		return $result;
 	}

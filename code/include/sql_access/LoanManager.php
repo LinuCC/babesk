@@ -25,7 +25,10 @@ class LoanManager extends TableManager{
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE user_id = "%s"', $this->tablename, $uid));
 		$result = $this->db->query($query);
 		if (!$result) {
-			throw DB_QUERY_ERROR.$this->db->error;
+			/**
+			 * @todo Proper Errorhandling here, not this: (wouldnt even execute)
+			 * throw DB_QUERY_ERROR.$this->db->error;
+			 */
 		}
 		while($buffer = $result->fetch_assoc())
 			$res_array[] = $buffer;
@@ -86,7 +89,10 @@ class LoanManager extends TableManager{
 		$query = sql_prev_inj(sprintf('SELECT inventory_id FROM %s WHERE user_id=%s', $this->tablename, $uid));
 		$result = $this->db->query($query);
 		if (!$result) {
-			throw DB_QUERY_ERROR.$this->db->error;
+			/**
+			 * @todo Proper Errorhandling here, not this: (wouldnt even execute)
+			 * throw DB_QUERY_ERROR.$this->db->error;
+			 */
 		}
 		while($buffer = $result->fetch_assoc())
 			$minusbooksinv[] = $buffer['inventory_id'];
