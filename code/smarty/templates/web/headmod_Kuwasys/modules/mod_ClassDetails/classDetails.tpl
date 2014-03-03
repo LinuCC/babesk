@@ -1,4 +1,4 @@
-{include file='web/header.tpl' title='Kursdetails'}
+{extends file=$inh_path}{block name=content}
 
 <h3>Kursdetails des Kurses {$class.label}</h3>
 <br><br>
@@ -7,7 +7,7 @@
 </div>
 <br>
 Dein Status bei diesem Kurs:<br>
-{if $classStatus} {$classStatus}
+{if $class.status} {$class.status}
 {else}<b>Fehler - ein falscher Statuseintrag! Wenden sie sich an den Administrator!</b>
 {/if}
 <br><br>
@@ -18,4 +18,5 @@ Dein Status bei diesem Kurs:<br>
 {else}
 Abmelden von dem Kurs ist nicht mehr möglich.
 {/if}
-{include file='web/footer.tpl'}
+
+{/block}

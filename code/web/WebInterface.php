@@ -54,6 +54,7 @@ class WebInterface {
 	 */
 	public function addButton($name, $link) {
 		$this->_buttonlinks[] = array('name' => $name, 'link' => $link);
+		$this->_smarty->assign('buttonlinks', $this->_buttonlinks);
 	}
 
 	/**
@@ -114,7 +115,6 @@ class WebInterface {
 	 * @return [type] [description]
 	 */
 	protected function display() {
-		$this->_smarty->assign('buttonlinks', $this->_buttonlinks);
 		$this->_smarty->display('web/baseLayout.tpl');
 	}
 
