@@ -17,10 +17,6 @@ define('PATH_SMARTY', realPath($rootPath."/smarty"));
 define('PATH_SMARTY_ADMIN_TEMPLATES', realPath($rootPath."/smarty/templates/administrator"));
 define('PATH_SMARTY_INH_PARENT', realPath($rootPath.'/smarty/templates/administrator/base_layout.tpl'));
 //define('PATH_SMARTY_ADMIN_MOD', realPath($rootPath.'/smarty/templates/administrator/modules'));
-
-defined('PATH_ACCESS_KUWASYS') or define('PATH_ACCESS_KUWASYS', PATH_ACCESS . '/headmod_Kuwasys');
-defined('PATH_INCLUDE_KUWASYS') or define('PATH_INCLUDE_KUWASYS', PATH_INCLUDE . '/headmod_Kuwasys');
-
 define('PATH_WEBROOT', $_SERVER['DOCUMENT_ROOT']);
 
 defined('PCHART_PATH')
