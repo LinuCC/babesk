@@ -413,11 +413,11 @@ class User extends System {
 		try {
 			$data = TableMng::query(
 				'SELECT u.*,
-				(SELECT CONCAT(g.gradelevel, g.label) AS class
+				(SELECT CONCAT(g.gradelevel, g.label) AS KuwasysClasses
 					FROM usersInGradesAndSchoolyears uigs
 					LEFT JOIN Grades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
-						uigs.schoolyearId = @activeSchoolyear) AS class
+						uigs.schoolyearId = @activeSchoolyear) AS KuwasysClasses
 				FROM users u');
 
 		} catch (Exception $e) {
@@ -532,7 +532,7 @@ class User extends System {
 	protected function classesGetAll() {
 
 		try {
-			$data = TableMng::query('SELECT * FROM class');
+			$data = TableMng::query('SELECT * FROM KuwasysClasses');
 
 		} catch (Exception $e) {
 			$this->_interface->dieError(_g('Could not fetch the Classes!'));
@@ -586,7 +586,7 @@ class User extends System {
 
 		try {
 			$data = TableMng::query("SELECT c.*, uic.statusId AS statusId
-				FROM class c
+				FROM KuwasysClasses c
 				JOIN jointUsersInClass uic ON c.ID = uic.ClassID
 				WHERE uic.UserID = '$id'");
 

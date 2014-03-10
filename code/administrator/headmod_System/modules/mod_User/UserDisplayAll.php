@@ -127,7 +127,7 @@ class UserDisplayAll {
 		// // 	$columns['countMessageSend'] = 'Nachrichten abgeschickt';
 		// // }
 		// // //Kuwasys existing
-		// // if(count(TableMng::query("SHOW TABLES LIKE 'class';"))) {
+		// // if(count(TableMng::query("SHOW TABLES LIKE 'KuwasysClasses';"))) {
 		// // 	$columns['countClass'] = 'Kurse';
 		// // }
 		// //Cards existing
@@ -431,7 +431,7 @@ class UserDisplayAllQueryCreator {
 			$this->addJoinStatement('
 				LEFT JOIN jointUsersInClass kuwasys_uic
 					ON kuwasys_uic.UserID = u.ID
-				LEFT JOIN class kuwasys_c
+				LEFT JOIN KuwasysClasses kuwasys_c
 					ON kuwasys_c.Id = kuwasys_uic.ClassID
 					AND kuwasys_c.schoolyearId = @activeSchoolyear
 				LEFT JOIN usersInClassStatus kuwasys_uics

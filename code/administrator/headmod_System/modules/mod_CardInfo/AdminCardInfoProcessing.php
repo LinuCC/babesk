@@ -70,11 +70,11 @@ class AdminCardInfoProcessing {
 		try {
 			$data = TableMng::query(sprintf(
 				'SELECT u.*,
-				(SELECT CONCAT(g.gradelevel, g.label) AS class
+				(SELECT CONCAT(g.gradelevel, g.label) AS KuwasysClasses
 					FROM usersInGradesAndSchoolyears uigs
 					LEFT JOIN Grades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
-						uigs.schoolyearId = @activeSchoolyear) AS class
+						uigs.schoolyearId = @activeSchoolyear) AS KuwasysClasses
 				FROM users u WHERE ID = %s', $uid), true);
 
 		} catch (MySQLVoidDataException $e) {
