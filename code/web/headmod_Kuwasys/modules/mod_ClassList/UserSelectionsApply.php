@@ -228,11 +228,11 @@ class UserSelectionsApply extends \web\Kuwasys\ClassList {
 
 		try {
 			$res = $this->_pdo->query(
-				"SELECT COUNT(*) FROM class c
+				"SELECT COUNT(*) FROM KuwasysClasses c
 					INNER JOIN jointUsersInClass uic ON uic.ClassID = c.ID
 					INNER JOIN (
 							SELECT DISTINCT unitId
-								FROM class c WHERE ({$searchStr})
+								FROM KuwasysClasses c WHERE ({$searchStr})
 						) ui
 					WHERE ui.unitId = c.unitId AND uic.UserID = {$userId}
 						AND c.schoolyearId = @activeSchoolyear"
@@ -260,7 +260,7 @@ class UserSelectionsApply extends \web\Kuwasys\ClassList {
 
 		try {
 			$res = $this->_pdo->query(
-				"SELECT COUNT(*) FROM class c
+				"SELECT COUNT(*) FROM KuwasysClasses c
 					WHERE ({$searchStr}) AND c.registrationEnabled = 0"
 			);
 			return ($res->fetchColumn() == 0);

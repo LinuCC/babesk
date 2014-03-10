@@ -54,7 +54,7 @@ class MainMenu extends Kuwasys {
 			$stmt = $this->_pdo->prepare(
 				'SELECT cu.translatedName AS unitname, c.*,
 					uics.translatedName AS status
-				FROM class c
+				FROM KuwasysClasses c
 				JOIN jointUsersInClass uic ON uic.ClassID = c.ID
 				JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
 				JOIN usersInClassStatus uics ON uic.statusId = uics.ID

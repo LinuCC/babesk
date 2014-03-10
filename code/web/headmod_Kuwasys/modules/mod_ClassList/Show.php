@@ -78,7 +78,7 @@ class Show extends \web\Kuwasys\ClassList {
 				'SELECT c.*, GROUP_CONCAT(
 						DISTINCT ct.forename, " ", ct.name SEPARATOR ", "
 					) AS classteacher
-					FROM class c
+					FROM KuwasysClasses c
 					LEFT JOIN jointClassTeacherInClass ctic
 						ON ctic.ClassID = c.ID
 					LEFT JOIN classTeacher ct ON ct.ID = ctic.ClassTeacherID

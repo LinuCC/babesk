@@ -43,7 +43,7 @@ class Overview extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses 
 					) AS usercount, c.label AS classlabel,
 					c.ID AS classId
 				FROM KuwasysTemporaryRequestsAssign ra
-				JOIN class c ON ra.classId = c.ID
+				JOIN KuwasysClasses c ON ra.classId = c.ID
 				JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
 				GROUP BY ra.classId ORDER BY cu.ID');
 

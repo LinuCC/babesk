@@ -53,12 +53,12 @@ class ClassdetailsGet extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToC
 				IF(origuics.ID, origuics.translatedName, "N/A") AS origStatusname,
 				CONCAT(u.forename, " ", u.name) AS username,
 				CONCAT(g.gradelevel, "-", g.label) AS grade,
-				(SELECT c2.ID FROM class c2
+				(SELECT c2.ID FROM KuwasysClasses c2
 					JOIN KuwasysTemporaryRequestsAssign ra2
 						ON ra2.classId = c2.ID
 					WHERE c2.unitId = c.unitId AND ra2.userId = ra.userId AND ra2.classId <> ra.classId
 				) AS otherClassId,
-			(SELECT c2.label FROM class c2
+			(SELECT c2.label FROM KuwasysClasses c2
 				JOIN KuwasysTemporaryRequestsAssign ra2
 					ON ra2.classId = c2.ID
 				WHERE c2.unitId = c.unitId AND ra2.userId = ra.userId AND ra2.classId <> ra.classId
@@ -70,7 +70,7 @@ class ClassdetailsGet extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToC
 					AND uigsy.schoolyearId = @activeSchoolyear
 			LEFT JOIN Grades g ON uigsy.gradeId = g.ID
 			LEFT JOIN usersInClassStatus uics ON ra.statusId = uics.ID
-			LEFT JOIN class c ON ra.classId = c.ID
+			LEFT JOIN KuwasysClasses c ON ra.classId = c.ID
 			LEFT JOIN usersInClassStatus origuics
 				ON ra.origStatusId = origuics.ID
 			WHERE ra.classId = :classId

@@ -104,7 +104,7 @@ class Classteachers extends Kuwasys {
 	protected function classesOfActiveSchoolyearGet() {
 
 		try {
-			$stmt = $this->_pdo->query('SELECT * FROM class
+			$stmt = $this->_pdo->query('SELECT * FROM KuwasysClasses
 				WHERE schoolyearId = @activeSchoolyear');
 
 			return $stmt->fetchAll();
@@ -422,7 +422,7 @@ class Classteachers extends Kuwasys {
 	protected function classesOfActiveSchoolyearAndClassteacherGet($id) {
 
 		try {
-			$stmt = $this->_pdo->prepare('SELECT * FROM class c
+			$stmt = $this->_pdo->prepare('SELECT * FROM KuwasysClasses c
 				JOIN jointClassTeacherInClass ctic ON c.ID = ctic.ClassID
 				WHERE ctic.ClassTeacherID = :id AND
 					c.schoolyearId = @activeSchoolyear');
@@ -505,7 +505,7 @@ class Classteachers extends Kuwasys {
 				FROM classTeacher ct
 				LEFT JOIN jointClassTeacherInClass ctic
 					ON ct.ID = ctic.ClassTeacherID
-				LEFT JOIN class c ON ctic.ClassID = c.ID
+				LEFT JOIN KuwasysClasses c ON ctic.ClassID = c.ID
 				GROUP BY ct.ID");
 
 			return $stmt->fetchAll();

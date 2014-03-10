@@ -68,7 +68,7 @@ class ClassDetails extends Kuwasys {
 	private function classDetailsGet($classId) {
 
 		try {
-			$stmt = $this->_pdo->prepare('SELECT * FROM class WHERE ID = ?');
+			$stmt = $this->_pdo->prepare('SELECT * FROM KuwasysClasses WHERE ID = ?');
 			$stmt->execute(array($classId));
 			return $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -125,7 +125,7 @@ class ClassDetails extends Kuwasys {
 			$stmt = $this->_pdo->prepare(
 				'SELECT c.ID, c.label, c.description,
 					uics.translatedName AS status, c.registrationEnabled
-					FROM class c
+					FROM KuwasysClasses c
 						INNER JOIN jointUsersInClass uic
 							ON uic.ClassID = c.ID
 						INNER JOIN usersInClassStatus uics

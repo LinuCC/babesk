@@ -50,7 +50,7 @@ class Classdetails extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClas
 	private function classesGetAllOfActiveSchoolyear() {
 
 		try {
-			$classes = $this->_pdo->query('SELECT * FROM class
+			$classes = $this->_pdo->query('SELECT * FROM KuwasysClasses
 				WHERE schoolyearId = @activeSchoolyear');
 
 			return $classes;

@@ -215,7 +215,7 @@ class Classes extends Kuwasys {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'INSERT INTO class (label, description, maxRegistration,
+				'INSERT INTO KuwasysClasses (label, description, maxRegistration,
 					registrationEnabled, unitId, schoolyearId)
 				VALUES (:label, :description, :maxRegistration,
 					:registrationEnabled, :unitId, :schoolyearId)');
@@ -272,7 +272,7 @@ class Classes extends Kuwasys {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'UPDATE class SET label = :label, description = :description,
+				'UPDATE KuwasysClasses SET label = :label, description = :description,
 					maxRegistration = :maxRegistration,
 					registrationEnabled = :registrationEnabled,
 					unitId = :unitId, schoolyearId = :schoolyearId
@@ -392,7 +392,7 @@ class Classes extends Kuwasys {
 		try {
 			$stmt = $this->_pdo->prepare(
 				'DELETE c.*, uic.*
-				FROM class c
+				FROM KuwasysClasses c
 				LEFT JOIN jointUsersInClass uic ON c.ID = uic.ClassID
 				WHERE c.ID = :id');
 
@@ -516,7 +516,7 @@ class Classes extends Kuwasys {
 					'. sprintf ($subQueryCountUsers, 'waiting') . ' AS waitingCount,
 					'. sprintf ($subQueryCountUsers, 'request1') . ' AS request1Count,
 					'. sprintf ($subQueryCountUsers, 'request2') . ' AS request2Count
-				FROM class c
+				FROM KuwasysClasses c
 				LEFT JOIN schoolYear sy ON c.schoolyearId = sy.ID
 				LEFT JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
 				LEFT JOIN (
@@ -578,7 +578,7 @@ class Classes extends Kuwasys {
 					'. sprintf ($subQueryCountUsers, 'waiting') . ' AS waitingCount,
 					'. sprintf ($subQueryCountUsers, 'request1') . ' AS request1Count,
 					'. sprintf ($subQueryCountUsers, 'request2') . ' AS request2Count
-				FROM class c
+				FROM KuwasysClasses c
 				LEFT JOIN schoolYear sy ON c.schoolyearId = sy.ID
 				LEFT JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
 				LEFT JOIN (
@@ -678,7 +678,7 @@ class Classes extends Kuwasys {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				"SELECT c.*, uic.UserID AS userId FROM class c
+				"SELECT c.*, uic.UserID AS userId FROM KuwasysClasses c
 				JOIN jointUsersInClass uic ON c.ID = uic.ClassID
 				WHERE $userIdPart c.unitId = :unitId
 					AND c.ID <> :classId
@@ -807,7 +807,7 @@ class Classes extends Kuwasys {
 
 		try {
 			$this->_pdo->exec(
-				'UPDATE class SET registrationEnabled = 1
+				'UPDATE KuwasysClasses SET registrationEnabled = 1
 					WHERE schoolyearId = @activeSchoolyear'
 			);
 

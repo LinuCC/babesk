@@ -38,7 +38,7 @@ class SummaryOfClassesPdf {
 				CONCAT(g.gradelevel, g.label) AS grade,
 				CONCAT(ct.forename, " ", ct.name) AS classteacherFullname,
 				cu.name as unitName
-			FROM class c
+			FROM KuwasysClasses c
 				JOIN jointUsersInClass uic ON uic.ClassID = c.ID
 				JOIN users u ON uic.UserID = u.ID
 				LEFT JOIN usersInGradesAndSchoolyears uigs

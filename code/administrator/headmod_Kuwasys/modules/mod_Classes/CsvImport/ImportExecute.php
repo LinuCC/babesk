@@ -53,7 +53,7 @@ class ImportExecute extends \administrator\Kuwasys\Classes\CsvImport {
 
 	private function classQueryGenerate($class) {
 
-		$classQuery = 'INSERT INTO `class`
+		$classQuery = 'INSERT INTO `KuwasysClasses`
 			(label, description, maxRegistration, registrationEnabled,
 				unitId, schoolyearId)
 			VALUES (
