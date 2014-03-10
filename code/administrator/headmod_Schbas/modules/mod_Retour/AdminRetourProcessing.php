@@ -115,12 +115,12 @@ class AdminRetourProcessing {
 	 */
 	public function GetUser ($card_id) {
 		$isCard = TableMng::query(sprintf(
-		'SELECT COUNT(*) FROM cards WHERE cardnumber LIKE "%s"',$card_id));
+		'SELECT COUNT(*) FROM BabeskCards WHERE cardnumber LIKE "%s"',$card_id));
 
 		$isUser = TableMng::query(sprintf(
 				'SELECT COUNT(*) FROM users WHERE username LIKE "%s"',$card_id));
 
-		if ($isCard[0]['COUNT(*)']==="0") 
+		if ($isCard[0]['COUNT(*)']==="0")
 				$this->RetourInterface->dieError(sprintf($this->msg['err_get_user_by_card']));
 
 		if ($isCard[0]['COUNT(*)']==="1") {

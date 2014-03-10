@@ -35,7 +35,7 @@ class AdminCardChangeProcessing {
 
 		require_once PATH_INCLUDE . '/TableMng.php';
 		TableMng::init ();
-		$temp =  TableMng::query('SELECT SUM(changed_cardID) FROM cards');
+		$temp =  TableMng::query('SELECT SUM(changed_cardID) FROM BabeskCards');
 		return $temp[0]["SUM(changed_cardID)"];
 
 	}

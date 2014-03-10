@@ -131,7 +131,7 @@ class UserDisplayAll {
 		// // 	$columns['countClass'] = 'Kurse';
 		// // }
 		// //Cards existing
-		// if(count(TableMng::query("SHOW TABLES LIKE 'cards';"))) {
+		// if(count(TableMng::query("SHOW TABLES LIKE 'BabeskCards';"))) {
 		// 	$columns['cardnumber'] = 'Kartennummer';
 		// }
 		// //Babesk existing
@@ -370,10 +370,10 @@ class UserDisplayAllQueryCreator {
 	protected function cardsQuery() {
 
 		if(!$this->_cardsQueryDone) {
-			$this->addSelectStatement('cards.cardnumber AS cardnumber');
+			$this->addSelectStatement('BabeskCards.cardnumber AS cardnumber');
 			$this->addJoinStatement('LEFT JOIN
-				(SELECT UID, cardnumber FROM cards) cards
-				ON cards.UID = u.ID');
+				(SELECT UID, cardnumber FROM BabeskCards) BabeskCards
+				ON BabeskCards.UID = u.ID');
 			$this->_cardsQueryDone = true;
 		}
 	}

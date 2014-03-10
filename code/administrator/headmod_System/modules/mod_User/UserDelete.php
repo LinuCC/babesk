@@ -120,8 +120,8 @@ class UserDelete {
 
 		$querys = '';
 
-		if(count(TableMng::query('SHOW TABLES LIKE "cards";'))) {
-			$querys .= "DELETE FROM cards WHERE UID = $uid;";
+		if(count(TableMng::query('SHOW TABLES LIKE "BabeskCards";'))) {
+			$querys .= "DELETE FROM BabeskCards WHERE UID = $uid;";
 		}
 		if(count(TableMng::query(
 			'SHOW TABLES LIKE "jointUsersInClass";'))) {

@@ -204,7 +204,7 @@ class User extends System {
 				$_POST, array('pricegroupId', 'credits', 'isSoli'));
 
 			if(!empty($_POST['cardnumber'])) {
-				$cardnumberQuery = "INSERT INTO cards (cardnumber, UID)
+				$cardnumberQuery = "INSERT INTO BabeskCards (cardnumber, UID)
 					VALUES ('$_POST[cardnumber]', @uid);";
 			}
 
@@ -618,7 +618,7 @@ class User extends System {
 	protected function cardnumberGetByUserId($userId) {
 
 		$cardnumber = TableMng::query(
-			"SELECT cardnumber FROM cards WHERE UID = $userId");
+			"SELECT cardnumber FROM BabeskCards WHERE UID = $userId");
 
 		return $cardnumber;
 	}
@@ -907,12 +907,12 @@ class User extends System {
 		$query = '';
 		//Fetch the existing cardnumber of the User
 		$userCard = TableMng::query(
-				"SELECT * FROM cards WHERE UID = $uid");
+				"SELECT * FROM BabeskCards WHERE UID = $uid");
 
 		if(!empty($_POST['cardnumber'])) {
 
 			if(!count($userCard)) {
-				$query = "INSERT INTO cards (cardnumber, UID)
+				$query = "INSERT INTO BabeskCards (cardnumber, UID)
 					VALUES ('$_POST[cardnumber]', $uid);";
 			}
 			else if($userCard[0]['cardnumber'] == $_POST['cardnumber']) {
@@ -923,7 +923,7 @@ class User extends System {
 				//Card was changed, add it to the counter
 				$countChangedCardId = $userCard[0]['changed_cardID'] + 1;
 				$cardnumber = $_POST['cardnumber'];
-				$query = "UPDATE cards
+				$query = "UPDATE BabeskCards
 					SET cardnumber = '$cardnumber',
 						changed_cardID = '$countChangedCardId'
 					WHERE UID = $uid;";
@@ -932,7 +932,7 @@ class User extends System {
 		else {
 			if(count($userCard)) {
 				//cardnumber exists, but user deleted that
-				$query = "DELETE FROM cards WHERE UID = $uid";
+				$query = "DELETE FROM BabeskCards WHERE UID = $uid";
 			}
 			else {
 				//No Cardnumber exists and User did not enter one

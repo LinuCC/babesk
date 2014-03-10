@@ -147,7 +147,7 @@ class AdminGChangeCardProcessing {
 	 */
 	public function getCardDataByUserId($userId) {
 
-		$res = TableMng::query("SELECT * FROM cards WHERE UID = $userId");
+		$res = TableMng::query("SELECT * FROM BabeskCards WHERE UID = $userId");
 
 		if(!empty($res)) {
 			if(count($res) > 1) {

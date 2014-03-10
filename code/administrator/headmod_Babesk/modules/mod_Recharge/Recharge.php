@@ -117,7 +117,7 @@ class Recharge extends Babesk {
 	protected function userIdGetByCardId($cardId) {
 
 		try {
-			$stmt = $this->_pdo->prepare('SELECT UID FROM cards
+			$stmt = $this->_pdo->prepare('SELECT UID FROM BabeskCards
 				WHERE cardnumber = :cardnumber');
 
 			$stmt->execute(array('cardnumber' => $cardId));
