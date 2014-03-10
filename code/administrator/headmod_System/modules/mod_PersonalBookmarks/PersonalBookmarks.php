@@ -58,14 +58,14 @@ class PersonalBookmarks extends System {
 		}
 
 		try {
-			TableMng::query("update adminBookmarks set bmid = '0' WHERE bmid='1' AND uid=".$_SESSION['UID']);
-			TableMng::query("update adminBookmarks set bmid = '1' WHERE bmid='2' AND uid=".$_SESSION['UID']);
-			TableMng::query("update adminBookmarks set bmid = '2' WHERE bmid='3' AND uid=".$_SESSION['UID']);
-			TableMng::query("update adminBookmarks set bmid = '3' WHERE bmid='4' AND uid=".$_SESSION['UID']);
-			$stmt = $this->_pdo->prepare('INSERT INTO adminBookmarks
+			TableMng::query("update SystemAdminBookmarks set bmid = '0' WHERE bmid='1' AND uid=".$_SESSION['UID']);
+			TableMng::query("update SystemAdminBookmarks set bmid = '1' WHERE bmid='2' AND uid=".$_SESSION['UID']);
+			TableMng::query("update SystemAdminBookmarks set bmid = '2' WHERE bmid='3' AND uid=".$_SESSION['UID']);
+			TableMng::query("update SystemAdminBookmarks set bmid = '3' WHERE bmid='4' AND uid=".$_SESSION['UID']);
+			$stmt = $this->_pdo->prepare('INSERT INTO SystemAdminBookmarks
 				(uid, bmid, mid) VALUES (?, "4", ?)');
 			$stmt->execute(array($_SESSION['UID'], $_POST['moduleId']));
-			TableMng::query("delete from adminBookmarks WHERE bmid = '0' AND uid=".$_SESSION['UID']);
+			TableMng::query("delete from SystemAdminBookmarks WHERE bmid = '0' AND uid=".$_SESSION['UID']);
 
 		} catch (Exception $e) {
 			$this->_logger->log('Could not add a bookmark',

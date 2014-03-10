@@ -252,7 +252,7 @@ class Administrator {
 						WHERE node.lft BETWEEN parent.lft AND parent.rgt
 							AND node.ID = mid
 					) AS modulePath
-				FROM adminBookmarks WHERE uid = :userId
+				FROM SystemAdminBookmarks WHERE uid = :userId
 				-- Order it so we dont need to order manually in PHP or Smarty
 				ORDER BY bmid'
 			);
