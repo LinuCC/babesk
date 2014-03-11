@@ -147,7 +147,7 @@ class Grade extends Kuwasys {
 			$grades = TableMng::query(
 				'SELECT g.*, st.name AS schooltypeName
 				FROM SystemGrades g
-				LEFT JOIN Schooltype st ON g.schooltypeId = st.ID
+				LEFT JOIN SystemSchooltype st ON g.schooltypeId = st.ID
 				');
 
 		} catch (Exception $e) {
@@ -295,7 +295,7 @@ class Grade extends Kuwasys {
 	protected function fetchAllSchooltypes() {
 
 		try {
-			$data = TableMng::query('SELECT * FROM Schooltype');
+			$data = TableMng::query('SELECT * FROM SystemSchooltype');
 
 		} catch (Exception $e) {
 			$this->_interface->dieError('Konnte die Schultypen nicht abrufen');

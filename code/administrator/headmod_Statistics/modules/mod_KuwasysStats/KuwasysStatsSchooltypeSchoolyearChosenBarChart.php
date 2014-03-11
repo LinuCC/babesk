@@ -38,9 +38,9 @@ class KuwasysStatsSchooltypeSchoolyearChosenBarChart
 			'SELECT st.ID AS schooltypeId, st.token AS schooltypeToken,
 			g.gradelevel, userChosen.classesChosen, COUNT(*) AS userCount
 			FROM SystemGrades g
-				-- Schooltype (optional, splits gradelevels in schooltypes if
+				-- SystemSchooltype (optional, splits gradelevels in schooltypes if
 				-- needed)
-				LEFT JOIN Schooltype st ON g.schooltypeId = st.ID
+				LEFT JOIN SystemSchooltype st ON g.schooltypeId = st.ID
 				-- Fetch how many classes the user has chosen
 				INNER JOIN (
 					SELECT COUNT(*) AS classesChosen, uigs.gradeId AS GradeID

@@ -55,7 +55,7 @@ class KuwasysStatsUsersChosenStackedBarChart extends StatisticsStackedBarChart {
 	protected function schooltypeDataFetch() {
 
 		$this->_schooltypeData = TableMng::query(
-			'SELECT * FROM Schooltype');
+			'SELECT * FROM SystemSchooltype');
 	}
 
 	protected function dataProcess() {

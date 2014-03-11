@@ -73,7 +73,7 @@ class Schooltype extends System {
 		$data = array();
 
 		try {
-			$data = TableMng::query('SELECT * FROM Schooltype;');
+			$data = TableMng::query('SELECT * FROM SystemSchooltype;');
 
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->showError('Es sind keine Schultypen vorhanden');
@@ -92,7 +92,7 @@ class Schooltype extends System {
 
 		try {
 			$data = TableMng::query(sprintf(
-				'SELECT * FROM Schooltype WHERE `ID` = "%s"', $id));
+				'SELECT * FROM SystemSchooltype WHERE `ID` = "%s"', $id));
 
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->dieError('Der Schultyp konnte nicht gefunden werden');
@@ -112,7 +112,7 @@ class Schooltype extends System {
 
 		try {
 			TableMng::query(sprintf(
-				'INSERT INTO Schooltype (name) VALUES ("%s")', $name));
+				'INSERT INTO SystemSchooltype (name) VALUES ("%s")', $name));
 
 		} catch (Exception $e) {
 			$this->_interface->dieError(
@@ -158,7 +158,7 @@ class Schooltype extends System {
 
 		try {
 			TableMng::query(sprintf(
-				'UPDATE Schooltype SET name = "%s" WHERE ID = "%s"', $name,
+				'UPDATE SystemSchooltype SET name = "%s" WHERE ID = "%s"', $name,
 				$id));
 
 		} catch (Exception $e) {
@@ -191,7 +191,7 @@ class Schooltype extends System {
 
 		try {
 			TableMng::query(sprintf(
-				'DELETE FROM Schooltype WHERE `ID` = %s', $id));
+				'DELETE FROM SystemSchooltype WHERE `ID` = %s', $id));
 
 		} catch (Exception $e) {
 			$this->_interface->dieError('Konnte den Schultypen nicht löschen');
