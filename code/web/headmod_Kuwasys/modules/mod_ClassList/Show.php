@@ -79,7 +79,7 @@ class Show extends \web\Kuwasys\ClassList {
 						DISTINCT ct.forename, " ", ct.name SEPARATOR ", "
 					) AS classteacher
 					FROM KuwasysClasses c
-					LEFT JOIN jointClassTeacherInClass ctic
+					LEFT JOIN KuwasysClassteachersInClasses ctic
 						ON ctic.ClassID = c.ID
 					LEFT JOIN classTeacher ct ON ct.ID = ctic.ClassTeacherID
 					WHERE c.schoolyearId = @activeSchoolyear

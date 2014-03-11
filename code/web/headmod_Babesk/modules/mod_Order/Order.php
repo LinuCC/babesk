@@ -223,7 +223,7 @@ class Order extends Babesk {
 		$ordertime = date("Y-m-d h:i:s");
 		$soliPrice = $this->soliPriceGet();
 
-		TableMng::query("INSERT INTO orders
+		TableMng::query("INSERT INTO BabeskOrders
 			(MID, UID, date, IP, ordertime, fetched) VALUES
 			('$meal[ID]', '$userId', '$meal[date]', '$ip', '$ordertime', 0)");
 
@@ -453,7 +453,7 @@ class Order extends Babesk {
 	protected function orderCountOfDayByUserGet($userId, $date) {
 
 		$row = TableMng::querySingleEntry(
-			"SELECT COUNT(*) AS count FROM orders o
+			"SELECT COUNT(*) AS count FROM BabeskOrders o
 			JOIN BabeskMeals m ON m.ID = o.MID
 			WHERE o.UID = '$userId' AND m.date = '$date'");
 

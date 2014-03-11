@@ -59,7 +59,7 @@ class Cancel extends Babesk {
 		$data = TableMng::query("SELECT o.*, u.credit AS userCredits,
 				m.ID AS mealId, sc.ID AS solicouponId,
 				pc.price AS price
-			FROM orders o
+			FROM BabeskOrders o
 			JOIN SystemUsers u ON u.ID = $_SESSION[uid]
 			JOIN BabeskMeals m ON o.MID = m.ID
 			LEFT JOIN BabeskSoliCoupons sc ON sc.UID = u.ID AND
@@ -233,7 +233,7 @@ class Cancel extends Babesk {
 	 */
 	protected function orderDbEntryDelete($orderId) {
 
-		TableMng::query("DELETE FROM orders WHERE ID = $orderId");
+		TableMng::query("DELETE FROM BabeskOrders WHERE ID = $orderId");
 
 		if($this->_isSoli) {
 			TableMng::query("DELETE FROM BabeskSoliOrders WHERE ID = $orderId");

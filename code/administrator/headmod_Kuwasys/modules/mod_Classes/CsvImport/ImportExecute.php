@@ -78,11 +78,11 @@ class ImportExecute extends \administrator\Kuwasys\Classes\CsvImport {
 		foreach($classteachers as &$ct) {
 			if($ct['ID'] == 'CREATE_NEW') {
 				$query .= $this->newClassteacherQueryGenerate($ct);
-				$query .= 'INSERT INTO jointClassTeacherInClass
+				$query .= 'INSERT INTO KuwasysClassteachersInClasses
 					(ClassTeacherID, ClassID) VALUES (@newCtId, @newClassId);';
 			}
 			else if($ct['ID'] !== 0) {
-				$query .= 'INSERT INTO jointClassTeacherInClass
+				$query .= 'INSERT INTO KuwasysClassteachersInClasses
 					(ClassTeacherID, ClassID) VALUES (
 						' . $this->_pdo->quote($ct['ID']) . ', @newClassId);';
 			}

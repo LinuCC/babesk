@@ -112,7 +112,7 @@ class User extends System {
 			//---fetch data
 			try { //Babesk-specific, dont crash when table not exist
 				$priceGroups = $this->arrayGetFlattened(
-					'SELECT ID, name FROM priceGroups');
+					'SELECT ID, name FROM BabeskPriceGroups');
 
 			} catch (Exception $e) {
 				$priceGroups = array();
@@ -489,7 +489,7 @@ class User extends System {
 
 		if($modsActivated['Babesk']) {
 			$priceGroups = $this->arrayGetFlattened(
-				'SELECT ID, name FROM priceGroups');
+				'SELECT ID, name FROM BabeskPriceGroups');
 			$cardnumber = $this->cardnumberGetByUserId($userId);
 			$cardnumber = (!empty($cardnumber)) ?
 				$cardnumber[0]['cardnumber'] : '';

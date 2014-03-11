@@ -135,7 +135,7 @@ class UserDisplayAll {
 		// 	$columns['cardnumber'] = 'Kartennummer';
 		// }
 		// //Babesk existing
-		// // if(count(TableMng::query("SHOW TABLES LIKE 'orders';"))) {
+		// // if(count(TableMng::query("SHOW TABLES LIKE 'BabeskOrders';"))) {
 		// 	// $columns['countOrders'] = 'Bestellungen';
 		// // }
 

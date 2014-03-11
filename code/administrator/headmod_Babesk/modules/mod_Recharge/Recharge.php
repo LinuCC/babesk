@@ -176,7 +176,7 @@ class Recharge extends Babesk {
 			$stmt = $this->_pdo->prepare(
 				'SELECT g.max_credit AS maxCredits, u.credit AS credits
 				FROM SystemUsers u
-				JOIN priceGroups g ON u.GID = g.ID
+				JOIN BabeskPriceGroups g ON u.GID = g.ID
 				WHERE u.ID = :userId');
 
 			$stmt->execute(array('userId' => $userId));

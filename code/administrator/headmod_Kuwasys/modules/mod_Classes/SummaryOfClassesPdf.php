@@ -44,7 +44,7 @@ class SummaryOfClassesPdf {
 				LEFT JOIN SystemUsersInGradesAndSchoolyears uigs
 					ON uigs.UserID = u.ID
 				LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
-				LEFT JOIN jointClassTeacherInClass ctic ON ctic.ClassID = c.ID
+				LEFT JOIN KuwasysClassteachersInClasses ctic ON ctic.ClassID = c.ID
 				LEFT JOIN classTeacher ct ON ctic.ClassTeacherID = ct.ID
 				LEFT JOIN KuwasysClassCategories cu ON cu.ID = c.unitId
 			WHERE  uic.statusId = (SELECT ID FROM KuwasysUsersInClassStatuses WHERE KuwasysUsersInClassStatuses.name="active")

@@ -64,7 +64,7 @@ class CopyOldOrdersToSoli {
 						WHERE m.ID = o.MID
 					) AS existMealAndPriceclass
 				FROM SystemUsers u
-				JOIN orders o ON o.UID = u.ID
+				JOIN BabeskOrders o ON o.UID = u.ID
 				/*We want to check if meal exists manually (for error-output), so using LEFT JOIN instead of JOIN*/
 				LEFT JOIN BabeskMeals m ON o.MID = m.ID
 				/*Fetch the price of the meal for the user*/

@@ -11,7 +11,7 @@ require_once PATH_ACCESS . '/TableManager.php';
 class GroupManager extends TableManager {
 
 	function __construct() {
-		parent::__construct('priceGroups');
+		parent::__construct('BabeskPriceGroups');
 	}
 	
 	/**

@@ -227,7 +227,7 @@ class Classteachers extends Kuwasys {
 	protected function classteacherAddClassesAdd($id) {
 
 		try {
-			$stmt = $this->_pdo->prepare('INSERT INTO jointClassTeacherInClass
+			$stmt = $this->_pdo->prepare('INSERT INTO KuwasysClassteachersInClasses
 				(ClassTeacherID, ClassID) VALUES (:classteacherId, :classId)');
 
 		foreach($_POST['classes'] as $class) {
@@ -339,7 +339,7 @@ class Classteachers extends Kuwasys {
 	protected function classteacherChangeAddMissingClasses($existingClasses) {
 
 		$stmtAdd = $this->_pdo->prepare('INSERT INTO
-			jointClassTeacherInClass
+			KuwasysClassteachersInClasses
 			(ClassTeacherID, ClassID) VALUES (:id, :classId)');
 
 		foreach($_POST['classes'] as $class) {
@@ -361,7 +361,7 @@ class Classteachers extends Kuwasys {
 	protected function classteacherChangeDeleteClasses($existingClasses) {
 
 		$stmtDelete = $this->_pdo->prepare('DELETE FROM
-				jointClassTeacherInClass
+				KuwasysClassteachersInClasses
 			WHERE ClassTeacherId = :id AND classId = :classId');
 
 		foreach($existingClasses as $exClassId) {
@@ -423,7 +423,7 @@ class Classteachers extends Kuwasys {
 
 		try {
 			$stmt = $this->_pdo->prepare('SELECT * FROM KuwasysClasses c
-				JOIN jointClassTeacherInClass ctic ON c.ID = ctic.ClassID
+				JOIN KuwasysClassteachersInClasses ctic ON c.ID = ctic.ClassID
 				WHERE ctic.ClassTeacherID = :id AND
 					c.schoolyearId = @activeSchoolyear');
 
@@ -465,7 +465,7 @@ class Classteachers extends Kuwasys {
 		try {
 			$stmt = $this->_pdo->prepare(
 				'DELETE ct, ctic FROM classTeacher ct
-				LEFT JOIN jointClassTeacherInClass ctic
+				LEFT JOIN KuwasysClassteachersInClasses ctic
 					ON ct.ID = ctic.ClassTeacherID
 				WHERE ct.ID = :id');
 
@@ -503,7 +503,7 @@ class Classteachers extends Kuwasys {
 					CONCAT('{$classlink}', c.ID, '\">', c.label, '</a>')
 					SEPARATOR '<hr>') AS classes
 				FROM classTeacher ct
-				LEFT JOIN jointClassTeacherInClass ctic
+				LEFT JOIN KuwasysClassteachersInClasses ctic
 					ON ct.ID = ctic.ClassTeacherID
 				LEFT JOIN KuwasysClasses c ON ctic.ClassID = c.ID
 				GROUP BY ct.ID");

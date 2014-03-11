@@ -337,7 +337,7 @@ class UserCsvImport extends CsvImportTableData {
 	protected function pricegroupIdsAppendToColumns() {
 
 		$allPricegroups = TableMng::query('SELECT ID, LOWER(name) AS name
-			FROM priceGroups pg');
+			FROM BabeskPriceGroups pg');
 		$flatPricegroups = ArrayFunctions::arrayColumn(
 			$allPricegroups, 'name', 'ID');
 

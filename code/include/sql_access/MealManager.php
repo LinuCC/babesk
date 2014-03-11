@@ -100,7 +100,7 @@ class MealManager extends TableManager {
 		}
 		include 'databaseDistributor.php';
 		$res_array = NULL;
-		$query = sql_prev_inj(sprintf('SELECT DISTINCT MID FROM orders WHERE date="%s";', $date)
+		$query = sql_prev_inj(sprintf('SELECT DISTINCT MID FROM BabeskOrders WHERE date="%s";', $date)
 			);
 		$result = $this->db->query($query);
 		if (!$result) {

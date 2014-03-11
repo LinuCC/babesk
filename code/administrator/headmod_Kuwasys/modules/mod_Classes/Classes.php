@@ -523,7 +523,7 @@ class Classes extends Kuwasys {
 						SELECT ctic.ClassID AS classId,
 							CONCAT(ct.forename, " ", ct.name) AS name
 						FROM classTeacher ct
-						JOIN jointClassTeacherInClass ctic
+						JOIN KuwasysClassteachersInClasses ctic
 							ON ct.ID = ctic.ClassTeacherID
 					) ct ON c.ID = ct.classId
 				WHERE sy.ID = :schoolyearId
@@ -585,7 +585,7 @@ class Classes extends Kuwasys {
 						SELECT ctic.ClassID AS classId,
 							CONCAT(ct.forename, " ", ct.name) AS name
 						FROM classTeacher ct
-						JOIN jointClassTeacherInClass ctic
+						JOIN KuwasysClassteachersInClasses ctic
 							ON ct.ID = ctic.ClassTeacherID
 					) ct ON c.ID = ct.classId
 				' . $whereStr . '
