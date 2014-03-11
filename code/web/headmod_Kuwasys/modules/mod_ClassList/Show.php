@@ -81,7 +81,7 @@ class Show extends \web\Kuwasys\ClassList {
 					FROM KuwasysClasses c
 					LEFT JOIN KuwasysClassteachersInClasses ctic
 						ON ctic.ClassID = c.ID
-					LEFT JOIN classTeacher ct ON ct.ID = ctic.ClassTeacherID
+					LEFT JOIN KuwasysClassteachers ct ON ct.ID = ctic.ClassTeacherID
 					WHERE c.schoolyearId = @activeSchoolyear
 					GROUP BY c.ID'
 			);

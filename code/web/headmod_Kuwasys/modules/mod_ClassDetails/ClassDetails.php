@@ -61,25 +61,6 @@ class ClassDetails extends Kuwasys {
 	}
 
 	/**
-	 * Fetches and returns the data of the class by the given Id
-	 * @param  int    $classId The id of the class
-	 * @return array           The data of the class
-	 */
-	private function classDetailsGet($classId) {
-
-		try {
-			$stmt = $this->_pdo->prepare('SELECT * FROM KuwasysClasses WHERE ID = ?');
-			$stmt->execute(array($classId));
-			return $stmt->fetch(\PDO::FETCH_ASSOC);
-
-		} catch(\PDOException $e) {
-			$this->_logger->log('Error fetching the class by id',
-				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
-			$this->_interface->DieError(_g('Could not fetch the class!'));
-		}
-	}
-
-	/**
 	 * Checks if class-registration is enabled or not
 	 * @return bool   true if it is enabled, else false
 	 */
@@ -117,14 +98,17 @@ class ClassDetails extends Kuwasys {
 	}
 
 	/**
-	 * Displays the details of the class to the user
+	 * Fetches the data of the class chosen by the user
+	 * @param  int    $classId The id of the class from which to fetch the
+	 *                         details
+	 * @return array           The classdata
 	 */
-	private function showClassDetails() {
+	private function detailsOfChosenClassGet($classId) {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'SELECT c.ID, c.label, c.description,
-					uics.translatedName AS status, c.registrationEnabled
+				'SELECT c.*, uics.name, uics.translatedName AS status,
+					c.registrationEnabled
 					FROM KuwasysClasses c
 						INNER JOIN KuwasysUsersInClasses uic
 							ON uic.ClassID = c.ID
@@ -134,8 +118,26 @@ class ClassDetails extends Kuwasys {
 						AND c.schoolyearId = @activeSchoolyear
 				'
 			);
-			$stmt->execute(array($_SESSION['uid'], $_GET['classId']));
+			$stmt->execute(array($_SESSION['uid'], $classId));
 			$data = $stmt->fetch(\PDO::FETCH_ASSOC);
+			return $data;
+
+		} catch (\PDOException $e) {
+			$this->_logger->log('Error fetching the class-details',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieError(_g(
+				'Could not fetch the class-details!')
+			);
+		}
+	}
+
+	/**
+	 * Displays the details of the class to the user
+	 */
+	private function showClassDetails() {
+
+		try {
+			$data = $this->detailsOfChosenClassGet($_GET['classId']);
 			$this->_smarty->assign('class', $data);
 			$this->displayTpl('classDetails.tpl');
 
@@ -154,7 +156,7 @@ class ClassDetails extends Kuwasys {
 	private function showConfirmationDeRegisterClass() {
 
 		$classId = $_GET['classId'];
-		$class = $this->classDetailsGet($classId);
+		$class = $this->detailsOfChosenClassGet($classId);
 		$this->_smarty->assign('class', $class);
 		$this->_smarty->display(
 			$this->_smartyPath . 'deRegisterClassConfirmation.tpl'
@@ -166,7 +168,7 @@ class ClassDetails extends Kuwasys {
 	 */
 	private function deRegisterUserFromClass() {
 
-		$class = $this->classDetailsGet($_GET['classId']);
+		$class = $this->detailsOfChosenClassGet($_GET['classId']);
 		$this->deRegisterAllowedCheck($class);
 		$this->deleteJointUsersInClass($_SESSION['uid'], $class['ID']);
 		$this->_interface->DieMessage(sprintf('Sie wurden erfolgreich vom Kurs %s abgemeldet. %s', $class ['label'], Kuwasys::$buttonBackToMM));
