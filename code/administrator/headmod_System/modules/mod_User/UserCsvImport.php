@@ -151,7 +151,7 @@ class UserCsvImport extends CsvImportTableData {
 		$this->_stmtSchoolyearAndGrade = TableMng::getDb()->prepare(
 			'INSERT INTO usersInGradesAndSchoolyears
 				(userId, gradeId, schoolyearId) VALUES (?, ?, ?)');
-		$this->_stmtUsergroups = $this->_pdo->prepare('INSERT INTO UserInGroups
+		$this->_stmtUsergroups = $this->_pdo->prepare('INSERT INTO SystemUsersInGroups
 			(userId, groupId) VALUES (:userId, :groupId);');
 		$this->_noGradeId = $this->noGradeIdGet();
 	}

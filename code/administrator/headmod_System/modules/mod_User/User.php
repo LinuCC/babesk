@@ -315,7 +315,7 @@ class User extends System {
 		if(isset($_POST['groups']) && count($_POST['groups'])) {
 			foreach($_POST['groups'] as $group) {
 				TableMng::sqlEscape($group);
-				$query .= "INSERT INTO UserInGroups (userId, groupId)
+				$query .= "INSERT INTO SystemUsersInGroups (userId, groupId)
 					VALUES (@uid, '$group');";
 			}
 		}
@@ -680,7 +680,7 @@ class User extends System {
 
 		$groups = TableMng::query(
 			"SELECT ID, name,
-			(SELECT COUNT(*) AS count FROM UserInGroups uig
+			(SELECT COUNT(*) AS count FROM SystemUsersInGroups uig
 				WHERE g.ID = uig.groupId AND uig.userId = $userId)
 					AS isUserIn
 			FROM SystemGroups g");
@@ -1096,7 +1096,7 @@ class User extends System {
 	protected function groupsOfUserGet($userId) {
 
 		return TableMng::query("SELECT g.ID FROM SystemGroups g
-			JOIN UserInGroups uig ON g.ID = uig.groupId
+			JOIN SystemUsersInGroups uig ON g.ID = uig.groupId
 			WHERE uig.userId = $userId");
 	}
 
@@ -1116,7 +1116,7 @@ class User extends System {
 			if(array_search($group,
 				ArrayFunctions::arrayColumn($existingGroups, 'ID'))
 					=== false) {
-				$query .= "INSERT INTO UserInGroups (userId, groupId)
+				$query .= "INSERT INTO SystemUsersInGroups (userId, groupId)
 					VALUES ($userId, $group);";
 			}
 		}
@@ -1138,7 +1138,7 @@ class User extends System {
 		foreach(ArrayFunctions::arrayColumn($existingGroups, 'ID') as
 			$exGroup) {
 			if(array_search($exGroup, $_POST['groups']) === false) {
-				$query .= "DELETE FROM UserInGroups WHERE userId = $userId
+				$query .= "DELETE FROM SystemUsersInGroups WHERE userId = $userId
 					AND groupId = $exGroup;";
 			}
 		}

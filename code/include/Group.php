@@ -274,7 +274,7 @@ class Group {
 
 		$groupArray = TableMng::query(
 			"SELECT g.* FROM SystemGroups g
-			JOIN UserInGroups uig ON uig.groupId = g.ID
+			JOIN SystemUsersInGroups uig ON uig.groupId = g.ID
 			WHERE uig.userId = '$userId';");
 
 		if(count($groupArray)) {

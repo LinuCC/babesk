@@ -177,7 +177,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 				))'
 			);
 			$stmtgroups = $this->_pdo->prepare(
-				'INSERT INTO UserInGroups (userId, groupId) VALUES
+				'INSERT INTO SystemUsersInGroups (userId, groupId) VALUES
 				(?, ?)'
 			);
 
