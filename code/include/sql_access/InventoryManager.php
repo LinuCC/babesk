@@ -12,7 +12,7 @@ require_once PATH_ACCESS . '/BookManager.php';
 class InventoryManager extends TableManager{
 
 	public function __construct() {
-		parent::__construct('schbas_inventory');
+		parent::__construct('SchbasInventory');
 	}
 
 	/**

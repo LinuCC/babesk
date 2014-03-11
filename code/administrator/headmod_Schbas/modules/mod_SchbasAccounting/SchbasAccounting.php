@@ -380,7 +380,7 @@ class SchbasAccounting extends Schbas {
 		$booklist = "";
 		$nr = count($books);
 		for($i=0;$i<$nr;$i++){
-			$bookid = TableMng::query("SELECT book_id FROM schbas_inventory WHERE id='".$books[$i]["inventory_id"]."'");
+			$bookid = TableMng::query("SELECT book_id FROM SchbasInventory WHERE id='".$books[$i]["inventory_id"]."'");
 			$bookIDs[] = $bookid[0]["book_id"];
 		}
 		

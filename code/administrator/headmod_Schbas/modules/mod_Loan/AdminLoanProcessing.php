@@ -54,7 +54,7 @@ $alert="<font color=#ff0000>";
 					$hasBooksID = TableMng::query(sprintf('SELECT inventory_id FROM schbas_lending WHERE user_id = "%s"',$uid));
 					$alert .= "<u>Es sind noch B&uuml;cher ausgeliehen:</u><br>";
 					foreach ($hasBooksID as $hasBook){
-						$book_id = TableMng::query(sprintf("SELECT book_id FROM schbas_inventory WHERE id = %s",$hasBook['inventory_id']));
+						$book_id = TableMng::query(sprintf("SELECT book_id FROM SchbasInventory WHERE id = %s",$hasBook['inventory_id']));
 						$book_title = TableMng::query(sprintf("SELECT title FROM schbas_books WHERE id = %s",$book_id[0]['book_id']));
 						$alert .= "<li><h5>".$book_title[0]['title']."</h5></li>";
 					}

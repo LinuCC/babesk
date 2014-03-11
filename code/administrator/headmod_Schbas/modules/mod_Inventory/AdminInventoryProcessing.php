@@ -41,7 +41,7 @@ class AdminInventoryProcessing {
 							sprintf('Error while getting Data from MySQL:%s in %s', $e->getMessage(), __METHOD__));
 			$this->inventoryInterface->dieError($this->messages['error']['get_data_failed']);
 		}
-		$navbar = navBar($showPage, 'schbas_inventory', 'Schbas', 'Inventory', '1',$filter);
+		$navbar = navBar($showPage, 'SchbasInventory', 'Schbas', 'Inventory', '1',$filter);
 		$this->inventoryInterface->ShowInventory($bookcodes,$navbar);
 	}
 
@@ -163,8 +163,8 @@ class AdminInventoryProcessing {
 		$loanManager = new LoanManager();
 
 		try {
-			$inventoryManager->delEntry($id);										// die Inventardaten löschen
-			$loanManager->deleteAllEntriesWithValueOfKey("inventory_id", $id);		// die Ausleihdaten löschen wir auch mit
+			$inventoryManager->delEntry($id);										// die Inventardaten lÃ¶schen
+			$loanManager->deleteAllEntriesWithValueOfKey("inventory_id", $id);		// die Ausleihdaten lÃ¶schen wir auch mit
 		} catch (Exception $e) {
 			$this->logs
 			->log('ADMIN', 'MODERATE',
