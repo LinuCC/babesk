@@ -7,7 +7,6 @@ RENAME TABLE `Grades` TO `SystemGrades`;
 RENAME TABLE `GroupModuleRights` TO `SystemGroupModuleRights`;
 RENAME TABLE `Groups` TO `SystemGroups`;
 RENAME TABLE `jointClassInSchoolYear` TO `KuwasysClassesInSchoolyears`;
-RENAME TABLE `jointClassTeacherInClass` TO `KuwasysClassteachersInClasses`;
 RENAME TABLE `jointUsersInClass` TO `KuwasysUsersInClasses`;
 RENAME TABLE `kuwasysClassUnit` TO `KuwasysClassCategory`;
 RENAME TABLE `LogCategories` TO `SystemLogCategories`;

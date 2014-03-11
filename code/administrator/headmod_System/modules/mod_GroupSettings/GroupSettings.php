@@ -406,7 +406,7 @@ class GroupSettings extends System {
 	protected function modulesFetchRightsFetch($groupId) {
 
 		try {
-			$rights = TableMng::query("SELECT * FROM GroupModuleRights
+			$rights = TableMng::query("SELECT * FROM SystemGroupModuleRights
 				WHERE `groupId` = '$groupId'");
 
 		} catch (Exception $e) {

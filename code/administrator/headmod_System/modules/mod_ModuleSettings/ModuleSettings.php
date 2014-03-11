@@ -297,7 +297,7 @@ class ModuleSettings extends System {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'DELETE FROM GroupModuleRights WHERE moduleId = :moduleId');
+				'DELETE FROM SystemGroupModuleRights WHERE moduleId = :moduleId');
 
 			$stmt->execute(array('moduleId' => $moduleId));
 

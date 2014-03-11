@@ -64,7 +64,7 @@ class GroupModuleRight {
 	 */
 	public static function rightDelete($moduleId, $groupId) {
 
-		TableMng::query("DELETE FROM GroupModuleRights
+		TableMng::query("DELETE FROM SystemGroupModuleRights
 			WHERE `groupId` = '$groupId' AND `moduleId` = '$moduleId'");
 	}
 
@@ -76,7 +76,7 @@ class GroupModuleRight {
 	 */
 	public static function rightCreate($moduleId, $groupId) {
 
-		TableMng::query("INSERT INTO GroupModuleRights
+		TableMng::query("INSERT INTO SystemGroupModuleRights
 			(`groupId`, `moduleId`) VALUES
 			('$groupId', '$moduleId')");
 	}
@@ -95,7 +95,7 @@ class GroupModuleRight {
 		}
 		$inserts = rtrim($inserts, ', ');
 
-		TableMng::query("INSERT INTO GroupModuleRights
+		TableMng::query("INSERT INTO SystemGroupModuleRights
 				(moduleId, groupId)
 			VALUES $inserts;");
 	}
@@ -111,13 +111,13 @@ class GroupModuleRight {
 		$whereStr = rtrim($whereStr, ' OR');
 
 		$rights = TableMng::query(
-			"SELECT * FROM GroupModuleRights WHERE $whereStr");
+			"SELECT * FROM SystemGroupModuleRights WHERE $whereStr");
 		return $rights;
 	}
 
 	public static function rightsOfUserGet($userId) {
 
-		$res = TableMng::query("SELECT * FROM GroupModuleRights
+		$res = TableMng::query("SELECT * FROM SystemGroupModuleRights
 			WHERE `userId` = '$userId'");
 
 		return $res;
@@ -135,7 +135,7 @@ class GroupModuleRight {
 		$whereStr = rtrim($whereStr, ' OR');
 
 		$rights = TableMng::query(
-			"SELECT * FROM GroupModuleRights WHERE $whereStr");
+			"SELECT * FROM SystemGroupModuleRights WHERE $whereStr");
 
 		return $rights;
 	}
