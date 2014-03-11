@@ -479,7 +479,7 @@ class Recharge extends Babesk {
 		try {
 			$stmt = $this->_pdo->prepare(
 				'SELECT IF(COUNT(*) > 0, 1, 0) AS hasValidCoupon
-				FROM soli_coupons sc
+				FROM BabeskSoliCoupons sc
 				JOIN users u ON u.ID = :userId
 				WHERE sc.UID = :userId
 					AND :date BETWEEN sc.startdate AND sc.enddate

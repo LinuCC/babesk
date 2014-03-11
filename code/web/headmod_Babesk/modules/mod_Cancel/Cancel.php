@@ -62,11 +62,11 @@ class Cancel extends Babesk {
 			FROM orders o
 			JOIN users u ON u.ID = $_SESSION[uid]
 			JOIN BabeskMeals m ON o.MID = m.ID
-			LEFT JOIN soli_coupons sc ON sc.UID = u.ID AND
+			LEFT JOIN BabeskSoliCoupons sc ON sc.UID = u.ID AND
 				m.date BETWEEN sc.startdate AND sc.enddate
 			JOIN BabeskPriceClasses pc ON m.price_class = pc.pc_ID AND u.GID = pc.GID
 			WHERE o.ID = $orderId
-			-- If multiple soli_coupons at same time active, group to one
+			-- If multiple BabeskSoliCoupons at same time active, group to one
 			GROUP BY sc.UID;");
 
 		if(count($data)) {
@@ -205,7 +205,7 @@ class Cancel extends Babesk {
 	protected function userHasValidCoupon() {
 
 		$hasCoupon = TableMng::query("SELECT COUNT(*) AS count
-			FROM soli_coupons sc
+			FROM BabeskSoliCoupons sc
 			JOIN BabeskMeals m ON m.ID = {$this->_orderData['mealId']}
 			JOIN users u ON u.ID = sc.UID
 			WHERE m.date BETWEEN sc.startdate AND sc.enddate AND

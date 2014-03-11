@@ -89,7 +89,7 @@ class CopyOldOrdersToSoli {
 	 */
 	protected static function couponDataFetch() {
 
-		$coupons = TableMng::query('SELECT * FROM soli_coupons');
+		$coupons = TableMng::query('SELECT * FROM BabeskSoliCoupons');
 
 		foreach($coupons as $coupon) {
 			try {

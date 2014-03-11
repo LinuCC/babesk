@@ -239,7 +239,7 @@ class UserManager extends TableManager{
 		$id = array();
 		$query = "enddate > '".$date."'";
 		try {
-			$table_coupons = new TableManager('soli_coupons');
+			$table_coupons = new TableManager('BabeskSoliCoupons');
 			$users = $table_coupons->getTableData($query);
 			foreach ($users as $user) {
 				array_push($id, $user['UID']);

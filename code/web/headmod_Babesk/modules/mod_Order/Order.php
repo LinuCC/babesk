@@ -313,7 +313,7 @@ class Order extends Babesk {
 	protected function userHasValidCoupon($mealId) {
 
 		$hasCoupon = TableMng::query("SELECT COUNT(*) AS count
-			FROM soli_coupons sc
+			FROM BabeskSoliCoupons sc
 			JOIN BabeskMeals m ON m.ID = $mealId
 			JOIN users u ON u.ID = sc.UID
 			WHERE m.date BETWEEN sc.startdate AND sc.enddate AND
