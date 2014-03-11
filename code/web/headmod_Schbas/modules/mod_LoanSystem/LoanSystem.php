@@ -94,7 +94,7 @@ class LoanSystem extends Schbas {
 			require_once PATH_ACCESS . '/LoanManager.php';
 			$lm = new LoanManager();
 			$loanbooks = $lm->getLoanByUID($_SESSION['uid'], false);
-			$loanbooksSelfBuy = TableMng::query("SELECT BID FROM schbas_selfpayer WHERE UID=".$_SESSION['uid']);
+			$loanbooksSelfBuy = TableMng::query("SELECT BID FROM SchbasSelfpayer WHERE UID=".$_SESSION['uid']);
 			$loanbooksSelfBuy = array_map('current',$loanbooksSelfBuy);
 
 			$checkedBooks = array();
@@ -174,10 +174,10 @@ class LoanSystem extends Schbas {
 	}
 
 	private function saveSelfBuy() {
-		TableMng::query("DELETE FROM schbas_selfpayer WHERE UID=".$_SESSION['uid']);
+		TableMng::query("DELETE FROM SchbasSelfpayer WHERE UID=".$_SESSION['uid']);
 		if (isset($_POST['bookID'])) {
 			foreach ($_POST['bookID'] as $book) {
-				TableMng::query("INSERT IGNORE INTO schbas_selfpayer (UID, BID) VALUES (".$_SESSION['uid'].",".$book.")");
+				TableMng::query("INSERT IGNORE INTO SchbasSelfpayer (UID, BID) VALUES (".$_SESSION['uid'].",".$book.")");
 			}
 		}
 		$this->_smarty->display($this->_smartyPath . 'saved.tpl');
@@ -224,7 +224,7 @@ class LoanSystem extends Schbas {
         require_once PATH_ACCESS . '/LoanManager.php';
         $lm = new LoanManager();
         $loanbooks = $lm->getLoanByUID($_SESSION['uid'], false);
-        $loanbooksSelfBuy = TableMng::query("SELECT BID FROM schbas_selfpayer WHERE UID=".$_SESSION['uid']);
+        $loanbooksSelfBuy = TableMng::query("SELECT BID FROM SchbasSelfpayer WHERE UID=".$_SESSION['uid']);
         $loanbooksSelfBuy = array_map('current',$loanbooksSelfBuy);
 
         $checkedBooks = array();

@@ -135,7 +135,7 @@ class SchbasAccounting extends Schbas {
                     require_once PATH_ACCESS . '/LoanManager.php';
                     $lm = new LoanManager();
                     $loanbooks = $lm->getLoanByUID($uid, false);
-                    $loanbooksSelfBuy = TableMng::query("SELECT BID FROM schbas_selfpayer WHERE UID=".$uid);
+                    $loanbooksSelfBuy = TableMng::query("SELECT BID FROM SchbasSelfpayer WHERE UID=".$uid);
                     $loanbooksSelfBuy = array_map('current',$loanbooksSelfBuy);
 
                     $checkedBooks = array();
@@ -401,7 +401,7 @@ class SchbasAccounting extends Schbas {
 	
 	private function getBooksOfStudentIdRebmemer($studentId, $class){
 		$books = $this->lm->getLoanByUID($studentId, false);
-		$loanbooksSelfBuy = TableMng::query("SELECT BID FROM schbas_selfpayer WHERE UID=".$studentId);
+		$loanbooksSelfBuy = TableMng::query("SELECT BID FROM SchbasSelfpayer WHERE UID=".$studentId);
 		$loanbooksSelfBuy = array_map('current',$loanbooksSelfBuy);
 		$checkedBooks = array();
 		foreach ($books as $book) {

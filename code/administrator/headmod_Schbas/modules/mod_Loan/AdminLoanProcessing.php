@@ -66,7 +66,7 @@ $alert="<font color=#ff0000>";
 		$loanbooks = $this->loanManager->getLoanByUID($uid, false);
 		
 		//
-		$loanbooksSelfBuy = TableMng::query("SELECT BID FROM schbas_selfpayer WHERE UID=".$uid);
+		$loanbooksSelfBuy = TableMng::query("SELECT BID FROM SchbasSelfpayer WHERE UID=".$uid);
 	
 		if (count($loanbooksSelfBuy)!=0){
 			$alert .= "<u>Folgende B&uuml;cher werden selbst angeschafft:</u><br>";
@@ -128,7 +128,7 @@ $alert="<font color=#ff0000>";
 		$uid = $this->GetUser($card_id);
 		$loanbooks = $this->loanManager->getLoanByUID($uid,true);
 		//
-		$loanbooksSelfBuy = TableMng::query("SELECT BID FROM schbas_selfpayer WHERE UID=".$_uid);
+		$loanbooksSelfBuy = TableMng::query("SELECT BID FROM SchbasSelfpayer WHERE UID=".$_uid);
 		$loanbooksSelfBuy = array_map('current',$loanbooksSelfBuy);
 			
 		$checkedBooks = array();
