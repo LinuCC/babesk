@@ -60,7 +60,7 @@ class CopyOldOrdersToSoli {
 					o.ordertime AS ordertime,
 					/*Does the Meal and the priceclass still exist?*/
 					(SELECT m.ID FROM BabeskMeals m
-						JOIN price_classes pc ON m.price_class = pc.ID
+						JOIN BabeskPriceClasses pc ON m.price_class = pc.ID
 						WHERE m.ID = o.MID
 					) AS existMealAndPriceclass
 				FROM users u
@@ -69,7 +69,7 @@ class CopyOldOrdersToSoli {
 				LEFT JOIN BabeskMeals m ON o.MID = m.ID
 				/*Fetch the price of the meal for the user*/
 				LEFT JOIN
-					(SELECT ID, pc_ID, GID, price FROM price_classes) pc
+					(SELECT ID, pc_ID, GID, price FROM BabeskPriceClasses) pc
 						ON pc.pc_ID = m.price_class AND pc.GID = u.GID
 				WHERE /*does the order already exist in soli_orders?*/
 						(SELECT COUNT(*) FROM soli_orders so

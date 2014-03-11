@@ -64,7 +64,7 @@ class Cancel extends Babesk {
 			JOIN BabeskMeals m ON o.MID = m.ID
 			LEFT JOIN soli_coupons sc ON sc.UID = u.ID AND
 				m.date BETWEEN sc.startdate AND sc.enddate
-			JOIN price_classes pc ON m.price_class = pc.pc_ID AND u.GID = pc.GID
+			JOIN BabeskPriceClasses pc ON m.price_class = pc.pc_ID AND u.GID = pc.GID
 			WHERE o.ID = $orderId
 			-- If multiple soli_coupons at same time active, group to one
 			GROUP BY sc.UID;");

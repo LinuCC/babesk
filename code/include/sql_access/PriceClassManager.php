@@ -11,7 +11,7 @@ require_once PATH_ACCESS . '/TableManager.php';
 class PriceClassManager extends TableManager {
 
 	function __construct () {
-		TableManager::__construct('price_classes');
+		TableManager::__construct('BabeskPriceClasses');
 	}
 
 	/**

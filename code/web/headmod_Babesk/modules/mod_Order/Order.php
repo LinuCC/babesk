@@ -251,7 +251,7 @@ class Order extends Babesk {
 			$meal = TableMng::query("SELECT pc.price AS price, m.*
 				FROM BabeskMeals m
 				JOIN users u ON u.ID = $userId
-				JOIN price_classes pc
+				JOIN BabeskPriceClasses pc
 					ON pc.GID = u.GID AND pc.pc_ID = m.price_class
 				WHERE m.ID = '$mealId';");
 
@@ -412,7 +412,7 @@ class Order extends Babesk {
 			$meals = TableMng::query("SELECT m.*, pc.price AS price
 				FROM BabeskMeals m
 				JOIN users u ON u.ID = $_SESSION[uid]
-				JOIN price_classes pc
+				JOIN BabeskPriceClasses pc
 					ON m.price_class = pc.pc_ID AND pc.GID = u.GID
 				WHERE date BETWEEN '$startdate' AND '$enddate'
 					ORDER BY date, price_class");
