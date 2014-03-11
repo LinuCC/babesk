@@ -259,7 +259,7 @@ class Recharge extends Babesk {
 		$isSoli = $this->userHasValidSoliCoupon($userId, date('Y-m-d'));
 
 		try {
-			$stmt = $this->_pdo->prepare('INSERT INTO UsercreditsRecharges
+			$stmt = $this->_pdo->prepare('INSERT INTO BabeskUsercreditsRecharges
 				(userId, rechargingUserId, rechargeAmount, datetime, isSoli)
 				VALUES (:userId, :rechargingUserId, :rechargeAmount,
 					:datetime, :isSoli
@@ -382,7 +382,7 @@ class Recharge extends Babesk {
 				CONCAT(u.forename, " ", u.name) AS name,
 				CONCAT(ru.forename, " ", ru.name) AS rechargedBy,
 				isSoli
-				FROM UsercreditsRecharges ur
+				FROM BabeskUsercreditsRecharges ur
 				JOIN users u ON ur.userId = u.ID
 				JOIN users ru ON ur.rechargingUserId = ru.ID
 				WHERE datetime BETWEEN :startdate AND :enddate');
