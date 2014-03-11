@@ -20,7 +20,6 @@ RENAME TABLE `price_classes` TO `BabeskPriceClasses`;
 RENAME TABLE `schbas_fee` TO `SchbasFee`;
 RENAME TABLE `schbas_inventory` TO `SchbasInventory`;
 RENAME TABLE `schbas_lending` TO `SchbasLending`;
-RENAME TABLE `schbas_spezific` TO `SchbasSpecific`;
 RENAME TABLE `schbas_selfpayer` TO `SchbasSelfpayer`;
 RENAME TABLE `Schooltype` TO `SystemSchooltype`;
 RENAME TABLE `schoolYear` TO `SystemSchoolyear`;
