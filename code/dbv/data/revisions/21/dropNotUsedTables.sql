@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS jointClassInSchoolYear;
+DROP TABLE IF EXISTS ip;
+DROP TABLE IF EXISTS schbas_spezific;
