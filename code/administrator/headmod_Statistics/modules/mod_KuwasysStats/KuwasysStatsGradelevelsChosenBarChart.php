@@ -40,7 +40,7 @@ class KuwasysStatsGradelevelsChosenBarChart extends StatisticsBarChart {
 					AND c.schoolyearId = @activeSchoolyear
 				INNER JOIN (
 						SELECT ID
-						FROM usersInClassStatus
+						FROM KuwasysUsersInClassStatuses
 						WHERE name="active"
 					) status ON status.ID = uic.statusId
 				GROUP BY g.gradelevel

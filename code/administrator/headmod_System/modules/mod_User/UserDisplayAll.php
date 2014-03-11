@@ -434,7 +434,7 @@ class UserDisplayAllQueryCreator {
 				LEFT JOIN KuwasysClasses kuwasys_c
 					ON kuwasys_c.Id = kuwasys_uic.ClassID
 					AND kuwasys_c.schoolyearId = @activeSchoolyear
-				LEFT JOIN usersInClassStatus kuwasys_uics
+				LEFT JOIN KuwasysUsersInClassStatuses kuwasys_uics
 					ON kuwasys_uics.ID = kuwasys_uic.statusId
 				');
 			$this->_classesQueryDone = true;

@@ -42,7 +42,7 @@ class AssignUsersInClassParticipationConfirmation
 					ON u.ID = uic.userId AND (
 						uic.statusId = 1 OR uic.statusId = 0
 					)
-				LEFT JOIN usersInClassStatus uics ON uics.ID = uic.statusId
+				LEFT JOIN KuwasysUsersInClassStatuses uics ON uics.ID = uic.statusId
 				LEFT JOIN KuwasysClasses c ON c.ID = uic.classId AND c.schoolyearId = @activeSchoolyear
 				LEFT JOIN SystemGrades g ON g.ID = uigs.gradeId
 				LEFT JOIN KuwasysClassCategory cu ON c.unitId = cu.ID

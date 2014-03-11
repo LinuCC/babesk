@@ -57,7 +57,7 @@ class MainMenu extends Kuwasys {
 				FROM KuwasysClasses c
 				JOIN KuwasysUsersInClasses uic ON uic.ClassID = c.ID
 				JOIN KuwasysClassCategory cu ON c.unitId = cu.ID
-				JOIN usersInClassStatus uics ON uic.statusId = uics.ID
+				JOIN KuwasysUsersInClassStatuses uics ON uic.statusId = uics.ID
 				WHERE uic.UserID = :userId AND c.schoolyearId = @activeSchoolyear
 				ORDER BY cu.ID
 				-- The ID of the ClassUnits states the Order of the Units');

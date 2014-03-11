@@ -69,9 +69,9 @@ class ClassdetailsGet extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToC
 				ON ra.userId = uigsy.userId
 					AND uigsy.schoolyearId = @activeSchoolyear
 			LEFT JOIN SystemGrades g ON uigsy.gradeId = g.ID
-			LEFT JOIN usersInClassStatus uics ON ra.statusId = uics.ID
+			LEFT JOIN KuwasysUsersInClassStatuses uics ON ra.statusId = uics.ID
 			LEFT JOIN KuwasysClasses c ON ra.classId = c.ID
-			LEFT JOIN usersInClassStatus origuics
+			LEFT JOIN KuwasysUsersInClassStatuses origuics
 				ON ra.origStatusId = origuics.ID
 			WHERE ra.classId = :classId
 		');

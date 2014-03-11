@@ -285,7 +285,7 @@ class UserSelectionsApply extends \web\Kuwasys\ClassList {
 			$stmt = $this->_pdo->prepare(
 				'INSERT INTO `KuwasysUsersInClasses` (UserID, ClassID, statusId)
 					VALUES (?, ?, (
-						SELECT ID FROM usersInClassStatus uics
+						SELECT ID FROM KuwasysUsersInClassStatuses uics
 							WHERE uics.name = ?
 					))'
 			);

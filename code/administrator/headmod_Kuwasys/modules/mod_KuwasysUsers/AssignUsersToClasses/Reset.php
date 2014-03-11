@@ -90,7 +90,7 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 
 		try {
 			$res = $this->_pdo->query(
-				'SELECT ID, name FROM usersInClassStatus WHERE 1'
+				'SELECT ID, name FROM KuwasysUsersInClassStatuses WHERE 1'
 			);
 
 			$this->_status = $res->fetchAll(\PDO::FETCH_KEY_PAIR);
@@ -117,11 +117,11 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 				WHERE c.schoolyearId = @activeSchoolyear
 					AND (
 						uic.statusId = (
-							SELECT ID FROM usersInClassStatus
+							SELECT ID FROM KuwasysUsersInClassStatuses
 								WHERE name="request1"
 						) OR
 						uic.statusId = (
-							SELECT ID FROM usersInClassStatus
+							SELECT ID FROM KuwasysUsersInClassStatuses
 								WHERE name="request2"
 						)
 					)

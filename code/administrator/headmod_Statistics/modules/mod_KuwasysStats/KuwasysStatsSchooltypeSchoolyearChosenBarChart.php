@@ -50,7 +50,7 @@ class KuwasysStatsSchooltypeSchoolyearChosenBarChart
 						-- Check for interesting status
 						INNER JOIN (
 							SELECT ID
-							FROM usersInClassStatus
+							FROM KuwasysUsersInClassStatuses
 							WHERE name="active"
 							) status ON status.ID = uic.statusId
 					WHERE uigs.schoolyearId = @activeSchoolyear

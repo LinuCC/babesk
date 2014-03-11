@@ -128,7 +128,7 @@ class ClassDetails extends Kuwasys {
 					FROM KuwasysClasses c
 						INNER JOIN KuwasysUsersInClasses uic
 							ON uic.ClassID = c.ID
-						INNER JOIN usersInClassStatus uics
+						INNER JOIN KuwasysUsersInClassStatuses uics
 							ON uics.Id = uic.statusId
 					WHERE uic.userId = ? AND uic.classId = ?
 						AND c.schoolyearId = @activeSchoolyear

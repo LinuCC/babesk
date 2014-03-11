@@ -217,7 +217,7 @@ class KuwasysUsers extends Kuwasys {
 	 */
 	protected function statusIdGetByName($statusName) {
 
-		$stmt = $this->_pdo->prepare('SELECT ID FROM usersInClassStatus
+		$stmt = $this->_pdo->prepare('SELECT ID FROM KuwasysUsersInClassStatuses
 			WHERE name = :name');
 
 		$stmt->execute(array('name' => $statusName));

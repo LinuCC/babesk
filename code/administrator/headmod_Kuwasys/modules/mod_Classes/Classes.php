@@ -503,7 +503,7 @@ class Classes extends Kuwasys {
 			$subQueryCountUsers = '(SELECT Count(*)
 					FROM KuwasysUsersInClasses uic
 					JOIN SystemUsers ON SystemUsers.ID = uic.UserID
-					WHERE uic.statusId = (SELECT ID FROM usersInClassStatus
+					WHERE uic.statusId = (SELECT ID FROM KuwasysUsersInClassStatuses
 						WHERE name="%s") AND c.ID = uic.ClassID
 					)
 				';
@@ -564,7 +564,7 @@ class Classes extends Kuwasys {
 		$subQueryCountUsers = '(SELECT Count(*)
 				FROM KuwasysUsersInClasses uic
 				JOIN SystemUsers ON SystemUsers.ID = uic.UserID
-				WHERE uic.statusId = (SELECT ID FROM usersInClassStatus
+				WHERE uic.statusId = (SELECT ID FROM KuwasysUsersInClassStatuses
 					WHERE name="%s") AND c.ID = uic.ClassID
 				)
 			';
@@ -638,7 +638,7 @@ class Classes extends Kuwasys {
 					uics.translatedName AS statusTranslated
 				FROM SystemUsers u
 				JOIN KuwasysUsersInClasses uic ON u.ID = uic.UserID
-				JOIN usersInClassStatus uics ON uic.statusId = uics.ID
+				JOIN KuwasysUsersInClassStatuses uics ON uic.statusId = uics.ID
 				LEFT JOIN (
 						SELECT CONCAT(label, "-", gradelevel) AS gradename,
 							uigs.UserID AS userId
@@ -709,7 +709,7 @@ class Classes extends Kuwasys {
 	protected function statusesGetAll() {
 
 		try {
-			$stmt = $this->_pdo->query('SELECT * FROM usersInClassStatus');
+			$stmt = $this->_pdo->query('SELECT * FROM KuwasysUsersInClassStatuses');
 			$stmt->execute();
 			return $stmt->fetchAll();
 

@@ -549,7 +549,7 @@ class User extends System {
 	protected function usersInClassStatusGetAll() {
 
 		try {
-			$data = TableMng::query('SELECT * FROM usersInClassStatus');
+			$data = TableMng::query('SELECT * FROM KuwasysUsersInClassStatuses');
 
 		} catch (Exception $e) {
 			$this->_interface->dieError(
