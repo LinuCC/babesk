@@ -70,7 +70,7 @@ class SchbasSettings extends Schbas {
 	}
 
 	function updateFee(){
-		$stmt = TableMng::getDB()->prepare("UPDATE schbas_fee SET fee_normal = ?, fee_reduced = ? WHERE grade = ?;");
+		$stmt = TableMng::getDB()->prepare("UPDATE SchbasFee SET fee_normal = ?, fee_reduced = ? WHERE grade = ?;");
 		for ($i = 5;$i<=12; $i++){
 			$_POST[$i.'norm'] = str_replace (",", ".", $_POST[$i.'norm'] );
 			$_POST[$i.'erm'] = str_replace (",", ".", $_POST[$i.'erm'] );
@@ -258,8 +258,8 @@ class SchbasSettings extends Schbas {
 		$books = str_replace('é', '&eacute;', $books);
 
 		//get loan fees
-		$feeNormal = TableMng::query("SELECT fee_normal FROM schbas_fee WHERE grade=".$gradelevel);
-		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradelevel);
+		$feeNormal = TableMng::query("SELECT fee_normal FROM SchbasFee WHERE grade=".$gradelevel);
+		$feeReduced = TableMng::query("SELECT fee_reduced FROM SchbasFee WHERE grade=".$gradelevel);
 
 		//get bank account
 		$bank_account =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='bank_details'");
