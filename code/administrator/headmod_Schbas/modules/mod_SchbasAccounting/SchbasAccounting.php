@@ -306,7 +306,7 @@ class SchbasAccounting extends Schbas {
 
 		$showIdAfterName = false;				// to enable the id after name set this value to true
 
-		$lending = TableMng::query('SELECT * FROM schbas_lending');
+		$lending = TableMng::query('SELECT * FROM SchbasLending');
 
 		for ($i=0; $i < (count($lending)); $i++){	// one loop prodices one line of the table
 			//name
@@ -376,7 +376,7 @@ class SchbasAccounting extends Schbas {
 	}
 	
 	private function getBooksOfStudentId($studentId){
-		$books = TableMng::query("SELECT inventory_id FROM schbas_lending WHERE user_id='$studentId'");
+		$books = TableMng::query("SELECT inventory_id FROM SchbasLending WHERE user_id='$studentId'");
 		$booklist = "";
 		$nr = count($books);
 		for($i=0;$i<$nr;$i++){
@@ -413,7 +413,7 @@ class SchbasAccounting extends Schbas {
 		foreach ($checkedBooks as $book) {
 			$booklist .= "<li>".$book["title"];
 		}
-// 		$books = TableMng::query("SELECT inventory_id FROM schbas_lending WHERE user_id='".$studentId."'");
+// 		$books = TableMng::query("SELECT inventory_id FROM SchbasLending WHERE user_id='".$studentId."'");
 // 		$booklist = "";
 // 		if (!empty($books)) {
 // 		// format class to right format (in table int(7) is string(2)"07" )

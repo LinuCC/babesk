@@ -164,7 +164,7 @@ class UserDelete {
 	protected function deleteConditionSchbas($uid) {
 
 		$stillLoaned = TableMng::query(
-			"SELECT COUNT(*) AS count FROM schbas_lending
+			"SELECT COUNT(*) AS count FROM SchbasLending
 				WHERE user_id = $uid");
 
 		if($stillLoaned[0]['count'] > 0) {
