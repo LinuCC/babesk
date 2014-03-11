@@ -142,7 +142,7 @@ class Classes extends Kuwasys {
 	protected function classunitsGetAll() {
 
 		try {
-			$stmt = $this->_pdo->query('SELECT * FROM kuwasysClassUnit');
+			$stmt = $this->_pdo->query('SELECT * FROM KuwasysClassCategory');
 			return $stmt->fetchAll();
 
 		} catch (Exception $e) {
@@ -518,7 +518,7 @@ class Classes extends Kuwasys {
 					'. sprintf ($subQueryCountUsers, 'request2') . ' AS request2Count
 				FROM KuwasysClasses c
 				LEFT JOIN schoolYear sy ON c.schoolyearId = sy.ID
-				LEFT JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
+				LEFT JOIN KuwasysClassCategory cu ON c.unitId = cu.ID
 				LEFT JOIN (
 						SELECT ctic.ClassID AS classId,
 							CONCAT(ct.forename, " ", ct.name) AS name
@@ -580,7 +580,7 @@ class Classes extends Kuwasys {
 					'. sprintf ($subQueryCountUsers, 'request2') . ' AS request2Count
 				FROM KuwasysClasses c
 				LEFT JOIN schoolYear sy ON c.schoolyearId = sy.ID
-				LEFT JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
+				LEFT JOIN KuwasysClassCategory cu ON c.unitId = cu.ID
 				LEFT JOIN (
 						SELECT ctic.ClassID AS classId,
 							CONCAT(ct.forename, " ", ct.name) AS name

@@ -88,7 +88,7 @@ class Review extends \administrator\Kuwasys\Classes\CsvImport {
 
 		try {
 			$stmt = $this->_pdo->query('SELECT ID, translatedName
-				FROM kuwasysClassUnit');
+				FROM KuwasysClassCategory');
 			return $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);
 
 		} catch (\PDOException $e) {

@@ -43,7 +43,7 @@ class KuwasysUsersCreateParticipationConfirmationPdf {
 				LEFT JOIN usersInClassStatus uics ON uics.ID = uic.statusId
 				LEFT JOIN KuwasysClasses c ON c.ID = uic.ClassID AND c.schoolyearId = @activeSchoolyear
 				LEFT JOIN SystemGrades g ON g.ID = uigs.gradeId
-				LEFT JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
+				LEFT JOIN KuwasysClassCategory cu ON c.unitId = cu.ID
 			WHERE (%s)
 				AND uigs.schoolyearId = @activeSchoolyear
 				AND uics.name = "active"
