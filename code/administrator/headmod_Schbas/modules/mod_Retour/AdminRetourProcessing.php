@@ -118,7 +118,7 @@ class AdminRetourProcessing {
 		'SELECT COUNT(*) FROM BabeskCards WHERE cardnumber LIKE "%s"',$card_id));
 
 		$isUser = TableMng::query(sprintf(
-				'SELECT COUNT(*) FROM users WHERE username LIKE "%s"',$card_id));
+				'SELECT COUNT(*) FROM SystemUsers WHERE username LIKE "%s"',$card_id));
 
 		if ($isCard[0]['COUNT(*)']==="0")
 				$this->RetourInterface->dieError(sprintf($this->msg['err_get_user_by_card']));
@@ -157,7 +157,7 @@ class AdminRetourProcessing {
 					LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS class
-			FROM users u WHERE `ID` = %s', $userId));
+			FROM SystemUsers u WHERE `ID` = %s', $userId));
 
 
 		return $userDetails[0];

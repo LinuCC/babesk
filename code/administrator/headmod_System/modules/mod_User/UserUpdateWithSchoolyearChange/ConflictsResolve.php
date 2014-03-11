@@ -63,7 +63,7 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 					CONCAT(tu.gradelevel, "-", tu.label) AS newGrade
 				FROM UserUpdateTempConflicts tc
 					LEFT JOIN UserUpdateTempUsers tu ON tu.ID = tc.tempUserId
-					LEFT JOIN users u ON u.ID = tc.origUserId
+					LEFT JOIN SystemUsers u ON u.ID = tc.origUserId
 					LEFT JOIN usersInGradesAndSchoolyears uigs
 						ON u.ID = uigs.userId
 						AND uigs.schoolyearId = @activeSchoolyear
@@ -219,7 +219,7 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 					tu.label AS newGradelabel
 				FROM UserUpdateTempConflicts tc
 				LEFT JOIN UserUpdateTempUsers tu ON tu.ID = tc.tempUserId
-				LEFT JOIN users u ON u.ID = tc.origUserId
+				LEFT JOIN SystemUsers u ON u.ID = tc.origUserId
 				LEFT JOIN usersInGradesAndSchoolyears uigs
 					ON u.ID = uigs.userId
 					AND uigs.schoolyearId = @activeSchoolyear

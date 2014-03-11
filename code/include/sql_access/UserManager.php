@@ -11,7 +11,7 @@ require_once PATH_ACCESS . '/TableManager.php';
 class UserManager extends TableManager{
 
 	public function __construct() {
-		parent::__construct('users');
+		parent::__construct('SystemUsers');
 	}
 
 	function getUser ($uid) {
@@ -151,7 +151,7 @@ class UserManager extends TableManager{
 	function checkPassword($uid, $password) {
 		require_once PATH_INCLUDE.'/functions.php';
         require_once PATH_INCLUDE.'/PasswordHash.php';
-		$sql = ('SELECT password FROM users WHERE ID = ?');
+		$sql = ('SELECT password FROM SystemUsers WHERE ID = ?');
 		$stmt = $this->db->prepare($sql);
 
 		if (!$stmt) {
@@ -171,7 +171,7 @@ class UserManager extends TableManager{
 	//	if (hash_password($password) == $result) {
 		if (strlen($result)==32 && md5($password) == $result) {
             $convert = hash_password($password);
-            $sql = 'UPDATE users SET password = ? WHERE ID=?' ;
+            $sql = 'UPDATE SystemUsers SET password = ? WHERE ID=?' ;
             $stmt = $this->db->prepare($sql);
 
             if (!$stmt) {
@@ -190,7 +190,7 @@ class UserManager extends TableManager{
         if (validate_password($password,$result)) {
 			return true;
 		} else {
-			$sql = 'UPDATE users SET login_tries = login_tries + 1 WHERE ID = ?';
+			$sql = 'UPDATE SystemUsers SET login_tries = login_tries + 1 WHERE ID = ?';
 			$stmt = $this->db->prepare($sql);
 
 			if (!$stmt) {
@@ -212,7 +212,7 @@ class UserManager extends TableManager{
 	*/
 	function checkAccount($uid) {
 		require_once PATH_INCLUDE.'/functions.php';
-		$sql = ('SELECT locked FROM users WHERE ID = ?');
+		$sql = ('SELECT locked FROM SystemUsers WHERE ID = ?');
 		$stmt = $this->db->prepare($sql);
 
 		if (!$stmt) {

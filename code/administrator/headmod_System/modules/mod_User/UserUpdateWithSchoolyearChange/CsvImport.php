@@ -292,7 +292,7 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 			$res = $this->_pdo->query(
 				'SELECT u.ID AS userId, u.forename AS forename, u.name AS name,
 					u.birthday AS birthday, g.gradelevel AS gradelevel
-				FROM users u
+				FROM SystemUsers u
 					JOIN usersInGradesAndSchoolyears uigs ON u.ID = uigs.userId
 					JOIN SystemGrades g ON g.ID = uigs.gradeId
 				WHERE uigs.schoolyearId = @activeSchoolyear'

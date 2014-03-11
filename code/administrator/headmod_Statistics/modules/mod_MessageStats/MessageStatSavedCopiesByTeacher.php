@@ -34,7 +34,7 @@ class MessageStatSavedCopiesByTeacher extends StatisticsBarChart {
 	protected function dataFetch() {
 
 		$this->_savedCopiesData = TableMng::query(
-			"SELECT u.forename, u.name, m.authorId, m.savedCopies FROM MessageCarbonFootprint AS m, users as u WHERE u.ID=m.authorId ORDER BY m.savedCopies DESC");
+			"SELECT u.forename, u.name, m.authorId, m.savedCopies FROM MessageCarbonFootprint AS m, SystemUsers as u WHERE u.ID=m.authorId ORDER BY m.savedCopies DESC");
 	}
 
 	protected function dataProcess() {

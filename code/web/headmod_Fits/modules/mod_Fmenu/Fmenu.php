@@ -42,7 +42,7 @@ class Fmenu extends Fits {
 					LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS class
-				FROM users u WHERE `ID` = %s', $_SESSION['uid']), true);
+				FROM SystemUsers u WHERE `ID` = %s', $_SESSION['uid']), true);
 			// $userDetails = $userManager->getUserDetails($_SESSION['uid']);
 			$userClass = $userDetails['class'];
 

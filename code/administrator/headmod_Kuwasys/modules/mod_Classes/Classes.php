@@ -502,7 +502,7 @@ class Classes extends Kuwasys {
 		try {
 			$subQueryCountUsers = '(SELECT Count(*)
 					FROM KuwasysUsersInClasses uic
-					JOIN users ON users.ID = uic.UserID
+					JOIN SystemUsers ON SystemUsers.ID = uic.UserID
 					WHERE uic.statusId = (SELECT ID FROM usersInClassStatus
 						WHERE name="%s") AND c.ID = uic.ClassID
 					)
@@ -563,7 +563,7 @@ class Classes extends Kuwasys {
 
 		$subQueryCountUsers = '(SELECT Count(*)
 				FROM KuwasysUsersInClasses uic
-				JOIN users ON users.ID = uic.UserID
+				JOIN SystemUsers ON SystemUsers.ID = uic.UserID
 				WHERE uic.statusId = (SELECT ID FROM usersInClassStatus
 					WHERE name="%s") AND c.ID = uic.ClassID
 				)
@@ -636,7 +636,7 @@ class Classes extends Kuwasys {
 			$stmt = $this->_pdo->prepare(
 				'SELECT u.*, g.gradename AS gradename,
 					uics.translatedName AS statusTranslated
-				FROM users u
+				FROM SystemUsers u
 				JOIN KuwasysUsersInClasses uic ON u.ID = uic.UserID
 				JOIN usersInClassStatus uics ON uic.statusId = uics.ID
 				LEFT JOIN (

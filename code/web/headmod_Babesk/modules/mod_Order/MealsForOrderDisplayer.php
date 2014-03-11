@@ -164,13 +164,13 @@ class MealsForOrderDisplayer {
 
 		try {
 
-			$hasSoli = TableMng::query("SELECT soli FROM users
+			$hasSoli = TableMng::query("SELECT soli FROM SystemUsers
 					WHERE ID = $_SESSION[uid]");
 
 			$meals = TableMng::query("SELECT m.*, pc.price AS price,
 					pc.pc_ID AS priceclassId, pc.name AS priceclassName
 				FROM BabeskMeals m
-				JOIN users u ON u.ID = $_SESSION[uid]
+				JOIN SystemUsers u ON u.ID = $_SESSION[uid]
 				JOIN BabeskPriceClasses pc
 					ON m.price_class = pc.pc_ID AND pc.GID = u.GID
 				WHERE date BETWEEN '$startdate' AND '$enddate'

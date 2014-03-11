@@ -63,7 +63,7 @@ class CopyOldOrdersToSoli {
 						JOIN BabeskPriceClasses pc ON m.price_class = pc.ID
 						WHERE m.ID = o.MID
 					) AS existMealAndPriceclass
-				FROM users u
+				FROM SystemUsers u
 				JOIN orders o ON o.UID = u.ID
 				/*We want to check if meal exists manually (for error-output), so using LEFT JOIN instead of JOIN*/
 				LEFT JOIN BabeskMeals m ON o.MID = m.ID

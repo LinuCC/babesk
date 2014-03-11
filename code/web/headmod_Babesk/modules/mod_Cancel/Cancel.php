@@ -60,7 +60,7 @@ class Cancel extends Babesk {
 				m.ID AS mealId, sc.ID AS solicouponId,
 				pc.price AS price
 			FROM orders o
-			JOIN users u ON u.ID = $_SESSION[uid]
+			JOIN SystemUsers u ON u.ID = $_SESSION[uid]
 			JOIN BabeskMeals m ON o.MID = m.ID
 			LEFT JOIN BabeskSoliCoupons sc ON sc.UID = u.ID AND
 				m.date BETWEEN sc.startdate AND sc.enddate
@@ -207,7 +207,7 @@ class Cancel extends Babesk {
 		$hasCoupon = TableMng::query("SELECT COUNT(*) AS count
 			FROM BabeskSoliCoupons sc
 			JOIN BabeskMeals m ON m.ID = {$this->_orderData['mealId']}
-			JOIN users u ON u.ID = sc.UID
+			JOIN SystemUsers u ON u.ID = sc.UID
 			WHERE m.date BETWEEN sc.startdate AND sc.enddate AND
 				sc.UID = $_SESSION[uid] AND u.soli = 1");
 
@@ -223,7 +223,7 @@ class Cancel extends Babesk {
 
 		$newBalance = $this->_orderData['userCredits'] + $amount;
 		$newBalanceStr = str_replace(',', '.', (string) $newBalance);
-		TableMng::query("UPDATE users SET credit = '$newBalanceStr' WHERE $_SESSION[uid] = ID");
+		TableMng::query("UPDATE SystemUsers SET credit = '$newBalanceStr' WHERE $_SESSION[uid] = ID");
 	}
 
 	/**

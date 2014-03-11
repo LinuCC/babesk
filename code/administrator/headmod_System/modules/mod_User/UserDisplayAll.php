@@ -113,7 +113,7 @@ class UserDisplayAll {
 		// $columns = array();
 
 		// $userdata = TableMng::query("SELECT *
-		// 	FROM users LIMIT 1, 1");
+		// 	FROM SystemUsers LIMIT 1, 1");
 
 		// foreach($userdata[0] as $key => $data) {
 		// 	if(!empty($this->_selectableColumns[$key])) {
@@ -336,7 +336,7 @@ class UserDisplayAllQueryCreator {
 		}
 
 		$this->_query = "SELECT u.*, u.ID AS ID $this->_querySelect
-			FROM users u
+			FROM SystemUsers u
 				$this->_queryJoin
 			GROUP BY u.ID
 			$filterQuery
@@ -350,7 +350,7 @@ class UserDisplayAllQueryCreator {
 		(SELECT u.ID AS userId, u.forename AS forename, u.name AS name, u.username AS username, u.email AS email, u.telephone AS telephone, u.GID AS GID, u.birthday AS birthday,
 			u.soli AS soli, u.first_passwd AS first_passwd
 			$this->_querySelect
-					FROM users u
+					FROM SystemUsers u
 						$this->_queryJoin
 					GROUP BY u.ID
 					$filterQuery) counting";

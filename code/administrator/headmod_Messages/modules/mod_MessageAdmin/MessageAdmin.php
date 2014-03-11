@@ -138,7 +138,7 @@ class MessageAdmin extends Messages {
 		$name = '';
 
 		$stmt = TableMng::getDb()->prepare(
-			'SELECT CONCAT(forename, " ", name) FROM users WHERE `ID` = ?;');
+			'SELECT CONCAT(forename, " ", name) FROM SystemUsers WHERE `ID` = ?;');
 		$stmt->bind_result($name);
 
 		foreach($creators as $creator) {

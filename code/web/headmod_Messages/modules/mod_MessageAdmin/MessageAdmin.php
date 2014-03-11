@@ -251,7 +251,7 @@ class MessageAdmin extends Messages {
 		$forename = $name = $username = $birthday = $email = $telephone = '';
 		$stmt = TableMng::getDb()->prepare(
 			'SELECT `forename`, `name`, `username`, `birthday`, `email`,
-				`telephone` FROM users WHERE `ID` = ?');
+				`telephone` FROM SystemUsers WHERE `ID` = ?');
 		$stmt->bind_result($forename, $name, $username, $birthday, $email,
 			$telephone);
 		foreach($receivers as $recId) {
@@ -403,7 +403,7 @@ class MessageAdmin extends Messages {
 		//get data of manager
 		$stmt = TableMng::getDb()->prepare(
 			'SELECT forename, name
-			FROM users u
+			FROM SystemUsers u
 			WHERE u.ID = ?');
 		foreach ($managerArray as $mng) {
 			$stmt->bind_param('i', $mng ['userId']);
@@ -444,7 +444,7 @@ class MessageAdmin extends Messages {
 		//get the data of the receivers
 		$stmt = TableMng::getDb()->prepare(
 			'SELECT u.forename, u.name
-			FROM users u
+			FROM SystemUsers u
 			WHERE u.ID = ?;
 			');
 		foreach($receiverArray as $receiver) {

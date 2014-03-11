@@ -36,7 +36,7 @@ class KuwasysUsersCreateParticipationConfirmationPdf {
 				uics.translatedName AS statusTranslatedName,
 				CONCAT(g.gradelevel, g.label) AS gradeName,
 				IF(c.ID, CONCAT(u.ID, "-", c.ID), CONCAT(u.ID, "-")) AS grouper
-			FROM users u
+			FROM SystemUsers u
 				JOIN usersInGradesAndSchoolyears uigs ON uigs.userId = u.ID
 				JOIN SystemSchoolyear sy ON sy.ID = uigs.SchoolYearID
 				INNER JOIN KuwasysUsersInClasses uic ON u.ID = uic.UserID

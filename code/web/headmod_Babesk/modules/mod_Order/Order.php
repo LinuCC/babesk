@@ -250,7 +250,7 @@ class Order extends Babesk {
 		try {
 			$meal = TableMng::query("SELECT pc.price AS price, m.*
 				FROM BabeskMeals m
-				JOIN users u ON u.ID = $userId
+				JOIN SystemUsers u ON u.ID = $userId
 				JOIN BabeskPriceClasses pc
 					ON pc.GID = u.GID AND pc.pc_ID = m.price_class
 				WHERE m.ID = '$mealId';");
@@ -315,7 +315,7 @@ class Order extends Babesk {
 		$hasCoupon = TableMng::query("SELECT COUNT(*) AS count
 			FROM BabeskSoliCoupons sc
 			JOIN BabeskMeals m ON m.ID = $mealId
-			JOIN users u ON u.ID = sc.UID
+			JOIN SystemUsers u ON u.ID = sc.UID
 			WHERE m.date BETWEEN sc.startdate AND sc.enddate AND
 				sc.UID = $_SESSION[uid] AND u.soli = 1");
 
@@ -353,7 +353,7 @@ class Order extends Babesk {
 		if(($newBalance = $this->userBalanceChangeCheck($userId, $amount)) !==
 				false) {
 			$balanceStr = str_replace(',', '.', (string) $newBalance);
-			TableMng::query("UPDATE users SET credit = '$balanceStr'
+			TableMng::query("UPDATE SystemUsers SET credit = '$balanceStr'
 				WHERE ID = $userId");
 			return true;
 		}
@@ -371,7 +371,7 @@ class Order extends Babesk {
 	 */
 	protected function userBalanceChangeCheck($userId, $amount) {
 
-		$data = TableMng::query("SELECT * FROM users u
+		$data = TableMng::query("SELECT * FROM SystemUsers u
 			WHERE u.ID = $userId");
 
 		if(!empty($data[0]['credit'])) {
@@ -411,7 +411,7 @@ class Order extends Babesk {
 		try {
 			$meals = TableMng::query("SELECT m.*, pc.price AS price
 				FROM BabeskMeals m
-				JOIN users u ON u.ID = $_SESSION[uid]
+				JOIN SystemUsers u ON u.ID = $_SESSION[uid]
 				JOIN BabeskPriceClasses pc
 					ON m.price_class = pc.pc_ID AND pc.GID = u.GID
 				WHERE date BETWEEN '$startdate' AND '$enddate'

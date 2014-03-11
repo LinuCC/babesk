@@ -111,7 +111,7 @@ class KuwasysUsers extends Kuwasys {
 
 		$gradeId = $_GET['gradeId'];
 		$query = "SELECT u.ID as userId
-			FROM users u
+			FROM SystemUsers u
 				JOIN usersInGradesAndSchoolyears uigsy ON uigsy.UserID = u.ID
 			WHERE uigsy.schoolyearId = @activeSchoolyear AND
 				uigsy.gradeId = {$gradeId}
@@ -288,7 +288,7 @@ class KuwasysUsers extends Kuwasys {
 	protected function userIdGetByUsername($username) {
 
 		try {
-			$stmt = $this->_pdo->prepare('SELECT ID FROM users
+			$stmt = $this->_pdo->prepare('SELECT ID FROM SystemUsers
 				WHERE username = :username');
 
 			$stmt->execute(array('username' => $username));

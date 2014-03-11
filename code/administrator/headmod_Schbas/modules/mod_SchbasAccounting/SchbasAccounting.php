@@ -189,7 +189,7 @@ class SchbasAccounting extends Schbas {
 			// Cows stands for Code of worst systematic
 			$gradesAll[] = $SaveTheCows[0];
 		}
-		$users = TableMng::query('SELECT * FROM users ORDER BY name ASC');
+		$users = TableMng::query('SELECT * FROM SystemUsers ORDER BY name ASC');
 		$users = $this->addGradeLabelToUsers($users);
 		$users = $this->addPayedAmountToUsers($users);
 		if (isset ($_GET['gradeIdDesired'])){
@@ -311,9 +311,9 @@ class SchbasAccounting extends Schbas {
 		for ($i=0; $i < (count($lending)); $i++){	// one loop prodices one line of the table
 			//name
 			$id = (int) $lending[$i]["user_id"];
-			$name = TableMng::query("SELECT name FROM users WHERE ID=$id");
+			$name = TableMng::query("SELECT name FROM SystemUsers WHERE ID=$id");
 			$name = $name[0]["name"];
-			$forename = TableMng::query("SELECT forename FROM users WHERE ID=$id");
+			$forename = TableMng::query("SELECT forename FROM SystemUsers WHERE ID=$id");
 			$forename = $forename[0]["forename"];
 			if($showIdAfterName == true){
 				$schueler = ("$forename $name($id)");
@@ -364,13 +364,13 @@ class SchbasAccounting extends Schbas {
 	}
 	
 	private function getNameOfStudentId($studentId){
-		$name = TableMng::query("SELECT name FROM users WHERE ID='$studentId'");
+		$name = TableMng::query("SELECT name FROM SystemUsers WHERE ID='$studentId'");
 		$name = $name[0]["name"];
 		return $name;
 	}
 	
 	private function getForenameOfStudentId($studentId){
-		$forename = TableMng::query("SELECT forename FROM users WHERE ID='$studentId'");
+		$forename = TableMng::query("SELECT forename FROM SystemUsers WHERE ID='$studentId'");
 		$forename = $forename[0]["forename"];
 		return $forename;
 	}

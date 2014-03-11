@@ -75,7 +75,7 @@ class UserDelete {
 		$userToDeleteRes = TableMng::querySingleEntry(
 			"SELECT forename, name, credit, birthday,
 				CONCAT(g.gradelevel, '-', g.label) AS grade
-			FROM users u
+			FROM SystemUsers u
 			LEFT JOIN (
 					SELECT g.gradelevel AS gradelevel, g.label AS label,
 						uigs.userId AS userId
@@ -110,7 +110,7 @@ class UserDelete {
 		$additionalQuerys = $this->deleteQuerysCreateAdditional($uid);
 		TableMng::getDb()->autocommit(false);
 		TableMng::queryMultiple(
-			"DELETE FROM users WHERE ID = $uid;
+			"DELETE FROM SystemUsers WHERE ID = $uid;
 			$additionalQuerys
 			");
 		TableMng::getDb()->autocommit(true);

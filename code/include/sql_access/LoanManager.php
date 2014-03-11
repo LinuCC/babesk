@@ -171,7 +171,7 @@ class LoanManager extends TableManager{
 				LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 				WHERE uigs.userId = u.ID AND
 					uigs.schoolyearId = @activeSchoolyear) AS class
-			FROM users u WHERE `ID` = %s', $userId));
+			FROM SystemUsers u WHERE `ID` = %s', $userId));
 
 
 		return $userDetails[0];

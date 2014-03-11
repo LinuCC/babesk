@@ -87,7 +87,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 					WHERE su.origUserId <> 0
 			';
 			//Update user-entries if data is given
-			$queryUsers = 'UPDATE users u
+			$queryUsers = 'UPDATE SystemUsers u
 				LEFT JOIN UserUpdateTempSolvedUsers su ON u.ID = su.origUserId
 				SET u.email = IFNULL(su.newEmail, u.email),
 					u.telephone = IFNULL(su.newTelephone, u.telephone),
@@ -163,7 +163,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 			}
 
 			$stmtu = $this->_pdo->prepare(
-				'INSERT INTO users
+				'INSERT INTO SystemUsers
 					(forename, name, username, password, email, telephone,
 						last_login, locked, GID, credit, soli, birthday)
 				VALUES (?, ?, IFNULL(?, CONCAT(forename, ".", name)), "", IFNULL(?, ""), IFNULL(?, ""), "", 0, 0, 0, 0, ?)'

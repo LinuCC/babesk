@@ -40,7 +40,7 @@ class SummaryOfClassesPdf {
 				cu.name as unitName
 			FROM KuwasysClasses c
 				JOIN KuwasysUsersInClasses uic ON uic.ClassID = c.ID
-				JOIN users u ON uic.UserID = u.ID
+				JOIN SystemUsers u ON uic.UserID = u.ID
 				LEFT JOIN usersInGradesAndSchoolyears uigs
 					ON uigs.UserID = u.ID
 				LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID

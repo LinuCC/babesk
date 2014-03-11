@@ -124,7 +124,7 @@ class UserCsvImport extends CsvImportTableData {
 		$this->dataPrepare();
 
 		$stmt = $this->_pdo->prepare(
-			'INSERT INTO users (forename, name, username, birthday, email,
+			'INSERT INTO SystemUsers (forename, name, username, birthday, email,
 				GID, credit, soli, password)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
 			');

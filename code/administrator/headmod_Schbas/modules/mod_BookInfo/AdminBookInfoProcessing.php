@@ -61,7 +61,7 @@ class AdminBookInfoProcessing {
 					LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS class
-			FROM users u WHERE ID = %s', $uid), true);
+			FROM SystemUsers u WHERE ID = %s', $uid), true);
 
 		return $data[0];
 	}

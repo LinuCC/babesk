@@ -204,7 +204,7 @@ class MessageMainMenu extends Messages {
 			$msgText = $msgTitle = $forename = $name = $grade = $msgRecId = $msgReturn = '';
 			$query = "SELECT m.title, m.text, mr.read, mr.ID, mr.return,
 					u.forename, u.name, CONCAT(g.gradelevel, g.label)
-				FROM users u
+				FROM SystemUsers u
 				JOIN MessageReceivers mr ON mr.userId = u.ID
 				JOIN MessageMessages m ON mr.messageId = m.ID AND m.ID = ?
 				LEFT JOIN usersInGradesAndSchoolyears uigs ON

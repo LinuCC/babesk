@@ -208,7 +208,7 @@ class LoanSystem extends Schbas {
 
 
 
-		$name =  TableMng::query("SELECT forename, name FROM users WHERE ID = '".$_SESSION['uid']."'");
+		$name =  TableMng::query("SELECT forename, name FROM SystemUsers WHERE ID = '".$_SESSION['uid']."'");
 
 		$text .= '</tr><tr><td colspan="2">Name, Vorname des Sch&uuml;lers / der Sch&uuml;lerin:<br>'.$name[0]['name'].", ".$name[0]['forename'].'</td>';
 		$text .= "<td><b>Jahrgangsstufe: ".$gradelevel[0]['gradelevel']."</b></td>";
@@ -277,7 +277,7 @@ class LoanSystem extends Schbas {
 			$bank_account =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='bank_details'");
 			$bank_account = explode("|", $bank_account[0]['value']);
 
-			$username = TableMng::query("SELECT username FROM users WHERE ID=".$_SESSION['uid']);
+			$username = TableMng::query("SELECT username FROM SystemUsers WHERE ID=".$_SESSION['uid']);
 
 			$text .= 	"<table style=\"border:solid\" width=\"75%\" cellpadding=\"2\" cellspacing=\"2\">
 				<tr><td>Kontoinhaber:</td><td>".$bank_account[0]."</td></tr>

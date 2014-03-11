@@ -35,7 +35,7 @@ class ResetAllUserPasswords extends User {
 		$presetPassword = $this->presetPasswordGet();
 
 		if($presetPassword) {
-			$this->_pdo->query("UPDATE users
+			$this->_pdo->query("UPDATE SystemUsers
 				SET password = '$presetPassword'
 				WHERE ID <> 1");
 		}

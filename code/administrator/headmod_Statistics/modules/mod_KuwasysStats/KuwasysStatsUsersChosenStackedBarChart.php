@@ -43,7 +43,7 @@ class KuwasysStatsUsersChosenStackedBarChart extends StatisticsStackedBarChart {
 					INNER JOIN class c ON c.ID = uic.ClassID
 						AND c.schoolyearId = sy.ID
 				WHERE uic.userId = u.ID) AS choiceCount
-			FROM users u
+			FROM SystemUsers u
 				INNER JOIN usersInGradesAndSchoolyears uigs
 					ON u.ID = uigs.userId
 					AND uigs.schoolyearId = @activeSchoolyear

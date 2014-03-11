@@ -145,7 +145,7 @@ class Login {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'SELECT ID, password, username FROM users
+				'SELECT ID, password, username FROM SystemUsers
 					WHERE username LIKE ?'
 			);
 			$stmt->execute(array($username));
@@ -180,7 +180,7 @@ class Login {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'SELECT COUNT(*) FROM users WHERE username = ?'
+				'SELECT COUNT(*) FROM SystemUsers WHERE username = ?'
 			);
 			$stmt->execute(array($username));
 			return $stmt->fetchColumn();
@@ -227,7 +227,7 @@ class Login {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'UPDATE users SET password = ? WHERE ID = ?'
+				'UPDATE SystemUsers SET password = ? WHERE ID = ?'
 			);
 			$stmt->execute(array($newHash, $userId));
 

@@ -208,7 +208,7 @@ class User extends System {
 					VALUES ('$_POST[cardnumber]', @uid);";
 			}
 
-			TableMng::queryMultiple("INSERT INTO users
+			TableMng::queryMultiple("INSERT INTO SystemUsers
 				(forename, name, username, password, email, telephone, birthday,
 					first_passwd, locked, GID, credit, soli)
 				VALUES ('$_POST[forename]', '$_POST[name]', '$_POST[username]',
@@ -372,7 +372,7 @@ class User extends System {
 				$users = $this->usersGetAll();
 				$this->_pdo->beginTransaction();
 				$stmt = $this->_pdo->prepare(
-					'UPDATE users SET username = ? WHERE ID = ?'
+					'UPDATE SystemUsers SET username = ? WHERE ID = ?'
 				);
 				foreach($users as $user) {
 					$stmt->execute(array(
@@ -418,7 +418,7 @@ class User extends System {
 					LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS KuwasysClasses
-				FROM users u');
+				FROM SystemUsers u');
 
 		} catch (Exception $e) {
 			$this->userInterface->dieError ('Konnte die Benutzer nicht abrufen');
@@ -601,7 +601,7 @@ class User extends System {
 	protected function userGet($uid) {
 
 		$user = TableMng::querySingleEntry(
-			"SELECT u.* FROM users u WHERE `ID` = $uid");
+			"SELECT u.* FROM SystemUsers u WHERE `ID` = $uid");
 
 		return $user;
 	}
@@ -824,7 +824,7 @@ class User extends System {
 		$passwordQuery = $this->passwordQueryCreate($uid);
 
 		try {
-			$userQuery = "UPDATE users
+			$userQuery = "UPDATE SystemUsers
 				SET `forename` = ?, `name` = ?, `username` = ?, `email` = ?,
 				$passwordQuery `telephone` = ?, `birthday` = ?, `locked` = ?,
 				`GID` = ?, `credit` = ?, `soli` = ?
@@ -1182,7 +1182,7 @@ class User extends System {
 		try {
 			$data = array();
 			$stmt = $this->_pdo->prepare('SELECT u.username AS username
-				FROM users u
+				FROM SystemUsers u
 				JOIN usersInGradesAndSchoolyears uigs ON u.ID = uigs.userId
 				WHERE uigs.schoolyearId = @activeSchoolyear
 				ORDER BY levenshtein_ratio(:name, username) DESC
