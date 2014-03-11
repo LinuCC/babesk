@@ -654,7 +654,7 @@ class User extends System {
 	protected function usergroupsGetAllFlattened() {
 
 		try {
-			$stmt = $this->_pdo->query('SELECT ID, name FROM Groups');
+			$stmt = $this->_pdo->query('SELECT ID, name FROM SystemGroups');
 
 			return $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
@@ -683,7 +683,7 @@ class User extends System {
 			(SELECT COUNT(*) AS count FROM UserInGroups uig
 				WHERE g.ID = uig.groupId AND uig.userId = $userId)
 					AS isUserIn
-			FROM Groups g");
+			FROM SystemGroups g");
 
 		return $groups;
 	}
@@ -1095,7 +1095,7 @@ class User extends System {
 	 */
 	protected function groupsOfUserGet($userId) {
 
-		return TableMng::query("SELECT g.ID FROM Groups g
+		return TableMng::query("SELECT g.ID FROM SystemGroups g
 			JOIN UserInGroups uig ON g.ID = uig.groupId
 			WHERE uig.userId = $userId");
 	}

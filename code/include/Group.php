@@ -85,29 +85,29 @@ class Group {
 
 		$id = $parentGroup->getId();
 
-		return "SELECT @groupRight := rgt FROM Groups WHERE ID = '$id';
-			UPDATE Groups SET rgt = rgt + 2 WHERE rgt >= @groupRight;
-			UPDATE Groups SET lft = lft + 2 WHERE lft >= @groupRight;
-			INSERT INTO Groups(name, lft, rgt) VALUES('$groupname',
+		return "SELECT @groupRight := rgt FROM SystemGroups WHERE ID = '$id';
+			UPDATE SystemGroups SET rgt = rgt + 2 WHERE rgt >= @groupRight;
+			UPDATE SystemGroups SET lft = lft + 2 WHERE lft >= @groupRight;
+			INSERT INTO SystemGroups(name, lft, rgt) VALUES('$groupname',
 				@groupRight, @groupRight + 1);";
 	}
 
 	public static function groupChangeQueryCreate($group, $newGroupname) {
 
 		$id = $group->getId();
-		return "UPDATE Groups SET `name` = '$newGroupname'
+		return "UPDATE SystemGroups SET `name` = '$newGroupname'
 			WHERE `ID` = '$id';";
 	}
 
 	public static function groupDeleteQueryCreate($group) {
 
 		if($group->_lft > 0 && $group->_rgt > 0) {
-			return "DELETE FROM Groups WHERE lft
+			return "DELETE FROM SystemGroups WHERE lft
 						BETWEEN $group->_lft AND $group->_rgt;
-				UPDATE Groups
+				UPDATE SystemGroups
 					SET lft=lft-ROUND(( $group->_rgt - $group->_lft +1))
 					WHERE lft > $group->_rgt ;
-				UPDATE Groups
+				UPDATE SystemGroups
 					SET rgt=rgt-ROUND(( $group->_rgt - $group->_lft +1))
 					WHERE rgt > $group->_rgt;";
 		}
@@ -122,7 +122,7 @@ class Group {
 		TableMng::sqlEscape($parentName);
 
 		try {
-			$parent = TableMng::query("SELECT lft, rgt FROM Groups
+			$parent = TableMng::query("SELECT lft, rgt FROM SystemGroups
 				WHERE `name` = '$parentName'");
 
 			if($parent[0]['rgt'] == $parent[0]['lft'] + 1) {
@@ -273,7 +273,7 @@ class Group {
 	public static function groupsGetAllOfUser($userId) {
 
 		$groupArray = TableMng::query(
-			"SELECT g.* FROM Groups g
+			"SELECT g.* FROM SystemGroups g
 			JOIN UserInGroups uig ON uig.groupId = g.ID
 			WHERE uig.userId = '$userId';");
 
@@ -382,7 +382,7 @@ class Group {
 		$data = TableMng::query("SELECT node.ID AS ID, node.lft AS lft,
 			node.rgt AS rgt, node.name AS name,
 				(COUNT(parent.ID) - 1) AS level
-			FROM Groups AS node, Groups AS parent
+			FROM SystemGroups AS node, SystemGroups AS parent
 			WHERE node.lft BETWEEN parent.lft AND parent.rgt
 			GROUP BY node.ID
 			ORDER BY node.lft;");
@@ -446,11 +446,11 @@ class Group {
 
 		TableMng::getDb()->autocommit(false);
 
-		TableMng::queryMultiple("SELECT @myLeft := lft FROM Groups
+		TableMng::queryMultiple("SELECT @myLeft := lft FROM SystemGroups
 			WHERE name = '$parentName';
-			UPDATE Groups SET rgt = rgt + 2 WHERE rgt > @myLeft;
-			UPDATE Groups SET lft = lft + 2 WHERE lft > @myLeft;
-			INSERT INTO Groups(name, lft, rgt) VALUES('$name',
+			UPDATE SystemGroups SET rgt = rgt + 2 WHERE rgt > @myLeft;
+			UPDATE SystemGroups SET lft = lft + 2 WHERE lft > @myLeft;
+			INSERT INTO SystemGroups(name, lft, rgt) VALUES('$name',
 							@myLeft + 1, @myLeft + 2);");
 
 		TableMng::getDb()->autocommit(true);
@@ -470,11 +470,11 @@ class Group {
 
 		TableMng::getDb()->autocommit(false);
 
-		TableMng::queryMultiple("SELECT @myRight := rgt FROM Groups
+		TableMng::queryMultiple("SELECT @myRight := rgt FROM SystemGroups
 			WHERE name = '$parentName';
-			UPDATE Groups SET rgt = rgt + 2 WHERE rgt >= @myRight;
-			UPDATE Groups SET lft = lft + 2 WHERE lft >= @myRight;
-			INSERT INTO Groups(name, lft, rgt) VALUES('$name',
+			UPDATE SystemGroups SET rgt = rgt + 2 WHERE rgt >= @myRight;
+			UPDATE SystemGroups SET lft = lft + 2 WHERE lft >= @myRight;
+			INSERT INTO SystemGroups(name, lft, rgt) VALUES('$name',
 							@myRight, @myRight + 1);
 			");
 
