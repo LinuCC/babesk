@@ -22,7 +22,7 @@ class AdminLoanProcessing {
 		$this->inventoryManager = new InventoryManager();
 		$this->bookManager = new BookManager();
 		$this->loanInterface = $loanInterface;
-		$this->msg = array('err_card_id' => 'Dies ist keine gültige Karten-ID ("%s")',
+		$this->msg = array('err_card_id' => 'Dies ist keine gĂźltige Karten-ID ("%s")',
 				'err_get_user_by_card' => 'Anhand der Kartennummer konnte kein Benutzer gefunden werden.');
 	}
 
@@ -35,14 +35,14 @@ $alert="<font color=#ff0000>";
 			$this->loanInterface->dieError(sprintf($this->msg['err_card_id'], $card_id));
 
 		$uid = $this->GetUser($card_id);
-		// eingef�gt
+		// eingefügt
 		$hasForm = TableMng::query(sprintf('SELECT COUNT(*) FROM schbas_accounting WHERE UID = "%s"',$uid));
 			if ($hasForm[0]['COUNT(*)']=="0")
 		$alert .= "<u>Buchhaltungshinweis:</u><br><li><h5>Formular zur Buchausleihe wurde nicht abgegeben!</h5></li><br>";
 		$schoolyearDesired = TableMng::query('SELECT ID FROM schoolYear WHERE active = 1');
 		$schoolyearID = $schoolyearDesired[0]['ID'];
 		$gradeID = TableMng::query(sprintf('SELECT GradeID FROM usersInGradesAndSchoolyears WHERE UserID = "%s" AND schoolyearID ="%s"', $uid,$schoolyearID));
-				$grade = TableMng::query(sprintf('SELECT gradelevel FROM Grades WHERE ID = %s', $gradeID[0]['GradeID']));
+				$grade = TableMng::query(sprintf('SELECT gradelevel FROM SystemGrades WHERE ID = %s', $gradeID[0]['GradeID']));
 				$payed = TableMng::query(sprintf('SELECT loanChoice, payedAmount,amountToPay FROM schbas_accounting WHERE UID="%s"',$uid));
 				if (($payed[0]['loanChoice']=="ln" || $payed[0]['loanChoice']=="lr" )&& strcmp($payed[0]['payedAmount'],$payed[0]['amountToPay'])<0)
 						$alert .="<u>Buchhaltungshinweis:</u><br><li><h5>Geld wurde noch nicht (ausreichend) gezahlt.</h5></li><li><h5>Es sind bisher ".$payed[0]['payedAmount']."&euro; von ".$payed[0]['amountToPay']."&euro; eingegangen!</h5></li><br>";
@@ -188,7 +188,7 @@ $alert="<font color=#ff0000>";
 				'SELECT u.*,
 				(SELECT CONCAT(g.gradelevel, g.label) AS class
 					FROM usersInGradesAndSchoolyears uigs
-					LEFT JOIN Grades g ON uigs.gradeId = g.ID
+					LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS class
 				FROM users u WHERE `ID` = %s', $userId));

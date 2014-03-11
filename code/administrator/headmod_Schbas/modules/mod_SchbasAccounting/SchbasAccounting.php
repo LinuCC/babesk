@@ -158,7 +158,7 @@ class SchbasAccounting extends Schbas {
                     $feeReduced = $feeNormal * 0.8;
                     $feeNormal = number_format( round($feeNormal,0) , 2, ',','.'); //preise auf volle
                     $feeReduced = number_format( round($feeReduced,0) , 2, ',','.');//betraege runden
-				//	$grade = TableMng::query(sprintf("SELECT g.gradelevel FROM jointusersingrade as juig, Grades as g WHERE juig.GradeID=g.ID and juig.UserID='%s'",$uid));
+				//	$grade = TableMng::query(sprintf("SELECT g.gradelevel FROM jointusersingrade as juig, SystemGrades as g WHERE juig.GradeID=g.ID and juig.UserID='%s'",$uid));
 
 					if ($loanChoice=="ln")	$amountToPay = $feeNormal;
 					if ($loanChoice=="lr")	$amountToPay = $feeReduced;
@@ -185,7 +185,7 @@ class SchbasAccounting extends Schbas {
 		$gradeID = TableMng::query("SELECT DISTINCT gradeID FROM usersInGradesAndSchoolyears WHERE schoolyearID = $schoolyearID");
 		foreach ($gradeID as $grade){
 			$ID = $grade['gradeID'];
-			$SaveTheCows = TableMng::query("SELECT * FROM Grades WHERE ID = $ID");
+			$SaveTheCows = TableMng::query("SELECT * FROM SystemGrades WHERE ID = $ID");
 			// Cows stands for Code of worst systematic
 			$gradesAll[] = $SaveTheCows[0];
 		}
@@ -218,7 +218,7 @@ class SchbasAccounting extends Schbas {
 	private function addGradeLabelToUsers ($users) {
 
 		$jointsUsersInGrade = TableMng::query('SELECT * FROM usersInGradesAndSchoolyears');
-		$grades = TableMng::query('SELECT * FROM Grades');
+		$grades = TableMng::query('SELECT * FROM SystemGrades');
 		if (isset($users) && count ($users) && isset($jointsUsersInGrade) && count ($jointsUsersInGrade)) {
 			foreach ($users as & $user) {
 				foreach ($jointsUsersInGrade as $joint) {
@@ -328,9 +328,9 @@ class SchbasAccounting extends Schbas {
 				$schoolyearID = $schoolyearDesired[0]['ID'];
 				$gradeID = TableMng::query(sprintf("SELECT GradeID FROM usersInGradesAndSchoolyears WHERE UserID = '$id' AND schoolyearID = $schoolyearID"));
 				$gradeIDtemp = (int)$gradeID[0]['GradeID'];
-				$gradelevel = TableMng::query(sprintf("SELECT gradelevel FROM Grades WHERE ID = $gradeIDtemp"));
+				$gradelevel = TableMng::query(sprintf("SELECT gradelevel FROM SystemGrades WHERE ID = $gradeIDtemp"));
 				$grade = $gradelevel[0]['gradelevel'];
-				$label = TableMng::query(sprintf("SELECT label FROM Grades WHERE ID = $gradeIDtemp"));
+				$label = TableMng::query(sprintf("SELECT label FROM SystemGrades WHERE ID = $gradeIDtemp"));
 				$label = $label[0]['label'];
 			}catch (Exception $e){
 				$grade = 0;
@@ -458,9 +458,9 @@ class SchbasAccounting extends Schbas {
 			
 			$classId = $_GET['class'];
 			
-			$classNamelabel = TableMng::query("SELECT label FROM Grades WHERE ID='$classId'");
+			$classNamelabel = TableMng::query("SELECT label FROM SystemGrades WHERE ID='$classId'");
 			$classNamelabel = $classNamelabel[0]["label"];
-			$classNamelevel = TableMng::query("SELECT gradelevel FROM Grades WHERE ID='$classId'");
+			$classNamelevel = TableMng::query("SELECT gradelevel FROM SystemGrades WHERE ID='$classId'");
 			$classNamelevel = $classNamelevel[0]["gradelevel"];
 			$className = "$classNamelevel$classNamelabel";
 			
@@ -480,7 +480,7 @@ class SchbasAccounting extends Schbas {
 	}
 	
 	private function getListOfClasses($func="remember2"){
-		$gradesTbl = TableMng::query("SELECT * FROM Grades");
+		$gradesTbl = TableMng::query("SELECT * FROM SystemGrades");
 		$nr = count($gradesTbl);
 		
 		$listOfClasses="";
@@ -501,9 +501,9 @@ class SchbasAccounting extends Schbas {
 		}else{
 			$classId = $_GET['class'];
 			
-			$classNamelabel = TableMng::query("SELECT label FROM Grades WHERE ID='$classId'");
+			$classNamelabel = TableMng::query("SELECT label FROM SystemGrades WHERE ID='$classId'");
 			$classNamelabel = $classNamelabel[0]["label"];
-			$classNamelevel = TableMng::query("SELECT gradelevel FROM Grades WHERE ID='$classId'");
+			$classNamelevel = TableMng::query("SELECT gradelevel FROM SystemGrades WHERE ID='$classId'");
 			$classNamelevel = $classNamelevel[0]["gradelevel"];
 			$className = "$classNamelevel$classNamelabel";
 			

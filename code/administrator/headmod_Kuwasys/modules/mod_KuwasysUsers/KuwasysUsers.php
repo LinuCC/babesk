@@ -87,7 +87,7 @@ class KuwasysUsers extends Kuwasys {
 		try {
 			$stmt = $this->_pdo->query(
 				'SELECT *, CONCAT(gradelevel, "-", label) AS gradename
-				FROM Grades');
+				FROM SystemGrades');
 
 			return $stmt->fetchAll();
 

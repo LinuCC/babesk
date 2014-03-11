@@ -98,7 +98,7 @@ class UserManager extends TableManager{
 			'SELECT u.*,
 			(SELECT CONCAT(g.gradelevel, g.label) AS class
 					FROM usersInGradesAndSchoolyears uigs
-					LEFT JOIN Grades g ON uigs.gradeId = g.ID
+					LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS class
 			FROM %s u ORDER BY %s LIMIT %s, 10',

@@ -80,7 +80,7 @@ class UserDelete {
 					SELECT g.gradelevel AS gradelevel, g.label AS label,
 						uigs.userId AS userId
 					FROM usersInGradesAndSchoolyears uigs
-					JOIN Grades g ON uigs.gradeId = g.ID
+					JOIN SystemGrades g ON uigs.gradeId = g.ID
 					WHERE uigs.schoolyearId = @activeSchoolyear
 				) g ON g.userId = u.ID
 			WHERE u.ID = $userId", true);

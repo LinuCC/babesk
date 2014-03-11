@@ -72,7 +72,7 @@ class AdminGDelUserProcessing {
 				'SELECT u.*,
 				(SELECT CONCAT(g.gradelevel, g.label) AS class
 					FROM usersInGradesAndSchoolyears uigs
-					LEFT JOIN Grades g ON uigs.gradeId = g.ID
+					LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS class
 				FROM users u WHERE ID = %s', $uid), true);

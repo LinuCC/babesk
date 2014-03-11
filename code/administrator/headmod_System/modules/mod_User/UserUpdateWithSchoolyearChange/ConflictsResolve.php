@@ -67,7 +67,7 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 					LEFT JOIN usersInGradesAndSchoolyears uigs
 						ON u.ID = uigs.userId
 						AND uigs.schoolyearId = @activeSchoolyear
-					LEFT JOIN Grades g ON uigs.gradeId = g.ID
+					LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 				WHERE solved = 0
 					ORDER BY type LIMIT 10'
 			);
@@ -223,7 +223,7 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 				LEFT JOIN usersInGradesAndSchoolyears uigs
 					ON u.ID = uigs.userId
 					AND uigs.schoolyearId = @activeSchoolyear
-				LEFT JOIN Grades g ON uigs.gradeId = g.ID
+				LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 				WHERE tc.ID = ?';
 
 		try {

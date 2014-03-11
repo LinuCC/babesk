@@ -116,7 +116,7 @@ class Grade extends Kuwasys {
 			$_POST['schooltype'] : 0;
 
 		try {
-			TableMng::query("INSERT INTO Grades
+			TableMng::query("INSERT INTO SystemGrades
 					(label, gradelevel, schooltypeId)
 				VALUES ('$_POST[gradelabel]', '$_POST[gradelevel]',
 					'$schooltypeId')");
@@ -146,7 +146,7 @@ class Grade extends Kuwasys {
 		try {
 			$grades = TableMng::query(
 				'SELECT g.*, st.name AS schooltypeName
-				FROM Grades g
+				FROM SystemGrades g
 				LEFT JOIN Schooltype st ON g.schooltypeId = st.ID
 				');
 
@@ -181,7 +181,7 @@ class Grade extends Kuwasys {
 	protected function deleteGradeFromDatabase() {
 
 		try {
-			TableMng::query("DELETE FROM Grades WHERE ID = $_GET[ID]");
+			TableMng::query("DELETE FROM SystemGrades WHERE ID = $_GET[ID]");
 
 		} catch (Exception $e) {
 			$this->_interface->dieError(
@@ -219,7 +219,7 @@ class Grade extends Kuwasys {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'SELECT * FROM Grades WHERE ID = ?');
+				'SELECT * FROM SystemGrades WHERE ID = ?');
 			$stmt->execute(array($_GET['ID']));
 			return $stmt->fetch();
 
@@ -262,7 +262,7 @@ class Grade extends Kuwasys {
 			? $_POST['schooltype'] : 0;
 
 		try {
-			$stmt = $this->_pdo->prepare('UPDATE Grades SET label = ?,
+			$stmt = $this->_pdo->prepare('UPDATE SystemGrades SET label = ?,
 				gradelevel = ?, schooltypeId = ? WHERE ID = ?');
 
 			$stmt->execute(array($_POST['gradelabel'], $_POST['gradelevel'],

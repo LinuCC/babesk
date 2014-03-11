@@ -37,7 +37,7 @@ class AdminRetourProcessing {
 	//	if ($hasForm[0]['COUNT(*)']=="0")
 			//$this->RetourInterface->dieError("Formular zur Buchausleihe wurde nicht abgegeben!");
 		//$gradeID = TableMng::query(sprintf('SELECT GradeID FROM jointusersingrade WHERE UserID = "%s"', $uid));
-//		$grade = TableMng::query(sprintf('SELECT gradelevel FROM Grades WHERE ID = %s', $gradeID[0]['GradeID']));
+//		$grade = TableMng::query(sprintf('SELECT gradelevel FROM SystemGrades WHERE ID = %s', $gradeID[0]['GradeID']));
 //		$payed = TableMng::query(sprintf('SELECT loanChoice, payedAmount,amountToPay FROM schbas_accounting WHERE UID="%s"',$uid));
 //		if (($payed[0]['loanChoice']=="ln" || $payed[0]['loanChoice']=="lr" )&& strcmp($payed[0]['payedAmount'],$payed[0]['amountToPay'])<0)
 //			$this->RetourInterface->dieError("Geld wurde noch nicht (ausreichend) gezahlt. Es sind bisher ".$payed[0]['payedAmount']."&euro; von ".$payed[0]['amountToPay']."&euro; eingegangen!");
@@ -89,7 +89,7 @@ class AdminRetourProcessing {
 
 
 	/**
-	 * Ein Buch zurückgeben
+	 * Ein Buch zurÃ¼ckgeben
 	 */
 	function RetourBook($inventarnr,$uid) {
 
@@ -154,7 +154,7 @@ class AdminRetourProcessing {
 			'SELECT u.*,
 			(SELECT CONCAT(g.gradelevel, g.label) AS class
 					FROM usersInGradesAndSchoolyears uigs
-					LEFT JOIN Grades g ON uigs.gradeId = g.ID
+					LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS class
 			FROM users u WHERE `ID` = %s', $userId));

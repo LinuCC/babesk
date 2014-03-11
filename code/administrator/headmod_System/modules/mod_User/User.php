@@ -415,7 +415,7 @@ class User extends System {
 				'SELECT u.*,
 				(SELECT CONCAT(g.gradelevel, g.label) AS KuwasysClasses
 					FROM usersInGradesAndSchoolyears uigs
-					LEFT JOIN Grades g ON uigs.gradeId = g.ID
+					LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS KuwasysClasses
 				FROM users u');
@@ -626,7 +626,7 @@ class User extends System {
 	protected function gradesGetAllFlattened() {
 
 		$grades = TableMng::query(
-			'SELECT ID, CONCAT(gradelevel, "-", label) AS name FROM Grades');
+			'SELECT ID, CONCAT(gradelevel, "-", label) AS name FROM SystemGrades');
 
 		$flattenedGrades = ArrayFunctions::arrayColumn($grades, 'name', 'ID');
 

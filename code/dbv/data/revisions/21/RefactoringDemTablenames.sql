@@ -3,8 +3,7 @@ RENAME TABLE `cards` TO `BabeskCards`;
 RENAME TABLE `class` TO `KuwasysClasses`;
 RENAME TABLE `classTeacher` TO `KuwasysClassteachers`;
 RENAME TABLE `global_settings` TO `SystemGlobalSettings`;
-
-RENAME TABLE `Grades` TO `Grades`;
+RENAME TABLE `Grades` TO `SystemGrades`;
 RENAME TABLE `GroupModuleRights` TO `SystemGroupModuleRights`;
 RENAME TABLE `Groups` TO `SystemGroups`;
 RENAME TABLE `jointClassInSchoolYear` TO `KuwasysClassesInSchoolyears`;

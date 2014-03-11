@@ -403,11 +403,11 @@ class UserDisplayAllQueryCreator {
 			$this->addJoinStatement('
 				LEFT JOIN usersInGradesAndSchoolyears uigsg
 					ON uigsg.userId = u.ID
-				LEFT JOIN Grades g ON uigsg.gradeId = g.ID
+				LEFT JOIN SystemGrades g ON uigsg.gradeId = g.ID
 				LEFT JOIN (
 					SELECT CONCAT(gradelevel, "-", label)
 						AS activeGrade, uigsg.userId AS userId
-					FROM Grades g
+					FROM SystemGrades g
 					JOIN usersInGradesAndSchoolyears uigsg ON
 						uigsg.gradeId = g.ID AND
 						uigsg.schoolyearId = @activeSchoolyear

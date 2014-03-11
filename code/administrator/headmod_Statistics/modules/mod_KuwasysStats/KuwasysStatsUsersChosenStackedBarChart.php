@@ -47,7 +47,7 @@ class KuwasysStatsUsersChosenStackedBarChart extends StatisticsStackedBarChart {
 				INNER JOIN usersInGradesAndSchoolyears uigs
 					ON u.ID = uigs.userId
 					AND uigs.schoolyearId = @activeSchoolyear
-				INNER JOIN Grades g ON g.ID = uigs.gradeId
+				INNER JOIN SystemGrades g ON g.ID = uigs.gradeId
 				INNER JOIN schoolYear sy ON uigs.SchoolYearID = sy.ID
 		');
 	}

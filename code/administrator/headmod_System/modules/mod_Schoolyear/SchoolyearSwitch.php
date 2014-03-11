@@ -99,7 +99,7 @@ class SchoolyearSwitch {
 			'SELECT uigs.*, g.gradelevel AS currentGradelevel,
 				g.label AS gradelabel
 			FROM usersInGradesAndSchoolyears uigs
-			JOIN Grades g ON uigs.gradeId = g.ID
+			JOIN SystemGrades g ON uigs.gradeId = g.ID
 			WHERE uigs.schoolyearId = @activeSchoolyear');
 
 		return $toUpgrade;
@@ -117,7 +117,7 @@ class SchoolyearSwitch {
 	protected function gradesSetRearrangedByLevel() {
 
 		$arrangedGrades = array();
-		$grades = TableMng::query('SELECT * FROM Grades');
+		$grades = TableMng::query('SELECT * FROM SystemGrades');
 
 		foreach($grades as $grade) {
 			if(!isset($arrangedGrades[$grade['gradelevel']])) {
@@ -248,7 +248,7 @@ class SchoolyearSwitch {
  	 */
 	protected function gradeCreate($label, $level) {
 
-		TableMng::query("INSERT INTO Grades (label, gradelevel) VALUES
+		TableMng::query("INSERT INTO SystemGrades (label, gradelevel) VALUES
 			('$label', '$level')");
 
 		return TableMng::getDb()->insert_id;

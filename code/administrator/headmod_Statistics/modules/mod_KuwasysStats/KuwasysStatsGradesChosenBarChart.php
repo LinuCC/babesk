@@ -31,7 +31,7 @@ class KuwasysStatsGradesChosenBarChart extends StatisticsBarChart {
 
 		$this->_gradeData = TableMng::query(
 			'SELECT COUNT(*) AS gradeCount, CONCAT(g.gradelevel, "-", g.label) AS gradeName
-			FROM Grades g
+			FROM SystemGrades g
 				INNER JOIN usersInGradesAndSchoolyears uigs ON uigs.gradeId = g.ID
 					AND uigs.schoolyearId = @activeSchoolyear
 				INNER JOIN jointUsersInClass uic ON uic.statusId = (

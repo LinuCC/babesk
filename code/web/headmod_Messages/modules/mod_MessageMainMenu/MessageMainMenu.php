@@ -210,7 +210,7 @@ class MessageMainMenu extends Messages {
 				LEFT JOIN usersInGradesAndSchoolyears uigs ON
 					uigs.userId = u.ID AND
 					uigs.schoolyearId = @activeSchoolyear
-				LEFT JOIN Grades g ON g.ID = uigs.gradeId
+				LEFT JOIN SystemGrades g ON g.ID = uigs.gradeId
 				WHERE u.ID = ?";
 			$stmt = $db->prepare($query);
 			if($stmt) {

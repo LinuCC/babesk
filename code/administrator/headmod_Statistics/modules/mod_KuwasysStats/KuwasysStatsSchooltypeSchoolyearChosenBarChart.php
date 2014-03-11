@@ -37,7 +37,7 @@ class KuwasysStatsSchooltypeSchoolyearChosenBarChart
 		$this->_data = TableMng::query(
 			'SELECT st.ID AS schooltypeId, st.token AS schooltypeToken,
 			g.gradelevel, userChosen.classesChosen, COUNT(*) AS userCount
-			FROM Grades g
+			FROM SystemGrades g
 				-- Schooltype (optional, splits gradelevels in schooltypes if
 				-- needed)
 				LEFT JOIN Schooltype st ON g.schooltypeId = st.ID

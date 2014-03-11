@@ -82,7 +82,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 							"userUpdateWithSchoolyearChangeNewSchoolyearId"
 					) AS schoolyear
 				FROM UserUpdateTempSolvedUsers su
-					LEFT JOIN Grades g ON g.gradelevel = su.gradelevel AND
+					LEFT JOIN SystemGrades g ON g.gradelevel = su.gradelevel AND
 						g.label = su.gradelabel
 					WHERE su.origUserId <> 0
 			';
@@ -137,7 +137,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 		try {
 			$stmt = $this->_pdo->query(
 				'SELECT ID, CONCAT(gradelevel, label) AS name
-				FROM Grades WHERE 1'
+				FROM SystemGrades WHERE 1'
 			);
 			return $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);
 
@@ -272,7 +272,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 		try {
 			if(empty($this->_gradeStmt)) {
 				$this->_gradeStmt = $this->_pdo->prepare(
-					'INSERT INTO Grades (label, gradelevel, schooltypeId) VALUES (?,?, 0)'
+					'INSERT INTO SystemGrades (label, gradelevel, schooltypeId) VALUES (?,?, 0)'
 				);
 			}
 			$this->_gradeStmt->execute(array($label, $level));
@@ -298,7 +298,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 		try {
 			$res = $this->_pdo->query('SELECT su.*, g.ID AS gradeId
 				FROM UserUpdateTempSolvedUsers su
-				LEFT JOIN Grades g ON su.gradelevel = g.gradelevel AND
+				LEFT JOIN SystemGrades g ON su.gradelevel = g.gradelevel AND
 					su.gradelabel = g.label
 				WHERE su.origUserId = 0');
 			$users = $res->fetchAll(\PDO::FETCH_ASSOC);
@@ -322,7 +322,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 			$res = $this->_pdo->query('SELECT su.ID, g.ID AS gradeId,
 					su.gradelevel AS gradelevel, su.gradelabel AS gradelabel
 				FROM UserUpdateTempSolvedUsers su
-				LEFT JOIN Grades g ON su.gradelevel = g.gradelevel AND
+				LEFT JOIN SystemGrades g ON su.gradelevel = g.gradelevel AND
 					su.gradelabel = g.label
 				WHERE su.origUserId <> 0');
 			$users = $res->fetchAll(\PDO::FETCH_ASSOC);

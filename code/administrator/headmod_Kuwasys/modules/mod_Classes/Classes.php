@@ -642,7 +642,7 @@ class Classes extends Kuwasys {
 				LEFT JOIN (
 						SELECT CONCAT(label, "-", gradelevel) AS gradename,
 							uigs.UserID AS userId
-						FROM Grades g
+						FROM SystemGrades g
 						JOIN usersInGradesAndSchoolyears uigs ON
 							uigs.gradeId = g.ID
 						WHERE uigs.schoolyearId = @activeSchoolyear

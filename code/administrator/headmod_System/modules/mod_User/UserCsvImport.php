@@ -236,7 +236,7 @@ class UserCsvImport extends CsvImportTableData {
 	protected function gradeIdsAppendToColumns() {
 
 		$allGrades = TableMng::query('SELECT ID,
-			CONCAT(g.gradelevel, "-", LOWER(g.label)) AS name FROM Grades g');
+			CONCAT(g.gradelevel, "-", LOWER(g.label)) AS name FROM SystemGrades g');
 		$flatGrades = ArrayFunctions::arrayColumn($allGrades, 'name', 'ID');
 
 		foreach($this->_contentArray as &$con) {
@@ -286,7 +286,7 @@ class UserCsvImport extends CsvImportTableData {
 	protected function gradeAddUpload($gradelevel, $label) {
 
 		if(!isset($this->_stmtAddGrade)) {
-			$this->_stmtAddGrade =$this->_pdo->prepare('INSERT INTO Grades
+			$this->_stmtAddGrade =$this->_pdo->prepare('INSERT INTO SystemGrades
 				(gradelevel, label) VALUES (:gradelevel, :label);');
 		}
 
@@ -308,7 +308,7 @@ class UserCsvImport extends CsvImportTableData {
 	protected function noGradeIdGet() {
 
 		try {
-			$row = TableMng::querySingleEntry('SELECT ID FROM Grades
+			$row = TableMng::querySingleEntry('SELECT ID FROM SystemGrades
 				WHERE gradelevel = 0');
 
 		} catch(MultipleEntriesException $e) {
