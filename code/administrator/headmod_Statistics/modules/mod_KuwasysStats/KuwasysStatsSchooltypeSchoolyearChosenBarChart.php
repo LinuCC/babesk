@@ -45,7 +45,7 @@ class KuwasysStatsSchooltypeSchoolyearChosenBarChart
 				INNER JOIN (
 					SELECT COUNT(*) AS classesChosen, uigs.gradeId AS GradeID
 					FROM usersInGradesAndSchoolyears uigs
-						INNER JOIN jointUsersInClass uic
+						INNER JOIN KuwasysUsersInClasses uic
 							ON uigs.userId = uic.UserID
 						-- Check for interesting status
 						INNER JOIN (

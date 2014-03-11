@@ -39,7 +39,7 @@ class KuwasysStatsUsersChosenBySchoolyearBarChart extends StatisticsBarChart {
 			FROM
 			(SELECT sy.ID AS id, uic.UserID as userId, sy.label AS label
 				FROM schoolYear sy
-				INNER JOIN jointUsersInClass uic
+				INNER JOIN KuwasysUsersInClasses uic
 				INNER JOIN class c ON c.ID = uic.ClassID
 					AND c.schoolyearId = sy.ID
 				WHERE

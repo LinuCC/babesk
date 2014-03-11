@@ -102,7 +102,7 @@ class ClassDetails extends Kuwasys {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'DELETE FROM jointUsersInClass
+				'DELETE FROM KuwasysUsersInClasses
 					WHERE UserID = ? AND ClassID = ?'
 			);
 			$stmt->execute(array($userId, $classId));
@@ -126,7 +126,7 @@ class ClassDetails extends Kuwasys {
 				'SELECT c.ID, c.label, c.description,
 					uics.translatedName AS status, c.registrationEnabled
 					FROM KuwasysClasses c
-						INNER JOIN jointUsersInClass uic
+						INNER JOIN KuwasysUsersInClasses uic
 							ON uic.ClassID = c.ID
 						INNER JOIN usersInClassStatus uics
 							ON uics.Id = uic.statusId

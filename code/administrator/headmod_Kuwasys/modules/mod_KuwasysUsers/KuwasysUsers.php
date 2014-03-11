@@ -318,7 +318,7 @@ class KuwasysUsers extends Kuwasys {
 	 */
 	private function userAssignToClass($userId, $classId, $statusId) {
 
-		$stmt = $this->_pdo->prepare('INSERT INTO jointUsersInClass
+		$stmt = $this->_pdo->prepare('INSERT INTO KuwasysUsersInClasses
 			(UserID, ClassID, statusId) VALUES
 			(:userId, :classId, :statusId);');
 

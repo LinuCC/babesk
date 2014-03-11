@@ -587,7 +587,7 @@ class User extends System {
 		try {
 			$data = TableMng::query("SELECT c.*, uic.statusId AS statusId
 				FROM KuwasysClasses c
-				JOIN jointUsersInClass uic ON c.ID = uic.ClassID
+				JOIN KuwasysUsersInClasses uic ON c.ID = uic.ClassID
 				WHERE uic.UserID = '$id'");
 
 		} catch (Exception $e) {
@@ -1041,7 +1041,7 @@ class User extends System {
 		}
 
 		$stmtAdd = $this->_pdo->prepare('INSERT INTO
-			jointUsersInClass (UserID, ClassID, statusId) VALUES
+			KuwasysUsersInClasses (UserID, ClassID, statusId) VALUES
 			(:id, :classId, :statusId)');
 
 		foreach($_POST['schoolyearAndClassData'] as $join) {
@@ -1074,7 +1074,7 @@ class User extends System {
 		}
 
 		$stmtDelete = $this->_pdo->prepare('DELETE FROM
-			jointUsersInClass WHERE UserID = :id AND ClassID = :classId');
+			KuwasysUsersInClasses WHERE UserID = :id AND ClassID = :classId');
 
 		foreach($existingClasses as $exClassId => $exStatusId) {
 			if(!isset($flatClassInput[$exClassId]) ||

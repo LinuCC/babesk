@@ -393,7 +393,7 @@ class Classes extends Kuwasys {
 			$stmt = $this->_pdo->prepare(
 				'DELETE c.*, uic.*
 				FROM KuwasysClasses c
-				LEFT JOIN jointUsersInClass uic ON c.ID = uic.ClassID
+				LEFT JOIN KuwasysUsersInClasses uic ON c.ID = uic.ClassID
 				WHERE c.ID = :id');
 
 			$stmt->execute(array(':id' => $_GET['ID']));
@@ -501,7 +501,7 @@ class Classes extends Kuwasys {
 
 		try {
 			$subQueryCountUsers = '(SELECT Count(*)
-					FROM jointUsersInClass uic
+					FROM KuwasysUsersInClasses uic
 					JOIN users ON users.ID = uic.UserID
 					WHERE uic.statusId = (SELECT ID FROM usersInClassStatus
 						WHERE name="%s") AND c.ID = uic.ClassID
@@ -562,7 +562,7 @@ class Classes extends Kuwasys {
 		}
 
 		$subQueryCountUsers = '(SELECT Count(*)
-				FROM jointUsersInClass uic
+				FROM KuwasysUsersInClasses uic
 				JOIN users ON users.ID = uic.UserID
 				WHERE uic.statusId = (SELECT ID FROM usersInClassStatus
 					WHERE name="%s") AND c.ID = uic.ClassID
@@ -637,7 +637,7 @@ class Classes extends Kuwasys {
 				'SELECT u.*, g.gradename AS gradename,
 					uics.translatedName AS statusTranslated
 				FROM users u
-				JOIN jointUsersInClass uic ON u.ID = uic.UserID
+				JOIN KuwasysUsersInClasses uic ON u.ID = uic.UserID
 				JOIN usersInClassStatus uics ON uic.statusId = uics.ID
 				LEFT JOIN (
 						SELECT CONCAT(label, "-", gradelevel) AS gradename,
@@ -679,7 +679,7 @@ class Classes extends Kuwasys {
 		try {
 			$stmt = $this->_pdo->prepare(
 				"SELECT c.*, uic.UserID AS userId FROM KuwasysClasses c
-				JOIN jointUsersInClass uic ON c.ID = uic.ClassID
+				JOIN KuwasysUsersInClasses uic ON c.ID = uic.ClassID
 				WHERE $userIdPart c.unitId = :unitId
 					AND c.ID <> :classId
 					AND c.schoolyearId = @activeSchoolyear"

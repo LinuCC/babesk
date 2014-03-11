@@ -124,8 +124,8 @@ class UserDelete {
 			$querys .= "DELETE FROM BabeskCards WHERE UID = $uid;";
 		}
 		if(count(TableMng::query(
-			'SHOW TABLES LIKE "jointUsersInClass";'))) {
-			$querys .= "DELETE FROM jointUsersInClass WHERE UserID = $uid;";
+			'SHOW TABLES LIKE "KuwasysUsersInClasses";'))) {
+			$querys .= "DELETE FROM KuwasysUsersInClasses WHERE UserID = $uid;";
 		}
 		if(count(TableMng::query(
 			'SHOW TABLES LIKE "usersInGradesAndSchoolyears";'))) {

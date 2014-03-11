@@ -35,7 +35,7 @@ class KuwasysStatsGradelevelsChosenBarChart extends StatisticsBarChart {
 				INNER JOIN usersInGradesAndSchoolyears uigs
 					ON g.ID = uigs.gradeId
 					AND uigs.schoolyearId = @activeSchoolyear
-				INNER JOIN jointUsersInClass uic ON uic.UserID = uigs.userId
+				INNER JOIN KuwasysUsersInClasses uic ON uic.UserID = uigs.userId
 				INNER JOIN class c ON c.ID = uic.ClassID
 					AND c.schoolyearId = @activeSchoolyear
 				INNER JOIN (

@@ -39,7 +39,7 @@ class KuwasysUsersCreateParticipationConfirmationPdf {
 			FROM users u
 				JOIN usersInGradesAndSchoolyears uigs ON uigs.userId = u.ID
 				JOIN schoolYear sy ON sy.ID = uigs.SchoolYearID
-				INNER JOIN jointUsersInClass uic ON u.ID = uic.UserID
+				INNER JOIN KuwasysUsersInClasses uic ON u.ID = uic.UserID
 				LEFT JOIN usersInClassStatus uics ON uics.ID = uic.statusId
 				LEFT JOIN KuwasysClasses c ON c.ID = uic.ClassID AND c.schoolyearId = @activeSchoolyear
 				LEFT JOIN SystemGrades g ON g.ID = uigs.gradeId

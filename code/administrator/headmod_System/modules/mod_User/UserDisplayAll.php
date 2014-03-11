@@ -429,7 +429,7 @@ class UserDisplayAllQueryCreator {
 				);
 
 			$this->addJoinStatement('
-				LEFT JOIN jointUsersInClass kuwasys_uic
+				LEFT JOIN KuwasysUsersInClasses kuwasys_uic
 					ON kuwasys_uic.UserID = u.ID
 				LEFT JOIN KuwasysClasses kuwasys_c
 					ON kuwasys_c.Id = kuwasys_uic.ClassID

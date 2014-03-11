@@ -229,7 +229,7 @@ class UserSelectionsApply extends \web\Kuwasys\ClassList {
 		try {
 			$res = $this->_pdo->query(
 				"SELECT COUNT(*) FROM KuwasysClasses c
-					INNER JOIN jointUsersInClass uic ON uic.ClassID = c.ID
+					INNER JOIN KuwasysUsersInClasses uic ON uic.ClassID = c.ID
 					INNER JOIN (
 							SELECT DISTINCT unitId
 								FROM KuwasysClasses c WHERE ({$searchStr})
@@ -283,7 +283,7 @@ class UserSelectionsApply extends \web\Kuwasys\ClassList {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'INSERT INTO `jointUsersInClass` (UserID, ClassID, statusId)
+				'INSERT INTO `KuwasysUsersInClasses` (UserID, ClassID, statusId)
 					VALUES (?, ?, (
 						SELECT ID FROM usersInClassStatus uics
 							WHERE uics.name = ?

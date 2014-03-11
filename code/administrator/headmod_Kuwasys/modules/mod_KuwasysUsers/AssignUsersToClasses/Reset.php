@@ -112,7 +112,7 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 				'SELECT uic.statusId AS statusId, uic.ClassID AS classId,
 					uic.UserID AS userId, c.maxRegistration AS maxRegistration,
 					c.unitId AS unitId
-				FROM jointUsersInClass uic
+				FROM KuwasysUsersInClasses uic
 				JOIN KuwasysClasses c ON uic.ClassID = c.ID
 				WHERE c.schoolyearId = @activeSchoolyear
 					AND (
