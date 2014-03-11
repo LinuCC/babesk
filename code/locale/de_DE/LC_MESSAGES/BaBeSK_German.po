@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-03 22:37+0100\n"
-"PO-Revision-Date: 2014-03-03 22:37+0100\n"
+"POT-Creation-Date: 2014-03-11 20:43+0100\n"
+"PO-Revision-Date: 2014-03-11 20:43+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: de\n"
@@ -30,12 +30,12 @@ msgid ""
 "Here you can Print PDFs confirming the Participation of Users at their "
 "Classes of this Year"
 msgstr ""
-"Hier können sie PDF-Dateien drucken die die Teilnahmen der Nutzer an Kursen "
-"in diesem Jahr bestätigen."
+"Hier können sie PDF-Dateien erstellen die die Teilnahmen der Nutzer an "
+"Kursen in diesem Jahr bestätigen."
 
 #: ../../../include/smarty-gettext/smarty2c.c:11
-msgid "Print Participation Confirmation"
-msgstr "Teilnahmebestätigung ausdrucken"
+msgid "Create Participation Confirmation"
+msgstr "Teilnahmebestätigung erstellen"
 
 #: ../../../include/smarty-gettext/smarty2c.c:14
 #: ../../../include/smarty-gettext/smarty2c.c:263
@@ -338,7 +338,7 @@ msgstr "Eine Karte aufladen"
 #: ../../../smarty/templates_c/818149c8372c3fa5e5e32c9cd62bc5d894003dc9.file.mainmenu.tpl.php:123
 #: ../../../smarty/templates_c/d9ae2e659e39b51da4b84a100552c0b5c94fb34c.file.printRechargeBalanceSelect.tpl.php:105
 msgid "Print Recharge Balance"
-msgstr "Die Aufladungen ausdrucken"
+msgstr "Die Aufladungen erstellen"
 
 #: ../../../include/smarty-gettext/smarty2c.c:212
 #: ../../../smarty/templates_c/d9ae2e659e39b51da4b84a100552c0b5c94fb34c.file.printRechargeBalanceSelect.tpl.php:129
@@ -1780,11 +1780,9 @@ msgstr ""
 msgid "Wrong action-value!"
 msgstr "Falsche action-value!"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:81
-msgid "The Schoolyear was added successfully"
-msgstr "Das Schuljahr wurde erfolgreich hinzugefügt"
-
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:95
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:83
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:104
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:271
 msgid ""
 "An active schoolyear already exists! Please add the schoolyear without it "
 "being active and then activate it in the menu."
@@ -1792,52 +1790,56 @@ msgstr ""
 "Ein aktives Schuljahr existiert bereits! Bitte aktivieren sie das Schuljahr "
 "erst nach dem Hinzufügen."
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:119
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:90
+msgid "The Schoolyear was added successfully"
+msgstr "Das Schuljahr wurde erfolgreich hinzugefügt"
+
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:134
 msgid "Could not check if an active schoolyear already exists"
 msgstr ""
 "Konnte nicht überprüfen ob ein aktiviertes Schuljahr bereits existiert!"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:127
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:142
 msgid "Name of Schoolyear"
 msgstr "Name des Schuljahres"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:149
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:164
 msgid "Could not add the Schoolyear"
 msgstr "Konnte das Schuljahr nicht hinzufügen"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:170
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:185
 msgid "Error Fetching the Schoolyears!"
 msgstr "Konnte die Schuljahre nicht abrufen"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:183
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:198
 msgid "The Schoolyear was successfully deleted"
 msgstr "Das Schuljahr wurde erfolgreich gelöscht"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:186
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:201
 msgid "The Schoolyear was not deleted"
 msgstr "Das Schuljahr wurde nicht gelöscht"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:199
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:214
 msgid "Could not delete the Schoolyear!"
 msgstr "Konnte das Schuljahr nicht löschen!"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:207
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:222
 msgid "The Schoolyear was successfully activated"
 msgstr "Das Schuljahr wurde erfolgreich aktiviert"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:240
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:256
 msgid "Could not fetch the Schoolyear from the Database"
 msgstr "Kontne das Schuljahr nicht von der Datenbank abrufen"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:251
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:277
 msgid "The Schoolyear was successfully changed"
 msgstr "Das Schuljahr wurde erfolgreich verändert"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:271
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:300
 msgid "Could not change the Schoolyear"
 msgstr "Konnte das Schuljahr nicht verändern"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:304
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:333
 msgid "No schoolyear selected!"
 msgstr "Kein Schuljahr ausgewählt!"
 

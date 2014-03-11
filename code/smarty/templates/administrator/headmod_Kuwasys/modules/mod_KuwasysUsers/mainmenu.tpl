@@ -13,7 +13,7 @@
 			<a id="printParticipationConfirmation" class="submodulelink"
 			href="#"
 			title="{t}Here you can Print PDFs confirming the Participation of Users at their Classes of this Year{/t}">
-				{t}Print Participation Confirmation{/t}
+				{t}Create Participation Confirmation{/t}
 			</a>
 		</li>
 	</ul>
@@ -34,7 +34,7 @@
 </fieldset>
 
 <div class="dialog" id="printDialog" title="Teilnahmebestätigungen">
-	<p>Bitte wählen sie die Klasse für die sie die Teilnahmebestätigungen ausdrucken wollen</p>
+	<p>Bitte wählen sie die Klasse für die sie die Teilnahmebestätigungen erstellen wollen</p>
 	<form>
 		<fieldset>
 		<label for="grade">Klasse</label>
@@ -66,7 +66,7 @@ $(document).ready(function() {
 
 		buttons: {
 
-			"Drucken": function() {
+			"Erstellen": function() {
 				var id = $('select[name=grade] option:selected').val();
 				window.location.href = 'index.php?module=administrator|Kuwasys|KuwasysUsers|PrintParticipationConfirmation&gradeId=' + id;
 				$(this).dialog("close");

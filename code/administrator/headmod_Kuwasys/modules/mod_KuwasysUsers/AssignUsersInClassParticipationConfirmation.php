@@ -53,7 +53,7 @@ class AssignUsersInClassParticipationConfirmation
 		try {
 			$data = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {
-			self::$_interface->dieError ('Es wurden keine Schüler gefunden, für die man die Dokumente hätte drucken können');
+			self::$_interface->dieError ('Es wurden keine Schüler gefunden, für die man die Dokumente hätte erstellen können');
 		} catch (Exception $e) {
 			self::$_interface->dieError ('konnte die Daten der Schüler nicht abrufen' . $e->getMessage ());
 		}

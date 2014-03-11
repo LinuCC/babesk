@@ -60,6 +60,7 @@ class Classteachers extends Kuwasys {
 	 */
 	protected function entryPoint($dataContainer) {
 
+		parent::entryPoint($dataContainer);
 		$this->_interface = $dataContainer->getInterface();
 		$this->_acl = $dataContainer->getAcl();
 		$this->_pdo = $dataContainer->getPdo();

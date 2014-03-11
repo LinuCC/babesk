@@ -100,7 +100,7 @@ $(document).ready(function() {
 
 		buttons: {
 
-			"Drucken": function() {
+			"Erstellen": function() {
 				var startdate = $('input[name=classSummaryStart]').val();
 				var enddate = $('input[name=classSummaryEnd]').val();
 				window.location.href = 'index.php?module=administrator|Kuwasys|Classes|CreateClassSummary&startdate=' + startdate +

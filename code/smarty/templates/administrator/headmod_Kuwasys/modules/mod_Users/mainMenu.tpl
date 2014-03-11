@@ -41,7 +41,7 @@ fieldset {
 <fieldset>
 	<legend>Sonstiges</legend>
 	<form action='index.php?section=Kuwasys|Users&action=printParticipationConfirmationForAll' method='post'>
-		<input type='submit' value='Für alle Schüler die Teilnahmebestätigungen ausdrucken'>
+		<input type='submit' value='Für alle Schüler die Teilnahmebestätigungen erstellen'>
 	</form>
 
 </fieldset>

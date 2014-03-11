@@ -119,7 +119,7 @@ class KuwasysUsers extends Kuwasys {
 		try {
 			$data = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError ('Es wurden keine Schüler gefunden, für die man die Dokumente hätte drucken können');
+			$this->_interface->dieError ('Es wurden keine Schüler gefunden, für die man die Dokumente hätte erstellen können');
 		} catch (Exception $e) {
 			$this->_interface->dieError ('konnte die Daten der Schüler nicht abrufen' . $e->getMessage ());
 		}
