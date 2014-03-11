@@ -30,7 +30,6 @@ RENAME TABLE `users` TO `SystemUsers`;
 RENAME TABLE `usersInClassStatus` TO `KuwasysUsersInClassStatuses`;
 RENAME TABLE `usersInGradesAndSchoolyears`
 	TO `SystemUsersInGradesAndSchoolyears`;
-
 RENAME TABLE `jointClassTeacherInClass` TO `KuwasysClassteachersInClasses`;
 RENAME TABLE `orders` TO `BabeskOrders`;
 RENAME TABLE `priceGroups` TO `BabeskPriceGroups`;

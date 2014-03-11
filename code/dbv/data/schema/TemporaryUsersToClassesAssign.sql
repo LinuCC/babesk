@@ -6,4 +6,4 @@ CREATE TABLE `TemporaryUsersToClassesAssign` (
   `origClassId` int(11) unsigned NOT NULL,
   `origStatusId` int(11) unsigned NOT NULL,
   PRIMARY KEY (`userId`,`classId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8

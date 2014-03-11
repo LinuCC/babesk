@@ -1,4 +1,4 @@
-CREATE PROCEDURE `moduleAddNewByPath`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `moduleAddNewByPath`(
 	IN modulename varchar(255),
 	IN isEnabled int(1),
 	IN displayInMenu int(1),
@@ -15,13 +15,13 @@ BEGIN
 	DECLARE done int(1) DEFAULT 0;
 
 	DECLARE moduleBuffer CURSOR FOR
-		SELECT ID FROM Modules
+		SELECT ID FROM SystemModules
 			WHERE name = directParentName;
 
 	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
-	DECLARE EXIT HANDLER FOR SQLSTATE '42000'
-		SELECT CONCAT('Could not find the given parentModule "',
-			directParentName, '" with its path "', directParentPath);
+	DECLARE EXIT HANDLER FOR SQLSTATE "42000"
+		SELECT CONCAT("Could not find the given parentModule ",
+			directParentName, " with its path ", directParentPath);
 
 	OPEN moduleBuffer;
 
@@ -33,9 +33,9 @@ BEGIN
 			-- Check if directParentPath is the same as the selected Modules
 			-- Parent Path; This is because Modules are allowed to have the
 			-- same name
-			SELECT GROUP_CONCAT(parent.name SEPARATOR '/') INTO pathBuffer
-				FROM Modules AS node,
-					Modules AS parent
+			SELECT GROUP_CONCAT(parent.name SEPARATOR "/") INTO pathBuffer
+				FROM SystemModules AS node,
+					SystemModules AS parent
 				WHERE node.lft BETWEEN parent.lft AND parent.rgt
 					AND node.ID = idBuffer
 				ORDER BY node.lft;

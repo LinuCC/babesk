@@ -1,4 +1,4 @@
-CREATE PROCEDURE `moduleAddNew`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `moduleAddNew`(
 	IN modulename varchar(255),
 	IN isEnabled int(1),
 	IN displayInMenu int(1),
@@ -16,21 +16,21 @@ BEGIN
 	END;
 
 	-- Custom Errorhandling, the MySQL 5.X way (before 5.5)
-	DECLARE EXIT HANDLER FOR SQLSTATE '42000'
-		SELECT 'Could not find the Parent by the Parent-ID.';
+	DECLARE EXIT HANDLER FOR SQLSTATE "42000"
+		SELECT "Could not find the Parent by the Parent-ID.";
 
 	-- Default value, gets returned if something has gone wrong
 	SET newModuleId = 0;
 
-	SELECT rgt FROM Modules WHERE ID = parentmoduleId INTO parentRightEnd;
+	SELECT rgt FROM SystemModules WHERE ID = parentmoduleId INTO parentRightEnd;
 
 	IF parentRightEnd IS NOT NULL THEN
 		START TRANSACTION;
 		-- Inserts the new module as the first element of the parent
-		UPDATE Modules SET rgt = rgt + 2 WHERE rgt >= parentRightEnd;
-		UPDATE Modules SET lft = lft + 2 WHERE lft >= parentRightEnd;
+		UPDATE SystemModules SET rgt = rgt + 2 WHERE rgt >= parentRightEnd;
+		UPDATE SystemModules SET lft = lft + 2 WHERE lft >= parentRightEnd;
 
-		INSERT INTO Modules
+		INSERT INTO SystemModules
 			(`name`, `enabled`, `displayInMenu`, `executablePath`, `lft`, `rgt`)
 			VALUES (
 				modulename, isEnabled, displayInMenu, executablePath,
@@ -44,5 +44,5 @@ BEGIN
 	END IF;
 
 	-- Workaround for some MySQL-Versions not working correctly with PDO-prepare
-	SELECT '';
+	SELECT "";
 END
