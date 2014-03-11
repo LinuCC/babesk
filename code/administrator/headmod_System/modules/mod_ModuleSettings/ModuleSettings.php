@@ -99,7 +99,7 @@ class ModuleSettings extends System {
 	protected function moduleFromDatabaseGet($moduleId) {
 
 		try {
-			$module = TableMng::query("SELECT * FROM Modules
+			$module = TableMng::query("SELECT * FROM SystemModules
 				WHERE ID = $moduleId");
 
 		} catch (Exception $e) {
@@ -204,7 +204,7 @@ class ModuleSettings extends System {
 		$executablePath = $_POST['executablePath'];
 
 		try {
-			TableMng::query("UPDATE Modules
+			TableMng::query("UPDATE SystemModules
 				SET name = '$name', executablePath = '$executablePath',
 					enabled = '$isEnabled', displayInMenu = '$displayInMenu'
 				WHERE id = '$id';");

@@ -247,8 +247,8 @@ class Administrator {
 			$stmt = $this->_pdo->prepare(
 				'SELECT bmid, (
 						SELECT GROUP_CONCAT(parent.name ORDER BY parent.lft ASC SEPARATOR "|")
-						FROM Modules AS node,
-							Modules AS parent
+						FROM SystemModules AS node,
+							SystemModules AS parent
 						WHERE node.lft BETWEEN parent.lft AND parent.rgt
 							AND node.ID = mid
 					) AS modulePath

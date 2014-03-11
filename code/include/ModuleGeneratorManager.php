@@ -168,7 +168,7 @@ class ModuleGeneratorManager {
 					node.executablePath AS executablePath,
 					node.displayInMenu AS displayInMenu,
 						(COUNT(parent.ID) - 1) AS level
-				FROM Modules AS node, Modules AS parent
+				FROM SystemModules AS node, SystemModules AS parent
 					WHERE node.lft BETWEEN parent.lft AND parent.rgt
 				GROUP BY node.ID
 				ORDER BY node.lft;');
