@@ -385,7 +385,7 @@ class UserDisplayAllQueryCreator {
 					SEPARATOR "<br />")
 				AS schoolyears');
 			$this->addJoinStatement(
-				'LEFT JOIN usersInGradesAndSchoolyears uigsy
+				'LEFT JOIN SystemUsersInGradesAndSchoolyears uigsy
 				ON uigsy.userId = u.ID
 			LEFT JOIN SystemSchoolyear sy ON sy.ID = uigsy.schoolyearId');
 			$this->_schoolyearQueryDone = true;
@@ -401,14 +401,14 @@ class UserDisplayAllQueryCreator {
 				activeGrade.activeGrade AS activeGrade');
 
 			$this->addJoinStatement('
-				LEFT JOIN usersInGradesAndSchoolyears uigsg
+				LEFT JOIN SystemUsersInGradesAndSchoolyears uigsg
 					ON uigsg.userId = u.ID
 				LEFT JOIN SystemGrades g ON uigsg.gradeId = g.ID
 				LEFT JOIN (
 					SELECT CONCAT(gradelevel, "-", label)
 						AS activeGrade, uigsg.userId AS userId
 					FROM SystemGrades g
-					JOIN usersInGradesAndSchoolyears uigsg ON
+					JOIN SystemUsersInGradesAndSchoolyears uigsg ON
 						uigsg.gradeId = g.ID AND
 						uigsg.schoolyearId = @activeSchoolyear
 					) activeGrade

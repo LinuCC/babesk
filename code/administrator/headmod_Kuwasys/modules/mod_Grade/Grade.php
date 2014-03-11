@@ -199,7 +199,7 @@ class Grade extends Kuwasys {
 	protected function deleteLinkedItems($gradeId) {
 
 		try {
-			TableMng::query("DELETE FROM usersInGradesAndSchoolyears
+			TableMng::query("DELETE FROM SystemUsersInGradesAndSchoolyears
 				WHERE gradeId = $gradeId");
 
 		} catch (Exception $e) {

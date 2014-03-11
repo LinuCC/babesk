@@ -41,7 +41,7 @@ $alert="<font color=#ff0000>";
 		$alert .= "<u>Buchhaltungshinweis:</u><br><li><h5>Formular zur Buchausleihe wurde nicht abgegeben!</h5></li><br>";
 		$schoolyearDesired = TableMng::query('SELECT ID FROM SystemSchoolyear WHERE active = 1');
 		$schoolyearID = $schoolyearDesired[0]['ID'];
-		$gradeID = TableMng::query(sprintf('SELECT GradeID FROM usersInGradesAndSchoolyears WHERE UserID = "%s" AND schoolyearID ="%s"', $uid,$schoolyearID));
+		$gradeID = TableMng::query(sprintf('SELECT GradeID FROM SystemUsersInGradesAndSchoolyears WHERE UserID = "%s" AND schoolyearID ="%s"', $uid,$schoolyearID));
 				$grade = TableMng::query(sprintf('SELECT gradelevel FROM SystemGrades WHERE ID = %s', $gradeID[0]['GradeID']));
 				$payed = TableMng::query(sprintf('SELECT loanChoice, payedAmount,amountToPay FROM schbas_accounting WHERE UID="%s"',$uid));
 				if (($payed[0]['loanChoice']=="ln" || $payed[0]['loanChoice']=="lr" )&& strcmp($payed[0]['payedAmount'],$payed[0]['amountToPay'])<0)
@@ -187,7 +187,7 @@ $alert="<font color=#ff0000>";
 			$userDetails = TableMng::query(sprintf(
 				'SELECT u.*,
 				(SELECT CONCAT(g.gradelevel, g.label) AS class
-					FROM usersInGradesAndSchoolyears uigs
+					FROM SystemUsersInGradesAndSchoolyears uigs
 					LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS class

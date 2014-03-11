@@ -302,7 +302,7 @@ class MessageAdmin extends Messages {
 			$db = TableMng::getDb();
 			$grades = $_POST['grades'];
 			$stmt =$db->prepare("SELECT uigs.UserID AS userId
-				FROM usersInGradesAndSchoolyears uigs
+				FROM SystemUsersInGradesAndSchoolyears uigs
 					WHERE uigs.schoolyearId = @activeSchoolyear
 					AND uigs.gradeId = ?");
 			foreach($grades as $gradeId) {

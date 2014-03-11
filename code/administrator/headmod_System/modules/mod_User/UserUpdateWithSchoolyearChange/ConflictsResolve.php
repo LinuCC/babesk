@@ -64,7 +64,7 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 				FROM UserUpdateTempConflicts tc
 					LEFT JOIN UserUpdateTempUsers tu ON tu.ID = tc.tempUserId
 					LEFT JOIN SystemUsers u ON u.ID = tc.origUserId
-					LEFT JOIN usersInGradesAndSchoolyears uigs
+					LEFT JOIN SystemUsersInGradesAndSchoolyears uigs
 						ON u.ID = uigs.userId
 						AND uigs.schoolyearId = @activeSchoolyear
 					LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
@@ -220,7 +220,7 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 				FROM UserUpdateTempConflicts tc
 				LEFT JOIN UserUpdateTempUsers tu ON tu.ID = tc.tempUserId
 				LEFT JOIN SystemUsers u ON u.ID = tc.origUserId
-				LEFT JOIN usersInGradesAndSchoolyears uigs
+				LEFT JOIN SystemUsersInGradesAndSchoolyears uigs
 					ON u.ID = uigs.userId
 					AND uigs.schoolyearId = @activeSchoolyear
 				LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID

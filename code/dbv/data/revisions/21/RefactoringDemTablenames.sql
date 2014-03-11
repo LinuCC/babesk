@@ -27,6 +27,6 @@ RENAME TABLE `TemporaryFiles` TO `SystemTemporaryFiles`;
 RENAME TABLE `UsercreditsRecharges` TO `BabeskUsercreditsRecharges`;
 RENAME TABLE `UserInGroups` TO `SystemUsersInGroups`;
 RENAME TABLE `users` TO `SystemUsers`;
-RENAME TABLE `usersInClassStatus` TO `KuwasysUsersInClassStatus`;
+RENAME TABLE `usersInClassStatus` TO `KuwasysUsersInClassStatuses`;
 RENAME TABLE `usersInGradesAndSchoolyears`
 	TO `SystemUsersInGradesAndSchoolyears`;

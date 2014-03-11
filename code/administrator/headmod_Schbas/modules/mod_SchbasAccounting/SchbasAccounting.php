@@ -182,7 +182,7 @@ class SchbasAccounting extends Schbas {
 	private function showUsers () {
 		$schoolyearDesired = TableMng::query('SELECT ID FROM SystemSchoolyear WHERE active = 1');
 		$schoolyearID = $schoolyearDesired[0]['ID'];
-		$gradeID = TableMng::query("SELECT DISTINCT gradeID FROM usersInGradesAndSchoolyears WHERE schoolyearID = $schoolyearID");
+		$gradeID = TableMng::query("SELECT DISTINCT gradeID FROM SystemUsersInGradesAndSchoolyears WHERE schoolyearID = $schoolyearID");
 		foreach ($gradeID as $grade){
 			$ID = $grade['gradeID'];
 			$SaveTheCows = TableMng::query("SELECT * FROM SystemGrades WHERE ID = $ID");
@@ -217,7 +217,7 @@ class SchbasAccounting extends Schbas {
 
 	private function addGradeLabelToUsers ($users) {
 
-		$jointsUsersInGrade = TableMng::query('SELECT * FROM usersInGradesAndSchoolyears');
+		$jointsUsersInGrade = TableMng::query('SELECT * FROM SystemUsersInGradesAndSchoolyears');
 		$grades = TableMng::query('SELECT * FROM SystemGrades');
 		if (isset($users) && count ($users) && isset($jointsUsersInGrade) && count ($jointsUsersInGrade)) {
 			foreach ($users as & $user) {
@@ -326,7 +326,7 @@ class SchbasAccounting extends Schbas {
 			try{
 				$schoolyearDesired = TableMng::query('SELECT ID FROM SystemSchoolyear WHERE active = 1');
 				$schoolyearID = $schoolyearDesired[0]['ID'];
-				$gradeID = TableMng::query(sprintf("SELECT GradeID FROM usersInGradesAndSchoolyears WHERE UserID = '$id' AND schoolyearID = $schoolyearID"));
+				$gradeID = TableMng::query(sprintf("SELECT GradeID FROM SystemUsersInGradesAndSchoolyears WHERE UserID = '$id' AND schoolyearID = $schoolyearID"));
 				$gradeIDtemp = (int)$gradeID[0]['GradeID'];
 				$gradelevel = TableMng::query(sprintf("SELECT gradelevel FROM SystemGrades WHERE ID = $gradeIDtemp"));
 				$grade = $gradelevel[0]['gradelevel'];
@@ -354,7 +354,7 @@ class SchbasAccounting extends Schbas {
 	}
 	
 	private function getStudentIDsOfClass($gradeId){
-		$ids = TableMng::query("SELECT userId FROM usersInGradesAndSchoolyears WHERE gradeId='$gradeId'");
+		$ids = TableMng::query("SELECT userId FROM SystemUsersInGradesAndSchoolyears WHERE gradeId='$gradeId'");
 		$nr = count($ids);
 		$studentIDs;
 		for($i=0;$i<$nr;$i++){

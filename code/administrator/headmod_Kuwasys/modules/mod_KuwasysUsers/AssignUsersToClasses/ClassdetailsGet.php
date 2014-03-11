@@ -65,7 +65,7 @@ class ClassdetailsGet extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToC
 			) AS otherClassLabel
 			FROM KuwasysTemporaryRequestsAssign ra
 			JOIN SystemUsers u ON ra.userId = u.ID
-			LEFT JOIN usersInGradesAndSchoolyears uigsy
+			LEFT JOIN SystemUsersInGradesAndSchoolyears uigsy
 				ON ra.userId = uigsy.userId
 					AND uigsy.schoolyearId = @activeSchoolyear
 			LEFT JOIN SystemGrades g ON uigsy.gradeId = g.ID

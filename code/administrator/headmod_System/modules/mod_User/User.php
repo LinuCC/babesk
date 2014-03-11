@@ -297,7 +297,7 @@ class User extends System {
 			$_POST['schoolyearAndGradeData'], 'gradeId', 'schoolyearId');
 
 		foreach($flatRequestedRows as $rSyId => $rGradeId) {
-			$query .= "INSERT INTO usersInGradesAndSchoolyears
+			$query .= "INSERT INTO SystemUsersInGradesAndSchoolyears
 				(userId, gradeId, schoolyearId) VALUES
 				(@uid, '$rGradeId', '$rSyId');";
 		}
@@ -414,7 +414,7 @@ class User extends System {
 			$data = TableMng::query(
 				'SELECT u.*,
 				(SELECT CONCAT(g.gradelevel, g.label) AS KuwasysClasses
-					FROM usersInGradesAndSchoolyears uigs
+					FROM SystemUsersInGradesAndSchoolyears uigs
 					LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS KuwasysClasses
@@ -609,7 +609,7 @@ class User extends System {
 	protected function gradeAndSchoolyearDataOfUserGet($uid) {
 
 		$data = TableMng::query(
-			"SELECT gradeId, schoolyearId FROM usersInGradesAndSchoolyears
+			"SELECT gradeId, schoolyearId FROM SystemUsersInGradesAndSchoolyears
 			WHERE userId = $uid");
 
 		return $data;
@@ -667,7 +667,7 @@ class User extends System {
 
 		$schoolyears = TableMng::query(
 			"SELECT ID, label AS name, (
-				SELECT COUNT(*) AS count FROM usersInGradesAndSchoolyears uigs
+				SELECT COUNT(*) AS count FROM SystemUsersInGradesAndSchoolyears uigs
 				WHERE sy.ID = uigs.schoolyearId AND uigs.userId = $userId
 			) AS isUserIn
 			FROM SystemSchoolyear sy
@@ -876,7 +876,7 @@ class User extends System {
 			if(!array_key_exists($rSyId, $flatExistingRows) ||
 				$flatExistingRows[$rSyId] != $rGradeId) {
 
-				$query .= "INSERT INTO usersInGradesAndSchoolyears
+				$query .= "INSERT INTO SystemUsersInGradesAndSchoolyears
 					(userId, gradeId, schoolyearId) VALUES
 					('$userId', '$rGradeId', '$rSyId')
 					ON DUPLICATE KEY UPDATE gradeId = '$rGradeId', schoolyearId = '$rSyId';";
@@ -888,7 +888,7 @@ class User extends System {
 
 		foreach($toDelete as $schoolyearId => $gradeId) {
 
-			$query .= "DELETE FROM usersInGradesAndSchoolyears
+			$query .= "DELETE FROM SystemUsersInGradesAndSchoolyears
 				WHERE userId = $userId AND
 					schoolyearId = $schoolyearId AND
 					gradeId = $gradeId;";
@@ -1183,7 +1183,7 @@ class User extends System {
 			$data = array();
 			$stmt = $this->_pdo->prepare('SELECT u.username AS username
 				FROM SystemUsers u
-				JOIN usersInGradesAndSchoolyears uigs ON u.ID = uigs.userId
+				JOIN SystemUsersInGradesAndSchoolyears uigs ON u.ID = uigs.userId
 				WHERE uigs.schoolyearId = @activeSchoolyear
 				ORDER BY levenshtein_ratio(:name, username) DESC
 				LIMIT 0, 10');

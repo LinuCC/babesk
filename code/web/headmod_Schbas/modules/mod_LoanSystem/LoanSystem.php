@@ -81,7 +81,7 @@ class LoanSystem extends Schbas {
 	private function showMainMenu() {
 		$schbasYear = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbas_year'");
 		//get gradeValue ("Klassenstufe")
-		$gradelevel = TableMng::query("SELECT gradelevel FROM SystemGrades WHERE id=(SELECT gradeID from usersInGradesAndSchoolyears WHERE schoolyearId=(SELECT ID from SystemSchoolyear WHERE active=1) AND UserID='".$_SESSION['uid']."')");
+		$gradelevel = TableMng::query("SELECT gradelevel FROM SystemGrades WHERE id=(SELECT gradeID from SystemUsersInGradesAndSchoolyears WHERE schoolyearId=(SELECT ID from SystemSchoolyear WHERE active=1) AND UserID='".$_SESSION['uid']."')");
 		$gradelevel[0]['gradelevel'] = strval(intval($gradelevel[0]['gradelevel'])+1);
 
 		// Filter f�r Abijahrgang
@@ -186,7 +186,7 @@ class LoanSystem extends Schbas {
 	private function showFormPdf() {
 
 		//get gradelevel ("Klassenstufe")
-		$gradelevel = TableMng::query("SELECT gradelevel FROM SystemGrades WHERE id=(SELECT gradeID from usersInGradesAndSchoolyears WHERE schoolyearId=(SELECT ID from SystemSchoolyear WHERE active=1) AND UserID='".$_SESSION['uid']."')");
+		$gradelevel = TableMng::query("SELECT gradelevel FROM SystemGrades WHERE id=(SELECT gradeID from SystemUsersInGradesAndSchoolyears WHERE schoolyearId=(SELECT ID from SystemSchoolyear WHERE active=1) AND UserID='".$_SESSION['uid']."')");
 				$gradelevel[0]['gradelevel'] = strval(intval($gradelevel[0]['gradelevel'])+1);
 
 		$schbasYear = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbas_year'");
@@ -312,7 +312,7 @@ class LoanSystem extends Schbas {
 		$booklistManager = new BookManager();
 
 		//get gradelevel ("Klassenstufe")
-		$gradelevel = TableMng::query("SELECT gradelevel FROM SystemGrades WHERE id=(SELECT gradeID from usersInGradesAndSchoolyears WHERE schoolyearId=(SELECT ID from SystemSchoolyear WHERE active=1) AND UserID='".$_SESSION['uid']."')");
+		$gradelevel = TableMng::query("SELECT gradelevel FROM SystemGrades WHERE id=(SELECT gradeID from SystemUsersInGradesAndSchoolyears WHERE schoolyearId=(SELECT ID from SystemSchoolyear WHERE active=1) AND UserID='".$_SESSION['uid']."')");
 				$gradelevel[0]['gradelevel'] = strval(intval($gradelevel[0]['gradelevel'])+1);
 
 		// get cover letter ("Anschreiben")

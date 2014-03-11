@@ -153,7 +153,7 @@ class AdminRetourProcessing {
 		$userDetails = TableMng::query(sprintf(
 			'SELECT u.*,
 			(SELECT CONCAT(g.gradelevel, g.label) AS class
-					FROM usersInGradesAndSchoolyears uigs
+					FROM SystemUsersInGradesAndSchoolyears uigs
 					LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS class
