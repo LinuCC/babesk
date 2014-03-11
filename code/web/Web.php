@@ -114,7 +114,7 @@ class Web {
 	private function checkFirstPassword() {
 
 		$changePasswordOnFirstLoginEnabled = TableMng::query('SELECT value
-			FROM global_settings WHERE `name` = "firstLoginChangePassword"');
+			FROM SystemGlobalSettings WHERE `name` = "firstLoginChangePassword"');
 
 		if ($changePasswordOnFirstLoginEnabled[0]['value'] == '1') {
 			$userData = $this->_userManager->getUserdata ($_SESSION ['uid']);
@@ -144,7 +144,7 @@ class Web {
 		try {
 			$data = TableMng::query('SELECT gsDelay.value AS delay,
 					gsTarget.value AS target
-				FROM global_settings gsDelay, global_settings gsTarget
+				FROM SystemGlobalSettings gsDelay, SystemGlobalSettings gsTarget
 				WHERE gsDelay.name = "webHomepageRedirectDelay" AND
 					gsTarget.name = "webHomepageRedirectTarget"');
 

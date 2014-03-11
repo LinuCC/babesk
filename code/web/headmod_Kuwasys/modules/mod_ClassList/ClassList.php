@@ -47,7 +47,7 @@ class ClassList extends \Kuwasys {
 
 		try {
 			$res = $this->_pdo->query(
-				'SELECT value FROM global_settings
+				'SELECT value FROM SystemGlobalSettings
 					WHERE name = "isClassRegistrationEnabled"'
 			);
 			$value = $res->fetchColumn();

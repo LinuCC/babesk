@@ -77,7 +77,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 			$queryJoints = 'INSERT INTO usersInGradesAndSchoolyears (
 					userId, gradeId, schoolyearId
 				) SELECT su.origUserId, g.ID,
-					(SELECT value FROM global_settings
+					(SELECT value FROM SystemGlobalSettings
 						WHERE name =
 							"userUpdateWithSchoolyearChangeNewSchoolyearId"
 					) AS schoolyear
@@ -171,7 +171,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 			$stmtg = $this->_pdo->prepare(
 				'INSERT INTO usersInGradesAndSchoolyears (
 					userId, gradeId, schoolyearId
-				) VALUES (? ,?, (SELECT value FROM global_settings
+				) VALUES (? ,?, (SELECT value FROM SystemGlobalSettings
 					WHERE name =
 						"userUpdateWithSchoolyearChangeNewSchoolyearId"
 				))'
@@ -213,7 +213,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 
 		try {
 			$res = $this->_pdo->query(
-				'SELECT value FROM global_settings WHERE
+				'SELECT value FROM SystemGlobalSettings WHERE
 					name = "UserUpdateWithSchoolyearChangeGroupOfNewUser"'
 			);
 			$data = $res->fetchColumn();
@@ -346,7 +346,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 			$this->_pdo->query(
 				'UPDATE schoolYear SET active = 0 WHERE active = 1;
 				UPDATE schoolYear SET active = 1 WHERE ID = (
-					SELECT value FROM global_settings
+					SELECT value FROM SystemGlobalSettings
 						WHERE name =
 							"userUpdateWithSchoolyearChangeNewSchoolyearId")'
 			);

@@ -101,7 +101,7 @@ class MessageAuthor extends Messages {
 
 		try {
 			$data = TableMng::query('SELECT value AS groupId
-				FROM global_settings WHERE name = "messageEditGroupId";');
+				FROM SystemGlobalSettings WHERE name = "messageEditGroupId";');
 
 		} catch (MySQLVoidDataException $e) {
 			return false;
@@ -186,13 +186,13 @@ class MessageAuthor extends Messages {
 
 		try {
 			TableMng::query(sprintf(
-				'UPDATE global_settings
+				'UPDATE SystemGlobalSettings
 				SET `value` = "%s"
 				WHERE `name` = "messageEditGroupId"', $newGroupId));
 
 			if(TableMng::getDb()->affected_rows == 0) {
 				TableMng::query(sprintf(
-					'INSERT INTO global_settings (`value`, `name`)
+					'INSERT INTO SystemGlobalSettings (`value`, `name`)
 					VALUES ("%s", "messageEditGroupId")', $newGroupId));
 			}
 

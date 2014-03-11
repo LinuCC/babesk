@@ -126,7 +126,7 @@ class Cancel extends Babesk {
 	protected function lastOrdercancelDatemodGet() {
 
 		try {
-			$data = TableMng::query('SELECT * FROM global_settings
+			$data = TableMng::query('SELECT * FROM SystemGlobalSettings
 				WHERE name = "ordercancelEnddate"');
 
 		} catch (Exception $e) {
@@ -186,7 +186,7 @@ class Cancel extends Babesk {
 	 */
 	protected function soliPriceGet() {
 
-		$soliPrice = TableMng::query('SELECT * FROM global_settings
+		$soliPrice = TableMng::query('SELECT * FROM SystemGlobalSettings
 			WHERE name = "soli_price"');
 		if(count($soliPrice)) {
 			return ((int) $soliPrice[0]['value']);
@@ -248,7 +248,7 @@ class Cancel extends Babesk {
 	protected function isSolipriceEnabledGet() {
 
 		try {
-			$stmt = $this->_pdo->query("SELECT `value` FROM `global_settings`
+			$stmt = $this->_pdo->query("SELECT `value` FROM `SystemGlobalSettings`
 				WHERE `name` = 'solipriceEnabled'");
 
 			return $stmt->fetchColumn() == '1';

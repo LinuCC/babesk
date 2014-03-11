@@ -129,11 +129,11 @@ class Meals extends Babesk {
 
 		try {
 			if($this->maxCountOfOrdersPerDayPerUserGet() !== false) {
-				TableMng::query("UPDATE global_settings SET value = '$amount'
+				TableMng::query("UPDATE SystemGlobalSettings SET value = '$amount'
 					WHERE name = 'maxCountOfOrdersPerDayPerUser';");
 			}
 			else {
-				TableMng::query("INSERT INTO global_settings (name, value)
+				TableMng::query("INSERT INTO SystemGlobalSettings (name, value)
 					VALUES ('maxCountOfOrdersPerDayPerUser', '$amount');");
 			}
 		} catch (Exception $e) {
@@ -165,7 +165,7 @@ class Meals extends Babesk {
 	protected function maxCountOfOrdersPerDayPerUserGet() {
 
 		$data = TableMng::querySingleEntry(
-			'SELECT * FROM global_settings
+			'SELECT * FROM SystemGlobalSettings
 				WHERE name = "maxCountOfOrdersPerDayPerUser"');
 
 		if(!count($data)) {
@@ -199,7 +199,7 @@ class Meals extends Babesk {
 
 		try {
 			$stmt = $this->_pdo->query(
-				'SELECT name, value FROM global_settings
+				'SELECT name, value FROM SystemGlobalSettings
 					WHERE name IN("menu_text1", "menu_text2")');
 
 			$data = $stmt->fetchAll();
@@ -269,7 +269,7 @@ class Meals extends Babesk {
 	}
 
 	/**
-	 * Adds a MenuInfotext to the global_settings-Table
+	 * Adds a MenuInfotext to the SystemGlobalSettings-Table
 	 *
 	 * Dies displaying a Message on Error
 	 *
@@ -280,7 +280,7 @@ class Meals extends Babesk {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'INSERT INTO global_settings (name, value) VALUES
+				'INSERT INTO SystemGlobalSettings (name, value) VALUES
 					(:name, :infotext)');
 
 			$stmt->execute(array('name' => $name, 'infotext' => $infotext));
@@ -291,7 +291,7 @@ class Meals extends Babesk {
 	}
 
 	/**
-	 * Changes a MenuInfotext in the global_settings-Table
+	 * Changes a MenuInfotext in the SystemGlobalSettings-Table
 	 *
 	 * Dies displaying a Message on Error
 	 *
@@ -302,7 +302,7 @@ class Meals extends Babesk {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'UPDATE global_settings SET
+				'UPDATE SystemGlobalSettings SET
 					value = :infotext WHERE name = :name');
 
 			$stmt->execute(array('name' => $name, 'infotext' => $infotext));

@@ -204,7 +204,7 @@ class Schooltype extends System {
 	 */
 	protected function isEnabled() {
 		try {
-			$data = TableMng::query('SELECT value FROM global_settings
+			$data = TableMng::query('SELECT value FROM SystemGlobalSettings
 				WHERE name = "schooltypeEnabled"');
 
 		} catch (MySQLVoidDataException $e) {
@@ -225,7 +225,7 @@ class Schooltype extends System {
 	protected function isEnabledAddEntry() {
 
 		try {
-			TableMng::query('INSERT INTO global_settings (`name`, `value`)
+			TableMng::query('INSERT INTO SystemGlobalSettings (`name`, `value`)
 				VALUES ("schooltypeEnabled", 0)');
 
 		} catch (Exception $e) {
@@ -238,7 +238,7 @@ class Schooltype extends System {
 		$ie = ($isEnabled) ? '1' : '0';
 
 		try {
-			TableMng::query(sprintf('UPDATE global_settings SET value = "%s"
+			TableMng::query(sprintf('UPDATE SystemGlobalSettings SET value = "%s"
 							WHERE name = "schooltypeEnabled"', $ie));
 
 		} catch (Exception $e) {

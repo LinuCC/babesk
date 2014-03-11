@@ -88,8 +88,8 @@ class SchbasAccounting extends Schbas {
 	 */
 	protected function sendReminder () {
 		try {
-			$template= TableMng::query("SELECT mt.title, mt.text FROM MessageTemplate AS mt WHERE mt.ID=(SELECT value FROM global_settings WHERE name='schbasReminderMessageID')");
-			$author = TableMng::query("SELECT value FROM global_settings WHERE name='schbasReminderAuthorID'");
+			$template= TableMng::query("SELECT mt.title, mt.text FROM MessageTemplate AS mt WHERE mt.ID=(SELECT value FROM SystemGlobalSettings WHERE name='schbasReminderMessageID')");
+			$author = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasReminderAuthorID'");
 			$group = TableMng::query("SELECT ID FROM MessageGroups WHERE name='schbas'");
 			TableMng::query("INSERT INTO Message (`ID`, `title`, `text`, `validFrom`, `validTo`, `originUserId`, `GID`) VALUES (NULL, '".$template[0]['title']."', '".$template [0]['text']."', '".date("Y-m-d")."', '".date("Y-m-d",strtotime("+4 weeks"))."', '".$author[0]['value']."', '".$group[0]['ID']."');");
 			$messageID = TableMng::$db->insert_id;

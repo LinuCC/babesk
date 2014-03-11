@@ -70,14 +70,14 @@ class MessageMainMenu extends Messages {
 	private function setEditor() {
 
 		try {
-			$contractGID = TableMng::query('SELECT value FROM global_settings
+			$contractGID = TableMng::query('SELECT value FROM SystemGlobalSettings
 				WHERE name = "messageEditGroupId"');
 			$userGID = TableMng::query('SELECT groupId FROM UserInGroups WHERE userId =
 				"'.$_SESSION['uid'].'"');
 			if(!count($contractGID)) {
 				throw new Exception('Es wurde noch keiner Gruppe erlaubt, Nachrichten zu editieren!');
 			}
-			
+
 			$this->_isEditor = $this->searchInMultiDimArray($contractGID[0]['value'],$userGID);
 		} catch (MySQLVoidDataException $e) {
 			echo 'Konnte die Gruppe nicht überprüfen!';
@@ -87,7 +87,7 @@ class MessageMainMenu extends Messages {
 			$this->_interface->DieError('Konnte keine Überprüfung der Gruppe vornehmen!');
 		}
 	}
-	
+
 	/**
 	 * Workaround for the problem that a user can be in more than one group.
 	 * If one of the group ids has the right to create messages, return this group id.
@@ -217,7 +217,7 @@ class MessageMainMenu extends Messages {
 				$stmt->bind_param('ii', $messageId, $_SESSION['uid']);
 				$stmt->bind_result($msgTitle, $msgText, $isRead, $msgRecId, $msgReturn,
 					$forename, $name, $grade);
-				
+
 				$stmt->execute();
 				while($stmt->fetch()) {
 					// User got multiple messages of the same kind, select only

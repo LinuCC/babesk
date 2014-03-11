@@ -194,7 +194,7 @@ class CopyOldOrdersToSoli {
 	protected static function solipriceFetch() {
 
 		try {
-			$res = TableMng::query('SELECT value FROM global_settings
+			$res = TableMng::query('SELECT value FROM SystemGlobalSettings
 				WHERE name = "soli_price"');
 
 		} catch (Exception $e) {

@@ -23,7 +23,7 @@ class FitsManager extends TableManager {
 	}
 	
 	/**
-	 * returns if Fits is passed in the MySQL-table global_settings
+	 * returns if Fits is passed in the MySQL-table SystemGlobalSettings
 	 * @throws MySQLVoidDataException
 	 * @throws Other Exceptions (@see TableManager)
 	 * @return boolean

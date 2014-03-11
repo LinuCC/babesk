@@ -33,20 +33,20 @@ class SchbasSettings extends Schbas {
 				case 'editBankAccount':	$this->editBankAccount();break;
 				case '2':	$SchbasSettingsInterface->LoanSettings($SchbasSettingsProcessing->getLoanSettings(),false);break;
 				case '3':	$SchbasSettingsInterface->RetourSettings();break;
-				case '4':	TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", $_POST['owner']."|".$_POST['number']."|".$_POST['blz']."|".$_POST['institute'], 'bank_details'));break;
+				case '4':	TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", $_POST['owner']."|".$_POST['number']."|".$_POST['blz']."|".$_POST['institute'], 'bank_details'));break;
 				case '5':	$this->updateFee();
 				$SchbasSettingsInterface->LoanSettings($SchbasSettingsProcessing->getLoanSettings(),true);break;
 				case '6':	$claim_date = $_POST['claim_Day'].".". $_POST['claim_Month'].".". $_POST['claim_Year'];
 				$transfer_date = $_POST['transfer_Day'].".". $_POST['transfer_Month'].".". $_POST['transfer_Year'];
-				TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", $claim_date,"schbasDeadlineClaim"));
-				TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", $transfer_date,"schbasDeadlineTransfer"));break;
-				case '7':	$claimEnabled = TableMng::query(sprintf("SELECT value FROM global_settings WHERE name='isSchbasClaimEnabled'"));
+				TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", $claim_date,"schbasDeadlineClaim"));
+				TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", $transfer_date,"schbasDeadlineTransfer"));break;
+				case '7':	$claimEnabled = TableMng::query(sprintf("SELECT value FROM SystemGlobalSettings WHERE name='isSchbasClaimEnabled'"));
 				$SchbasSettingsInterface->enableFormConfirm($claimEnabled[0]['value']);break;
 				case '8':   $SchbasSettingsInterface->TextSettings();break;
 				case '9':	if (isset($_POST['enable'])){
-					TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", 1, 'isSchbasClaimEnabled'));
+					TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", 1, 'isSchbasClaimEnabled'));
 				}else{
-					TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", 0, 'isSchbasClaimEnabled'));
+					TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", 0, 'isSchbasClaimEnabled'));
 				}
 				$SchbasSettingsInterface->enableFormConfirmFin();break;
 				case '10': $this->saveTexts();
@@ -56,8 +56,8 @@ class SchbasSettings extends Schbas {
 				case 'previewInfoDocs': $this->previewInfoDocs();
 				break;
 				case 'setReminder': if (isset($_POST['templateID']) && isset($_POST['authorID'])){
-					TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", $_POST['templateID'], 'schbasReminderMessageID'));
-					TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", $_POST['authorID'], 'schbasReminderAuthorID'));
+					TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", $_POST['templateID'], 'schbasReminderMessageID'));
+					TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", $_POST['authorID'], 'schbasReminderAuthorID'));
 					$SchbasSettingsInterface->enableFormConfirmFin();break;
 				} else $this->setReminder();
 				break;
@@ -131,14 +131,14 @@ class SchbasSettings extends Schbas {
 
 		if (isset($_POST['owner']) && isset($_POST['number']) && isset($_POST['blz']) && isset($_POST['institute'])) {
 			try {
-				TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", $_POST['owner']."|".$_POST['number']."|".$_POST['blz']."|".$_POST['institute'], 'bank_details'));
+				TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", $_POST['owner']."|".$_POST['number']."|".$_POST['blz']."|".$_POST['institute'], 'bank_details'));
 				$SchbasSettingsInterface->SavingSuccess();
 			} catch (Exception $e) {
 				$SchbasSettingsInterface->SavingFailed();
 			}
 		}
 		else {
-			$temp = TableMng::query('SELECT value FROM global_settings WHERE name="bank_details"');
+			$temp = TableMng::query('SELECT value FROM SystemGlobalSettings WHERE name="bank_details"');
 			$bankAccount = explode("|", $temp[0]['value']);
 			$SchbasSettingsInterface->EditBankAccount($bankAccount[0],$bankAccount[1],$bankAccount[2],$bankAccount[3]);
 		}
@@ -151,8 +151,8 @@ class SchbasSettings extends Schbas {
 		require_once 'AdminSchbasSettingsInterface.php';
 		$SchbasSettingsInterface = new AdminSchbasSettingsInterface($this->relPath);
 		
-		$activeReminderID = TableMng::query('SELECT value FROM global_settings WHERE name="schbasReminderMessageID"');
-		$reminderAuthorID = TableMng::query('SELECT value FROM global_settings WHERE name="schbasReminderAuthorID"');
+		$activeReminderID = TableMng::query('SELECT value FROM SystemGlobalSettings WHERE name="schbasReminderMessageID"');
+		$reminderAuthorID = TableMng::query('SELECT value FROM SystemGlobalSettings WHERE name="schbasReminderAuthorID"');
 		$SchbasSettingsInterface->showReminderSelection($activeReminderID,$reminderAuthorID,$this->templatesFetchSchbas());	
 	}
 	
@@ -222,7 +222,7 @@ class SchbasSettings extends Schbas {
 		require_once PATH_ACCESS. '/BookManager.php';
 
 		//get cover letter date
-		$letter_date =  TableMng::query("SELECT value FROM global_settings WHERE name='schbasDateCoverLetter'");
+		$letter_date =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDateCoverLetter'");
 
 		$booklistManager = new BookManager();
 
@@ -262,7 +262,7 @@ class SchbasSettings extends Schbas {
 		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradelevel);
 
 		//get bank account
-		$bank_account =  TableMng::query("SELECT value FROM global_settings WHERE name='bank_details'");
+		$bank_account =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='bank_details'");
 		$bank_account = explode("|", $bank_account[0]['value']);
 
 		//textOne[0]['title'] wird nicht ausgegeben, unter admin darauf hinweisen!

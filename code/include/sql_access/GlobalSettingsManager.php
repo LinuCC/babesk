@@ -33,11 +33,11 @@ abstract class GlobalSettings {
 
 class GlobalSettingsManager extends TableManager {
 	function __construct() {
-		parent::__construct('global_settings');
+		parent::__construct('SystemGlobalSettings');
 	}
 
 	/**
-	 * returns the helptext found in the MySQL-table global_settings
+	 * returns the helptext found in the MySQL-table SystemGlobalSettings
 	 * @throws MySQLVoidDataException
 	 * @throws Other Exceptions (@see TableManager)
 	 * @return string
@@ -57,7 +57,7 @@ class GlobalSettingsManager extends TableManager {
 	}
 
 	/**
-	 * returns the religions found in the MySQL-table global_settings
+	 * returns the religions found in the MySQL-table SystemGlobalSettings
 	 * @throws MySQLVoidDataException
 	 * @throws Other Exceptions (@see TableManager)
 	 * @return string
@@ -81,7 +81,7 @@ class GlobalSettingsManager extends TableManager {
 	///			(setCourse == setSpecialCourses etc)
 
 	/**
-	 * returns the courses found in the MySQL-table global_settings
+	 * returns the courses found in the MySQL-table SystemGlobalSettings
 	 * @throws MySQLVoidDataException
 	 * @throws Other Exceptions (@see TableManager)
 	 * @return string
@@ -101,7 +101,7 @@ class GlobalSettingsManager extends TableManager {
 	}
 
 	/**
-	 * returns the special courses found in the MySQL-table global_settings
+	 * returns the special courses found in the MySQL-table SystemGlobalSettings
 	 * @throws MySQLVoidDataException
 	 * @throws Other Exceptions (@see TableManager)
 	 * @return string
@@ -121,7 +121,7 @@ class GlobalSettingsManager extends TableManager {
 	}
 
 	/**
-	 * returns the foreign languages found in the MySQL-table global_settings
+	 * returns the foreign languages found in the MySQL-table SystemGlobalSettings
 	 * @throws MySQLVoidDataException
 	 * @throws Other Exceptions (@see TableManager)
 	 * @return string
@@ -142,7 +142,7 @@ class GlobalSettingsManager extends TableManager {
 
 
 	/**
-	 * Returns both of the infotexts of the table global_settings
+	 * Returns both of the infotexts of the table SystemGlobalSettings
 	 * Enter description here ...
 	 * @return array [0] = infotext1 [1] = infotext2
 	 */

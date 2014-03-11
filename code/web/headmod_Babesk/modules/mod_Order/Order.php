@@ -181,7 +181,7 @@ class Order extends Babesk {
 	protected function orderEnddateGet() {
 
 		try {
-			$data = TableMng::query('SELECT * FROM global_settings
+			$data = TableMng::query('SELECT * FROM SystemGlobalSettings
 				WHERE name = "orderEnddate"');
 			if(!isset($data[0]['value'])) {
 				throw new Exception('Could not fetch OrderEnddate');
@@ -293,7 +293,7 @@ class Order extends Babesk {
 	protected function isSolipriceEnabledGet() {
 
 		try {
-			$stmt = $this->_pdo->query("SELECT `value` FROM `global_settings`
+			$stmt = $this->_pdo->query("SELECT `value` FROM `SystemGlobalSettings`
 				WHERE `name` = 'solipriceEnabled'");
 
 			return $stmt->fetchColumn() == '1';
@@ -330,7 +330,7 @@ class Order extends Babesk {
 	 */
 	protected function soliPriceGet() {
 
-		$soliPrice = TableMng::query('SELECT * FROM global_settings
+		$soliPrice = TableMng::query('SELECT * FROM SystemGlobalSettings
 			WHERE name = "soli_price"');
 		if(count($soliPrice)) {
 			return $soliPrice[0]['value'];
@@ -432,7 +432,7 @@ class Order extends Babesk {
 	protected function maxCountOfOrdersPerDayPerUserGet() {
 
 		$data = TableMng::querySingleEntry(
-			'SELECT * FROM global_settings
+			'SELECT * FROM SystemGlobalSettings
 				WHERE name = "maxCountOfOrdersPerDayPerUser"');
 
 		if(!count($data)) {

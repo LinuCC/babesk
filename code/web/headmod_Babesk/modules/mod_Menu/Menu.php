@@ -92,7 +92,7 @@ class Menu extends Babesk {
 
 
 		try {
-			$data = TableMng::query('SELECT * FROM global_settings
+			$data = TableMng::query('SELECT * FROM SystemGlobalSettings
 				WHERE name = "ordercancelEnddate"');
 
 		} catch (Exception $e) {

@@ -138,7 +138,7 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'UPDATE global_settings SET value = ?
+				'UPDATE SystemGlobalSettings SET value = ?
 				WHERE name = "UserUpdateWithSchoolyearChangeGroupOfNewUser"'
 			);
 			$stmt->execute(array($groupId));
@@ -182,7 +182,7 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'UPDATE global_settings SET value = ?
+				'UPDATE SystemGlobalSettings SET value = ?
 				WHERE name = "userUpdateWithSchoolyearChangeNewSchoolyearId"'
 			);
 			$stmt->execute(array($id));

@@ -785,7 +785,7 @@ class Classes extends Kuwasys {
 		$toggle = (isset($_POST['toggleGlobalClassregistration'])) ? 1 : 0;
 
 		try {
-			$stmt = $this->_pdo->prepare('UPDATE global_settings
+			$stmt = $this->_pdo->prepare('UPDATE SystemGlobalSettings
 				SET value = :toggle
 				WHERE name = "isClassRegistrationEnabled"');
 
@@ -838,7 +838,7 @@ class Classes extends Kuwasys {
 	protected function globalClassRegistrationGet() {
 
 		try {
-			$stmt = $this->_pdo->query('SELECT * FROM global_settings
+			$stmt = $this->_pdo->query('SELECT * FROM SystemGlobalSettings
 				WHERE name = "isClassRegistrationEnabled"');
 
 			$data = $stmt->fetch();
@@ -866,7 +866,7 @@ class Classes extends Kuwasys {
 	protected function globalClassRegistrationAdd() {
 
 		try {
-			$this->_pdo->exec('INSERT INTO global_settings (name, value)
+			$this->_pdo->exec('INSERT INTO SystemGlobalSettings (name, value)
 				VALUES ("isClassRegistrationEnabled", "0")');
 
 		} catch (Exception $e) {

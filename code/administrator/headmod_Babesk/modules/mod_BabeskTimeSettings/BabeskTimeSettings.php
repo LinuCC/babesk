@@ -70,7 +70,7 @@ class BabeskTimeSettings extends Babesk {
 	protected function dataFetch() {
 
 		try {
-			$data = TableMng::query('SELECT * FROM global_settings
+			$data = TableMng::query('SELECT * FROM SystemGlobalSettings
 				WHERE name = "displayMealsStartdate" OR
 					name = "displayMealsEnddate" OR
 					name = "orderEnddate" OR
@@ -106,7 +106,7 @@ class BabeskTimeSettings extends Babesk {
 	protected function dataDefaultAddToDb() {
 
 		try {
-			TableMng::query('INSERT INTO global_settings
+			TableMng::query('INSERT INTO SystemGlobalSettings
 				(name, value) VALUES
 				("displayMealsStartdate", "last Monday"),
 					("displayMealsEnddate", "this Friday +1 weeks"),
@@ -180,16 +180,16 @@ class BabeskTimeSettings extends Babesk {
 
 		try {
 			TableMng::queryMultiple(
-				"UPDATE global_settings
+				"UPDATE SystemGlobalSettings
 					SET value = '$data[displayMealsStartdate]'
 					WHERE name = 'displayMealsStartdate';
-				UPDATE global_settings
+				UPDATE SystemGlobalSettings
 					SET value = '$data[displayMealsEnddate]'
 					WHERE name = 'displayMealsEnddate';
-				UPDATE global_settings
+				UPDATE SystemGlobalSettings
 					SET value = '$data[orderEnddate]'
 					WHERE name = 'orderEnddate';
-				UPDATE global_settings
+				UPDATE SystemGlobalSettings
 					SET value = '$data[ordercancelEnddate]'
 					WHERE name = 'ordercancelEnddate';");
 

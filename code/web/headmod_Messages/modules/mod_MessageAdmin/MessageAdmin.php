@@ -606,7 +606,7 @@ class MessageAdmin extends Messages {
 
 		try {
 			$data = TableMng::query(sprintf(
-				'SELECT COUNT(*) AS "entries" FROM global_settings WHERE
+				'SELECT COUNT(*) AS "entries" FROM SystemGlobalSettings WHERE
 				`name` = "smtpHost" OR
 				`name` = "smtpUsername" OR
 				`name` = "smtpPassword" OR
@@ -620,7 +620,7 @@ class MessageAdmin extends Messages {
 			$this->_interface->DieError('Konnte nicht überprüfen, ob die Email-Daten angegeben sind.');
 		}
 
-		//Only return true if ALL 5 global_settings exist
+		//Only return true if ALL 5 SystemGlobalSettings exist
 		return ($data['entries'] == 5);
 	}
 

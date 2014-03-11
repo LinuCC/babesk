@@ -240,7 +240,7 @@ class User extends System {
 
 		try {
 			$data = TableMng::querySingleEntry('SELECT value
-				FROM global_settings
+				FROM SystemGlobalSettings
 				WHERE name = "firstLoginChangePassword"');
 
 		} catch (Exception $e) {
@@ -266,7 +266,7 @@ class User extends System {
 
 		try {
 			$stmt = $this->_pdo->query(
-				'SELECT value FROM global_settings
+				'SELECT value FROM SystemGlobalSettings
 				WHERE name = "presetPassword"');
 			$stmt->execute();
 			$res = $stmt->fetchColumn();

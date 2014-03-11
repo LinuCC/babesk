@@ -420,7 +420,7 @@ class UserCsvImport extends CsvImportTableData {
 
 		try {
 			$stmt = $this->_pdo->query(
-				'SELECT value FROM global_settings
+				'SELECT value FROM SystemGlobalSettings
 				WHERE name = "presetPassword"');
 			$stmt->execute();
 			$res = $stmt->fetchColumn();

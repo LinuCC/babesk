@@ -55,7 +55,7 @@ class ResetAllUserPasswords extends User {
 
 		try {
 			$stmt = $this->_pdo->query(
-				'SELECT value FROM global_settings
+				'SELECT value FROM SystemGlobalSettings
 					WHERE name = "presetPassword"');
 
 			return $stmt->fetchColumn();

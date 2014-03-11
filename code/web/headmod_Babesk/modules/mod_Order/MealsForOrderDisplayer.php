@@ -50,7 +50,7 @@ class MealsForOrderDisplayer {
 
 	protected function settingsFetch() {
 
-		$data = TableMng::query('SELECT * FROM global_settings
+		$data = TableMng::query('SELECT * FROM SystemGlobalSettings
 			WHERE name = "displayMealsStartdate" OR
 				name = "displayMealsEnddate" OR
 				name = "orderEnddate" OR
@@ -178,7 +178,7 @@ class MealsForOrderDisplayer {
 
 			if ($this->_isSolipriceEnabled && $hasSoli[0]['soli']=="1") {
 
-				$soliPrice = TableMng::query('SELECT value FROM global_settings
+				$soliPrice = TableMng::query('SELECT value FROM SystemGlobalSettings
 				WHERE name LIKE "soli_price"');
 
 				foreach ($meals as &$meal) {
@@ -260,7 +260,7 @@ class MealsForOrderDisplayer {
 
 	protected function infotextsFetch() {
 
-		$data = TableMng::query('SELECT * FROM global_settings
+		$data = TableMng::query('SELECT * FROM SystemGlobalSettings
 			WHERE name = "menu_text1" OR name = "menu_text2"');
 
 		if(count($data) == 2) {
@@ -286,7 +286,7 @@ class MealsForOrderDisplayer {
 	protected function isSolipriceEnabledGet() {
 
 		try {
-			$stmt = $this->_pdo->query("SELECT `value` FROM `global_settings`
+			$stmt = $this->_pdo->query("SELECT `value` FROM `SystemGlobalSettings`
 				WHERE `name` = 'solipriceEnabled'");
 
 			return $stmt->fetchColumn() == '1';

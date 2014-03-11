@@ -388,7 +388,7 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 
 		try {
 			$res = $this->_pdo->query('SELECT value
-				FROM global_settings WHERE
+				FROM SystemGlobalSettings WHERE
 				name = "userUpdateWithSchoolyearChangeGradelevelConflictScope"
 			');
 			return (int)$res->fetchColumn();
