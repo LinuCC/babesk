@@ -38,7 +38,7 @@ class KuwasysUsersCreateParticipationConfirmationPdf {
 				IF(c.ID, CONCAT(u.ID, "-", c.ID), CONCAT(u.ID, "-")) AS grouper
 			FROM users u
 				JOIN usersInGradesAndSchoolyears uigs ON uigs.userId = u.ID
-				JOIN schoolYear sy ON sy.ID = uigs.SchoolYearID
+				JOIN SystemSchoolyear sy ON sy.ID = uigs.SchoolYearID
 				INNER JOIN KuwasysUsersInClasses uic ON u.ID = uic.UserID
 				LEFT JOIN usersInClassStatus uics ON uics.ID = uic.statusId
 				LEFT JOIN KuwasysClasses c ON c.ID = uic.ClassID AND c.schoolyearId = @activeSchoolyear

@@ -32,7 +32,7 @@ class KuwasysStatsSchooltypeSchoolyearChosenBarChart
 
 	protected function dataFetch() {
 
-		TableMng::query('SET @activeSy := (SELECT ID FROM schoolYear WHERE active = "1");');
+		TableMng::query('SET @activeSy := (SELECT ID FROM SystemSchoolyear WHERE active = "1");');
 
 		$this->_data = TableMng::query(
 			'SELECT st.ID AS schooltypeId, st.token AS schooltypeToken,

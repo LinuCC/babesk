@@ -39,7 +39,7 @@ $alert="<font color=#ff0000>";
 		$hasForm = TableMng::query(sprintf('SELECT COUNT(*) FROM schbas_accounting WHERE UID = "%s"',$uid));
 			if ($hasForm[0]['COUNT(*)']=="0")
 		$alert .= "<u>Buchhaltungshinweis:</u><br><li><h5>Formular zur Buchausleihe wurde nicht abgegeben!</h5></li><br>";
-		$schoolyearDesired = TableMng::query('SELECT ID FROM schoolYear WHERE active = 1');
+		$schoolyearDesired = TableMng::query('SELECT ID FROM SystemSchoolyear WHERE active = 1');
 		$schoolyearID = $schoolyearDesired[0]['ID'];
 		$gradeID = TableMng::query(sprintf('SELECT GradeID FROM usersInGradesAndSchoolyears WHERE UserID = "%s" AND schoolyearID ="%s"', $uid,$schoolyearID));
 				$grade = TableMng::query(sprintf('SELECT gradelevel FROM SystemGrades WHERE ID = %s', $gradeID[0]['GradeID']));

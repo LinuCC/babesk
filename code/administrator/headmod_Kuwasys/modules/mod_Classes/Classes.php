@@ -107,7 +107,7 @@ class Classes extends Kuwasys {
 	protected function schoolyearsGetAll() {
 
 		try {
-			$stmt = $this->_pdo->query('SELECT * FROM schoolYear');
+			$stmt = $this->_pdo->query('SELECT * FROM SystemSchoolyear');
 			return $stmt->fetchAll();
 
 		} catch (Exception $e) {
@@ -119,7 +119,7 @@ class Classes extends Kuwasys {
 	protected function schoolyearsIdNamePairsGetAll() {
 
 		try {
-			$stmt = $this->_pdo->query('SELECT ID, label FROM schoolYear');
+			$stmt = $this->_pdo->query('SELECT ID, label FROM SystemSchoolyear');
 
 			$stmt->execute();
 			return $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
@@ -445,7 +445,7 @@ class Classes extends Kuwasys {
 
 		try {
 			$stmt = $this->_pdo->query(
-				'SELECT ID FROM schoolYear WHERE active = 1');
+				'SELECT ID FROM SystemSchoolyear WHERE active = 1');
 
 			$stmt->execute();
 			return $stmt->fetchColumn();
@@ -517,7 +517,7 @@ class Classes extends Kuwasys {
 					'. sprintf ($subQueryCountUsers, 'request1') . ' AS request1Count,
 					'. sprintf ($subQueryCountUsers, 'request2') . ' AS request2Count
 				FROM KuwasysClasses c
-				LEFT JOIN schoolYear sy ON c.schoolyearId = sy.ID
+				LEFT JOIN SystemSchoolyear sy ON c.schoolyearId = sy.ID
 				LEFT JOIN KuwasysClassCategory cu ON c.unitId = cu.ID
 				LEFT JOIN (
 						SELECT ctic.ClassID AS classId,
@@ -579,7 +579,7 @@ class Classes extends Kuwasys {
 					'. sprintf ($subQueryCountUsers, 'request1') . ' AS request1Count,
 					'. sprintf ($subQueryCountUsers, 'request2') . ' AS request2Count
 				FROM KuwasysClasses c
-				LEFT JOIN schoolYear sy ON c.schoolyearId = sy.ID
+				LEFT JOIN SystemSchoolyear sy ON c.schoolyearId = sy.ID
 				LEFT JOIN KuwasysClassCategory cu ON c.unitId = cu.ID
 				LEFT JOIN (
 						SELECT ctic.ClassID AS classId,

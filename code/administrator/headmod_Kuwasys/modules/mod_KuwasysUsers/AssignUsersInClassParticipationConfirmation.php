@@ -37,7 +37,7 @@ class AssignUsersInClassParticipationConfirmation
 				IF(c.ID, CONCAT(u.ID, "-", c.ID), CONCAT(u.ID, "-")) AS grouper
 			FROM users u
 				JOIN usersInGradesAndSchoolyears uigs ON uigs.userId = u.ID
-				JOIN schoolYear sy ON sy.ID = uigs.SchoolYearID
+				JOIN SystemSchoolyear sy ON sy.ID = uigs.SchoolYearID
 				JOIN KuwasysTemporaryRequestsAssign uic
 					ON u.ID = uic.userId AND (
 						uic.statusId = 1 OR uic.statusId = 0

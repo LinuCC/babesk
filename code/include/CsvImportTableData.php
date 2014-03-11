@@ -66,7 +66,7 @@ abstract class CsvImportTableData extends CsvImport {
 	 */
 	private function schoolyearsGetAll() {
 
-		$schoolyears = TableMng::query('SELECT * FROM schoolYear');
+		$schoolyears = TableMng::query('SELECT * FROM SystemSchoolyear');
 
 		return $schoolyears;
 	}

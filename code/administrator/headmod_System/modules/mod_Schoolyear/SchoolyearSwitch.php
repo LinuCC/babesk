@@ -264,8 +264,8 @@ class SchoolyearSwitch {
 		$newSyId = $this->_schoolyearId;
 
 		TableMng::queryMultiple(
-			"UPDATE schoolYear SET active = 0 WHERE active = 1;
-			UPDATE schoolYear SET active = 1 WHERE ID = '$newSyId'");
+			"UPDATE SystemSchoolyear SET active = 0 WHERE active = 1;
+			UPDATE SystemSchoolyear SET active = 1 WHERE ID = '$newSyId'");
 	}
 
 	/**

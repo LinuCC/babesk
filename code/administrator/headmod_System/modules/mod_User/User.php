@@ -636,7 +636,7 @@ class User extends System {
 	protected function schoolyearsGetAllFlattened() {
 
 		$schoolyears = TableMng::query(
-			'SELECT ID, label AS name FROM schoolYear');
+			'SELECT ID, label AS name FROM SystemSchoolyear');
 
 		$flattenedSchoolyears = ArrayFunctions::arrayColumn(
 			$schoolyears,
@@ -670,7 +670,7 @@ class User extends System {
 				SELECT COUNT(*) AS count FROM usersInGradesAndSchoolyears uigs
 				WHERE sy.ID = uigs.schoolyearId AND uigs.userId = $userId
 			) AS isUserIn
-			FROM schoolYear sy
+			FROM SystemSchoolyear sy
 			ORDER BY active DESC;");
 
 		return $schoolyears;

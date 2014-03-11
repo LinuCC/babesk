@@ -180,7 +180,7 @@ class SchbasAccounting extends Schbas {
 	}
 
 	private function showUsers () {
-		$schoolyearDesired = TableMng::query('SELECT ID FROM schoolYear WHERE active = 1');
+		$schoolyearDesired = TableMng::query('SELECT ID FROM SystemSchoolyear WHERE active = 1');
 		$schoolyearID = $schoolyearDesired[0]['ID'];
 		$gradeID = TableMng::query("SELECT DISTINCT gradeID FROM usersInGradesAndSchoolyears WHERE schoolyearID = $schoolyearID");
 		foreach ($gradeID as $grade){
@@ -324,7 +324,7 @@ class SchbasAccounting extends Schbas {
 
 			//class
 			try{
-				$schoolyearDesired = TableMng::query('SELECT ID FROM schoolYear WHERE active = 1');
+				$schoolyearDesired = TableMng::query('SELECT ID FROM SystemSchoolyear WHERE active = 1');
 				$schoolyearID = $schoolyearDesired[0]['ID'];
 				$gradeID = TableMng::query(sprintf("SELECT GradeID FROM usersInGradesAndSchoolyears WHERE UserID = '$id' AND schoolyearID = $schoolyearID"));
 				$gradeIDtemp = (int)$gradeID[0]['GradeID'];

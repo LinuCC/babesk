@@ -107,7 +107,7 @@ class Schoolyear extends System {
 
 		try {
 			$res = $this->_pdo->query(
-				'SELECT COUNT(*) FROM schoolYear WHERE active = 1'
+				'SELECT COUNT(*) FROM SystemSchoolyear WHERE active = 1'
 			);
 			return $res->fetchColumn() != '0';
 
@@ -139,7 +139,7 @@ class Schoolyear extends System {
 		$active = (int)$_POST['active'];
 
 		try {
-			$stmt = $this->_pdo->prepare('INSERT INTO schoolYear
+			$stmt = $this->_pdo->prepare('INSERT INTO SystemSchoolyear
 				(label, active) VALUES (?, ?)');
 			$stmt->execute(array($_POST['label'], $active));
 
@@ -164,7 +164,7 @@ class Schoolyear extends System {
 	protected function getAllSchoolYears() {
 
 		try {
-			$schoolyears = TableMng::query('SELECT * FROM schoolYear');
+			$schoolyears = TableMng::query('SELECT * FROM SystemSchoolyear');
 
 		} catch(Exception $e) {
 			$this->_interface->dieError(_g('Error Fetching the Schoolyears!'));
@@ -193,7 +193,7 @@ class Schoolyear extends System {
 	protected function deleteSchoolYearInDatabase() {
 
 		try {
-			TableMng::query("DELETE FROM schoolYear WHERE ID = {$_GET['ID']}");
+			TableMng::query("DELETE FROM SystemSchoolyear WHERE ID = {$_GET['ID']}");
 
 		} catch(Exception $e) {
 			$this->_interface->dieError(_g('Could not delete the Schoolyear!'));
@@ -217,9 +217,9 @@ class Schoolyear extends System {
 	protected function activateSchoolYearInDatabase() {
 
 		TableMng::getDb()->autocommit(false);
-		TableMng::query("UPDATE schoolYear SET active = 0
+		TableMng::query("UPDATE SystemSchoolyear SET active = 0
 			WHERE active = 1");
-		TableMng::query("UPDATE schoolYear SET active = 1
+		TableMng::query("UPDATE SystemSchoolyear SET active = 1
 			WHERE ID = {$_GET['ID']}");
 		TableMng::getDb()->autocommit(true);
 	}
@@ -264,7 +264,7 @@ class Schoolyear extends System {
 	protected function changeSchoolYearInDatabase() {
 
 		try {
-			TableMng::query("UPDATE schoolYear SET label = '{$_POST['label']}',
+			TableMng::query("UPDATE SystemSchoolyear SET label = '{$_POST['label']}',
 				active = '{$_POST['active']}' WHERE ID = {$_GET['ID']}");
 
 		} catch(Exception $e) {
