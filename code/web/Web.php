@@ -198,7 +198,7 @@ class Web {
 		try {
 			$mailcount = TableMng::query(sprintf("SELECT COUNT(*) AS count
 				FROM MessageReceivers mr
-				LEFT JOIN Message m ON mr.messageId = m.ID
+				LEFT JOIN MessageMessages m ON mr.messageId = m.ID
 				WHERE %s = userId
 					AND SYSDATE() BETWEEN m.validFrom AND m.validTo
 					AND mr.read = 0",

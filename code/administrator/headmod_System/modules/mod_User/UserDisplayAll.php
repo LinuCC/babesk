@@ -122,7 +122,7 @@ class UserDisplayAll {
 		// }
 
 		// // //Messages-Module existing
-		// // if(count(TableMng::query("SHOW TABLES LIKE 'Message';"))) {
+		// // if(count(TableMng::query("SHOW TABLES LIKE 'MessageMessages';"))) {
 		// // 	$columns['countMessageReceived'] = 'Nachrichten empfangen';
 		// // 	$columns['countMessageSend'] = 'Nachrichten abgeschickt';
 		// // }

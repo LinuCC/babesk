@@ -91,7 +91,7 @@ class SchbasAccounting extends Schbas {
 			$template= TableMng::query("SELECT mt.title, mt.text FROM MessageTemplate AS mt WHERE mt.ID=(SELECT value FROM SystemGlobalSettings WHERE name='schbasReminderMessageID')");
 			$author = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasReminderAuthorID'");
 			$group = TableMng::query("SELECT ID FROM MessageGroups WHERE name='schbas'");
-			TableMng::query("INSERT INTO Message (`ID`, `title`, `text`, `validFrom`, `validTo`, `originUserId`, `GID`) VALUES (NULL, '".$template[0]['title']."', '".$template [0]['text']."', '".date("Y-m-d")."', '".date("Y-m-d",strtotime("+4 weeks"))."', '".$author[0]['value']."', '".$group[0]['ID']."');");
+			TableMng::query("INSERT INTO MessageMessages (`ID`, `title`, `text`, `validFrom`, `validTo`, `originUserId`, `GID`) VALUES (NULL, '".$template[0]['title']."', '".$template [0]['text']."', '".date("Y-m-d")."', '".date("Y-m-d",strtotime("+4 weeks"))."', '".$author[0]['value']."', '".$group[0]['ID']."');");
 			$messageID = TableMng::$db->insert_id;
 			TableMng::query("INSERT INTO MessageManagers (`ID`, `messageID`, `userId`) VALUES (NULL, '".$messageID."','".$author[0]['value']."')");
 			$usersToRemind = TableMng::query("SELECT * FROM schbas_accounting WHERE payedAmount < amountToPay");

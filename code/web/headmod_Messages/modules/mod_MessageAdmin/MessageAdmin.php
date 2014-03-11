@@ -103,7 +103,7 @@ class MessageAdmin extends Messages {
 			//get GID for vanilla message system
 			$gid = TableMng::query('SELECT ID FROM messagegroups WHERE name LIKE "vanilla"');
 			//Add Message itself
-			TableMng::query(sprintf('INSERT INTO Message
+			TableMng::query(sprintf('INSERT INTO MessageMessages
 					(originUserId,title,text,validFrom,validTo,GID)
 				VALUES (%s,"%s","%s","%s","%s","%d")',
 				$_SESSION['uid'], $msgTitle, $msgText, $startDate, $endDate,$gid[0]['ID']));
@@ -371,7 +371,7 @@ class MessageAdmin extends Messages {
 		$id = TableMng::getDb()->real_escape_string($id);
 		try {
 			$data = TableMng::query(sprintf(
-				'SELECT * FROM Message WHERE `ID` = %s;
+				'SELECT * FROM MessageMessages WHERE `ID` = %s;
 				', $id));
 		} catch (Exception $e) {
 			$this->_interface->DieError('Konnte die Nachricht nicht abrufen!');
