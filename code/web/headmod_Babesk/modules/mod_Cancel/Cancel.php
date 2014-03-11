@@ -61,7 +61,7 @@ class Cancel extends Babesk {
 				pc.price AS price
 			FROM orders o
 			JOIN users u ON u.ID = $_SESSION[uid]
-			JOIN meals m ON o.MID = m.ID
+			JOIN BabeskMeals m ON o.MID = m.ID
 			LEFT JOIN soli_coupons sc ON sc.UID = u.ID AND
 				m.date BETWEEN sc.startdate AND sc.enddate
 			JOIN price_classes pc ON m.price_class = pc.pc_ID AND u.GID = pc.GID
@@ -206,7 +206,7 @@ class Cancel extends Babesk {
 
 		$hasCoupon = TableMng::query("SELECT COUNT(*) AS count
 			FROM soli_coupons sc
-			JOIN meals m ON m.ID = {$this->_orderData['mealId']}
+			JOIN BabeskMeals m ON m.ID = {$this->_orderData['mealId']}
 			JOIN users u ON u.ID = sc.UID
 			WHERE m.date BETWEEN sc.startdate AND sc.enddate AND
 				sc.UID = $_SESSION[uid] AND u.soli = 1");

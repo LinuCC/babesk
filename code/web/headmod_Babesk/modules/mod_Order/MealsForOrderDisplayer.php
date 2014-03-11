@@ -150,7 +150,7 @@ class MealsForOrderDisplayer {
 
 		$hasCoupon = TableMng::query("SELECT COUNT(*) AS count
 				FROM soli_coupons sc
-				JOIN meals m ON m.ID = $mealId
+				JOIN BabeskMeals m ON m.ID = $mealId
 				WHERE m.date BETWEEN sc.startdate AND sc.enddate AND
 				UID = $_SESSION[uid]");
 
@@ -169,7 +169,7 @@ class MealsForOrderDisplayer {
 
 			$meals = TableMng::query("SELECT m.*, pc.price AS price,
 					pc.pc_ID AS priceclassId, pc.name AS priceclassName
-				FROM meals m
+				FROM BabeskMeals m
 				JOIN users u ON u.ID = $_SESSION[uid]
 				JOIN price_classes pc
 					ON m.price_class = pc.pc_ID AND pc.GID = u.GID

@@ -35,7 +35,7 @@ class Menu extends Babesk {
 		$smarty = $dataContainer->getSmarty();
 
 		$orderManager = new OrderManager('orders');
-		$mealManager = new MealManager('meals');
+		$mealManager = new MealManager('BabeskMeals');
 
 		$meal = array();
 		$orders_existing = true;

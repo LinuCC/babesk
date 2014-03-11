@@ -11,7 +11,7 @@ require_once PATH_ACCESS . '/TableManager.php';
 class MealManager extends TableManager {
 
 	function __construct () {
-		parent::__construct('meals');
+		parent::__construct('BabeskMeals');
 	}
 
 	/**
@@ -29,7 +29,7 @@ class MealManager extends TableManager {
 		$query =
 			'SELECT *
     				FROM
-    					meals
+    					BabeskMeals
     				WHERE
     					date >= "'
 			. $date . '"
@@ -65,12 +65,12 @@ class MealManager extends TableManager {
 		include 'databaseDistributor.php';
 		$res_array = NULL;
 		if (!$order_str) {
-			$query = sql_prev_inj(sprintf('SELECT *  FROM meals
+			$query = sql_prev_inj(sprintf('SELECT *  FROM BabeskMeals
     				 WHERE date between "%s" and "%s"',
 				$date1, $date2));
 		} else {
 			$query = sql_prev_inj(sprintf(
-				'SELECT *  FROM meals
+				'SELECT *  FROM BabeskMeals
     				 WHERE date between "%s" and "%s" ORDER BY %s', $date1, $date2,
 				$order_str));
 		}

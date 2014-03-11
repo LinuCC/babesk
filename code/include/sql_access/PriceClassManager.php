@@ -25,7 +25,7 @@ class PriceClassManager extends TableManager {
 		require_once PATH_ACCESS . '/MealManager.php';
 
 		$userManager = new UserManager();
-		$mealManager = new MealManager('meals');
+		$mealManager = new MealManager('BabeskMeals');
 
 		$gid = $userManager->getEntryData($uid, 'GID');
 		$gid = $gid['GID'];

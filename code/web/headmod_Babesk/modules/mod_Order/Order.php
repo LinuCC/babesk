@@ -249,7 +249,7 @@ class Order extends Babesk {
 
 		try {
 			$meal = TableMng::query("SELECT pc.price AS price, m.*
-				FROM meals m
+				FROM BabeskMeals m
 				JOIN users u ON u.ID = $userId
 				JOIN price_classes pc
 					ON pc.GID = u.GID AND pc.pc_ID = m.price_class
@@ -314,7 +314,7 @@ class Order extends Babesk {
 
 		$hasCoupon = TableMng::query("SELECT COUNT(*) AS count
 			FROM soli_coupons sc
-			JOIN meals m ON m.ID = $mealId
+			JOIN BabeskMeals m ON m.ID = $mealId
 			JOIN users u ON u.ID = sc.UID
 			WHERE m.date BETWEEN sc.startdate AND sc.enddate AND
 				sc.UID = $_SESSION[uid] AND u.soli = 1");
@@ -410,7 +410,7 @@ class Order extends Babesk {
 
 		try {
 			$meals = TableMng::query("SELECT m.*, pc.price AS price
-				FROM meals m
+				FROM BabeskMeals m
 				JOIN users u ON u.ID = $_SESSION[uid]
 				JOIN price_classes pc
 					ON m.price_class = pc.pc_ID AND pc.GID = u.GID
@@ -454,7 +454,7 @@ class Order extends Babesk {
 
 		$row = TableMng::querySingleEntry(
 			"SELECT COUNT(*) AS count FROM orders o
-			JOIN meals m ON m.ID = o.MID
+			JOIN BabeskMeals m ON m.ID = o.MID
 			WHERE o.UID = '$userId' AND m.date = '$date'");
 
 		return $row['count'];

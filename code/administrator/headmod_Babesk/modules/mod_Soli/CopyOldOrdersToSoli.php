@@ -59,14 +59,14 @@ class CopyOldOrdersToSoli {
 					CONCAT(u.forename, " ", u.name) AS userWholename,
 					o.ordertime AS ordertime,
 					/*Does the Meal and the priceclass still exist?*/
-					(SELECT m.ID FROM meals m
+					(SELECT m.ID FROM BabeskMeals m
 						JOIN price_classes pc ON m.price_class = pc.ID
 						WHERE m.ID = o.MID
 					) AS existMealAndPriceclass
 				FROM users u
 				JOIN orders o ON o.UID = u.ID
 				/*We want to check if meal exists manually (for error-output), so using LEFT JOIN instead of JOIN*/
-				LEFT JOIN meals m ON o.MID = m.ID
+				LEFT JOIN BabeskMeals m ON o.MID = m.ID
 				/*Fetch the price of the meal for the user*/
 				LEFT JOIN
 					(SELECT ID, pc_ID, GID, price FROM price_classes) pc
