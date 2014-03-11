@@ -230,7 +230,7 @@ class Order extends Babesk {
 		$lastInsertId = TableMng::getDb()->insert_id;
 
 		if($this->_hasValidCoupon) {
-			TableMng::query("INSERT INTO soli_orders (ID, UID, date, IP,
+			TableMng::query("INSERT INTO BabeskSoliOrders (ID, UID, date, IP,
 				ordertime, fetched, mealname, mealprice, mealdate, soliprice)
 				VALUES ('$lastInsertId', '$userId', '$meal[date]', '$ip',
 					'$ordertime', '0', '$meal[name]', '$meal[price]',

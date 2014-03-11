@@ -141,8 +141,8 @@ class UserDelete {
 			$querys .= "DELETE FROM MessageManagers WHERE userId = $uid;";
 		}
 		if(count(TableMng::query(
-			'SHOW TABLES LIKE "soli_orders";'))) {
-			$querys .= "DELETE FROM soli_orders WHERE UID = $uid;";
+			'SHOW TABLES LIKE "BabeskSoliOrders";'))) {
+			$querys .= "DELETE FROM BabeskSoliOrders WHERE UID = $uid;";
 		}
 		if(count(TableMng::query(
 			'SHOW TABLES LIKE "BabeskSoliCoupons";'))) {

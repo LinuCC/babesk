@@ -11,8 +11,6 @@ RENAME TABLE `kuwasysClassUnit` TO `KuwasysClassCategory`;
 RENAME TABLE `LogCategories` TO `SystemLogCategories`;
 RENAME TABLE `Logs` TO `SystemLogs`;
 RENAME TABLE `LogSeverities` TO `SystemLogSeverities`;
-RENAME TABLE `Logs` TO `SystemLogs`;
-RENAME TABLE `LogSeverities` TO `SystemLogSeverities`;
 RENAME TABLE `meals` TO `BabeskMeals`;
 RENAME TABLE `Message` TO `MessageMessages`;
 RENAME TABLE `Modules` TO `SystemModules`;

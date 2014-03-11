@@ -5,7 +5,7 @@ require_once PATH_ACCESS . '/TableManager.php';
 class SoliOrderManager extends TableManager {
 
 	function __construct() {
-		parent::__construct('soli_orders');
+		parent::__construct('BabeskSoliOrders');
 	}
 
 	/**

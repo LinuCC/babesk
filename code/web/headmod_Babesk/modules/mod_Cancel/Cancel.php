@@ -236,7 +236,7 @@ class Cancel extends Babesk {
 		TableMng::query("DELETE FROM orders WHERE ID = $orderId");
 
 		if($this->_isSoli) {
-			TableMng::query("DELETE FROM soli_orders WHERE ID = $orderId");
+			TableMng::query("DELETE FROM BabeskSoliOrders WHERE ID = $orderId");
 		}
 	}
 

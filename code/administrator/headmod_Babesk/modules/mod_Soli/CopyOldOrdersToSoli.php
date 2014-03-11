@@ -72,7 +72,7 @@ class CopyOldOrdersToSoli {
 					(SELECT ID, pc_ID, GID, price FROM BabeskPriceClasses) pc
 						ON pc.pc_ID = m.price_class AND pc.GID = u.GID
 				WHERE /*does the order already exist in soli_orders?*/
-						(SELECT COUNT(*) FROM soli_orders so
+						(SELECT COUNT(*) FROM BabeskSoliOrders so
 					 	WHERE o.ID = so.ID) = 0'), true);
 
 		} catch (MySQLVoidDataException $e) {
@@ -113,7 +113,7 @@ class CopyOldOrdersToSoli {
 		TableMng::getDb()->autocommit(false);
 
 		$stmt = TableMng::getDb()->prepare(
-			'INSERT INTO `soli_orders`
+			'INSERT INTO `BabeskSoliOrders`
 				(`ID`, `UID`, `date`, `IP`, `ordertime`, `fetched`,
 					`mealname`, `mealprice`, `mealdate`, `soliprice`)
 			VALUES (?, ?, ?, "", ?, ?, ?, ?, ?, ?)');
