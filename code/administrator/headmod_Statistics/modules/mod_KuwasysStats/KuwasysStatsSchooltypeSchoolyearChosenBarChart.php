@@ -32,15 +32,15 @@ class KuwasysStatsSchooltypeSchoolyearChosenBarChart
 
 	protected function dataFetch() {
 
-		TableMng::query('SET @activeSy := (SELECT ID FROM SystemSchoolyear WHERE active = "1");');
+		TableMng::query('SET @activeSy := (SELECT ID FROM SystemSchoolyears WHERE active = "1");');
 
 		$this->_data = TableMng::query(
 			'SELECT st.ID AS schooltypeId, st.token AS schooltypeToken,
 			g.gradelevel, userChosen.classesChosen, COUNT(*) AS userCount
 			FROM SystemGrades g
-				-- SystemSchooltype (optional, splits gradelevels in schooltypes if
+				-- SystemSchooltypes (optional, splits gradelevels in schooltypes if
 				-- needed)
-				LEFT JOIN SystemSchooltype st ON g.schooltypeId = st.ID
+				LEFT JOIN SystemSchooltypes st ON g.schooltypeId = st.ID
 				-- Fetch how many classes the user has chosen
 				INNER JOIN (
 					SELECT COUNT(*) AS classesChosen, uigs.gradeId AS GradeID

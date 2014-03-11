@@ -344,8 +344,8 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 
 		try {
 			$this->_pdo->query(
-				'UPDATE SystemSchoolyear SET active = 0 WHERE active = 1;
-				UPDATE SystemSchoolyear SET active = 1 WHERE ID = (
+				'UPDATE SystemSchoolyears SET active = 0 WHERE active = 1;
+				UPDATE SystemSchoolyears SET active = 1 WHERE ID = (
 					SELECT value FROM SystemGlobalSettings
 						WHERE name =
 							"userUpdateWithSchoolyearChangeNewSchoolyearId")'

@@ -82,7 +82,7 @@ class UserDisplayAll {
 
 			//Fetch the Userdata
 			TableMng::query('SET @activeSy :=
-				(SELECT ID FROM SystemSchoolyear WHERE active = "1");');
+				(SELECT ID FROM SystemSchoolyears WHERE active = "1");');
 			$data = TableMng::query($query);
 			$usercount = TableMng::query($countQuery);
 
@@ -387,7 +387,7 @@ class UserDisplayAllQueryCreator {
 			$this->addJoinStatement(
 				'LEFT JOIN SystemUsersInGradesAndSchoolyears uigsy
 				ON uigsy.userId = u.ID
-			LEFT JOIN SystemSchoolyear sy ON sy.ID = uigsy.schoolyearId');
+			LEFT JOIN SystemSchoolyears sy ON sy.ID = uigsy.schoolyearId');
 			$this->_schoolyearQueryDone = true;
 		}
 	}

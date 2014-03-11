@@ -201,7 +201,7 @@ class TableMng {
 	protected static function globalVarsSet() {
 
 		TableMng::query('SET @activeSchoolyear :=
-			(SELECT ID FROM SystemSchoolyear WHERE active = "1");');
+			(SELECT ID FROM SystemSchoolyears WHERE active = "1");');
 	}
 
 	/////////////////////////////////////////////////////////////////////

@@ -38,7 +38,7 @@ class KuwasysStatsUsersChosenBySchoolyearBarChart extends StatisticsBarChart {
 			uniqueUsersPerSchoolyear.label AS label
 			FROM
 			(SELECT sy.ID AS id, uic.UserID as userId, sy.label AS label
-				FROM SystemSchoolyear sy
+				FROM SystemSchoolyears sy
 				INNER JOIN KuwasysUsersInClasses uic
 				INNER JOIN class c ON c.ID = uic.ClassID
 					AND c.schoolyearId = sy.ID

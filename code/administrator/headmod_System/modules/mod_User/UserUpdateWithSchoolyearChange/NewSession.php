@@ -60,7 +60,7 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 
 		try {
 			$res = $this->_pdo->query(
-				'SELECT ID, label FROM SystemSchoolyear WHERE ID <> @activeSchoolyear'
+				'SELECT ID, label FROM SystemSchoolyears WHERE ID <> @activeSchoolyear'
 			);
 			return $res->fetchAll(\PDO::FETCH_KEY_PAIR);
 

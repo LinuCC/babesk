@@ -103,7 +103,7 @@ class Show extends \web\Kuwasys\ClassList {
 
 		try {
 			$res = $this->_pdo->query(
-				'SELECT * FROM KuwasysClassCategory ORDER BY ID'
+				'SELECT * FROM KuwasysClassCategories ORDER BY ID'
 			);
 			$data = $res->fetchAll(\PDO::FETCH_ASSOC);
 			return $data;

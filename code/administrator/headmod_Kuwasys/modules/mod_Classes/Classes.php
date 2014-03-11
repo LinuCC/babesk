@@ -107,7 +107,7 @@ class Classes extends Kuwasys {
 	protected function schoolyearsGetAll() {
 
 		try {
-			$stmt = $this->_pdo->query('SELECT * FROM SystemSchoolyear');
+			$stmt = $this->_pdo->query('SELECT * FROM SystemSchoolyears');
 			return $stmt->fetchAll();
 
 		} catch (Exception $e) {
@@ -119,7 +119,7 @@ class Classes extends Kuwasys {
 	protected function schoolyearsIdNamePairsGetAll() {
 
 		try {
-			$stmt = $this->_pdo->query('SELECT ID, label FROM SystemSchoolyear');
+			$stmt = $this->_pdo->query('SELECT ID, label FROM SystemSchoolyears');
 
 			$stmt->execute();
 			return $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
@@ -142,7 +142,7 @@ class Classes extends Kuwasys {
 	protected function classunitsGetAll() {
 
 		try {
-			$stmt = $this->_pdo->query('SELECT * FROM KuwasysClassCategory');
+			$stmt = $this->_pdo->query('SELECT * FROM KuwasysClassCategories');
 			return $stmt->fetchAll();
 
 		} catch (Exception $e) {
@@ -445,7 +445,7 @@ class Classes extends Kuwasys {
 
 		try {
 			$stmt = $this->_pdo->query(
-				'SELECT ID FROM SystemSchoolyear WHERE active = 1');
+				'SELECT ID FROM SystemSchoolyears WHERE active = 1');
 
 			$stmt->execute();
 			return $stmt->fetchColumn();
@@ -517,8 +517,8 @@ class Classes extends Kuwasys {
 					'. sprintf ($subQueryCountUsers, 'request1') . ' AS request1Count,
 					'. sprintf ($subQueryCountUsers, 'request2') . ' AS request2Count
 				FROM KuwasysClasses c
-				LEFT JOIN SystemSchoolyear sy ON c.schoolyearId = sy.ID
-				LEFT JOIN KuwasysClassCategory cu ON c.unitId = cu.ID
+				LEFT JOIN SystemSchoolyears sy ON c.schoolyearId = sy.ID
+				LEFT JOIN KuwasysClassCategories cu ON c.unitId = cu.ID
 				LEFT JOIN (
 						SELECT ctic.ClassID AS classId,
 							CONCAT(ct.forename, " ", ct.name) AS name
@@ -579,8 +579,8 @@ class Classes extends Kuwasys {
 					'. sprintf ($subQueryCountUsers, 'request1') . ' AS request1Count,
 					'. sprintf ($subQueryCountUsers, 'request2') . ' AS request2Count
 				FROM KuwasysClasses c
-				LEFT JOIN SystemSchoolyear sy ON c.schoolyearId = sy.ID
-				LEFT JOIN KuwasysClassCategory cu ON c.unitId = cu.ID
+				LEFT JOIN SystemSchoolyears sy ON c.schoolyearId = sy.ID
+				LEFT JOIN KuwasysClassCategories cu ON c.unitId = cu.ID
 				LEFT JOIN (
 						SELECT ctic.ClassID AS classId,
 							CONCAT(ct.forename, " ", ct.name) AS name

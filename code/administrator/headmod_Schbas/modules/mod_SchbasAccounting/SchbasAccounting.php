@@ -25,7 +25,7 @@ class SchbasAccounting extends Schbas {
 
 		$this->SchbasAccountingInterface = new SchbasAccountingInterface($this->relPath);
 		$this->lm = new LoanManager();
-		
+
 		if(isset($_GET['action'])) {
 			switch($_GET['action']) {
 
@@ -45,14 +45,14 @@ class SchbasAccounting extends Schbas {
 					$this->remember();
 					break;
 				case 'userRemoveByID':
-					if (isset($_POST['UserID'])){		
+					if (isset($_POST['UserID'])){
 						$this->userRemoveByID();
-						
+
 					}else{
 						$this->SchbasAccountingInterface->showDelete();
-						
+
 					}
-					
+
 					break;
 				case 'remember2':
 					$this->remember2();
@@ -75,7 +75,7 @@ class SchbasAccounting extends Schbas {
 			}
 		}
 		else {
-			
+
 			$listOfClasses = $this->getListOfClasses();
 			$listOfClassesRebmemer = $this->getListOfClasses("rebmemer2");
 			$this->SchbasAccountingInterface->MainMenu($listOfClasses, $listOfClassesRebmemer);
@@ -83,7 +83,7 @@ class SchbasAccounting extends Schbas {
 	}
 
 	/**
-	 * send reminders via the message module to all users who haven't payed the 
+	 * send reminders via the message module to all users who haven't payed the
 	 * complete fee yet. this function uses the selected reminder template for usage.
 	 */
 	protected function sendReminder () {
@@ -97,14 +97,14 @@ class SchbasAccounting extends Schbas {
 			$usersToRemind = TableMng::query("SELECT * FROM schbas_accounting WHERE payedAmount < amountToPay");
 			foreach ($usersToRemind as $user) {
 				TableMng::query("INSERT INTO MessageReceivers (`ID`, `messageID`, `userID`, `read`, `return`) VALUES (NULL, '".$messageID."', '".$user['UID']."', '0', 'noReturn');");
-					
+
 			}
 		}
-		catch (Exception $e) {	
+		catch (Exception $e) {
 		}
 		$this->SchbasAccountingInterface->reminderSent();
 	}
-	
+
 	/**
 	 * based on the post-values given from Ajax, this function sets the
 	 * has-user-returned-the-message-value to "hasReturned"
@@ -180,7 +180,7 @@ class SchbasAccounting extends Schbas {
 	}
 
 	private function showUsers () {
-		$schoolyearDesired = TableMng::query('SELECT ID FROM SystemSchoolyear WHERE active = 1');
+		$schoolyearDesired = TableMng::query('SELECT ID FROM SystemSchoolyears WHERE active = 1');
 		$schoolyearID = $schoolyearDesired[0]['ID'];
 		$gradeID = TableMng::query("SELECT DISTINCT gradeID FROM SystemUsersInGradesAndSchoolyears WHERE schoolyearID = $schoolyearID");
 		foreach ($gradeID as $grade){
@@ -269,15 +269,15 @@ class SchbasAccounting extends Schbas {
 
 	}
 
-	
+
 	function userRemoveByID() {
 		$uid = TableMng::getDb()->real_escape_string($_POST['UserID']);
 		$uidArray = explode(' ', $uid);
-		
+
 		if(count($uidArray) == 2) {
-		
+
 			$uid = $uidArray[0];
-			
+
 			$query = sprintf("SELECT COUNT(*) FROM schbas_accounting WHERE `UID`='%s'",$uid);
 			$result=TableMng::query($query);
 			if (!$result[0]['COUNT(*)']!="0") {
@@ -286,7 +286,7 @@ class SchbasAccounting extends Schbas {
 			if(is_numeric($uid)) {
 				try {
 					$query = sprintf("DELETE FROM schbas_accounting WHERE `UID`='%s'",$uid);
-		
+
 					TableMng::query($query);
 					$this->SchbasAccountingInterface->showDeleteSuccess();
 				} catch (Exception $e) {
@@ -301,7 +301,7 @@ class SchbasAccounting extends Schbas {
 			$this->SchbasAccountingInterface->dieError('Bitte auszutauschenden oder neuen Antrag einscannen!');
 		}
 	}
-	
+
 	private function remember(){	// function prints lend books
 
 		$showIdAfterName = false;				// to enable the id after name set this value to true
@@ -324,7 +324,7 @@ class SchbasAccounting extends Schbas {
 
 			//class
 			try{
-				$schoolyearDesired = TableMng::query('SELECT ID FROM SystemSchoolyear WHERE active = 1');
+				$schoolyearDesired = TableMng::query('SELECT ID FROM SystemSchoolyears WHERE active = 1');
 				$schoolyearID = $schoolyearDesired[0]['ID'];
 				$gradeID = TableMng::query(sprintf("SELECT GradeID FROM SystemUsersInGradesAndSchoolyears WHERE UserID = '$id' AND schoolyearID = $schoolyearID"));
 				$gradeIDtemp = (int)$gradeID[0]['GradeID'];
@@ -352,7 +352,7 @@ class SchbasAccounting extends Schbas {
 		}
 		$this->SchbasAccountingInterface->showRememberList($schueler_arr, $class_arr, $book, $date, count($lending)-1);
 	}
-	
+
 	private function getStudentIDsOfClass($gradeId){
 		$ids = TableMng::query("SELECT userId FROM SystemUsersInGradesAndSchoolyears WHERE gradeId='$gradeId'");
 		$nr = count($ids);
@@ -362,19 +362,19 @@ class SchbasAccounting extends Schbas {
 		}
 		return $studentIDs;
 	}
-	
+
 	private function getNameOfStudentId($studentId){
 		$name = TableMng::query("SELECT name FROM SystemUsers WHERE ID='$studentId'");
 		$name = $name[0]["name"];
 		return $name;
 	}
-	
+
 	private function getForenameOfStudentId($studentId){
 		$forename = TableMng::query("SELECT forename FROM SystemUsers WHERE ID='$studentId'");
 		$forename = $forename[0]["forename"];
 		return $forename;
 	}
-	
+
 	private function getBooksOfStudentId($studentId){
 		$books = TableMng::query("SELECT inventory_id FROM SchbasLending WHERE user_id='$studentId'");
 		$booklist = "";
@@ -383,7 +383,7 @@ class SchbasAccounting extends Schbas {
 			$bookid = TableMng::query("SELECT book_id FROM SchbasInventory WHERE id='".$books[$i]["inventory_id"]."'");
 			$bookIDs[] = $bookid[0]["book_id"];
 		}
-		
+
 		for ($i=0;$i<$nr;$i++){
 			$bookName = TableMng::query("SELECT title FROM schbas_books WHERE id='$bookIDs[$i]'");
 			if (!empty($bookName)) {
@@ -395,10 +395,10 @@ class SchbasAccounting extends Schbas {
 			}
 			}
 		}
-		
+
 		return $booklist;
 	}
-	
+
 	private function getBooksOfStudentIdRebmemer($studentId, $class){
 		$books = $this->lm->getLoanByUID($studentId, false);
 		$loanbooksSelfBuy = TableMng::query("SELECT BID FROM SchbasSelfpayer WHERE UID=".$studentId);
@@ -406,9 +406,9 @@ class SchbasAccounting extends Schbas {
 		$checkedBooks = array();
 		foreach ($books as $book) {
 			if (!in_array($book['id'],$loanbooksSelfBuy)) $checkedBooks[] = $book;
-				
+
 		}
-		
+
 		$booklist = "";
 		foreach ($checkedBooks as $book) {
 			$booklist .= "<li>".$book["title"];
@@ -419,22 +419,22 @@ class SchbasAccounting extends Schbas {
 // 		// format class to right format (in table int(7) is string(2)"07" )
 // 		if ($class < 10)
 // 			$class = "0".$class;
-		
-		
+
+
 // 		for($i=0;$i<count($books); $i++){
 // 			$bookIDs[] = $books[$i]["inventory_id"];
 // 		}
-		
+
 // 		$should = TableMng::query("SELECT id FROM schbas_books WHERE class='".$class."'");
-		
+
 // 		for ($i=0; $i<count($should); $i++){
 // 			$shouldIDs[] = $should[$i]["id"];
 // 		}
-		
+
 // 		$bookIDs1 = array_diff($shouldIDs, $bookIDs);
-		
+
 // 		// FINDING THE NAMES
-		
+
 // 		for ($i=0;$i<count($bookIDs1);$i++){
 // 			$bookName = TableMng::query("SELECT title FROM schbas_books WHERE id='$bookIDs1[$i]'");
 // 			//var_dump($bookName);echo "<br>";
@@ -448,43 +448,43 @@ class SchbasAccounting extends Schbas {
 // 		}
 		return $booklist;
 	}
-	
-	
+
+
 	private function remember2(){	// function prints lend books
-	
+
 		if(!isset($_GET['class'])){
 			die("ERROR: No Class selected.");
 		}else{
-			
+
 			$classId = $_GET['class'];
-			
+
 			$classNamelabel = TableMng::query("SELECT label FROM SystemGrades WHERE ID='$classId'");
 			$classNamelabel = $classNamelabel[0]["label"];
 			$classNamelevel = TableMng::query("SELECT gradelevel FROM SystemGrades WHERE ID='$classId'");
 			$classNamelevel = $classNamelevel[0]["gradelevel"];
 			$className = "$classNamelevel$classNamelabel";
-			
+
 			$studentIDs = $this->getStudentIDsOfClass($classId);
-			
+
 			$nrOfStudentIDs = count($studentIDs);
 			for($i=0; $i<$nrOfStudentIDs; $i++){
 				$name[] = $this->getNameOfStudentId($studentIDs[$i]);
 				$forename[] = $this->getForenameOfStudentId($studentIDs[$i]);
 				$books[] = $this->getBooksOfStudentID($studentIDs[$i]);
 			}
-			
+
 			$listOfClasses = $this->getListOfClasses();
-			
+
 		}
 		$this->SchbasAccountingInterface->showRememberList2($name, $forename, $books, $nrOfStudentIDs-1, $className, $listOfClasses);
 	}
-	
+
 	private function getListOfClasses($func="remember2"){
 		$gradesTbl = TableMng::query("SELECT * FROM SystemGrades");
 		$nr = count($gradesTbl);
-		
+
 		$listOfClasses="";
-		
+
 		for ($i=0; $i<$nr; $i++){
 			$gradesTblLine = $gradesTbl[$i];
 			$gradeId = $gradesTblLine["ID"];
@@ -494,32 +494,32 @@ class SchbasAccounting extends Schbas {
 		}
 		return $listOfClasses;
 	}
-	
-	private function rebmemer2(){		// REBMEMER IS REMEMBER BACKWARDS, BECAUSE IT DOES THE OPPOSITE (and i like it... ;P)		
+
+	private function rebmemer2(){		// REBMEMER IS REMEMBER BACKWARDS, BECAUSE IT DOES THE OPPOSITE (and i like it... ;P)
 		if(!isset($_GET['class'])){
 			die("ERROR: No Class selected.");
 		}else{
 			$classId = $_GET['class'];
-			
+
 			$classNamelabel = TableMng::query("SELECT label FROM SystemGrades WHERE ID='$classId'");
 			$classNamelabel = $classNamelabel[0]["label"];
 			$classNamelevel = TableMng::query("SELECT gradelevel FROM SystemGrades WHERE ID='$classId'");
 			$classNamelevel = $classNamelevel[0]["gradelevel"];
 			$className = "$classNamelevel$classNamelabel";
-			
+
 			$studentIDs = $this->getStudentIDsOfClass($classId);
-			
+
 			$nrOfStudentIDs = count($studentIDs);	// excluded from for loop to increase speed.... (dont like it? channge it...)
 			for($i=0; $i<$nrOfStudentIDs; $i++){
 				$name[] = $this->getNameOfStudentId($studentIDs[$i]);
 				$forename[] = $this->getForenameOfStudentId($studentIDs[$i]);
 				$books[] = $this->getBooksOfStudentIDRebmemer($studentIDs[$i],$classNamelevel);
 			}
-			
+
 			$listOfClasses = $this->getListOfClasses("rebmemer2");
 		}
 		$this->SchbasAccountingInterface->showRebmemerList2($name, $forename, $books, $nrOfStudentIDs-1, $className, $listOfClasses);
-	
+
 	}
 }
 ?>
