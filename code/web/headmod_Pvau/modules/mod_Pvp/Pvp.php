@@ -13,7 +13,7 @@ class Pvp extends Pvau {
 	//Constructor
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
-		$this->smartyPath = PATH_SMARTY . '/templates/web' . $path;
+		$this->smartyPath = PATH_SMARTY_TPL . '/web' . $path;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////

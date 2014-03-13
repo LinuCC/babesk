@@ -16,7 +16,7 @@ class Order extends Babesk {
 
 		parent::__construct($name, $display_name, $path);
 		$this->modulePath = $path;
-		$this->smartyPath = PATH_SMARTY . '/templates/web' . $path;
+		$this->smartyPath = PATH_SMARTY_TPL . '/web' . $path;
 		require_once PATH_CODE . '/web/WebInterface.php';
 	}
 

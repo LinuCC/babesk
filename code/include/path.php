@@ -13,10 +13,9 @@ define('PATH_PUBLICDATA', realPath($rootPath."/publicData"));
 define('PATH_WEB', realPath($rootPath."/web"));
 define('PATH_INCLUDE', realPath($rootPath."/include"));
 define('PATH_ACCESS', realPath($rootPath."/include/sql_access"));
-define('PATH_SMARTY', realPath($rootPath."/smarty"));
-define('PATH_SMARTY_ADMIN_TEMPLATES', realPath($rootPath."/smarty/templates/administrator"));
-define('PATH_SMARTY_INH_PARENT', realPath($rootPath.'/smarty/templates/administrator/base_layout.tpl'));
-//define('PATH_SMARTY_ADMIN_MOD', realPath($rootPath.'/smarty/templates/administrator/modules'));
+define('PATH_3RD_PARTY', PATH_INCLUDE . '/3rdParty');
+define('PATH_SMARTY', PATH_3RD_PARTY . '/smarty');
+define('PATH_SMARTY_TPL', realPath($rootPath . '/smarty_templates'));
 define('PATH_WEBROOT', $_SERVER['DOCUMENT_ROOT']);
 
 defined('PCHART_PATH')
@@ -29,7 +28,5 @@ defined('PCHART_PATH')
 // 	}
 // 	define('PATH_TMP', $tmpDir);
 // }
-
-// define('REL_PATH_SMARTY', '/'.$smartypath);    //the relative path to /smarty starting at the webroot
 
 ?>

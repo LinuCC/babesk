@@ -79,13 +79,13 @@ class Web {
 
 		require PATH_SMARTY . "/smarty_init.php";
 		$this->_smarty = $smarty;
-		// $this->_smarty->assign('smarty_path', REL_PATH_SMARTY);
 		$version=@file_get_contents("../version.txt");
 		$this->_smarty->assign('inh_path', 'web/baseLayout.tpl');
 		if ($version===FALSE) {
 			$version = "";
 		}
 		$smarty->assign('babesk_version', $version);
+		$smarty->assign('path_smarty_tpl', PATH_SMARTY_TPL);
 		$this->_smarty->assign('error', '');
 	}
 
@@ -325,7 +325,7 @@ class Web {
 			$birthday = date("m-d",strtotime($this->_userManager->getBirthday($_SESSION['uid'])));
 
 			$this->_smarty->assign('birthday',$birthday);
-			$this->_smarty->display(PATH_SMARTY . '/templates/web/main_menu.tpl');
+			$this->_smarty->display(PATH_SMARTY_TPL . '/web/main_menu.tpl');
 		}
 	}
 

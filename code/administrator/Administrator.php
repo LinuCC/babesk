@@ -78,7 +78,7 @@ class Administrator {
 		$this->_smarty->assign('sid', htmlspecialchars(SID));
 
 		$this->_smarty->assign('base_path',
-			PATH_SMARTY . '/templates/administrator/base_layout.tpl');
+			PATH_SMARTY_TPL . '/administrator/base_layout.tpl');
 
 	}
 
@@ -174,7 +174,6 @@ class Administrator {
 		require_once PATH_SMARTY . "/smarty_init.php";
 
 		$this->_smarty = $smarty;
-		// $this->_smarty->assign('smarty_path', REL_PATH_SMARTY);
 		$this->_smarty->assign('status', '');
 
 		$version=@file_get_contents("../version.txt");

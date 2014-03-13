@@ -42,7 +42,7 @@ class BabeskTimeSettings extends Babesk {
 	 */
 	protected function entryPoint($dataContainer) {
 
-		$this->_templateDir = PATH_SMARTY_ADMIN_TEMPLATES . $this->relPath;
+		$this->_templateDir = PATH_SMARTY_TPL . '/administrator' . $this->relPath;
 		$this->_interface = $dataContainer->getInterface();
 		$this->_acl = $dataContainer->getAcl();
 		$this->_smarty = $dataContainer->getSmarty();

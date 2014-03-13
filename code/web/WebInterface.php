@@ -115,7 +115,7 @@ class WebInterface {
 	 * @return [type] [description]
 	 */
 	protected function display() {
-		$this->_smarty->display('web/baseLayout.tpl');
+		$this->_smarty->display(PATH_SMARTY_TPL . '/web/baseLayout.tpl');
 	}
 
 	////////////////////////////////////////////////////////////////////////

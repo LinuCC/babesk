@@ -23,7 +23,7 @@ class UserDisplayAll {
 	 * Displays all of the Users
 	 */
 	public function displayAll() {
-		$this->_smarty->display(PATH_SMARTY_ADMIN_TEMPLATES .
+		$this->_smarty->display(PATH_SMARTY_TPL . '/administrator' .
 			'/headmod_System/modules/mod_User/displayAll.tpl');
 	}
 

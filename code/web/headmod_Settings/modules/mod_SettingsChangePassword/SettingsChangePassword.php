@@ -8,7 +8,7 @@ class SettingsChangePassword extends Settings {
 	/////////////////////////////////////////////////////////////////////
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
-		$this->_smartyPath = PATH_SMARTY . '/templates/web' . $path;
+		$this->_smartyPath = PATH_SMARTY_TPL . '/web' . $path;
 	}
 
 	/////////////////////////////////////////////////////////////////////

@@ -44,7 +44,7 @@ class GroupSettings extends System {
 		}
 		else {
 			$this->_smarty->display(
-				PATH_SMARTY . "/templates/administrator/$this->relPath/" .
+				PATH_SMARTY_TPL . "/administrator/$this->relPath/" .
 				"main.tpl");
 		}
 	}

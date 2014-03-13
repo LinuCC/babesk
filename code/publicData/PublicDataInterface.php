@@ -23,8 +23,8 @@ class PublicDataInterface extends GeneralInterface {
 		else {
 			$this->_smarty = $smarty;
 		}
-		$this->_smartyModTemplates = PATH_SMARTY . '/templates/publicData' . $modRelativePath;
-		$this->_smartyParentTemplate = PATH_SMARTY . '/templates/publicData/base_layout.tpl';
+		$this->_smartyModTemplates = PATH_SMARTY_TPL . '/publicData' . $modRelativePath;
+		$this->_smartyParentTemplate = PATH_SMARTY_TPL . '/publicData/base_layout.tpl';
 		$this->_smarty->assign('inh_path', $this->_smartyParentTemplate);
 	}
 
@@ -45,7 +45,7 @@ class PublicDataInterface extends GeneralInterface {
 	function dieError ($msg) {
 
 		$this->_smarty->append('_userErrorOutput', $msg);
-		$this->_smarty->display(PATH_SMARTY . '/templates/publicData/message.tpl',
+		$this->_smarty->display(PATH_SMARTY_TPL . '/publicData/message.tpl',
 			md5($_SERVER['REQUEST_URI']), md5($_SERVER['REQUEST_URI']));
 		die();
 	}
@@ -57,7 +57,7 @@ class PublicDataInterface extends GeneralInterface {
 	 */
 	function dieMsg ($msg) {
 		$this->_smarty->assign('_userMsgOutput', $msg);
-		$this->_smarty->display(PATH_SMARTY . '/templates/publicData/message.tpl',
+		$this->_smarty->display(PATH_SMARTY_TPL . '/publicData/message.tpl',
 			md5($_SERVER['REQUEST_URI']), md5($_SERVER['REQUEST_URI']));
 		die();
 	}
@@ -74,7 +74,7 @@ class PublicDataInterface extends GeneralInterface {
 	 * dies and displays all messages which were used by showError and showMsg
 	 */
 	function dieDisplay () {
-		$this->smarty->display(PATH_SMARTY . '/templates/publicData/message.tpl',
+		$this->smarty->display(PATH_SMARTY_TPL . '/publicData/message.tpl',
 			md5($_SERVER['REQUEST_URI']), md5(	$_SERVER['REQUEST_URI']));
 	}
 
@@ -87,7 +87,6 @@ class PublicDataInterface extends GeneralInterface {
 	private function initSmarty () {
 		require PATH_SMARTY . "/smarty_init.php";
 		$this->_smarty = $smarty;
-		// $this->_smarty->assign('smarty_path', REL_PATH_SMARTY);
 		$this->_smarty->assign('status', '');
 		$version=@file_get_contents("../version.txt");
 if ($version===FALSE) $version = "";
