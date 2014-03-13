@@ -124,7 +124,9 @@ class Administrator {
 			$this->_smarty->assign('headmodules', $adminModule->getChilds());
 			$this->_smarty->assign(
 				'moduleGenMan', $this->_acl->moduleGeneratorManagerGet());
-			$this->_smarty->display('administrator/menu.tpl');
+			$this->_smarty->display(
+				PATH_SMARTY_TPL . '/administrator/menu.tpl'
+			);
 		}
 		else {
 			$this->_logger->log('Administrator-Layer access denied.',
@@ -175,6 +177,11 @@ class Administrator {
 
 		$this->_smarty = $smarty;
 		$this->_smarty->assign('status', '');
+
+		$relRoot = '../';
+		$smarty->assign('path_smarty_tpl', $relRoot . 'smarty_templates');
+		$smarty->assign('path_js', $relRoot . 'include/js');
+		$smarty->assign('path_css', $relRoot . 'include/css');
 
 		$version=@file_get_contents("../version.txt");
 		if ($version===FALSE) $version = "";

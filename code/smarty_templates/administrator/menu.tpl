@@ -1,10 +1,10 @@
 {extends file=$base_path} {block name=content}
 
 <link rel="stylesheet"
-	href="../smarty/templates/administrator/css/adminModuleMenu.css"
+	href="{$path_smarty_tpl}/administrator/css/adminModuleMenu.css"
 	type="text/css" />
 
-<script src="../smarty/templates/administrator/moduleMenu.js"></script>
+<script src="{$path_smarty_tpl}/administrator/moduleMenu.js"></script>
 
 <!-- ACTUAL HTML -->
 

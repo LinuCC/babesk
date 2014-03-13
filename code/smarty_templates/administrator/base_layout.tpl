@@ -5,14 +5,14 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="adminicon.ico" />
 <link rel="stylesheet"
-	href="../include/js/jquery-ui-smoothness.css"
+	href="{$path_js}/jquery-ui-smoothness.css"
 	type="text/css"
 />
-<script type="text/javascript" src="../include/js/jquery.min.js"></script>
-<script type="text/javascript" src="../include/js/json2.min.js"></script>
-<script type="text/javascript" src="../include/js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="../include/js/jquery.cookie.js"></script>
-<script type="text/javascript" src="../smarty/templates/administrator/administratorFunctions.js"></script>
+<script type="text/javascript" src="{$path_js}/jquery.min.js"></script>
+<script type="text/javascript" src="{$path_js}/json2.min.js"></script>
+<script type="text/javascript" src="{$path_js}/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{$path_js}/jquery.cookie.js"></script>
+<script type="text/javascript" src="{$path_smarty_tpl}/administrator/administratorFunctions.js"></script>
 
 {literal}
 <script>
@@ -55,7 +55,7 @@
 {/literal}
 
 <link rel="stylesheet"
-	href="../smarty/templates/administrator/css/general.css"
+	href="{$path_smarty_tpl}/administrator/css/general.css"
 	type="text/css" />
 
 

@@ -9,8 +9,8 @@
 		url=index.php?section={$redirection.target}" />
 	{/if}
 	<link rel="shortcut icon" href="webicon.ico" />
-	<link rel="stylesheet" href="../smarty/templates/web/css/general.css" type="text/css" />
-	<script type="text/javascript" src="../include/js/jquery.min.js"></script>
+	<link rel="stylesheet" href="{$path_smarty_tpl}/web/css/general.css" type="text/css" />
+	<script type="text/javascript" src="{$path_js}/jquery.min.js"></script>
 	<script type="text/javascript" src="../include/js/jquery.cookie.js"></script>
 
 {literal}
