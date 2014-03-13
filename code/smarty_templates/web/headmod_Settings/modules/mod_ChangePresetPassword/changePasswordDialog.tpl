@@ -1,4 +1,4 @@
-{include file='web/header.tpl' title='Passwort verändern'}
+{extends file=$inh_path}{block name=content}
 
 <div align="center"><h3>Erst-Passwort verändern</h3></div> <br>
 
@@ -14,4 +14,4 @@
 	<input type='submit' value="Einstellung ändern">
 </form>
 
-{include file='web/footer.tpl'}
+{/block}

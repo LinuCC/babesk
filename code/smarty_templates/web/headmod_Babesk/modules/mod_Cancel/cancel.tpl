@@ -1,6 +1,6 @@
-{include file='web/header.tpl' title='Bestellen'}
+{extends file=$inh_path}{block name=content}
 
 <p>Das Men&uuml; wurde erfolgreich abbestellt!</p>
 <a href="index.php">Weiter</a> 
                                                                           
-{include file='web/footer.tpl'}
+{/block}

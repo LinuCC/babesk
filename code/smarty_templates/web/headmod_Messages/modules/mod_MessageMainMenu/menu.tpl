@@ -1,4 +1,4 @@
-{include file='web/header.tpl' title='Nachrichten-Menü'}
+{extends file=$inh_path}{block name=content}
 
 <style type="text/css" media="all">
 .dateBeyondValid {
@@ -101,4 +101,4 @@
 		Neue Nachricht erstellen
 	</a>
 {/if}
-{include file='web/footer.tpl'}
+{/block}

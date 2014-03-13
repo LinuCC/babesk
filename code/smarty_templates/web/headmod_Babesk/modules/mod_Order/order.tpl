@@ -1,6 +1,6 @@
 
 
-{include file='web/header.tpl' title='Bestellen'}
+{extends file=$inh_path}{block name=content}
 <h2>
 	<u>Speiseplan:</u>
 </h2>

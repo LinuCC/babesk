@@ -1,4 +1,4 @@
-{include file='web/header.tpl' title='Kursliste'}
+{extends file=$inh_path}{block name=content}
 
 <script type="text/javascript" src="../smarty/templates/web/headmod_Kuwasys/classDescriptionSwitch.js">
 </script>
@@ -128,4 +128,4 @@ $(document).ready(function() {
 });
 
 </script>
-{include file='web/footer.tpl'}
+{/block}

@@ -1,4 +1,4 @@
-{include file='web/header.tpl' title='Vorlagen'}
+{extends file=$inh_path}{block name=content}
 <script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
 
 {literal}
@@ -85,4 +85,4 @@ fieldset {
 
 <script type="text/JavaScript" src="../smarty/templates/web/headmod_Messages/searchUser.js"></script>
 <script type="text/JavaScript" src="../smarty/templates/web/headmod_Messages/modules/mod_MessageAdmin/newMessageBinds.js"></script>
-{include file='web/footer.tpl'}
+{/block}

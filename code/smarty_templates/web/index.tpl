@@ -16,4 +16,4 @@
       <p>Passwort: <input name="password" type="password" size="30" ></p>
       <input type="submit" value="Login">
     </form>
-{include file='web/footer.tpl'}
+{/block}

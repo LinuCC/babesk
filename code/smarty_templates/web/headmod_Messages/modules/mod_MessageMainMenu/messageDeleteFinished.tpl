@@ -1,5 +1,5 @@
-{include file='web/header.tpl' title='Nachricht gel&ouml;scht!'}
+{extends file=$inh_path}{block name=content}
 
 <h2>Nachricht wurde gel&ouml;scht!</h2>
 
-{include file='web/footer.tpl'}
+{/block}

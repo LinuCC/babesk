@@ -1,3 +1,3 @@
-{include file='web/header.tpl' title='Logout erfolgreich!'}
+{extends file=$inh_path}{block name=content}
 
-{include file='web/footer.tpl'}
+{/block}

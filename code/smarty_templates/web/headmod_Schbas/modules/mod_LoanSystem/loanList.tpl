@@ -1,4 +1,4 @@
-{include file='web/header.tpl' title='Schulbuchausleihe'}
+{extends file=$inh_path}{block name=content}
 
 <div align="center"><h2>Ausgeliehene Lernmittel</h2></div>
 
@@ -11,4 +11,4 @@
 </div>
 
 
-{include file='web/footer.tpl'}
+{/block}

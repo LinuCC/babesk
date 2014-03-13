@@ -1,6 +1,6 @@
-{include file='web/header.tpl' title='Passwort ge&auml;ndert'}
+{extends file=$inh_path}{block name=content}
 
 
 
 
-{include file='web/footer.tpl'}
+{/block}

@@ -1,4 +1,4 @@
-{include file='web/header.tpl' title='Hauptmen&uuml;'}
+{extends file=$inh_path}{block name=content}
 {if $hasFits}
 <div id="order">
     <h3><a href="index.php?section=Fits|Zeugnis">Zertifikat &ouml;ffnen</a></h3>
@@ -14,4 +14,4 @@
 </div>
 {/if}
 
-{include file='web/footer.tpl'}
+{/block}

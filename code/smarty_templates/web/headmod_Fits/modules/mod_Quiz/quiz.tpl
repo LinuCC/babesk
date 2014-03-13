@@ -1,4 +1,4 @@
-{include file='web/header.tpl' title='Quiz'}
+{extends file=$inh_path}{block name=content}
 <div style="float:left">{html_iframe src="headmod_Fits/modules/mod_Quiz/embed.php?uid={$uid}" height=400 width=450}
 </div>
 <div style="height:400px">
@@ -12,4 +12,4 @@ Gib am Ende das angezeigte Kennwort in das untere Feld ein und klicke auf Senden
     </fieldset>
 </form>
 </div>
-{include file='web/footer.tpl'}
+{/block}

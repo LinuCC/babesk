@@ -1,4 +1,4 @@
-{include file='web/header.tpl' title='Nachrichten-Admin'}
+{extends file=$inh_path}{block name=content}
 
 {literal}
 <script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
@@ -248,4 +248,4 @@ $(document).on('keyup', function(event) {
 {/literal}
 
 
-{include file='web/footer.tpl'}
+{/block}

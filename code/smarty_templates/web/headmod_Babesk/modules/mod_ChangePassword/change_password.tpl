@@ -1,4 +1,4 @@
-{include file='web/header.tpl' title='Passwort &Auml;ndern'}
+{extends file=$inh_path}{block name=content}
 
 <p>Bitte neues Passwort eingeben und zur Sicherheit wiederholen.</p>
 <form action="index.php?section=Babesk|ChangePassword" method="post">
@@ -11,4 +11,4 @@
     </fieldset>
 </form>
 
-{include file='web/footer.tpl'}
+{/block}

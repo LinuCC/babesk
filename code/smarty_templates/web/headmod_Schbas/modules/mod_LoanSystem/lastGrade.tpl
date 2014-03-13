@@ -1,4 +1,4 @@
-{include file='web/header.tpl' title='Schulbuchausleihe'}
+{extends file=$inh_path}{block name=content}
 
 
 
@@ -6,4 +6,4 @@
 			<h3>Wir w&uuml;nschen dem Abiturjahrgang viel Erfolg !!!</h3>
 			</center>
 
-{include file='web/footer.tpl'}
+{/block}

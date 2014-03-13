@@ -1,4 +1,4 @@
-{include file='web/header.tpl' title='Schulbuchausleihe'}
+{extends file=$inh_path}{block name=content}
 
 <h3>Anmeldeformular</h3>
 
@@ -68,4 +68,4 @@ An der entgeltlichen Ausleihe von Lernmitteln im Schuljahr JJJJ/JJ<br/>
 <input type="submit" value="Senden" />
 </form>
 
-{include file='web/footer.tpl'}
+{/block}

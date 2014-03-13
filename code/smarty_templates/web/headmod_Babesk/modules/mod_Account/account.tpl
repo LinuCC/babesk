@@ -1,4 +1,4 @@
-{include file='web/header.tpl' title='Konto sperren'}
+{extends file=$inh_path}{block name=content}
 
 <h3>Konto sperren</h3> 
 <form action="index.php?section=Babesk|Account" method="post">
@@ -10,4 +10,4 @@
       </select>
     </fieldset>
 </form>                                                                          
-{include file='web/footer.tpl'}
+{/block}

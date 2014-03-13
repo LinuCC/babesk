@@ -1,4 +1,4 @@
-{include file='web/header.tpl' title='Email verändern'}
+{extends file=$inh_path}{block name=content}
 
 <div align="center"><h3>Email verändern</h3></div>
 
@@ -9,4 +9,4 @@
 	<input type="text" name="emailNew">
 	<input type="submit" value="Email-Adresse verändern">
 </form>
-{include file='web/footer.tpl'}
+{/block}

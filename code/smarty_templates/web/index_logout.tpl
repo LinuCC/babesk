@@ -1,3 +1,3 @@
-{include file='web/header.tpl' title='Logout erfolgreich!'}
+{extends file=$inh_path}{block name=content}
 <p>Erfolgreich ausgeloggt! <a href="index.php">Zur Startseite</a><p>
-{include file='web/footer.tpl'}
+{/block}

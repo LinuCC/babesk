@@ -1,5 +1,5 @@
-{include file='web/header.tpl' title='Bestellen'}
+{extends file=$inh_path}{block name=content}
 
 <h3>Hilfe:</h3> 
 {$help_str}
-{include file='web/footer.tpl'}
+{/block}

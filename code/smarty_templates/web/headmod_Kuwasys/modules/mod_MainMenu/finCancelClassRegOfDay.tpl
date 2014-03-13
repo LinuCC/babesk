@@ -1,5 +1,5 @@
-{include file='web/header.tpl' title='Abwählen von Kursen'}
+{extends file=$inh_path}{block name=content}
 
 Die Kurse wurden erfolgreich abgewählt.
 
-{include file='web/footer.tpl'}
+{/block}

@@ -1,4 +1,4 @@
-{include file='web/header.tpl' title='Abwählen von Kursen'}
+{extends file=$inh_path}{block name=content}
 
 <h2>Abwählen von Kursen an einem Tag</h2>
 
@@ -11,4 +11,4 @@
 	<input type="submit" name="cancelConfirmed" value="Nein, die Kurse nicht abwählen">
 </form>
 
-{include file='web/footer.tpl'}
+{/block}

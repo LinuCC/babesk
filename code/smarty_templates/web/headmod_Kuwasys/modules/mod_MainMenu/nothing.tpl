@@ -1,5 +1,5 @@
-{include file='web/header.tpl' title='Hauptmenü des Kurswahlsystems'}
+{extends file=$inh_path}{block name=content}
 
 {*Can be used to show only errors, because the errormessage can be added to header.tpl by Smarty*}
 
-{include file='web/footer.tpl'}
+{/block}

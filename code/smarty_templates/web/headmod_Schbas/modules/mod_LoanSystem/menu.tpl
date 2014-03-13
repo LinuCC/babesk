@@ -1,4 +1,4 @@
-{include file='web/header.tpl' title='Schulbuchausleihe'}
+{extends file=$inh_path}{block name=content}
 
 
 
@@ -170,4 +170,4 @@ if ($("textarea[name=siblings]").val() && $('input[id=loanReduced]').prop('check
 </script>	
 		
 {/if}
-{include file='web/footer.tpl'}
+{/block}
