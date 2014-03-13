@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>BaBeSK Login</title>
-	<link rel="stylesheet" href="../smarty/templates/administrator/css/general.css" type="text/css" />
+	<link rel="stylesheet" href="{$path_smarty_tpl}/administrator/css/general.css" type="text/css" />
 	<link rel="shortcut icon" href="adminicon.ico" />
 </head>
 

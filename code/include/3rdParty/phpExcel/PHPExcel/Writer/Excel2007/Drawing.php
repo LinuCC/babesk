@@ -104,6 +104,11 @@ class PHPExcel_Writer_Excel2007_Drawing extends PHPExcel_Writer_Excel2007_Writer
 		$br = $pChart->getBottomRightPosition();
 		$br['colRow'] = PHPExcel_Cell::coordinateFromString($br['cell']);
 
+
+29 matches across 9 files
+
+
+Searching 2412 files for "PCHART_PATH" (regex, case sensitive)
 		$objWriter->startElement('xdr:twoCellAnchor');
 
 			$objWriter->startElement('xdr:from');

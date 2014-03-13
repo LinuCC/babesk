@@ -44,7 +44,7 @@ class Login {
 	protected function loginShow($msg = '') {
 
 		$this->_smarty->assign('status', $msg);
-		$this->_smarty->display('administrator/login.tpl');
+		$this->_smarty->display(PATH_SMARTY_TPL . '/administrator/login.tpl');
 		die();
 	}
 

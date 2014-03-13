@@ -14,19 +14,12 @@ define('PATH_WEB', realPath($rootPath."/web"));
 define('PATH_INCLUDE', realPath($rootPath."/include"));
 define('PATH_ACCESS', realPath($rootPath."/include/sql_access"));
 define('PATH_3RD_PARTY', PATH_INCLUDE . '/3rdParty');
+
+//Smarty
 define('PATH_SMARTY', PATH_3RD_PARTY . '/smarty');
 define('PATH_SMARTY_TPL', realPath($rootPath . '/smarty_templates'));
+
+//Document root
 define('PATH_WEBROOT', $_SERVER['DOCUMENT_ROOT']);
-
-defined('PCHART_PATH')
-	OR define('PCHART_PATH', PATH_INCLUDE . '/pChart');
-
-//tmp-Path
-// if(!defined('PATH_TMP')) {
-// 	if(!($tmpDir = ini_get('upload_tmp_dir'))) {
-// 		$tmpDir = $ini_val ? $ini_val : sys_get_temp_dir();
-// 	}
-// 	define('PATH_TMP', $tmpDir);
-// }
 
 ?>

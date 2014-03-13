@@ -38,11 +38,6 @@ jQuery.fn.outerHtml = function() {
 	return jQuery('<div />').append(this.eq(0).clone()).html();
 };
 
-$(document).ready(function() {
-	$('#content').hide();
-	$('#content').show(300);
-});
-
 </script>
 {/literal}
 

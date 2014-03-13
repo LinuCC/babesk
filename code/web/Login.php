@@ -116,7 +116,7 @@ class Login {
 		else {
 			$this->_smarty->assign ('showLoginButton', false);
 		}
-		$this->_smarty->display('web/login.tpl');
+		$this->_smarty->display(PATH_SMARTY_TPL . '/web/login.tpl');
 		die();
 	}
 

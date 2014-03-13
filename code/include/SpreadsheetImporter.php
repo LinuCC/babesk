@@ -1,6 +1,6 @@
 <?php
 
-require_once PATH_INCLUDE . '/phpExcel/PHPExcel.php';
+require_once PATH_3RD_PARTY . '/phpExcel/PHPExcel.php';
 require_once PATH_INCLUDE . '/IDataImporter.php';
 
 /**

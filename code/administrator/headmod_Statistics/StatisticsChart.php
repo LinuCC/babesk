@@ -26,9 +26,9 @@ abstract class StatisticsChart {
 
 	public function __construct() {
 
-		require_once PCHART_PATH . '/pDraw.class.php';
-		require_once PCHART_PATH . '/pData.class.php';
-		require_once PCHART_PATH . '/pImage.class.php';
+		require_once PATH_3RD_PARTY . '/pChart/pDraw.class.php';
+		require_once PATH_3RD_PARTY . '/pChart/pData.class.php';
+		require_once PATH_3RD_PARTY . '/pChart/pImage.class.php';
 
 	}
 
