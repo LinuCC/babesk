@@ -49,8 +49,7 @@ class MessageTemplate extends Messages {
 
 	protected function entryPoint($dataContainer) {
 
-		defined('_AEXEC') or die('Access denied');
-
+		parent::entryPoint($dataContainer);
 		$this->_dataContainer = $dataContainer;
 		$this->_interface = new MessageTemplateInterface($this->relPath,
 			$this->_dataContainer->getSmarty());
@@ -73,19 +72,16 @@ class MessageTemplate extends Messages {
 	 */
 	protected function templatesFetchAll() {
 
-		$data = array();
-
 		try {
-			$data = TableMng::query('SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM messagegroups WHERE name="vanilla");');
+			$res = $this->_pdo->query('SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM messagegroups WHERE name="vanilla");');
+			$data = $res->fetchAll(PDO::FETCH_ASSOC);
+			return (!empty($data)) ? $data : array();
 
-		} catch (MySQLVoidDataException $e) {
-			return array();
-
-		} catch (Exception $e) {
+		} catch (PDOException $e) {
+			$this->_logger->log('Error fetching the message-templates',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
 			$this->_interface->dieError('Konnte die Vorlagen nicht abrufen');
 		}
-
-		return $data;
 	}
 
 	/**

@@ -137,3 +137,5 @@ table {
 <hr>
 </p>
 <p>{$infotext2}</p>
+
+{/block}

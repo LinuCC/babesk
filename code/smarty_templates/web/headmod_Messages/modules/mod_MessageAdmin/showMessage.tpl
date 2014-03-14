@@ -1,7 +1,7 @@
 {extends file=$inh_path}{block name=content}
 
 {literal}
-<script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="{$path_js}/ckeditor/ckeditor.js"></script>
 <style type="text/css">
 
 .barcodeInput {

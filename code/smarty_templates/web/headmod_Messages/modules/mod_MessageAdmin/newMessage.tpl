@@ -1,5 +1,5 @@
 {extends file=$inh_path}{block name=content}
-<script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="{$path_js}/ckeditor/ckeditor.js"></script>
 
 {literal}
 
