@@ -1,33 +1,71 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
-<head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	{if isset($redirection)}
-		{*If this Var is set, redirect the user to another Website*}
-		<meta HTTP-EQUIV="REFRESH" content="{$redirection.time};
-		url=index.php?section={$redirection.target}" />
-	{/if}
+		{if isset($redirection)}
+			{*If this Var is set, redirect the user to another Website*}
+			<meta HTTP-EQUIV="REFRESH" content="{$redirection.time};
+			url=index.php?section={$redirection.target}" />
+		{/if}
 
-	{block name="style_include"}
-	<!-- <link rel="stylesheet" href="{$path_smarty_tpl}/web/css/general.css" type="text/css" /> -->
-	<link rel="stylesheet" href="{$path_css}/bootstrap-theme.min.css" type="text/css" />
-	<link rel="stylesheet" href="{$path_css}/bootstrap.min.css" type="text/css" />
-	{/block}
+		{block name="style_include"}
+		<!-- <link rel="stylesheet" href="{$path_smarty_tpl}/web/css/general.css" type="text/css" /> -->
+		<link rel="stylesheet" href="{$path_css}/bootstrap-theme.css" type="text/css" />
+		<link rel="stylesheet" href="{$path_css}/bootstrap.css" type="text/css" />
+		{/block}
 
-
-	<link rel="shortcut icon" href="webicon.ico" />
-	<title>{$title|default:'BaBeSK'}</title>
-</head>
+		<link rel="shortcut icon" href="webicon.ico" />
+		<title>{$title|default:'BaBeSK'}</title>
+	</head>
 
 	<body>
+	<div class="navbar navbar-default">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">BaBeSK</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li class="active">
+						<a href="index.php">{t}Main menu{/t}</a>
+					</li>
+					<li>
+						<a href="index.php?module=web|Settings">{t}Settings{/t}</a>
+					</li>
+					<li>
+						<a href="index.php?module=web|Help">{t}Help{/t}</a>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					{if $babeskActivated && isset($credit)}
+<!-- 						<li>
+							<p>Guthaben: {$credit} Euro</p>
+						</li>
+ -->					{/if}
+					<li>
+						<a href="index.php?action=logout">{t}Logout{/t}</a>
+					</li>
+<!-- 					<li>
+						<p>Name: {$username}</p>
+					</li>
+ -->				</ul>
+			</div>
+		</div>
+	</div>
+
+
 		<div id="header">
 			<div id="top">
 				<div id="top_left">
-					<p>Name: {$username}</p>
-					{if $babeskActivated && isset($credit)}<p>Guthaben: {$credit} Euro</p>{/if}
 					<a id="account_settings" href="#">Kontoeinstellungen</a><br />
 					<div id="account" style="display: none;">
 						{if $babeskActivated}
