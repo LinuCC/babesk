@@ -10,6 +10,10 @@ class WebInterface {
 
 	public function __construct($smarty) {
 		$this->_smarty = $smarty;
+		$this->_baseTemplate = PATH_SMARTY_TPL . '/web/baseLayout.tpl';
+		$this->_smarty->assign(
+			'inh_path', $this->_baseTemplate
+		);
 	}
 
 	////////////////////////////////////////////////////////////////////////
@@ -115,7 +119,7 @@ class WebInterface {
 	 * @return [type] [description]
 	 */
 	protected function display() {
-		$this->_smarty->display(PATH_SMARTY_TPL . '/web/baseLayout.tpl');
+		$this->_smarty->display($this->_baseTemplate);
 	}
 
 	////////////////////////////////////////////////////////////////////////
@@ -131,6 +135,12 @@ class WebInterface {
 	protected $_backlink;
 
 	protected $_buttonlinks;
+
+	/**
+	 * The base-smarty-template that gets inherited to display the side
+	 * @var string
+	 */
+	protected $_baseTemplate;
 }
 
 ?>

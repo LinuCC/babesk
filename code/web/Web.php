@@ -80,9 +80,6 @@ class Web {
 		require PATH_SMARTY . "/smarty_init.php";
 		$this->_smarty = $smarty;
 		$version=@file_get_contents("../version.txt");
-		$this->_smarty->assign(
-			'inh_path', PATH_SMARTY_TPL . '/web/baseLayout.tpl'
-		);
 		if ($version===FALSE) {
 			$version = "";
 		}
@@ -310,8 +307,8 @@ class Web {
 
 		try {
 			$this->_acl->accessControlInit($_SESSION['uid']);
-			// $webModule = $this->_acl->moduleGet('root/web');
-			// $this->_smarty->assign('modules', $webModule->getChilds());
+			$webModule = $this->_acl->moduleGet('root/web');
+			$this->_smarty->assign('modules', $webModule->getChilds());
 
 		} catch (AclException $e) {
 			$this->_logger->log('user is not in any group',

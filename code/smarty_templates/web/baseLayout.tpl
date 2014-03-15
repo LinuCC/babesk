@@ -92,47 +92,30 @@
 
 		{block name="module_selector"}
 			<div id="module_selector" class="container">
-				<a href="index.php?module=web|Babesk" class="col-md-2 col-sm-4 col-xs-6
-				{if $activeHeadmodule == 'Babesk'}active{/if}">
-					<div> <!-- Correctly wrap with smaller devices with extra div -->
-						<div class="icon-Babesk icon"></div>
-						Essen bestellen
-					</div>
-				</a>
-				<a href="index.php?module=web|Kuwasys" class="col-md-2 col-sm-4 col-xs-6 {if $activeHeadmodule == 'Kuwasys'}active{/if}">
-					<div>
-						<div class="icon-Kuwasys icon"></div>
-						Kurswahlen
-					</div>
-				</a>
-				<a href="index.php?module=web|Schbas" class="col-md-2 col-sm-4 col-xs-6
-				{if $activeHeadmodule == 'Schbas'}active{/if}">
-					<div>
-						<div class="icon-Schbas icon"></div>
-						Schulbuchausleihe
-					</div>
-				</a>
-				<a href="index.php?module=web|PVau" class="col-md-2 col-sm-4 col-xs-6
-				{if $activeHeadmodule == 'PVau'}active{/if}">
-					<div>
-						<div class="icon-PVau icon"></div>
-						Vertretungsplan
-					</div>
-				</a>
-				<a href="index.php?module=web|Fits" class="col-md-2 col-sm-4 col-xs-6
-				{if $activeHeadmodule == 'Fits'}active{/if}">
-					<div>
-						<div class="icon-Fits icon"></div>
-						Internet-Führerschein
-					</div>
-				</a>
-				<a href="index.php?module=web|Messages" class="col-md-2 col-sm-4
-				col-xs-6 {if $activeHeadmodule == 'Messages'}active{/if}">
-					<div>
-						<div class="icon-Messages icon"></div>
-						Nachrichten
-					</div>
-				</a>
+
+				{$visibleModules = 0}
+				{foreach $modules as $module}
+					{if $module->isDisplayInMenuAllowed()}
+						{$visibleModules = $visibleModules + 1}
+					{/if}
+				{/foreach}
+
+				{if $visibleModules < 6}
+					<div class="col-md-{6 - $visibleModules}"></div>
+				{/if}
+				{foreach $modules as $module}
+					{if $module->isDisplayInMenuAllowed()}
+						{*Center the Modules if they wouldnt span the whole page*}
+						<a href="index.php?module=web|{$module->getName()}" class="col-md-2 col-sm-4 col-xs-6
+						{if $activeHeadmodule == $module->getName()}active{/if}">
+							<div> <!-- Correctly wrap with smaller devices with extra div -->
+								<div class="icon-{$module->getName()} icon"></div>
+									{$path = $moduleGenMan->modulePathGet($module)}
+									{_g("modulepath_$path")}
+							</div>
+						</a>
+					{/if}
+				{/foreach}
 			</div>
 		{/block}
 
