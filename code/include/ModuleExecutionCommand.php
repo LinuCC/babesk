@@ -126,7 +126,7 @@ class ModuleExecutionCommand {
 	 */
 	public function lastModuleElementRemove() {
 
-		if(count($this->_execPathModules)) {
+		if(count($this->_execPathModules) > 1) {
 			array_pop($this->_execPathModules);
 			return true;
 		}

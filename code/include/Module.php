@@ -101,6 +101,19 @@ abstract class Module {
 		$this->_smarty->assign('inh_path', $siteHeaderPath);
 	}
 
+	protected function moduleTemplatePathSet($customPath = false) {
+
+		if($customPath === false) {
+			$relpath = $this->relPath;
+		}
+		else {
+			$relpath = $customPath;
+		}
+		$subprogram = $this->_modExecCommand->subprogramGet();
+		$this->_smartyModuleTemplatesPath =
+			PATH_SMARTY_TPL . '/' . $subprogram . $relpath;
+	}
+
 	/**
 	 * Displays a Templatefile which is in the standard templatePath
 	 *

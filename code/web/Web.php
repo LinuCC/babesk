@@ -240,6 +240,9 @@ class Web {
 				$this->_interface->dieError(
 					'Keine Zugriffsberechtigung auf dieses Modul!');
 			}
+			$this->_logger->log('Could not execute a module!',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieError(_g('Error executing the Module!'));
 
 		} catch (Exception $e) {
 			$this->_logger->log('Could not execute a module!',
