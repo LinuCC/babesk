@@ -18,7 +18,7 @@ function switchClassDescriptionOfLink(classDescrId) {
 
 $(document).ready(function() {
 
-	$('[id^=classDescription_]').hide();
+	$('[id^=classDescription]').hide();
 
 	$('.classlistingContainer').hover(
 		function(event) {

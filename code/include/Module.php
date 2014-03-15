@@ -95,7 +95,7 @@ abstract class Module {
 
 		$subprogram = $this->_modExecCommand->subprogramGet();
 		$this->_smartyModuleTemplatesPath =
-			PATH_SMARTY_TPL . $subprogram . $this->relPath;
+			PATH_SMARTY_TPL . '/' . $subprogram . $this->relPath;
 
 		$siteHeaderPath = $this->_smartyModuleTemplatesPath . 'header.tpl';
 		$this->_smarty->assign('inh_path', $siteHeaderPath);

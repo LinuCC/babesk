@@ -64,7 +64,9 @@ class Show extends \web\Kuwasys\ClassList {
 	protected function entryPoint($dataContainer) {
 
 		parent::entryPoint($dataContainer);
-		$this->initSmartyVariables();
+		$subprogram = $this->_modExecCommand->subprogramGet();
+		$this->_smartyModuleTemplatesPath =
+			PATH_SMARTY_TPL . '/' . $subprogram . $this->relPath;
 	}
 
 	/**

@@ -315,7 +315,7 @@ h3.filterBar {
 #errorContainer {
 	color: #af2d2b;
 	background-color: #ffc0bf;
-	background-image: url(../../../../images/status/error_64.png);
+	background-image: url(../../../images/status/error_64.png);
 	background-repeat: no-repeat;
 	background-position: 5px 50%;
 	border-radius: 15px;
@@ -351,7 +351,7 @@ h3.filterBar {
 #warningContainer {
 	color: #686800;
 	background-color: #fff878;
-	background-image: url(../../../../images/status/warning_64.png);
+	background-image: url(../../../images/status/warning_64.png);
 	background-repeat: no-repeat;
 	background-position: 5px 50%;
 	border-radius: 15px;
@@ -387,7 +387,7 @@ h3.filterBar {
 #messageContainer {
 	color: #2b67af;
 	background: #acd2ff;
-	background-image: url(../../../../images/status/information_64.png);
+	background-image: url(../../../images/status/information_64.png);
 	background-repeat: no-repeat;
 	background-position: 5px 50%;
 	border-radius: 15px;
@@ -418,7 +418,7 @@ h3.filterBar {
 #successContainer {
 	color: #55832f;
 	background: #e0ffc6;
-	background-image: url(../../../../images/status/checkmark_64.png);
+	background-image: url(../../../images/status/checkmark_64.png);
 	background-repeat: no-repeat;
 	background-position: 5px 50%;
 	border-radius: 15px;

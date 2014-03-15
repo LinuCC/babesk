@@ -13,7 +13,7 @@
 	</div>
 </fieldset>
 
-<script src="../include/js/jstree/jquery.jstree.js"></script>
-<script src="../smarty/templates/administrator/headmod_System/modules/
+<script src="{$path_js}/jstree/jquery.jstree.js"></script>
+<script src="{$path_smarty_tpl}/administrator/headmod_System/modules/
 	mod_ModuleSettings/main.js"></script>
 {/block}

@@ -1,10 +1,5 @@
 {extends file=$inh_path}{block name=content}
 
-<script type="text/javascript" src="../smarty/templates/web/headmod_Kuwasys/classDescriptionSwitch.js">
-</script>
-<script type="text/javascript" src="../smarty/templates/web/headmod_Kuwasys/generalFunctions.js">
-</script>
-
 <style type='text/css'  media='all'>
 
 .classListLabelSelectable {
@@ -51,7 +46,7 @@ p.helpTextLockedClasses {
 		<p class="weekdayHeading">
 			{$classUnit.translatedName}
 		</p>
-		<table>
+		<table class="classlist">
 			<tr>
 				<th>Kurs</th>
 				<th>Erste Wahl</th>
@@ -101,7 +96,12 @@ p.helpTextLockedClasses {
 	diese Kurse sind voll, erlauben generell keine Anmeldungen oder sie haben sich für diesen Veranstaltungstag schon bei
 	anderen Kursen angemeldet.</p>
 </form>
+{/block}
 
+{block name="js_include" append}
+
+<script type="text/javascript" src="{$path_smarty_tpl}/web/headmod_Kuwasys/classDescriptionSwitch.js"></script>
+<script type="text/javascript" src="{$path_smarty_tpl}/web/headmod_Kuwasys/generalFunctions.js"></script>
 
 <script type="text/javascript">
 
@@ -114,6 +114,10 @@ $(document).ready(function() {
 		$(this).parent().children('div.classDescription').toggle();
 	});
 
+	$('table.classlist tr th').hover(function(ev) {
+		$(this).children('div.classDescription').toggle();
+	});
+
 	$('input.classListCheckbox').on('click', function(event) {
 
 		var nameBeginning = $(this).attr('name').replace(/Choice.*/, 'Choice');
@@ -123,8 +127,6 @@ $(document).ready(function() {
 			find('input.classListCheckbox[name^=' + nameBeginning + ']')
 			.not($(this)).attr('checked', false);
 	});
-
-
 });
 
 </script>

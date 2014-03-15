@@ -1,0 +1,108 @@
+.program_title {
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+#navigation {
+	background-image: -webkit-gradient(linear, left 0%, left 100%, from(#807D7D), to(#6C6A6A));
+	background-image: -webkit-linear-gradient(top, #807D7D, 0%, #6C6A6A, 100%);
+	background-image: -moz-linear-gradient(top, #807D7D 0%, #6C6A6A 100%);
+	background-image: linear-gradient(to bottom, #807D7D 0%, #6C6A6A 100%);
+	background-repeat: repeat-x;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff807D7D', endColorstr='#ff6C6A6A', GradientType=0);
+	color: #BFBBBB;
+}
+
+#navigation.navbar-inverse .navbar-brand {
+	color: #DDDDDD;
+}
+
+#navigation.navbar-inverse .navbar-nav > li > a {
+	color: #DDDDDD;
+}
+
+#navigation.navbar-inverse .navbar-brand:hover {
+	color: #FFFFFF;
+}
+
+#navigation.navbar-inverse .navbar-nav > li > a:hover {
+	color: #FFFFFF;
+}
+
+#navigation .navbar-nav .active > a {
+	background-color: #595757;
+}
+
+#navigation .icon-Settings {
+	position: relative;
+	top: 2px;
+}
+
+#module_selector {
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+	padding: 10px 0;
+	background-color: #AADD33;
+	box-shadow: 2px 2px 1px black;
+}
+
+#module_selector a {
+	border-radius: 5px;
+	text-align: center;
+	color: #404040;
+	padding: 10px;
+}
+
+#module_selector a:focus {
+	text-decoration: none;
+}
+
+#module_selector a:hover div.icon,
+#module_selector a.active div.icon {
+	text-decoration: none;
+	text-shadow: 1px 1px 0px #5F7729;
+	color: #FFBA00;
+	transition-property: color;
+	transition-duration: 0.2s;
+}
+
+#module_selector a:hover {
+	text-decoration: none;
+}
+
+#content {
+	/*border: 1px solid #33dea2;*/
+	background-color: #F5F4AC;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	padding: 20px;
+	margin-top: 5px;
+	box-shadow: 2px 2px 1px black;
+	min-height: 400px;
+}
+
+#content > h2, h3 {
+	text-align: center;
+}
+
+#content_footer_conn {
+	position: relative;
+	top: -30px;
+	z-index: -1;
+	height: 40px;
+	background-color: #6C6A6A;
+	border-top: 10px solid #AADD33;
+}
+
+#footer {
+	background-color: #6C6A6A;
+	padding-bottom: 20px;
+	height: 250px;
+	color: #FFFFFF;
+	text-shadow: 1px 1px 0px #3D3D3D;
+	margin-top: 5px;
+}
+
+#footer .program_version {
+	text-align: right;
+}

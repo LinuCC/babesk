@@ -91,6 +91,7 @@ class Web {
 		$smarty->assign('path_smarty_tpl', $relRoot . 'smarty_templates');
 		$smarty->assign('path_js', $relRoot . 'include/js');
 		$smarty->assign('path_css', $relRoot . 'include/css');
+		$smarty->assign('path_images', $relRoot . 'images');
 		$this->_smarty->assign('error', '');
 	}
 
@@ -224,21 +225,24 @@ class Web {
 	private function executeModule() {
 
 		try {
-			try {
-				$this->_acl->moduleExecute(
-					$this->_moduleExecutionParser->executionCommandGet(),
-					$this->dataContainerCreate());
-
-			} catch (Exception $e) {
-				$this->_interface->dieError(_g('Error executing the Module!'));
-			}
-
+			$this->_acl->moduleExecute(
+				$this->_moduleExecutionParser->executionCommandGet(),
+				$this->dataContainerCreate());
 
 		} catch (AclException $e) {
+			$this->_logger->log('Forbidden module-access-try by a user',
+				'Notice', Null, json_encode(array(
+					'msg' => $e->getMessage(), 'uid' => $_SESSION['uid']
+			)));
 			if($e->getCode() == 105) { //Module-Access forbidden
 				$this->_interface->dieError(
 					'Keine Zugriffsberechtigung auf dieses Modul!');
 			}
+
+		} catch (Exception $e) {
+			$this->_logger->log('Could not execute a module!',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieError(_g('Error executing the Module!'));
 		}
 	}
 
