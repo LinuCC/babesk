@@ -109,12 +109,8 @@ $(document).ready(function() {
 
 	$('div.classDescription').hide();
 
-	$('a.classlabel').on('click', function(event) {
+	$('table.classlist tr th').on('click', function(ev) {
 		event.preventDefault();
-		$(this).parent().children('div.classDescription').toggle();
-	});
-
-	$('table.classlist tr th').hover(function(ev) {
 		$(this).children('div.classDescription').toggle();
 	});
 

@@ -85,11 +85,20 @@
 	text-align: center;
 }
 
+.error_sorry {
+	font-size: 20px;
+	text-align: center;
+}
+
+.error_description {
+
+}
+
 #content_footer_conn {
 	position: relative;
-	top: -30px;
+	top: -50px;
 	z-index: -1;
-	height: 40px;
+	height: 50px;
 	background-color: #6C6A6A;
 	border-top: 10px solid #AADD33;
 }
@@ -97,12 +106,62 @@
 #footer {
 	background-color: #6C6A6A;
 	padding-bottom: 20px;
-	height: 250px;
+	min-height: 300px;
 	color: #FFFFFF;
 	text-shadow: 1px 1px 0px #3D3D3D;
 	margin-top: 5px;
 }
 
-#footer .program_version {
+#footer a {
+	color: #AADD33;
+}
+
+/*
+ * Set the colors of the twitter-bootstrap-buttons again...
+ */
+#footer a.btn-default {
+	color: #000;
+}
+
+#footer a.btn-primary,
+#footer a.btn-success,
+#footer a.btn-info,
+#footer a.btn-warning,
+#footer a.btn-danger,
+#footer a.btn-link {
+	color: #fff;
+}
+
+#footer .footer-text {
+	position: relative;
+	top: -30px;
+}
+
+#footer .modules {
+	text-align: left;
+}
+
+#footer .contact {
+	text-align: center;
+}
+
+#footer .footer-heading {
+	margin-top: 0;
+	font-size: 16px;
+	min-height: 20px;
+}
+
+#footer .right-col {
 	text-align: right;
+}
+
+#footer .help {
+	margin-bottom: 2em;
+}
+
+/*
+ * Toast configuration
+ */
+
+body .toast-top-right{
 }

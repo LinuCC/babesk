@@ -1,16 +1,16 @@
 @font-face {
-	font-family: 'headmodicons';
-	src:url('../../../images/iconfonts/headmodicons.eot?-sclaym');
-	src:url('../../../images/iconfonts/headmodicons.eot?#iefix-sclaym') format('embedded-opentype'),
-		url('../../../images/iconfonts/headmodicons.woff?-sclaym') format('woff'),
-		url('../../../images/iconfonts/headmodicons.ttf?-sclaym') format('truetype'),
-		url('../../../images/iconfonts/headmodicons.svg?-sclaym#headmodicons') format('svg');
+	font-family: 'iconfonts';
+	src:url('../../../images/iconfonts/iconfonts.eot?-sclaym');
+	src:url('../../../images/iconfonts/iconfonts.eot?#iefix-sclaym') format('embedded-opentype'),
+		url('../../../images/iconfonts/iconfonts.woff?-sclaym') format('woff'),
+		url('../../../images/iconfonts/iconfonts.ttf?-sclaym') format('truetype'),
+		url('../../../images/iconfonts/iconfonts.svg?-sclaym#iconfonts') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
 
 [class^="icon-"], [class*=" icon-"] {
-	font-family: 'headmodicons';
+	font-family: 'iconfonts';
 	font-size: 64px;
 	speak: none;
 	font-style: normal;
@@ -49,6 +49,12 @@
 }
 .icon-Messages:before {
 	content: "\e606";
+}
+.icon-error:before {
+	content: "\e600";
+}
+.icon-darthvader:before {
+	content: "\e608";
 }
 .icon-Settings:before {
 	content: "\e607";
