@@ -25,7 +25,8 @@
 	</head>
 
 	<body>
-		<div id="navigation" class="navbar-inverse navbar-default">
+		<div id="navigation" class="navbar-inverse navbar-default"
+			role="navigation">
 			<div class="container">
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -34,36 +35,49 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="#">BaBeSK</a>
+					<a class="navbar-brand" href="index.php">BaBeSK</a>
 				</div>
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
 						<li>
 							<a href="index.php">{t}Home{/t}</a>
 						</li>
-						<li>
-							<a href="index.php?module=web|Settings">
-								<span class="icon-Settings"></span>
-								{t}Settings{/t}
-							</a>
-						</li>
-						<li>
-							<a href="index.php?module=web|Help">{t}Help{/t}</a>
-						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
-						{if $babeskActivated && isset($credit)}
-	<!-- 						<li>
-								<p>Guthaben: {$credit} Euro</p>
-							</li>
-	 -->					{/if}
 						<li>
-							<a href="index.php?action=logout">{t}Logout{/t}</a>
+							<form>
+								<a class="btn btn-info navbar-btn"
+								href="index.php?module=web|Help">
+									{t}Help{/t}
+								</a>
+							</form>
 						</li>
-	<!-- 					<li>
-							<p>Name: {$username}</p>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								{$username} <b class="caret"></b>
+							</a>
+							<ul id="dropdown-user" class="dropdown-menu">
+								{if $babeskActivated && isset($credit)}
+									<li>
+										<p class="navbar-text">
+												<span class="highlighted">
+													Guthaben: {$credit} Euro
+												</span>
+										</p>
+									</li>
+								{/if}
+								<li>
+									<a href="index.php?module=web|Settings">
+										{t}Settings{/t}
+										<span class="icon-Settings"></span>
+									</a>
+								</li>
+								<li>
+									<a href="index.php?action=logout">{t}Logout{/t}</a>
+								</li>
+							</ul>
 						</li>
-	 -->				</ul>
+					</ul>
 				</div>
 			</div>
 		</div>
@@ -78,37 +92,42 @@
 
 		{block name="module_selector"}
 			<div id="module_selector" class="container">
-				<a href="index.php?module=web|Babesk" class="col-md-2 col-sm-4 col-xs-6">
+				<a href="index.php?module=web|Babesk" class="col-md-2 col-sm-4 col-xs-6
+				{if $activeHeadmodule == 'Babesk'}active{/if}">
 					<div> <!-- Correctly wrap with smaller devices with extra div -->
 						<div class="icon-Babesk icon"></div>
 						Essen bestellen
 					</div>
 				</a>
-				<a href="index.php?module=web|Kuwasys" class="col-md-2 col-sm-4 col-xs-6">
+				<a href="index.php?module=web|Kuwasys" class="col-md-2 col-sm-4 col-xs-6 {if $activeHeadmodule == 'Kuwasys'}active{/if}">
 					<div>
 						<div class="icon-Kuwasys icon"></div>
 						Kurswahlen
 					</div>
 				</a>
-				<a href="index.php?module=web|Schbas" class="col-md-2 col-sm-4 col-xs-6">
+				<a href="index.php?module=web|Schbas" class="col-md-2 col-sm-4 col-xs-6
+				{if $activeHeadmodule == 'Schbas'}active{/if}">
 					<div>
 						<div class="icon-Schbas icon"></div>
 						Schulbuchausleihe
 					</div>
 				</a>
-				<a href="index.php?module=web|PVau" class="col-md-2 col-sm-4 col-xs-6">
+				<a href="index.php?module=web|PVau" class="col-md-2 col-sm-4 col-xs-6
+				{if $activeHeadmodule == 'PVau'}active{/if}">
 					<div>
 						<div class="icon-PVau icon"></div>
 						Vertretungsplan
 					</div>
 				</a>
-				<a href="index.php?module=web|Fits" class="col-md-2 col-sm-4 col-xs-6">
+				<a href="index.php?module=web|Fits" class="col-md-2 col-sm-4 col-xs-6
+				{if $activeHeadmodule == 'Fits'}active{/if}">
 					<div>
 						<div class="icon-Fits icon"></div>
 						Internet-Führerschein
 					</div>
 				</a>
-				<a href="index.php?module=web|Messages" class="col-md-2 col-sm-4 col-xs-6">
+				<a href="index.php?module=web|Messages" class="col-md-2 col-sm-4
+				col-xs-6 {if $activeHeadmodule == 'Messages'}active{/if}">
 					<div>
 						<div class="icon-Messages icon"></div>
 						Nachrichten
@@ -136,8 +155,8 @@
 			</noscript>
 			{block name="content"}
 				{if $error}
-					<div class="col-md-8 col-md-offset-2">
-						<h3><div class="icon-darthvader icon"></div></h3>
+					<div class="col-md-8 col-md-offset-2 error-container">
+						<h3><div class="icon-error icon"></div></h3>
 						<p class="error_sorry">
 							{t}Sorry! An error occured. We could not handle your request.{/t}
 						</p>
@@ -157,7 +176,7 @@
 								</div>
 							</div>
 						</div>
-						<a class="btn btn-primary"
+						<a class="btn btn-primary pull-right"
 							href="{if $backlink}{$backlink}
 								{else}javascript: history.go(-1){/if}">
 							{t}back{/t}
@@ -173,7 +192,7 @@
 					<div class="footer-heading"></div>
 				</div>
 				<div class="container footer-text">
-					<div class="modules col-md-4">
+					<div class="modules col-sm-4 col-xs-12">
 							<div class="footer-heading">{t}Actions:{/t}</div>
 							<p><a href="index.php?module=web|Babesk">Essen bestellen</a></p>
 							<p><a href="index.php?module=web|Kuwasys">Kurswahlen</a></p>
@@ -183,21 +202,21 @@
 							<p><a href="index.php?module=web|Messages">Nachrichten</a></p>
 							<p><a href="index.php?module=web|Settings">Einstellungen</a></p>
 					</div>
-					<div class="contact col-md-4">
+					<div class="contact col-sm-4 col-xs-12">
 						<div class="footer-heading">{t}Contact:{/t}</div>
 
 
 						<!-- Remove following paragraphs and put your own information in -->
 						<p>+++</p>
-						<p>Here would be your contact-information</p>
+						<p>Insert your contact-information here</p>
 						<p>+++</p>
 
 					</div>
-					<div class="col-md-4 right-col">
-						<div class="footer-heading"></div>
+					<div class="col-sm-4 col-xs-12 right-col">
+						<div class="footer-heading">{t}More:{/t}</div>
 						<div class="help">
 							<a class="btn btn-sm btn-info"
-								href="index.php?module=web|Babesk|Help"
+								href="index.php?module=web|Help"
 							>{t}Help{/t}</a>
 						</div>
 						<div class="program_version">
@@ -216,9 +235,8 @@
 							</a>
 							for bugs and feature requests.
 						</p>
-						<p style="font-size: 10px; position:absolute; top: 225px;
-							right: 0px">
-							Also, <a href="javascript: toastr.success('We heard you like mobile... so we put your toasts in your browser so you can toast while getting a toast', 'Yo dawg')">spam.</a>
+						<p style="font-size: 10px; position:relative; top: 50px">
+							Also, <a href="javascript: toastr.info('<div class=&quot;icon-darthvader icon&quot;></div>', 'A wild Vader appeared!')">spam.</a>
 						</p>
 						</div>
 					</div>

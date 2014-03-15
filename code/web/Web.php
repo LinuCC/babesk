@@ -225,9 +225,11 @@ class Web {
 	private function executeModule() {
 
 		try {
-			$this->_acl->moduleExecute(
-				$this->_moduleExecutionParser->executionCommandGet(),
-				$this->dataContainerCreate());
+			$command = $this->_moduleExecutionParser->executionCommandGet();
+			$this->_smarty->assign(
+				'activeHeadmodule', $command->moduleAtLevelGet(2)
+			);
+			$this->_acl->moduleExecute($command, $this->dataContainerCreate());
 
 		} catch (AclException $e) {
 			$this->_logger->log('Forbidden module-access-try by a user',
@@ -305,10 +307,13 @@ class Web {
 
 		try {
 			$this->_acl->accessControlInit($_SESSION['uid']);
-			$webModule = $this->_acl->moduleGet('root/web');
-			$this->_smarty->assign('modules', $webModule->getChilds());
+			// $webModule = $this->_acl->moduleGet('root/web');
+			// $this->_smarty->assign('modules', $webModule->getChilds());
 
 		} catch (AclException $e) {
+			$this->_logger->log('user is not in any group',
+				'Moderate', Null,
+				json_encode(array('msg' => $e->getMessage())));
 			$this->_interface->dieError('Sie sind in keiner Gruppe und ' .
 				'haben daher keine Rechte! Wenden sie sich bitte an den ' .
 				'Administrator');

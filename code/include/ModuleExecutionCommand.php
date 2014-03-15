@@ -63,6 +63,27 @@ class ModuleExecutionCommand {
 	}
 
 	/**
+	 * Returns the modulename that is at the given level
+	 * level 0 is root, level 1 the subprogram, level 2 the headmodule...
+	 * @return string The modulename or false if none found
+	 */
+	public function moduleAtLevelGet($level) {
+
+		if($level < 2) {
+			return $this->_execPathPreElements[$level];
+		}
+		else {
+			$elLevel = $level - 2;
+			if(isset($this->_execPathModules[$elLevel])) {
+				return $this->_execPathModules[$elLevel];
+			}
+			else {
+				return false;
+			}
+		}
+	}
+
+	/**
 	 * Returns only the module-part of the execution-path
 	 *
 	 * @return string the module-path
