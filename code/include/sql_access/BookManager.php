@@ -24,9 +24,10 @@ class BookManager extends TableManager{
 		$inventoryManager = new InventoryManager();
 		$res_array = array();
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY `%s` LIMIT %s,10', $this->tablename,$orderBy,$pagePointer));
-		$result = $this->db->query($query);
-		if (!$result) {
-			throw DB_QUERY_ERROR.$this->db->error;
+		try {
+            $result = $this->db->query($query);
+        }  catch (Exception $e) {
+            echo  DB_QUERY_ERROR.$e->getMessage();
 		}
 		while($buffer = $result->fetch_assoc())
 			$res_array[] = $buffer;

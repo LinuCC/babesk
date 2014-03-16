@@ -76,7 +76,7 @@ class MessageAuthor extends Messages {
 		$data = array();
 
 		try {
-			$data = TableMng::query('SELECT `ID`, `name` FROM groups;');
+			$data = TableMng::query('SELECT `ID`, `name` FROM Groups;');
 
 		} catch (MySQLVoidDataException $e) {
 			return array();
@@ -165,7 +165,7 @@ class MessageAuthor extends Messages {
 		try {
 			$data = TableMng::query(sprintf(
 				'SELECT COUNT(*) AS count
-				FROM groups WHERE `ID` = "%s"', $id));
+				FROM Groups WHERE `ID` = "%s"', $id));
 
 		} catch (Exception $e) {
 			$this->_interface->dieError('Konnte nicht überprüfen ob die Gruppe existiert');

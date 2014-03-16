@@ -76,7 +76,7 @@ class MessageTemplate extends Messages {
 		$data = array();
 
 		try {
-			$data = TableMng::query('SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM messagegroups WHERE name="vanilla");');
+			$data = TableMng::query('SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM MessageGroups WHERE name="vanilla");');
 
 		} catch (MySQLVoidDataException $e) {
 			return array();
@@ -123,9 +123,9 @@ class MessageTemplate extends Messages {
 	protected function templateAddToDb($title, $text) {
 
 		try {
-			$gid = TableMng::query('SELECT ID FROM messagegroups WHERE name LIKE "vanilla"');
+			$gid = TableMng::query('SELECT ID FROM messageGroups WHERE name LIKE "vanilla"');
 
-			TableMng::query(sprintf('INSERT INTO MessageTemplate
+			TableMng::query(sprintf('INSERT INTO messageTemplate
 				(`title`, `text`,`GID`) VALUES ("%s", "%s", "%d");', $title, $text,$gid[0]['ID']));
 
 		} catch (Exception $e) {
@@ -154,7 +154,7 @@ class MessageTemplate extends Messages {
 	protected function templateDeleteFromDb($id) {
 
 		try {
-			TableMng::query(sprintf('DELETE FROM MessageTemplate
+			TableMng::query(sprintf('DELETE FROM messageTemplate
 				WHERE `ID` = %s', $id));
 
 		} catch (Exception $e) {
