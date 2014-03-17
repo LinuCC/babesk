@@ -4,10 +4,10 @@
 }
 
 #navigation {
-	background-image: -webkit-gradient(linear, left 0%, left 100%, from(#807D7D), to(#6C6A6A));
-	background-image: -webkit-linear-gradient(top, #807D7D, 0%, #6C6A6A, 100%);
-	background-image: -moz-linear-gradient(top, #807D7D 0%, #6C6A6A 100%);
-	background-image: linear-gradient(to bottom, #807D7D 0%, #6C6A6A 100%);
+	background-image: -webkit-gradient(linear, left 0%, left 100%, from(#807D7D), to(#807D7D));
+	background-image: -webkit-linear-gradient(top, #807D7D 0%, #807D7D, 100%);
+	background-image: -moz-linear-gradient(top, #807D7D 0%, #807D7D 100%);
+	background-image: linear-gradient(to bottom, #807D7D 0%, #807D7D 100%);
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff807D7D', endColorstr='#ff6C6A6A', GradientType=0);
 	color: #BFBBBB;
@@ -110,6 +110,10 @@
 	text-decoration: none;
 }
 
+#module_selector .icon {
+	font-size: 64px;
+}
+
 #content {
 	/*border: 1px solid #33dea2;*/
 	background-color: #F5F4AC;
@@ -126,16 +130,23 @@
 }
 
 .error_sorry {
-	font-size: 18px;
 	text-align: center;
+	line-height: 32px;
 }
 
-.error_description {
-
+.error-container .icon-error-container {
+	font-size: 32px;
+	margin-top: 0px;
+	margin-bottom: 0px;
 }
 
-.error-container [class^="icon-"], [class*=" icon-"] {
+.error-container [class^="icon-"],
+.error-container [class*=" icon-"] {
 	color: #b94a48;
+}
+
+.error-container .btn {
+	margin-top: 20px;
 }
 
 #content_footer_conn {
@@ -214,7 +225,47 @@
 	min-height: 20px;
 }
 
-
 #footer .help {
 	margin-bottom: 2em;
+}
+
+
+div.quotebox, p.quotebox {
+
+	border-left: 4px solid #AADD33;
+	margin: 5px 5px 5px 5px;
+	padding: 5px;
+	background-color: #EEEEEE;
+}
+
+.panel.bg-fit {
+	background-color: #F5F5D1;
+}
+
+.panel-primary {
+	border-color: #AADD33;
+}
+
+.panel-primary > .panel-heading {
+	background-image: none;
+	background-color: #AADD33;
+	border-color: #AADD33;
+}
+
+.panel-primary > .panel-heading > .panel-title {
+	/*font-weight: bold;*/
+	color: #455912;
+}
+
+.class-container h4.panel-title {
+	display: inline;
+}
+
+.expand-button-content {
+	font-size: 12px;
+	margin-right: 5px;
+}
+
+#selector-container .submit-button {
+	margin-right: 10px;
 }

@@ -49,6 +49,9 @@ class Login {
 		defined('_WEXEC') or die("Access denied");
 		$this->_username = $_POST['login'];
 		$this->_password = $_POST['password'];
+		$this->_isAjaxRequest = (
+			isset($_GET['login']) && $_GET['login'] == 'ajax'
+		);
 	}
 
 	private function checkLogin() {
@@ -59,7 +62,13 @@ class Login {
 		$this->checkPassword();
 		$this->checkLockedAccount();
 		$this->finishSuccessfulLogin();
-		return true;
+
+		if($this->_isAjaxRequest) {
+			die(json_encode(array('val' => 'success')));
+		}
+		else {
+			return true;
+		}
 	}
 
 	private function setUpUserManager() {
@@ -77,47 +86,57 @@ class Login {
 
 		try {
 			$this->_userId = $this->_userManager->getUserID($this->_username);
+
 		} catch (MySQLVoidDataException $e) {
-			$this->assignErrorToSmarty(
-				_g('User not found or incorrect password')
+			$this->dieShowLoginForm(
+				_g('User not found or incorrect password'), true
 			);
-			$this->dieShowLoginForm();
 		} catch (Exception $e) {
-			$this->assignErrorToSmarty('ERROR:' . $e->getMessage());
-			$this->dieShowLoginForm();
+			$this->_logger->log(
+				'Error while fetching the userId at userlogin!',
+				'Moderate', Null,
+				json_encode(array('msg' => $e->getMessage())));
+			$this->dieShowLoginForm(_g('Error while logging you in!'), true);
 		}
 	}
 
 	private function checkLoginInput() {
 
 		if(empty($this->_username) || empty($this->_password)) {
-			$this->assignErrorToSmarty(
-				_g('Please input both username and password!')
+			$this->dieShowLoginForm(
+				_g('Please input both username and password!'), true
 			);
-			$this->dieShowLoginForm();
 		}
 
 		try {
 			inputcheck($this->_username, 'name', _g('Username'));
 			inputcheck($this->_password, 'password', _g('Password'));
+
 		} catch (WrongInputException $e) {
-			$this->assignErrorToSmarty(
-				_g('Invalid characters were used in field %1$s',
-					$e->getFieldName())
+			$this->dieShowLoginForm(
+				_g('The input of field %1$s contains invalid characters or ' .
+					'is too short!', $e->getFieldName()
+				), true
 			);
-			$this->dieShowLoginForm();
 		}
 	}
 
-	private function dieShowLoginForm() {
-		if ($this->isWebloginHelptext()) {
-			$this->_smarty->assign ('showLoginButton', true);
+	private function dieShowLoginForm($msg = '', $isError = false) {
+
+		if($this->_isAjaxRequest) {
+			$val = ($isError) ? 'error' : 'notice';
+			die(json_encode(array('msg' => $msg, 'val' => $val)));
 		}
 		else {
-			$this->_smarty->assign ('showLoginButton', false);
+			if ($this->isWebloginHelptext()) {
+				$this->_smarty->assign ('webLoginHelptext', true);
+			}
+			else {
+				$this->_smarty->assign ('webLoginHelptext', false);
+			}
+			$this->_smarty->display(PATH_SMARTY_TPL . '/web/login.tpl');
+			die();
 		}
-		$this->_smarty->display(PATH_SMARTY_TPL . '/web/login.tpl');
-		die();
 	}
 
 	/**
@@ -135,8 +154,10 @@ class Login {
 	private function easterEggLeg() {
 
 		if ($this->_username == 'BaBeSK') {
-			$this->assignErrorToSmarty('<marquee>' . file_get_contents("../credits.txt") . '</marquee>');
-			$this->dieShowLoginForm();
+			$this->dieShowLoginForm(
+				'<marquee>' . file_get_contents("../credits.txt") .
+				'</marquee>'
+			);
 		}
 	}
 
@@ -199,6 +220,8 @@ class Login {
 	private $_username;
 	private $_password;
 	private $_userId;
+
+	private $_isAjaxRequest;
 }
 
 ?>

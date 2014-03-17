@@ -11,7 +11,6 @@
 
 [class^="icon-"], [class*=" icon-"] {
 	font-family: 'iconfonts';
-	font-size: 64px;
 	speak: none;
 	font-style: normal;
 	font-weight: normal;
@@ -55,6 +54,12 @@
 }
 .icon-darthvader:before {
 	content: "\e608";
+}
+.icon-plus:before {
+	content: "\e609";
+}
+.icon-minus:before {
+	content: "\e60a";
 }
 .icon-Settings:before {
 	content: "\e607";

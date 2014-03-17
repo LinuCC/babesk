@@ -1,67 +1,68 @@
 {extends file=$inh_path}{block name='content'}
 
-<script type="text/javascript" src="../smarty/templates/web/headmod_Kuwasys/classDescriptionSwitch.js">
-</script>
-
-<style type='text/css'  media='all'>
-
-
-a.classListing {
-}
-p.classListing {
-	color: maroon;
-}
-
-.classlistingContainer {
-	margin-left: 4em;
-	margin-bottom: 20px;
-}
-
-</style>
-
-<h2>Hauptmenü des Kurswahlsystems</h2><br>
-<h4 style="text-align:center">Übersicht der Kurse</h4>
-{if !count($classes)}
-Keine Kurse wurden ausgewählt.
-{else}
-{foreach $classes as $unitname => $classesAtUnit}
-	<h4>{$unitname}:</h4>
-	<ul>
-	{foreach $classesAtUnit as $class}
-		<li class="classlistingContainer" classId="{$class.ID}">
-			<b>
-			{if $class.registrationEnabled}
-				<a class="classListing" classId="{$class.ID}"
-					{if $class.status == 'Aktiv'}
-						style="color: rgb(255, 50, 50);"
-					{else if $class.status == 'waiting'}
-						style="color: rgb(50, 255, 50);"
-					{/if}
-					title="Klicken für Optionen"
-					href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}">{$class.label} ({$class.status})</a>
-			{else}
-				<p class="classListing" classId="{$class.ID}"
-					{if $class.status == 'Aktiv'}
-						style="color: rgb(255, 50, 50);"
-					{else if $class.status == 'Wartend'}
-						style="color: rgb(50, 255, 50);"
-					{/if}
-					href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}"
-					>{$class.label} ({$class.status})</p>
-			{/if}
-			</b>
-			<div id="classDescription_{$class.ID}" class="classDescription" hidden="hidden">
-				<p>{$class.status}</p>
-				<p class="quotebox">{$class.description}</p>
+<div>
+	<h3>Übersicht über die gewählten Kurse</h3>
+	{if !count($classes)}
+		Keine Kurse wurden ausgewählt.
+	{else}
+	{foreach $classes as $unitname => $classesAtUnit}
+		<div class="panel panel-primary bg-fit">
+			<div class="panel-heading">
+				<h4 class="panel-title">{$unitname}</h4>
 			</div>
-		</li>
-	{/foreach}
-	</ul>
-{/foreach}
-{/if}
+			<div class="panel-body">
+				<ul class="list-group">
+				{foreach $classesAtUnit as $class}
+					{* Only link to options if registering is enabled *}
+					{if $class.registrationEnabled}
+					<a class="list-group-item" classId="{$class.ID}"
+						href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}">
+					{else}
+					<li class="list-group-item" classId="{$class.ID}">
+					{/if}
 
-<br><br>
-<form action="index.php?section=Kuwasys|ClassList" method="post">
-	<input type="submit" value="Zur Kurswahlliste">
-</form>
+						<p class="list-group-item-heading" classId="{$class.ID}"
+							href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}"
+							>
+								{$class.label}
+								<span class="label pull-right
+									{if $class.status == 'request1'}label-primary
+									{elseif $class.status == 'request2'}label-info
+									{elseif $class.status == 'active'}label-success
+									{elseif $class.status == 'waiting'}label-default
+									{else}label-default{/if}
+									">{$class.translatedStatus}</span>
+						</p>
+						<p class="list-group-item-text">
+							<p class="quotebox">{$class.description}</p>
+						</p>
+					{if $class.registrationEnabled}
+						</a>
+					{else}
+						</li>
+					{/if}
+				{/foreach}
+				</ul>
+				<a class="btn btn btn-danger pull-right" href="#">{t}Unregister from all classes at this day{/t}</a>
+			</div>
+		</div>
+	{/foreach}
+	{/if}
+	<a class="btn btn-primary"
+	href="index.php?module=web|Kuwasys|ClassList">
+		Zur Kurswahlliste
+	</a>
+</div>
+
+
+{/block}
+
+{block name='js_include' append}
+<script type="text/javascript" src="{$path_smarty_tpl}/web/headmod_Kuwasys/classDescriptionSwitch.js">
+</script>
+{/block}
+
+{block name='style_include' append}
+<link rel="stylesheet" href="{$path_css}/web/Kuwasys/main.css"
+type="text/css" />
 {/block}

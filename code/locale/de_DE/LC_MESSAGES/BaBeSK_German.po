@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-15 14:54+0100\n"
-"PO-Revision-Date: 2014-03-15 14:55+0100\n"
+"PO-Revision-Date: 2014-03-15 20:44+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: de\n"
@@ -1334,7 +1334,7 @@ msgstr "Kein aktives Schuljahr wurde gesetzt!"
 #: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:538
 #, php-format
 msgid "Could not fetch the Classes by SchoolyearId $1%s"
-msgstr "Konnte den Benutzer anhand der SchuljahrId %1$s nicht abrufen!"
+msgstr "Konnte die Klassen anhand der SchuljahrId %1$s nicht abrufen!"
 
 #: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:609
 msgid "Could not fetch the Class(es)!"

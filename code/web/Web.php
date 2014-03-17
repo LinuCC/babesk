@@ -307,8 +307,10 @@ class Web {
 
 		try {
 			$this->_acl->accessControlInit($_SESSION['uid']);
-			$webModule = $this->_acl->moduleGet('root/web');
-			$this->_smarty->assign('modules', $webModule->getChilds());
+
+			$this->_smarty->assign(
+				'modules', $this->headmodulesToDisplayGet()
+			);
 
 		} catch (AclException $e) {
 			$this->_logger->log('user is not in any group',
@@ -318,6 +320,23 @@ class Web {
 				'haben daher keine Rechte! Wenden sie sich bitte an den ' .
 				'Administrator');
 		}
+	}
+
+	/**
+	 * Returns all Headmodules the user has access to and should be displayed
+	 * @return array The headmodules
+	 */
+	private function headmodulesToDisplayGet() {
+
+		$webModule = $this->_acl->moduleGet('root/web');
+		$childs = $webModule->getChilds();
+		$headmodsToDisplay = array();
+		foreach($childs as $child) {
+			if($child->isDisplayInMenuAllowed()) {
+				$headmodsToDisplay[] = $child;
+			}
+		}
+		return $headmodsToDisplay;
 	}
 
 	private function handleRedirect() {

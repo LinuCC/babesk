@@ -53,13 +53,14 @@ class MainMenu extends Kuwasys {
 		try {
 			$stmt = $this->_pdo->prepare(
 				'SELECT cu.translatedName AS unitname, c.*,
-					uics.translatedName AS status
+					uics.translatedName AS translatedStatus,
+					uics.name AS status
 				FROM KuwasysClasses c
 				JOIN KuwasysUsersInClasses uic ON uic.ClassID = c.ID
 				JOIN KuwasysClassCategories cu ON c.unitId = cu.ID
 				JOIN KuwasysUsersInClassStatuses uics ON uic.statusId = uics.ID
 				WHERE uic.UserID = :userId AND c.schoolyearId = @activeSchoolyear
-				ORDER BY cu.ID
+				ORDER BY cu.ID, uic.statusId
 				-- The ID of the ClassUnits states the Order of the Units');
 
 			$stmt->execute(array('userId' => $_SESSION['uid']));

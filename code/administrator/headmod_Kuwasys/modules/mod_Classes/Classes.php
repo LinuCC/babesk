@@ -522,7 +522,7 @@ class Classes extends Kuwasys {
 				LEFT JOIN (
 						SELECT ctic.ClassID AS classId,
 							CONCAT(ct.forename, " ", ct.name) AS name
-						FROM classTeacher ct
+						FROM KuwasysClassteachers ct
 						JOIN KuwasysClassteachersInClasses ctic
 							ON ct.ID = ctic.ClassTeacherID
 					) ct ON c.ID = ct.classId
@@ -534,6 +534,10 @@ class Classes extends Kuwasys {
 			return $stmt->fetchAll();
 
 		} catch (PDOException $e) {
+			$this->_logger->log('error fetching the classes by schoolyearId',
+				'Notice', Null, json_encode(array(
+					'msg' => $e->getMessage(),
+					'schoolyearId' => $schoolyearId)));
 			$this->_interface->dieError(
 				_g('Could not fetch the Classes by SchoolyearId $1%s',
 					$schoolyearId));

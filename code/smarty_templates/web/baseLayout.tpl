@@ -39,44 +39,50 @@
 				</div>
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
-						<li>
-							<a href="index.php">{t}Home{/t}</a>
-						</li>
+						{block name="nav_home"}
+							<li>
+								<a href="index.php">{t}Home{/t}</a>
+							</li>
+						{/block}
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
-						<li>
-							<form>
-								<a class="btn btn-info navbar-btn"
-								href="index.php?module=web|Help">
-									{t}Help{/t}
-								</a>
-							</form>
-						</li>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-								{$username} <b class="caret"></b>
-							</a>
-							<ul id="dropdown-user" class="dropdown-menu">
-								{if $babeskActivated && isset($credit)}
-									<li>
-										<p class="navbar-text">
-												<span class="highlighted">
-													Guthaben: {$credit} Euro
-												</span>
-										</p>
-									</li>
-								{/if}
-								<li>
-									<a href="index.php?module=web|Settings">
-										{t}Settings{/t}
-										<span class="icon-Settings"></span>
+						{block name="nav_help_button"}
+							<li>
+								<form>
+									<a class="btn btn-info navbar-btn"
+									href="index.php?module=web|Help">
+										{t}Help{/t}
 									</a>
-								</li>
-								<li>
-									<a href="index.php?action=logout">{t}Logout{/t}</a>
-								</li>
-							</ul>
-						</li>
+								</form>
+							</li>
+						{/block}
+						{block name="nav_user_dropdown"}
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									{$username} <b class="caret"></b>
+								</a>
+								<ul id="dropdown-user" class="dropdown-menu">
+									{if $babeskActivated && isset($credit)}
+										<li>
+											<p class="navbar-text">
+													<span class="highlighted">
+														Guthaben: {$credit} Euro
+													</span>
+											</p>
+										</li>
+									{/if}
+									<li>
+										<a href="index.php?module=web|Settings">
+											{t}Settings{/t}
+											<span class="icon-Settings"></span>
+										</a>
+									</li>
+									<li>
+										<a href="index.php?action=logout">{t}Logout{/t}</a>
+									</li>
+								</ul>
+							</li>
+						{/block}
 					</ul>
 				</div>
 			</div>
@@ -100,20 +106,25 @@
 					{/if}
 				{/foreach}
 
-				{if $visibleModules < 6}
-					<div class="col-md-{6 - $visibleModules}"></div>
-				{/if}
 				{foreach $modules as $module}
-					{if $module->isDisplayInMenuAllowed()}
+					<a href="index.php?module=web|{$module->getName()}"
+					class="col-md-2 col-xs-6
 						{*Center the Modules if they wouldnt span the whole page*}
-						<a href="index.php?module=web|{$module->getName()}" class="col-md-2 col-sm-4 col-xs-6
+						{if $module@first}
+							col-md-offset-{6 - $visibleModules}
+						{else}
+							col-md-offset-0
+						{/if}
 						{if $activeHeadmodule == $module->getName()}active{/if}">
-							<div> <!-- Correctly wrap with smaller devices with extra div -->
-								<div class="icon-{$module->getName()} icon"></div>
-									{$path = $moduleGenMan->modulePathGet($module)}
-									{_g("modulepath_$path")}
-							</div>
-						</a>
+						<div> <!-- Correctly wrap with smaller devices with extra div -->
+							<div class="icon-{$module->getName()} icon"></div>
+								{$path = $moduleGenMan->modulePathGet($module)}
+								{_g("modulepath_$path")}
+						</div>
+					</a>
+					{if $module@iteration is even}
+						{*Clearfix when text under the icons begin to wrap*}
+						<div class="clearfix visible-xs"></div>
 					{/if}
 				{/foreach}
 			</div>
@@ -139,31 +150,36 @@
 			{block name="content"}
 				{if $error}
 					<div class="col-md-8 col-md-offset-2 error-container">
-						<h3><div class="icon-error icon"></div></h3>
-						<p class="error_sorry">
-							{t}Sorry! An error occured. We could not handle your request.{/t}
-						</p>
-						<div class="error_description">
 							<div class="panel panel-danger">
 								<div class="panel-heading">
-									<h3 class="panel-title">{t}Error-description:{/t}</h3>
+									<div class="panel-title">
+										<h3 class="icon-error-container col-xs-2 col-sm-1">
+											<span class="icon-error icon"></span>
+										</h3>
+										<span class="error_sorry col-xs-10 col-sm-11">
+											{t}Sorry! An error occured. We could not handle your request.{/t}
+										</span>
+										<div class="clearfix"></div>
+									</div>
 								</div>
 								<div class="panel-body">
-									{if is_array($error)}
-										{foreach $error as $msg}
-											{$msg}
-										{/foreach}
-									{else}
-										{$error}
-									{/if}
+									<div class="error_description">
+										{if is_array($error)}
+											{foreach $error as $msg}
+												{$msg}
+											{/foreach}
+										{else}
+											{$error}
+										{/if}
+									</div>
 								</div>
-							</div>
+
+							<a class="btn btn-primary pull-right"
+								href="{if $backlink}{$backlink}
+									{else}javascript: history.go(-1){/if}">
+								{t}back{/t}
+							</a>
 						</div>
-						<a class="btn btn-primary pull-right"
-							href="{if $backlink}{$backlink}
-								{else}javascript: history.go(-1){/if}">
-							{t}back{/t}
-						</a>
 					</div>
 				{/if}
 			{/block}
@@ -176,6 +192,7 @@
 				</div>
 				<div class="container footer-text">
 					<div class="modules col-sm-4 col-xs-12">
+						{block name="footer_actions"}
 							<div class="footer-heading">{t}Actions:{/t}</div>
 							<p><a href="index.php?module=web|Babesk">Essen bestellen</a></p>
 							<p><a href="index.php?module=web|Kuwasys">Kurswahlen</a></p>
@@ -184,6 +201,7 @@
 							<p><a href="index.php?module=web|Fits">Internet-Führerschein</a></p>
 							<p><a href="index.php?module=web|Messages">Nachrichten</a></p>
 							<p><a href="index.php?module=web|Settings">Einstellungen</a></p>
+						{/block}
 					</div>
 					<div class="contact col-sm-4 col-xs-12">
 						<div class="footer-heading">{t}Contact:{/t}</div>
@@ -196,12 +214,16 @@
 
 					</div>
 					<div class="col-sm-4 col-xs-12 right-col">
-						<div class="footer-heading">{t}More:{/t}</div>
-						<div class="help">
-							<a class="btn btn-sm btn-info"
-								href="index.php?module=web|Help"
-							>{t}Help{/t}</a>
+						<div class="footer-heading">
+							{t}More:{/t}
 						</div>
+						{block name="footer_help_button"}
+							<div class="help">
+								<a class="btn btn-sm btn-info"
+									href="index.php?module=web|Help"
+								>{t}Help{/t}</a>
+							</div>
+						{/block}
 						<div class="program_version">
 							<p>
 								BaBeSK {$babesk_version}<br />
@@ -219,7 +241,7 @@
 							for bugs and feature requests.
 						</p>
 						<p style="font-size: 10px; position:relative; top: 50px">
-							Also, <a href="javascript: toastr.info('<div class=&quot;icon-darthvader icon&quot;></div>', 'A wild Vader appeared!')">spam.</a>
+							Also, <a href="javascript: toastr.info('<div class=&quot;icon-darthvader icon&quot; style=&quot;font-size:48px&quot;></div>', 'A wild Vader appeared!')">spam.</a>
 						</p>
 						</div>
 					</div>
