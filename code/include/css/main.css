@@ -129,12 +129,16 @@
 	text-align: center;
 }
 
-.error_sorry {
+.error-container .panel-title,
+.message-container .panel-title,
+.success-container .panel-title {
 	text-align: center;
 	line-height: 32px;
 }
 
-.error-container .icon-error-container {
+.error-container .icon-container,
+.message-container .icon-container,
+.success-container .icon-container {
 	font-size: 32px;
 	margin-top: 0px;
 	margin-bottom: 0px;
@@ -145,7 +149,9 @@
 	color: #b94a48;
 }
 
-.error-container .btn {
+.error-container .btn,
+.message-container .btn,
+.success-container .btn {
 	margin-top: 20px;
 }
 

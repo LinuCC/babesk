@@ -1,0 +1,12 @@
+.class-container .panel-heading {
+	line-height: 30px;
+}
+
+.class-container .label {
+	position: relative;
+	top: -2px;
+}
+
+.class-container .to-disabled {
+	font-size: 18px;
+}

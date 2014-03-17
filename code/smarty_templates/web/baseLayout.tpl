@@ -150,29 +150,93 @@
 			{block name="content"}
 				{if $error}
 					<div class="col-md-8 col-md-offset-2 error-container">
-							<div class="panel panel-danger">
-								<div class="panel-heading">
-									<div class="panel-title">
-										<h3 class="icon-error-container col-xs-2 col-sm-1">
-											<span class="icon-error icon"></span>
-										</h3>
-										<span class="error_sorry col-xs-10 col-sm-11">
-											{t}Sorry! An error occured. We could not handle your request.{/t}
-										</span>
-										<div class="clearfix"></div>
-									</div>
+						<div class="panel panel-danger">
+							<div class="panel-heading">
+								<div class="panel-title">
+									<h3 class="icon-container col-xs-2 col-sm-1">
+										<span class="icon-error icon"></span>
+									</h3>
+									<span class="col-xs-10 col-sm-11">
+										{t}Sorry! An error occured. We could not handle your request.{/t}
+									</span>
+									<div class="clearfix"></div>
 								</div>
-								<div class="panel-body">
-									<div class="error_description">
-										{if is_array($error)}
-											{foreach $error as $msg}
-												{$msg}
-											{/foreach}
-										{else}
-											{$error}
-										{/if}
-									</div>
+							</div>
+							<div class="panel-body">
+								<div>
+									{if is_array($error)}
+										{foreach $error as $msg}
+											{$msg}
+										{/foreach}
+									{else}
+										{$error}
+									{/if}
 								</div>
+							</div>
+
+							<a class="btn btn-primary pull-right"
+								href="{if $backlink}{$backlink}
+									{else}javascript: history.go(-1){/if}">
+								{t}back{/t}
+							</a>
+						</div>
+					</div>
+				{/if}
+				{if $message}
+					<div class="col-md-8 col-md-offset-2 message-container">
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								<div class="panel-title">
+									<h3 class="icon-container col-xs-2 col-sm-1">
+										<span class="icon icon-info"></span>
+									</h3>
+									<span class="col-xs-10 col-sm-11">
+										{t}Information{/t}
+									</span>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+							<div class="panel-body">
+									{if is_array($message)}
+										{foreach $message as $msg}
+											<div>{$msg}</div>
+										{/foreach}
+									{else}
+										{$message}
+									{/if}
+							</div>
+
+							<a class="btn btn-primary pull-right"
+								href="{if $backlink}{$backlink}
+									{else}javascript: history.go(-1){/if}">
+								{t}back{/t}
+							</a>
+						</div>
+					</div>
+				{/if}
+				{if $success}
+					<div class="col-md-8 col-md-offset-2 success-container">
+						<div class="panel panel-success">
+							<div class="panel-heading">
+								<div class="panel-title">
+									<h3 class="icon-container col-xs-2 col-sm-1">
+										<span class="icon icon-success"></span>
+									</h3>
+									<span class="col-xs-10 col-sm-11">
+										{t}Success!{/t}
+									</span>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+							<div class="panel-body">
+								{if is_array($success)}
+									{foreach $success as $msg}
+										<div>{$msg}</div>
+									{/foreach}
+								{else}
+									{$success}
+								{/if}
+							</div>
 
 							<a class="btn btn-primary pull-right"
 								href="{if $backlink}{$backlink}

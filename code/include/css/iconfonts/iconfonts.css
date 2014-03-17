@@ -61,6 +61,24 @@
 .icon-minus:before {
 	content: "\e60a";
 }
+.icon-success:before {
+	content: "\e60b";
+}
+.icon-addbookmark:before {
+	content: "\e60c";
+}
+.icon-removebookmark:before {
+	content: "\e60d";
+}
+.icon-info:before {
+	content: "\e60e";
+}
+.icon-quoteup:before {
+	content: "\e60f";
+}
+.icon-quotedown:before {
+	content: "\e610";
+}
 .icon-Settings:before {
 	content: "\e607";
 }

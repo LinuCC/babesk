@@ -4,24 +4,26 @@
 
 <div id="selector-container">
 	{foreach $classUnits as $classUnit}
-		<div class="panel panel-primary bg-fit unit-panel">
-				<div class="panel-heading">
-					<div class="panel-title">
-						<button type="button"
-							class="btn btn-sm btn-default expand-button-content"
-							data-toggle="collapse" data-parent=""
-							href="#unit-accordion-body_{$classUnit.ID}">
-							<div class="icon icon-plus"></div>
-						</button>
-						{$classUnit.translatedName}
-					</div>
+		<div class="panel panel-primary bg-fit unit-panel"
+		unitId="{$classUnit.ID}">
+			<div class="panel-heading">
+				<div class="panel-title">
+					<button type="button"
+						class="btn btn-sm btn-default expand-button-content"
+						data-toggle="collapse" data-parent=""
+						href="#unit-accordion-body_{$classUnit.ID}">
+						<div class="icon icon-plus"></div>
+					</button>
+					{$classUnit.translatedName}
 				</div>
-			<div id="unit-accordion-body_{$classUnit.ID}" class="collapse">
+			</div>
+			<div id="unit-accordion-body_{$classUnit.ID}" class="unit-container-body collapse">
 				<div class="panel-body">
 					<div class="panel-group unit-container" id="unitAccordion_{$classUnit.ID}">
 						{foreach $classes as $class}
 							{if $class.unitId == $classUnit.ID}
-								<div class="panel panel-default class-container">
+								<div classId="{$class.ID}"
+									class="panel panel-default class-container">
 									<div class="panel-heading">
 										<div class="col-xs-7 col-sm-8 col-md-9">
 											<button type="button" class="btn btn-sm btn-default expand-button-content"
@@ -43,13 +45,15 @@
 											</h4>
 										</div>
 										<div class="col-xs-5 col-sm-4 col-md-3">
-											<div class="btn-group pull-right">
+											<div class="btn-group pull-right selection-buttons">
 													<button type="button" classId="{$class.ID}"
+													category="request1"
 													class="btn btn-sm btn-success to-primary
 													{if !$class.registrationEnabled}disabled{/if}">
 														Erstwahl
 													</button>
 													<button type="button" classId="{$class.ID}"
+													category="request2"
 													class="btn btn-sm btn-info to-secondary
 													{if !$class.registrationEnabled}disabled{/if}">
 														Zweitwahl
@@ -63,7 +67,7 @@
 										<div class="clearfix"></div>
 									</div>
 									<div id="class-accordion-body_{$class.ID}"
-										class="panel-collapse collapse">
+										class="panel-collapse collapse class-container-body">
 										<div class="panel-body">
 											<div class="quotebox">
 													{$class.description}

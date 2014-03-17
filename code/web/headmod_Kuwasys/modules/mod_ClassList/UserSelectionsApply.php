@@ -50,10 +50,15 @@ class UserSelectionsApply extends \web\Kuwasys\ClassList {
 
 		if(empty($err)) {
 			$this->choicesUpload($choices);
-			$this->_interface->dieMessage(_g(
-				'Your choices where added. You can see your registrations ' .
-				'in the main menu.')
+			$this->_interface->addButton(
+				_g('Back to main menu'),
+				'index.php?module=web|Kuwasys',
+				'primary'
 			);
+			$this->_interface->dieSuccess(_g(
+				'Your choices where added. You can see your ' .
+				'registrations in the main menu.'
+			));
 		}
 		else {
 			$this->_interface->dieError($err);
@@ -72,13 +77,19 @@ class UserSelectionsApply extends \web\Kuwasys\ClassList {
 	protected function entryPoint($dataContainer) {
 
 		parent::entryPoint($dataContainer);
-		$this->_interface->setBacklink(
-			'index.php?module=web|Kuwasys|ClassList'
+		$this->_interface->setAjax(
+			isset($_POST['ajax']) && $_POST['ajax'] == true
 		);
-		$this->_interface->addButton(
-			_g('Go to Main menu'),
-			'index.php?module=web|Kuwasys'
-		);
+		if(!$this->_interface->getAjax()) {
+			//Only add buttons when no ajax-response is requested
+			$this->_interface->setBacklink(
+				'index.php?module=web|Kuwasys|ClassList'
+			);
+			$this->_interface->addButton(
+				_g('Go to Main menu'),
+				'index.php?module=web|Kuwasys'
+			);
+		}
 	}
 
 	/**
@@ -120,6 +131,11 @@ class UserSelectionsApply extends \web\Kuwasys\ClassList {
 			);
 		}
 		else if(!$this->noClassesAtUnitYetChosenCheck($choices)) {
+			$this->_interface->addButton(
+				_g('Back to main menu'),
+				'index.php?module=web|Kuwasys',
+				'primary'
+			);
 			$error = _g(
 				'You have selected a class at a day at which you ' .
 				'have already selected classes. Please undo your choices ' .

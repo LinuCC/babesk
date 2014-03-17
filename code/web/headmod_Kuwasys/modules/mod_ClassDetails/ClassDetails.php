@@ -69,7 +69,7 @@ class ClassDetails extends Kuwasys {
 		try {
 			$value = $this->_globalSettingsManager->valueGet(GlobalSettings::IS_CLASSREGISTRATION_ENABLED);
 		} catch(Exception $e) {
-			$this->_interface->DieError('Ein Fehler ist beim Abrufen vom KurswahlWert aufgetreten. Breche ab.');
+			$this->_interface->dieError('Ein Fehler ist beim Abrufen vom KurswahlWert aufgetreten. Breche ab.');
 		}
 		return $value == 1;
 	}
@@ -91,7 +91,7 @@ class ClassDetails extends Kuwasys {
 		} catch(\PDOException $e) {
 			$this->_logger->log('error deleting userInClass-Connection',
 				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
-			$this->_interface->DieError(
+			$this->_interface->dieError(
 				'Could not remove you from the class!'
 			);
 		}
@@ -171,7 +171,8 @@ class ClassDetails extends Kuwasys {
 		$class = $this->detailsOfChosenClassGet($_GET['classId']);
 		$this->deRegisterAllowedCheck($class);
 		$this->deleteJointUsersInClass($_SESSION['uid'], $class['ID']);
-		$this->_interface->DieMessage(sprintf('Sie wurden erfolgreich vom Kurs %s abgemeldet. %s', $class ['label'], Kuwasys::$buttonBackToMM));
+		$this->_interface->setBacklink('index.php?module=web|Kuwasys');
+		$this->_interface->dieSuccess(sprintf('Sie wurden erfolgreich vom Kurs %s abgemeldet.', $class ['label']));
 	}
 
 	/**
@@ -183,13 +184,19 @@ class ClassDetails extends Kuwasys {
 	private function deRegisterAllowedCheck($class) {
 
 		if(!$class['registrationEnabled']) {
+			$this->_interface->setBacklink('index.php?module=web|Kuwasys');
 			$this->_interface->dieError('Dieser Kurs erlaubt momentan keine Abmeldungen!');
 		}
 		else if(!$this->getIsClassRegistrationGloballyEnabled()) {
+			$this->_interface->setBacklink('index.php?module=web|Kuwasys');
 			$this->_interface->dieError('Kursan- und abmeldungen sind momentan gesperrt!');
 		}
 		else if(!isset($_POST['yes'])) {
-			$this->_interface->DieMessage(sprintf('Sie wurden nicht vom Kurs %s abgemeldet', $class ['label']));
+			$this->_interface->setBacklink('index.php?module=web|Kuwasys');
+			$this->_interface->dieMessage(
+				sprintf('Sie wurden nicht vom Kurs %s abgemeldet',
+					$class ['label'])
+			);
 		}
 		else {
 			return true;
