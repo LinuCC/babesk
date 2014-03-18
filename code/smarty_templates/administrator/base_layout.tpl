@@ -20,7 +20,19 @@
 		<link rel="stylesheet" href="{$path_css}/toastr.min.css" type="text/css" />
 		{/block}
 
-		<link rel="shortcut icon" href="webicon.ico" />
+		{$enableDeprecatedLayout = isset($smarty.get.old_layout)}
+
+		{if $enableDeprecatedLayout}
+		<link rel="stylesheet"
+			href="{$path_js}/jquery-ui-smoothness.css"
+			type="text/css"
+		/>
+		<link rel="stylesheet"
+			href="{$path_smarty_tpl}/administrator/css/general.css"
+			type="text/css" />
+		{/if}
+
+		<link rel="shortcut icon" href="adminicon.ico" />
 		<title>{$title|default:'BaBeSK'}</title>
 	</head>
 
@@ -98,28 +110,28 @@
 				 *}
 				<div id="sidebar-module-selection" class="col-sm-3 col-md-2 sidebar">
 					<ul id="sidebar-base-nav" class="nav">
-						<li>
-							{foreach $headmodules as $headmodule}
-								{$hModulepath = $moduleGenMan->modulePathGet($headmodule)}
-								<li>
-									<a href="#" data-toggle="collapse" data-target="#sidebar-module-{str_replace('/', '_', $hModulepath)}" class="collapsed sidebar-folder">
-										<span>{_g('modulepath_'|cat:$hModulepath)}</span>
-										<span class="toggle-icon icon icon-plus pull-right"></span>
-									</a>
-									<ul id="sidebar-module-{str_replace('/', '_', $hModulepath)}"
-									class="nav collapse">
-										{foreach $headmodule->getChilds() as $module}
-											{$modulepath = $moduleGenMan->modulePathGet($module)}
-											<li>
-												<a href="index.php?module=administrator|{$headmodule->getName()}|{$module->getName()}">
-													<span>{_g('modulepath_'|cat:$modulepath)}</span>
-												</a>
-											</li>
-										{/foreach}
-									</ul>
-								</li>
-							{/foreach}
-						</li>
+						{foreach $headmodules as $headmodule}
+							{$hModulepath = $moduleGenMan->modulePathGet($headmodule)}
+							<li>
+								<a href="#" data-toggle="collapse"
+								data-target="#sidebar-module-{str_replace('/', '_', $hModulepath)}" data-parent="#sidebar-base-nav"
+								class="sidebar-folder">
+									<span>{_g('modulepath_'|cat:$hModulepath)}</span>
+									<span class="toggle-icon icon icon-plus pull-right"></span>
+								</a>
+								<ul id="sidebar-module-{str_replace('/', '_', $hModulepath)}"
+								class="nav collapse">
+									{foreach $headmodule->getChilds() as $module}
+										{$modulepath = $moduleGenMan->modulePathGet($module)}
+										<li>
+											<a href="index.php?module=administrator|{$headmodule->getName()}|{$module->getName()}">
+												<span>{_g('modulepath_'|cat:$modulepath)}</span>
+											</a>
+										</li>
+									{/foreach}
+								</ul>
+							</li>
+						{/foreach}
 						<li>
 							<a href="#" data-toggle="collapse" data-target="#headmod-submenu-1" class="collapsed sidebar-folder">
 								<span>Custom folder</span>
@@ -214,7 +226,7 @@
 															{$msg}
 														{/foreach}
 													{else}
-														{$error}
+														{$_userErrorOutput}
 													{/if}
 												</div>
 											</div>
@@ -227,7 +239,7 @@
 										</div>
 									</div>
 								{/if}
-								{if $message}
+								{if $_userMsgOutput}
 									<div class="col-md-8 col-md-offset-2 message-container">
 										<div class="panel panel-info">
 											<div class="panel-heading">
@@ -242,12 +254,12 @@
 												</div>
 											</div>
 											<div class="panel-body">
-													{if is_array($message)}
-														{foreach $message as $msg}
+													{if is_array($_userMsgOutput)}
+														{foreach $_userMsgOutput as $msg}
 															<div>{$msg}</div>
 														{/foreach}
 													{else}
-														{$message}
+														{$_userMsgOutput}
 													{/if}
 											</div>
 
@@ -259,7 +271,7 @@
 										</div>
 									</div>
 								{/if}
-								{if $success}
+								{if $_userSuccessOutput}
 									<div class="col-md-8 col-md-offset-2 success-container">
 										<div class="panel panel-success">
 											<div class="panel-heading">
@@ -274,12 +286,12 @@
 												</div>
 											</div>
 											<div class="panel-body">
-												{if is_array($success)}
-													{foreach $success as $msg}
+												{if is_array($_userSuccessOutput)}
+													{foreach $_userSuccessOutput as $msg}
 														<div>{$msg}</div>
 													{/foreach}
 												{else}
-													{$success}
+													{$_userSuccessOutput}
 												{/if}
 											</div>
 
@@ -307,7 +319,7 @@
 			<script type="text/javascript" src="{$path_js}/bootstrap.min.js"></script>
 			<script type="text/javascript" src="{$path_js}/toastr.min.js"></script>
 			<script type="text/javascript" src="{$path_js}/administrator/main.js"></script>
-
+			<script type="text/javascript" src="{$path_js}/json2.min.js"></script>
 		{literal}
 			<script type="text/javascript">
 
@@ -342,6 +354,11 @@
 		{/literal}
 
 		{/block}
+
+		{if $enableDeprecatedLayout}
+			<script type="text/javascript" src="{$path_js}/jquery-ui.min.js"></script>
+			<script type="text/javascript" src="{$path_smarty_tpl}/administrator/administratorFunctions.js"></script>
+		{/if}
 
 	</body>
 </html>

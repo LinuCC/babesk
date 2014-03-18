@@ -55,9 +55,12 @@
 	</div>
 </div>
 
-<link rel="stylesheet" href="/resources/demos/style.css" />
-<script src="../smarty/templates/administrator/headmod_System/modules/
+<link rel="stylesheet" href="{$path_js}/jstree/themes/apple/style.css" />
+
+{/block}
+
+{block name="js_include" append}
+<script src="{$path_smarty_tpl}/administrator/headmod_System/modules/
 	mod_User/displayAll.js">
 </script>
-
 {/block}
