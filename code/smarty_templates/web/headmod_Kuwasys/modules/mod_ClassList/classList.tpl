@@ -15,6 +15,9 @@
 						<div class="icon icon-plus"></div>
 					</button>
 					{$classUnit.translatedName}
+					{if $classUnit.votedCount}
+						<span class="label label-info pull-right">bereits gewählt</span>
+					{/if}
 				</div>
 			</div>
 			<div id="unit-accordion-body_{$classUnit.ID}" class="unit-container-body collapse">
@@ -33,15 +36,14 @@
 												<div class="icon icon-plus"></div>
 											</button>
 											<h4 class="panel-title">
-												{if $class.registrationEnabled}
-													<span>
-												{/if}
-													{$class.label}
-												{if $class.registrationEnabled}
-													</span>
-												{else}
-													<span class="label label-danger">deaktiviert</span>
-												{/if}
+												{$class.label}
+													{if !$class.registrationEnabled}
+														<span class="label label-danger">deaktiviert</span>
+													{/if}
+													{if $classUnit.votedCount}
+														<span class="label label-info">bereits am Tag gewählt</span>
+													{/if}
+
 											</h4>
 										</div>
 										<div class="col-xs-5 col-sm-4 col-md-3">
@@ -49,13 +51,13 @@
 													<button type="button" classId="{$class.ID}"
 													category="request1"
 													class="btn btn-sm btn-success to-primary
-													{if !$class.registrationEnabled}disabled{/if}">
+													{if !$class.registrationEnabled || $classUnit.votedCount}disabled{/if}">
 														Erstwahl
 													</button>
 													<button type="button" classId="{$class.ID}"
 													category="request2"
 													class="btn btn-sm btn-info to-secondary
-													{if !$class.registrationEnabled}disabled{/if}">
+													{if !$class.registrationEnabled || $classUnit.votedCount}disabled{/if}">
 														Zweitwahl
 													</button>
 													<button type="button" classId="{$class.ID}"
@@ -92,9 +94,10 @@
 		href="{if $backlink}{$backlink} {else}javascript: history.go(-1){/if}">
 		Zurück
 	</a>
-	<a id="class-deactivated-info" class="btn btn-info pull-right">
-		Warum sind Kurse gesperrt?
-	</a>
+	<button type="button" class="btn btn-info pull-right"
+	id="class-deactivated-info">
+		Warum sind Kurse deaktiviert?
+	</button>
 
 	</p>
 	</div>

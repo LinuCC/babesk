@@ -108,14 +108,23 @@ class ClassDetails extends Kuwasys {
 		try {
 			$stmt = $this->_pdo->prepare(
 				'SELECT c.*, uics.name, uics.translatedName AS status,
-					c.registrationEnabled
+					c.registrationEnabled,
+					GROUP_CONCAT(
+						DISTINCT CONCAT(ct.forename, " ", ct.name)
+						SEPARATOR ", "
+					) AS classteacherName
 					FROM KuwasysClasses c
 						INNER JOIN KuwasysUsersInClasses uic
 							ON uic.ClassID = c.ID
 						INNER JOIN KuwasysUsersInClassStatuses uics
 							ON uics.Id = uic.statusId
+						INNER JOIN KuwasysClassteachersInClasses ctic
+							ON ctic.ClassID = c.ID
+						INNER JOIN KuwasysClassteachers ct
+							ON ct.ID = ctic.ClassTeacherID
 					WHERE uic.userId = ? AND uic.classId = ?
 						AND c.schoolyearId = @activeSchoolyear
+					GROUP BY c.ID
 				'
 			);
 			$stmt->execute(array($_SESSION['uid'], $classId));

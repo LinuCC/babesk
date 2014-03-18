@@ -34,7 +34,7 @@
 									">{$class.translatedStatus}</span>
 						</p>
 						<p class="list-group-item-text">
-							<p class="quotebox">{$class.description}</p>
+							<p class="quotebox quoted">{$class.description}</p>
 						</p>
 					{if $class.registrationEnabled}
 						</a>
@@ -58,7 +58,7 @@
 {/block}
 
 {block name='js_include' append}
-<script type="text/javascript" src="{$path_smarty_tpl}/web/headmod_Kuwasys/classDescriptionSwitch.js">
+
 </script>
 {/block}
 

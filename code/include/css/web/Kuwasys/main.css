@@ -1,10 +1,11 @@
-.class-container .panel-heading {
+.class-container .panel-heading .panel-title {
 	line-height: 30px;
 }
 
 .class-container .label {
 	position: relative;
 	top: -2px;
+	line-height: 30px;
 }
 
 .class-container .to-disabled {

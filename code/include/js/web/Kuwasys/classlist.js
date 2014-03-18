@@ -29,6 +29,16 @@ $(document).ready(function() {
 			}
 		});
 
+		$('button#class-deactivated-info').on('click', function(ev) {
+			toastr['info'](
+				'Für deaktivierte Kurse kann sich der Benutzer nicht mehr ' +
+				'anmelden. Entweder diese Kurse sind voll, erlauben ' +
+				'generell keine Anmeldungen oder sie haben sich für diesen ' +
+				'Veranstaltungstag schon bei anderen Kursen angemeldet.',
+				'Deaktivierte Kurse'
+			);
+		});
+
 		$('button.submit-button').on('click', function(ev) {
 			var inp = parseInput();
 			if(testInput(inp)) {
@@ -241,6 +251,9 @@ $(document).ready(function() {
 					}
 					if(data.val == 'success') {
 						toastr['success'](data.msg, 'Erfolgreich angemeldet!');
+						$('#content').html(
+							'<div class="panel panel-success"> <div class="panel-heading"> <div class="panel-title"> Erfolgreich angemeldet! </div> </div> </div> <a class="btn btn-primary pull-right" href="index.php?module=web|Kuwasys"> zum Hauptmenü </a>'
+						);
 					}
 					else if(data.val == 'message') {
 						toastr['info'](data.msg, 'Hinweis');

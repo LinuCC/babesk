@@ -104,10 +104,21 @@ class Show extends \web\Kuwasys\ClassList {
 	private function unitsFetch() {
 
 		try {
-			$res = $this->_pdo->query(
-				'SELECT * FROM KuwasysClassCategories ORDER BY ID'
-			);
-			$data = $res->fetchAll(\PDO::FETCH_ASSOC);
+			$stmt = $this->_pdo->prepare(
+				'SELECT cc.*, COUNT(voted.unitId) AS votedCount
+				FROM KuwasysClassCategories cc
+					-- If the user has voted on this category already
+					LEFT JOIN (SELECT c.unitId AS unitId FROM KuwasysClasses c
+						INNER JOIN KuwasysUsersInClasses uic ON
+							uic.ClassID = c.ID AND
+							uic.UserID = ? AND
+							c.schoolyearId = @activeSchoolyear
+					) voted ON voted.unitId = cc.ID
+					GROUP BY cc.ID
+					ORDER BY cc.ID
+			');
+			$stmt->execute(array($_SESSION['uid']));
+			$data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 			return $data;
 
 		} catch (\PDOException $e) {
