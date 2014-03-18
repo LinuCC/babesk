@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-15 14:54+0100\n"
-"PO-Revision-Date: 2014-03-15 20:44+0100\n"
+"POT-Creation-Date: 2014-03-18 11:36+0100\n"
+"PO-Revision-Date: 2014-03-18 11:39+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: de\n"
@@ -17,15 +17,15 @@ msgstr ""
 "X-Poedit-Bookmarks: 121,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 "X-Poedit-SearchPath-0: ../../..\n"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:2
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:2
 msgid "Kuwasys User-Mainmenu"
 msgstr "Kuwasys Benutzer-Hauptmenü"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:5
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:5
 msgid "Printables"
 msgstr "Druckbares"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:8
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:8
 msgid ""
 "Here you can Print PDFs confirming the Participation of Users at their "
 "Classes of this Year"
@@ -33,54 +33,54 @@ msgstr ""
 "Hier können sie PDF-Dateien erstellen die die Teilnahmen der Nutzer an "
 "Kursen in diesem Jahr bestätigen."
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:11
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:11
 msgid "Create Participation Confirmation"
 msgstr "Teilnahmebestätigung erstellen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:14
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:263
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:14
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:263
 msgid "Bulk-Changes"
 msgstr "Massenveränderungen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:17
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:17
 msgid ""
 "Here you can assign the Users that submitted requests to Classes of the "
 "active Year"
 msgstr "Hier können sie Nutzer den von ihnen gewünschten Kursen zuweisen."
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:20
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:20
 msgid "Assign the Users to the Classes"
 msgstr "Die Benutzer den Kursen zuordnen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:23
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:296
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:470
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:23
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:296
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:470
 msgid "Actions"
 msgstr "Aktionen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:26
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:26
 msgid "Go to the existing Assignment-Process"
 msgstr "Zum existierenden Zuweisungs-Prozess gehen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:29
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:29
 msgid "Bulk-Actions"
 msgstr "Massenänderungnen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:32
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:32
 msgid "Start a new Assignment-Process"
 msgstr ""
 "Einen neuen Zuweisungsprozess starten (Warnung - löscht den alten Prozess, "
 "falls vorhanden)"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:35
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:35
 msgid "Assign all Users to their Classes"
 msgstr "Alle Benutzer ihren Kursen zuordnen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:38
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:38
 msgid "Really start a new Assignment-Process?"
 msgstr "Wollen sie wirklich einen neuen Zuweisungsprozess starten?"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:41
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:41
 msgid ""
 "If you have already started an Assignment-Process, the Data will be "
 "inevitably lost. Are you sure?"
@@ -88,164 +88,140 @@ msgstr ""
 "Wenn sie bereits einen Zuweisungsprozess gestartet haben, werden die Daten "
 "verloren gehen. Sind sie sicher?"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:44
-#: ../../../include/3rdParty/smarty/templates_c/a1c6b6c80b42f8498abfb006fd1e9d1e5e250c41.file.classdetails.tpl.php:125
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:44
 msgid "Classdetails of Class"
 msgstr "Details des Kurses"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:47
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:95
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:47
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:95
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:503
 #: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:55
 #: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:75
-#: ../../../include/3rdParty/smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:264
-#: ../../../include/3rdParty/smarty/templates_c/a1c6b6c80b42f8498abfb006fd1e9d1e5e250c41.file.classdetails.tpl.php:152
-#: ../../../web/Login.php:101
+#: ../../../web/Login.php:112
 msgid "Username"
 msgstr "Benutzername"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:50
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:53
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:98
-#: ../../../include/3rdParty/smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:267
-#: ../../../include/3rdParty/smarty/templates_c/a1c6b6c80b42f8498abfb006fd1e9d1e5e250c41.file.classdetails.tpl.php:155
-#: ../../../include/3rdParty/smarty/templates_c/a1c6b6c80b42f8498abfb006fd1e9d1e5e250c41.file.classdetails.tpl.php:177
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:50
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:53
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:98
 msgid "Status"
 msgstr "Status"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:56
-#: ../../../include/3rdParty/smarty/templates_c/a1c6b6c80b42f8498abfb006fd1e9d1e5e250c41.file.classdetails.tpl.php:199
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:56
 msgid "Class"
 msgstr "Kurs"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:59
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:59
 msgid "Classregistrations are not allowed"
 msgstr "Kursregistrierungen sind nicht erlaubt"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:62
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:62
 msgid "Classregistrations are allowed"
 msgstr "Kursregistrierungen sind erlaubt"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:65
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:158
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:65
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:158
 msgid "Standard-Actions"
 msgstr "Standard-Aktionen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:68
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:68
 msgid "Add a Class"
 msgstr "Ein Kurs hinzufügen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:71
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:71
 msgid "Display all Classes"
 msgstr "Alle Kurse anzeigen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:74
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:167
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:74
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:167
 msgid "More Actions"
 msgstr "Mehr Aktionen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:77
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:77
 msgid "Import Classes with a CSV-File"
 msgstr "Kurse mit einer CSV-Datei importieren"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:80
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:80
 msgid "Create Class-Summaries"
 msgstr "Klassenübersichten erstellen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:83
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:83
 msgid "Change if Classregistrations are enabled"
 msgstr "Ändern, ob Kursregistrierungen erlaubt sind"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:86
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:89
-#: ../../../include/3rdParty/smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:255
-#: ../../../include/3rdParty/smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:258
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:86
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:89
 msgid "Assign a User to this Class"
 msgstr "Einen Benutzer den Kursen zuordnen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:92
-#: ../../../include/3rdParty/smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:260
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:92
 msgid "Please select the User and the Status of the Assignment"
 msgstr ""
 "Bitte geben sie den Benutzernamen des Nutzers und den Status der Zuweisung "
 "ein."
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:101
-#: ../../../include/3rdParty/smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:299
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:101
 msgid "Assign User"
 msgstr "Benutzer zuweisen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:104
-#: ../../../include/3rdParty/smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:328
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:104
 msgid "Could not parse the Serveranswer!"
 msgstr "Konne die Serveratnwort nicht lesen!"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:107
-#: ../../../include/3rdParty/smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:334
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:107
 msgid "Could not Assign the User to the Class!"
 msgstr "Konnte die Benutzer nicht zu den Kursen zuweisen!"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:110
-#: ../../../include/3rdParty/smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:340
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:110
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:113
-#: ../../../include/3rdParty/smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:123
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:113
 msgid "Name"
 msgstr "Name"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:116
-#: ../../../include/3rdParty/smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:144
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:116
 msgid "Classteacher"
 msgstr "Kursleiter"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:119
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:119
 #: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:461
-#: ../../../include/3rdParty/smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:208
 msgid "Day"
 msgstr "Tag"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:122
-#: ../../../include/3rdParty/smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:241
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:122
 msgid "execute Changes"
 msgstr "Änderungen ausführen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:125
-#: ../../../include/3rdParty/smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:246
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:125
 msgid "The uploaded file did not contain any usable data."
 msgstr "Die hochgeladene Datei besaß keine nutzbaren Daten."
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:128
-#: ../../../include/3rdParty/smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:249
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:128
 msgid "click here to go back"
 msgstr "Hier klicken um zurückzukehren."
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:131
-#: ../../../include/3rdParty/smarty/templates_c/653313aa093ae5dd2ab742df89f4d5ce8fe3c030.file.fileUploadForm.tpl.php:108
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:131
 msgid "Upload a file"
 msgstr "Datei hochladen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:134
-#: ../../../include/3rdParty/smarty/templates_c/653313aa093ae5dd2ab742df89f4d5ce8fe3c030.file.fileUploadForm.tpl.php:114
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:134
 msgid "File:"
 msgstr "Datei:"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:137
-#: ../../../include/3rdParty/smarty/templates_c/653313aa093ae5dd2ab742df89f4d5ce8fe3c030.file.fileUploadForm.tpl.php:117
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:137
 msgid "Create Preview"
 msgstr "Vorschau erstellen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:140
-#: ../../../include/3rdParty/smarty/templates_c/653313aa093ae5dd2ab742df89f4d5ce8fe3c030.file.fileUploadForm.tpl.php:122
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:140
 msgid "Help:"
 msgstr "Hilfe:"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:143
-#: ../../../include/3rdParty/smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:106
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:143
 msgid "Class-Deletion"
 msgstr "Kurs-Löschung"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:146
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:146
 msgid ""
 "Do you really want to delete the Class \"%1\"? All its data is inevitably "
 "lost when doing so!"
@@ -253,114 +229,99 @@ msgstr ""
 "Wollen sie wirklich den Kurs \"%1\" löschen? Alle Daten gehen "
 "unwiederbringlich verloren!"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:149
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:410
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:419
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:428
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:149
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:410
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:419
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:428
 #: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:420
-#: ../../../include/3rdParty/smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:117
 msgid "Yes"
 msgstr "Ja"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:152
-#: ../../../include/3rdParty/smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:120
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:152
 msgid "No, I dont want to delete the Class"
 msgstr "Nein, ich will den Kurs nicht löschen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:155
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:155
 msgid "Mainmenu of the Classteacher-Module"
 msgstr "Hauptmenü des Kursleiter-Moduls"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:161
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:161
 msgid "Add a Classteacher"
 msgstr "Einen Kursleiter hinzufügen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:164
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:164
 msgid "Display all Classteachers"
 msgstr "Alle Kursleiter anzeigen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:170
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:170
 msgid "Import Classteachers by a CSV-file"
 msgstr "Kursleiter mit einer CSV-Datei importieren"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:173
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:173
 msgid "Delete a Classteacher"
 msgstr "Einen Kursleiter löschen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:176
-#: ../../../include/3rdParty/smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:93
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:176
 msgid "Soli-Settings"
 msgstr "Teilhabepaket-Einstellungen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:179
-#: ../../../include/3rdParty/smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:101
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:179
 msgid "Enable Soli"
 msgstr "Teilhabepaket aktivieren"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:182
-#: ../../../include/3rdParty/smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:105
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:182
 msgid "Is the Soli-Module enabled:"
 msgstr "Ist das Soli-Modul aktiviert:"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:185
-#: ../../../include/3rdParty/smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:116
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:185
 msgid "Soliprice"
 msgstr "Teilhabepaketpreis"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:188
-#: ../../../include/3rdParty/smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:122
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:188
 msgid "Is Soliprice Enabled:"
 msgstr "Sind Teilhabepaket-Preise aktiviert:"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:191
-#: ../../../include/3rdParty/smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:132
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:191
 msgid "Amount to Pay:"
 msgstr "Zu bezahlender Betrag:"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:194
-#: ../../../include/3rdParty/smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:140
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:194
 msgid "Commit Changes"
 msgstr "Änderungen hochladen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:197
-#: ../../../include/3rdParty/smarty/templates_c/818149c8372c3fa5e5e32c9cd62bc5d894003dc9.file.mainmenu.tpl.php:111
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:197
 msgid "Standard Actions"
 msgstr "Standardaktionen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:200
-#: ../../../include/3rdParty/smarty/templates_c/818149c8372c3fa5e5e32c9cd62bc5d894003dc9.file.mainmenu.tpl.php:117
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:200
 msgid "Recharge a Card"
 msgstr "Eine Karte aufladen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:203
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:206
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:209
-#: ../../../include/3rdParty/smarty/templates_c/818149c8372c3fa5e5e32c9cd62bc5d894003dc9.file.mainmenu.tpl.php:123
-#: ../../../include/3rdParty/smarty/templates_c/d9ae2e659e39b51da4b84a100552c0b5c94fb34c.file.printRechargeBalanceSelect.tpl.php:105
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:203
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:206
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:209
 msgid "Print Recharge Balance"
 msgstr "Die Aufladungen erstellen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:212
-#: ../../../include/3rdParty/smarty/templates_c/d9ae2e659e39b51da4b84a100552c0b5c94fb34c.file.printRechargeBalanceSelect.tpl.php:129
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:212
 msgid "At:"
 msgstr "Am:"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:215
-#: ../../../include/3rdParty/smarty/templates_c/d9ae2e659e39b51da4b84a100552c0b5c94fb34c.file.printRechargeBalanceSelect.tpl.php:136
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:215
 msgid "Download Pdf"
 msgstr "PDF herunterladen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:218
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:218
 msgid "Reset passwords of all users"
 msgstr "Passwörter aller Nutzer zurücksetzen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:221
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:221
 msgid "Here you can reset the passwords of all users to the preset password."
 msgstr ""
 "Hier können sie die Passwörter aller Nutzer zu den voreingestellten Passwort "
 "zurücksetzen."
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:224
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:224
 msgid ""
 "You will reset the passwords of all users (but the one which id is 1, "
 "usually the Superadmin) to the preset password. Thus this may be true for "
@@ -373,19 +334,19 @@ msgstr ""
 "sie sich nach dem Zurücksetzen also nicht mehr einloggen können, probieren "
 "sie das voreingestellte Passwort aus."
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:227
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:227
 msgid "Click here"
 msgstr "Klicken sie hier"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:230
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:230
 msgid "to change the preset password."
 msgstr "um das voreingestellte Passwort zu verändern."
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:233
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:233
 msgid "!!!Important!!!"
 msgstr "!!!WICHTIG!!!"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:236
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:236
 msgid ""
 "After the reset manually change the passwords of all accounts that have "
 "access to the Administrator-Section, else everyone can log themselfes into "
@@ -395,94 +356,94 @@ msgstr ""
 "(diejenigen, die Zugriff auf den Administratorbereich haben) die Passwörter, "
 "da sonst jeder sich mit dem Passwort einloggen kann!"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:239
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:239
 msgid "At the moment the preset password is not set. Please"
 msgstr "Momentan ist kein voreingestelltes Passwort gesetzt. Bitte"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:242
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:242
 msgid "click here"
 msgstr "klicken sie hier"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:245
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:245
 msgid "to set a preset password."
 msgstr "um ein voreingestelltes Passwort zu setzen."
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:248
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:248
 msgid "Yes, I want to reset the passwords!"
 msgstr "Ja, ich möchte die Passwörter zurücksetzen!"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:251
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:251
 msgid "Usersettings-Mainmenu"
 msgstr "Benutzereinstellungs-Hauptmenü"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:254
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:254
 msgid "General"
 msgstr "Allgemein"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:257
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:257
 msgid "Register a User"
 msgstr "Benutzer registrieren"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:260
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:260
 msgid "Show Users"
 msgstr "Benutzer anzeigen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:266
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:266
 msgid "Assign Usernames to User automatically"
 msgstr "Benutzernamen der Benutzer automatisch erstellen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:269
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:269
 msgid "Remove Specialcharacters from Usernames"
 msgstr "Spezialschriftzeichen von den Benutzernamen entfernen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:272
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:272
 msgid "Import Users by a CSV-File"
 msgstr "Benutzer mit einer CSV-Datei importieren"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:275
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:275
 msgid "Reset passwords of users to preset passwords"
 msgstr "Die Passwörter von Nutzern zum voreingestellten Passwort zurücksetzen."
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:278
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:461
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:467
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:278
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:461
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:467
 msgid "Update users with Schoolyear-change"
 msgstr "Benutzer mit Schuljahreswechsel aktualisieren"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:281
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:281
 msgid "User-update menu"
 msgstr "Benutzeraktualisierungsmenü"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:284
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:284
 msgid "Conflicts"
 msgstr "Konflikte"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:287
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:287
 msgid "conflicts open"
 msgstr "offene Konflikte"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:290
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:290
 msgid "conflicts resolved"
 msgstr "gelöste Konflikte"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:293
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:392
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:293
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:392
 msgid "Resolve conflicts"
 msgstr "Konflikte lösen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:299
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:299
 msgid "Display changes-overview"
 msgstr "Veränderungsübersicht anzeigen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:302
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:302
 msgid "Execute changes"
 msgstr "Änderungen ausführen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:305
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:305
 msgid "Update users and change the schoolyear"
 msgstr "Benutzer aktualisieren und Schuljahr verändern"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:308
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:308
 msgid ""
 "Here you can change the schoolyear and at the same time update the grades of "
 "the users with a csv-file."
@@ -490,25 +451,25 @@ msgstr ""
 "Hier können sie das Schuljahr verändern und gleichzeitig die Klassen der "
 "Benutzer mit einer CSV-Datei aktualisieren."
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:311
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:311
 msgid "Begin change"
 msgstr "Mit Veränderungen starten"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:314
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:314
 msgid "Csv-file help"
 msgstr "Hilfe zur Csv-Datei"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:317
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:317
 msgid "Select schoolyear"
 msgstr "Schuljahr auswählen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:320
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:320
 msgid "Please select a schoolyear to switch to when changes get applied:"
 msgstr ""
 "Bitte wählen sie ein Schuljahr aus zu dem gewechselt werden soll, wenn die "
 "Änderungen angewendet werden:"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:323
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:323
 msgid ""
 "When full-year switch get selected, it will be assumed that the normal "
 "behaviour is that the users move one gradelevel up."
@@ -516,27 +477,27 @@ msgstr ""
 "Wenn Schuljahreswechsel ausgewählt wird wird angenommen dass normalerweise "
 "die Benutzer einen Jahrgang höher versetzt werden."
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:326
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:326
 msgid "Is it a half-year switch or a full-year switch?"
 msgstr "Ist es ein Halbjahres- oder Schuljahreswechsel?"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:329
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:329
 msgid "To which usergroup should new users be assigned?"
 msgstr "Zu welcher Benutzergruppe sollen neue Nutzer hinzugefügt werden?"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:332
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:332
 msgid "None"
 msgstr "Keine"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:335
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:335
 msgid "No user-groups found."
 msgstr "Keine Nutzergruppen gefunden."
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:338
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:338
 msgid "continue"
 msgstr "weiter"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:341
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:341
 msgid ""
 "There is no schoolyear you can switch to. Please add a schoolyear and then "
 "try again."
@@ -544,28 +505,28 @@ msgstr ""
 "Es gibt kein Schuljahr zu dem sie wechseln könnten. Bitte fügen sie ein "
 "Schuljahr hinzu und versuchen sie es nochmal."
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:344
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:344
 msgid "Add a schoolyear"
 msgstr "Ein Schuljahr hinzufügen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:347
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:347
 msgid "Import userdata with a csv-file"
 msgstr "Benutzerdaten mit einer CSV-Datei importieren"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:350
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:350
 msgid "Please select the csv-file that contains the data of the users:"
 msgstr ""
 "Bitte wählen sie die CSV-Datei aus welche die Daten der Nutzer beinhaltet:"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:353
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:353
 msgid "Upload"
 msgstr "hochladen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:356
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:356
 msgid "Help for formatting the csv-file to update users"
 msgstr "Hilfe zur Formatierung der Csv-Datei zur Benutzeraktualisierung"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:359
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:359
 msgid ""
 "Use the semicolon (;) as a separator. Make sure the csv-file contains the "
 "following columns:"
@@ -573,27 +534,27 @@ msgstr ""
 "Benutzen sie das Semikolon (;) als Separator. Stellen sie sicher dass die "
 "Csv-Datei die folgenden Spalten besitzt:"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:362
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:362
 msgid "The forename of the user"
 msgstr "Der Vorname des Benutzers"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:365
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:365
 msgid "The lastname of the user"
 msgstr "Der Nachname des Benutzers"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:368
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:368
 msgid "The grade the user should be switched to"
 msgstr "Die Klasse zu der der Benutzer wechselt"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:371
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:371
 msgid "Additionally, following columns can be added:"
 msgstr "Zusätzlich können noch folgende Spalten hinzugefügt werden:"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:374
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:374
 msgid "Neccessary if the birthdays of the users are already in the program!"
 msgstr "Nötig wenn die Geburtstage der Benutzer bereits im Programm sind!"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:377
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:377
 msgid ""
 "The birthday of the user. Used to distinguish users with the same forename "
 "and name."
@@ -601,7 +562,7 @@ msgstr ""
 "Der Geburtstag des Benutzers. Benutzt um Nutzer mit demselben Vor- und "
 "Nachnamen zu unterscheiden."
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:380
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:380
 msgid ""
 "The new telephone-number of the user. When this column exists, the old "
 "entries will be overridden, even if the new telephone-number is void!"
@@ -610,7 +571,7 @@ msgstr ""
 "vorhandenen Einträge überschrieben, selbst wenn die neue telefonnummer leer "
 "ist!"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:383
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:383
 msgid ""
 "The new username of the user. When this column exists, the old entries will "
 "be overridden, even if the new username is void!"
@@ -619,32 +580,32 @@ msgstr ""
 "bereits vorhandenen Einträge überschrieben, selbst wenn der neue Nutzername "
 "leer ist!"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:386
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:386
 msgid "Example of a csv-file:"
 msgstr "Beispiel einer Csv-Datei:"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:389
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:389
 msgid "Another example:"
 msgstr "Weiteres Beispiel:"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:395
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:395
 msgid "Yes to all"
 msgstr "Ja zu allem"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:398
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:398
 msgid "User not found in program"
 msgstr "Benutzer im Programm nicht gefunden"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:401
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:401
 msgid "User existing but not found in new file"
 msgstr "Benutzer existiert, wurde aber nicht in der neuen Datei gefunden"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:404
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:404
 msgid "Users old and new gradelevels differ too much"
 msgstr ""
 "Die Differenz zwischen altem und neuem Jahrgang des Nutzers ist zu groß"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:407
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:407
 msgid ""
 "The user <span class=\"highlighted\">\"%1 %2\"</span> (birthday: <span class="
 "\"highlighted\">\"%3\"</span>), that will be in grade <span class="
@@ -654,14 +615,14 @@ msgstr ""
 "class=\"highlighted\">\"%3\"</span>), der in der Klasse <span class="
 "\"highlighted\">\"%4\"</span> sein wird, ist neu. Ist das korrekt?"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:413
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:422
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:431
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:413
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:422
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:431
 #: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:420
 msgid "No"
 msgstr "Nein"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:416
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:416
 msgid ""
 "The user <span class=\"highlighted\">\"%1 %2\"</span> (birthday: <span class="
 "\"highlighted\">\"%3\"</span>) is not in the upcoming schoolyear. Is that "
@@ -671,7 +632,7 @@ msgstr ""
 "class=\"highlighted\">\"%3\"</span>) ist nicht im neuen Schuljahr. Ist das "
 "korrekt?"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:425
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:425
 msgid ""
 "The grade of the user <span class=\"highlighted\">\"%1 %2\"</span> "
 "(birthday: <span class=\"highlighted\">\"%3\"</span>) changed from \"%4\" to "
@@ -681,437 +642,138 @@ msgstr ""
 "(Geburtstag: <span class=\"highlighted\">\"%3\"</span>) hat sich von \"%4\" "
 "auf \"%5\" verändert. Ist das korrekt?"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:434
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:434
 msgid "Submit changes"
 msgstr "Änderungen hochladen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:437
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:437
 msgid "Cancel changes"
 msgstr "Änderungen abbrechen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:440
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:440
 msgid "No conflicts exist."
 msgstr "Es existieren keine Konflikte."
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:443
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:443
 msgid "Answered with yes"
 msgstr "Mit Ja beantwortet"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:446
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:446
 msgid "Answered with no"
 msgstr "Mit nein beantwortet"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:449
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:449
 msgid "changed to user: "
 msgstr "geändert zu Benutzer:"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:452
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:452
 msgid "Please give the correct new grade of the user:"
 msgstr "Bitte geben sie die korrekte neue Klasse des Benutzers an:"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:455
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:455
 msgid "finished"
 msgstr "fertig"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:458
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:458
 msgid "The new grade of the user will be:"
 msgstr "Die neue Klasse des Benutzers wird sein:"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:464
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:464
 msgid "Back to Useradministration"
 msgstr "Zurück zur Benutzerverwaltung"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:473
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:473
 msgid "Go to the existing update-Process"
 msgstr "Zum existierenden Aktualisierungsprozess gehen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:476
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:476
 msgid "Start a new update-process"
 msgstr "Einen neuen Aktualisierungsprozess starten"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:479
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:479
 msgid "Bookmarks"
 msgstr "Lesezeichen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:482
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:482
 msgid "No Bookmarks added"
 msgstr "Keine Leszeichen hinzugefügt"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:485
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:485
 msgid "Add bookmark"
 msgstr "Lesezeichen hinzufügen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:488
-#: ../../../include/3rdParty/smarty/templates_c/61311f7f7fb60d3dae427fe42bb0cc9d^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/3eb0db64f553de2c6d2b3cfcf12fb33948f1ba0a.file.show_soli.tpl.php:153
-#: ../../../include/3rdParty/smarty/templates_c/598e6acc5f3bcd6b3615f13c309eaebd^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../include/3rdParty/smarty/templates_c/69ef1474499747a738f5d4a1531c6368^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
-#: ../../../include/3rdParty/smarty/templates_c/b4c831a78d52cf96e32ee4f16aae16a94472c7d7.file.show_orders_select_date.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/8b712f5beaeafcf6d28b6ca8620568fa^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/0cd7c5a039495beac1f26ece05193e06^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../include/3rdParty/smarty/templates_c/636441a92bd78923471ca1393e876607^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/48c6d6c3c8d49d53db66eafdca634838^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../include/3rdParty/smarty/templates_c/c5e04422d7253498e27ca9bbb9fe5383^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/8c8b534d695ba143ddb57dc057a0c5d0e8505d3f.file.mainMenu.tpl.php:115
-#: ../../../include/3rdParty/smarty/templates_c/045db863b95c89679e3820eb7d397bd5^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/af7c4a46c8c61bdeb8dae903c70385e5^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/277023282b4cc18ca18acb57da7166581f1aee33.file.addClass.tpl.php:150
-#: ../../../include/3rdParty/smarty/templates_c/54357cbff38bb9a56a3f0320b4a11859bfb76f9e.file.addGrade.tpl.php:148
-#: ../../../include/3rdParty/smarty/templates_c/e693a97a437fc988b339dc119089dcfe^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/bbf9ad2fdd63936ac404f5b9f6172b50^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/20b5c846cd8333f8d6fb3350d797e9ec^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../include/3rdParty/smarty/templates_c/3a2f75ea979a961e0e90243618a8d1e82c2749f8.file.mainMenu.tpl.php:152
-#: ../../../include/3rdParty/smarty/templates_c/f192c0b6d274b2dabfa2ab4496db5562^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/08f09ebdf491fb65de6505244c66b2022d891c8a.file.form2.tpl.php:126
-#: ../../../include/3rdParty/smarty/templates_c/ddb0d0ba8ee9fdf4e444b4e7b21ba5fa679b1c85.file.addClassteacher.tpl.php:138
-#: ../../../include/3rdParty/smarty/templates_c/83acc38b8be114f6de986e149986d28dc9513209.file.add_coupon.tpl.php:131
-#: ../../../include/3rdParty/smarty/templates_c/380b69cc0f234b463033e8afe3c1cd264bc66b9e.file.checkout.tpl.php:163
-#: ../../../include/3rdParty/smarty/templates_c/bdb15ee20b1d3b444dfd8197c98a3f07^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/6b2a561c23564141ab6fe75158bab493^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/9c43cff433cc0199a399a11eaed29f0edaeaaad9.file.form1.tpl.php:112
-#: ../../../include/3rdParty/smarty/templates_c/b8290a55c06d0c945dc0c9d45c953257472a419f.file.changePresetPassword.tpl.php:134
-#: ../../../include/3rdParty/smarty/templates_c/a1c606792afd58a9f36bea654b33b612^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/8379559d312825dae10d96a6acea1c32^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/c12ad3b6a4c00e915c42df669b4e2240^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/d91ce8105c7f0fd68454fa10e5a24c68^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/1f6a26e35709fa6f1e23ae9594968969^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/628001cb7e9a9871b59b46bcb7d44a7e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../include/3rdParty/smarty/templates_c/b25e78662f0a215c299127dc25b9859a^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/002055c25e67803b204546232850a4d6^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/230554c0e2a57d045b6f2bf014fda1206d86620b.file.show_admins.tpl.php:138
-#: ../../../include/3rdParty/smarty/templates_c/ff62410a4490a05fe5ba9f3a9b846715^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/aa42d7ed24f43d736e58e142af6a9221^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/4c3577b6952e07ee02b042f81e383c19^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/2b98c7a7c317fbdf1731b4384a084dd19d393c79.file.mainMenu.tpl.php:159
-#: ../../../include/3rdParty/smarty/templates_c/cf0d094d9c4584318b6f76fe71bea06b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/664c01597200c1a7ae5862799806ad03^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../include/3rdParty/smarty/templates_c/2ca92fd8323335f226298095835d98ca262d96a5.file.mainMenu.tpl.php:110
-#: ../../../include/3rdParty/smarty/templates_c/516a0803d1835a440051f88826fca39f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/4d797408ac0de3b6aa7c65dc5ffba2ebd1793600.file.edit_infotext.tpl.php:128
-#: ../../../include/3rdParty/smarty/templates_c/7f87ee520e7730d927ab3b83507d7254e2abc307.file.form.tpl.php:118
-#: ../../../include/3rdParty/smarty/templates_c/e819f7f99ecd450a383ffdfbb8dfbf425712c54b.file.usernameRemoveSpecialChars.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/1e3dbc5247bf8a44d36892940a1f2eccddf694a2.file.form.tpl.php:117
-#: ../../../include/3rdParty/smarty/templates_c/23319d8ef0a908c25db037491895a5965906a6ca.file.mainMenu.tpl.php:120
-#: ../../../include/3rdParty/smarty/templates_c/ff2dc585d32d39fe88f4d4dc8855a13dcb87b733.file.scanCard.tpl.php:117
-#: ../../../include/3rdParty/smarty/templates_c/3266fc8f1560d681dc8ece178a2e516e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/d204f5a78a2c54aaf0be5e199eaeed92^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/4d9b32b9b0dc1d3039d4314762c79c62^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/61767cbc64649c69bd673494ca137082a25c84f0.file.meals_initial_menu.tpl.php:133
-#: ../../../include/3rdParty/smarty/templates_c/f76ffdfcdad256c24204d364f08a79c8^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/a25451d3515e5e23ace7ac615462ceae511ac36c.file.changeGrade.tpl.php:156
-#: ../../../include/3rdParty/smarty/templates_c/89224019825745f42c5e821ebe5682f9^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
-#: ../../../include/3rdParty/smarty/templates_c/9c8559733c7c6f94d36879f24d405c45ea03136c.file.show_priceclasses.tpl.php:147
-#: ../../../include/3rdParty/smarty/templates_c/44d5aa350fc543565b63b32fc921b2a7^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/f2128f715b9f62770a49df46344c4460^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/ec84ab963ebe9613284e1db0d3673ef21d8bdca8.file.changeDataForm.tpl.php:151
-#: ../../../include/3rdParty/smarty/templates_c/7b415d4d25227cfd1604ce5f60bafd2a^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/dfe2673619baad8cf532069545f6444f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/5219913f09f1279f345ac25596bc0565^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/f7b87120f81370a946a9773bd032dfde22e602d2.file.schoolyearSwitchSettings.tpl.php:159
-#: ../../../include/3rdParty/smarty/templates_c/c0409ae9e83f62481fbfed3f72ac3c85^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/de82f2924405730175362278d7381ed1^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
-#: ../../../include/3rdParty/smarty/templates_c/d67536f6a3582dc1e0bbd937cc542e9e62b10883.file.mainMenu.tpl.php:116
-#: ../../../include/3rdParty/smarty/templates_c/7fb8f038c46a276d923030cb5e24d8b6^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/1d0c4466dd2e88c1fccb75485890ee44^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/707e0aac284644300ef1569511e6f8d0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:147
-#: ../../../include/3rdParty/smarty/templates_c/9eb111b5be8559be63c33100f9210c2e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/7c862a52e499efd71d661ed80448e866ab3cba91.file.importCsvFile.tpl.php:184
-#: ../../../include/3rdParty/smarty/templates_c/44238ca8d518270a98644887f90dbe9ed035afb8.file.formatted_menu_table.tpl.php:99
-#: ../../../include/3rdParty/smarty/templates_c/14e4210eabe8e0b4fc471c0255d612065c60917c.file.show_meals.tpl.php:159
-#: ../../../include/3rdParty/smarty/templates_c/3f871ee107ca834b153f9721ce3cb611^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/818149c8372c3fa5e5e32c9cd62bc5d894003dc9.file.mainmenu.tpl.php:133
-#: ../../../include/3rdParty/smarty/templates_c/046472c964af18870b944712023105ed2cbcf2bc.file.changeSchooltype.tpl.php:117
-#: ../../../include/3rdParty/smarty/templates_c/a36df7097db7dd11efa890e7d63becd2^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/4131376768aeda7dc9af28fc0cab0af7^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:102
-#: ../../../include/3rdParty/smarty/templates_c/2f878d67f74ddacb6e56554edac41c2b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../include/3rdParty/smarty/templates_c/28b4ba17b8ad0a5c7a9702eced482ca4^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/a35f65cc272307fff5829ae2ca5377ef^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/e9ef32d639f577e7016cba9bc6d3ec88^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/d300b1a65a8c9e93420fec719c7c3e95^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/6a991575aa1e061506dad37cd234dd13^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
-#: ../../../include/3rdParty/smarty/templates_c/81af9d8a0076e390a700db80fd40b609^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:101
-#: ../../../include/3rdParty/smarty/templates_c/bfdce0ce780f1b921d0f5d0f77d3a41e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/08b87636831815a329051ca2af6c2131^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/a3a18d123a59baeb078624ed83302ab9735a0d8c.file.index.tpl.php:128
-#: ../../../include/3rdParty/smarty/templates_c/97dd776ccc42d799232d77d2d7eadbdb2087af4c.file.dialogAutoCreateUsernames.tpl.php:116
-#: ../../../include/3rdParty/smarty/templates_c/abac30fa7990a32ae4b19e2843f492a3^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../include/3rdParty/smarty/templates_c/5f5cc045c2a4bca7ede41bd4bca1c11e14f3159f.file.changeClass.tpl.php:150
-#: ../../../include/3rdParty/smarty/templates_c/d9ae2e659e39b51da4b84a100552c0b5c94fb34c.file.printRechargeBalanceSelect.tpl.php:159
-#: ../../../include/3rdParty/smarty/templates_c/5d41d89b12e6498bb59be068a987ef34b6de9057.file.form.tpl.php:123
-#: ../../../include/3rdParty/smarty/templates_c/4b1fe40eacb5550dfde823402c417039^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/1aba61cc2138316ef751086f0b7c8aef^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/4451fdbc13bb18f59777edc53f811b76^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/d686400357de6981c313f550a86efbb0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/37a4abad2565f8c6bf3927c1f637cd07^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:102
-#: ../../../include/3rdParty/smarty/templates_c/3fe9dd4755277e6278186f28955fcbbd458369e5.file.addSchooltype.tpl.php:115
-#: ../../../include/3rdParty/smarty/templates_c/fea8382e3cb86c0d31ea0a8b44238b57^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/3aca5d69d87cb7cd10c07c85ed6bb8f1^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/b9ef676150afe51b0b71e54ccaf8fce10e61ecd1.file.form.tpl.php:117
-#: ../../../include/3rdParty/smarty/templates_c/ad60e971e39e02d8ef91e8131eb32470^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
-#: ../../../include/3rdParty/smarty/templates_c/f1fb68a4a736ac8b0c11d60311f9ea24cf2a546c.file.displayClassteachers.tpl.php:195
-#: ../../../include/3rdParty/smarty/templates_c/384270013e2109337508e4d690ab82d4^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
-#: ../../../include/3rdParty/smarty/templates_c/d5bd7be426d163f094c82f8882c3badf^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../include/3rdParty/smarty/templates_c/df1e4d596497e17b37303b671be40369^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/ca879b300d561643ebb33c9ba7ee4ca8^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/46d7ac200bb571742c06323e1e7a8b5ea770fe1d.file.main.tpl.php:137
-#: ../../../include/3rdParty/smarty/templates_c/b979c61321fd6804a55b50bf860d09a683a229af.file.confirm_delete_admin.tpl.php:116
-#: ../../../include/3rdParty/smarty/templates_c/b4b50b6349ab533465158747cdc7260d^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
-#: ../../../include/3rdParty/smarty/templates_c/587d07c5d0c54d54ca93576150e63890^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/653313aa093ae5dd2ab742df89f4d5ce8fe3c030.file.fileUploadForm.tpl.php:149
-#: ../../../include/3rdParty/smarty/templates_c/6221e361426f8d0d469deaf81b9184d25dfc8239.file.show_admin_groups.tpl.php:137
-#: ../../../include/3rdParty/smarty/templates_c/6819e4ee18e749c9a4e594e249811227^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:101
-#: ../../../include/3rdParty/smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:357
-#: ../../../include/3rdParty/smarty/templates_c/6d320c29e0e1511fdc58580d322ba16d^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/ed644aaaf5fefb2a842bebba2040e0f3f62a171d.file.add_meal.tpl.php:134
-#: ../../../include/3rdParty/smarty/templates_c/d534d9f49bc829123ed4c699a3fa4db7^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/4d022996272f352d84190722f66bc1ed^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/547e8385236d7d6dff30a14f19a0711ca5772983.file.classlist.tpl.php:151
-#: ../../../include/3rdParty/smarty/templates_c/198a72121709680142960e7c6523f621deaac438.file.show_groups.tpl.php:142
-#: ../../../include/3rdParty/smarty/templates_c/d5d10f26b865a28cf095a7baade645ed^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/ca042523a2777c7b93c12ee7fa2da788b257227c.file.soli_initial_menu.tpl.php:138
-#: ../../../include/3rdParty/smarty/templates_c/30c51ac2abcacd4b2faaaaa31300ece1^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/eb4bd6e3e4dbbad921ca508b55f22332^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/0748586e15bdbbd91f885faa7bc33dca^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/b66f56f46a450a048339b5e7fdf70049^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/793097fbd89cfdba8d2e0eda77fb46e6^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/1dfa2a88ec6648ede5006d985c146e61^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../include/3rdParty/smarty/templates_c/a766f5febf55211ea4f5a1ed0e93342f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/9b176697e9c01ab28e9a627b7e206875^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/a1c6b6c80b42f8498abfb006fd1e9d1e5e250c41.file.classdetails.tpl.php:230
-#: ../../../include/3rdParty/smarty/templates_c/686caf3f34115759198177dd13ab331c^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:128
-#: ../../../include/3rdParty/smarty/templates_c/f531db0c8d39f285e60aa959db59594faf0a5e6e.file.form_new_group.tpl.php:139
-#: ../../../include/3rdParty/smarty/templates_c/535a254aa55c8e371fd9ffa70cfb696f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:102
-#: ../../../include/3rdParty/smarty/templates_c/49a9e4f01ccd432b8b480ca323d402a2^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/306f600db800299a6ad3ab912cd0c78b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/d95c219a8fb7baf56d0061d297771ed0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../include/3rdParty/smarty/templates_c/2f920d75b29d2132c6817097df89b1a0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/5c4f5e8298f55bdfc41b1b6cb62330e9^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/baeb13dd0e679c0670d7178c51c47a55^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/5205630910627d7b30771f29339592d83d742f1c.file.changeClassteacher.tpl.php:152
-#: ../../../include/3rdParty/smarty/templates_c/3fe3cd4fe2198d402677adeafdbd993c923a8f2b.file.priceclass_menu.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/06dd0d9732ef303ee29fef713e85b555^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../include/3rdParty/smarty/templates_c/ceaf0ad7d9fe554cda482d67b1c284e9cd3a25d6.file.recharge_success.tpl.php:112
-#: ../../../include/3rdParty/smarty/templates_c/ae38d2b047d428ee59a9881a50e5d090^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/8aa904b2039d13bed04c64e858656380^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:101
-#: ../../../include/3rdParty/smarty/templates_c/1b545d44b0a0623299d3305753b50bf1111e2703.file.showGrades.tpl.php:208
-#: ../../../include/3rdParty/smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:258
-#: ../../../include/3rdParty/smarty/templates_c/1081a3ef152a60fd6957b974abb091ce54e7d1f4.file.importLocalCsvFile.tpl.php:138
-#: ../../../include/3rdParty/smarty/templates_c/e29344e5fddedce49eda85e42920220e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:102
-#: ../../../include/3rdParty/smarty/templates_c/ceec5c5e493d80cdb00c6fc1b1f84bf0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../include/3rdParty/smarty/templates_c/d925ccfd02616368489173c0239296c41d838a43.file.displayClasses.tpl.php:235
-#: ../../../include/3rdParty/smarty/templates_c/777ebcedd35b28752564bee134b4cc0f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../include/3rdParty/smarty/templates_c/96c7be0a38d11f4c59e8d0e03e8af275^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:488
 msgid "Back"
 msgstr "zurück"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:491
-#: ../../../include/3rdParty/smarty/templates_c/61311f7f7fb60d3dae427fe42bb0cc9d^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/3eb0db64f553de2c6d2b3cfcf12fb33948f1ba0a.file.show_soli.tpl.php:158
-#: ../../../include/3rdParty/smarty/templates_c/598e6acc5f3bcd6b3615f13c309eaebd^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../include/3rdParty/smarty/templates_c/69ef1474499747a738f5d4a1531c6368^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
-#: ../../../include/3rdParty/smarty/templates_c/b4c831a78d52cf96e32ee4f16aae16a94472c7d7.file.show_orders_select_date.tpl.php:124
-#: ../../../include/3rdParty/smarty/templates_c/8b712f5beaeafcf6d28b6ca8620568fa^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/0cd7c5a039495beac1f26ece05193e06^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../include/3rdParty/smarty/templates_c/636441a92bd78923471ca1393e876607^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/48c6d6c3c8d49d53db66eafdca634838^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../include/3rdParty/smarty/templates_c/c5e04422d7253498e27ca9bbb9fe5383^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/8c8b534d695ba143ddb57dc057a0c5d0e8505d3f.file.mainMenu.tpl.php:120
-#: ../../../include/3rdParty/smarty/templates_c/045db863b95c89679e3820eb7d397bd5^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/af7c4a46c8c61bdeb8dae903c70385e5^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/277023282b4cc18ca18acb57da7166581f1aee33.file.addClass.tpl.php:155
-#: ../../../include/3rdParty/smarty/templates_c/54357cbff38bb9a56a3f0320b4a11859bfb76f9e.file.addGrade.tpl.php:153
-#: ../../../include/3rdParty/smarty/templates_c/e693a97a437fc988b339dc119089dcfe^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/bbf9ad2fdd63936ac404f5b9f6172b50^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/20b5c846cd8333f8d6fb3350d797e9ec^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../include/3rdParty/smarty/templates_c/3a2f75ea979a961e0e90243618a8d1e82c2749f8.file.mainMenu.tpl.php:157
-#: ../../../include/3rdParty/smarty/templates_c/f192c0b6d274b2dabfa2ab4496db5562^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/08f09ebdf491fb65de6505244c66b2022d891c8a.file.form2.tpl.php:131
-#: ../../../include/3rdParty/smarty/templates_c/ddb0d0ba8ee9fdf4e444b4e7b21ba5fa679b1c85.file.addClassteacher.tpl.php:143
-#: ../../../include/3rdParty/smarty/templates_c/83acc38b8be114f6de986e149986d28dc9513209.file.add_coupon.tpl.php:136
-#: ../../../include/3rdParty/smarty/templates_c/380b69cc0f234b463033e8afe3c1cd264bc66b9e.file.checkout.tpl.php:168
-#: ../../../include/3rdParty/smarty/templates_c/bdb15ee20b1d3b444dfd8197c98a3f07^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/6b2a561c23564141ab6fe75158bab493^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/9c43cff433cc0199a399a11eaed29f0edaeaaad9.file.form1.tpl.php:117
-#: ../../../include/3rdParty/smarty/templates_c/b8290a55c06d0c945dc0c9d45c953257472a419f.file.changePresetPassword.tpl.php:139
-#: ../../../include/3rdParty/smarty/templates_c/a1c606792afd58a9f36bea654b33b612^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/8379559d312825dae10d96a6acea1c32^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/c12ad3b6a4c00e915c42df669b4e2240^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/d91ce8105c7f0fd68454fa10e5a24c68^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/1f6a26e35709fa6f1e23ae9594968969^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/628001cb7e9a9871b59b46bcb7d44a7e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../include/3rdParty/smarty/templates_c/b25e78662f0a215c299127dc25b9859a^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/002055c25e67803b204546232850a4d6^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/230554c0e2a57d045b6f2bf014fda1206d86620b.file.show_admins.tpl.php:143
-#: ../../../include/3rdParty/smarty/templates_c/ff62410a4490a05fe5ba9f3a9b846715^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/aa42d7ed24f43d736e58e142af6a9221^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/4c3577b6952e07ee02b042f81e383c19^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/2b98c7a7c317fbdf1731b4384a084dd19d393c79.file.mainMenu.tpl.php:164
-#: ../../../include/3rdParty/smarty/templates_c/cf0d094d9c4584318b6f76fe71bea06b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/664c01597200c1a7ae5862799806ad03^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../include/3rdParty/smarty/templates_c/2ca92fd8323335f226298095835d98ca262d96a5.file.mainMenu.tpl.php:115
-#: ../../../include/3rdParty/smarty/templates_c/516a0803d1835a440051f88826fca39f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/4d797408ac0de3b6aa7c65dc5ffba2ebd1793600.file.edit_infotext.tpl.php:133
-#: ../../../include/3rdParty/smarty/templates_c/7f87ee520e7730d927ab3b83507d7254e2abc307.file.form.tpl.php:123
-#: ../../../include/3rdParty/smarty/templates_c/e819f7f99ecd450a383ffdfbb8dfbf425712c54b.file.usernameRemoveSpecialChars.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/1e3dbc5247bf8a44d36892940a1f2eccddf694a2.file.form.tpl.php:122
-#: ../../../include/3rdParty/smarty/templates_c/23319d8ef0a908c25db037491895a5965906a6ca.file.mainMenu.tpl.php:125
-#: ../../../include/3rdParty/smarty/templates_c/ff2dc585d32d39fe88f4d4dc8855a13dcb87b733.file.scanCard.tpl.php:122
-#: ../../../include/3rdParty/smarty/templates_c/3266fc8f1560d681dc8ece178a2e516e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/d204f5a78a2c54aaf0be5e199eaeed92^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/4d9b32b9b0dc1d3039d4314762c79c62^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/61767cbc64649c69bd673494ca137082a25c84f0.file.meals_initial_menu.tpl.php:138
-#: ../../../include/3rdParty/smarty/templates_c/f76ffdfcdad256c24204d364f08a79c8^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/a25451d3515e5e23ace7ac615462ceae511ac36c.file.changeGrade.tpl.php:161
-#: ../../../include/3rdParty/smarty/templates_c/89224019825745f42c5e821ebe5682f9^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:122
-#: ../../../include/3rdParty/smarty/templates_c/9c8559733c7c6f94d36879f24d405c45ea03136c.file.show_priceclasses.tpl.php:152
-#: ../../../include/3rdParty/smarty/templates_c/44d5aa350fc543565b63b32fc921b2a7^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/f2128f715b9f62770a49df46344c4460^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/ec84ab963ebe9613284e1db0d3673ef21d8bdca8.file.changeDataForm.tpl.php:156
-#: ../../../include/3rdParty/smarty/templates_c/7b415d4d25227cfd1604ce5f60bafd2a^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/dfe2673619baad8cf532069545f6444f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/5219913f09f1279f345ac25596bc0565^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/f7b87120f81370a946a9773bd032dfde22e602d2.file.schoolyearSwitchSettings.tpl.php:164
-#: ../../../include/3rdParty/smarty/templates_c/c0409ae9e83f62481fbfed3f72ac3c85^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/de82f2924405730175362278d7381ed1^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
-#: ../../../include/3rdParty/smarty/templates_c/d67536f6a3582dc1e0bbd937cc542e9e62b10883.file.mainMenu.tpl.php:121
-#: ../../../include/3rdParty/smarty/templates_c/7fb8f038c46a276d923030cb5e24d8b6^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/1d0c4466dd2e88c1fccb75485890ee44^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/707e0aac284644300ef1569511e6f8d0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:152
-#: ../../../include/3rdParty/smarty/templates_c/9eb111b5be8559be63c33100f9210c2e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/7c862a52e499efd71d661ed80448e866ab3cba91.file.importCsvFile.tpl.php:189
-#: ../../../include/3rdParty/smarty/templates_c/44238ca8d518270a98644887f90dbe9ed035afb8.file.formatted_menu_table.tpl.php:104
-#: ../../../include/3rdParty/smarty/templates_c/14e4210eabe8e0b4fc471c0255d612065c60917c.file.show_meals.tpl.php:164
-#: ../../../include/3rdParty/smarty/templates_c/3f871ee107ca834b153f9721ce3cb611^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/818149c8372c3fa5e5e32c9cd62bc5d894003dc9.file.mainmenu.tpl.php:138
-#: ../../../include/3rdParty/smarty/templates_c/046472c964af18870b944712023105ed2cbcf2bc.file.changeSchooltype.tpl.php:122
-#: ../../../include/3rdParty/smarty/templates_c/a36df7097db7dd11efa890e7d63becd2^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/4131376768aeda7dc9af28fc0cab0af7^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:107
-#: ../../../include/3rdParty/smarty/templates_c/2f878d67f74ddacb6e56554edac41c2b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../include/3rdParty/smarty/templates_c/28b4ba17b8ad0a5c7a9702eced482ca4^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/a35f65cc272307fff5829ae2ca5377ef^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/e9ef32d639f577e7016cba9bc6d3ec88^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/d300b1a65a8c9e93420fec719c7c3e95^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/6a991575aa1e061506dad37cd234dd13^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:122
-#: ../../../include/3rdParty/smarty/templates_c/81af9d8a0076e390a700db80fd40b609^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:106
-#: ../../../include/3rdParty/smarty/templates_c/bfdce0ce780f1b921d0f5d0f77d3a41e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/08b87636831815a329051ca2af6c2131^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/a3a18d123a59baeb078624ed83302ab9735a0d8c.file.index.tpl.php:133
-#: ../../../include/3rdParty/smarty/templates_c/97dd776ccc42d799232d77d2d7eadbdb2087af4c.file.dialogAutoCreateUsernames.tpl.php:121
-#: ../../../include/3rdParty/smarty/templates_c/abac30fa7990a32ae4b19e2843f492a3^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../include/3rdParty/smarty/templates_c/5f5cc045c2a4bca7ede41bd4bca1c11e14f3159f.file.changeClass.tpl.php:155
-#: ../../../include/3rdParty/smarty/templates_c/d9ae2e659e39b51da4b84a100552c0b5c94fb34c.file.printRechargeBalanceSelect.tpl.php:164
-#: ../../../include/3rdParty/smarty/templates_c/5d41d89b12e6498bb59be068a987ef34b6de9057.file.form.tpl.php:128
-#: ../../../include/3rdParty/smarty/templates_c/4b1fe40eacb5550dfde823402c417039^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/1aba61cc2138316ef751086f0b7c8aef^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/4451fdbc13bb18f59777edc53f811b76^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/d686400357de6981c313f550a86efbb0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/37a4abad2565f8c6bf3927c1f637cd07^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:107
-#: ../../../include/3rdParty/smarty/templates_c/3fe9dd4755277e6278186f28955fcbbd458369e5.file.addSchooltype.tpl.php:120
-#: ../../../include/3rdParty/smarty/templates_c/fea8382e3cb86c0d31ea0a8b44238b57^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/3aca5d69d87cb7cd10c07c85ed6bb8f1^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/b9ef676150afe51b0b71e54ccaf8fce10e61ecd1.file.form.tpl.php:122
-#: ../../../include/3rdParty/smarty/templates_c/ad60e971e39e02d8ef91e8131eb32470^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
-#: ../../../include/3rdParty/smarty/templates_c/f1fb68a4a736ac8b0c11d60311f9ea24cf2a546c.file.displayClassteachers.tpl.php:200
-#: ../../../include/3rdParty/smarty/templates_c/384270013e2109337508e4d690ab82d4^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:122
-#: ../../../include/3rdParty/smarty/templates_c/d5bd7be426d163f094c82f8882c3badf^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../include/3rdParty/smarty/templates_c/df1e4d596497e17b37303b671be40369^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/ca879b300d561643ebb33c9ba7ee4ca8^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/46d7ac200bb571742c06323e1e7a8b5ea770fe1d.file.main.tpl.php:142
-#: ../../../include/3rdParty/smarty/templates_c/b979c61321fd6804a55b50bf860d09a683a229af.file.confirm_delete_admin.tpl.php:121
-#: ../../../include/3rdParty/smarty/templates_c/b4b50b6349ab533465158747cdc7260d^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
-#: ../../../include/3rdParty/smarty/templates_c/587d07c5d0c54d54ca93576150e63890^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/653313aa093ae5dd2ab742df89f4d5ce8fe3c030.file.fileUploadForm.tpl.php:154
-#: ../../../include/3rdParty/smarty/templates_c/6221e361426f8d0d469deaf81b9184d25dfc8239.file.show_admin_groups.tpl.php:142
-#: ../../../include/3rdParty/smarty/templates_c/6819e4ee18e749c9a4e594e249811227^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:106
-#: ../../../include/3rdParty/smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:362
-#: ../../../include/3rdParty/smarty/templates_c/6d320c29e0e1511fdc58580d322ba16d^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/ed644aaaf5fefb2a842bebba2040e0f3f62a171d.file.add_meal.tpl.php:139
-#: ../../../include/3rdParty/smarty/templates_c/d534d9f49bc829123ed4c699a3fa4db7^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/4d022996272f352d84190722f66bc1ed^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/547e8385236d7d6dff30a14f19a0711ca5772983.file.classlist.tpl.php:156
-#: ../../../include/3rdParty/smarty/templates_c/198a72121709680142960e7c6523f621deaac438.file.show_groups.tpl.php:147
-#: ../../../include/3rdParty/smarty/templates_c/d5d10f26b865a28cf095a7baade645ed^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/ca042523a2777c7b93c12ee7fa2da788b257227c.file.soli_initial_menu.tpl.php:143
-#: ../../../include/3rdParty/smarty/templates_c/30c51ac2abcacd4b2faaaaa31300ece1^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/eb4bd6e3e4dbbad921ca508b55f22332^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/0748586e15bdbbd91f885faa7bc33dca^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/b66f56f46a450a048339b5e7fdf70049^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/793097fbd89cfdba8d2e0eda77fb46e6^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/1dfa2a88ec6648ede5006d985c146e61^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../include/3rdParty/smarty/templates_c/a766f5febf55211ea4f5a1ed0e93342f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/9b176697e9c01ab28e9a627b7e206875^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/a1c6b6c80b42f8498abfb006fd1e9d1e5e250c41.file.classdetails.tpl.php:235
-#: ../../../include/3rdParty/smarty/templates_c/686caf3f34115759198177dd13ab331c^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:133
-#: ../../../include/3rdParty/smarty/templates_c/f531db0c8d39f285e60aa959db59594faf0a5e6e.file.form_new_group.tpl.php:144
-#: ../../../include/3rdParty/smarty/templates_c/535a254aa55c8e371fd9ffa70cfb696f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:107
-#: ../../../include/3rdParty/smarty/templates_c/49a9e4f01ccd432b8b480ca323d402a2^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/306f600db800299a6ad3ab912cd0c78b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/d95c219a8fb7baf56d0061d297771ed0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../include/3rdParty/smarty/templates_c/2f920d75b29d2132c6817097df89b1a0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/5c4f5e8298f55bdfc41b1b6cb62330e9^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/baeb13dd0e679c0670d7178c51c47a55^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/5205630910627d7b30771f29339592d83d742f1c.file.changeClassteacher.tpl.php:157
-#: ../../../include/3rdParty/smarty/templates_c/3fe3cd4fe2198d402677adeafdbd993c923a8f2b.file.priceclass_menu.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/06dd0d9732ef303ee29fef713e85b555^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../include/3rdParty/smarty/templates_c/ceaf0ad7d9fe554cda482d67b1c284e9cd3a25d6.file.recharge_success.tpl.php:117
-#: ../../../include/3rdParty/smarty/templates_c/ae38d2b047d428ee59a9881a50e5d090^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/8aa904b2039d13bed04c64e858656380^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:106
-#: ../../../include/3rdParty/smarty/templates_c/1b545d44b0a0623299d3305753b50bf1111e2703.file.showGrades.tpl.php:213
-#: ../../../include/3rdParty/smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:263
-#: ../../../include/3rdParty/smarty/templates_c/1081a3ef152a60fd6957b974abb091ce54e7d1f4.file.importLocalCsvFile.tpl.php:143
-#: ../../../include/3rdParty/smarty/templates_c/e29344e5fddedce49eda85e42920220e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:107
-#: ../../../include/3rdParty/smarty/templates_c/ceec5c5e493d80cdb00c6fc1b1f84bf0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../include/3rdParty/smarty/templates_c/d925ccfd02616368489173c0239296c41d838a43.file.displayClasses.tpl.php:240
-#: ../../../include/3rdParty/smarty/templates_c/777ebcedd35b28752564bee134b4cc0f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../include/3rdParty/smarty/templates_c/96c7be0a38d11f4c59e8d0e03e8af275^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:491
 msgid "Back to the Module"
 msgstr "zurück zum Modul"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:494
-msgid "Home"
-msgstr "Startseite"
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:494
+msgid "Unregister from all classes at this day"
+msgstr "Von allen Kursen an diesem Tag abmelden"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:497
-msgid "Settings"
-msgstr "Einstellungen"
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:497
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:524
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:530
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:536
+msgid "back"
+msgstr "zurück"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:500
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:521
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:500
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:512
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:548
 msgid "Help"
 msgstr "Hilfe"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:503
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:506
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:58
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:78
+#: ../../../web/Login.php:113
+msgid "Password"
+msgstr "Passwort"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:509
+msgid "Home"
+msgstr "Startseite"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:515
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:518
 msgid "Logout"
 msgstr "Ausloggen"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:506
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:521
 msgid "Sorry! An error occured. We could not handle your request."
 msgstr ""
 "Sorry! Ein Fehler ist aufgetreten. Wir konnten deine Anfrage nicht "
 "bearbeiten."
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:509
-msgid "Error-description:"
-msgstr "Fehlerbeschreibung"
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:527
+msgid "Information"
+msgstr "Hinweis"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:512
-msgid "back"
-msgstr "zurück"
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:533
+msgid "Success!"
+msgstr "Erfolgreich!"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:515
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:539
 msgid "Actions:"
 msgstr "Aktionen:"
 
-#: ../../../include/3rdParty/smarty-gettext/smarty2c.c:518
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:542
 msgid "Contact:"
 msgstr "Kontakt:"
 
-#: ../../../administrator/Login.php:116 ../../../web/Login.php:82
-#: ../../../web/Login.php:153
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:545
+msgid "More:"
+msgstr "Mehr:"
+
+#: ../../../administrator/Login.php:116 ../../../web/Login.php:92
+#: ../../../web/Login.php:174
 msgid "User not found or incorrect password"
 msgstr "Benutzer nicht gefunden oder inkorrektes Passwort"
 
@@ -1331,47 +993,47 @@ msgstr "Konnte die Kurse des aktiven Schuljahres nicht abrufen"
 msgid "There is no active Schoolyear set!"
 msgstr "Kein aktives Schuljahr wurde gesetzt!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:538
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:542
 #, php-format
 msgid "Could not fetch the Classes by SchoolyearId $1%s"
 msgstr "Konnte die Klassen anhand der SchuljahrId %1$s nicht abrufen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:609
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:613
 msgid "Could not fetch the Class(es)!"
 msgstr "Konnte die Kurse/den Kurs nicht abrufen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:658
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:662
 msgid "Could not fetch the Users by Class"
 msgstr "Konnte die Benutzer des Kurses nicht abrufen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:698
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:702
 msgid "Could not fetch the Classes of the User at the same day"
 msgstr ""
 "Konnte die Kurse des Benutzers, die am selben tag stattfinden, nicht abrufen"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:717
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:721
 msgid "Error fetching the Statuses!"
 msgstr "Konnte die Statuse nicht abrufen"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:770
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:774
 msgid "The Global Classregistration was successfully changed."
 msgstr "Die Kursregistrationen wurde erfolgreich verändert."
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:797
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:801
 msgid "Could not change the Global Classregistration!"
 msgstr "Konnte die Kursregistrationen nicht verändern!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:817
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:821
 msgid "Could not change the individual classregistrations!"
 msgstr "Konnte die Kursregistrationen der jeweiligen Kurse nicht verändern!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:854
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:858
 msgid "Could not check whether the global Classregistration isenabled or not."
 msgstr ""
 "Konnte nicht herausfinden ob der \"ist Kursregistration erlaubt\"-Schalter "
 "aktiviert ist oder nicht."
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:873
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:877
 msgid "Could not add the Global Classregistration setting!"
 msgstr "Konnte den \"ist Kursregistration erlaubt\"-Schalter nicht hinzufügen!"
 
@@ -1887,12 +1549,6 @@ msgstr "Geburtstag"
 #: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:77
 msgid "Email-Address"
 msgstr "Email-Adresse"
-
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:58
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:78
-#: ../../../web/Login.php:102
-msgid "Password"
-msgstr "Passwort"
 
 #: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:59
 #: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:79
@@ -2574,25 +2230,19 @@ msgstr "Moduleinstellungen"
 msgid "modulepath_root/administrator/System/Schoolyear"
 msgstr "Schuljahr"
 
-#: ../../../include/3rdParty/smarty/templates_c/0ef320b8c36c79b8bc1ebddff5b804f9abd245dc.file.module_selector.tpl.php:36
-#: ../../../include/3rdParty/smarty/templates_c/2328dac5db09b7c1f6741aa622ddd68094e9adf1.file.module_selector.tpl.php:36
-#: ../../../include/3rdParty/smarty/templates_c/afead75d992336f62dfc6f745df557ba83e34863.file.module_selector.tpl.php:36
-#: ../../../include/3rdParty/smarty/templates_c/ce21713a072c08d0e1f613475cfcfa807ac123a8.file.module_selector.tpl.php:36
+#: ../../../include/3rdParty/smarty/templates_c/641806b5f33365be0b0c26c108d61fc998ac854b.file.classList.tpl.php:190
+#: ../../../include/3rdParty/smarty/templates_c/bae2498d1a0896252f99bb98cdc148ce328965b9.file.menu.tpl.php:186
+#: ../../../include/3rdParty/smarty/templates_c/53449f046cc541e67815fff55aa55f52fb00b27a.file.deRegisterClassConfirmation.tpl.php:186
+#: ../../../include/3rdParty/smarty/templates_c/3deb146f949b84eb8e9399a09deca3be42373944.file.classDetails.tpl.php:186
+#: ../../../include/3rdParty/smarty/templates_c/52f3583583c1b674b835468fcdc127f384d923e4.file.baseLayout.tpl.php:180
+#: ../../../include/3rdParty/smarty/templates_c/ae63deb6b5f3a72006e6d3220cf1491201636794.file.mainMenu.tpl.php:190
+#: ../../../include/3rdParty/smarty/templates_c/1e42dd3602af3d91555e49f13522e090f2374125.file.order.tpl.php:186
+#: ../../../include/3rdParty/smarty/templates_c/afead75d992336f62dfc6f745df557ba83e34863.file.module_selector.tpl.php:169
+#: ../../../include/3rdParty/smarty/templates_c/afead75d992336f62dfc6f745df557ba83e34863.file.module_selector.tpl.php:194
+#: ../../../include/3rdParty/smarty/templates_c/c56cf3f1a038e908eabfdc01b6d79f850a64097f.file.main_menu.tpl.php:187
+#: ../../../include/3rdParty/smarty/templates_c/da4879aacbdf317d59afc8b18e8804fb539aa9bc.file.main.tpl.php:180
 msgid "modulepath_"
 msgstr "NOT USED"
-
-#: ../../../include/3rdParty/smarty/templates_c/d9ae2e659e39b51da4b84a100552c0b5c94fb34c.file.printRechargeBalanceSelect.tpl.php:111
-msgid "Interval:"
-msgstr "Zeitspanne:"
-
-#: ../../../include/3rdParty/smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:111
-#, php-format
-msgid ""
-"Do you really want to delete the Class \"%1$s\"? All its data is inevitably "
-"lost when doing so!"
-msgstr ""
-"Wollen sie wirklich den Kurs \"%1$s\" löschen? Alle Daten gehen "
-"unwiederbringlich verloren!"
 
 #: ../../../include/sql_access/MealManager.php:80
 msgid "Error occured while fetching the meals"
@@ -2610,37 +2260,55 @@ msgstr "Ein Fehler ist beim Abrufen der Bücher nach Klassen aufgetreten"
 msgid "Error occured while fetching the books by topic"
 msgstr "Ein Fehler ist beim Abrufen der Bücher nach Thema aufgetreten"
 
-#: ../../../web/Login.php:95
+#: ../../../web/Login.php:99
+msgid "Error while logging you in!"
+msgstr "Beim einloggen ist ein Fehler aufgetreten!"
+
+#: ../../../web/Login.php:107
 msgid "Please input both username and password!"
 msgstr "Bitte geben sie sowohl Benutzername als auch Passwort ein!"
 
-#: ../../../web/Login.php:105
+#: ../../../web/Login.php:117
 #, php-format
-msgid "Invalid characters were used in field %1$s"
-msgstr "In Feld %1$s wurden ungültige Zeichen benutzt"
+msgid "The input of field %1$s contains invalid characters or is too short!"
+msgstr ""
+"Die Eingabe von Feld %1$s beinhaltet ungültige Zeichen oder ist zu kurz!"
 
-#: ../../../web/Login.php:163
+#: ../../../web/Login.php:184
 msgid "Account is locked!"
 msgstr "Der Account ist gesperrt!"
 
-#: ../../../web/Web.php:245
+#: ../../../web/Web.php:242 ../../../web/Web.php:247
 msgid "Error executing the Module!"
 msgstr "Konnte das Modul nicht ausführen!"
 
-#: ../../../web/headmod_Kuwasys/modules/mod_MainMenu/MainMenu.php:70
+#: ../../../web/headmod_Kuwasys/modules/mod_MainMenu/MainMenu.php:95
 msgid "Could not fetch your Classes!"
 msgstr "Konnte deine Kurse nicht abrufen!"
 
+#: ../../../web/headmod_Kuwasys/modules/mod_MainMenu/MainMenu.php:117
+msgid "You were not unregistered from any classes."
+msgstr "Du wurdest von keinem Kurs abgemeldet."
+
+#: ../../../web/headmod_Kuwasys/modules/mod_MainMenu/MainMenu.php:122
+#, php-format
+msgid "Unregistered you from %1$s classes."
+msgstr "Du wurdest von %1$s Kursen abgemeldet."
+
+#: ../../../web/headmod_Kuwasys/modules/mod_MainMenu/MainMenu.php:152
+msgid "Could not unregister you from your classes!"
+msgstr "Konnte dich nicht von deinen Kursen abmelden!"
+
 #: ../../../web/headmod_Kuwasys/modules/mod_ClassDetails/ClassDetails.php:58
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:79
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:89
 msgid "Go to Main menu"
 msgstr "Zum Hauptmenü"
 
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassDetails/ClassDetails.php:129
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassDetails/ClassDetails.php:138
 msgid "Could not fetch the class-details!"
 msgstr "Konnte die Kursdetails nicht abrufen!"
 
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassDetails/ClassDetails.php:148
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassDetails/ClassDetails.php:157
 msgid "Could not display the class-details!"
 msgstr "Konnte die Kursdetails nicht anzeigen!"
 
@@ -2661,24 +2329,29 @@ msgid "Error checking the input data!"
 msgstr "Ein Fehler ist beim überprüfen der eingegebenen Daten aufgetreten!"
 
 #: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:54
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:135
+msgid "Back to main menu"
+msgstr "Zum Hauptmenü"
+
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:59
 msgid ""
 "Your choices where added. You can see your registrations in the main menu."
 msgstr ""
 "Deine Wahlen wurden hinzugefügt. Du kannst die Registrationen im Hauptmenü "
 "einsehen."
 
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:113
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:124
 msgid "You did not make any selection. Nothing will be changed."
 msgstr "Du hast nichts ausgewählt. Nichts wird verändert."
 
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:118
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:129
 msgid ""
 "You can only select a class as either primary or secondary, not both at once!"
 msgstr ""
 "Du kannst einen Kurs nur als Primärwunsch oder Sekundärwunsche auswählen, "
 "nicht beides gleichzeitig!"
 
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:124
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:140
 msgid ""
 "You have selected a class at a day at which you have already selected "
 "classes. Please undo your choices and then try again if you want to change "
@@ -2689,15 +2362,15 @@ msgstr ""
 "versuche nochmal dich für die jetzt gewählten Kurse zu registrieren wenn du "
 "sie verändern willst!"
 
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:131
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:147
 msgid "Classregistrations are disabled!"
 msgstr "Kursregistrierungen sind deaktiviert!"
 
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:136
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:152
 msgid "One or more classes you have chosen are not enabled!"
 msgstr "Eine oder mehrere Kurse die du gewählt hast sind gesperrt!"
 
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:142
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:158
 msgid ""
 "For a specific day you did not chose a primary request, but you did chose a "
 "secondary request. If you only have one request at this day, please select "
@@ -2707,15 +2380,39 @@ msgstr ""
 "ausgewählt. Wenn du nur einen Wunsch für diesen Tag hast, wähle den Kurs "
 "bitte als Erstwunsch."
 
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:306
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:322
 msgid "Could not commit your choices!"
 msgstr "Konnte deine Wahlen nicht hochladen!"
+
+#: ../../../web/headmod_Help/Help.php:28
+msgid "The helptext is void"
+msgstr "Der Hilfetext ist leer"
+
+#: ../../../web/headmod_Help/Help.php:60
+msgid "Could not fetch the helptext."
+msgstr "Konnte den Hilfetext nicht abrufen."
 
 #: ../../../web/headmod_Babesk/modules/mod_Order/Order.php:303
 #: ../../../web/headmod_Babesk/modules/mod_Order/MealsForOrderDisplayer.php:296
 #: ../../../web/headmod_Babesk/modules/mod_Cancel/Cancel.php:258
 msgid "Could not check if the Soliprice is enabled!"
 msgstr "Konnte nicht überprüfen ob der Teilhabepaket-Preis aktiviert ist!"
+
+#~ msgid "Error-description:"
+#~ msgstr "Fehlerbeschreibung"
+
+#~ msgid "Interval:"
+#~ msgstr "Zeitspanne:"
+
+#~ msgid ""
+#~ "Do you really want to delete the Class \"%1$s\"? All its data is "
+#~ "inevitably lost when doing so!"
+#~ msgstr ""
+#~ "Wollen sie wirklich den Kurs \"%1$s\" löschen? Alle Daten gehen "
+#~ "unwiederbringlich verloren!"
+
+#~ msgid "Invalid characters were used in field %1$s"
+#~ msgstr "In Feld %1$s wurden ungültige Zeichen benutzt"
 
 #~ msgid "Action:"
 #~ msgstr "Aktion:"
