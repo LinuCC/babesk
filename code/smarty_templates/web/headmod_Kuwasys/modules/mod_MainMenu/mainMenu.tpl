@@ -3,19 +3,26 @@
 <div>
 	<h3>Übersicht über die gewählten Kurse</h3>
 	{if !count($classes)}
-		Keine Kurse wurden ausgewählt.
-	{else}
-	{foreach $classes as $unitname => $classesAtUnit}
-		<div class="panel panel-primary bg-fit">
+		<div class="panel panel-primary">
 			<div class="panel-heading">
-				<h4 class="panel-title">{$unitname}</h4>
+				<div class="panel-title">
+					Keine Kurse wurden ausgewählt.
+				</div>
+			</div>
+		</div>
+	{else}
+	{foreach $classes as $category}
+		<div class="panel panel-primary bg-fit category-panel">
+			<div class="panel-heading">
+				<h4 class="panel-title">{$category.name}</h4>
 			</div>
 			<div class="panel-body">
 				<ul class="list-group">
-				{foreach $classesAtUnit as $class}
+				{foreach $category.classes as $class}
 					{* Only link to options if registering is enabled *}
 					{if $class.registrationEnabled}
-					<a class="list-group-item" classId="{$class.ID}"
+					<a class="list-group-item class-container"
+						classId="{$class.ID}" statusname="{$class.statusName}"
 						href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}">
 					{else}
 					<li class="list-group-item" classId="{$class.ID}">
@@ -43,7 +50,10 @@
 					{/if}
 				{/foreach}
 				</ul>
-				<a class="btn btn btn-danger pull-right" href="#">{t}Unregister from all classes at this day{/t}</a>
+				<button type="button" catId="{$category.id}"
+					class="btn btn btn-danger pull-right unregister-category">
+					{t}Unregister from all classes at this day{/t}
+				</button>
 			</div>
 		</div>
 	{/foreach}
@@ -58,7 +68,7 @@
 {/block}
 
 {block name='js_include' append}
-
+<script type="text/javascript" src="{$path_js}/web/Kuwasys/mainmenu.js">
 </script>
 {/block}
 

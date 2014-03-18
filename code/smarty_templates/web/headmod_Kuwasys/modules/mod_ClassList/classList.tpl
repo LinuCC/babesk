@@ -71,13 +71,14 @@
 									<div id="class-accordion-body_{$class.ID}"
 										class="panel-collapse collapse class-container-body">
 										<div class="panel-body">
+											{if isset($class.classteacher)}
+												<span class="label label-default">
+													{$class.classteacher}
+												</span>
+											{/if}
 											<div class="quotebox">
 													{$class.description}
 											</div>
-											{if isset($class.classteacher)}
-												Kursleiter:
-												{$class.classteacher}
-											{/if}
 										</div>
 									</div>
 								</div>
