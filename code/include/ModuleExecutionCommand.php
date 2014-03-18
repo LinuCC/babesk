@@ -30,14 +30,16 @@ class ModuleExecutionCommand {
 	 *                          set for this object
 	 * @return string The module-path preceded with root/<subprogram>
 	 */
-	public function pathGet($delimiter = NULL) {
+	public function pathGet($delimiter = NULL, $length = 0) {
 
 		$delim = (!empty($delimiter)) ? $delimiter : $this->delim;
 
-		$prePath = implode($delim, $this->_execPathPreElements);
-		$modPath = implode($delim, $this->_execPathModules);
+		$pathAr = array_merge($this->_execPathPreElements, $this->_execPathModules);
+		if($length != 0) {
+			$pathAr = array_slice($pathAr, 0, $length);
+		}
 
-		return $prePath . $delim . $modPath;
+		return implode($delim, $pathAr);
 	}
 
 	/**

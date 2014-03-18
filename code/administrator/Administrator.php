@@ -55,13 +55,13 @@ class Administrator {
 		$login = new Login($this->_smarty, $this->_pdo, $this->_logger);
 		if($login->loginCheck()) {
 			$this->accessControlInit();
+			$this->initDisplayingModules();
 			$this->initUserInterface();
 			$this->adminBookmarks();
 			if($this->_moduleExecutionParser->load()) {
 				$this->backlink();
 				$this->moduleBacklink();
 				$this->executeModule();
-
 			}
 			else {
 				$this->MainMenu();
@@ -74,7 +74,7 @@ class Administrator {
 
 	public function initUserInterface() {
 
-		$this->_smarty->assign('_ADMIN_USERNAME', $_SESSION['username']);
+		$this->_smarty->assign('username', $_SESSION['username']);
 		$this->_smarty->assign('sid', htmlspecialchars(SID));
 
 		$this->_smarty->assign('base_path',
@@ -86,6 +86,7 @@ class Administrator {
 
 		try {
 			$execCom = $this->_moduleExecutionParser->executionCommandGet();
+			$this->_smarty->assign('moduleExecCommand', $execCom);
 			$genManager = $this->_acl->moduleGeneratorManagerGet();
 			$module = $genManager->moduleByPathGet($execCom->pathGet());
 			if($module) {
@@ -118,24 +119,9 @@ class Administrator {
 	public function MainMenu() {
 
 		$adminModule = $this->_acl->moduleGet('root/administrator');
-
-		if($adminModule) {
-			$this->_smarty->assign('is_mainmenu', true);
-			$this->_smarty->assign('headmodules', $adminModule->getChilds());
-			$this->_smarty->assign(
-				'moduleGenMan', $this->_acl->moduleGeneratorManagerGet());
-			$this->_smarty->display(
-				PATH_SMARTY_TPL . '/administrator/menu.tpl'
-			);
-		}
-		else {
-			$this->_logger->log('Administrator-Layer access denied.',
-				'Notice', null, json_encode(array(
-					'userId' => $_SESSION['UID']))
-			);
-			$this->_adminInterface->dieError(_g('Error Accessing the Admin-Layer; Either the Module does not exist, or you dont have the rights to access it!'));
-		}
-
+		$this->_smarty->display(
+			PATH_SMARTY_TPL . '/administrator/menu.tpl'
+		);
 	}
 
 
@@ -213,6 +199,25 @@ class Administrator {
 		ini_set('session.use_cookies', 1);
 		ini_set('session.use_only_cookies', 0);
 		ini_set("default_charset", "utf-8");
+	}
+
+	private function initDisplayingModules() {
+
+		$adminModule = $this->_acl->moduleGet('root/administrator');
+
+		if($adminModule) {
+			$this->_smarty->assign('is_mainmenu', true);
+			$this->_smarty->assign('headmodules', $adminModule->getChilds());
+			$this->_smarty->assign(
+				'moduleGenMan', $this->_acl->moduleGeneratorManagerGet());
+		}
+		else {
+			$this->_logger->log('Administrator-Layer access denied.',
+				'Notice', null, json_encode(array(
+					'userId' => $_SESSION['UID']))
+			);
+			$this->_adminInterface->dieError(_g('Error Accessing the Admin-Layer; Either the Module does not exist, or you dont have the rights to access it!'));
+		}
 	}
 
 	private function loadVersion() {
