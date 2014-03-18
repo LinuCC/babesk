@@ -132,20 +132,19 @@
 
 		<div id="content" class="container">
 			<noscript>
-				<p>
-					<b>
-						Ihr Browser hat JavaScript ausgestellt. Diese Seite funktioniert nur dann vollständig, wenn sie Javascript aktiviert haben!
-					</b>
-					<br />
-					(Kurswahlen sind auch ohne Javascript möglich, allerdings wird die Seite nicht korrekt angezeigt)
-					<br />
-					Ein Anleitung finden sie
-					<a href="http://www.enable-javascript.com/de/" target="_blank">
-						hier
-					</a>
-					.
-				</p>
-				<hr />
+				<div class="panel panel-danger">
+					<div class="panel-heading">
+						<div class="panel-title">
+							Javascript ist deaktiviert
+						</div>
+					</div>
+					<div class="panel-body">
+							Ihr Browser hat JavaScript ausgestellt. Diese Seite funktioniert nur dann, wenn sie Javascript aktiviert haben!
+						<a class="btn btn-primary pull-right" href="http://www.enable-javascript.com/de/" target="_blank">
+							Aktivierungsanleitung
+						</a>
+					</div>
+				</div>
 			</noscript>
 			{block name="content"}
 				{if $error}
@@ -327,8 +326,6 @@
 					return jQuery('<div />').append(this.eq(0).clone()).html();
 				};
 
-				$('#account_settings').on('click', function(ev){$('#account').toggle()});
-
 				toastr.options = {
 				  "closeButton": false,
 				  "debug": false,
@@ -342,6 +339,14 @@
 				  "hideEasing": "linear",
 				  "showMethod": "fadeIn",
 				  "hideMethod": "fadeOut"
+				}
+
+				document.cookie="testcookie";
+				var cookieEnabled = (
+					document.cookie.indexOf("testcookie")!=-1
+				);
+				if(!cookieEnabled) {
+					toastr['error']('Cookies sind nicht aktiviert! Diese Website benötigt Cookies um zu funktionieren.', 'Cookies');
 				}
 
 			</script>

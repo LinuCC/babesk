@@ -52,7 +52,12 @@ $(document).ready(function() {
 					if(data.val == 'success') {
 						toastr['success'](data.msg, 'Erfolgreich');
 						$containerToVoid.fadeOut({
-							'done': function() {$containerToVoid.remove()}
+							'done': function() {
+								$containerToVoid.remove();
+								if($('#content').find('.category-panel').length == 0) {
+									$('#no-selections-info').show();
+								}
+							}
 						});
 					}
 					else if(data.val == 'message') {

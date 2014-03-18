@@ -2,15 +2,14 @@
 
 <div>
 	<h3>Übersicht über die gewählten Kurse</h3>
-	{if !count($classes)}
-		<div class="panel panel-primary">
+		<div id="no-selections-info" class="panel panel-primary"
+		{if count($classes)}hidden="hidden"{/if}>
 			<div class="panel-heading">
 				<div class="panel-title">
 					Keine Kurse wurden ausgewählt.
 				</div>
 			</div>
 		</div>
-	{else}
 	{foreach $classes as $category}
 		<div class="panel panel-primary bg-fit category-panel">
 			<div class="panel-heading">
@@ -57,7 +56,6 @@
 			</div>
 		</div>
 	{/foreach}
-	{/if}
 	<a class="btn btn-primary"
 	href="index.php?module=web|Kuwasys|ClassList">
 		Zur Kurswahlliste
