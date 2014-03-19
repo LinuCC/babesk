@@ -211,4 +211,16 @@ function _g($id)
 
 }
 
+/**
+ * Like empty(), but accepts 0, 0.0 and "0" as true values, too
+ * @param  mixed   $value The value to check for blank
+ * @return boolean        false if the value is
+ * 'NULL', 'FALSE', 'array()' (empty array) or '""' (empty string)
+ * else true
+ */
+function isBlank($value) {
+
+	return empty($value) && !is_numeric($value);
+}
+
 ?>

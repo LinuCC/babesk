@@ -124,6 +124,7 @@ class User extends System {
 				$this->schoolyearsGetAllFlattened());
 			$this->_smarty->assign('usergroups',
 				$this->usergroupsGetAllFlattened());
+			$this->_smarty->assign('priceGroups', $priceGroups);
 
 			$this->displayTpl('register.tpl');
 
@@ -175,13 +176,38 @@ class User extends System {
 	}
 
 	/**
-	 * Registers the User by the Inputdata by creating the rows in the database
+	 * Registers a new user by the data given as post-variables
+	 * Dies displaying something, uses Ajax
 	 */
 	protected function registerUpload() {
 
-		//Standard-Values when adding a new User
-		$locked = '0';
-		$first_passwd = ($this->isFirstPasswordEnabled()) ? 1 : 0;
+		try {
+			$this->_pdo->beginTransaction();
+			$userId = $this->registerUserUpload();
+			$this->registerUserInGradesAndSchoolyearsUpload($userId);
+			$this->registerUsergroupsUpload($userId);
+			$this->registerCardnumberUpload($userId);
+			$this->_pdo->commit();
+
+		} catch (\PDOException $e) {
+			$this->_logger->log('Error adding a new user',
+				'Notice', Null, json_encode(array(
+					'msg' => $e->getMessage(),
+					'post' => var_export($_POST, true)
+			)));
+			die(json_encode(array('value' => $e->getMessage())));
+		}
+	}
+
+	/**
+	 * Adds a new user to the table by post-variables
+	 * @return int    The id of the newly created user
+	 */
+	protected function registerUserUpload() {
+
+		\ArrayFunctions::setOnBlank($_POST, 'credits', 0);
+		\ArrayFunctions::setOnBlank($_POST, 'isSoli', 0);
+		\ArrayFunctions::setOnBlank($_POST, 'pricegroupId', 0);
 
 		if(!empty($_POST['password'])) {
 			$password = hash_password($_POST['password']);
@@ -190,43 +216,104 @@ class User extends System {
 			$password = $this->presetPasswordGet();
 		}
 
-		//Querys
-		$cardnumberQuery = '';
+		$first_passwd = ($this->isFirstPasswordEnabled()) ? 1 : 0;
 
-		TableMng::getDb()->autocommit(false);
 
-		try {
-			$gradeAndSchoolyearQuery =
-				$this->schoolyearsAndGradesRegisterQueryCreate();
-			$usergroupsQuery = $this->registerUserUsergroupQueryCreate();
 
-			$_POST = ArrayFunctions::arrayKeysCreateIfNotExist(
-				$_POST, array('pricegroupId', 'credits', 'isSoli'));
+		$stmt = $this->_pdo->prepare(
+			'INSERT INTO SystemUsers (
+				forename, name, username, password, email, telephone,
+				birthday, login_tries, last_login, first_passwd, locked,
+				GID, credit, soli
+				)
+				VALUES (
+					:forename, :name, :username, :password, :email,
+					:telephone, :birthday, :login_tries, :last_login,
+					:first_passwd, :locked, :GID, :credit, :soli );
+		');
 
-			if(!empty($_POST['cardnumber'])) {
-				$cardnumberQuery = "INSERT INTO BabeskCards (cardnumber, UID)
-					VALUES ('$_POST[cardnumber]', @uid);";
-			}
+		$stmt->execute(array(
+			'forename' => $_POST['forename'],
+			'name' => $_POST['name'],
+			'username' => $_POST['username'],
+			'password' => $password,
+			'email' => $_POST['email'],
+			'telephone' => $_POST['telephone'],
+			'birthday' => $_POST['birthday'],
+			'login_tries' => 0,
+			'last_login' => 0,
+			'first_passwd' => $first_passwd,
+			'locked' => 0,
+			'GID' => $_POST['pricegroupId'],
+			'credit' => $_POST['credits'],
+			'soli' => $_POST['isSoli']
+		));
 
-			TableMng::queryMultiple("INSERT INTO SystemUsers
-				(forename, name, username, password, email, telephone, birthday,
-					first_passwd, locked, GID, credit, soli)
-				VALUES ('$_POST[forename]', '$_POST[name]', '$_POST[username]',
-					'$password', '$_POST[email]', '$_POST[telephone]',
-					'$_POST[birthday]', $first_passwd, $locked,
-					'$_POST[pricegroupId]', '$_POST[credits]', '$_POST[isSoli]'
+		return $this->_pdo->lastInsertId();
+	}
+
+	/**
+	 * Adds the selected grades and schoolyears to the newly created user
+	 * @param  int    $newUserId The id of the new user
+	 */
+	protected function registerUserInGradesAndSchoolyearsUpload($newUserId) {
+
+		if(!empty($_POST['schoolyearAndGradeData'])) {
+			$this->_pdo->prepare(
+				'INSERT INTO SystemUsersInGradesAndSchoolyears (
+						userId, gradeId, schoolyearId
+					) VALUES (
+						:userId, :gradeId, :schoolyearId
 					);
-				SET @uid = LAST_INSERT_ID();
-				$gradeAndSchoolyearQuery
-				$cardnumberQuery
-				$usergroupsQuery
-				");
-
-		} catch (Exception $e) {
-			die($e->getMessage());
+			');
+			foreach($_POST['schoolyearAndGradeData'] as $el) {
+				$this->_pdo->execute(array(
+					'userId' => $newUserId,
+					'gradeId' => $el['gradeId'],
+					'schoolyearId' => $el['schoolyearId']
+				));
+			}
 		}
 
-		TableMng::getDb()->autocommit(true);
+	}
+
+	/**
+	 * Adds the newly created user to the selected usergroups
+	 * @param  int    $newUserId The id of the newly created user
+	 */
+	protected function registerUsergroupsUpload($newUserId) {
+
+		if(!empty($_POST['groups'])) {
+			$stmt = $this->_pdo->prepare(
+				'INSERT INTO SystemUsersInGroups (userId, groupId)
+					VALUES(:userId, :groupId);
+			');
+			foreach($_POST['groups'] as $groupId => $wasSet) {
+				$stmt->execute(array(
+					'userId' => $newUserId,
+					'groupId' => $groupId
+				));
+			}
+		}
+	}
+
+	/**
+	 * Adds a card to the newly created user if input given
+	 * @param  int    $newUserId The id of the newly created user
+	 */
+	protected function registerCardnumberUpload($newUserId) {
+
+		if(!empty($_POST['cardnumber'])) {
+			$stmt = $this->_pdo->prepare(
+				'INSERT INTO BabeskCards (cardnumber, UID) VALUES (
+					:cardnumber, :userId
+				);
+			');
+			$stmt->execute(array(
+				'cardnumber' => $_POST['cardnumber'],
+				'userId' => $newUserId
+			));
+		}
 	}
 
 	/**
@@ -283,44 +370,6 @@ class User extends System {
 		else {
 			return $res;
 		}
-	}
-
-	protected function schoolyearsAndGradesRegisterQueryCreate() {
-
-		$query = '';
-
-		if(empty($_POST['schoolyearAndGradeData'])) {
-			return $query;
-		}
-
-		$flatRequestedRows = ArrayFunctions::arrayColumn(
-			$_POST['schoolyearAndGradeData'], 'gradeId', 'schoolyearId');
-
-		foreach($flatRequestedRows as $rSyId => $rGradeId) {
-			$query .= "INSERT INTO SystemUsersInGradesAndSchoolyears
-				(userId, gradeId, schoolyearId) VALUES
-				(@uid, '$rGradeId', '$rSyId');";
-		}
-
-		return $query;
-	}
-
-	/**
-	 * Creates Queries that adds the newly added User to the Selected Groups
-	 */
-	protected function registerUserUsergroupQueryCreate() {
-
-		$query = '';
-
-		if(isset($_POST['groups']) && count($_POST['groups'])) {
-			foreach($_POST['groups'] as $group) {
-				TableMng::sqlEscape($group);
-				$query .= "INSERT INTO SystemUsersInGroups (userId, groupId)
-					VALUES (@uid, '$group');";
-			}
-		}
-
-		return $query;
 	}
 
 	/**

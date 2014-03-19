@@ -124,6 +124,20 @@ class ArrayFunctions {
 			}
 		}
 	}
+
+	/**
+	 * If value with the $key in array $container is blank, set it to $toSet
+	 * @param array  $container The array which (maybe) contains an element with
+	 *                          the key $key
+	 * @param mixed  $key       The key of the value to check for blank-ness
+	 * @param mixed  $toSet     The value to set when the original value is blank
+	 */
+	public static function setOnBlank(array &$container, $key, $toSet) {
+
+		if(empty($container[$key]) || isBlank($container[$key])) {
+			$container[$key] = $toSet;
+		}
+	}
 }
 
 ?>
