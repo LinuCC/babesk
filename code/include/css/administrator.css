@@ -2,6 +2,15 @@ body {
 	background-color: #DDDDDD;
 }
 
+.moduleHeader {
+	text-align: center;
+	margin-top: 0;
+	margin-bottom: 30px;
+	padding: 10px;
+	background-color: #AADD33;
+	border-bottom: 2px solid #AADD33;
+}
+
 .module_breadcrumb.breadcrumb {
 	background-color: #AADD33;
 	/*width: 100%;*/
@@ -162,6 +171,14 @@ padding-right: 15px;
 #sidebar-module-selection .spacer {
 	border-bottom: 1px solid #151515;
 	height: 40px;
+}
+
+#sidebar-module-selection .text-icon-spacer {
+	padding: 0;
+}
+
+#sidebar-module-selection .text-icon-spacer span {
+	padding: 0;
 }
 
 #main_wrapper {

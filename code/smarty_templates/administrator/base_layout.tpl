@@ -116,8 +116,15 @@
 								<a href="#" data-toggle="collapse"
 								data-target="#sidebar-module-{str_replace('/', '_', $hModulepath)}" data-parent="#sidebar-base-nav"
 								class="sidebar-folder">
-									<span>{_g('modulepath_'|cat:$hModulepath)}</span>
-									<span class="toggle-icon icon icon-plus pull-right"></span>
+									<div class="container text-icon-spacer">
+										<span class="col-xs-10 col-lg-11">
+											{_g('modulepath_'|cat:$hModulepath)}
+										</span>
+										<span class="col-xs-2 col-lg-1">
+											<span class="toggle-icon icon icon-plus pull-right">
+											</span>
+										</span>
+									</div>
 								</a>
 								<ul id="sidebar-module-{str_replace('/', '_', $hModulepath)}"
 								class="nav collapse">
