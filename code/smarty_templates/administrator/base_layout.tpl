@@ -37,6 +37,7 @@
 	</head>
 
 	<body>
+
 		{*-----------------------------------------------------
 		 * The top-navigation
 		 *}
@@ -366,6 +367,19 @@
 			<script type="text/javascript" src="{$path_js}/jquery-ui.min.js"></script>
 			<script type="text/javascript" src="{$path_smarty_tpl}/administrator/administratorFunctions.js"></script>
 		{/if}
+
+		{block name=html_snippets}
+			{* put your bigger html-code-snippets you need to add with javascript in
+			 * here
+			 *}
+		{/block}
+
+		{block name=popup_dialogs}
+			{*You can append modal dialogs here to minimize the interaction with
+			 *other parts of the page
+			 *}
+		{/block}
+
 
 	</body>
 </html>

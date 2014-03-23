@@ -1,123 +1,323 @@
-{extends file=$UserParent}{block name=content}
+{extends file=$UserParent}
 
-<script>
-	var grades = {json_encode($grades)};
-	var schoolyears = {json_encode($schoolyears)};
-</script>
-
-<script src="../smarty/templates/administrator/AddItemInterface.js">
-	</script>
-<script src="../smarty/templates/administrator/headmod_System/modules/mod_User/register.js">
-</script>
-
-<form class="simpleForm" action="#" method="post">
-
-	<fieldset>
-		<legend>Persönliche Daten</legend>
-		<label>Vorname:
-			<input class="inputItem" type="text" name="forename" />
-		</label>
-		<label>Name:
-			<input class="inputItem" type="text" name="name" />
-		</label>
-		<label>Benutzername:
-			<input class="inputItem" type="text" name="username" />
-		</label>
-		<label>Passwort:
-			<input class="inputItem" type="password" name="password" />
-		</label>
-		<label>Passwort wiederholen:
-			<input class="inputItem" type="password" name="passwordRepeat" />
-		</label>
-		<label>Emailadresse:
-			<input class="inputItem" type="text" name="email" />
-		</label>
-		<label>Telefonnummer:
-			<input class="inputItem" type="text" name="telephone" />
-		</label>
-		<label>
-			Geburtstag :
-			<input class="inputItem" type="text" size="10" name="birthday" />
-		</label>
-		<label>
-			Kartennummer:
-			<a class="cardnumberAdd" href="#">hinzufügen</a>
-			<input style="display:inline" name="cardnumber" class="inputItem cardnumberAdd" type="text" size="10" maxlength="10" />
-		</label>
-
-		<div class="simpleForm clearfix">
-				<p class="inputItem">Gruppen:</p>
-				{if empty($usergroups)}
-					<p class="inputItem">
-						keine Gruppen vorhanden
+{block name=popup_dialogs append}
+	<!-- Dialog for adding schoolyears to the user -->
+	<div id="grade-schoolyear-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">
+						&times;
+					</button>
+					<h4 class="modal-title">Schuljahr und Klasse hinzufügen</h4>
+				</div>
+				<div class="modal-body">
+					<p>
+						Im folgenden können sie einen Schüler zu einem Schuljahr sowie einer Klasse hinzufügen.
 					</p>
-				{else}
-					<div class="inputItem">
-						<div class="scrollableCheckboxes">
-							{foreach $usergroups as $id => $name}
-								<input type="checkbox"
-									name="groups[{$id}]"/>
-									{$name}<br />
-							{/foreach}
+					<p>
+						Der neue Schüler ist im Schuljahr...
+					</p>
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon">
+								<span class="icon icon-calendar"></span>
+							</div>
+							<div class="input-group-addon">
+								Schuljahr:
+							</div>
+							<select id="modal-schoolyearId" name="schoolyearid"
+							class="form-control">
+								{foreach $schoolyears as $syId => $syName}
+									<option value="{$syId}">
+											{$syName}
+									</option>
+								{/foreach}
+							</select>
 						</div>
 					</div>
-				{/if}
+					<p>
+						in der Klasse...
+					</p>
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon">
+								<span class="icon icon-friends"></span>
+							</div>
+							<div class="input-group-addon">
+								Klasse:
+							</div>
+							<select id="modal-gradeid" name="gradeid" class="form-control">
+								{foreach $grades as $gradeId => $gradeName}
+									<option value="{$gradeId}">
+											{$gradeName}
+									</option>
+								{/foreach}
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">
+						{t}Cancel{/t}
+					</button>
+					<button id="grade-schoolyear-submit" type="button" class="btn btn-primary">
+						{t}Add to user{/t}
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+{/block}
+
+
+{block name=html_snippets append}
+{* Its easier to just copy this div if admin adds a schoolyear to the new user
+ *}
+<div id="grade-schoolyear-snippet" hidden>
+	<div class="input-group form-group">
+		<span class="input-group-addon">
+			<span class="icon icon-calendar"></span>
+		</span>
+		<span name="schoolyearid" class="input-group-addon">
+			Im Schuljahr
+		</span>
+		<select class="schoolyear-selector form-control" name="schoolyearid">
+			{foreach $schoolyears as $syId => $syName}
+				<option value="{$syId}">
+						{$syName}
+				</option>
+			{/foreach}
+		</select>
+		<span name="schoolyearid" class="input-group-addon">
+			In Klasse
+		</span>
+		<select class="grade-selector form-control" name="gradeid">
+			{foreach $grades as $gradeId => $gradeName}
+				<option value="{$gradeId}">
+						{$gradeName}
+				</option>
+			{/foreach}
+		</select>
+		<span class="input-group-btn">
+			<a class="btn btn-danger">
+				<span class="icon icon-error"></span>
+				Verbindung löschen...
+			</a>
+		</span>
+	</div>
+</div>
+{/block}
+
+
+{block name=content}
+<h3 class="moduleHeader">Benutzer registrieren</h3>
+<form id="register-form" action="#" method="post">
+	<fieldset>
+		<legend>Persönliche Daten</legend>
+		<div class="row">
+			<div class="col-xs-12 col-md-6 form-group">
+				<div class="input-group">
+					<span class="input-group-addon"><span class="icon icon-businesscard"></span></span>
+					<input name="forename" id="forename" class="form-control" type="text" placeholder="{t}Forename{/t}" required minlength="3" />
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6 form-group">
+				<div class="input-group">
+					<span class="input-group-addon"><span class="icon icon-businesscard"></span></span>
+					<input name="lastname" id="lastname" class="form-control" type="text" placeholder="{t}Lastname{/t}" required minlength="3" />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-md-6 form-group">
+				<div class="input-group">
+					<span class="input-group-addon"><span class="icon icon-user"></span></span>
+					<input name="username" id="username" class="form-control" type="text" placeholder="{t}Username{/t}" required minlength="3" />
+				</div>
+			</div>
 		</div>
 
-		<fieldset class="schoolyearGradeContainer smallContainer">
-			<legend>Schuljahre und Klassen:</legend>
-			{foreach $gradesAndSchoolyearsOfUser as $gas}
-				<div class="schoolyearGradeRow">
-					Im Schuljahr
-					<select name="schoolyearId">
-						{foreach $schoolyears as $syId => $syName}
-							<option value="{$syId}">
-									{$syName}
-							</option>
-						{/foreach}
-					</select>
-					in Klasse
-					<select name="gradeId">
-						{foreach $grades as $gradeId => $gradeName}
-							<option value="{$gradeId}">
-									{$gradeName}
-							</option>
-						{/foreach}
-					</select>
-					<input type="image" src="../images/status/forbidden_32.png"
-						title="Diese Kombination entfernen"
-						class="gradeSchoolyearRemove" />
+		<!-- Password -->
+		<div class="row">
+			<div class="col-xs-12 col-md-6">
+				<div class="input-group form-group">
+					<span class="input-group-addon"><span class="icon icon-lock"></span></span>
+					<span class="form-control">
+						<label for="password-switch">{t}use preset password{/t}</label>
+						<input type="checkbox" id="password-switch" name="password-switch"
+						data-on-text="Ja" data-off-text="Nein" data-size="small"
+						data-on-color="info" data-off-color="warning" checked/>
+					</span>
 				</div>
-				{$counter++}
-			{/foreach}
-			<input type="image" src="../images/actions/plusbutton_32.png"
-				title="Ein neues Schuljahr mit Klasse hinzufügen"
-				class="gradeSchoolyearAdd" />
-		</fieldset>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-md-6 form-group">
+				<div class="input-group">
+					<span class="input-group-addon"><span class="icon icon-lock"></span></span>
+					<input name="password" id="password" class="form-control" type="password" placeholder="{t}Password{/t}" disabled required/>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6 form-group">
+				<div class="input-group">
+					<span class="input-group-addon"><span class="icon icon-lock"></span></span>
+					<input name="password-repeat" id="password-repeat" class="form-control"
+					type="password" placeholder="{t}Repeat password{/t}"
+					disabled required />
+				</div>
+			</div>
+		</div>
 
-	</fieldset>
+		<!-- more userdata -->
+		<div class="row">
+			<div class="col-xs-12 col-md-6 form-group">
+				<div class="input-group">
+					<span class="input-group-addon"><span class="icon icon-email"></span></span>
+					<input name="email" id="email" class="form-control" type="text" placeholder="{t}Email-address{/t}" email="true" />
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6 form-group">
+				<div class="input-group">
+					<span class="input-group-addon"><span class="icon icon-phone"></span></span>
+					<input name="telephone" id="telephone" class="form-control" type="text" placeholder="{t}Telephone-number{/t}" />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-md-6 form-group">
+				<div class="input-group">
+					<span class="input-group-addon"><span class="icon icon-calendar"></span></span>
+					<input name="birthday" id="birthday" class="form-control" type="text" placeholder="{t}Birthday{/t}" data-provide="datepicker" data-date-format="dd.mm.yyyy" data-date-language="de" date required />
+				</div>
+			</div>
+		</div>
+
+		<!-- usergroups -->
+		<div class="row">
+			<div class="col-xs-12 col-md-6 form-group">
+				<fieldset id="usergroups" >
+					<legend>{t}Usergroups{/t}</legend>
+					<ol>
+						{* Define function allowing to recursively make a list*}
+						{function name=displayGroup group=0}
+							{$hasChilds = $group->childsGet()}
+
+							<span groupId="{$group->getId()}" class="group-identifier label label-default">
+								{$group->getName()}
+							</span>
+
+							{if $hasChilds}
+								<a class="btn btn-info btn-xs expand"
+								data-toggle="collapse"
+								data-target="#group-childs-list-for-{$group->getId()}">
+									<span class="icon icon-plus"></span>
+								</a>
+
+								<ol id="group-childs-list-for-{$group->getId()}" class="collapse">
+									{foreach $group->childsGet() as $child}
+										<li>
+											{displayGroup group=$child}
+										</li>
+									{/foreach}
+								</ol>
+							{/if}
+						{/function}
+
+						{displayGroup group=$usergroups}
+					</ol>
+				</fieldset>
+				<div id="usergroups" class="col-xs-12 col-md-6"></div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+
+		<!-- schoolyears & grades -->
+		<div class="row">
+			<div class="col-xs-12 col-md-12 form-group">
+				<fieldset>
+					<div id="grade-schoolyears">
+					</div>
+					<legend>{t}Klassen und Schuljahre{/t}</legend>
+					<a class="btn btn-info btn-sm" data-toggle="modal"
+					data-target="#grade-schoolyear-modal">
+						Schüler zu einem Schuljahr hinzufügen...
+					</a>
+				</fieldset>
+			</div>
+		</div>
+
 	<fieldset>
-		<legend>BaBeSK</legend>
-		<label>Preisgruppen:
-				{if empty($priceGroups)}
-					<p class="inputItem">
-						keine Preisgruppen vorhanden
-					</p>
-				{else}
-					<select class="inputItem" name="pricegroupId">
-						<option value="">Keine</option>
-						{html_options options=$priceGroups selected="1"}
-					</select>
-				{/if}
-		</label>
-		<label>Guthaben:
-			<input class="inputItem" type="int" name="credits" size="5" maxlength="5" />
-		</label>
-		<label>Teilhabepaket:
-			<input class="inputItem" type="checkbox" name="isSoli" />
-		</label>
-	</fieldset>
-	<input type="submit" value="Submit" />
-</form>
+	<legend>Babesk</legend>
+		<div class="row">
+			<div class="col-xs-12 col-md-6 form-group">
+				<div class="input-group">
+					<span class="input-group-addon"><span class="icon icon-credit"></span></span>
+					<input id="cardnumber" name="cardnumber" class="form-control" type="text" placeholder="{t}Cardnumber{/t}" maxlength="10" minlength="10" digits="true" />
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6 form-group">
+				<div class="input-column">
+					<label for="issoli">
+						Ist Teilhabepaket-Nutzer?
+					</label>
+					<span>
+						<input id="issoli" name="issoli" type="checkbox" data-on-text="Ja"
+						data-off-text="Nein" data-on-color="warning" />
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-md-6 form-group">
+				<div class="input-group">
+					<span class="input-group-addon">
+						<span class="icon icon-users"></span>
+					</span>
+					<label for="pricegroup" class="input-group-addon">
+						{t}Pricegroup{/t}
+					</label>
 
+					{if empty($priceGroups)}
+							<input id="pricegroupId" name="pricegroupId" class="form-control" type="text" placeholder="{t}No pricegroup existing{/t}" disabled />
+					{else}
+						<select class="form-control" id="pricegroupId" name="pricegroupId">
+							<option value="">Keine</option>
+							{html_options options=$priceGroups selected="1"}
+						</select>
+					{/if}
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6 form-group">
+				<div class="input-group">
+					<span class="input-group-addon"><span class="icon icon-euro"></span></span>
+					<input id="credits" name="credits" class="form-control" type="text" placeholder="{t}Credits{/t}" maxlength="5" number="true" />
+				</div>
+			</div>
+		</div>
+	</fieldset>
+	<input type="submit" value="{t}Submit{/t}" class="btn btn-primary" />
+	<a class="btn btn-default pull-right"
+	href="index.php?module=administrator|System|User">
+		{t}Cancel{/t}
+	</a>
+</form>
+{/block}
+
+
+{block name="style_include" append}
+<link rel="stylesheet" href="{$path_css}/administrator/System/User/register.css" type="text/css" />
+<link rel="stylesheet" href="{$path_css}/datepicker3.css" type="text/css" />
+<link rel="stylesheet" href="{$path_css}/bootstrap-switch.min.css" type="text/css" />
+{/block}
+
+
+{block name="js_include" append}
+<script type="text/javascript" src="{$path_js}/datepicker/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" src="{$path_js}/datepicker/locales/bootstrap-datepicker.de.js"></script>
+<script type="text/javascript" src="{$path_js}/bootstrap-switch.min.js"></script>
+<script type="text/javascript" src="{$path_js}/jquery-validate/jquery.validate.min.js"></script>
+<script type="text/javascript" src="{$path_js}/bootbox.min.js"></script>
+<script type="text/javascript" src="{$path_smarty_tpl}/administrator/headmod_System/modules/mod_User/register.js"></script>
 {/block}

@@ -1,289 +1,200 @@
-/**
- * Handles the Input of the Schoolyears and the Grades
- */
-var schoolyearAndGradeHandler = function() {
-
-	var that = this;
-
-	var updateRemoveClickHandler = function updateRemoveClickHandler() {
-
-		$('input.gradeSchoolyearRemove').on('click', function(event) {
-
-			event.preventDefault();
-			var toDel = $(this).parent();
-			toDel.remove();
-		});
-	};
-
-	var inputHtmlSceletonCreate = function() {
-
-		var output = $(
-			'<div class="schoolyearGradeRow">\
-				Im Schuljahr\
-				<select name="schoolyearId">\
-				</select>\
-				in Klasse\
-				<select name="gradeId">\
-				</select>\
-				<input type="image" src="../images/status/forbidden_32.png"\
-					title="Diese Kombination entfernen"\
-					class="gradeSchoolyearRemove" />\
-			</div>'
-		);
-
-		return output;
-	};
-
-	var schoolyearContainerAppend = function(parent) {
-
-		var schoolyearContainer = parent.children(
-			'select[name="schoolyearId"]');
-
-		for(var syId in schoolyears) {
-			schoolyearContainer.append(
-				'<option value="' + syId + '">' +
-				schoolyears[syId] + '</option>');
-		}
-	};
-
-	var gradeContainerAppend = function(parent) {
-
-		var gradeContainer = parent.children(
-			'select[name="gradeId"]');
-
-		for(var gradeId in grades) {
-			gradeContainer.append(
-				'<option value="' + gradeId + '">' +
-				grades[gradeId] + '</option>');
-		}
-	};
-
-	var checkForSameSchoolyearId = function(
-		schoolyearId,
-		selectedGradesAndSchoolyears) {
-
-		var syIsUnique = true;
-
-		$.each(selectedGradesAndSchoolyears, function(index, value) {
-			if(value.schoolyearId == schoolyearId) {
-				adminInterface.errorShow('Bitte wählen sie nicht zweimal\
-					das gleiche Schuljahr aus!');
-				syIsUnique = false;
-			}
-		});
-
-		return syIsUnique;
-	}
-
-	that.inputGet = function() {
-
-		var selectedGradesAndSchoolyears = [];
-		var isOkay = true;
-
-		$('.schoolyearGradeRow').each(function(index, value) {
-
-			var schoolyearId = $(this).find('select[name="schoolyearId"]')
-				.find(':selected').val();
-			var gradeId = $(this).find('select[name="gradeId"]')
-				.find(':selected').val();
-
-			if(checkForSameSchoolyearId(schoolyearId, selectedGradesAndSchoolyears)) {
-				selectedGradesAndSchoolyears.push({
-					'schoolyearId': schoolyearId,
-					'gradeId': gradeId
-				});
-			}
-			else {
-				isOkay = false;
-			}
-		});
-
-		if(isOkay) {
-			return selectedGradesAndSchoolyears;
-		}
-		else {
-			return false;
-		}
-	};
-
-	$('input.gradeSchoolyearAdd').on('click', function(event) {
-
-		event.preventDefault();
-
-		output = inputHtmlSceletonCreate();
-		schoolyearContainerAppend(output);
-		gradeContainerAppend(output);
-
-		$('.schoolyearGradeContainer input.gradeSchoolyearAdd').before(output);
-		updateRemoveClickHandler();
-	});
-
-	updateRemoveClickHandler();
-};
-
 $(document).ready(function() {
 
-	addItemInterface = new AddItemInterface();
-	sygHandler = new schoolyearAndGradeHandler();
+	registerUser();
 
-	$('input.cardnumberAdd').hide();
+	function registerUser() {
 
-	$('a.cardnumberAdd').on('click', function(event) {
+		$('#issoli').bootstrapSwitch();
+		$passwordSwitch = $('input#password-switch');
+		$passwordSwitch.bootstrapSwitch();
+		$passwordSwitch.on('switchChange.bootstrapSwitch', function(ev, data) {
+			//Change disable-status of password-fields depending on toggle
+			customPasswordCheckDisabled(data, true);
+		});
 
-		event.preventDefault();
+		// Make a first test so that the password-fields are in correct state
+		customPasswordCheckDisabled(
+			$passwordSwitch.bootstrapSwitch('state'), false
+		);
 
-		$('a.cardnumberAdd').hide(200);
-		$('input.cardnumberAdd').css({display: 'inline'}).focus();
-		//register Eventhandler
-		$('input.cardnumberAdd').on('keyup', function(event) {
-			if($(this).val().length == 10) {
-				addItemInterface.userInputCheckGump($(this).val(),
-					'exact_len,10', $(this));
+		$('.group-identifier').on('click', function(ev) {
+			$(this).toggleClass('label-default label-success active');
+		});
+
+		$('#usergroups .expand').on('click', function(ev) {
+			$(this).children('.icon').toggleClass('icon-plus icon-minus');
+		});
+
+		/**
+		 * Submit the modal with which the user is added to a grade and schoolyear
+		 */
+		$('#grade-schoolyear-submit').on('click', function(ev) {
+
+			var $modal = $(this).closest('#grade-schoolyear-modal');
+			var gradeId = $modal.find('#modal-gradeid option:selected').val();
+			var schoolyearId = $modal.find('#modal-schoolyearId option:selected')
+				.val();
+			var schoolyearName = $modal.find('#modal-schoolyearId option:selected')
+				.text();
+			var $snippet = $($('#grade-schoolyear-snippet').html());
+			$snippet.find('select.grade-selector option[value=' + gradeId + ']')
+				.prop("selected", true);
+			$snippet.find('select.schoolyear-selector option[value=' + schoolyearId
+					+ ']')
+				.prop("selected", true);
+
+			$existingSchoolyearWithValue = $(
+				'#grade-schoolyears .schoolyear-selector option[value="' +
+					schoolyearId + '"]:selected'
+			);
+			if($existingSchoolyearWithValue.length) {
+				$('#grade-schoolyear-modal').modal('hide');
+				bootbox.confirm('Der Schüler wurde bereits in diesem Schuljahr eingetragen ("' + schoolyearName +
+					'"). Wollen sie ihn wirklich nochmal eintragen?',
+					function(res) {
+						if(res) {
+							submitGradeSchoolyears();
+						}
+					}
+				);
+			}
+			else {
+				$('#grade-schoolyear-modal').modal('hide');
+				submitGradeSchoolyears();
+			}
+
+			function submitGradeSchoolyears() {
+				$('#grade-schoolyears').append($snippet);
 			}
 		});
-	});
 
-	$('input.inputItem[name=birthday]').datepicker({
-		dateFormat: 'yy-mm-dd',
-		changeMonth: true,
-		changeYear: true,
-		yearRange: "1920:+10"
-	});
-
-
-	/**
-	 * When other field selected, check input of the field where input was made
-	 */
-	$('input.inputItem[name=forename]').on('focusout', function() {
-		addItemInterface.userInputCheckGump($(this).val(),
-			'required|min_len,2|max_len,64', $(this));
-	});
-	$('input.inputItem[name=name]').on('focusout', function() {
-		addItemInterface.userInputCheckGump($(this).val(),
-			'required|min_len,2|max_len,64', $(this));
-	});
-	$('input.inputItem[name=username]').on('focusout', function() {
-		addItemInterface.userInputCheckGump($(this).val(),
-			'min_len,2|max_len,64', $(this));
-	});
-	$('input.inputItem[name=password]').on('focusout', function() {
-		addItemInterface.userInputCheckGump($(this).val(),
-			'min_len,2|max_len,64', $(this));
-	});
-	$('input.inputItem[name=passwordRepeat]').on('focusout', function() {
-		addItemInterface.userInputCheckGump($(this).val(),
-			'min_len,2|max_len,64', $(this));
-	});
-	$('input.inputItem[name=email]').on('focusout', function() {
-		addItemInterface.userInputCheckGump($(this).val(),
-			'valid_email|min_len,2|max_len,64', $(this));
-	});
-	$('input.inputItem[name=telephone]').on('focusout', function() {
-		addItemInterface.userInputCheckGump($(this).val(),
-			'min_len,2|max_len,64', $(this));
-	});
-	$('select.inputItem[name=pricegroupId] option:selected').on('focusout',
-		function() {
-		addItemInterface.userInputCheckGump($(this).val(),
-			'numeric|min_len,1|max_len,11', $(this));
-	});
-	$('input.inputItem[name=credits]').on('focusout', function() {
-		value = $(this).val();
-		$(this).val(value.replace(',', '.'));
-		addItemInterface.userInputCheckGump($(this).val(),
-			'numeric|min_len,1|max_len,5', $(this));
-	});
-
-	/**
-	 * Admin submitted the form, add the User
-	 */
-	$('form.simpleForm').on('submit', function(event) {
-
-		addFatalError = function() {
-			adminInterface.errorShow('Konnte aufgrund eines Fehlers den Benutzer nicht hinzufügen');
-		}
-
-		cleanInputFields = function() {
-			$('input.inputItem').each(function(index) {
-				$(this).val('');
-			});
-		}
-
-		var schoolyearAndGradeData = sygHandler.inputGet();
-		if(!schoolyearAndGradeData) {
-			addFatalError();
-			return false;
-		}
-
-		var groups = $("input[name^='groups[']").map(function(){
-			if($(this).prop('checked')) {
-				var id = $(this).attr('name')
-							.replace('groups[', '').replace(']', '');
-				return id;
-			}
-		}).get();
-
-		event.preventDefault();
-
-		$.ajax({
-			type: "POST",
-			url: "index.php?module=administrator|System|User|Register",
-			data: {
-				'forename': $('input.inputItem[name=forename]').val(),
-				'name': $('input.inputItem[name=name]').val(),
-				'username': $('input.inputItem[name=username]').val(),
-				'password': $('input.inputItem[name=password]').val(),
-				'passwordRepeat':
-					$('input.inputItem[name=passwordRepeat]').val(),
-				'email': $('input.inputItem[name=email]').val(),
-				'telephone': $('input.inputItem[name=telephone]').val(),
-				'birthday': $('input.inputItem[name=birthday]').val(),
-				'pricegroupId': $('select.inputItem[name=pricegroupId] option:selected').val(),
-				'groups': groups,
-				'schoolyearAndGradeData': schoolyearAndGradeData,
-				'credits': $('input.inputItem[name=credits]').val(),
-				'cardnumber': $('input.inputItem[name=cardnumber]').val(),
-				'isSoli': $('input.inputItem[name=isSoli]').prop('checked'),
-			},
-
-			success: function(data) {
-
-				console.log(data);
-				try {
-					var res = $.parseJSON(data);
-				}
-				catch (e) {
-					adminInterface.errorShow('Error parsing the server-response');
-					addFatalError();
-					return;
-				}
-				if(res.value == 'success') {
-					adminInterface.successShow(res.message);
-					cleanInputFields();
-				}
-				else if(res.value == 'inputError') {
-					$.each(res.message, function(index, error) {
-						console.log(error);
-						adminInterface.errorShow(error);
-					});
-					addFatalError();
-				}
-				else if(res.value == 'error') {
-					addFatalError();
-				}
-				else if(res.value == 'success') { //success
-					adminInterface.successShow(res.message);
+		/**
+		 * Shows / hides the custom-password fields based on the toggle
+		 * @param  {Boolean} isChecked If the presetpassword-toggle is checked or
+		 *                             not
+		 */
+		function customPasswordCheckDisabled(isChecked, animate) {
+			$fields = $('#password, #password-repeat');
+			$fields.prop('disabled', isChecked);
+			if(isChecked) {
+				if(animate) {
+					$fields.closest('.form-group').slideUp();
 				}
 				else {
-					adminInterface.errorShow('Server returned unknown value');
-					addFatalError();
+					$fields.closest('.form-group').hide();
+				}
+				// Remove error-messages if exist from password-field
+				$('span[for="password"],span[for="password-repeat"]').remove();
+				$fields.closest('.form-group').removeClass('has-error');
+			}
+			else {
+				if(animate) {
+					$fields.closest('.form-group').slideDown();
+				}
+				else {
+					$fields.closest('.form-group').show();
+				}
+			}
+		};
+
+
+		/*==========  Validation  ==========*/
+
+		$('#register-form').validate({
+			rules: {
+				"password-repeat": {equalTo: "#password"}
+			},
+			messages: {
+				"password-repeat": {
+					equalTo: "Passwort-Wiederholung muss mit Passworteingabe " +
+						"übereinstimmen!"
 				}
 			},
+			submitHandler: function(form) {
 
-			error: function(error) {
-				addFatalError();
-			}
+				if(!$('#usergroups .group-identifier.active').length) {
+					bootbox.confirm('Es wurden keine Benutzergruppen ausgewählt. Der neue Benutzer wird sich deswegen nicht anmelden und keine der Funktionen nutzen können. Möchten sie trotzdem fortfahren?',
+						function(res) {
+							if(res) {
+								upload();
+							}
+					});
+				}
+				else {
+					upload();
+				}
+
+			},
+			invalidHandler: function(event, validator) {
+				// 'this' refers to the form
+				var errors = validator.numberOfInvalids();
+				if (errors) {
+					var message = (errors == 1)
+						? 'Sie haben in einem Feld eine inkorrekte Eingabe gemacht.'
+						: 'Sie haben in ' + errors + ' Feldern eine inkorrekte Eingabe gemacht';
+					toastr['error'](message, 'Eingabefehler');
+				}
+			},
+			ignore: "disabled"
 		});
-	});
 
+		/*==========  Upload  ==========*/
+
+		function upload() {
+
+			var groups = [];
+			$('#usergroups .group-identifier.active').each(function (i, el) {
+				groups.push($(el).attr('groupId'));
+			});
+			var schoolyearGrades = [];
+			$('#grade-schoolyears .form-group').each(function(i, el) {
+				schoolyearGrades.push({
+					'schoolyearId': $(el).find('.schoolyear-selector option:selected').val(),
+					'gradeId': $(el).find('.grade-selector option:selected').val()
+				});
+			});
+
+			$.ajax({
+				type: 'POST',
+				url: 'index.php?module=administrator|System|User|Register',
+				data: {
+					'forename': $('#forename').val(),
+					'lastname': $('#lastname').val(),
+					'username': $('#username').val(),
+					'presetPasswordToggle': $passwordSwitch.bootstrapSwitch('state'),
+					'password': $('#password').val(),
+					'email': $('#email').val(),
+					'telephone': $('#telephone').val(),
+					'birthday': $('#birthday').val(),
+					'pricegroupId': $('#pricegroupId option:selected').val(),
+					'groups': groups,
+					'schoolyearAndGradeData': schoolyearGrades,
+					'credits': $('#credits').val(),
+					'cardnumber': $('#cardnumber').val(),
+					'isSoli': $('#issoli').bootstrapSwitch('state')
+				},
+				success: function(data) {
+					console.log(data);
+					try {
+						data = JSON.parse(data);
+					} catch(e) {
+						toastr['error']('Konnte die Serverantwort nicht parsen');
+						return;
+					}
+					if(data.value == 'success') {
+						toastr['success'](data.message);
+					}
+					else if(data.value == 'error') {
+						toastr['error'](data.message);
+					}
+					else {
+						toastr['error']('Konnte die Serverantwort nicht lesen');
+					}
+				},
+				error: function(data) {
+					toastr['error']('Nope!');
+				}
+			});
+		};
+	}
 });

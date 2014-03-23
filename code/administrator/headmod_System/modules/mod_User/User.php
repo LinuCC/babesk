@@ -92,11 +92,13 @@ class User extends System {
 	 */
 	protected function submoduleRegisterExecute() {
 
-		if (isset($_POST['forename'], $_POST['name'])) {
+		if (isset($_POST['forename'], $_POST['lastname'])) {
+			$_POST['birthday'] = date('Y-m-d', strtotime($_POST['birthday']));
 			$this->registerCheck(); //Form filled out
 			$this->registerUpload();
 			die(json_encode(array('value' => 'success',
-				'message' => array("Der Benutzer $_POST[forename] $_POST[name] wurde erfolgreich hinzugefügt"))));
+				'message' => array("Der Benutzer $_POST[forename] " .
+					"$_POST[lastname] wurde erfolgreich hinzugefügt"))));
 		}
 		else { //show Form
 			$this->registerForm();
@@ -118,17 +120,26 @@ class User extends System {
 				$priceGroups = array();
 			}
 
+			require_once PATH_INCLUDE . '/System/UserGroupsManager.php';
+			$gMng = new \Babesk\System\UserGroupsManager(
+				$this->_pdo, $this->_logger
+			);
+
+			$gMng->groupsLoad();
+			$usergroups = $gMng->userGroupGet();
+
 			//---display
 			$this->_smarty->assign('grades', $this->gradesGetAllFlattened());
 			$this->_smarty->assign('schoolyears',
 				$this->schoolyearsGetAllFlattened());
-			$this->_smarty->assign('usergroups',
-				$this->usergroupsGetAllFlattened());
+			$this->_smarty->assign('usergroups', $usergroups);
 			$this->_smarty->assign('priceGroups', $priceGroups);
 
 			$this->displayTpl('register.tpl');
 
 		} catch (Exception $e) {
+			$this->_logger->log('error fetching data for user-register-form',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
 			$this->_interface->dieError('Ein Fehler ist beim Abrufen der Daten aufgetreten!');
 		}
 	}
@@ -155,12 +166,7 @@ class User extends System {
 
 			//validate and MySQL-Escape the elements
 			if($gump->run($_POST)) {
-				//Is PasswordRepeat the same as Password
-				if($_POST['password'] != $_POST['passwordRepeat']) {
-					die(json_encode(array(
-						'value' => 'inputError',
-						'message' => array('Wiederholtes Passwort stimmt nicht mit dem Passwort überein!'))));
-				}
+
 			}
 			else {
 				die(json_encode(array(
@@ -209,16 +215,22 @@ class User extends System {
 		\ArrayFunctions::setOnBlank($_POST, 'isSoli', 0);
 		\ArrayFunctions::setOnBlank($_POST, 'pricegroupId', 0);
 
-		if(!empty($_POST['password'])) {
-			$password = hash_password($_POST['password']);
+		//Password-specific, hashes it
+		if(isset($_POST['presetPasswordToggle']) &&
+			$_POST['presetPasswordToggle'] == 'true'
+		) {
+			$_POST['password'] = $this->presetPasswordGet();
 		}
 		else {
-			$password = $this->presetPasswordGet();
+			if(!empty($_POST['password'])) {
+				$_POST['password'] = hash_password($_POST['password']);
+			}
+			else {
+				$_POST['password'] = '';
+			}
 		}
 
 		$first_passwd = ($this->isFirstPasswordEnabled()) ? 1 : 0;
-
-
 
 		$stmt = $this->_pdo->prepare(
 			'INSERT INTO SystemUsers (
@@ -234,9 +246,9 @@ class User extends System {
 
 		$stmt->execute(array(
 			'forename' => $_POST['forename'],
-			'name' => $_POST['name'],
+			'name' => $_POST['lastname'],
 			'username' => $_POST['username'],
-			'password' => $password,
+			'password' => $_POST['password'],
 			'email' => $_POST['email'],
 			'telephone' => $_POST['telephone'],
 			'birthday' => $_POST['birthday'],
@@ -259,7 +271,7 @@ class User extends System {
 	protected function registerUserInGradesAndSchoolyearsUpload($newUserId) {
 
 		if(!empty($_POST['schoolyearAndGradeData'])) {
-			$this->_pdo->prepare(
+			$stmt = $this->_pdo->prepare(
 				'INSERT INTO SystemUsersInGradesAndSchoolyears (
 						userId, gradeId, schoolyearId
 					) VALUES (
@@ -267,7 +279,7 @@ class User extends System {
 					);
 			');
 			foreach($_POST['schoolyearAndGradeData'] as $el) {
-				$this->_pdo->execute(array(
+				$stmt->execute(array(
 					'userId' => $newUserId,
 					'gradeId' => $el['gradeId'],
 					'schoolyearId' => $el['schoolyearId']
@@ -288,7 +300,7 @@ class User extends System {
 				'INSERT INTO SystemUsersInGroups (userId, groupId)
 					VALUES(:userId, :groupId);
 			');
-			foreach($_POST['groups'] as $groupId => $wasSet) {
+			foreach($_POST['groups'] as $groupId) {
 				$stmt->execute(array(
 					'userId' => $newUserId,
 					'groupId' => $groupId
@@ -1280,7 +1292,7 @@ class User extends System {
 			'required|min_len,2|max_len,64',
 			'sql_escape',
 			'Vorname'),
-		'name' => array(
+		'lastname' => array(
 			'required|min_len,3|max_len,64',
 			'sql_escape',
 			'Nachname'),
@@ -1292,9 +1304,6 @@ class User extends System {
 			'min_len,3|max_len,64',
 			'sql_escape',
 			'Passwort'),
-		'passwordRepeat' => array(
-			'min_len,3|max_len,64',
-			'sql_escape','wiederholtes Passwort'),
 		'email' => array(
 			'valid_email|min_len,3|max_len,64',
 			'sql_escape',
@@ -1304,7 +1313,7 @@ class User extends System {
 			'sql_escape',
 			'Telefonnummer'),
 		'birthday' => array(
-			'max_len,10',
+			'max_len,10|isodate',
 			'sql_escape',
 			'Geburtstag'),
 		'pricegroupId' => array(

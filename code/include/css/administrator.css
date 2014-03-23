@@ -1,5 +1,9 @@
 body {
-	background-color: #DDDDDD;
+	background-color: #FBFBFB;
+}
+
+hr {
+	border-top: 1px solid #BBBBBB;
 }
 
 .moduleHeader {
@@ -7,8 +11,9 @@ body {
 	margin-top: 0;
 	margin-bottom: 30px;
 	padding: 10px;
-	background-color: #AADD33;
-	border-bottom: 2px solid #AADD33;
+	color: #777777;
+	/*background-color: #AADD33;*/
+	/*border-bottom: 2px solid #AADD33;*/
 }
 
 .module_breadcrumb.breadcrumb {
@@ -115,18 +120,18 @@ padding-right: 15px;
 	z-index: 1000;
 	display: block;
 	overflow-x: hidden;
-	background-color: #333232;
+	background-color: #666464;
 	border-right: 1px solid #151515;
 	box-shadow: 2px 0px 8px #111111;
 }
 
 #sidebar-module-selection li {
-	background-image: -webkit-gradient(linear, left 0%, left 100%, from(#333232), to(#2B2B2B));
-	background-image: -webkit-linear-gradient(top, #333232 0%, #2B2B2B, 100%);
-	background-image: -moz-linear-gradient(top, #333232 0%, #2B2B2B 100%);
-	background-image: linear-gradient(to bottom, #333232 0%, #2B2B2B 100%);
+	background-image: -webkit-gradient(linear, left 0%, left 100%, from(#666464), to(#515050));
+	background-image: -webkit-linear-gradient(top, #666464, 0%, #515050, 100%);
+	background-image: -moz-linear-gradient(top, #666464 0%, #515050 100%);
+	background-image: linear-gradient(to bottom, #666464 0%, #515050 100%);
 	background-repeat: repeat-x;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff333232', endColorstr='#ff2B2B2B', GradientType=0);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff666464', endColorstr='#ff666464', GradientType=0);
 }
 
 #sidebar-module-selection li > ul > li {
@@ -254,4 +259,49 @@ div.quotebox, p.quotebox {
 
 #selector-container .submit-button {
 	margin-right: 10px;
+}
+
+.input-group .icon {
+	color: #888888;
+	font-size: 16px;
+}
+
+.input-group label {
+	color: #666666;
+	font-size: 14px;
+}
+
+label {
+	font-weight: 400;
+}
+
+fieldset {
+	padding: 5px;
+	border: 1px solid #BBBBBB;
+	border-radius: 3px;
+	margin-bottom: 10px;
+}
+
+fieldset > legend {
+	display: inline;
+	font-size: 14px;
+	color: #999999;
+	margin-bottom: 0;
+	padding: 0 5px;
+	width: auto;
+	border: none;
+}
+
+label.valid {
+	width: 24px;
+	height: 24px;
+	background: url(assets/img/valid.png) center center no-repeat;
+	display: inline-block;
+	text-indent: -9999px;
+}
+label.error {
+	font-weight: bold;
+	color: red;
+	padding: 2px 8px;
+	margin-top: 2px;
 }

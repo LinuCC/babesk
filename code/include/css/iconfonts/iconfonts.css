@@ -31,6 +31,12 @@
 	font-size: 16px;
 }
 
+.icon-plus:before {
+	content: "\e609";
+}
+.icon-minus:before {
+	content: "\e60a";
+}
 .icon-Babesk:before {
 	content: "\e601";
 }
@@ -43,32 +49,56 @@
 .icon-PVau:before {
 	content: "\e604";
 }
-.icon-Fits:before {
-	content: "\e605";
+.icon-euro:before {
+	content: "\e611";
 }
-.icon-Messages:before {
-	content: "\e606";
+.icon-uniF5C8:before {
+	content: "\e612";
 }
-.icon-error:before {
-	content: "\e600";
+.icon-useroutline:before {
+	content: "\e613";
 }
-.icon-darthvader:before {
-	content: "\e608";
+.icon-useraddoutline:before {
+	content: "\e614";
 }
-.icon-plus:before {
-	content: "\e609";
-}
-.icon-minus:before {
-	content: "\e60a";
-}
-.icon-success:before {
-	content: "\e60b";
+.icon-userremoveoutline:before {
+	content: "\e615";
 }
 .icon-addbookmark:before {
 	content: "\e60c";
 }
 .icon-removebookmark:before {
 	content: "\e60d";
+}
+.icon-Fits:before {
+	content: "\e605";
+}
+.icon-error:before {
+	content: "\e600";
+}
+.icon-success:before {
+	content: "\e60b";
+}
+.icon-darthvader:before {
+	content: "\e608";
+}
+.icon-uptime:before {
+	content: "\e616";
+}
+.icon-Messages:before {
+	content: "\e606";
+}
+.icon-friends:before {
+	content: "\e618";
+}
+.icon-email:before {
+	content: "\e619";
+}
+.icon-businesscard:before {
+	content: "\e61a";
+}
+.icon-clock:before {
+	content: "\e61b";
 }
 .icon-info:before {
 	content: "\e60e";
@@ -78,6 +108,24 @@
 }
 .icon-quotedown:before {
 	content: "\e610";
+}
+.icon-credit:before {
+	content: "\e61c";
+}
+.icon-phone:before {
+	content: "\e620";
+}
+.icon-calendar:before {
+	content: "\e617";
+}
+.icon-user:before {
+	content: "\e61d";
+}
+.icon-users:before {
+	content: "\e61e";
+}
+.icon-lock:before {
+	content: "\e61f";
 }
 .icon-Settings:before {
 	content: "\e607";

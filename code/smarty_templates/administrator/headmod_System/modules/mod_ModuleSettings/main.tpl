@@ -13,6 +13,9 @@
 	</div>
 </fieldset>
 
+{/block}
+
+{block name=js_include append}
 <script src="{$path_js}/jstree/jquery.jstree.js"></script>
 <script src="{$path_smarty_tpl}/administrator/headmod_System/modules/
 	mod_ModuleSettings/main.js"></script>
