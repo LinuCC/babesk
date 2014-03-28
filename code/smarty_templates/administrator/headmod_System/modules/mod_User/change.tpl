@@ -240,7 +240,7 @@
 							</a>
 
 							{if $hasChilds}
-								<a class="btn btn-info btn-xs expand"
+								<a class="btn btn-default btn-xs expand"
 								data-toggle="collapse"
 								data-target="#group-childs-list-for-{$group->getId()}">
 									<span class="icon icon-minus"></span>
