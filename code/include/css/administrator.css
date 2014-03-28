@@ -302,3 +302,7 @@ a.label:hover {
 	transition-duration: 0.15s;
 	color: #AADD33;
 }
+
+.pagination {
+	margin: 0;
+}

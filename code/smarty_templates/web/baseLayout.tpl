@@ -327,13 +327,13 @@
 				};
 
 				toastr.options = {
-				  "closeButton": false,
+				  "closeButton": true,
 				  "debug": false,
-				  "positionClass": "toast-top-right",
+				  "positionClass": "toast-top-center",
 				  "onclick": null,
 				  "showDuration": "300",
 				  "hideDuration": "1000",
-				  "timeOut": "0",
+				  "timeOut": "7500",
 				  "extendedTimeOut": "1000",
 				  "showEasing": "swing",
 				  "hideEasing": "linear",

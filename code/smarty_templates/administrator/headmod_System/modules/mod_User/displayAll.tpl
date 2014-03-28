@@ -1,4 +1,55 @@
-{extends file=$UserParent}{block name=content}
+{extends file=$UserParent}{block name=filling_content}
+
+<div class="row">
+	<div class="col-sm-2 col-md-2 text-center">
+		<a class="btn btn-default">{t}Columns{/t}</a>
+	</div>
+	<div class="col-sm-7 col-md-8 text-center">
+		<ul class="pagination">
+			<li><a>&laquo;</a></li>
+			<li><a>1</a></li>
+			<li><a>2</a></li>
+			<li><a>3</a></li>
+			<li><a>4</a></li>
+			<li><a>5</a></li>
+			<li><a>6</a></li>
+			<li><a>7</a></li>
+			<li><a>8</a></li>
+			<li><a>9</a></li>
+			<li><a>&raquo;</a></li>
+		</ul>
+	</div>
+	<div class="col-sm-3 col-md-2 form-group">
+		<div class="input-group elements-count" title="{t}Elements per page{/t}" >
+		<span class="input-group-addon">
+			<span class="icon icon-Settings"></span>
+		</span>
+		<input type="text" maxlength="3" class="form-control" />
+		</div>
+	</div>
+</div>
+
+<div class="">
+<table class="table">
+	<tr>
+		<th>#</th>
+		<th>Vorname</th>
+		<th>Nachname</th>
+	</tr>
+	<tr>
+		<td>5</td>
+		<td>Pascal</td>
+		<td>Ernst</td>
+	</tr>
+</table>
+</div>
+{/block}
+
+{block name=style_include append}
+<link rel="stylesheet" href="{$path_css}/administrator/System/User/display-all.css" type="text/css" />
+{/block}
+
+{block name=content}
 
 <style type="text/css">
 
