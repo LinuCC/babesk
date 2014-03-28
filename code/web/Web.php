@@ -169,6 +169,10 @@ class Web {
 		$this->addSessionUserdata($userData);
 		$this->handleModuleSpecificData($userData);
 		$this->loginTriesHandle($userData);
+		if($userData['locked']) {
+			session_destroy();
+			$this->_smarty->display(PATH_SMARTY_TPL . '/web/login.tpl');
+		}
 		$this->addUserdataToSmarty();
 	}
 
@@ -329,6 +333,14 @@ class Web {
 	private function headmodulesToDisplayGet() {
 
 		$webModule = $this->_acl->moduleGet('root/web');
+		if(!$webModule) {
+			$this->_logger->log(
+				'a user tried to access web without rights!',
+				'Notice', Null, json_encode(
+					array('userId' => $_SESSION['uid'])
+			));
+			$this->_interface->dieError(_g('You have no access to web!'));
+		}
 		$childs = $webModule->getChilds();
 		$headmodsToDisplay = array();
 		foreach($childs as $child) {

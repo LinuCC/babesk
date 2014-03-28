@@ -10,6 +10,7 @@ require_once PATH_ACCESS . '/UserManager.php';
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/ArrayFunctions.php';
 require_once PATH_ADMIN . '/headmod_System/System.php';
+require_once PATH_INCLUDE . '/System/UserGroupsManager.php';
 
 class User extends System {
 
@@ -120,20 +121,21 @@ class User extends System {
 				$priceGroups = array();
 			}
 
-			require_once PATH_INCLUDE . '/System/UserGroupsManager.php';
-			$gMng = new \Babesk\System\UserGroupsManager(
-				$this->_pdo, $this->_logger
-			);
-
-			$gMng->groupsLoad();
-			$usergroups = $gMng->userGroupGet();
-
 			//---display
+			try {
+				$this->_smarty->assign(
+					'priceGroups', $this->pricegroupsFetch()
+				);
+			} catch (PDOException $e) {
+				//Pricegroups is Babesk-specific, dont crash when table not
+				//exists
+				$this->_smarty->assign('priceGroups', array());
+			}
+			$this->_smarty->assign(
+				'schoolyears', $this->schoolyearsGetAllFlattened()
+			);
 			$this->_smarty->assign('grades', $this->gradesGetAllFlattened());
-			$this->_smarty->assign('schoolyears',
-				$this->schoolyearsGetAllFlattened());
-			$this->_smarty->assign('usergroups', $usergroups);
-			$this->_smarty->assign('priceGroups', $priceGroups);
+			$this->_smarty->assign('usergroups', $this->usergroupsGet());
 
 			$this->displayTpl('register.tpl');
 
@@ -142,6 +144,32 @@ class User extends System {
 				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
 			$this->_interface->dieError('Ein Fehler ist beim Abrufen der Daten aufgetreten!');
 		}
+	}
+
+	/**
+	 * Returns all existing usergroups
+	 * @return Group  The root-user-group with all other groups as childs
+	 */
+	protected function usergroupsGet() {
+
+		$gMng = new \Babesk\System\UserGroupsManager(
+			$this->_pdo, $this->_logger
+		);
+		$gMng->groupsLoad();
+		return $gMng->userGroupGet();
+	}
+
+	/**
+	 * Fetches and returns all existing pricegroups
+	 * @return array  The pricegroups
+	 */
+	protected function pricegroupsFetch() {
+
+		$res = $this->_pdo->query(
+			'SELECT ID, name FROM BabeskPriceGroups'
+		);
+		$pricegroups = $res->fetchAll(PDO::FETCH_KEY_PAIR);
+		return $pricegroups;
 	}
 
 	/**
@@ -510,6 +538,7 @@ class User extends System {
 				$grades,
 				$schoolyears,
 				$gradesAndSchoolyears,
+				$userInGroups,
 				$groups,
 				$modsActivated) = $this->changeDisplayDataFetch($uid);
 
@@ -545,15 +574,21 @@ class User extends System {
 			$userId);
 		$grades = $this->gradesGetAllFlattened();
 		$schoolyears = $this->schoolyearsGetAllFlattened();
-		$groups = $this->groupsGetAllWithCheckIsUserIn($userId);
+
+		$userInGroups = $this->groupsOfUserGet($userId);
+		$gMng = new \Babesk\System\UserGroupsManager(
+			$this->_pdo, $this->_logger
+		);
+		$gMng->groupsLoad();
+		$usergroups = $gMng->userGroupGet();
+
 		$modsActivated = $this->userChangeModuleActivationGet();
 
 		if($modsActivated['Babesk']) {
 			$priceGroups = $this->arrayGetFlattened(
 				'SELECT ID, name FROM BabeskPriceGroups');
 			$cardnumber = $this->cardnumberGetByUserId($userId);
-			$cardnumber = (!empty($cardnumber)) ?
-				$cardnumber[0]['cardnumber'] : '';
+			$cardnumber = (!empty($cardnumber)) ? $cardnumber : '';
 
 		}
 		else {
@@ -567,7 +602,8 @@ class User extends System {
 			$grades,
 			$schoolyears,
 			$gradeAndSchoolyears,
-			$groups,
+			$userInGroups,
+			$usergroups,
 			$modsActivated);
 	}
 
@@ -659,52 +695,56 @@ class User extends System {
 		return $data;
 	}
 
-	protected function userGet($uid) {
+	/**
+	 * Returns the data of the user with the id $userId
+	 * Throws PDOException if something has gone wrong
+	 * @param  int    $userId The Id of the user to search for
+	 * @return array          The userdata or false if not found
+	 */
+	protected function userGet($userId) {
 
-		$user = TableMng::querySingleEntry(
-			"SELECT u.* FROM SystemUsers u WHERE `ID` = $uid");
-
-		return $user;
+		$stmt = $this->_pdo->prepare(
+			'SELECT * FROM SystemUsers WHERE ID = ?
+		');
+		$stmt->execute(array($userId));
+		return $stmt->fetch();
 	}
 
 	protected function gradeAndSchoolyearDataOfUserGet($uid) {
 
-		$data = TableMng::query(
-			"SELECT gradeId, schoolyearId FROM SystemUsersInGradesAndSchoolyears
-			WHERE userId = $uid");
-
-		return $data;
+		$stmt = $this->_pdo->prepare(
+			'SELECT gradeId, schoolyearId
+				FROM SystemUsersInGradesAndSchoolyears
+				WHERE userId = ?
+		');
+		$stmt->execute(array($uid));
+		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 	}
 
 	protected function cardnumberGetByUserId($userId) {
 
-		$cardnumber = TableMng::query(
-			"SELECT cardnumber FROM BabeskCards WHERE UID = $userId");
-
-		return $cardnumber;
+		$stmt = $this->_pdo->prepare(
+			'SELECT cardnumber FROM BabeskCards WHERE UID = ?'
+		);
+		$stmt->execute(array($userId));
+		return $stmt->fetchColumn();
 	}
 
 	protected function gradesGetAllFlattened() {
 
-		$grades = TableMng::query(
-			'SELECT ID, CONCAT(gradelevel, "-", label) AS name FROM SystemGrades');
-
-		$flattenedGrades = ArrayFunctions::arrayColumn($grades, 'name', 'ID');
-
-		return $flattenedGrades;
+		$stmt = $this->_pdo->query(
+			'SELECT ID, CONCAT(gradelevel, "-", label) AS name
+				FROM SystemGrades;
+		');
+		return $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 	}
 
 	protected function schoolyearsGetAllFlattened() {
 
-		$schoolyears = TableMng::query(
-			'SELECT ID, label AS name FROM SystemSchoolyears');
-
-		$flattenedSchoolyears = ArrayFunctions::arrayColumn(
-			$schoolyears,
-			'name',
-			'ID');
-
-		return $flattenedSchoolyears;
+		$stmt = $this->_pdo->query(
+			'SELECT ID, label AS name FROM SystemSchoolyears'
+		);
+		return $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 	}
 
 	/**
@@ -750,405 +790,6 @@ class User extends System {
 	}
 
 	/**
-	 * Handles the Input from the ChangeUser-Form and changes the data
-	 */
-	protected function submoduleChangeExecute() {
-
-		$uid = $_POST['ID'];
-		TableMng::sqlEscape($uid);
-		$this->changeParseInput();
-		$this->changeCleanAndCheckInput();
-		$this->changeUpload($uid);
-		die(json_encode(array('value' => 'success',
-			'message' => "Der Benutzer mit der ID '$uid' wurde erfolgreich geändert")));
-	}
-
-	/**
-	 * Parses the input that the user made, so that the Program can run
-	 * without throwing weird errors
-	 */
-	protected function changeParseInput() {
-
-		$_POST['isSoli'] = (isset($_POST['isSoli']) &&
-			$_POST['isSoli'] == 'true') ? 1 : 0;
-
-		$_POST['accountLocked'] = ($_POST['accountLocked'] == 'true') ? 1 : 0;
-
-		//Add Password to the Inputcheck if user wants it to be changed
-		if($_POST['passwordChange'] == 'true') {
-			self::$_changeRules['password'] = array('min_len,3|max_len,64', '', 'Passwort');
-		}
-
-		if(isset($_POST['credits'])) {
-			$_POST['credits'] = str_replace(',', '.', $_POST['credits']);
-		}
-		else {
-			$_POST['credits'] = 0;
-		}
-	}
-
-	/**
-	 * Cleans the Input, decodes HTML-entities and mysql-Encapes it and checks
-	 * the input
-	 */
-	protected function changeCleanAndCheckInput() {
-
-		require_once PATH_INCLUDE . '/gump.php';
-
-		$gump = new GUMP();
-
-
-		try {
-			$gump->rules(self::$_changeRules);
-
-			//Set none-filled-out formelements to be at least a void string,
-			//for easier processing
-			$_POST = $gump->voidVarsToStringByRuleset(
-				$_POST, self::$registerRules);
-
-			//validate the elements
-			if($validatedData = $gump->run($_POST)) {
-				//escapes all of the elements in the ruleset
-				// $_POST = $gump->input_preprocess_by_ruleset($_POST,
-					// self::$_changeRules);
-			}
-			else {
-				die(json_encode(array(
-					'value' => 'inputError',
-					'message' => $gump->get_readable_string_errors(false)
-					)));
-			}
-
-			if(empty($_POST['pricegroupId'])) {
-				$_POST['pricegroupId'] = 0;
-			}
-
-		} catch(Exception $e) {
-			die(json_encode(array(
-				'value' => 'inputError',
-				'message' => array('Konnte die Eingaben nicht überprüfen!' .
-					$e->getMessage()))));
-		}
-	}
-
-	/**
-	 * Uploads the changed data of the User
-	 *
-	 * Never ever use the following function to change the ID of the User,
-	 * SQL-Statements used here dont support it and the linked Table-Elements
-	 * will point to the wrong ID!
-	 *
-	 * @param  String $uid The ID of the User to upload the change
-	 */
-	protected function changeUpload($uid) {
-
-		//Querys
-		$cardnumberQuery = '';
-		$passwordQuery = '';
-		$groupQuery = '';
-
-		TableMng::getDb()->autocommit(false);
-		$this->_pdo->beginTransaction();
-
-		try {
-			//check for additional Querys needed
-			if($this->_acl->moduleGet('root/administrator/Babesk')) {
-				$cardnumberQuery = $this->cardsQueryCreate($uid);
-			}
-			$groupQuery = $this->groupQueryCreate($uid);
-			$schoolyearsAndGradesQuery =
-				$this->schoolyearsAndGradesQueryCreate($uid);
-			$this->userChangeKuwasysData($uid);
-
-			$this->changeUploadUserTableData($uid);
-
-			$query = "{$cardnumberQuery}{$groupQuery}" .
-				"{$schoolyearsAndGradesQuery}";
-
-			if(!empty($query)) {
-				TableMng::queryMultiple($query);
-			}
-
-		} catch (Exception $e) {
-			$this->_logger->log('Could not change the user',
-				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
-			die(json_encode(array('value' => 'error',
-				'message' => _g('Could not update the user!'))));
-		}
-
-		TableMng::getDb()->autocommit(true);
-		$this->_pdo->commit();
-	}
-
-	private function changeUploadUserTableData($uid) {
-
-		$passwordQuery = $this->passwordQueryCreate($uid);
-
-		try {
-			$userQuery = "UPDATE SystemUsers
-				SET `forename` = ?, `name` = ?, `username` = ?, `email` = ?,
-				$passwordQuery `telephone` = ?, `birthday` = ?, `locked` = ?,
-				`GID` = ?, `credit` = ?, `soli` = ?
-				WHERE `ID` = ?";
-
-			$stmtu = $this->_pdo->prepare($userQuery);
-			$stmtu->execute(array(
-				$_POST['forename'], $_POST['name'], $_POST['username'],
-				$_POST['email'], $_POST['telephone'], $_POST['birthday'],
-				$_POST['accountLocked'], $_POST['pricegroupId'],
-				$_POST['credits'], $_POST['isSoli'], $uid
-			));
-
-		} catch (PDOException $e) {
-			$this->_logger->log('Could not change the user: ' .
-				'error changing the usertable-data', 'Notice', Null,
-				json_encode(array('msg' => $e->getMessage())));
-			throw $e;
-		}
-	}
-
-	protected function schoolyearsAndGradesQueryCreate($userId) {
-
-		if(empty($_POST['schoolyearAndGradeData'])) {
-			$_POST['schoolyearAndGradeData'] = array();
-		}
-
-		$query = $this->schoolyearsAndGradesChange(
-			$_POST['schoolyearAndGradeData'],
-			$userId);
-
-		return $query;
-	}
-
-	protected function schoolyearsAndGradesChange($requestedRows, $userId) {
-
-		$query = '';
-		$existingRows = $this->gradeAndSchoolyearDataOfUserGet($userId);
-
-		$flatExistingRows = ArrayFunctions::arrayColumn(
-			$existingRows, 'gradeId', 'schoolyearId');
-		$flatRequestedRows = ArrayFunctions::arrayColumn(
-			$requestedRows, 'gradeId', 'schoolyearId');
-
-		$toDelete = $flatExistingRows;
-
-		foreach($flatRequestedRows as $rSyId => $rGradeId) {
-
-			if(!array_key_exists($rSyId, $flatExistingRows) ||
-				$flatExistingRows[$rSyId] != $rGradeId) {
-
-				$query .= "INSERT INTO SystemUsersInGradesAndSchoolyears
-					(userId, gradeId, schoolyearId) VALUES
-					('$userId', '$rGradeId', '$rSyId')
-					ON DUPLICATE KEY UPDATE gradeId = '$rGradeId', schoolyearId = '$rSyId';";
-			}
-			else {
-				unset($toDelete[$rSyId]);
-			}
-		}
-
-		foreach($toDelete as $schoolyearId => $gradeId) {
-
-			$query .= "DELETE FROM SystemUsersInGradesAndSchoolyears
-				WHERE userId = $userId AND
-					schoolyearId = $schoolyearId AND
-					gradeId = $gradeId;";
-		}
-
-		return $query;
-	}
-
-	/**
-	 * Creates a Query changing the Cardnumber of a User depending on the
-	 * Userinput given from the Change-User-Dialog
-	 * @return String The Query that changes the Data in the Database
-	 */
-	protected function cardsQueryCreate($uid) {
-
-		$query = '';
-		//Fetch the existing cardnumber of the User
-		$userCard = TableMng::query(
-				"SELECT * FROM BabeskCards WHERE UID = $uid");
-
-		if(!empty($_POST['cardnumber'])) {
-
-			if(!count($userCard)) {
-				$query = "INSERT INTO BabeskCards (cardnumber, UID)
-					VALUES ('$_POST[cardnumber]', $uid);";
-			}
-			else if($userCard[0]['cardnumber'] == $_POST['cardnumber']) {
-				//nothing changed
-				return '';
-			}
-			else {
-				//Card was changed, add it to the counter
-				$countChangedCardId = $userCard[0]['changed_cardID'] + 1;
-				$cardnumber = $_POST['cardnumber'];
-				$query = "UPDATE BabeskCards
-					SET cardnumber = '$cardnumber',
-						changed_cardID = '$countChangedCardId'
-					WHERE UID = $uid;";
-			}
-		}
-		else {
-			if(count($userCard)) {
-				//cardnumber exists, but user deleted that
-				$query = "DELETE FROM BabeskCards WHERE UID = $uid";
-			}
-			else {
-				//No Cardnumber exists and User did not enter one
-				return '';
-			}
-		}
-
-		return $query;
-	}
-
-	/**
-	 * Creates a Query changing the Password of a User depending on
-	 * the Userinput given from the Change-User-Dialog
-	 * @return String The Query that changes the Data in the Database
-	 */
-	protected function passwordQueryCreate($uid) {
-
-		$query = '';
-
-		if($_POST['passwordChange'] == 'true') {
-			if(!empty($_POST['password'])) {
-				$query = sprintf('password = "%s",', hash_password($_POST['password']));
-			}
-			else {
-				$query = sprintf('password = "%s",', hash_password(''));
-			}
-		}
-
-		return $query;
-	}
-
-	/**
-	 * Creates a Query changing the Groups of the User to the Input
-	 *
-	 * Fetches the group-Ids from $_POST['groups']
-	 *
-	 * @param integer $uid The Userid of which Groups to change
-	 */
-	protected function groupQueryCreate($uid) {
-
-		$query = '';
-
-		if(!empty($_POST['groups'])) {
-			$existingGroups = $this->groupsOfUserGet($uid);
-			$query .= $this->groupAddQueryCreate($uid, $existingGroups);
-			$query .= $this->groupDeleteQueryCreate($uid, $existingGroups);
-		}
-
-		return $query;
-	}
-
-	/**
-	 * Creates a Query that Updates the Tables belonging to the Kuwasys-Module
-	 *
-	 * Dies displaying a Message on Error
-	 */
-	protected function userChangeKuwasysData($userId) {
-
-		if($this->_acl->moduleGet('root/administrator/Kuwasys')) {
-
-			$this->userChangeKuwasysDataInputCheck();
-
-			$classes = $this->classesOfUserGet($userId);
-			$flatClasses = ArrayFunctions::arrayColumn(
-				$classes, 'unitId', 'ID');
-
-			$this->classesChangeDeleteDeleted($userId, $flatClasses);
-			$this->classesChangeAddMissing($userId, $flatClasses);
-		}
-	}
-
-	/**
-	 * Checks if the Kuwasys-Input is correct
-	 *
-	 * Dies displaying a Message in Error
-	 */
-	protected function userChangeKuwasysDataInputCheck() {
-
-		if(!isset($_POST['schoolyearAndClassData']) ||
-			!count($_POST['schoolyearAndClassData'])) {
-			return;
-		}
-		foreach($_POST['schoolyearAndClassData'] as $key1 => $class1) {
-			foreach($_POST['schoolyearAndClassData'] as $key2 =>$class2) {
-				if($class1['classId'] == $class2['classId'] &&
-					$key1 !== $key2) {
-					die(json_encode(array('value' => 'error',
-						'message' => 'Der Benutzer kann nicht zweimal gleichzeitig in derselben Klasse sein!')));
-				}
-			}
-		}
-	}
-
-	/**
-	 * Adds the Classes that were added in the Change-User-dialog
-	 *
-	 * @param  string $userId          The User-ID
-	 * @param  array  $existingClasses A flattened array of classes that the
-	 * User already has
-	 */
-	protected function classesChangeAddMissing($userId, $existingClasses) {
-
-		if(!isset($_POST['schoolyearAndClassData']) ||
-				!count($_POST['schoolyearAndClassData'])) {
-			return;
-		}
-
-		$stmtAdd = $this->_pdo->prepare('INSERT INTO
-			KuwasysUsersInClasses (UserID, ClassID, statusId) VALUES
-			(:id, :classId, :statusId)');
-
-		foreach($_POST['schoolyearAndClassData'] as $join) {
-			if(!isset($existingClasses[$join['classId']]) ||
-				$existingClasses[$join['classId']] != $join['statusId']) {
-				$stmtAdd->execute(array(
-					':id' => $userId,
-					':classId' => $join['classId'],
-					':statusId' => $join['statusId']
-				));
-			}
-		}
-	}
-
-	/**
-	 * Deletes the Classes that were removed in the Change-User-dialog
-	 *
-	 * @param  string $userId          The User-ID
-	 * @param  array  $existingClasses A flattened array of classes that the
-	 * User already has
-	 */
-	protected function classesChangeDeleteDeleted($userId, $existingClasses) {
-
-		if(isset($_POST['schoolyearAndClassData'])) {
-			$flatClassInput = ArrayFunctions::arrayColumn(
-				$_POST['schoolyearAndClassData'], 'statusId', 'classId');
-		}
-		else {
-			$flatClassInput = array();
-		}
-
-		$stmtDelete = $this->_pdo->prepare('DELETE FROM
-			KuwasysUsersInClasses WHERE UserID = :id AND ClassID = :classId');
-
-		foreach($existingClasses as $exClassId => $exStatusId) {
-			if(!isset($flatClassInput[$exClassId]) ||
-				$flatClassInput[$exClassId] != $exStatusId) {
-				$stmtDelete->execute(array(
-					':id' => $userId,
-					':classId' => $exClassId
-				));
-			}
-		}
-	}
-
-	/**
 	 * Fetches the Groups of one User and returns them
 	 *
 	 * @param  integer $userId
@@ -1156,55 +797,13 @@ class User extends System {
 	 */
 	protected function groupsOfUserGet($userId) {
 
-		return TableMng::query("SELECT g.ID FROM SystemGroups g
-			JOIN SystemUsersInGroups uig ON g.ID = uig.groupId
-			WHERE uig.userId = $userId");
-	}
-
-	/**
-	 * Creates a Query that adds Groups to a specific User
-	 * @param  integer $userId
-	 * @param  Array $existingGroups
-	 * @return string contains multiple Queries, SQL-ready separated with
-	 * Semicolon
-	 */
-	protected function groupAddQueryCreate($userId, $existingGroups) {
-
-		$query = '';
-
-		foreach($_POST['groups'] as $group) {
-			//if UserInGroup is not already in Db, add it
-			if(array_search($group,
-				ArrayFunctions::arrayColumn($existingGroups, 'ID'))
-					=== false) {
-				$query .= "INSERT INTO SystemUsersInGroups (userId, groupId)
-					VALUES ($userId, $group);";
-			}
-		}
-
-		return $query;
-	}
-
-	/**
-	 * Creates a Query that removes the User from specific Groups
-	 *
-	 * @param  integer $userId
-	 * @param  Array $existingGroups
-	 * @return string contains multiple Queries separated with semicolon
-	 */
-	protected function groupDeleteQueryCreate($userId, $existingGroups) {
-
-		$query = '';
-
-		foreach(ArrayFunctions::arrayColumn($existingGroups, 'ID') as
-			$exGroup) {
-			if(array_search($exGroup, $_POST['groups']) === false) {
-				$query .= "DELETE FROM SystemUsersInGroups WHERE userId = $userId
-					AND groupId = $exGroup;";
-			}
-		}
-
-		return $query;
+		$stmt = $this->_pdo->prepare(
+			'SELECT g.ID FROM SystemGroups g
+				JOIN SystemUsersInGroups uig ON g.ID = uig.groupId
+				WHERE uig.userId = ?
+		');
+		$stmt->execute(array($userId));
+		return $stmt->fetchAll(PDO::FETCH_COLUMN);
 	}
 
 	/**
@@ -1341,54 +940,6 @@ class User extends System {
 			'sql_escape',
 			'ist-Soli-Benutzer')
 	);
-
-	protected static $_changeRules = array(
-		'ID' => array(
-			'required|numeric|min_len,1|max_len,10',
-			'sql_escape',
-			'ID'),
-		'forename' => array(
-			'required|min_len,2|max_len,64',
-			'sql_escape',
-			'Vorname'),
-		'name' => array(
-			'required|min_len,3|max_len,64',
-			'sql_escape',
-			'Nachname'),
-		'username' => array(
-			'min_len,3|max_len,64',
-			'sql_escape',
-			'Benutzername'),
-		'email' => array(
-			'valid_email|min_len,3|max_len,64',
-			'sql_escape',
-			'Email'),
-		'telephone' => array(
-			'min_len,3|max_len,64',
-			'sql_escape',
-			'Telefonnummer'),
-		'birthday' => array(
-			'isodate|max_len,10',
-			'sql_escape',
-			'Geburtstag'),
-		'pricegroupId' => array(
-			'numeric',
-			'sql_escape',
-			'PreisgruppenId'),
-		'cardnumber' => array(
-			'exact_len,10',
-			'sql_escape',
-			'Kartennummer'),
-		'credits' => array(
-			'numeric|min_len,1|max_len,5',
-			'sql_escape',
-			'Guthaben'),
-		'isSoli' => array(
-			'boolean',
-			'sql_escape',
-			'ist-Soli-Benutzer')
-	);
-
 }
 
 ?>

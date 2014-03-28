@@ -181,8 +181,7 @@ class Login {
 	private function checkLockedAccount() {
 
 		if($this->_userManager->checkAccount($this->_userId)) {
-			$this->assignErrorToSmarty(_g('Account is locked!'));
-			$this->dieShowLoginForm();
+			$this->dieShowLoginForm(_g('Account is locked!'), true);
 		}
 	}
 

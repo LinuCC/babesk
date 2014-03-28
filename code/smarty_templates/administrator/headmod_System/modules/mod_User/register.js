@@ -25,6 +25,13 @@ $(document).ready(function() {
 			$(this).children('.icon').toggleClass('icon-plus icon-minus');
 		});
 
+		$('.grade-schoolyear-remove').on('click', function(ev) {
+			$(this).closest('.input-group').fadeOut({complete: function() {
+				$(this).closest('.input-group').remove();
+				}
+			});
+		});
+
 		/**
 		 * Submit the modal with which the user is added to a grade and schoolyear
 		 */

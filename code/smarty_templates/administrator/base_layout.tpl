@@ -37,7 +37,6 @@
 	</head>
 
 	<body>
-
 		{*-----------------------------------------------------
 		 * The top-navigation
 		 *}
@@ -62,37 +61,12 @@
 						{/block}
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
-						{block name="nav_help_button"}
-							<li>
-								<form>
-									<a class="btn btn-info navbar-btn"
-									href="index.php?module=web|Help">
-										{t}Help{/t}
-									</a>
-								</form>
-							</li>
-						{/block}
 						{block name="nav_user_dropdown"}
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 									{$username} <b class="caret"></b>
 								</a>
 								<ul id="dropdown-user" class="dropdown-menu">
-									{if $babeskActivated && isset($credit)}
-										<li>
-											<p class="navbar-text">
-													<span class="highlighted">
-														Guthaben: {$credit} Euro
-													</span>
-											</p>
-										</li>
-									{/if}
-									<li>
-										<a href="index.php?module=web|Settings">
-											{t}Settings{/t}
-											<span class="icon-Settings"></span>
-										</a>
-									</li>
 									<li>
 										<a href="index.php?action=logout">{t}Logout{/t}</a>
 									</li>
@@ -181,18 +155,20 @@
 						<ul class="module_breadcrumb breadcrumb">
 							<li>administrator</li>
 							{$level = 2}
-							{while $moduleExecCommand->moduleAtLevelGet($level)}
-							<li>
-								{if $level > 2}
-								<a href="index.php?module={$moduleExecCommand->pathGet('|', $level + 1)}">
-								{/if}
-									{$moduleExecCommand->moduleAtLevelGet($level)}
-								{if $level > 2}
-								</a>
-								{/if}
-							</li>
-								{$level = $level + 1}
-							{/while}
+							{if $moduleExecCommand}
+								{while $moduleExecCommand->moduleAtLevelGet($level)}
+								<li>
+									{if $level > 2}
+									<a href="index.php?module={$moduleExecCommand->pathGet('|', $level + 1)}">
+									{/if}
+										{$moduleExecCommand->moduleAtLevelGet($level)}
+									{if $level > 2}
+									</a>
+									{/if}
+								</li>
+									{$level = $level + 1}
+								{/while}
+							{/if}
 						</ul>
 					{/block}
 					<div id="content">
@@ -336,13 +312,13 @@
 				};
 
 				toastr.options = {
-					"closeButton": false,
+					"closeButton": true,
 					"debug": false,
-					"positionClass": "toast-top-right",
+					"positionClass": "toast-top-center",
 					"onclick": null,
 					"showDuration": "300",
 					"hideDuration": "1000",
-					"timeOut": "0",
+					"timeOut": "5000",
 					"extendedTimeOut": "1000",
 					"showEasing": "swing",
 					"hideEasing": "linear",

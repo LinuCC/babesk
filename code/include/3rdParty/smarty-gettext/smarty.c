@@ -214,6 +214,93 @@ gettext("At:");
 /* ../../../smarty_templates/administrator/headmod_Babesk/modules/mod_Recharge/printRechargeBalanceSelect.tpl */
 gettext("Download Pdf");
 
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Cancel");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Add to user");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Forename");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Forename");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Lastname");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Lastname");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Username");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Username");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Change password?");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Password");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Repeat password");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Email-address");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Emailaddress");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Telephone-number");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Telephonenumber");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Birthday");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Birthday");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Account locked");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Usergroups");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Grades and schoolyears");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Cardnumber");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Cardnumber");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Pricegroup");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("No pricegroup existing");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Pricegroup");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Credits");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Credits");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Submit");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/change.tpl */
+gettext("Cancel");
+
 /* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/ResetAllUserPasswords/confirmReset.tpl */
 gettext("Reset passwords of all users");
 
@@ -246,6 +333,63 @@ gettext("to set a preset password.");
 
 /* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/ResetAllUserPasswords/confirmReset.tpl */
 gettext("Yes, I want to reset the passwords!");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/register.tpl */
+gettext("Cancel");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/register.tpl */
+gettext("Add to user");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/register.tpl */
+gettext("Forename");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/register.tpl */
+gettext("Lastname");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/register.tpl */
+gettext("Username");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/register.tpl */
+gettext("use preset password");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/register.tpl */
+gettext("Password");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/register.tpl */
+gettext("Repeat password");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/register.tpl */
+gettext("Email-address");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/register.tpl */
+gettext("Telephone-number");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/register.tpl */
+gettext("Birthday");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/register.tpl */
+gettext("Usergroups");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/register.tpl */
+gettext("Grades and schoolyears");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/register.tpl */
+gettext("Cardnumber");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/register.tpl */
+gettext("Pricegroup");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/register.tpl */
+gettext("No pricegroup existing");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/register.tpl */
+gettext("Credits");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/register.tpl */
+gettext("Submit");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/register.tpl */
+gettext("Cancel");
 
 /* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/user_select.tpl */
 gettext("Usersettings-Mainmenu");
@@ -476,19 +620,34 @@ gettext("Go to the existing update-Process");
 gettext("Start a new update-process");
 
 /* ../../../smarty_templates/administrator/base_layout.tpl */
-gettext("Bookmarks");
+gettext("Home");
 
 /* ../../../smarty_templates/administrator/base_layout.tpl */
-gettext("No Bookmarks added");
+gettext("Help");
 
 /* ../../../smarty_templates/administrator/base_layout.tpl */
-gettext("Add bookmark");
+gettext("Settings");
 
 /* ../../../smarty_templates/administrator/base_layout.tpl */
-gettext("Back");
+gettext("Logout");
 
 /* ../../../smarty_templates/administrator/base_layout.tpl */
-gettext("Back to the Module");
+gettext("Sorry! An error occured. We could not handle your request.");
+
+/* ../../../smarty_templates/administrator/base_layout.tpl */
+gettext("back");
+
+/* ../../../smarty_templates/administrator/base_layout.tpl */
+gettext("Information");
+
+/* ../../../smarty_templates/administrator/base_layout.tpl */
+gettext("back");
+
+/* ../../../smarty_templates/administrator/base_layout.tpl */
+gettext("Success!");
+
+/* ../../../smarty_templates/administrator/base_layout.tpl */
+gettext("back");
 
 /* ../../../smarty_templates/web/headmod_Kuwasys/modules/mod_MainMenu/mainMenu.tpl */
 gettext("Unregister from all classes at this day");

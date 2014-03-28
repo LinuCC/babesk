@@ -101,7 +101,7 @@
 			{/foreach}
 		</select>
 		<span class="input-group-btn">
-			<a class="btn btn-danger">
+			<a class="btn btn-danger grade-schoolyear-remove">
 				<span class="icon icon-error"></span>
 				Verbindung löschen...
 			</a>
@@ -239,7 +239,7 @@
 				<fieldset>
 					<div id="grade-schoolyears">
 					</div>
-					<legend>{t}Klassen und Schuljahre{/t}</legend>
+					<legend>{t}Grades and schoolyears{/t}</legend>
 					<a class="btn btn-info btn-sm" data-toggle="modal"
 					data-target="#grade-schoolyear-modal">
 						Schüler zu einem Schuljahr hinzufügen...

@@ -24,18 +24,6 @@
 	</div>
 </fieldset>
 
-<script src="{$path_js}/jstree/jquery.jstree.js">
-</script>
-<script src="{$path_smarty_tpl}/administrator/headmod_System/modules/
-	mod_GroupSettings/righttree.js">
-</script>
-<script src="{$path_smarty_tpl}/administrator/headmod_System/modules/
-	mod_GroupSettings/grouptree.js">
-</script>
-<script src="{$path_smarty_tpl}/administrator/headmod_System/modules/
-	mod_GroupSettings/main.js">
-</script>
-
 <style type="text/css">
 
 .jstree .modNotAllowed {
@@ -55,4 +43,18 @@
 
 </style>
 
+{/block}
+
+{block name="js_include" append}
+<script src="{$path_js}/jstree/jquery.jstree.js">
+</script>
+<script src="{$path_smarty_tpl}/administrator/headmod_System/modules/
+	mod_GroupSettings/righttree.js">
+</script>
+<script src="{$path_smarty_tpl}/administrator/headmod_System/modules/
+	mod_GroupSettings/grouptree.js">
+</script>
+<script src="{$path_smarty_tpl}/administrator/headmod_System/modules/
+	mod_GroupSettings/main.js">
+</script>
 {/block}

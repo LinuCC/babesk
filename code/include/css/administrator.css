@@ -271,6 +271,11 @@ div.quotebox, p.quotebox {
 	font-size: 14px;
 }
 
+.form-group label {
+	padding-right: 15px;
+	color: #444444;
+}
+
 label {
 	font-weight: 400;
 }
@@ -285,7 +290,7 @@ fieldset {
 fieldset > legend {
 	display: inline;
 	font-size: 14px;
-	color: #999999;
+	color: #777777;
 	margin-bottom: 0;
 	padding: 0 5px;
 	width: auto;
@@ -304,4 +309,11 @@ label.error {
 	color: red;
 	padding: 2px 8px;
 	margin-top: 2px;
+}
+
+a.label:hover {
+	text-decoration: none;
+	transition-property: color;
+	transition-duration: 0.15s;
+	color: #AADD33;
 }
