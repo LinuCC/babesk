@@ -1,3 +1,9 @@
-.elements-count {
+.users-per-page-container {
 	width:100px;
+}
+
+#column-show-form {
+	height: 500px;
+	overflow-x: hidden;
+	overflow-y: auto;
 }

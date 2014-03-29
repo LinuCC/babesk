@@ -10,6 +10,7 @@ class UserDisplayAll {
 
 	public function __construct($dataContainer) {
 
+		$this->_pdo = $dataContainer->getPdo();
 		$this->_smarty = $dataContainer->getSmarty();
 		$this->_acl = $dataContainer->getAcl();
 		$this->activeModulesAddSelectableData();
@@ -24,7 +25,7 @@ class UserDisplayAll {
 	 */
 	public function displayAll() {
 		$this->_smarty->display(PATH_SMARTY_TPL . '/administrator' .
-			'/headmod_System/modules/mod_User/displayAll.tpl');
+			'/headmod_System/modules/mod_User/display-all.tpl');
 	}
 
 	/**
@@ -73,8 +74,13 @@ class UserDisplayAll {
 		}
 
 		try {
-			$queryCreator = new UserDisplayAllQueryCreator($filterForQuery,
-				$sortFor, $userToStart, $usersPerPage);
+			$queryCreator = new UserDisplayAllQueryCreator(
+				$this->_pdo,
+				$filterForQuery,
+				$sortFor,
+				$userToStart,
+				$usersPerPage
+			);
 			$query = $queryCreator->createQuery($columnsToFetch, $sortFor,
 				$filterForCol, $filterForVal);
 			$countQuery = $queryCreator->createCountOfQuery($columnsToFetch,
@@ -240,6 +246,8 @@ class UserDisplayAll {
 		'birthday' => 'Geburtstag',
 		'first_passwd' => 'ist erstes Passwort'
 	);
+
+	protected $_pdo;
 }
 
 
@@ -254,13 +262,15 @@ class UserDisplayAllQueryCreator {
 	//Constructor
 	/////////////////////////////////////////////////////////////////////
 
-	public function __construct($filterForQuery, $sortFor, $userToStart,
+	public function __construct($pdo, $filterForQuery, $sortFor, $userToStart,
 		$usersPerPage) {
 
+		$this->_pdo = $pdo;
 		$this->_filterForQuery = $filterForQuery;
 		$this->_sortFor = $sortFor;
 		$this->_userToStart = $userToStart;
 		$this->_usersPerPage = $usersPerPage;
+		$this->_userElementsToFetch = array();
 	}
 
 
@@ -325,6 +335,11 @@ class UserDisplayAllQueryCreator {
 			case 'classes':
 				$this->classesQuery();
 				break;
+			default:   //Else guess that its a field in the users-table
+				$this->_userElementsToFetch[] = $this->quoteIdentifier(
+					$col
+				);
+				break;
 		}
 	}
 
@@ -335,7 +350,9 @@ class UserDisplayAllQueryCreator {
 			$this->_querySelect = ", $this->_querySelect";
 		}
 
-		$this->_query = "SELECT u.*, u.ID AS ID $this->_querySelect
+		$userSelect = implode(', ', $this->_userElementsToFetch);
+
+		$this->_query = "SELECT u.ID AS ID, $userSelect $this->_querySelect
 			FROM SystemUsers u
 				$this->_queryJoin
 			GROUP BY u.ID
@@ -451,6 +468,15 @@ class UserDisplayAllQueryCreator {
 		$this->_queryJoin .= " $st ";
 	}
 
+	/**
+	 * Quotes an identifier so that it is not vulnerable to SQL-Injection
+	 * @param  string $ident The SQL-identifier to quote
+	 * @return string        The quoted (with backticks) identifier
+	 */
+	protected function quoteIdentifier($ident) {
+		return '`' . str_replace('`', '``', $ident) . '`';
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
@@ -472,11 +498,15 @@ class UserDisplayAllQueryCreator {
 	protected $_userToStart;
 	protected $_usersPerPage;
 
+	protected $_userElementsToFetch;
+
 	/**
 	 * The Accesscontrollayer, To find out what Headmodules are active
 	 * @var Acl
 	 */
 	protected $_acl;
+
+	protected $_pdo;
 }
 
 ?>

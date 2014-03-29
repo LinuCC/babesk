@@ -297,6 +297,18 @@
 			</div>
 		</div>
 
+		{block name=html_snippets}
+			{* put your bigger html-code-snippets you need to add with javascript in
+			 * here
+			 *}
+		{/block}
+
+		{block name=popup_dialogs}
+			{*You can append modal dialogs here to minimize the interaction with
+			 *other parts of the page
+			 *}
+		{/block}
+
 		{block name="js_include"}
 			<script type="text/javascript" src="{$path_js}/jquery.min.js"></script>
 			<script type="text/javascript" src="{$path_js}/jquery.cookie.js"></script>
@@ -306,6 +318,19 @@
 			<script type="text/javascript" src="{$path_js}/json2.min.js"></script>
 		{literal}
 			<script type="text/javascript">
+
+				/**
+				 * A function to emulate a sprintf-like functionality
+				 */
+				if (!String.prototype.format) {
+					String.prototype.format = function() {
+						var args = arguments;
+						return this.replace(/{(\d+)}/g, function(match, number) {
+							return typeof args[number] != 'undefined'
+								? args[number] : match;
+						});
+					};
+				}
 
 				jQuery.fn.outerHtml = function() {
 					return jQuery('<div />').append(this.eq(0).clone()).html();
@@ -343,19 +368,5 @@
 			<script type="text/javascript" src="{$path_js}/jquery-ui.min.js"></script>
 			<script type="text/javascript" src="{$path_smarty_tpl}/administrator/administratorFunctions.js"></script>
 		{/if}
-
-		{block name=html_snippets}
-			{* put your bigger html-code-snippets you need to add with javascript in
-			 * here
-			 *}
-		{/block}
-
-		{block name=popup_dialogs}
-			{*You can append modal dialogs here to minimize the interaction with
-			 *other parts of the page
-			 *}
-		{/block}
-
-
 	</body>
 </html>

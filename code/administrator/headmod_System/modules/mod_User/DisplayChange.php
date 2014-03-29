@@ -15,8 +15,13 @@ class DisplayChange extends User
 	public function execute($dataContainer) {
 
 		$this->entryPoint($dataContainer);
-		$this->dataFetch();
-		$this->displayTpl('change.tpl');
+		if(isset($_GET['ID'])) {
+			$this->dataFetch();
+			$this->displayTpl('change.tpl');
+		}
+		else {
+			$this->_interface->dieError(_g('Missing id of the user!'));
+		}
 	}
 
 	/////////////////////////////////////////////////////////////////////
