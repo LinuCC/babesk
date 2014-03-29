@@ -336,7 +336,7 @@ class UserDisplayAllQueryCreator {
 				$this->classesQuery();
 				break;
 			default:   //Else guess that its a field in the users-table
-				$this->_userElementsToFetch[] = $this->quoteIdentifier(
+				$this->_userElementsToFetch[] = 'u.' . $this->quoteIdentifier(
 					$col
 				);
 				break;

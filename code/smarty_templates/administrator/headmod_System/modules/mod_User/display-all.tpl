@@ -60,18 +60,7 @@
 			</button>
 		</div>
 		<div class="col-sm-7 col-md-8 text-center">
-			<ul class="pagination">
-				<li><a>&laquo;</a></li>
-				<li><a>1</a></li>
-				<li><a>2</a></li>
-				<li><a>3</a></li>
-				<li><a>4</a></li>
-				<li><a>5</a></li>
-				<li><a>6</a></li>
-				<li><a>7</a></li>
-				<li><a>8</a></li>
-				<li><a>9</a></li>
-				<li><a>&raquo;</a></li>
+			<ul id="page-select" class="pagination">
 			</ul>
 		</div>
 		<div class="col-sm-3 col-md-2 form-group">
@@ -89,27 +78,12 @@
 
 <div>
 	<table id="user-table" class="table table-striped table-responsive">
-		<thead>
-			<tr>
-				<th>#</th>
-				<th name="forename">Vorname</th>
-				<th name="name">Nachname</th>
-				<th name="settings">Weiteres</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>5</td>
-				<td>Pascal</td>
-				<td>Ernst</td>
-			</tr>
-		</tbody>
 	</table>
 </div>
 <div>
-	<ul class="pager">
-		<li><a href="#">&larr; {t}Previous{/t}</a></li>
-		<li><a href="#">{t}Next{/t} &rarr;</a></li>
+	<ul id="relative-pager" class="pager">
+		<li id="relative-pager-prev"><a href="#">&larr; {t}Previous{/t}</a></li>
+		<li id="relative-pager-next"><a href="#">{t}Next{/t} &rarr;</a></li>
 	</ul>
 </div>
 

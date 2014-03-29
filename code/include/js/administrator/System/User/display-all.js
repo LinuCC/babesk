@@ -80,23 +80,105 @@ $(document).ready(function() {
 				displayName: 'Ist Soli',
 				isDisplayed: false
 			},
+			{
+				name: 'schoolyears',
+				displayName: 'Schuljahre',
+				isDisplayed: false
+			},
+			{
+				name: 'grades',
+				displayName: 'Klassen',
+				isDisplayed: false
+			},
+			{
+				name: 'activeGrade',
+				displayName: 'aktive Klasse',
+				isDisplayed: false
+			}
 		];
 
 		var activePage = 1;
+		var amountPages = 0;
 
-		updateColumnsToShow();
+		columnsToShowUpdate();
 		columnToggleDisplayListBuild();
 		$('.column-switch').bootstrapSwitch();
 		$('[title]').tooltip();
 		newDataFetch();
 
+		$('#page-select').on('click', 'a', function(ev) {
+			$this = $(this);
+			if($this.hasClass('first-page')) {
+				var page = 1;
+			}
+			else if($this.hasClass('last-page')) {
+				var page = amountPages;
+			}
+			else {
+				var page = $(this).text();
+			}
+			newDataFetch(page);
+		});
+
+		$('#relative-pager-prev').on('click', function(ev) {
+			if(activePage > 1) {
+				newDataFetch(activePage - 1);
+			}
+		});
+
+		$('#relative-pager-next').on('click', function(ev) {
+			if(activePage < amountPages) {
+				newDataFetch(activePage + 1);
+			}
+		});
+
 		$('#column-show-form-submit').on('click', function(ev) {
-			updateColumnsToShow();
+			columnsToShowUpdate();
 			newDataFetch();
 			$('#table-columns-modal').modal('hide');
 		});
 
-		function updateColumnsToShow() {
+		function pageSelectorUpdate(pagecount) {
+
+			amountPages = pagecount;
+
+			var amountSelectorsDisplayed = 9;
+			var startPage = activePage - Math.floor(amountSelectorsDisplayed / 2);
+			if(startPage < 1) {
+				startPage = 1;
+			}
+			if(activePage == 1) {
+				$pager= $(
+					'<li class="disabled"><a class="first-page">&laquo;</a></li>'
+				);
+				$('#relative-pager-prev').addClass('disabled');
+			}
+			else {
+				$pager= $('<li><a class="first-page">&laquo;</a></li>');
+				$('#relative-pager-prev').removeClass('disabled');
+			}
+			for(var i = startPage; i <= pagecount && i < startPage + amountSelectorsDisplayed; i++) {
+				if(i == activePage) {
+					$pager.append('<li class="active"><a>' + i + '</a></li>');
+				}
+				else {
+					$pager.append('<li><a>' + i + '</a></li>');
+				}
+			}
+			if(activePage == pagecount) {
+				$pager.append(
+					'<li class="disabled"><a class="last-page">&raquo;</a></li>'
+				);
+				$('#relative-pager-next').addClass('disabled');
+			}
+			else {
+				$pager.append('<li><a class="last-page">&raquo;</a></li>');
+				$('#relative-pager-next').removeClass('disabled');
+			}
+			$('#page-select').html($pager.outerHtml());
+		}
+
+		function columnsToShowUpdate() {
 			$.each($('#column-show-form [id^="column-show-"]'), function(ind, el) {
 				$el = $(el);
 				var name = $el.attr('id').replace('column-show-', '');
@@ -125,7 +207,6 @@ $(document).ready(function() {
 					$checkbox.prop('checked', true);
 				}
 				if(el.name == 'ID') {
-					console.log('toLog');
 					$checkbox.prop('disabled', true);
 				}
 				$colList.append($col);
@@ -177,7 +258,7 @@ $(document).ready(function() {
 					if(data.value == 'data') {
 						activePage = pagenum;
 						tableRefresh(data.users);
-						// pageSelectorUpdate(data.pagecount);
+						pageSelectorUpdate(data.pagecount);
 					}
 					else if(data.value == 'error') {
 						toastr['error'](data.message);
@@ -212,7 +293,6 @@ $(document).ready(function() {
 				});
 				if(respectiveColumnEntryArr[0] != undefined) {
 					var respectiveColumnEntry = respectiveColumnEntryArr[0];
-					console.log(respectiveColumnEntry);
 					headRow += '<th>' + respectiveColumnEntry.displayName + '</th>';
 				}
 				else {
