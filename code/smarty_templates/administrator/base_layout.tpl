@@ -93,6 +93,7 @@
 								class="sidebar-folder">
 									<div class="container text-icon-spacer">
 										<span class="col-xs-10 col-lg-11">
+											<span class="icon icon-{$headmodule->getName()} module-icon"></span>
 											{_g('modulepath_'|cat:$hModulepath)}
 										</span>
 										<span class="col-xs-2 col-lg-1">
