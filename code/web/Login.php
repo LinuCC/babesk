@@ -12,6 +12,7 @@ class Login {
 	//Constructor
 	////////////////////////////////////////////////////////////////////////
 	public function __construct ($smarty) {
+        $this->interface = new WebInterface($smarty);
 		$this->_smarty = $smarty;
 		$this->setUpUserManager();
 		$this->setUpGlobalSettingsManager ();
@@ -60,6 +61,7 @@ class Login {
 		$this->setUserIdByUsername();
 		$this->checkPassword();
 		$this->checkLockedAccount();
+        $this->checkCardLost();
 		$this->finishSuccessfulLogin();
 		return true;
 	}
@@ -152,6 +154,14 @@ class Login {
 			$this->dieShowLoginForm();
 		}
 	}
+
+    private function checkCardLost() {
+        $lost = TableMng::query(sprintf("select lost from cards where UID = %s", $this->_userId))[0]['lost'];
+        if ($lost) {
+            TableMng::query(sprintf("UPDATE cards SET lost=%s WHERE UID = %s", $lost-1, $this->_userId));
+            $this->interface->showError("Deine LeG-Card wurde gefunden und kann im GNISSEL-Raum abgeholt werden.");
+        }
+    }
 
 	private function addLoginTryToUser() {
 

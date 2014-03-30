@@ -113,6 +113,10 @@ class User extends System {
 			try { //Babesk-specific, dont crash when table not exist
 				$priceGroups = $this->arrayGetFlattened(
 					'SELECT ID, name FROM priceGroups');
+				$res = $this->_pdo->query(
+					'SELECT ID, name FROM priceGroups'
+				);
+				$priceGroups = $res->fetchAll(PDO::FETCH_KEY_PAIR);
 
 			} catch (Exception $e) {
 				$priceGroups = array();
@@ -120,6 +124,7 @@ class User extends System {
 
 			//---display
 			$this->_smarty->assign('grades', $this->gradesGetAllFlattened());
+			$this->_smarty->assign('priceGroups', $priceGroups);
 			$this->_smarty->assign('schoolyears',
 				$this->schoolyearsGetAllFlattened());
 			$this->_smarty->assign('usergroups',
@@ -203,17 +208,26 @@ class User extends System {
 			$_POST = ArrayFunctions::arrayKeysCreateIfNotExist(
 				$_POST, array('pricegroupId', 'credits', 'isSoli'));
 
+			if($_POST['credits'] == '') {
+				$_POST['credits'] = 0;
+			}
+			if($_POST['isSoli'] == '') {
+				$_POST['isSoli'] = 0;
+			}
+
 			if(!empty($_POST['cardnumber'])) {
 				$cardnumberQuery = "INSERT INTO cards (cardnumber, UID)
 					VALUES ('$_POST[cardnumber]', @uid);";
 			}
 
-			TableMng::queryMultiple("INSERT INTO users
-				(forename, name, username, password, email, telephone, birthday,
-					first_passwd, locked, GID, credit, soli)
+			TableMng::queryMultiple("INSERT INTO users (
+					forename, name, username, password, email, telephone,
+					birthday, login_tries, last_login, first_passwd, locked, GID, credit,
+					soli
+				)
 				VALUES ('$_POST[forename]', '$_POST[name]', '$_POST[username]',
 					'$password', '$_POST[email]', '$_POST[telephone]',
-					'$_POST[birthday]', $first_passwd, $locked,
+					'$_POST[birthday]', 0, 0, $first_passwd, $locked,
 					'$_POST[pricegroupId]', '$_POST[credits]', '$_POST[isSoli]'
 					);
 				SET @uid = LAST_INSERT_ID();
@@ -223,7 +237,12 @@ class User extends System {
 				");
 
 		} catch (Exception $e) {
-			die($e->getMessage());
+			$this->_logger->log('Error adding a new user',
+				'Notice', Null, json_encode(array(
+					'msg' => $e->getMessage(),
+					'post' => var_export($_POST, true)
+			)));
+			die(json_encode(array('value' => 'error')));
 		}
 
 		TableMng::getDb()->autocommit(true);
