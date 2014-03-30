@@ -247,6 +247,7 @@
 				</fieldset>
 			</div>
 		</div>
+	</fieldset>
 
 	<fieldset>
 	<legend>Babesk</legend>
