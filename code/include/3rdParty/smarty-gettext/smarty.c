@@ -619,14 +619,32 @@ gettext("Go to the existing update-Process");
 /* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/start_menu.tpl */
 gettext("Start a new update-process");
 
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/display-all.tpl */
+gettext("Ok");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/display-all.tpl */
+gettext("Search");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/display-all.tpl */
+gettext("Search...");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/display-all.tpl */
+gettext("What Columns should be displayed");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/display-all.tpl */
+gettext("Columns");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/display-all.tpl */
+gettext("Rows per page");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/display-all.tpl */
+gettext("Previous");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/display-all.tpl */
+gettext("Next");
+
 /* ../../../smarty_templates/administrator/base_layout.tpl */
 gettext("Home");
-
-/* ../../../smarty_templates/administrator/base_layout.tpl */
-gettext("Help");
-
-/* ../../../smarty_templates/administrator/base_layout.tpl */
-gettext("Settings");
 
 /* ../../../smarty_templates/administrator/base_layout.tpl */
 gettext("Logout");

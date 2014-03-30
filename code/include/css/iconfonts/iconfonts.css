@@ -31,6 +31,7 @@
 	font-size: 16px;
 }
 
+
 .icon-plus:before {
 	content: "\e609";
 }
@@ -51,9 +52,6 @@
 }
 .icon-euro:before {
 	content: "\e611";
-}
-.icon-uniF5C8:before {
-	content: "\e612";
 }
 .icon-useroutline:before {
 	content: "\e613";
@@ -123,6 +121,9 @@
 }
 .icon-users:before {
 	content: "\e61e";
+}
+.icon-search:before {
+	content: "\e612";
 }
 .icon-lock:before {
 	content: "\e61f";

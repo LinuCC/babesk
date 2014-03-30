@@ -81,6 +81,11 @@ $(document).ready(function() {
 				isDisplayed: false
 			},
 			{
+				name: 'cardnumber',
+				displayName: 'Kartennummer',
+				isDisplayed: false
+			},
+			{
 				name: 'schoolyears',
 				displayName: 'Schuljahre',
 				isDisplayed: false
@@ -138,7 +143,7 @@ $(document).ready(function() {
 			$('#table-columns-modal').modal('hide');
 		});
 
-		$('#users-per-page').on('keyup', function(ev) {
+		$('#users-per-page, #filter').on('keyup', function(ev) {
 			if(ev.which == 13) {
 				newDataFetch();
 			}
@@ -234,8 +239,7 @@ $(document).ready(function() {
 			}
 
 			var sortFor = '';
-			var filterForColumn = '';
-			var filterForValue = '';
+			var filterForValue = $('#filter').val();
 			var columnsToFetch = [];
 			$.each(columns, function(ind, el) {
 				if(el.isDisplayed) {
@@ -250,7 +254,6 @@ $(document).ready(function() {
 					'usersPerPage': $('#users-per-page').val(),
 					'pagenumber': pagenum,
 					'sortFor': sortFor,
-					'filterForCol': filterForColumn,
 					'filterForVal': filterForValue,
 					'columnsToFetch': columnsToFetch
 				},
@@ -294,42 +297,45 @@ $(document).ready(function() {
 			//Sets the TableHead
 			// var columnHeader = selectedColumnLabelsGet();
 			var headRow = '<tr>';
-			$.each(userData[0], function(index, columnName) {
-				var respectiveColumnEntryArr = $.grep(columns, function(el) {
-						return index == el.name;
+			if(userData.length != 0){
+				$.each(userData[0], function(index, columnName) {
+					var respectiveColumnEntryArr = $.grep(columns, function(el) {
+							return index == el.name;
+					});
+					if(respectiveColumnEntryArr[0] != undefined) {
+						var respectiveColumnEntry = respectiveColumnEntryArr[0];
+						headRow += '<th>' + respectiveColumnEntry.displayName + '</th>';
+					}
+					else {
+						headRow += '<th>' + index + '(Not found in columns)' + '</th>';
+					}
 				});
-				if(respectiveColumnEntryArr[0] != undefined) {
-					var respectiveColumnEntry = respectiveColumnEntryArr[0];
-					headRow += '<th>' + respectiveColumnEntry.displayName + '</th>';
-				}
-				else {
-					headRow += '<th>' + index + '(Not found in columns)' + '</th>';
-				}
-			});
-			headRow += '<th>Optionen</th>';
-			headRow += '</tr>';
-			$('#user-table thead').append(headRow);
+				headRow += '<th>Optionen</th>';
+				headRow += '</tr>';
+				$('#user-table thead').append(headRow);
 
-			$settingsColTpl = $('#list-user-settings-template');
-			//Sets the TableBody
-			$.each(userData, function(index, user) {
-				row = String('<tr id="user_{0}">').format(user.ID);
-				$.each(user, function(colIndex, column) {
-					row += '<td>' + column + '</td>';
+				$settingsColTpl = $('#list-user-settings-template');
+				//Sets the TableBody
+				$.each(userData, function(index, user) {
+					row = String('<tr id="user_{0}">').format(user.ID);
+					$.each(user, function(colIndex, column) {
+						row += '<td>' + column + '</td>';
+					});
+					$settingsCol = $settingsColTpl.clone();
+					$settingsCol.children('a.user-action-settings')
+						.attr('href', 'index.php?module=administrator|System|User|\
+							DisplayChange&ID=' + user.ID)
+						.attr('title', 'Nutzereinstellungen');
+					$settingsCol.children('a.user-action-delete')
+						.attr('title', 'Nutzer löschen');
+					row += '<td>' + $settingsCol.html() + '</td>';
+					row += '</tr>';
+					$('#user-table tbody').append(row);
+					//refresh tooltips
+					$('[title]').tooltip();
+
 				});
-				$settingsCol = $settingsColTpl.clone();
-				$settingsCol.children('a.user-action-settings')
-					.attr('href', 'index.php?module=administrator|System|User|\
-						DisplayChange&ID=' + user.ID).attr('title', 'Nutzereinstellungen');
-				$settingsCol.children('a.user-action-delete')
-					.attr('title', 'Nutzer löschen');
-				row += '<td>' + $settingsCol.html() + '</td>';
-				row += '</tr>';
-				$('#user-table tbody').append(row);
-
-				//refresh tooltips
-				$('[title]').tooltip();
-			});
+			}
 		}
 
 	};

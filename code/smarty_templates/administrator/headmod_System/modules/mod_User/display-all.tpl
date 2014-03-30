@@ -50,25 +50,37 @@
 {block name=filling_content}
 <div>
 	<div class="center-block">
-		<div class="col-sm-2 col-md-2 text-center">
-			<button class="btn btn-default" data-toggle="modal"
-				data-target="#table-columns-modal"
-				title="{t}What Columns should be displayed{/t}">
-				{t}Columns{/t}
-			</button>
+		<div class="col-sm-4 col-md-3 text-center">
+			<span class="input-group filter-container"
+				title="{t}Search{/t}" >
+				<span class="input-group-addon">
+					<span class="icon icon-search"></span>
+				</span>
+				<input id="filter" type="text" class="form-control"
+					placeholder="{t}Search...{/t}" />
+			</span>
 		</div>
-		<div class="col-sm-7 col-md-8 text-center">
+		<div class="col-sm-8 col-md-6 text-center">
 			<ul id="page-select" class="pagination">
 			</ul>
 		</div>
-		<div class="col-sm-3 col-md-2 form-group">
-			<div class="input-group users-per-page-container"
-				title="{t}Elements per page{/t}" >
-				<span class="input-group-addon">
-					<span class="icon icon-Settings"></span>
-				</span>
-				<input id="users-per-page" type="text" maxlength="3" class="form-control"
-					value="10" />
+		<div class="col-sm-12 col-md-3 form-group">
+			<div class="col-sm-5">
+				<button class="btn btn-default pull-right" data-toggle="modal"
+					data-target="#table-columns-modal"
+					title="{t}What Columns should be displayed{/t}">
+					{t}Columns{/t}
+				</button>
+			</div>
+			<div class="col-sm-7">
+				<div class="input-group users-per-page-container pull-right"
+					title="{t}Elements per page{/t}" >
+					<span class="input-group-addon">
+						<span class="icon icon-Settings"></span>
+					</span>
+					<input id="users-per-page" type="text" maxlength="3" class="form-control"
+						value="10" />
+				</div>
 			</div>
 		</div>
 	</div>

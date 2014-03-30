@@ -46,9 +46,10 @@ class UserDisplayAll {
 		$pagenumber = $_POST['pagenumber'];
 		$usersPerPage = $_POST['usersPerPage'];
 		$sortFor = $_POST['sortFor'];
-		$filterForCol = $_POST['filterForCol'];
 		$filterForVal = $_POST['filterForVal'];
-		$toEscape = array(&$pagenumber, &$usersPerPage, &$sortFor, &$filterForCol, &$filterForVal);
+		$toEscape = array(
+			&$pagenumber, &$usersPerPage, &$sortFor, &$filterForVal
+		);
 		TableMng::sqlEscapeByArray($toEscape);
 		$userToStart = ($pagenumber - 1) * $usersPerPage;
 		$filterForQuery = '';
@@ -81,10 +82,12 @@ class UserDisplayAll {
 				$userToStart,
 				$usersPerPage
 			);
-			$query = $queryCreator->createQuery($columnsToFetch, $sortFor,
-				$filterForCol, $filterForVal);
-			$countQuery = $queryCreator->createCountOfQuery($columnsToFetch,
-				$sortFor, $filterForCol, $filterForVal);
+			$query = $queryCreator->createQuery(
+				$columnsToFetch, $sortFor, $filterForVal
+			);
+			$countQuery = $queryCreator->createCountOfQuery(
+				$columnsToFetch, $sortFor, $filterForVal
+			);
 
 			//Fetch the Userdata
 			TableMng::query('SET @activeSy :=
@@ -266,6 +269,7 @@ class UserDisplayAllQueryCreator {
 		$usersPerPage) {
 
 		$this->_pdo = $pdo;
+		$this->_selectors = array();
 		$this->_filterForQuery = $filterForQuery;
 		$this->_sortFor = $sortFor;
 		$this->_userToStart = $userToStart;
@@ -278,38 +282,18 @@ class UserDisplayAllQueryCreator {
 	//Methods
 	/////////////////////////////////////////////////////////////////////
 
-	public function createQuery($columns, $toSortFor, $toFilterColumn, $toFilterValue) {
+	public function createQuery($columns, $toSortFor, $toFilterValue) {
 
-		foreach($columns as $col) {
-			$this->addSubquery($col);
-		}
-		if(!empty($toSortFor)) {
-			$this->addSubquery($toSortFor);
-		}
-		if(!empty($toFilterColumn)) {
-			$this->addSubquery($toFilterColumn);
-		}
-
-		$filterQuery = $this->filterForQuery($toFilterColumn, $toFilterValue, 'HAVING');
-		$this->concatQuery($filterQuery);
+		$this->preQuery($columns, $toSortFor, $toFilterValue);
+		$this->concatQuery($toFilterValue);
 
 		return $this->_query;
 	}
 
-	public function createCountOfQuery($columns, $toSortFor, $toFilterColumn, $toFilterValue) {
+	public function createCountOfQuery($columns, $toSortFor, $toFilterValue) {
 
-		foreach($columns as $col) {
-			$this->addSubquery($col);
-		}
-		if(!empty($toSortFor)) {
-			$this->addSubquery($toSortFor);
-		}
-		if(!empty($toFilterColumn)) {
-			$this->addSubquery($toFilterColumn);
-		}
-
-		$filterQuery = $this->filterForQuery($toFilterColumn, $toFilterValue, 'HAVING');
-		$this->concatCountQuery($filterQuery);
+		$this->preQuery($columns, $toSortFor, $toFilterValue);
+		$this->concatCountQuery($toFilterValue);
 
 		return $this->_countQuery;
 	}
@@ -317,6 +301,22 @@ class UserDisplayAllQueryCreator {
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
+
+	protected function preQuery($columns, $toSortFor, $toFilterValue) {
+
+		if(!$this->_preQueryRun) {
+			foreach($columns as $col) {
+				$this->addSubquery($col);
+			}
+			if(!empty($toSortFor)) {
+				$this->addSubquery($toSortFor);
+			}
+			if(!empty($toFilterColumn)) {
+				$this->addSubquery($toFilterColumn);
+			}
+			$this->_preQueryRun = true;
+		}
+	}
 
 	protected function addSubquery($col) {
 		switch($col) {
@@ -336,23 +336,17 @@ class UserDisplayAllQueryCreator {
 				$this->classesQuery();
 				break;
 			default:   //Else guess that its a field in the users-table
-				$this->_userElementsToFetch[] = 'u.' . $this->quoteIdentifier(
-					$col
-				);
+				$this->addSelectStatement('u.' . $this->quoteIdentifier($col));
 				break;
 		}
 	}
 
-	protected function concatQuery($filterQuery) {
+	protected function concatQuery($toFilterValue) {
 
-		$this->_querySelect = rtrim($this->_querySelect, ', ');
-		if($this->_querySelect != '') {
-			$this->_querySelect = ", $this->_querySelect";
-		}
+		$selectQuery = implode(', ', $this->_selectors);
+		$filterQuery = $this->filterForQuery($this->_filters, $toFilterValue);
 
-		$userSelect = implode(', ', $this->_userElementsToFetch);
-
-		$this->_query = "SELECT u.ID AS ID, $userSelect $this->_querySelect
+		$this->_query = "SELECT $selectQuery
 			FROM SystemUsers u
 				$this->_queryJoin
 			GROUP BY u.ID
@@ -361,23 +355,29 @@ class UserDisplayAllQueryCreator {
 			LIMIT $this->_userToStart, $this->_usersPerPage";
 	}
 
-	protected function concatCountQuery($filterQuery) {
+	protected function concatCountQuery($filterVal) {
+
+		$selectQuery = implode(', ', $this->_selectors);
+		$filterQuery = $this->filterForQuery($this->_filters, $filterVal);
 
 		$this->_countQuery = "SELECT COUNT(*) AS count FROM
-		(SELECT u.ID AS userId, u.forename AS forename, u.name AS name, u.username AS username, u.email AS email, u.telephone AS telephone, u.GID AS GID, u.birthday AS birthday,
-			u.soli AS soli, u.first_passwd AS first_passwd
-			$this->_querySelect
+		(SELECT $selectQuery
 					FROM SystemUsers u
 						$this->_queryJoin
 					GROUP BY u.ID
 					$filterQuery) counting";
 	}
 
-	protected function filterForQuery($toFilterColumn, $toFilterValue,
-		$statement) {
+	protected function filterForQuery($columns, $value) {
 
-		if(!empty($toFilterColumn) && !empty($toFilterValue)) {
-			return "$statement $toFilterColumn LIKE '%$toFilterValue%'";
+		if(!empty($columns) && !isBlank($value)) {
+			$searches = array();
+			$query = '';
+			foreach($columns as $col) {
+				$searches[] = "$col LIKE '%$value%'";
+			}
+			$query = 'HAVING ' . implode(' OR ', $searches);
+			return $query;
 		}
 		else {
 			return '';
@@ -460,7 +460,18 @@ class UserDisplayAllQueryCreator {
 
 	protected function addSelectStatement($st) {
 
-		$this->_querySelect .= "$st, ";
+		if(in_array($st, $this->_selectors) === false) {
+			$this->_selectors[] = $st;
+		}
+
+		// Also add the elements to filter
+		if(strstr($st, 'AS') === false) {
+			$this->_filters[] = $st;
+		}
+		else {
+			$stSplit = explode('AS', $st);
+			$this->_filters[] = $stSplit[1];
+		}
 	}
 
 	protected function addJoinStatement($st) {
@@ -481,7 +492,8 @@ class UserDisplayAllQueryCreator {
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
 
-	protected $_querySelect = '';
+	protected $_selectors;
+	protected $_filters;
 
 	protected $_queryJoin = '';
 
@@ -507,6 +519,8 @@ class UserDisplayAllQueryCreator {
 	protected $_acl;
 
 	protected $_pdo;
+
+	protected $_preQueryRun = false;
 }
 
 ?>
