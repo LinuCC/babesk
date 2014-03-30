@@ -25,6 +25,11 @@ class SchbasAccounting extends Schbas {
 
 		$this->SchbasAccountingInterface = new SchbasAccountingInterface($this->relPath);
 		$this->lm = new LoanManager();
+
+        $this->_pdo = $dataContainer->getPdo();
+
+
+
 		
 		if(isset($_GET['action'])) {
 			switch($_GET['action']) {
@@ -41,6 +46,9 @@ class SchbasAccounting extends Schbas {
 				case 'sendReminder':
 					$this->sendReminder();
 					break;
+                case 'deleteAll':
+                    $this->deleteAll();
+                    break;
 				case 'remember':
 					$this->remember();
 					break;
@@ -525,5 +533,17 @@ class SchbasAccounting extends Schbas {
 		$this->SchbasAccountingInterface->showRebmemerList2($name, $forename, $books, $nrOfStudentIDs-1, $className, $listOfClasses);
 	
 	}
+
+    private function deleteAll()
+    {
+        try {
+            $stmt = $this->_pdo->query('TRUNCATE TABLE schbas_accounting');
+            $stmt->execute();
+            $this->SchbasAccountingInterface->dieSuccess('Tabelle Buchhaltung erfolgreich geleert!');
+        } catch (PDOException $e) {
+            $this->SchbasAccountingInterface->dieError('Konnte die Tabelle Buchhaltung nicht leeren!');
+        }
+
+    }
 }
 ?>

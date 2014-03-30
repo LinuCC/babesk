@@ -23,7 +23,21 @@ EnableSubmit = function(val)
     {
         sbmt.disabled = true;
     }
-}     
+}
+
+EnableDelete = function(val)
+{
+    var sbmt = document.getElementById("deleteAll");
+
+    if (val.checked == true)
+    {
+        sbmt.disabled = false;
+    }
+    else
+    {
+        sbmt.disabled = true;
+    }
+}
 </script>
 
 
@@ -44,8 +58,12 @@ EnableSubmit = function(val)
 </form>
 <form action="index.php?section=Schbas|SchbasAccounting&action=sendReminder" method="post">
 	<input type="checkbox" name="TOS" value="agreeReminder" onClick="EnableSubmit(this)">
-	<input type="submit" id="sendReminder" value="Mahnungen versenden" disabled="disabled">
+	<input type="submit" id="sendReminder" value="Mahnungen senden" disabled="disabled">
 </form>
+    <form action="index.php?section=Schbas|SchbasAccounting&action=deleteAll" method="post">
+        <input type="checkbox" name="TOS2" value="agreeReminder" onClick="EnableDelete(this)">
+        <input type="submit" id="deleteAll" value="Buchhaltung leeren" disabled="disabled">
+    </form>
 </fieldset>
 
 <fieldset>
