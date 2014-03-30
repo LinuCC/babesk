@@ -380,11 +380,13 @@ class Change extends \User
 
 			$stmt = $this->_pdo->prepare(
 				'UPDATE SystemUsers SET GID = ?, credit = ?, soli = ?
+					WHERE ID = ?
 			');
 			$stmt->execute(array(
 				$_POST['pricegroupId'],
 				$_POST['credits'],
-				$_POST['isSoli']
+				$_POST['isSoli'],
+				$this->_userId
 			));
 		}
 	}
@@ -407,7 +409,8 @@ class Change extends \User
 			}
 			else {
 				$query = 'UPDATE BabeskCards SET cardnumber = :cardnumber,
-					changed_cardID = changed_cardID + 1, UID = :userId';
+					changed_cardID = changed_cardID + 1
+					WHERE UID = :userId';
 			}
 			if(!empty($query)) {
 				$stmt = $this->_pdo->prepare($query);

@@ -7,3 +7,7 @@
 	overflow-x: hidden;
 	overflow-y: auto;
 }
+
+#column-show-form label {
+	padding-top: 0;
+}

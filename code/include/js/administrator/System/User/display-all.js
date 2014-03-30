@@ -138,6 +138,12 @@ $(document).ready(function() {
 			$('#table-columns-modal').modal('hide');
 		});
 
+		$('#users-per-page').on('keyup', function(ev) {
+			if(ev.which == 13) {
+				newDataFetch();
+			}
+		});
+
 		function pageSelectorUpdate(pagecount) {
 
 			amountPages = pagecount;
@@ -250,6 +256,7 @@ $(document).ready(function() {
 				},
 
 				success: function(data) {
+					console.log(data);
 					try {
 						data = JSON.parse(data);
 					} catch(e) {

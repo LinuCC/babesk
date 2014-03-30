@@ -3,11 +3,9 @@
 {block name=html_snippets append}
 <div id="column-show-template" hidden>
 	<div class="form-group">
-		<label class="col-sm-6 control-label">
-		</label>
-		<input type="checkbox" class="column-switch"
-		data-on-text="Ja" data-off-text="Nein"
-		data-size="small" data-on-color="warning"
+		<label class="col-sm-6 control-label"></label>
+		<input type="checkbox" class="column-switch"data-on-text="Ja"
+		data-off-text="Nein" data-size="mini" data-on-color="info"
 		data-off-color="default" />
 	</div>
 </div>
@@ -66,11 +64,11 @@
 		<div class="col-sm-3 col-md-2 form-group">
 			<div class="input-group users-per-page-container"
 				title="{t}Elements per page{/t}" >
-			<span class="input-group-addon">
-				<span class="icon icon-Settings"></span>
-			</span>
-			<input id="users-per-page" type="text" maxlength="3" class="form-control"
-				value="10" />
+				<span class="input-group-addon">
+					<span class="icon icon-Settings"></span>
+				</span>
+				<input id="users-per-page" type="text" maxlength="3" class="form-control"
+					value="10" />
 			</div>
 		</div>
 	</div>

@@ -68,9 +68,9 @@ class UserDisplayAll {
 			$filterForVal = 'u.ID';
 		}
 
-		//When user didnt select anything to sort For, default to name
+		//When user didnt select anything to sort For, default to Id
 		if(empty($sortFor)) {
-			$sortFor = 'name';
+			$sortFor = 'ID';
 		}
 
 		try {
