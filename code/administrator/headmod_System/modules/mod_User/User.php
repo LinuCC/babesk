@@ -34,6 +34,15 @@ class User extends System {
 
 		$this->entryPoint($dataContainer);
 
+		//hotfix, to be reworked
+		if(isset($_GET['showPdfOfDeletedUser'])) {
+			TableMng::sqlEscape($_GET['pdfId']);
+			$fileId = $_GET['pdfId'];
+			$deleter = new UserDelete();
+			$deleter->showPdfOfDeletedUser($fileId);
+			die();
+		}
+
 		$execReq = $dataContainer->getExecutionCommand()->pathGet();
 		if($this->submoduleCountGet($execReq)) {
 			$this->submoduleExecuteAsMethod($execReq);
@@ -804,17 +813,6 @@ class User extends System {
 		');
 		$stmt->execute(array($userId));
 		return $stmt->fetchAll(PDO::FETCH_COLUMN);
-	}
-
-	/**
-	 * Just a Hotfix, should be refactored later on
-	 */
-	protected function submoduleDeletedUserShowPdfExecute() {
-
-		TableMng::sqlEscape($_GET['pdfId']);
-		$fileId = $_GET['pdfId'];
-		$deleter = new UserDelete();
-		$deleter->showPdfOfDeletedUser($fileId);
 	}
 
 	/**

@@ -143,11 +143,92 @@ $(document).ready(function() {
 			$('#table-columns-modal').modal('hide');
 		});
 
+		// When searching or entering a new row-count, refresh on enter
 		$('#users-per-page, #filter').on('keyup', function(ev) {
+			activePage = 1;   //Reset pagenumber to 1
+			ev.preventDefault();
 			if(ev.which == 13) {
 				newDataFetch();
 			}
 		});
+
+		$('#user-table').on('click', '.user-action-delete', function(ev) {
+			var userId = $(this).closest('tr').attr('id').replace('user_', '');
+			bootbox.dialog({
+				message: 'Wollen sie den Schüler wirklich löschen?',
+				buttons: {
+					danger: {
+						label: "Ja",
+						className: "btn-danger",
+						callback: function() {
+							deleteUser(userId);
+						}
+					},
+					default: {
+						label: "Abbrechen",
+						className: "btn-primary",
+						callback: null
+					},
+				}
+			});
+		});
+
+		function deleteUser(userId) {
+
+			$.ajax({
+				type: "POST",
+				url: 'index.php?module=administrator|System|User|Delete&ID={0}'.format(userId),
+				data: {
+				},
+				success: function(data) {
+					try {
+						data = JSON.parse(data);
+					} catch(e) {
+						toastr['error']('Konnte die Serverantwort nicht parsen.');
+					}
+					if(data.value == 'success') {
+						toastr['success']('Benutzer erfolgreich gelöscht.');
+						userDeletePdfEntryAdd(data.pdfId, data.forename, data.name);
+						newDataFetch();
+					}
+					else if(data.value == 'error') {
+						toastr['error'](data.message);
+					}
+					else {
+						toastr['error']('Konnte die Serverantwort nicht lesen.');
+					}
+				},
+
+				error: function(error) {
+					toastr['error']('Konnte den Server nicht erreichen.');
+				}
+			});
+		}
+
+		/**
+		 * When a user got deleted, allow the admin to download a created pdf
+		 */
+		function userDeletePdfEntryAdd(pdfId, forename, name) {
+
+			$contentParent = $('#deleted-user-pdf-form');
+			$newEntry = $('#deleted-user-pdf-template').clone();
+
+			//if there is the yet-no-users-deleted Message, remove it
+			if($contentParent.find('p.no-users-deleted').length != 0) {
+				$contentParent.html('');
+				$('#deleted-user-pdf-modal-btn')
+					.removeClass('btn-default')
+					.addClass('btn-warning');
+			}
+			$newEntry.find('a').attr(
+				'href',
+				'index.php?module=administrator|System|User\
+					&showPdfOfDeletedUser&pdfId=' + pdfId
+			).attr('target', '_blank');
+			$newEntry.find('label').html(forename + ' ' + name);
+
+			$contentParent.append($newEntry.html());
+		}
 
 		function pageSelectorUpdate(pagecount) {
 

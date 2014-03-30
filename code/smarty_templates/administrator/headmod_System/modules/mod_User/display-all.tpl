@@ -4,7 +4,7 @@
 <div id="column-show-template" hidden>
 	<div class="form-group">
 		<label class="col-sm-6 control-label"></label>
-		<input type="checkbox" class="column-switch"data-on-text="Ja"
+		<input type="checkbox" class="column-switch" data-on-text="Ja"
 		data-off-text="Nein" data-size="mini" data-on-color="info"
 		data-off-color="default" />
 	</div>
@@ -17,6 +17,13 @@
 	<a class="btn btn-xs btn-danger user-action-delete" href="#">
 		<span class="icon icon-error"></span>
 	</a>
+</div>
+
+<div id="deleted-user-pdf-template" hidden>
+	<div class="form-group">
+		<label class="col-sm-6 control-label"></label>
+		<a class="btn btn-info">Pdf abrufen</a>
+	</div>
 </div>
 {/block}
 
@@ -44,6 +51,25 @@
 		</div>
 	</div>
 </div>
+
+<div id="deleted-user-pdf-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title">Pdfs der gelöschten Nutzer</h4>
+			</div>
+			<div class="modal-body">
+				<form id="deleted-user-pdf-form" class="form-horizontal" role="form">
+					<p class="no-users-deleted">Es wurden noch keine Nutzer gelöscht.</p>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 {/block}
 
 
@@ -65,23 +91,24 @@
 			</ul>
 		</div>
 		<div class="col-sm-12 col-md-3 form-group">
-			<div class="col-sm-5">
-				<button class="btn btn-default pull-right" data-toggle="modal"
+				<button class="btn btn-default" data-toggle="modal"
 					data-target="#table-columns-modal"
 					title="{t}What Columns should be displayed{/t}">
 					{t}Columns{/t}
 				</button>
-			</div>
-			<div class="col-sm-7">
+				<button id="deleted-user-pdf-modal-btn" class="btn btn-default"
+					data-toggle="modal" data-target="#deleted-user-pdf-modal"
+					title="{t}Pdfs of deleted users{/t}">
+					PDF
+				</button>
 				<div class="input-group users-per-page-container pull-right"
-					title="{t}Elements per page{/t}" >
+					title="{t}Rows per page{/t}" >
 					<span class="input-group-addon">
 						<span class="icon icon-Settings"></span>
 					</span>
 					<input id="users-per-page" type="text" maxlength="3" class="form-control"
 						value="10" />
 				</div>
-			</div>
 		</div>
 	</div>
 </div>
@@ -109,4 +136,5 @@
 </script>
 <script type="text/javascript" src="{$path_js}/bootstrap-switch.min.js">
 </script>
+<script type="text/javascript" src="{$path_js}/bootbox.min.js"></script>
 {/block}

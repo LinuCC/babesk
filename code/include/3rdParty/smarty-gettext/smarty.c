@@ -635,6 +635,9 @@ gettext("What Columns should be displayed");
 gettext("Columns");
 
 /* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/display-all.tpl */
+gettext("Pdfs of deleted users");
+
+/* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/display-all.tpl */
 gettext("Rows per page");
 
 /* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/display-all.tpl */

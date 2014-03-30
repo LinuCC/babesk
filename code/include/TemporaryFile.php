@@ -200,9 +200,9 @@ class TemporaryFile {
 		if($this->_fileId === false) {
 			try {
 				TableMng::query("INSERT INTO SystemTemporaryFiles
-						(`created`, `until`, `usage`)
+						(`location`, `created`, `until`, `usage`)
 					VALUES
-						('$this->_created', '$this->_until', '$this->_usage');
+						('', '$this->_created', '$this->_until', '$this->_usage');
 						");
 				$this->_fileId = TableMng::getDb()->insert_id;
 
