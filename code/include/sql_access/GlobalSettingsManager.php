@@ -29,6 +29,7 @@ abstract class GlobalSettings {
 	const WEBHP_REDIRECT_DELAY = 'webHomepageRedirectDelay';
 	const WEBHP_REDIRECT_TARGET  = 'webHomepageRedirectTarget';
 	const ORDER_ENDDATE  = 'orderEnddate';
+    const ISSITEUNDERMAINTENANCE  = 'siteIsUnderMaintenance';
 }
 
 class GlobalSettingsManager extends TableManager {

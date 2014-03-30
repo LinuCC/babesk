@@ -28,6 +28,12 @@ class WebHomepageSettings extends System {
 				case 'helptext':
 					$this->helptext ();
 				break;
+                case 'maintenance':
+                    $this->maintenance ();
+                    break;
+                case 'setmaintenance':
+                    $this->setMaintenance();
+                    break;
 				default:
 					die ('wrong action-value');
 					break;
@@ -93,6 +99,35 @@ class WebHomepageSettings extends System {
 			$this->dieError ('Konnte die Weiterleitungs-Einstellungen nicht ändern');
 		}
 	}
+
+    protected function maintenance() {
+        $this->_interface->maintenance ($this->_globalSettingsMng->valueGet(GlobalSettings::ISSITEUNDERMAINTENANCE));
+    }
+
+    /**
+     * Settings for maintenance in web, before the user logged in
+     */
+    protected function setMaintenance () {
+
+        if (isset ($_POST['maintenance'])) {
+            try {
+            $this->_globalSettingsMng->valueSet (
+                GlobalSettings::ISSITEUNDERMAINTENANCE, 1);
+                $this->_interface->dieSuccess ('Wartungsmodus aktiviert');
+        } catch (Exception $e) {
+            $this->_interface->dieSuccess ('Konnte den Wartungsmodus nicht ändern');
+        }
+        }
+        else {
+            try {
+                $this->_globalSettingsMng->valueSet (
+                    GlobalSettings::ISSITEUNDERMAINTENANCE, 0);
+                $this->_interface->dieSuccess  ('Wartungsmodus deaktiviert');
+            } catch (Exception $e) {
+                $this->_interface->dieSuccess  ('Konnte den Wartungsmodus nicht ändern');
+            }
+        }
+    }
 
 	/**
 	 * Settings for helptext in web, before the user logged in

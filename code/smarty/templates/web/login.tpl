@@ -11,6 +11,9 @@
        <img src="../smarty/templates/web/images/header.png" style="width:600px;" />
     </div>
 <div id="login">
+    {if $maintenance eq 1}
+        <p class="error">Diese Seite wird momentan gewartet.<br/>Bitte versuchen Sie es sp&auml;ter noch einmal.</p>
+    {else}
     {if $error != ''}
     <p class="error">{$error}</p>
     {/if}
@@ -22,6 +25,7 @@
         {if isset($showLoginButton) && $showLoginButton}
         <a href="../publicData/index.php?section=GeneralPublicData|LoginHelp">Hilfe</a>
         {/if}
+    {/if}
 </div>
 <div id="footer">
     <p>BaBeSK {$babesk_version}</p>

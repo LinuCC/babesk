@@ -8,4 +8,7 @@
 <form action="index.php?section=System|WebHomepageSettings&amp;action=helptext" method="post">
 	<input type="submit" value="Hilfetext auf der Loginseite einrichten">
 </form>
+    <form action="index.php?section=System|WebHomepageSettings&amp;action=maintenance" method="post">
+        <input type="submit" value="Den Wartungsmodus einstellen">
+    </form>
 {/block}

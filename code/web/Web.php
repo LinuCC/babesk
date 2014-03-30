@@ -11,7 +11,7 @@ class Web {
 		if (!isset($_SESSION)) {
 			require_once "../include/path.php";
 			$this->initEnvironment();
-			$this->initSmarty();
+
 		}
 
 		require_once PATH_ACCESS . '/UserManager.php';
@@ -34,6 +34,8 @@ class Web {
 		$this->_moduleExecutionParser = new ModuleExecutionInputParser();
 		$this->_moduleExecutionParser->setSubprogramPath('root/web');
 		$this->initLanguage();
+
+        $this->initSmarty();
 	}
 
 	///////////////////////////////////////////////////////////////////////
@@ -86,6 +88,7 @@ class Web {
 			$version = "";
 		}
 		$smarty->assign('babesk_version', $version);
+        $this->_smarty->assign('maintenance', $this->checkMaintenance());
 		$this->_smarty->assign('error', '');
 	}
 
@@ -136,7 +139,25 @@ class Web {
 		}
 	}
 
-	/**
+    /**
+     * checks if the system is under maintenance now...
+     */
+    private function checkMaintenance() {
+        try {
+            $data = TableMng::query('SELECT value
+				FROM global_settings
+				WHERE name = "siteIsUnderMaintenance"');
+
+        } catch (Exception $e) {
+            return 0;
+        }
+        if(isset($data[0]['value']) && $data[0]['value'] != '') {
+           return $data[0]['value'];
+        }
+        return 0;
+    }
+
+    /**
 	 * handles if the user gets redirected after some seconds
 	 */
 	private function redirect() {

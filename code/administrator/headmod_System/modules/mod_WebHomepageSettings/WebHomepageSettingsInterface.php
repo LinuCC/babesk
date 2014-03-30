@@ -26,6 +26,11 @@ class WebHomepageSettingsInterface extends AdminInterface {
 		$this->smarty->assign('helptext',$helptext);
 		$this->smarty->display ($this->tplFilePath . 'helptext.tpl');
 	}
+
+    public function maintenance ($maintenance) {
+        $this->smarty->assign('maintenance',$maintenance);
+        $this->smarty->display ($this->tplFilePath . 'maintenance.tpl');
+    }
 	/////////////////////////////////////////////////////////////////////
 	//Methods
 	/////////////////////////////////////////////////////////////////////
