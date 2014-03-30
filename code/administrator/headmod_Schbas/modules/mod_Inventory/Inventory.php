@@ -63,10 +63,22 @@ class Inventory extends Schbas {
 					}
 					break;
 				case 4: //add an entry
-					if (!isset($_POST['barcode'])) {
+					if (!isset($_POST['bookcodes'])) {
 						$inventoryProcessing->AddEntry();
 					} else {
-						$inventoryProcessing->AddEntryFin($_POST['barcode']);
+                            $barcodes = explode( "\r\n", $_POST['bookcodes'] );
+                            if(in_array("",$barcodes)){
+                                $pos=array_search("",$barcodes);
+                                unset($barcodes[$pos]);
+                            }
+                            $barcodes = array_values($barcodes);
+
+
+                        $succ_list = "";
+                        foreach ($barcodes as $barcode) {
+						    $succ_list .= "<li>".$inventoryProcessing->AddEntryFin($barcode)."</li>";
+                    }
+                        $inventoryInterface->ShowAddEntryFin($succ_list);
 					}
 					break;
 				case 5: //search an entry for deleting

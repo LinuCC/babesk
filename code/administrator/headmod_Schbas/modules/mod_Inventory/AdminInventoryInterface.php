@@ -53,10 +53,8 @@ class AdminInventoryInterface extends AdminInterface{
 		$this->smarty->display($this->tplFilePath.'add_entry.tpl');
 	}
 	
-	function ShowAddEntryFin($book_info, $year_of_purchase,$exemplar) {
-		$this->smarty->assign('book_info', $book_info);
-		$this->smarty->assign('purchase', $year_of_purchase);
-		$this->smarty->assign('exemplar', $exemplar);
+	function ShowAddEntryFin($booklist) {
+		$this->smarty->assign('booklist', $booklist);
 		$this->smarty->display($this->tplFilePath.'add_entry_fin.tpl');
 	}
 	

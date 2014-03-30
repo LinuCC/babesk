@@ -128,7 +128,7 @@ class AdminInventoryProcessing {
 			$search = 0;
 		}
 		if($search) {
-				$this->inventoryInterface->dieError($this->messages['error']['duplicate']);
+				$this->inventoryInterface->dieError($this->messages['error']['duplicate'].": ".$book_info['title']." [".$barcode."]");
 			} else {
 				try {
 					$inventoryManager->addEntry('book_id',$book_info['id'],'year_of_purchase',$barcode_exploded[1],'exemplar',$barcode_exploded[5]);
@@ -140,7 +140,8 @@ class AdminInventoryProcessing {
 				}
 			}
 
-		$this->inventoryInterface->showAddEntryFin($book_info,$barcode_exploded[1],$barcode_exploded[5]);
+		//$this->inventoryInterface->showAddEntryFin($book_info,$barcode_exploded[1],$barcode_exploded[5]);
+        return $book_info["title"]." [".$barcode."]";
 	}
 
 	/**
@@ -163,8 +164,8 @@ class AdminInventoryProcessing {
 		$loanManager = new LoanManager();
 
 		try {
-			$inventoryManager->delEntry($id);										// die Inventardaten löschen
-			$loanManager->deleteAllEntriesWithValueOfKey("inventory_id", $id);		// die Ausleihdaten löschen wir auch mit
+			$inventoryManager->delEntry($id);										// die Inventardaten lï¿½schen
+			$loanManager->deleteAllEntriesWithValueOfKey("inventory_id", $id);		// die Ausleihdaten lï¿½schen wir auch mit
 		} catch (Exception $e) {
 			$this->logs
 			->log('ADMIN', 'MODERATE',
