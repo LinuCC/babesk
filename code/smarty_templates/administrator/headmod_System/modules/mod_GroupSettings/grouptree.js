@@ -1,5 +1,4 @@
 var group = new function() {
-
 	var jstree = undefined;
 	var tree = undefined;
 	var that = this;
@@ -111,8 +110,9 @@ var group = new function() {
 			},
 
 			error: function(error) {
-				adminInterface.errorShow('Ein Fehler ist beim verbinden mit' +
-					'dem Server aufgetreten!');
+				toastr['error'](
+					'Ein Fehler ist beim verbinden mit dem Server aufgetreten!'
+				);
 			}
 		});
 	};
@@ -124,8 +124,7 @@ var group = new function() {
 		try {
 			var res = $.parseJSON(data);
 		} catch(e) {
-			adminInterface.errorShow('Error parsing the server' +
-				'response');
+			toastr['error']('Error parsing the server response');
 			return;
 		}
 		if(res) {
@@ -134,16 +133,14 @@ var group = new function() {
 				update(res.data);
 			}
 			else if(res.value == 'error') {
-				adminInterface.errorShow(res.message);
+				toastr['error'](res.message);
 			}
 			else {
-				adminInterface.errorShow('Server returned unknown' +
-					'value');
+				toastr['error']('Server returned unknown value');
 			}
 		}
 		else {
-			adminInterface.errorShow('Error parsing the server' +
-				'response');
+			toastr['error']('Error parsing the server response');
 			return;
 		}
 	};
@@ -270,7 +267,7 @@ var group = new function() {
 				onSuccess(data);
 			},
 			error: function(data) {
-				adminInterface.errorShow('Could not parse Servermessage');
+				toastr['error']('Could not parse Servermessage');
 				return false;
 			}
 		});
@@ -284,7 +281,7 @@ var group = new function() {
 			try{
 				var res = $.parseJSON(data);
 			} catch(e) {
-				adminInterface.errorShow('Could not parse Servermessage');
+				toastr['error']('Could not parse Servermessage');
 				that.fetch();
 				return false;
 			}
@@ -292,9 +289,7 @@ var group = new function() {
 				return true;
 			}
 			else {
-				adminInterface.errorShow('Error:' + res.message);
-				adminInterface.errorShow('Konnte die Gruppe nicht ' +
-					'verändern');
+				toastr['error'](res.message, 'Konnte die Gruppe nicht verändern');
 				that.fetch();
 				return false;
 			}
