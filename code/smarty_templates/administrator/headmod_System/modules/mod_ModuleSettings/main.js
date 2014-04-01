@@ -1,7 +1,7 @@
 
 $(document).ready(function() {
 
-	adminInterface.warningShow('Hier verändern sie grundlegende Eigenschaften des Systems! Bitte tun sie dies nur, wenn sie genau wissen, was sie tun!');
+
 });
 
 /**
@@ -50,8 +50,7 @@ var details = new function() {
 		 * Displays a fatal Error
 		 */
 		var fatalError = function() {
-			adminInterface.errorShow('Konnte die Daten des Modules nicht' +
-				'abrufen');
+			toastr['error']('Konnte die Daten des Modules nicht abrufen');
 		}
 
 		/**
@@ -66,7 +65,7 @@ var details = new function() {
 				res = JSON.parse(data);
 
 			} catch(e) {
-				adminInterface.errorShow('Unbekannte Serverantwort');
+				toastr['error']('Unbekannte Serverantwort');
 				return false;
 			}
 
@@ -81,11 +80,13 @@ var details = new function() {
 		var errorShow = function(res) {
 
 			if(typeof res.message) {
-				adminInterface.errorShow(res.message);
+				toastr['error'](res.message);
 			}
 			else {
-				adminInterface.errorShow('Ein Fehler ist beim abrufen der' +
-					'Fehlermeldung des Servers entstanden.');
+				toastr['error'](
+					'Ein Fehler ist beim abrufen der Fehlermeldung des Servers \
+						entstanden.'
+				);
 			}
 		};
 
@@ -199,7 +200,7 @@ var details = new function() {
 				changeHandlerAdd();
 			}
 			else {
-				adminInterface.errorShow('unbekannte Serverantwort!');
+				toastr['error']('unbekannte Serverantwort!');
 				return false;
 			}
 
@@ -222,12 +223,12 @@ var details = new function() {
 						errorShow(res);
 						break;
 					default:
-						adminInterface.errorShow('Unbekannte Serverantwort');
+					toastr['error']('unbekannte Serverantwort!');
 						return false;
 				}
 			}
 			else {
-				adminInterface.errorShow('Unbekannte Serverantwort');
+				toastr['error']('unbekannte Serverantwort!');
 				return false;
 			}
 
@@ -274,8 +275,7 @@ var details = new function() {
 		 * Displays a fatal Error to the User
 		 */
 		var fatalError = function() {
-			adminInterface.errorShow(
-				'Konnte die Daten nicht verändern');
+			toastr['error']('Konnte die Daten nicht verändern');
 		};
 
 		/**
@@ -310,8 +310,7 @@ var details = new function() {
 					res = JSON.parse(data);
 
 				} catch(e) {
-					adminInterface.errorShow('unbekannte Serverantwort;' +
-						'konnte JSON nicht parsen');
+					toastr['error']('Fehler beim parsen der Serverantwort.');
 					return false;
 				}
 
@@ -330,8 +329,7 @@ var details = new function() {
 
 					switch(res.value) {
 						case 'success':
-							adminInterface.successShow(
-									'Das Modul wurde erfolgreich verändert');
+							toastr['success']('Das Modul wurde erfolgreich verändert');
 							var moduleBefore = moduletree.selectedModuleGet();
 							$("div.moduletree").jstree(
 								"rename_node",
@@ -340,20 +338,21 @@ var details = new function() {
 							return true;
 							break;
 						case 'error':
-							adminInterface.errorShow('Fehler: ' +
-								res.message);
+							toastr['error'](res.message, 'Fehler');
 							return false;
 							break;
 						default:
-							adminInterface.errorShow('Unbekannte ' +
-								'Serverantwort; Value ist falsch definiert');
+							toastr['error'](
+								'Unbekannte Serverantwort; Value ist falsch definiert'
+							);
 							return false;
 							break;
 					}
 				}
 				else {
-					adminInterface.errorShow('unbekannte Serverantwort;' +
-						' Value ist nicht definiert');
+					toastr['error'](
+						'unbekannte Serverantwort. Value ist nicht definiert'
+					);
 					return false;
 				}
 			};
@@ -398,8 +397,7 @@ var details = new function() {
 			changeToDb(module);
 		}
 		else {
-			adminInterface.errorShow(
-				'Die zu verändernden Daten sind inkorrekt');
+			toastr['error']('Die zu verändernden Daten sind inkorrekt');
 		}
 	};
 };
@@ -454,7 +452,7 @@ var moduletree = new function() {
 		 * Displays a fatal Error
 		 */
 		var fatalError = function() {
-			adminInterface.errorShow('Konnte die Module nicht abrufen!');
+			toastr['error']('Konnte die Module nicht abrufen!');
 		};
 
 		/**
@@ -464,10 +462,10 @@ var moduletree = new function() {
 		 */
 		var serverErrorShow = function(res) {
 			if(typeof res.message != 'undefined') {
-				adminInterface.errorShow(res.message);
+				toastr['error'](res.message);
 			}
 			else {
-				adminInterface.errorShow('Could not display Servererror!');
+				toastr['error']('Konnte den Serverfehler nicht anzeigen.');
 			}
 		};
 
@@ -483,7 +481,7 @@ var moduletree = new function() {
 
 			} catch(e) {
 				var res = false;
-				adminInterface.errorShow('Error parsing the Serverresponse');
+				toastr['error']('Error parsing the Serverresponse')
 			}
 			return res;
 		};
@@ -508,13 +506,13 @@ var moduletree = new function() {
 						fatalError();
 						break;
 					default:
-						adminInterface.errorShow('Unknown Serverresponse!');
+						toastr['error']('Unknown Serverresponse!');
 						return false;
 						break;
 				}
 			}
 			else {
-				adminInterface.errorShow('Unknown Serverresponse!');
+				toastr['error']('Unknown Serverresponse!');
 				return false;
 			}
 		};
@@ -661,16 +659,14 @@ var moduletree = new function() {
 				});
 
 				function fatalError() {
-					adminInterface.errorShow(
-						'Konnte das Modul nicht löschen!');
+					toastr['error']('Konnte das Modul nicht löschen!');
 				}
 
 				function onSuccess(data) {
 					console.log(data);
 					if(res = responseStringParse(data)) {
 						if(resultHandle(res)) {
-							adminInterface.successShow(
-									'Modul erfolgreich gelöscht');
+							toastr['success']('Modul erfolgreich gelöscht');
 						}
 					}
 
@@ -680,8 +676,7 @@ var moduletree = new function() {
 							res = JSON.parse(data);
 
 						} catch(e) {
-							adminInterface.errorShow(
-								'Konnte die Serverantwort nicht parsen!');
+							toastr['error']('Konnte die Serverantwort nicht parsen!');
 							return false;
 						}
 						return res;
@@ -695,12 +690,11 @@ var moduletree = new function() {
 								return true;
 								break;
 							case 'error':
-								adminInterface.errorShow(res.message);
+								toastr['error'](res.message);
 								return false;
 								break;
 							default:
-								adminInterface.errorShow(
-									'Unbekannte Serverantwort!');
+								toastr['error']('Unbekannte Serverantwort!');
 								return false;
 								break;
 						}
@@ -736,8 +730,7 @@ var moduletree = new function() {
 				 * Displays a fatal Error
 				 */
 				var fatalError = function() {
-
-					adminInterface.errorShow('Das Modul konnte nicht hinzugefügt werden! ');
+					toastr['error']('Das Modul konnte nicht hinzugefügt werden.');
 				};
 
 				/**
@@ -752,8 +745,7 @@ var moduletree = new function() {
 						res = JSON.parse(data);
 
 					} catch(e) {
-						adminInterface.errorShow('Konnte die Serverantwort ' +
-							'nicht parsen');
+						toastr['error']('Konnte die Serverantwort nicht parsen');
 						return false;
 					}
 
@@ -775,20 +767,21 @@ var moduletree = new function() {
 								return true;
 								break;
 							case 'error':
-								adminInterface.errorShow(res.message);
+								toastr['error'](res.message);
 								return false;
 								break;
 							default:
-								adminInterface.errorShow('Unbekannte ' +
-									'Serverantwort; Value hat einen ' +
-									'unbekannten Wert');
+								toastr['error'](
+									'Unbekannte Serverantwort; Value hat einen unbekannten Wert'
+								);
 								return false;
 								break;
 						}
 					}
 					else {
-						adminInterface.errorShow('Unbekannte Serverantwort; ' +
-							'Value ist nicht definiert');
+						toastr['error'](
+							'Unbekannte Serverantwort. Value ist nicht definiert'
+						);
 					}
 				};
 
@@ -811,8 +804,7 @@ var moduletree = new function() {
 
 					if(res = dataParse(data)) {
 						if(resultHandle(res)) {
-							adminInterface.successShow('Das Modul wurde ' +
-								'erfolgreich hinzugefügt');
+							toastr['success']('Das Modul wurde erfolgreich hinzugefügt');
 							creationSucceeded = true;
 						}
 						else {
