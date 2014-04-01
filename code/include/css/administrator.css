@@ -1,7 +1,7 @@
 @import url('open_sans.css');
 
 body {
-	background-color: #FBFBFB;
+	background-color: #EEEEEE;
 }
 
 hr {
@@ -14,6 +14,7 @@ hr {
 	margin-bottom: 30px;
 	padding: 10px;
 	color: #777777;
+	text-shadow: 1px 1px #fff;
 	/*background-color: #AADD33;*/
 	/*border-bottom: 2px solid #AADD33;*/
 }
@@ -43,12 +44,12 @@ padding-right: 15px;
 }
 
 #navigation {
-	background-image: -webkit-gradient(linear, left 0%, left 100%, from(#807D7D), to(#666464));
-	background-image: -webkit-linear-gradient(top, #807D7D 0%, #666464, 100%);
-	background-image: -moz-linear-gradient(top, #807D7D 0%, #666464 100%);
-	background-image: linear-gradient(to bottom, #807D7D 0%, #666464 100%);
+	background-image: -webkit-gradient(linear, left 0%, left 100%, from(#444), to(#333));
+	background-image: -webkit-linear-gradient(top, #444 0%, #333, 100%);
+	background-image: -moz-linear-gradient(top, #444 0%, #333 100%);
+	background-image: linear-gradient(to bottom, #444 0%, #333 100%);
 	background-repeat: repeat-x;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff666464', endColorstr='#ff6C6A6A', GradientType=0);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff444', endColorstr='#ff333', GradientType=0);
 	color: #BFBBBB;
 	border-bottom: 1px solid #151515;
 }
@@ -124,7 +125,7 @@ padding-right: 15px;
 	overflow-x: hidden;
 	background-color: #333;
 	border-right: 1px solid #151515;
-	box-shadow: 2px 0px 8px #111111;
+	box-shadow: 2px 0px 2px #666;
 }
 
 #sidebar-module-selection li {
@@ -161,7 +162,7 @@ padding-right: 15px;
 }
 
 #sidebar-module-selection .spacer {
-	height: 20px;
+	height: 40px;
 }
 
 #sidebar-module-selection .text-icon-spacer {
@@ -306,4 +307,22 @@ a.label:hover {
 
 .pagination {
 	margin: 0;
+}
+
+ul.submodulelinkList li {
+	list-style: none;
+	font-size: 18px;
+	line-height: 1.3em;
+	padding: 10px 0;
+}
+
+ul.submodulelinkList li a {
+	color: #333;
+}
+
+ul.submodulelinkList li a:hover {
+	color: #77AA22;
+	text-decoration: none;
+	transition-property: color;
+	transition-duration: 0.15s;
 }

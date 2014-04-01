@@ -51,7 +51,6 @@ class DBConnect {
 		$username = $this->_username;
 		$password = $this->_password;
 		$databaseName = $this->_databaseName;
-
 		try {
 			$pdo = new PDO("mysql:host=$host;dbname=$databaseName",
 				$username, $password);

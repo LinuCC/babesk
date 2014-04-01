@@ -78,7 +78,7 @@
 	<div class="center-block">
 		<div class="col-sm-4 col-md-3 text-center">
 			<span class="input-group filter-container"
-				title="{t}Search{/t}" >
+				title="{t}Search (Enter to commit){/t}" >
 				<span class="input-group-addon">
 					<span class="icon icon-search"></span>
 				</span>

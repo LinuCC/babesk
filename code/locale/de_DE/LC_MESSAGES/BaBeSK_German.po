@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-30 17:57+0100\n"
-"PO-Revision-Date: 2014-03-30 18:04+0100\n"
+"POT-Creation-Date: 2014-03-31 18:39+0100\n"
+"PO-Revision-Date: 2014-03-31 18:40+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: de\n"
@@ -815,8 +815,8 @@ msgid "Ok"
 msgstr "Ok"
 
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:626
-msgid "Search"
-msgstr "Suchen"
+msgid "Search (Enter to commit)"
+msgstr "Suchen (Enter um Suche abzusenden)"
 
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:629
 msgid "Search..."
@@ -2354,12 +2354,7 @@ msgstr "Moduleinstellungen"
 msgid "modulepath_root/administrator/System/Schoolyear"
 msgstr "Schuljahr"
 
-#: ../../../include/3rdParty/smarty/templates_c/641806b5f33365be0b0c26c108d61fc998ac854b.file.classList.tpl.php:190
-#: ../../../include/3rdParty/smarty/templates_c/bae2498d1a0896252f99bb98cdc148ce328965b9.file.menu.tpl.php:186
-#: ../../../include/3rdParty/smarty/templates_c/ae63deb6b5f3a72006e6d3220cf1491201636794.file.mainMenu.tpl.php:190
-#: ../../../include/3rdParty/smarty/templates_c/1e42dd3602af3d91555e49f13522e090f2374125.file.order.tpl.php:186
 #: ../../../include/3rdParty/smarty/templates_c/c56cf3f1a038e908eabfdc01b6d79f850a64097f.file.main_menu.tpl.php:187
-#: ../../../include/3rdParty/smarty/templates_c/da4879aacbdf317d59afc8b18e8804fb539aa9bc.file.main.tpl.php:186
 #: ../../../smarty/templates_c/2328dac5db09b7c1f6741aa622ddd68094e9adf1.file.module_selector.tpl.php:36
 msgid "modulepath_"
 msgstr "NOT USED"
@@ -2521,6 +2516,9 @@ msgstr "Konnte den Hilfetext nicht abrufen."
 #: ../../../web/headmod_Babesk/modules/mod_Cancel/Cancel.php:258
 msgid "Could not check if the Soliprice is enabled!"
 msgstr "Konnte nicht überprüfen ob der Teilhabepaket-Preis aktiviert ist!"
+
+#~ msgid "Search"
+#~ msgstr "Suchen"
 
 #~ msgid "Could not update the user!"
 #~ msgstr "Konnte die Benutzer nicht aktualisieren!"

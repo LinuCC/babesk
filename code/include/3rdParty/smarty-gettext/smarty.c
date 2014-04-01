@@ -623,7 +623,7 @@ gettext("Start a new update-process");
 gettext("Ok");
 
 /* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/display-all.tpl */
-gettext("Search");
+gettext("Search (Enter to commit)");
 
 /* ../../../smarty_templates/administrator/headmod_System/modules/mod_User/display-all.tpl */
 gettext("Search...");
