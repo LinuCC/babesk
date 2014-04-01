@@ -44,6 +44,9 @@
 .icon-Kuwasys:before {
 	content: "\e602";
 }
+.icon-clipboard:before {
+	content: "\e621";
+}
 .icon-Schbas:before {
 	content: "\e603";
 }
@@ -61,6 +64,9 @@
 }
 .icon-userremoveoutline:before {
 	content: "\e615";
+}
+.icon-listelements:before {
+	content: "\e622";
 }
 .icon-addbookmark:before {
 	content: "\e60c";

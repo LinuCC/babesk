@@ -360,6 +360,13 @@
 					toastr['error']('Cookies sind nicht aktiviert! Diese Website benötigt Cookies um zu funktionieren.', 'Cookies');
 				}
 
+				// $('body').popover({
+				// 	selector: '[data-toggle="popover"]'
+				// });
+				$('body').tooltip({
+					selector: 'a[rel="tooltip"], [data-toggle="tooltip"]'
+				});
+
 			</script>
 		{/literal}
 
