@@ -378,6 +378,9 @@ class Classes extends Kuwasys {
 
 		$this->classDeletionInputCheck();
 		$this->classDeletionUpload();
+		$this->_interface->backlink(
+			'administrator|Kuwasys|Classes|DisplayClasses'
+		);
 		$this->_interface->dieSuccess(_g(
 			'The Class was successfully deleted'));
 	}
@@ -588,7 +591,7 @@ class Classes extends Kuwasys {
 				LEFT JOIN (
 						SELECT ctic.ClassID AS classId,
 							CONCAT(ct.forename, " ", ct.name) AS name
-						FROM classTeacher ct
+						FROM KuwasysClassteachers ct
 						JOIN KuwasysClassteachersInClasses ctic
 							ON ct.ID = ctic.ClassTeacherID
 					) ct ON c.ID = ct.classId
@@ -619,13 +622,15 @@ class Classes extends Kuwasys {
 		$class = $this->classesGetWithAdditionalReadableData($_GET['ID']);
 		$users = $this->usersByClassIdGet($_GET['ID']);
 		$users = $this->assignClassesOfSameClassunitToUsers(
-			$users, $class['unitId']);
+			$users, $class['unitId']
+		);
 		$statuses = $this->statusesGetAll();
 		$this->_smarty->assign('class', $class);
 		$this->_smarty->assign('users', $users);
 		$this->_smarty->assign('statuses', $statuses);
 		$this->_smarty->display(
-			$this->_smartyModuleTemplatesPath . 'displayClassDetails.tpl');
+			$this->_smartyModuleTemplatesPath . 'displayClassDetails.tpl'
+		);
 	}
 
 	/**

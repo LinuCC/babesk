@@ -326,3 +326,14 @@ ul.submodulelinkList li a:hover {
 	transition-property: color;
 	transition-duration: 0.15s;
 }
+
+.panel-title {
+	text-align: center;
+	line-height: 32px;
+}
+
+.panel-title h3 {
+	line-height: 32px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
