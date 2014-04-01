@@ -1,16 +1,68 @@
-{extends file=$inh_path} {block name='content'}
+{extends file=$inh_path}
+
+{block name=popup_dialogs append}
+
+<div id="class-summary-modal" class="modal fade" tabindex="-1" role="dialog"
+	aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+				aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title">{t}Create Class-Summaries{/t}</h4>
+			</div>
+			<div class="modal-body">
+				<form role="form" action="#" method="post">
+					<div class="input-group form-group">
+						<span class="input-group-addon">
+							Anfangsdatum
+						</span>
+						<input name="class-summary-begin" id="class-summary-begin"
+							class="form-control" type="text" placeholder="Anfangsdatum"
+							data-provide="datepicker" data-date-format="dd.mm.yyyy"
+							data-date-language="de">
+					</div>
+					<div class="input-group form-group">
+						<span class="input-group-addon">
+							Enddatum
+						</span>
+						<input name="class-summary-end" id="class-summary-end"
+							class="form-control" type="text" placeholder="Enddatum"
+							data-provide="datepicker" data-date-format="dd.mm.yyyy"
+							data-date-language="de">
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
+					{t}Cancel{/t}
+				</button>
+				<button type="button" class="btn btn-primary apply">
+					{t}Create{/t}
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+{/block}
+
+
+{block name='content'}
 
 <h2 class='moduleHeader'>Hauptmen&uuml; der Kursverwaltung</h2>
 
 <div>
 	{if !$isClassRegistrationGloballyEnabled}
-		<p>
+		<span class="label label-warning">
 			{t}Classregistrations are not allowed{/t}
-		</p>
+		</span>
 	{else}
-		<p>
+		<span class="label label-info">
 			{t}Classregistrations are allowed{/t}
-		</p>
+		</span>
 	{/if}
 </div>
 
@@ -43,7 +95,8 @@
 			</a>
 		</li>
 		<li>
-			<a id="createClassSummaries" href="index.php?module=administrator|Kuwasys|Classes|CreateClassSummary">
+			<a id="class-summary-create" data-toggle="modal"
+				data-target="#class-summary-modal">
 					{t}Create Class-Summaries{/t}
 			</a>
 		</li>
@@ -54,42 +107,29 @@
 		</li>
 	</ul>
 </fieldset>
+{/block}
 
-<div class="dialog" id="printDialog" title="Kursübersichten">
-	<p>Bitte wählen sie das Anfangs- und Enddatum, zwischen denen der Kurs stattfindet (Anfang und Ende des Schuljahres)</p>
-	<form>
-		<fieldset>
-			<label for="classSummaryStart">Anfangsdatum</label>
-			<input type="text" size="10" name="classSummaryStart" />
-		</fieldset>
-		<fieldset>
-			<label for="classSummaryEnd">Enddatum</label>
-			<input type="text" size="10" name="classSummaryEnd" />
-		</fieldset>
-	</form>
-</div>
 
+{block name="style_include" append}
+<link rel="stylesheet" href="{$path_css}/datepicker3.css" type="text/css" />
+{/block}
+
+
+{block name="js_include" append}
+<script type="text/javascript" src="{$path_js}/datepicker/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" src="{$path_js}/datejs/date.min.js"></script>
+<script type="text/javascript" src="{$path_js}/datepicker/locales/bootstrap-datepicker.de.js"></script>
 <script type="text/javascript">
 
 $(document).ready(function() {
 
-	$('input[name=classSummaryStart]').datepicker({
-		dateFormat: 'yy-mm-dd',
-		changeMonth: true,
-		changeYear: true,
-		yearRange: "1920:+10"
-	});
-
-	$('input[name=classSummaryEnd]').datepicker({
-		dateFormat: 'yy-mm-dd',
-		changeMonth: true,
-		changeYear: true,
-		yearRange: "1920:+10"
-	});
-
-	$('#createClassSummaries').on('click', function(event) {
-		event.preventDefault();
-		$('div#printDialog').dialog('open');
+	$('#class-summary-modal button.apply').on('click', function(ev) {
+		var startdate = Date.parse($('input[name=class-summary-begin]').val())
+			.toString('yyyy-MM-dd');
+		var enddate = Date.parse($('input[name=class-summary-end]').val())
+			.toString('yyyy-MM-dd');
+		window.location.href = 'index.php?module=administrator|Kuwasys|Classes|CreateClassSummary&startdate=' + startdate +
+		'&enddate=' + enddate;
 	});
 
 	$('div#printDialog').dialog({
@@ -117,5 +157,5 @@ $(document).ready(function() {
 });
 
 </script>
-
 {/block}
+
