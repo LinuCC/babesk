@@ -1,12 +1,85 @@
-{extends file=$inh_path} {block name='content'}
+{extends file=$inh_path} {block name=filling_content}
 
 <h2 class='moduleHeader'>Die Kurse</h2>
 
+<div class="filter-bar text-center">
+	<div>
+		<div class="input-group form-group">
+			<span class="input-group-addon">
+				Kurse für welches Schuljahr?
+			</span>
+			<select id="schoolyearSelector" class="form-control" name="schoolyearId">
+				{foreach $schoolyears as $schoolyearId => $schoolyearLabel}
+					<option value="{$schoolyearId}"
+						{if $schoolyearId == $activeSchoolyearId}selected="selected"{/if}
+						>{$schoolyearLabel}</option>
+
+				{/foreach}
+			</select>
+		</div>
+	</div>
+</div>
+
+<table class="table table-striped table-responsive">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+			<th>Kursleiter</th>
+			<th>Aktive Teilnehmer</th>
+			<th>Wartende Teilnehmer</th>
+			<th>Wünschende Teilnehmer</th>
+			<th>Maximale Registrierungen</th>
+			<th>Veranstaltungstag</th>
+			<th>Optionen</th>
+		</tr>
+	</thead>
+	<tbody>
+		{foreach $classes as $class}
+		<tr>
+			<td>{$class.ID}</td>
+			<td>{$class.label}</td>
+			<td>{$class.classteacherName}</td>
+			<td>{$class.activeCount}</td>
+			<td>{$class.waitingCount}</td>
+			<td>{$class.request1Count + $class.request2Count}</td>
+			<td>{$class.maxRegistration}</td>
+			<td>{$class.unitTranslatedName}</td>
+			<td>
+				<div id='option{$class.ID}'>
+
+				</div>
+				<div id='optionButtons{$class.ID}' class="option-buttons">
+					<form action="index.php?module=administrator|Kuwasys|Classes|DisplayClassDetails&ID={$class.ID}" method="post">
+						<button type="submit" data-toggle="tooltip"
+							class="btn btn-info btn-xs" data-title="Kursdetails anzeigen">
+							<span class="icon icon-listelements"></span>
+						</button>
+					</form>
+					<form action="index.php?module=administrator|Kuwasys|Classes|ChangeClass&amp;ID={$class.ID}" method="post">
+						<button type="submit" data-toggle="tooltip"
+							class="btn btn-default btn-xs" data-title="Kurs bearbeiten">
+							<span class="icon icon-businesscard"></span>
+						</button>
+					</form>
+					<form action="index.php?module=administrator|Kuwasys|Classes|DeleteClass&amp;ID={$class.ID}" method="post">
+						<button type="submit" data-toggle="tooltip"
+							class="btn btn-danger btn-xs" data-title="Kurs löschen">
+							<span class="icon icon-error"></span>
+						</button>
+					</form>
+				</div>
+			</td>
+		</tr>
+		{/foreach}
+	</tbody>
+</table>
+
+{/block}
+
+
+{block name=js_include append}
 <script type="text/javascript">
-function showOptions (ID) {
-	document.getElementById('optionButtons' + ID).hidden = false;
-	document.getElementById('option' + ID).hidden = true;
-}
 
 $(document).ready(function() {
 
@@ -18,87 +91,9 @@ $(document).ready(function() {
 });
 
 </script>
+{/block}
 
-<!--
-<div class="filterBar">
-<h3>Filter</h3>
-<form action="index.php?section=Kuwasys|Classes&action=showClass" method="post">
-	<input id="filterBarSubmitButton" type="submit" value="Absenden">
-Nach
-<select name="keyToSortAfter">
-	<option value="label">Name</option>
-	<option value="schoolyearLabel">Schuljahr</option>
-</select>
-sortieren.<br>
-<select name="keyToFilterAfter">
-	<option value="label">Name</option>
-	<option value="schoolyearLabel">Schuljahr</option>
-</select>
-nach
-	<input type="text" name="filterValue" maxlength="12">
-filtern.
-</form>
-</div><br>
--->
 
-<div class="filterBar">
-	<label for="schoolyearSelector">Kurse für welches Schuljahr?</label>
-	<select id="schoolyearSelector" name="schoolyearId">
-		{foreach $schoolyears as $schoolyearId => $schoolyearLabel}
-			<option value="{$schoolyearId}"
-				{if $schoolyearId == $activeSchoolyearId}selected="selected"{/if}
-				>{$schoolyearLabel}</option>
-
-		{/foreach}
-	</select>
-</div>
-
-<table>
-	<thead>
-		<tr bgcolor='#33CFF'>
-			<th align='center'>ID</th>
-			<th align='center'>Name</th>
-			<th align='center'>Kursleiter</th>
-			<th align='center'>Aktive Teilnehmer</th>
-			<th align='center'>Wartende Teilnehmer</th>
-			<th align='center'>Wünschende Teilnehmer</th>
-			<th align='center'>Maximale Registrierungen</th>
-			<th align='center'>Veranstaltungstag</th>
-		</tr>
-	</thead>
-	<tbody>
-		{foreach $classes as $class}
-		<tr bgcolor='#FFC33'>
-			<td align="center">{$class.ID}</td>
-			<td align="center">{$class.label}</td>
-			<td align="center">{$class.classteacherName}</td>
-			<td align="center">{$class.activeCount}</td>
-			<td align="center">{$class.waitingCount}</td>
-			<td align="center">{$class.request1Count + $class.request2Count}</td>
-			<td align="center">{$class.maxRegistration}</td>
-			<td align="center">{$class.unitTranslatedName}</td>
-			<td align="center" bgcolor='#FFD99'>
-				<div id='option{$class.ID}'>
-
-				<form method="post">
-					<input type='button' value='Optionen' onclick='showOptions("{$class.ID}")'>
-				</form>
-				</div>
-				<div id='optionButtons{$class.ID}' hidden="hidden" >
-					<form action="index.php?module=administrator|Kuwasys|Classes|ChangeClass&amp;ID={$class.ID}" method="post">
-						<input type='submit' value='bearbeiten'>
-					</form>
-					<form action="index.php?module=administrator|Kuwasys|Classes|DeleteClass&amp;ID={$class.ID}" method="post">
-						<input type='submit' value='löschen'>
-					</form>
-					<form action="index.php?module=administrator|Kuwasys|Classes|DisplayClassDetails&ID={$class.ID}" method="post">
-						<input type='submit' value='Details anzeigen'>
-					</form>
-				</div>
-			</td>
-		</tr>
-		{/foreach}
-	</tbody>
-</table>
-
+{block name=style_include append}
+<link rel="stylesheet" href="{$path_css}/administrator/Kuwasys/Classes/display-classes.css" type="text/css" />
 {/block}
