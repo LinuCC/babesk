@@ -843,16 +843,16 @@ class User extends System {
 				FROM SystemUsers u
 				JOIN SystemUsersInGradesAndSchoolyears uigs ON u.ID = uigs.userId
 				WHERE uigs.schoolyearId = @activeSchoolyear
-				ORDER BY levenshtein_ratio(:name, username) DESC
+					AND u.username LIKE :name
 				LIMIT 0, 10');
-			$stmt->execute(array('name' => $_GET['term']));
+			$stmt->execute(array('name' => '%' .$_GET['term'] . '%'));
 
 			while($el = $stmt->fetchColumn()) {
 				$data[] = $el;
 			}
 
 		} catch (Exception $e) {
-			$this->_logger->log('Error (levenshtein-)searching for username',
+			$this->_logger->log('Error searching for username',
 				'Notice', Null,json_encode(array('msg' => $e->getMessage())));
 			die(json_encode(array($e->getMessage())));
 		}

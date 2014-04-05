@@ -1,6 +1,6 @@
 {extends file=$inh_path} {block name=filling_content}
 
-<h2 class='moduleHeader'>Die Kurse</h2>
+<h2 class='moduleHeader'>Kursauflistung</h2>
 
 <div class="filter-bar text-center">
 	<div>
@@ -13,7 +13,6 @@
 					<option value="{$schoolyearId}"
 						{if $schoolyearId == $activeSchoolyearId}selected="selected"{/if}
 						>{$schoolyearLabel}</option>
-
 				{/foreach}
 			</select>
 		</div>
@@ -50,24 +49,20 @@
 
 				</div>
 				<div id='optionButtons{$class.ID}' class="option-buttons">
-					<form action="index.php?module=administrator|Kuwasys|Classes|DisplayClassDetails&ID={$class.ID}" method="post">
-						<button type="submit" data-toggle="tooltip"
-							class="btn btn-info btn-xs" data-title="Kursdetails anzeigen">
-							<span class="icon icon-listelements"></span>
-						</button>
-					</form>
-					<form action="index.php?module=administrator|Kuwasys|Classes|ChangeClass&amp;ID={$class.ID}" method="post">
-						<button type="submit" data-toggle="tooltip"
-							class="btn btn-default btn-xs" data-title="Kurs bearbeiten">
-							<span class="icon icon-businesscard"></span>
-						</button>
-					</form>
-					<form action="index.php?module=administrator|Kuwasys|Classes|DeleteClass&amp;ID={$class.ID}" method="post">
-						<button type="submit" data-toggle="tooltip"
-							class="btn btn-danger btn-xs" data-title="Kurs löschen">
-							<span class="icon icon-error"></span>
-						</button>
-					</form>
+					<a href="index.php?module=administrator|Kuwasys|Classes|DisplayClassDetails&amp;ID={$class.ID}" data-toggle="tooltip"class="btn btn-info btn-xs"
+						data-title="Kursdetails anzeigen">
+						<span class="icon icon-listelements"></span>
+					</a>
+					<a href="index.php?module=administrator|Kuwasys|Classes|ChangeClass&amp;ID={$class.ID}"
+						data-toggle="tooltip" class="btn btn-default btn-xs"
+						data-title="Kurs bearbeiten">
+						<span class="icon icon-businesscard"></span>
+					</a>
+					<a href="index.php?module=administrator|Kuwasys|Classes|DeleteClass&amp;ID={$class.ID}"
+						data-toggle="tooltip"
+						class="btn btn-danger btn-xs" data-title="Kurs löschen">
+						<span class="icon icon-error"></span>
+					</a>
 				</div>
 			</td>
 		</tr>

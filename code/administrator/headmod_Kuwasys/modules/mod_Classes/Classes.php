@@ -644,12 +644,13 @@ class Classes extends Kuwasys {
 		try {
 			$stmt = $this->_pdo->prepare(
 				'SELECT u.*, g.gradename AS gradename,
-					uics.translatedName AS statusTranslated
+					uics.translatedName AS statusTranslated,
+					uic.ID as jointId
 				FROM SystemUsers u
 				JOIN KuwasysUsersInClasses uic ON u.ID = uic.UserID
 				JOIN KuwasysUsersInClassStatuses uics ON uic.statusId = uics.ID
 				LEFT JOIN (
-						SELECT CONCAT(label, "-", gradelevel) AS gradename,
+						SELECT CONCAT(gradelevel, "-", label) AS gradename,
 							uigs.UserID AS userId
 						FROM SystemGrades g
 						JOIN SystemUsersInGradesAndSchoolyears uigs ON

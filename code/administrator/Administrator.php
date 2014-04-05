@@ -100,6 +100,7 @@ class Administrator {
 			$this->_logger->log(
 				'Error executing a Module', 'Notice', Null,
 				json_encode(array(
+					'command' => $execCom->pathGet(),
 					'userId' => $_SESSION['UID'],
 					'msg' => $e->getMessage()
 			)));

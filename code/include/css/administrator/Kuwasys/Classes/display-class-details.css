@@ -1,0 +1,12 @@
+ul.other-classes-container {
+	margin: 0;
+	padding: 0;
+}
+
+ul.other-classes-container li {
+	list-style-type: none;
+}
+
+.ui-autocomplete {
+	z-index: 1151 !important;
+}

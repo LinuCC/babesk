@@ -3,10 +3,6 @@
 	display: inline-block;
 }
 
-.option-buttons form {
-	display: inline;
-}
-
 .option-buttons {
 	min-width: 80px;
 }
