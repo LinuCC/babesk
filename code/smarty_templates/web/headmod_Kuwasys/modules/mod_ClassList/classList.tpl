@@ -11,7 +11,8 @@
 					<button type="button"
 						class="btn btn-sm btn-default expand-button-content"
 						data-toggle="collapse" data-parent=""
-						href="#unit-accordion-body_{$classUnit.ID}">
+						href="#unit-accordion-body_{$classUnit.ID}"
+						{if $classUnit.votedCount}disabled{/if}>
 						<div class="icon icon-plus"></div>
 					</button>
 					{$classUnit.translatedName}
@@ -90,14 +91,18 @@
 		</div>
 	{/foreach}
 
-	<button type="button" class="btn btn-primary submit-button">Absenden</button>
+	<button type="button" class="btn btn-primary submit-button">
+		Wahlen ausführen
+	</button>
 	<a type="button" class="btn btn-default"
 		href="{if $backlink}{$backlink} {else}javascript: history.go(-1){/if}">
 		Zurück
 	</a>
-	<button type="button" class="btn btn-info pull-right"
-	id="class-deactivated-info">
-		Warum sind Kurse deaktiviert?
+	<button type="button" class="btn btn-info pull-right" data-toggle="popover"
+	id="class-deactivated-info" title="Warum sind Kurse deaktiviert?"
+	data-content="Für deaktivierte Kurse kann sich der Benutzer nicht mehr anmelden. Entweder diese Kurse sind voll, erlauben generell keine Anmeldungen oder sie haben sich für diesen Veranstaltungstag schon bei anderen Kursen angemeldet."
+	data-placement="left" >
+		Hilfe zu deaktivierten Kursen
 	</button>
 
 	</p>

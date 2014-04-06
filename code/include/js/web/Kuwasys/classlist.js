@@ -29,16 +29,6 @@ $(document).ready(function() {
 			}
 		});
 
-		$('button#class-deactivated-info').on('click', function(ev) {
-			toastr['info'](
-				'Für deaktivierte Kurse kann sich der Benutzer nicht mehr ' +
-				'anmelden. Entweder diese Kurse sind voll, erlauben ' +
-				'generell keine Anmeldungen oder sie haben sich für diesen ' +
-				'Veranstaltungstag schon bei anderen Kursen angemeldet.',
-				'Deaktivierte Kurse'
-			);
-		});
-
 		$('button.submit-button').on('click', function(ev) {
 			var inp = parseInput();
 			if(testInput(inp)) {
