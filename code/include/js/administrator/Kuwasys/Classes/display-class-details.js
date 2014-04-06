@@ -10,7 +10,7 @@ $(document).ready(function() {
 			url: 'index.php?module=administrator|Kuwasys|KuwasysUsers|AddUserToClass',
 			data: {
 				'username': $('#username').val(),
-				'statusId': $('#status').val(),
+				'statusId': $('select[name="status"]').val(),
 				'classId': $('#add-user-modal').attr('classId')
 			},
 
@@ -42,8 +42,11 @@ $(document).ready(function() {
 		$('#addUserDialog').dialog('open');
 	});
 
-	$('a.unregister-user').on('click', function(ev) {
+	$('button.unregister-user').on('click', function(ev) {
+		ev.preventDefault();
 		$clicked = $(this);
+		var $row = $clicked.closest('tr');
+
 		var unregisterUser = function() {
 			$.postJSON(
 				"index.php?module=administrator|Kuwasys|Classes|UnregisterUserFromClass",
@@ -57,12 +60,13 @@ $(document).ready(function() {
 					}
 				}
 			);
-			$clicked.closest('tr').fadeOut();
+			$row.fadeOut();
 		}
 
-		ev.preventDefault();
+		var username = $row.children('td.username').text();
 		bootbox.confirm(
-			'Wollen sie den Benutzer wirklich von dem Kurs entfernen?',
+			'Wollen sie den Benutzer ' + username +
+				' wirklich von dem Kurs entfernen?',
 			function(res) {
 				if(res) {
 					unregisterUser();
@@ -71,5 +75,19 @@ $(document).ready(function() {
 		);
 	});
 
+	$('button.change-user').on('click', function(ev) {
+		var $row = $(this).closest('tr');
+		var $modal = $('#change-user-modal');
+		var statusId = $row.children('td.user-status').attr('statusid');
+		var username = $row.children('td.username').text();
 
+		$.each($modal.find('select[name="status"] option'), function(ind, el) {
+			if($(el).val() == statusId) {
+				$(el).prop('selected', true);
+			}
+		});
+		$modal.find('div.modal-title span.username').html(username);
+
+		$modal.modal('show');
+	});
 });

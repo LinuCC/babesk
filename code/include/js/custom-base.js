@@ -59,3 +59,7 @@ if(!cookieEnabled) {
 $('body').tooltip({
 	selector: 'a[rel="tooltip"], [data-toggle="tooltip"]'
 });
+
+$('body').popover({
+	selector: 'a[rel="popover"], [data-toggle="popover"]'
+});

@@ -645,6 +645,7 @@ class Classes extends Kuwasys {
 			$stmt = $this->_pdo->prepare(
 				'SELECT u.*, g.gradename AS gradename,
 					uics.translatedName AS statusTranslated,
+					uics.ID AS statusId,
 					uic.ID as jointId
 				FROM SystemUsers u
 				JOIN KuwasysUsersInClasses uic ON u.ID = uic.UserID
@@ -898,12 +899,6 @@ class Classes extends Kuwasys {
 		require_once 'SummaryOfClassesPdf.php';
 		SummaryOfClassesPdf::init($this->_interface);
 		SummaryOfClassesPdf::execute($_GET['startdate'], $_GET['enddate']);
-	}
-
-	protected function submoduleUnregisterUserExecute() {
-
-		$this->_interface->dieError(
-			'Dieses Modul ist noch in Überarbeitung...');
 	}
 
 	protected function submoduleCsvImportExecute() {

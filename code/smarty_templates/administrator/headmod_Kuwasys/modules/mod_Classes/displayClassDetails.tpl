@@ -31,7 +31,7 @@
 						<span class="input-group-addon">
 							<span class="icon icon-businesscard"></span>
 						</span>
-						<select name="status" id="status" class="form-control">
+						<select name="status" class="form-control">
 							{foreach $statuses as $status}
 							<option value="{$status.ID}" >
 								{$status.translatedName}
@@ -53,23 +53,59 @@
 	</div>
 </div>
 
-<!-- <div id="addUserDialog" title="{t}Assign a User to this Class{/t}">
-	<p>{t}Please select the User and the Status of the Assignment{/t}</p>
-<form>
-	<fieldset>
-	<label for="username">{t}Username{/t}</label>
-	<input type="text" name="username" id="username" class="text ui-widget-content ui-corner-all" />
-	<label for="status">{t}Status{/t}</label>
-		<select name="status" id="status">
-			{foreach $statuses as $status}
-			<option value="{$status.ID}" >
-				{$status.translatedName}
-			</option>
-			{/foreach}
-		</select>
-	</fieldset>
-	</form>
-</div> -->
+<div classId="{$class.ID}" id="change-user-modal" class="modal fade"
+	tabindex="-1" role="dialog" aria-hidden="true" >
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="modal-title">
+					<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">
+						&times;
+					</button>
+					Kursregistrierung für Benutzer <span class="username"></span> ändern
+				</div>
+			</div>
+			<div class="modal-body">
+				<form>
+					<div class="form-group input-group" data-toggle="tooltip"
+						title="Status des Benutzers">
+						<span class="input-group-addon">
+							<span class="icon icon-businesscard"></span>
+						</span>
+						<select name="status" class="form-control">
+							{foreach $statuses as $status}
+							<option value="{$status.ID}" >
+								{$status.translatedName}
+							</option>
+							{/foreach}
+						</select>
+					</div>
+					<div class="form-group input-group" data-toggle="tooltip">
+						<span class="input-group-addon">
+							<span class="icon icon-businesscard"></span>
+						</span>
+						<select name="status" class="form-control">
+							{foreach $statuses as $status}
+							<option value="{$status.ID}" >
+								{$status.translatedName}
+							</option>
+							{/foreach}
+						</select>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
+					Abbrechen
+				</button>
+				<button id="change-user-submit" type="button" class="btn btn-primary">
+					Kursregistrierung verändern
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 {/block}
 
@@ -147,13 +183,14 @@
 		{if isset($users) && count($users)} {foreach $users as $user}
 		<tr>
 			{$rowsOfSamePerson = 1}
-			<td rowspan="{$rowsOfSamePerson}">
+			<td class="username" rowspan="{$rowsOfSamePerson}">
 			<!-- Link to UserDetails -->
 			<a href="index.php?module=administrator|System|User|DisplayChange&amp;ID={$user.ID}">
 				{$user.forename} {$user.name}
 			</a>
 			</td>
-			<td rowspan="{$rowsOfSamePerson}">
+			<td class="user-status" rowspan="{$rowsOfSamePerson}"
+				statusid="{$user.statusId}" >
 				<!-- Link to "move user to another Class" -->
 				<a href="index.php?section=Kuwasys|Users&amp;action=moveUserByClass&amp;classIdOld={$class.ID}&amp;userId={$user.ID}">
 					{if $user.statusTranslated}
@@ -175,9 +212,18 @@
 					{/foreach}
 				</ul>
 			</td>
-			<td rowspan="{$rowsOfSamePerson}">
-			<a class="btn btn-default btn-xs unregister-user"
-			joinId="{$user.jointId}" href=>Abmelden</a></td>
+			<td class="user-actions" rowspan="{$rowsOfSamePerson}">
+				<div class="btn-group">
+					<button class="btn btn-default btn-xs change-user"
+					joinId="{$user.jointId}">
+						ändern
+					</button>
+					<button class="btn btn-danger btn-xs unregister-user"
+					joinId="{$user.jointId}">
+						Abmelden
+					</button>
+				</div>
+			</td>
 		</tr>
 		{/foreach}
 		{/if}

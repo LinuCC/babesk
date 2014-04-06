@@ -10,3 +10,9 @@ ul.other-classes-container li {
 .ui-autocomplete {
 	z-index: 1151 !important;
 }
+
+@media (min-width: 768px) {
+	td.user-actions {
+		min-width: 160px;
+	}
+}

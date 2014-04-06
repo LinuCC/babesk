@@ -319,6 +319,7 @@
 			<script type="text/javascript" src="{$path_js}/bootstrap.min.js"></script>
 			<script type="text/javascript" src="{$path_js}/toastr.min.js"></script>
 			<script type="text/javascript" src="{$path_js}/json2.min.js"></script>
+			<script type="text/javascript" src="{$path_js}/custom-base.js"></script>
 		{literal}
 			<script type="text/javascript">
 
