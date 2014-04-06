@@ -43,16 +43,33 @@ $(document).ready(function() {
 	});
 
 	$('a.unregister-user').on('click', function(ev) {
+		$clicked = $(this);
+		var unregisterUser = function() {
+			$.postJSON(
+				"index.php?module=administrator|Kuwasys|Classes|UnregisterUserFromClass",
+				{"joinId": $clicked.attr('joinId')},
+				function(res) {
+					if(res.state == 'success') {
+						toastr['success'](res.data);
+					}
+					else {
+						toastr['error'](res.data, 'Fehler');
+					}
+				}
+			);
+			$clicked.closest('tr').fadeOut();
+		}
+
 		ev.preventDefault();
-		$.post(
-			"index.php?module=administrator|Kuwasys|Classes|DisplayClassDetails&\
-				ID={$otherClass.ID}",
-			$(this).attr('joinId'),
+		bootbox.confirm(
+			'Wollen sie den Benutzer wirklich von dem Kurs entfernen?',
 			function(res) {
-				console.log(res);
-			},
-			'json'
+				if(res) {
+					unregisterUser();
+				}
+			}
 		);
 	});
+
 
 });

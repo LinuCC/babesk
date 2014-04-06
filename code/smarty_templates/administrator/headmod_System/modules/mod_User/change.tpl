@@ -112,7 +112,7 @@
 
 
 {block name=content}
-<h3 class="moduleHeader">Benutzer änderrn</h3>
+<h3 class="moduleHeader">Benutzer ändern</h3>
 <form id="change-form" role="form" action="#" method="post">
 	<fieldset>
 		<legend>Persönliche Daten</legend>
