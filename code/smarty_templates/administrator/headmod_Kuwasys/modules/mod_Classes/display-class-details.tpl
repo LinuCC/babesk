@@ -75,23 +75,32 @@
 						</span>
 						<select name="status" class="form-control">
 							{foreach $statuses as $status}
-							<option value="{$status.ID}" >
-								{$status.translatedName}
-							</option>
+								<option value="{$status.ID}" >
+									{$status.translatedName}
+								</option>
 							{/foreach}
 						</select>
 					</div>
-					<div class="form-group input-group" data-toggle="tooltip">
-						<span class="input-group-addon">
-							<span class="icon icon-businesscard"></span>
-						</span>
-						<select name="status" class="form-control">
-							{foreach $statuses as $status}
-							<option value="{$status.ID}" >
-								{$status.translatedName}
-							</option>
-							{/foreach}
-						</select>
+					<div class="form-group">
+						<label>In einen anderen Kurs verschieben?</label>
+						<input type="checkbox" id="change-user-move-class-switch"
+						name="change-user-move-class-switch"
+						data-on-text="Ja" data-off-text="Nein"
+						data-on-color="info" data-off-color="default"/>
+					</div>
+					<div id="change-user-move-class-selector-container" hidden="true">
+						<div class="form-group input-group" data-toggle="tooltip" title="Kurs zu dem der Benutzer verschoben werden soll">
+							<span class="input-group-addon">
+								<span class="icon icon-listelements"></span>
+							</span>
+							<select name="classes" class="form-control">
+							</select>
+						</div>
+						<a class="btn btn-info" data-toggle="popover" href="#a"
+							title="Schüler in einen Kurs an einem anderen Tag verschieben"
+							data-content="Um den Schüler in einen Kurs zu verschieben, der an einem anderen Tag liegt, melden sie den Schüler in diesem Kurs ab und fügen sie den Schüler dem anderen Kurs hinzu.">
+							Kurse an anderen Tagen
+						</a>
 					</div>
 				</form>
 			</div>
@@ -129,6 +138,10 @@
 				<th>Beschreibung:</th>
 				<td>{$class.description}</td>
 			</tr>
+			<tr class="class-schoolyear" schoolyearid="{$class.schoolyearId}">
+				<th>Schuljahr:</th>
+				<td>{$class.schoolyearLabel}</td>
+			</tr>
 			<tr>
 				<th>Maximale Registrierungen:</th>
 				<td>{$class.maxRegistration}</td>
@@ -153,7 +166,7 @@
 				<td>{if $class.registrationEnabled}<b>Ja</b>{else}<b>Nein</b>{/if}
 				</td>
 			</tr>
-			<tr>
+			<tr class="class-category" categoryid="{$class.categoryId}">
 				<th>Veranstaltungstag:</th>
 				<td>{if
 					$class.unitTranslatedName}{$class.unitTranslatedName}{else}---{/if}</td>
@@ -181,7 +194,7 @@
 	</thead>
 	<tbody>
 		{if isset($users) && count($users)} {foreach $users as $user}
-		<tr>
+		<tr joinId="{$user.jointId}" >
 			{$rowsOfSamePerson = 1}
 			<td class="username" rowspan="{$rowsOfSamePerson}">
 			<!-- Link to UserDetails -->
@@ -191,12 +204,9 @@
 			</td>
 			<td class="user-status" rowspan="{$rowsOfSamePerson}"
 				statusid="{$user.statusId}" >
-				<!-- Link to "move user to another Class" -->
-				<a href="index.php?section=Kuwasys|Users&amp;action=moveUserByClass&amp;classIdOld={$class.ID}&amp;userId={$user.ID}">
-					{if $user.statusTranslated}
-						{$user.statusTranslated}
-					{else}Fehler!{/if}
-				</a>
+				{if $user.statusTranslated}
+					{$user.statusTranslated}
+				{else}Fehler!{/if}
 			</td>
 			<td rowspan="{$rowsOfSamePerson}">{$user.gradename}</td>
 			<td rowspan="{$rowsOfSamePerson}">{$user.email}</td>
@@ -238,14 +248,20 @@
 
 <link rel="stylesheet" href="{$path_css}/administrator/Kuwasys/Classes/display-class-details.css" type="text/css" />
 <link rel="stylesheet" href="{$path_js}/jquery-ui-smoothness.css" type="text/css" />
+<link rel="stylesheet" href="{$path_css}/bootstrap-switch.min.css" type="text/css" />
 
 {/block}
 
 
 {block name=js_include append}
 
+<script type="text/javascript">
+	var statuses = {json_encode($statuses)};
+</script>
+
 <script type="text/javascript" src="{$path_js}/jquery-ui-1.10.4.only-autocomplete.min.js"></script>
 <script type="text/javascript" src="{$path_js}/bootbox.min.js"></script>
 <script type="text/javascript" src="{$path_js}/administrator/Kuwasys/Classes/display-class-details.js"></script>
+<script type="text/javascript" src="{$path_js}/bootstrap-switch.min.js"></script>
 
 {/block}

@@ -578,8 +578,9 @@ class Classes extends Kuwasys {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'SELECT c.*, sy.label As schoolyearLabel,
-					cu.translatedName AS unitTranslatedName,
+				'SELECT c.*, cc.translatedName AS unitTranslatedName,
+					sy.ID AS schoolyearId, sy.label AS schoolyearLabel,
+					cc.ID AS categoryId,
 					GROUP_CONCAT(DISTINCT ct.name SEPARATOR "; ") AS classteacherName,
 					'. sprintf ($subQueryCountUsers, 'active') . ' AS activeCount,
 					'. sprintf ($subQueryCountUsers, 'waiting') . ' AS waitingCount,
@@ -587,7 +588,7 @@ class Classes extends Kuwasys {
 					'. sprintf ($subQueryCountUsers, 'request2') . ' AS request2Count
 				FROM KuwasysClasses c
 				LEFT JOIN SystemSchoolyears sy ON c.schoolyearId = sy.ID
-				LEFT JOIN KuwasysClassCategories cu ON c.unitId = cu.ID
+				LEFT JOIN KuwasysClassCategories cc ON c.unitId = cc.ID
 				LEFT JOIN (
 						SELECT ctic.ClassID AS classId,
 							CONCAT(ct.forename, " ", ct.name) AS name
@@ -619,6 +620,10 @@ class Classes extends Kuwasys {
 
 	protected function submoduleDisplayClassDetailsExecute() {
 
+		if(!isset($_GET['ID'])) {
+			$this->_interface->dieError('Keine ID angegeben!');
+		}
+
 		$class = $this->classesGetWithAdditionalReadableData($_GET['ID']);
 		$users = $this->usersByClassIdGet($_GET['ID']);
 		$users = $this->assignClassesOfSameClassunitToUsers(
@@ -629,7 +634,7 @@ class Classes extends Kuwasys {
 		$this->_smarty->assign('users', $users);
 		$this->_smarty->assign('statuses', $statuses);
 		$this->_smarty->display(
-			$this->_smartyModuleTemplatesPath . 'displayClassDetails.tpl'
+			$this->_smartyModuleTemplatesPath . 'display-class-details.tpl'
 		);
 	}
 
@@ -662,7 +667,7 @@ class Classes extends Kuwasys {
 			);
 
 			$stmt->execute(array(':id' => $classId));
-			return $stmt->fetchAll();
+			return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
 		} catch (Exception $e) {
 			$this->_interface->dieError(
@@ -722,7 +727,7 @@ class Classes extends Kuwasys {
 		try {
 			$stmt = $this->_pdo->query('SELECT * FROM KuwasysUsersInClassStatuses');
 			$stmt->execute();
-			return $stmt->fetchAll();
+			return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
 		} catch (PDOException $e) {
 			$this->_interface->dieError(_g('Error fetching the Statuses!'));
