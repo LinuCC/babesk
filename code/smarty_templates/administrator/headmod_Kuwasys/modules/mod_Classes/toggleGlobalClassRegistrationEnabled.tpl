@@ -22,25 +22,46 @@
 
 <fieldset class="smallContainer">
 	<legend>Formular</legend>
-	<form class="tableForm" action="index.php?module=administrator|Kuwasys|Classes|GlobalClassRegistration&amp;toggleFormSend" method="post">
-		<div>
-			<label for="toggleGlobalClassregistration">
+	<form class="form-horizontal" role="form" method="post"
+		action="index.php?module=administrator|Kuwasys|Classes|GlobalClassRegistration&amp;toggleFormSend">
+		<div class="form-group">
+			<label for="toggleGlobalClassregistration" class="col-sm-4">
 				Kursregistrierungen generell erlauben
 			</label>
 			<input id="toggleGlobalClassregistration" type="checkbox"
-				name="toggleGlobalClassregistration"
-				{if $enabled}checked="checked"{/if}>
+				name="toggleGlobalClassregistration" data-on-text="Ja"
+				data-off-text="Nein" data-on-color="success"
+				data-off-color="danger" {if $enabled}checked="checked"{/if}>
 		</div>
-		<div title="Erlaubt die Kursregistrierungen bei jedem einzelnen Kurs">
-			<label for="activateIndividualClassregistrations">
+		<div class="form-group" title="Erlaubt die Kursregistrierungen bei jedem einzelnen Kurs">
+			<label for="activateIndividualClassregistrations" class="col-sm-4">
 				Für alle Kurse in diesem Schuljahr die Kursregistrierungen aktivieren <br />(Überschreibt bei Aktivierung ihre Änderungen falls sie welche gemacht haben)
 			</label>
 			<input id="activateIndividualClassregistrations" type="checkbox"
-				name="activateIndividualClassregistrations"
-				{if $enabled}checked="checked"{/if}>
+				name="activateIndividualClassregistrations" data-on-text="Ja"
+				data-off-text="Nein" data-on-color="warning"
+				data-off-color="default">
 		</div>
-		<input type="submit" value="Absenden">
+		<input class="btn btn-primary" type="submit" value="Absenden">
 	</form>
 </fieldset>
 
+{/block}
+
+
+{block name=style_include append}
+<link rel="stylesheet" href="{$path_css}/bootstrap-switch.min.css" type="text/css" />
+{/block}
+
+
+{block name=js_include append}
+<script type="text/javascript" src="{$path_js}/bootstrap-switch.min.js">
+</script>
+
+<script>
+
+$('#toggleGlobalClassregistration').bootstrapSwitch();
+$('#activateIndividualClassregistrations').bootstrapSwitch();
+
+</script>
 {/block}
