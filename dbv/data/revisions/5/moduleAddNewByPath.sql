@@ -33,12 +33,13 @@ BEGIN
 			-- Check if directParentPath is the same as the selected Modules
 			-- Parent Path; This is because Modules are allowed to have the
 			-- same name
-			SELECT GROUP_CONCAT(parent.name SEPARATOR '/') INTO pathBuffer
+			SELECT GROUP_CONCAT(
+						parent.name ORDER BY parent.lft SEPARATOR '/'
+					) INTO pathBuffer
 				FROM Modules AS node,
 					Modules AS parent
 				WHERE node.lft BETWEEN parent.lft AND parent.rgt
-					AND node.ID = idBuffer
-				ORDER BY node.lft;
+					AND node.ID = idBuffer;
 
 			IF pathBuffer LIKE directParentPath THEN
 				SELECT idBuffer INTO resId;

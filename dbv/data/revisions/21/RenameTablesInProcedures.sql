@@ -88,7 +88,7 @@ CREATE PROCEDURE `moduleAddNewByPath` (
 	IN isEnabled int(1),
 	IN displayInMenu int(1),
 	IN executablePath text,
-	IN directParentName varchar(255) CHARSET utf8,
+	IN directParentName varchar(255),
 	IN directParentPath text,
 	OUT newModId int(11)
 	)
@@ -105,8 +105,8 @@ BEGIN
 
 	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
 	DECLARE EXIT HANDLER FOR SQLSTATE "42000"
-		SELECT CONCAT("Could not find the given parentModule ",
-			directParentName, " with its path ", directParentPath);
+		SELECT CONCAT('Could not find the given parentModule "',
+			directParentName, '" with its path "', directParentPath, '"');
 
 	OPEN moduleBuffer;
 
@@ -118,12 +118,13 @@ BEGIN
 			-- Check if directParentPath is the same as the selected Modules
 			-- Parent Path; This is because Modules are allowed to have the
 			-- same name
-			SELECT GROUP_CONCAT(parent.name SEPARATOR "/") INTO pathBuffer
+			SELECT GROUP_CONCAT(
+						parent.name ORDER BY parent.lft SEPARATOR '/'
+					) INTO pathBuffer
 				FROM SystemModules AS node,
 					SystemModules AS parent
 				WHERE node.lft BETWEEN parent.lft AND parent.rgt
-					AND node.ID = idBuffer
-				ORDER BY node.lft;
+					AND node.ID = idBuffer;
 
 			IF pathBuffer LIKE directParentPath THEN
 				SELECT idBuffer INTO resId;
@@ -134,6 +135,7 @@ BEGIN
 	UNTIL done END REPEAT;
 
 	CLOSE moduleBuffer;
+
 
 	-- Now add the new Module to the Parent
 	IF resId IS NOT NULL THEN

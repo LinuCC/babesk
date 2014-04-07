@@ -35,7 +35,7 @@ BEGIN
 				ORDER BY node.lft;
 
 			IF pathBuffer LIKE modulepath THEN
-				SELECT idBuffer INTO moduleid;
+				SELECT idBuffer INTO moduleId;
 				SELECT 1 INTO done;
 			END IF;
 
