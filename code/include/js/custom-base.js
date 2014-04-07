@@ -48,11 +48,7 @@ toastr.options = {
 	'hideMethod': 'fadeOut'
 }
 
-document.cookie='testcookie';
-var cookieEnabled = (
-	document.cookie.indexOf('testcookie')!=-1
-);
-if(!cookieEnabled) {
+if(!navigator.cookieEnabled) {
 	toastr['error']('Cookies sind nicht aktiviert! Diese Website benötigt Cookies um zu funktionieren.', 'Cookies');
 }
 
