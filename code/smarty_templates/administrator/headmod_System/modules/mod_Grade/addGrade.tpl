@@ -15,7 +15,7 @@ select, input.moduleFormulars {
 <h2 class='moduleHeader'>Eine Klasse hinzufügen</h2>
 <br>
 <div class='moduleFormulars'>
-<form action='index.php?module=administrator|Kuwasys|Grade|AddGrade' method='post'>
+<form action='index.php?module=administrator|System|Grade|AddGrade' method='post'>
 	<label>Jahrgangsstufe:<input type='text' name='gradelevel' class='moduleFormulars'></label> <br><br>
 	<label>Label:
 		<input type='text' name='gradelabel' class='moduleFormulars'>

@@ -56,6 +56,15 @@ gettext("Status");
 gettext("Class");
 
 /* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/mainmenu.tpl */
+gettext("Create Class-Summaries");
+
+/* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/mainmenu.tpl */
+gettext("Cancel");
+
+/* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/mainmenu.tpl */
+gettext("Create");
+
+/* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/mainmenu.tpl */
 gettext("Classregistrations are not allowed");
 
 /* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/mainmenu.tpl */
@@ -82,32 +91,17 @@ gettext("Create Class-Summaries");
 /* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/mainmenu.tpl */
 gettext("Change if Classregistrations are enabled");
 
-/* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/displayClassDetails.tpl */
-gettext("Assign a User to this Class");
-
-/* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/displayClassDetails.tpl */
-gettext("Assign a User to this Class");
-
-/* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/displayClassDetails.tpl */
+/* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/display-class-details.tpl */
 gettext("Please select the User and the Status of the Assignment");
 
-/* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/displayClassDetails.tpl */
-gettext("Username");
-
-/* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/displayClassDetails.tpl */
-gettext("Status");
-
-/* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/displayClassDetails.tpl */
-gettext("Assign User");
-
-/* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/displayClassDetails.tpl */
-gettext("Could not parse the Serveranswer!");
-
-/* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/displayClassDetails.tpl */
-gettext("Could not Assign the User to the Class!");
-
-/* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/displayClassDetails.tpl */
+/* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/display-class-details.tpl */
 gettext("Cancel");
+
+/* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/display-class-details.tpl */
+gettext("Add the user to the class");
+
+/* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/display-class-details.tpl */
+gettext("Assign a User to this Class");
 
 /* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/CsvImport/review.tpl */
 gettext("Name");
@@ -141,6 +135,9 @@ gettext("Help:");
 
 /* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/deleteClassConfirmation.tpl */
 gettext("Class-Deletion");
+
+/* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/deleteClassConfirmation.tpl */
+gettext("Really delete the class?");
 
 /* ../../../smarty_templates/administrator/headmod_Kuwasys/modules/mod_Classes/deleteClassConfirmation.tpl */
 gettext("Do you really want to delete the Class \"%1\"? All its data is inevitably lost when doing so!");

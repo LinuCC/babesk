@@ -1,10 +1,21 @@
 {extends file=$inh_path} {block name='content'}
 
-<form action='index.php?module=administrator|Kuwasys|Grade|AddGrade' method='post'>
-	<input type='submit' value='eine neue Klasse hinzufügen'>
-</form>
-<form action='index.php?module=administrator|Kuwasys|Grade|ShowGrades' method='post'>
-	<input type='submit' value='Die Klassen anzeigen'>
-</form>
+<h2 class="moduleHeader">Klassen</h2>
+
+<fieldset>
+	<legend>Allgemein</legend>
+	<ul class="submodulelinkList" >
+		<li>
+			<a href="index.php?module=administrator|System|Grade|AddGrade">
+				eine neue Klasse hinzufügen
+			</a>
+		</li>
+		<li>
+			<a href="index.php?module=administrator|System|Grade|ShowGrades">
+				Alle Klassen anzeigen
+			</a>
+		</li>
+	</ul>
+</fieldset>
 
 {/block}

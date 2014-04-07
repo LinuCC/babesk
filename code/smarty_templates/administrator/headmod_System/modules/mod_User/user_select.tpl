@@ -2,7 +2,7 @@
 
 <h2 class="moduleHeader">{t}Usersettings-Mainmenu{/t}</h2>
 
-<fieldset class="smallContainer">
+<fieldset>
 	<legend>
 		{t}General{/t}
 	</legend>
@@ -20,7 +20,7 @@
 	</ul>
 </fieldset>
 
-<fieldset class="smallContainer">
+<fieldset>
 	<legend>
 		{t}Bulk-Changes{/t}
 	</legend>

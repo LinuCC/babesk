@@ -15,7 +15,7 @@ select, input.moduleFormulars {
 <h2 class='moduleHeader'>Eine Klasse verändern</h2>
 <br>
 <div class='moduleFormulars'>
-<form action='index.php?module=administrator|Kuwasys|Grade|ChangeGrade&ID={$grade.ID}' method='post'>
+<form action='index.php?module=administrator|System|Grade|ChangeGrade&ID={$grade.ID}' method='post'>
 	<label>Label:
 		<input type='text' name='gradelabel' value='{$grade.label}' class='moduleFormulars'>
 	</label> <br><br>

@@ -2,12 +2,12 @@
 
 require_once 'GradeInterface.php';
 require_once PATH_INCLUDE . '/Module.php';
-require_once PATH_ADMIN . '/headmod_Kuwasys/Kuwasys.php';
+require_once PATH_ADMIN . '/headmod_System/System.php';
 
 /**
  * Grade-Module
  */
-class Grade extends Kuwasys {
+class Grade extends System {
 
 	///////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -310,7 +310,7 @@ class Grade extends Kuwasys {
 	///////////////////////////////////////////////////////////////////////
 
 	/**
-	 * @var KuwasysDataContainer
+	 * @var DataContainer
 	 */
 	protected $_dataContainer;
 
