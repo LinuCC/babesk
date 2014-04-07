@@ -9,8 +9,7 @@
 				"tags": [
 					"uniF7A8"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 114,
@@ -31,8 +30,7 @@
 				"tags": [
 					"uniF7D1"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 155,
@@ -53,8 +51,7 @@
 				"tags": [
 					"uniF64F"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 347,
@@ -75,8 +72,7 @@
 				"tags": [
 					"uniF676"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 386,
@@ -97,8 +93,7 @@
 				"tags": [
 					"uniF554"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 850,
@@ -119,8 +114,7 @@
 				"tags": [
 					"mxentry"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 1355,
@@ -144,8 +138,7 @@
 					"preferences",
 					"options"
 				],
-				"grid": 20,
-				"matchesSearch": false
+				"grid": 20
 			},
 			"properties": {
 				"id": 42,
@@ -166,8 +159,7 @@
 				"tags": [
 					"uniF478"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 906,
@@ -188,8 +180,7 @@
 				"tags": [
 					"darthvader"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 1050,
@@ -210,8 +201,7 @@
 				"tags": [
 					"plus"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 3,
@@ -232,8 +222,7 @@
 				"tags": [
 					"minus"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 17,
@@ -254,8 +243,7 @@
 				"tags": [
 					"uniF479"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 907,
@@ -276,8 +264,7 @@
 				"tags": [
 					"uniF551"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 847,
@@ -298,8 +285,7 @@
 				"tags": [
 					"uniF552"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 848,
@@ -320,8 +306,7 @@
 				"tags": [
 					"info"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 2023,
@@ -342,8 +327,7 @@
 				"tags": [
 					"quoteup"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 2042,
@@ -364,8 +348,7 @@
 				"tags": [
 					"quotedown"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 2043,
@@ -390,8 +373,7 @@
 					"payment",
 					"ecommerce"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 57,
@@ -412,8 +394,7 @@
 				"tags": [
 					"businesscard2"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 1544,
@@ -434,8 +415,7 @@
 				"tags": [
 					"uptime"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 1255,
@@ -456,8 +436,7 @@
 				"tags": [
 					"uniF5E5"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 493,
@@ -478,8 +457,7 @@
 				"tags": [
 					"uniF5CE"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 634,
@@ -500,8 +478,7 @@
 				"tags": [
 					"uniF5CF"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 635,
@@ -522,8 +499,7 @@
 				"tags": [
 					"uniF5D1"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 637,
@@ -544,8 +520,7 @@
 				"tags": [
 					"clock"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 1761,
@@ -566,8 +541,7 @@
 				"tags": [
 					"friends"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 1541,
@@ -593,8 +567,7 @@
 					"talk",
 					"member"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 112,
@@ -620,8 +593,7 @@
 					"members",
 					"community"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 113,
@@ -645,8 +617,7 @@
 					"private",
 					"encrypted"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 136,
@@ -667,8 +638,7 @@
 				"tags": [
 					"email2"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 1543,
@@ -693,8 +663,7 @@
 					"time",
 					"day"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 78,
@@ -719,8 +688,7 @@
 					"support",
 					"call"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 60,
@@ -744,8 +712,7 @@
 					"lookup",
 					"find"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 127,
@@ -766,8 +733,7 @@
 				"tags": [
 					"uniF73F"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 287,
@@ -788,8 +754,7 @@
 				"tags": [
 					"uniF4C2"
 				],
-				"grid": 16,
-				"matchesSearch": false
+				"grid": 16
 			},
 			"properties": {
 				"id": 704,
@@ -801,6 +766,48 @@
 			},
 			"setIdx": 0,
 			"iconIdx": 704
+		},
+		{
+			"icon": {
+				"paths": [
+					"M992 576q13 0 22.5 9.5t9.5 22.5v64q0 13-9.5 22.5t-22.5 9.5h-32v128q0 27-18.5 45.5t-45.5 18.5h-832q-27 0-45.5-18.5t-18.5-45.5v-640q0-27 18.5-45.5t45.5-18.5h832q26 0 45 19t19 45v128h32q13 0 22.5 9.5t9.5 22.5v64q0 13-9.5 22.5t-22.5 9.5h-32v128h32zM768 256h-64v32q0 13 9.5 22.5t22.5 9.5 22.5-9.5 9.5-22.5v-32zM896 288q0-13-9.5-22.5t-22.5-9.5h-32v64q0 27-18.5 45.5t-45.5 18.5h-64q-27 0-45.5-19t-18.5-45v-64h-544q-13 0-22.5 9.5t-9.5 22.5v448q0 13 9.5 22.5t22.5 9.5h672v-64h-64q-27 0-45.5-18.5t-18.5-45.5v-128q0-27 18.5-45.5t45.5-18.5h64q26 0 45 18.5t19 45.5v256h32q13 0 22.5-9.5t9.5-22.5v-448zM768 608v-64q0-13-9.5-22.5t-22.5-9.5-22.5 9.5-9.5 22.5v64q0 13 9.5 22.5t22.5 9.5 22.5-9.5 9.5-22.5zM544 704q-13 0-22.5-9.5t-9.5-22.5v-96h-64q-27 0-45.5-18.5t-18.5-45.5v-160q0-13 9.5-22.5t22.5-9.5 22.5 9.5 9.5 22.5v128q0 13 9.5 22.5t22.5 9.5 22.5-9.5 9.5-22.5v-128q0-13 9.5-22.5t22.5-9.5 22.5 9.5 9.5 22.5v320q0 13-9.5 22.5t-22.5 9.5zM256 704h-64q-27 0-45.5-18.5t-18.5-45.5v-256q0-27 18.5-45.5t45.5-18.5h64q27 0 45.5 18.5t18.5 45.5v256q0 27-18.5 45.5t-45.5 18.5zM256 416q0-13-9.5-22.5t-22.5-9.5-22.5 9.5-9.5 22.5v192q0 13 9.5 22.5t22.5 9.5 22.5-9.5 9.5-22.5v-192z"
+				],
+				"tags": [
+					"uniF656"
+				],
+				"grid": 16
+			},
+			"properties": {
+				"id": 354,
+				"order": 36,
+				"prevSize": 32,
+				"code": 58915,
+				"name": "counter",
+				"ligatures": ""
+			},
+			"setIdx": 0,
+			"iconIdx": 354
+		},
+		{
+			"icon": {
+				"paths": [
+					"M832 1024l-320-224-320 224q-27 0-45.5-18.5t-18.5-45.5v-832q0-53 37.5-90.5t90.5-37.5h512q53 0 90.5 37.5t37.5 90.5v832q0 26-19 45t-45 19z"
+				],
+				"tags": [
+					"uniF4CF"
+				],
+				"grid": 16
+			},
+			"properties": {
+				"id": 717,
+				"order": 37,
+				"prevSize": 32,
+				"code": 58916,
+				"name": "bookmark",
+				"ligatures": ""
+			},
+			"setIdx": 0,
+			"iconIdx": 717
 		}
 	],
 	"height": 1024,
@@ -843,6 +850,7 @@
 		"showQuickUse": true,
 		"quickUsageToken": {
 			"UntitledProject1": "YjZkMmNiY2ZiOTdlYmY0M2NmNGIzMDc0M2UwMWFmMWIjMiMxMzk0ODIzNzc3IyMj"
-		}
+		},
+		"search": ""
 	}
 }

@@ -50,6 +50,9 @@
 .icon-Schbas:before {
 	content: "\e603";
 }
+.icon-counter:before {
+	content: "\e623";
+}
 .icon-PVau:before {
 	content: "\e604";
 }
@@ -67,6 +70,9 @@
 }
 .icon-listelements:before {
 	content: "\e622";
+}
+.icon-bookmark:before {
+	content: "\e624";
 }
 .icon-addbookmark:before {
 	content: "\e60c";

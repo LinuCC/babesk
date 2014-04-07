@@ -1,38 +1,45 @@
-{extends file=$inh_path}
-{block name='content'}
-
-<style type='text/css'  media='all'>
-div.moduleFormulars {
-	width:350px;
-	margin:0 auto;
-}
-
-select, input.moduleFormulars {
-	float:right;
-}
-</style>
+{extends file=$inh_path}{block name='content'}
 
 <h2 class='moduleHeader'>Eine Klasse hinzufügen</h2>
-<br>
-<div class='moduleFormulars'>
-<form action='index.php?module=administrator|System|Grade|AddGrade' method='post'>
-	<label>Jahrgangsstufe:<input type='text' name='gradelevel' class='moduleFormulars'></label> <br><br>
-	<label>Label:
-		<input type='text' name='gradelabel' class='moduleFormulars'>
-	</label> <br /><br />
-	{if count($schooltypes)}
-	<label> Schultyp:
-		<select name='schooltype' size='1'>
-		{foreach $schooltypes as $schooltype}
-		<option value='{$schooltype.ID}'>
-			{$schooltype.name}
-		</option>
-		{/foreach}
+
+<form role="form" action="index.php?module=administrator|System|Grade|AddGrade"
+	method="post">
+	<div class="row">
+		<div class="input-group form-group col-sm-6">
+			<span class="input-group-addon">
+				<span class="icon icon-counter"></span>
+			</span>
+			<input type="text" name="gradelevel" placeholder="Jahrgangsstufe"
+				class="form-control">
+		</div>
+		<div class="input-group form-group col-sm-6">
+			<span class="input-group-addon">
+				<span class="icon icon-bookmark"></span>
+			</span>
+			<input type="text" name="gradelabel" placeholder="Label"
+				class="form-control">
+		</div>
+	</div>
+	<div class="row">
+		<div class="input-group form-group col-sm-6">
+		<span class="input-group-addon">
+			<span class="icon icon-calendar"></span>
+		</span>
+		<select class="form-control" name='schooltype' size='1'>
+			{foreach $schooltypes as $schooltype}
+				<option value='{$schooltype.ID}'>
+					{$schooltype.name}
+				</option>
+			{/foreach}
 		</select>
-	</label>
-	{/if}
-	<br><br>
-	<input type='submit' value='Hinzufügen'>
+		</div>
+	</div>
+	<a class="btn btn-default"
+		href="index.php?module=administrator|System|Grade">
+		Abbrechen
+	</a>
+	<button type="submit" class="btn btn-primary pull-right">
+		Klasse hinzufügen
+	</button>
 </form>
-</div>
 {/block}
