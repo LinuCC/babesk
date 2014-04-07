@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-04-07 17:44+0100\n"
-"PO-Revision-Date: 2014-04-07 17:45+0100\n"
+"PO-Revision-Date: 2014-04-07 19:16+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: de\n"
@@ -1912,7 +1912,7 @@ msgstr "Keine Klassen gefunden"
 
 #: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:173
 msgid "The Grade was successfully deleted"
-msgstr "Die Klassen wurden erfolgreich gelöscht"
+msgstr "Die Klasse wurde erfolgreich gelöscht"
 
 #: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:188
 #, php-format

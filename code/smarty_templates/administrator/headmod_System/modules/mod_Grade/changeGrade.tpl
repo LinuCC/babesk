@@ -1,47 +1,50 @@
-{extends file=$inh_path}
-{block name='content'}
-
-<style type='text/css'  media='all'>
-div.moduleFormulars {
-	width:350px;
-	margin:0 auto;
-}
-
-select, input.moduleFormulars {
-	float:right;
-}
-</style>
+{extends file=$inh_path}{block name='content'}
 
 <h2 class='moduleHeader'>Eine Klasse verändern</h2>
-<br>
-<div class='moduleFormulars'>
-<form action='index.php?module=administrator|System|Grade|ChangeGrade&ID={$grade.ID}' method='post'>
-	<label>Label:
-		<input type='text' name='gradelabel' value='{$grade.label}' class='moduleFormulars'>
-	</label> <br><br>
-	<label>Jahrgangsstufe:<input type='text' name='gradelevel' value='{$grade.gradelevel}' class='moduleFormulars'></label> <br><br>
-	{if count($schooltypes)}
-	<label>
-		Schultyp:
-		<select name='schooltype' size='1'>
-		<option value='0'>
-			Kein Schultyp
-		</option>
-		{foreach $schooltypes as $schooltype}
-		{var_dump($schooltype.ID)}
-		{var_dump($grade.schooltypeId)}
-		<option value='{$schooltype.ID}'
-			{if $schooltype.ID == $grade.schooltypeId}
-				selected='selected'
-			{/if}>
-			{$schooltype.name}
-		</option>
-		{/foreach}
+
+<form role="form" action='index.php?module=administrator|System|Grade|ChangeGrade&amp;ID={$grade.ID}'
+	method="post">
+	<div class="row">
+		<div class="input-group form-group col-sm-6">
+			<span class="input-group-addon">
+				<span class="icon icon-counter"></span>
+			</span>
+			<input type="text" name="gradelevel" placeholder="Jahrgangsstufe"
+				class="form-control" value="{$grade.gradelevel}">
+		</div>
+		<div class="input-group form-group col-sm-6">
+			<span class="input-group-addon">
+				<span class="icon icon-bookmark"></span>
+			</span>
+			<input type="text" name="gradelabel" placeholder="Label"
+				class="form-control" value="{$grade.label}">
+		</div>
+	</div>
+	<div class="row">
+		<div class="input-group form-group col-sm-6">
+		<span class="input-group-addon">
+			<span class="icon icon-calendar"></span>
+		</span>
+		<select class="form-control" name='schooltype' size='1'>
+			<option value='0'> Kein Schultyp </option>
+			{foreach $schooltypes as $schooltype}
+				<option value='{$schooltype.ID}'
+					{if $schooltype.ID == $grade.schooltypeId}
+						selected='selected'
+					{/if}>
+					{$schooltype.name}
+				</option>
+			{/foreach}
 		</select>
-	</label>
-	<br><br>
-	{/if}
-	<input type='submit' value='Ändern'>
+		</div>
+	</div>
+	<a class="btn btn-default"
+		href="index.php?module=administrator|System|Grade|ShowGrades">
+		Abbrechen
+	</a>
+	<button type="submit" class="btn btn-primary pull-right">
+		Klasse ändern
+	</button>
 </form>
-</div>
+
 {/block}
