@@ -95,7 +95,7 @@
 			</a>
 		</li>
 		<li>
-			<a id="class-summary-create" data-toggle="modal"
+			<a id="class-summary-create" data-toggle="modal" href="#"
 				data-target="#class-summary-modal">
 					{t}Create Class-Summaries{/t}
 			</a>

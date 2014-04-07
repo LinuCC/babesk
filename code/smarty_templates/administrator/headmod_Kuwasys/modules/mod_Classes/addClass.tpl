@@ -5,24 +5,26 @@
 <form action='index.php?module=administrator|Kuwasys|Classes|AddClass'
 	role="form" method='post'>
 
-	<div class="form-group input-group" title="Kursname">
+	<div class="form-group input-group" data-toggle="tooltip" title="Kursname">
 		<span class="input-group-addon">
 			<span class="icon icon-businesscard"></span>
 		</span>
 		<input class="form-control" type="text" name="label"
 			placeholder="Kursname" required />
 	</div>
-	<div class="form-group input-group" title="Kursbeschreibung">
+	<div class="form-group input-group" data-toggle="tooltip"
+		title="Kursbeschreibung">
 		<span class="input-group-addon">
 			<span class="icon icon-clipboard"></span>
 		</span>
 		<textarea class="form-control" type="text" name="description"
-			placeholder="Kursbeschreibung" required></textarea>
+			placeholder="Kursbeschreibung" rows="3" required></textarea>
 	</div>
 
 	<div class="row">
 		<div class="col-sm-6">
-			<div class="form-group input-group" title="Maximale Registrierungen">
+			<div class="form-group input-group" data-toggle="tooltip"
+				title="Maximale Registrierungen">
 				<span class="input-group-addon">
 					<span class="icon icon-listelements"></span>
 				</span>
@@ -32,7 +34,7 @@
 		</div>
 		<div class="col-sm-6">
 			<div class="form-group input-group"
-				title="Zu welchem Schuljahr der Kurs gehört">
+				data-toggle="tooltip" title="Zu welchem Schuljahr der Kurs gehört">
 				<span class="input-group-addon">
 					<span class="icon icon-calendar"></span>
 				</span>
@@ -52,7 +54,7 @@
 	<div class="row">
 		<div class="col-sm-6">
 			<div class="form-group input-group"
-				title="Der Veranstaltungszeitpunkt des Kurses">
+				data-toggle="tooltip" title="Der Veranstaltungszeitpunkt des Kurses">
 				<span class="input-group-addon">
 					<span class="icon icon-clock"></span>
 				</span>
