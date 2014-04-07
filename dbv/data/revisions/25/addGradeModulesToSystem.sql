@@ -4,32 +4,37 @@ CALL moduleAddNewByPath(
 	"System", "root/administrator/System",
 	@newModuleId
 );
-INSERT INTO GroupModuleRights (groupId, moduleId) VALUES (3, @newModuleId);
+INSERT INTO SystemGroupModuleRights (groupId, moduleId)
+	VALUES (3, @newModuleId);
 CALL moduleAddNewByPath(
 	"ShowGrades", 1, 1,
 	"",
 	"Grade", "root/administrator/System/Grade",
 	@newModuleId
 );
-INSERT INTO GroupModuleRights (groupId, moduleId) VALUES (3, @newModuleId);
+INSERT INTO SystemGroupModuleRights (groupId, moduleId)
+	VALUES (3, @newModuleId);
 CALL moduleAddNewByPath(
 	"AddGrade", 1, 1,
 	"",
 	"Grade", "root/administrator/System/Grade",
 	@newModuleId
 );
-INSERT INTO GroupModuleRights (groupId, moduleId) VALUES (3, @newModuleId);
+INSERT INTO SystemGroupModuleRights (groupId, moduleId)
+	VALUES (3, @newModuleId);
 CALL moduleAddNewByPath(
 	"DeleteGrade", 1, 1,
 	"",
 	"Grade", "root/administrator/System/Grade",
 	@newModuleId
 );
-INSERT INTO GroupModuleRights (groupId, moduleId) VALUES (3, @newModuleId);
+INSERT INTO SystemGroupModuleRights (groupId, moduleId)
+	VALUES (3, @newModuleId);
 CALL moduleAddNewByPath(
 	"ChangeGrade", 1, 1,
 	"",
 	"Grade", "root/administrator/System/Grade",
 	@newModuleId
 );
-INSERT INTO GroupModuleRights (groupId, moduleId) VALUES (3, @newModuleId);
+INSERT INTO SystemGroupModuleRights (groupId, moduleId)
+	VALUES (3, @newModuleId);
