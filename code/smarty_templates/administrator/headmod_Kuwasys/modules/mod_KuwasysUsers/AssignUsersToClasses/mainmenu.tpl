@@ -36,18 +36,13 @@
 	</ul>
 </fieldset>
 
-
-<div id="confirmReset" title="{t}Really start a new Assignment-Process?{/t}">
-  <p>{t}If you have already started an Assignment-Process, the Data will be inevitably lost. Are you sure?{/t}</p>
-</div>
-
-<div id="confirmAssignment" title="Zuweisungen durchführen?">
-  <p>Wenn sie die Zuweisungen durchführen, werden die in diesem Modul Temporär durchgeführten Veränderungen auf die Nutzter angewendet und die Nutzer sind dann offiziell in den hier zugewiesenen Kursen. Kleine Veränderungen können aber auch im Kurs-Modul nachher noch durchgeführt werden.</p>
-</div>
+{/block}
 
 
-<script src="../smarty/templates/administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/mainmenu.js">
+{block name=js_include append}
+
+<script src="{$path_js}/administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/mainmenu.js">
 </script>
-
+<script type="text/javascript" src="{$path_js}/bootbox.min.js"></script>
 
 {/block}
