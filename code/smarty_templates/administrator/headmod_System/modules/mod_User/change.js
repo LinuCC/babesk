@@ -4,6 +4,8 @@ $(document).ready(function() {
 
 	function changeUser() {
 
+		bootbox.setDefaults({locale: 'de'});
+
 		$('#change-form [title]').tooltip();
 		$('#issoli').bootstrapSwitch();
 		$('#account-locked').bootstrapSwitch();

@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+	bootbox.setDefaults({locale: 'de'});
+
 	mainmenu();
 
 	function mainmenu() {
@@ -7,7 +9,14 @@ $(document).ready(function() {
 			var categoryId = $(this).attr('catId');
 			var $toDel = $(this).closest('.category-panel');
 			checkHasClassWithRequestStatus($toDel);
-			unregisterAll(categoryId, $toDel);
+			bootbox.confirm(
+				'Willst du dich wirklich von den Kursen abmelden?',
+				function(res) {
+					if(res) {
+						unregisterAll(categoryId, $toDel);
+					}
+				}
+			);
 		});
 
 		function checkHasClassWithRequestStatus($categoryPanel) {
