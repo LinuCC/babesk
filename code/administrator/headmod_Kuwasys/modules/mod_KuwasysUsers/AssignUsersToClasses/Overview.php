@@ -45,7 +45,7 @@ class Overview extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses 
 				FROM KuwasysTemporaryRequestsAssign ra
 				JOIN KuwasysClasses c ON ra.classId = c.ID
 				JOIN KuwasysClassCategories cu ON c.unitId = cu.ID
-				GROUP BY ra.classId ORDER BY cu.ID');
+				GROUP BY ra.classId ORDER BY usercount DESC');
 
 			return $data;
 
