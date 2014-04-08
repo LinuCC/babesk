@@ -174,7 +174,9 @@ class Login {
 				_g('User not found or incorrect password')
 			);
 			$this->addLoginTryToUser();
-			$this->dieShowLoginForm();
+			$this->dieShowLoginForm(
+				_g('User not found or incorrect password'), true
+			);
 		}
 	}
 
