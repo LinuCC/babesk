@@ -5,14 +5,16 @@
 <form role="form" action='index.php?module=administrator|System|Grade|ChangeGrade&amp;ID={$grade.ID}'
 	method="post">
 	<div class="row">
-		<div class="input-group form-group col-sm-6">
+		<div class="input-group form-group col-sm-6" data-toggle="tooltip"
+				title="Jahrgangsstufe">
 			<span class="input-group-addon">
 				<span class="icon icon-counter"></span>
 			</span>
 			<input type="text" name="gradelevel" placeholder="Jahrgangsstufe"
 				class="form-control" value="{$grade.gradelevel}">
 		</div>
-		<div class="input-group form-group col-sm-6">
+		<div class="input-group form-group col-sm-6" data-toggle="tooltip"
+				title="Label">
 			<span class="input-group-addon">
 				<span class="icon icon-bookmark"></span>
 			</span>
@@ -21,7 +23,8 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="input-group form-group col-sm-6">
+		<div class="input-group form-group col-sm-6" data-toggle="tooltip"
+				title="Schultyp">
 		<span class="input-group-addon">
 			<span class="icon icon-calendar"></span>
 		</span>
