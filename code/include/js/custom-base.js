@@ -53,7 +53,7 @@ if(!navigator.cookieEnabled) {
 }
 
 $(document).ready(function() {
-	if(typeof bootbox != undefined) {
+	if(typeof bootbox != undefined && typeof bootbox != "undefined") {
 		bootbox.setDefaults({locale: 'de'});
 	}
 });
