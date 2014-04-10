@@ -5,24 +5,40 @@
 {literal}
 
 <script type="text/template" id="logRowTemplate">
-<tr>
-	<td><%= ID %></td>
-	<td><%= message %></td>
-	<td><%= categoryId %></td>
-	<td><%= severityId %></td>
-	<td><%= date %></td>
-	<td>
-		<button class="btn btn-xs btn-default log-additional-data-display"
-			data-target="#log-row-additionaldata-<%= ID %>">
-			Daten anzeigen
-		</button>
-		<div id="log-row-additionaldata-<%= ID %>" hidden style="display: none">
-			<div class="">
-				<%= additionalData %>
+	<tr>
+		<td><%= ID %></td>
+		<td><%= message %></td>
+		<td><%= categoryId %></td>
+		<td><%= severityId %></td>
+		<td><%= date %></td>
+		<td>
+			<button class="btn btn-xs btn-default log-additional-data-display"
+				data-target="#log-row-additionaldata-<%= ID %>">
+				Daten anzeigen
+			</button>
+			<div id="log-row-additionaldata-<%= ID %>" hidden style="display: none">
+				<div class="">
+					<%= additionalData %>
+				</div>
 			</div>
-		</div>
-	</td>
-</tr>
+		</td>
+	</tr>
+</script>
+
+<script type="text/template" id="logPaginationTemplate">
+
+	<li <% if(activePage == 1){ %> class="disabled" <% } %> >
+		<a pagenum="<%= 1 %>" href="#">&laquo;</a>
+	</li>
+	<% for(var i = minPage; i <= maxPage; i++) { %>
+		<li <% if(activePage == i){ %> class="active" <% } %> >
+			<a pagenum="<%= i %>" href="#"><%= i %></a>
+		</li>
+	<% } %>
+	<li <% if(activePage == pageCount){ %> class="disabled" <% } %> >
+		<a pagenum="<%= pageCount %>" href="#">&raquo;</a>
+	</li>
+
 </script>
 
 {/literal}
@@ -71,26 +87,15 @@
 	</div>
 	<div class="col-sm-8 col-md-6 text-center">
 		<ul id="page-select" class="pagination">
-			<li><a href="#">0</a></li>
-			<li><a href="#">1</a></li>
-			<li><a href="#">2</a></li>
-			<li><a href="#">3</a></li>
-			<li><a href="#">4</a></li>
-			<li><a href="#">5</a></li>
-			<li><a href="#">6</a></li>
-			<li><a href="#">7</a></li>
-			<li><a href="#">8</a></li>
-			<li><a href="#">9</a></li>
-			<li><a href="#">10</a></li>
 		</ul>
-			<div class="input-group logs-per-page-container pull-right"
-				title="{t}Rows per page{/t}" data-toggle="tooltip" >
-				<span class="input-group-addon">
-					<span class="icon icon-Settings"></span>
-				</span>
-				<input id="logs-per-page" type="text" maxlength="3"
-				class="form-control" value="10" />
-			</div>
+		<div class="input-group logs-per-page-container pull-right"
+			title="{t}Rows per page{/t}" data-toggle="tooltip" >
+			<span class="input-group-addon">
+				<span class="icon icon-Settings"></span>
+			</span>
+			<input id="logs-per-page" type="text" maxlength="3"
+			class="form-control" value="10" />
+		</div>
 	</div>
 </div>
 

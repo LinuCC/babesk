@@ -15,7 +15,11 @@ class ShowLogs extends \administrator\System\Logs {
 		$this->entryPoint($dataContainer);
 		if(isset($_POST['getData'])) {
 			$this->_interface->dieAjax(
-				'success', array('logs' => $this->logsFetch())
+				'success',
+				array(
+					'logs' => $this->logsFetch(),
+					'count' => $this->logsCountFetch()
+				)
 			);
 		}
 		else {
@@ -37,12 +41,16 @@ class ShowLogs extends \administrator\System\Logs {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'SELECT * FROM SystemLogs LIMIT 0, :logsPerPage'
+				'SELECT * FROM SystemLogs LIMIT :startLog, :logsPerPage'
 			);
+
 			$_POST['logsPerPage'] = (int) $_POST['logsPerPage'];
 			$stmt->bindParam(
 				'logsPerPage', $_POST['logsPerPage'], \PDO::PARAM_INT
 			);
+			$startLog = ($_POST['activePage'] - 1) * $_POST['logsPerPage'];
+			$stmt->bindParam('startLog', $startLog, \PDO::PARAM_INT);
+
 			$stmt->execute();
 			return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -51,6 +59,24 @@ class ShowLogs extends \administrator\System\Logs {
 				'Moderate', Null, json_encode(array('msg' => $e->getMessage())));
 			$this->_interface->dieAjax(
 				'error', 'Konnte die Logs nicht abrufen'
+			);
+		}
+	}
+
+	public function logsCountFetch() {
+
+		try {
+			$stmt = $this->_pdo->prepare(
+				'SELECT COUNT(*) FROM SystemLogs'
+			);
+			$stmt->execute();
+			return $stmt->fetchColumn();
+
+		} catch (\PDOException $e) {
+			$this->_logger->log('error counting the logs',
+				'Moderate', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieAjax(
+				'error', 'Konnte die Logs nicht zählen'
 			);
 		}
 	}
