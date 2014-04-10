@@ -73,9 +73,8 @@
 
 
 {block name=html_snippets append}
-{* Its easier to just copy this div if admin adds a schoolyear to the new user
- *}
-<div id="grade-schoolyear-snippet" hidden>
+
+<script type="text/template" id="grade-schoolyear-snippet">
 	<div class="input-group form-group">
 		<span class="input-group-addon">
 			<span class="icon icon-calendar"></span>
@@ -107,7 +106,7 @@
 			</a>
 		</span>
 	</div>
-</div>
+</script>
 {/block}
 
 

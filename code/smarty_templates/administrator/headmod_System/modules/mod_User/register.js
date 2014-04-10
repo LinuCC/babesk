@@ -27,9 +27,10 @@ $(document).ready(function() {
 			$(this).children('.icon').toggleClass('icon-plus icon-minus');
 		});
 
-		$('.grade-schoolyear-remove').on('click', function(ev) {
-			$(this).closest('.input-group').fadeOut({complete: function() {
-				$(this).closest('.input-group').remove();
+		$('#grade-schoolyears').on('click', '.grade-schoolyear-remove',
+			function(ev) {
+				$(this).closest('.input-group').fadeOut({complete: function() {
+					$(this).closest('.input-group').remove();
 				}
 			});
 		});
