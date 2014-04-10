@@ -347,3 +347,10 @@ ul.submodulelinkList li a:hover {
 ul.ui-autocomplete {
 	z-index: 1151 !important;
 }
+
+/* When modal opens, dont margin for the scrollbar - its uglier moving the whole site to the left than the scrollbar covering some of it */
+body.modal-open,
+.modal-open .navbar-fixed-top,
+.modal-open .navbar-fixed-bottom {
+	margin-right: 0px;
+}
