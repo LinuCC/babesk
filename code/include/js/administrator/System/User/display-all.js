@@ -213,7 +213,7 @@ $(document).ready(function() {
 		function userDeletePdfEntryAdd(pdfId, forename, name) {
 
 			$contentParent = $('#deleted-user-pdf-form');
-			$newEntry = $('#deleted-user-pdf-template').clone();
+			// $newEntry = $('#deleted-user-pdf-template').clone();
 
 			//if there is the yet-no-users-deleted Message, remove it
 			if($contentParent.find('p.no-users-deleted').length != 0) {
@@ -222,14 +222,17 @@ $(document).ready(function() {
 					.removeClass('btn-default')
 					.addClass('btn-warning');
 			}
-			$newEntry.find('a').attr(
-				'href',
-				'index.php?module=administrator|System|User\
-					&showPdfOfDeletedUser&pdfId=' + pdfId
-			).attr('target', '_blank');
-			$newEntry.find('label').html(forename + ' ' + name);
 
-			$contentParent.append($newEntry.html());
+			var newEntryHtml = microTmpl(
+				$('#deleted-user-pdf-template').html(),
+				{
+					"pdfId": pdfId,
+					"forename": forename,
+					"name": name
+				}
+			);
+
+			$contentParent.append(newEntryHtml);
 		}
 
 		function pageSelectorUpdate(pagecount) {
@@ -289,21 +292,10 @@ $(document).ready(function() {
 		 * Builds the list allowing the users to choose which columns to display
 		 */
 		function columnToggleDisplayListBuild() {
-			var $colTpl = $('#column-show-template div.form-group');
 			var $colList = $('#column-show-form');
 			$.each(columns, function(ind, el) {
-				var $col = $colTpl.clone();
-				$col.children('label').attr('for', 'column-show-' + el.name)
-					.html(el.displayName);
-				$checkbox = $col.children('div input');
-				$checkbox.attr('id', 'column-show-' + el.name);
-				if(el.isDisplayed) {
-					$checkbox.prop('checked', true);
-				}
-				if(el.name == 'ID') {
-					$checkbox.prop('disabled', true);
-				}
-				$colList.append($col);
+				var colHtml = microTmpl($('#column-show-template').html(), el);
+				$colList.append(colHtml);
 			});
 		}
 
@@ -397,21 +389,17 @@ $(document).ready(function() {
 				headRow += '</tr>';
 				$('#user-table thead').append(headRow);
 
-				$settingsColTpl = $('#list-user-settings-template');
 				//Sets the TableBody
 				$.each(userData, function(index, user) {
 					row = String('<tr id="user_{0}">').format(user.ID);
 					$.each(user, function(colIndex, column) {
 						row += '<td>' + column + '</td>';
 					});
-					$settingsCol = $settingsColTpl.clone();
-					$settingsCol.children('a.user-action-settings')
-						.attr('href', 'index.php?module=administrator|System|User|\
-							DisplayChange&ID=' + user.ID)
-						.attr('title', 'Nutzereinstellungen');
-					$settingsCol.children('a.user-action-delete')
-						.attr('title', 'Nutzer löschen');
-					row += '<td>' + $settingsCol.html() + '</td>';
+					var settingsColHtml = microTmpl(
+						$('#list-user-settings-template').html(),
+						user
+					);
+					row += settingsColHtml;
 					row += '</tr>';
 					$('#user-table tbody').append(row);
 					//refresh tooltips

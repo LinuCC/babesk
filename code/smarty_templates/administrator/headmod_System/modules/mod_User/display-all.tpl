@@ -1,31 +1,44 @@
 {extends file=$UserParent}
 
 {block name=html_snippets append}
-<div id="column-show-template" hidden>
+
+<script type="text/template" id="column-show-template">
 	<div class="form-group">
-		<label class="col-sm-6 control-label"></label>
+		<label class="col-sm-6 control-label" for="column-show-<%= name %>">
+			<%= displayName %>
+		</label>
 		<input type="checkbox" class="column-switch" data-on-text="Ja"
 		data-off-text="Nein" data-size="mini" data-on-color="info"
-		data-off-color="default" />
+		data-off-color="default" id="column-show-<%= name %>"
+		<% if(isDisplayed){ %> checked <% } %>
+		<% if(name == "ID"){ %> disabled <% } %> />
 	</div>
-</div>
+</script>
 
-<div id="list-user-settings-template" hidden>
-	<a class="btn btn-xs btn-info user-action-settings" href="#">
-		<span class="icon icon-Settings"></span>
-	</a>
-	<a class="btn btn-xs btn-danger user-action-delete" href="#">
-		<span class="icon icon-error"></span>
-	</a>
-</div>
+<script type="text/template" id="list-user-settings-template">
+	<td>
+		<a class="btn btn-xs btn-info user-action-settings"
+			href="index.php?module=administrator|System|User|DisplayChange&ID=<%= ID %>" title="Nutzereinstellungen"
+			>
+			<span class="icon icon-Settings"></span>
+		</a>
+		<a class="btn btn-xs btn-danger user-action-delete" href="#"
+			title="Nutzer löschen">
+			<span class="icon icon-error"></span>
+		</a>
+	</td>
+</script>
 
-<div id="deleted-user-pdf-template" hidden>
+<script type="text/template" id="deleted-user-pdf-template">
 	<div class="form-group">
-		<label class="col-sm-6 control-label"></label>
-		<a class="btn btn-info">Pdf abrufen</a>
+		<label class="col-sm-6 control-label"><%= forename %> <%= name %></label>
+		<a class="btn btn-info" target="_blank"
+			href="index.php?module=administrator|System|User&amp;showPdfOfDeletedUser&amp;pdfId=<%= pdfId %>" >Pdf abrufen</a>
 	</div>
-</div>
+</script>
+
 {/block}
+
 
 {block name=popup_dialogs append}
 <div id="table-columns-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
