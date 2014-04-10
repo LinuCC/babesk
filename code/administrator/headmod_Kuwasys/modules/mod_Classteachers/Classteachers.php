@@ -503,11 +503,13 @@ class Classteachers extends Kuwasys {
 				GROUP_CONCAT(
 					CONCAT('{$classlink}', c.ID, '\">', c.label, '</a>')
 					SEPARATOR '<hr>') AS classes
-				FROM classTeacher ct
+				FROM KuwasysClassteachers ct
 				LEFT JOIN KuwasysClassteachersInClasses ctic
 					ON ct.ID = ctic.ClassTeacherID
 				LEFT JOIN KuwasysClasses c ON ctic.ClassID = c.ID
-				GROUP BY ct.ID");
+					AND c.schoolyearId = @activeSchoolyear
+				GROUP BY ct.ID"
+			);
 
 			return $stmt->fetchAll();
 
