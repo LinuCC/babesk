@@ -200,9 +200,9 @@ class Classteachers extends Kuwasys {
 	protected function classteacherAddUpload() {
 
 		try {
-			$stmt = $this->_pdo->prepare('INSERT INTO classTeacher
-				(forename, name, address, telephone) VALUES
-				(:forename, :name, :address, :telephone)');
+			$stmt = $this->_pdo->prepare('INSERT INTO KuwasysClassteachers
+				(forename, name, address, telephone, email) VALUES
+				(:forename, :name, :address, :telephone, "email")');
 
 			$stmt->execute(array(
 				':forename' => $_POST['forename'],
@@ -288,7 +288,7 @@ class Classteachers extends Kuwasys {
 	protected function classteacherChangeUpload() {
 
 		try {
-			$stmt = $this->_pdo->prepare('UPDATE classTeacher SET
+			$stmt = $this->_pdo->prepare('UPDATE KuwasysClassteachers SET
 				forename = :forename,
 				name = :name,
 				address = :address,
@@ -402,7 +402,7 @@ class Classteachers extends Kuwasys {
 	protected function classteacherGet($id) {
 
 		try {
-			$stmt = $this->_pdo->prepare('SELECT * FROM classTeacher
+			$stmt = $this->_pdo->prepare('SELECT * FROM KuwasysClassteachers
 				WHERE ID = :id');
 
 			$stmt->execute(array(':id' => $id));
@@ -465,7 +465,7 @@ class Classteachers extends Kuwasys {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'DELETE ct, ctic FROM classTeacher ct
+				'DELETE ct, ctic FROM KuwasysClassteachers ct
 				LEFT JOIN KuwasysClassteachersInClasses ctic
 					ON ct.ID = ctic.ClassTeacherID
 				WHERE ct.ID = :id');
