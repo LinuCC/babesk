@@ -33,18 +33,40 @@ $(document).ready(function() {
 			logsFetch();
 		});
 
+		$('#filter').on('keyup', function(ev) {
+			if(ev.keyCode == 13) {
+				activePage = 1;
+				logsFetch();
+			}
+		});
+
+		$('#category-select, #severity-select').on('change', function(ev) {
+			activePage = 1;
+			logsFetch();
+		});
+
 		function logsFetch() {
 
 			tableLoadingStatus(true);
 			request();
 
 			function request() {
+
+				var selectorsFetch = (
+					$('#severity-select').children().length == 0 &&
+					$('#category-select').children().length == 0
+				);
 				$.postJSON(
 					'index.php?module=administrator|System|Logs|ShowLogs',
 					{
 						'getData': true,
+						'fetchCategories': selectorsFetch,
+						'fetchSeverities': selectorsFetch,
 						'activePage': activePage,
-						'logsPerPage': $('#logs-per-page').val()
+						'logsPerPage': $('#logs-per-page').val(),
+						'filter': $('#filter').val(),
+						'category': $('#category-select option:selected').val(),
+						'severity': $('#severity-select option:selected').val()
 					},
 					update
 				);
@@ -65,11 +87,18 @@ $(document).ready(function() {
 
 			function update(res) {
 				console.log(res);
-				if(res) {
+				if(res.state == "success") {
 					tableLoadingStatus(false);
 					tableClear();
 					logsToTable(res.data.logs);
 					paginationUpdate(res.data.count);
+					if(typeof res.data.severities != 'undefined') {
+						console.log(typeof res.data.severities);
+						severitiesUpdate(res.data.severities);
+					}
+					if(typeof res.data.categories != 'undefined') {
+						categoriesUpdate(res.data.categories);
+					}
 				}
 				else {
 					toastr['error'](res.data, 'Fehler beim Abrufen der Logs');
@@ -98,10 +127,24 @@ $(document).ready(function() {
 					"pageCount": pageCount,
 					"activePage": activePage
 				};
-				console.log(data.minPage);
-				console.log(data.maxPage);
 				var pagHtml = microTmpl($('#logPaginationTemplate').html(), data);
 				$('#page-select').html(pagHtml);
+			}
+
+			function severitiesUpdate(sev) {
+				selectorUpdate(sev, '#severity-select');
+			}
+
+			function categoriesUpdate(cat) {
+				selectorUpdate(cat, '#category-select');
+			}
+
+			function selectorUpdate(elements, container) {
+				$container = $(container);
+				$container.html('<option value="0">Nicht filtern</option>');
+				$.each(elements, function(ind, el) {
+					$container.append('<option value="' + ind +'">' + el + '</option>');
+				});
 			}
 		}
 

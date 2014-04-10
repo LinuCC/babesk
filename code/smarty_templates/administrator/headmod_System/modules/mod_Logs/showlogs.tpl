@@ -8,8 +8,8 @@
 	<tr>
 		<td><%= ID %></td>
 		<td><%= message %></td>
-		<td><%= categoryId %></td>
-		<td><%= severityId %></td>
+		<td><%= categoryName %></td>
+		<td><%= severityName %></td>
 		<td><%= date %></td>
 		<td>
 			<button class="btn btn-xs btn-default log-additional-data-display"
