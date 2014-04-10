@@ -1,7 +1,5 @@
 $(document).ready(function() {
 
-	bootbox.setDefaults({locale: 'de'});
-
 	mainmenu();
 
 	function mainmenu() {

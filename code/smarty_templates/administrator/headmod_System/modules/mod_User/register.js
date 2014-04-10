@@ -4,8 +4,6 @@ $(document).ready(function() {
 
 	function registerUser() {
 
-		bootbox.setDefaults({locale: 'de'});
-
 		$('#issoli').bootstrapSwitch();
 		$passwordSwitch = $('input#password-switch');
 		$passwordSwitch.bootstrapSwitch();

@@ -4,8 +4,6 @@ $(document).ready(function() {
 
 	function displayAll() {
 
-		bootbox.setDefaults({locale: 'de'});
-
 		var columns = [
 			{
 				name: 'ID',

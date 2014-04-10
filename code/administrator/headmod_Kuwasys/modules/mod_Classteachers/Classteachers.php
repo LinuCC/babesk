@@ -496,13 +496,13 @@ class Classteachers extends Kuwasys {
 	 */
 	protected function classteachersGetAll() {
 
-		$classlink = '<a href=\"index.php?module=administrator|Kuwasys|Classes|DisplayClassDetails&amp;ID=';
+		$classlink = '<li class="list-group-item"><a href=\"index.php?module=administrator|Kuwasys|Classes|DisplayClassDetails&amp;ID=';
 
 		try {
 			$stmt = $this->_pdo->query("SELECT ct.*,
 				GROUP_CONCAT(
-					CONCAT('{$classlink}', c.ID, '\">', c.label, '</a>')
-					SEPARATOR '<hr>') AS classes
+					CONCAT('{$classlink}', c.ID, '\">', c.label, '</a></li>')
+					SEPARATOR '') AS classes
 				FROM KuwasysClassteachers ct
 				LEFT JOIN KuwasysClassteachersInClasses ctic
 					ON ct.ID = ctic.ClassTeacherID

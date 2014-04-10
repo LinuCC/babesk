@@ -21,7 +21,7 @@
 			<td>{$classteacher.name}</td>
 			<td>{$classteacher.address}</td>
 			<td>{$classteacher.telephone}</td>
-			<td>{$classteacher.classes}</td>
+			<td><ul class="list-group">{$classteacher.classes}</ul></td>
 			</td>
 			<td>
 				<a class="btn btn-info btn-xs"
@@ -32,15 +32,32 @@
 					class="btn btn-danger btn-xs delete-classteacher">
 					<span class="icon icon-error"></span>
 				</button>
-				<form class="deleteClassteacher" classteacherId="{$classteacher.ID}"
-					action="#" method="post">
-					<input type='submit' value='löschen'>
-				</form>
 			</td>
 		</tr>
 		{/foreach}
 	</tbody>
 </table>
+
+<a class="btn btn-primary pull-right"
+	href="index.php?module=administrator|Kuwasys|Classteachers">
+	Zurück
+</a>
+
+{/block}
+
+
+{block name=style_include append}
+
+<style type="text/css" media="all">
+table ul.list-group {
+	margin-bottom: 0px;
+}
+
+table ul.list-group li.list-group-item {
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+</style>
 
 {/block}
 
@@ -48,52 +65,6 @@
 {block name=js_include append}
 
 <script type="text/javascript" src="{$path_js}/bootbox.min.js"></script>
-<script type="text/javascript">
-
-$(document).ready(function() {
-
-	bootbox.setDefaults({locale: 'de'});
-
-	$('button.delete-classteacher').on('click', function(event) {
-
-		event.preventDefault();
-
-		var toDelete = $(this).attr('classteacherId');
-
-		bootbox.confirm(
-			'Der Klassenlehrer wird dauerhaft gelöscht! Sind sie sich wirklich \
-			sicher?',
-			function(res) {
-				if(res) {
-					window.location = "index.php?module=administrator|Kuwasys\
-					|Classteachers|Delete&ID=" + toDelete;
-				}
-			}
-		);
-
-		// $('body').append('<div id="delConf" title="Klassenlehrer wirklich löschen?}">\
-		// 				<p><span class="ui-icon ui-icon-alert"\
-		// 				style="float:left; margin: 0 7px 20px 0;"></span>\
-		// 				Der Klassenlehrer wird dauerhaft gelöscht! Sind sie sich wirklich sicher?</p>\
-		// 				</div>');
-		// $('div#delConf').dialog({
-		// 	height: 200,
-		// 	width: 400,
-		// 	modal: true,
-		// 	buttons: {
-		// 		'Ja, löschen!': function() {
-		// 			window.location = "index.php?module=administrator|Kuwasys\
-		// 			|Classteachers|Delete&ID=" + toDelete;
-		// 		},
-		// 		'Nein, nicht löschen': function() {
-		// 			$('div#delConf').remove();
-		// 			$(this).dialog('close');
-		// 		}
-		// 	}
-		// });
-	});
-});
-
-</script>
+<script type="text/javascript" src="{$path_js}/administrator/Kuwasys/Classteachers/display-classteachers.js"></script>
 
 {/block}

@@ -1,7 +1,5 @@
 $(document).ready(function() {
 
-	bootbox.setDefaults({locale: 'de'});
-
 	$('#resetAssignment').on('click', function(event) {
 		event.preventDefault();
 		bootbox.confirm(

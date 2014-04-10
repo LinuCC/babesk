@@ -52,17 +52,21 @@ if(!navigator.cookieEnabled) {
 	toastr['error']('Cookies sind nicht aktiviert! Diese Website benötigt Cookies um zu funktionieren.', 'Cookies');
 }
 
+$(document).ready(function() {
+	if(typeof bootbox != undefined) {
+		bootbox.setDefaults({locale: 'de'});
+	}
+});
+
 (function refreshTooltips() {
 	$('body').tooltip({
 		selector: 'a[rel="tooltip"], [data-toggle="tooltip"]'
 	});
 })();
 
-
 $('body').popover({
 	selector: 'a[rel="popover"], [data-toggle="popover"]'
 });
-
 
 // Simple JavaScript Templating
 // John Resig - http://ejohn.org/ - MIT Licensed
