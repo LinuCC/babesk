@@ -2,7 +2,7 @@
 
 <h2 class="moduleHeader">Kursübersicht über temporäre Zuweisungen</h2>
 
-<table class="table table-responsive table-striped">
+<table class="table table-responsive table-striped table-hover">
 	<tr>
 		<th>Kursname</th>
 		<th>Anzahl Schüler</th>

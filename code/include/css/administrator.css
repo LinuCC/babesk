@@ -337,3 +337,13 @@ ul.submodulelinkList li a:hover {
 	margin-top: 0px;
 	margin-bottom: 0px;
 }
+
+.table-hover > tbody > tr:hover > td,
+.table-hover > tbody > tr:hover > th {
+  background-color: #E8FFB3;
+}
+
+/* Autocomplete should be over the bootstrap-modals */
+ul.ui-autocomplete {
+	z-index: 1151 !important;
+}
