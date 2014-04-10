@@ -3,14 +3,27 @@
 
 <h2 class='moduleHeader'>Hauptmenü der Schuljahresverwaltung</h2>
 
-<form action='index.php?module=administrator|System|Schoolyear&action=addSchoolYear' method='post'>
-	<input type='submit' value='ein neues Schuljahr hinzufügen'>
-</form>
-<form action='index.php?module=administrator|System|Schoolyear&action=showSchoolYear' method='post'>
-	<input type='submit' value='Die Schuljahre anzeigen'>
-</form>
-<form action='index.php?module=administrator|System|Schoolyear|SwitchSchoolyear' method='post'>
-	<input type='submit' value='Ein Schuljahreswechsel durchführen'>
-</form>
+<fieldset>
+	<legend>Generell</legend>
+	<ul class="submodulelinkList">
+		<li>
+			<a href='index.php?module=administrator|System|Schoolyear&amp;action=addSchoolYear' method='post'>
+				ein neues Schuljahr hinzufügen
+			</a>
+		</li>
+		<li>
+			<a href='index.php?module=administrator|System|Schoolyear&amp;action=showSchoolYear' method='post'>
+				Die Schuljahre anzeigen
+			</a>
+		</li>
+		<li>
+			<a href='index.php?module=administrator|System|Schoolyear|SwitchSchoolyear'
+			method='post'>
+				Ein Schuljahreswechsel durchführen
+			</a>
+		</li>
+	</ul>
+</fieldset>
+
 
 {/block}

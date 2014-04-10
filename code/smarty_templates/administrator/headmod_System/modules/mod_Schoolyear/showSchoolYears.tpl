@@ -4,12 +4,7 @@
 
 {literal}
 
-<script type="text/javascript">
-function showOptions (ID) {
-	document.getElementById('optionButtons' + ID).hidden = false;
-	document.getElementById('option' + ID).hidden = true;
-}
-</script>
+
 
 <style type="text/css">
 .cleanButtons {
@@ -21,33 +16,57 @@ function showOptions (ID) {
 </style>
 {/literal}
 
-<table style='margin:0 auto;'>
+<table class="table table-responsive table-striped table-hover"
+	style='margin:0 auto;'>
 	<thead>
-		<tr bgcolor='#33CFF'>
-			<th align='center'>ID</th>
-			<th align='center'>Bezeichnung</th>
-			<th align='center'>Aktiv</th>
+		<tr>
+			<th>ID</th>
+			<th>Bezeichnung</th>
+			<th>Aktiv</th>
 		</tr>
 	</thead>
 	<tbody>
 		{foreach $schoolYears as $schoolYear}
-		<tr {if $schoolYear.active}bgcolor='rgbcolor(255,100,100)'{else}bgcolor='#FFC33'{/if}>
-			<td align="center">{$schoolYear.ID}</td>
-			<td align="center">{$schoolYear.label}</td>
-			<td align="center">{if $schoolYear.active}&#10004;{else}&#10008;{/if}</td>
-			<td align="center" bgcolor='#FFD99'>
-			<div id='option{$schoolYear.ID}'>
-			<form method="post"><input type='button' value='Optionen' onclick='showOptions("{$schoolYear.ID}")'></form>
-			</div>
-			<div id='optionButtons{$schoolYear.ID}' hidden>
-			<form class='cleanButtons' action="index.php?module=administrator|System|Schoolyear&action=changeSchoolYear&ID={$schoolYear.ID}" method="post"><input type='submit' value='bearbeiten'></form>
-			<form class='cleanButtons' action="index.php?module=administrator|System|Schoolyear&action=deleteSchoolYear&ID={$schoolYear.ID}" method="post"><input style='inline' type='submit' value='löschen'></form>
-			{if !($schoolYear.active)}<form class='cleanButtons' action="index.php?module=administrator|System|Schoolyear&action=activateSchoolYear&ID={$schoolYear.ID}" method="post"><input style='inline' type='submit' value='aktivieren'></form>{/if}
-			</div>
+		<tr {if $schoolYear.active}bgcolor='#df3'{/if}>
+			<td>{$schoolYear.ID}</td>
+			<td>{$schoolYear.label}</td>
+			<td>{if $schoolYear.active}&#10004;{else}&#10008;{/if}</td>
+			<td>
+				<a class="btn btn-xs btn-default"
+					href="index.php?module=administrator|System|Schoolyear&amp;action=changeSchoolYear&amp;ID={$schoolYear.ID}"
+					data-toggle="tooltip" title="Schuljahr bearbeiten">
+					<span class="icon icon-edit"></span>
+				</a>
+				<a class="btn btn-xs btn-danger"
+					href="index.php?module=administrator|System|Schoolyear&amp;action=deleteSchoolYear&amp;ID={$schoolYear.ID}"
+					data-toggle="tooltip" title="Schuljahr löschen">
+					<span class="icon icon-error"></span>
+				</a>
+				{if !($schoolYear.active)}
+					<a class="btn btn-xs btn-info"
+						href="index.php?module=administrator|System|Schoolyear&amp;action=activateSchoolYear&amp;ID={$schoolYear.ID}"
+						data-toggle="tooltip" title="Schuljahr aktivieren">
+						<span class="icon icon-refresh"></span>
+					</a>
+				{/if}
 			</td>
 		</tr>
 		{/foreach}
 	</tbody>
 </table>
+
+{/block}
+
+
+{block name=js_include append}
+
+{literal}
+
+<script type="text/javascript">
+
+
+</script>
+
+{/literal}
 
 {/block}

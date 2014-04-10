@@ -49,7 +49,7 @@ class Schoolyear extends System {
 		}
 		else {
 			if($this->execPathHasSubmoduleLevel(1, $this->_subExecPath)) {
-				$this->submoduleExecute($this->_subExecPath, 1);
+				$this->submoduleExecuteAsMethod($this->_subExecPath, 1);
 				die();
 			}
 			$this->_interface->displayMainMenu();

@@ -4,6 +4,11 @@
 	Schuljahreswechsel
 </h2>
 
+<div class="alert alert-danger">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	<strong>Veraltet!</strong> Diese Funktionalität ist veraltet und könnte nicht das gewünschte Ergebnis ergeben!
+</div>
+
 <form action="index.php?module=administrator|System|Schoolyear|SwitchSchoolyear|Upload"
 	method="POST">
 	<fieldset class="smallContainer">
