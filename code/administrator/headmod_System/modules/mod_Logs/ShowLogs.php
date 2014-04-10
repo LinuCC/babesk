@@ -12,9 +12,11 @@ class ShowLogs extends \administrator\System\Logs {
 
 	public function execute($dataContainer) {
 
-		parent::entryPoint($dataContainer);
-		if(isset($_GET['data'])) {
-			$this->_interface->dieAjax('success', $this->logsFetch());
+		$this->entryPoint($dataContainer);
+		if(isset($_POST['getData'])) {
+			$this->_interface->dieAjax(
+				'success', array('logs' => $this->logsFetch())
+			);
 		}
 		else {
 			$this->displayTpl('showlogs.tpl');
@@ -25,11 +27,21 @@ class ShowLogs extends \administrator\System\Logs {
 	//Implements
 	/////////////////////////////////////////////////////////////////////
 
+	protected function entryPoint($dataContainer) {
+
+		parent::entryPoint($dataContainer);
+		$this->moduleTemplatePathSet();
+	}
+
 	public function logsFetch() {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'SELECT * FROM SystemLogs'
+				'SELECT * FROM SystemLogs LIMIT 0, :logsPerPage'
+			);
+			$_POST['logsPerPage'] = (int) $_POST['logsPerPage'];
+			$stmt->bindParam(
+				'logsPerPage', $_POST['logsPerPage'], \PDO::PARAM_INT
 			);
 			$stmt->execute();
 			return $stmt->fetchAll(\PDO::FETCH_ASSOC);
