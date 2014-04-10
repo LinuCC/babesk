@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-04-07 17:44+0100\n"
-"PO-Revision-Date: 2014-04-07 19:16+0100\n"
+"PO-Revision-Date: 2014-04-10 09:05+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: de\n"
@@ -1027,7 +1027,7 @@ msgstr "Konnte die Benutzer nicht zu dem anderen Kurs verschieben!"
 
 #: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/ApplyChanges.php:31
 msgid "The users were successfully assigned to their respective classes!"
-msgstr "Der Benutzer wurde erfolgreich seinen Kursen zugewiesen."
+msgstr "Die Benutzer wurden erfolgreich ihren Kursen zugewiesen."
 
 #: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/ApplyChanges.php:54
 msgid "Could not delete the old Joints!"

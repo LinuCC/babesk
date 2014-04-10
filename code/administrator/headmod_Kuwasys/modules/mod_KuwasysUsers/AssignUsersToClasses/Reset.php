@@ -80,7 +80,14 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 
 		$requestsSorted = $this->requestsSort($this->requestsGet());
 		$this->requestsAssign($requestsSorted);
-		$this->upload();
+		if(count($this->_toadd)) {
+			$this->upload();
+		}
+		else {
+			$this->_interface->dieError(
+				'Es wurden keine möglichen Zuweisungen gefunden!'
+			);
+		}
 	}
 
 	/**
@@ -153,6 +160,8 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 	 *         ]
 	 */
 	private function requestsSort($requests) {
+
+		$sorted = array();
 
 		foreach($requests as $request) {
 			$sorted[(int)$request['statusId']][(int)$request['classId']]
