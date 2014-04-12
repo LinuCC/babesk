@@ -86,14 +86,13 @@ $(document).ready(function() {
 			}
 
 			function update(res) {
-				console.log(res);
 				if(res.state == "success") {
 					tableLoadingStatus(false);
 					tableClear();
 					logsToTable(res.data.logs);
 					paginationUpdate(res.data.count);
+					tableSizeUpdate(parseFloat(res.data.tableSize));
 					if(typeof res.data.severities != 'undefined') {
-						console.log(typeof res.data.severities);
 						severitiesUpdate(res.data.severities);
 					}
 					if(typeof res.data.categories != 'undefined') {
@@ -105,11 +104,40 @@ $(document).ready(function() {
 				}
 			}
 
+			function tableSizeUpdate(size) {
+				if(size != false) {
+					$('#table-size').text(size);
+					if(size > 50) {
+						toastr['info'](
+							'Die Logs nehmen viel (' + size + ' Mb) Speicher ein.\
+							Es wird empfohlen, unwichtige Logs zu löschen',
+							'Viel Speicher'
+						);
+						if(size > 500) {
+							$('#table-size-container span.label')
+								.removeClass('label-success')
+								.addClass('label-danger');
+						}
+						else {
+							$('#table-size-container span.label')
+								.removeClass('label-success')
+								.addClass('label-warning');
+						}
+					}
+				}
+				else {
+					toastr['error']('Konnte die Tabellengröße nicht abrufen.');
+				}
+			}
+
 			function logsToTable(logs) {
 				//update table
 				var $tablebody = $('#log-table tbody');
 				var templHtml = $('#logRowTemplate').html();
 				$.each(logs, function(ind, logData) {
+					logData['additionalData'] = JSON.stringify(
+						logData['additionalData']
+					);
 					var colHtml = microTmpl(templHtml, logData);
 					$tablebody.append(colHtml);
 				});

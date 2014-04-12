@@ -26,6 +26,7 @@ class ShowLogs extends \administrator\System\Logs {
 				$_POST['fetchSeverities'] == 'true') {
 				$data['severities'] = $this->severitiesFetch();
 			}
+			$data['tableSize'] = $this->sizeFetch();
 			$this->_interface->dieAjax('success', $data);
 		}
 		else {
@@ -145,6 +146,29 @@ class ShowLogs extends \administrator\System\Logs {
 			$this->_interface->dieAjax(
 				'error', 'Konnte die Gewichtungen nicht abrufen'
 			);
+		}
+	}
+
+	/**
+	 * Fetches the size of the logs-table
+	 * @return string The size of the logs-table in Megabyte, or false if an
+	 *                error occured
+	 */
+	protected function sizeFetch() {
+
+		try {
+			$res = $this->_pdo->query(
+				'SELECT round(((data_length + index_length) / 1024 / 1024), 2)
+				FROM information_schema.TABLES
+				WHERE table_schema = DATABASE()
+					AND table_name = "SystemLogs";
+			');
+			return $res->fetchColumn();
+
+		} catch (\PDOException $e) {
+			$this->_logger->log('Error fetching the size of the logs-table',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			return false;
 		}
 	}
 

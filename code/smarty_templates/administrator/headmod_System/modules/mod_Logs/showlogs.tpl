@@ -46,15 +46,21 @@
 
 
 {block name=filling_content}
-<h3 class="moduleHeader">Log-Anzeige</h3>
 
-<div class="alert alert-danger">
-	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-	<strong>Logs</strong> Die Logs sind bisher nur teilweise in das Projekt eingebaut worden. Sie bieten noch keine vollständige Übersicht über die Fehler und Hinweise des Programms.
+<div class="row">
+	<div class="col-sm-4 col-sm-offset-4">
+		<h3 class="moduleHeader">Log-Anzeige</h3>
+	</div>
+	<span id="table-size-container" class="col-sm-4">
+		<span class="pull-right label label-success">
+			Die Tabelle ist
+			<span id="table-size"></span>
+			Megabyte groß
+		</span>
+	</span>
 </div>
 
-
-<div class="center-block">
+<div class="row">
 	<div class="col-sm-4 col-md-2 text-center">
 		<span class="input-group filter-container" data-toggle="tooltip"
 			title="{t}Search (Enter to commit){/t}" >
