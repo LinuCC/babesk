@@ -141,7 +141,8 @@ padding-right: 15px;
 	background-color: #444;
 }
 
-#sidebar-module-selection .nav>li>a:hover {
+#sidebar-module-selection .nav>li>a:hover,
+#sidebar-module-selection .nav>li>a:focus {
 	background-color: transparent;
 	background: transparent;
 	color: #fd3;
