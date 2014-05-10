@@ -25,11 +25,11 @@
 </script>
 
 <script type="text/template" id="paginator-template">
-	<li class="disabled"><a class="first-page">&laquo;</a></li>
+	<li class="disabled"><a href="#" class="first-page">&laquo;</a></li>
 	<% for(var i = startPage; i <= pagecount && i < startPage + amountDisplayed; i++) { %>
-		<li><a><%= i %></a></li>
+		<li><a href="#"><%= i %></a></li>
 	<% } %>
-	<li class="disabled"><a class="last-page">&raquo;</a></li>
+	<li class="disabled"><a href="#" class="last-page">&raquo;</a></li>
 </script>
 
 {/block}

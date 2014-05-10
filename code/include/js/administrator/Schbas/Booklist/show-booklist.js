@@ -21,7 +21,7 @@ $(document).ready(function() {
 			var pagenumber = activePage;
 
 			$.postJSON(
-				"index.php?module=administrator|Schbas|Booklist&action=fetchBooklist",
+				"index.php?module=administrator|Schbas|Booklist|ShowBooklist&ajax=1",
 				{
 					"pagenumber": pagenumber - 1,
 					"booksPerPage": $('#books-per-page').val()

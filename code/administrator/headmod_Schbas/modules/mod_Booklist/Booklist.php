@@ -30,58 +30,58 @@ class Booklist extends Schbas {
 							'del_book' => 6);
 
 		if ('POST' == $_SERVER['REQUEST_METHOD']){
-		if (isset($_GET['action'])) {
-			$action = $_GET['action'];
-			switch ($action) {
-				case 'fetchBooklist':
-					$this->getBooklist();
-					break;
-				case 1: //show booklist
-					$this->showBooklist();
-					break;
-				case 2: //edit a book
-					if (isset ($_POST['isbn_search'])) {
-						$bookID = $BookProcessing->getBookIdByISBN($_POST['isbn_search']);
-						$BookProcessing->editBook($bookID);
-					}
-					else if (!isset ($_POST['subject'], $_POST['class'],$_POST['title'],$_POST['author'],$_POST['publisher'],$_POST['isbn'],$_POST['price'],$_POST['bundle'])){
-						$BookProcessing->editBook($_GET['ID']);
-					}else{
-						$BookProcessing->changeBook($_GET['ID'],$_POST['subject'], $_POST['class'],$_POST['title'],$_POST['author'],$_POST['publisher'],$_POST['isbn'],$_POST['price'],$_POST['bundle']);
-					}
-					break;
-				case 3: //delete an entry
-
-					if (isset($_POST['barcode'])) {
-						try {
-
-							$BookProcessing->DeleteEntry($BookProcessing->GetIDFromBarcode($_POST['barcode']));
-						} catch (Exception $e) {
+			if (isset($_GET['action'])) {
+				$action = $_GET['action'];
+				switch ($action) {
+					case 'fetchBooklist':
+						$this->getBooklist();
+						break;
+					case 1: //show booklist
+						$this->showBooklist();
+						break;
+					case 2: //edit a book
+						if (isset ($_POST['isbn_search'])) {
+							$bookID = $BookProcessing->getBookIdByISBN($_POST['isbn_search']);
+							$BookProcessing->editBook($bookID);
 						}
-					}
-					else if (isset($_POST['delete'])) {
-						$BookProcessing->DeleteEntry($_GET['ID']);
-					} else if (isset($_POST['not_delete'])) {
-						$BookInterface->ShowSelectionFunctionality($action_arr);
-					} else {
-
-						if (!$BookProcessing->isInvForBook($_GET['ID'])){
-							$BookProcessing->DeleteConfirmation($_GET['ID']);
+						else if (!isset ($_POST['subject'], $_POST['class'],$_POST['title'],$_POST['author'],$_POST['publisher'],$_POST['isbn'],$_POST['price'],$_POST['bundle'])){
+							$BookProcessing->editBook($_GET['ID']);
 						}else{
-							$BookInterface->dieError("Es ist noch Inventar zu diesem Buch vorhanden! Bitte l&ouml;schen Sie dies zuerst!");
+							$BookProcessing->changeBook($_GET['ID'],$_POST['subject'], $_POST['class'],$_POST['title'],$_POST['author'],$_POST['publisher'],$_POST['isbn'],$_POST['price'],$_POST['bundle']);
 						}
-					}
-					break;
-				case 4: //add an entry
-					if (!isset($_POST['title'])) {
-						$BookProcessing->AddEntry();
-					} else {
-						$BookProcessing->AddEntryFin($_POST['subject'], $_POST['class'],$_POST['title'],$_POST['author'],$_POST['publisher'],$_POST['isbn'],$_POST['price'],$_POST['bundle']);
-					}
-					break;
-				case 5: //filter
-					$BookProcessing->ShowBooklist("search", $_POST['search']);
-					break;
+						break;
+					case 3: //delete an entry
+
+						if (isset($_POST['barcode'])) {
+							try {
+
+								$BookProcessing->DeleteEntry($BookProcessing->GetIDFromBarcode($_POST['barcode']));
+							} catch (Exception $e) {
+							}
+						}
+						else if (isset($_POST['delete'])) {
+							$BookProcessing->DeleteEntry($_GET['ID']);
+						} else if (isset($_POST['not_delete'])) {
+							$BookInterface->ShowSelectionFunctionality($action_arr);
+						} else {
+
+							if (!$BookProcessing->isInvForBook($_GET['ID'])){
+								$BookProcessing->DeleteConfirmation($_GET['ID']);
+							}else{
+								$BookInterface->dieError("Es ist noch Inventar zu diesem Buch vorhanden! Bitte l&ouml;schen Sie dies zuerst!");
+							}
+						}
+						break;
+					case 4: //add an entry
+						if (!isset($_POST['title'])) {
+							$BookProcessing->AddEntry();
+						} else {
+							$BookProcessing->AddEntryFin($_POST['subject'], $_POST['class'],$_POST['title'],$_POST['author'],$_POST['publisher'],$_POST['isbn'],$_POST['price'],$_POST['bundle']);
+						}
+						break;
+					case 5: //filter
+						$BookProcessing->ShowBooklist("search", $_POST['search']);
+						break;
 
 					case 6: //search an entry for deleting
 
@@ -91,12 +91,12 @@ class Booklist extends Schbas {
 					case 'showBooksFNY':
 						$BookProcessing->showBooksForNextYear();
 						break;
-                                            case 'showBooksBT':
+					case 'showBooksBT':
 						$BookProcessing->showBooksByTopic();
 						break;
-				break;
+					break;
+				}
 			}
-		}
 		}elseif  (('GET' == $_SERVER['REQUEST_METHOD'])&&isset($_GET['action'])) {
 			$action = $_GET['action'];
 			$mode = $_GET['mode'];
@@ -133,8 +133,10 @@ class Booklist extends Schbas {
 			->select(array('b, s'))
 			->from('Babesk\ORM\SchbasBooks', 'b')
 			->leftJoin('b.subject', 's')
+			->where('b.title = ""')
 			->setFirstResult($_POST['pagenumber'] * $_POST['booksPerPage'])
-			->setMaxResults($_POST['booksPerPage']);
+			->setMaxResults($_POST['booksPerPage'])
+			;
 
 		// if($_POST['sortFor']) {
 		// 	$query->orderBy($_POST['sortFor']);
@@ -149,7 +151,6 @@ class Booklist extends Schbas {
 
 		$books = array();
 		foreach($paginator as $book) {
-			$this->_entityManager->detach($book);
 			$bookAr = array(
 				'id' => $book->getId(),
 				'title' => $book->getTitle(),
