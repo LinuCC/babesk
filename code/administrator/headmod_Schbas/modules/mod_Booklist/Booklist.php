@@ -33,6 +33,9 @@ class Booklist extends Schbas {
 		if (isset($_GET['action'])) {
 			$action = $_GET['action'];
 			switch ($action) {
+				case 'fetchBooklist':
+					$this->getBooklist();
+					break;
 				case 1: //show booklist
 					$this->showBooklist();
 					break;
@@ -116,18 +119,52 @@ class Booklist extends Schbas {
 
 	protected function showBooklist() {
 
+		$this->displayTpl('show-booklist.tpl');
+	}
+
+	protected function getBooklist() {
+
+		// $pagenum = $_POST['pagenumber'];
+		// $usersPerPage = $_POST['usersPerPage'];
+		// $sortFor = $_POST['sortFor'];
+		// $filterFor = $_POST['filterFor'];
+
 		$query = $this->_entityManager->createQueryBuilder()
 			->select(array('b, s'))
 			->from('Babesk\ORM\SchbasBooks', 'b')
 			->leftJoin('b.subject', 's')
-			->setFirstResult(1)
-			->setMaxResults(2)
-			->getQuery();
+			->setFirstResult($_POST['pagenumber'] * $_POST['booksPerPage'])
+			->setMaxResults($_POST['booksPerPage']);
+
+		// if($_POST['sortFor']) {
+		// 	$query->orderBy($_POST['sortFor']);
+		// }
+		// if($_POST['filterFor']) {
+		// 	$query->where()
+		// }
+
 		$paginator = new \Doctrine\ORM\Tools\Pagination\Paginator(
 			$query, $fetchJoinCollection = true
 		);
-		$this->_smarty->assign('booksPaginator', $paginator);
-		$this->displayTpl('show_booklist.tpl');
+
+		$books = array();
+		foreach($paginator as $book) {
+			$this->_entityManager->detach($book);
+			$bookAr = array(
+				'id' => $book->getId(),
+				'title' => $book->getTitle(),
+				'author' => $book->getAuthor(),
+				'gradelevel' => $book->getClass(),
+				'bundle' => $book->getBundle(),
+				'price' => $book->getPrice(),
+				'isbn' => $book->getIsbn(),
+				'publisher' => $book->getPublisher()
+			);
+			$bookAr['subject'] = ($book->getSubject()) ?
+				$book->getSubject()->getName() : '';
+			$books[] = $bookAr;
+		}
+		die(json_encode($books));
 	}
 
 	/////////////////////////////////////////////////////////////////////
