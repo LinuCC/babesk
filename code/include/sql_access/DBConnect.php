@@ -63,6 +63,31 @@ class DBConnect {
 		return $pdo;
 	}
 
+	/**
+	 * Creates and returns a new instance of doctrine
+	 * @return EntityManager The Doctrine Entity Manager
+	 */
+	public function getDoctrineEntityManager() {
+
+		try {
+			require_once PATH_3RD_PARTY . '/doctrine-orm/vendor/autoload.php';
+			$config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
+					array(PATH_INCLUDE . '/orm-entities'), true
+			);
+			$conn = array(
+				'driver' => 'pdo_mysql',
+				'dbname' => $this->_databaseName,
+				'user' => $this->_username,
+				'password' => $this->_password,
+				'host' => $this->_host
+			);
+			return Doctrine\ORM\EntityManager::create($conn, $config);
+
+		} catch (Exception $e) {
+			throw new Exception('Could not set up doctrine entity manager!');
+		}
+	}
+
 	public function setDatabaseValues ($host, $username, $password, $databaseName) {
 
 		$this->_host = $host;

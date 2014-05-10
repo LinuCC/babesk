@@ -27,7 +27,7 @@ class Web {
 		$this->_userManager = new UserManager();
 		$this->_loggedIn = isset($_SESSION['uid']);
 		$this->_interface = new WebInterface($this->_smarty);
-		$this->initPdo();
+		$this->initDatabaseConnections();
 		$this->_logger = new Logger($this->_pdo);
 		$this->_logger->categorySet('Web');
 		$this->_acl = new Acl($this->_logger, $this->_pdo);
@@ -97,12 +97,13 @@ class Web {
 	 *
 	 * triggers an error when the PDO-Object could not be created
 	 */
-	private function initPdo() {
+	private function initDatabaseConnections() {
 
 		try {
 			$connector = new DBConnect();
 			$connector->initDatabaseFromXML();
 			$this->_pdo = $connector->getPdo();
+			$this->_entityManager = $connector->getDoctrineEntityManager();
 			$this->_pdo->query('SET @activeSchoolyear :=
 				(SELECT ID FROM SystemSchoolyears WHERE active = "1");');
 
@@ -448,6 +449,7 @@ class Web {
 			clone($this->_interface),
 			clone($this->_acl),
 			$this->_pdo,
+			$this->_entityManager,
 			clone($this->_logger));
 
 		return $dataContainer;
@@ -470,6 +472,8 @@ class Web {
 	private $_logger;
 
 	private $_pdo;
+
+	private $_entityManager;
 
 	private $_smarty;
 
