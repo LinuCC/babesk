@@ -24,6 +24,7 @@ $(document).ready(function() {
 				"index.php?module=administrator|Schbas|Booklist|ShowBooklist&ajax=1",
 				{
 					"pagenumber": pagenumber - 1,
+					"filterFor": $('#filter').val(),
 					"booksPerPage": $('#books-per-page').val()
 				},
 				function(res) {

@@ -39,8 +39,22 @@ class ShowBooklist extends Booklist {
 		$query = $this->_entityManager->createQueryBuilder()
 			->select(array('b, s'))
 			->from('Babesk\ORM\SchbasBooks', 'b')
-			->leftJoin('b.subject', 's')
-			->setFirstResult($_POST['pagenumber'] * $_POST['booksPerPage'])
+			->leftJoin('b.subject', 's');
+
+		if(isset($_POST['filterFor']) && !isBlank($_POST['filterFor'])) {
+			$query->where('b.title LIKE :filterVar')
+			->orWhere('b.author LIKE :filterVar')
+			->orWhere('b.class LIKE :filterVar')
+			->orWhere('b.bundle LIKE :filterVar')
+			->orWhere('b.price LIKE :filterVar')
+			->orWhere('b.isbn LIKE :filterVar')
+			->orWhere('b.publisher LIKE :filterVar')
+			->orWhere('s.name LIKE :filterVar')
+			->orWhere('s.abbreviation LIKE :filterVar')
+			->setParameter('filterVar', '%' . $_POST['filterFor'] . '%');
+		}
+
+		$query->setFirstResult($_POST['pagenumber'] * $_POST['booksPerPage'])
 			->setMaxResults($_POST['booksPerPage']) ;
 
 		// 	// if($_POST['sortFor']) {
