@@ -40,7 +40,7 @@ class Administrator {
 		$this->_moduleExecutionParser->setSubprogramPath(
 			'root/administrator');
 		$this->loadVersion();
-		$this->initPdo();
+		$this->initDatabaseConnections();
 		$this->_logger = new Logger($this->_pdo);
 		$this->_logger->categorySet('Administrator');
 		$this->_acl = new Acl($this->_logger, $this->_pdo);
@@ -180,12 +180,13 @@ class Administrator {
 	 *
 	 * triggers an error when
 	 */
-	private function initPdo() {
+	private function initDatabaseConnections() {
 
 		try {
 			$connector = new DBConnect();
 			$connector->initDatabaseFromXML();
 			$this->_pdo = $connector->getPdo();
+			$this->_entityManager = $connector->getDoctrineEntityManager();
 			$this->_pdo->query(
 				'SET @activeSchoolyear :=
 				(SELECT ID FROM SystemSchoolyears WHERE active = "1" LIMIT 1);
@@ -319,7 +320,9 @@ class Administrator {
 			clone($this->_adminInterface),
 			clone($this->_acl),
 			$this->_pdo,
-			clone($this->_logger));
+			$this->_entityManager,
+			clone($this->_logger)
+		);
 
 		return $dataContainer;
 	}
@@ -332,6 +335,12 @@ class Administrator {
 	 * The Access-Control-Layer
 	 */
 	private $_acl;
+
+	/**
+	 * Doctrines entity Manager
+	 * @var EntityManager
+	 */
+	private $_entityManager;
 
 	/**
 	 * The Interface handling displaying stuff
