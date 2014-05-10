@@ -1,48 +1,45 @@
-{extends file=$booklistParent}
-{block name=search}
-<form action="index.php?section=Schbas|Booklist&action=5&mode=search" method="post">
-	<input type='text' name='search'>
-	<input type='submit' value='Mit Benutzernamen, Klasse oder Jahrgang suchen'>
-</form>
-<br>
-<form action="index.php?section=Schbas|Booklist&action=2" method="post"><input type='text' name='isbn_search'><input type='submit' value='Mit ISBN suchen'></form>
-{/block}
-{block name=content}
-<table width=100%>
-<tr><th align='center'>{$navbar}</th></tr>
-</table>
-<table>
-	<thead>
-		<tr bgcolor='#33CFF'>
-			<form name="filterFach" action="index.php?section=Schbas|Booklist&action=1&mode=filter" method="post"><input type="hidden" name="filter" value="subject"><th align='center'><a href="#" onclick="document.filterFach.submit();">Fach</a></th></form>
-			<form name="filterJahrgang" action="index.php?section=Schbas|Booklist&action=1&mode=filter" method="post"><input type="hidden" name="filter" value="class"><th align='center'><a href="#" onclick="document.filterJahrgang.submit();">Jahrgang</a></th></form>
-			<form name="filterTitel" action="index.php?section=Schbas|Booklist&action=1&mode=filter" method="post"><input type="hidden" name="filter" value="title"><th align='center'><a href="#" onclick="document.filterTitel.submit();">Titel</a></th></form>
-			<form name="filterAutor" action="index.php?section=Schbas|Booklist&action=1&mode=filter" method="post"><input type="hidden" name="filter" value="author"><th align='center'><a href="#" onclick="document.filterAutor.submit();">Autor</a></th></form>
-			<form name="filterVerlag" action="index.php?section=Schbas|Booklist&action=1&mode=filter" method="post"><input type="hidden" name="filter" value="publisher"><th align='center'><a href="#" onclick="document.filterVerlag.submit();">Verlag</a></th></form>
-			<form name="filterISBN" action="index.php?section=Schbas|Booklist&action=1&mode=filter" method="post"><input type="hidden" name="filter" value="isbn"><th align='center'><a href="#" onclick="document.filterISBN.submit();">ISBN</a></th></form>
-			<th align='center'>Preis</th>
-			<form name="filterBundle" action="index.php?section=Schbas|Booklist&action=1&mode=filter" method="post"><input type="hidden" name="filter" value="bundle"><th align='center'><a href="#" onclick="document.filterBundle.submit();">Bundle</a></th></form>
-			<th align='center'>Letzte Inventarnummer</th>
-		</tr>
-	</thead>
-	<tbody>
-	{foreach $bookcodes as $bookcode}
-		<tr bgcolor='#FFC33'>
-			<td align="center">{$bookcode.subject}</td>
-			<td align="center">{$bookcode.class}</td>
-			<td align="center">{$bookcode.title}</td>
-			<td align="center">{$bookcode.author}</td>
-			<td align="center">{$bookcode.publisher}</td>
-			<td align="center">{$bookcode.isbn}</td>
-			<td align="center">{$bookcode.price}</td>
-			<td align="center">{$bookcode.bundle}</td>
-			<td align="center">{$bookcode.lastNumber}</td>
-			<td align="center" bgcolor='#FFD99'>
-			<form action="index.php?section=Schbas|Booklist&action=2&ID={$bookcode.id}" method="post"><input type='submit' value='bearbeiten'></form>
-			<form action="index.php?section=Schbas|Booklist&action=3&ID={$bookcode.id}" method="post"><input type='submit' value='löschen'></form>
-			</td>
-		</tr>
-	{/foreach}
-	</tbody>
-</table>
+{extends file=$inh_path}
+
+{block name=filling_content}
+
+<div class="table-responsive">
+	<table class="table table-hover table-striped">
+		<thead>
+			<tr>
+				<th>Fach</th>
+				<th>Jahrgang</th>
+				<th>Titel</th>
+				<th>Autor</th>
+				<th>Verlag</th>
+				<th>ISBN</th>
+				<th>Preis</th>
+				<th>Bundle</th>
+				<th>letzte Inventarnummer</th>
+				<th>Optionen</th>
+			</tr>
+		</thead>
+		<tbody>
+			{foreach $booksPaginator as $book}
+				<tr>
+					<td>
+						{if $book->getSubject()} {$book->getSubject()->getName()} {/if}
+					</td>
+					<td>{$book->getClass()}</td>
+					<td>{$book->getTitle()}</td>
+					<td>{$book->getAuthor()}</td>
+					<td>{$book->getPublisher()}</td>
+					<td>{$book->getIsbn()}</td>
+					<td>{$book->getPrice()|string_format:"%.2f"}</td>
+					<td>{$book->getBundle()}</td>
+					<td></td>
+					<td align="center" bgcolor='#FFD99'>
+						<a class="btn btn-info btn-xs" href="index.php?section=Schbas|Booklist&action=2&ID={$bookcode.id}">bearbeiten</a>
+						<a class="btn btn-danger btn-xs" href="index.php?section=Schbas|Booklist&action=3&ID={$bookcode.id}">löschen</a>
+					</td>
+				</tr>
+			{/foreach}
+		</tbody>
+	</table>
+</div>
+
 {/block}

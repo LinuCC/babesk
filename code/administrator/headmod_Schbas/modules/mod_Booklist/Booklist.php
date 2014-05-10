@@ -2,20 +2,16 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ADMIN . '/headmod_Schbas/Schbas.php';
+require_once PATH_INCLUDE . '/orm-entities/SchbasBooks.php';
+require_once PATH_INCLUDE . '/orm-entities/SchbasSubjects.php';
 
 class Booklist extends Schbas {
 
-	////////////////////////////////////////////////////////////////////////////////
-	//Attributes
 
-	////////////////////////////////////////////////////////////////////////////////
-	//Constructor
-	public function __construct($name, $display_name, $path) {
-		parent::__construct($name, $display_name, $path);
-	}
-
-	////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
 	//Methods
+	/////////////////////////////////////////////////////////////////////
+
 	public function execute($dataContainer) {
 
 		defined('_AEXEC') or die('Access denied');
@@ -26,6 +22,9 @@ class Booklist extends Schbas {
 		$BookInterface = new AdminBooklistInterface($this->relPath);
 		$BookProcessing = new AdminBooklistProcessing($BookInterface);
 
+		parent::entryPoint($dataContainer);
+		parent::moduleTemplatePathSet();
+
 		$action_arr = array('show_booklist' => 1,
 							'add_book' => 4,
 							'del_book' => 6);
@@ -35,11 +34,7 @@ class Booklist extends Schbas {
 			$action = $_GET['action'];
 			switch ($action) {
 				case 1: //show booklist
-					if (isset($_POST['filter'])){
-						$BookProcessing->ShowBooklist("filter", $_POST['filter']);
-					}else{
-						$BookProcessing->ShowBooklist("filter","subject");
-					}
+					$this->showBooklist();
 					break;
 				case 2: //edit a book
 					if (isset ($_POST['isbn_search'])) {
@@ -114,6 +109,31 @@ class Booklist extends Schbas {
 			$BookInterface->ShowSelectionFunctionality($action_arr);
 		}
 	}
+
+	/////////////////////////////////////////////////////////////////////
+	//Implements
+	/////////////////////////////////////////////////////////////////////
+
+	protected function showBooklist() {
+
+		$query = $this->_entityManager->createQueryBuilder()
+			->select(array('b, s'))
+			->from('Babesk\ORM\SchbasBooks', 'b')
+			->leftJoin('b.subject', 's')
+			->setFirstResult(1)
+			->setMaxResults(2)
+			->getQuery();
+		$paginator = new \Doctrine\ORM\Tools\Pagination\Paginator(
+			$query, $fetchJoinCollection = true
+		);
+		$this->_smarty->assign('booksPaginator', $paginator);
+		$this->displayTpl('show_booklist.tpl');
+	}
+
+	/////////////////////////////////////////////////////////////////////
+	//Attributes
+	/////////////////////////////////////////////////////////////////////
+
 }
 
 ?>
