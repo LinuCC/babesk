@@ -11,7 +11,7 @@ require_once PATH_ACCESS . '/TableManager.php';
 class BookManager extends TableManager{
 
 	public function __construct() {
-		parent::__construct('schbas_books');
+		parent::__construct('SchbasBooks');
 	}
 
 	/**

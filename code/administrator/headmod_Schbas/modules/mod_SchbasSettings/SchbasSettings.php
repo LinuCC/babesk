@@ -88,7 +88,7 @@ class SchbasSettings extends Schbas {
 		$textId = TableMng::getDb()->real_escape_string($_POST['textId']);
 		try {
 			$template = TableMng::query(sprintf(
-					'SELECT * FROM schbas_texts WHERE `description` = "%s%s"',
+					'SELECT * FROM SchbasTexts WHERE `description` = "%s%s"',
 					$textId,$templateId));
 
 		} catch (Exception $e) {
@@ -115,9 +115,9 @@ class SchbasSettings extends Schbas {
 		if ($textThreeText == '') $textThreeText = '&nbsp;';
 
 		try {
-			TableMng::query('UPDATE schbas_texts SET title="'.$textOneTitle.'",text="'.$textOneText.'" WHERE description="textOne'.$grade.'"',false);
-			TableMng::query('UPDATE schbas_texts SET title="'.$textTwoTitle.'",text="'.$textTwoText.'" WHERE description="textTwo'.$grade.'"',false);
-			TableMng::query('UPDATE schbas_texts SET title="'.$textThreeTitle.'",text="'.$textThreeText.'" WHERE description="textThree'.$grade.'"',false);
+			TableMng::query('UPDATE SchbasTexts SET title="'.$textOneTitle.'",text="'.$textOneText.'" WHERE description="textOne'.$grade.'"',false);
+			TableMng::query('UPDATE SchbasTexts SET title="'.$textTwoTitle.'",text="'.$textTwoText.'" WHERE description="textTwo'.$grade.'"',false);
+			TableMng::query('UPDATE SchbasTexts SET title="'.$textThreeTitle.'",text="'.$textThreeText.'" WHERE description="textThree'.$grade.'"',false);
 			$SchbasSettingsInterface->SavingSuccess();
 		} catch (Exception $e) {
 			$SchbasSettingsInterface->SavingFailed();
@@ -194,15 +194,15 @@ class SchbasSettings extends Schbas {
 			if ($coverLetterText == '') $coverLetterText = '&nbsp;';
 
 			try {
-				TableMng::query('UPDATE schbas_texts SET title="'.$coverLetterTitle.'",text="'.$coverLetterText.'" WHERE description="coverLetter"',false);
+				TableMng::query('UPDATE SchbasTexts SET title="'.$coverLetterTitle.'",text="'.$coverLetterText.'" WHERE description="coverLetter"',false);
 				$SchbasSettingsInterface->SavingSuccess();
 			} catch (Exception $e) {
 				$SchbasSettingsInterface->SavingFailed();
 			}
 		}
 		else {
-			$title = TableMng::query('SELECT title FROM schbas_texts WHERE description="coverLetter"');
-			$text = TableMng::query('SELECT text FROM schbas_texts WHERE description="coverLetter"');
+			$title = TableMng::query('SELECT title FROM SchbasTexts WHERE description="coverLetter"');
+			$text = TableMng::query('SELECT text FROM SchbasTexts WHERE description="coverLetter"');
 			$SchbasSettingsInterface->EditCoverLetter($title[0]['title'],$text[0]['text']);
 		}
 	}
@@ -230,16 +230,16 @@ class SchbasSettings extends Schbas {
 		$gradelevel = $_POST['gradelabel'];
 
 		// get cover letter ("Anschreiben")
-		$coverLetter = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='coverLetter'");
+		$coverLetter = TableMng::query("SELECT title, text FROM SchbasTexts WHERE description='coverLetter'");
 
 		// get first infotext
-		$textOne = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textOne".$gradelevel."'");
+		$textOne = TableMng::query("SELECT title, text FROM SchbasTexts WHERE description='textOne".$gradelevel."'");
 
 		// get second infotext
-		$textTwo = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textTwo".$gradelevel."'");
+		$textTwo = TableMng::query("SELECT title, text FROM SchbasTexts WHERE description='textTwo".$gradelevel."'");
 
 		// get third infotext
-		$textThree = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textThree".$gradelevel."'");
+		$textThree = TableMng::query("SELECT title, text FROM SchbasTexts WHERE description='textThree".$gradelevel."'");
 
 		// get booklist
 		$booklist = $booklistManager->getBooksByClass($gradelevel);

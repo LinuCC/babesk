@@ -94,7 +94,7 @@ class SchbasAccounting extends Schbas {
 			TableMng::query("INSERT INTO MessageMessages (`ID`, `title`, `text`, `validFrom`, `validTo`, `originUserId`, `GID`) VALUES (NULL, '".$template[0]['title']."', '".$template [0]['text']."', '".date("Y-m-d")."', '".date("Y-m-d",strtotime("+4 weeks"))."', '".$author[0]['value']."', '".$group[0]['ID']."');");
 			$messageID = TableMng::$db->insert_id;
 			TableMng::query("INSERT INTO MessageManagers (`ID`, `messageID`, `userId`) VALUES (NULL, '".$messageID."','".$author[0]['value']."')");
-			$usersToRemind = TableMng::query("SELECT * FROM schbas_accounting WHERE payedAmount < amountToPay");
+			$usersToRemind = TableMng::query("SELECT * FROM SchbasAccounting WHERE payedAmount < amountToPay");
 			foreach ($usersToRemind as $user) {
 				TableMng::query("INSERT INTO MessageReceivers (`ID`, `messageID`, `userID`, `read`, `return`) VALUES (NULL, '".$messageID."', '".$user['UID']."', '0', 'noReturn');");
 
@@ -122,7 +122,7 @@ class SchbasAccounting extends Schbas {
 			$loanChoice = $barcodeArray[1];
 			$haystack = array('nl','ln','lr','ls');
 
-			$query = sprintf("SELECT COUNT(*) FROM schbas_accounting WHERE `UID`='%s'",$uid);
+			$query = sprintf("SELECT COUNT(*) FROM SchbasAccounting WHERE `UID`='%s'",$uid);
 			$result=TableMng::query($query);
 			if ($result[0]['COUNT(*)']!="0") {
 				die('dupe');
@@ -163,7 +163,7 @@ class SchbasAccounting extends Schbas {
 					if ($loanChoice=="ln")	$amountToPay = $feeNormal;
 					if ($loanChoice=="lr")	$amountToPay = $feeReduced;
 					if (!isset($amountToPay)) $amountToPay="0.00";
-					$query = sprintf("INSERT INTO schbas_accounting (`UID`,`loanChoice`,`payedAmount`,`amountToPay`) VALUES ('%s','%s','%s','%s')",$uid,$loanChoice,"0.00",$amountToPay);
+					$query = sprintf("INSERT INTO SchbasAccounting (`UID`,`loanChoice`,`payedAmount`,`amountToPay`) VALUES ('%s','%s','%s','%s')",$uid,$loanChoice,"0.00",$amountToPay);
 
 					TableMng::query($query);
 				} catch (Exception $e) {
@@ -237,7 +237,7 @@ class SchbasAccounting extends Schbas {
 
 	private function addPayedAmountToUsers ($users) {
 
-		$payed = TableMng::query('SELECT * FROM schbas_accounting');
+		$payed = TableMng::query('SELECT * FROM SchbasAccounting');
 	//	$fees = TableMng::query('SELECT * FROM SchbasFee', true);
 		foreach ($users as & $user) {
 			foreach ($payed as $pay) {
@@ -261,10 +261,10 @@ class SchbasAccounting extends Schbas {
 	private function executePayment($UID, $payment){
 		$UID = str_replace("Payment", "", $UID);
 		try {
-			TableMng::query("UPDATE schbas_accounting SET payedAmount=$payment WHERE UID=$UID");
-			//die("UPDATE schbas_accounting SET payedAmount=$payment WHERE 'UID'=$UID");
+			TableMng::query("UPDATE SchbasAccounting SET payedAmount=$payment WHERE UID=$UID");
+			//die("UPDATE SchbasAccounting SET payedAmount=$payment WHERE 'UID'=$UID");
 		} catch (Exception $e) {
-			//die("UPDATE schbas_accounting SET 'payedAmount'=$payment WHERE 'UID'=$UID".$e);
+			//die("UPDATE SchbasAccounting SET 'payedAmount'=$payment WHERE 'UID'=$UID".$e);
 		}
 
 	}
@@ -278,14 +278,14 @@ class SchbasAccounting extends Schbas {
 
 			$uid = $uidArray[0];
 
-			$query = sprintf("SELECT COUNT(*) FROM schbas_accounting WHERE `UID`='%s'",$uid);
+			$query = sprintf("SELECT COUNT(*) FROM SchbasAccounting WHERE `UID`='%s'",$uid);
 			$result=TableMng::query($query);
 			if (!$result[0]['COUNT(*)']!="0") {
 				$this->SchbasAccountingInterface->dieError('Benutzer hat noch keinen Antrag abgegeben!');
 			}
 			if(is_numeric($uid)) {
 				try {
-					$query = sprintf("DELETE FROM schbas_accounting WHERE `UID`='%s'",$uid);
+					$query = sprintf("DELETE FROM SchbasAccounting WHERE `UID`='%s'",$uid);
 
 					TableMng::query($query);
 					$this->SchbasAccountingInterface->showDeleteSuccess();
@@ -340,7 +340,7 @@ class SchbasAccounting extends Schbas {
 
 			//book
 			$bookid = (int) $lending[$i]["inventory_id"];
-			$title = TableMng::query("SELECT title FROM schbas_books WHERE id=$bookid");
+			$title = TableMng::query("SELECT title FROM SchbasBooks WHERE id=$bookid");
 			$book[] = $title[0]["title"];
 
 			//date
@@ -385,7 +385,7 @@ class SchbasAccounting extends Schbas {
 		}
 
 		for ($i=0;$i<$nr;$i++){
-			$bookName = TableMng::query("SELECT title FROM schbas_books WHERE id='$bookIDs[$i]'");
+			$bookName = TableMng::query("SELECT title FROM SchbasBooks WHERE id='$bookIDs[$i]'");
 			if (!empty($bookName)) {
 			$bookName = $bookName[0]["title"];
 			if ($i==0){
@@ -425,7 +425,7 @@ class SchbasAccounting extends Schbas {
 // 			$bookIDs[] = $books[$i]["inventory_id"];
 // 		}
 
-// 		$should = TableMng::query("SELECT id FROM schbas_books WHERE class='".$class."'");
+// 		$should = TableMng::query("SELECT id FROM SchbasBooks WHERE class='".$class."'");
 
 // 		for ($i=0; $i<count($should); $i++){
 // 			$shouldIDs[] = $should[$i]["id"];
@@ -436,7 +436,7 @@ class SchbasAccounting extends Schbas {
 // 		// FINDING THE NAMES
 
 // 		for ($i=0;$i<count($bookIDs1);$i++){
-// 			$bookName = TableMng::query("SELECT title FROM schbas_books WHERE id='$bookIDs1[$i]'");
+// 			$bookName = TableMng::query("SELECT title FROM SchbasBooks WHERE id='$bookIDs1[$i]'");
 // 			//var_dump($bookName);echo "<br>";
 // 			$bookName = $bookName[0]["title"];
 // 			if ($i==0){

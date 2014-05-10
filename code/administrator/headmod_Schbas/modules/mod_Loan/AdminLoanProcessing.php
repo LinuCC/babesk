@@ -36,14 +36,14 @@ $alert="<font color=#ff0000>";
 
 		$uid = $this->GetUser($card_id);
 		// eingefügt
-		$hasForm = TableMng::query(sprintf('SELECT COUNT(*) FROM schbas_accounting WHERE UID = "%s"',$uid));
+		$hasForm = TableMng::query(sprintf('SELECT COUNT(*) FROM SchbasAccounting WHERE UID = "%s"',$uid));
 			if ($hasForm[0]['COUNT(*)']=="0")
 		$alert .= "<u>Buchhaltungshinweis:</u><br><li><h5>Formular zur Buchausleihe wurde nicht abgegeben!</h5></li><br>";
 		$schoolyearDesired = TableMng::query('SELECT ID FROM SystemSchoolyears WHERE active = 1');
 		$schoolyearID = $schoolyearDesired[0]['ID'];
 		$gradeID = TableMng::query(sprintf('SELECT GradeID FROM SystemUsersInGradesAndSchoolyears WHERE UserID = "%s" AND schoolyearID ="%s"', $uid,$schoolyearID));
 				$grade = TableMng::query(sprintf('SELECT gradelevel FROM SystemGrades WHERE ID = %s', $gradeID[0]['GradeID']));
-				$payed = TableMng::query(sprintf('SELECT loanChoice, payedAmount,amountToPay FROM schbas_accounting WHERE UID="%s"',$uid));
+				$payed = TableMng::query(sprintf('SELECT loanChoice, payedAmount,amountToPay FROM SchbasAccounting WHERE UID="%s"',$uid));
 				if (($payed[0]['loanChoice']=="ln" || $payed[0]['loanChoice']=="lr" )&& strcmp($payed[0]['payedAmount'],$payed[0]['amountToPay'])<0)
 						$alert .="<u>Buchhaltungshinweis:</u><br><li><h5>Geld wurde noch nicht (ausreichend) gezahlt.</h5></li><li><h5>Es sind bisher ".$payed[0]['payedAmount']."&euro; von ".$payed[0]['amountToPay']."&euro; eingegangen!</h5></li><br>";
 
@@ -55,7 +55,7 @@ $alert="<font color=#ff0000>";
 					$alert .= "<u>Es sind noch B&uuml;cher ausgeliehen:</u><br>";
 					foreach ($hasBooksID as $hasBook){
 						$book_id = TableMng::query(sprintf("SELECT book_id FROM SchbasInventory WHERE id = %s",$hasBook['inventory_id']));
-						$book_title = TableMng::query(sprintf("SELECT title FROM schbas_books WHERE id = %s",$book_id[0]['book_id']));
+						$book_title = TableMng::query(sprintf("SELECT title FROM SchbasBooks WHERE id = %s",$book_id[0]['book_id']));
 						$alert .= "<li><h5>".$book_title[0]['title']."</h5></li>";
 					}
 					$alert.="<br>";
@@ -72,7 +72,7 @@ $alert="<font color=#ff0000>";
 			$alert .= "<u>Folgende B&uuml;cher werden selbst angeschafft:</u><br>";
 			foreach ($loanbooksSelfBuy as $selfBook){
 
-				$book_title = TableMng::query(sprintf("SELECT title FROM schbas_books WHERE id = %s",$selfBook['BID']));
+				$book_title = TableMng::query(sprintf("SELECT title FROM SchbasBooks WHERE id = %s",$selfBook['BID']));
 				$alert .= "<li><h5>".$book_title[0]['title']."</h5></li>";
 			}
 			$alert.="<br>";
