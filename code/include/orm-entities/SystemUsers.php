@@ -1,6 +1,6 @@
 <?php
 
-namespace Babesk\ORM\Entities;
+namespace Babesk\ORM;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;

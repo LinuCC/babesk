@@ -1,6 +1,6 @@
 <?php
 
-namespace Babesk\ORM\Entities;
+namespace Babesk\ORM;
 
 /**
  * @Entity @Table(name="SystemGroups")
