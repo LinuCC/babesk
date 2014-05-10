@@ -164,7 +164,19 @@ class Booklist extends Schbas {
 				$book->getSubject()->getName() : '';
 			$books[] = $bookAr;
 		}
-		die(json_encode($books));
+
+		$bookcount = count($paginator);
+		// No division by zero, never show zero sites
+		if($_POST['booksPerPage'] != 0 && $bookcount > 0) {
+			$pagecount = ceil($bookcount / (int)$_POST['booksPerPage']);
+		}
+		else {
+			$pagecount = 1;
+		}
+
+		die(json_encode(array(
+			'pagecount' => $pagecount, 'books' => $books
+		)));
 	}
 
 	/////////////////////////////////////////////////////////////////////

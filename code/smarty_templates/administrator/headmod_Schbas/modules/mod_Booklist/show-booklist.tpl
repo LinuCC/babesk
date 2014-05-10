@@ -14,22 +14,59 @@
 		<td><%= bundle %></td>
 		<td>LOOOOL</td>
 		<td>
-		<a class="btn btn-info btn-xs" href="index.php?section=Schbas|Booklist&action=2&ID=<%= id %>">bearbeiten</a>
-			<a class="btn btn-danger btn-xs" href="index.php?section=Schbas|Booklist&action=3&ID=<%= id %>">löschen</a>
+		<a class="btn btn-info btn-xs" href="index.php?section=Schbas|Booklist&action=2&ID=<%= id %>" title="Bucheinstellungen">
+				<span class="icon icon-Settings"></span>
+		</a>
+		<a class="btn btn-danger btn-xs" href="index.php?section=Schbas|Booklist&action=3&ID=<%= id %>" title="Buch löschen">
+			<span class="icon icon-error"></span>
+		</a>
 		</td>
 	</tr>
+</script>
 
-
+<script type="text/template" id="paginator-template">
+	<li class="disabled"><a class="first-page">&laquo;</a></li>
+	<% for(var i = startPage; i <= pagecount && i < startPage + amountDisplayed; i++) { %>
+		<li><a><%= i %></a></li>
+	<% } %>
+	<li class="disabled"><a class="last-page">&raquo;</a></li>
 </script>
 
 {/block}
 
 {block name=filling_content}
 
-<a class="btn btn-danger">button</a>
+<div class="row">
+	<div class="center-block">
+		<div class="col-sm-4 col-md-3 text-center">
+			<span class="input-group filter-container"
+				title="{t}Search (Enter to commit){/t}" >
+				<span class="input-group-addon">
+					<span class="icon icon-search"></span>
+				</span>
+				<input id="filter" type="text" class="form-control"
+					placeholder="{t}Search...{/t}" />
+			</span>
+		</div>
+		<div class="col-sm-8 col-md-6 text-center">
+			<ul id="page-select" class="pagination">
+			</ul>
+		</div>
+		<div class="col-sm-12 col-md-3 form-group">
+				<div class="input-group books-per-page-container pull-right"
+					title="{t}Rows per page{/t}" >
+					<span class="input-group-addon">
+						<span class="icon icon-Settings"></span>
+					</span>
+					<input id="books-per-page" type="text" maxlength="3" class="form-control"
+						value="10" />
+				</div>
+		</div>
+	</div>
+</div>
 
-<div class="table-responsive">
-	<table id="booklist" class="table table-hover table-striped">
+<div>
+	<table id="booklist" class="table table-hover table-striped table-responsive">
 		<thead>
 			<tr>
 				<th>Fach</th>
@@ -45,25 +82,6 @@
 			</tr>
 		</thead>
 		<tbody>
-			{foreach $booksPaginator as $book}
-				<tr>
-					<td>
-						{if $book->getSubject()} {$book->getSubject()->getName()} {/if}
-					</td>
-					<td>{$book->getClass()}</td>
-					<td>{$book->getTitle()}</td>
-					<td>{$book->getAuthor()}</td>
-					<td>{$book->getPublisher()}</td>
-					<td>{$book->getIsbn()}</td>
-					<td>{$book->getPrice()|string_format:"%.2f"}</td>
-					<td>{$book->getBundle()}</td>
-					<td></td>
-					<td>
-						<a class="btn btn-info btn-xs" href="index.php?section=Schbas|Booklist&action=2&ID={$bookcode.id}">bearbeiten</a>
-						<a class="btn btn-danger btn-xs" href="index.php?section=Schbas|Booklist&action=3&ID={$bookcode.id}">löschen</a>
-					</td>
-				</tr>
-			{/foreach}
 		</tbody>
 	</table>
 </div>

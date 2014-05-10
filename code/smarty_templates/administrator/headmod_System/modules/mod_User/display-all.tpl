@@ -87,7 +87,7 @@
 
 
 {block name=filling_content}
-<div>
+<div class="row">
 	<div class="center-block">
 		<div class="col-sm-4 col-md-3 text-center">
 			<span class="input-group filter-container"
