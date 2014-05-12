@@ -61,6 +61,13 @@
 						{/block}
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
+						<li>
+							<button class="btn btn-dark navbar-btn btn-sm sidebar-toggle"
+								data-toggle="tooltip" data-placement="bottom"
+								title="Seitennavigation togglen">
+								<span class="icon icon-listelements"></span>
+							</button>
+						</li>
 						{block name="nav_user_dropdown"}
 							<li class="dropdown">
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown">

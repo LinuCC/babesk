@@ -54,6 +54,7 @@ hr {
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffAADD33', endColorstr='#ff91BD2B', GradientType=0);
 	border-bottom: 1px solid #151515;
+	padding-right: 20px;
 }
 
 #navigation.navbar-default .navbar-brand,
@@ -180,7 +181,7 @@ hr {
 
 #main_wrapper {
 	/*position: relative;*/
-	top: 50px;
+	margin-top: 60px;
 	padding: 0px;
 	margin-left: 251px;
 }
@@ -360,4 +361,27 @@ body.modal-open,
 .modal-open .navbar-fixed-top,
 .modal-open .navbar-fixed-bottom {
 	margin-right: 0px;
+}
+
+/*
+ * Just a dark button, as an alternative to the other bootstrap-buttons
+ */
+.btn-dark {
+  color: #fff;
+  background-color: #555;
+  border-color: #333;
+}
+.btn-dark:hover,
+.btn-dark:focus,
+.btn-dark:active,
+.btn-dark.active,
+.open .dropdown-toggle.btn-dark {
+  color: #fff;
+  background-color: #777;
+  border-color: #555;
+}
+.btn-dark:active,
+.btn-dark.active,
+.open .dropdown-toggle.btn-dark {
+  background-image: none;
 }
