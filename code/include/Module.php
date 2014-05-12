@@ -380,6 +380,8 @@ abstract class Module {
 	 * @var Interface
 	 */
 	protected $_interface;
+
+	protected $_submoduleExecutionpath;
 }
 
 ?>

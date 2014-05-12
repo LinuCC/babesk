@@ -135,6 +135,7 @@ hr {
 
 #sidebar-module-selection .nav > li > a {
 	padding-right: 5px;
+	padding-left: 5px;
 }
 
 #sidebar-module-selection li > ul > li {

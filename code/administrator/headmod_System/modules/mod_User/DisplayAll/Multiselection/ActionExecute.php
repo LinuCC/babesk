@@ -1,8 +1,10 @@
 <?php
 
+namespace administrator\System\User\DisplayAll\Multiselection;
+
 require_once PATH_ADMIN . '/headmod_System/modules/mod_User/DisplayAll/Multiselection/Multiselection.php';
 
-class ActionExecute extends Multiselection {
+class ActionExecute extends \Multiselection {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -15,7 +17,6 @@ class ActionExecute extends Multiselection {
 	public function execute($dataContainer) {
 
 		$this->entryPoint($dataContainer);
-		die('["schinken!"]');
 	}
 
 	/////////////////////////////////////////////////////////////////////

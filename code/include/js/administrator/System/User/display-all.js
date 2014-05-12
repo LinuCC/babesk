@@ -99,12 +99,33 @@ $(document).ready(function() {
 				name: 'activeGrade',
 				displayName: 'aktive Klasse',
 				isDisplayed: false
+			},
+			{
+				name: 'religion',
+				displayName: 'Religionen',
+				isDisplayed: false
+			},
+			{
+				name: 'foreign_language',
+				displayName: 'Fremdsprachen',
+				isDisplayed: false
+			},
+			{
+				name: 'course',
+				displayName: 'Oberstufenkurse',
+				isDisplayed: false
+			},
+			{
+				name: 'special_course',
+				displayName: 'Spezielle Oberstufenkurse',
+				isDisplayed: false
 			}
 		];
 
 		var activePage = 1;
 		var amountPages = 0;
 
+		columnsToShowSetByCookies();
 		columnsToShowUpdate();
 		columnToggleDisplayListBuild();
 		$('.column-switch').bootstrapSwitch();
@@ -158,13 +179,14 @@ $(document).ready(function() {
 		});
 
 		$('#selected-action-button').on('click', function(ev) {
-			$.postJSON(
-					'index.php?module=administrator|System|User|DisplayAll|Multiselection|ActionsGet',
-					['barsch'],
-					function(res) {
-						toastr.success(res);
-					}
-				);
+			$.post(
+				'index.php?module=administrator|System|User|DisplayAll|Multiselection|ActionsGet',
+				{},
+				function(res) {
+					$('#multiselection-actions-container').html(res);
+				},
+				'html'
+			);
 		});
 
 		$('#user-table').on('click', '#user-checkbox-global', function(ev) {
@@ -306,6 +328,25 @@ $(document).ready(function() {
 			});
 		}
 
+		function columnsToShowSetByCookies() {
+
+			$.each(columns, function(ind, el) {
+				var cookieVal = $.cookie('UserlistColumnDisplay' + el['name']);
+				console.log(cookieVal);
+				console.log(el);
+				if(cookieVal != 'undefined' && cookieVal != undefined) {
+					columns[ind]['isDisplayed'] = (cookieVal == 'true') ? true : false;
+				}
+			});
+		}
+
+		function cookiesSetByColumnsToShow() {
+
+			$.each(columns, function(ind, el) {
+				$.cookie('UserlistColumnDisplay' + el['name'], el['isDisplayed']);
+			});
+		}
+
 		/**
 		 * Builds the list allowing the users to choose which columns to display
 		 */
@@ -380,6 +421,7 @@ $(document).ready(function() {
 		function tableRefresh(userData) {
 			tableClear();
 			tableFill(userData);
+			cookiesSetByColumnsToShow();
 		};
 
 		function tableClear() {

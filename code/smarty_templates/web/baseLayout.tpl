@@ -304,7 +304,7 @@
 							for bugs and feature requests.
 						</p>
 						<p style="font-size: 10px; position:relative; top: 50px">
-							Also, <a href="javascript: toastr.info('<div class=&quot;icon-darthvader icon&quot; style=&quot;font-size:48px&quot;></div>', 'A wild Vader appeared!')">spam.</a>
+							Also, <a href="#" onclick="javascript: toastr.info('<div class=&quot;icon-darthvader icon&quot; style=&quot;font-size:48px&quot;></div>', 'A wild Vader appeared!')">spam.</a>
 						</p>
 						</div>
 					</div>

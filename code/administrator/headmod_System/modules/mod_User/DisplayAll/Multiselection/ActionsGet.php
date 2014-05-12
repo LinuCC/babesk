@@ -1,8 +1,10 @@
 <?php
 
+namespace administrator\System\User\DisplayAll\Multiselection;
+
 require_once PATH_ADMIN . '/headmod_System/modules/mod_User/DisplayAll/Multiselection/Multiselection.php';
 
-class ActionsGet extends Multiselection {
+class ActionsGet extends \Multiselection {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -15,7 +17,7 @@ class ActionsGet extends Multiselection {
 	public function execute($dataContainer) {
 
 		$this->entryPoint($dataContainer);
-		die(json_encode('value'));
+		$this->render();
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -26,6 +28,11 @@ class ActionsGet extends Multiselection {
 
 		parent::entryPoint($dataContainer);
 		parent::moduleTemplatePathSet();
+	}
+
+	protected function render() {
+
+		$this->displayTpl('actions/base.tpl');
 	}
 
 	/////////////////////////////////////////////////////////////////////

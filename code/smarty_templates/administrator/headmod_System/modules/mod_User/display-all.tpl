@@ -83,6 +83,23 @@
 		</div>
 	</div>
 </div>
+
+<div id="multiselection-actions-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title">Aktionen mit selektierten Nutzern</h4>
+			</div>
+			<div id="multiselection-actions-container" class="modal-body">
+			</div>
+		</div>
+	</div>
+</div>
+
 {/block}
 
 
@@ -131,7 +148,8 @@
 	</table>
 </div>
 <div>
-	<button id="selected-action-button" class="btn btn-default" type="button">
+	<button id="selected-action-button" class="btn btn-default" type="button"
+		data-toggle="modal" data-target="#multiselection-actions-modal">
 		&uArr; Aktion mit selektierten
 	</button>
 	<ul id="relative-pager" class="pager">
