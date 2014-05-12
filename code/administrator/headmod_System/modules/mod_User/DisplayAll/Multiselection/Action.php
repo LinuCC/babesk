@@ -5,7 +5,7 @@ namespace administrator\System\User\DisplayAll\Multiselection\Actions;
 /**
  * Baseclass for an ActionHandler, a class that does something with userdata
  */
-class Action {
+abstract class Action {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -28,7 +28,7 @@ class Action {
 	//Methods
 	/////////////////////////////////////////////////////////////////////
 
-	virtual public function actionExecute($clientData);
+	abstract public function actionExecute($clientData);
 
 	/////////////////////////////////////////////////////////////////////
 	//Implements

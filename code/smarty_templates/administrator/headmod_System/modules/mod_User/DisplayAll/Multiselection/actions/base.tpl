@@ -3,7 +3,11 @@
  * file (or include an additional template with the form), and add the action
  * based on that to the class ActionExecute.
  *}
+
+{$path_action_tpl = "$path_smarty_tpl/administrator/headmod_System/modules/mod_User/DisplayAll/Multiselection/actions"}
 <fieldset>
 	<legend>Alle löschen!</legend>
-	<button class="btn btn-danger">GO!</button>
+	<button class="btn btn-danger btn-lg">GO!</button>
 </fieldset>
+
+{include file="$path_action_tpl/user-replace-religion.tpl"}
