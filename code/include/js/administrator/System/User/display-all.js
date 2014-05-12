@@ -157,6 +157,16 @@ $(document).ready(function() {
 				.addClass('btn-warning');
 		});
 
+		$('#selected-action-button').on('click', function(ev) {
+			$.postJSON(
+					'index.php?module=administrator|System|User|DisplayAll|Multiselection|ActionsGet',
+					['barsch'],
+					function(res) {
+						toastr.success(res);
+					}
+				);
+		});
+
 		$('#user-table').on('click', '#user-checkbox-global', function(ev) {
 			var checkboxes = $('.user-checkbox');
 			checkboxes.prop('checked', $('#user-checkbox-global').prop('checked'));
