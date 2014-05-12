@@ -131,6 +131,9 @@
 	</table>
 </div>
 <div>
+	<button id="selected-action-button" class="btn btn-default" type="button">
+		&uArr; Aktion mit selektierten
+	</button>
 	<ul id="relative-pager" class="pager">
 		<li id="relative-pager-prev"><a href="#">&larr; {t}Previous{/t}</a></li>
 		<li id="relative-pager-next"><a href="#">{t}Next{/t} &rarr;</a></li>

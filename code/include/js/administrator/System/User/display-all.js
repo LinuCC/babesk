@@ -152,6 +152,16 @@ $(document).ready(function() {
 			}
 		});
 
+		$('#user-table').on('click', '.user-checkbox', function(ev) {
+			$('button#selected-action-button').removeClass('btn-default')
+				.addClass('btn-warning');
+		});
+
+		$('#user-table').on('click', '#user-checkbox-global', function(ev) {
+			var checkboxes = $('.user-checkbox');
+			checkboxes.prop('checked', $('#user-checkbox-global').prop('checked'));
+		});
+
 		$('#user-table').on('click', '.user-action-delete', function(ev) {
 			var userId = $(this).closest('tr').attr('id').replace('user_', '');
 			bootbox.dialog({
@@ -249,25 +259,25 @@ $(document).ready(function() {
 				$('#relative-pager-prev').addClass('disabled');
 			}
 			else {
-				$pager= $('<li><a class="first-page">&laquo;</a></li>');
+				$pager= $('<li><a href="#" class="first-page">&laquo;</a></li>');
 				$('#relative-pager-prev').removeClass('disabled');
 			}
 			for(var i = startPage; i <= pagecount && i < startPage + amountSelectorsDisplayed; i++) {
 				if(i == activePage) {
-					$pager.append('<li class="active"><a>' + i + '</a></li>');
+					$pager.append('<li class="active"><a href="#">' + i + '</a></li>');
 				}
 				else {
-					$pager.append('<li><a>' + i + '</a></li>');
+					$pager.append('<li><a href="#">' + i + '</a></li>');
 				}
 			}
 			if(activePage == pagecount) {
 				$pager.append(
-					'<li class="disabled"><a class="last-page">&raquo;</a></li>'
+					'<li class="disabled"><a href="#" class="last-page">&raquo;</a></li>'
 				);
 				$('#relative-pager-next').addClass('disabled');
 			}
 			else {
-				$pager.append('<li><a class="last-page">&raquo;</a></li>');
+				$pager.append('<li><a href="#" class="last-page">&raquo;</a></li>');
 				$('#relative-pager-next').removeClass('disabled');
 			}
 			$('#page-select').html($pager.outerHtml());
@@ -369,7 +379,7 @@ $(document).ready(function() {
 		function tableFill(userData) {
 			//Sets the TableHead
 			// var columnHeader = selectedColumnLabelsGet();
-			var headRow = '<tr>';
+			var headRow = '<tr><th><input id="user-checkbox-global" type="checkbox" /></th>';
 			if(userData.length != 0){
 				$.each(userData[0], function(index, columnName) {
 					var respectiveColumnEntryArr = $.grep(columns, function(el) {
@@ -389,7 +399,12 @@ $(document).ready(function() {
 
 				//Sets the TableBody
 				$.each(userData, function(index, user) {
-					row = String('<tr id="user_{0}">').format(user.ID);
+					row = String(
+							'<tr id="user_{0}">\
+								<td>\
+									<input class="user-checkbox" user-id="{0}" type="checkbox"/>\
+								</td>'
+						).format(user.ID);
 					$.each(user, function(colIndex, column) {
 						row += '<td>' + column + '</td>';
 					});
