@@ -20,70 +20,65 @@ hr {
 }
 
 .module_breadcrumb.breadcrumb {
-	background-color: #AADD33;
+	background-color: #494949;
 	/*width: 100%;*/
 	margin: 0;
-	padding: 7px 7px 7px 20px;
-	margin-bottom: 20px;
+	padding: 5px;
 	border-radius: 0;
+	color: #CCC;
+	font-size: 80%;
+	border-bottom: 1px solid #111;
 }
 
 .module_breadcrumb.breadcrumb > li + li:before {
-	color: #61801C;
+	color: #888;
+	padding: 0 0 0 2px;
 }
 
-.module_breadcrumb p {
-	margin: 0;
+.module_breadcrumb a {
+	color: #AAE;
 }
 
 .container-fluid {
-margin-right: auto;
-margin-left: auto;
-padding-left: 15px;
-padding-right: 15px;
+	margin-right: auto;
+	margin-left: auto;
+	padding-left: 15px;
+	padding-right: 15px;
 }
 
 #navigation {
-	background-image: -webkit-gradient(linear, left 0%, left 100%, from(#444), to(#333));
-	background-image: -webkit-linear-gradient(top, #444 0%, #333, 100%);
-	background-image: -moz-linear-gradient(top, #444 0%, #333 100%);
-	background-image: linear-gradient(to bottom, #444 0%, #333 100%);
+	background-image: -webkit-gradient(linear, left 0%, left 100%, from(#AADD33), to(#91BD2B));
+	background-image: -webkit-linear-gradient(top, #AADD33 0%, #91BD2B, 100%);
+	background-image: -moz-linear-gradient(top, #AADD33 0%, #91BD2B 100%);
+	background-image: linear-gradient(to bottom, #AADD33 0%, #91BD2B 100%);
 	background-repeat: repeat-x;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff444', endColorstr='#ff333', GradientType=0);
-	color: #BFBBBB;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffAADD33', endColorstr='#ff91BD2B', GradientType=0);
 	border-bottom: 1px solid #151515;
 }
 
-#navigation.navbar-inverse .navbar-brand {
-	color: #EEEEEE;
+#navigation.navbar-default .navbar-brand,
+#navigation.navbar-default .navbar-nav > li > a {
+	color: #222;
 }
 
-#navigation.navbar-inverse .navbar-nav > li > a {
-	color: #EEEEEE;
-}
-
-#navigation.navbar-inverse .navbar-brand:hover {
-	color: #FFFFFF;
-}
-
-#navigation.navbar-inverse .navbar-nav > li > a:hover {
-	color: #FFFFFF;
+#navigation.navbar-default .navbar-brand:hover,
+#navigation.navbar-default .navbar-nav > li > a:hover {
+	color: #666;
 }
 
 #navigation .navbar-nav .active > a {
 	background-color: #595757;
 }
 
-#navigation.navbar-inverse .navbar-nav > .open > a,
-#navigation.navbar-inverse .navbar-nav > .open > a:hover,
-#navigation.navbar-inverse .navbar-nav > .open > a:focus {
-	background-image: -webkit-gradient(linear, left 0%, left 100%, from(#666464), to(#515050));
-	background-image: -webkit-linear-gradient(top, #666464, 0%, #515050, 100%);
-	background-image: -moz-linear-gradient(top, #666464 0%, #515050 100%);
-	background-image: linear-gradient(to bottom, #666464 0%, #515050 100%);
+#navigation.navbar-default .navbar-nav > .open > a,
+#navigation.navbar-default .navbar-nav > .open > a:hover,
+#navigation.navbar-default .navbar-nav > .open > a:focus {
+	background-image: -webkit-gradient(linear, left 0%, left 100%, from(#AADD33), to(#91BD2B));
+	background-image: -webkit-linear-gradient(top, #AADD33 0%, #91BD2B, 100%);
+	background-image: -moz-linear-gradient(top, #AADD33 0%, #91BD2B 100%);
+	background-image: linear-gradient(to bottom, #AADD33 0%, #91BD2B 100%);
 	background-repeat: repeat-x;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff666464', endColorstr='#ff666464', GradientType=0);
-	color: #FFFFFF;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffAADD33', endColorstr='#ff91BD2B', GradientType=0);
 }
 
 #navigation.navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
@@ -114,7 +109,7 @@ padding-right: 15px;
 	border: none;
 }
 
-#sidebar-module-selection {
+.sidebar {
 	position: fixed;
 	top: 50px;
 	bottom: 0;
@@ -126,11 +121,19 @@ padding-right: 15px;
 	background-color: #333;
 	border-right: 1px solid #151515;
 	box-shadow: 2px 0px 2px #666;
+	width: 250px;
+}
+
+#sidebar-module-selection {
 }
 
 #sidebar-module-selection li {
 	background-color: #333;
 	text-shadow: 2px 2px 2px #111;
+}
+
+#sidebar-module-selection .nav > li > a {
+	padding-right: 5px;
 }
 
 #sidebar-module-selection li > ul > li {
@@ -160,6 +163,7 @@ padding-right: 15px;
 
 #sidebar-module-selection a .toggle-icon {
 	line-height: 20px;
+	font-size: 10px;
 }
 
 #sidebar-module-selection .spacer {
@@ -175,8 +179,10 @@ padding-right: 15px;
 }
 
 #main_wrapper {
+	/*position: relative;*/
 	top: 50px;
 	padding: 0px;
+	margin-left: 251px;
 }
 
 

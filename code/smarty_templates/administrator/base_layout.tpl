@@ -40,7 +40,7 @@
 		{*-----------------------------------------------------
 		 * The top-navigation
 		 *}
-		<div id="navigation" class="navbar-inverse navbar-default navbar-fixed-top"
+		<div id="navigation" class="navbar-default navbar-fixed-top"
 			role="navigation">
 			<div class="">
 				<div class="navbar-header">
@@ -83,72 +83,7 @@
 				{*-----------------------------------------------------
 				 * The sidebar-navigation
 				 *}
-				<div id="sidebar-module-selection" class="col-sm-3 col-md-2 sidebar">
-					<ul id="sidebar-base-nav" class="nav">
-						{foreach $headmodules as $headmodule}
-							{$hModulepath = $moduleGenMan->modulePathGet($headmodule)}
-							<li>
-								<a href="#" data-toggle="collapse"
-								data-target="#sidebar-module-{str_replace('/', '_', $hModulepath)}" data-parent="#sidebar-base-nav"
-								class="sidebar-folder">
-									<div class="container text-icon-spacer">
-										<span class="col-xs-10 col-lg-11">
-											<span class="icon icon-{$headmodule->getName()} module-icon"></span>
-											{_g('modulepath_'|cat:$hModulepath)}
-										</span>
-										<span class="col-xs-2 col-lg-1">
-											<span class="toggle-icon icon icon-plus pull-right">
-											</span>
-										</span>
-									</div>
-								</a>
-								<ul id="sidebar-module-{str_replace('/', '_', $hModulepath)}"
-								class="nav collapse">
-									{foreach $headmodule->getChilds() as $module}
-										{$modulepath = $moduleGenMan->modulePathGet($module)}
-										<li>
-											<a href="index.php?module=administrator|{$headmodule->getName()}|{$module->getName()}">
-												<span>{_g('modulepath_'|cat:$modulepath)}</span>
-											</a>
-										</li>
-									{/foreach}
-								</ul>
-							</li>
-						{/foreach}
-						<li>
-							<a href="#" data-toggle="collapse" data-target="#headmod-submenu-1" class="collapsed sidebar-folder">
-								<span>Custom folder</span>
-								<span class="toggle-icon icon icon-plus pull-right"></span>
-							</a>
-							<ul id="headmod-submenu-1" class="nav collapse">
-								<li>
-									<a href="#">Custom Link</a>
-								</li>
-								<li>
-									<a href="#" data-toggle="collapse" data-target="#headmod-submenu-3" class="collapsed sidebar-folder">
-										<span>Custom nested folder</span>
-										<span class="toggle-icon icon icon-plus pull-right"></span>
-									</a>
-									<ul id="headmod-submenu-3" class="nav collapse">
-										<li>
-											<a href="#">Custom Link</a>
-										</li>
-										<li>
-											<a href="#">Another Link that could do something...</a>
-										</li>
-									</ul>
-								</li>
-								<li class="spacer"></li>
-								<li>
-									<a href="#">Hey, there is a spacer over me!</a>
-								</li>
-
-							</ul>
-						</li>
-					</ul>
-				</div>
-				<div id="main_wrapper" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
-
+				<div class="sidebar">
 					{*-----------------------------------------------------
 					 * Breadcrumb displaying which module we use right now
 					 *}
@@ -172,6 +107,70 @@
 							{/if}
 						</ul>
 					{/block}
+					<div id="sidebar-module-selection">
+						<ul id="sidebar-base-nav" class="nav">
+							{foreach $headmodules as $headmodule}
+								{$hModulepath = $moduleGenMan->modulePathGet($headmodule)}
+								<li>
+									<a href="#" data-toggle="collapse"
+									data-target="#sidebar-module-{str_replace('/', '_', $hModulepath)}" data-parent="#sidebar-base-nav"
+									class="sidebar-folder">
+										<div class="text-icon-spacer">
+												<span class="icon icon-{$headmodule->getName()} module-icon"></span>
+												{_g('modulepath_'|cat:$hModulepath)}
+												<span class="toggle-icon icon icon-plus pull-right">
+												</span>
+												<span class="clearfix"></span>
+										</div>
+									</a>
+									<ul id="sidebar-module-{str_replace('/', '_', $hModulepath)}"
+									class="nav collapse">
+										{foreach $headmodule->getChilds() as $module}
+											{$modulepath = $moduleGenMan->modulePathGet($module)}
+											<li>
+												<a href="index.php?module=administrator|{$headmodule->getName()}|{$module->getName()}">
+													<span>{_g('modulepath_'|cat:$modulepath)}</span>
+												</a>
+											</li>
+										{/foreach}
+									</ul>
+								</li>
+							{/foreach}
+							<li>
+								<a href="#" data-toggle="collapse" data-target="#headmod-submenu-1" class="collapsed sidebar-folder">
+									<span>Custom folder</span>
+									<span class="toggle-icon icon icon-plus pull-right"></span>
+								</a>
+								<ul id="headmod-submenu-1" class="nav collapse">
+									<li>
+										<a href="#">Custom Link</a>
+									</li>
+									<li>
+										<a href="#" data-toggle="collapse" data-target="#headmod-submenu-3" class="collapsed sidebar-folder">
+											<span>Custom nested folder</span>
+											<span class="toggle-icon icon icon-plus pull-right"></span>
+										</a>
+										<ul id="headmod-submenu-3" class="nav collapse">
+											<li>
+												<a href="#">Custom Link</a>
+											</li>
+											<li>
+												<a href="#">Another Link that could do something...</a>
+											</li>
+										</ul>
+									</li>
+									<li class="spacer"></li>
+									<li>
+										<a href="#">Hey, there is a spacer over me!</a>
+									</li>
+
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div id="main_wrapper" class="">
+
 					<div id="content">
 						<noscript>
 							<div class="panel panel-danger">
