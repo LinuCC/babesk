@@ -32,6 +32,9 @@ class ActionsGet extends \Multiselection {
 
 	protected function render() {
 
+		//Require all ORM-Entities allowing the plugins to use them
+		require_all(PATH_INCLUDE . '/orm-entities/');
+		$this->_smarty->assign('doctrine', $this->_entityManager);
 		$this->displayTpl('actions/base.tpl');
 	}
 

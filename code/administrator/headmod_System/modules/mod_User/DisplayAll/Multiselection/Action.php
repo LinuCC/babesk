@@ -34,6 +34,19 @@ abstract class Action {
 	//Implements
 	/////////////////////////////////////////////////////////////////////
 
+	protected function dieSuccess($msg) {
+		$this->dieStatus($msg, 'success');
+	}
+
+	protected function dieError($msg) {
+		$this->dieStatus($msg, 'error');
+	}
+
+	protected function dieStatus($msg, $status) {
+		die(json_encode(array('value' => $status,
+			'message' => $msg)));
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
 	/////////////////////////////////////////////////////////////////////

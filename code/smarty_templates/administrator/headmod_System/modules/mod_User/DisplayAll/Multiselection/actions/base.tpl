@@ -5,9 +5,5 @@
  *}
 
 {$path_action_tpl = "$path_smarty_tpl/administrator/headmod_System/modules/mod_User/DisplayAll/Multiselection/actions"}
-<fieldset>
-	<legend>Alle löschen!</legend>
-	<button class="btn btn-danger btn-lg">GO!</button>
-</fieldset>
 
 {include file="$path_action_tpl/user-replace-religion.tpl"}

@@ -332,8 +332,6 @@ $(document).ready(function() {
 
 			$.each(columns, function(ind, el) {
 				var cookieVal = $.cookie('UserlistColumnDisplay' + el['name']);
-				console.log(cookieVal);
-				console.log(el);
 				if(cookieVal != 'undefined' && cookieVal != undefined) {
 					columns[ind]['isDisplayed'] = (cookieVal == 'true') ? true : false;
 				}
@@ -428,6 +426,10 @@ $(document).ready(function() {
 			$('#user-table').html('<thead></thead><tbody></tbody>');
 		}
 
+		/**
+		 * Fills the Userstable with data
+		 * @param  {Object} userData The data with which to fill the table
+		 */
 		function tableFill(userData) {
 			//Sets the TableHead
 			// var columnHeader = selectedColumnLabelsGet();
@@ -473,6 +475,65 @@ $(document).ready(function() {
 				});
 			}
 		}
+
+		/**
+		 * Returns an array of ids of by multiselection selected users
+		 */
+		function getIdsOfSelectedUsers() {
+			return $('input.user-checkbox:checked')
+				.map(function() {return $(this).attr('user-id')}).get();
+		}
+
+		/**
+		 * Contains functions to handle the multiselection-actions
+		 */
+		(function() {
+			$('#multiselection-actions-container').on(
+				'click', '.multiselection-action-submit',
+				function(ev) {
+					var $container = $(ev.currentTarget)
+						.closest(".multiselection-action-view");
+					var data = compileInput($container);
+					data['_multiselectionSelectedOfUsers'] = getIdsOfSelectedUsers();
+					$.postJSON(
+						'index.php?module=administrator|System|User|DisplayAll|\
+						Multiselection|ActionExecute',
+						data,
+						onExecuteSuccess
+					);
+				}
+			);
+
+			/**
+			 * Searches for all inputs in the container and puts values into Object
+			 * @return {Object} The Object containing all input- and select-data
+			 */
+			function compileInput($inputContainer) {
+				var inputData = {};
+				//Load all Inputs
+				$.each($inputContainer.find('input'), function(ind, input) {
+					inputData[$(input).attr('name')] = $(input).val();
+				});
+				//Load all Selects
+				$.each($inputContainer.find('select'), function(ind, select) {
+					var selectedOptions = $(select).find('option:selected');
+					var selOptions = [];
+					//Load every selected option of the select
+					$.each(selectedOptions, function(opInd, option) {
+						selOptions.push($(option).val());
+					});
+					inputData[$(select).attr('name')] = selOptions;
+				});
+				return inputData;
+			}
+
+			function onExecuteSuccess(res) {
+				toastr[res.value](res.message, 'Erfolgreich ausgeführt');
+				$('#multiselection-actions-modal').modal('hide');
+				newDataFetch();
+			}
+
+		})();
 
 	};
 });

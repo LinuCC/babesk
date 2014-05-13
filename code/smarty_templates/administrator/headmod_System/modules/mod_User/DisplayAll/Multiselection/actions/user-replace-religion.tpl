@@ -1,9 +1,24 @@
 <fieldset>
+	{$religionlist = $doctrine->getRepository('\\Babesk\\ORM\\SystemGlobalSettings')->findOneByName('religion')}
+	{if !empty($religionlist)}
+		{$religions = explode('|', $religionlist->getValue())}
+	{/if}
 	<legend>Religion verändern (ersetzt vorherige Religion(-en))</legend>
-	<form method="post" action="index.php?module=administrator|System|User|DisplayAll|Multiselection|ActionExecute">
-		<input type="hidden" name="actionName" value="UserReplaceReligion">
-		<input type="text" name="username" value="Hier reli und so" data-enter-as-click="#action-user-replace-religion-submit">
-		<button id="action-user-replace-religion-submit" type="button"
-			class="btn btn-danger multiselection-action-submit">Verändern</button>
-	</form>
+		<div class="multiselection-action-view">
+			<input type="hidden" name="actionName" value="UserReplaceReligion">
+			<div class="form-group col-sm-6">
+				<select name="religion" class="form-control">
+					{foreach $religions as $rel}
+						<option value="{$rel}">{$rel}</option>
+					{/foreach}
+					}
+				</select>
+			</div>
+			<div class="form-group pull-right">
+				<button id="action-user-replace-religion-submit" type="button"
+					class="btn btn-sm btn-warning multiselection-action-submit">
+						Verändern
+				</button>
+			</div>
+		</div>
 </fieldset>
