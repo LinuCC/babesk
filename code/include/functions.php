@@ -223,4 +223,14 @@ function isBlank($value) {
 	return empty($value) && !is_numeric($value);
 }
 
+/**
+ * Requires all that are in a a directory
+ * @param  string $path The path of the direcory
+ */
+function require_all ($path) {
+	foreach (glob($path.'*.php') as $filename) {
+		require_once $filename;
+	}
+}
+
 ?>
