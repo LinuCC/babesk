@@ -93,8 +93,13 @@
 					&times;
 				</button>
 				<h4 class="modal-title">Aktionen mit selektierten Nutzern</h4>
+					<small>
+						<b>Hinweis:</b>
+						Die Veränderungen werden beim Klick auf den Verändern-Button ohne Nachfrage durchgeführt!
+					</small>
 			</div>
 			<div id="multiselection-actions-container" class="modal-body">
+				{* Dynamically created content here *}
 			</div>
 		</div>
 	</div>
@@ -163,6 +168,7 @@
 {block name=style_include append}
 <link rel="stylesheet" href="{$path_css}/administrator/System/User/display-all.css" type="text/css" />
 <link rel="stylesheet" href="{$path_css}/bootstrap-switch.min.css" type="text/css" />
+<link rel="stylesheet" href="{$path_css}/bootstrap-multiselect.css" type="text/css" />
 {/block}
 
 {block name="js_include" append}
@@ -170,5 +176,6 @@
 </script>
 <script type="text/javascript" src="{$path_js}/bootstrap-switch.min.js">
 </script>
+<script type="text/javascript" src="{$path_js}/bootstrap-multiselect.min.js"></script>
 <script type="text/javascript" src="{$path_js}/bootbox.min.js"></script>
 {/block}

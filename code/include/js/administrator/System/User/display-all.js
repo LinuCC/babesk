@@ -528,7 +528,8 @@ $(document).ready(function() {
 			}
 
 			function onExecuteSuccess(res) {
-				toastr[res.value](res.message, 'Erfolgreich ausgeführt');
+				console.log(res.value);
+				toastr[res.value](res.message);
 				$('#multiselection-actions-modal').modal('hide');
 				newDataFetch();
 			}

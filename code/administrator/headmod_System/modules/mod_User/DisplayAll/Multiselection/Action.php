@@ -28,11 +28,22 @@ abstract class Action {
 	//Methods
 	/////////////////////////////////////////////////////////////////////
 
-	abstract public function actionExecute($clientData);
+	public function actionExecute($clientData) {
+
+		if(isset($clientData['_multiselectionSelectedOfUsers']) &&
+			count($clientData['_multiselectionSelectedOfUsers'])) {
+			$this->execute($clientData);
+		}
+		else {
+			$this->dieError('Keine Nutzer ausgewählt!');
+		}
+	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
+
+	abstract protected function execute($clientData);
 
 	protected function dieSuccess($msg) {
 		$this->dieStatus($msg, 'success');
