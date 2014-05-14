@@ -173,7 +173,16 @@ $(document).ready(function() {
 			}
 		});
 
-		$('#user-table').on('click', '.user-checkbox', function(ev) {
+		$('#user-table').on('click', 'tr', function(ev) {
+
+			var $target = $(ev.target);
+			var $this = $(this);
+			var $box = $this.children('td').children('input[type="checkbox"]');
+			//Dont toggle checkbox two times if checkbox is clicked
+			if(!$target.is('input[type="checkbox"]')) {
+				$box.prop('checked', !$box.prop('checked'));
+			}
+			$this.toggleClass('selected');
 			$('button#selected-action-button').removeClass('btn-default')
 				.addClass('btn-warning');
 		});

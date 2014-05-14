@@ -17,15 +17,17 @@
 
 <script type="text/template" id="list-user-settings-template">
 	<td>
-		<a class="btn btn-xs btn-info user-action-settings"
-			href="index.php?module=administrator|System|User|DisplayChange&ID=<%= ID %>" title="Nutzereinstellungen"
-			>
-			<span class="icon icon-Settings"></span>
-		</a>
-		<a class="btn btn-xs btn-danger user-action-delete" href="#"
-			title="Nutzer löschen">
-			<span class="icon icon-error"></span>
-		</a>
+		<div class="btn-group">
+			<a class="btn btn-xs btn-info user-action-settings"
+				href="index.php?module=administrator|System|User|DisplayChange&ID=<%= ID %>" title="Nutzereinstellungen"
+				>
+				<span class="icon icon-Settings"></span>
+			</a>
+			<a class="btn btn-xs btn-danger user-action-delete" href="#"
+				title="Nutzer löschen">
+				<span class="icon icon-error"></span>
+			</a>
+		</div>
 	</td>
 </script>
 
@@ -149,7 +151,7 @@
 </div>
 
 <div>
-	<table id="user-table" class="table table-striped table-responsive">
+	<table id="user-table" class="table table-striped table-responsive table-hover">
 	</table>
 </div>
 <div>

@@ -11,3 +11,15 @@
 #column-show-form label {
 	padding-top: 0;
 }
+
+table#user-table > tbody > tr.selected {
+	background-color: #C6F1F8;
+}
+
+table#user-table tr.selected:nth-child(2n+1) > td {
+	background-color: #A1DDE6;
+}
+
+table#user-table.table-hover > tbody > tr:hover > td {
+	background-color: #E8FFB3;
+}
