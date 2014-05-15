@@ -1,4 +1,4 @@
-{$courselist = $doctrine->getRepository('\\Babesk\\ORM\\SystemGlobalSettings')->findOneByName('course')}
+{$courselist = $doctrine->getRepository('\\Babesk\\ORM\\SystemGlobalSettings')->findOneByName('special_course')}
 {if !empty($courselist)}
 	{$courses = explode('|', $courselist->getValue())}
 {/if}
