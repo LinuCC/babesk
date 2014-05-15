@@ -8,15 +8,14 @@
 			<input type="hidden" name="actionName" value="UserReplaceReligion">
 			<div class="form-group col-sm-10 row">
 				<div class="col-sm-12">
-					<div class="input-group">
+					<div class="input-group" data-toggle="tooltip" title="Religion auswählen">
 						<span class="input-group-addon">
 							<span class="icon icon-user"></span>
 						</span>
-						<select name="religion" class="form-control" data-toggle="tooltip" title="Religion auswählen">
+						<select name="religion" class="form-control">
 							{foreach $religions as $rel}
 								<option value="{$rel}">{$rel}</option>
 							{/foreach}
-							}
 						</select>
 					</div>
 				</div>
