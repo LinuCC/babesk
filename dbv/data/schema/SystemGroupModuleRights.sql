@@ -3,4 +3,4 @@ CREATE TABLE `SystemGroupModuleRights` (
   `moduleId` int(11) NOT NULL,
   PRIMARY KEY (`groupId`,`moduleId`),
   KEY `ixModules` (`moduleId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci

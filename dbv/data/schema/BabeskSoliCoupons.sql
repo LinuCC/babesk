@@ -4,4 +4,4 @@ CREATE TABLE `BabeskSoliCoupons` (
   `startdate` date DEFAULT NULL,
   `enddate` date DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci

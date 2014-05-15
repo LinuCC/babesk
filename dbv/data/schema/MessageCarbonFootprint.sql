@@ -4,4 +4,4 @@ CREATE TABLE `MessageCarbonFootprint` (
   `savedCopies` int(6) unsigned NOT NULL DEFAULT '0',
   `returnedCopies` int(6) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Keeps track of how much Carbon and Paper the school has saved by using Messages'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci COMMENT='Keeps track of how much Carbon and Paper the school has save'

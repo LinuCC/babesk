@@ -7,4 +7,4 @@ CREATE TABLE `BabeskUsercreditsRecharges` (
   `soli` tinyint(1) NOT NULL COMMENT 'If the User had a valid Solicoupon at the time he recharged',
   `isSoli` tinyint(1) NOT NULL COMMENT 'If the User had a valid Solicoupon at the time he recharged',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=latin1

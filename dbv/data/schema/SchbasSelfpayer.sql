@@ -1,4 +1,6 @@
 CREATE TABLE `SchbasSelfpayer` (
-  `UID` bigint(20) NOT NULL,
-  `BID` smallint(5) NOT NULL
+  `UID` int(11) NOT NULL,
+  `BID` int(11) NOT NULL,
+  PRIMARY KEY (`UID`,`BID`),
+  KEY `ixBID` (`BID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8

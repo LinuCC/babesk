@@ -5,6 +5,6 @@ CREATE TABLE `KuwasysClasses` (
   `maxRegistration` int(5) NOT NULL DEFAULT '0',
   `registrationEnabled` tinyint(1) NOT NULL DEFAULT '0',
   `unitId` int(11) unsigned NOT NULL,
-  `schoolyearId` int(11) unsigned NOT NULL,
+  `schoolyearId` int(11) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
