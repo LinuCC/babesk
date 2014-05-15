@@ -551,6 +551,9 @@ class User extends System {
 				$groups,
 				$modsActivated) = $this->changeDisplayDataFetch($uid);
 
+			$classes = array();
+			$statuses = array();
+			$classesOfUser = array();
 			if($modsActivated['Kuwasys']) {
 				list($classes,
 					$statuses,
