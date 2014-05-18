@@ -35,7 +35,7 @@ class SchbasBooks {
 	protected $isbn;
 
 	/**
-	 * @ManyToOne(targetEntity="SchbasSubjects")
+	 * @ManyToOne(targetEntity="SystemSchoolSubjects")
 	 * @JoinColumn(name="subjectId", referencedColumnName="id")
 	 */
 	protected $subject;

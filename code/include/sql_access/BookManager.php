@@ -47,7 +47,12 @@ class BookManager extends TableManager{
 	 */
 	function getBookDataByID($id) {
 		require_once PATH_ACCESS . '/DBConnect.php';
-		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE id = %s', $this->tablename, $id));
+		$query = sql_prev_inj(sprintf(
+			'SELECT b.*, ss.abbreviation AS subject FROM %s b
+				LEFT JOIN `SystemSchoolSubjects` ss ON ss.ID = b.subjectId
+				WHERE b.id = %s',
+			$this->tablename, $id
+		));
 		$result = $this->db->query($query);
 		if (!$result) {
 			/**
@@ -70,7 +75,15 @@ class BookManager extends TableManager{
 		} catch (Exception $e) {
 		}
 		if (isset ($barcode_exploded[5])){
-			$query = sql_prev_inj(sprintf('subject = "%s" AND class = "%s" AND bundle = %s' , $barcode_exploded[0], $barcode_exploded[2], $barcode_exploded[3]));
+			$query = sql_prev_inj(sprintf(
+				'subjectId = (
+					SELECT ID FROM SystemSchoolSubjects ss
+						WHERE ss.abbreviation = "%s"
+				) AND class = "%s" AND bundle = %s',
+				$barcode_exploded[0],
+				$barcode_exploded[2],
+				$barcode_exploded[3])
+			);
 			$result = parent::searchEntry($query);
 			if (!$result) {
 				/**
@@ -101,8 +114,8 @@ class BookManager extends TableManager{
 	/**
 	 * edit a book entry by given id
 	 */
-	function editBook($id, $subject, $class, $title, $author, $publisher, $isbn, $price, $bundle){
-		parent::alterEntry($id, 'subject', $subject, 'class', $class, 'title', $title, 'author', $author, 'publisher', $publisher, 'isbn', $isbn, 'price', $price, 'bundle', $bundle);
+	function editBook($id, $subjectId, $class, $title, $author, $publisher, $isbn, $price, $bundle){
+		parent::alterEntry($id, 'subjectId', $subjectId, 'class', $class, 'title', $title, 'author', $author, 'publisher', $publisher, 'isbn', $isbn, 'price', $price, 'bundle', $bundle);
 	}
 
 	/**
@@ -123,7 +136,12 @@ class BookManager extends TableManager{
 				'11'=>'12,92,13',
 				'12'=>'12,92,13');
 		require_once PATH_ACCESS . '/DBConnect.php';
-		$query = sql_prev_inj(sprintf("SELECT * FROM %s WHERE class IN (%s)", $this->tablename, $classAssign[$class]));
+		$query = sql_prev_inj(sprintf(
+			"SELECT b.*, ss.abbreviation AS subject FROM %s b
+				LEFT JOIN `SystemSchoolSubjects` ss ON ss.ID = b.subjectId
+				WHERE class IN (%s)",
+			$this->tablename, $classAssign[$class]
+		));
 		$result = $this->db->query($query);
 		if (!$result) {
 			die(_g('Error occured while fetching the books by class'));
@@ -136,7 +154,13 @@ class BookManager extends TableManager{
 
         function getBooksByTopic($topic) {
             require_once PATH_ACCESS . '/DBConnect.php';
-		$query = sql_prev_inj(sprintf("SELECT * FROM %s WHERE `subject` LIKE '%s' ORDER BY `class`", $this->tablename, $topic));
+		$query = sql_prev_inj(sprintf(
+			'SELECT * FROM %s WHERE subjectId = (
+					SELECT ID FROM SystemSchoolSubjects
+						WHERE abbreviation = "%s"
+				) ORDER BY `class`',
+			$this->tablename, $topic
+		));
 
                 $result = $this->db->query($query);
 		if (!$result) {

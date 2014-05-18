@@ -233,8 +233,13 @@ class AdminBooklistProcessing {
 		require_once PATH_ACCESS . '/BookManager.php';
 		$bookManager = new BookManager();
 		$price = str_replace (",", ".", $price );
+		$subjectId = TableMng::query(
+			"SELECT ID FROM `SystemSchoolSubjects`
+				WHERE abbreviation = '{$subject}'
+		");
+		$subjectId = $subjectId[0]['ID'];
 		try {
-			$bookManager->editBook($id, $subject, $class, $title, $author, $publisher, $isbn, $price, $bundle);
+			$bookManager->editBook($id, $subjectId, $class, $title, $author, $publisher, $isbn, $price, $bundle);
 		} catch (Exception $e) {
 			$this->BookInterface->dieError($this->messages['error']['change'] . $e->getMessage());
 		}
@@ -271,7 +276,11 @@ class AdminBooklistProcessing {
 		$bookManager = new BookManager();
 		$price = str_replace (",", ".", $price );
 		try {
-			$search = $bookManager->searchEntry('subject='.$subject.' AND class='.$class.' AND bundle='.$bundle);
+			$search = $bookManager->searchEntry(
+				'subjectId = (SELECT ID FROM SystemSchoolSubjects WHERE abbreviation = ' . $subject . ')' .
+				' AND class=' . $class .
+				' AND bundle=' . $bundle
+			);
 		}catch (Exception $e){
 			$search = 0;
 		}
@@ -279,7 +288,12 @@ class AdminBooklistProcessing {
 			$this->BookInterface->dieError($this->messages['error']['duplicate']);
 		} else {
 			try {
-				$bookManager->addEntry('subject',$subject,'class', $class,'title', $title,'author', $author,'publisher', $publisher,'isbn', $isbn, 'price', $price,'bundle', $bundle);
+				$subjectId = TableMng::query(
+					'SELECT ID FROM `SystemSchoolSubjects`
+						WHERE abbreviation = "%s"
+					', $subject
+				);
+				$bookManager->addEntry('subjectId',$subjectId,'class', $class,'title', $title,'author', $author,'publisher', $publisher,'isbn', $isbn, 'price', $price,'bundle', $bundle);
 			}catch (Exception $e) {
 				$this->logs
 				->log('ADMIN', 'MODERATE',

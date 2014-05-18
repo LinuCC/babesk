@@ -5,10 +5,10 @@ namespace Babesk\ORM;
 /**
  * @Entity
  */
-class SchbasSubjects {
+class SystemSchoolSubjects {
 
 	/**
-	 * @Id
+	 * @id
 	 * @Column(type="integer")
 	 * @GeneratedValue
 	 */
@@ -20,17 +20,12 @@ class SchbasSubjects {
 	protected $abbreviation;
 
 	/**
-	 * @Column(type="string")
+   * @Column(type="string")
 	 */
 	protected $name;
 
 	public function getId() {
 		return $this->id;
-	}
-
-	public function setId($id) {
-		$this->id = $id;
-		return $this;
 	}
 
 	public function getAbbreviation() {
@@ -50,6 +45,7 @@ class SchbasSubjects {
 		$this->name = $name;
 		return $this;
 	}
+
 }
 
 ?>

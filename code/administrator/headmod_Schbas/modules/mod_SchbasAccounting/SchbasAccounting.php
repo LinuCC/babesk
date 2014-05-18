@@ -163,7 +163,14 @@ class SchbasAccounting extends Schbas {
 					if ($loanChoice=="ln")	$amountToPay = $feeNormal;
 					if ($loanChoice=="lr")	$amountToPay = $feeReduced;
 					if (!isset($amountToPay)) $amountToPay="0.00";
-					$query = sprintf("INSERT INTO SchbasAccounting (`UID`,`loanChoice`,`payedAmount`,`amountToPay`) VALUES ('%s','%s','%s','%s')",$uid,$loanChoice,"0.00",$amountToPay);
+					$query = sprintf(
+						"INSERT INTO SchbasAccounting
+							(`UID`,`loanChoice`,`payedAmount`,`amountToPay`)
+							VALUES ('%s',(
+									SELECT ID FROM SchbasLoanChoices
+										WHERE abbreviation = '%s'
+								) ,'%s','%s')"
+							,$uid,$loanChoice,"0.00",$amountToPay);
 
 					TableMng::query($query);
 				} catch (Exception $e) {
@@ -189,7 +196,9 @@ class SchbasAccounting extends Schbas {
 			// Cows stands for Code of worst systematic
 			$gradesAll[] = $SaveTheCows[0];
 		}
-		$users = TableMng::query('SELECT * FROM SystemUsers ORDER BY name ASC');
+		$users = TableMng::query(
+			'SELECT * FROM SystemUsers ORDER BY name ASC'
+		);
 		$users = $this->addGradeLabelToUsers($users);
 		$users = $this->addPayedAmountToUsers($users);
 		if (isset ($_GET['gradeIdDesired'])){
@@ -237,7 +246,11 @@ class SchbasAccounting extends Schbas {
 
 	private function addPayedAmountToUsers ($users) {
 
-		$payed = TableMng::query('SELECT * FROM SchbasAccounting');
+		$payed = TableMng::query(
+			'SELECT a.*, lc.abbreviation AS loanChoice
+				FROM SchbasAccounting a
+				LEFT JOIN SchbasLoanChoices lc ON lc.ID = a.loanChoiceId
+		');
 	//	$fees = TableMng::query('SELECT * FROM SchbasFee', true);
 		foreach ($users as & $user) {
 			foreach ($payed as $pay) {

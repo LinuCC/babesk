@@ -3,7 +3,7 @@
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ADMIN . '/headmod_Schbas/Schbas.php';
 require_once PATH_INCLUDE . '/orm-entities/SchbasBooks.php';
-require_once PATH_INCLUDE . '/orm-entities/SchbasSubjects.php';
+require_once PATH_INCLUDE . '/orm-entities/SystemSchoolSubjects.php';
 
 class Booklist extends Schbas {
 
@@ -98,69 +98,6 @@ class Booklist extends Schbas {
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
-
-	protected function showBooklist() {
-
-		$this->displayTpl('show-booklist.tpl');
-	}
-
-	protected function getBooklist() {
-
-		// $pagenum = $_POST['pagenumber'];
-		// $usersPerPage = $_POST['usersPerPage'];
-		// $sortFor = $_POST['sortFor'];
-		// $filterFor = $_POST['filterFor'];
-
-		$query = $this->_entityManager->createQueryBuilder()
-			->select(array('b, s'))
-			->from('Babesk\ORM\SchbasBooks', 'b')
-			->leftJoin('b.subject', 's')
-			->where('b.title = ""')
-			->setFirstResult($_POST['pagenumber'] * $_POST['booksPerPage'])
-			->setMaxResults($_POST['booksPerPage'])
-			;
-
-		// if($_POST['sortFor']) {
-		// 	$query->orderBy($_POST['sortFor']);
-		// }
-		// if($_POST['filterFor']) {
-		// 	$query->where()
-		// }
-
-		$paginator = new \Doctrine\ORM\Tools\Pagination\Paginator(
-			$query, $fetchJoinCollection = true
-		);
-
-		$books = array();
-		foreach($paginator as $book) {
-			$bookAr = array(
-				'id' => $book->getId(),
-				'title' => $book->getTitle(),
-				'author' => $book->getAuthor(),
-				'gradelevel' => $book->getClass(),
-				'bundle' => $book->getBundle(),
-				'price' => $book->getPrice(),
-				'isbn' => $book->getIsbn(),
-				'publisher' => $book->getPublisher()
-			);
-			$bookAr['subject'] = ($book->getSubject()) ?
-				$book->getSubject()->getName() : '';
-			$books[] = $bookAr;
-		}
-
-		$bookcount = count($paginator);
-		// No division by zero, never show zero sites
-		if($_POST['booksPerPage'] != 0 && $bookcount > 0) {
-			$pagecount = ceil($bookcount / (int)$_POST['booksPerPage']);
-		}
-		else {
-			$pagecount = 1;
-		}
-
-		die(json_encode(array(
-			'pagecount' => $pagecount, 'books' => $books
-		)));
-	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Attributes

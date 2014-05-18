@@ -30,42 +30,67 @@ class AdminLoanProcessing {
 	 * Ausleihtabelle anzeigen
 	 */
 	function Loan($card_id) {
-$alert="<font color=#ff0000>";
-		if (!$this->cardManager->valid_card_ID($card_id))
+
+		$alert="<font color=#ff0000>";
+
+		if (!$this->cardManager->valid_card_ID($card_id)) {
 			$this->loanInterface->dieError(sprintf($this->msg['err_card_id'], $card_id));
+		}
 
 		$uid = $this->GetUser($card_id);
 		// eingefügt
 		$hasForm = TableMng::query(sprintf('SELECT COUNT(*) FROM SchbasAccounting WHERE UID = "%s"',$uid));
-			if ($hasForm[0]['COUNT(*)']=="0")
-		$alert .= "<u>Buchhaltungshinweis:</u><br><li><h5>Formular zur Buchausleihe wurde nicht abgegeben!</h5></li><br>";
-		$schoolyearDesired = TableMng::query('SELECT ID FROM SystemSchoolyears WHERE active = 1');
+		if ($hasForm[0]['COUNT(*)']=="0") {
+			$alert .= "<u>Buchhaltungshinweis:</u><br><li><h5>Formular zur Buchausleihe wurde nicht abgegeben!</h5></li><br>";
+		}
+		$schoolyearDesired = TableMng::query(
+			'SELECT ID FROM SystemSchoolyears WHERE active = 1'
+		);
 		$schoolyearID = $schoolyearDesired[0]['ID'];
-		$gradeID = TableMng::query(sprintf('SELECT GradeID FROM SystemUsersInGradesAndSchoolyears WHERE UserID = "%s" AND schoolyearID ="%s"', $uid,$schoolyearID));
-				$grade = TableMng::query(sprintf('SELECT gradelevel FROM SystemGrades WHERE ID = %s', $gradeID[0]['GradeID']));
-				$payed = TableMng::query(sprintf('SELECT loanChoice, payedAmount,amountToPay FROM SchbasAccounting WHERE UID="%s"',$uid));
-				if (($payed[0]['loanChoice']=="ln" || $payed[0]['loanChoice']=="lr" )&& strcmp($payed[0]['payedAmount'],$payed[0]['amountToPay'])<0)
-						$alert .="<u>Buchhaltungshinweis:</u><br><li><h5>Geld wurde noch nicht (ausreichend) gezahlt.</h5></li><li><h5>Es sind bisher ".$payed[0]['payedAmount']."&euro; von ".$payed[0]['amountToPay']."&euro; eingegangen!</h5></li><br>";
+		$gradeID = TableMng::query(sprintf(
+			'SELECT GradeID
+				FROM SystemUsersInGradesAndSchoolyears
+				WHERE UserID = "%s" AND schoolyearID ="%s"',
+				$uid,$schoolyearID)
+		);
+		$grade = TableMng::query(sprintf(
+			'SELECT gradelevel FROM SystemGrades WHERE ID = %s',
+			$gradeID[0]['GradeID'])
+		);
+		$payed = TableMng::query(sprintf(
+			'SELECT slc.abbreviation AS loanchoice, payedAmount,amountToPay
+				FROM SchbasAccounting sa
+				LEFT JOIN SchbasLoanChoices slc ON slc.ID = sa.loanChoiceId
+				WHERE UID="%s"',
+			$uid)
+		);
+		if (($payed[0]['loanchoice']=="ln" ||
+				$payed[0]['loanchoice'] == "lr" ) &&
+			strcmp($payed[0]['payedAmount'],$payed[0]['amountToPay']) < 0) {
+			$alert .="<u>Buchhaltungshinweis:</u><br><li><h5>Geld wurde noch nicht (ausreichend) gezahlt.</h5></li><li><h5>Es sind bisher ".$payed[0]['payedAmount']."&euro; von ".$payed[0]['amountToPay']."&euro; eingegangen!</h5></li><br>";
+		}
 
-		if($payed[0]['loanChoice']=="nl") $alert .= "<u>Buchhaltungshinweis:</u><br><li><h5>Achtung: Selbstzahler! Keine B&uuml;cher ausleihen!</h5></li><br>";
-		$hasBooks = TableMng::query(sprintf('SELECT COUNT(*) FROM SchbasLending WHERE user_id = "%s"',$uid));
+		if($payed[0]['loanchoice']=="nl") {
+			$alert .= "<u>Buchhaltungshinweis:</u><br><li><h5>Achtung: Selbstzahler! Keine B&uuml;cher ausleihen!</h5></li><br>";
+		}
+		$hasBooks = TableMng::query(
+			sprintf('SELECT COUNT(*) FROM SchbasLending WHERE user_id = "%s"',
+			$uid)
+		);
 
-				if ($hasBooks[0]['COUNT(*)']!="0"){
-					$hasBooksID = TableMng::query(sprintf('SELECT inventory_id FROM SchbasLending WHERE user_id = "%s"',$uid));
-					$alert .= "<u>Es sind noch B&uuml;cher ausgeliehen:</u><br>";
-					foreach ($hasBooksID as $hasBook){
-						$book_id = TableMng::query(sprintf("SELECT book_id FROM SchbasInventory WHERE id = %s",$hasBook['inventory_id']));
-						$book_title = TableMng::query(sprintf("SELECT title FROM SchbasBooks WHERE id = %s",$book_id[0]['book_id']));
-						$alert .= "<li><h5>".$book_title[0]['title']."</h5></li>";
-					}
-					$alert.="<br>";
-
-				}
-//
+		if ($hasBooks[0]['COUNT(*)']!="0"){
+			$hasBooksID = TableMng::query(sprintf('SELECT inventory_id FROM SchbasLending WHERE user_id = "%s"',$uid));
+			$alert .= "<u>Es sind noch B&uuml;cher ausgeliehen:</u><br>";
+			foreach ($hasBooksID as $hasBook){
+				$book_id = TableMng::query(sprintf("SELECT book_id FROM SchbasInventory WHERE id = %s",$hasBook['inventory_id']));
+				$book_title = TableMng::query(sprintf("SELECT title FROM SchbasBooks WHERE id = %s",$book_id[0]['book_id']));
+				$alert .= "<li><h5>".$book_title[0]['title']."</h5></li>";
+			}
+			$alert.="<br>";
+		}
 
 		$loanbooks = $this->loanManager->getLoanByUID($uid, false);
 
-		//
 		$loanbooksSelfBuy = TableMng::query("SELECT BID FROM SchbasSelfpayer WHERE UID=".$uid);
 
 		if (count($loanbooksSelfBuy)!=0){
@@ -78,7 +103,6 @@ $alert="<font color=#ff0000>";
 			$alert.="<br>";
 
 		}
-		//
 		$alert .="</font>";
 
 		$loanbooksSelfBuy = array_map('current',$loanbooksSelfBuy);
@@ -89,7 +113,6 @@ $alert="<font color=#ff0000>";
 			if (!in_array($book['id'],$loanbooksSelfBuy)) $checkedBooks[] = $book;
 
 		}
-		//
 
 		$class = $this->fetchUserDetails($uid);
 		// $class = $this->userManager->getUserDetails($uid);
