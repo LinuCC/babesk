@@ -8,7 +8,7 @@
 		<div class="form-group">
 			<label for="barcodeInput" class="col-sm-2 control-label">Barcode</label>
 			<div class="col-sm-10">
-				<input class="form-control" id="barcodeInput" type="text" />
+				<input class="form-control" id="barcodeInput" type="text" autofocus />
 				<small>Enter drücken, wenn Barcode eingescannt ist.</small>
 			</div>
 		</div>

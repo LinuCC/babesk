@@ -1,5 +1,7 @@
 {extends file=$booklistParent}{block name=content}
 
+<h3 class="moduleHeader">Bücherlistenmenü</h3>
+
 <fieldset class="smallContainer">
 	<legend>
 		Standard-Aktionen
