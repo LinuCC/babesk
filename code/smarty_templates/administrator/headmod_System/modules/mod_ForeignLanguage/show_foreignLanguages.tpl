@@ -4,14 +4,27 @@
 	method="post" onsubmit="submit()">
 	<fieldset>
 		<legend>Fremdsprachen</legend>
-		{foreach from=$foreignLanguages item=foreignLanguage name=zaehler}
-		<input type="text" name="rel{$smarty.foreach.zaehler.iteration}" size="3"
-			maxlength="3" value="{$foreignLanguage}" /><br/>
+
+		{foreach $foreignLanguages as $foreignLanguage}
+			<div class="input-group form-group col-sm-3" data-toggle="tooltip"
+			title="Fremdsprache">
+				<span class="input-group-addon">
+					<span class="icon icon-clipboard"></span>
+				</span>
+				<input type="text" name="foreignLanguages[]" class="form-control"
+				value="{$foreignLanguage}" />
+			</div>
 		{/foreach}
-		<input type="text" name="rel{$smarty.foreach.zaehler.total+1}" size="3"
-			maxlength="3" value="" /><br/>
-		<input type="hidden" name="relcounter" value="{$smarty.foreach.zaehler.total+1}" />
+		<div class="input-group form-group col-sm-3" data-toggle="tooltip"
+		title="Neue Fremdsprache hinzufügen">
+			<span class="input-group-addon">
+				<span class="icon icon-clipboard"></span>
+			</span>
+			<input type="text" name="foreignLanguages[]" class="form-control"
+			value="" size="2" />
+		</div>
 	</fieldset>
-	<br> <input id="submit" onclick="submit()" type="submit" value="Speichern" />
+	<input class="btn btn-primary" id="submit" onclick="submit()" type="submit" value="Speichern" />
 </form>
+
 {/block}

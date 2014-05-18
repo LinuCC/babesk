@@ -41,8 +41,9 @@ class AdminForeignLanguageProcessing {
 				}
 			}
 			if(sizeof($foreignLanguages)>0) $foreignLanguages = substr($foreignLanguages, 0,strlen($foreignLanguages)-1);
+			var_dump($foreignLanguages);
 			$globalSettingsManager->setForeignLanguages($foreignLanguages);
-			$this->ForeignLanguageInterface->ShowForeignLanguagesSet($foreignLanguages);
+			// $this->ForeignLanguageInterface->ShowForeignLanguagesSet($foreignLanguages);
 		}
 
 	}
