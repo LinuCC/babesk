@@ -1,0 +1,1 @@
+ALTER TABLE SystemGroups ADD max_credit decimal(4,2) NOT NULL DEFAULT 0.00;
