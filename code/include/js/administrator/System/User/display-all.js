@@ -111,19 +111,16 @@ $(document).ready(function() {
 				isDisplayed: false
 			},
 			{
-				name: 'course',
-				displayName: 'Oberstufenkurse',
-				isDisplayed: false
-			},
-			{
 				name: 'special_course',
-				displayName: 'Spezielle Oberstufenkurse',
+				displayName: 'Oberstufenkurse',
 				isDisplayed: false
 			}
 		];
 
 		var activePage = 1;
 		var amountPages = 0;
+		var colToSort = {};
+		var sortMethod = 'ASC';
 
 		columnsToShowSetByCookies();
 		columnsToShowUpdate();
@@ -173,7 +170,55 @@ $(document).ready(function() {
 			}
 		});
 
-		$('#user-table').on('click', 'tr', function(ev) {
+		$('#user-table').on('click', 'thead th > a.column-header', function(ev) {
+			var $link = $(ev.target);
+			var columnName = $link.text();
+			//Get column-entry that fits the clicked column-header
+			var column = $.grep(columns, function(el, ind) {
+				if(el.displayName == columnName) {
+					return el;
+				}
+			})[0];
+			if(colToSort.name == column.name) {
+				//Change sorting method
+				sortMethod = (sortMethod == 'ASC') ? 'DESC' : 'ASC';
+			}
+			else {
+				//Change column to sort
+				sortMethod = 'ASC';
+				colToSort = column;
+			}
+			newDataFetch();
+		});
+
+		$('#user-table').on('click', '#user-checkbox-global',
+			function(ev) {
+				var checkboxes = $('.user-checkbox');
+				checkboxes.prop('checked', $('#user-checkbox-global').prop('checked'));
+		});
+
+		$('#user-table').on('click', '.user-action-delete', function(ev) {
+			var userId = $(this).closest('tr').attr('id').replace('user_', '');
+			bootbox.dialog({
+				message: 'Wollen sie den Schüler wirklich löschen?',
+				buttons: {
+					danger: {
+						label: "Ja",
+						className: "btn-danger",
+						callback: function() {
+							deleteUser(userId);
+						}
+					},
+					default: {
+						label: "Abbrechen",
+						className: "btn-primary",
+						callback: null
+					},
+				}
+			});
+		});
+
+		$('#user-table').on('click', 'tbody > tr', function(ev) {
 
 			var $target = $(ev.target);
 			var $this = $(this);
@@ -196,32 +241,6 @@ $(document).ready(function() {
 				},
 				'html'
 			);
-		});
-
-		$('#user-table').on('click', '#user-checkbox-global', function(ev) {
-			var checkboxes = $('.user-checkbox');
-			checkboxes.prop('checked', $('#user-checkbox-global').prop('checked'));
-		});
-
-		$('#user-table').on('click', '.user-action-delete', function(ev) {
-			var userId = $(this).closest('tr').attr('id').replace('user_', '');
-			bootbox.dialog({
-				message: 'Wollen sie den Schüler wirklich löschen?',
-				buttons: {
-					danger: {
-						label: "Ja",
-						className: "btn-danger",
-						callback: function() {
-							deleteUser(userId);
-						}
-					},
-					default: {
-						label: "Abbrechen",
-						className: "btn-primary",
-						callback: null
-					},
-				}
-			});
 		});
 
 		function deleteUser(userId) {
@@ -379,7 +398,12 @@ $(document).ready(function() {
 				pagenum = activePage;
 			}
 
-			var sortFor = '';
+			if(colToSort.name !== 'undefined' && colToSort.name !== undefined) {
+				var sortFor = colToSort.name;
+			}
+			else {
+				var sortFor = '';
+			}
 			var filterForValue = $('#filter').val();
 			var columnsToFetch = [];
 			$.each(columns, function(ind, el) {
@@ -387,7 +411,6 @@ $(document).ready(function() {
 					columnsToFetch.push(el.name);
 				}
 			});
-
 			$.ajax({
 				type: "POST",
 				url: "index.php?module=administrator|System|User|FetchUserdata",
@@ -395,6 +418,7 @@ $(document).ready(function() {
 					'usersPerPage': $('#users-per-page').val(),
 					'pagenumber': pagenum,
 					'sortFor': sortFor,
+					'sortMethod' : sortMethod,
 					'filterForVal': filterForValue,
 					'columnsToFetch': columnsToFetch
 				},
@@ -448,9 +472,12 @@ $(document).ready(function() {
 					var respectiveColumnEntryArr = $.grep(columns, function(el) {
 							return index == el.name;
 					});
+					// Compare columns given by the server with all possible columns
 					if(respectiveColumnEntryArr[0] != undefined) {
 						var respectiveColumnEntry = respectiveColumnEntryArr[0];
-						headRow += '<th>' + respectiveColumnEntry.displayName + '</th>';
+						headRow += '<th><a href="#" class="column-header">'
+							+ respectiveColumnEntry.displayName
+							+ '</a></th>';
 					}
 					else {
 						headRow += '<th>' + index + '(Not found in columns)' + '</th>';

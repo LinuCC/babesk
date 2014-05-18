@@ -74,11 +74,15 @@ class UserDisplayAll {
 			$sortFor = 'ID';
 		}
 
+		//Set the method of sorting
+		$sortMethod = ($_POST['sortMethod'] == 'ASC') ? 'ASC' : 'DESC';
+
 		try {
 			$queryCreator = new UserDisplayAllQueryCreator(
 				$this->_pdo,
 				$filterForQuery,
 				$sortFor,
+				$sortMethod,
 				$userToStart,
 				$usersPerPage
 			);
@@ -108,8 +112,13 @@ class UserDisplayAll {
 			$data = $this->fetchedDataToReadable($data, $columnsToFetch);
 
 		} catch (Exception $e) {
-			die(json_encode(array('value' => 'error',
-							'message' => 'Ein Fehler ist bei der Datenverarbeitung aufgetreten.' . $e->getMessage())));
+			die(json_encode(array(
+				'value' => 'error',
+				'message' => 'Ein Fehler ist bei der Datenverarbeitung ' .
+					'aufgetreten.'
+			)));
+			$this->_logger->log('Error processing the data',
+				'Error', Null, json_encode(array('msg' => $e->getMessage())));
 		}
 
 		die(json_encode(array('value' => 'data',
@@ -265,13 +274,14 @@ class UserDisplayAllQueryCreator {
 	//Constructor
 	/////////////////////////////////////////////////////////////////////
 
-	public function __construct($pdo, $filterForQuery, $sortFor, $userToStart,
-		$usersPerPage) {
+	public function __construct($pdo, $filterForQuery, $sortFor, $sortMethod,
+		$userToStart, $usersPerPage) {
 
 		$this->_pdo = $pdo;
 		$this->_selectors = array();
 		$this->_filterForQuery = $filterForQuery;
 		$this->_sortFor = $sortFor;
+		$this->_sortMethod = $sortMethod;
 		$this->_userToStart = $userToStart;
 		$this->_usersPerPage = $usersPerPage;
 		$this->_userElementsToFetch = array();
@@ -351,7 +361,7 @@ class UserDisplayAllQueryCreator {
 				$this->_queryJoin
 			GROUP BY u.ID
 			$filterQuery
-			ORDER BY $this->_sortFor
+			ORDER BY $this->_sortFor {$this->_sortMethod}
 			LIMIT $this->_userToStart, $this->_usersPerPage";
 	}
 
