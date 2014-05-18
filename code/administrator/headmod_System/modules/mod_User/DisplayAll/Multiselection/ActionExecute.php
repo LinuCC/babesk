@@ -4,6 +4,9 @@ namespace administrator\System\User\DisplayAll\Multiselection;
 
 require_once PATH_ADMIN . '/headmod_System/modules/mod_User/DisplayAll/Multiselection/Multiselection.php';
 
+/**
+ * Executes a given action that changes data of the selected users
+ */
 class ActionExecute extends \Multiselection {
 
 	/////////////////////////////////////////////////////////////////////
@@ -43,12 +46,15 @@ class ActionExecute extends \Multiselection {
 		str_replace('/', '', $name);
 		$class = 'administrator\\System\\User\\DisplayAll\\Multiselection\\' .
 			'Actions\\' . $name;
-		if((include __DIR__ . "/ActionHandlers/$name.php") === 1) {
-			if(class_exists($class)
-				) {
-				$action = new $class($this->_dataContainer);
-				$action->actionExecute($_POST);
-			}
+		if((include __DIR__ . "/ActionHandlers/$name.php") === 1 &&
+				class_exists($class)
+			) {
+			$action = new $class($this->_dataContainer);
+			$action->actionExecute($_POST);
+		}
+		else {
+			$this->_logger->log('Error executing multiselection-action',
+				'Error', Null, json_encode(array('actionName' => $name)));
 		}
 	}
 

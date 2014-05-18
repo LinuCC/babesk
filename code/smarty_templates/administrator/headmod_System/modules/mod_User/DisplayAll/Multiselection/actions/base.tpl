@@ -10,3 +10,4 @@
 
 {include file="$path_action_tpl/user-replace-religion.tpl"}
 {include file="$path_action_tpl/user-replace-course.tpl"}
+{include file="$path_action_tpl/user-replace-foreign_language.tpl"}

@@ -33,7 +33,7 @@
 </fieldset>
 
 <script type="text/javascript">
-	$('.multiselect').multiselect({
+	$('select.multiselect[name="courses"]').multiselect({
 		buttonContainer: '<div class="btn-group" />',
 		buttonWidth: '100%'
 	});
