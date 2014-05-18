@@ -30,25 +30,43 @@ class SchbasSettings extends Schbas {
 			$SchbasSettingsInterface->InitialMenu();
 		else {
 			switch ($_GET['action']){
-				case 'editBankAccount':	$this->editBankAccount();break;
-				case '2':	$SchbasSettingsInterface->LoanSettings($SchbasSettingsProcessing->getLoanSettings(),false);break;
-				case '3':	$SchbasSettingsInterface->RetourSettings();break;
-				case '4':	TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", $_POST['owner']."|".$_POST['number']."|".$_POST['blz']."|".$_POST['institute'], 'bank_details'));break;
-				case '5':	$this->updateFee();
-				$SchbasSettingsInterface->LoanSettings($SchbasSettingsProcessing->getLoanSettings(),true);break;
-				case '6':	$claim_date = $_POST['claim_Day'].".". $_POST['claim_Month'].".". $_POST['claim_Year'];
+				case 'editBankAccount':
+					$this->editBankAccount();
+					break;
+				case '2':
+					$SchbasSettingsInterface->LoanSettings($SchbasSettingsProcessing->getLoanSettings(),false);
+					break;
+				case '3':
+					$SchbasSettingsInterface->RetourSettings();
+					break;
+				case '4':
+					TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", $_POST['owner']."|".$_POST['number']."|".$_POST['blz']."|".$_POST['institute'], 'bank_details'));
+					break;
+				case '5':
+					$this->updateFee();
+				$SchbasSettingsInterface->LoanSettings($SchbasSettingsProcessing->getLoanSettings(),true);
+					break;
+				case '6':
+					$claim_date = $_POST['claim_Day'].".". $_POST['claim_Month'].".". $_POST['claim_Year'];
 				$transfer_date = $_POST['transfer_Day'].".". $_POST['transfer_Month'].".". $_POST['transfer_Year'];
 				TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", $claim_date,"schbasDeadlineClaim"));
-				TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", $transfer_date,"schbasDeadlineTransfer"));break;
-				case '7':	$claimEnabled = TableMng::query(sprintf("SELECT value FROM SystemGlobalSettings WHERE name='isSchbasClaimEnabled'"));
-				$SchbasSettingsInterface->enableFormConfirm($claimEnabled[0]['value']);break;
-				case '8':   $SchbasSettingsInterface->TextSettings();break;
-				case '9':	if (isset($_POST['enable'])){
+				TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", $transfer_date,"schbasDeadlineTransfer"));
+					break;
+				case '7':
+					$claimEnabled = TableMng::query(sprintf("SELECT value FROM SystemGlobalSettings WHERE name='isSchbasClaimEnabled'"));
+				$SchbasSettingsInterface->enableFormConfirm($claimEnabled[0]['value']);
+					break;
+				case '8':
+					$SchbasSettingsInterface->TextSettings();
+					break;
+				case '9':
+					if (isset($_POST['enable'])){
 					TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", 1, 'isSchbasClaimEnabled'));
 				}else{
 					TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", 0, 'isSchbasClaimEnabled'));
 				}
-				$SchbasSettingsInterface->enableFormConfirmFin();break;
+				$SchbasSettingsInterface->enableFormConfirmFin();
+					break;
 				case '10': $this->saveTexts();
 				break;
 				case 'editCoverLetter': $this->editCoverLetter();
@@ -143,19 +161,19 @@ class SchbasSettings extends Schbas {
 			$SchbasSettingsInterface->EditBankAccount($bankAccount[0],$bankAccount[1],$bankAccount[2],$bankAccount[3]);
 		}
 	}
-	
+
 	/**
 	 * sets the schbas message template for the payment reminder
 	 */
 	protected function setReminder() {
 		require_once 'AdminSchbasSettingsInterface.php';
 		$SchbasSettingsInterface = new AdminSchbasSettingsInterface($this->relPath);
-		
+
 		$activeReminderID = TableMng::query('SELECT value FROM SystemGlobalSettings WHERE name="schbasReminderMessageID"');
 		$reminderAuthorID = TableMng::query('SELECT value FROM SystemGlobalSettings WHERE name="schbasReminderAuthorID"');
-		$SchbasSettingsInterface->showReminderSelection($activeReminderID,$reminderAuthorID,$this->templatesFetchSchbas());	
+		$SchbasSettingsInterface->showReminderSelection($activeReminderID,$reminderAuthorID,$this->templatesFetchSchbas());
 	}
-	
+
 	/**
 	 * Fetches all of the Templates from the database and returns them
 	 *
@@ -163,23 +181,23 @@ class SchbasSettings extends Schbas {
 	 * a void Array if no elements where found
 	 */
 	protected function templatesFetchSchbas() {
-	
+
 		$data = array();
-	
+
 		try {
 			$data = TableMng::query('SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM messagegroups WHERE name="Schbas");');
-	
+
 		} catch (MySQLVoidDataException $e) {
 			return array();
-	
+
 		} catch (Exception $e) {
 			$this->_interface->dieError('Konnte die Vorlagen nicht abrufen');
 		}
-	
+
 		return $data;
 	}
-	
-	
+
+
 	protected function editCoverLetter () {
 
 		require_once 'AdminSchbasSettingsInterface.php';
