@@ -123,6 +123,13 @@ $(document).ready(function() {
 		var sortMethod = 'ASC';
 
 		columnsToShowSetByCookies();
+		$('#search-select-menu').multiselect({
+			buttonContainer: '<div class="btn-group" />',
+			includeSelectAllOption: true,
+			buttonWidth: 150,
+			selectAllText: 'Alle auswählen',
+			numberDisplayed: 1
+		});
 		columnsToShowUpdate();
 		columnToggleDisplayListBuild();
 		$('.column-switch').bootstrapSwitch();
@@ -168,6 +175,11 @@ $(document).ready(function() {
 			if(ev.which == 13) {
 				newDataFetch();
 			}
+		});
+
+		$('#search-submit').on('click', function(ev) {
+			activePage = 1;   //Reset pagenumber to 1
+			newDataFetch();
 		});
 
 		$('#user-table').on('click', 'thead th > a.column-header', function(ev) {
@@ -354,6 +366,32 @@ $(document).ready(function() {
 					}
 				});
 			});
+			columnsToSearchSelectUpdate();
+		}
+
+		function columnsToSearchSelectUpdate() {
+			var $menu = $('#search-select-menu');
+			$menu.html('');
+			$.each(columns, function(ind, col) {
+				if(col.isDisplayed) {
+					$menu.append(
+						'<option value="' + col.name + '" selected>' +
+						col.displayName + '</option>'
+					);
+				}
+			});
+			$menu.multiselect('rebuild');
+			$('button.multiselect').attr('title', '');
+		}
+
+		function columnsToSearchSelectedGet() {
+			var filterForColumns = $('#search-select-menu').val();
+			//Handle select-all checkbox; we do not need to know it is selected
+			var pos = $.inArray('multiselect-all', filterForColumns);
+			if(pos > -1) {
+				filterForColumns.splice(pos, 1);
+			}
+			return filterForColumns;
 		}
 
 		function columnsToShowSetByCookies() {
@@ -404,7 +442,9 @@ $(document).ready(function() {
 			else {
 				var sortFor = '';
 			}
+			var filterForColumns = columnsToSearchSelectedGet();
 			var filterForValue = $('#filter').val();
+			console.log(filterForColumns);
 			var columnsToFetch = [];
 			$.each(columns, function(ind, el) {
 				if(el.isDisplayed) {
@@ -420,6 +460,7 @@ $(document).ready(function() {
 					'sortFor': sortFor,
 					'sortMethod' : sortMethod,
 					'filterForVal': filterForValue,
+					'filterForColumns': filterForColumns,
 					'columnsToFetch': columnsToFetch
 				},
 

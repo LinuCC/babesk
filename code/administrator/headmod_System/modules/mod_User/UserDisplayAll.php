@@ -13,6 +13,7 @@ class UserDisplayAll {
 		$this->_pdo = $dataContainer->getPdo();
 		$this->_smarty = $dataContainer->getSmarty();
 		$this->_acl = $dataContainer->getAcl();
+		$this->_logger = $dataContainer->getLogger();
 		$this->activeModulesAddSelectableData();
 	}
 
@@ -52,7 +53,6 @@ class UserDisplayAll {
 		);
 		TableMng::sqlEscapeByArray($toEscape);
 		$userToStart = ($pagenumber - 1) * $usersPerPage;
-		$filterForQuery = '';
 
 		if(empty($_POST['columnsToFetch'])) {
 			$columnsToFetch = array();
@@ -62,6 +62,14 @@ class UserDisplayAll {
 			foreach($columnsToFetch as &$col) {
 				TableMng::sqlEscape($col);
 			}
+		}
+
+		$filterForColumns = array();
+		if(!empty($_POST['filterForColumns'])) {
+			foreach($_POST['filterForColumns'] as &$col) {
+				TableMng::sqlEscape($col);
+			}
+			$filterForColumns = $_POST['filterForColumns'];
 		}
 
 		//When joining multiple tables, we have multiple IDs
@@ -80,7 +88,7 @@ class UserDisplayAll {
 		try {
 			$queryCreator = new UserDisplayAllQueryCreator(
 				$this->_pdo,
-				$filterForQuery,
+				$filterForColumns,
 				$sortFor,
 				$sortMethod,
 				$userToStart,
@@ -112,13 +120,13 @@ class UserDisplayAll {
 			$data = $this->fetchedDataToReadable($data, $columnsToFetch);
 
 		} catch (Exception $e) {
+			$this->_logger->log('Error processing the data',
+				'Error', Null, json_encode(array('msg' => $e->getMessage())));
 			die(json_encode(array(
 				'value' => 'error',
 				'message' => 'Ein Fehler ist bei der Datenverarbeitung ' .
 					'aufgetreten.'
 			)));
-			$this->_logger->log('Error processing the data',
-				'Error', Null, json_encode(array('msg' => $e->getMessage())));
 		}
 
 		die(json_encode(array('value' => 'data',
@@ -274,17 +282,22 @@ class UserDisplayAllQueryCreator {
 	//Constructor
 	/////////////////////////////////////////////////////////////////////
 
-	public function __construct($pdo, $filterForQuery, $sortFor, $sortMethod,
+	public function __construct($pdo, $filterForColumns, $sortFor, $sortMethod,
 		$userToStart, $usersPerPage) {
 
 		$this->_pdo = $pdo;
 		$this->_selectors = array();
-		$this->_filterForQuery = $filterForQuery;
 		$this->_sortFor = $sortFor;
 		$this->_sortMethod = $sortMethod;
 		$this->_userToStart = $userToStart;
 		$this->_usersPerPage = $usersPerPage;
 		$this->_userElementsToFetch = array();
+
+		foreach($filterForColumns as $col) {
+			//Quote every column so it can be compared to the automatically
+			//generated columns
+			$this->_filterForColumns[] = 'u.' . $this->quoteIdentifier($col);
+		}
 	}
 
 
@@ -384,9 +397,16 @@ class UserDisplayAllQueryCreator {
 			$searches = array();
 			$query = '';
 			foreach($columns as $col) {
-				$searches[] = "$col LIKE '%$value%'";
+				if(in_array($col, $this->_filterForColumns)) {
+					$searches[] = "$col LIKE '%$value%'";
+				}
 			}
-			$query = 'HAVING ' . implode(' OR ', $searches);
+			if(!empty($searches)) {
+				$query = 'HAVING ' . implode(' OR ', $searches);
+			}
+			else {
+				$query = '';
+			}
 			return $query;
 		}
 		else {
@@ -515,8 +535,8 @@ class UserDisplayAllQueryCreator {
 	protected $_cardsQueryDone = false;
 	protected $_classesQueryDone = false;
 
-	protected $_filterForQuery;
 	protected $_sortFor;
+	protected $_filterForColumns;
 	protected $_userToStart;
 	protected $_usersPerPage;
 

@@ -368,21 +368,36 @@ body.modal-open,
  * Just a dark button, as an alternative to the other bootstrap-buttons
  */
 .btn-dark {
-  color: #fff;
-  background-color: #555;
-  border-color: #333;
+	color: #eee;
+	background-color: #555;
+	border-color: #333;
 }
+
+.input-group .btn-dark .icon {
+	color: #eee;
+}
+
 .btn-dark:hover,
 .btn-dark:focus,
 .btn-dark:active,
 .btn-dark.active,
 .open .dropdown-toggle.btn-dark {
-  color: #fff;
-  background-color: #777;
-  border-color: #555;
+	color: #eee;
+	background-color: #777;
+	border-color: #555;
 }
+
 .btn-dark:active,
 .btn-dark.active,
 .open .dropdown-toggle.btn-dark {
-  background-image: none;
+	background-image: none;
+}
+
+/*
+ * Override multiselection-stuff for better looks
+ */
+
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+	background-color: #A1DDE6;
+	background-image: none;
 }

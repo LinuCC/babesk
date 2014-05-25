@@ -114,13 +114,20 @@
 <div class="row">
 	<div class="center-block">
 		<div class="col-sm-4 col-md-3 text-center">
-			<span class="input-group filter-container"
-				title="{t}Search (Enter to commit){/t}" >
-				<span class="input-group-addon">
-					<span class="icon icon-search"></span>
+			<span class="input-group filter-container">
+				<span class="input-group-btn">
+					<select id="search-select-menu" class="dropdown-menu pull-right"
+						role="menu" multiple="multiple">
+					</select>
 				</span>
 				<input id="filter" type="text" class="form-control"
-					placeholder="{t}Search...{/t}" />
+					placeholder="{t}Search...{/t}"
+					title="{t}Search (Enter to commit){/t}" />
+				<span class="input-group-btn">
+					<button id="search-submit" class="btn btn-default">
+						<span class="icon icon-search"></span>
+					</button>
+				</span>
 			</span>
 		</div>
 		<div class="col-sm-8 col-md-6 text-center">
