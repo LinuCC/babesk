@@ -445,21 +445,15 @@ class UserDisplayAllQueryCreator {
 			$this->addSelectStatement('GROUP_CONCAT( DISTINCT
 				CONCAT(g.gradelevel, "-", g.label)
 				SEPARATOR "<br />") AS grades,
-				activeGrade.activeGrade AS activeGrade');
+				CONCAT(ga.gradelevel, "-", ga.label) AS activeGrade');
 
 			$this->addJoinStatement('
 				LEFT JOIN SystemUsersInGradesAndSchoolyears uigsg
 					ON uigsg.userId = u.ID
 				LEFT JOIN SystemGrades g ON uigsg.gradeId = g.ID
-				LEFT JOIN (
-					SELECT CONCAT(gradelevel, "-", label)
-						AS activeGrade, uigsg.userId AS userId
-					FROM SystemGrades g
-					JOIN SystemUsersInGradesAndSchoolyears uigsg ON
-						uigsg.gradeId = g.ID AND
-						uigsg.schoolyearId = @activeSchoolyear
-					) activeGrade
-						ON u.ID = activeGrade.userId');
+				LEFT JOIN SystemGrades ga ON ga.ID = uigsg.gradeId
+					AND uigsg.schoolyearId = @activeSchoolyear
+			');
 			$this->_gradeQueryDone = true;
 		}
 	}
