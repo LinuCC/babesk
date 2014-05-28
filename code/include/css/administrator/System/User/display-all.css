@@ -23,3 +23,11 @@ table#user-table tr.selected:nth-child(2n+1) > td {
 table#user-table.table-hover > tbody > tr:hover > td {
 	background-color: #E8FFB3;
 }
+
+.special-course-selector {
+	display: inline-block;
+	padding: 0 3px;
+	border-left: 1px solid #BBB;
+	border-right: 1px solid #BBB;
+	margin-left: -1px;
+}

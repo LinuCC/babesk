@@ -121,6 +121,8 @@ $(document).ready(function() {
 		var amountPages = 0;
 		var colToSort = {};
 		var sortMethod = 'ASC';
+		//All special_course s
+		var specialCourses = [];
 
 		columnsToShowSetByCookies();
 		$('#search-select-menu').multiselect({
@@ -230,9 +232,33 @@ $(document).ready(function() {
 			});
 		});
 
+		$('#user-table').on('click', '.special-course-checkbox', function(ev) {
+			var $checkbox = $(ev.target);
+			console.log($checkbox.prop('checked'));
+			$.postJSON(
+				'index.php?module=administrator|System|User|DisplayAll&setSpecialCourse',
+				{
+					'inCourse': $checkbox.prop('checked'),
+					'specialCourse': $checkbox.attr('specialcourse'),
+					'userId': $checkbox.closest('tr').attr('userid')
+				},
+				function(res) {
+					console.log(res);
+					if(res['state'] == 'error') {
+						toastr.error(res['data']);
+					}
+				}
+			);
+		});
+
 		$('#user-table').on('click', 'tbody > tr', function(ev) {
 
 			var $target = $(ev.target);
+			//If a button or input was clicked and its not the selection-checkbox,
+			//dont select the user
+			if($target.filter('button,input,a').not('input.user-checkbox').length) {
+				return;
+			}
 			var $this = $(this);
 			var $box = $this.children('td').children('input[type="checkbox"]');
 			//Dont toggle checkbox two times if checkbox is clicked
@@ -381,7 +407,7 @@ $(document).ready(function() {
 				}
 			});
 			$menu.multiselect('rebuild');
-			$('button.multiselect').attr('title', '');
+			$('button.multiselect').attr('title', 'Zu durchsuchende Spalten');
 		}
 
 		function columnsToSearchSelectedGet() {
@@ -432,6 +458,10 @@ $(document).ready(function() {
 		 */
 		function newDataFetch(pagenum) {
 
+			if(!specialCourses.length) {
+				getAllSpecialCourses();
+			}
+
 			if(pagenum == undefined) {
 				pagenum = activePage;
 			}
@@ -444,7 +474,6 @@ $(document).ready(function() {
 			}
 			var filterForColumns = columnsToSearchSelectedGet();
 			var filterForValue = $('#filter').val();
-			console.log(filterForColumns);
 			var columnsToFetch = [];
 			$.each(columns, function(ind, el) {
 				if(el.isDisplayed) {
@@ -465,7 +494,6 @@ $(document).ready(function() {
 				},
 
 				success: function(data) {
-					console.log(data);
 					try {
 						data = JSON.parse(data);
 					} catch(e) {
@@ -508,8 +536,12 @@ $(document).ready(function() {
 			//Sets the TableHead
 			// var columnHeader = selectedColumnLabelsGet();
 			var headRow = '<tr><th><input id="user-checkbox-global" type="checkbox" /></th>';
+			var specialCoursePos = -1;
 			if(userData.length != 0){
 				$.each(userData[0], function(index, columnName) {
+					if(index == 'special_course') {
+						specialCoursePos = index;
+					}
 					var respectiveColumnEntryArr = $.grep(columns, function(el) {
 							return index == el.name;
 					});
@@ -531,12 +563,15 @@ $(document).ready(function() {
 				//Sets the TableBody
 				$.each(userData, function(index, user) {
 					row = String(
-							'<tr id="user_{0}">\
+							'<tr id="user_{0}" userid="{0}">\
 								<td>\
 									<input class="user-checkbox" user-id="{0}" type="checkbox"/>\
 								</td>'
 						).format(user.ID);
 					$.each(user, function(colIndex, column) {
+						if(colIndex == specialCoursePos) {
+							column = special_course(column);
+						}
 						row += '<td>' + column + '</td>';
 					});
 					var settingsColHtml = microTmpl(
@@ -551,6 +586,51 @@ $(document).ready(function() {
 
 				});
 			}
+		}
+
+		/**
+		 * Allows direct editing of the special courses
+		 * @todo  HOTFIX - rework display-all and make it better!
+		 */
+		function special_course(courseStr) {
+			var courses = courseStr.split("|");
+			var newCourseStr = '';
+			var $courseSel = $(
+				'<span class="special-course-selector"><div></div>\
+					<input type="checkbox" class="special-course-checkbox"></span>'
+			);
+			var $checkedCourseSel = $courseSel.clone();
+			$checkedCourseSel.find('input').attr('checked', true);
+			$.each(specialCourses, function(ind, el) {
+				if($.inArray(el, courses) != -1) {
+					var $content = $checkedCourseSel.clone();
+				}
+				else {
+					var $content = $courseSel.clone();
+				}
+				$content.find('input').attr('specialcourse', el);
+				$content.find('div').html(el);
+				newCourseStr += $content.outerHtml();
+			});
+			return newCourseStr;
+		}
+
+		function getAllSpecialCourses() {
+			jQuery.ajaxSetup({async:false});
+			$.postJSON(
+				'index.php?module=administrator|System|User|DisplayAll\
+					&getAllSpecialCourses',
+				{},
+				function(res) {
+					if(res['state'] == 'success') {
+						specialCourses = res['data'];
+					}
+					else {
+						toastr.error(res['data']);
+					}
+				}
+			);
+			jQuery.ajaxSetup({async:true});
 		}
 
 		/**

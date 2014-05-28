@@ -42,6 +42,16 @@ class User extends System {
 			$deleter->showPdfOfDeletedUser($fileId);
 			die();
 		}
+		//Another hotfix, to be removed when UserDisplayAll gets reworked to a
+		//client-based app (something like angular.js)
+		else if(isset($_GET['getAllSpecialCourses'])) {
+			$this->getAllSpecialCourses();
+			die();
+		}
+		else if(isset($_GET['setSpecialCourse'])) {
+			$this->setSpecialCourse();
+			die();
+		}
 
 		$execReq = $dataContainer->getExecutionCommand()->pathGet();
 		if($this->submoduleCountGet($execReq)) {
@@ -758,6 +768,87 @@ class User extends System {
 		}
 
 		die(json_encode($data));
+	}
+
+	// protected function showSpecialCourseEdit() {
+
+	// 	$ids = $_POST['userIds'];
+	// 	$query = $this->_entityManager->createQueryBuilder()
+	// 		->select('u')
+	// 		->from('Babesk\ORM\SystemUsers', 'u');
+
+	// 	foreach($ids as $ind => $id) {
+	// 		$query->andWhere("u.ID = :id{$ind}");
+	// 	}
+	// }
+
+	protected function getAllSpecialCourses() {
+
+		require_once PATH_INCLUDE . '/orm-entities/SystemGlobalSettings.php';
+
+		$courseStr = $this->_entityManager
+			->getRepository('Babesk\ORM\SystemGlobalSettings')
+			->findOneByName('special_course')
+			->getValue();
+
+		if(!empty($courseStr)) {
+			$courses = explode('|', $courseStr);
+			$this->_interface->dieAjax('success', $courses);
+		}
+		else {
+			$this->_logger->log('Error fetching global setting special_course',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieAjax(
+				'error',
+				'Ein Fehler ist beim Abrufen aller Oberstufenkurse aufgetreten'
+			);
+		}
+	}
+
+	protected function setSpecialCourse() {
+
+		require_once PATH_INCLUDE . '/orm-entities/SystemUsers.php';
+		$users = $this->_entityManager->getRepository(
+			'Babesk\ORM\SystemUsers'
+		);
+		$courseStr = $users
+			->findOneById($_POST['userId'])
+			->getSpecialCourse();
+		$newStatus = ($_POST['inCourse'] == 'true') ? true : false;
+		$hasCourse = strpos($courseStr, $_POST['specialCourse']) !== false;
+		if($newStatus && !$hasCourse) {
+			//Add course
+			if(!empty($courseStr)) {
+				$courseStr .= '|';   //Add delimiter if not void
+			}
+			$courseStr .= $_POST['specialCourse'];
+		}
+		else if(!$newStatus && $hasCourse) {
+			//delete course
+			//Delimiter can be in two different places or not there, just try
+			//all possibilities...
+			$courseStr = str_replace(
+				$_POST['specialCourse'] . '|', '', $courseStr
+			);
+			$courseStr = str_replace(
+				'|' . $_POST['specialCourse'], '', $courseStr
+			);
+			$courseStr = str_replace(
+				$_POST['specialCourse'], '', $courseStr
+			);
+		}
+		else {
+			//Nothing to change
+			$this->_interface->dieAjax('info', 'Nothing changed');
+		}
+
+		$user = $users->findOneById($_POST['userId'])
+			->setSpecialCourse($courseStr);
+		$this->_entityManager->persist($user);
+		$this->_entityManager->flush();
+		$this->_interface->dieAjax(
+			'success', 'Der Oberstufenkurs wurde erfolgreich verändert'
+		);
 	}
 
 	///////////////////////////////////////////////////////////////////////
