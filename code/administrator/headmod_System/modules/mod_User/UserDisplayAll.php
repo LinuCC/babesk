@@ -100,14 +100,13 @@ class UserDisplayAll {
 			$countQuery = $queryCreator->createCountOfQuery(
 				$columnsToFetch, $sortFor, $filterForVal
 			);
-
+			// var_dump($query);
+			// die();
 			//Fetch the Userdata
 			TableMng::query('SET @activeSy :=
 				(SELECT ID FROM SystemSchoolyears WHERE active = "1");');
 			$data = TableMng::query($query);
 			$usercount = TableMng::query($countQuery);
-
-			// var_dump($usercount);
 
 			// No division by zero, never show zero sites
 			if($usersPerPage != 0 && $usercount[0]['count'] > 0) {
@@ -374,7 +373,7 @@ class UserDisplayAllQueryCreator {
 		$this->_query = "SELECT $selectQuery
 			FROM SystemUsers u
 				$this->_queryJoin
-			GROUP BY u.ID
+			GROUP BY u.ID $this->_queryGroup
 			$filterQuery
 			ORDER BY $this->_sortFor {$this->_sortMethod}
 			LIMIT $this->_userToStart, $this->_usersPerPage";
@@ -389,7 +388,7 @@ class UserDisplayAllQueryCreator {
 		(SELECT $selectQuery
 					FROM SystemUsers u
 						$this->_queryJoin
-					GROUP BY u.ID
+					GROUP BY u.ID $this->_queryGroup
 					$filterQuery) counting";
 	}
 
@@ -467,6 +466,7 @@ class UserDisplayAllQueryCreator {
 				LEFT JOIN SystemGrades ga ON ga.ID = uigs.gradeId
 					AND uigs.schoolyearId = @activeSchoolyear
 			');
+			$this->addGroupStatement('ga.`gradelevel`');
 			$this->_activeGradeQueryDone = true;
 		}
 	}
@@ -527,6 +527,10 @@ class UserDisplayAllQueryCreator {
 		$this->_queryJoin .= " $st ";
 	}
 
+	protected function addGroupStatement($st) {
+		$this->_queryGroup .= ", $st";
+	}
+
 	/**
 	 * Quotes an identifier so that it is not vulnerable to SQL-Injection
 	 * @param  string $ident The SQL-identifier to quote
@@ -544,6 +548,7 @@ class UserDisplayAllQueryCreator {
 	protected $_filters;
 
 	protected $_queryJoin = '';
+	protected $_queryGroup = '';
 
 	protected $_query = '';
 	protected $_countQuery = '';
