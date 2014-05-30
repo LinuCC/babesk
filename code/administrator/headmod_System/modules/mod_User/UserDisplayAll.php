@@ -295,8 +295,10 @@ class UserDisplayAllQueryCreator {
 
 		foreach($filterForColumns as $col) {
 			//Quote every column so it can be compared to the automatically
-			//generated columns
+			//generated columns. It can be a user-column or a standalone one,
+			//so try both possibilities
 			$this->_filterForColumns[] = 'u.' . $this->quoteIdentifier($col);
+			$this->_filterForColumns[] = $this->quoteIdentifier($col);
 		}
 	}
 
@@ -350,7 +352,7 @@ class UserDisplayAllQueryCreator {
 				$this->cardsQuery();
 				break;
 			case 'activeGrade':
-				$this->gradeQuery();
+				$this->activeGradeQuery();
 				break;
 			case 'schoolyears':
 				$this->schoolyearQuery();
@@ -427,34 +429,45 @@ class UserDisplayAllQueryCreator {
 
 	protected function schoolyearQuery() {
 
+		$this->usersInGradesAndSchoolyearsQuery();
 		if(!$this->_schoolyearQueryDone) {
 			$this->addSelectStatement('GROUP_CONCAT(DISTINCT sy.label
 					SEPARATOR "<br />")
 				AS schoolyears');
 			$this->addJoinStatement(
-				'LEFT JOIN SystemUsersInGradesAndSchoolyears uigsy
-				ON uigsy.userId = u.ID
-			LEFT JOIN SystemSchoolyears sy ON sy.ID = uigsy.schoolyearId');
+				'
+			LEFT JOIN SystemSchoolyears sy ON sy.ID = uigs.schoolyearId');
 			$this->_schoolyearQueryDone = true;
 		}
 	}
 
 	protected function gradeQuery() {
 
+		$this->usersInGradesAndSchoolyearsQuery();
 		if(!$this->_gradeQueryDone) {
 			$this->addSelectStatement('GROUP_CONCAT( DISTINCT
 				CONCAT(g.gradelevel, "-", g.label)
-				SEPARATOR "<br />") AS grades,
-				CONCAT(ga.gradelevel, "-", ga.label) AS activeGrade');
+				SEPARATOR "<br />") AS grades');
 
 			$this->addJoinStatement('
-				LEFT JOIN SystemUsersInGradesAndSchoolyears uigsg
-					ON uigsg.userId = u.ID
-				LEFT JOIN SystemGrades g ON uigsg.gradeId = g.ID
-				LEFT JOIN SystemGrades ga ON ga.ID = uigsg.gradeId
-					AND uigsg.schoolyearId = @activeSchoolyear
+				LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 			');
 			$this->_gradeQueryDone = true;
+		}
+	}
+
+	protected function activeGradeQuery() {
+
+		$this->usersInGradesAndSchoolyearsQuery();
+		if(!$this->_activeGradeQueryDone) {
+			$this->addSelectStatement(
+				'CONCAT(ga.gradelevel, "-", ga.label) AS `activeGrade`'
+			);
+			$this->addJoinStatement('
+				LEFT JOIN SystemGrades ga ON ga.ID = uigs.gradeId
+					AND uigs.schoolyearId = @activeSchoolyear
+			');
+			$this->_activeGradeQueryDone = true;
 		}
 	}
 
@@ -482,6 +495,17 @@ class UserDisplayAllQueryCreator {
 		}
 	}
 
+	protected function usersInGradesAndSchoolyearsQuery() {
+
+		if(!$this->_usersInGradesAndSchoolyearsQueryDone) {
+			$this->addJoinStatement('
+				LEFT JOIN SystemUsersInGradesAndSchoolyears uigs
+					ON uigs.userId = u.ID
+			');
+			$this->_usersInGradesAndSchoolyearsQueryDone = true;
+		}
+	}
+
 	protected function addSelectStatement($st) {
 
 		if(in_array($st, $this->_selectors) === false) {
@@ -494,7 +518,7 @@ class UserDisplayAllQueryCreator {
 		}
 		else {
 			$stSplit = explode('AS', $st);
-			$this->_filters[] = $stSplit[1];
+			$this->_filters[] = trim($stSplit[1]);
 		}
 	}
 
@@ -525,9 +549,11 @@ class UserDisplayAllQueryCreator {
 	protected $_countQuery = '';
 
 	protected $_gradeQueryDone = false;
+	protected $_activeGradeQueryDone = false;
 	protected $_schoolyearQueryDone = false;
 	protected $_cardsQueryDone = false;
 	protected $_classesQueryDone = false;
+	protected $_usersInGradesAndSchoolyearsQueryDone = false;
 
 	protected $_sortFor;
 	protected $_filterForColumns;
