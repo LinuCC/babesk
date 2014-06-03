@@ -8,12 +8,17 @@ $(document).ready(function() {
 		newDataFetch();
 
 		// When searching or entering a new row-count, refresh on enter
-		$('#books-per-page, #filter').on('keyup', function(ev) {
+		$('#books-per-page, #filter').on('keyup', function(event) {
 			activePage = 1;   //Reset pagenumber
-			ev.preventDefault();
-			if(ev.which == 13) {
+			event.preventDefault();
+			if(event.which == 13) {
 				newDataFetch();
 			}
+		});
+
+		$('ul#page-select').on('click', 'li:not(.disabled) > a', function(event) {
+			activePage = parseInt($(event.target).text());
+			newDataFetch();
 		});
 
 		function newDataFetch() {
