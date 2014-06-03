@@ -1,6 +1,11 @@
 <?php
 
 namespace Babesk\ORM;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+require_once PATH_INCLUDE . '/orm-entities/SchbasInventory.php';
+require_once PATH_INCLUDE . '/orm-entities/SystemSchoolSubjects.php';
 
 /**
  * @Entity
@@ -9,7 +14,7 @@ class SchbasBooks {
 
 	/**
 	 * @id
-	 * @Column(type="integer")
+	 * @Column(type="integer", name="id")
 	 * @GeneratedValue
 	 */
 	protected $id;
@@ -39,6 +44,11 @@ class SchbasBooks {
 	 * @JoinColumn(name="subjectId", referencedColumnName="id")
 	 */
 	protected $subject;
+
+	/**
+	 * @OneToMany(targetEntity="SchbasInventory", mappedBy="book")
+	 */
+	protected $exemplars;
 
 	/**
 	 * @Column(type="string")
@@ -128,6 +138,15 @@ class SchbasBooks {
 
 	public function setPrice($price) {
 		$this->price = $price;
+		return $this;
+	}
+
+	public function getExemplars() {
+		return $this->exemplars;
+	}
+
+	public function setExemplars($exemplars) {
+		$this->exemplars = $exemplars;
 		return $this;
 	}
 }

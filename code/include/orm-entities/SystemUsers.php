@@ -2,8 +2,11 @@
 
 namespace Babesk\ORM;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping;
 use Doctrine\Common\Collections\ArrayCollection;
+
+require_once PATH_INCLUDE . '/orm-entities/SystemGroups.php';
+require_once PATH_INCLUDE . '/orm-entities/SchbasInventory.php';
 
 /**
  * @Entity @Table(name="SystemUsers")
@@ -12,7 +15,7 @@ class SystemUsers {
 
 	/**
 	 * @Id
-	 * @Column(type="integer")
+	 * @Column(type="integer",name="ID")
 	 * @GeneratedValue
 	 */
 	protected $id;
@@ -108,17 +111,35 @@ class SystemUsers {
 	protected $special_course;
 
 	/**
-	 * @ORM\ManyToMany(targetEntity="SystemGroups")
-	 * @ORM\JoinTable(name="SystemUsersInGroups",
-	 *     joinColumns= {@ORM\JoinColumn(
+	 * @ManyToMany(targetEntity="SystemGroups")
+	 * @JoinTable(name="SystemUsersInGroups",
+	 *     joinColumns= {@JoinColumn(
 	 *         name="userId", referencedColumnName="ID"
 	 *     )},
-	 *     inverseJoinColumns={@ORM\JoinColumn(
+	 *     inverseJoinColumns={@JoinColumn(
 	 *         name="groupId", referencedColumnName="ID"
 	 *     )}
-	 * ))
+	 * )
 	 */
 	protected $groups;
+
+	/**
+	 * @ManyToMany(targetEntity="SchbasInventory")
+	 * @JoinTable(
+	 *     name="SchbasLending",
+	 *     joinColumns = {
+	 *         @JoinColumn(
+	 *             name = "user_id", referencedColumnName = "ID"
+	 *         )
+	 *     },
+	 *     inverseJoinColumns = {
+	 *         @JoinColumn(
+	 *             name = "inventory_id", referencedColumnName = "id"
+	 *         )
+	 *     }
+	 * )
+	 */
+	protected $lentBooks;
 
 
 	public function getId() {
@@ -292,13 +313,20 @@ class SystemUsers {
 		return $this;
 	}
 
+	public function getLentBooks() {
+		return $this->lentBooks;
+	}
 
-
+	public function setLentBooks($lentBooks) {
+		$this->lentBooks = $lentBooks;
+		return $this;
+	}
 
 	public function __construct() {
 
 		// $this->birthday = new DateTime();
 		$this->groups = new ArrayCollection();
+		$this->lentBooks = new ArrayCollection();
 	}
 }
 
