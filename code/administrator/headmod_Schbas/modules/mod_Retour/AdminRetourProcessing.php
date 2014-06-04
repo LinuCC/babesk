@@ -113,22 +113,19 @@ class AdminRetourProcessing {
 		$isUser = TableMng::query(sprintf(
 				'SELECT COUNT(*) FROM SystemUsers WHERE username LIKE "%s"',$card_id));
 
-		if ($isCard[0]['COUNT(*)']==="0")
-				$this->RetourInterface->dieError(sprintf($this->msg['err_get_user_by_card']));
-
 		if ($isCard[0]['COUNT(*)']==="1") {
 			if (!$this->cardManager->valid_card_ID($card_id))
 				$this->RetourInterface->dieError(sprintf($this->msg['err_card_id']));
-
-		try {
-			$uid = $this->cardManager->getUserID($card_id);
-			if ($this->userManager->checkAccount($uid)) {
-				$this->RetourInterface->dieError(sprintf($this->msg['err_usr_locked']));
+			try {
+				$uid = $this->cardManager->getUserID($card_id);
+				if ($this->userManager->checkAccount($uid)) {
+					$this->RetourInterface->dieError(sprintf($this->msg['err_usr_locked']));
+				}
+			} catch (Exception $e) {
+				$this->RetourInterface->dieError($this->msg['err_get_user_by_card'] . ' Error:' . $e->getMessage());
 			}
-		} catch (Exception $e) {
-			$this->RetourInterface->dieError($this->msg['err_get_user_by_card'] . ' Error:' . $e->getMessage());
 		}
-		} else if ($isUser[0]['COUNT(*)']==="1") {
+		else if ($isUser[0]['COUNT(*)']==="1") {
 			try {
 				$uid = $this->userManager->getUserID($card_id);
 				if ($this->userManager->checkAccount($uid)) {
@@ -137,6 +134,11 @@ class AdminRetourProcessing {
 			} catch (Exception $e) {
 				$this->RetourInterface->dieError($this->msg['err_get_user_by_card'] . ' Error:' . $e->getMessage());
 			}
+		}
+		else {
+			$this->RetourInterface->dieError(
+				sprintf($this->msg['err_get_user_by_card'])
+			);
 		}
 		return $uid;
 	}
