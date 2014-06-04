@@ -31,16 +31,27 @@ class ShowBooklist extends Booklist {
 
 	protected function ajaxBooklist() {
 
-		// 	// $pagenum = $_POST['pagenumber'];
-		// 	// $usersPerPage = $_POST['usersPerPage'];
-		// 	// $sortFor = $_POST['sortFor'];
-		// 	// $filterFor = $_POST['filterFor'];
+		$query = $this->booklistQueryGet();
+		$paginator = new \Doctrine\ORM\Tools\Pagination\Paginator(
+			$query, $fetchJoinCollection = true
+		);
+		$books = $this->bookArrayPopulate($paginator);
+		$pagecount = $this->pagecountGet($paginator);
+		die(json_encode(array(
+			'pagecount' => $pagecount, 'books' => $books
+		)));
+	}
+
+	/**
+	 * Creates and returns a query that fetches the book-variables
+	 * @return QueryBuilder A Doctrine-Query-Builder
+	 */
+	protected function booklistQueryGet() {
 
 		$query = $this->_entityManager->createQueryBuilder()
 			->select(array('b, s'))
 			->from('Babesk\ORM\SchbasBooks', 'b')
 			->leftJoin('b.subject', 's');
-
 		if(isset($_POST['filterFor']) && !isBlank($_POST['filterFor'])) {
 			$query->where('b.title LIKE :filterVar')
 			->orWhere('b.author LIKE :filterVar')
@@ -53,20 +64,17 @@ class ShowBooklist extends Booklist {
 			->orWhere('s.abbreviation LIKE :filterVar')
 			->setParameter('filterVar', '%' . $_POST['filterFor'] . '%');
 		}
-
 		$query->setFirstResult($_POST['pagenumber'] * $_POST['booksPerPage'])
-			->setMaxResults($_POST['booksPerPage']) ;
+			->setMaxResults($_POST['booksPerPage']);
+		return $query;
+	}
 
-		// 	// if($_POST['sortFor']) {
-		// 	// 	$query->orderBy($_POST['sortFor']);
-		// 	// }
-		// 	// if($_POST['filterFor']) {
-		// 	// 	$query->where()
-		// 	// }
-
-		$paginator = new \Doctrine\ORM\Tools\Pagination\Paginator(
-			$query, $fetchJoinCollection = true
-		);
+	/**
+	 * Populates the array of books to be returned to the client
+	 * @param  Paginator $paginator doctrines paginator to fetch the data
+	 * @return array                An array of bookdata
+	 */
+	protected function bookArrayPopulate($paginator) {
 
 		$books = array();
 		foreach($paginator as $book) {
@@ -82,8 +90,19 @@ class ShowBooklist extends Booklist {
 			);
 			$bookAr['subject'] = ($book->getSubject()) ?
 				$book->getSubject()->getName() : '';
-			$books[] = $bookAr;
+			$books[$book->getId()] = $bookAr;
 		}
+		$invData = $this->booksInventoryDataGet($paginator);
+		$books = $this->bookArrayMerge($books, $invData);
+		return $books;
+	}
+
+	/**
+	 * Calculates the pagecount of the booklist
+	 * @param  Paginator $paginator doctrines paginator fed with the bookquery
+	 * @return int                  The count of showable pages
+	 */
+	protected function pagecountGet($paginator) {
 
 		$bookcount = count($paginator);
 		// No division by zero, never show zero sites
@@ -93,10 +112,74 @@ class ShowBooklist extends Booklist {
 		else {
 			$pagecount = 1;
 		}
+		return $pagecount;
+	}
 
-		die(json_encode(array(
-			'pagecount' => $pagecount, 'books' => $books
-		)));
+	/*====================================================
+	=            Additional Bookdata to fetch            =
+	====================================================*/
+
+	protected function booksInventoryDataGet($paginator) {
+
+		require_once PATH_INCLUDE . '/orm-entities/SchbasBooks.php';
+
+		$booksLent = $this->booksLentGet($paginator);
+		return $booksLent;
+	}
+
+	/**
+	 * Gets the count of exemplars of the given books that are lent
+	 * @param  Paginator $paginator a doctrine-paginator containing the books
+	 *                              which lent exemplars (inventory) to count
+	 * @return array                '<bookId>' => [
+	 *                                  'exemplarsLent' => '<lentCount>'
+	 *                              ]
+	 */
+	protected function booksLentGet($paginator) {
+
+		$booksLent = array();
+		$query = $this->_entityManager->createQuery(
+			'SELECT COUNT(l) FROM \Babesk\ORM\SchbasBooks b
+				JOIN b.exemplars e
+				JOIN e.lending l
+				WHERE b.id = :id
+		');
+		foreach($paginator as $book) {
+			$res = $query->setParameter('id', $book->getId())->getResult();
+			$booksLent[$book->getId()]['exemplarsLent'] = $res[0][1];
+		}
+
+		return $booksLent;
+	}
+
+	/*-----  End of Additional Bookdata to fetch  ------*/
+
+	/**
+	 * Combines two multi-dimensional arrays
+	 * Combines something like
+	 *     [ '1' => ['A' => '5', 'B' => '6'],
+	 *         '2' => ['A' => '9', 'B' => '3'] ]
+	 *     and
+	 *     [ '1' => ['F' => '8']
+	 *         '2' => ['F' => '4'] ]
+	 *     to
+	 *     [ '1' => ['A' => '5', 'B' => '6', 'F' => '8'],
+	 *         '2' => ['A' => '9', 'B' => '3', 'F' => '4'] ]
+	 * @param  array  $ar1 The first array
+	 * @param  array  $ar2 The second array
+	 * @return array       The combined array
+	 */
+	protected function bookArrayMerge($ar1, $ar2) {
+
+		foreach($ar1 as $bookId1 => $book1) {
+			if(!empty($ar2[$bookId1])) {
+				foreach($ar2[$bookId1] as $name => $val) {
+					$ar1[$bookId1][$name] = $val;
+				}
+			}
+		}
+
+		return $ar1;
 	}
 
 	/////////////////////////////////////////////////////////////////////

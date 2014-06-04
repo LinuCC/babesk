@@ -13,28 +13,6 @@ class AdminBooklistProcessing {
 	var $messages = array();
 	private $bookInterface;
 
-	public function ShowBooklist($option, $filter) {
-
-		try {
-			isset($_GET['sitePointer'])?$showPage = $_GET['sitePointer'] + 0:$showPage = 1;
-			$nextPointer = $showPage*10-10;
-			$booklist = $this->_pem->getRepository(
-					'Babesk/ORM/Entities/SchbasBooks'
-				)->findAll();
-
-		} catch (Exception $e) {
-			$this->logs
-			->log('ADMIN', 'MODERATE',
-					sprintf('Error while getting Data from MySQL:%s in %s', $e->getMessage(), __METHOD__));
-			$this->booklistInterface->dieError($this->messages['error']['get_data_failed']);
-		}
-
-		echo 'hi';
-
-		// $navbar = navBar($showPage, 'schbas_books', 'Schbas', 'Booklist', '1',$filter);
-		// $this->BookInterface->ShowBooklist($booklist,$navbar);
-	}
-
 	/**
 	 * Shows booklist
 	 * @param $filter
