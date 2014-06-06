@@ -182,8 +182,9 @@ class ShowBooklist extends Booklist {
 				WHERE b.id = :id
 		');
 		foreach($paginator as $book) {
-			$res = $query->setParameter('id', $book->getId())->getResult();
-			$booksLent[$book->getId()]['exemplarsLent'] = $res[0][1];
+			$res = $query->setParameter('id', $book->getId())
+				->getSingleScalarResult();
+			$booksLent[$book->getId()]['exemplarsLent'] = (int)$res;
 		}
 
 		return $booksLent;
@@ -201,8 +202,10 @@ class ShowBooklist extends Booklist {
 
 		$booksInventory = array();
 		$query = $this->_entityManager->createQuery(
-			'SELECT COUNT(b) FROM \Babesk\ORM\SchbasBooks b WHERE b.id = :id'
-		);
+			'SELECT COUNT(e.id) FROM \Babesk\ORM\SchbasBooks b
+				JOIN b.exemplars e
+				WHERE b.id = :id
+		');
 		foreach($paginator as $book) {
 			$res = $query->setParameter('id', $book->getId())->getResult();
 			$booksInventory[$book->getId()]['allExemplars'] = $res[0][1];
