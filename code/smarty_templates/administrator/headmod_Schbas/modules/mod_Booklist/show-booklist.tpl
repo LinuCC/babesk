@@ -12,7 +12,7 @@
 		<td><%= isbn %></td>
 		<td><%= price %></td>
 		<td><%= bundle %></td>
-		<td>LOOOOL</td>
+		<td><%= highestExemplarNumber %></td>
 		<td><%= exemplarsInStock %></td>
 		<td><%= exemplarsLent %></td>
 		<td><%= exemplarsToBuy %></td>

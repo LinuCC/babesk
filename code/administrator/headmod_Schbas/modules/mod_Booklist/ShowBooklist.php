@@ -130,10 +130,12 @@ class ShowBooklist extends Booklist {
 	 * @param  Paginator $paginator doctrines paginator containing the books
 	 * @return array                an array containing the data for each book
 	 *                              '<bookId>' => [
+	 *                                  'highestExemplarNumber' => '<count>'
 	 *                                  'exemplarsLent' => '<count>'
 	 *                                  'allExemplars' => '<count>'
 	 *                                  'exemplarsInStock' => '<count>'
 	 *                                  'exemplarsNeeded' => '<count>'
+	 *                                  'exemplarsToBuy' => '<count>'
 	 *                              ]
 	 */
 	protected function booksInventoryDataGet($paginator) {
@@ -141,7 +143,10 @@ class ShowBooklist extends Booklist {
 		require_once PATH_INCLUDE . '/orm-entities/SchbasBooks.php';
 
 		try {
-			$booksData = $this->bookExemplarsLentGet($paginator);
+			$booksData = $this->booksHighestInventoryNumberGet($paginator);
+			$booksData = $this->bookArrayMerge(
+				$booksData, $this->bookExemplarsLentGet($paginator)
+			);
 			$booksData = $this->bookArrayMerge(
 				$booksData, $this->bookExemplarCountGet($paginator)
 			);
@@ -162,6 +167,35 @@ class ShowBooklist extends Booklist {
 			return array();
 		}
 		return $booksData;
+	}
+
+	/**
+	 * Gets the highest exemplar number for the books in paginator
+	 * @param  Paginator $paginator doctrines paginator containing the books
+	 * @return array                an array containing the data for each book
+	 *                              '<bookId>' => [
+	 *                                  'highestExemplarNumber' => '<count>'
+	 *                              ]
+	 */
+	protected function booksHighestInventoryNumberGet($paginator) {
+
+		$invNums = array();
+		$query = $this->_entityManager->createQuery(
+			'SELECT MAX(i.exemplar) FROM \Babesk\ORM\SchbasInventory i
+				JOIN i.book b
+				WHERE b.id = :id
+		');
+		foreach($paginator as $book) {
+			$res = $query->setParameter('id', $book->getId())
+				->getSingleScalarResult();
+			if(!empty($res)) {
+				$invNums[$book->getId()]['highestExemplarNumber'] = (int) $res;
+			}
+			else {
+				$invNums[$book->getId()]['highestExemplarNumber'] = 0;
+			}
+		}
+		return $invNums;
 	}
 
 	/**
