@@ -307,7 +307,16 @@ class ShowBooklist extends Booklist {
 			foreach($gradelevels as $key => $gradelevel) {
 				$query->setParameter(($key + 1), $gradelevel);
 			}
-			return $query->getResult();
+			$res = $query->getSingleScalarResult();
+			if(!empty($res)) {
+				return (int)$res;
+			}
+			else {
+				$this->_logger->log(
+					'Error fetching lower grades book exemplars',
+					'Notice', Null);
+				return 0;
+			}
 		}
 		else {
 			//user not in senior grades and booksubject not in list
@@ -315,8 +324,9 @@ class ShowBooklist extends Booklist {
 			foreach($gradelevels as $key => $gradelevel) {
 				$query->setParameter(($key + 1), $gradelevel);
 			}
-			if(!empty($query->getResult()[0][1])) {
-				return (int)$query->getResult()[0][1];
+			$res = $query->getSingleScalarResult();
+			if(!empty($res)) {
+				return (int)$res;
 			}
 			else {
 				$this->_logger->log(
@@ -354,8 +364,9 @@ class ShowBooklist extends Booklist {
 			foreach($gradelevels as $key => $gradelevel) {
 				$query->setParameter(($key + 1), $gradelevel);
 			}
-			if(!empty($query->getResult()[0][1])) {
-				return (int)$query->getResult()[0][1];
+			$res = $query->getSingleScalarResult();
+			if(!empty($res)) {
+				return (int)$res;
 			}
 			else {
 				$this->_logger->log(
