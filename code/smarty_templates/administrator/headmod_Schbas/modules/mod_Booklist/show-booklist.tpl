@@ -13,6 +13,9 @@
 		<td><%= price %></td>
 		<td><%= bundle %></td>
 		<td>LOOOOL</td>
+		<td><%= exemplarsInStock %></td>
+		<td><%= exemplarsLent %></td>
+		<td><%= exemplarsToBuy %></td>
 		<td>
 		<a class="btn btn-info btn-xs" href="index.php?section=Schbas|Booklist&action=2&ID=<%= id %>" title="Bucheinstellungen">
 				<span class="icon icon-Settings"></span>
@@ -35,6 +38,11 @@
 {/block}
 
 {block name=filling_content}
+
+<div class="alert alert-warning alert-dismissable">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <strong>Benötigte Bücher</strong> Die Anzahl der benötigten Bücher für das nächste Schuljahr kann inkorrekt sein. Um ein korrektes Ergebnis zu erhalten, müssen alle Bücher, die wieder verliehen werden können, als nicht verliehen gespeichert sein. Weiterhin müssen alle Selbstzahler korrekt eingetraten sein.
+</div>
 
 <div class="row">
 	<div class="center-block">
@@ -78,6 +86,9 @@
 				<th>Preis</th>
 				<th>Bundle</th>
 				<th>letzte Inventarnummer</th>
+				<th>Auf Lager</th>
+				<th>Verliehen</th>
+				<th>Benötigt</th>
 				<th>Optionen</th>
 			</tr>
 		</thead>

@@ -141,14 +141,34 @@ class SystemUsers {
 	 */
 	protected $lentBooks;
 
+	/**
+	 * @ManyToMany(targetEntity="SchbasBooks")
+	 * @JoinTable(
+	 *     name="SchbasSelfpayer",
+	 *     joinColumns = {
+	 *         @JoinColumn(
+	 *             name = "UID", referencedColumnName = "ID"
+	 *         )
+	 *     },
+	 *     inverseJoinColumns = {
+	 *         @JoinColumn(
+	 *             name = "BID", referencedColumnName = "id"
+	 *         )
+	 *     }
+	 * )
+	 */
+	protected $selfpayingBooks;
+
+	/**
+	 * @OneToMany(
+	 *     targetEntity = "SystemUsersInGradesAndSchoolyears",
+	 *     mappedBy = "user"
+	 * )
+	 */
+	protected $usersInGradesAndSchoolyears;
 
 	public function getId() {
 		return $this->id;
-	}
-
-	public function setId($id) {
-		$this->id = $id;
-		return $this;
 	}
 
 	public function getName() {
@@ -319,6 +339,15 @@ class SystemUsers {
 
 	public function setLentBooks($lentBooks) {
 		$this->lentBooks = $lentBooks;
+		return $this;
+	}
+
+	public function getSelfpayingBooks() {
+		return $this->selfpayingBooks;
+	}
+
+	public function setSelfpayingBooks($selfpayingBooks) {
+		$this->selfpayingBooks = $selfpayingBooks;
 		return $this;
 	}
 

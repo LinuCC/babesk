@@ -2,6 +2,12 @@
 
 require_once 'Booklist.php';
 
+require_once PATH_INCLUDE . '/orm-entities/SystemUsers.php';
+require_once PATH_INCLUDE . '/orm-entities/SystemGrades.php';
+require_once PATH_INCLUDE . '/orm-entities/SystemSchoolyears.php';
+require_once PATH_INCLUDE . '/orm-entities/' .
+	'SystemUsersInGradesAndSchoolyears.php';
+
 class ShowBooklist extends Booklist {
 
 	/////////////////////////////////////////////////////////////////////
@@ -119,12 +125,43 @@ class ShowBooklist extends Booklist {
 	=            Additional Bookdata to fetch            =
 	====================================================*/
 
+	/**
+	 * Fetches the book-inventory-data
+	 * @param  Paginator $paginator doctrines paginator containing the books
+	 * @return array                an array containing the data for each book
+	 *                              '<bookId>' => [
+	 *                                  'exemplarsLent' => '<count>'
+	 *                                  'allExemplars' => '<count>'
+	 *                                  'exemplarsInStock' => '<count>'
+	 *                                  'exemplarsNeeded' => '<count>'
+	 *                              ]
+	 */
 	protected function booksInventoryDataGet($paginator) {
 
 		require_once PATH_INCLUDE . '/orm-entities/SchbasBooks.php';
 
-		$booksLent = $this->booksLentGet($paginator);
-		return $booksLent;
+		try {
+			$booksData = $this->bookExemplarsLentGet($paginator);
+			$booksData = $this->bookArrayMerge(
+				$booksData, $this->bookExemplarCountGet($paginator)
+			);
+			$booksData = $this->bookArrayMerge(
+				$booksData, $this->booksInStockCalculate($booksData)
+			);
+			$booksData = $this->bookArrayMerge(
+				$booksData, $this->bookExemplarsNeededGet($paginator)
+			);
+
+			$booksData = $this->bookArrayMerge(
+				$booksData, $this->bookExemplarsToBuyGet($booksData)
+			);
+
+		} catch (Exception $e) {
+			$this->_logger->log('Error fetching the booksInventoryData',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			return array();
+		}
+		return $booksData;
 	}
 
 	/**
@@ -135,7 +172,7 @@ class ShowBooklist extends Booklist {
 	 *                                  'exemplarsLent' => '<lentCount>'
 	 *                              ]
 	 */
-	protected function booksLentGet($paginator) {
+	protected function bookExemplarsLentGet($paginator) {
 
 		$booksLent = array();
 		$query = $this->_entityManager->createQuery(
@@ -150,6 +187,340 @@ class ShowBooklist extends Booklist {
 		}
 
 		return $booksLent;
+	}
+
+	/**
+	 * Gets the count of all existing exemplars of the given books
+	 * @param  Paginator $paginator a doctrine-paginator containing the books
+	 *                              which lent exemplars (inventory) to count
+	 * @return array                '<bookId>' => [
+	 *                                  'allExemplars' => '<exemplarCount>'
+	 *                              ]
+	 */
+	protected function bookExemplarCountGet($paginator) {
+
+		$booksInventory = array();
+		$query = $this->_entityManager->createQuery(
+			'SELECT COUNT(b) FROM \Babesk\ORM\SchbasBooks b WHERE b.id = :id'
+		);
+		foreach($paginator as $book) {
+			$res = $query->setParameter('id', $book->getId())->getResult();
+			$booksInventory[$book->getId()]['allExemplars'] = $res[0][1];
+		}
+
+		return $booksInventory;
+	}
+
+	/**
+	 * Calculates the books in stock by allExemplars - lentExemplars
+	 * @param  array  $bookData  the already fetched books-data containing
+	 *                           allExemplars and exemplarsLent
+	 * @return array             The books-data with the book-exemplar-count
+	 *                           in stock
+	 *                           '<bookId>' => [
+	 *                               'exemplarsInStock' => '<exemplarCount>'
+	 *                               ...
+	 *                           ]
+	 */
+	protected function booksInStockCalculate($bookData) {
+
+		$booksInStock = array();
+		foreach($bookData as $bookId => $data) {
+			$booksInStock[$bookId]['exemplarsInStock'] =
+				$data['allExemplars'] - $data['exemplarsLent'];
+		}
+		return $booksInStock;
+	}
+
+	/**
+	 * Calculates the amount of book-exemplars needed
+	 * It doesnt consider if the user already has the book
+	 * @param  Paginator $paginator doctrines paginator containing the books
+	 * @return array                book-ids as the key with the values being
+	 *                              the amount of book-exemplars needed
+	 *                              '<bookId>' => [
+	 *                                  'exemplarsNeeded' => '<exemplarCount>'
+	 *                              ]
+	 */
+	protected function bookExemplarsNeededGet($paginator) {
+
+		require_once PATH_INCLUDE . '/Schbas/Loan.php';
+		$loan = new \Babesk\Schbas\Loan($this->_dataContainer);
+		$trigger = $this->specialCourseTriggerGet();
+		$booksNeeded = array();
+		foreach($paginator as $book) {
+			$lowerCount = 0;
+			$upperCount = 0;
+			$class = $book->getClass();
+			if(!empty($class)) {
+				$gradelevels = $loan->isbnIdent2Gradelevel($class);
+				list($lowerGrades, $upperGrades ) =
+					$this->gradelevelsSplitByTrigger($trigger, $gradelevels);
+				if(!empty($lowerGrades)) {
+					$lowerCount = $this->bookExemplarsNeededForLowerGradesGet(
+						$lowerGrades, $book
+					);
+				}
+				if(!empty($upperGrades)) {
+					$upperCount = $this->bookExemplarsNeededForUpperGradesGet(
+						$upperGrades, $book
+					);
+				}
+				$booksNeeded[$book->getId()]['exemplarsNeeded'] =
+					$lowerCount + $upperCount;
+			}
+			else {
+				$this->_logger->log(
+					'book to display is not assigned to a class',
+					'Notice', Null,
+					json_encode(array('id' => $book->getId())));
+				$booksNeeded[$book->getId()]['exemplarsNeeded'] = 0;
+			}
+		}
+		return $booksNeeded;
+	}
+
+	/**
+	 * Calculates the book-exemplars needed for the given book for lower grades
+	 * @param  array  $gradelevels The gradelevels of the book. Only give the
+	 *                             gradelevels of the lower grades, else the
+	 *                             calculation will be wrong.
+	 * @param  SchbasBook $book    The book to calculate with
+	 * @return int                 the count of book-exemplars of lower grades
+	 *                             needed
+	 */
+	protected function bookExemplarsNeededForLowerGradesGet(
+			$gradelevels,
+			$book
+		) {
+
+		$baseQuery = $this->bookExemplarsNeededBaseQueryCreate($gradelevels);
+		if($this->bookSubjectIsListedCheck($book->getSubject(), false)) {
+			//user not in senior grades and booksubject in list
+			$query = $this->_entityManager->createQuery(
+				$baseQuery . ' AND
+				(
+					u.religion LIKE :subject OR
+					u.foreign_language LIKE :subject
+				)');
+			$query->setParameter('subject', '%' . $book->getSubject() . '%');
+			foreach($gradelevels as $key => $gradelevel) {
+				$query->setParameter(($key + 1), $gradelevel);
+			}
+			return $query->getResult();
+		}
+		else {
+			//user not in senior grades and booksubject not in list
+			$query = $this->_entityManager->createQuery($baseQuery);
+			foreach($gradelevels as $key => $gradelevel) {
+				$query->setParameter(($key + 1), $gradelevel);
+			}
+			if(!empty($query->getResult()[0][1])) {
+				return (int)$query->getResult()[0][1];
+			}
+			else {
+				$this->_logger->log(
+					'Error fetching lower grades book exemplars',
+					'Notice', Null);
+				return 0;
+			}
+		}
+	}
+
+	/**
+	 * Calculates the book-exemplars needed for the given book for upper grades
+	 * @param  array  $gradelevels The gradelevels of the book. Only give the
+	 *                             gradelevels of the upper grades, else the
+	 *                             calculation will be wrong.
+	 * @param  SchbasBook $book    The book to calculate with
+	 * @return int                 the count of book-exemplars of lower grades
+	 *                             needed
+	 */
+	protected function bookExemplarsNeededForUpperGradesGet(
+			$gradelevels,
+			$book
+		) {
+
+		$baseQuery = $this->bookExemplarsNeededBaseQueryCreate($gradelevels);
+		if($this->bookSubjectIsListedCheck($book->getSubject(), true)) {
+			$query = $this->_entityManager->createQuery(
+				$baseQuery . ' AND (
+							u.special_course LIKE :subject OR
+							u.religion LIKE :subject OR
+							u.foreign_language LIKE :subject
+						)
+			');
+			$query->setParameter('subject', '%' . $book->getSubject() . '%');
+			foreach($gradelevels as $key => $gradelevel) {
+				$query->setParameter(($key + 1), $gradelevel);
+			}
+			if(!empty($query->getResult()[0][1])) {
+				return (int)$query->getResult()[0][1];
+			}
+			else {
+				$this->_logger->log(
+					'Error fetching upper grades book exemplars',
+					'Notice', Null);
+				return 0;
+			}
+		}
+		else {
+			//Book-subject is not listed in any of the subject-lists, so
+			//there should be no user having the books subject listed.
+			//This step right here is why you dont do put lists into strings
+			//to global settings when you could just create an additional table
+			return 0;
+		}
+	}
+
+	/**
+	 * Creates the basic query for counting the needed Book Exemplars
+	 * @param  array  $gradelevels An array of gradelevels that should be put
+	 *                             into the Query
+	 * @return string              The basic query to which one can append
+	 */
+	protected function bookExemplarsNeededBaseQueryCreate($gradelevels) {
+
+		$glAr = array();
+		//Used for the prepared-statement, because there can be a variable
+		//amount of gradelevels
+		for ($i = 0; $i < count($gradelevels); $i++) {
+			$glAr[] = '?' . (string)($i + 1);
+		}
+		$glQuery = implode(', ', $glAr);
+		return 'SELECT COUNT(u.id) FROM \Babesk\ORM\SystemUsers u
+					JOIN u.usersInGradesAndSchoolyears uigs
+					JOIN uigs.schoolyear s
+					JOIN uigs.grade g
+					WHERE g.gradelevel IN(' . $glQuery . ')
+						 AND s.active = 1
+		';
+	}
+
+	/**
+	 * Checks if the subject is listed in a subject-group like religion
+	 * @param  string $subject         The abbreviation for a subject like 'EN'
+	 * @param  bool   $isSpecialCourse If the special_courses list should be
+	 *                                 considered, too
+	 * @return bool                    True if the subject is listed, false if
+	 *                                 not
+	 */
+	protected function bookSubjectIsListedCheck($subject, $isSpecialCourse) {
+
+		if(empty($this->_allReligions) ||
+			empty($this->_allForeignLanguages) ||
+			empty($this->_allSpecialCourses)
+		) {
+			$this->bookSubjectIsListedCacheFill();
+		}
+
+		return (in_array($subject, $this->_allReligions) ||
+			in_array($subject, $this->_allForeignLanguages) ||
+			(
+				$isSpecialCourse &&
+				in_array($subject, $this->_allSpecialCourses)
+			)
+		);
+	}
+
+	/**
+	 * Caches the lists defining which subject is assigned to which group
+	 */
+	protected function bookSubjectIsListedCacheFill() {
+
+		$globalSettings = $this->_entityManager
+			->getRepository('\Babesk\ORM\SystemGlobalSettings');
+		$rel = $globalSettings->findOneByName('religion')->getValue();
+		$this->_allReligions = explode('|', $rel);
+		$lan = $globalSettings->findOneByName('foreign_language')->getValue();
+		$this->_allForeignLanguages = explode('|', $lan);
+		$course = $globalSettings->findOneByName('special_course')->getValue();
+		$this->_allSpecialCourses = explode('|', $course);
+	}
+
+	/**
+	 * Calculates the amount of book-exemplars to buy
+	 * Never gets negative, will stop at 0
+	 * @param  array  $bookData The already fetched bookdata
+	 * @return array                '<bookId>' => [
+	 *                                  'exemplarsToBuy' => '<exemplarsToBuy>'
+	 *                              ]
+	 */
+	protected function bookExemplarsToBuyGet($bookData) {
+
+		$toBuy = array();
+		foreach ($bookData as $bookId => $data) {
+			$res = (
+				- $data['exemplarsInStock'] +
+				(
+					$data['exemplarsNeeded'] -
+					$this->bookExemplarsSelfboughtByUsersGet($bookId)
+				)
+			);
+			$toBuy[$bookId]['exemplarsToBuy'] = ($res > 0) ? $res : 0 ;
+		}
+		return $toBuy;
+	}
+
+	/**
+	 * Fetches the amount of selfbought exemplars of the book by the bookId
+	 * @param  int    $bid The Id of the book
+	 * @return int         The result
+	 */
+	protected function bookExemplarsSelfboughtByUsersGet($bid) {
+
+		$res = $this->_entityManager->createQuery(
+				'SELECT COUNT(u.id) FROM \Babesk\ORM\SystemUsers u
+					WHERE ?1 MEMBER OF u.selfpayingBooks
+			')->setParameter(1, $bid)
+			->getSingleScalarResult();
+
+		return (int)$res;
+	}
+
+	/**
+	 * Fetches the value from the db defining the begin of specialCourses
+	 * @return int    The value
+	 */
+	protected function specialCourseTriggerGet() {
+
+		require_once PATH_INCLUDE . '/orm-entities/SystemGlobalSettings.php';
+		$trigger = $this->_entityManager
+			->getRepository('\Babesk\ORM\SystemGlobalSettings')
+			->findOneByName('special_course_trigger');
+
+		if(empty($trigger)) {
+			$this->_logger->log(
+				'no "special_course_trigger" defined in SystemGlobalSettings',
+				'Notice', Null);
+			throw new MySQLException('Could not fetch special_course_trigger');
+		}
+		else {
+			return (int)$trigger->getValue();
+		}
+	}
+
+	/**
+	 * Splits the given gradelevels in lower and higher-same as $trigger
+	 * @param  int    $trigger     The trigger with which to split the arrays
+	 * @param  int    $gradelevels The gradelevels as an array
+	 * @return array               An array containing the lowerGrades-Array as
+	 *                             well as the upperGrades-Array
+	 */
+	protected function gradelevelsSplitByTrigger($trigger, $gradelevels) {
+
+		$lowerGrades = array();
+		$upperGrades = array();
+		foreach($gradelevels as $gl) {
+			if($gl < $trigger) {
+				$lowerGrades[] = $gl;
+			}
+			else {
+				$upperGrades[] = $gl;
+			}
+		}
+
+		return array($lowerGrades, $upperGrades);
 	}
 
 	/*-----  End of Additional Bookdata to fetch  ------*/
@@ -186,6 +557,25 @@ class ShowBooklist extends Booklist {
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
 
+	/*==========  Cached Stuff  ==========*/
+
+	/**
+	 * Stores the value of GlobalSetting's religion-row
+	 * @var array
+	 */
+	protected $_allReligions;
+
+	/**
+	 * Stores the value of GlobalSetting's foreign_language-row
+	 * @var array
+	 */
+	protected $_allForeignLanguages;
+
+	/**
+	 * Stores the value of GlobalSetting's special_course-row
+	 * @var array
+	 */
+	protected $_allSpecialCourses;
 }
 
 ?>

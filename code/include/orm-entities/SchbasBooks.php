@@ -51,6 +51,11 @@ class SchbasBooks {
 	protected $exemplars;
 
 	/**
+	 * @ManyToMany(targetEntity="SystemUsers", mappedBy="selfpayingBooks")
+	 */
+	protected $selfpayingUsers;
+
+	/**
 	 * @Column(type="string")
 	 */
 	protected $class;
@@ -147,6 +152,15 @@ class SchbasBooks {
 
 	public function setExemplars($exemplars) {
 		$this->exemplars = $exemplars;
+		return $this;
+	}
+
+	public function getSelfpayingUsers() {
+		return $this->selfpayingUsers;
+	}
+
+	public function setSelfpayingUsers($selfpayingUsers) {
+		$this->selfpayingUsers = $selfpayingUsers;
 		return $this;
 	}
 }
