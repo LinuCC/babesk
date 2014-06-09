@@ -32,11 +32,10 @@ CREATE TABLE `SchbasAccounting` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `SchbasLoanChoices` (
-	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	`abbreviation` varchar(2) NOT NULL DEFAULT '',
-	`name` varchar(255) NOT NULL DEFAULT '',
-	KEY `ix_abbreviation` (`abbreviation`),
-	PRIMARY KEY(`id`)
+  `ID` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `abbreviation` varchar(8) NOT NULL,
+  PRIMARY KEY(`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE SchbasSelfpayer;
