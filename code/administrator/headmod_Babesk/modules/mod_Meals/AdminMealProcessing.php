@@ -336,6 +336,7 @@ class AdminMealProcessing {
 			}
 		}
 	}
+
 	/**
 	 * Deletes old Meals and Orders (Yesterday and before)
 	 */

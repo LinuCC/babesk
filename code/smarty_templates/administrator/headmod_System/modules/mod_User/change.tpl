@@ -200,7 +200,7 @@
 					<input name="birthday" id="birthday" class="form-control" type="text"
 						placeholder="{t}Birthday{/t}" data-provide="datepicker"
 						data-date-format="dd.mm.yyyy" data-date-language="de"
-						value="{$user.birthday|date_format:'%d.%m.%Y'}" date required
+						value="{$user.birthday|date_format:'%d.%m.%Y'}" date
 						title="{t}Birthday{/t}" />
 				</div>
 			</div>
