@@ -1,7 +1,5 @@
 <?php
 
-require_once dirname(__FILE__) . '/../constants.php';
-
 /**
  * Handles the connection to the Database
  * @author voelkerball
@@ -53,7 +51,6 @@ class DBConnect {
 		$username = $this->_username;
 		$password = $this->_password;
 		$databaseName = $this->_databaseName;
-
 		try {
 			$pdo = new PDO("mysql:host=$host;dbname=$databaseName",
 				$username, $password);
@@ -64,6 +61,31 @@ class DBConnect {
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$pdo->exec("set names utf8");
 		return $pdo;
+	}
+
+	/**
+	 * Creates and returns a new instance of doctrine
+	 * @return EntityManager The Doctrine Entity Manager
+	 */
+	public function getDoctrineEntityManager() {
+
+		try {
+			require_once PATH_3RD_PARTY . '/doctrine-orm/vendor/autoload.php';
+			$config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
+					array(PATH_INCLUDE . '/orm-entities'), true
+			);
+			$conn = array(
+				'driver' => 'pdo_mysql',
+				'dbname' => $this->_databaseName,
+				'user' => $this->_username,
+				'password' => $this->_password,
+				'host' => $this->_host
+			);
+			return Doctrine\ORM\EntityManager::create($conn, $config);
+
+		} catch (Exception $e) {
+			throw new Exception('Could not set up doctrine entity manager!');
+		}
 	}
 
 	public function setDatabaseValues ($host, $username, $password, $databaseName) {

@@ -10,8 +10,10 @@ class UserDisplayAll {
 
 	public function __construct($dataContainer) {
 
+		$this->_pdo = $dataContainer->getPdo();
 		$this->_smarty = $dataContainer->getSmarty();
 		$this->_acl = $dataContainer->getAcl();
+		$this->_logger = $dataContainer->getLogger();
 		$this->activeModulesAddSelectableData();
 	}
 
@@ -23,8 +25,8 @@ class UserDisplayAll {
 	 * Displays all of the Users
 	 */
 	public function displayAll() {
-		$this->_smarty->display(PATH_SMARTY_ADMIN_TEMPLATES .
-			'/headmod_System/modules/mod_User/displayAll.tpl');
+		$this->_smarty->display(PATH_SMARTY_TPL . '/administrator' .
+			'/headmod_System/modules/mod_User/display-all.tpl');
 	}
 
 	/**
@@ -45,12 +47,12 @@ class UserDisplayAll {
 		$pagenumber = $_POST['pagenumber'];
 		$usersPerPage = $_POST['usersPerPage'];
 		$sortFor = $_POST['sortFor'];
-		$filterForCol = $_POST['filterForCol'];
 		$filterForVal = $_POST['filterForVal'];
-		$toEscape = array(&$pagenumber, &$usersPerPage, &$sortFor, &$filterForCol, &$filterForVal);
+		$toEscape = array(
+			&$pagenumber, &$usersPerPage, &$sortFor, &$filterForVal
+		);
 		TableMng::sqlEscapeByArray($toEscape);
 		$userToStart = ($pagenumber - 1) * $usersPerPage;
-		$filterForQuery = '';
 
 		if(empty($_POST['columnsToFetch'])) {
 			$columnsToFetch = array();
@@ -62,31 +64,49 @@ class UserDisplayAll {
 			}
 		}
 
+		$filterForColumns = array();
+		if(!empty($_POST['filterForColumns'])) {
+			foreach($_POST['filterForColumns'] as &$col) {
+				TableMng::sqlEscape($col);
+			}
+			$filterForColumns = $_POST['filterForColumns'];
+		}
+
 		//When joining multiple tables, we have multiple IDs
 		if($filterForVal == 'ID') {
 			$filterForVal = 'u.ID';
 		}
 
-		//When user didnt select anything to sort For, default to name
+		//When user didnt select anything to sort For, default to Id
 		if(empty($sortFor)) {
-			$sortFor = 'name';
+			$sortFor = 'ID';
 		}
 
-		try {
-			$queryCreator = new UserDisplayAllQueryCreator($filterForQuery,
-				$sortFor, $userToStart, $usersPerPage);
-			$query = $queryCreator->createQuery($columnsToFetch, $sortFor,
-				$filterForCol, $filterForVal);
-			$countQuery = $queryCreator->createCountOfQuery($columnsToFetch,
-				$sortFor, $filterForCol, $filterForVal);
+		//Set the method of sorting
+		$sortMethod = ($_POST['sortMethod'] == 'ASC') ? 'ASC' : 'DESC';
 
+		try {
+			$queryCreator = new UserDisplayAllQueryCreator(
+				$this->_pdo,
+				$filterForColumns,
+				$sortFor,
+				$sortMethod,
+				$userToStart,
+				$usersPerPage
+			);
+			$query = $queryCreator->createQuery(
+				$columnsToFetch, $sortFor, $filterForVal
+			);
+			$countQuery = $queryCreator->createCountOfQuery(
+				$columnsToFetch, $sortFor, $filterForVal
+			);
+			// var_dump($query);
+			// die();
 			//Fetch the Userdata
 			TableMng::query('SET @activeSy :=
-				(SELECT ID FROM schoolYear WHERE active = "1");');
+				(SELECT ID FROM SystemSchoolyears WHERE active = "1");');
 			$data = TableMng::query($query);
 			$usercount = TableMng::query($countQuery);
-
-			// var_dump($usercount);
 
 			// No division by zero, never show zero sites
 			if($usersPerPage != 0 && $usercount[0]['count'] > 0) {
@@ -99,8 +119,13 @@ class UserDisplayAll {
 			$data = $this->fetchedDataToReadable($data, $columnsToFetch);
 
 		} catch (Exception $e) {
-			die(json_encode(array('value' => 'error',
-							'message' => 'Ein Fehler ist bei der Datenverarbeitung aufgetreten.' . $e->getMessage())));
+			$this->_logger->log('Error processing the data',
+				'Error', Null, json_encode(array('msg' => $e->getMessage())));
+			die(json_encode(array(
+				'value' => 'error',
+				'message' => 'Ein Fehler ist bei der Datenverarbeitung ' .
+					'aufgetreten.'
+			)));
 		}
 
 		die(json_encode(array('value' => 'data',
@@ -113,7 +138,7 @@ class UserDisplayAll {
 		// $columns = array();
 
 		// $userdata = TableMng::query("SELECT *
-		// 	FROM users LIMIT 1, 1");
+		// 	FROM SystemUsers LIMIT 1, 1");
 
 		// foreach($userdata[0] as $key => $data) {
 		// 	if(!empty($this->_selectableColumns[$key])) {
@@ -122,20 +147,20 @@ class UserDisplayAll {
 		// }
 
 		// // //Messages-Module existing
-		// // if(count(TableMng::query("SHOW TABLES LIKE 'Message';"))) {
+		// // if(count(TableMng::query("SHOW TABLES LIKE 'MessageMessages';"))) {
 		// // 	$columns['countMessageReceived'] = 'Nachrichten empfangen';
 		// // 	$columns['countMessageSend'] = 'Nachrichten abgeschickt';
 		// // }
 		// // //Kuwasys existing
-		// // if(count(TableMng::query("SHOW TABLES LIKE 'class';"))) {
+		// // if(count(TableMng::query("SHOW TABLES LIKE 'KuwasysClasses';"))) {
 		// // 	$columns['countClass'] = 'Kurse';
 		// // }
 		// //Cards existing
-		// if(count(TableMng::query("SHOW TABLES LIKE 'cards';"))) {
+		// if(count(TableMng::query("SHOW TABLES LIKE 'BabeskCards';"))) {
 		// 	$columns['cardnumber'] = 'Kartennummer';
 		// }
 		// //Babesk existing
-		// // if(count(TableMng::query("SHOW TABLES LIKE 'orders';"))) {
+		// // if(count(TableMng::query("SHOW TABLES LIKE 'BabeskOrders';"))) {
 		// 	// $columns['countOrders'] = 'Bestellungen';
 		// // }
 
@@ -240,6 +265,8 @@ class UserDisplayAll {
 		'birthday' => 'Geburtstag',
 		'first_passwd' => 'ist erstes Passwort'
 	);
+
+	protected $_pdo;
 }
 
 
@@ -254,13 +281,24 @@ class UserDisplayAllQueryCreator {
 	//Constructor
 	/////////////////////////////////////////////////////////////////////
 
-	public function __construct($filterForQuery, $sortFor, $userToStart,
-		$usersPerPage) {
+	public function __construct($pdo, $filterForColumns, $sortFor, $sortMethod,
+		$userToStart, $usersPerPage) {
 
-		$this->_filterForQuery = $filterForQuery;
+		$this->_pdo = $pdo;
+		$this->_selectors = array();
 		$this->_sortFor = $sortFor;
+		$this->_sortMethod = $sortMethod;
 		$this->_userToStart = $userToStart;
 		$this->_usersPerPage = $usersPerPage;
+		$this->_userElementsToFetch = array();
+
+		foreach($filterForColumns as $col) {
+			//Quote every column so it can be compared to the automatically
+			//generated columns. It can be a user-column or a standalone one,
+			//so try both possibilities
+			$this->_filterForColumns[] = 'u.' . $this->quoteIdentifier($col);
+			$this->_filterForColumns[] = $this->quoteIdentifier($col);
+		}
 	}
 
 
@@ -268,38 +306,18 @@ class UserDisplayAllQueryCreator {
 	//Methods
 	/////////////////////////////////////////////////////////////////////
 
-	public function createQuery($columns, $toSortFor, $toFilterColumn, $toFilterValue) {
+	public function createQuery($columns, $toSortFor, $toFilterValue) {
 
-		foreach($columns as $col) {
-			$this->addSubquery($col);
-		}
-		if(!empty($toSortFor)) {
-			$this->addSubquery($toSortFor);
-		}
-		if(!empty($toFilterColumn)) {
-			$this->addSubquery($toFilterColumn);
-		}
-
-		$filterQuery = $this->filterForQuery($toFilterColumn, $toFilterValue, 'HAVING');
-		$this->concatQuery($filterQuery);
+		$this->preQuery($columns, $toSortFor, $toFilterValue);
+		$this->concatQuery($toFilterValue);
 
 		return $this->_query;
 	}
 
-	public function createCountOfQuery($columns, $toSortFor, $toFilterColumn, $toFilterValue) {
+	public function createCountOfQuery($columns, $toSortFor, $toFilterValue) {
 
-		foreach($columns as $col) {
-			$this->addSubquery($col);
-		}
-		if(!empty($toSortFor)) {
-			$this->addSubquery($toSortFor);
-		}
-		if(!empty($toFilterColumn)) {
-			$this->addSubquery($toFilterColumn);
-		}
-
-		$filterQuery = $this->filterForQuery($toFilterColumn, $toFilterValue, 'HAVING');
-		$this->concatCountQuery($filterQuery);
+		$this->preQuery($columns, $toSortFor, $toFilterValue);
+		$this->concatCountQuery($toFilterValue);
 
 		return $this->_countQuery;
 	}
@@ -307,6 +325,22 @@ class UserDisplayAllQueryCreator {
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
+
+	protected function preQuery($columns, $toSortFor, $toFilterValue) {
+
+		if(!$this->_preQueryRun) {
+			foreach($columns as $col) {
+				$this->addSubquery($col);
+			}
+			if(!empty($toSortFor)) {
+				$this->addSubquery($toSortFor);
+			}
+			if(!empty($toFilterColumn)) {
+				$this->addSubquery($toFilterColumn);
+			}
+			$this->_preQueryRun = true;
+		}
+	}
 
 	protected function addSubquery($col) {
 		switch($col) {
@@ -317,7 +351,7 @@ class UserDisplayAllQueryCreator {
 				$this->cardsQuery();
 				break;
 			case 'activeGrade':
-				$this->gradeQuery();
+				$this->activeGradeQuery();
 				break;
 			case 'schoolyears':
 				$this->schoolyearQuery();
@@ -325,42 +359,56 @@ class UserDisplayAllQueryCreator {
 			case 'classes':
 				$this->classesQuery();
 				break;
+			default:   //Else guess that its a field in the users-table
+				$this->addSelectStatement('u.' . $this->quoteIdentifier($col));
+				break;
 		}
 	}
 
-	protected function concatQuery($filterQuery) {
+	protected function concatQuery($toFilterValue) {
 
-		$this->_querySelect = rtrim($this->_querySelect, ', ');
-		if($this->_querySelect != '') {
-			$this->_querySelect = ", $this->_querySelect";
-		}
+		$selectQuery = implode(', ', $this->_selectors);
+		$filterQuery = $this->filterForQuery($this->_filters, $toFilterValue);
 
-		$this->_query = "SELECT u.*, u.ID AS ID $this->_querySelect
-			FROM users u
+		$this->_query = "SELECT $selectQuery
+			FROM SystemUsers u
 				$this->_queryJoin
-			GROUP BY u.ID
+			GROUP BY u.ID $this->_queryGroup
 			$filterQuery
-			ORDER BY $this->_sortFor
+			ORDER BY $this->_sortFor {$this->_sortMethod}
 			LIMIT $this->_userToStart, $this->_usersPerPage";
 	}
 
-	protected function concatCountQuery($filterQuery) {
+	protected function concatCountQuery($filterVal) {
+
+		$selectQuery = implode(', ', $this->_selectors);
+		$filterQuery = $this->filterForQuery($this->_filters, $filterVal);
 
 		$this->_countQuery = "SELECT COUNT(*) AS count FROM
-		(SELECT u.ID AS userId, u.forename AS forename, u.name AS name, u.username AS username, u.email AS email, u.telephone AS telephone, u.GID AS GID, u.birthday AS birthday,
-			u.soli AS soli, u.first_passwd AS first_passwd
-			$this->_querySelect
-					FROM users u
+		(SELECT $selectQuery
+					FROM SystemUsers u
 						$this->_queryJoin
-					GROUP BY u.ID
+					GROUP BY u.ID $this->_queryGroup
 					$filterQuery) counting";
 	}
 
-	protected function filterForQuery($toFilterColumn, $toFilterValue,
-		$statement) {
+	protected function filterForQuery($columns, $value) {
 
-		if(!empty($toFilterColumn) && !empty($toFilterValue)) {
-			return "$statement $toFilterColumn LIKE '%$toFilterValue%'";
+		if(!empty($columns) && !isBlank($value)) {
+			$searches = array();
+			$query = '';
+			foreach($columns as $col) {
+				if(in_array($col, $this->_filterForColumns)) {
+					$searches[] = "$col LIKE '%$value%'";
+				}
+			}
+			if(!empty($searches)) {
+				$query = 'HAVING ' . implode(' OR ', $searches);
+			}
+			else {
+				$query = '';
+			}
+			return $query;
 		}
 		else {
 			return '';
@@ -370,50 +418,56 @@ class UserDisplayAllQueryCreator {
 	protected function cardsQuery() {
 
 		if(!$this->_cardsQueryDone) {
-			$this->addSelectStatement('cards.cardnumber AS cardnumber');
+			$this->addSelectStatement('BabeskCards.cardnumber AS cardnumber');
 			$this->addJoinStatement('LEFT JOIN
-				(SELECT UID, cardnumber FROM cards) cards
-				ON cards.UID = u.ID');
+				(SELECT UID, cardnumber FROM BabeskCards) BabeskCards
+				ON BabeskCards.UID = u.ID');
 			$this->_cardsQueryDone = true;
 		}
 	}
 
 	protected function schoolyearQuery() {
 
+		$this->usersInGradesAndSchoolyearsQuery();
 		if(!$this->_schoolyearQueryDone) {
 			$this->addSelectStatement('GROUP_CONCAT(DISTINCT sy.label
 					SEPARATOR "<br />")
 				AS schoolyears');
 			$this->addJoinStatement(
-				'LEFT JOIN usersInGradesAndSchoolyears uigsy
-				ON uigsy.userId = u.ID
-			LEFT JOIN schoolYear sy ON sy.ID = uigsy.schoolyearId');
+				'
+			LEFT JOIN SystemSchoolyears sy ON sy.ID = uigs.schoolyearId');
 			$this->_schoolyearQueryDone = true;
 		}
 	}
 
 	protected function gradeQuery() {
 
+		$this->usersInGradesAndSchoolyearsQuery();
 		if(!$this->_gradeQueryDone) {
 			$this->addSelectStatement('GROUP_CONCAT( DISTINCT
 				CONCAT(g.gradelevel, "-", g.label)
-				SEPARATOR "<br />") AS grades,
-				activeGrade.activeGrade AS activeGrade');
+				SEPARATOR "<br />") AS grades');
 
 			$this->addJoinStatement('
-				LEFT JOIN usersInGradesAndSchoolyears uigsg
-					ON uigsg.userId = u.ID
-				LEFT JOIN Grades g ON uigsg.gradeId = g.ID
-				LEFT JOIN (
-					SELECT CONCAT(gradelevel, "-", label)
-						AS activeGrade, uigsg.userId AS userId
-					FROM Grades g
-					JOIN usersInGradesAndSchoolyears uigsg ON
-						uigsg.gradeId = g.ID AND
-						uigsg.schoolyearId = @activeSchoolyear
-					) activeGrade
-						ON u.ID = activeGrade.userId');
+				LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
+			');
 			$this->_gradeQueryDone = true;
+		}
+	}
+
+	protected function activeGradeQuery() {
+
+		$this->usersInGradesAndSchoolyearsQuery();
+		if(!$this->_activeGradeQueryDone) {
+			$this->addSelectStatement(
+				'CONCAT(ga.gradelevel, "-", ga.label) AS `activeGrade`'
+			);
+			$this->addJoinStatement('
+				LEFT JOIN SystemGrades ga ON ga.ID = uigs.gradeId
+					AND uigs.schoolyearId = @activeSchoolyear
+			');
+			$this->addGroupStatement('ga.`gradelevel`');
+			$this->_activeGradeQueryDone = true;
 		}
 	}
 
@@ -429,21 +483,43 @@ class UserDisplayAllQueryCreator {
 				);
 
 			$this->addJoinStatement('
-				LEFT JOIN jointUsersInClass kuwasys_uic
+				LEFT JOIN KuwasysUsersInClasses kuwasys_uic
 					ON kuwasys_uic.UserID = u.ID
-				LEFT JOIN class kuwasys_c
+				LEFT JOIN KuwasysClasses kuwasys_c
 					ON kuwasys_c.Id = kuwasys_uic.ClassID
 					AND kuwasys_c.schoolyearId = @activeSchoolyear
-				LEFT JOIN usersInClassStatus kuwasys_uics
+				LEFT JOIN KuwasysUsersInClassStatuses kuwasys_uics
 					ON kuwasys_uics.ID = kuwasys_uic.statusId
 				');
 			$this->_classesQueryDone = true;
 		}
 	}
 
+	protected function usersInGradesAndSchoolyearsQuery() {
+
+		if(!$this->_usersInGradesAndSchoolyearsQueryDone) {
+			$this->addJoinStatement('
+				LEFT JOIN SystemUsersInGradesAndSchoolyears uigs
+					ON uigs.userId = u.ID
+			');
+			$this->_usersInGradesAndSchoolyearsQueryDone = true;
+		}
+	}
+
 	protected function addSelectStatement($st) {
 
-		$this->_querySelect .= "$st, ";
+		if(in_array($st, $this->_selectors) === false) {
+			$this->_selectors[] = $st;
+		}
+
+		// Also add the elements to filter
+		if(strstr($st, 'AS') === false) {
+			$this->_filters[] = $st;
+		}
+		else {
+			$stSplit = explode('AS', $st);
+			$this->_filters[] = trim($stSplit[1]);
+		}
 	}
 
 	protected function addJoinStatement($st) {
@@ -451,32 +527,55 @@ class UserDisplayAllQueryCreator {
 		$this->_queryJoin .= " $st ";
 	}
 
+	protected function addGroupStatement($st) {
+		$this->_queryGroup .= ", $st";
+	}
+
+	/**
+	 * Quotes an identifier so that it is not vulnerable to SQL-Injection
+	 * @param  string $ident The SQL-identifier to quote
+	 * @return string        The quoted (with backticks) identifier
+	 */
+	protected function quoteIdentifier($ident) {
+		return '`' . str_replace('`', '``', $ident) . '`';
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
 
-	protected $_querySelect = '';
+	protected $_selectors;
+	protected $_filters;
 
 	protected $_queryJoin = '';
+	protected $_queryGroup = '';
 
 	protected $_query = '';
 	protected $_countQuery = '';
 
 	protected $_gradeQueryDone = false;
+	protected $_activeGradeQueryDone = false;
 	protected $_schoolyearQueryDone = false;
 	protected $_cardsQueryDone = false;
 	protected $_classesQueryDone = false;
+	protected $_usersInGradesAndSchoolyearsQueryDone = false;
 
-	protected $_filterForQuery;
 	protected $_sortFor;
+	protected $_filterForColumns;
 	protected $_userToStart;
 	protected $_usersPerPage;
+
+	protected $_userElementsToFetch;
 
 	/**
 	 * The Accesscontrollayer, To find out what Headmodules are active
 	 * @var Acl
 	 */
 	protected $_acl;
+
+	protected $_pdo;
+
+	protected $_preQueryRun = false;
 }
 
 ?>

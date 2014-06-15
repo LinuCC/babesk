@@ -15,13 +15,20 @@ class DataContainer {
 	//Constructor
 	////////////////////////////////////////////////////////////////////////
 
-	public function __construct ($smarty, $interface, $acl = NULL, $pdo = NULL,
-		$logger = NULL) {
+	public function __construct (
+		$smarty,
+		$interface,
+		$acl = NULL,
+		$pdo = NULL,
+		$entityManager = NULL,
+		$logger = NULL
+	) {
 
 		$this->_smarty = $smarty;
 		$this->_interface = $interface;
 		$this->_acl = $acl;
 		$this->_pdo = $pdo;
+		$this->_entityManager = $entityManager;
 		$this->_logger = $logger;
 	}
 
@@ -66,6 +73,14 @@ class DataContainer {
 
 	public function setPdo($pdo) {
 		$this->_pdo = $pdo;
+	}
+
+	public function getEntityManager() {
+		return $this->_entityManager;
+	}
+
+	public function setEntityManager($entityManager) {
+		$this->_entityManager = $entityManager;
 	}
 
 	public function getLogger() {
@@ -122,6 +137,12 @@ class DataContainer {
 	 * @var PDO
 	 */
 	protected $_pdo;
+
+	/**
+	 * Doctrines entityManager
+	 * @var EntityManager
+	 */
+	protected $_entityManager;
 
 	/**
 	 * Allows to Log Errors, notices and other stuff

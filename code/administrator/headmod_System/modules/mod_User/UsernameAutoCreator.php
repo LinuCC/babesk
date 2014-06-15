@@ -1,6 +1,5 @@
 <?php
 
-require_once PATH_INCLUDE . '/constants.php';
 require_once 'UsernameScheme.php';
 
 /**

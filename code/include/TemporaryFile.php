@@ -199,10 +199,10 @@ class TemporaryFile {
 		//only create new entry when entry is not existing already
 		if($this->_fileId === false) {
 			try {
-				TableMng::query("INSERT INTO TemporaryFiles
-						(`created`, `until`, `usage`)
+				TableMng::query("INSERT INTO SystemTemporaryFiles
+						(`location`, `created`, `until`, `usage`)
 					VALUES
-						('$this->_created', '$this->_until', '$this->_usage');
+						('', '$this->_created', '$this->_until', '$this->_usage');
 						");
 				$this->_fileId = TableMng::getDb()->insert_id;
 
@@ -210,7 +210,7 @@ class TemporaryFile {
 
 				//Update the location since only now we know the ID of the file
 				$this->_filepath = addslashes($this->_filepath);
-				TableMng::query("UPDATE TemporaryFiles
+				TableMng::query("UPDATE SystemTemporaryFiles
 					SET `location` = '$this->_filepath'
 					WHERE ID = $this->_fileId");
 
@@ -319,7 +319,7 @@ class TemporaryFile {
 	 */
 	protected function tableRowExists() {
 
-		$data = TableMng::query("SELECT COUNT(*) AS count FROM TemporaryFiles
+		$data = TableMng::query("SELECT COUNT(*) AS count FROM SystemTemporaryFiles
 			WHERE ID = '$this->_fileId'");
 		$count = $data[0]['count'];
 		return ($count != 0);
@@ -333,7 +333,7 @@ class TemporaryFile {
 	protected function fetchFiledataFromDb() {
 
 		try {
-			$data = TableMng::query("SELECT * FROM TemporaryFiles
+			$data = TableMng::query("SELECT * FROM SystemTemporaryFiles
 				WHERE `ID` = '$this->_fileId'");
 
 		} catch (Exception $e) {
@@ -364,7 +364,7 @@ class TemporaryFile {
 
 		try {
 			TableMng::query(
-				"DELETE FROM TemporaryFiles WHERE ID = $this->_fileId");
+				"DELETE FROM SystemTemporaryFiles WHERE ID = $this->_fileId");
 
 		} catch (Exception $e) {
 			throw new TemporaryFileException("Error deleting the Datarow of"+
@@ -418,7 +418,7 @@ class TemporaryFile {
 	 */
 	protected static function cleanBrokenDbLinks() {
 
-		$entries = TableMng::query('SELECT * FROM TemporaryFiles');
+		$entries = TableMng::query('SELECT * FROM SystemTemporaryFiles');
 		$deletedRows = 0;
 
 		if(!count($entries)) {
@@ -469,7 +469,7 @@ class TemporaryFile {
 
 		$now = self::toDatetime(time());
 		$oldEntries = TableMng::query(
-			"SELECT * FROM TemporaryFiles WHERE until < '$now'");
+			"SELECT * FROM SystemTemporaryFiles WHERE until < '$now'");
 
 		$deletedEntries = 0;
 		if(count($oldEntries)) {

@@ -36,14 +36,14 @@ class KuwasysUsersCreateParticipationConfirmationPdf {
 				uics.translatedName AS statusTranslatedName,
 				CONCAT(g.gradelevel, g.label) AS gradeName,
 				IF(c.ID, CONCAT(u.ID, "-", c.ID), CONCAT(u.ID, "-")) AS grouper
-			FROM users u
-				JOIN usersInGradesAndSchoolyears uigs ON uigs.userId = u.ID
-				JOIN schoolYear sy ON sy.ID = uigs.SchoolYearID
-				INNER JOIN jointUsersInClass uic ON u.ID = uic.UserID
-				LEFT JOIN usersInClassStatus uics ON uics.ID = uic.statusId
-				LEFT JOIN class c ON c.ID = uic.ClassID AND c.schoolyearId = @activeSchoolyear
-				LEFT JOIN Grades g ON g.ID = uigs.gradeId
-				LEFT JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
+			FROM SystemUsers u
+				JOIN SystemUsersInGradesAndSchoolyears uigs ON uigs.userId = u.ID
+				JOIN SystemSchoolyears sy ON sy.ID = uigs.SchoolYearID
+				INNER JOIN KuwasysUsersInClasses uic ON u.ID = uic.UserID
+				LEFT JOIN KuwasysUsersInClassStatuses uics ON uics.ID = uic.statusId
+				LEFT JOIN KuwasysClasses c ON c.ID = uic.ClassID AND c.schoolyearId = @activeSchoolyear
+				LEFT JOIN SystemGrades g ON g.ID = uigs.gradeId
+				LEFT JOIN KuwasysClassCategories cu ON c.unitId = cu.ID
 			WHERE (%s)
 				AND uigs.schoolyearId = @activeSchoolyear
 				AND uics.name = "active"
@@ -53,7 +53,7 @@ class KuwasysUsersCreateParticipationConfirmationPdf {
 		try {
 			$data = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {
-			self::$_interface->dieError ('Es wurden keine Schüler gefunden, für die man die Dokumente hätte drucken können');
+			self::$_interface->dieError ('Es wurden keine Schüler gefunden, für die man die Dokumente hätte erstellen können');
 		} catch (Exception $e) {
 			self::$_interface->dieError ('konnte die Daten der Schüler nicht abrufen' . $e->getMessage ());
 		}

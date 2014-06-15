@@ -117,7 +117,7 @@ class Recharge extends Babesk {
 	protected function userIdGetByCardId($cardId) {
 
 		try {
-			$stmt = $this->_pdo->prepare('SELECT UID FROM cards
+			$stmt = $this->_pdo->prepare('SELECT UID FROM BabeskCards
 				WHERE cardnumber = :cardnumber');
 
 			$stmt->execute(array('cardnumber' => $cardId));
@@ -142,7 +142,7 @@ class Recharge extends Babesk {
 	protected function isUseraccountUnlockedCheck($userId) {
 
 		try {
-			$stmt = $this->_pdo->prepare('SELECT locked FROM users
+			$stmt = $this->_pdo->prepare('SELECT locked FROM SystemUsers
 				WHERE ID = :userId');
 
 			$stmt->execute(array('userId' => $userId));
@@ -175,8 +175,8 @@ class Recharge extends Babesk {
 		try {
 			$stmt = $this->_pdo->prepare(
 				'SELECT g.max_credit AS maxCredits, u.credit AS credits
-				FROM users u
-				JOIN priceGroups g ON u.GID = g.ID
+				FROM SystemUsers u
+				JOIN BabeskPriceGroups g ON u.GID = g.ID
 				WHERE u.ID = :userId');
 
 			$stmt->execute(array('userId' => $userId));
@@ -235,7 +235,7 @@ class Recharge extends Babesk {
 	protected function amountAddToUsercredits($amount, $userId) {
 
 		try {
-			$stmt = $this->_pdo->prepare('UPDATE users
+			$stmt = $this->_pdo->prepare('UPDATE SystemUsers
 				SET credit = credit + :amount WHERE ID = :userId');
 
 			$stmt->execute(array('amount' => $amount, 'userId' => $userId));
@@ -259,7 +259,7 @@ class Recharge extends Babesk {
 		$isSoli = $this->userHasValidSoliCoupon($userId, date('Y-m-d'));
 
 		try {
-			$stmt = $this->_pdo->prepare('INSERT INTO UsercreditsRecharges
+			$stmt = $this->_pdo->prepare('INSERT INTO BabeskUsercreditsRecharges
 				(userId, rechargingUserId, rechargeAmount, datetime, isSoli)
 				VALUES (:userId, :rechargingUserId, :rechargeAmount,
 					:datetime, :isSoli
@@ -289,7 +289,7 @@ class Recharge extends Babesk {
 	protected function rechargeSuccessDisplay($amount, $userId) {
 
 		$stmt = $this->_pdo->prepare(
-			'SELECT CONCAT(forename, " ", name) FROM users
+			'SELECT CONCAT(forename, " ", name) FROM SystemUsers
 			WHERE ID = :userId');
 		$stmt->execute(array('userId' => $userId));
 
@@ -382,9 +382,9 @@ class Recharge extends Babesk {
 				CONCAT(u.forename, " ", u.name) AS name,
 				CONCAT(ru.forename, " ", ru.name) AS rechargedBy,
 				isSoli
-				FROM UsercreditsRecharges ur
-				JOIN users u ON ur.userId = u.ID
-				JOIN users ru ON ur.rechargingUserId = ru.ID
+				FROM BabeskUsercreditsRecharges ur
+				JOIN SystemUsers u ON ur.userId = u.ID
+				JOIN SystemUsers ru ON ur.rechargingUserId = ru.ID
 				WHERE datetime BETWEEN :startdate AND :enddate');
 
 			$stmt->execute(array(
@@ -479,8 +479,8 @@ class Recharge extends Babesk {
 		try {
 			$stmt = $this->_pdo->prepare(
 				'SELECT IF(COUNT(*) > 0, 1, 0) AS hasValidCoupon
-				FROM soli_coupons sc
-				JOIN users u ON u.ID = :userId
+				FROM BabeskSoliCoupons sc
+				JOIN SystemUsers u ON u.ID = :userId
 				WHERE sc.UID = :userId
 					AND :date BETWEEN sc.startdate AND sc.enddate
 					AND u.soli = 1

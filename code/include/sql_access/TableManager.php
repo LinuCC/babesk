@@ -2,7 +2,6 @@
 
 require_once PATH_INCLUDE . '/functions.php';
 require_once PATH_INCLUDE . '/exception_def.php';
-require_once PATH_ACCESS . '/DbMultiQueryManager.php';
 
 /**
  *
@@ -70,7 +69,7 @@ class TableManager {
 
 		$result = $this->db->query($query);
 		if (!$result) {
-			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error . "<br />" . $query);
+			throw new MySQLConnectionException($this->db->error);
 		}
 		return $result;
 	}
@@ -107,7 +106,6 @@ class TableManager {
 	 */
 	public function getEntryData () {
 
-		require_once PATH_INCLUDE . '/constants.php';
 
 		$num_args = func_num_args();
 
@@ -169,7 +167,7 @@ class TableManager {
 	 *  @return twodimensional-array: $return_var[EntryArray[FieldnameArray]]
 	 */
 	function getTableData () {
-		require_once PATH_INCLUDE . '/constants.php';
+
 		switch (func_num_args()) {
 			case 0: // all elements of the table
 				$query = sql_prev_inj(sprintf('SELECT * FROM %s', $this->tablename));
@@ -198,7 +196,6 @@ class TableManager {
 	 */
 
 	public function addEntry () {
-		require_once PATH_INCLUDE . '/constants.php';
 
 		$column_identifier_str = '';
 		$column_value_str = '';
@@ -206,7 +203,7 @@ class TableManager {
 		$num_args = func_num_args();
 
 		if (($num_args % 2 == 1)) {
-			throw new Exception(ERR_NUMBER_PARAM);
+			throw new Exception('Wrong number of parameters!');
 		}
 
 		for ($i = 1; $i <= $num_args; $i++) {
@@ -331,8 +328,6 @@ class TableManager {
 
 	public function delEntry ($ID) {
 
-		require_once PATH_INCLUDE . '/constants.php';
-
 		$query = sql_prev_inj(sprintf('DELETE FROM %s WHERE ID="%s";', $this->tablename, $ID));
 		$result = $this->executeQuery($query);
 	}
@@ -362,7 +357,6 @@ class TableManager {
 	 */
 
 	public function delEntryNoID($noIDString) {
-		require_once PATH_INCLUDE . '/constants.php';
 
 		if (!is_string($noIDString)) {
 			//parameter-checking
@@ -371,7 +365,7 @@ class TableManager {
 		$query = sql_prev_inj(sprintf('DELETE FROM %s WHERE %s;', $this->tablename, $noIDString));
 		$result = $this->db->query($query);
 		if (!$result) {
-			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error);
+			throw new MySQLConnectionException($this->db->error);
 		}
 		return $result;
 	}
@@ -421,26 +415,6 @@ class TableManager {
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE %s IN (%s);', $this->tablename, $keyName, $valueStr));
 		$result = $this->executeQuery($query);
 		return $this->getResultArrayContent($result);
-	}
-
-	/**
-	 * Returns a new DbMultiQueryManager-Object, allowing to do multiple querys
-	 * with the returned object, since TableManager can only commit a single Command
-	 * at a time to the SQL-Server which is hitting the performance at loops
-	 */
-	public function getMultiQueryManager () {
-		return new DbMultiQueryManager ($this->db, $this->tablename);
-	}
-
-	/**
-	 * Allows to change multiple entries with the multi-query-manager
-	 */
-	public function doMultiQueryManagerByRows ($function, $rows) {
-		$mQMng = $this->getMultiQueryManager ();
-		foreach ($rows as $row) {
-			$mQMng->rowAdd ($row);
-		}
-		return $mQMng->dbExecute ($function);
 	}
 
 	/**

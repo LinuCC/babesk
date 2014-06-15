@@ -15,8 +15,8 @@ class AdminInterface extends GeneralInterface {
 		else {
 			$this->smarty = self::$smartyHelper;
 		}
-		$this->tplFilePath = PATH_SMARTY_ADMIN_TEMPLATES . $mod_rel_path;
-		$this->parentPath = PATH_SMARTY . '/templates/administrator/base_layout.tpl';
+		$this->tplFilePath = PATH_SMARTY_TPL . '/administrator' . $mod_rel_path;
+		$this->parentPath = PATH_SMARTY_TPL . '/administrator/base_layout.tpl';
 		$this->smarty->assign('tplFilePath', $this->tplFilePath);
 		$this->smarty->assign('inh_path', $this->parentPath);
 	}
@@ -29,7 +29,7 @@ class AdminInterface extends GeneralInterface {
 	public function dieError ($msg) {
 
 		$this->smarty->append('_userErrorOutput', $msg);
-		$this->smarty->display(PATH_SMARTY . '/templates/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5(
+		$this->smarty->display(PATH_SMARTY_TPL . '/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5(
 			$_SERVER['REQUEST_URI']));
 		die();
 	}
@@ -42,7 +42,7 @@ class AdminInterface extends GeneralInterface {
 	public function dieErrorAjax ($msg) {
 
 		$this->smarty->assign('error', $msg);
-		$this->smarty->display(PATH_SMARTY . '/templates/administrator/messageAjax.tpl', md5($_SERVER['REQUEST_URI']), md5(
+		$this->smarty->display(PATH_SMARTY_TPL . '/administrator/messageAjax.tpl', md5($_SERVER['REQUEST_URI']), md5(
 				$_SERVER['REQUEST_URI']));
 		die();
 	}
@@ -54,7 +54,7 @@ class AdminInterface extends GeneralInterface {
 	 */
 	public function dieMsg ($msg) {
 		$this->smarty->assign('_userMsgOutput', $msg);
-		$this->smarty->display(PATH_SMARTY . '/templates/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5(
+		$this->smarty->display(PATH_SMARTY_TPL . '/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5(
 			$_SERVER['REQUEST_URI']));
 		die();
 	}
@@ -65,7 +65,7 @@ class AdminInterface extends GeneralInterface {
 	 */
 	public function dieSuccess($msg) {
 		$this->smarty->assign('_userSuccessOutput', $msg);
-		$this->smarty->display(PATH_SMARTY . '/templates/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5(
+		$this->smarty->display(PATH_SMARTY_TPL . '/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5(
 			$_SERVER['REQUEST_URI']));
 		die();
 	}
@@ -91,7 +91,7 @@ class AdminInterface extends GeneralInterface {
 	 */
 	public function dieDisplay () {
 
-		$this->smarty->display(PATH_SMARTY . '/templates/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5(
+		$this->smarty->display(PATH_SMARTY_TPL . '/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5(
 			$_SERVER['REQUEST_URI']));
 	}
 
@@ -110,7 +110,7 @@ class AdminInterface extends GeneralInterface {
 		$this->smarty->assign('actionStr', $actionString);
 		$this->smarty->assign('confirmedStr', $confirmedString);
 		$this->smarty->assign('notConfirmedStr', $notConfirmedString);
-		$this->smarty->display(PATH_SMARTY_ADMIN_TEMPLATES . '/confirmationDialog.tpl');
+		$this->smarty->display(PATH_SMARTY_TPL . '/administrator/confirmationDialog.tpl');
 	}
 
 	/**
@@ -139,7 +139,7 @@ class AdminInterface extends GeneralInterface {
 		$this->smarty->assign('actionString', $actionString);
 		$this->smarty->assign('inputContainer', $inputContainer);
 		$this->smarty->assign('submitString', $submitString);
-		$this->smarty->display(PATH_SMARTY_ADMIN_TEMPLATES . '/generalForm.tpl');
+		$this->smarty->display(PATH_SMARTY_TPL . '/administrator/generalForm.tpl');
 	}
 
 	public function backlink($link) {

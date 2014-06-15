@@ -11,8 +11,8 @@ class MessageFunctions {
 		$users = TableMng::query (
 			'SELECT u.ID AS userId,
 				CONCAT(u.forename, " ", u.name) AS userFullname
-			FROM users u
-				JOIN usersInGradesAndSchoolyears uigs ON u.ID = uigs.userId
+			FROM SystemUsers u
+				JOIN SystemUsersInGradesAndSchoolyears uigs ON u.ID = uigs.userId
 			WHERE uigs.schoolyearId = @activeSchoolyear');
 		return $users;
 	}
@@ -69,7 +69,7 @@ class MessageFunctions {
 	 */
 	public static function checkIsCreatorOf($messageId, $userId) {
 		try {
-			$res = TableMng::query(sprintf('SELECT originUserId FROM Message
+			$res = TableMng::query(sprintf('SELECT originUserId FROM MessageMessages
 				WHERE `ID` = "%s"', $messageId));
 		} catch (Exception $e) {
 			return false;
@@ -88,7 +88,7 @@ class MessageFunctions {
 		$db = TableMng::getDb();
 		$db->autocommit(false);
 		$query = sprintf(
-			'DELETE FROM Message WHERE `ID` = %s;
+			'DELETE FROM MessageMessages WHERE `ID` = %s;
 			DELETE FROM MessageReceivers WHERE `messageId` = %s;
 			DELETE FROM MessageManagers WHERE `messageId` = %s;',
 			$messageId, $messageId, $messageId);

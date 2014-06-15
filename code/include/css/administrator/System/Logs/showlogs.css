@@ -1,0 +1,9 @@
+.logs-per-page-container {
+	width: 100px;
+}
+
+#table-size-container {
+	position: relative;
+	font-size: 16px;
+	top: 17px;
+}

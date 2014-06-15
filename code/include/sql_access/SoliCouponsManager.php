@@ -4,7 +4,7 @@ require_once PATH_ACCESS . '/TableManager.php';
 
 class SoliCouponsManager extends TableManager {
 	function __construct() {
-		parent::__construct('soli_coupons');
+		parent::__construct('BabeskSoliCoupons');
 	}
 
 	/**

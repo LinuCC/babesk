@@ -3,7 +3,7 @@
 /**
  * This file is used for gettext-Editors that fetch the elements automatically
  * from the Sourcecode. Since the Modulepaths are created from a database the
- * editors delete the translations every time the autoupdate.
+ * editors delete the translations every time they autoupdate.
  * This file prevents it
  */
 
@@ -56,7 +56,6 @@ _g("modulepath_root/administrator/Statistics/KuwasysStats");
 _g("modulepath_root/administrator/Statistics/MessageStats");
 _g("modulepath_root/administrator/Kuwasys");
 _g("modulepath_root/administrator/Kuwasys/Classteachers");
-_g("modulepath_root/administrator/Kuwasys/Grade");
 _g("modulepath_root/administrator/Kuwasys/Classes");
 _g("modulepath_root/administrator/Kuwasys/KuwasysUsers");
 _g("modulepath_root/administrator/Schbas");
@@ -97,6 +96,7 @@ _g("modulepath_root/administrator/System/SpecialCourse");
 _g("modulepath_root/administrator/System/ForeignLanguage");
 _g("modulepath_root/administrator/System/Religion");
 _g("modulepath_root/administrator/System/User");
+_g("modulepath_root/administrator/System/Grade");
 _g("root/administrator/Babesk/Checkout");
 _g("modulepath_root/administrator/Babesk/BabeskTimeSettings");
 _g("modulepath_root/administrator/Fits/FitsSettings");

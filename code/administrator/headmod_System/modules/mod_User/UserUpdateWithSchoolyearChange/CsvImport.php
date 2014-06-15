@@ -292,9 +292,9 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 			$res = $this->_pdo->query(
 				'SELECT u.ID AS userId, u.forename AS forename, u.name AS name,
 					u.birthday AS birthday, g.gradelevel AS gradelevel
-				FROM users u
-					JOIN usersInGradesAndSchoolyears uigs ON u.ID = uigs.userId
-					JOIN Grades g ON g.ID = uigs.gradeId
+				FROM SystemUsers u
+					JOIN SystemUsersInGradesAndSchoolyears uigs ON u.ID = uigs.userId
+					JOIN SystemGrades g ON g.ID = uigs.gradeId
 				WHERE uigs.schoolyearId = @activeSchoolyear'
 			);
 
@@ -388,7 +388,7 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 
 		try {
 			$res = $this->_pdo->query('SELECT value
-				FROM global_settings WHERE
+				FROM SystemGlobalSettings WHERE
 				name = "userUpdateWithSchoolyearChangeGradelevelConflictScope"
 			');
 			return (int)$res->fetchColumn();

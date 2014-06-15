@@ -35,7 +35,7 @@ class ResetAllUserPasswords extends User {
 		$presetPassword = $this->presetPasswordGet();
 
 		if($presetPassword) {
-			$this->_pdo->query("UPDATE users
+			$this->_pdo->query("UPDATE SystemUsers
 				SET password = '$presetPassword'
 				WHERE ID <> 1");
 		}
@@ -55,7 +55,7 @@ class ResetAllUserPasswords extends User {
 
 		try {
 			$stmt = $this->_pdo->query(
-				'SELECT value FROM global_settings
+				'SELECT value FROM SystemGlobalSettings
 					WHERE name = "presetPassword"');
 
 			return $stmt->fetchColumn();

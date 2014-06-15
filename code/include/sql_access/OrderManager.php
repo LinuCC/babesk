@@ -11,7 +11,7 @@ require_once PATH_ACCESS . '/TableManager.php';
 class OrderManager extends TableManager {
 
 	function __construct () {
-		parent::__construct('orders');
+		parent::__construct('BabeskOrders');
 	}
 
 	/**
@@ -79,7 +79,7 @@ class OrderManager extends TableManager {
 	 * @return boolean true if everything has gone right
 	 */
 	function setOrderFetched ($ID) {
-		$query = sql_prev_inj(sprintf('UPDATE orders
+		$query = sql_prev_inj(sprintf('UPDATE BabeskOrders
                         SET fetched = 1
                       WHERE ID = %s;', $ID));
 		$result = $this->db->query($query);
@@ -126,7 +126,7 @@ class OrderManager extends TableManager {
 		$query = sql_prev_inj(sprintf('DELETE FROM %s WHERE date < "%s"', $this->tablename, date('Y-m-d',$timestamp)));
 		$result = $this->db->query($query);
 		if(!$result)
-			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error);
+			throw new MySQLConnectionException($this->db->error);
 	}
 
 	/**

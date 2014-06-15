@@ -16,7 +16,7 @@ class Order extends Babesk {
 
 		parent::__construct($name, $display_name, $path);
 		$this->modulePath = $path;
-		$this->smartyPath = PATH_SMARTY . '/templates/web' . $path;
+		$this->smartyPath = PATH_SMARTY_TPL . '/web' . $path;
 		require_once PATH_CODE . '/web/WebInterface.php';
 	}
 
@@ -31,8 +31,6 @@ class Order extends Babesk {
 
 		//No direct access
 		defined('_WEXEC') or die("Access denied");
-
-		require_once 'order_constants.php';
 
 		$smarty = $dataContainer->getSmarty();
 		$this->_interface = $dataContainer->getInterface();
@@ -183,7 +181,7 @@ class Order extends Babesk {
 	protected function orderEnddateGet() {
 
 		try {
-			$data = TableMng::query('SELECT * FROM global_settings
+			$data = TableMng::query('SELECT * FROM SystemGlobalSettings
 				WHERE name = "orderEnddate"');
 			if(!isset($data[0]['value'])) {
 				throw new Exception('Could not fetch OrderEnddate');
@@ -225,14 +223,14 @@ class Order extends Babesk {
 		$ordertime = date("Y-m-d h:i:s");
 		$soliPrice = $this->soliPriceGet();
 
-		TableMng::query("INSERT INTO orders
+		TableMng::query("INSERT INTO BabeskOrders
 			(MID, UID, date, IP, ordertime, fetched) VALUES
 			('$meal[ID]', '$userId', '$meal[date]', '$ip', '$ordertime', 0)");
 
 		$lastInsertId = TableMng::getDb()->insert_id;
 
 		if($this->_hasValidCoupon) {
-			TableMng::query("INSERT INTO soli_orders (ID, UID, date, IP,
+			TableMng::query("INSERT INTO BabeskSoliOrders (ID, UID, date, IP,
 				ordertime, fetched, mealname, mealprice, mealdate, soliprice)
 				VALUES ('$lastInsertId', '$userId', '$meal[date]', '$ip',
 					'$ordertime', '0', '$meal[name]', '$meal[price]',
@@ -251,9 +249,9 @@ class Order extends Babesk {
 
 		try {
 			$meal = TableMng::query("SELECT pc.price AS price, m.*
-				FROM meals m
-				JOIN users u ON u.ID = $userId
-				JOIN price_classes pc
+				FROM BabeskMeals m
+				JOIN SystemUsers u ON u.ID = $userId
+				JOIN BabeskPriceClasses pc
 					ON pc.GID = u.GID AND pc.pc_ID = m.price_class
 				WHERE m.ID = '$mealId';");
 
@@ -295,7 +293,7 @@ class Order extends Babesk {
 	protected function isSolipriceEnabledGet() {
 
 		try {
-			$stmt = $this->_pdo->query("SELECT `value` FROM `global_settings`
+			$stmt = $this->_pdo->query("SELECT `value` FROM `SystemGlobalSettings`
 				WHERE `name` = 'solipriceEnabled'");
 
 			return $stmt->fetchColumn() == '1';
@@ -315,9 +313,9 @@ class Order extends Babesk {
 	protected function userHasValidCoupon($mealId) {
 
 		$hasCoupon = TableMng::query("SELECT COUNT(*) AS count
-			FROM soli_coupons sc
-			JOIN meals m ON m.ID = $mealId
-			JOIN users u ON u.ID = sc.UID
+			FROM BabeskSoliCoupons sc
+			JOIN BabeskMeals m ON m.ID = $mealId
+			JOIN SystemUsers u ON u.ID = sc.UID
 			WHERE m.date BETWEEN sc.startdate AND sc.enddate AND
 				sc.UID = $_SESSION[uid] AND u.soli = 1");
 
@@ -332,7 +330,7 @@ class Order extends Babesk {
 	 */
 	protected function soliPriceGet() {
 
-		$soliPrice = TableMng::query('SELECT * FROM global_settings
+		$soliPrice = TableMng::query('SELECT * FROM SystemGlobalSettings
 			WHERE name = "soli_price"');
 		if(count($soliPrice)) {
 			return $soliPrice[0]['value'];
@@ -355,7 +353,7 @@ class Order extends Babesk {
 		if(($newBalance = $this->userBalanceChangeCheck($userId, $amount)) !==
 				false) {
 			$balanceStr = str_replace(',', '.', (string) $newBalance);
-			TableMng::query("UPDATE users SET credit = '$balanceStr'
+			TableMng::query("UPDATE SystemUsers SET credit = '$balanceStr'
 				WHERE ID = $userId");
 			return true;
 		}
@@ -373,7 +371,7 @@ class Order extends Babesk {
 	 */
 	protected function userBalanceChangeCheck($userId, $amount) {
 
-		$data = TableMng::query("SELECT * FROM users u
+		$data = TableMng::query("SELECT * FROM SystemUsers u
 			WHERE u.ID = $userId");
 
 		if(!empty($data[0]['credit'])) {
@@ -412,9 +410,9 @@ class Order extends Babesk {
 
 		try {
 			$meals = TableMng::query("SELECT m.*, pc.price AS price
-				FROM meals m
-				JOIN users u ON u.ID = $_SESSION[uid]
-				JOIN price_classes pc
+				FROM BabeskMeals m
+				JOIN SystemUsers u ON u.ID = $_SESSION[uid]
+				JOIN BabeskPriceClasses pc
 					ON m.price_class = pc.pc_ID AND pc.GID = u.GID
 				WHERE date BETWEEN '$startdate' AND '$enddate'
 					ORDER BY date, price_class");
@@ -434,7 +432,7 @@ class Order extends Babesk {
 	protected function maxCountOfOrdersPerDayPerUserGet() {
 
 		$data = TableMng::querySingleEntry(
-			'SELECT * FROM global_settings
+			'SELECT * FROM SystemGlobalSettings
 				WHERE name = "maxCountOfOrdersPerDayPerUser"');
 
 		if(!count($data)) {
@@ -455,8 +453,8 @@ class Order extends Babesk {
 	protected function orderCountOfDayByUserGet($userId, $date) {
 
 		$row = TableMng::querySingleEntry(
-			"SELECT COUNT(*) AS count FROM orders o
-			JOIN meals m ON m.ID = o.MID
+			"SELECT COUNT(*) AS count FROM BabeskOrders o
+			JOIN BabeskMeals m ON m.ID = o.MID
 			WHERE o.UID = '$userId' AND m.date = '$date'");
 
 		return $row['count'];

@@ -44,7 +44,7 @@ class GroupSettings extends System {
 		}
 		else {
 			$this->_smarty->display(
-				PATH_SMARTY . "/templates/administrator/$this->relPath/" .
+				PATH_SMARTY_TPL . "/administrator/$this->relPath/" .
 				"main.tpl");
 		}
 	}
@@ -406,7 +406,7 @@ class GroupSettings extends System {
 	protected function modulesFetchRightsFetch($groupId) {
 
 		try {
-			$rights = TableMng::query("SELECT * FROM GroupModuleRights
+			$rights = TableMng::query("SELECT * FROM SystemGroupModuleRights
 				WHERE `groupId` = '$groupId'");
 
 		} catch (Exception $e) {

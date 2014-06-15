@@ -11,7 +11,7 @@ class Web {
 		if (!isset($_SESSION)) {
 			require_once "../include/path.php";
 			$this->initEnvironment();
-
+			$this->initSmarty();
 		}
 
 		require_once PATH_ACCESS . '/UserManager.php';
@@ -27,15 +27,13 @@ class Web {
 		$this->_userManager = new UserManager();
 		$this->_loggedIn = isset($_SESSION['uid']);
 		$this->_interface = new WebInterface($this->_smarty);
-		$this->initPdo();
+		$this->initDatabaseConnections();
 		$this->_logger = new Logger($this->_pdo);
 		$this->_logger->categorySet('Web');
 		$this->_acl = new Acl($this->_logger, $this->_pdo);
 		$this->_moduleExecutionParser = new ModuleExecutionInputParser();
 		$this->_moduleExecutionParser->setSubprogramPath('root/web');
 		$this->initLanguage();
-
-        $this->initSmarty();
 	}
 
 	///////////////////////////////////////////////////////////////////////
@@ -81,14 +79,16 @@ class Web {
 
 		require PATH_SMARTY . "/smarty_init.php";
 		$this->_smarty = $smarty;
-		// $this->_smarty->assign('smarty_path', REL_PATH_SMARTY);
 		$version=@file_get_contents("../version.txt");
-		$this->_smarty->assign('inh_path', 'web/baseLayout.tpl');
 		if ($version===FALSE) {
 			$version = "";
 		}
 		$smarty->assign('babesk_version', $version);
-        $this->_smarty->assign('maintenance', $this->checkMaintenance());
+		$relRoot = '../';
+		$smarty->assign('path_smarty_tpl', $relRoot . 'smarty_templates');
+		$smarty->assign('path_js', $relRoot . 'include/js');
+		$smarty->assign('path_css', $relRoot . 'include/css');
+		$smarty->assign('path_images', $relRoot . 'images');
 		$this->_smarty->assign('error', '');
 	}
 
@@ -97,14 +97,15 @@ class Web {
 	 *
 	 * triggers an error when the PDO-Object could not be created
 	 */
-	private function initPdo() {
+	private function initDatabaseConnections() {
 
 		try {
 			$connector = new DBConnect();
 			$connector->initDatabaseFromXML();
 			$this->_pdo = $connector->getPdo();
+			$this->_entityManager = $connector->getDoctrineEntityManager();
 			$this->_pdo->query('SET @activeSchoolyear :=
-				(SELECT ID FROM schoolYear WHERE active = "1");');
+				(SELECT ID FROM SystemSchoolyears WHERE active = "1");');
 
 		} catch (Exception $e) {
 			trigger_error('Could not create the PDO-Object!');
@@ -117,7 +118,7 @@ class Web {
 	private function checkFirstPassword() {
 
 		$changePasswordOnFirstLoginEnabled = TableMng::query('SELECT value
-			FROM global_settings WHERE `name` = "firstLoginChangePassword"');
+			FROM SystemGlobalSettings WHERE `name` = "firstLoginChangePassword"');
 
 		if ($changePasswordOnFirstLoginEnabled[0]['value'] == '1') {
 			$userData = $this->_userManager->getUserdata ($_SESSION ['uid']);
@@ -139,25 +140,7 @@ class Web {
 		}
 	}
 
-    /**
-     * checks if the system is under maintenance now...
-     */
-    private function checkMaintenance() {
-        try {
-            $data = TableMng::query('SELECT value
-				FROM global_settings
-				WHERE name = "siteIsUnderMaintenance"');
-
-        } catch (Exception $e) {
-            return 0;
-        }
-        if(isset($data[0]['value']) && $data[0]['value'] != '') {
-           return $data[0]['value'];
-        }
-        return 0;
-    }
-
-    /**
+	/**
 	 * handles if the user gets redirected after some seconds
 	 */
 	private function redirect() {
@@ -165,7 +148,7 @@ class Web {
 		try {
 			$data = TableMng::query('SELECT gsDelay.value AS delay,
 					gsTarget.value AS target
-				FROM global_settings gsDelay, global_settings gsTarget
+				FROM SystemGlobalSettings gsDelay, SystemGlobalSettings gsTarget
 				WHERE gsDelay.name = "webHomepageRedirectDelay" AND
 					gsTarget.name = "webHomepageRedirectTarget"');
 
@@ -187,6 +170,10 @@ class Web {
 		$this->addSessionUserdata($userData);
 		$this->handleModuleSpecificData($userData);
 		$this->loginTriesHandle($userData);
+		if($userData['locked']) {
+			session_destroy();
+			$this->_smarty->display(PATH_SMARTY_TPL . '/web/login.tpl');
+		}
 		$this->addUserdataToSmarty();
 	}
 
@@ -219,7 +206,7 @@ class Web {
 		try {
 			$mailcount = TableMng::query(sprintf("SELECT COUNT(*) AS count
 				FROM MessageReceivers mr
-				LEFT JOIN Message m ON mr.messageId = m.ID
+				LEFT JOIN MessageMessages m ON mr.messageId = m.ID
 				WHERE %s = userId
 					AND SYSDATE() BETWEEN m.validFrom AND m.validTo
 					AND mr.read = 0",
@@ -240,21 +227,29 @@ class Web {
 	private function executeModule() {
 
 		try {
-			try {
-				$this->_acl->moduleExecute(
-					$this->_moduleExecutionParser->executionCommandGet(),
-					$this->dataContainerCreate());
-
-			} catch (Exception $e) {
-				$this->_interface->dieError(_g('Error executing the Module!'));
-			}
-
+			$command = $this->_moduleExecutionParser->executionCommandGet();
+			$this->_smarty->assign(
+				'activeHeadmodule', $command->moduleAtLevelGet(2)
+			);
+			$this->_acl->moduleExecute($command, $this->dataContainerCreate());
 
 		} catch (AclException $e) {
+			$this->_logger->log('Forbidden module-access-try by a user',
+				'Notice', Null, json_encode(array(
+					'msg' => $e->getMessage(), 'uid' => $_SESSION['uid']
+			)));
 			if($e->getCode() == 105) { //Module-Access forbidden
 				$this->_interface->dieError(
 					'Keine Zugriffsberechtigung auf dieses Modul!');
 			}
+			$this->_logger->log('Could not execute a module!',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieError(_g('Error executing the Module!'));
+
+		} catch (Exception $e) {
+			$this->_logger->log('Could not execute a module!',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieError(_g('Error executing the Module!'));
 		}
 	}
 
@@ -317,14 +312,44 @@ class Web {
 
 		try {
 			$this->_acl->accessControlInit($_SESSION['uid']);
-			$webModule = $this->_acl->moduleGet('root/web');
-			$this->_smarty->assign('modules', $webModule->getChilds());
+
+			$this->_smarty->assign(
+				'modules', $this->headmodulesToDisplayGet()
+			);
 
 		} catch (AclException $e) {
+			$this->_logger->log('user is not in any group',
+				'Moderate', Null,
+				json_encode(array('msg' => $e->getMessage())));
 			$this->_interface->dieError('Sie sind in keiner Gruppe und ' .
 				'haben daher keine Rechte! Wenden sie sich bitte an den ' .
 				'Administrator');
 		}
+	}
+
+	/**
+	 * Returns all Headmodules the user has access to and should be displayed
+	 * @return array The headmodules
+	 */
+	private function headmodulesToDisplayGet() {
+
+		$webModule = $this->_acl->moduleGet('root/web');
+		if(!$webModule) {
+			$this->_logger->log(
+				'a user tried to access web without rights!',
+				'Notice', Null, json_encode(
+					array('userId' => $_SESSION['uid'])
+			));
+			$this->_interface->dieError(_g('You have no access to web!'));
+		}
+		$childs = $webModule->getChilds();
+		$headmodsToDisplay = array();
+		foreach($childs as $child) {
+			if($child->isDisplayInMenuAllowed()) {
+				$headmodsToDisplay[] = $child;
+			}
+		}
+		return $headmodsToDisplay;
 	}
 
 	private function handleRedirect() {
@@ -346,7 +371,7 @@ class Web {
 			$birthday = date("m-d",strtotime($this->_userManager->getBirthday($_SESSION['uid'])));
 
 			$this->_smarty->assign('birthday',$birthday);
-			$this->_smarty->display(PATH_SMARTY . '/templates/web/main_menu.tpl');
+			$this->_smarty->display(PATH_SMARTY_TPL . '/web/main_menu.tpl');
 		}
 	}
 
@@ -424,6 +449,7 @@ class Web {
 			clone($this->_interface),
 			clone($this->_acl),
 			$this->_pdo,
+			$this->_entityManager,
 			clone($this->_logger));
 
 		return $dataContainer;
@@ -446,6 +472,8 @@ class Web {
 	private $_logger;
 
 	private $_pdo;
+
+	private $_entityManager;
 
 	private $_smarty;
 

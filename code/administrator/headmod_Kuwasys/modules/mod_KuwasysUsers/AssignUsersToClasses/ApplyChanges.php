@@ -44,7 +44,7 @@ class ApplyChanges extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClas
 	protected function usersInClassJointDeleteByNewAssignments() {
 
 		try {
-			$this->_pdo->exec('DELETE uic.* FROM jointUsersInClass uic
+			$this->_pdo->exec('DELETE uic.* FROM KuwasysUsersInClasses uic
 				JOIN KuwasysTemporaryRequestsAssign ra
 					ON uic.ClassID = ra.origClassId
 						AND uic.userId = ra.origUserId');
@@ -64,7 +64,7 @@ class ApplyChanges extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClas
 	protected function newAssignmentsAddToJoints() {
 
 		try {
-			$this->_pdo->exec('INSERT INTO jointUsersInClass
+			$this->_pdo->exec('INSERT INTO KuwasysUsersInClasses
 				(UserID, ClassID, statusId)
 				SELECT userId, classId, statusId
 					FROM KuwasysTemporaryRequestsAssign re

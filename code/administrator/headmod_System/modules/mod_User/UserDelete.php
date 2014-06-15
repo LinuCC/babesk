@@ -75,12 +75,12 @@ class UserDelete {
 		$userToDeleteRes = TableMng::querySingleEntry(
 			"SELECT forename, name, credit, birthday,
 				CONCAT(g.gradelevel, '-', g.label) AS grade
-			FROM users u
+			FROM SystemUsers u
 			LEFT JOIN (
 					SELECT g.gradelevel AS gradelevel, g.label AS label,
 						uigs.userId AS userId
-					FROM usersInGradesAndSchoolyears uigs
-					JOIN Grades g ON uigs.gradeId = g.ID
+					FROM SystemUsersInGradesAndSchoolyears uigs
+					JOIN SystemGrades g ON uigs.gradeId = g.ID
 					WHERE uigs.schoolyearId = @activeSchoolyear
 				) g ON g.userId = u.ID
 			WHERE u.ID = $userId", true);
@@ -110,7 +110,7 @@ class UserDelete {
 		$additionalQuerys = $this->deleteQuerysCreateAdditional($uid);
 		TableMng::getDb()->autocommit(false);
 		TableMng::queryMultiple(
-			"DELETE FROM users WHERE ID = $uid;
+			"DELETE FROM SystemUsers WHERE ID = $uid;
 			$additionalQuerys
 			");
 		TableMng::getDb()->autocommit(true);
@@ -120,16 +120,16 @@ class UserDelete {
 
 		$querys = '';
 
-		if(count(TableMng::query('SHOW TABLES LIKE "cards";'))) {
-			$querys .= "DELETE FROM cards WHERE UID = $uid;";
+		if(count(TableMng::query('SHOW TABLES LIKE "BabeskCards";'))) {
+			$querys .= "DELETE FROM BabeskCards WHERE UID = $uid;";
 		}
 		if(count(TableMng::query(
-			'SHOW TABLES LIKE "jointUsersInClass";'))) {
-			$querys .= "DELETE FROM jointUsersInClass WHERE UserID = $uid;";
+			'SHOW TABLES LIKE "KuwasysUsersInClasses";'))) {
+			$querys .= "DELETE FROM KuwasysUsersInClasses WHERE UserID = $uid;";
 		}
 		if(count(TableMng::query(
-			'SHOW TABLES LIKE "usersInGradesAndSchoolyears";'))) {
-			$querys .= "DELETE FROM usersInGradesAndSchoolyears
+			'SHOW TABLES LIKE "SystemUsersInGradesAndSchoolyears";'))) {
+			$querys .= "DELETE FROM SystemUsersInGradesAndSchoolyears
 				WHERE userId = $uid;";
 		}
 		if(count(TableMng::query(
@@ -141,12 +141,12 @@ class UserDelete {
 			$querys .= "DELETE FROM MessageManagers WHERE userId = $uid;";
 		}
 		if(count(TableMng::query(
-			'SHOW TABLES LIKE "soli_orders";'))) {
-			$querys .= "DELETE FROM soli_orders WHERE UID = $uid;";
+			'SHOW TABLES LIKE "BabeskSoliOrders";'))) {
+			$querys .= "DELETE FROM BabeskSoliOrders WHERE UID = $uid;";
 		}
 		if(count(TableMng::query(
-			'SHOW TABLES LIKE "soli_coupons";'))) {
-			$querys .= "DELETE FROM soli_coupons WHERE UID = $uid;";
+			'SHOW TABLES LIKE "BabeskSoliCoupons";'))) {
+			$querys .= "DELETE FROM BabeskSoliCoupons WHERE UID = $uid;";
 		}
 		if(count(TableMng::query(
 			'SHOW TABLES LIKE "MessageCarbonFootprint";'))) {
@@ -164,7 +164,7 @@ class UserDelete {
 	protected function deleteConditionSchbas($uid) {
 
 		$stillLoaned = TableMng::query(
-			"SELECT COUNT(*) AS count FROM schbas_lending
+			"SELECT COUNT(*) AS count FROM SchbasLending
 				WHERE user_id = $uid");
 
 		if($stillLoaned[0]['count'] > 0) {

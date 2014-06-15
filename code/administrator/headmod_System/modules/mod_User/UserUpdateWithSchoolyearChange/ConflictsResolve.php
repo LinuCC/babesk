@@ -63,11 +63,11 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 					CONCAT(tu.gradelevel, "-", tu.label) AS newGrade
 				FROM UserUpdateTempConflicts tc
 					LEFT JOIN UserUpdateTempUsers tu ON tu.ID = tc.tempUserId
-					LEFT JOIN users u ON u.ID = tc.origUserId
-					LEFT JOIN usersInGradesAndSchoolyears uigs
+					LEFT JOIN SystemUsers u ON u.ID = tc.origUserId
+					LEFT JOIN SystemUsersInGradesAndSchoolyears uigs
 						ON u.ID = uigs.userId
 						AND uigs.schoolyearId = @activeSchoolyear
-					LEFT JOIN Grades g ON uigs.gradeId = g.ID
+					LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 				WHERE solved = 0
 					ORDER BY type LIMIT 10'
 			);
@@ -219,11 +219,11 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 					tu.label AS newGradelabel
 				FROM UserUpdateTempConflicts tc
 				LEFT JOIN UserUpdateTempUsers tu ON tu.ID = tc.tempUserId
-				LEFT JOIN users u ON u.ID = tc.origUserId
-				LEFT JOIN usersInGradesAndSchoolyears uigs
+				LEFT JOIN SystemUsers u ON u.ID = tc.origUserId
+				LEFT JOIN SystemUsersInGradesAndSchoolyears uigs
 					ON u.ID = uigs.userId
 					AND uigs.schoolyearId = @activeSchoolyear
-				LEFT JOIN Grades g ON uigs.gradeId = g.ID
+				LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 				WHERE tc.ID = ?';
 
 		try {

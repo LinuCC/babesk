@@ -1,0 +1,17 @@
+#selector-container .class-container .panel-heading .panel-title {
+	line-height: 30px;
+}
+
+#selector-container .class-container .label {
+	position: relative;
+	top: -2px;
+	line-height: 30px;
+}
+
+#selector-container .class-container .to-disabled {
+	font-size: 18px;
+}
+
+#selector-container .unit-panel .label {
+	line-height: 20px;
+}

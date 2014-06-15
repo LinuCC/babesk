@@ -1,7 +1,6 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-require_once "constants.php";
 require_once "PasswordHash.php";
 
 /**
@@ -72,16 +71,7 @@ function sql_prev_inj($str) {
  */
 function hash_password($pw_str) {
 	//return md5($pw_str);
-    return create_hash($pw_str);
-}
-
-/**
- * converts old passwords from md5 hash to the more secure bcrypt/sha265 with key stretching
- */
-function convert_md5_to_bcrypt($pw_str) {
-
-        return create_hash($pw_str);
-
+	return create_hash($pw_str);
 }
 
 /**
@@ -176,7 +166,10 @@ function navBar($showPage, $table,$headmod, $mod, $action,$filter) {
 	$query = sql_prev_inj(sprintf('SELECT COUNT(*) AS total FROM %s', $table));
 	$result = $db->query($query);
 	if (!$result) {
-		throw DB_QUERY_ERROR.$db->error;
+		/**
+		 * @todo Proper Errorhandling here, not this: (wouldnt even execute)
+		 * throw DB_QUERY_ERROR.$db->error;
+		 */
 	}
 
 	$row = $result->fetch_array(MYSQLI_ASSOC);
@@ -216,6 +209,28 @@ function _g($id)
 //	return vsprintf(gettext($id), array_slice(func_get_args(), 1));
 	return vsprintf(gettext($id), array_slice($func_args, 1));
 
+}
+
+/**
+ * Like empty(), but accepts 0, 0.0 and "0" as true values, too
+ * @param  mixed   $value The value to check for blank
+ * @return boolean        false if the value is
+ * 'NULL', 'FALSE', 'array()' (empty array) or '""' (empty string)
+ * else true
+ */
+function isBlank($value) {
+
+	return empty($value) && !is_numeric($value);
+}
+
+/**
+ * Requires all that are in a a directory
+ * @param  string $path The path of the direcory
+ */
+function require_all ($path) {
+	foreach (glob($path.'*.php') as $filename) {
+		require_once $filename;
+	}
 }
 
 ?>

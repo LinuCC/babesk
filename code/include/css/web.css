@@ -1,0 +1,278 @@
+@import url('open_sans.css');
+
+.program_title {
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+#navigation {
+	background-image: -webkit-gradient(linear, left 0%, left 100%, from(#807D7D), to(#666464));
+	background-image: -webkit-linear-gradient(top, #807D7D 0%, #666464, 100%);
+	background-image: -moz-linear-gradient(top, #807D7D 0%, #666464 100%);
+	background-image: linear-gradient(to bottom, #807D7D 0%, #666464 100%);
+	background-repeat: repeat-x;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff807D7D', endColorstr='#ff666464', GradientType=0);
+	color: #BFBBBB;
+}
+
+#navigation.navbar-inverse .navbar-brand {
+	color: #EEEEEE;
+}
+
+#navigation.navbar-inverse .navbar-nav > li > a {
+	color: #EEEEEE;
+}
+
+#navigation.navbar-inverse .navbar-brand:hover {
+	color: #FFFFFF;
+}
+
+#navigation.navbar-inverse .navbar-nav > li > a:hover {
+	color: #FFFFFF;
+}
+
+#navigation .navbar-nav .active > a {
+	background-color: #595757;
+}
+
+#navigation.navbar-inverse .navbar-nav > .open > a,
+#navigation.navbar-inverse .navbar-nav > .open > a:hover,
+#navigation.navbar-inverse .navbar-nav > .open > a:focus {
+	background-image: -webkit-gradient(linear, left 0%, left 100%, from(#666464), to(#515050));
+	background-image: -webkit-linear-gradient(top, #666464, 0%, #515050, 100%);
+	background-image: -moz-linear-gradient(top, #666464 0%, #515050 100%);
+	background-image: linear-gradient(to bottom, #666464 0%, #515050 100%);
+	background-repeat: repeat-x;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff666464', endColorstr='#ff666464', GradientType=0);
+	color: #FFFFFF;
+}
+
+#navigation.navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
+	color: #EEEEEE;
+}
+
+#navigation.navbar-inverse .navbar-nav .open .dropdown-menu > li > a:hover {
+	color: #FFFFFF;
+}
+
+#navigation.navbar-inverse .dropdown-menu > li > p {
+	margin: 0;
+	padding: 3px 20px;
+	white-space: nowrap;
+}
+
+#navigation .highlighted {
+	color: #AADD33;
+}
+
+#navigation .icon-Settings {
+	position: relative;
+	top: 2px;
+}
+
+#dropdown-user {
+	background-color: #666464;
+	border: none;
+}
+
+#module_selector {
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+	padding: 10px 0;
+	background-color: #AADD33;
+	box-shadow: 0px 0px 8px #222222;
+}
+
+#module_selector a {
+	border-radius: 5px;
+	text-align: center;
+	color: #404040;
+	padding: 10px;
+}
+
+#module_selector a:focus {
+	text-decoration: none;
+}
+
+#module_selector a:hover div.icon {
+	text-decoration: none;
+	text-shadow: 1px 1px 0px #5F7729;
+	/* Should overwrite active color, so make it important*/
+	color: #FFBA00 !important;
+	transition-property: color;
+	transition-duration: 0.2s;
+}
+
+#module_selector a.active div.icon {
+	color: #F5F4AC;
+	text-shadow: 1px 1px 0px #5F7729;
+}
+
+#module_selector a:hover {
+	text-decoration: none;
+}
+
+#module_selector .icon {
+	font-size: 64px;
+}
+
+#content {
+	/*border: 1px solid #33dea2;*/
+	background-color: #F5F4AC;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	padding: 20px;
+	margin-top: 5px;
+	box-shadow: 0px 0px 8px #222222;
+	min-height: 450px;
+}
+
+#content > h2, h3 {
+	text-align: center;
+}
+
+.error-container .panel-title,
+.message-container .panel-title,
+.success-container .panel-title {
+	text-align: center;
+	line-height: 32px;
+}
+
+.error-container .icon-container,
+.message-container .icon-container,
+.success-container .icon-container {
+	font-size: 32px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.error-container [class^="icon-"],
+.error-container [class*=" icon-"] {
+	color: #b94a48;
+}
+
+.error-container .btn,
+.message-container .btn,
+.success-container .btn {
+	margin-top: 20px;
+}
+
+#content_footer_conn {
+	position: relative;
+	top: -50px;
+	z-index: -1;
+	height: 50px;
+	background-color: #666464;
+	border-top: 10px solid #AADD33;
+}
+
+#footer {
+	background-color: #666464;
+	padding-bottom: 20px;
+	min-height: 400px;
+	color: #FFFFFF;
+	text-shadow: 1px 1px 0px #3D3D3D;
+	margin-top: 5px;
+}
+
+#footer a {
+	color: #AADD33;
+}
+
+/*
+ * Set the colors of the twitter-bootstrap-buttons again...
+ */
+#footer a.btn-default {
+	color: #000;
+}
+
+#footer a.btn-primary,
+#footer a.btn-success,
+#footer a.btn-info,
+#footer a.btn-warning,
+#footer a.btn-danger,
+#footer a.btn-link {
+	color: #fff;
+}
+
+#footer .footer-text {
+	position: relative;
+	top: -30px;
+}
+
+#footer .modules {
+	text-align: left;
+}
+
+#footer .contact {
+	text-align: center;
+}
+
+#footer .right-col {
+	text-align: right;
+}
+
+@media (max-width: 768px) {
+	#footer .modules,
+	#footer .contact,
+	#footer .right-col {
+		text-align: center;
+	}
+
+	#footer .contact,
+	#footer .right-col {
+		border-top: 1px solid #AAAAAA;
+		padding-top: 10px;
+	}
+}
+
+#footer .footer-heading {
+	margin-top: 0;
+	margin-bottom: 5px;
+	font-size: 16px;
+	min-height: 20px;
+}
+
+#footer .help {
+	margin-bottom: 2em;
+}
+
+
+div.quotebox, p.quotebox {
+
+	border-left: 4px solid #AADD33;
+	padding: 5px;
+	background-color: #EEEEEE;
+}
+
+.panel.bg-fit {
+	background-color: #F5F5D1;
+}
+
+.panel-primary {
+	border-color: #AADD33;
+}
+
+.panel-primary > .panel-heading {
+	background-image: none;
+	background-color: #AADD33;
+	border-color: #AADD33;
+}
+
+.panel-primary > .panel-heading > .panel-title {
+	/*font-weight: bold;*/
+	color: #455912;
+}
+
+.class-container h4.panel-title {
+	display: inline;
+}
+
+.expand-button-content {
+	font-size: 12px;
+	margin-right: 5px;
+}
+
+#selector-container .submit-button {
+	margin-right: 10px;
+}

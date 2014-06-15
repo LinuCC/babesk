@@ -13,7 +13,7 @@ class Fmenu extends Fits {
 	//Constructor
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
-		$this->smartyPath = PATH_SMARTY . '/templates/web' . $path;
+		$this->smartyPath = PATH_SMARTY_TPL . '/web' . $path;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -38,11 +38,11 @@ class Fmenu extends Fits {
 			$userDetails = TableMng::querySingleEntry(sprintf(
 				'SELECT u.*,
 				(SELECT CONCAT(g.gradelevel, g.label) AS class
-					FROM usersInGradesAndSchoolyears uigs
-					LEFT JOIN Grades g ON uigs.gradeId = g.ID
+					FROM SystemUsersInGradesAndSchoolyears uigs
+					LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS class
-				FROM users u WHERE `ID` = %s', $_SESSION['uid']), true);
+				FROM SystemUsers u WHERE `ID` = %s', $_SESSION['uid']), true);
 			// $userDetails = $userManager->getUserDetails($_SESSION['uid']);
 			$userClass = $userDetails['class'];
 

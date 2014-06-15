@@ -1,0 +1,33 @@
+.users-per-page-container {
+	width:90px;
+}
+
+#column-show-form {
+	height: 500px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+#column-show-form label {
+	padding-top: 0;
+}
+
+table#user-table > tbody > tr.selected {
+	background-color: #C6F1F8;
+}
+
+table#user-table tr.selected:nth-child(2n+1) > td {
+	background-color: #A1DDE6;
+}
+
+table#user-table.table-hover > tbody > tr:hover > td {
+	background-color: #E8FFB3;
+}
+
+.special-course-selector {
+	display: inline-block;
+	padding: 0 3px;
+	border-left: 1px solid #BBB;
+	border-right: 1px solid #BBB;
+	margin-left: -1px;
+}

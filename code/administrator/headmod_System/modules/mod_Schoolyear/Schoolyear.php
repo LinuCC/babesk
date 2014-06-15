@@ -49,7 +49,7 @@ class Schoolyear extends System {
 		}
 		else {
 			if($this->execPathHasSubmoduleLevel(1, $this->_subExecPath)) {
-				$this->submoduleExecute($this->_subExecPath, 1);
+				$this->submoduleExecuteAsMethod($this->_subExecPath, 1);
 				die();
 			}
 			$this->_interface->displayMainMenu();
@@ -75,7 +75,16 @@ class Schoolyear extends System {
 
 		if(isset($_POST['label'])) {
 
-			$this->handleCheckboxActive();
+			if(!isset($_POST['active'])) {
+				$_POST['active'] = false;
+			}
+			else {
+				if($this->schoolyearIfActiveExistsIdGet()) {
+					$this->_interface->dieError(_g('An active schoolyear already exists! Please add the schoolyear without it being active and then activate it in the menu.')
+					);
+				}
+				$_POST['active'] = true;
+			}
 			$this->checkInput();
 			$this->addSchoolYearToDatabase();
 			$this->_interface->dieMsg(_g('The Schoolyear was added successfully'));
@@ -85,13 +94,13 @@ class Schoolyear extends System {
 		}
 	}
 
-	protected function handleCheckboxActive() {
+	protected function handleCheckboxActive($schoolyearId) {
 
 		if(!isset($_POST['active'])) {
 			$_POST['active'] = false;
 		}
 		else {
-			if($this->schoolyearActiveExists()) {
+			if($this->schoolyearIfActiveExistsIdGet()) {
 				$this->_interface->dieError(_g('An active schoolyear already exists! Please add the schoolyear without it being active and then activate it in the menu.')
 				);
 			}
@@ -100,16 +109,22 @@ class Schoolyear extends System {
 	}
 
 	/**
-	 * Checks if an active schoolyear already exists
-	 * @return bool  true if an active schoolyear exists, false if not
+	 * Checks if an active schoolyear already exists and returns id
+	 * @return int   the id if it exists, false if not
 	 */
-	private function schoolyearActiveExists() {
+	private function schoolyearIfActiveExistsIdGet() {
 
 		try {
 			$res = $this->_pdo->query(
-				'SELECT COUNT(*) FROM schoolYear WHERE active = 1'
+				'SELECT ID FROM SystemSchoolyears WHERE active = 1'
 			);
-			return $res->fetchColumn() != '0';
+			$id = $res->fetchColumn();
+			if(is_numeric($id) && $id != 0) {
+				return $id;
+			}
+			else {
+				return false;
+			}
 
 		} catch (PDOException $e) {
 			$this->_logger->log(
@@ -139,7 +154,7 @@ class Schoolyear extends System {
 		$active = (int)$_POST['active'];
 
 		try {
-			$stmt = $this->_pdo->prepare('INSERT INTO schoolYear
+			$stmt = $this->_pdo->prepare('INSERT INTO SystemSchoolyears
 				(label, active) VALUES (?, ?)');
 			$stmt->execute(array($_POST['label'], $active));
 
@@ -164,7 +179,7 @@ class Schoolyear extends System {
 	protected function getAllSchoolYears() {
 
 		try {
-			$schoolyears = TableMng::query('SELECT * FROM schoolYear');
+			$schoolyears = TableMng::query('SELECT * FROM SystemSchoolyears');
 
 		} catch(Exception $e) {
 			$this->_interface->dieError(_g('Error Fetching the Schoolyears!'));
@@ -193,7 +208,7 @@ class Schoolyear extends System {
 	protected function deleteSchoolYearInDatabase() {
 
 		try {
-			TableMng::query("DELETE FROM schoolYear WHERE ID = {$_GET['ID']}");
+			TableMng::query("DELETE FROM SystemSchoolyears WHERE ID = {$_GET['ID']}");
 
 		} catch(Exception $e) {
 			$this->_interface->dieError(_g('Could not delete the Schoolyear!'));
@@ -217,9 +232,9 @@ class Schoolyear extends System {
 	protected function activateSchoolYearInDatabase() {
 
 		TableMng::getDb()->autocommit(false);
-		TableMng::query("UPDATE schoolYear SET active = 0
+		TableMng::query("UPDATE SystemSchoolyears SET active = 0
 			WHERE active = 1");
-		TableMng::query("UPDATE schoolYear SET active = 1
+		TableMng::query("UPDATE SystemSchoolyears SET active = 1
 			WHERE ID = {$_GET['ID']}");
 		TableMng::getDb()->autocommit(true);
 	}
@@ -233,8 +248,9 @@ class Schoolyear extends System {
 	protected function getSchoolYear() {
 
 		try {
-			$schoolyear = TableMng::querySingleEntry("SELECT * FROM schoolYear
-				WHERE ID = {$_GET['ID']}");
+			$schoolyear = TableMng::querySingleEntry(
+				"SELECT * FROM SystemSchoolyears WHERE ID = {$_GET['ID']}"
+			);
 
 		} catch(Exception $e) {
 			$this->_interface->dieError(_g('Could not fetch the Schoolyear from the Database'));
@@ -246,7 +262,17 @@ class Schoolyear extends System {
 
 		if(isset($_POST['label'])) {
 			$this->checkInput();
-			$this->handleCheckboxActive();
+			if(!isset($_POST['active'])) {
+				$_POST['active'] = false;
+			}
+			else {
+				$activeId = $this->schoolyearIfActiveExistsIdGet();
+				if($activeId && $activeId != $_GET['ID']) {
+					$this->_interface->dieError(_g('An active schoolyear already exists! Please add the schoolyear without it being active and then activate it in the menu.')
+					);
+				}
+				$_POST['active'] = true;
+			}
 			$this->changeSchoolYearInDatabase();
 			$this->_interface->dieMsg(_g('The Schoolyear was successfully changed'));
 		}
@@ -264,10 +290,13 @@ class Schoolyear extends System {
 	protected function changeSchoolYearInDatabase() {
 
 		try {
-			TableMng::query("UPDATE schoolYear SET label = '{$_POST['label']}',
-				active = '{$_POST['active']}' WHERE ID = {$_GET['ID']}");
+			$active = (!empty($_POST['active'])) ? 1 : 0;
+			TableMng::query("UPDATE SystemSchoolyears SET label = '{$_POST['label']}',
+				active = '{$active}' WHERE ID = {$_GET['ID']}");
 
 		} catch(Exception $e) {
+			$this->_logger->log('Error changing the schoolyear',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
 			$this->_interface->dieError(_g('Could not change the Schoolyear'));
 		}
 	}

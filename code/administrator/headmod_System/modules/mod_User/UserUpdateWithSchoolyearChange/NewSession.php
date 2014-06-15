@@ -60,7 +60,7 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 
 		try {
 			$res = $this->_pdo->query(
-				'SELECT ID, label FROM schoolYear WHERE ID <> @activeSchoolyear'
+				'SELECT ID, label FROM SystemSchoolyears WHERE ID <> @activeSchoolyear'
 			);
 			return $res->fetchAll(\PDO::FETCH_KEY_PAIR);
 
@@ -138,7 +138,7 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'UPDATE global_settings SET value = ?
+				'UPDATE SystemGlobalSettings SET value = ?
 				WHERE name = "UserUpdateWithSchoolyearChangeGroupOfNewUser"'
 			);
 			$stmt->execute(array($groupId));
@@ -160,7 +160,7 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 
 		try {
 			$stmt = $this->_pdo->prepare('SELECT COUNT(*)
-				FROM usersInGradesAndSchoolyears WHERE schoolyearId = ?');
+				FROM SystemUsersInGradesAndSchoolyears WHERE schoolyearId = ?');
 			$stmt->execute(array($schoolyearId));
 			return (bool)(int)$stmt->fetchColumn();
 
@@ -182,7 +182,7 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'UPDATE global_settings SET value = ?
+				'UPDATE SystemGlobalSettings SET value = ?
 				WHERE name = "userUpdateWithSchoolyearChangeNewSchoolyearId"'
 			);
 			$stmt->execute(array($id));

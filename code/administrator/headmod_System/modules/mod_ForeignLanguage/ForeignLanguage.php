@@ -2,23 +2,17 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ADMIN . '/headmod_System/System.php';
+require_once PATH_INCLUDE . '/orm-entities/SystemGlobalSettings.php';
 
 class ForeignLanguage extends System {
 
-	////////////////////////////////////////////////////////////////////////////////
-	//Attributes
-
-	////////////////////////////////////////////////////////////////////////////////
-	//Constructor
-	public function __construct($name, $display_name, $path) {
-		parent::__construct($name, $display_name, $path);
-	}
-
-	////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
 	//Methods
+	/////////////////////////////////////////////////////////////////////
+
 	public function execute($dataContainer) {
 
-		defined('_AEXEC') or die('Access denied');
+		$this->entryPoint($dataContainer);
 
 		require_once 'AdminForeignLanguageInterface.php';
 		require_once 'AdminForeignLanguageProcessing.php';
@@ -30,10 +24,11 @@ class ForeignLanguage extends System {
 			$action = $_GET['action'];
 			switch ($action) {
 				case 1: //edit the language list
-					$ForeignLanguageProcessing->EditForeignLanguages(0);
+					$this->editDisplay();
 				break;
-				case 2: //save the langiuage list
-					$ForeignLanguageProcessing->EditForeignLanguages($_POST);
+				case 2: //save the language list
+					$this->editUpload($_POST);
+					// $ForeignLanguageProcessing->EditForeignLanguages($_POST);
 				break;
 				case 3: //edit the users
 					if (isset($_POST['filter'])) {
@@ -65,6 +60,55 @@ class ForeignLanguage extends System {
 			$ForeignLanguageInterface->ShowSelectionFunctionality();
 		}
 	}
+
+	/////////////////////////////////////////////////////////////////////
+	//Implements
+	/////////////////////////////////////////////////////////////////////
+
+	protected function entryPoint($dataContainer) {
+
+		parent::entryPoint($dataContainer);
+		parent::moduleTemplatePathSet();
+	}
+
+	private function editDisplay() {
+
+		$languages = array();
+		$languagesString = $this->_entityManager->getRepository(
+				'\\Babesk\\ORM\\SystemGlobalSettings'
+			)->findOneByName('foreign_language')->getValue();
+		if(!empty($languagesString)) {
+			$languages = explode('|', $languagesString);
+		}
+		$this->_smarty->assign('foreignLanguages', $languages);
+		$this->displayTpl('show_foreignLanguages.tpl');
+	}
+
+	private function editUpload($data) {
+
+		//Remove not filled out fields
+		foreach($data['foreignLanguages'] as $ind => $lan) {
+			if(empty($lan)) {
+				unset($data['foreignLanguages'][$ind]);
+			}
+		}
+		$string = implode('|', $data['foreignLanguages']);
+		//Upload foreign languages
+		$setting = $this->_entityManager->getRepository(
+				'\\Babesk\\ORM\\SystemGlobalSettings'
+			)->findOneByName('foreign_language')
+			->setValue($string);
+		$this->_entityManager->persist($setting);
+		$this->_entityManager->flush();
+		$this->_interface->dieSuccess(
+			'Die Fremdsprachen wurden erfolgreich verändert'
+		);
+	}
+
+	/////////////////////////////////////////////////////////////////////
+	//Attributes
+	/////////////////////////////////////////////////////////////////////
+
 }
 
 ?>

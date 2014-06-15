@@ -1,0 +1,157 @@
+@font-face {
+	font-family: 'iconfonts';
+	src:url('../../../images/iconfonts/iconfonts.eot?-sclaym');
+	src:url('../../../images/iconfonts/iconfonts.eot?#iefix-sclaym') format('embedded-opentype'),
+		url('../../../images/iconfonts/iconfonts.woff?-sclaym') format('woff'),
+		url('../../../images/iconfonts/iconfonts.ttf?-sclaym') format('truetype'),
+		url('../../../images/iconfonts/iconfonts.svg?-sclaym#iconfonts') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+	font-family: 'iconfonts';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* If logos are used in the navbar, make them smaller */
+.navbar [class^="icon-"],
+.navbar [class*=" icon-"],
+.navbar-inverse [class^="icon-"],
+.navbar-inverse [class*=" icon-"] {
+	font-size: 16px;
+}
+
+
+.icon-plus:before {
+	content: "\e609";
+}
+.icon-minus:before {
+	content: "\e60a";
+}
+.icon-Babesk:before {
+	content: "\e601";
+}
+.icon-Kuwasys:before {
+	content: "\e602";
+}
+.icon-clipboard:before {
+	content: "\e621";
+}
+.icon-Schbas:before {
+	content: "\e603";
+}
+.icon-counter:before {
+	content: "\e623";
+}
+.icon-PVau:before {
+	content: "\e604";
+}
+.icon-euro:before {
+	content: "\e611";
+}
+.icon-useroutline:before {
+	content: "\e613";
+}
+.icon-useraddoutline:before {
+	content: "\e614";
+}
+.icon-userremoveoutline:before {
+	content: "\e615";
+}
+.icon-editfield:before {
+	content: "\e625";
+}
+.icon-listelements:before {
+	content: "\e622";
+}
+.icon-addbookmark:before {
+	content: "\e60c";
+}
+.icon-removebookmark:before {
+	content: "\e60d";
+}
+.icon-Fits:before {
+	content: "\e605";
+}
+.icon-error:before {
+	content: "\e600";
+}
+.icon-success:before {
+	content: "\e60b";
+}
+.icon-darthvader:before {
+	content: "\e608";
+}
+.icon-uptime:before {
+	content: "\e616";
+}
+.icon-bookmark:before {
+	content: "\e627";
+}
+.icon-refresh:before {
+	content: "\e626";
+}
+.icon-Messages:before {
+	content: "\e606";
+}
+.icon-friends:before {
+	content: "\e618";
+}
+.icon-email:before {
+	content: "\e619";
+}
+.icon-businesscard:before {
+	content: "\e61a";
+}
+.icon-edit:before {
+	content: "\e624";
+}
+.icon-clock:before {
+	content: "\e61b";
+}
+.icon-info:before {
+	content: "\e60e";
+}
+.icon-move:before {
+	content: "\e628";
+}
+.icon-quoteup:before {
+	content: "\e60f";
+}
+.icon-quotedown:before {
+	content: "\e610";
+}
+.icon-credit:before {
+	content: "\e61c";
+}
+.icon-phone:before {
+	content: "\e620";
+}
+.icon-calendar:before {
+	content: "\e617";
+}
+.icon-user:before {
+	content: "\e61d";
+}
+.icon-users:before {
+	content: "\e61e";
+}
+.icon-search:before {
+	content: "\e612";
+}
+.icon-lock:before {
+	content: "\e61f";
+}
+.icon-Settings:before {
+	content: "\e607";
+}

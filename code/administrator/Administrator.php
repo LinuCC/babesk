@@ -28,8 +28,9 @@ class Administrator {
 		if(!isset($_SESSION)) {
 			$this->initEnvironment();
 		}
-
-		validSession() or die(INVALID_SESSION);
+		else if(!validSession()) {
+			die(_g('The session is invalid, please login again'));
+		}
 		$this->initSmarty();
 		TableMng::init();
 		$this->_adminInterface = new AdminInterface(NULL, $this->_smarty);
@@ -39,7 +40,7 @@ class Administrator {
 		$this->_moduleExecutionParser->setSubprogramPath(
 			'root/administrator');
 		$this->loadVersion();
-		$this->initPdo();
+		$this->initDatabaseConnections();
 		$this->_logger = new Logger($this->_pdo);
 		$this->_logger->categorySet('Administrator');
 		$this->_acl = new Acl($this->_logger, $this->_pdo);
@@ -54,13 +55,13 @@ class Administrator {
 		$login = new Login($this->_smarty, $this->_pdo, $this->_logger);
 		if($login->loginCheck()) {
 			$this->accessControlInit();
+			$this->initDisplayingModules();
 			$this->initUserInterface();
 			$this->adminBookmarks();
 			if($this->_moduleExecutionParser->load()) {
 				$this->backlink();
 				$this->moduleBacklink();
 				$this->executeModule();
-
 			}
 			else {
 				$this->MainMenu();
@@ -73,11 +74,11 @@ class Administrator {
 
 	public function initUserInterface() {
 
-		$this->_smarty->assign('_ADMIN_USERNAME', $_SESSION['username']);
+		$this->_smarty->assign('username', $_SESSION['username']);
 		$this->_smarty->assign('sid', htmlspecialchars(SID));
 
 		$this->_smarty->assign('base_path',
-			PATH_SMARTY . '/templates/administrator/base_layout.tpl');
+			PATH_SMARTY_TPL . '/administrator/base_layout.tpl');
 
 	}
 
@@ -85,6 +86,7 @@ class Administrator {
 
 		try {
 			$execCom = $this->_moduleExecutionParser->executionCommandGet();
+			$this->_smarty->assign('moduleExecCommand', $execCom);
 			$genManager = $this->_acl->moduleGeneratorManagerGet();
 			$module = $genManager->moduleByPathGet($execCom->pathGet());
 			if($module) {
@@ -98,6 +100,7 @@ class Administrator {
 			$this->_logger->log(
 				'Error executing a Module', 'Notice', Null,
 				json_encode(array(
+					'command' => $execCom->pathGet(),
 					'userId' => $_SESSION['UID'],
 					'msg' => $e->getMessage()
 			)));
@@ -117,22 +120,9 @@ class Administrator {
 	public function MainMenu() {
 
 		$adminModule = $this->_acl->moduleGet('root/administrator');
-
-		if($adminModule) {
-			$this->_smarty->assign('is_mainmenu', true);
-			$this->_smarty->assign('headmodules', $adminModule->getChilds());
-			$this->_smarty->assign(
-				'moduleGenMan', $this->_acl->moduleGeneratorManagerGet());
-			$this->_smarty->display('administrator/menu.tpl');
-		}
-		else {
-			$this->_logger->log('Administrator-Layer access denied.',
-				'Notice', null, json_encode(array(
-					'userId' => $_SESSION['UID']))
-			);
-			$this->_adminInterface->dieError(_g('Error Accessing the Admin-Layer; Either the Module does not exist, or you dont have the rights to access it!'));
-		}
-
+		$this->_smarty->display(
+			PATH_SMARTY_TPL . '/administrator/menu.tpl'
+		);
 	}
 
 
@@ -173,8 +163,12 @@ class Administrator {
 		require_once PATH_SMARTY . "/smarty_init.php";
 
 		$this->_smarty = $smarty;
-		// $this->_smarty->assign('smarty_path', REL_PATH_SMARTY);
 		$this->_smarty->assign('status', '');
+
+		$relRoot = '../';
+		$smarty->assign('path_smarty_tpl', $relRoot . 'smarty_templates');
+		$smarty->assign('path_js', $relRoot . 'include/js');
+		$smarty->assign('path_css', $relRoot . 'include/css');
 
 		$version=@file_get_contents("../version.txt");
 		if ($version===FALSE) $version = "";
@@ -186,14 +180,17 @@ class Administrator {
 	 *
 	 * triggers an error when
 	 */
-	private function initPdo() {
+	private function initDatabaseConnections() {
 
 		try {
 			$connector = new DBConnect();
 			$connector->initDatabaseFromXML();
 			$this->_pdo = $connector->getPdo();
-			$this->_pdo->query('SET @activeSchoolyear :=
-				(SELECT ID FROM schoolYear WHERE active = "1" LIMIT 1);');
+			$this->_entityManager = $connector->getDoctrineEntityManager();
+			$this->_pdo->query(
+				'SET @activeSchoolyear :=
+				(SELECT ID FROM SystemSchoolyears WHERE active = "1" LIMIT 1);
+			');
 
 		} catch (Exception $e) {
 			trigger_error('Could not create the PDO-Object!');
@@ -206,6 +203,25 @@ class Administrator {
 		ini_set('session.use_cookies', 1);
 		ini_set('session.use_only_cookies', 0);
 		ini_set("default_charset", "utf-8");
+	}
+
+	private function initDisplayingModules() {
+
+		$adminModule = $this->_acl->moduleGet('root/administrator');
+
+		if($adminModule) {
+			$this->_smarty->assign('is_mainmenu', true);
+			$this->_smarty->assign('headmodules', $adminModule->getChilds());
+			$this->_smarty->assign(
+				'moduleGenMan', $this->_acl->moduleGeneratorManagerGet());
+		}
+		else {
+			$this->_logger->log('Administrator-Layer access denied.',
+				'Notice', null, json_encode(array(
+					'userId' => $_SESSION['UID']))
+			);
+			$this->_adminInterface->dieError(_g('Error Accessing the Admin-Layer; Either the Module does not exist, or you dont have the rights to access it!'));
+		}
 	}
 
 	private function loadVersion() {
@@ -246,12 +262,12 @@ class Administrator {
 			$stmt = $this->_pdo->prepare(
 				'SELECT bmid, (
 						SELECT GROUP_CONCAT(parent.name ORDER BY parent.lft ASC SEPARATOR "|")
-						FROM Modules AS node,
-							Modules AS parent
+						FROM SystemModules AS node,
+							SystemModules AS parent
 						WHERE node.lft BETWEEN parent.lft AND parent.rgt
 							AND node.ID = mid
 					) AS modulePath
-				FROM adminBookmarks WHERE uid = :userId
+				FROM SystemAdminBookmarks WHERE uid = :userId
 				-- Order it so we dont need to order manually in PHP or Smarty
 				ORDER BY bmid'
 			);
@@ -304,7 +320,9 @@ class Administrator {
 			clone($this->_adminInterface),
 			clone($this->_acl),
 			$this->_pdo,
-			clone($this->_logger));
+			$this->_entityManager,
+			clone($this->_logger)
+		);
 
 		return $dataContainer;
 	}
@@ -317,6 +335,12 @@ class Administrator {
 	 * The Access-Control-Layer
 	 */
 	private $_acl;
+
+	/**
+	 * Doctrines entity Manager
+	 * @var EntityManager
+	 */
+	private $_entityManager;
 
 	/**
 	 * The Interface handling displaying stuff

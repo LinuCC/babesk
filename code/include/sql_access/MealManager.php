@@ -3,7 +3,6 @@
  * Provides a class to manage the meals of the system
  */
 
-require_once PATH_INCLUDE . '/constants.php';
 require_once PATH_ACCESS . '/TableManager.php';
 
 /**
@@ -12,7 +11,7 @@ require_once PATH_ACCESS . '/TableManager.php';
 class MealManager extends TableManager {
 
 	function __construct () {
-		parent::__construct('meals');
+		parent::__construct('BabeskMeals');
 	}
 
 	/**
@@ -30,7 +29,7 @@ class MealManager extends TableManager {
 		$query =
 			'SELECT *
     				FROM
-    					meals
+    					BabeskMeals
     				WHERE
     					date >= "'
 			. $date . '"
@@ -66,19 +65,19 @@ class MealManager extends TableManager {
 		include 'databaseDistributor.php';
 		$res_array = NULL;
 		if (!$order_str) {
-			$query = sql_prev_inj(sprintf('SELECT *  FROM meals
+			$query = sql_prev_inj(sprintf('SELECT *  FROM BabeskMeals
     				 WHERE date between "%s" and "%s"',
 				$date1, $date2));
 		} else {
 			$query = sql_prev_inj(sprintf(
-				'SELECT *  FROM meals
+				'SELECT *  FROM BabeskMeals
     				 WHERE date between "%s" and "%s" ORDER BY %s', $date1, $date2,
 				$order_str));
 		}
 
 		$result = $this->db->query($query);
 		if (!$result) {
-			echo DB_CONNECT_ERROR . $this->db->error;
+			echo _g('Error occured while fetching the meals');
 			exit;
 		}
 		$is_void = true;
@@ -101,11 +100,11 @@ class MealManager extends TableManager {
 		}
 		include 'databaseDistributor.php';
 		$res_array = NULL;
-		$query = sql_prev_inj(sprintf('SELECT DISTINCT MID FROM orders WHERE date="%s";', $date)
+		$query = sql_prev_inj(sprintf('SELECT DISTINCT MID FROM BabeskOrders WHERE date="%s";', $date)
 			);
 		$result = $this->db->query($query);
 		if (!$result) {
-			echo DB_CONNECT_ERROR . $this->db->error;
+			echo _g('Error occured while fetching the meal-ids at date');
 			exit;
 		}
 		while ($buffer = $result->fetch_assoc())
@@ -118,7 +117,7 @@ class MealManager extends TableManager {
 	 * @param id the menu id
 	 */
 	public function GetMealName ($id) {
-		
+
 		$name = $this->getEntryValue($id, 'name');
 		return $name;
 	}
@@ -146,7 +145,7 @@ class MealManager extends TableManager {
 		$query = sql_prev_inj(sprintf('DELETE FROM %s WHERE date < "%s"', $this->tablename, date('Y-m-d', $timestamp)));
 		$result = $this->db->query($query);
 		if (!$result)
-			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error);
+			throw new MySQLConnectionException($this->db->error);
 	}
 }
 

@@ -1,0 +1,23 @@
+CREATE TABLE `SystemUsers` (
+  `ID` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) COLLATE latin1_german2_ci NOT NULL DEFAULT '',
+  `forename` varchar(64) COLLATE latin1_german2_ci NOT NULL DEFAULT '',
+  `username` varchar(64) COLLATE latin1_german2_ci NOT NULL DEFAULT '',
+  `password` varchar(100) COLLATE latin1_german2_ci NOT NULL DEFAULT '',
+  `email` varchar(64) COLLATE latin1_german2_ci NOT NULL DEFAULT '',
+  `telephone` varchar(64) COLLATE latin1_german2_ci NOT NULL DEFAULT '',
+  `birthday` varchar(11) COLLATE latin1_german2_ci NOT NULL DEFAULT '',
+  `last_login` varchar(11) COLLATE latin1_german2_ci NOT NULL DEFAULT '',
+  `login_tries` smallint(5) DEFAULT NULL,
+  `first_passwd` tinyint(1) NOT NULL DEFAULT '0',
+  `locked` tinyint(1) NOT NULL DEFAULT '0',
+  `GID` int(11) NOT NULL,
+  `credit` decimal(6,2) NOT NULL DEFAULT '0.00',
+  `soli` tinyint(1) NOT NULL DEFAULT '0',
+  `religion` varchar(3) COLLATE latin1_german2_ci NOT NULL DEFAULT '',
+  `foreign_language` varchar(30) COLLATE latin1_german2_ci NOT NULL DEFAULT '',
+  `course` varchar(30) COLLATE latin1_german2_ci NOT NULL DEFAULT '',
+  `special_course` varchar(30) COLLATE latin1_german2_ci NOT NULL DEFAULT '',
+  PRIMARY KEY (`ID`),
+  KEY `ID` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci

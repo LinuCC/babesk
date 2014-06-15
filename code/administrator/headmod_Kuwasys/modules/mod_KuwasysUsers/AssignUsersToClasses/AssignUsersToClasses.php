@@ -63,7 +63,7 @@ class AssignUsersToClasses extends \KuwasysUsers {
 	 */
 	protected function statusIdGetByNameWoException($statusName) {
 
-		$stmt = $this->_pdo->prepare('SELECT ID FROM usersInClassStatus
+		$stmt = $this->_pdo->prepare('SELECT ID FROM KuwasysUsersInClassStatuses
 			WHERE name = :name');
 
 		$stmt->execute(array('name' => $statusName));

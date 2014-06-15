@@ -116,8 +116,16 @@ class Acl {
 
 			$this->_executionTries += 1;
 			$dataContainer->setExecutionCommand($command);
-			$this->moduleExecuteHelper(
-				$command, $dataContainer);
+			try {
+				$this->moduleExecuteHelper(
+					$command, $dataContainer);
+			} catch (AclException $e) {
+				$this->_logger->log(__METHOD__ . ': ' .
+					'None of the Modules in Path found!','Moderate', NULL,
+					json_encode(array('path' => $command->pathGet()))
+				);
+				throw $e;
+			}
 		}
 		else {
 			throw new AclException('Module-Access forbidden', 105);
@@ -337,12 +345,9 @@ class Acl {
 					$this->moduleExecuteHelper($command, $dataContainer);
 				}
 				else {
-					$this->_logger->log(__METHOD__ . ': ' .
-						'None of the Modules in Path found!','Moderate', NULL,
-						json_encode(array('path' => $command->pathGet()))
-					);
 					throw new AclException(
-						'None of the Modules in Path found!');
+						'None of the Modules in Path found!'
+					);
 				}
 			}
 		}

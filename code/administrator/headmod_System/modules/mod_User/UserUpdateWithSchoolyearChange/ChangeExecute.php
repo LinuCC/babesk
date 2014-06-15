@@ -74,20 +74,20 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 		$this->usersToChangeCheckGrades();
 
 		try {
-			$queryJoints = 'INSERT INTO usersInGradesAndSchoolyears (
+			$queryJoints = 'INSERT INTO SystemUsersInGradesAndSchoolyears (
 					userId, gradeId, schoolyearId
 				) SELECT su.origUserId, g.ID,
-					(SELECT value FROM global_settings
+					(SELECT value FROM SystemGlobalSettings
 						WHERE name =
 							"userUpdateWithSchoolyearChangeNewSchoolyearId"
 					) AS schoolyear
 				FROM UserUpdateTempSolvedUsers su
-					LEFT JOIN Grades g ON g.gradelevel = su.gradelevel AND
+					LEFT JOIN SystemGrades g ON g.gradelevel = su.gradelevel AND
 						g.label = su.gradelabel
 					WHERE su.origUserId <> 0
 			';
 			//Update user-entries if data is given
-			$queryUsers = 'UPDATE users u
+			$queryUsers = 'UPDATE SystemUsers u
 				LEFT JOIN UserUpdateTempSolvedUsers su ON u.ID = su.origUserId
 				SET u.email = IFNULL(su.newEmail, u.email),
 					u.telephone = IFNULL(su.newTelephone, u.telephone),
@@ -137,7 +137,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 		try {
 			$stmt = $this->_pdo->query(
 				'SELECT ID, CONCAT(gradelevel, label) AS name
-				FROM Grades WHERE 1'
+				FROM SystemGrades WHERE 1'
 			);
 			return $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);
 
@@ -163,21 +163,21 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 			}
 
 			$stmtu = $this->_pdo->prepare(
-				'INSERT INTO users
+				'INSERT INTO SystemUsers
 					(forename, name, username, password, email, telephone,
 						last_login, locked, GID, credit, soli, birthday)
 				VALUES (?, ?, IFNULL(?, CONCAT(forename, ".", name)), "", IFNULL(?, ""), IFNULL(?, ""), "", 0, 0, 0, 0, ?)'
 			);
 			$stmtg = $this->_pdo->prepare(
-				'INSERT INTO usersInGradesAndSchoolyears (
+				'INSERT INTO SystemUsersInGradesAndSchoolyears (
 					userId, gradeId, schoolyearId
-				) VALUES (? ,?, (SELECT value FROM global_settings
+				) VALUES (? ,?, (SELECT value FROM SystemGlobalSettings
 					WHERE name =
 						"userUpdateWithSchoolyearChangeNewSchoolyearId"
 				))'
 			);
 			$stmtgroups = $this->_pdo->prepare(
-				'INSERT INTO UserInGroups (userId, groupId) VALUES
+				'INSERT INTO SystemUsersInGroups (userId, groupId) VALUES
 				(?, ?)'
 			);
 
@@ -213,7 +213,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 
 		try {
 			$res = $this->_pdo->query(
-				'SELECT value FROM global_settings WHERE
+				'SELECT value FROM SystemGlobalSettings WHERE
 					name = "UserUpdateWithSchoolyearChangeGroupOfNewUser"'
 			);
 			$data = $res->fetchColumn();
@@ -272,7 +272,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 		try {
 			if(empty($this->_gradeStmt)) {
 				$this->_gradeStmt = $this->_pdo->prepare(
-					'INSERT INTO Grades (label, gradelevel, schooltypeId) VALUES (?,?, 0)'
+					'INSERT INTO SystemGrades (label, gradelevel, schooltypeId) VALUES (?,?, 0)'
 				);
 			}
 			$this->_gradeStmt->execute(array($label, $level));
@@ -298,7 +298,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 		try {
 			$res = $this->_pdo->query('SELECT su.*, g.ID AS gradeId
 				FROM UserUpdateTempSolvedUsers su
-				LEFT JOIN Grades g ON su.gradelevel = g.gradelevel AND
+				LEFT JOIN SystemGrades g ON su.gradelevel = g.gradelevel AND
 					su.gradelabel = g.label
 				WHERE su.origUserId = 0');
 			$users = $res->fetchAll(\PDO::FETCH_ASSOC);
@@ -322,7 +322,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 			$res = $this->_pdo->query('SELECT su.ID, g.ID AS gradeId,
 					su.gradelevel AS gradelevel, su.gradelabel AS gradelabel
 				FROM UserUpdateTempSolvedUsers su
-				LEFT JOIN Grades g ON su.gradelevel = g.gradelevel AND
+				LEFT JOIN SystemGrades g ON su.gradelevel = g.gradelevel AND
 					su.gradelabel = g.label
 				WHERE su.origUserId <> 0');
 			$users = $res->fetchAll(\PDO::FETCH_ASSOC);
@@ -344,9 +344,9 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 
 		try {
 			$this->_pdo->query(
-				'UPDATE schoolYear SET active = 0 WHERE active = 1;
-				UPDATE schoolYear SET active = 1 WHERE ID = (
-					SELECT value FROM global_settings
+				'UPDATE SystemSchoolyears SET active = 0 WHERE active = 1;
+				UPDATE SystemSchoolyears SET active = 1 WHERE ID = (
+					SELECT value FROM SystemGlobalSettings
 						WHERE name =
 							"userUpdateWithSchoolyearChangeNewSchoolyearId")'
 			);

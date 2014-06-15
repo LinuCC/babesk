@@ -50,7 +50,7 @@ class MealsForOrderDisplayer {
 
 	protected function settingsFetch() {
 
-		$data = TableMng::query('SELECT * FROM global_settings
+		$data = TableMng::query('SELECT * FROM SystemGlobalSettings
 			WHERE name = "displayMealsStartdate" OR
 				name = "displayMealsEnddate" OR
 				name = "orderEnddate" OR
@@ -149,8 +149,8 @@ class MealsForOrderDisplayer {
 	protected function userHasValidCoupon($mealId) {
 
 		$hasCoupon = TableMng::query("SELECT COUNT(*) AS count
-				FROM soli_coupons sc
-				JOIN meals m ON m.ID = $mealId
+				FROM BabeskSoliCoupons sc
+				JOIN BabeskMeals m ON m.ID = $mealId
 				WHERE m.date BETWEEN sc.startdate AND sc.enddate AND
 				UID = $_SESSION[uid]");
 
@@ -164,21 +164,21 @@ class MealsForOrderDisplayer {
 
 		try {
 
-			$hasSoli = TableMng::query("SELECT soli FROM users
+			$hasSoli = TableMng::query("SELECT soli FROM SystemUsers
 					WHERE ID = $_SESSION[uid]");
 
 			$meals = TableMng::query("SELECT m.*, pc.price AS price,
 					pc.pc_ID AS priceclassId, pc.name AS priceclassName
-				FROM meals m
-				JOIN users u ON u.ID = $_SESSION[uid]
-				JOIN price_classes pc
+				FROM BabeskMeals m
+				JOIN SystemUsers u ON u.ID = $_SESSION[uid]
+				JOIN BabeskPriceClasses pc
 					ON m.price_class = pc.pc_ID AND pc.GID = u.GID
 				WHERE date BETWEEN '$startdate' AND '$enddate'
 					ORDER BY date, price_class");
 
 			if ($this->_isSolipriceEnabled && $hasSoli[0]['soli']=="1") {
 
-				$soliPrice = TableMng::query('SELECT value FROM global_settings
+				$soliPrice = TableMng::query('SELECT value FROM SystemGlobalSettings
 				WHERE name LIKE "soli_price"');
 
 				foreach ($meals as &$meal) {
@@ -260,7 +260,7 @@ class MealsForOrderDisplayer {
 
 	protected function infotextsFetch() {
 
-		$data = TableMng::query('SELECT * FROM global_settings
+		$data = TableMng::query('SELECT * FROM SystemGlobalSettings
 			WHERE name = "menu_text1" OR name = "menu_text2"');
 
 		if(count($data) == 2) {
@@ -286,7 +286,7 @@ class MealsForOrderDisplayer {
 	protected function isSolipriceEnabledGet() {
 
 		try {
-			$stmt = $this->_pdo->query("SELECT `value` FROM `global_settings`
+			$stmt = $this->_pdo->query("SELECT `value` FROM `SystemGlobalSettings`
 				WHERE `name` = 'solipriceEnabled'");
 
 			return $stmt->fetchColumn() == '1';

@@ -196,7 +196,7 @@ class GeneralPdf {
 
 		if(empty($this->_globalSettingsStmt)) {
 			$this->_globalSettingsStmt = $this->_pdo->prepare(
-				'SELECT value FROM global_settings WHERE name = :name'
+				'SELECT value FROM SystemGlobalSettings WHERE name = :name'
 			);
 		}
 

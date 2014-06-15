@@ -73,7 +73,7 @@ class Schooltype extends System {
 		$data = array();
 
 		try {
-			$data = TableMng::query('SELECT * FROM Schooltype;');
+			$data = TableMng::query('SELECT * FROM SystemSchooltypes;');
 
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->showError('Es sind keine Schultypen vorhanden');
@@ -92,7 +92,7 @@ class Schooltype extends System {
 
 		try {
 			$data = TableMng::query(sprintf(
-				'SELECT * FROM Schooltype WHERE `ID` = "%s"', $id));
+				'SELECT * FROM SystemSchooltypes WHERE `ID` = "%s"', $id));
 
 		} catch (MySQLVoidDataException $e) {
 			$this->_interface->dieError('Der Schultyp konnte nicht gefunden werden');
@@ -112,7 +112,7 @@ class Schooltype extends System {
 
 		try {
 			TableMng::query(sprintf(
-				'INSERT INTO Schooltype (name) VALUES ("%s")', $name));
+				'INSERT INTO SystemSchooltypes (name) VALUES ("%s")', $name));
 
 		} catch (Exception $e) {
 			$this->_interface->dieError(
@@ -158,7 +158,7 @@ class Schooltype extends System {
 
 		try {
 			TableMng::query(sprintf(
-				'UPDATE Schooltype SET name = "%s" WHERE ID = "%s"', $name,
+				'UPDATE SystemSchooltypes SET name = "%s" WHERE ID = "%s"', $name,
 				$id));
 
 		} catch (Exception $e) {
@@ -191,7 +191,7 @@ class Schooltype extends System {
 
 		try {
 			TableMng::query(sprintf(
-				'DELETE FROM Schooltype WHERE `ID` = %s', $id));
+				'DELETE FROM SystemSchooltypes WHERE `ID` = %s', $id));
 
 		} catch (Exception $e) {
 			$this->_interface->dieError('Konnte den Schultypen nicht löschen');
@@ -204,7 +204,7 @@ class Schooltype extends System {
 	 */
 	protected function isEnabled() {
 		try {
-			$data = TableMng::query('SELECT value FROM global_settings
+			$data = TableMng::query('SELECT value FROM SystemGlobalSettings
 				WHERE name = "schooltypeEnabled"');
 
 		} catch (MySQLVoidDataException $e) {
@@ -225,7 +225,7 @@ class Schooltype extends System {
 	protected function isEnabledAddEntry() {
 
 		try {
-			TableMng::query('INSERT INTO global_settings (`name`, `value`)
+			TableMng::query('INSERT INTO SystemGlobalSettings (`name`, `value`)
 				VALUES ("schooltypeEnabled", 0)');
 
 		} catch (Exception $e) {
@@ -238,7 +238,7 @@ class Schooltype extends System {
 		$ie = ($isEnabled) ? '1' : '0';
 
 		try {
-			TableMng::query(sprintf('UPDATE global_settings SET value = "%s"
+			TableMng::query(sprintf('UPDATE SystemGlobalSettings SET value = "%s"
 							WHERE name = "schooltypeEnabled"', $ie));
 
 		} catch (Exception $e) {

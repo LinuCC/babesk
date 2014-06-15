@@ -1,6 +1,6 @@
 [submodule "code/include/smarty"]
 	path = code/include/smarty
 	url = https://github.com/CaiusCaligulaCC/smarty3-i18n.git
-[submodule "code/include/smarty-gettext"]
-	path = code/include/smarty-gettext
+[submodule "code/include/3rdParty/smarty-gettext"]
+	path = code/include/3rdParty/smarty-gettext
 	url = https://github.com/CaiusCaligulaCC/smarty3-i18n.git

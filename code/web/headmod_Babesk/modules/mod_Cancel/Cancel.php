@@ -11,7 +11,7 @@ class Cancel extends Babesk {
 
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
-		$this->smartyPath = PATH_SMARTY . '/templates/web' . $path;
+		$this->smartyPath = PATH_SMARTY_TPL . '/web' . $path;
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -59,14 +59,14 @@ class Cancel extends Babesk {
 		$data = TableMng::query("SELECT o.*, u.credit AS userCredits,
 				m.ID AS mealId, sc.ID AS solicouponId,
 				pc.price AS price
-			FROM orders o
-			JOIN users u ON u.ID = $_SESSION[uid]
-			JOIN meals m ON o.MID = m.ID
-			LEFT JOIN soli_coupons sc ON sc.UID = u.ID AND
+			FROM BabeskOrders o
+			JOIN SystemUsers u ON u.ID = $_SESSION[uid]
+			JOIN BabeskMeals m ON o.MID = m.ID
+			LEFT JOIN BabeskSoliCoupons sc ON sc.UID = u.ID AND
 				m.date BETWEEN sc.startdate AND sc.enddate
-			JOIN price_classes pc ON m.price_class = pc.pc_ID AND u.GID = pc.GID
+			JOIN BabeskPriceClasses pc ON m.price_class = pc.pc_ID AND u.GID = pc.GID
 			WHERE o.ID = $orderId
-			-- If multiple soli_coupons at same time active, group to one
+			-- If multiple BabeskSoliCoupons at same time active, group to one
 			GROUP BY sc.UID;");
 
 		if(count($data)) {
@@ -126,7 +126,7 @@ class Cancel extends Babesk {
 	protected function lastOrdercancelDatemodGet() {
 
 		try {
-			$data = TableMng::query('SELECT * FROM global_settings
+			$data = TableMng::query('SELECT * FROM SystemGlobalSettings
 				WHERE name = "ordercancelEnddate"');
 
 		} catch (Exception $e) {
@@ -186,7 +186,7 @@ class Cancel extends Babesk {
 	 */
 	protected function soliPriceGet() {
 
-		$soliPrice = TableMng::query('SELECT * FROM global_settings
+		$soliPrice = TableMng::query('SELECT * FROM SystemGlobalSettings
 			WHERE name = "soli_price"');
 		if(count($soliPrice)) {
 			return ((int) $soliPrice[0]['value']);
@@ -205,9 +205,9 @@ class Cancel extends Babesk {
 	protected function userHasValidCoupon() {
 
 		$hasCoupon = TableMng::query("SELECT COUNT(*) AS count
-			FROM soli_coupons sc
-			JOIN meals m ON m.ID = {$this->_orderData['mealId']}
-			JOIN users u ON u.ID = sc.UID
+			FROM BabeskSoliCoupons sc
+			JOIN BabeskMeals m ON m.ID = {$this->_orderData['mealId']}
+			JOIN SystemUsers u ON u.ID = sc.UID
 			WHERE m.date BETWEEN sc.startdate AND sc.enddate AND
 				sc.UID = $_SESSION[uid] AND u.soli = 1");
 
@@ -223,7 +223,7 @@ class Cancel extends Babesk {
 
 		$newBalance = $this->_orderData['userCredits'] + $amount;
 		$newBalanceStr = str_replace(',', '.', (string) $newBalance);
-		TableMng::query("UPDATE users SET credit = '$newBalanceStr' WHERE $_SESSION[uid] = ID");
+		TableMng::query("UPDATE SystemUsers SET credit = '$newBalanceStr' WHERE $_SESSION[uid] = ID");
 	}
 
 	/**
@@ -233,10 +233,10 @@ class Cancel extends Babesk {
 	 */
 	protected function orderDbEntryDelete($orderId) {
 
-		TableMng::query("DELETE FROM orders WHERE ID = $orderId");
+		TableMng::query("DELETE FROM BabeskOrders WHERE ID = $orderId");
 
 		if($this->_isSoli) {
-			TableMng::query("DELETE FROM soli_orders WHERE ID = $orderId");
+			TableMng::query("DELETE FROM BabeskSoliOrders WHERE ID = $orderId");
 		}
 	}
 
@@ -248,7 +248,7 @@ class Cancel extends Babesk {
 	protected function isSolipriceEnabledGet() {
 
 		try {
-			$stmt = $this->_pdo->query("SELECT `value` FROM `global_settings`
+			$stmt = $this->_pdo->query("SELECT `value` FROM `SystemGlobalSettings`
 				WHERE `name` = 'solipriceEnabled'");
 
 			return $stmt->fetchColumn() == '1';

@@ -70,12 +70,12 @@ class AdminCardInfoProcessing {
 		try {
 			$data = TableMng::query(sprintf(
 				'SELECT u.*,
-				(SELECT CONCAT(g.gradelevel, g.label) AS class
-					FROM usersInGradesAndSchoolyears uigs
-					LEFT JOIN Grades g ON uigs.gradeId = g.ID
+				(SELECT CONCAT(g.gradelevel, g.label) AS KuwasysClasses
+					FROM SystemUsersInGradesAndSchoolyears uigs
+					LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
-						uigs.schoolyearId = @activeSchoolyear) AS class
-				FROM users u WHERE ID = %s', $uid), true);
+						uigs.schoolyearId = @activeSchoolyear) AS KuwasysClasses
+				FROM SystemUsers u WHERE ID = %s', $uid), true);
 
 		} catch (MySQLVoidDataException $e) {
 			$this->cardInfoInterface->dieError('Der Benutzer wurde nicht gefunden');

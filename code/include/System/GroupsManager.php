@@ -36,8 +36,8 @@ class GroupsManager {
 			$res = $this->_pdo->query(
 				"SELECT node.ID AS ID, node.name AS name, node.lft AS lft,
 					node.rgt AS rgt
-				FROM Groups AS node,
-					Groups AS parent
+				FROM SystemGroups AS node,
+					SystemGroups AS parent
 				WHERE node.lft BETWEEN parent.lft AND parent.rgt
 					AND parent.id = $nodeId
 				GROUP BY node.ID
@@ -66,8 +66,8 @@ class GroupsManager {
 		try {
 			$stmt = $this->_pdo->prepare(
 				'SELECT node.ID
-				FROM Groups AS node,
-						Groups AS parent
+				FROM SystemGroups AS node,
+						SystemGroups AS parent
 				WHERE node.lft BETWEEN parent.lft AND parent.rgt
 					AND node.name = ?
 				GROUP BY node.ID

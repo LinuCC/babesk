@@ -1,0 +1,403 @@
+@import url('open_sans.css');
+
+body {
+	background-color: #F3F3F3;
+}
+
+hr {
+	border-top: 1px solid #BBBBBB;
+}
+
+.moduleHeader {
+	text-align: center;
+	margin-top: 0;
+	margin-bottom: 30px;
+	padding: 10px;
+	color: #777777;
+	text-shadow: 1px 1px #fff;
+	/*background-color: #AADD33;*/
+	/*border-bottom: 2px solid #AADD33;*/
+}
+
+.module_breadcrumb.breadcrumb {
+	background-color: #494949;
+	/*width: 100%;*/
+	margin: 0;
+	padding: 5px;
+	border-radius: 0;
+	color: #CCC;
+	font-size: 80%;
+	border-bottom: 1px solid #111;
+}
+
+.module_breadcrumb.breadcrumb > li + li:before {
+	color: #888;
+	padding: 0 0 0 2px;
+}
+
+.module_breadcrumb a {
+	color: #AAE;
+}
+
+.container-fluid {
+	margin-right: auto;
+	margin-left: auto;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+#navigation {
+	background-image: -webkit-gradient(linear, left 0%, left 100%, from(#AADD33), to(#91BD2B));
+	background-image: -webkit-linear-gradient(top, #AADD33 0%, #91BD2B, 100%);
+	background-image: -moz-linear-gradient(top, #AADD33 0%, #91BD2B 100%);
+	background-image: linear-gradient(to bottom, #AADD33 0%, #91BD2B 100%);
+	background-repeat: repeat-x;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffAADD33', endColorstr='#ff91BD2B', GradientType=0);
+	border-bottom: 1px solid #151515;
+	padding-right: 20px;
+}
+
+#navigation.navbar-default .navbar-brand,
+#navigation.navbar-default .navbar-nav > li > a {
+	color: #222;
+}
+
+#navigation.navbar-default .navbar-brand:hover,
+#navigation.navbar-default .navbar-nav > li > a:hover {
+	color: #666;
+}
+
+#navigation .navbar-nav .active > a {
+	background-color: #595757;
+}
+
+#navigation.navbar-default .navbar-nav > .open > a,
+#navigation.navbar-default .navbar-nav > .open > a:hover,
+#navigation.navbar-default .navbar-nav > .open > a:focus {
+	background-image: -webkit-gradient(linear, left 0%, left 100%, from(#AADD33), to(#91BD2B));
+	background-image: -webkit-linear-gradient(top, #AADD33 0%, #91BD2B, 100%);
+	background-image: -moz-linear-gradient(top, #AADD33 0%, #91BD2B 100%);
+	background-image: linear-gradient(to bottom, #AADD33 0%, #91BD2B 100%);
+	background-repeat: repeat-x;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffAADD33', endColorstr='#ff91BD2B', GradientType=0);
+}
+
+#navigation.navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
+	color: #EEEEEE;
+}
+
+#navigation.navbar-inverse .navbar-nav .open .dropdown-menu > li > a:hover {
+	color: #FFFFFF;
+}
+
+#navigation.navbar-inverse .dropdown-menu > li > p {
+	margin: 0;
+	padding: 3px 20px;
+	white-space: nowrap;
+}
+
+#navigation .highlighted {
+	color: #AADD33;
+}
+
+#navigation .icon-Settings {
+	position: relative;
+	top: 2px;
+}
+
+#dropdown-user {
+	background-color: #6C6A6A;
+	border: none;
+}
+
+.sidebar {
+	position: fixed;
+	top: 50px;
+	bottom: 0;
+	left: 0;
+	padding: 0;
+	z-index: 1000;
+	display: block;
+	overflow-x: hidden;
+	background-color: #333;
+	border-right: 1px solid #151515;
+	box-shadow: 2px 0px 2px #666;
+	width: 250px;
+}
+
+#sidebar-module-selection {
+}
+
+#sidebar-module-selection li {
+	background-color: #333;
+	text-shadow: 2px 2px 2px #111;
+}
+
+#sidebar-module-selection .nav > li > a {
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+#sidebar-module-selection li > ul > li {
+	background-color: #3A3A3A;
+}
+
+#sidebar-module-selection li > ul > li > ul > li {
+	background-color: #444;
+}
+
+#sidebar-module-selection .nav>li>a:hover,
+#sidebar-module-selection .nav>li>a:focus {
+	background-color: transparent;
+	background: transparent;
+	color: #fd3;
+	transition-property: color;
+	transition-duration: 0.1s;
+}
+
+#sidebar-module-selection a {
+	color: #AADD33;
+	width: 100%;
+	line-height: 20px;
+	word-wrap: break-word;
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+}
+
+#sidebar-module-selection a .toggle-icon {
+	line-height: 20px;
+	font-size: 10px;
+}
+
+#sidebar-module-selection .spacer {
+	height: 40px;
+}
+
+#sidebar-module-selection .text-icon-spacer {
+	padding: 0;
+}
+
+#sidebar-module-selection .text-icon-spacer span {
+	padding: 0;
+}
+
+#main_wrapper {
+	/*position: relative;*/
+	margin-top: 60px;
+	padding: 0px;
+	margin-left: 251px;
+}
+
+
+#content > h2, h3 {
+	text-align: center;
+}
+
+.error-container .panel-title,
+.message-container .panel-title,
+.success-container .panel-title {
+	text-align: center;
+	line-height: 32px;
+}
+
+.error-container .icon-container,
+.message-container .icon-container,
+.success-container .icon-container {
+	font-size: 32px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.error-container [class^="icon-"],
+.error-container [class*=" icon-"] {
+	color: #b94a48;
+}
+
+.error-container .btn,
+.message-container .btn,
+.success-container .btn {
+	margin-top: 20px;
+}
+
+div.quotebox, p.quotebox {
+
+	border-left: 4px solid #AADD33;
+	padding: 5px;
+	background-color: #EEEEEE;
+}
+
+.panel.bg-fit {
+	background-color: #F5F5D1;
+}
+
+.panel-primary {
+	border-color: #AADD33;
+}
+
+.panel-primary > .panel-heading {
+	background-image: none;
+	background-color: #AADD33;
+	border-color: #AADD33;
+}
+
+.panel-primary > .panel-heading > .panel-title {
+	/*font-weight: bold;*/
+	color: #455912;
+}
+
+.class-container h4.panel-title {
+	display: inline;
+}
+
+.expand-button-content {
+	font-size: 12px;
+	margin-right: 5px;
+}
+
+#selector-container .submit-button {
+	margin-right: 10px;
+}
+
+.input-group .icon {
+	color: #888888;
+	font-size: 16px;
+}
+
+.input-group label {
+	color: #666666;
+	font-size: 14px;
+}
+
+.form-group label {
+	padding-right: 15px;
+	color: #444444;
+}
+
+label {
+	font-weight: 400;
+}
+
+fieldset {
+	padding: 5px;
+	border: 1px solid #BBBBBB;
+	border-radius: 3px;
+	margin-bottom: 10px;
+}
+
+fieldset > legend {
+	display: inline;
+	font-size: 14px;
+	color: #777777;
+	margin-bottom: 0;
+	padding: 0 5px;
+	width: auto;
+	border: none;
+}
+
+label.valid {
+	width: 24px;
+	height: 24px;
+	background: url(assets/img/valid.png) center center no-repeat;
+	display: inline-block;
+	text-indent: -9999px;
+}
+label.error {
+	font-weight: bold;
+	color: red;
+	padding: 2px 8px;
+	margin-top: 2px;
+}
+
+a.label:hover {
+	text-decoration: none;
+	transition-property: color;
+	transition-duration: 0.15s;
+	color: #AADD33;
+}
+
+.pagination {
+	margin: 0;
+}
+
+ul.submodulelinkList li {
+	list-style: none;
+	font-size: 18px;
+	line-height: 1.3em;
+	padding: 10px 0;
+}
+
+ul.submodulelinkList li a {
+	color: #333;
+}
+
+ul.submodulelinkList li a:hover {
+	color: #77AA22;
+	text-decoration: none;
+	transition-property: color;
+	transition-duration: 0.15s;
+}
+
+.panel-title {
+	text-align: center;
+	line-height: 32px;
+}
+
+.panel-title h3 {
+	line-height: 32px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.table-hover > tbody > tr:hover > td,
+.table-hover > tbody > tr:hover > th {
+  background-color: #E8FFB3;
+}
+
+/* Autocomplete should be over the bootstrap-modals */
+ul.ui-autocomplete {
+	z-index: 1151 !important;
+}
+
+/* When modal opens, dont margin for the scrollbar - its uglier moving the whole site to the left than the scrollbar covering some of it */
+body.modal-open,
+.modal-open .navbar-fixed-top,
+.modal-open .navbar-fixed-bottom {
+	margin-right: 0px;
+}
+
+/*
+ * Just a dark button, as an alternative to the other bootstrap-buttons
+ */
+.btn-dark {
+	color: #eee;
+	background-color: #555;
+	border-color: #333;
+}
+
+.input-group .btn-dark .icon {
+	color: #eee;
+}
+
+.btn-dark:hover,
+.btn-dark:focus,
+.btn-dark:active,
+.btn-dark.active,
+.open .dropdown-toggle.btn-dark {
+	color: #eee;
+	background-color: #777;
+	border-color: #555;
+}
+
+.btn-dark:active,
+.btn-dark.active,
+.open .dropdown-toggle.btn-dark {
+	background-image: none;
+}
+
+/*
+ * Override multiselection-stuff for better looks
+ */
+
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+	background-color: #A1DDE6;
+	background-image: none;
+}

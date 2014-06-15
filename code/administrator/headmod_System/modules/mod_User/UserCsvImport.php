@@ -124,7 +124,7 @@ class UserCsvImport extends CsvImportTableData {
 		$this->dataPrepare();
 
 		$stmt = $this->_pdo->prepare(
-			'INSERT INTO users (forename, name, username, birthday, email,
+			'INSERT INTO SystemUsers (forename, name, username, birthday, email,
 				GID, credit, soli, password)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
 			');
@@ -149,9 +149,9 @@ class UserCsvImport extends CsvImportTableData {
 	protected function additionalUserQuerysInit() {
 
 		$this->_stmtSchoolyearAndGrade = TableMng::getDb()->prepare(
-			'INSERT INTO usersInGradesAndSchoolyears
+			'INSERT INTO SystemUsersInGradesAndSchoolyears
 				(userId, gradeId, schoolyearId) VALUES (?, ?, ?)');
-		$this->_stmtUsergroups = $this->_pdo->prepare('INSERT INTO UserInGroups
+		$this->_stmtUsergroups = $this->_pdo->prepare('INSERT INTO SystemUsersInGroups
 			(userId, groupId) VALUES (:userId, :groupId);');
 		$this->_noGradeId = $this->noGradeIdGet();
 	}
@@ -236,7 +236,7 @@ class UserCsvImport extends CsvImportTableData {
 	protected function gradeIdsAppendToColumns() {
 
 		$allGrades = TableMng::query('SELECT ID,
-			CONCAT(g.gradelevel, "-", LOWER(g.label)) AS name FROM Grades g');
+			CONCAT(g.gradelevel, "-", LOWER(g.label)) AS name FROM SystemGrades g');
 		$flatGrades = ArrayFunctions::arrayColumn($allGrades, 'name', 'ID');
 
 		foreach($this->_contentArray as &$con) {
@@ -286,7 +286,7 @@ class UserCsvImport extends CsvImportTableData {
 	protected function gradeAddUpload($gradelevel, $label) {
 
 		if(!isset($this->_stmtAddGrade)) {
-			$this->_stmtAddGrade =$this->_pdo->prepare('INSERT INTO Grades
+			$this->_stmtAddGrade =$this->_pdo->prepare('INSERT INTO SystemGrades
 				(gradelevel, label) VALUES (:gradelevel, :label);');
 		}
 
@@ -308,7 +308,7 @@ class UserCsvImport extends CsvImportTableData {
 	protected function noGradeIdGet() {
 
 		try {
-			$row = TableMng::querySingleEntry('SELECT ID FROM Grades
+			$row = TableMng::querySingleEntry('SELECT ID FROM SystemGrades
 				WHERE gradelevel = 0');
 
 		} catch(MultipleEntriesException $e) {
@@ -337,7 +337,7 @@ class UserCsvImport extends CsvImportTableData {
 	protected function pricegroupIdsAppendToColumns() {
 
 		$allPricegroups = TableMng::query('SELECT ID, LOWER(name) AS name
-			FROM priceGroups pg');
+			FROM BabeskPriceGroups pg');
 		$flatPricegroups = ArrayFunctions::arrayColumn(
 			$allPricegroups, 'name', 'ID');
 
@@ -420,7 +420,7 @@ class UserCsvImport extends CsvImportTableData {
 
 		try {
 			$stmt = $this->_pdo->query(
-				'SELECT value FROM global_settings
+				'SELECT value FROM SystemGlobalSettings
 				WHERE name = "presetPassword"');
 			$stmt->execute();
 			$res = $stmt->fetchColumn();

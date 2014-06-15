@@ -44,7 +44,7 @@ class Login {
 	protected function loginShow($msg = '') {
 
 		$this->_smarty->assign('status', $msg);
-		$this->_smarty->display('administrator/login.tpl');
+		$this->_smarty->display(PATH_SMARTY_TPL . '/administrator/login.tpl');
 		die();
 	}
 
@@ -113,7 +113,7 @@ class Login {
 			if(!$this->passwordCheck(
 					$userData['ID'], $userData['password'], $_POST['Password']
 			)) {
-				$this->loginShow(INVALID_LOGIN);
+				$this->loginShow(_g('User not found or incorrect password'));
 			}
 		}
 
@@ -125,12 +125,12 @@ class Login {
 	protected function emptyLoginCheckDieOnError() {
 
 		if(!isset($_POST['Username'], $_POST['Password'])) {
-			$this->loginShow(INVALID_FORM);
+			$this->loginShow('Please Log in');
 		}
 
 		if(trim($_POST['Username']) == '' ||
 			trim($_POST['Password']) == '') {
-			$this->loginShow(EMPTY_FORM);
+			$this->loginShow(_g('Please fill out the form completely.'));
 		}
 	}
 
@@ -145,7 +145,7 @@ class Login {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'SELECT ID, password, username FROM users
+				'SELECT ID, password, username FROM SystemUsers
 					WHERE username LIKE ?'
 			);
 			$stmt->execute(array($username));
@@ -180,7 +180,7 @@ class Login {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'SELECT COUNT(*) FROM users WHERE username = ?'
+				'SELECT COUNT(*) FROM SystemUsers WHERE username = ?'
 			);
 			$stmt->execute(array($username));
 			return $stmt->fetchColumn();
@@ -223,11 +223,11 @@ class Login {
 	 */
 	protected function passwordOfUserUpdate($userId, $password) {
 
-		$newHash = convert_md5_to_bcrypt($password);
+		$newHash = hash_password($password);
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'UPDATE users SET password = ? WHERE ID = ?'
+				'UPDATE SystemUsers SET password = ? WHERE ID = ?'
 			);
 			$stmt->execute(array($newHash, $userId));
 

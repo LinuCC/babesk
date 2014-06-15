@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-08 03:43+0100\n"
-"PO-Revision-Date: 2014-02-08 03:44+0100\n"
+"POT-Creation-Date: 2014-04-07 17:44+0100\n"
+"PO-Revision-Date: 2014-04-10 09:05+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: de\n"
@@ -17,70 +17,70 @@ msgstr ""
 "X-Poedit-Bookmarks: 121,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 "X-Poedit-SearchPath-0: ../../..\n"
 
-#: ../../../include/smarty-gettext/smarty2c.c:2
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:2
 msgid "Kuwasys User-Mainmenu"
 msgstr "Kuwasys Benutzer-Hauptmenü"
 
-#: ../../../include/smarty-gettext/smarty2c.c:5
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:5
 msgid "Printables"
 msgstr "Druckbares"
 
-#: ../../../include/smarty-gettext/smarty2c.c:8
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:8
 msgid ""
 "Here you can Print PDFs confirming the Participation of Users at their "
 "Classes of this Year"
 msgstr ""
-"Hier können sie PDF-Dateien drucken die die Teilnahmen der Nutzer an Kursen "
-"in diesem Jahr bestätigen."
+"Hier können sie PDF-Dateien erstellen die die Teilnahmen der Nutzer an "
+"Kursen in diesem Jahr bestätigen."
 
-#: ../../../include/smarty-gettext/smarty2c.c:11
-msgid "Print Participation Confirmation"
-msgstr "Teilnahmebestätigung ausdrucken"
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:11
+msgid "Create Participation Confirmation"
+msgstr "Teilnahmebestätigung erstellen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:14
-#: ../../../include/smarty-gettext/smarty2c.c:263
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:14
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:404
 msgid "Bulk-Changes"
 msgstr "Massenveränderungen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:17
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:17
 msgid ""
 "Here you can assign the Users that submitted requests to Classes of the "
 "active Year"
 msgstr "Hier können sie Nutzer den von ihnen gewünschten Kursen zuweisen."
 
-#: ../../../include/smarty-gettext/smarty2c.c:20
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:20
 msgid "Assign the Users to the Classes"
 msgstr "Die Benutzer den Kursen zuordnen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:23
-#: ../../../include/smarty-gettext/smarty2c.c:296
-#: ../../../include/smarty-gettext/smarty2c.c:461
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:23
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:437
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:611
 msgid "Actions"
 msgstr "Aktionen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:26
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:26
 msgid "Go to the existing Assignment-Process"
 msgstr "Zum existierenden Zuweisungs-Prozess gehen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:29
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:29
 msgid "Bulk-Actions"
 msgstr "Massenänderungnen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:32
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:32
 msgid "Start a new Assignment-Process"
 msgstr ""
 "Einen neuen Zuweisungsprozess starten (Warnung - löscht den alten Prozess, "
 "falls vorhanden)"
 
-#: ../../../include/smarty-gettext/smarty2c.c:35
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:35
 msgid "Assign all Users to their Classes"
 msgstr "Alle Benutzer ihren Kursen zuordnen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:38
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:38
 msgid "Really start a new Assignment-Process?"
 msgstr "Wollen sie wirklich einen neuen Zuweisungsprozess starten?"
 
-#: ../../../include/smarty-gettext/smarty2c.c:41
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:41
 msgid ""
 "If you have already started an Assignment-Process, the Data will be "
 "inevitably lost. Are you sure?"
@@ -88,163 +88,146 @@ msgstr ""
 "Wenn sie bereits einen Zuweisungsprozess gestartet haben, werden die Daten "
 "verloren gehen. Sind sie sicher?"
 
-#: ../../../include/smarty-gettext/smarty2c.c:44
-#: ../../../smarty/templates_c/a1c6b6c80b42f8498abfb006fd1e9d1e5e250c41.file.classdetails.tpl.php:125
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:44
 msgid "Classdetails of Class"
 msgstr "Details des Kurses"
 
-#: ../../../include/smarty-gettext/smarty2c.c:47
-#: ../../../include/smarty-gettext/smarty2c.c:95
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:47
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:233
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:236
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:347
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:680
 #: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:55
 #: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:75
-#: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:264
-#: ../../../smarty/templates_c/a1c6b6c80b42f8498abfb006fd1e9d1e5e250c41.file.classdetails.tpl.php:152
+#: ../../../web/Login.php:112
 msgid "Username"
 msgstr "Benutzername"
 
-#: ../../../include/smarty-gettext/smarty2c.c:50
-#: ../../../include/smarty-gettext/smarty2c.c:53
-#: ../../../include/smarty-gettext/smarty2c.c:98
-#: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:267
-#: ../../../smarty/templates_c/a1c6b6c80b42f8498abfb006fd1e9d1e5e250c41.file.classdetails.tpl.php:155
-#: ../../../smarty/templates_c/a1c6b6c80b42f8498abfb006fd1e9d1e5e250c41.file.classdetails.tpl.php:177
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:50
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:53
 msgid "Status"
 msgstr "Status"
 
-#: ../../../include/smarty-gettext/smarty2c.c:56
-#: ../../../smarty/templates_c/a1c6b6c80b42f8498abfb006fd1e9d1e5e250c41.file.classdetails.tpl.php:199
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:56
 msgid "Class"
 msgstr "Kurs"
 
-#: ../../../include/smarty-gettext/smarty2c.c:59
-msgid "Classregistrations are not allowed"
-msgstr "Kursregistrierungen sind nicht erlaubt"
-
-#: ../../../include/smarty-gettext/smarty2c.c:62
-msgid "Classregistrations are allowed"
-msgstr "Kursregistrierungen sind erlaubt"
-
-#: ../../../include/smarty-gettext/smarty2c.c:65
-#: ../../../include/smarty-gettext/smarty2c.c:158
-msgid "Standard-Actions"
-msgstr "Standard-Aktionen"
-
-#: ../../../include/smarty-gettext/smarty2c.c:68
-msgid "Add a Class"
-msgstr "Ein Kurs hinzufügen"
-
-#: ../../../include/smarty-gettext/smarty2c.c:71
-msgid "Display all Classes"
-msgstr "Alle Kurse anzeigen"
-
-#: ../../../include/smarty-gettext/smarty2c.c:74
-#: ../../../include/smarty-gettext/smarty2c.c:167
-msgid "More Actions"
-msgstr "Mehr Aktionen"
-
-#: ../../../include/smarty-gettext/smarty2c.c:77
-msgid "Import Classes with a CSV-File"
-msgstr "Kurse mit einer CSV-Datei importieren"
-
-#: ../../../include/smarty-gettext/smarty2c.c:80
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:59
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:89
 msgid "Create Class-Summaries"
 msgstr "Klassenübersichten erstellen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:83
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:62
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:98
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:215
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:299
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:335
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:389
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:65
+msgid "Create"
+msgstr "Erstellen"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:68
+msgid "Classregistrations are not allowed"
+msgstr "Kursregistrierungen sind nicht erlaubt"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:71
+msgid "Classregistrations are allowed"
+msgstr "Kursregistrierungen sind erlaubt"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:74
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:155
+msgid "Standard-Actions"
+msgstr "Standard-Aktionen"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:77
+msgid "Add a Class"
+msgstr "Ein Kurs hinzufügen"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:80
+msgid "Display all Classes"
+msgstr "Alle Kurse anzeigen"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:83
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:164
+msgid "More Actions"
+msgstr "Mehr Aktionen"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:86
+msgid "Import Classes with a CSV-File"
+msgstr "Kurse mit einer CSV-Datei importieren"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:92
 msgid "Change if Classregistrations are enabled"
 msgstr "Ändern, ob Kursregistrierungen erlaubt sind"
 
-#: ../../../include/smarty-gettext/smarty2c.c:86
-#: ../../../include/smarty-gettext/smarty2c.c:89
-#: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:255
-#: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:258
-msgid "Assign a User to this Class"
-msgstr "Einen Benutzer den Kursen zuordnen"
-
-#: ../../../include/smarty-gettext/smarty2c.c:92
-#: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:260
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:95
 msgid "Please select the User and the Status of the Assignment"
 msgstr ""
 "Bitte geben sie den Benutzernamen des Nutzers und den Status der Zuweisung "
 "ein."
 
-#: ../../../include/smarty-gettext/smarty2c.c:101
-#: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:299
-msgid "Assign User"
-msgstr "Benutzer zuweisen"
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:101
+msgid "Add the user to the class"
+msgstr "Den Benutzer den Kurs zuordnen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:104
-#: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:328
-msgid "Could not parse the Serveranswer!"
-msgstr "Konne die Serveratnwort nicht lesen!"
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:104
+msgid "Assign a User to this Class"
+msgstr "Einen Benutzer den Kursen zuordnen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:107
-#: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:334
-msgid "Could not Assign the User to the Class!"
-msgstr "Konnte die Benutzer nicht zu den Kursen zuweisen!"
-
-#: ../../../include/smarty-gettext/smarty2c.c:110
-#: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:340
-msgid "Cancel"
-msgstr "Abbrechen"
-
-#: ../../../include/smarty-gettext/smarty2c.c:113
-#: ../../../smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:123
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:107
 msgid "Name"
 msgstr "Name"
 
-#: ../../../include/smarty-gettext/smarty2c.c:116
-#: ../../../smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:144
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:110
 msgid "Classteacher"
 msgstr "Kursleiter"
 
-#: ../../../include/smarty-gettext/smarty2c.c:119
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:113
 #: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:461
-#: ../../../smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:208
 msgid "Day"
 msgstr "Tag"
 
-#: ../../../include/smarty-gettext/smarty2c.c:122
-#: ../../../smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:241
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:116
 msgid "execute Changes"
 msgstr "Änderungen ausführen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:125
-#: ../../../smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:246
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:119
 msgid "The uploaded file did not contain any usable data."
 msgstr "Die hochgeladene Datei besaß keine nutzbaren Daten."
 
-#: ../../../include/smarty-gettext/smarty2c.c:128
-#: ../../../smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:249
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:122
 msgid "click here to go back"
 msgstr "Hier klicken um zurückzukehren."
 
-#: ../../../include/smarty-gettext/smarty2c.c:131
-#: ../../../smarty/templates_c/653313aa093ae5dd2ab742df89f4d5ce8fe3c030.file.fileUploadForm.tpl.php:108
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:125
 msgid "Upload a file"
 msgstr "Datei hochladen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:134
-#: ../../../smarty/templates_c/653313aa093ae5dd2ab742df89f4d5ce8fe3c030.file.fileUploadForm.tpl.php:114
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:128
 msgid "File:"
 msgstr "Datei:"
 
-#: ../../../include/smarty-gettext/smarty2c.c:137
-#: ../../../smarty/templates_c/653313aa093ae5dd2ab742df89f4d5ce8fe3c030.file.fileUploadForm.tpl.php:117
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:131
 msgid "Create Preview"
 msgstr "Vorschau erstellen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:140
-#: ../../../smarty/templates_c/653313aa093ae5dd2ab742df89f4d5ce8fe3c030.file.fileUploadForm.tpl.php:122
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:134
 msgid "Help:"
 msgstr "Hilfe:"
 
-#: ../../../include/smarty-gettext/smarty2c.c:143
-#: ../../../smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:106
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:137
 msgid "Class-Deletion"
 msgstr "Kurs-Löschung"
 
-#: ../../../include/smarty-gettext/smarty2c.c:146
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:140
+msgid "Really delete the class?"
+msgstr "Wollen sie wirklich den Kurs löschen?"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:143
 msgid ""
 "Do you really want to delete the Class \"%1\"? All its data is inevitably "
 "lost when doing so!"
@@ -252,114 +235,208 @@ msgstr ""
 "Wollen sie wirklich den Kurs \"%1\" löschen? Alle Daten gehen "
 "unwiederbringlich verloren!"
 
-#: ../../../include/smarty-gettext/smarty2c.c:149
-#: ../../../include/smarty-gettext/smarty2c.c:401
-#: ../../../include/smarty-gettext/smarty2c.c:410
-#: ../../../include/smarty-gettext/smarty2c.c:419
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:146
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:551
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:560
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:569
 #: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:420
-#: ../../../smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:117
 msgid "Yes"
 msgstr "Ja"
 
-#: ../../../include/smarty-gettext/smarty2c.c:152
-#: ../../../smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:120
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:149
 msgid "No, I dont want to delete the Class"
 msgstr "Nein, ich will den Kurs nicht löschen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:155
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:152
 msgid "Mainmenu of the Classteacher-Module"
 msgstr "Hauptmenü des Kursleiter-Moduls"
 
-#: ../../../include/smarty-gettext/smarty2c.c:161
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:158
 msgid "Add a Classteacher"
 msgstr "Einen Kursleiter hinzufügen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:164
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:161
 msgid "Display all Classteachers"
 msgstr "Alle Kursleiter anzeigen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:170
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:167
 msgid "Import Classteachers by a CSV-file"
 msgstr "Kursleiter mit einer CSV-Datei importieren"
 
-#: ../../../include/smarty-gettext/smarty2c.c:173
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:170
 msgid "Delete a Classteacher"
 msgstr "Einen Kursleiter löschen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:176
-#: ../../../smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:93
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:173
 msgid "Soli-Settings"
 msgstr "Teilhabepaket-Einstellungen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:179
-#: ../../../smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:101
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:176
 msgid "Enable Soli"
 msgstr "Teilhabepaket aktivieren"
 
-#: ../../../include/smarty-gettext/smarty2c.c:182
-#: ../../../smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:105
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:179
 msgid "Is the Soli-Module enabled:"
 msgstr "Ist das Soli-Modul aktiviert:"
 
-#: ../../../include/smarty-gettext/smarty2c.c:185
-#: ../../../smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:116
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:182
 msgid "Soliprice"
 msgstr "Teilhabepaketpreis"
 
-#: ../../../include/smarty-gettext/smarty2c.c:188
-#: ../../../smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:122
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:185
 msgid "Is Soliprice Enabled:"
 msgstr "Sind Teilhabepaket-Preise aktiviert:"
 
-#: ../../../include/smarty-gettext/smarty2c.c:191
-#: ../../../smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:132
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:188
 msgid "Amount to Pay:"
 msgstr "Zu bezahlender Betrag:"
 
-#: ../../../include/smarty-gettext/smarty2c.c:194
-#: ../../../smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:140
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:191
 msgid "Commit Changes"
 msgstr "Änderungen hochladen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:197
-#: ../../../smarty/templates_c/818149c8372c3fa5e5e32c9cd62bc5d894003dc9.file.mainmenu.tpl.php:111
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:194
 msgid "Standard Actions"
 msgstr "Standardaktionen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:200
-#: ../../../smarty/templates_c/818149c8372c3fa5e5e32c9cd62bc5d894003dc9.file.mainmenu.tpl.php:117
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:197
 msgid "Recharge a Card"
 msgstr "Eine Karte aufladen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:203
-#: ../../../include/smarty-gettext/smarty2c.c:206
-#: ../../../include/smarty-gettext/smarty2c.c:209
-#: ../../../smarty/templates_c/818149c8372c3fa5e5e32c9cd62bc5d894003dc9.file.mainmenu.tpl.php:123
-#: ../../../smarty/templates_c/d9ae2e659e39b51da4b84a100552c0b5c94fb34c.file.printRechargeBalanceSelect.tpl.php:105
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:200
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:203
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:206
 msgid "Print Recharge Balance"
-msgstr "Die Aufladungen ausdrucken"
+msgstr "Die Aufladungen erstellen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:212
-#: ../../../smarty/templates_c/d9ae2e659e39b51da4b84a100552c0b5c94fb34c.file.printRechargeBalanceSelect.tpl.php:129
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:209
 msgid "At:"
 msgstr "Am:"
 
-#: ../../../include/smarty-gettext/smarty2c.c:215
-#: ../../../smarty/templates_c/d9ae2e659e39b51da4b84a100552c0b5c94fb34c.file.printRechargeBalanceSelect.tpl.php:136
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:212
 msgid "Download Pdf"
 msgstr "PDF herunterladen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:218
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:218
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:338
+msgid "Add to user"
+msgstr "Zum Benutzer hinzufügen"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:221
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:224
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:341
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:152
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:53
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:69
+msgid "Forename"
+msgstr "Vorname"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:227
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:230
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:344
+msgid "Lastname"
+msgstr "Nachname"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:239
+msgid "Change password?"
+msgstr "Passwort verändern?"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:242
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:353
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:683
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:58
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:78
+#: ../../../web/Login.php:113
+msgid "Password"
+msgstr "Passwort"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:245
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:356
+msgid "Repeat password"
+msgstr "Passwort wiederholen"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:248
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:359
+msgid "Email-address"
+msgstr "Email-Adresse"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:251
+msgid "Emailaddress"
+msgstr "Emailadresse"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:254
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:362
+msgid "Telephone-number"
+msgstr "Telefonnummer"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:257
+msgid "Telephonenumber"
+msgstr "Telefonnummer"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:260
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:263
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:365
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:56
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:76
+msgid "Birthday"
+msgstr "Geburtstag"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:266
+msgid "Account locked"
+msgstr "Account gesperrt"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:269
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:368
+msgid "Usergroups"
+msgstr "Benutzergruppen"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:272
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:371
+msgid "Grades and schoolyears"
+msgstr "Klassen und Schuljahre"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:275
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:278
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:374
+msgid "Cardnumber"
+msgstr "Kartennummer"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:281
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:287
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:377
+msgid "Pricegroup"
+msgstr "Preisgruppe"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:284
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:380
+msgid "No pricegroup existing"
+msgstr "Keine Preisgruppe existiert"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:290
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:293
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:383
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:61
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:82
+#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:97
+msgid "Credits"
+msgstr "Guthaben"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:296
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:386
+msgid "Submit"
+msgstr "Änderungen hochladen"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:302
 msgid "Reset passwords of all users"
 msgstr "Passwörter aller Nutzer zurücksetzen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:221
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:305
 msgid "Here you can reset the passwords of all users to the preset password."
 msgstr ""
 "Hier können sie die Passwörter aller Nutzer zu den voreingestellten Passwort "
 "zurücksetzen."
 
-#: ../../../include/smarty-gettext/smarty2c.c:224
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:308
 msgid ""
 "You will reset the passwords of all users (but the one which id is 1, "
 "usually the Superadmin) to the preset password. Thus this may be true for "
@@ -372,19 +449,19 @@ msgstr ""
 "sie sich nach dem Zurücksetzen also nicht mehr einloggen können, probieren "
 "sie das voreingestellte Passwort aus."
 
-#: ../../../include/smarty-gettext/smarty2c.c:227
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:311
 msgid "Click here"
 msgstr "Klicken sie hier"
 
-#: ../../../include/smarty-gettext/smarty2c.c:230
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:314
 msgid "to change the preset password."
 msgstr "um das voreingestellte Passwort zu verändern."
 
-#: ../../../include/smarty-gettext/smarty2c.c:233
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:317
 msgid "!!!Important!!!"
 msgstr "!!!WICHTIG!!!"
 
-#: ../../../include/smarty-gettext/smarty2c.c:236
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:320
 msgid ""
 "After the reset manually change the passwords of all accounts that have "
 "access to the Administrator-Section, else everyone can log themselfes into "
@@ -394,94 +471,98 @@ msgstr ""
 "(diejenigen, die Zugriff auf den Administratorbereich haben) die Passwörter, "
 "da sonst jeder sich mit dem Passwort einloggen kann!"
 
-#: ../../../include/smarty-gettext/smarty2c.c:239
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:323
 msgid "At the moment the preset password is not set. Please"
 msgstr "Momentan ist kein voreingestelltes Passwort gesetzt. Bitte"
 
-#: ../../../include/smarty-gettext/smarty2c.c:242
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:326
 msgid "click here"
 msgstr "klicken sie hier"
 
-#: ../../../include/smarty-gettext/smarty2c.c:245
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:329
 msgid "to set a preset password."
 msgstr "um ein voreingestelltes Passwort zu setzen."
 
-#: ../../../include/smarty-gettext/smarty2c.c:248
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:332
 msgid "Yes, I want to reset the passwords!"
 msgstr "Ja, ich möchte die Passwörter zurücksetzen!"
 
-#: ../../../include/smarty-gettext/smarty2c.c:251
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:350
+msgid "use preset password"
+msgstr "Benutze voreingestelltes Passwort"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:392
 msgid "Usersettings-Mainmenu"
 msgstr "Benutzereinstellungs-Hauptmenü"
 
-#: ../../../include/smarty-gettext/smarty2c.c:254
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:395
 msgid "General"
 msgstr "Allgemein"
 
-#: ../../../include/smarty-gettext/smarty2c.c:257
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:398
 msgid "Register a User"
 msgstr "Benutzer registrieren"
 
-#: ../../../include/smarty-gettext/smarty2c.c:260
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:401
 msgid "Show Users"
 msgstr "Benutzer anzeigen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:266
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:407
 msgid "Assign Usernames to User automatically"
 msgstr "Benutzernamen der Benutzer automatisch erstellen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:269
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:410
 msgid "Remove Specialcharacters from Usernames"
 msgstr "Spezialschriftzeichen von den Benutzernamen entfernen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:272
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:413
 msgid "Import Users by a CSV-File"
 msgstr "Benutzer mit einer CSV-Datei importieren"
 
-#: ../../../include/smarty-gettext/smarty2c.c:275
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:416
 msgid "Reset passwords of users to preset passwords"
 msgstr "Die Passwörter von Nutzern zum voreingestellten Passwort zurücksetzen."
 
-#: ../../../include/smarty-gettext/smarty2c.c:278
-#: ../../../include/smarty-gettext/smarty2c.c:452
-#: ../../../include/smarty-gettext/smarty2c.c:458
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:419
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:602
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:608
 msgid "Update users with Schoolyear-change"
 msgstr "Benutzer mit Schuljahreswechsel aktualisieren"
 
-#: ../../../include/smarty-gettext/smarty2c.c:281
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:422
 msgid "User-update menu"
 msgstr "Benutzeraktualisierungsmenü"
 
-#: ../../../include/smarty-gettext/smarty2c.c:284
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:425
 msgid "Conflicts"
 msgstr "Konflikte"
 
-#: ../../../include/smarty-gettext/smarty2c.c:287
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:428
 msgid "conflicts open"
 msgstr "offene Konflikte"
 
-#: ../../../include/smarty-gettext/smarty2c.c:290
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:431
 msgid "conflicts resolved"
 msgstr "gelöste Konflikte"
 
-#: ../../../include/smarty-gettext/smarty2c.c:293
-#: ../../../include/smarty-gettext/smarty2c.c:383
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:434
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:533
 msgid "Resolve conflicts"
 msgstr "Konflikte lösen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:299
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:440
 msgid "Display changes-overview"
 msgstr "Veränderungsübersicht anzeigen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:302
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:443
 msgid "Execute changes"
 msgstr "Änderungen ausführen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:305
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:446
 msgid "Update users and change the schoolyear"
 msgstr "Benutzer aktualisieren und Schuljahr verändern"
 
-#: ../../../include/smarty-gettext/smarty2c.c:308
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:449
 msgid ""
 "Here you can change the schoolyear and at the same time update the grades of "
 "the users with a csv-file."
@@ -489,25 +570,25 @@ msgstr ""
 "Hier können sie das Schuljahr verändern und gleichzeitig die Klassen der "
 "Benutzer mit einer CSV-Datei aktualisieren."
 
-#: ../../../include/smarty-gettext/smarty2c.c:311
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:452
 msgid "Begin change"
 msgstr "Mit Veränderungen starten"
 
-#: ../../../include/smarty-gettext/smarty2c.c:314
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:455
 msgid "Csv-file help"
 msgstr "Hilfe zur Csv-Datei"
 
-#: ../../../include/smarty-gettext/smarty2c.c:317
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:458
 msgid "Select schoolyear"
 msgstr "Schuljahr auswählen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:320
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:461
 msgid "Please select a schoolyear to switch to when changes get applied:"
 msgstr ""
 "Bitte wählen sie ein Schuljahr aus zu dem gewechselt werden soll, wenn die "
 "Änderungen angewendet werden:"
 
-#: ../../../include/smarty-gettext/smarty2c.c:323
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:464
 msgid ""
 "When full-year switch get selected, it will be assumed that the normal "
 "behaviour is that the users move one gradelevel up."
@@ -515,15 +596,27 @@ msgstr ""
 "Wenn Schuljahreswechsel ausgewählt wird wird angenommen dass normalerweise "
 "die Benutzer einen Jahrgang höher versetzt werden."
 
-#: ../../../include/smarty-gettext/smarty2c.c:326
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:467
 msgid "Is it a half-year switch or a full-year switch?"
 msgstr "Ist es ein Halbjahres- oder Schuljahreswechsel?"
 
-#: ../../../include/smarty-gettext/smarty2c.c:329
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:470
+msgid "To which usergroup should new users be assigned?"
+msgstr "Zu welcher Benutzergruppe sollen neue Nutzer hinzugefügt werden?"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:473
+msgid "None"
+msgstr "Keine"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:476
+msgid "No user-groups found."
+msgstr "Keine Nutzergruppen gefunden."
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:479
 msgid "continue"
 msgstr "weiter"
 
-#: ../../../include/smarty-gettext/smarty2c.c:332
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:482
 msgid ""
 "There is no schoolyear you can switch to. Please add a schoolyear and then "
 "try again."
@@ -531,28 +624,28 @@ msgstr ""
 "Es gibt kein Schuljahr zu dem sie wechseln könnten. Bitte fügen sie ein "
 "Schuljahr hinzu und versuchen sie es nochmal."
 
-#: ../../../include/smarty-gettext/smarty2c.c:335
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:485
 msgid "Add a schoolyear"
 msgstr "Ein Schuljahr hinzufügen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:338
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:488
 msgid "Import userdata with a csv-file"
 msgstr "Benutzerdaten mit einer CSV-Datei importieren"
 
-#: ../../../include/smarty-gettext/smarty2c.c:341
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:491
 msgid "Please select the csv-file that contains the data of the users:"
 msgstr ""
 "Bitte wählen sie die CSV-Datei aus welche die Daten der Nutzer beinhaltet:"
 
-#: ../../../include/smarty-gettext/smarty2c.c:344
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:494
 msgid "Upload"
 msgstr "hochladen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:347
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:497
 msgid "Help for formatting the csv-file to update users"
 msgstr "Hilfe zur Formatierung der Csv-Datei zur Benutzeraktualisierung"
 
-#: ../../../include/smarty-gettext/smarty2c.c:350
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:500
 msgid ""
 "Use the semicolon (;) as a separator. Make sure the csv-file contains the "
 "following columns:"
@@ -560,27 +653,27 @@ msgstr ""
 "Benutzen sie das Semikolon (;) als Separator. Stellen sie sicher dass die "
 "Csv-Datei die folgenden Spalten besitzt:"
 
-#: ../../../include/smarty-gettext/smarty2c.c:353
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:503
 msgid "The forename of the user"
 msgstr "Der Vorname des Benutzers"
 
-#: ../../../include/smarty-gettext/smarty2c.c:356
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:506
 msgid "The lastname of the user"
 msgstr "Der Nachname des Benutzers"
 
-#: ../../../include/smarty-gettext/smarty2c.c:359
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:509
 msgid "The grade the user should be switched to"
 msgstr "Die Klasse zu der der Benutzer wechselt"
 
-#: ../../../include/smarty-gettext/smarty2c.c:362
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:512
 msgid "Additionally, following columns can be added:"
 msgstr "Zusätzlich können noch folgende Spalten hinzugefügt werden:"
 
-#: ../../../include/smarty-gettext/smarty2c.c:365
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:515
 msgid "Neccessary if the birthdays of the users are already in the program!"
 msgstr "Nötig wenn die Geburtstage der Benutzer bereits im Programm sind!"
 
-#: ../../../include/smarty-gettext/smarty2c.c:368
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:518
 msgid ""
 "The birthday of the user. Used to distinguish users with the same forename "
 "and name."
@@ -588,7 +681,7 @@ msgstr ""
 "Der Geburtstag des Benutzers. Benutzt um Nutzer mit demselben Vor- und "
 "Nachnamen zu unterscheiden."
 
-#: ../../../include/smarty-gettext/smarty2c.c:371
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:521
 msgid ""
 "The new telephone-number of the user. When this column exists, the old "
 "entries will be overridden, even if the new telephone-number is void!"
@@ -597,7 +690,7 @@ msgstr ""
 "vorhandenen Einträge überschrieben, selbst wenn die neue telefonnummer leer "
 "ist!"
 
-#: ../../../include/smarty-gettext/smarty2c.c:374
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:524
 msgid ""
 "The new username of the user. When this column exists, the old entries will "
 "be overridden, even if the new username is void!"
@@ -606,32 +699,32 @@ msgstr ""
 "bereits vorhandenen Einträge überschrieben, selbst wenn der neue Nutzername "
 "leer ist!"
 
-#: ../../../include/smarty-gettext/smarty2c.c:377
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:527
 msgid "Example of a csv-file:"
 msgstr "Beispiel einer Csv-Datei:"
 
-#: ../../../include/smarty-gettext/smarty2c.c:380
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:530
 msgid "Another example:"
 msgstr "Weiteres Beispiel:"
 
-#: ../../../include/smarty-gettext/smarty2c.c:386
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:536
 msgid "Yes to all"
 msgstr "Ja zu allem"
 
-#: ../../../include/smarty-gettext/smarty2c.c:389
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:539
 msgid "User not found in program"
 msgstr "Benutzer im Programm nicht gefunden"
 
-#: ../../../include/smarty-gettext/smarty2c.c:392
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:542
 msgid "User existing but not found in new file"
 msgstr "Benutzer existiert, wurde aber nicht in der neuen Datei gefunden"
 
-#: ../../../include/smarty-gettext/smarty2c.c:395
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:545
 msgid "Users old and new gradelevels differ too much"
 msgstr ""
 "Die Differenz zwischen altem und neuem Jahrgang des Nutzers ist zu groß"
 
-#: ../../../include/smarty-gettext/smarty2c.c:398
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:548
 msgid ""
 "The user <span class=\"highlighted\">\"%1 %2\"</span> (birthday: <span class="
 "\"highlighted\">\"%3\"</span>), that will be in grade <span class="
@@ -641,14 +734,14 @@ msgstr ""
 "class=\"highlighted\">\"%3\"</span>), der in der Klasse <span class="
 "\"highlighted\">\"%4\"</span> sein wird, ist neu. Ist das korrekt?"
 
-#: ../../../include/smarty-gettext/smarty2c.c:404
-#: ../../../include/smarty-gettext/smarty2c.c:413
-#: ../../../include/smarty-gettext/smarty2c.c:422
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:554
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:563
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:572
 #: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:420
 msgid "No"
 msgstr "Nein"
 
-#: ../../../include/smarty-gettext/smarty2c.c:407
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:557
 msgid ""
 "The user <span class=\"highlighted\">\"%1 %2\"</span> (birthday: <span class="
 "\"highlighted\">\"%3\"</span>) is not in the upcoming schoolyear. Is that "
@@ -658,7 +751,7 @@ msgstr ""
 "class=\"highlighted\">\"%3\"</span>) ist nicht im neuen Schuljahr. Ist das "
 "korrekt?"
 
-#: ../../../include/smarty-gettext/smarty2c.c:416
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:566
 msgid ""
 "The grade of the user <span class=\"highlighted\">\"%1 %2\"</span> "
 "(birthday: <span class=\"highlighted\">\"%3\"</span>) changed from \"%4\" to "
@@ -668,401 +761,167 @@ msgstr ""
 "(Geburtstag: <span class=\"highlighted\">\"%3\"</span>) hat sich von \"%4\" "
 "auf \"%5\" verändert. Ist das korrekt?"
 
-#: ../../../include/smarty-gettext/smarty2c.c:425
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:575
 msgid "Submit changes"
 msgstr "Änderungen hochladen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:428
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:578
 msgid "Cancel changes"
 msgstr "Änderungen abbrechen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:431
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:581
 msgid "No conflicts exist."
 msgstr "Es existieren keine Konflikte."
 
-#: ../../../include/smarty-gettext/smarty2c.c:434
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:584
 msgid "Answered with yes"
 msgstr "Mit Ja beantwortet"
 
-#: ../../../include/smarty-gettext/smarty2c.c:437
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:587
 msgid "Answered with no"
 msgstr "Mit nein beantwortet"
 
-#: ../../../include/smarty-gettext/smarty2c.c:440
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:590
 msgid "changed to user: "
 msgstr "geändert zu Benutzer:"
 
-#: ../../../include/smarty-gettext/smarty2c.c:443
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:593
 msgid "Please give the correct new grade of the user:"
 msgstr "Bitte geben sie die korrekte neue Klasse des Benutzers an:"
 
-#: ../../../include/smarty-gettext/smarty2c.c:446
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:596
 msgid "finished"
 msgstr "fertig"
 
-#: ../../../include/smarty-gettext/smarty2c.c:449
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:599
 msgid "The new grade of the user will be:"
 msgstr "Die neue Klasse des Benutzers wird sein:"
 
-#: ../../../include/smarty-gettext/smarty2c.c:455
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:605
 msgid "Back to Useradministration"
 msgstr "Zurück zur Benutzerverwaltung"
 
-#: ../../../include/smarty-gettext/smarty2c.c:464
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:614
 msgid "Go to the existing update-Process"
 msgstr "Zum existierenden Aktualisierungsprozess gehen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:467
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:617
 msgid "Start a new update-process"
 msgstr "Einen neuen Aktualisierungsprozess starten"
 
-#: ../../../include/smarty-gettext/smarty2c.c:470
-msgid "Bookmarks"
-msgstr "Lesezeichen"
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:620
+msgid "Ok"
+msgstr "Ok"
 
-#: ../../../include/smarty-gettext/smarty2c.c:473
-msgid "No Bookmarks added"
-msgstr "Keine Leszeichen hinzugefügt"
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:623
+msgid "Search (Enter to commit)"
+msgstr "Suchen (Enter um Suche abzusenden)"
 
-#: ../../../include/smarty-gettext/smarty2c.c:476
-msgid "Add bookmark"
-msgstr "Lesezeichen hinzufügen"
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:626
+msgid "Search..."
+msgstr "Suchen..."
 
-#: ../../../include/smarty-gettext/smarty2c.c:479
-#: ../../../smarty/templates_c/61311f7f7fb60d3dae427fe42bb0cc9d^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/3eb0db64f553de2c6d2b3cfcf12fb33948f1ba0a.file.show_soli.tpl.php:153
-#: ../../../smarty/templates_c/598e6acc5f3bcd6b3615f13c309eaebd^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../smarty/templates_c/69ef1474499747a738f5d4a1531c6368^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
-#: ../../../smarty/templates_c/b4c831a78d52cf96e32ee4f16aae16a94472c7d7.file.show_orders_select_date.tpl.php:119
-#: ../../../smarty/templates_c/8b712f5beaeafcf6d28b6ca8620568fa^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/0cd7c5a039495beac1f26ece05193e06^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../smarty/templates_c/636441a92bd78923471ca1393e876607^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/48c6d6c3c8d49d53db66eafdca634838^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../smarty/templates_c/c5e04422d7253498e27ca9bbb9fe5383^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/8c8b534d695ba143ddb57dc057a0c5d0e8505d3f.file.mainMenu.tpl.php:115
-#: ../../../smarty/templates_c/045db863b95c89679e3820eb7d397bd5^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/af7c4a46c8c61bdeb8dae903c70385e5^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/277023282b4cc18ca18acb57da7166581f1aee33.file.addClass.tpl.php:150
-#: ../../../smarty/templates_c/54357cbff38bb9a56a3f0320b4a11859bfb76f9e.file.addGrade.tpl.php:148
-#: ../../../smarty/templates_c/e693a97a437fc988b339dc119089dcfe^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/bbf9ad2fdd63936ac404f5b9f6172b50^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/20b5c846cd8333f8d6fb3350d797e9ec^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../smarty/templates_c/3a2f75ea979a961e0e90243618a8d1e82c2749f8.file.mainMenu.tpl.php:152
-#: ../../../smarty/templates_c/f192c0b6d274b2dabfa2ab4496db5562^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/08f09ebdf491fb65de6505244c66b2022d891c8a.file.form2.tpl.php:126
-#: ../../../smarty/templates_c/ddb0d0ba8ee9fdf4e444b4e7b21ba5fa679b1c85.file.addClassteacher.tpl.php:138
-#: ../../../smarty/templates_c/83acc38b8be114f6de986e149986d28dc9513209.file.add_coupon.tpl.php:131
-#: ../../../smarty/templates_c/380b69cc0f234b463033e8afe3c1cd264bc66b9e.file.checkout.tpl.php:163
-#: ../../../smarty/templates_c/bdb15ee20b1d3b444dfd8197c98a3f07^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/6b2a561c23564141ab6fe75158bab493^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/9c43cff433cc0199a399a11eaed29f0edaeaaad9.file.form1.tpl.php:112
-#: ../../../smarty/templates_c/b8290a55c06d0c945dc0c9d45c953257472a419f.file.changePresetPassword.tpl.php:134
-#: ../../../smarty/templates_c/a1c606792afd58a9f36bea654b33b612^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/8379559d312825dae10d96a6acea1c32^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/c12ad3b6a4c00e915c42df669b4e2240^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/d91ce8105c7f0fd68454fa10e5a24c68^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/1f6a26e35709fa6f1e23ae9594968969^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/628001cb7e9a9871b59b46bcb7d44a7e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../smarty/templates_c/b25e78662f0a215c299127dc25b9859a^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/002055c25e67803b204546232850a4d6^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/230554c0e2a57d045b6f2bf014fda1206d86620b.file.show_admins.tpl.php:138
-#: ../../../smarty/templates_c/ff62410a4490a05fe5ba9f3a9b846715^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/aa42d7ed24f43d736e58e142af6a9221^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/4c3577b6952e07ee02b042f81e383c19^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/2b98c7a7c317fbdf1731b4384a084dd19d393c79.file.mainMenu.tpl.php:159
-#: ../../../smarty/templates_c/cf0d094d9c4584318b6f76fe71bea06b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/664c01597200c1a7ae5862799806ad03^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../smarty/templates_c/2ca92fd8323335f226298095835d98ca262d96a5.file.mainMenu.tpl.php:110
-#: ../../../smarty/templates_c/516a0803d1835a440051f88826fca39f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/4d797408ac0de3b6aa7c65dc5ffba2ebd1793600.file.edit_infotext.tpl.php:128
-#: ../../../smarty/templates_c/7f87ee520e7730d927ab3b83507d7254e2abc307.file.form.tpl.php:118
-#: ../../../smarty/templates_c/e819f7f99ecd450a383ffdfbb8dfbf425712c54b.file.usernameRemoveSpecialChars.tpl.php:114
-#: ../../../smarty/templates_c/1e3dbc5247bf8a44d36892940a1f2eccddf694a2.file.form.tpl.php:117
-#: ../../../smarty/templates_c/23319d8ef0a908c25db037491895a5965906a6ca.file.mainMenu.tpl.php:120
-#: ../../../smarty/templates_c/ff2dc585d32d39fe88f4d4dc8855a13dcb87b733.file.scanCard.tpl.php:117
-#: ../../../smarty/templates_c/3266fc8f1560d681dc8ece178a2e516e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/d204f5a78a2c54aaf0be5e199eaeed92^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/4d9b32b9b0dc1d3039d4314762c79c62^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/61767cbc64649c69bd673494ca137082a25c84f0.file.meals_initial_menu.tpl.php:133
-#: ../../../smarty/templates_c/f76ffdfcdad256c24204d364f08a79c8^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/a25451d3515e5e23ace7ac615462ceae511ac36c.file.changeGrade.tpl.php:156
-#: ../../../smarty/templates_c/89224019825745f42c5e821ebe5682f9^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
-#: ../../../smarty/templates_c/9c8559733c7c6f94d36879f24d405c45ea03136c.file.show_priceclasses.tpl.php:147
-#: ../../../smarty/templates_c/44d5aa350fc543565b63b32fc921b2a7^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/f2128f715b9f62770a49df46344c4460^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/ec84ab963ebe9613284e1db0d3673ef21d8bdca8.file.changeDataForm.tpl.php:151
-#: ../../../smarty/templates_c/7b415d4d25227cfd1604ce5f60bafd2a^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/dfe2673619baad8cf532069545f6444f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/5219913f09f1279f345ac25596bc0565^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/f7b87120f81370a946a9773bd032dfde22e602d2.file.schoolyearSwitchSettings.tpl.php:159
-#: ../../../smarty/templates_c/c0409ae9e83f62481fbfed3f72ac3c85^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/de82f2924405730175362278d7381ed1^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
-#: ../../../smarty/templates_c/d67536f6a3582dc1e0bbd937cc542e9e62b10883.file.mainMenu.tpl.php:116
-#: ../../../smarty/templates_c/7fb8f038c46a276d923030cb5e24d8b6^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/1d0c4466dd2e88c1fccb75485890ee44^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/707e0aac284644300ef1569511e6f8d0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:147
-#: ../../../smarty/templates_c/9eb111b5be8559be63c33100f9210c2e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/7c862a52e499efd71d661ed80448e866ab3cba91.file.importCsvFile.tpl.php:184
-#: ../../../smarty/templates_c/44238ca8d518270a98644887f90dbe9ed035afb8.file.formatted_menu_table.tpl.php:99
-#: ../../../smarty/templates_c/14e4210eabe8e0b4fc471c0255d612065c60917c.file.show_meals.tpl.php:159
-#: ../../../smarty/templates_c/3f871ee107ca834b153f9721ce3cb611^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/818149c8372c3fa5e5e32c9cd62bc5d894003dc9.file.mainmenu.tpl.php:133
-#: ../../../smarty/templates_c/046472c964af18870b944712023105ed2cbcf2bc.file.changeSchooltype.tpl.php:117
-#: ../../../smarty/templates_c/a36df7097db7dd11efa890e7d63becd2^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/4131376768aeda7dc9af28fc0cab0af7^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:102
-#: ../../../smarty/templates_c/2f878d67f74ddacb6e56554edac41c2b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../smarty/templates_c/28b4ba17b8ad0a5c7a9702eced482ca4^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/a35f65cc272307fff5829ae2ca5377ef^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/e9ef32d639f577e7016cba9bc6d3ec88^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/d300b1a65a8c9e93420fec719c7c3e95^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/6a991575aa1e061506dad37cd234dd13^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
-#: ../../../smarty/templates_c/81af9d8a0076e390a700db80fd40b609^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:101
-#: ../../../smarty/templates_c/bfdce0ce780f1b921d0f5d0f77d3a41e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/08b87636831815a329051ca2af6c2131^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/a3a18d123a59baeb078624ed83302ab9735a0d8c.file.index.tpl.php:128
-#: ../../../smarty/templates_c/97dd776ccc42d799232d77d2d7eadbdb2087af4c.file.dialogAutoCreateUsernames.tpl.php:116
-#: ../../../smarty/templates_c/abac30fa7990a32ae4b19e2843f492a3^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../smarty/templates_c/5f5cc045c2a4bca7ede41bd4bca1c11e14f3159f.file.changeClass.tpl.php:150
-#: ../../../smarty/templates_c/d9ae2e659e39b51da4b84a100552c0b5c94fb34c.file.printRechargeBalanceSelect.tpl.php:159
-#: ../../../smarty/templates_c/5d41d89b12e6498bb59be068a987ef34b6de9057.file.form.tpl.php:123
-#: ../../../smarty/templates_c/4b1fe40eacb5550dfde823402c417039^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/1aba61cc2138316ef751086f0b7c8aef^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/4451fdbc13bb18f59777edc53f811b76^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/d686400357de6981c313f550a86efbb0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/37a4abad2565f8c6bf3927c1f637cd07^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:102
-#: ../../../smarty/templates_c/3fe9dd4755277e6278186f28955fcbbd458369e5.file.addSchooltype.tpl.php:115
-#: ../../../smarty/templates_c/fea8382e3cb86c0d31ea0a8b44238b57^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/3aca5d69d87cb7cd10c07c85ed6bb8f1^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/b9ef676150afe51b0b71e54ccaf8fce10e61ecd1.file.form.tpl.php:117
-#: ../../../smarty/templates_c/ad60e971e39e02d8ef91e8131eb32470^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
-#: ../../../smarty/templates_c/f1fb68a4a736ac8b0c11d60311f9ea24cf2a546c.file.displayClassteachers.tpl.php:195
-#: ../../../smarty/templates_c/384270013e2109337508e4d690ab82d4^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
-#: ../../../smarty/templates_c/d5bd7be426d163f094c82f8882c3badf^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../smarty/templates_c/df1e4d596497e17b37303b671be40369^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/ca879b300d561643ebb33c9ba7ee4ca8^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/46d7ac200bb571742c06323e1e7a8b5ea770fe1d.file.main.tpl.php:137
-#: ../../../smarty/templates_c/b979c61321fd6804a55b50bf860d09a683a229af.file.confirm_delete_admin.tpl.php:116
-#: ../../../smarty/templates_c/b4b50b6349ab533465158747cdc7260d^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:112
-#: ../../../smarty/templates_c/587d07c5d0c54d54ca93576150e63890^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/653313aa093ae5dd2ab742df89f4d5ce8fe3c030.file.fileUploadForm.tpl.php:149
-#: ../../../smarty/templates_c/6221e361426f8d0d469deaf81b9184d25dfc8239.file.show_admin_groups.tpl.php:137
-#: ../../../smarty/templates_c/6819e4ee18e749c9a4e594e249811227^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:101
-#: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:357
-#: ../../../smarty/templates_c/6d320c29e0e1511fdc58580d322ba16d^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/ed644aaaf5fefb2a842bebba2040e0f3f62a171d.file.add_meal.tpl.php:134
-#: ../../../smarty/templates_c/d534d9f49bc829123ed4c699a3fa4db7^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/4d022996272f352d84190722f66bc1ed^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/547e8385236d7d6dff30a14f19a0711ca5772983.file.classlist.tpl.php:151
-#: ../../../smarty/templates_c/198a72121709680142960e7c6523f621deaac438.file.show_groups.tpl.php:142
-#: ../../../smarty/templates_c/d5d10f26b865a28cf095a7baade645ed^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/ca042523a2777c7b93c12ee7fa2da788b257227c.file.soli_initial_menu.tpl.php:138
-#: ../../../smarty/templates_c/30c51ac2abcacd4b2faaaaa31300ece1^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/eb4bd6e3e4dbbad921ca508b55f22332^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/0748586e15bdbbd91f885faa7bc33dca^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/b66f56f46a450a048339b5e7fdf70049^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/793097fbd89cfdba8d2e0eda77fb46e6^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/1dfa2a88ec6648ede5006d985c146e61^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../smarty/templates_c/a766f5febf55211ea4f5a1ed0e93342f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/9b176697e9c01ab28e9a627b7e206875^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/a1c6b6c80b42f8498abfb006fd1e9d1e5e250c41.file.classdetails.tpl.php:230
-#: ../../../smarty/templates_c/686caf3f34115759198177dd13ab331c^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:128
-#: ../../../smarty/templates_c/f531db0c8d39f285e60aa959db59594faf0a5e6e.file.form_new_group.tpl.php:139
-#: ../../../smarty/templates_c/535a254aa55c8e371fd9ffa70cfb696f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:102
-#: ../../../smarty/templates_c/49a9e4f01ccd432b8b480ca323d402a2^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/306f600db800299a6ad3ab912cd0c78b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/d95c219a8fb7baf56d0061d297771ed0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../smarty/templates_c/2f920d75b29d2132c6817097df89b1a0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/5c4f5e8298f55bdfc41b1b6cb62330e9^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/baeb13dd0e679c0670d7178c51c47a55^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/5205630910627d7b30771f29339592d83d742f1c.file.changeClassteacher.tpl.php:152
-#: ../../../smarty/templates_c/3fe3cd4fe2198d402677adeafdbd993c923a8f2b.file.priceclass_menu.tpl.php:114
-#: ../../../smarty/templates_c/06dd0d9732ef303ee29fef713e85b555^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:114
-#: ../../../smarty/templates_c/ceaf0ad7d9fe554cda482d67b1c284e9cd3a25d6.file.recharge_success.tpl.php:112
-#: ../../../smarty/templates_c/ae38d2b047d428ee59a9881a50e5d090^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/8aa904b2039d13bed04c64e858656380^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:101
-#: ../../../smarty/templates_c/1b545d44b0a0623299d3305753b50bf1111e2703.file.showGrades.tpl.php:208
-#: ../../../smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:258
-#: ../../../smarty/templates_c/1081a3ef152a60fd6957b974abb091ce54e7d1f4.file.importLocalCsvFile.tpl.php:138
-#: ../../../smarty/templates_c/e29344e5fddedce49eda85e42920220e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:102
-#: ../../../smarty/templates_c/ceec5c5e493d80cdb00c6fc1b1f84bf0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-#: ../../../smarty/templates_c/d925ccfd02616368489173c0239296c41d838a43.file.displayClasses.tpl.php:235
-#: ../../../smarty/templates_c/777ebcedd35b28752564bee134b4cc0f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:103
-#: ../../../smarty/templates_c/96c7be0a38d11f4c59e8d0e03e8af275^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:113
-msgid "Back"
-msgstr "zurück"
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:629
+msgid "What Columns should be displayed"
+msgstr "Welche Spalten angezeigt werden sollen"
 
-#: ../../../include/smarty-gettext/smarty2c.c:482
-#: ../../../smarty/templates_c/61311f7f7fb60d3dae427fe42bb0cc9d^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/3eb0db64f553de2c6d2b3cfcf12fb33948f1ba0a.file.show_soli.tpl.php:158
-#: ../../../smarty/templates_c/598e6acc5f3bcd6b3615f13c309eaebd^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../smarty/templates_c/69ef1474499747a738f5d4a1531c6368^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
-#: ../../../smarty/templates_c/b4c831a78d52cf96e32ee4f16aae16a94472c7d7.file.show_orders_select_date.tpl.php:124
-#: ../../../smarty/templates_c/8b712f5beaeafcf6d28b6ca8620568fa^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/0cd7c5a039495beac1f26ece05193e06^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../smarty/templates_c/636441a92bd78923471ca1393e876607^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/48c6d6c3c8d49d53db66eafdca634838^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../smarty/templates_c/c5e04422d7253498e27ca9bbb9fe5383^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/8c8b534d695ba143ddb57dc057a0c5d0e8505d3f.file.mainMenu.tpl.php:120
-#: ../../../smarty/templates_c/045db863b95c89679e3820eb7d397bd5^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/af7c4a46c8c61bdeb8dae903c70385e5^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/277023282b4cc18ca18acb57da7166581f1aee33.file.addClass.tpl.php:155
-#: ../../../smarty/templates_c/54357cbff38bb9a56a3f0320b4a11859bfb76f9e.file.addGrade.tpl.php:153
-#: ../../../smarty/templates_c/e693a97a437fc988b339dc119089dcfe^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/bbf9ad2fdd63936ac404f5b9f6172b50^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/20b5c846cd8333f8d6fb3350d797e9ec^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../smarty/templates_c/3a2f75ea979a961e0e90243618a8d1e82c2749f8.file.mainMenu.tpl.php:157
-#: ../../../smarty/templates_c/f192c0b6d274b2dabfa2ab4496db5562^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/08f09ebdf491fb65de6505244c66b2022d891c8a.file.form2.tpl.php:131
-#: ../../../smarty/templates_c/ddb0d0ba8ee9fdf4e444b4e7b21ba5fa679b1c85.file.addClassteacher.tpl.php:143
-#: ../../../smarty/templates_c/83acc38b8be114f6de986e149986d28dc9513209.file.add_coupon.tpl.php:136
-#: ../../../smarty/templates_c/380b69cc0f234b463033e8afe3c1cd264bc66b9e.file.checkout.tpl.php:168
-#: ../../../smarty/templates_c/bdb15ee20b1d3b444dfd8197c98a3f07^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/6b2a561c23564141ab6fe75158bab493^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/9c43cff433cc0199a399a11eaed29f0edaeaaad9.file.form1.tpl.php:117
-#: ../../../smarty/templates_c/b8290a55c06d0c945dc0c9d45c953257472a419f.file.changePresetPassword.tpl.php:139
-#: ../../../smarty/templates_c/a1c606792afd58a9f36bea654b33b612^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/8379559d312825dae10d96a6acea1c32^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/c12ad3b6a4c00e915c42df669b4e2240^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/d91ce8105c7f0fd68454fa10e5a24c68^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/1f6a26e35709fa6f1e23ae9594968969^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/628001cb7e9a9871b59b46bcb7d44a7e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../smarty/templates_c/b25e78662f0a215c299127dc25b9859a^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/002055c25e67803b204546232850a4d6^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/230554c0e2a57d045b6f2bf014fda1206d86620b.file.show_admins.tpl.php:143
-#: ../../../smarty/templates_c/ff62410a4490a05fe5ba9f3a9b846715^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/aa42d7ed24f43d736e58e142af6a9221^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/4c3577b6952e07ee02b042f81e383c19^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/2b98c7a7c317fbdf1731b4384a084dd19d393c79.file.mainMenu.tpl.php:164
-#: ../../../smarty/templates_c/cf0d094d9c4584318b6f76fe71bea06b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/664c01597200c1a7ae5862799806ad03^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../smarty/templates_c/2ca92fd8323335f226298095835d98ca262d96a5.file.mainMenu.tpl.php:115
-#: ../../../smarty/templates_c/516a0803d1835a440051f88826fca39f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/4d797408ac0de3b6aa7c65dc5ffba2ebd1793600.file.edit_infotext.tpl.php:133
-#: ../../../smarty/templates_c/7f87ee520e7730d927ab3b83507d7254e2abc307.file.form.tpl.php:123
-#: ../../../smarty/templates_c/e819f7f99ecd450a383ffdfbb8dfbf425712c54b.file.usernameRemoveSpecialChars.tpl.php:119
-#: ../../../smarty/templates_c/1e3dbc5247bf8a44d36892940a1f2eccddf694a2.file.form.tpl.php:122
-#: ../../../smarty/templates_c/23319d8ef0a908c25db037491895a5965906a6ca.file.mainMenu.tpl.php:125
-#: ../../../smarty/templates_c/ff2dc585d32d39fe88f4d4dc8855a13dcb87b733.file.scanCard.tpl.php:122
-#: ../../../smarty/templates_c/3266fc8f1560d681dc8ece178a2e516e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/d204f5a78a2c54aaf0be5e199eaeed92^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/4d9b32b9b0dc1d3039d4314762c79c62^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/61767cbc64649c69bd673494ca137082a25c84f0.file.meals_initial_menu.tpl.php:138
-#: ../../../smarty/templates_c/f76ffdfcdad256c24204d364f08a79c8^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/a25451d3515e5e23ace7ac615462ceae511ac36c.file.changeGrade.tpl.php:161
-#: ../../../smarty/templates_c/89224019825745f42c5e821ebe5682f9^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:122
-#: ../../../smarty/templates_c/9c8559733c7c6f94d36879f24d405c45ea03136c.file.show_priceclasses.tpl.php:152
-#: ../../../smarty/templates_c/44d5aa350fc543565b63b32fc921b2a7^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/f2128f715b9f62770a49df46344c4460^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/ec84ab963ebe9613284e1db0d3673ef21d8bdca8.file.changeDataForm.tpl.php:156
-#: ../../../smarty/templates_c/7b415d4d25227cfd1604ce5f60bafd2a^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/dfe2673619baad8cf532069545f6444f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/5219913f09f1279f345ac25596bc0565^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/f7b87120f81370a946a9773bd032dfde22e602d2.file.schoolyearSwitchSettings.tpl.php:164
-#: ../../../smarty/templates_c/c0409ae9e83f62481fbfed3f72ac3c85^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/de82f2924405730175362278d7381ed1^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
-#: ../../../smarty/templates_c/d67536f6a3582dc1e0bbd937cc542e9e62b10883.file.mainMenu.tpl.php:121
-#: ../../../smarty/templates_c/7fb8f038c46a276d923030cb5e24d8b6^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/1d0c4466dd2e88c1fccb75485890ee44^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/707e0aac284644300ef1569511e6f8d0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/4311394d11d41ff180fa18ec81c8b40d6ba0a95d.file.show_settings.tpl.php:152
-#: ../../../smarty/templates_c/9eb111b5be8559be63c33100f9210c2e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/7c862a52e499efd71d661ed80448e866ab3cba91.file.importCsvFile.tpl.php:189
-#: ../../../smarty/templates_c/44238ca8d518270a98644887f90dbe9ed035afb8.file.formatted_menu_table.tpl.php:104
-#: ../../../smarty/templates_c/14e4210eabe8e0b4fc471c0255d612065c60917c.file.show_meals.tpl.php:164
-#: ../../../smarty/templates_c/3f871ee107ca834b153f9721ce3cb611^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/818149c8372c3fa5e5e32c9cd62bc5d894003dc9.file.mainmenu.tpl.php:138
-#: ../../../smarty/templates_c/046472c964af18870b944712023105ed2cbcf2bc.file.changeSchooltype.tpl.php:122
-#: ../../../smarty/templates_c/a36df7097db7dd11efa890e7d63becd2^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/4131376768aeda7dc9af28fc0cab0af7^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:107
-#: ../../../smarty/templates_c/2f878d67f74ddacb6e56554edac41c2b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../smarty/templates_c/28b4ba17b8ad0a5c7a9702eced482ca4^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/a35f65cc272307fff5829ae2ca5377ef^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/e9ef32d639f577e7016cba9bc6d3ec88^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/d300b1a65a8c9e93420fec719c7c3e95^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/6a991575aa1e061506dad37cd234dd13^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:122
-#: ../../../smarty/templates_c/81af9d8a0076e390a700db80fd40b609^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:106
-#: ../../../smarty/templates_c/bfdce0ce780f1b921d0f5d0f77d3a41e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/08b87636831815a329051ca2af6c2131^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/a3a18d123a59baeb078624ed83302ab9735a0d8c.file.index.tpl.php:133
-#: ../../../smarty/templates_c/97dd776ccc42d799232d77d2d7eadbdb2087af4c.file.dialogAutoCreateUsernames.tpl.php:121
-#: ../../../smarty/templates_c/abac30fa7990a32ae4b19e2843f492a3^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../smarty/templates_c/5f5cc045c2a4bca7ede41bd4bca1c11e14f3159f.file.changeClass.tpl.php:155
-#: ../../../smarty/templates_c/d9ae2e659e39b51da4b84a100552c0b5c94fb34c.file.printRechargeBalanceSelect.tpl.php:164
-#: ../../../smarty/templates_c/5d41d89b12e6498bb59be068a987ef34b6de9057.file.form.tpl.php:128
-#: ../../../smarty/templates_c/4b1fe40eacb5550dfde823402c417039^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/1aba61cc2138316ef751086f0b7c8aef^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/4451fdbc13bb18f59777edc53f811b76^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/d686400357de6981c313f550a86efbb0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/37a4abad2565f8c6bf3927c1f637cd07^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:107
-#: ../../../smarty/templates_c/3fe9dd4755277e6278186f28955fcbbd458369e5.file.addSchooltype.tpl.php:120
-#: ../../../smarty/templates_c/fea8382e3cb86c0d31ea0a8b44238b57^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/3aca5d69d87cb7cd10c07c85ed6bb8f1^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/b9ef676150afe51b0b71e54ccaf8fce10e61ecd1.file.form.tpl.php:122
-#: ../../../smarty/templates_c/ad60e971e39e02d8ef91e8131eb32470^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
-#: ../../../smarty/templates_c/f1fb68a4a736ac8b0c11d60311f9ea24cf2a546c.file.displayClassteachers.tpl.php:200
-#: ../../../smarty/templates_c/384270013e2109337508e4d690ab82d4^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:122
-#: ../../../smarty/templates_c/d5bd7be426d163f094c82f8882c3badf^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../smarty/templates_c/df1e4d596497e17b37303b671be40369^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/ca879b300d561643ebb33c9ba7ee4ca8^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/46d7ac200bb571742c06323e1e7a8b5ea770fe1d.file.main.tpl.php:142
-#: ../../../smarty/templates_c/b979c61321fd6804a55b50bf860d09a683a229af.file.confirm_delete_admin.tpl.php:121
-#: ../../../smarty/templates_c/b4b50b6349ab533465158747cdc7260d^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:117
-#: ../../../smarty/templates_c/587d07c5d0c54d54ca93576150e63890^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/653313aa093ae5dd2ab742df89f4d5ce8fe3c030.file.fileUploadForm.tpl.php:154
-#: ../../../smarty/templates_c/6221e361426f8d0d469deaf81b9184d25dfc8239.file.show_admin_groups.tpl.php:142
-#: ../../../smarty/templates_c/6819e4ee18e749c9a4e594e249811227^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:106
-#: ../../../smarty/templates_c/03296fd2e25e87b709f7d5f4c535c70fc98518c8.file.displayClassDetails.tpl.php:362
-#: ../../../smarty/templates_c/6d320c29e0e1511fdc58580d322ba16d^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/ed644aaaf5fefb2a842bebba2040e0f3f62a171d.file.add_meal.tpl.php:139
-#: ../../../smarty/templates_c/d534d9f49bc829123ed4c699a3fa4db7^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/4d022996272f352d84190722f66bc1ed^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/547e8385236d7d6dff30a14f19a0711ca5772983.file.classlist.tpl.php:156
-#: ../../../smarty/templates_c/198a72121709680142960e7c6523f621deaac438.file.show_groups.tpl.php:147
-#: ../../../smarty/templates_c/d5d10f26b865a28cf095a7baade645ed^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/ca042523a2777c7b93c12ee7fa2da788b257227c.file.soli_initial_menu.tpl.php:143
-#: ../../../smarty/templates_c/30c51ac2abcacd4b2faaaaa31300ece1^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/eb4bd6e3e4dbbad921ca508b55f22332^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/0748586e15bdbbd91f885faa7bc33dca^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/b66f56f46a450a048339b5e7fdf70049^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/793097fbd89cfdba8d2e0eda77fb46e6^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/1dfa2a88ec6648ede5006d985c146e61^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../smarty/templates_c/a766f5febf55211ea4f5a1ed0e93342f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/9b176697e9c01ab28e9a627b7e206875^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/a1c6b6c80b42f8498abfb006fd1e9d1e5e250c41.file.classdetails.tpl.php:235
-#: ../../../smarty/templates_c/686caf3f34115759198177dd13ab331c^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:133
-#: ../../../smarty/templates_c/f531db0c8d39f285e60aa959db59594faf0a5e6e.file.form_new_group.tpl.php:144
-#: ../../../smarty/templates_c/535a254aa55c8e371fd9ffa70cfb696f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:107
-#: ../../../smarty/templates_c/49a9e4f01ccd432b8b480ca323d402a2^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/306f600db800299a6ad3ab912cd0c78b^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/d95c219a8fb7baf56d0061d297771ed0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../smarty/templates_c/2f920d75b29d2132c6817097df89b1a0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/5c4f5e8298f55bdfc41b1b6cb62330e9^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/baeb13dd0e679c0670d7178c51c47a55^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/5205630910627d7b30771f29339592d83d742f1c.file.changeClassteacher.tpl.php:157
-#: ../../../smarty/templates_c/3fe3cd4fe2198d402677adeafdbd993c923a8f2b.file.priceclass_menu.tpl.php:119
-#: ../../../smarty/templates_c/06dd0d9732ef303ee29fef713e85b555^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:119
-#: ../../../smarty/templates_c/ceaf0ad7d9fe554cda482d67b1c284e9cd3a25d6.file.recharge_success.tpl.php:117
-#: ../../../smarty/templates_c/ae38d2b047d428ee59a9881a50e5d090^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/8aa904b2039d13bed04c64e858656380^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:106
-#: ../../../smarty/templates_c/1b545d44b0a0623299d3305753b50bf1111e2703.file.showGrades.tpl.php:213
-#: ../../../smarty/templates_c/1d430ec620c253040893f778e5e7d18ee4531eb0.file.review.tpl.php:263
-#: ../../../smarty/templates_c/1081a3ef152a60fd6957b974abb091ce54e7d1f4.file.importLocalCsvFile.tpl.php:143
-#: ../../../smarty/templates_c/e29344e5fddedce49eda85e42920220e^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:107
-#: ../../../smarty/templates_c/ceec5c5e493d80cdb00c6fc1b1f84bf0^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-#: ../../../smarty/templates_c/d925ccfd02616368489173c0239296c41d838a43.file.displayClasses.tpl.php:240
-#: ../../../smarty/templates_c/777ebcedd35b28752564bee134b4cc0f^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:108
-#: ../../../smarty/templates_c/96c7be0a38d11f4c59e8d0e03e8af275^820ab2b0fa7b20b40548c76c35573744cc76ad44.file.message.tpl.php:118
-msgid "Back to the Module"
-msgstr "zurück zum Modul"
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:632
+msgid "Columns"
+msgstr "Spalten"
 
-#: ../../../include/smarty-gettext/smarty2c.c:485
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:635
+msgid "Pdfs of deleted users"
+msgstr "Pdfs der gelöschten Nutzer"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:638
+msgid "Rows per page"
+msgstr "Reihen pro Seite"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:641
+msgid "Previous"
+msgstr "Vorherige"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:644
+msgid "Next"
+msgstr "Nächste"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:647
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:686
+msgid "Home"
+msgstr "Startseite"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:650
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:695
+msgid "Logout"
+msgstr "Ausloggen"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:653
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:698
+msgid "Sorry! An error occured. We could not handle your request."
+msgstr ""
+"Sorry! Ein Fehler ist aufgetreten. Wir konnten deine Anfrage nicht "
+"bearbeiten."
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:656
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:662
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:668
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:674
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:701
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:707
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:713
 msgid "back"
 msgstr "zurück"
 
-#: ../../../administrator/Administrator.php:133
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:659
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:704
+msgid "Information"
+msgstr "Hinweis"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:665
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:710
+msgid "Success!"
+msgstr "Erfolgreich!"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:671
+msgid "Unregister from all classes at this day"
+msgstr "Von allen Kursen an diesem Tag abmelden"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:677
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:689
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:725
+msgid "Help"
+msgstr "Hilfe"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:692
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:716
+msgid "Actions:"
+msgstr "Aktionen:"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:719
+msgid "Contact:"
+msgstr "Kontakt:"
+
+#: ../../../include/3rdParty/smarty-gettext/smarty.c:722
+msgid "More:"
+msgstr "Mehr:"
+
+#: ../../../administrator/Login.php:116 ../../../web/Login.php:92
+#: ../../../web/Login.php:174
+msgid "User not found or incorrect password"
+msgstr "Benutzer nicht gefunden oder inkorrektes Passwort"
+
+#: ../../../administrator/Login.php:133
+msgid "Please fill out the form completely."
+msgstr "Bitte fülle das Formular komplett aus."
+
+#: ../../../administrator/Administrator.php:32
+msgid "The session is invalid, please login again"
+msgstr "Die Sitzung ist abgelaufen, bitte logge dich nochmal ein."
+
+#: ../../../administrator/Administrator.php:222
 msgid ""
 "Error Accessing the Admin-Layer; Either the Module does not exist, or you "
 "dont have the rights to access it!"
@@ -1071,7 +930,42 @@ msgstr ""
 "Entweder existiert das Modul nicht, oder sie haben keine Rechte es zu "
 "benutzen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:163
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:167
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/AssignUsersToClasses.php:48
+msgid "Could not check if the UsersToClasses-Table exists!"
+msgstr "Konnte nicht überprüfen ob die Benutzer-In-Kurse-Tabelle existiert!"
+
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:205
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/ChangeStatusOfUser.php:64
+msgid "Could not change the Status of the User"
+msgstr "Konnte den Status des Nutzers nicht verändern!"
+
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:274
+msgid "Could not newly assign the User to the Class!"
+msgstr "Konnte den Benutzer nicht neu zu dem Kurs hinzufügen!"
+
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:278
+msgid "The User was successfully assigned to the Class."
+msgstr "Der Benutzer wurde erfolgreich der Klasse zugewiesen."
+
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:301
+msgid "No User found by the Username!"
+msgstr "Keinen Benutzer bei seinem Benutzernamen gefunden!"
+
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:307
+msgid "Error while fetching the User from the Database!"
+msgstr ""
+"Ein Fehler ist beim Abrufen der Benutzer von der Datenbank aufgetreten!"
+
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/AddUserToClass.php:30
+msgid "The User was successfully added"
+msgstr "Der Benutzer wurde erfolgreich hinzugefügt"
+
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/AddUserToClass.php:61
+msgid "Could not add the User to the Class"
+msgstr "Konnte den Benutzer nicht zu dem Kurs zuweisen!"
+
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/Reset.php:31
 msgid ""
 "The Data was successfully Assigned. You can now go back and view and edit "
 "the temporary changes"
@@ -1079,99 +973,81 @@ msgstr ""
 "Die Daten wurden erfolgreich zugewiesen. Sie können jetzt zurückgehen und "
 "die temporären Veränderungen einsehen und bearbeiten."
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:181
-msgid "Could not check if the UsersToClasses-Table exists!"
-msgstr "Konnte nicht überprüfen ob die Benutzer-In-Kurse-Tabelle existiert!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:200
-msgid "Could not delete the UsersToClasses-Table!"
-msgstr "Konnte den die Benutzer-in-Kurs-Tabelle nicht löschen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:225
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/Reset.php:59
 msgid "Could not create the UsersToClasses-Table!"
 msgstr "Konnte die Benuter-in-Kurse-Tabelle nicht erstellen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:251
-msgid "No Requests of Users found!"
-msgstr "Keine Wünsche der Benutzer gefunden!"
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/Reset.php:75
+msgid "Could not delete the UsersToClasses-Table!"
+msgstr "Konnte den die Benutzer-in-Kurs-Tabelle nicht löschen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:298
-msgid "Could not fetch the Temporary Assignments!"
-msgstr "Konnte die temporären Zuweisungen nicht abrufen!"
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/Reset.php:100
+msgid "Could not fetch the status"
+msgstr "Konnte den Status nicht abrufen"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:314
-msgid "Error while fetching the data!"
-msgstr "Ein Fehler ist beim Abrufen der Daten aufgetreten!"
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/Reset.php:137
+msgid "Could not fetch the requests!"
+msgstr "Konnte die Anfragen nicht abrufen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:334
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:493
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/Reset.php:359
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:162
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:191
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:497
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:550
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:577
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:609
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:615
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:644
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:650
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:678
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:64
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:193
+msgid "Could not upload the data!"
+msgstr "Konnte die Daten nicht hochladen!"
+
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/ClassdetailsGet.php:30
 msgid "Could not fetch the User-Assignments"
 msgstr "Konnte die Benutzerzuweisungen nicht abrufen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:395
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/ChangeStatusOfUser.php:30
 msgid "Could not fetch the Status"
 msgstr "Konnte den Status nicht abrufen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:402
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/ChangeStatusOfUser.php:36
 msgid "The Status of the User was successfully changed"
 msgstr "Der Status des Nutzers wurde erfolgreich geändert."
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:427
-msgid "Could not change the Status of the User"
-msgstr "Konnte den Status des Nutzers nicht verändern!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:468
-msgid "Could not move the User to the other Class!"
-msgstr "Konnte die Benutzer nicht zu dem anderen Kurs verschieben!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:473
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/ChangeClassOfUser.php:28
 msgid "The User was successfully moved."
 msgstr "Der Benutzer wurde erfolgreich verschoben."
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:529
-msgid "Could not add the User to the Class"
-msgstr "Konnte den Benutzer nicht zu dem Kurs zuweisen!"
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/ChangeClassOfUser.php:50
+msgid "Could not move the User to the other Class!"
+msgstr "Konnte die Benutzer nicht zu dem anderen Kurs verschieben!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:533
-msgid "The User was successfully added"
-msgstr "Der Benutzer wurde erfolgreich hinzugefügt"
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/ApplyChanges.php:31
+msgid "The users were successfully assigned to their respective classes!"
+msgstr "Die Benutzer wurden erfolgreich ihren Kursen zugewiesen."
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:576
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/ApplyChanges.php:54
 msgid "Could not delete the old Joints!"
 msgstr "Die alten Zuweisungen konnte nicht gelöscht werden!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:596
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/ApplyChanges.php:74
 msgid "Could not add the new Joints!"
 msgstr "Konnte die neuen Zuweisungen nicht hinzufügen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:613
-msgid "Could not newly assign the User to the Class!"
-msgstr "Konnte den Benutzer nicht neu zu dem Kurs hinzufügen!"
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/Classdetails.php:31
+msgid "Error while fetching the data!"
+msgstr "Ein Fehler ist beim Abrufen der Daten aufgetreten!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:617
-msgid "The User was successfully assigned to the Class."
-msgstr "Der Benutzer wurde erfolgreich der Klasse zugewiesen."
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/Classdetails.php:60
+msgid "Could not fetch all classes of the active schoolyear"
+msgstr "Konnte nicht alle Kurse des aktiven Schuljahres abrufen"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:640
-msgid "No User found by the Username!"
-msgstr "Keinen Benutzer bei seinem Benutzernamen gefunden!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:646
-msgid "Error while fetching the User from the Database!"
-msgstr ""
-"Ein Fehler ist beim Abrufen der Benutzer von der Datenbank aufgetreten!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:810
-msgid "Error fetching the Choices of the Users!"
-msgstr "Konnte die Kurswahlen der Benutzer nicht abrufen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:837
-msgid "Could not fetch the StatusIds!"
-msgstr "Konnte die Status-IDs nicht abrufen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:991
-msgid "Could not Shuffle the Requests!"
-msgstr "Konnte die Kursanfragen nicht mischen!"
+#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/Overview.php:53
+msgid "Could not fetch the Temporary Assignments!"
+msgstr "Konnte die temporären Zuweisungen nicht abrufen!"
 
 #: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:95
 msgid "The Class was successfully added."
@@ -1237,63 +1113,63 @@ msgstr "Der zu löschende Kurs wurde nicht gefunden!"
 msgid "Class-ID"
 msgstr "Kurs-ID"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:382
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:385
 msgid "The Class was successfully deleted"
 msgstr "Der Kurs wurde erfolgreich gelöscht"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:402
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:405
 msgid "Could not delete the Class!"
 msgstr "Der Kurs konnte nicht gelöscht werden!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:455
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:458
 msgid "Could not fetch the active Schoolyear!"
 msgstr "Konnte die Kurse des aktiven Schuljahres nicht abrufen"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:486
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:489
 msgid "There is no active Schoolyear set!"
 msgstr "Kein aktives Schuljahr wurde gesetzt!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:538
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:545
 #, php-format
 msgid "Could not fetch the Classes by SchoolyearId $1%s"
-msgstr "Konnte den Benutzer anhand der SchuljahrId %1$s nicht abrufen!"
+msgstr "Konnte die Klassen anhand der SchuljahrId %1$s nicht abrufen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:609
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:617
 msgid "Could not fetch the Class(es)!"
 msgstr "Konnte die Kurse/den Kurs nicht abrufen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:658
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:674
 msgid "Could not fetch the Users by Class"
 msgstr "Konnte die Benutzer des Kurses nicht abrufen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:697
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:714
 msgid "Could not fetch the Classes of the User at the same day"
 msgstr ""
 "Konnte die Kurse des Benutzers, die am selben tag stattfinden, nicht abrufen"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:716
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:733
 msgid "Error fetching the Statuses!"
 msgstr "Konnte die Statuse nicht abrufen"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:769
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:786
 msgid "The Global Classregistration was successfully changed."
 msgstr "Die Kursregistrationen wurde erfolgreich verändert."
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:796
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:813
 msgid "Could not change the Global Classregistration!"
 msgstr "Konnte die Kursregistrationen nicht verändern!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:816
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:833
 msgid "Could not change the individual classregistrations!"
 msgstr "Konnte die Kursregistrationen der jeweiligen Kurse nicht verändern!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:853
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:870
 msgid "Could not check whether the global Classregistration isenabled or not."
 msgstr ""
 "Konnte nicht herausfinden ob der \"ist Kursregistration erlaubt\"-Schalter "
 "aktiviert ist oder nicht."
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:872
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:889
 msgid "Could not add the Global Classregistration setting!"
 msgstr "Konnte den \"ist Kursregistration erlaubt\"-Schalter nicht hinzufügen!"
 
@@ -1329,144 +1205,78 @@ msgstr "Keine Kurse gegeben."
 msgid "Could not execute the Query!"
 msgstr "Konnte die Query nicht ausführen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:114
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:115
 msgid "Could not fetch the Classes of the Active Schoolyear"
 msgstr "Konnte nicht die Kurse des aktiven Schuljahres abrufen"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:135
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:136
 msgid "The Classteacher was successfully added."
 msgstr "Der Kurslehrer wurde erfolgreich hinzugefügt"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:151
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:53
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:69
-msgid "Forename"
-msgstr "Vorname"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:156
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:157
 #: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:54
 #: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:73
 msgid "Surname"
 msgstr "Nachname"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:161
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:162
 msgid "Address"
 msgstr "Adresse"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:166
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:167
 msgid "Telephone Number"
 msgstr "Telefonnummer"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:189
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:190
 msgid ""
 "You cant choose that the Classteacher has No Classes AND select classes!"
 msgstr ""
 "Sie können nicht wählen dass der Kursleiter gleichzeitig \"keine Kurse\" hat "
 "und dabei Kurse auswählen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:216
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:217
 msgid "Could not add the Classteacher!"
 msgstr "Konnte den Kursleiter nicht hinzufügen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:243
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:244
 msgid "Could not add the Classes to the Classteacher!"
 msgstr "Konnte die Kurse des Kursleiters nicht hinzufügen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:261
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:262
 msgid "No ID given!"
 msgstr "Keine ID gegeben!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:279
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:280
 msgid "The Classteacher was successfully changed."
 msgstr "Der Kursleiter wurde erfolgreich verändert."
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:308
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:309
 msgid "Could not change the Classteacher!"
 msgstr "Konnte den Kursleiter nicht verändern!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:329
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:330
 msgid "Could not change the Classes of the Classteacher!"
 msgstr "Konnte die Kurse des Kursleiters nicht verändern!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:435
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:436
 msgid "Could not fetch the Classes of the Classteacher!"
 msgstr "Konnte die Kurse des Kursleiters nicht abrufen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:451
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:452
 msgid "The Classteacher was successfully deleted!"
 msgstr "Der Kursleiter wurde erfolgreich gelöscht."
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:454
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:455
 msgid "Id is not set!"
 msgstr "Die ID wurde nicht gesetzt!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:476
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:477
 msgid "Could not delete the Classteacher!"
 msgstr "Konnte den Kursleiter nicht löschen!"
 
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:515
+#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:516
 msgid "Could not fetch the Classteachers"
 msgstr "Konnte die Kursleiter nicht abrufen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:53
-msgid "wrong action-value!"
-msgstr "Falsche action-value!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:80
-#, php-format
-msgid "Grade \"%1$s-%2$s\" was successfully added"
-msgstr "Die Klasse \"%1$s-%2$s\" wurde erfolgreich hinzugefügt"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:101
-msgid "Gradelabel"
-msgstr "Klassenbezeichnung"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:103
-msgid "Gradelevel"
-msgstr "Klassenjahrgang"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:105
-msgid "Schooltype"
-msgstr "Schultyp"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:129
-#, php-format
-msgid "Error adding the Grade \"%1$s-%2$s\""
-msgstr "Konnte die Klasse \"%1$s-%2$s\" nicht hinzufügen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:157
-msgid "Could not fetch the Grades"
-msgstr "Konnte die Klassen nicht abrufen"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:160
-msgid "No Grades found"
-msgstr "Keine Klassen gefunden"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:176
-msgid "The Grade was successfully deleted"
-msgstr "Die Klassen wurden erfolgreich gelöscht"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:191
-#, php-format
-msgid "Error deleting the Grade with the ID %1$s!"
-msgstr "Konnte die Klasse mit der ID %1$s nicht löschen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:209
-#, php-format
-msgid "Could not delete the Joins of the GradeId \"%1$s\""
-msgstr "Konnte die Verbindungen zur KlassenID \"%1$s\" nicht löschen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:232
-msgid "Could not fetch the Grade"
-msgstr "Konnte die Klasse nicht abrufen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:250
-msgid "The Grade was successfully changed"
-msgstr "Die Klasse wurde erfolgreich verändert"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Grade/Grade.php:277
-msgid "Could not change the Grade!"
-msgstr "Konnte die Klasse nicht verändern!"
 
 #: ../../../administrator/headmod_Gnissel/modules/mod_GChangeCard/AdminGChangeCardProcessing.php:127
 msgid "The User had no cardnumber in the first place; Card not changed!"
@@ -1534,6 +1344,10 @@ msgstr "Die Infotexte wurden erfolgreich geändert"
 #: ../../../administrator/headmod_Babesk/modules/mod_Meals/Meals.php:311
 msgid "Could not change the Infotext!"
 msgstr "Konnte die Infotexte nicht verändern!"
+
+#: ../../../administrator/headmod_Babesk/modules/mod_Meals/AdminMealProcessing.php:86
+msgid "Mealdate at weekend not valid!"
+msgstr "Mahlzeitendatum wurde am Wochenende gewählt, ist nicht korrekt!"
 
 #: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:105
 msgid "Useraccount is locked!"
@@ -1630,7 +1444,11 @@ msgstr ""
 "Konnte nicht überprüfen ob der Benutzer Teilhabepaketberechtigt ist oder "
 "nicht"
 
-#: ../../../administrator/headmod_Statistics/modules/mod_KuwasysStats/KuwasysStats.php:131
+#: ../../../administrator/headmod_Statistics/modules/mod_KuwasysStats/KuwasysStatsUsersChosenStackedBarChart.php:127
+msgid "No ST"
+msgstr "Kein ST"
+
+#: ../../../administrator/headmod_Statistics/modules/mod_KuwasysStats/KuwasysStats.php:136
 msgid "Error analyzing the statistics!"
 msgstr "Ein Fehler ist beim analysieren der Statistiken aufgetreten!"
 
@@ -1729,11 +1547,9 @@ msgstr ""
 msgid "Wrong action-value!"
 msgstr "Falsche action-value!"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:81
-msgid "The Schoolyear was added successfully"
-msgstr "Das Schuljahr wurde erfolgreich hinzugefügt"
-
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:95
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:83
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:104
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:271
 msgid ""
 "An active schoolyear already exists! Please add the schoolyear without it "
 "being active and then activate it in the menu."
@@ -1741,69 +1557,63 @@ msgstr ""
 "Ein aktives Schuljahr existiert bereits! Bitte aktivieren sie das Schuljahr "
 "erst nach dem Hinzufügen."
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:119
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:90
+msgid "The Schoolyear was added successfully"
+msgstr "Das Schuljahr wurde erfolgreich hinzugefügt"
+
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:134
 msgid "Could not check if an active schoolyear already exists"
 msgstr ""
 "Konnte nicht überprüfen ob ein aktiviertes Schuljahr bereits existiert!"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:127
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:142
 msgid "Name of Schoolyear"
 msgstr "Name des Schuljahres"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:149
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:164
 msgid "Could not add the Schoolyear"
 msgstr "Konnte das Schuljahr nicht hinzufügen"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:170
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:185
 msgid "Error Fetching the Schoolyears!"
 msgstr "Konnte die Schuljahre nicht abrufen"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:183
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:198
 msgid "The Schoolyear was successfully deleted"
 msgstr "Das Schuljahr wurde erfolgreich gelöscht"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:186
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:201
 msgid "The Schoolyear was not deleted"
 msgstr "Das Schuljahr wurde nicht gelöscht"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:199
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:214
 msgid "Could not delete the Schoolyear!"
 msgstr "Konnte das Schuljahr nicht löschen!"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:207
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:222
 msgid "The Schoolyear was successfully activated"
 msgstr "Das Schuljahr wurde erfolgreich aktiviert"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:240
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:256
 msgid "Could not fetch the Schoolyear from the Database"
 msgstr "Kontne das Schuljahr nicht von der Datenbank abrufen"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:251
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:277
 msgid "The Schoolyear was successfully changed"
 msgstr "Das Schuljahr wurde erfolgreich verändert"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:271
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:300
 msgid "Could not change the Schoolyear"
 msgstr "Konnte das Schuljahr nicht verändern"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:304
+#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:333
 msgid "No schoolyear selected!"
 msgstr "Kein Schuljahr ausgewählt!"
-
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:56
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:76
-msgid "Birthday"
-msgstr "Geburtstag"
 
 #: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:57
 #: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:77
 msgid "Email-Address"
 msgstr "Email-Adresse"
-
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:58
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:78
-msgid "Password"
-msgstr "Passwort"
 
 #: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:59
 #: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:79
@@ -1814,12 +1624,6 @@ msgstr "Schuljahr"
 #: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:80
 msgid "Grade"
 msgstr "Klasse"
-
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:61
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:82
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:97
-msgid "Credits"
-msgstr "Guthaben"
 
 #: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:62
 msgid "PricegroupId"
@@ -1878,35 +1682,43 @@ msgstr "Konnte die Preisgruppen \"%1$s\" nicht finden!"
 msgid "Could not find the Usergroup by Path \"%1$s\""
 msgstr "Konnte die Nutzergruppe anhand des Pfads \"%1$s\" nicht finden"
 
-#: ../../../administrator/headmod_System/modules/mod_User/User.php:247
+#: ../../../administrator/headmod_System/modules/mod_User/DisplayChange.php:23
+msgid "Missing id of the user!"
+msgstr "Id des Nutzers fehlt!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/User.php:383
 msgid "Could not check if first Password on Login is enabled!"
 msgstr ""
 "Konnte nicht überprüfen ob das passwort beim ersten Login verändert werden "
 "soll!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/User.php:522
+#: ../../../administrator/headmod_System/modules/mod_User/User.php:491
+msgid "Could not remove the special characters!"
+msgstr "Konnte die Spezialzeichen nicht entfernen!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/User.php:495
+msgid "The special characters were successfully removed!"
+msgstr "Die Sonderzeichen wurden erfolgreich entfernt!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/User.php:644
 msgid "Could not fetch the Classes!"
 msgstr "Konnte die Kurse nicht abrufen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/User.php:540
+#: ../../../administrator/headmod_System/modules/mod_User/User.php:662
 msgid "Could not fetch the User-in-Class-Statuses!"
 msgstr "Konnte die Benutzer-In-Klasse-Status nicht ändern!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/User.php:579
+#: ../../../administrator/headmod_System/modules/mod_User/User.php:701
 msgid "Could not fetch the Classes of the User"
 msgstr "Konnte die Kurse des Benutzers nicht abrufen"
 
-#: ../../../administrator/headmod_System/modules/mod_User/User.php:646
+#: ../../../administrator/headmod_System/modules/mod_User/User.php:772
 msgid "Error fetching the Usergroups"
 msgstr "Konnte die Benutzergruppen nicht abrufen"
 
-#: ../../../administrator/headmod_System/modules/mod_User/User.php:799
-msgid "Could not update the user!"
-msgstr "Konnte die Benutzer nicht aktualisieren!"
-
-#: ../../../administrator/headmod_System/modules/mod_User/User.php:1250
-msgid "Could not add the levenshtein-Function to the Database!"
-msgstr "Konnte die levenshtein-Funktion nicht zur Datenbank hinzufügen!"
+#: ../../../administrator/headmod_System/modules/mod_User/Change.php:133
+msgid "Error changing the user."
+msgstr "Fehler beim Verändern eines Benutzers."
 
 #: ../../../administrator/headmod_System/modules/mod_User/ResetAllUserPasswords/ResetAllUserPasswords.php:43
 msgid "Please set the preset password before reseting the users passwords."
@@ -1932,21 +1744,6 @@ msgstr "Bitte beantworten sie die Fragen um die Konflikte zu lösen."
 #: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:244
 msgid "Error fetching the data!"
 msgstr "Ein Fehler ist beim Abrufen der Daten aufgetreten!"
-
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:162
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:191
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:497
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:550
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:577
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:609
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:615
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:644
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:650
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:678
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:64
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:139
-msgid "Could not upload the data!"
-msgstr "Konnte die Daten nicht hochladen!"
 
 #: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:185
 msgid "Wrong type?!"
@@ -2009,61 +1806,135 @@ msgstr "Konnte die Benutzerveränderungen nicht hochladen!"
 msgid "Could not fetch the grades!"
 msgstr "Konnte die Klassen nicht abrufen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:195
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:204
 msgid "Could not commit the new users!"
 msgstr "Konnte die neuen Benutzer nicht hochladen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:251
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:231
+msgid "Could not get the group for the new users!"
+msgstr "Konnte die Gruppe für die neuen Nutzer nicht abrufen!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:288
 msgid "Could not add the grade!"
 msgstr "Konnte die Klasse nicht hinzufügen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:274
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:298
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:311
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:335
 msgid "Could not fetch the new users!"
 msgstr "Konnte die neuen Nutzer nicht abrufen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:320
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:357
 msgid "Could not switch to the new Schoolyear!"
 msgstr "Konnte nicht zu dem neuen Schuljahr wechseln!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:47
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:48
 msgid "Full year"
 msgstr "Schuljahr"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:47
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:48
 msgid "Half year"
 msgstr "Halbjahr"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:70
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:72
 msgid "Could not fetch the schoolyears!"
 msgstr "Konnte die Schuljahre nicht abrufen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:83
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:98
+msgid "Could not load the user-groups. Adding new users to groups is disabled!"
+msgstr ""
+"Konnte die Benutzergruppen nicht laden. Neue Nutzer zu Gruppen hinzufügen "
+"ist deaktiviert!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:112
 msgid ""
 "This schoolyear was already used! Please select one that was not used yet."
 msgstr ""
 "Dieses Schuljahr wurde bereits benutzt! Bitte wählen sie eins aus dass noch "
 "nicht benutzt wurde."
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:117
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:150
+msgid "Could not initialize the process!"
+msgstr "Konnte den Prozess nicht initialisieren!"
+
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:171
 msgid "Could not check if the schoolyear has already been used"
 msgstr "Konnte nicht überprüfen ob das Schuljahr bereits benutzt wurde"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:154
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:208
 msgid "Wrong type of switch-type of schoolyear!"
 msgstr "Falscher Wechsel-Typ des Schuljahres!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:159
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:213
 msgid "The Schoolyear with this Id does not exist!"
 msgstr "Ein Schuljahr mit dieser Id existiert nicht!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:163
+#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:217
 msgid ""
 "The formular was not filled out completely. Please correct your mistakes and "
 "try again."
 msgstr ""
 "Das Formular wurde nicht vollständig ausgefüllt. Bitte korrigieren sie ihre "
 "Fehler und versuchen sie es nochmal."
+
+#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:50
+msgid "wrong action-value!"
+msgstr "Falsche action-value!"
+
+#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:77
+#, php-format
+msgid "Grade \"%1$s-%2$s\" was successfully added"
+msgstr "Die Klasse \"%1$s-%2$s\" wurde erfolgreich hinzugefügt"
+
+#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:98
+msgid "Gradelabel"
+msgstr "Klassenbezeichnung"
+
+#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:100
+msgid "Gradelevel"
+msgstr "Klassenjahrgang"
+
+#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:102
+msgid "Schooltype"
+msgstr "Schultyp"
+
+#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:126
+#, php-format
+msgid "Error adding the Grade \"%1$s-%2$s\""
+msgstr "Konnte die Klasse \"%1$s-%2$s\" nicht hinzufügen!"
+
+#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:154
+msgid "Could not fetch the Grades"
+msgstr "Konnte die Klassen nicht abrufen"
+
+#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:157
+msgid "No Grades found"
+msgstr "Keine Klassen gefunden"
+
+#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:173
+msgid "The Grade was successfully deleted"
+msgstr "Die Klasse wurde erfolgreich gelöscht"
+
+#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:188
+#, php-format
+msgid "Error deleting the Grade with the ID %1$s!"
+msgstr "Konnte die Klasse mit der ID %1$s nicht löschen!"
+
+#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:206
+#, php-format
+msgid "Could not delete the Joins of the GradeId \"%1$s\""
+msgstr "Konnte die Verbindungen zur KlassenID \"%1$s\" nicht löschen!"
+
+#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:229
+msgid "Could not fetch the Grade"
+msgstr "Konnte die Klasse nicht abrufen!"
+
+#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:247
+msgid "The Grade was successfully changed"
+msgstr "Die Klasse wurde erfolgreich verändert"
+
+#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:274
+msgid "Could not change the Grade!"
+msgstr "Konnte die Klasse nicht verändern!"
 
 #: ../../../include/CsvImportTableData.php:55
 #, php-format
@@ -2295,168 +2166,168 @@ msgid "modulepath_root/administrator/Kuwasys/Classteachers"
 msgstr "Kursleitereinstellungen"
 
 #: ../../../include/modulepathNames.php:59
-msgid "modulepath_root/administrator/Kuwasys/Grade"
-msgstr "Klasseneinstellungen"
-
-#: ../../../include/modulepathNames.php:60
 msgid "modulepath_root/administrator/Kuwasys/Classes"
 msgstr "Kurseinstellungen"
 
-#: ../../../include/modulepathNames.php:61
+#: ../../../include/modulepathNames.php:60
 msgid "modulepath_root/administrator/Kuwasys/KuwasysUsers"
 msgstr "Benutzereinstellungen"
 
-#: ../../../include/modulepathNames.php:62
+#: ../../../include/modulepathNames.php:61
 msgid "modulepath_root/administrator/Schbas"
 msgstr "Schulbuchausleihe"
 
-#: ../../../include/modulepathNames.php:63
+#: ../../../include/modulepathNames.php:62
 msgid "modulepath_root/administrator/Schbas/SchbasMessages"
 msgstr "Schulbuchausleihenachrichten"
 
-#: ../../../include/modulepathNames.php:64
+#: ../../../include/modulepathNames.php:63
 msgid "modulepath_root/administrator/Schbas/SchbasAccounting"
 msgstr "Buchhaltung"
 
-#: ../../../include/modulepathNames.php:65
+#: ../../../include/modulepathNames.php:64
 msgid "modulepath_root/administrator/Schbas/SchbasSettings"
 msgstr "Schulbuchausleiheeinstellungen"
 
-#: ../../../include/modulepathNames.php:66
+#: ../../../include/modulepathNames.php:65
 msgid "modulepath_root/administrator/Schbas/BookInfo"
 msgstr "Buchinformationen"
 
-#: ../../../include/modulepathNames.php:67
+#: ../../../include/modulepathNames.php:66
 msgid "modulepath_root/administrator/Schbas/Retour"
 msgstr "Buchrückgabe"
 
-#: ../../../include/modulepathNames.php:68
+#: ../../../include/modulepathNames.php:67
 msgid "modulepath_root/administrator/Schbas/Loan"
 msgstr "Schulbuchausleihe"
 
-#: ../../../include/modulepathNames.php:69
+#: ../../../include/modulepathNames.php:68
 msgid "modulepath_root/administrator/Schbas/Inventory"
 msgstr "Inventar"
 
-#: ../../../include/modulepathNames.php:70
+#: ../../../include/modulepathNames.php:69
 msgid "modulepath_root/administrator/Schbas/Booklist"
 msgstr "Bücherliste"
 
-#: ../../../include/modulepathNames.php:71
+#: ../../../include/modulepathNames.php:70
 msgid "modulepath_root/administrator/Messages"
 msgstr "Nachrichten"
 
-#: ../../../include/modulepathNames.php:72
+#: ../../../include/modulepathNames.php:71
 msgid "modulepath_root/administrator/Messages/MessageAdmin"
 msgstr "Nachrichteneinstellungen"
 
-#: ../../../include/modulepathNames.php:73
+#: ../../../include/modulepathNames.php:72
 msgid "modulepath_root/administrator/Messages/MessageTemplate"
 msgstr "Nachrichtenvorlagen"
 
-#: ../../../include/modulepathNames.php:74
+#: ../../../include/modulepathNames.php:73
 msgid "modulepath_root/administrator/Messages/MessageAuthor"
 msgstr "Nachrichtenautor"
 
-#: ../../../include/modulepathNames.php:75
+#: ../../../include/modulepathNames.php:74
 msgid "modulepath_root/administrator/Fits"
 msgstr "Führerschein für IT-Systeme"
 
-#: ../../../include/modulepathNames.php:76
+#: ../../../include/modulepathNames.php:75
 msgid "modulepath_root/administrator/Fits/FitsSettins"
 msgstr "FITS Einstellungen"
 
-#: ../../../include/modulepathNames.php:77
+#: ../../../include/modulepathNames.php:76
 msgid "modulepath_root/administrator/Fits/FitsCheck"
 msgstr "FITS überprüfen"
 
-#: ../../../include/modulepathNames.php:78
+#: ../../../include/modulepathNames.php:77
 msgid "modulepath_root/administrator/Babesk"
 msgstr "Bargeldloses Bestellsystem"
 
-#: ../../../include/modulepathNames.php:79
+#: ../../../include/modulepathNames.php:78
 msgid "modulepath_root/administrator/Babesk/Soli"
 msgstr "Teilhabepaket"
 
-#: ../../../include/modulepathNames.php:80
+#: ../../../include/modulepathNames.php:79
 msgid "modulepath_root/administrator/Babesk/Recharge"
 msgstr "Karte aufladen"
 
-#: ../../../include/modulepathNames.php:81
+#: ../../../include/modulepathNames.php:80
 msgid "modulepath_root/administrator/Babesk/Priceclass"
 msgstr "Preisklasseneinstellung"
 
-#: ../../../include/modulepathNames.php:82
+#: ../../../include/modulepathNames.php:81
 msgid "modulepath_root/administrator/Babesk/Menu"
 msgstr "Menü"
 
-#: ../../../include/modulepathNames.php:83
+#: ../../../include/modulepathNames.php:82
 msgid "modulepath_root/administrator/Babesk/Meals"
 msgstr "Mahlzeiteinstellung"
 
-#: ../../../include/modulepathNames.php:84
+#: ../../../include/modulepathNames.php:83
 msgid "modulepath_root/administrator/Babesk/Checkout"
 msgstr "Ausgabe"
 
-#: ../../../include/modulepathNames.php:85
+#: ../../../include/modulepathNames.php:84
 msgid "modulepath_root/administrator/System"
 msgstr "Systemeinstellungen"
 
-#: ../../../include/modulepathNames.php:86
+#: ../../../include/modulepathNames.php:85
 msgid "modulepath_root/administrator/System/Schooltype"
 msgstr "Schultyp"
 
-#: ../../../include/modulepathNames.php:87
+#: ../../../include/modulepathNames.php:86
 msgid "modulepath_root/administrator/System/CardChange"
 msgstr "Kartenwechsel"
 
-#: ../../../include/modulepathNames.php:88
+#: ../../../include/modulepathNames.php:87
 msgid "modulepath_root/administrator/System/WebHomepageSettings"
 msgstr "Webseiteneinstellung"
 
-#: ../../../include/modulepathNames.php:89
+#: ../../../include/modulepathNames.php:88
 msgid "modulepath_root/administrator/System/PresetPassword"
 msgstr "Voreingestelltes Passwort"
 
-#: ../../../include/modulepathNames.php:90
+#: ../../../include/modulepathNames.php:89
 msgid "modulepath_root/administrator/System/EmailConfiguration"
 msgstr "Emaildaten-Konfiguration"
 
-#: ../../../include/modulepathNames.php:91
+#: ../../../include/modulepathNames.php:90
 msgid "modulepath_root/administrator/System/CardInfo"
 msgstr "Karteninformationen"
 
-#: ../../../include/modulepathNames.php:92
+#: ../../../include/modulepathNames.php:91
 msgid "modulepath_root/administrator/System/Logs"
 msgstr "Logeinstellungen"
 
-#: ../../../include/modulepathNames.php:93
+#: ../../../include/modulepathNames.php:92
 msgid "modulepath_root/administrator/System/Groups"
 msgstr "Preisgruppen"
 
-#: ../../../include/modulepathNames.php:94
+#: ../../../include/modulepathNames.php:93
 msgid "modulepath_root/administrator/System/Admin"
 msgstr "Administratoreinstellungen"
 
-#: ../../../include/modulepathNames.php:95
+#: ../../../include/modulepathNames.php:94
 msgid "modulepath_root/administrator/System/Help"
 msgstr "Hilfeeinstellungen"
 
-#: ../../../include/modulepathNames.php:96
+#: ../../../include/modulepathNames.php:95
 msgid "modulepath_root/administrator/System/SpecialCourse"
 msgstr "Oberstufenkurse"
 
-#: ../../../include/modulepathNames.php:97
+#: ../../../include/modulepathNames.php:96
 msgid "modulepath_root/administrator/System/ForeignLanguage"
 msgstr "Fremdsprachen"
 
-#: ../../../include/modulepathNames.php:98
+#: ../../../include/modulepathNames.php:97
 msgid "modulepath_root/administrator/System/Religion"
 msgstr "Religionseinstellungen"
 
-#: ../../../include/modulepathNames.php:99
+#: ../../../include/modulepathNames.php:98
 msgid "modulepath_root/administrator/System/User"
 msgstr "Benutzereinstellungen"
+
+#: ../../../include/modulepathNames.php:99
+msgid "modulepath_root/administrator/System/Grade"
+msgstr "Klassen"
 
 #: ../../../include/modulepathNames.php:100
 msgid "root/administrator/Babesk/Checkout"
@@ -2482,62 +2353,260 @@ msgstr "Moduleinstellungen"
 msgid "modulepath_root/administrator/System/Schoolyear"
 msgstr "Schuljahr"
 
-#: ../../../dbv/DBV.php:58
-msgid "Access denied"
-msgstr "Zugriff verweigert"
-
-#: ../../../dbv/templates/index.php:4
-msgid "dbv.php - Database versioning, made easy"
-msgstr "dbv.php - Datenbankversionierung, einfach gemacht"
-
-#: ../../../dbv/templates/revisions.php:157
-msgid "Error!"
-msgstr "Fehler!"
-
-#: ../../../dbv/templates/schema.php:17
-msgid "Schema object"
-msgstr ""
-
-#: ../../../smarty/templates_c/0ef320b8c36c79b8bc1ebddff5b804f9abd245dc.file.module_selector.tpl.php:36
+#: ../../../include/3rdParty/smarty/templates_c/641806b5f33365be0b0c26c108d61fc998ac854b.file.classList.tpl.php:190
+#: ../../../include/3rdParty/smarty/templates_c/bae2498d1a0896252f99bb98cdc148ce328965b9.file.menu.tpl.php:186
+#: ../../../include/3rdParty/smarty/templates_c/3deb146f949b84eb8e9399a09deca3be42373944.file.classDetails.tpl.php:186
+#: ../../../include/3rdParty/smarty/templates_c/52f3583583c1b674b835468fcdc127f384d923e4.file.baseLayout.tpl.php:180
+#: ../../../include/3rdParty/smarty/templates_c/ae63deb6b5f3a72006e6d3220cf1491201636794.file.mainMenu.tpl.php:190
+#: ../../../include/3rdParty/smarty/templates_c/1e42dd3602af3d91555e49f13522e090f2374125.file.order.tpl.php:186
+#: ../../../include/3rdParty/smarty/templates_c/c56cf3f1a038e908eabfdc01b6d79f850a64097f.file.main_menu.tpl.php:187
+#: ../../../include/3rdParty/smarty/templates_c/da4879aacbdf317d59afc8b18e8804fb539aa9bc.file.main.tpl.php:186
 #: ../../../smarty/templates_c/2328dac5db09b7c1f6741aa622ddd68094e9adf1.file.module_selector.tpl.php:36
 msgid "modulepath_"
 msgstr "NOT USED"
 
-#: ../../../smarty/templates_c/d9ae2e659e39b51da4b84a100552c0b5c94fb34c.file.printRechargeBalanceSelect.tpl.php:111
-msgid "Interval:"
-msgstr "Zeitspanne:"
+#: ../../../include/sql_access/MealManager.php:80
+msgid "Error occured while fetching the meals"
+msgstr "Ein Fehler ist beim Abrufen der Mahlzeiten aufgetreten"
 
-#: ../../../smarty/templates_c/d07944f9b1eaae48e0c5689b875cc25e37202cc3.file.deleteClassConfirmation.tpl.php:111
+#: ../../../include/sql_access/MealManager.php:107
+msgid "Error occured while fetching the meal-ids at date"
+msgstr "Ein Fehler ist beim Abrufen der Mahlzeiten am Datum aufgetreten"
+
+#: ../../../include/sql_access/BookManager.php:129
+msgid "Error occured while fetching the books by class"
+msgstr "Ein Fehler ist beim Abrufen der Bücher nach Klassen aufgetreten"
+
+#: ../../../include/sql_access/BookManager.php:143
+msgid "Error occured while fetching the books by topic"
+msgstr "Ein Fehler ist beim Abrufen der Bücher nach Thema aufgetreten"
+
+#: ../../../web/Login.php:99
+msgid "Error while logging you in!"
+msgstr "Beim einloggen ist ein Fehler aufgetreten!"
+
+#: ../../../web/Login.php:107
+msgid "Please input both username and password!"
+msgstr "Bitte geben sie sowohl Benutzername als auch Passwort ein!"
+
+#: ../../../web/Login.php:117
 #, php-format
-msgid ""
-"Do you really want to delete the Class \"%1$s\"? All its data is inevitably "
-"lost when doing so!"
+msgid "The input of field %1$s contains invalid characters or is too short!"
 msgstr ""
-"Wollen sie wirklich den Kurs \"%1$s\" löschen? Alle Daten gehen "
-"unwiederbringlich verloren!"
+"Die Eingabe von Feld %1$s beinhaltet ungültige Zeichen oder ist zu kurz!"
 
-#: ../../../web/Web.php:228
+#: ../../../web/Login.php:184
+msgid "Account is locked!"
+msgstr "Der Account ist gesperrt!"
+
+#: ../../../web/Web.php:246 ../../../web/Web.php:251
 msgid "Error executing the Module!"
 msgstr "Konnte das Modul nicht ausführen!"
 
-#: ../../../web/headmod_Kuwasys/modules/mod_MainMenu/MainMenu.php:78
+#: ../../../web/Web.php:342
+msgid "You have no access to web!"
+msgstr "Du hast keine Berechtigung für das Web-Modul!"
+
+#: ../../../web/headmod_Kuwasys/modules/mod_MainMenu/MainMenu.php:95
 msgid "Could not fetch your Classes!"
 msgstr "Konnte deine Kurse nicht abrufen!"
 
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/ClassList.php:409
+#: ../../../web/headmod_Kuwasys/modules/mod_MainMenu/MainMenu.php:117
+msgid "You were not unregistered from any classes."
+msgstr "Du wurdest von keinem Kurs abgemeldet."
+
+#: ../../../web/headmod_Kuwasys/modules/mod_MainMenu/MainMenu.php:122
 #, php-format
-msgid "You have already chosen a class at %1$s! %2$s"
-msgstr "Sie haben bereits einen Kurs am %1$s gewählt! %2$s"
+msgid "Unregistered you from %1$s classes."
+msgstr "Du wurdest von %1$s Kursen abgemeldet."
 
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/ClassList.php:419
-msgid "Could not check if you already selected classes!"
-msgstr "Konntenicht überprüfen ob du schon Kurse selektiert hast!"
+#: ../../../web/headmod_Kuwasys/modules/mod_MainMenu/MainMenu.php:152
+msgid "Could not unregister you from your classes!"
+msgstr "Konnte dich nicht von deinen Kursen abmelden!"
 
-#: ../../../web/headmod_Babesk/modules/mod_Order/Order.php:305
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassDetails/ClassDetails.php:58
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:89
+msgid "Go to Main menu"
+msgstr "Zum Hauptmenü"
+
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassDetails/ClassDetails.php:138
+msgid "Could not fetch the class-details!"
+msgstr "Konnte die Kursdetails nicht abrufen!"
+
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassDetails/ClassDetails.php:157
+msgid "Could not display the class-details!"
+msgstr "Konnte die Kursdetails nicht anzeigen!"
+
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/Show.php:48
+msgid "Registrations are not allowed for the moment!"
+msgstr "Kursregistrierungen sind momentan nicht erlaubt!"
+
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/Show.php:52
+msgid "Could not display the list!"
+msgstr "Konnte die Liste nicht anzeigen!"
+
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:40
+msgid "No choices made!"
+msgstr "Nichts gewählt!"
+
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:48
+msgid "Error checking the input data!"
+msgstr "Ein Fehler ist beim überprüfen der eingegebenen Daten aufgetreten!"
+
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:54
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:135
+msgid "Back to main menu"
+msgstr "Zum Hauptmenü"
+
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:59
+msgid ""
+"Your choices where added. You can see your registrations in the main menu."
+msgstr ""
+"Deine Wahlen wurden hinzugefügt. Du kannst die Registrationen im Hauptmenü "
+"einsehen."
+
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:124
+msgid "You did not make any selection. Nothing will be changed."
+msgstr "Du hast nichts ausgewählt. Nichts wird verändert."
+
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:129
+msgid ""
+"You can only select a class as either primary or secondary, not both at once!"
+msgstr ""
+"Du kannst einen Kurs nur als Primärwunsch oder Sekundärwunsche auswählen, "
+"nicht beides gleichzeitig!"
+
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:140
+msgid ""
+"You have selected a class at a day at which you have already selected "
+"classes. Please undo your choices and then try again if you want to change "
+"them!"
+msgstr ""
+"Du hast einen Kurs an einem Tag gewählt an dem du dich bereits für einen "
+"Kurs registriert hast. Bitte mache deine Wahlen im Hauptmenü rückgängig und "
+"versuche nochmal dich für die jetzt gewählten Kurse zu registrieren wenn du "
+"sie verändern willst!"
+
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:147
+msgid "Classregistrations are disabled!"
+msgstr "Kursregistrierungen sind deaktiviert!"
+
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:152
+msgid "One or more classes you have chosen are not enabled!"
+msgstr "Eine oder mehrere Kurse die du gewählt hast sind gesperrt!"
+
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:158
+msgid ""
+"For a specific day you did not chose a primary request, but you did chose a "
+"secondary request. If you only have one request at this day, please select "
+"the class as a primary request."
+msgstr ""
+"Du hast an einem Tag keinen Primärwunsch, aber einen Sekundärwunsch "
+"ausgewählt. Wenn du nur einen Wunsch für diesen Tag hast, wähle den Kurs "
+"bitte als Erstwunsch."
+
+#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:322
+msgid "Could not commit your choices!"
+msgstr "Konnte deine Wahlen nicht hochladen!"
+
+#: ../../../web/headmod_Help/Help.php:28
+msgid "The helptext is void"
+msgstr "Der Hilfetext ist leer"
+
+#: ../../../web/headmod_Help/Help.php:60
+msgid "Could not fetch the helptext."
+msgstr "Konnte den Hilfetext nicht abrufen."
+
+#: ../../../web/headmod_Babesk/modules/mod_Order/Order.php:303
 #: ../../../web/headmod_Babesk/modules/mod_Order/MealsForOrderDisplayer.php:296
 #: ../../../web/headmod_Babesk/modules/mod_Cancel/Cancel.php:258
 msgid "Could not check if the Soliprice is enabled!"
 msgstr "Konnte nicht überprüfen ob der Teilhabepaket-Preis aktiviert ist!"
+
+#~ msgid "Assign User"
+#~ msgstr "Benutzer zuweisen"
+
+#~ msgid "Could not parse the Serveranswer!"
+#~ msgstr "Konne die Serveratnwort nicht lesen!"
+
+#~ msgid "Could not Assign the User to the Class!"
+#~ msgstr "Konnte die Benutzer nicht zu den Kursen zuweisen!"
+
+#~ msgid "modulepath_root/administrator/Kuwasys/Grade"
+#~ msgstr "Klasseneinstellungen"
+
+#~ msgid "Search"
+#~ msgstr "Suchen"
+
+#~ msgid "Could not update the user!"
+#~ msgstr "Konnte die Benutzer nicht aktualisieren!"
+
+#~ msgid "Bookmarks"
+#~ msgstr "Lesezeichen"
+
+#~ msgid "No Bookmarks added"
+#~ msgstr "Keine Leszeichen hinzugefügt"
+
+#~ msgid "Add bookmark"
+#~ msgstr "Lesezeichen hinzufügen"
+
+#~ msgid "Back"
+#~ msgstr "zurück"
+
+#~ msgid "Back to the Module"
+#~ msgstr "zurück zum Modul"
+
+#~ msgid "Error-description:"
+#~ msgstr "Fehlerbeschreibung"
+
+#~ msgid "Interval:"
+#~ msgstr "Zeitspanne:"
+
+#~ msgid ""
+#~ "Do you really want to delete the Class \"%1$s\"? All its data is "
+#~ "inevitably lost when doing so!"
+#~ msgstr ""
+#~ "Wollen sie wirklich den Kurs \"%1$s\" löschen? Alle Daten gehen "
+#~ "unwiederbringlich verloren!"
+
+#~ msgid "Invalid characters were used in field %1$s"
+#~ msgstr "In Feld %1$s wurden ungültige Zeichen benutzt"
+
+#~ msgid "Action:"
+#~ msgstr "Aktion:"
+
+#~ msgid "Access denied"
+#~ msgstr "Zugriff verweigert"
+
+#~ msgid "dbv.php - Database versioning, made easy"
+#~ msgstr "dbv.php - Datenbankversionierung, einfach gemacht"
+
+#~ msgid "Error!"
+#~ msgstr "Fehler!"
+
+#~ msgid "Could not fetch the class!"
+#~ msgstr "Konnte die den Kurs nicht abrufen!"
+
+#~ msgid "No Requests of Users found!"
+#~ msgstr "Keine Wünsche der Benutzer gefunden!"
+
+#~ msgid "Error fetching the Choices of the Users!"
+#~ msgstr "Konnte die Kurswahlen der Benutzer nicht abrufen!"
+
+#~ msgid "Could not fetch the StatusIds!"
+#~ msgstr "Konnte die Status-IDs nicht abrufen!"
+
+#~ msgid "Could not Shuffle the Requests!"
+#~ msgstr "Konnte die Kursanfragen nicht mischen!"
+
+#~ msgid "Could not add the levenshtein-Function to the Database!"
+#~ msgstr "Konnte die levenshtein-Funktion nicht zur Datenbank hinzufügen!"
+
+#~ msgid "You have already chosen a class at %1$s! %2$s"
+#~ msgstr "Sie haben bereits einen Kurs am %1$s gewählt! %2$s"
+
+#~ msgid "Could not check if you already selected classes!"
+#~ msgstr "Konntenicht überprüfen ob du schon Kurse selektiert hast!"
 
 #, fuzzy
 #~ msgid "forename"
@@ -2585,9 +2654,6 @@ msgstr "Konnte nicht überprüfen ob der Teilhabepaket-Preis aktiviert ist!"
 
 #~ msgid "Label"
 #~ msgstr "Bezeichnung"
-
-#~ msgid "Description"
-#~ msgstr "Beschreibung"
 
 #~ msgid "Maximum Amount of Registrations"
 #~ msgstr "Maximale Anzahl Registrierungen"

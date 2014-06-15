@@ -1,37 +1,34 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
-require_once PATH_ACCESS_KUWASYS . '/KuwasysClassManager.php';
-require_once PATH_ACCESS_KUWASYS . '/KuwasysJointUsersInClass.php';
-require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersManager.php';
-require_once PATH_ACCESS_KUWASYS . '/KuwasysUsersInClassStatusManager.php';
 require_once PATH_ACCESS . '/GlobalSettingsManager.php';
-require_once PATH_WEB . '/WebInterface.php';
-require_once PATH_WEB . '/headmod_Kuwasys/Kuwasys.php';
 require_once PATH_WEB . '/headmod_Kuwasys/Kuwasys.php';
 
 class ClassDetails extends Kuwasys {
 
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Constructor
-	////////////////////////////////////////////////////////////////////////////////
-	public function __construct ($name, $display_name, $path) {
+	///////////////////////////////////////////////////////////////////////
+
+	public function __construct($name, $display_name, $path) {
 
 		parent::__construct($name, $display_name, $path);
-		$this->_smartyPath = PATH_SMARTY . '/templates/web' . $path;
+		$this->_smartyPath = PATH_SMARTY_TPL . '/web' . $path;
 	}
-	////////////////////////////////////////////////////////////////////////////////
-	//Getters and Setters
-	////////////////////////////////////////////////////////////////////////////////
 
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
+	//Getters and Setters
+	///////////////////////////////////////////////////////////////////////
+
+	///////////////////////////////////////////////////////////////////////
 	//Methods
-	////////////////////////////////////////////////////////////////////////////////
-	public function execute ($dataContainer) {
+	///////////////////////////////////////////////////////////////////////
+
+	public function execute($dataContainer) {
 
 		$this->entryPoint($dataContainer);
-		if (isset($_GET['action'])) {
-			switch ($_GET['action']) {
+		if(isset($_GET['action'])) {
+			switch($_GET['action']) {
 				case 'deRegisterClassConfirmation':
 					$this->showConfirmationDeRegisterClass();
 					break;
@@ -44,114 +41,183 @@ class ClassDetails extends Kuwasys {
 			$this->showClassDetails();
 		}
 	}
-	////////////////////////////////////////////////////////////////////////////////
+
+	///////////////////////////////////////////////////////////////////////
 	//Implementations
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
+
 	protected function entryPoint($dataContainer) {
 
-		$this->_smarty = $dataContainer->getSmarty();
-		$this->_interface = new WebInterface($this->_smarty);
-		$this->_classManager = new KuwasysClassManager();
-		$this->_jointUsersInClass = new KuwasysJointUsersInClass();
+		parent::entryPoint($dataContainer);
+		$this->initSmartyVariables();
 		$this->_globalSettingsManager = new GlobalSettingsManager();
-		$this->_usersInClassStatusManager = new KuwasysUsersInClassStatusManager ();
+		$this->_smarty->assign(
+			'inh_path', PATH_SMARTY_TPL . '/web/baseLayout.tpl'
+		);
+		$this->_interface->addButton(
+			_g('Go to Main menu'),
+			'index.php?module=web|Kuwasys'
+		);
 	}
 
-	private function getClassByClassId ($classId) {
+	/**
+	 * Checks if class-registration is enabled or not
+	 * @return bool   true if it is enabled, else false
+	 */
+	private function getIsClassRegistrationGloballyEnabled() {
 
 		try {
-			$class = $this->_classManager->getClass($classId);
-		} catch (Exception $e) {
-			$this->_interface->DieError('Ein Fehler ist beim Abrufen des Kurses aufgetreten.');
+			$value = $this->_globalSettingsManager->valueGet(GlobalSettings::IS_CLASSREGISTRATION_ENABLED);
+		} catch(Exception $e) {
+			$this->_interface->dieError('Ein Fehler ist beim Abrufen vom KurswahlWert aufgetreten. Breche ab.');
 		}
-		return $class;
+		return $value == 1;
 	}
 
-	private function getJointUsersInClassByUserIdAndClassId ($classId) {
+	/**
+	 * Deletes a link between a user and a class
+	 * @param  int    $userId  The id of the user
+	 * @param  int    $classId The id of the class
+	 */
+	private function deleteJointUsersInClass($userId, $classId) {
 
 		try {
-			$joint = $this->_jointUsersInClass->getJointOfUserIdAndClassId($_SESSION['uid'], $classId);
-		} catch (Exception $e) {
-			$this->_interface->DieError('Ein Fehler ist beim Abrufen der Verbindung zu dem Kurs aufgetreten.');
+			$stmt = $this->_pdo->prepare(
+				'DELETE FROM KuwasysUsersInClasses
+					WHERE UserID = ? AND ClassID = ?'
+			);
+			$stmt->execute(array($userId, $classId));
+
+		} catch(\PDOException $e) {
+			$this->_logger->log('error deleting userInClass-Connection',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieError(
+				'Could not remove you from the class!'
+			);
 		}
-		return $joint;
 	}
 
-	private function getIsClassRegistrationGloballyEnabled () {
+	/**
+	 * Fetches the data of the class chosen by the user
+	 * @param  int    $classId The id of the class from which to fetch the
+	 *                         details
+	 * @return array           The classdata
+	 */
+	private function detailsOfChosenClassGet($classId) {
 
 		try {
-			$value = $this->_globalSettingsManager->valueGet (GlobalSettings::IS_CLASSREGISTRATION_ENABLED);
-		} catch (Exception $e) {
-			$this->_interface->DieError('Ein Fehler ist beim Abrufen vom KurswahlWert aufgetreten. Breche ab.');
+			$stmt = $this->_pdo->prepare(
+				'SELECT c.*, uics.name, uics.translatedName AS status,
+					c.registrationEnabled,
+					GROUP_CONCAT(
+						DISTINCT CONCAT(ct.forename, " ", ct.name)
+						SEPARATOR ", "
+					) AS classteacherName
+					FROM KuwasysClasses c
+						INNER JOIN KuwasysUsersInClasses uic
+							ON uic.ClassID = c.ID
+						INNER JOIN KuwasysUsersInClassStatuses uics
+							ON uics.Id = uic.statusId
+						INNER JOIN KuwasysClassteachersInClasses ctic
+							ON ctic.ClassID = c.ID
+						INNER JOIN KuwasysClassteachers ct
+							ON ct.ID = ctic.ClassTeacherID
+					WHERE uic.userId = ? AND uic.classId = ?
+						AND c.schoolyearId = @activeSchoolyear
+					GROUP BY c.ID
+				'
+			);
+			$stmt->execute(array($_SESSION['uid'], $classId));
+			$data = $stmt->fetch(\PDO::FETCH_ASSOC);
+			return $data;
+
+		} catch (\PDOException $e) {
+			$this->_logger->log('Error fetching the class-details',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieError(_g(
+				'Could not fetch the class-details!')
+			);
 		}
-		return $value;
 	}
 
-	private function deleteJointUsersInClass ($jointId) {
+	/**
+	 * Displays the details of the class to the user
+	 */
+	private function showClassDetails() {
 
 		try {
-			$this->_jointUsersInClass->deleteJoint($jointId);
-		} catch (Exception $e) {
-			$this->_interface->DieError('Konnte die Verbindung zum Kurs nicht löschen!');
+			$data = $this->detailsOfChosenClassGet($_GET['classId']);
+			$this->_smarty->assign('class', $data);
+			$this->displayTpl('classDetails.tpl');
+
+		} catch(\PDOException $e) {
+			$this->_logger->log('Error fetching the class-details',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieError(_g(
+				'Could not display the class-details!')
+			);
 		}
 	}
 
-	private function showClassDetails () {
+	/**
+	 * Displays a confirmation whether the user really wants to deregister
+	 */
+	private function showConfirmationDeRegisterClass() {
 
 		$classId = $_GET['classId'];
-		$jointUsersInClass = $this->getJointUsersInClassByUserIdAndClassId($classId);
-		$status = $this->statusGetWithoutDieing ($jointUsersInClass['statusId']);
-		$this->_smarty->assign('class', $this->getClassByClassId($classId));
-		if($status) {
-			$this->_smarty->assign('classStatus', $status ['translatedName']);
-		}
-		$this->_smarty->display($this->_smartyPath . 'classDetails.tpl');
-	}
-
-	private function statusGetWithoutDieing ($statusId) {
-		try {
-			$status = $this->_usersInClassStatusManager->statusGet ($statusId);
-		} catch (MySQLVoidDataException $e) {
-			return false;
-		}
-		return $status;
-	}
-
-	private function showConfirmationDeRegisterClass () {
-
-		$classId = $_GET['classId'];
-		$class = $this->getClassByClassId($classId);
+		$class = $this->detailsOfChosenClassGet($classId);
 		$this->_smarty->assign('class', $class);
-		$this->_smarty->display($this->_smartyPath . 'deRegisterClassConfirmation.tpl');
+		$this->_smarty->display(
+			$this->_smartyPath . 'deRegisterClassConfirmation.tpl'
+		);
 	}
 
-	private function deRegisterUserFromClass () {
+	/**
+	 * deregisters the user from the class
+	 */
+	private function deRegisterUserFromClass() {
 
-		$class = $this->getClassByClassId($_GET['classId']);
-		$joint = $this->getJointUsersInClassByUserIdAndClassId($class ['ID']);
-		if(!$class ['registrationEnabled']) {
+		$class = $this->detailsOfChosenClassGet($_GET['classId']);
+		$this->deRegisterAllowedCheck($class);
+		$this->deleteJointUsersInClass($_SESSION['uid'], $class['ID']);
+		$this->_interface->setBacklink('index.php?module=web|Kuwasys');
+		$this->_interface->dieSuccess(sprintf('Sie wurden erfolgreich vom Kurs %s abgemeldet.', $class ['label']));
+	}
+
+	/**
+	 * Checks if the deregistering of the user is allowed
+	 * Dies displaying a message if it is not allowed
+	 * @param  array  $class The data of the class to deregister from
+	 * @return bool          true if it is allowed
+	 */
+	private function deRegisterAllowedCheck($class) {
+
+		if(!$class['registrationEnabled']) {
+			$this->_interface->setBacklink('index.php?module=web|Kuwasys');
 			$this->_interface->dieError('Dieser Kurs erlaubt momentan keine Abmeldungen!');
 		}
-		else if (!$this->getIsClassRegistrationGloballyEnabled()) {
+		else if(!$this->getIsClassRegistrationGloballyEnabled()) {
+			$this->_interface->setBacklink('index.php?module=web|Kuwasys');
 			$this->_interface->dieError('Kursan- und abmeldungen sind momentan gesperrt!');
 		}
-		else if (!isset($_POST['yes'])) {
-			$this->_interface->DieMessage(sprintf('Sie wurden nicht vom Kurs %s abgemeldet %s', $class ['label'], Kuwasys::$buttonBackToMM));
+		else if(!isset($_POST['yes'])) {
+			$this->_interface->setBacklink('index.php?module=web|Kuwasys');
+			$this->_interface->dieMessage(
+				sprintf('Sie wurden nicht vom Kurs %s abgemeldet',
+					$class ['label'])
+			);
 		}
-		$this->deleteJointUsersInClass($joint ['ID']);
-		$this->_interface->DieMessage(sprintf('Sie wurden erfolgreich vom Kurs %s abgemeldet. %s', $class ['label'], Kuwasys::$buttonBackToMM));
+		else {
+			return true;
+		}
 	}
 
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 	//Attributes
-	////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////
 
 	protected $_jointUsersInClass;
-	protected $_classManager;
 	protected $_globalSettingsManager;
-	protected $_usersInClassStatusManager;
-	protected $_interface;
-	protected $_smarty;
 	protected $_smartyPath;
 }
 

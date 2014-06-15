@@ -54,6 +54,7 @@ abstract class Module {
 	protected function entryPoint($dataContainer) {
 
 		$this->_pdo = $dataContainer->getPdo();
+		$this->_entityManager = $dataContainer->getEntityManager();
 		$this->_smarty = $dataContainer->getSmarty();
 		$this->_acl = $dataContainer->getAcl();
 		$this->_submoduleExecutionpath =
@@ -93,11 +94,25 @@ abstract class Module {
 	 */
 	protected function initSmartyVariables() {
 
+		$subprogram = $this->_modExecCommand->subprogramGet();
 		$this->_smartyModuleTemplatesPath =
-			PATH_SMARTY_ADMIN_TEMPLATES . $this->relPath;
+			PATH_SMARTY_TPL . '/' . $subprogram . $this->relPath;
 
 		$siteHeaderPath = $this->_smartyModuleTemplatesPath . 'header.tpl';
 		$this->_smarty->assign('inh_path', $siteHeaderPath);
+	}
+
+	protected function moduleTemplatePathSet($customPath = false) {
+
+		if($customPath === false) {
+			$relpath = $this->relPath;
+		}
+		else {
+			$relpath = $customPath;
+		}
+		$subprogram = $this->_modExecCommand->subprogramGet();
+		$this->_smartyModuleTemplatesPath =
+			PATH_SMARTY_TPL . '/' . $subprogram . $relpath;
 	}
 
 	/**
@@ -337,6 +352,12 @@ abstract class Module {
 	protected $_pdo;
 
 	/**
+	 * The Doctrine-Wrapper connection to the database
+	 * @var EntityManager
+	 */
+	protected $_entityManager;
+
+	/**
 	 * Allows for checking if the User has access to the Submodules
 	 * @var Acl
 	 */
@@ -350,7 +371,7 @@ abstract class Module {
 
 	/**
 	 * Wraps what Module should be executed
-	 * @var Object ModuleExecutionCommnad
+	 * @var Object ModuleExecutionCommand
 	 */
 	protected $_modExecCommand;
 
@@ -359,6 +380,8 @@ abstract class Module {
 	 * @var Interface
 	 */
 	protected $_interface;
+
+	protected $_submoduleExecutionpath;
 }
 
 ?>

@@ -1,0 +1,1 @@
+ALTER TABLE BabeskCards ADD lost tinyint(1) NOT NULL DEFAULT 0;

@@ -30,14 +30,16 @@ class ModuleExecutionCommand {
 	 *                          set for this object
 	 * @return string The module-path preceded with root/<subprogram>
 	 */
-	public function pathGet($delimiter = NULL) {
+	public function pathGet($delimiter = NULL, $length = 0) {
 
 		$delim = (!empty($delimiter)) ? $delimiter : $this->delim;
 
-		$prePath = implode($delim, $this->_execPathPreElements);
-		$modPath = implode($delim, $this->_execPathModules);
+		$pathAr = array_merge($this->_execPathPreElements, $this->_execPathModules);
+		if($length != 0) {
+			$pathAr = array_slice($pathAr, 0, $length);
+		}
 
-		return $prePath . $delim . $modPath;
+		return implode($delim, $pathAr);
 	}
 
 	/**
@@ -51,6 +53,36 @@ class ModuleExecutionCommand {
 		$modPath = implode($this->delim, $this->_execPathModules);
 
 		return $subprogram . $this->delim . $modPath;
+	}
+
+	/**
+	 * Returns the Subprogram of the ModuleExecutionCommand
+	 * @return string the subprogram
+	 */
+	public function subprogramGet() {
+
+		return $this->_execPathPreElements[1];
+	}
+
+	/**
+	 * Returns the modulename that is at the given level
+	 * level 0 is root, level 1 the subprogram, level 2 the headmodule...
+	 * @return string The modulename or false if none found
+	 */
+	public function moduleAtLevelGet($level) {
+
+		if($level < 2) {
+			return $this->_execPathPreElements[$level];
+		}
+		else {
+			$elLevel = $level - 2;
+			if(isset($this->_execPathModules[$elLevel])) {
+				return $this->_execPathModules[$elLevel];
+			}
+			else {
+				return false;
+			}
+		}
 	}
 
 	/**
@@ -96,7 +128,7 @@ class ModuleExecutionCommand {
 	 */
 	public function lastModuleElementRemove() {
 
-		if(count($this->_execPathModules)) {
+		if(count($this->_execPathModules) > 1) {
 			array_pop($this->_execPathModules);
 			return true;
 		}

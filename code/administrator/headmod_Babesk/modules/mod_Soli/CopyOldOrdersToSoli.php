@@ -59,20 +59,20 @@ class CopyOldOrdersToSoli {
 					CONCAT(u.forename, " ", u.name) AS userWholename,
 					o.ordertime AS ordertime,
 					/*Does the Meal and the priceclass still exist?*/
-					(SELECT m.ID FROM meals m
-						JOIN price_classes pc ON m.price_class = pc.ID
+					(SELECT m.ID FROM BabeskMeals m
+						JOIN BabeskPriceClasses pc ON m.price_class = pc.ID
 						WHERE m.ID = o.MID
 					) AS existMealAndPriceclass
-				FROM users u
-				JOIN orders o ON o.UID = u.ID
+				FROM SystemUsers u
+				JOIN BabeskOrders o ON o.UID = u.ID
 				/*We want to check if meal exists manually (for error-output), so using LEFT JOIN instead of JOIN*/
-				LEFT JOIN meals m ON o.MID = m.ID
+				LEFT JOIN BabeskMeals m ON o.MID = m.ID
 				/*Fetch the price of the meal for the user*/
 				LEFT JOIN
-					(SELECT ID, pc_ID, GID, price FROM price_classes) pc
+					(SELECT ID, pc_ID, GID, price FROM BabeskPriceClasses) pc
 						ON pc.pc_ID = m.price_class AND pc.GID = u.GID
 				WHERE /*does the order already exist in soli_orders?*/
-						(SELECT COUNT(*) FROM soli_orders so
+						(SELECT COUNT(*) FROM BabeskSoliOrders so
 					 	WHERE o.ID = so.ID) = 0'), true);
 
 		} catch (MySQLVoidDataException $e) {
@@ -89,7 +89,7 @@ class CopyOldOrdersToSoli {
 	 */
 	protected static function couponDataFetch() {
 
-		$coupons = TableMng::query('SELECT * FROM soli_coupons');
+		$coupons = TableMng::query('SELECT * FROM BabeskSoliCoupons');
 
 		foreach($coupons as $coupon) {
 			try {
@@ -113,7 +113,7 @@ class CopyOldOrdersToSoli {
 		TableMng::getDb()->autocommit(false);
 
 		$stmt = TableMng::getDb()->prepare(
-			'INSERT INTO `soli_orders`
+			'INSERT INTO `BabeskSoliOrders`
 				(`ID`, `UID`, `date`, `IP`, `ordertime`, `fetched`,
 					`mealname`, `mealprice`, `mealdate`, `soliprice`)
 			VALUES (?, ?, ?, "", ?, ?, ?, ?, ?, ?)');
@@ -194,7 +194,7 @@ class CopyOldOrdersToSoli {
 	protected static function solipriceFetch() {
 
 		try {
-			$res = TableMng::query('SELECT value FROM global_settings
+			$res = TableMng::query('SELECT value FROM SystemGlobalSettings
 				WHERE name = "soli_price"');
 
 		} catch (Exception $e) {

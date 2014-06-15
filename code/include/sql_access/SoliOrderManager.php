@@ -5,9 +5,9 @@ require_once PATH_ACCESS . '/TableManager.php';
 class SoliOrderManager extends TableManager {
 
 	function __construct() {
-		parent::__construct('soli_orders');
+		parent::__construct('BabeskSoliOrders');
 	}
-	
+
 	/**
 	 * Adds a order to the soli_order-table
 	 * Enter description here ...
@@ -26,7 +26,7 @@ class SoliOrderManager extends TableManager {
 						 'mealname', $mealname, 'mealprice', $mealprice, 'mealdate', $mealdate, 'soliprice',
 						 $soliprice);
 	}
-	
+
 	/**
 	 * Checks if an order with the given ID is existing
 	 * @param numeric_string $ID The ID of the order
@@ -39,7 +39,7 @@ class SoliOrderManager extends TableManager {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Returns all Orders of soli_orders sorted by date
 	 */
@@ -48,7 +48,7 @@ class SoliOrderManager extends TableManager {
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY %s', $this->tablename, 'date'));
 		$result = $this->db->query($query);
 		if (!$result)
-			throw new MySQLConnectionException(DB_QUERY_ERROR . $this->db->error . "<br />" . $query);
+			throw new MySQLConnectionException($this->db->error);
 		while ($order = $result->fetch_assoc()) {
 			$orders[] = $order;
 		}

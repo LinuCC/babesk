@@ -11,7 +11,7 @@ class MessageAdmin extends Messages {
 
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
-		$this->_smartyPath = PATH_SMARTY . '/templates/web' . $path;
+		$this->_smartyPath = PATH_SMARTY_TPL . '/web' . $path;
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -103,7 +103,7 @@ class MessageAdmin extends Messages {
 			//get GID for vanilla message system
 			$gid = TableMng::query('SELECT ID FROM messagegroups WHERE name LIKE "vanilla"');
 			//Add Message itself
-			TableMng::query(sprintf('INSERT INTO Message
+			TableMng::query(sprintf('INSERT INTO MessageMessages
 					(originUserId,title,text,validFrom,validTo,GID)
 				VALUES (%s,"%s","%s","%s","%s","%d")',
 				$_SESSION['uid'], $msgTitle, $msgText, $startDate, $endDate,$gid[0]['ID']));
@@ -251,7 +251,7 @@ class MessageAdmin extends Messages {
 		$forename = $name = $username = $birthday = $email = $telephone = '';
 		$stmt = TableMng::getDb()->prepare(
 			'SELECT `forename`, `name`, `username`, `birthday`, `email`,
-				`telephone` FROM users WHERE `ID` = ?');
+				`telephone` FROM SystemUsers WHERE `ID` = ?');
 		$stmt->bind_result($forename, $name, $username, $birthday, $email,
 			$telephone);
 		foreach($receivers as $recId) {
@@ -277,7 +277,7 @@ class MessageAdmin extends Messages {
 		try {
 			$grades = TableMng::query(
 				'SELECT CONCAT(gradelevel, label) AS name, ID
-				FROM Grades');
+				FROM SystemGrades');
 			$templates = TableMng::query(
 				'SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM messagegroups WHERE name="vanilla");');
 
@@ -302,7 +302,7 @@ class MessageAdmin extends Messages {
 			$db = TableMng::getDb();
 			$grades = $_POST['grades'];
 			$stmt =$db->prepare("SELECT uigs.UserID AS userId
-				FROM usersInGradesAndSchoolyears uigs
+				FROM SystemUsersInGradesAndSchoolyears uigs
 					WHERE uigs.schoolyearId = @activeSchoolyear
 					AND uigs.gradeId = ?");
 			foreach($grades as $gradeId) {
@@ -371,7 +371,7 @@ class MessageAdmin extends Messages {
 		$id = TableMng::getDb()->real_escape_string($id);
 		try {
 			$data = TableMng::query(sprintf(
-				'SELECT * FROM Message WHERE `ID` = %s;
+				'SELECT * FROM MessageMessages WHERE `ID` = %s;
 				', $id));
 		} catch (Exception $e) {
 			$this->_interface->DieError('Konnte die Nachricht nicht abrufen!');
@@ -403,7 +403,7 @@ class MessageAdmin extends Messages {
 		//get data of manager
 		$stmt = TableMng::getDb()->prepare(
 			'SELECT forename, name
-			FROM users u
+			FROM SystemUsers u
 			WHERE u.ID = ?');
 		foreach ($managerArray as $mng) {
 			$stmt->bind_param('i', $mng ['userId']);
@@ -444,7 +444,7 @@ class MessageAdmin extends Messages {
 		//get the data of the receivers
 		$stmt = TableMng::getDb()->prepare(
 			'SELECT u.forename, u.name
-			FROM users u
+			FROM SystemUsers u
 			WHERE u.ID = ?;
 			');
 		foreach($receiverArray as $receiver) {
@@ -606,7 +606,7 @@ class MessageAdmin extends Messages {
 
 		try {
 			$data = TableMng::query(sprintf(
-				'SELECT COUNT(*) AS "entries" FROM global_settings WHERE
+				'SELECT COUNT(*) AS "entries" FROM SystemGlobalSettings WHERE
 				`name` = "smtpHost" OR
 				`name` = "smtpUsername" OR
 				`name` = "smtpPassword" OR
@@ -620,7 +620,7 @@ class MessageAdmin extends Messages {
 			$this->_interface->DieError('Konnte nicht überprüfen, ob die Email-Daten angegeben sind.');
 		}
 
-		//Only return true if ALL 5 global_settings exist
+		//Only return true if ALL 5 SystemGlobalSettings exist
 		return ($data['entries'] == 5);
 	}
 

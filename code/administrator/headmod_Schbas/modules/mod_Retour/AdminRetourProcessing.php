@@ -33,14 +33,7 @@ class AdminRetourProcessing {
 
 
 		$uid = $this->GetUser($card_id);
-		//$hasForm = TableMng::query(sprintf('SELECT COUNT(*) FROM schbas_accounting WHERE UID = "%s"',$uid));
-	//	if ($hasForm[0]['COUNT(*)']=="0")
-			//$this->RetourInterface->dieError("Formular zur Buchausleihe wurde nicht abgegeben!");
-		//$gradeID = TableMng::query(sprintf('SELECT GradeID FROM jointusersingrade WHERE UserID = "%s"', $uid));
-//		$grade = TableMng::query(sprintf('SELECT gradelevel FROM Grades WHERE ID = %s', $gradeID[0]['GradeID']));
-//		$payed = TableMng::query(sprintf('SELECT loanChoice, payedAmount,amountToPay FROM schbas_accounting WHERE UID="%s"',$uid));
-//		if (($payed[0]['loanChoice']=="ln" || $payed[0]['loanChoice']=="lr" )&& strcmp($payed[0]['payedAmount'],$payed[0]['amountToPay'])<0)
-//			$this->RetourInterface->dieError("Geld wurde noch nicht (ausreichend) gezahlt. Es sind bisher ".$payed[0]['payedAmount']."&euro; von ".$payed[0]['amountToPay']."&euro; eingegangen!");
+
 		$loanbooks = $this->loanManager->getLoanlistByUID($uid);
 		$data = array();
 		foreach ($loanbooks as $loanbook){
@@ -89,7 +82,7 @@ class AdminRetourProcessing {
 
 
 	/**
-	 * Ein Buch zurückgeben
+	 * Ein Buch zurÃ¼ckgeben
 	 */
 	function RetourBook($inventarnr,$uid) {
 
@@ -115,27 +108,24 @@ class AdminRetourProcessing {
 	 */
 	public function GetUser ($card_id) {
 		$isCard = TableMng::query(sprintf(
-		'SELECT COUNT(*) FROM cards WHERE cardnumber LIKE "%s"',$card_id));
+		'SELECT COUNT(*) FROM BabeskCards WHERE cardnumber LIKE "%s"',$card_id));
 
 		$isUser = TableMng::query(sprintf(
-				'SELECT COUNT(*) FROM users WHERE username LIKE "%s"',$card_id));
-
-		if ($isCard[0]['COUNT(*)']==="0") 
-				$this->RetourInterface->dieError(sprintf($this->msg['err_get_user_by_card']));
+				'SELECT COUNT(*) FROM SystemUsers WHERE username LIKE "%s"',$card_id));
 
 		if ($isCard[0]['COUNT(*)']==="1") {
 			if (!$this->cardManager->valid_card_ID($card_id))
 				$this->RetourInterface->dieError(sprintf($this->msg['err_card_id']));
-
-		try {
-			$uid = $this->cardManager->getUserID($card_id);
-			if ($this->userManager->checkAccount($uid)) {
-				$this->RetourInterface->dieError(sprintf($this->msg['err_usr_locked']));
+			try {
+				$uid = $this->cardManager->getUserID($card_id);
+				if ($this->userManager->checkAccount($uid)) {
+					$this->RetourInterface->dieError(sprintf($this->msg['err_usr_locked']));
+				}
+			} catch (Exception $e) {
+				$this->RetourInterface->dieError($this->msg['err_get_user_by_card'] . ' Error:' . $e->getMessage());
 			}
-		} catch (Exception $e) {
-			$this->RetourInterface->dieError($this->msg['err_get_user_by_card'] . ' Error:' . $e->getMessage());
 		}
-		} else if ($isUser[0]['COUNT(*)']==="1") {
+		else if ($isUser[0]['COUNT(*)']==="1") {
 			try {
 				$uid = $this->userManager->getUserID($card_id);
 				if ($this->userManager->checkAccount($uid)) {
@@ -145,6 +135,11 @@ class AdminRetourProcessing {
 				$this->RetourInterface->dieError($this->msg['err_get_user_by_card'] . ' Error:' . $e->getMessage());
 			}
 		}
+		else {
+			$this->RetourInterface->dieError(
+				sprintf($this->msg['err_get_user_by_card'])
+			);
+		}
 		return $uid;
 	}
 
@@ -153,11 +148,11 @@ class AdminRetourProcessing {
 		$userDetails = TableMng::query(sprintf(
 			'SELECT u.*,
 			(SELECT CONCAT(g.gradelevel, g.label) AS class
-					FROM usersInGradesAndSchoolyears uigs
-					LEFT JOIN Grades g ON uigs.gradeId = g.ID
+					FROM SystemUsersInGradesAndSchoolyears uigs
+					LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS class
-			FROM users u WHERE `ID` = %s', $userId));
+			FROM SystemUsers u WHERE `ID` = %s', $userId));
 
 
 		return $userDetails[0];

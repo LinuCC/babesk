@@ -87,7 +87,7 @@ class KuwasysUsers extends Kuwasys {
 		try {
 			$stmt = $this->_pdo->query(
 				'SELECT *, CONCAT(gradelevel, "-", label) AS gradename
-				FROM Grades');
+				FROM SystemGrades');
 
 			return $stmt->fetchAll();
 
@@ -111,15 +111,15 @@ class KuwasysUsers extends Kuwasys {
 
 		$gradeId = $_GET['gradeId'];
 		$query = "SELECT u.ID as userId
-			FROM users u
-				JOIN usersInGradesAndSchoolyears uigsy ON uigsy.UserID = u.ID
+			FROM SystemUsers u
+				JOIN SystemUsersInGradesAndSchoolyears uigsy ON uigsy.UserID = u.ID
 			WHERE uigsy.schoolyearId = @activeSchoolyear AND
 				uigsy.gradeId = {$gradeId}
 			";
 		try {
 			$data = TableMng::query ($query);
 		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError ('Es wurden keine Schüler gefunden, für die man die Dokumente hätte drucken können');
+			$this->_interface->dieError ('Es wurden keine Schüler gefunden, für die man die Dokumente hätte erstellen können');
 		} catch (Exception $e) {
 			$this->_interface->dieError ('konnte die Daten der Schüler nicht abrufen' . $e->getMessage ());
 		}
@@ -217,7 +217,7 @@ class KuwasysUsers extends Kuwasys {
 	 */
 	protected function statusIdGetByName($statusName) {
 
-		$stmt = $this->_pdo->prepare('SELECT ID FROM usersInClassStatus
+		$stmt = $this->_pdo->prepare('SELECT ID FROM KuwasysUsersInClassStatuses
 			WHERE name = :name');
 
 		$stmt->execute(array('name' => $statusName));
@@ -288,7 +288,7 @@ class KuwasysUsers extends Kuwasys {
 	protected function userIdGetByUsername($username) {
 
 		try {
-			$stmt = $this->_pdo->prepare('SELECT ID FROM users
+			$stmt = $this->_pdo->prepare('SELECT ID FROM SystemUsers
 				WHERE username = :username');
 
 			$stmt->execute(array('username' => $username));
@@ -318,7 +318,7 @@ class KuwasysUsers extends Kuwasys {
 	 */
 	private function userAssignToClass($userId, $classId, $statusId) {
 
-		$stmt = $this->_pdo->prepare('INSERT INTO jointUsersInClass
+		$stmt = $this->_pdo->prepare('INSERT INTO KuwasysUsersInClasses
 			(UserID, ClassID, statusId) VALUES
 			(:userId, :classId, :statusId);');
 

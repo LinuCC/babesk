@@ -11,7 +11,7 @@ class AdminMenuInterface extends AdminInterface {
 	}
 	
 	public function AdditionalHeader() {
-		$this->smarty->display(PATH_SMARTY . '/templates/administrator/modules/mod_menu/menu_header.tpl');
+		$this->smarty->display(PATH_SMARTY_TPL . '/administrator/modules/mod_menu/menu_header.tpl');
 	}
 	
 	public function dieError($msg){

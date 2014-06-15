@@ -16,7 +16,7 @@ class LoanSystem extends Schbas {
 	//Constructor
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
-		$this->_smartyPath = PATH_SMARTY . '/templates/web' . $path;
+		$this->_smartyPath = PATH_SMARTY_TPL . '/web' . $path;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ class LoanSystem extends Schbas {
 
 		$this->init($dataContainer);
 
-		$schbasEnabled = TableMng::query("SELECT value FROM global_settings WHERE name='isSchbasClaimEnabled'");
+		$schbasEnabled = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='isSchbasClaimEnabled'");
 		if ($schbasEnabled[0]['value']=="0") {
 			$this->showLoanList();
 		}
@@ -77,11 +77,11 @@ class LoanSystem extends Schbas {
 		}
 		return false;
 	}
-	
+
 	private function showMainMenu() {
-		$schbasYear = TableMng::query("SELECT value FROM global_settings WHERE name='schbas_year'");
+		$schbasYear = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbas_year'");
 		//get gradeValue ("Klassenstufe")
-		$gradelevel = TableMng::query("SELECT gradelevel FROM Grades WHERE id=(SELECT gradeID from usersInGradesAndSchoolyears WHERE schoolyearId=(SELECT ID from schoolYear WHERE active=1) AND UserID='".$_SESSION['uid']."')");
+		$gradelevel = TableMng::query("SELECT gradelevel FROM SystemGrades WHERE id=(SELECT gradeID from SystemUsersInGradesAndSchoolyears WHERE schoolyearId=(SELECT ID from SystemSchoolyears WHERE active=1) AND UserID='".$_SESSION['uid']."')");
 		$gradelevel[0]['gradelevel'] = strval(intval($gradelevel[0]['gradelevel'])+1);
 
 		// Filter f�r Abijahrgang
@@ -94,9 +94,9 @@ class LoanSystem extends Schbas {
 			require_once PATH_ACCESS . '/LoanManager.php';
 			$lm = new LoanManager();
 			$loanbooks = $lm->getLoanByUID($_SESSION['uid'], false);
-			$loanbooksSelfBuy = TableMng::query("SELECT BID FROM schbas_selfpayer WHERE UID=".$_SESSION['uid']);
-			$loanbooksSelfBuy = array_map('current',$loanbooksSelfBuy); 
-			
+			$loanbooksSelfBuy = TableMng::query("SELECT BID FROM SchbasSelfpayer WHERE UID=".$_SESSION['uid']);
+			$loanbooksSelfBuy = array_map('current',$loanbooksSelfBuy);
+
 			$checkedBooks = array();
             $feeNormal = 0.00;
             $oneYear = array(05,06,07,08,09);
@@ -134,12 +134,12 @@ class LoanSystem extends Schbas {
 		$this->_smarty->assign('loanShowForm', isset($_POST['loanShowForm']));
 		$this->_smarty->assign('loanShowBuy', isset($_POST['loanShowBuy']));
 
-		
+
 		$this->_smarty->display($this->_smartyPath . 'menu.tpl');
 	}
 
 
-	
+
 	private function showLoanList() {
 		require_once PATH_ACCESS . '/LoanManager.php';
 		require_once PATH_ACCESS . '/InventoryManager.php';
@@ -178,28 +178,28 @@ class LoanSystem extends Schbas {
 	}
 
 	private function saveSelfBuy() {
-		TableMng::query("DELETE FROM schbas_selfpayer WHERE UID=".$_SESSION['uid']);
+		TableMng::query("DELETE FROM SchbasSelfpayer WHERE UID=".$_SESSION['uid']);
 		if (isset($_POST['bookID'])) {
 			foreach ($_POST['bookID'] as $book) {
-				TableMng::query("INSERT IGNORE INTO schbas_selfpayer (UID, BID) VALUES (".$_SESSION['uid'].",".$book.")");
+				TableMng::query("INSERT IGNORE INTO SchbasSelfpayer (UID, BID) VALUES (".$_SESSION['uid'].",".$book.")");
 			}
 		}
 		$this->_smarty->display($this->_smartyPath . 'saved.tpl');
 	}
-	
+
 	private function showFormPdf() {
 
 		//get gradelevel ("Klassenstufe")
-		$gradelevel = TableMng::query("SELECT gradelevel FROM Grades WHERE id=(SELECT gradeID from usersInGradesAndSchoolyears WHERE schoolyearId=(SELECT ID from schoolYear WHERE active=1) AND UserID='".$_SESSION['uid']."')");
+		$gradelevel = TableMng::query("SELECT gradelevel FROM SystemGrades WHERE id=(SELECT gradeID from SystemUsersInGradesAndSchoolyears WHERE schoolyearId=(SELECT ID from SystemSchoolyears WHERE active=1) AND UserID='".$_SESSION['uid']."')");
 				$gradelevel[0]['gradelevel'] = strval(intval($gradelevel[0]['gradelevel'])+1);
 
-		$schbasYear = TableMng::query("SELECT value FROM global_settings WHERE name='schbas_year'");
+		$schbasYear = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbas_year'");
 
 
 		//get cover letter date
-		$letter_date =  TableMng::query("SELECT value FROM global_settings WHERE name='schbasDateCoverLetter'");
+		$letter_date =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDateCoverLetter'");
 
-		$schbasDeadlineClaim = TableMng::query("SELECT value FROM global_settings WHERE name='schbasDeadlineClaim'");
+		$schbasDeadlineClaim = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDeadlineClaim'");
 		$text = "</h4>Bitte ausgef&uuml;llt zur&uuml;ckgeben an die Klassen- bzw. Kursleitung des Lessing-Gymnasiums bis zum ".$schbasDeadlineClaim[0]['value']."!</h4>";
 
 		$text .= '<table border="1"><tr>';
@@ -212,7 +212,7 @@ class LoanSystem extends Schbas {
 
 
 
-		$name =  TableMng::query("SELECT forename, name FROM users WHERE ID = '".$_SESSION['uid']."'");
+		$name =  TableMng::query("SELECT forename, name FROM SystemUsers WHERE ID = '".$_SESSION['uid']."'");
 
 		$text .= '</tr><tr><td colspan="2">Name, Vorname des Sch&uuml;lers / der Sch&uuml;lerin:<br>'.$name[0]['name'].", ".$name[0]['forename'].'</td>';
 		$text .= "<td><b>Jahrgangsstufe: ".$gradelevel[0]['gradelevel']."</b></td>";
@@ -228,7 +228,7 @@ class LoanSystem extends Schbas {
         require_once PATH_ACCESS . '/LoanManager.php';
         $lm = new LoanManager();
         $loanbooks = $lm->getLoanByUID($_SESSION['uid'], false);
-        $loanbooksSelfBuy = TableMng::query("SELECT BID FROM schbas_selfpayer WHERE UID=".$_SESSION['uid']);
+        $loanbooksSelfBuy = TableMng::query("SELECT BID FROM SchbasSelfpayer WHERE UID=".$_SESSION['uid']);
         $loanbooksSelfBuy = array_map('current',$loanbooksSelfBuy);
 
         $checkedBooks = array();
@@ -257,9 +257,9 @@ class LoanSystem extends Schbas {
         $feeNormal = number_format( round($feeNormal,0) , 2, ',','.'); //preise auf volle
         $feeReduced = number_format( round($feeReduced,0) , 2, ',','.');//betraege runden
 
-		//$feeNormal = TableMng::query("SELECT fee_normal FROM schbas_fee WHERE grade=".$gradelevel[0]['gradelevel']);
-		//$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradelevel[0]['gradelevel']);
-		$schbasDeadlineTransfer = TableMng::query("SELECT value FROM global_settings WHERE name='schbasDeadlineTransfer'");
+		//$feeNormal = TableMng::query("SELECT fee_normal FROM SchbasFee WHERE grade=".$gradelevel[0]['gradelevel']);
+		//$feeReduced = TableMng::query("SELECT fee_reduced FROM SchbasFee WHERE grade=".$gradelevel[0]['gradelevel']);
+		$schbasDeadlineTransfer = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDeadlineTransfer'");
 		$feedback = "";
 		if ($_POST['loanChoice']=="noLoan") {
 			$feedback = "nl";
@@ -282,10 +282,10 @@ class LoanSystem extends Schbas {
 			}
 			$text .= " wird bis sp&auml;testens ".$schbasDeadlineTransfer[0]['value']." &uuml;berwiesen.<br/><br/>";
 			//get bank account details
-			$bank_account =  TableMng::query("SELECT value FROM global_settings WHERE name='bank_details'");
+			$bank_account =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='bank_details'");
 			$bank_account = explode("|", $bank_account[0]['value']);
 
-			$username = TableMng::query("SELECT username FROM users WHERE ID=".$_SESSION['uid']);
+			$username = TableMng::query("SELECT username FROM SystemUsers WHERE ID=".$_SESSION['uid']);
 
 			$text .= 	"<table style=\"border:solid\" width=\"75%\" cellpadding=\"2\" cellspacing=\"2\">
 				<tr><td>Kontoinhaber:</td><td>".$bank_account[0]."</td></tr>
@@ -315,25 +315,25 @@ class LoanSystem extends Schbas {
 		require_once PATH_ACCESS. '/BookManager.php';
 
 		//get cover letter date
-		$letter_date =  TableMng::query("SELECT value FROM global_settings WHERE name='schbasDateCoverLetter'");
+		$letter_date =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDateCoverLetter'");
 
 		$booklistManager = new BookManager();
 
 		//get gradelevel ("Klassenstufe")
-		$gradelevel = TableMng::query("SELECT gradelevel FROM Grades WHERE id=(SELECT gradeID from usersInGradesAndSchoolyears WHERE schoolyearId=(SELECT ID from schoolYear WHERE active=1) AND UserID='".$_SESSION['uid']."')");
+		$gradelevel = TableMng::query("SELECT gradelevel FROM SystemGrades WHERE id=(SELECT gradeID from SystemUsersInGradesAndSchoolyears WHERE schoolyearId=(SELECT ID from SystemSchoolyears WHERE active=1) AND UserID='".$_SESSION['uid']."')");
 				$gradelevel[0]['gradelevel'] = strval(intval($gradelevel[0]['gradelevel'])+1);
 
 		// get cover letter ("Anschreiben")
-		$coverLetter = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='coverLetter'");
+		$coverLetter = TableMng::query("SELECT title, text FROM SchbasTexts WHERE description='coverLetter'");
 
 		// get first infotext
-		$textOne = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textOne".$gradelevel[0]['gradelevel']."'");
+		$textOne = TableMng::query("SELECT title, text FROM SchbasTexts WHERE description='textOne".$gradelevel[0]['gradelevel']."'");
 
 		// get second infotext
-		$textTwo = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textTwo".$gradelevel[0]['gradelevel']."'");
+		$textTwo = TableMng::query("SELECT title, text FROM SchbasTexts WHERE description='textTwo".$gradelevel[0]['gradelevel']."'");
 
 		// get third infotext
-		$textThree = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textThree".$gradelevel[0]['gradelevel']."'");
+		$textThree = TableMng::query("SELECT title, text FROM SchbasTexts WHERE description='textThree".$gradelevel[0]['gradelevel']."'");
 
 		// get booklist
 		$booklist = $booklistManager->getBooksByClass($gradelevel[0]['gradelevel']);
@@ -352,11 +352,11 @@ class LoanSystem extends Schbas {
 		$books = str_replace('é', '&eacute;', $books);
 
 		//get loan fees
-		$feeNormal = TableMng::query("SELECT fee_normal FROM schbas_fee WHERE grade=".$gradelevel[0]['gradelevel']);
-		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradelevel[0]['gradelevel']);
+		$feeNormal = TableMng::query("SELECT fee_normal FROM SchbasFee WHERE grade=".$gradelevel[0]['gradelevel']);
+		$feeReduced = TableMng::query("SELECT fee_reduced FROM SchbasFee WHERE grade=".$gradelevel[0]['gradelevel']);
 
 		//get bank account
-		$bank_account =  TableMng::query("SELECT value FROM global_settings WHERE name='bank_details'");
+		$bank_account =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='bank_details'");
 		$bank_account = explode("|", $bank_account[0]['value']);
 
 		//textOne[0]['title'] wird nicht ausgegeben, unter admin darauf hinweisen!

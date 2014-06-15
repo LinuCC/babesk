@@ -3,7 +3,6 @@
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/exception_def.php';
 require_once 'KuwasysDataContainer.php';
-require_once 'KuwasysLanguageManager.php';
 
 class Kuwasys extends Module {
 
@@ -14,8 +13,6 @@ class Kuwasys extends Module {
 	public function __construct ($name, $display_name,$headmod_menu) {
 
 		parent::__construct($name, $display_name,$headmod_menu);
-		defined('PATH_ACCESS_KUWASYS') or define('PATH_ACCESS_KUWASYS', PATH_ACCESS . '/headmod_Kuwasys');
-		defined('PATH_INCLUDE_KUWASYS') or define('PATH_INCLUDE_KUWASYS', PATH_INCLUDE . '/headmod_Kuwasys');
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -43,7 +40,7 @@ class Kuwasys extends Module {
 	protected function classGet($classId) {
 
 		try {
-			$stmt = $this->_pdo->prepare('SELECT * FROM class
+			$stmt = $this->_pdo->prepare('SELECT * FROM KuwasysClasses
 				WHERE ID = :classId');
 
 			$stmt->execute(array('classId' => $classId));

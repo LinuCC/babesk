@@ -70,7 +70,7 @@ class MessageAdmin extends Messages {
 	protected function messageFetchAll() {
 
 		try {
-			$data = TableMng::query('SELECT * FROM Message');
+			$data = TableMng::query('SELECT * FROM MessageMessages');
 
 		} catch (MySQLVoidDataException $e) {
 			return array();
@@ -138,7 +138,7 @@ class MessageAdmin extends Messages {
 		$name = '';
 
 		$stmt = TableMng::getDb()->prepare(
-			'SELECT CONCAT(forename, " ", name) FROM users WHERE `ID` = ?;');
+			'SELECT CONCAT(forename, " ", name) FROM SystemUsers WHERE `ID` = ?;');
 		$stmt->bind_result($name);
 
 		foreach($creators as $creator) {
@@ -207,7 +207,7 @@ class MessageAdmin extends Messages {
 		try {
 			TableMng::getDb()->autocommit(false);
 			$query = sprintf(
-				'DELETE FROM Message WHERE `ID` = %s;
+				'DELETE FROM MessageMessages WHERE `ID` = %s;
 				DELETE FROM MessageReceivers WHERE `messageId` = %s;
 				DELETE FROM MessageManagers WHERE `messageId` = %s;',
 				$id, $id, $id);

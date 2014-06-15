@@ -80,7 +80,14 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 
 		$requestsSorted = $this->requestsSort($this->requestsGet());
 		$this->requestsAssign($requestsSorted);
-		$this->upload();
+		if(count($this->_toadd)) {
+			$this->upload();
+		}
+		else {
+			$this->_interface->dieError(
+				'Es wurden keine möglichen Zuweisungen gefunden!'
+			);
+		}
 	}
 
 	/**
@@ -90,7 +97,7 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 
 		try {
 			$res = $this->_pdo->query(
-				'SELECT ID, name FROM usersInClassStatus WHERE 1'
+				'SELECT ID, name FROM KuwasysUsersInClassStatuses WHERE 1'
 			);
 
 			$this->_status = $res->fetchAll(\PDO::FETCH_KEY_PAIR);
@@ -112,16 +119,16 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 				'SELECT uic.statusId AS statusId, uic.ClassID AS classId,
 					uic.UserID AS userId, c.maxRegistration AS maxRegistration,
 					c.unitId AS unitId
-				FROM jointUsersInClass uic
-				JOIN class c ON uic.ClassID = c.ID
+				FROM KuwasysUsersInClasses uic
+				JOIN KuwasysClasses c ON uic.ClassID = c.ID
 				WHERE c.schoolyearId = @activeSchoolyear
 					AND (
 						uic.statusId = (
-							SELECT ID FROM usersInClassStatus
+							SELECT ID FROM KuwasysUsersInClassStatuses
 								WHERE name="request1"
 						) OR
 						uic.statusId = (
-							SELECT ID FROM usersInClassStatus
+							SELECT ID FROM KuwasysUsersInClassStatuses
 								WHERE name="request2"
 						)
 					)
@@ -153,6 +160,8 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 	 *         ]
 	 */
 	private function requestsSort($requests) {
+
+		$sorted = array();
 
 		foreach($requests as $request) {
 			$sorted[(int)$request['statusId']][(int)$request['classId']]

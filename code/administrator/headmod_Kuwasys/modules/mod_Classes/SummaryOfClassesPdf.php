@@ -1,6 +1,6 @@
 <?php
 
-require_once PATH_INCLUDE . '/phpExcel/PHPExcel.php';
+require_once PATH_3RD_PARTY . '/phpExcel/PHPExcel.php';
 require_once 'CctClass.php';
 
 class SummaryOfClassesPdf {
@@ -38,16 +38,17 @@ class SummaryOfClassesPdf {
 				CONCAT(g.gradelevel, g.label) AS grade,
 				CONCAT(ct.forename, " ", ct.name) AS classteacherFullname,
 				cu.name as unitName
-			FROM class c
-				JOIN jointUsersInClass uic ON uic.ClassID = c.ID
-				JOIN users u ON uic.UserID = u.ID
-				LEFT JOIN usersInGradesAndSchoolyears uigs
+			FROM KuwasysClasses c
+				JOIN KuwasysUsersInClasses uic ON uic.ClassID = c.ID
+				JOIN SystemUsers u ON uic.UserID = u.ID
+				LEFT JOIN SystemUsersInGradesAndSchoolyears uigs
 					ON uigs.UserID = u.ID
-				LEFT JOIN Grades g ON uigs.gradeId = g.ID
-				LEFT JOIN jointClassTeacherInClass ctic ON ctic.ClassID = c.ID
-				LEFT JOIN classTeacher ct ON ctic.ClassTeacherID = ct.ID
-				LEFT JOIN kuwasysClassUnit cu ON cu.ID = c.unitId
-			WHERE  uic.statusId = (SELECT ID FROM usersInClassStatus WHERE usersInClassStatus.name="active")
+				LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
+				LEFT JOIN KuwasysClassteachersInClasses ctic ON ctic.ClassID = c.ID
+				LEFT JOIN KuwasysClassteachers ct
+					ON ctic.ClassTeacherID = ct.ID
+				LEFT JOIN KuwasysClassCategories cu ON cu.ID = c.unitId
+			WHERE  uic.statusId = (SELECT ID FROM KuwasysUsersInClassStatuses WHERE KuwasysUsersInClassStatuses.name="active")
 				AND uigs.schoolyearId = @activeSchoolyear
 				AND c.schoolyearId = @activeSchoolyear;';
 		try {

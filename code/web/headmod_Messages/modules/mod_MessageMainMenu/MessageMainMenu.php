@@ -19,7 +19,7 @@ class MessageMainMenu extends Messages {
 	///////////////////////////////////////////////////////////////////////
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
-		$this->_smartyPath = PATH_SMARTY . '/templates/web' . $path;
+		$this->_smartyPath = PATH_SMARTY_TPL . '/web' . $path;
 	}
 
 	///////////////////////////////////////////////////////////////////////
@@ -70,14 +70,14 @@ class MessageMainMenu extends Messages {
 	private function setEditor() {
 
 		try {
-			$contractGID = TableMng::query('SELECT value FROM global_settings
+			$contractGID = TableMng::query('SELECT value FROM SystemGlobalSettings
 				WHERE name = "messageEditGroupId"');
-			$userGID = TableMng::query('SELECT groupId FROM UserInGroups WHERE userId =
+			$userGID = TableMng::query('SELECT groupId FROM SystemUsersInGroups WHERE userId =
 				"'.$_SESSION['uid'].'"');
 			if(!count($contractGID)) {
 				throw new Exception('Es wurde noch keiner Gruppe erlaubt, Nachrichten zu editieren!');
 			}
-			
+
 			$this->_isEditor = $this->searchInMultiDimArray($contractGID[0]['value'],$userGID);
 		} catch (MySQLVoidDataException $e) {
 			echo 'Konnte die Gruppe nicht überprüfen!';
@@ -87,7 +87,7 @@ class MessageMainMenu extends Messages {
 			$this->_interface->DieError('Konnte keine Überprüfung der Gruppe vornehmen!');
 		}
 	}
-	
+
 	/**
 	 * Workaround for the problem that a user can be in more than one group.
 	 * If one of the group ids has the right to create messages, return this group id.
@@ -117,7 +117,7 @@ class MessageMainMenu extends Messages {
 		$query = sprintf(
 			'SELECT m.ID AS ID,m.title AS title,m.validFrom AS validFrom,
 				m.validTo AS validTo, m.GID as GID
-			FROM Message m
+			FROM MessageMessages m
 			JOIN MessageManagers mm ON m.ID = mm.messageId AND mm.userId = %s
 			', $_SESSION['uid']);
 		try {
@@ -141,7 +141,7 @@ class MessageMainMenu extends Messages {
 		$query = sprintf(
 			'SELECT m.id AS ID,m.title AS title,m.validFrom AS validFrom,
 			m.validTo AS validTo, mr.return AS "return", m.GID as GID
-			FROM Message m
+			FROM MessageMessages m
 			JOIN MessageReceivers mr ON mr.userId = %s
 				AND m.ID = mr.messageId
 			WHERE SYSDATE() BETWEEN m.validFrom AND m.validTo
@@ -204,20 +204,20 @@ class MessageMainMenu extends Messages {
 			$msgText = $msgTitle = $forename = $name = $grade = $msgRecId = $msgReturn = '';
 			$query = "SELECT m.title, m.text, mr.read, mr.ID, mr.return,
 					u.forename, u.name, CONCAT(g.gradelevel, g.label)
-				FROM users u
+				FROM SystemUsers u
 				JOIN MessageReceivers mr ON mr.userId = u.ID
-				JOIN Message m ON mr.messageId = m.ID AND m.ID = ?
-				LEFT JOIN usersInGradesAndSchoolyears uigs ON
+				JOIN MessageMessages m ON mr.messageId = m.ID AND m.ID = ?
+				LEFT JOIN SystemUsersInGradesAndSchoolyears uigs ON
 					uigs.userId = u.ID AND
 					uigs.schoolyearId = @activeSchoolyear
-				LEFT JOIN Grades g ON g.ID = uigs.gradeId
+				LEFT JOIN SystemGrades g ON g.ID = uigs.gradeId
 				WHERE u.ID = ?";
 			$stmt = $db->prepare($query);
 			if($stmt) {
 				$stmt->bind_param('ii', $messageId, $_SESSION['uid']);
 				$stmt->bind_result($msgTitle, $msgText, $isRead, $msgRecId, $msgReturn,
 					$forename, $name, $grade);
-				
+
 				$stmt->execute();
 				while($stmt->fetch()) {
 					// User got multiple messages of the same kind, select only

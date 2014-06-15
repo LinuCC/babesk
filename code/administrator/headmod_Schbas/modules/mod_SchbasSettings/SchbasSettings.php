@@ -30,25 +30,43 @@ class SchbasSettings extends Schbas {
 			$SchbasSettingsInterface->InitialMenu();
 		else {
 			switch ($_GET['action']){
-				case 'editBankAccount':	$this->editBankAccount();break;
-				case '2':	$SchbasSettingsInterface->LoanSettings($SchbasSettingsProcessing->getLoanSettings(),false);break;
-				case '3':	$SchbasSettingsInterface->RetourSettings();break;
-				case '4':	TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", $_POST['owner']."|".$_POST['number']."|".$_POST['blz']."|".$_POST['institute'], 'bank_details'));break;
-				case '5':	$this->updateFee();
-				$SchbasSettingsInterface->LoanSettings($SchbasSettingsProcessing->getLoanSettings(),true);break;
-				case '6':	$claim_date = $_POST['claim_Day'].".". $_POST['claim_Month'].".". $_POST['claim_Year'];
+				case 'editBankAccount':
+					$this->editBankAccount();
+					break;
+				case '2':
+					$SchbasSettingsInterface->LoanSettings($SchbasSettingsProcessing->getLoanSettings(),false);
+					break;
+				case '3':
+					$SchbasSettingsInterface->RetourSettings();
+					break;
+				case '4':
+					TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", $_POST['owner']."|".$_POST['number']."|".$_POST['blz']."|".$_POST['institute'], 'bank_details'));
+					break;
+				case '5':
+					$this->updateFee();
+				$SchbasSettingsInterface->LoanSettings($SchbasSettingsProcessing->getLoanSettings(),true);
+					break;
+				case '6':
+					$claim_date = $_POST['claim_Day'].".". $_POST['claim_Month'].".". $_POST['claim_Year'];
 				$transfer_date = $_POST['transfer_Day'].".". $_POST['transfer_Month'].".". $_POST['transfer_Year'];
-				TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", $claim_date,"schbasDeadlineClaim"));
-				TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", $transfer_date,"schbasDeadlineTransfer"));break;
-				case '7':	$claimEnabled = TableMng::query(sprintf("SELECT value FROM global_settings WHERE name='isSchbasClaimEnabled'"));
-				$SchbasSettingsInterface->enableFormConfirm($claimEnabled[0]['value']);break;
-				case '8':   $SchbasSettingsInterface->TextSettings();break;
-				case '9':	if (isset($_POST['enable'])){
-					TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", 1, 'isSchbasClaimEnabled'));
+				TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", $claim_date,"schbasDeadlineClaim"));
+				TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", $transfer_date,"schbasDeadlineTransfer"));
+					break;
+				case '7':
+					$claimEnabled = TableMng::query(sprintf("SELECT value FROM SystemGlobalSettings WHERE name='isSchbasClaimEnabled'"));
+				$SchbasSettingsInterface->enableFormConfirm($claimEnabled[0]['value']);
+					break;
+				case '8':
+					$SchbasSettingsInterface->TextSettings();
+					break;
+				case '9':
+					if (isset($_POST['enable'])){
+					TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", 1, 'isSchbasClaimEnabled'));
 				}else{
-					TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", 0, 'isSchbasClaimEnabled'));
+					TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", 0, 'isSchbasClaimEnabled'));
 				}
-				$SchbasSettingsInterface->enableFormConfirmFin();break;
+				$SchbasSettingsInterface->enableFormConfirmFin();
+					break;
 				case '10': $this->saveTexts();
 				break;
 				case 'editCoverLetter': $this->editCoverLetter();
@@ -56,8 +74,8 @@ class SchbasSettings extends Schbas {
 				case 'previewInfoDocs': $this->previewInfoDocs();
 				break;
 				case 'setReminder': if (isset($_POST['templateID']) && isset($_POST['authorID'])){
-					TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", $_POST['templateID'], 'schbasReminderMessageID'));
-					TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", $_POST['authorID'], 'schbasReminderAuthorID'));
+					TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", $_POST['templateID'], 'schbasReminderMessageID'));
+					TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", $_POST['authorID'], 'schbasReminderAuthorID'));
 					$SchbasSettingsInterface->enableFormConfirmFin();break;
 				} else $this->setReminder();
 				break;
@@ -70,7 +88,7 @@ class SchbasSettings extends Schbas {
 	}
 
 	function updateFee(){
-		$stmt = TableMng::getDB()->prepare("UPDATE schbas_fee SET fee_normal = ?, fee_reduced = ? WHERE grade = ?;");
+		$stmt = TableMng::getDB()->prepare("UPDATE SchbasFee SET fee_normal = ?, fee_reduced = ? WHERE grade = ?;");
 		for ($i = 5;$i<=12; $i++){
 			$_POST[$i.'norm'] = str_replace (",", ".", $_POST[$i.'norm'] );
 			$_POST[$i.'erm'] = str_replace (",", ".", $_POST[$i.'erm'] );
@@ -88,7 +106,7 @@ class SchbasSettings extends Schbas {
 		$textId = TableMng::getDb()->real_escape_string($_POST['textId']);
 		try {
 			$template = TableMng::query(sprintf(
-					'SELECT * FROM schbas_texts WHERE `description` = "%s%s"',
+					'SELECT * FROM SchbasTexts WHERE `description` = "%s%s"',
 					$textId,$templateId));
 
 		} catch (Exception $e) {
@@ -115,9 +133,9 @@ class SchbasSettings extends Schbas {
 		if ($textThreeText == '') $textThreeText = '&nbsp;';
 
 		try {
-			TableMng::query('UPDATE schbas_texts SET title="'.$textOneTitle.'",text="'.$textOneText.'" WHERE description="textOne'.$grade.'"',false);
-			TableMng::query('UPDATE schbas_texts SET title="'.$textTwoTitle.'",text="'.$textTwoText.'" WHERE description="textTwo'.$grade.'"',false);
-			TableMng::query('UPDATE schbas_texts SET title="'.$textThreeTitle.'",text="'.$textThreeText.'" WHERE description="textThree'.$grade.'"',false);
+			TableMng::query('UPDATE SchbasTexts SET title="'.$textOneTitle.'",text="'.$textOneText.'" WHERE description="textOne'.$grade.'"',false);
+			TableMng::query('UPDATE SchbasTexts SET title="'.$textTwoTitle.'",text="'.$textTwoText.'" WHERE description="textTwo'.$grade.'"',false);
+			TableMng::query('UPDATE SchbasTexts SET title="'.$textThreeTitle.'",text="'.$textThreeText.'" WHERE description="textThree'.$grade.'"',false);
 			$SchbasSettingsInterface->SavingSuccess();
 		} catch (Exception $e) {
 			$SchbasSettingsInterface->SavingFailed();
@@ -131,31 +149,31 @@ class SchbasSettings extends Schbas {
 
 		if (isset($_POST['owner']) && isset($_POST['number']) && isset($_POST['blz']) && isset($_POST['institute'])) {
 			try {
-				TableMng::query(sprintf("UPDATE global_settings SET value = '%s' WHERE name = '%s'", $_POST['owner']."|".$_POST['number']."|".$_POST['blz']."|".$_POST['institute'], 'bank_details'));
+				TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", $_POST['owner']."|".$_POST['number']."|".$_POST['blz']."|".$_POST['institute'], 'bank_details'));
 				$SchbasSettingsInterface->SavingSuccess();
 			} catch (Exception $e) {
 				$SchbasSettingsInterface->SavingFailed();
 			}
 		}
 		else {
-			$temp = TableMng::query('SELECT value FROM global_settings WHERE name="bank_details"');
+			$temp = TableMng::query('SELECT value FROM SystemGlobalSettings WHERE name="bank_details"');
 			$bankAccount = explode("|", $temp[0]['value']);
 			$SchbasSettingsInterface->EditBankAccount($bankAccount[0],$bankAccount[1],$bankAccount[2],$bankAccount[3]);
 		}
 	}
-	
+
 	/**
 	 * sets the schbas message template for the payment reminder
 	 */
 	protected function setReminder() {
 		require_once 'AdminSchbasSettingsInterface.php';
 		$SchbasSettingsInterface = new AdminSchbasSettingsInterface($this->relPath);
-		
-		$activeReminderID = TableMng::query('SELECT value FROM global_settings WHERE name="schbasReminderMessageID"');
-		$reminderAuthorID = TableMng::query('SELECT value FROM global_settings WHERE name="schbasReminderAuthorID"');
-		$SchbasSettingsInterface->showReminderSelection($activeReminderID,$reminderAuthorID,$this->templatesFetchSchbas());	
+
+		$activeReminderID = TableMng::query('SELECT value FROM SystemGlobalSettings WHERE name="schbasReminderMessageID"');
+		$reminderAuthorID = TableMng::query('SELECT value FROM SystemGlobalSettings WHERE name="schbasReminderAuthorID"');
+		$SchbasSettingsInterface->showReminderSelection($activeReminderID,$reminderAuthorID,$this->templatesFetchSchbas());
 	}
-	
+
 	/**
 	 * Fetches all of the Templates from the database and returns them
 	 *
@@ -163,23 +181,23 @@ class SchbasSettings extends Schbas {
 	 * a void Array if no elements where found
 	 */
 	protected function templatesFetchSchbas() {
-	
+
 		$data = array();
-	
+
 		try {
 			$data = TableMng::query('SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM messagegroups WHERE name="Schbas");');
-	
+
 		} catch (MySQLVoidDataException $e) {
 			return array();
-	
+
 		} catch (Exception $e) {
 			$this->_interface->dieError('Konnte die Vorlagen nicht abrufen');
 		}
-	
+
 		return $data;
 	}
-	
-	
+
+
 	protected function editCoverLetter () {
 
 		require_once 'AdminSchbasSettingsInterface.php';
@@ -194,15 +212,15 @@ class SchbasSettings extends Schbas {
 			if ($coverLetterText == '') $coverLetterText = '&nbsp;';
 
 			try {
-				TableMng::query('UPDATE schbas_texts SET title="'.$coverLetterTitle.'",text="'.$coverLetterText.'" WHERE description="coverLetter"',false);
+				TableMng::query('UPDATE SchbasTexts SET title="'.$coverLetterTitle.'",text="'.$coverLetterText.'" WHERE description="coverLetter"',false);
 				$SchbasSettingsInterface->SavingSuccess();
 			} catch (Exception $e) {
 				$SchbasSettingsInterface->SavingFailed();
 			}
 		}
 		else {
-			$title = TableMng::query('SELECT title FROM schbas_texts WHERE description="coverLetter"');
-			$text = TableMng::query('SELECT text FROM schbas_texts WHERE description="coverLetter"');
+			$title = TableMng::query('SELECT title FROM SchbasTexts WHERE description="coverLetter"');
+			$text = TableMng::query('SELECT text FROM SchbasTexts WHERE description="coverLetter"');
 			$SchbasSettingsInterface->EditCoverLetter($title[0]['title'],$text[0]['text']);
 		}
 	}
@@ -222,7 +240,7 @@ class SchbasSettings extends Schbas {
 		require_once PATH_ACCESS. '/BookManager.php';
 
 		//get cover letter date
-		$letter_date =  TableMng::query("SELECT value FROM global_settings WHERE name='schbasDateCoverLetter'");
+		$letter_date =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDateCoverLetter'");
 
 		$booklistManager = new BookManager();
 
@@ -230,16 +248,16 @@ class SchbasSettings extends Schbas {
 		$gradelevel = $_POST['gradelabel'];
 
 		// get cover letter ("Anschreiben")
-		$coverLetter = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='coverLetter'");
+		$coverLetter = TableMng::query("SELECT title, text FROM SchbasTexts WHERE description='coverLetter'");
 
 		// get first infotext
-		$textOne = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textOne".$gradelevel."'");
+		$textOne = TableMng::query("SELECT title, text FROM SchbasTexts WHERE description='textOne".$gradelevel."'");
 
 		// get second infotext
-		$textTwo = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textTwo".$gradelevel."'");
+		$textTwo = TableMng::query("SELECT title, text FROM SchbasTexts WHERE description='textTwo".$gradelevel."'");
 
 		// get third infotext
-		$textThree = TableMng::query("SELECT title, text FROM schbas_texts WHERE description='textThree".$gradelevel."'");
+		$textThree = TableMng::query("SELECT title, text FROM SchbasTexts WHERE description='textThree".$gradelevel."'");
 
 		// get booklist
 		$booklist = $booklistManager->getBooksByClass($gradelevel);
@@ -258,11 +276,11 @@ class SchbasSettings extends Schbas {
 		$books = str_replace('é', '&eacute;', $books);
 
 		//get loan fees
-		$feeNormal = TableMng::query("SELECT fee_normal FROM schbas_fee WHERE grade=".$gradelevel);
-		$feeReduced = TableMng::query("SELECT fee_reduced FROM schbas_fee WHERE grade=".$gradelevel);
+		$feeNormal = TableMng::query("SELECT fee_normal FROM SchbasFee WHERE grade=".$gradelevel);
+		$feeReduced = TableMng::query("SELECT fee_reduced FROM SchbasFee WHERE grade=".$gradelevel);
 
 		//get bank account
-		$bank_account =  TableMng::query("SELECT value FROM global_settings WHERE name='bank_details'");
+		$bank_account =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='bank_details'");
 		$bank_account = explode("|", $bank_account[0]['value']);
 
 		//textOne[0]['title'] wird nicht ausgegeben, unter admin darauf hinweisen!

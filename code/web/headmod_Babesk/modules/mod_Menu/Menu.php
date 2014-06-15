@@ -19,7 +19,7 @@ class Menu extends Babesk {
 	//Constructor
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
-		$this->smartyPath = PATH_SMARTY . '/templates/web' . $path;
+		$this->smartyPath = PATH_SMARTY_TPL . '/web' . $path;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -34,8 +34,8 @@ class Menu extends Babesk {
 
 		$smarty = $dataContainer->getSmarty();
 
-		$orderManager = new OrderManager('orders');
-		$mealManager = new MealManager('meals');
+		$orderManager = new OrderManager('BabeskOrders');
+		$mealManager = new MealManager('BabeskMeals');
 
 		$meal = array();
 		$orders_existing = true;
@@ -92,7 +92,7 @@ class Menu extends Babesk {
 
 
 		try {
-			$data = TableMng::query('SELECT * FROM global_settings
+			$data = TableMng::query('SELECT * FROM SystemGlobalSettings
 				WHERE name = "ordercancelEnddate"');
 
 		} catch (Exception $e) {

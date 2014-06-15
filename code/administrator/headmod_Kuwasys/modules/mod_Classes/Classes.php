@@ -107,7 +107,7 @@ class Classes extends Kuwasys {
 	protected function schoolyearsGetAll() {
 
 		try {
-			$stmt = $this->_pdo->query('SELECT * FROM schoolYear');
+			$stmt = $this->_pdo->query('SELECT * FROM SystemSchoolyears');
 			return $stmt->fetchAll();
 
 		} catch (Exception $e) {
@@ -119,7 +119,7 @@ class Classes extends Kuwasys {
 	protected function schoolyearsIdNamePairsGetAll() {
 
 		try {
-			$stmt = $this->_pdo->query('SELECT ID, label FROM schoolYear');
+			$stmt = $this->_pdo->query('SELECT ID, label FROM SystemSchoolyears');
 
 			$stmt->execute();
 			return $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
@@ -142,7 +142,7 @@ class Classes extends Kuwasys {
 	protected function classunitsGetAll() {
 
 		try {
-			$stmt = $this->_pdo->query('SELECT * FROM kuwasysClassUnit');
+			$stmt = $this->_pdo->query('SELECT * FROM KuwasysClassCategories');
 			return $stmt->fetchAll();
 
 		} catch (Exception $e) {
@@ -215,7 +215,7 @@ class Classes extends Kuwasys {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'INSERT INTO class (label, description, maxRegistration,
+				'INSERT INTO KuwasysClasses (label, description, maxRegistration,
 					registrationEnabled, unitId, schoolyearId)
 				VALUES (:label, :description, :maxRegistration,
 					:registrationEnabled, :unitId, :schoolyearId)');
@@ -272,7 +272,7 @@ class Classes extends Kuwasys {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'UPDATE class SET label = :label, description = :description,
+				'UPDATE KuwasysClasses SET label = :label, description = :description,
 					maxRegistration = :maxRegistration,
 					registrationEnabled = :registrationEnabled,
 					unitId = :unitId, schoolyearId = :schoolyearId
@@ -378,6 +378,9 @@ class Classes extends Kuwasys {
 
 		$this->classDeletionInputCheck();
 		$this->classDeletionUpload();
+		$this->_interface->backlink(
+			'administrator|Kuwasys|Classes|DisplayClasses'
+		);
 		$this->_interface->dieSuccess(_g(
 			'The Class was successfully deleted'));
 	}
@@ -392,8 +395,8 @@ class Classes extends Kuwasys {
 		try {
 			$stmt = $this->_pdo->prepare(
 				'DELETE c.*, uic.*
-				FROM class c
-				LEFT JOIN jointUsersInClass uic ON c.ID = uic.ClassID
+				FROM KuwasysClasses c
+				LEFT JOIN KuwasysUsersInClasses uic ON c.ID = uic.ClassID
 				WHERE c.ID = :id');
 
 			$stmt->execute(array(':id' => $_GET['ID']));
@@ -445,7 +448,7 @@ class Classes extends Kuwasys {
 
 		try {
 			$stmt = $this->_pdo->query(
-				'SELECT ID FROM schoolYear WHERE active = 1');
+				'SELECT ID FROM SystemSchoolyears WHERE active = 1');
 
 			$stmt->execute();
 			return $stmt->fetchColumn();
@@ -501,9 +504,9 @@ class Classes extends Kuwasys {
 
 		try {
 			$subQueryCountUsers = '(SELECT Count(*)
-					FROM jointUsersInClass uic
-					JOIN users ON users.ID = uic.UserID
-					WHERE uic.statusId = (SELECT ID FROM usersInClassStatus
+					FROM KuwasysUsersInClasses uic
+					JOIN SystemUsers ON SystemUsers.ID = uic.UserID
+					WHERE uic.statusId = (SELECT ID FROM KuwasysUsersInClassStatuses
 						WHERE name="%s") AND c.ID = uic.ClassID
 					)
 				';
@@ -516,14 +519,14 @@ class Classes extends Kuwasys {
 					'. sprintf ($subQueryCountUsers, 'waiting') . ' AS waitingCount,
 					'. sprintf ($subQueryCountUsers, 'request1') . ' AS request1Count,
 					'. sprintf ($subQueryCountUsers, 'request2') . ' AS request2Count
-				FROM class c
-				LEFT JOIN schoolYear sy ON c.schoolyearId = sy.ID
-				LEFT JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
+				FROM KuwasysClasses c
+				LEFT JOIN SystemSchoolyears sy ON c.schoolyearId = sy.ID
+				LEFT JOIN KuwasysClassCategories cu ON c.unitId = cu.ID
 				LEFT JOIN (
 						SELECT ctic.ClassID AS classId,
 							CONCAT(ct.forename, " ", ct.name) AS name
-						FROM classTeacher ct
-						JOIN jointClassTeacherInClass ctic
+						FROM KuwasysClassteachers ct
+						JOIN KuwasysClassteachersInClasses ctic
 							ON ct.ID = ctic.ClassTeacherID
 					) ct ON c.ID = ct.classId
 				WHERE sy.ID = :schoolyearId
@@ -534,6 +537,10 @@ class Classes extends Kuwasys {
 			return $stmt->fetchAll();
 
 		} catch (PDOException $e) {
+			$this->_logger->log('error fetching the classes by schoolyearId',
+				'Notice', Null, json_encode(array(
+					'msg' => $e->getMessage(),
+					'schoolyearId' => $schoolyearId)));
 			$this->_interface->dieError(
 				_g('Could not fetch the Classes by SchoolyearId $1%s',
 					$schoolyearId));
@@ -562,30 +569,31 @@ class Classes extends Kuwasys {
 		}
 
 		$subQueryCountUsers = '(SELECT Count(*)
-				FROM jointUsersInClass uic
-				JOIN users ON users.ID = uic.UserID
-				WHERE uic.statusId = (SELECT ID FROM usersInClassStatus
+				FROM KuwasysUsersInClasses uic
+				JOIN SystemUsers ON SystemUsers.ID = uic.UserID
+				WHERE uic.statusId = (SELECT ID FROM KuwasysUsersInClassStatuses
 					WHERE name="%s") AND c.ID = uic.ClassID
 				)
 			';
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'SELECT c.*, sy.label As schoolyearLabel,
-					cu.translatedName AS unitTranslatedName,
+				'SELECT c.*, cc.translatedName AS unitTranslatedName,
+					sy.ID AS schoolyearId, sy.label AS schoolyearLabel,
+					cc.ID AS categoryId,
 					GROUP_CONCAT(DISTINCT ct.name SEPARATOR "; ") AS classteacherName,
 					'. sprintf ($subQueryCountUsers, 'active') . ' AS activeCount,
 					'. sprintf ($subQueryCountUsers, 'waiting') . ' AS waitingCount,
 					'. sprintf ($subQueryCountUsers, 'request1') . ' AS request1Count,
 					'. sprintf ($subQueryCountUsers, 'request2') . ' AS request2Count
-				FROM class c
-				LEFT JOIN schoolYear sy ON c.schoolyearId = sy.ID
-				LEFT JOIN kuwasysClassUnit cu ON c.unitId = cu.ID
+				FROM KuwasysClasses c
+				LEFT JOIN SystemSchoolyears sy ON c.schoolyearId = sy.ID
+				LEFT JOIN KuwasysClassCategories cc ON c.unitId = cc.ID
 				LEFT JOIN (
 						SELECT ctic.ClassID AS classId,
 							CONCAT(ct.forename, " ", ct.name) AS name
-						FROM classTeacher ct
-						JOIN jointClassTeacherInClass ctic
+						FROM KuwasysClassteachers ct
+						JOIN KuwasysClassteachersInClasses ctic
 							ON ct.ID = ctic.ClassTeacherID
 					) ct ON c.ID = ct.classId
 				' . $whereStr . '
@@ -612,16 +620,22 @@ class Classes extends Kuwasys {
 
 	protected function submoduleDisplayClassDetailsExecute() {
 
+		if(!isset($_GET['ID'])) {
+			$this->_interface->dieError('Keine ID angegeben!');
+		}
+
 		$class = $this->classesGetWithAdditionalReadableData($_GET['ID']);
 		$users = $this->usersByClassIdGet($_GET['ID']);
 		$users = $this->assignClassesOfSameClassunitToUsers(
-			$users, $class['unitId']);
+			$users, $class['unitId']
+		);
 		$statuses = $this->statusesGetAll();
 		$this->_smarty->assign('class', $class);
 		$this->_smarty->assign('users', $users);
 		$this->_smarty->assign('statuses', $statuses);
 		$this->_smarty->display(
-			$this->_smartyModuleTemplatesPath . 'displayClassDetails.tpl');
+			$this->_smartyModuleTemplatesPath . 'display-class-details.tpl'
+		);
 	}
 
 	/**
@@ -635,15 +649,17 @@ class Classes extends Kuwasys {
 		try {
 			$stmt = $this->_pdo->prepare(
 				'SELECT u.*, g.gradename AS gradename,
-					uics.translatedName AS statusTranslated
-				FROM users u
-				JOIN jointUsersInClass uic ON u.ID = uic.UserID
-				JOIN usersInClassStatus uics ON uic.statusId = uics.ID
+					uics.translatedName AS statusTranslated,
+					uics.ID AS statusId,
+					uic.ID as jointId
+				FROM SystemUsers u
+				JOIN KuwasysUsersInClasses uic ON u.ID = uic.UserID
+				JOIN KuwasysUsersInClassStatuses uics ON uic.statusId = uics.ID
 				LEFT JOIN (
-						SELECT CONCAT(label, "-", gradelevel) AS gradename,
+						SELECT CONCAT(gradelevel, "-", label) AS gradename,
 							uigs.UserID AS userId
-						FROM Grades g
-						JOIN usersInGradesAndSchoolyears uigs ON
+						FROM SystemGrades g
+						JOIN SystemUsersInGradesAndSchoolyears uigs ON
 							uigs.gradeId = g.ID
 						WHERE uigs.schoolyearId = @activeSchoolyear
 					) g ON g.userId = u.ID
@@ -651,7 +667,7 @@ class Classes extends Kuwasys {
 			);
 
 			$stmt->execute(array(':id' => $classId));
-			return $stmt->fetchAll();
+			return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
 		} catch (Exception $e) {
 			$this->_interface->dieError(
@@ -678,8 +694,8 @@ class Classes extends Kuwasys {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				"SELECT c.*, uic.UserID AS userId FROM class c
-				JOIN jointUsersInClass uic ON c.ID = uic.ClassID
+				"SELECT c.*, uic.UserID AS userId FROM KuwasysClasses c
+				JOIN KuwasysUsersInClasses uic ON c.ID = uic.ClassID
 				WHERE $userIdPart c.unitId = :unitId
 					AND c.ID <> :classId
 					AND c.schoolyearId = @activeSchoolyear"
@@ -709,9 +725,9 @@ class Classes extends Kuwasys {
 	protected function statusesGetAll() {
 
 		try {
-			$stmt = $this->_pdo->query('SELECT * FROM usersInClassStatus');
+			$stmt = $this->_pdo->query('SELECT * FROM KuwasysUsersInClassStatuses');
 			$stmt->execute();
-			return $stmt->fetchAll();
+			return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
 		} catch (PDOException $e) {
 			$this->_interface->dieError(_g('Error fetching the Statuses!'));
@@ -785,7 +801,7 @@ class Classes extends Kuwasys {
 		$toggle = (isset($_POST['toggleGlobalClassregistration'])) ? 1 : 0;
 
 		try {
-			$stmt = $this->_pdo->prepare('UPDATE global_settings
+			$stmt = $this->_pdo->prepare('UPDATE SystemGlobalSettings
 				SET value = :toggle
 				WHERE name = "isClassRegistrationEnabled"');
 
@@ -807,7 +823,7 @@ class Classes extends Kuwasys {
 
 		try {
 			$this->_pdo->exec(
-				'UPDATE class SET registrationEnabled = 1
+				'UPDATE KuwasysClasses SET registrationEnabled = 1
 					WHERE schoolyearId = @activeSchoolyear'
 			);
 
@@ -838,7 +854,7 @@ class Classes extends Kuwasys {
 	protected function globalClassRegistrationGet() {
 
 		try {
-			$stmt = $this->_pdo->query('SELECT * FROM global_settings
+			$stmt = $this->_pdo->query('SELECT * FROM SystemGlobalSettings
 				WHERE name = "isClassRegistrationEnabled"');
 
 			$data = $stmt->fetch();
@@ -866,7 +882,7 @@ class Classes extends Kuwasys {
 	protected function globalClassRegistrationAdd() {
 
 		try {
-			$this->_pdo->exec('INSERT INTO global_settings (name, value)
+			$this->_pdo->exec('INSERT INTO SystemGlobalSettings (name, value)
 				VALUES ("isClassRegistrationEnabled", "0")');
 
 		} catch (Exception $e) {
@@ -888,12 +904,6 @@ class Classes extends Kuwasys {
 		require_once 'SummaryOfClassesPdf.php';
 		SummaryOfClassesPdf::init($this->_interface);
 		SummaryOfClassesPdf::execute($_GET['startdate'], $_GET['enddate']);
-	}
-
-	protected function submoduleUnregisterUserExecute() {
-
-		$this->_interface->dieError(
-			'Dieses Modul ist noch in Überarbeitung...');
 	}
 
 	protected function submoduleCsvImportExecute() {

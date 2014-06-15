@@ -2,20 +2,16 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ADMIN . '/headmod_Schbas/Schbas.php';
+require_once PATH_INCLUDE . '/orm-entities/SchbasBooks.php';
+require_once PATH_INCLUDE . '/orm-entities/SystemSchoolSubjects.php';
 
 class Booklist extends Schbas {
 
-	////////////////////////////////////////////////////////////////////////////////
-	//Attributes
 
-	////////////////////////////////////////////////////////////////////////////////
-	//Constructor
-	public function __construct($name, $display_name, $path) {
-		parent::__construct($name, $display_name, $path);
-	}
-
-	////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
 	//Methods
+	/////////////////////////////////////////////////////////////////////
+
 	public function execute($dataContainer) {
 
 		defined('_AEXEC') or die('Access denied');
@@ -26,21 +22,16 @@ class Booklist extends Schbas {
 		$BookInterface = new AdminBooklistInterface($this->relPath);
 		$BookProcessing = new AdminBooklistProcessing($BookInterface);
 
+		parent::entryPoint($dataContainer);
+		parent::moduleTemplatePathSet();
+
 		$action_arr = array('show_booklist' => 1,
 							'add_book' => 4,
 							'del_book' => 6);
 
-		if ('POST' == $_SERVER['REQUEST_METHOD']){
 		if (isset($_GET['action'])) {
 			$action = $_GET['action'];
 			switch ($action) {
-				case 1: //show booklist
-					if (isset($_POST['filter'])){
-						$BookProcessing->ShowBooklist("filter", $_POST['filter']);
-					}else{
-						$BookProcessing->ShowBooklist("filter","subject");
-					}
-					break;
 				case 2: //edit a book
 					if (isset ($_POST['isbn_search'])) {
 						$bookID = $BookProcessing->getBookIdByISBN($_POST['isbn_search']);
@@ -85,35 +76,33 @@ class Booklist extends Schbas {
 					$BookProcessing->ShowBooklist("search", $_POST['search']);
 					break;
 
-					case 6: //search an entry for deleting
+				case 6: //search an entry for deleting
 
-						$BookProcessing->ScanForDeleteEntry();
+					$BookProcessing->ScanForDeleteEntry();
 
-						break;
-					case 'showBooksFNY':
-						$BookProcessing->showBooksForNextYear();
-						break;
-                                            case 'showBooksBT':
-						$BookProcessing->showBooksByTopic();
-						break;
+					break;
+				case 'showBooksFNY':
+					$BookProcessing->showBooksForNextYear();
+					break;
+				case 'showBooksBT':
+					$BookProcessing->showBooksByTopic();
+					break;
 				break;
 			}
 		}
-		}elseif  (('GET' == $_SERVER['REQUEST_METHOD'])&&isset($_GET['action'])) {
-			$action = $_GET['action'];
-			$mode = $_GET['mode'];
-			switch ($action) {
-				case 1: //show the users
-					if (isset($_GET['filter'])) {
-						$BookProcessing->ShowBooklist($mode,$_GET['filter']);
-					} else {
-						$BookProcessing->ShowBooklist("name");
-					}
-			}
-		}else {
+		else {
 			$BookInterface->ShowSelectionFunctionality($action_arr);
 		}
 	}
+
+	/////////////////////////////////////////////////////////////////////
+	//Implements
+	/////////////////////////////////////////////////////////////////////
+
+	/////////////////////////////////////////////////////////////////////
+	//Attributes
+	/////////////////////////////////////////////////////////////////////
+
 }
 
 ?>

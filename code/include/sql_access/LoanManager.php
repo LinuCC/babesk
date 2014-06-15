@@ -11,7 +11,7 @@ require_once PATH_ACCESS . '/TableManager.php';
 class LoanManager extends TableManager{
 
 	public function __construct() {
-		parent::__construct('schbas_lending');
+		parent::__construct('SchbasLending');
 	}
 
 
@@ -25,7 +25,10 @@ class LoanManager extends TableManager{
 		$query = sql_prev_inj(sprintf('SELECT * FROM %s WHERE user_id = "%s"', $this->tablename, $uid));
 		$result = $this->db->query($query);
 		if (!$result) {
-			throw DB_QUERY_ERROR.$this->db->error;
+			/**
+			 * @todo Proper Errorhandling here, not this: (wouldnt even execute)
+			 * throw DB_QUERY_ERROR.$this->db->error;
+			 */
 		}
 		while($buffer = $result->fetch_assoc())
 			$res_array[] = $buffer;
@@ -74,22 +77,37 @@ class LoanManager extends TableManager{
 
 		$books = $bookManager->getBooksByClass($details['class']);
 
+		//Wenn Buch nicht von Schueler benötigt, aus dem Array löschen
+		//Die arrays $lang, $reli und $course enthalten die Einträge die der
+		//Benutzer _nicht_ braucht.
+		//$course wird hierbei nur betrachtet, wenn der Benutzer in der
+		//Oberstufe ist => ist der Benutzer nicht im Oberstufenkurs, werden nur
+		//$lang und $reli Bücher herausgefiltert, die restlichen Bücher aus der
+		//Klasse kriegt er alle angedreht
 		$counter = 0;
 		if ($books){
 			foreach ($books as &$book){
-				if (in_array($book['subject'], $lang) OR in_array($book['subject'], $reli) OR ((intval(preg_replace($regex,'',$details['class'])) >= $sct) AND in_array($book['subject'], $course))){
+				if (in_array($book['subject'], $lang) OR
+					in_array($book['subject'], $reli) OR ((
+						intval(
+							preg_replace($regex,'',$details['class'])
+						) >= $sct) AND
+						in_array($book['subject'], $course)
+					)){
 					unset($books[$counter]);
 				}
 				$counter++;
 			}
 		}
+		//Hole alle Verleihungen an den Schüler
 		$query = sql_prev_inj(sprintf('SELECT inventory_id FROM %s WHERE user_id=%s', $this->tablename, $uid));
 		$result = $this->db->query($query);
 		if (!$result) {
-			throw DB_QUERY_ERROR.$this->db->error;
+			throw new Exception('Konnte die Ausleihen nicht abrufen');
 		}
 		while($buffer = $result->fetch_assoc())
 			$minusbooksinv[] = $buffer['inventory_id'];
+		//Entferne die Bücher, die der Benutzer bereits ausgeliehen hat
 		if (isset($minusbooksinv)) {
 
 			foreach ($minusbooksinv as &$minusbookinv){
@@ -161,11 +179,11 @@ class LoanManager extends TableManager{
 		$userDetails = TableMng::query(sprintf(
 			'SELECT u.*,
 			(SELECT CONCAT(g.gradelevel, g.label) AS class
-				FROM usersInGradesAndSchoolyears uigs
-				LEFT JOIN Grades g ON uigs.gradeId = g.ID
+				FROM SystemUsersInGradesAndSchoolyears uigs
+				LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 				WHERE uigs.userId = u.ID AND
 					uigs.schoolyearId = @activeSchoolyear) AS class
-			FROM users u WHERE `ID` = %s', $userId));
+			FROM SystemUsers u WHERE `ID` = %s', $userId));
 
 
 		return $userDetails[0];

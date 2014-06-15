@@ -70,16 +70,18 @@ class PublicData {
 		// $this->_moduleManager = new ModuleManager ('publicData', $this->_interface);
 		// $this->_moduleManager->setDataContainer ($this->_dataContainer);
 		// $this->_moduleManager->allowAllModules ();
+		$this->initDatabaseConnections();
 		$this->_logger = new Logger($this->_pdo);
 		$this->_logger->categorySet('PublicData');
-		$this->initPdo();
 		$this->_acl = new Acl($this->_logger, $this->_pdo);
 		$this->_dataContainer = new DataContainer (
 			$this->_interface->getSmarty (),
 			$this->_interface,
 			$this->_acl,
 			$this->_pdo,
-			$this->_logger);
+			$this->_entityManager,
+			$this->_logger
+		);
 	}
 
 	private function sessionInit () {
@@ -99,14 +101,15 @@ class PublicData {
 	 *
 	 * triggers an error when the PDO-Object could not be created
 	 */
-	private function initPdo() {
+	private function initDatabaseConnections() {
 
 		try {
 			$connector = new DBConnect();
 			$connector->initDatabaseFromXML();
 			$this->_pdo = $connector->getPdo();
 			$this->_pdo->query('SET @activeSchoolyear :=
-				(SELECT ID FROM schoolYear WHERE active = "1");');
+				(SELECT ID FROM SystemSchoolyears WHERE active = "1");');
+			$this->_entityManager = $connector->getDoctrineEntityManager();
 
 		} catch (Exception $e) {
 			trigger_error('Could not create the PDO-Object!');
@@ -122,6 +125,8 @@ class PublicData {
 	private $_acl;
 
 	private $_pdo;
+
+	private $_entityManager;
 
 	private $_logger;
 

@@ -1,0 +1,1 @@
+ALTER TABLE SystemUsers DROP course;

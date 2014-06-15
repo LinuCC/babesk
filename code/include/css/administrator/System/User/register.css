@@ -1,0 +1,57 @@
+.schoolyearswitch-container {
+	padding: 2px 12px;
+}
+
+#usergroups ol {
+	list-style: none;
+	padding-left: 20px;
+	margin-bottom: 0px;
+	/*margin-left: 5px;*/
+}
+
+#usergroups li {
+	margin-top: 5px;
+	margin-bottom: 7px;
+}
+
+#usergroups ol > li {
+	padding-left: 4px;
+	border-left: 1px solid #999999;
+}
+
+#usergroups button.expand,
+#usergroups a.expand {
+	margin-left: 5px;
+	font-size: 12px;
+}
+
+#usergroups .group-identifier {
+	font-size: 13px;
+	cursor: pointer;
+}
+fieldset#usergroups,
+fieldset#grade-schoolyears {
+	background-color: #FFFFFF;
+}
+
+fieldset#usergroups legend,
+fieldset#grade-schoolyears legend {
+	background-color: #FFFFFF;
+	border-radius: 5px;
+	box-shadow: 0 0 10px #ffffff;
+}
+
+fieldset#grade-schoolyears .btn-danger .icon-error {
+	position: relative;
+	top: 2px;
+	color: #ffffff;
+	text-align: center;
+}
+
+#presetpassword-selector input {
+	margin: 12px;
+}
+
+#presetpassword-selector * {
+	display: inline;
+}

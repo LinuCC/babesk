@@ -33,7 +33,7 @@ class GCardInfo extends Gnissel {
 			$cardInfoInterface->ShowCardInfo($userData,$_POST['card_ID']);				
 		}
 		else if (isset($_GET['lostcard'])){
-			TableMng::query(sprintf('UPDATE cards SET lost=5 WHERE cardnumber = "%s"', $_GET['lostcard']));
+			TableMng::query(sprintf('UPDATE BabeskCards SET lost=1 WHERE cardnumber = %s', $_GET['lostcard']));
 			$interface->dieMsg("Karte wurde verloren gemeldet!");	
 			$uid = $cardInfoProcessing->CheckCard($_GET['lostcard']);
 			$userData = $cardInfoProcessing->GetUserData($uid);

@@ -1,0 +1,8 @@
+.filter-bar > div {
+	max-width: 500px;
+	display: inline-block;
+}
+
+.option-buttons {
+	min-width: 80px;
+}

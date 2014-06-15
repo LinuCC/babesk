@@ -151,7 +151,7 @@ class Soli extends Babesk {
 
 		try {
 			$stmt = $this->_pdo->query('SELECT `name`, `value`
-				FROM global_settings
+				FROM SystemGlobalSettings
 				WHERE `name` IN("soli_price", "solipriceEnabled");');
 
 			$data = ArrayFunctions::arrayColumn(
@@ -165,7 +165,7 @@ class Soli extends Babesk {
 	}
 
 	/**
-	 * Adds Soli-Setting-Rows to the global_settings-Table if Not existend
+	 * Adds Soli-Setting-Rows to the SystemGlobalSettings-Table if Not existend
 	 * @param  array  $data The data fetched from the Server to check for if
 	 * the Rows Exist
 	 * @return array        the data but with the Missing Values added
@@ -183,7 +183,7 @@ class Soli extends Babesk {
 	}
 
 	/**
-	 * Inserts the soliEnabled-Variable into the global_settings
+	 * Inserts the soliEnabled-Variable into the SystemGlobalSettings
 	 *
 	 * Dies displaying a Message on Error
 	 *
@@ -194,7 +194,7 @@ class Soli extends Babesk {
 	// 	$default = 0;
 
 	// 	try {
-	// 		$this->_pdo->exec("INSERT INTO global_settings (`name`, `value`)
+	// 		$this->_pdo->exec("INSERT INTO SystemGlobalSettings (`name`, `value`)
 	// 			VALUES ('soliEnabled', {$default})");
 
 	// 	} catch (PDOException $e) {
@@ -217,7 +217,7 @@ class Soli extends Babesk {
 	// 	$val = ($isEnabled) 1 : 0;
 
 	// 	try {
-	// 		$this->_pdp->exec("UPDATE global_settings SET `value` = {$val}
+	// 		$this->_pdp->exec("UPDATE SystemGlobalSettings SET `value` = {$val}
 	// 			WHERE `name` = 'soliEnabled';");
 
 	// 	} catch (PDOException $e) {
@@ -237,7 +237,7 @@ class Soli extends Babesk {
 
 		try {
 			$this->_pdo->exec(
-				"INSERT INTO `global_settings` (`name`, `value`) VALUES
+				"INSERT INTO `SystemGlobalSettings` (`name`, `value`) VALUES
 					('soli_price', {$default});
 			");
 
@@ -259,7 +259,7 @@ class Soli extends Babesk {
 		$value = str_replace(',', '.', $value);
 
 		try {
-			$stmt = $this->_pdo->prepare("UPDATE global_settings
+			$stmt = $this->_pdo->prepare("UPDATE SystemGlobalSettings
 				SET value = :value WHERE name = 'soli_price'");
 
 			$stmt->execute(array('value' => $value));
@@ -270,7 +270,7 @@ class Soli extends Babesk {
 	}
 
 	/**
-	 * Inserts the solipriceEnabled-Row into global_settings-Table
+	 * Inserts the solipriceEnabled-Row into SystemGlobalSettings-Table
 	 *
 	 * Default is that the soliprice is not enabled
 	 * Dies displaying a Message on Error
@@ -282,7 +282,7 @@ class Soli extends Babesk {
 		$default = 0;
 
 		try {
-			$this->_pdo->exec("INSERT INTO global_settings (`name`, `value`)
+			$this->_pdo->exec("INSERT INTO SystemGlobalSettings (`name`, `value`)
 				VALUES ('solipriceEnabled', '{$default}')");
 
 		} catch (PDOException $e) {
@@ -303,7 +303,7 @@ class Soli extends Babesk {
 	protected function solipriceEnabledSet($isEnabled) {
 
 		try {
-			$stmt = $this->_pdo->prepare('UPDATE global_settings
+			$stmt = $this->_pdo->prepare('UPDATE SystemGlobalSettings
 				SET `value` = :val WHERE `name` = "solipriceEnabled"');
 
 			$val = ($isEnabled) ? 1 : 0;
