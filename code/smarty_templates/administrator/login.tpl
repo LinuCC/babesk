@@ -2,11 +2,19 @@
 <html>
 <head>
 	<title>BaBeSK Login</title>
-	<link rel="stylesheet" href="{$path_smarty_tpl}/administrator/css/general.css" type="text/css" />
+	<link rel="stylesheet" href="{$path_css}/bootstrap-theme.min.css" 
+		type="text/css" />
+	<link rel="stylesheet" href="{$path_css}/bootstrap.min.css" 
+		type="text/css" />
+	<link rel="stylesheet" href="{$path_css}/iconfonts/iconfonts.css" 
+		type="text/css" />
+	<link rel="stylesheet" href="{$path_css}/toastr.min.css" type="text/css" />
+	<link rel="stylesheet" href="{$path_smarty_tpl}/administrator/css/general.css" 
+		type="text/css" />
 	<link rel="shortcut icon" href="adminicon.ico" />
 </head>
 
-<body onload="x = document.getElementsByTagName('input')[0];if(x)if (x.value == '') x.focus();">
+<body>
 <div id="login_header">
 	<h1>BaBeSK Administrator Bereich</h1>
 </div>
@@ -14,15 +22,25 @@
 	{if $status != ''}
 	   <h4>{$status}</h4>
 	{/if}
-	<form action="index.php" method="post">
+	<form class="form-horizontal" action="index.php" method="post">
 		<fieldset>
 			<legend>Einloggen</legend>
-			<label>Benutzername</label>
-				<input type="text" name="Username" /><br />
-			<label>Passwort</label>
-				<input type="password" name="Password" /><br />
+			<div class="form-group">
+				<label for="username" class="col-sm-5 control-label">
+					Benutzername
+				</label>
+				<div class="col-sm-7">
+					<input id="username" type="text" name="Username" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="password" class="col-sm-5 control-label">Passwort</label>
+				<div class="col-sm-7">
+					<input id="password" type="password" name="Password" />
+				</div>
+			</div>
 		</fieldset>
-		<input type="submit" value="Submit" />
+		<input class="btn btn-primary" type="submit" value="Einloggen" />
 	</form>
 </div>
 <div id="footer">
@@ -38,6 +56,7 @@ $(document).ready(function() {
 			}
 		}
 	);
+	$('input[name=Username]').focus();
 });
 </script>
 

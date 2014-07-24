@@ -19,7 +19,7 @@ class TableMng {
 	 */
 	public static function init () {
 		self::dbInit ();
-		self::globalVarsSet();
+    self::globalVarsSet();
 	}
 
 	public static function getDb() {

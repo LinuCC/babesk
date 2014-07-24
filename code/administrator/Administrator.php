@@ -31,19 +31,24 @@ class Administrator {
 		else if(!validSession()) {
 			die(_g('The session is invalid, please login again'));
 		}
-		$this->initSmarty();
-		TableMng::init();
-		$this->_adminInterface = new AdminInterface(NULL, $this->_smarty);
-		// AdminInterface has used global $smarty, workaround
-		AdminInterface::$smartyHelper = $this->_smarty;
-		$this->_moduleExecutionParser = new ModuleExecutionInputParser();
-		$this->_moduleExecutionParser->setSubprogramPath(
-			'root/administrator');
-		$this->loadVersion();
-		$this->initDatabaseConnections();
-		$this->_logger = new Logger($this->_pdo);
-		$this->_logger->categorySet('Administrator');
-		$this->_acl = new Acl($this->_logger, $this->_pdo);
+		try {
+			$this->initSmarty();
+			TableMng::init();
+			$this->_adminInterface = new AdminInterface(NULL, $this->_smarty);
+			// AdminInterface has used global $smarty, workaround
+			AdminInterface::$smartyHelper = $this->_smarty;
+			$this->_moduleExecutionParser = new ModuleExecutionInputParser();
+			$this->_moduleExecutionParser->setSubprogramPath(
+				'root/administrator');
+			$this->loadVersion();
+			$this->initDatabaseConnections();
+			$this->_logger = new Logger($this->_pdo);
+			$this->_logger->categorySet('Administrator');
+			$this->_acl = new Acl($this->_logger, $this->_pdo);
+		}
+		catch(MySQLConnectionException $e) {
+			die('Sorry, could not connect to the database.');
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////
@@ -192,8 +197,9 @@ class Administrator {
 				(SELECT ID FROM SystemSchoolyears WHERE active = "1" LIMIT 1);
 			');
 
-		} catch (Exception $e) {
-			trigger_error('Could not create the PDO-Object!');
+		} catch (PDOException $e) {
+			echo $e->getMessage();
+			die("Sorry, could not connect to the database with pdo.");
 		}
 	}
 

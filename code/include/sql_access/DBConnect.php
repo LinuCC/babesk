@@ -113,7 +113,6 @@ class DBConnect {
 	public function initDatabase ($host, $username, $password, $databaseName) {
 
 		$this->setDatabaseValues($host, $username, $password, $databaseName);
-
 		$this->_database = new MySQLi($this->_host, $this->_username, $this->_password, $this->_databaseName);
 
 		if (mysqli_connect_errno()) {
