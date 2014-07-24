@@ -21,6 +21,10 @@
 *.sublime-project
 *.sublime-workspace
 
+#Vim-specific settings#
+#######################
+*.swp
+
 #OS-specific files we do not want#
 ##################################
 .directory
