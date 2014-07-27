@@ -786,22 +786,31 @@ class User extends System {
 
 		require_once PATH_INCLUDE . '/orm-entities/SystemGlobalSettings.php';
 
-		$courseStr = $this->_entityManager
+		$course = $this->_entityManager
 			->getRepository('Babesk\ORM\SystemGlobalSettings')
-			->findOneByName('special_course')
-			->getValue();
+			->findOneByName('special_course');
 
-		if(!empty($courseStr)) {
-			$courses = explode('|', $courseStr);
-			$this->_interface->dieAjax('success', $courses);
+		if(empty($course)) {
+			$this->_logger->log('Global Setting special_course does not exist',
+				'Notice', Null);
+			$this->_interface->dieAjax(
+				'info', 'Es wurden keine Oberstufenkurse gefunden.'
+			);
 		}
 		else {
-			$this->_logger->log('Error fetching global setting special_course',
-				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
-			$this->_interface->dieAjax(
-				'error',
-				'Ein Fehler ist beim Abrufen aller Oberstufenkurse aufgetreten'
-			);
+			$courseStr = $course->getValue();
+			if(!empty($courseStr)) {
+				$courses = explode('|', $courseStr);
+				$this->_interface->dieAjax('success', $courses);
+			}
+			else {
+				$this->_logger->log('Error fetching global setting special_course',
+					'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+				$this->_interface->dieAjax(
+					'error',
+					'Ein Fehler ist beim Abrufen aller Oberstufenkurse aufgetreten'
+				);
+			}
 		}
 	}
 

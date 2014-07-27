@@ -494,8 +494,8 @@ $(document).ready(function() {
 				},
 
 				success: function(data) {
+					console.log(data);
 					try {
-						console.log(data);
 						data = JSON.parse(data);
 					} catch(e) {
 						toastr['error']('Konnte die Server-antwort nicht parsen!');
@@ -627,7 +627,7 @@ $(document).ready(function() {
 						specialCourses = res['data'];
 					}
 					else {
-						toastr.error(res['data']);
+						toastr[res['state']](res['data']);
 					}
 				}
 			);

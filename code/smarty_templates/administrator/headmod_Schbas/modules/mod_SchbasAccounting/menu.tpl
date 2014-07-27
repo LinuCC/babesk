@@ -43,14 +43,16 @@ EnableSubmit = function(val)
 			</a>
 		</li>
 		<li>
-			<a href=""></a>
+			<form action="index.php?section=Schbas|SchbasAccounting&action=sendReminder"
+				method="post">
+				<input type="checkbox" name="TOS" value="agreeReminder"
+					onClick="EnableSubmit(this)">
+				<input type="submit" id="sendReminder" class="btn btn-default"
+					value="Mahnungen versenden" disabled="disabled">
+			</form>
 		</li>
 	</ul>
 
-	<form action="index.php?section=Schbas|SchbasAccounting&action=sendReminder" method="post">
-		<input type="checkbox" name="TOS" value="agreeReminder" onClick="EnableSubmit(this)">
-		<input type="submit" id="sendReminder" value="Mahnungen versenden" disabled="disabled">
-	</form>
 </fieldset>
 
 <fieldset>
