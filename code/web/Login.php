@@ -9,9 +9,10 @@ class Login {
 	////////////////////////////////////////////////////////////////////////
 	//Constructor
 	////////////////////////////////////////////////////////////////////////
-	public function __construct ($smarty) {
-        $this->interface = new WebInterface($smarty);
+	public function __construct ($smarty, $pdo) {
+		$this->interface = new WebInterface($smarty);
 		$this->_smarty = $smarty;
+		$this->_pdo = $pdo;
 		$this->setUpUserManager();
 		$this->setUpGlobalSettingsManager ();
 	}
@@ -62,7 +63,7 @@ class Login {
 		$this->setUserIdByUsername();
 		$this->checkPassword();
 		$this->checkLockedAccount();
-        $this->checkCardLost();
+		$this->checkCardLost();
 		$this->finishSuccessfulLogin();
 
 		if($this->_isAjaxRequest) {
@@ -189,13 +190,22 @@ class Login {
 		}
 	}
 
-    private function checkCardLost() {
-        $lost = TableMng::query(sprintf("select lost from cards where UID = %s", $this->_userId))[0]['lost'];
-        if ($lost) {
-            TableMng::query(sprintf("UPDATE cards SET lost=%s WHERE UID = %s", $lost-1, $this->_userId));
-            $this->interface->showError("Deine LeG-Card wurde gefunden und kann im GNISSEL-Raum abgeholt werden.");
-        }
-    }
+	private function checkCardLost() {
+		$lostStmt = $this->_pdo->prepare(
+			'SELECT lost FROM BabeskCards WHERE UID = ?'
+		);
+		$lostStmt->execute(array($this->_userId));
+		$lost = $lostStmt->fetchColumn();
+		//$lost = TableMng::query(sprintf("select lost from cards where UID = %s", $this->_userId))[0]['lost'];
+		if ($lost) {
+			$updateStmt = $this->_pdo->prepare(
+				'UPDATE BabeskCards SET lost = ? WHERE UID = ?'
+			);
+			$updateStmt->execute(array($lost - 1, $this->_userId));
+			//TableMng::query(sprintf("UPDATE cards SET lost=%s WHERE UID = %s", $lost-1, $this->_userId));
+			$this->interface->showError("Deine LeG-Card wurde gefunden und kann im GNISSEL-Raum abgeholt werden.");
+		}
+	}
 
 	private function addLoginTryToUser() {
 
@@ -217,6 +227,7 @@ class Login {
 	////////////////////////////////////////////////////////////////////////
 
 	private $_smarty;
+	private $_pdo;
 
 	/**
 	 * @var UserManager

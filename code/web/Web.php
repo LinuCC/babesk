@@ -278,7 +278,7 @@ class Web {
 	private function logIn() {
 
 		require_once 'Login.php';
-		$loginManager = new Login($this->_smarty);
+		$loginManager = new Login($this->_smarty, $this->_pdo);
 		if($loginManager->login()) {
 			$this->_userManager->updateLastLoginToNow($_SESSION['uid']);
 		}
