@@ -57,6 +57,7 @@ class LoanSystem extends Schbas {
 	private function init($dataContainer) {
 
 		defined('_WEXEC') or die("Access denied");
+		$this->entryPoint($dataContainer);
 
 		$this->_smarty = $dataContainer->getSmarty();
 		$this->_interface = new WebInterface($this->_smarty);
@@ -79,14 +80,42 @@ class LoanSystem extends Schbas {
 	}
 
 	private function showMainMenu() {
-		$schbasYear = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbas_year'");
+		require_once PATH_INCLUDE . '/orm-entities/SystemGlobalSettings.php';
+		$schbasYear = $this->_entityManager->getRepository(
+			'\Babesk\ORM\SystemGlobalSettings'
+		)->findOneByName('schbas_year')->getValue();
+		//$schbasYear = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbas_year'");
 		//get gradeValue ("Klassenstufe")
-		$gradelevel = TableMng::query("SELECT gradelevel FROM SystemGrades WHERE id=(SELECT gradeID from SystemUsersInGradesAndSchoolyears WHERE schoolyearId=(SELECT ID from SystemSchoolyears WHERE active=1) AND UserID='".$_SESSION['uid']."')");
-		$gradelevel[0]['gradelevel'] = strval(intval($gradelevel[0]['gradelevel'])+1);
-
+		//$gradelevel = TableMng::query(
+		//	"SELECT gradelevel FROM SystemGrades
+		//		WHERE id = (
+		//			SELECT gradeID from SystemUsersInGradesAndSchoolyears
+		//				WHERE schoolyearId = (
+		//					SELECT ID from SystemSchoolyears WHERE active=1
+		//				)
+		//			AND UserID='".$_SESSION['uid']."'
+		//		)
+		//");
+		$gradelevelStmt = $this->_pdo->prepare(
+			"SELECT gradelevel FROM SystemGrades g
+				LEFT JOIN SystemUsersInGradesAndSchoolyears uigs
+					ON uigs.gradeId = g.ID
+				WHERE uigs.userId = ? AND uigs.schoolyearId = @activeSchoolyear
+		");
+		$gradelevelStmt->execute(array($_SESSION['uid']));
+		$gradelevel = $gradelevelStmt->fetchColumn();
+		//Check if we got an entry back
+		if($gradelevel === false) {
+			$this->_logger->log('User accessing Schbas not in a grade!',
+				'Notice', Null, json_encode(array('uid' => $_SESSION['uid'])));
+			$this->_interface->dieError(
+				'Du bist in keiner Klasse eingetragen!'
+			);
+		}
+		$gradelevel = strval(intval($gradelevel)+1);
 		// Filter f�r Abijahrgang
 
-		if($gradelevel[0]['gradelevel']=="13") $this->_smarty->display($this->_smartyPath . 'lastGrade.tpl');;
+		if($gradelevel=="13") $this->_smarty->display($this->_smartyPath . 'lastGrade.tpl');;
 		;
 
 		$loanbooks = array();
@@ -129,7 +158,7 @@ class LoanSystem extends Schbas {
 
 		$this->_smarty->assign('feeNormal', $feeNormal);
 		$this->_smarty->assign('feeReduced', $feeReduced);
-		$this->_smarty->assign('schbasYear', $schbasYear[0]['value']);
+		$this->_smarty->assign('schbasYear', $schbasYear);
 		$this->_smarty->assign('BaBeSkTerminal', $this->checkIsKioskMode());
 		$this->_smarty->assign('loanShowForm', isset($_POST['loanShowForm']));
 		$this->_smarty->assign('loanShowBuy', isset($_POST['loanShowBuy']));
