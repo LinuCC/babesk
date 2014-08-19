@@ -26,6 +26,7 @@ class Fmenu extends Fits {
 		require_once PATH_ACCESS . '/FitsManager.php';
 		require_once PATH_ACCESS . '/GlobalSettingsManager.php';
 
+		$this->entryPoint($dataContainer);
 		$smarty = $dataContainer->getSmarty();
 		$userManager = new UserManager();
 		$fitsManager = new FitsManager();
@@ -43,36 +44,18 @@ class Fmenu extends Fits {
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS class
 				FROM SystemUsers u WHERE `ID` = %s', $_SESSION['uid']), true);
-			// $userDetails = $userManager->getUserDetails($_SESSION['uid']);
 			$userClass = $userDetails['class'];
-
-		} catch (Exception $e) {
-			die('Ein Fehler ist aufgetreten:'.$e->getMessage());
-		}
-
-		try {
 			$fitsManager->prepUser($_SESSION['uid']);
-		} catch (Exception $e) {
-				die('Ein Fehler ist aufgetreten:'.$e->getMessage());
-			}
-
-		try {
 			$has_Fits = $fitsManager->getFits($_SESSION['uid']);
-		} catch (Exception $e) {
-			die('Ein Fehler ist aufgetreten:'.$e->getMessage());
-		}
-
-		try {
 			$class = $gsm->getFitsClass();
-		} catch (Exception $e) {
-			die('Ein Fehler ist aufgetreten:'.$e->getMessage());
-		}
-
-		try {
 			$allClasses = $gsm->getFitsAllClasses();
 		} catch (Exception $e) {
-			die('Ein Fehler ist aufgetreten:'.$e->getMessage());
+			$this->_logger->log(
+				'Error executing Fits: ' . $e->getMessage(), 'Notice', Null, ''
+			);
+			$this->_interface->dieError('Konnte Fits nicht ausführen.');
 		}
+
 		if ($allClasses==true) {
 			$userClass =  preg_replace('/[^0-9]/i', '', $userClass);
 			$class =  preg_replace('/[^0-9]/i', '', $class);
