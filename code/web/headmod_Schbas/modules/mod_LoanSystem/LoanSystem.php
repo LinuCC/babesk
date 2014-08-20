@@ -80,6 +80,7 @@ class LoanSystem extends Schbas {
 	}
 
 	private function showMainMenu() {
+
 		require_once PATH_INCLUDE . '/orm-entities/SystemGlobalSettings.php';
 		$schbasYear = $this->_entityManager->getRepository(
 			'\Babesk\ORM\SystemGlobalSettings'

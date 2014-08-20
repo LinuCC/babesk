@@ -276,3 +276,15 @@ div.quotebox, p.quotebox {
 #selector-container .submit-button {
 	margin-right: 10px;
 }
+
+.nav-pills > li > a {
+	background-color: #FFFFFF;
+	color: #333333;
+}
+
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+	background-color: #AADD33;
+	color: #333333;
+}
