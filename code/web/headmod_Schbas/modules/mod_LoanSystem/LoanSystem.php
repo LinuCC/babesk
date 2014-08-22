@@ -1,6 +1,7 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_INCLUDE . '/Schbas/Loan.php';
 require_once PATH_WEB . '/WebInterface.php';
 require_once PATH_WEB . '/headmod_Schbas/Schbas.php';
 
@@ -263,8 +264,12 @@ class LoanSystem extends Schbas {
 
         $checkedBooks = array();
         $feeNormal = 0.00;
-        $oneYear = array(05,06,07,08,09);
-            $twoYears = array(56,67,78,89,90,12,13);
+        /**
+         * @todo Refactor using \Babesk\Schbas\Loan:
+         *       loanPriceOfAllBooksOfGradelevelCalculate(...)
+         */
+        $oneYear = array("05","06","07","08","09");
+            $twoYears = array(56,67,78,89,"90",12,13);
             $threeYears = array(79,91);
             $fourYears = array(69,92);
         foreach ($loanbooks as $book) {
@@ -381,9 +386,30 @@ class LoanSystem extends Schbas {
 		$books = str_replace('ä', '&auml;', $books);
 		$books = str_replace('é', '&eacute;', $books);
 
+		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
+		$fees = $loanHelper->loanPriceOfAllBooksOfGradelevelCalculate(
+			$gradelevel[0]['gradelevel']
+		);
+		list($feeNormal, $feeReduced) = $fees;
+
+		////Calculate the loan fee
+		//$feeNormal = 0.00;
+		//$feeReduced = 0.00;
+		//foreach($booklist as $book) {
+		//	$normalPrice = $loanHelper->bookLoanPriceCalculate(
+		//		$book['price'], $book['class']
+		//	);
+		//	$reducedPrice = $loanHelper->bookReducedLoanPriceCalculate(
+		//		$book['price'], $book['class']
+		//	);
+		//	$feeNormal += $normalPrice;
+		//	$feeReduced += $reducedPrice;
+		//}
+		//$feeNormal = round($feeNormal);
+		//$feeReduced = round($feeReduced);
 		//get loan fees
-		$feeNormal = TableMng::query("SELECT fee_normal FROM SchbasFee WHERE grade=".$gradelevel[0]['gradelevel']);
-		$feeReduced = TableMng::query("SELECT fee_reduced FROM SchbasFee WHERE grade=".$gradelevel[0]['gradelevel']);
+		//$feeNormal = TableMng::query("SELECT fee_normal FROM SchbasFee WHERE grade=".$gradelevel[0]['gradelevel']);
+		//$feeReduced = TableMng::query("SELECT fee_reduced FROM SchbasFee WHERE grade=".$gradelevel[0]['gradelevel']);
 
 		//get bank account
 		$bank_account =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='bank_details'");
@@ -392,8 +418,8 @@ class LoanSystem extends Schbas {
 		//textOne[0]['title'] wird nicht ausgegeben, unter admin darauf hinweisen!
 		$pageTwo = $books.'<br/>'.$textOne[0]['text'].'<br/><br/>'.
 				'<table style="border:solid" width="75%" cellpadding="2" cellspacing="2">
-				<tr><td>Leihgeb&uuml;hr: </td><td>'.$feeNormal[0]['fee_normal'].' Euro</td></tr>
-						<tr><td>(3 und mehr schulpflichtige Kinder:</td><td>'.$feeReduced[0]['fee_reduced'].' Euro)</td></tr>
+				<tr><td>Leihgeb&uuml;hr: </td><td>'.$feeNormal.' Euro</td></tr>
+						<tr><td>(3 und mehr schulpflichtige Kinder:</td><td>'.$feeReduced.' Euro)</td></tr>
 								<tr><td>Kontoinhaber:</td><td>'.$bank_account[0].'</td></tr>
 								<tr><td>Kontonummer:</td><td>'.$bank_account[1].'</td></tr>
 								<tr><td>Bankleitzahl:</td><td>'.$bank_account[2].'</td></tr>
@@ -409,6 +435,11 @@ class LoanSystem extends Schbas {
 
 		$this->createPdf($coverLetter[0]['title'],$daterow.$coverLetter[0]['text'],"Lehrb&uuml;cher Jahrgang ".$gradelevel[0]['gradelevel'],$pageTwo,
 				'Weitere Informationen',$pageThree,$gradelevel[0]['gradelevel'],false,"",$_SESSION['uid']);
+	}
+
+	private function loanFeeGet($userId) {
+
+
 	}
 
 	/**

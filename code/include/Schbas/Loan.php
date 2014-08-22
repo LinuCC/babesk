@@ -66,6 +66,70 @@ class Loan {
 		}
 	}
 
+	/**
+	 * Calculates the loan-price of a book by its full price and its class
+	 * @param  float  $flatPrice The full price of the book
+	 * @param  string $class     The class of the book (like "05" or "92")
+	 * @return float             The resulting loan-price
+	 */
+	public function bookLoanPriceCalculate($flatPrice, $class) {
+
+		if(isset($this->_classToPriceFactor[$class])) {
+			$factor = $this->_classToPriceFactor[$class];
+			$loanPrice = $flatPrice / $factor / 3;
+			return $loanPrice;
+		}
+		else {
+			throw new Exception('No book-class "' . $class . '" found.');
+		}
+	}
+
+	/**
+	 * Calculates the reduced loan-price of a book by its price and its class
+	 * @param  float  $flatPrice The full price of the book
+	 * @param  string $class     The class of the book (like "05" or "92")
+	 * @return float             The resulting reduced loan-price
+	 */
+	public function bookReducedLoanPriceCalculate($flatPrice, $class) {
+
+		if(isset($this->_classToPriceFactor[$class])) {
+			$factor = $this->_classToPriceFactor[$class];
+			$loanPrice = $flatPrice / $factor / 3 * 0.8;
+			return $loanPrice;
+		}
+		else {
+			throw new Exception('No book-class "' . $class . '" found.');
+		}
+	}
+
+	/**
+	 * Calculates loan-price of all books for users of the given gradelevel
+	 * @param  int    $gradelevel The gradelevel
+	 * @return array              Contains the normal fee and the reduced fee
+	 *                            Structure: [<normalFee>, <reducedFee>]
+	 */
+	public function loanPriceOfAllBooksOfGradelevelCalculate($gradelevel) {
+
+		require_once PATH_ACCESS . '/BookManager.php';
+		$booklistManager = new \BookManager();
+		$books = $booklistManager->getBooksByClass($gradelevel);
+		$feeNormal = 0.00;
+		$feeReduced = 0.00;
+		foreach($books as $book) {
+			$normalPrice = $this->bookLoanPriceCalculate(
+				$book['price'], $book['class']
+			);
+			$reducedPrice = $this->bookReducedLoanPriceCalculate(
+				$book['price'], $book['class']
+			);
+			$feeNormal += $normalPrice;
+			$feeReduced += $reducedPrice;
+		}
+		$feeNormal = round($feeNormal);
+		$feeReduced = round($feeReduced);
+		return array($feeNormal, $feeReduced);
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
@@ -102,6 +166,28 @@ class Loan {
 		'10' => array('90', '91', '10', '92'),
 		'11' => array('12', '92', '13'),
 		'12' => array('12', '92', '13')
+	);
+
+	//Maps the book-classes to the pricefactor with which the flatPrice to
+	//divide. Corresponds to the amount of years the user is lend the book.
+	protected $_classToPriceFactor = array(
+		"05" => 1,
+		"06" => 1,
+		"07" => 1,
+		"08" => 1,
+		"09" => 1,
+		"10" => 1,
+		"56" => 2,
+		"67" => 2,
+		"78" => 2,
+		"89" => 2,
+		"90" => 2,
+		"12" => 2,
+		"13" => 2,
+		"79" => 3,
+		"91" => 3,
+		"69" => 4,
+		"92" => 4
 	);
 
 	protected $_pdo;

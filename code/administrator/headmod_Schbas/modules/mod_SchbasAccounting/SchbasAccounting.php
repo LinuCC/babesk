@@ -30,7 +30,7 @@ class SchbasAccounting extends Schbas {
 
 
 
-		
+
 		if(isset($_GET['action'])) {
 			switch($_GET['action']) {
 
@@ -148,8 +148,8 @@ class SchbasAccounting extends Schbas {
 
                     $checkedBooks = array();
                     $feeNormal = 0.00;
-                    $oneYear = array(05,06,07,08,09);
-                    $twoYears = array(56,67,78,89,90,12,13);
+                    $oneYear = array("05","06","07","08","09","10");
+                    $twoYears = array(56,67,78,89,"90",12,13);
                     $threeYears = array(79,91);
                     $fourYears = array(69,92);
                     foreach ($loanbooks as $book) {
