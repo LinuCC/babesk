@@ -63,6 +63,7 @@ abstract class Module {
 		$this->_logger = clone($dataContainer->getLogger());
 		$this->_logger->categorySet($this->_modExecCommand->pathGet());
 		$this->_interface = $dataContainer->getInterface();
+		$this->_dataContainer = $dataContainer;
 	}
 
 	protected function debugDataPrint($dataContainer) {

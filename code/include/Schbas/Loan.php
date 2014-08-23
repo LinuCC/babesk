@@ -2,6 +2,8 @@
 
 namespace Babesk\Schbas;
 
+require_once PATH_INCLUDE . '/orm-entities/SchbasBooks.php';
+
 /**
  * Contains operations useful for the loan-process of Schbas
  */
@@ -11,7 +13,7 @@ class Loan {
 	//Constructor
 	/////////////////////////////////////////////////////////////////////
 
-	public function construct($dataContainer) {
+	public function __construct($dataContainer) {
 
 		$this->entryPoint($dataContainer);
 	}
@@ -110,9 +112,15 @@ class Loan {
 	 */
 	public function loanPriceOfAllBooksOfGradelevelCalculate($gradelevel) {
 
-		require_once PATH_ACCESS . '/BookManager.php';
-		$booklistManager = new \BookManager();
-		$books = $booklistManager->getBooksByClass($gradelevel);
+		$classes = $this->_gradelevelIsbnIdentAssoc[$gradelevel];
+		$bookQuery = $this->_entityManager
+			->createQueryBuilder()
+			->select(array('b.class', 'b.price'))
+			->from('\Babesk\ORM\SchbasBooks', 'b')
+			->where('b.class IN (:classes)')
+			->setParameter('classes', $classes)
+			->getQuery();
+		$books = $bookQuery->getArrayResult();
 		$feeNormal = 0.00;
 		$feeReduced = 0.00;
 		foreach($books as $book) {
