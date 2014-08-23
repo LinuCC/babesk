@@ -146,12 +146,7 @@ class Loan {
 	 */
 	public function loanPriceOfAllBooksOfUserCalculate($userId) {
 
-		/**
-		 * LoanManager should be replaced with an own, better-written function
-		 */
-		require_once PATH_ACCESS . '/LoanManager.php';
-		$loanManager = new \LoanManager();
-		$books = $loanManager->getLoanByUID($userId, Null);
+		$books = $this->loanBooksGet($userId);
 		$feeNormal = 0.00;
 		$feeReduced = 0.00;
 		foreach($books as $book) {
@@ -167,6 +162,18 @@ class Loan {
 		$feeNormal = round($feeNormal);
 		$feeReduced = round($feeReduced);
 		return array($feeNormal, $feeReduced);
+	}
+
+	public function loanBooksGet($userId) {
+
+		$books = array();
+		$notLendBooks = $this->booksNotLendToUserByHisGradelevelGet($userId);
+		if(!empty($notLendBooks)) {
+			$books = $this->optionalBooksNotNeededByUserRemove(
+				$userId, $notLendBooks
+			);
+		}
+		return $books;
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -191,6 +198,117 @@ class Loan {
 		$rel    = $gsRepo->findOneByName('religion')->getValue();
 		$course = $gsRepo->findOneByName('special_course')->getValue();
 	}
+
+	/**
+	 * Returns all Books assigned to the user by gradelevel and not lend by him
+	 * @param  int    $userId The ID of the user
+	 * @return array          Books not lend by user, but at the gradelevel
+	 */
+	protected function booksNotLendToUserByHisGradelevelGet($userId) {
+
+		$gradelevel = $this->activeGradelevelOfUserGet($userId);
+		if(empty($gradelevel)) {
+			$this->_logger->log('User missing an active gradelevel',
+				'Notice', Null, json_encode(array('uid' => $userId)));
+		}
+		$classes = $this->_gradelevelIsbnIdentAssoc[$gradelevel];
+		$classesStr = '"' . implode('", "', $classes) . '"';
+		$stmt = $this->_pdo->prepare(
+			"SELECT b.*, ss.abbreviation AS subject FROM SchbasBooks b
+				LEFT JOIN SystemSchoolSubjects ss ON ss.ID = b.subjectId
+				LEFT JOIN (
+					SELECT book_id
+						FROM SchbasInventory i
+						INNER JOIN SchbasLending l ON l.inventory_id = i.id
+						WHERE l.user_id = :userId
+				) lendings ON lendings.book_id = b.id
+				WHERE b.class IN(${classesStr})
+					-- We want only entries that are _not_ lend to the user
+					AND lendings.book_id IS NULL
+		");
+		$stmt->execute(array('userId' => $userId));
+		$books = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+		return $books;
+	}
+
+	/**
+	 * Returns the users gradelevel of the grade being in the active schoolyear
+	 * @param  int    $userId The ID of the user
+	 * @return int            The gradelevel
+	 * @todo   Probably want to extract this function to System/SystemUsers
+	 */
+	protected function activeGradelevelOfUserGet($userId) {
+
+		$stmt = $this->_pdo->prepare(
+			'SELECT g.gradelevel FROM SystemUsers u
+				INNER JOIN SystemUsersInGradesAndSchoolyears uigs
+					ON uigs.userId = u.ID
+				INNER JOIN SystemGrades g ON g.ID = uigs.gradeId
+				WHERE uigs.schoolyearId = @activeSchoolyear
+					AND u.ID = :userId
+		');
+		$stmt->execute(array('userId' => $userId));
+		return $stmt->fetchColumn();
+	}
+
+	/**
+	 * Removes the books the user does not have to lend from the booklist
+	 * @param  int    $userId The ID of the user
+	 * @param  array  $books  The list of books from which to remove the ones
+	 *                        that dont need to be lend by the user
+	 * @return array          The booklist with some books removed
+	 */
+	protected function optionalBooksNotNeededByUserRemove($userId, $books) {
+
+		//Get global values stating which booktypes generally exists
+		$settings = $this->_pdo->query(
+			'SELECT name, value FROM SystemGlobalSettings
+				WHERE name IN(
+						"foreign_language", "religion",
+						"special_course", "special_course_trigger"
+					)
+		')->fetchAll(\PDO::FETCH_KEY_PAIR);
+		foreach($settings as $key => $setting) {
+			$settings[$key] = explode('|', $setting);
+		}
+		//Get values for user which booktypes he needs to lend
+		$userStmt = $this->_pdo->prepare(
+				'SELECT foreign_language, religion, special_course
+					FROM SystemUsers u
+					WHERE u.ID = :userId
+			');
+		$userStmt->execute(array('userId' => $userId));
+		$userSettings = $userStmt->fetch(\PDO::FETCH_ASSOC);
+		foreach($userSettings as $key => $setting) {
+			$userSettings[$key] = explode('|', $setting);
+		}
+		$gradelevel = $this->activeGradelevelOfUserGet($userId);
+		$languagesToRemove = array_diff(
+			$settings['foreign_language'], $userSettings['foreign_language']
+		);
+		$religionsToRemove = array_diff(
+			$settings['religion'], $userSettings['religion']
+		);
+		$coursesToRemove = array_diff(
+			$settings['special_course'], $userSettings['special_course']
+		);
+		//Remove books with the unneeded booktypes
+		$filteredBooks = array();
+		foreach($books as $book) {
+			if(
+				!in_array($book['subject'], $languagesToRemove) &&
+				!in_array($book['subject'], $religionsToRemove) &&
+				!(
+					(int) $gradelevel >= $settings['special_course_trigger'] &&
+					in_array($book['subject'], $coursesToRemove)
+				)
+			) {
+				$filteredBooks[] = $book;
+			}
+		}
+		return $filteredBooks;
+	}
+
 
 	/////////////////////////////////////////////////////////////////////
 	//Attributes

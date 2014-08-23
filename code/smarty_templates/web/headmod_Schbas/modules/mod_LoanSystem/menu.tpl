@@ -56,7 +56,7 @@
 					</p>
 				{/foreach}
 			</fieldset>
-			<input class="btn btn-primary" type="submit" value="Selbstk&auml;ufe abspeichern" />
+			<input class="btn btn-primary pull-right" type="submit" value="Selbstk&auml;ufe abspeichern" />
 		</div>
 	</form>
 
@@ -107,7 +107,7 @@
 					<textarea name="siblings" rows=5 cols=80></textarea>
 				</div>
 			</fieldset>
-			<input class="btn btn-primary" type="submit" value="R&uuml;ckmeldedokument erstellen" />
+			<input class="btn btn-primary pull-right" type="submit" value="R&uuml;ckmeldedokument erstellen" />
 		</div>
 	</form>
 {/if}

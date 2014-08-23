@@ -126,6 +126,15 @@ class LoanSystem extends Schbas {
 		);
 		list($feeNormal, $feeReduced) = $fees;
 
+		/**
+		 * @todo  getLoanByUID will be replaced by a function in
+		 *        Babesk\Schbas\Loan. Switch to that function instead
+		 */
+		require_once PATH_ACCESS . '/LoanManager.php';
+		$lm = new LoanManager();
+		$loanbooks = $lm->getLoanByUID($_SESSION['uid'], Null);
+
+		$this->_smarty->assign('loanbooks', $loanbooks);
 		$this->_smarty->assign('feeNormal', $feeNormal);
 		$this->_smarty->assign('feeReduced', $feeReduced);
 		$this->_smarty->assign('schbasYear', $schbasYear);
@@ -287,6 +296,7 @@ class LoanSystem extends Schbas {
 		$letter_date =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDateCoverLetter'");
 
 		$booklistManager = new BookManager();
+		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
 
 		//get gradelevel ("Klassenstufe")
 		$gradelevel = TableMng::query("SELECT gradelevel FROM SystemGrades WHERE id=(SELECT gradeID from SystemUsersInGradesAndSchoolyears WHERE schoolyearId=(SELECT ID from SystemSchoolyears WHERE active=1) AND UserID='".$_SESSION['uid']."')");
@@ -305,7 +315,8 @@ class LoanSystem extends Schbas {
 		$textThree = TableMng::query("SELECT title, text FROM SchbasTexts WHERE description='textThree".$gradelevel[0]['gradelevel']."'");
 
 		// get booklist
-		$booklist = $booklistManager->getBooksByClass($gradelevel[0]['gradelevel']);
+		//$booklist = $booklistManager->getBooksByClass($gradelevel[0]['gradelevel']);
+		$booklist = $loanHelper->loanBooksGet($_SESSION['uid']);
 
 		$books = '<table border="0" bordercolor="#FFFFFF" style="background-color:#FFFFFF" width="100%" cellpadding="0" cellspacing="1">
 				<tr style="font-weight:bold; text-align:center;"><th>Fach</th><th>Titel</th><th>Verlag</th><th>ISBN-Nr.</th><th>Preis</th></tr>';
@@ -320,7 +331,6 @@ class LoanSystem extends Schbas {
 		$books = str_replace('ä', '&auml;', $books);
 		$books = str_replace('é', '&eacute;', $books);
 
-		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
 		$fees = $loanHelper->loanPriceOfAllBooksOfUserCalculate(
 			$_SESSION['uid']
 		);
