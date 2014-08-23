@@ -120,43 +120,11 @@ class LoanSystem extends Schbas {
 		if($gradelevel=="13") $this->_smarty->display($this->_smartyPath . 'lastGrade.tpl');;
 		;
 
-		$loanbooks = array();
-
-			require_once PATH_ACCESS . '/LoanManager.php';
-			$lm = new LoanManager();
-			$loanbooks = $lm->getLoanByUID($_SESSION['uid'], false);
-			$loanbooksSelfBuy = TableMng::query("SELECT BID FROM SchbasSelfpayer WHERE UID=".$_SESSION['uid']);
-			$loanbooksSelfBuy = array_map('current',$loanbooksSelfBuy);
-
-			$checkedBooks = array();
-            $feeNormal = 0.00;
-            $oneYear = array('05','06','07','08','09');
-            $twoYears = array(56,67,78,89,'90',12,13);
-            $threeYears = array(79,91);
-            $fourYears = array(69,92);
-			foreach ($loanbooks as $book) {
-				if (in_array($book['id'],$loanbooksSelfBuy)) {
-                    $book['selected']=true;
-                } else {
-                    if(in_array($book['class'],$oneYear)) $feeNormal += $book['price'];
-                    if(in_array($book['class'],$twoYears)) $feeNormal += $book['price']/2;
-                    if(in_array($book['class'],$threeYears)) $feeNormal += $book['price']/3;
-                    if(in_array($book['class'],$fourYears)) $feeNormal += $book['price']/4;
-                }
-				$checkedBooks[] = $book;
-			}
-			$this->_smarty->assign('loanbooks', $checkedBooks);
-
-        //get loan fees
-        //gesamtausleihpreis dritteln
-        $feeNormal /=3;
-
-        //für reduzierten Preis vom gedrittelten preis 20% abziehen
-        $feeReduced = $feeNormal * 0.8;
-        $feeNormal = number_format( round($feeNormal,0) , 2, ',','.'); //preise auf volle
-        $feeReduced = number_format( round($feeReduced,0) , 2, ',','.');//betraege runden
-
-
+		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
+		$fees = $loanHelper->loanPriceOfAllBooksOfUserCalculate(
+			$_SESSION['uid']
+		);
+		list($feeNormal, $feeReduced) = $fees;
 
 		$this->_smarty->assign('feeNormal', $feeNormal);
 		$this->_smarty->assign('feeReduced', $feeReduced);
@@ -254,46 +222,12 @@ class LoanSystem extends Schbas {
 
 		//get loan fees
 
-        $loanbooks = array();
+		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
+		$fees = $loanHelper->loanPriceOfAllBooksOfUserCalculate(
+			$_SESSION['uid']
+		);
+		list($feeNormal, $feeReduced) = $fees;
 
-        require_once PATH_ACCESS . '/LoanManager.php';
-        $lm = new LoanManager();
-        $loanbooks = $lm->getLoanByUID($_SESSION['uid'], false);
-        $loanbooksSelfBuy = TableMng::query("SELECT BID FROM SchbasSelfpayer WHERE UID=".$_SESSION['uid']);
-        $loanbooksSelfBuy = array_map('current',$loanbooksSelfBuy);
-
-        $checkedBooks = array();
-        $feeNormal = 0.00;
-        /**
-         * @todo Refactor using \Babesk\Schbas\Loan:
-         *       loanPriceOfAllBooksOfGradelevelCalculate(...)
-         */
-        $oneYear = array("05","06","07","08","09");
-            $twoYears = array(56,67,78,89,"90",12,13);
-            $threeYears = array(79,91);
-            $fourYears = array(69,92);
-        foreach ($loanbooks as $book) {
-            if (!in_array($book['id'],$loanbooksSelfBuy)) {
-
-                if(in_array($book['class'],$oneYear)) $feeNormal += $book['price'];
-                if(in_array($book['class'],$twoYears)) $feeNormal += $book['price']/2;
-                if(in_array($book['class'],$threeYears)) $feeNormal += $book['price']/3;
-                if(in_array($book['class'],$fourYears)) $feeNormal += $book['price']/4;
-
-        }}
-
-
-        //get loan fees
-        //gesamtausleihpreis dritteln
-        $feeNormal /=3;
-
-        //für reduzierten Preis vom gedrittelten preis 20% abziehen
-        $feeReduced = $feeNormal * 0.8;
-        $feeNormal = number_format( round($feeNormal,0) , 2, ',','.'); //preise auf volle
-        $feeReduced = number_format( round($feeReduced,0) , 2, ',','.');//betraege runden
-
-		//$feeNormal = TableMng::query("SELECT fee_normal FROM SchbasFee WHERE grade=".$gradelevel[0]['gradelevel']);
-		//$feeReduced = TableMng::query("SELECT fee_reduced FROM SchbasFee WHERE grade=".$gradelevel[0]['gradelevel']);
 		$schbasDeadlineTransfer = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDeadlineTransfer'");
 		$feedback = "";
 		if ($_POST['loanChoice']=="noLoan") {
@@ -387,29 +321,10 @@ class LoanSystem extends Schbas {
 		$books = str_replace('é', '&eacute;', $books);
 
 		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
-		$fees = $loanHelper->loanPriceOfAllBooksOfGradelevelCalculate(
-			$gradelevel[0]['gradelevel']
+		$fees = $loanHelper->loanPriceOfAllBooksOfUserCalculate(
+			$_SESSION['uid']
 		);
 		list($feeNormal, $feeReduced) = $fees;
-
-		////Calculate the loan fee
-		//$feeNormal = 0.00;
-		//$feeReduced = 0.00;
-		//foreach($booklist as $book) {
-		//	$normalPrice = $loanHelper->bookLoanPriceCalculate(
-		//		$book['price'], $book['class']
-		//	);
-		//	$reducedPrice = $loanHelper->bookReducedLoanPriceCalculate(
-		//		$book['price'], $book['class']
-		//	);
-		//	$feeNormal += $normalPrice;
-		//	$feeReduced += $reducedPrice;
-		//}
-		//$feeNormal = round($feeNormal);
-		//$feeReduced = round($feeReduced);
-		//get loan fees
-		//$feeNormal = TableMng::query("SELECT fee_normal FROM SchbasFee WHERE grade=".$gradelevel[0]['gradelevel']);
-		//$feeReduced = TableMng::query("SELECT fee_reduced FROM SchbasFee WHERE grade=".$gradelevel[0]['gradelevel']);
 
 		//get bank account
 		$bank_account =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='bank_details'");

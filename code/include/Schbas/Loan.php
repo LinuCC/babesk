@@ -138,6 +138,37 @@ class Loan {
 		return array($feeNormal, $feeReduced);
 	}
 
+	/**
+	 * Calculates loan-price of all books the given user has to lend
+	 * @param  int    $userId     The Id of the user
+	 * @return array              Contains the normal fee and the reduced fee
+	 *                            Structure: [<normalFee>, <reducedFee>]
+	 */
+	public function loanPriceOfAllBooksOfUserCalculate($userId) {
+
+		/**
+		 * LoanManager should be replaced with an own, better-written function
+		 */
+		require_once PATH_ACCESS . '/LoanManager.php';
+		$loanManager = new \LoanManager();
+		$books = $loanManager->getLoanByUID($userId, Null);
+		$feeNormal = 0.00;
+		$feeReduced = 0.00;
+		foreach($books as $book) {
+			$normalPrice = $this->bookLoanPriceCalculate(
+				$book['price'], $book['class']
+			);
+			$reducedPrice = $this->bookReducedLoanPriceCalculate(
+				$book['price'], $book['class']
+			);
+			$feeNormal += $normalPrice;
+			$feeReduced += $reducedPrice;
+		}
+		$feeNormal = round($feeNormal);
+		$feeReduced = round($feeReduced);
+		return array($feeNormal, $feeReduced);
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
