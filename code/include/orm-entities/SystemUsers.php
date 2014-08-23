@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 require_once PATH_INCLUDE . '/orm-entities/SystemGroups.php';
 require_once PATH_INCLUDE . '/orm-entities/SchbasInventory.php';
+require_once PATH_INCLUDE .
+	'/orm-entities/SystemUsersInGradesAndSchoolyears.php';
 
 /**
  * @Entity @Table(name="SystemUsers")
