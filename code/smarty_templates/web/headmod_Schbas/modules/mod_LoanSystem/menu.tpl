@@ -11,11 +11,11 @@
 	<li {if $loanInfo}class="active"{/if}>
 		<a href="javascript:document.loanInfo.submit()">Informationen</a>
 	</li>
-	<li {if $loanShowForm}class="active"{/if}>
-		<a href="javascript:document.loanShowForm.submit()">Anmeldeformular</a>
-	</li>
 	<li {if $loanShowBuy}class="active"{/if}>
 		<a href="javascript:document.loanShowBuy.submit()">Selbstkäufe</a>
+	</li>
+	<li {if $loanShowForm}class="active"{/if}>
+		<a href="javascript:document.loanShowForm.submit()">Anmeldeformular</a>
 	</li>
 </ul>
 {if !$loanShowBuy && !$loanShowForm}
@@ -39,14 +39,26 @@
 </form>
 {/if}
 {if $loanShowBuy}
-<form action="index.php?section=Schbas|LoanSystem&action=loanShowBuy" method="post" id="loanShowBuy">
-<input type="hidden" name="loanShowBuySave">
-<h5>Folgende B&uuml;cher werden f&uuml;r das kommende Schuljahr ben&ouml;tigt. Sie k&ouml;nnen in der Liste angeklickt werden, wenn sie selbst angeschafft werden. Bei der Buchausgabe werden sie dann nicht ausgegeben.</h5>
-{foreach from=$loanbooks item=book}
-		<input type="checkbox" name="bookID[]" value="{$book.id}" {if $book.selected}checked{/if}><b>{$book.subject}: {$book.title} </b><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({$book.author}, {$book.publisher}. ISBN: {$book.isbn}. {$book.price} &euro;)<br>
-{/foreach}
-<input type="submit" value="Selbstk&auml;ufe abspeichern" />
-</form>
+
+	<h3>Selbstkäufe</h3>
+	<form action="index.php?section=Schbas|LoanSystem&action=loanShowBuy" method="post" id="loanShowBuy">
+		<input type="hidden" name="loanShowBuySave">
+		<div class="col-md-8 col-md-offset-2">
+			<p>Folgende B&uuml;cher werden f&uuml;r das kommende Schuljahr ben&ouml;tigt. Sie k&ouml;nnen in der Liste angeklickt werden, wenn sie selbst angeschafft werden. Bei der Buchausgabe werden sie dann nicht ausgegeben.</p>
+			<fieldset>
+			<legend>Liste der Bücher</legend>
+				{foreach from=$loanbooks item=book}
+					<input type="checkbox" name="bookID[]" value="{$book.id}"
+						{if $book.selected}checked{/if}>
+					<span class="booklist-heading">{$book.subject}: {$book.title} </span>
+					<p class="booklist-details">
+						({$book.author}, {$book.publisher}. ISBN: {$book.isbn}. {$book.price} &euro;)
+					</p>
+				{/foreach}
+			</fieldset>
+			<input class="btn btn-primary" type="submit" value="Selbstk&auml;ufe abspeichern" />
+		</div>
+	</form>
 
 {/if}
 
@@ -149,5 +161,21 @@
 	});
 
 </script>
+
+{/block}
+
+{block name=style_include append}
+
+<style type="text/css">
+
+.booklist-heading {
+	font-weight: 700;
+}
+
+.booklist-details {
+	margin-left: 20px;
+}
+
+</style>
 
 {/block}
