@@ -288,3 +288,20 @@ div.quotebox, p.quotebox {
 	background-color: #AADD33;
 	color: #333333;
 }
+
+fieldset {
+	padding: 5px;
+	border: 1px solid #AADD33;
+	border-radius: 3px;
+	margin-bottom: 10px;
+}
+
+fieldset > legend {
+	display: inline;
+	font-size: 14px;
+	color: #3E5113;
+	margin-bottom: 0;
+	padding: 0 5px;
+	width: auto;
+	border: none;
+}

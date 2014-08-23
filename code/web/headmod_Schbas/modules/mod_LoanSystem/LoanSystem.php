@@ -437,11 +437,6 @@ class LoanSystem extends Schbas {
 				'Weitere Informationen',$pageThree,$gradelevel[0]['gradelevel'],false,"",$_SESSION['uid']);
 	}
 
-	private function loanFeeGet($userId) {
-
-
-	}
-
 	/**
 	 * Creates a PDF for the Participation Confirmation and returns its Path
 	 */
