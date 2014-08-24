@@ -117,31 +117,35 @@
 					<div id="sidebar-module-selection">
 						<ul id="sidebar-base-nav" class="nav">
 							{foreach $headmodules as $headmodule}
-								{$hModulepath = $moduleGenMan->modulePathGet($headmodule)}
-								<li>
-									<a href="#" data-toggle="collapse"
-									data-target="#sidebar-module-{str_replace('/', '_', $hModulepath)}" data-parent="#sidebar-base-nav"
-									class="sidebar-folder">
-										<div class="text-icon-spacer">
-												<span class="icon icon-{$headmodule->getName()} module-icon"></span>
-												{_g('modulepath_'|cat:$hModulepath)}
-												<span class="toggle-icon icon icon-plus pull-right">
-												</span>
-												<span class="clearfix"></span>
-										</div>
-									</a>
-									<ul id="sidebar-module-{str_replace('/', '_', $hModulepath)}"
-									class="nav collapse">
-										{foreach $headmodule->getChilds() as $module}
-											{$modulepath = $moduleGenMan->modulePathGet($module)}
-											<li>
-												<a href="index.php?module=administrator|{$headmodule->getName()}|{$module->getName()}">
-													<span>{_g('modulepath_'|cat:$modulepath)}</span>
-												</a>
-											</li>
-										{/foreach}
-									</ul>
-								</li>
+								{if $headmodule->isDisplayInMenuAllowed() && $headmodule->isEnabled() && $headmodule->userHasAccess()}
+									{$hModulepath = $moduleGenMan->modulePathGet($headmodule)}
+									<li>
+										<a href="#" data-toggle="collapse"
+										data-target="#sidebar-module-{str_replace('/', '_', $hModulepath)}" data-parent="#sidebar-base-nav"
+										class="sidebar-folder">
+											<div class="text-icon-spacer">
+													<span class="icon icon-{$headmodule->getName()} module-icon"></span>
+													{_g('modulepath_'|cat:$hModulepath)}
+													<span class="toggle-icon icon icon-plus pull-right">
+													</span>
+													<span class="clearfix"></span>
+											</div>
+										</a>
+										<ul id="sidebar-module-{str_replace('/', '_', $hModulepath)}"
+										class="nav collapse">
+											{foreach $headmodule->getChilds() as $module}
+												{if $module->isDisplayInMenuAllowed() && $module->isEnabled() && $module->userHasAccess()}
+													{$modulepath = $moduleGenMan->modulePathGet($module)}
+													<li>
+														<a href="index.php?module=administrator|{$headmodule->getName()}|{$module->getName()}">
+															<span>{_g('modulepath_'|cat:$modulepath)}</span>
+														</a>
+													</li>
+												{/if}
+											{/foreach}
+										</ul>
+									</li>
+								{/if}
 							{/foreach}
 							<li>
 								<a href="#" data-toggle="collapse" data-target="#headmod-submenu-1" class="collapsed sidebar-folder">
