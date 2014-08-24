@@ -1,39 +1,19 @@
 {extends file=$inh_path} {block name='content'}
 
-<style type='text/css'  media='all'>
-/*Table should not be over the Border of the Line of the main-block*/
-#main {
- width:1100px;
-}
-
-fieldset.selectiveLink {
- margin-left: 5%;
- margin-right: 5%;
- margin-bottom: 30px;
- border: 2px dashed rgb(100,100,100);
-}
-
-a.selectiveLink {
- padding: 5px;
-}
-
-.dataTable {
- margin: 0 auto;
-}
-</style>
-
-
 <h2 class='module-header'>Liste der ausgeliehenen B&uuml;cher ({$className})</h2>
 
-<p>{$listOfClasses}</p>
+<fieldset id="grade-list">
+	<legend>Klassen</legend>
+	{$listOfClasses}
+</fieldset>
 
-<table class="dataTable">
+<table class="table table-responsive table-striped table-hover">
 	<tr>
 		<th align="center">Name</th>
 		<th align="center">Vorname</th>
 		<th align="center">Ausgeliehende B&uuml;cher</th>
 	</tr>
-	
+
 	{for $i=0 to $nr}
 	<tr>
 		<td align="left">{$name[$i]}</td>

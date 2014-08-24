@@ -515,7 +515,7 @@ class SchbasAccounting extends Schbas {
 			$gradeId = $gradesTblLine["ID"];
 			$gradelabel = $gradesTblLine["label"];
 			$gradelevel = $gradesTblLine["gradelevel"];
-			$listOfClasses = "$listOfClasses <a href='./index.php?section=Schbas|SchbasAccounting&action=".$func."&class=$gradeId'>$gradelevel$gradelabel</a>";
+			$listOfClasses = "$listOfClasses <a class='btn btn-default btn-sm' href='./index.php?section=Schbas|SchbasAccounting&action=".$func."&class=$gradeId'>$gradelevel$gradelabel</a>";
 		}
 		return $listOfClasses;
 	}

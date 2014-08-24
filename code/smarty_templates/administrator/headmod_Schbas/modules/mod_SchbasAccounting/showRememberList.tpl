@@ -32,7 +32,7 @@ a.selectiveLink {
 		<th align="center">Ausgeliehende B&uuml;cher</th>
 		<th align="center">Datum</th>
 	</tr>
-	
+
 	{for $i=0 to $schuelerTotalNr}
 	<tr>
 		<td align="left">{$schueler1[$i]}</td>

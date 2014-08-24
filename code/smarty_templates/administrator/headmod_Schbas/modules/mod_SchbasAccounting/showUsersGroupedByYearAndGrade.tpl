@@ -39,7 +39,7 @@ a.selectiveLink {
 </fieldset>
 
 
-<table class="dataTable">
+<table class="table table-responsive table-striped table-hover">
  <thead>
   <tr>
    <th align='center'>ID</th>

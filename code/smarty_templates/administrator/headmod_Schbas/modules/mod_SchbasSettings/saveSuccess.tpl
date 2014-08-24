@@ -1,4 +1,6 @@
 {extends file=$schbasSettingsParent}{block name=content}
-Einstellungen erfolgreich gespeichert!
+<div class="alert alert-success">
+	Einstellungen erfolgreich gespeichert!
+</div>
 
 {/block}
