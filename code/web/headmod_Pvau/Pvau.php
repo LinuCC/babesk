@@ -22,7 +22,7 @@ class Pvau extends Module {
 	//Methods
 	public function execute($dataContainer) {
 
-		$defaultMod = new ModuleExecutionCommand('root/web/Pvau/Pvp');
+		$defaultMod = new ModuleExecutionCommand('root/web/PVau/Pvp');
 		$dataContainer->getAcl()->moduleExecute($defaultMod,
 				$dataContainer);
 	}

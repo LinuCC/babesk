@@ -332,8 +332,8 @@ class Acl {
 
 		if($this->moduleExecutionIsAllowed($command)) {
 			if($this->_moduleGenManager->moduleExecute(
-				$command, $dataContainer)) {
-
+				$command, $dataContainer)
+			) {
 				exit(0); // Everything fine, quit the program
 			}
 			else {
