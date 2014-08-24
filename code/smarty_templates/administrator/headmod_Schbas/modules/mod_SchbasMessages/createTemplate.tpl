@@ -3,13 +3,21 @@
 
 <script type="text/javascript" src="{$path_js}/ckeditor/ckeditor.js"></script>
 
-<h2 class="module-header">Neue Vorlage</h2>
+<h3 class="module-header">Neue Vorlage</h3>
 
-<form action="index.php?section=Schbas|SchbasMessages&amp;action=addTemplate" method="POST">
-	<fieldset class="blockyField">
+<form role="form" action="index.php?section=Schbas|SchbasMessages&amp;action=addTemplate" method="POST">
+	<fieldset>
 		<legend>Vorlagendaten</legend>
-		<label>Titel:<input type="text" name="templateTitle" value=""></label><br /><br />
-		<label>Text:<textarea class="ckeditor" name="templateText"></textarea></label>
+		<div class="form-group">
+			<label for="template-title">Titel</label>
+			<input id="template-title" class="form-control" type="text"
+				name="templateTitle" placeholder="Titel der Vorlage">
+		</div>
+		<div class="form-group">
+			<label for_"template-text">Text</label>
+			<textarea id="template-text" class="ckeditor" name="templateText">
+			</textarea>
+		</div>
 	</fieldset>
 	<input type="submit" value="Vorlage hinzufügen" />
 </form>
