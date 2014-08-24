@@ -81,7 +81,16 @@ class DBConnect {
 				'password' => $this->_password,
 				'host' => $this->_host
 			);
-			return Doctrine\ORM\EntityManager::create($conn, $config);
+			$entityManager =  Doctrine\ORM\EntityManager::create(
+				$conn, $config
+			);
+			$entityManager->getEventManager()->addEventSubscriber(
+				new \Doctrine\DBAL\Event\Listeners\MysqlSessionInit(
+					'utf8', 'utf8_unicode_ci'
+				)
+			);
+
+			return $entityManager;
 
 		} catch (Exception $e) {
 			throw new Exception('Could not set up doctrine entity manager!');
