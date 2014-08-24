@@ -247,6 +247,9 @@ $(document).ready(function() {
 					if(res['state'] == 'error') {
 						toastr.error(res['data']);
 					}
+					if(res['value'] == 'error') {
+						toastr.error(res['message']);
+					}
 				}
 			);
 		});
@@ -619,7 +622,7 @@ $(document).ready(function() {
 		function getAllSpecialCourses() {
 			jQuery.ajaxSetup({async:false});
 			$.postJSON(
-				'index.php?module=administrator|System|User|DisplayAll\
+				'index.php?module=administrator|System|User\
 					&getAllSpecialCourses',
 				{},
 				function(res) {

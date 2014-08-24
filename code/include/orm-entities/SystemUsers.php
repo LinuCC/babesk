@@ -105,11 +105,6 @@ class SystemUsers {
 	/**
 	 * @Column(type="string")
 	 */
-	protected $course;
-
-	/**
-	 * @Column(type="string")
-	 */
 	protected $special_course;
 
 	/**
