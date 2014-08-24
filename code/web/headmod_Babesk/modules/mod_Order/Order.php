@@ -36,6 +36,7 @@ class Order extends Babesk {
 		$this->_interface = $dataContainer->getInterface();
 
 		parent::entryPoint($dataContainer);
+		parent::moduleTemplatePathSet();
 
 		if (isset($_GET['order'])) {
 			$this->mealOrderEntry();
@@ -105,7 +106,11 @@ class Order extends Babesk {
 		$mealId = $_GET['order'];
 		$meal = $this->mealGet($mealId, $_SESSION['uid']);
 		$date = formatDate($meal['date']);
-		$this->_interface->dieMessage("Am $date das Menü $meal[name] bestellen?<br /><form method='POST' action='index.php?section=Babesk|Order&order={$_GET['order']}&confirmed' ><input type='submit' value='Bestellen' /></form>");
+		$this->_smarty->assign('date', $date);
+		$this->_smarty->assign('meal', $meal['name']);
+		$this->_smarty->assign('orderId', $_GET['order']);
+		$this->displayTpl('confirm.tpl');
+		//$this->_interface->dieMessage("Am $date das Menü $meal[name] bestellen?<br /><form method='POST' action='index.php?section=Babesk|Order&order={$_GET['order']}&confirmed' ><input type='submit' value='Bestellen' /></form>");
 	}
 
 	/**

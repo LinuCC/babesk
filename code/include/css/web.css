@@ -305,3 +305,9 @@ fieldset > legend {
 	width: auto;
 	border: none;
 }
+
+/*If using bootstrap-tables, make sure it looks okay*/
+table.table th,
+table.table td {
+	background-color: #FFFFFF;
+}

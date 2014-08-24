@@ -29,7 +29,9 @@ class Cancel extends Babesk {
 			$this->orderCancel();
 		}
 
-		$this->_smarty->display($this->smartyPath . "cancel.tpl");
+		$this->_interface->dieSuccess(
+			'Die Mahlzeit wurde erfolgreich gelöscht.'
+		);
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -56,18 +58,25 @@ class Cancel extends Babesk {
 	 */
 	protected function orderdataLoad($orderId) {
 
-		$data = TableMng::query("SELECT o.*, u.credit AS userCredits,
+		$stmt = $this->_pdo->prepare(
+			'SELECT o.*, u.credit AS userCredits,
 				m.ID AS mealId, sc.ID AS solicouponId,
 				pc.price AS price
 			FROM BabeskOrders o
-			JOIN SystemUsers u ON u.ID = $_SESSION[uid]
+			JOIN SystemUsers u ON u.ID = :userId
 			JOIN BabeskMeals m ON o.MID = m.ID
 			LEFT JOIN BabeskSoliCoupons sc ON sc.UID = u.ID AND
 				m.date BETWEEN sc.startdate AND sc.enddate
 			JOIN BabeskPriceClasses pc ON m.price_class = pc.pc_ID AND u.GID = pc.GID
-			WHERE o.ID = $orderId
+			WHERE o.ID = :orderId
 			-- If multiple BabeskSoliCoupons at same time active, group to one
-			GROUP BY sc.UID;");
+			GROUP BY sc.UID;
+		');
+		$stmt->execute(array(
+			'userId' => $_SESSION['uid'],
+			'orderId' => $orderId
+		));
+		$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 		if(count($data)) {
 			$this->_orderData = $data[0];
