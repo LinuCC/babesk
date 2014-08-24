@@ -73,7 +73,7 @@ class MessageTemplate extends Messages {
 	protected function templatesFetchAll() {
 
 		try {
-			$res = $this->_pdo->query('SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM messagegroups WHERE name="vanilla");');
+			$res = $this->_pdo->query('SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM MessageGroups WHERE name="vanilla");');
 			$data = $res->fetchAll(PDO::FETCH_ASSOC);
 			return (!empty($data)) ? $data : array();
 
@@ -119,7 +119,7 @@ class MessageTemplate extends Messages {
 	protected function templateAddToDb($title, $text) {
 
 		try {
-			$gid = TableMng::query('SELECT ID FROM messagegroups WHERE name LIKE "vanilla"');
+			$gid = TableMng::query('SELECT ID FROM MessageGroups WHERE name LIKE "vanilla"');
 
 			TableMng::query(sprintf('INSERT INTO MessageTemplate
 				(`title`, `text`,`GID`) VALUES ("%s", "%s", "%d");', $title, $text,$gid[0]['ID']));

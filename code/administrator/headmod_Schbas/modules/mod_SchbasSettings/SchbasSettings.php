@@ -185,7 +185,7 @@ class SchbasSettings extends Schbas {
 		$data = array();
 
 		try {
-			$data = TableMng::query('SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM messagegroups WHERE name="Schbas");');
+			$data = TableMng::query('SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM MessageGroups WHERE name="Schbas");');
 
 		} catch (MySQLVoidDataException $e) {
 			return array();

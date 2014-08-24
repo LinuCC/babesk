@@ -101,7 +101,7 @@ class MessageAdmin extends Messages {
 			//UPLOAD
 			$db->autocommit(false);
 			//get GID for vanilla message system
-			$gid = TableMng::query('SELECT ID FROM messagegroups WHERE name LIKE "vanilla"');
+			$gid = TableMng::query('SELECT ID FROM MessageGroups WHERE name LIKE "vanilla"');
 			//Add Message itself
 			TableMng::query(sprintf('INSERT INTO MessageMessages
 					(originUserId,title,text,validFrom,validTo,GID)
@@ -279,7 +279,7 @@ class MessageAdmin extends Messages {
 				'SELECT CONCAT(gradelevel, label) AS name, ID
 				FROM SystemGrades');
 			$templates = TableMng::query(
-				'SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM messagegroups WHERE name="vanilla");');
+				'SELECT * FROM MessageTemplate WHERE GID=(SELECT ID FROM MessageGroups WHERE name="vanilla");');
 
 		} catch (Exception $e) {
 			$this->_interface->DieError('Konnte die nötigen Daten nicht abrufen.' . $e->getMessage());
@@ -581,7 +581,7 @@ class MessageAdmin extends Messages {
 		$templateId =
 			TableMng::getDb()->real_escape_string($_POST['templateId']);
 		try {
-			$gid = TableMng::query('SELECT ID FROM messagegroups WHERE name LIKE "vanilla"');
+			$gid = TableMng::query('SELECT ID FROM MessageGroups WHERE name LIKE "vanilla"');
 
 			$template = TableMng::query(sprintf(
 				'SELECT * FROM MessageTemplate WHERE `ID` = "%s"',
