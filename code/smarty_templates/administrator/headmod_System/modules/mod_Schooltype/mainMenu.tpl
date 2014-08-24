@@ -1,6 +1,6 @@
 {extends file=$inh_path} {block name='content'}
 
-<h2 class='moduleHeader'>Schultypen</h2>
+<h2 class='module-header'>Schultypen</h2>
 
 {if $schooltypes !== false}
 

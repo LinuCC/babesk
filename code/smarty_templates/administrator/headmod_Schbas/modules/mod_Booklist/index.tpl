@@ -1,6 +1,6 @@
 {extends file=$booklistParent}{block name=content}
 
-<h3 class="moduleHeader">Bücherlistenmenü</h3>
+<h3 class="module-header">Bücherlistenmenü</h3>
 
 <fieldset class="smallContainer">
 	<legend>

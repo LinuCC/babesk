@@ -1,6 +1,6 @@
 #{extends file=$inh_path} {block name="content"}
 
-<h2 class='moduleHeader'>Details des Schülers "{$user.forename} {$user.name}"</h2>
+<h2 class='module-header'>Details des Schülers "{$user.forename} {$user.name}"</h2>
 
 {literal}
 <style type='text/css'  media='all'>

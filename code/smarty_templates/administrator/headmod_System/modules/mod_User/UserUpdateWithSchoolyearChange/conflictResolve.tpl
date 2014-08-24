@@ -1,6 +1,6 @@
 {extends file=$inh_path}{block name=content}
 
-<h2 class="moduleHeader">{t}Resolve conflicts{/t}</h2>
+<h2 class="module-header">{t}Resolve conflicts{/t}</h2>
 
 {$lastType = ''}
 {$listStarted = false}

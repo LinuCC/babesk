@@ -48,7 +48,7 @@
 
 {block name="content"}
 
-<h2 class="moduleHeader">
+<h2 class="module-header">
 	{t}Kuwasys User-Mainmenu{/t}
 </h2>
 

@@ -1,6 +1,6 @@
 {extends $inh_path} {block name="content"}
 
-<h2 class="moduleHeader">Den Schüler einen Kurs zuweisen</h2>
+<h2 class="module-header">Den Schüler einen Kurs zuweisen</h2>
 <p>Welchen Kurs soll dem Schüler "{$user.forename} {$user.name}" zugewiesen werden?<br>
 ToDo: Kursveränderungen hier nicht erlaubt!<br>
 ToDo: Warnung wenn Kurs am selben Tag wie ein anderer Kurs!

@@ -121,7 +121,7 @@
 
 {block name="filling_content"}
 
-<h2 class='moduleHeader'>Details des Kurses "{$class.label}"</h2>
+<h2 class='module-header'>Details des Kurses "{$class.label}"</h2>
 
 <div class="container">
 	<div class="col-lg-8 col-lg-offset-2">

@@ -1,7 +1,7 @@
 {extends file=$checkoutParent}{block name=content}
 
 
-<h3 class="moduleHeader">Antrag erfassen</h3>
+<h3 class="module-header">Antrag erfassen</h3>
 
 
 	<div class="form-horizontal" role="form">

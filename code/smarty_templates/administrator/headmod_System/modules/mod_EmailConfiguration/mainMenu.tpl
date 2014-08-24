@@ -16,7 +16,7 @@ fieldset {
 }
 </style>
 
-<h2 class="moduleHeader">Hauptmenü der Emaileinstellungen</h2>
+<h2 class="module-header">Hauptmenü der Emaileinstellungen</h2>
 
 <div class="moduleFormulars">
 <form action='index.php?section=System|EmailConfiguration&action=changeData' method='post'>

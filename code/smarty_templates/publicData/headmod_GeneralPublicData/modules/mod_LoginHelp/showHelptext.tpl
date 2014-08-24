@@ -13,7 +13,7 @@
   border-radius: 20px;
 }
 
-.moduleHeader {
+.module-header {
   color: #2e6132;
   text-align: center;
   padding-bottom: 20px;
@@ -23,7 +23,7 @@
 
 <div id="main">
 
-<h3 class="moduleHeader">Login-Hilfe</h3>
+<h3 class="module-header">Login-Hilfe</h3>
 
 {$helptext}<br>
 <form action="../web/index.php" method="get">

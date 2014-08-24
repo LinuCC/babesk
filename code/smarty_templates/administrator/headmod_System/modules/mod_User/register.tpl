@@ -112,7 +112,7 @@
 
 
 {block name=content}
-<h3 class="moduleHeader">Benutzer registrieren</h3>
+<h3 class="module-header">Benutzer registrieren</h3>
 <form id="register-form" action="#" method="post">
 	<fieldset>
 		<legend>Persönliche Daten</legend>

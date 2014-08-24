@@ -1,6 +1,6 @@
 {extends $inh_path} {block name="content"}
 
-<h2 class="moduleHeader">Die Zuordnung von "{$user.forename} {$user.name}" zu dem Kurs {$class.label} verändern</h2>
+<h2 class="module-header">Die Zuordnung von "{$user.forename} {$user.name}" zu dem Kurs {$class.label} verändern</h2>
 
 <form action="index.php?section=Kuwasys|Users&action=changeUserToClass&userId={$user.ID}&classId={$class.ID}" method="post">
 	<label>Wie ist die Verbindung des Schülers zum Kurs?</label><br>

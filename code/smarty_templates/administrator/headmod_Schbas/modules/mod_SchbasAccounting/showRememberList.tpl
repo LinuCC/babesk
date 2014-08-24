@@ -23,7 +23,7 @@ a.selectiveLink {
 </style>
 
 
-<h2 class='moduleHeader'>Liste der ausgeliehenden B&uuml;cher</h2>
+<h2 class='module-header'>Liste der ausgeliehenden B&uuml;cher</h2>
 
 <table class="dataTable">
 	<tr>

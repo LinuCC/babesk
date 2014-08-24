@@ -49,7 +49,7 @@
 
 <div class="row">
 	<div class="col-sm-4 col-sm-offset-4">
-		<h3 class="moduleHeader">Log-Anzeige</h3>
+		<h3 class="module-header">Log-Anzeige</h3>
 	</div>
 	<span id="table-size-container" class="col-sm-4">
 		<span class="pull-right label label-success">

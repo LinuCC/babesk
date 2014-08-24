@@ -1,6 +1,6 @@
 {extends file=$mealParent}{block name=content}
 
-<h2 class="moduleHeader">Maximale Bestellungsanzahl pro Tag</h2>
+<h2 class="module-header">Maximale Bestellungsanzahl pro Tag</h2>
 
 <form action="index.php?module=administrator|Babesk|Meals|MaxOrderAmount"
 	method="post">

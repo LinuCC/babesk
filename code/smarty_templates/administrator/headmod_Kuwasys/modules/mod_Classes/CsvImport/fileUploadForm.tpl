@@ -1,6 +1,6 @@
 {extends file=$inh_path} {block name='content'}
 
-<h2 class="moduleHeader">{t}Upload a file{/t}</h2>
+<h2 class="module-header">{t}Upload a file{/t}</h2>
 
 <form action="index.php?module=administrator|Kuwasys|Classes|CsvImport|Review"
 	method="post" enctype="multipart/form-data">

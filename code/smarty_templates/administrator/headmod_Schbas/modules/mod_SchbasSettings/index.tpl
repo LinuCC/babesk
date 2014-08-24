@@ -1,6 +1,6 @@
 {extends file=$schbasSettingsParent}{block name=content}
 
-<h3 class="moduleHeader">Schbas Einstellungsmenü</h3>
+<h3 class="module-header">Schbas Einstellungsmenü</h3>
 
 <fieldset>
 	<legend>Grundeinstellungen</legend>

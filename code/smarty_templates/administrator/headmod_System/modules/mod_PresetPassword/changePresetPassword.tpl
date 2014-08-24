@@ -1,6 +1,6 @@
 {extends file=$inh_path} {block name='content'}
 
-<h2 class='moduleHeader'>Das voreingestellte Passwort ändern</h2>
+<h2 class='module-header'>Das voreingestellte Passwort ändern</h2>
 
 <p>
 Hier können sie das Passwort verändern, dass Schüler bekommen, bevor sie sich zum ersten mal eingeloggt haben. Außerdem können sie verändern, ob die Schüler beim ersten mal einloggen ihr Passwort verändern müssen.

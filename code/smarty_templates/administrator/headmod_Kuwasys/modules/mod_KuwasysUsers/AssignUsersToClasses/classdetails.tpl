@@ -165,7 +165,7 @@
 
 {block name="content"}
 
-<h2 class="moduleHeader">
+<h2 class="module-header">
 	{t}Classdetails of Class{/t} {$class.label}
 </h2>
 

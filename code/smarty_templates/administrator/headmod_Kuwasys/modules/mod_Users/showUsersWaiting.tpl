@@ -1,6 +1,6 @@
 {extends file=$inh_path} {block name='content'}
 
-<h2 class="moduleHeader">Die wartenden Benutzer</h2>
+<h2 class="module-header">Die wartenden Benutzer</h2>
 
 {$modAction = "showWaitingUsers"}
 {include file="$tplFilePath"|cat:"filterUsers.tpl"}

@@ -1,6 +1,6 @@
 {extends file=$inh_path}{block name=content}
 
-<h2 class="moduleHeader">{t}Update users and change the schoolyear{/t}</h2>
+<h2 class="module-header">{t}Update users and change the schoolyear{/t}</h2>
 
 <p>
 	{t condense=yes}

@@ -1,6 +1,6 @@
 {extends file=$inh_path} {block name='content'}
 
-<h2 class="moduleHeader">Gruppeneinstellungen</h2>
+<h2 class="module-header">Gruppeneinstellungen</h2>
 
 <div class="treeButtons">
 	<button id="groupAdd">Gruppe hinzufügen</button>

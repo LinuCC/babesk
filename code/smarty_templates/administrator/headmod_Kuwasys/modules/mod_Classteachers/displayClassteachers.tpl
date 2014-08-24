@@ -1,6 +1,6 @@
 {extends file=$inh_path} {block name='filling_content'}
 
-<h2 class='moduleHeader'>Die Kursleiter</h2>
+<h2 class='module-header'>Die Kursleiter</h2>
 
 <table class="table table-responsive table-hover table-striped">
 	<thead>

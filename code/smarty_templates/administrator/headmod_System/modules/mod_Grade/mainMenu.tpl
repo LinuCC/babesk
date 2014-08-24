@@ -1,6 +1,6 @@
 {extends file=$inh_path} {block name='content'}
 
-<h2 class="moduleHeader">Klassen</h2>
+<h2 class="module-header">Klassen</h2>
 
 <fieldset>
 	<legend>Allgemein</legend>

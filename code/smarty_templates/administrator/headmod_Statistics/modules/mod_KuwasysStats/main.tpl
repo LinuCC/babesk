@@ -10,7 +10,7 @@
 </style>
 {/literal}
 
-<h2 class="moduleHeader">Statistiken zu Kuwasys</h2>
+<h2 class="module-header">Statistiken zu Kuwasys</h2>
 
 <p>Wählen sie eine Statistikanzeige aus:</p>
 

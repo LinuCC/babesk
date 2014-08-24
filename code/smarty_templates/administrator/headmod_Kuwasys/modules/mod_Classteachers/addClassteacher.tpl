@@ -1,6 +1,6 @@
 {extends file=$inh_path} {block name='content'}
 
-<h2 class='moduleHeader'>Einen Kursleiter hinzufügen</h2>
+<h2 class='module-header'>Einen Kursleiter hinzufügen</h2>
 
 <form action='index.php?module=administrator|Kuwasys|Classteachers|Add' method='post'>
 

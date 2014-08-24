@@ -1,6 +1,6 @@
 {extends file=$inh_path}{block name=content}
 
-<h2 class="moduleHeader">{t}User-update menu{/t}</h2>
+<h2 class="module-header">{t}User-update menu{/t}</h2>
 
 <fieldset class="smallContainer">
 	<legend>{t}Conflicts{/t}</legend>

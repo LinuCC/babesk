@@ -1,6 +1,6 @@
 {extends file=$inh_path} {block name="content"}
 
-<h2 class="moduleHeader">Erlauben der Kursregistrierungen</h2>
+<h2 class="module-header">Erlauben der Kursregistrierungen</h2>
 
 <fieldset class="smallContainer">
 	<legend>Beschreibung</legend>

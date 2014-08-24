@@ -1,6 +1,6 @@
 {extends file=$UserParent}{block name=content}
 
-<h2 class="moduleHeader">{t}Usersettings-Mainmenu{/t}</h2>
+<h2 class="module-header">{t}Usersettings-Mainmenu{/t}</h2>
 
 <fieldset>
 	<legend>

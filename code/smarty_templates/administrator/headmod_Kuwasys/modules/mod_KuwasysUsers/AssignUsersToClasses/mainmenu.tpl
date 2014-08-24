@@ -1,6 +1,6 @@
 {extends file=$inh_path}{block name="content"}
 
-<h2 class="moduleHeader">
+<h2 class="module-header">
 	Den Schülern ihre Kurse zuweisen
 </h2>
 

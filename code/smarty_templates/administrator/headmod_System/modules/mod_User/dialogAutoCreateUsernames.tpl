@@ -1,7 +1,7 @@
 {extends file=$UserParent}{block name=content}
 
 
-<h2 class="moduleHeader">Benutzern automatisch Benutzernamen zuweisen</h2>
+<h2 class="module-header">Benutzern automatisch Benutzernamen zuweisen</h2>
 
 <p>Hier können sie die bisherigen Benutzernamen überschreiben und allen von
 ihnen das Format "Vorname.Nachname" zuweisen (zum Beispiel Pascal.Ernst).<br>

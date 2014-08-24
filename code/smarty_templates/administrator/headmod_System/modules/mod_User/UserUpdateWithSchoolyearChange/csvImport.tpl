@@ -1,6 +1,6 @@
 {extends file=$inh_path}{block name="content"}
 
-<h2 class="moduleHeader">{t}Import userdata with a csv-file{/t}</h2>
+<h2 class="module-header">{t}Import userdata with a csv-file{/t}</h2>
 
 <p>{t}Please select the csv-file that contains the data of the users:{/t}</p>
 

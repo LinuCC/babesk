@@ -1,6 +1,6 @@
 {extends file=$inh_path} {block name=content}
 
-<h2 class="moduleHeader">Der Kurs hat die maximale Anzahl von Registrierungen erreicht</h2>
+<h2 class="module-header">Der Kurs hat die maximale Anzahl von Registrierungen erreicht</h2>
 
 <p>Sind sie sich sicher, dass sie trotzdem den Benutzer {$user.name} {$user.forename} vom Kurs "{$classOld.label}" zum Kurs
 {$classNew.label} verschieben wollen?</p>

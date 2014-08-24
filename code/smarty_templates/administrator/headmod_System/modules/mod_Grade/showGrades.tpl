@@ -1,6 +1,6 @@
 {extends file=$inh_path} {block name='content'}
 
-<h2 class='moduleHeader'>Die Klassen</h2>
+<h2 class='module-header'>Die Klassen</h2>
 
 <table class="table table-striped table-responsive">
 	<thead>

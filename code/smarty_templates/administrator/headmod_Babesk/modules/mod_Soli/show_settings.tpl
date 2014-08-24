@@ -1,6 +1,6 @@
 {extends file=$base_path}{block name=content}
 
-<h2 class="moduleHeader">{t}Soli-Settings{/t}</h2>
+<h2 class="module-header">{t}Soli-Settings{/t}</h2>
 
 <form action="index.php?module=administrator|Babesk|Soli|Settings"
 	class="simpleForm" method="post">

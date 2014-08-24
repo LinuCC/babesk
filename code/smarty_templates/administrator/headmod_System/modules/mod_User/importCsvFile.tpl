@@ -1,6 +1,6 @@
 {extends file=$inh_path} {block name='content'}
 
-<h2 class="moduleHeader">CSV-Import-Test</h2>
+<h2 class="module-header">CSV-Import-Test</h2>
 
 <div class="csvUpload">
 

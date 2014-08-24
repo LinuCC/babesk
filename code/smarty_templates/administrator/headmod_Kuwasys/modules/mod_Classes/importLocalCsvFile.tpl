@@ -1,6 +1,6 @@
 {extends $inh_path} {block name="content"}
 
-<h2 class="moduleHeader">Kurse per CSV-Datei importieren</h2>
+<h2 class="module-header">Kurse per CSV-Datei importieren</h2>
 
 Die CSV-Datei sollte folgende Schlüssel beinhalten:
 <table>

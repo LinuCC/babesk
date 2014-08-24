@@ -6,7 +6,7 @@
 		{$isNoClassSelected = false}
 	{/if}
 {/foreach}
-<h2 class='moduleHeader'>Einen Kursleiter verändern</h2>
+<h2 class='module-header'>Einen Kursleiter verändern</h2>
 
 <form action='index.php?module=administrator|Kuwasys|Classteachers|Change&amp;ID={$classteacher.ID}' method='post'>
 

@@ -29,7 +29,7 @@ function showOptions (ID) {
 }
 </script>
 
-<h2 class='moduleHeader'>Die Benutzer</h2>
+<h2 class='module-header'>Die Benutzer</h2>
 
 <fieldset class="selectiveLink">
 <legend>Jahrgang</legend>

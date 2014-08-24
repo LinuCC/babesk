@@ -10,7 +10,7 @@ fieldset {
 }
 </style>
 
-<h2 class="moduleHeader">Hauptmenü des Benutzer-Moduls</h2>
+<h2 class="module-header">Hauptmenü des Benutzer-Moduls</h2>
 
 <fieldset>
 <legend>Benutzer verändern</legend>

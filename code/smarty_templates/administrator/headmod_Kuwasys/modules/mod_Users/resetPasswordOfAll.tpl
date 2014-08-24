@@ -1,6 +1,6 @@
 {extends file=$base_path} {block name=content}
 
-<h2 class="moduleHeader">
+<h2 class="module-header">
 	Das Passwort der Benutzer zurücksetzen
 </h2>
 

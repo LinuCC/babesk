@@ -52,7 +52,7 @@
 
 {block name='content'}
 
-<h2 class='moduleHeader'>Hauptmen&uuml; der Kursverwaltung</h2>
+<h2 class='module-header'>Hauptmen&uuml; der Kursverwaltung</h2>
 
 <div>
 	{if !$isClassRegistrationGloballyEnabled}

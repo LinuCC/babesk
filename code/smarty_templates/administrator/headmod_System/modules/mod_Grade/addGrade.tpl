@@ -1,6 +1,6 @@
 {extends file=$inh_path}{block name='content'}
 
-<h2 class='moduleHeader'>Eine Klasse hinzufügen</h2>
+<h2 class='module-header'>Eine Klasse hinzufügen</h2>
 
 <form role="form" action="index.php?module=administrator|System|Grade|AddGrade"
 	method="post">

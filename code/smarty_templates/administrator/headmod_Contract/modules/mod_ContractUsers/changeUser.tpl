@@ -14,7 +14,7 @@ fieldset {
 }
 </style>
 
-<h2 class='moduleHeader'>Einen Benutzer verändern</h2>
+<h2 class='module-header'>Einen Benutzer verändern</h2>
 
 <form action='index.php?section=Kuwasys|Users&action=changeUser&ID={$user.ID}' method='post'>
 	<label>Vorname: <input type='text' value="{$user.forename}" name='forename'></label><br><br>

@@ -23,7 +23,7 @@ a.selectiveLink {
 </style>
 
 
-<h2 class='moduleHeader'>Sch&uuml;lerliste</h2>
+<h2 class='module-header'>Sch&uuml;lerliste</h2>
 
 {$modAction = "showUsersGroupedByYearAndGrade"}
 

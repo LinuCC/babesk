@@ -2,7 +2,7 @@
 
 <!-- ACTUAL HTML -->
 
-<h3 id="moduleHeader">
+<h3 id="module-header">
 	Bitte wählen sie in dem Menü links einen Eintrag aus.
 </h3>
 

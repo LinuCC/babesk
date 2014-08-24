@@ -1,6 +1,6 @@
 {extends file=$base_path} {block name=content}
 
-<h2 class="moduleHeader">
+<h2 class="module-header">
 	Wollen sie wirklich die Passwörter der Benutzer aus dem Jahr ({$activeYearName}) zurücksetzen?
 </h2>
 

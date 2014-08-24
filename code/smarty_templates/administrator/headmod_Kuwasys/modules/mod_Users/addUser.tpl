@@ -62,7 +62,7 @@ select, input.moduleFormulars {
 }
 </style>
 
-<h2 class='moduleHeader'>Einen Benutzer hinzufügen</h2>
+<h2 class='module-header'>Einen Benutzer hinzufügen</h2>
 <br>
 <div class='moduleFormulars'>
 <form action='index.php?section=Kuwasys|Users&action=addUser' method='post'>

@@ -1,6 +1,6 @@
 {extends file=$inh_path} {block name="content"}
 
-<h2 class="moduleHeader">Den Benutzer "{$user.forename} {$user.name}" von dem Kurs "{$classOld.label}" in einen anderen verschieben</h2>
+<h2 class="module-header">Den Benutzer "{$user.forename} {$user.name}" von dem Kurs "{$classOld.label}" in einen anderen verschieben</h2>
 
 <form action="index.php?section=Kuwasys|Users&action=moveUserByClass&classIdOld={$classOld.ID}&userId={$user.ID}" method="post">
 	<label>Der neue Kurs des Schülers<br>

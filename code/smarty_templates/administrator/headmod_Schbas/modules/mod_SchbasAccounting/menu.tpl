@@ -16,7 +16,7 @@ EnableSubmit = function(val)
 }
 </script>
 
-<h3 class="moduleHeader">Schbasverwaltung Menü</h3>
+<h3 class="module-header">Schbasverwaltung Menü</h3>
 
 <fieldset>
 	<legend>Antr&auml;ge verwalten</legend>

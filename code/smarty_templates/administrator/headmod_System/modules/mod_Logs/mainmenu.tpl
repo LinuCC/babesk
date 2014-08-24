@@ -1,5 +1,5 @@
 {extends file=$inh_path}{block name=content}
-<h3 class="moduleHeader">Logs</h3>
+<h3 class="module-header">Logs</h3>
 
 <fieldset>
 	<legend>Generell</legend>

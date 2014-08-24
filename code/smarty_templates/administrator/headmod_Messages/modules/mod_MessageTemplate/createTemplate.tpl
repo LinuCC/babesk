@@ -3,7 +3,7 @@
 
 <script type="text/javascript" src="{$path_js}/ckeditor/ckeditor.js"></script>
 
-<h2 class="moduleHeader">Neue Vorlage</h2>
+<h2 class="module-header">Neue Vorlage</h2>
 
 <form action="index.php?section=Messages|MessageTemplate&amp;action=addTemplate" method="POST">
 	<fieldset class="blockyField">

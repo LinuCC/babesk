@@ -1,6 +1,6 @@
 {extends file=$inh_path} {block name=filling_content}
 
-<h2 class='moduleHeader'>Kursauflistung</h2>
+<h2 class='module-header'>Kursauflistung</h2>
 
 <div class="filter-bar text-center">
 	<div>

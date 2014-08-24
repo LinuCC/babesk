@@ -1,6 +1,6 @@
 {extends file=$inventoryParent}{block name=content}
 
-<h3 class="moduleHeader">Inventarmenü</h3>
+<h3 class="module-header">Inventarmenü</h3>
 
 <fieldset>
 	<legend>Generell</legend>

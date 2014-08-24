@@ -3,7 +3,7 @@
 <!-- Template-File for those pesky repeating Forms needed for the modules in Admininstrator 
 	If you need more GET-Variables, just extend the action-string with whatever you feel like-->
 
-<h2 class='moduleHeader'>{$headString}</h2>
+<h2 class='module-header'>{$headString}</h2>
 
 <form action='index.php?section={$sectionString}&action={$actionString}' method='post'>
 	{foreach $inputContainer as $input}

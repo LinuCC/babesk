@@ -1,6 +1,6 @@
 {extends file=$inh_path}{block name=content}
 
-<h2 class="moduleHeader">{t}Reset passwords of all users{/t}</h2>
+<h2 class="module-header">{t}Reset passwords of all users{/t}</h2>
 
 <form action="index.php?module=administrator|System|User|ResetAllUserPasswords"
 	method="post">

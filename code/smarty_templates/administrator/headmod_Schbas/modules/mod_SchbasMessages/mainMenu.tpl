@@ -1,6 +1,8 @@
 {extends file=$inh_path}
 {block name=content}
 
+<h3 class="module-header">Schulbuchausleihnachrichten</h3>
+
 {if count($templates)}
 	<table class="dataTable">
 		<tr>
