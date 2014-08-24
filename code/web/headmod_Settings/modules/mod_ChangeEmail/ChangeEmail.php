@@ -62,7 +62,9 @@ class ChangeEmail extends Settings {
 			$emailNew = $_POST['emailNew'];
 			inputcheck($emailNew, 'email', 'EmailAdresse');
 		} catch(WrongInputException $e) {
-			$this->_interface->DieError(sprintf('Die EmailAdresse "%s" wurde falsch eingegeben.%s', $emailNew, Kuwasys::$buttonBackToMM));
+			$this->_interface->dieError(
+				"Die Emailadresse '$emailNew' wurde falsch eingegeben!"
+			);
 		}
 	}
 
@@ -71,7 +73,9 @@ class ChangeEmail extends Settings {
 	}
 
 	protected function finShow() {
-		$this->_interface->DieMessage(sprintf('Die Emailadresse wurde erfolgreich zu "%s" verändert. %s', $_POST['emailNew'], Kuwasys::$buttonBackToMM));
+		$this->_interface->dieSuccess(
+			'Deine Emailadresse wurde erfolgreich verändert!'
+		);
 	}
 
 	protected function emailOldFetch() {

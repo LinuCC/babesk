@@ -97,7 +97,7 @@
 </table>
 {/if}
 {if $editor}
-	<a href="index.php?section=Messages|MessageAdmin&amp;action=newMessageForm">
+	<a class="btn btn-success" href="index.php?section=Messages|MessageAdmin&amp;action=newMessageForm">
 		Neue Nachricht erstellen
 	</a>
 {/if}

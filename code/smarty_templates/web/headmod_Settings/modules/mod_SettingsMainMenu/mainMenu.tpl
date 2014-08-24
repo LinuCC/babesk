@@ -6,10 +6,11 @@
 <p>Was willst du verändern?</p>
 
 <form action="index.php?section=Settings|ChangeEmail" method="post">
-	<input type="submit" value="Die Email-adresse verändern">
+	<input class="btn btn-default" type="submit"
+		value="Die Email-adresse verändern">
 </form>
 <form action="index.php?section=Settings|SettingsChangePassword" method="post">
-	<input type="submit" value="Das Passwort verändern">
+	<input class="btn btn-default" type="submit" value="Das Passwort verändern">
 </form>
 
 {/block}
