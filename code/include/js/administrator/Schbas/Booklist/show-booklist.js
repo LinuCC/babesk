@@ -69,7 +69,7 @@ $(document).ready(function() {
 				{
 					"startPage": startPage,
 					"pagecount": pagecount,
-					"amountDisplayed": amountPagesDisplayed
+					"amountDisplayed": amountPagesDisplayed,
 				}
 			);
 			$('#page-select').html(html);

@@ -15,6 +15,7 @@
 		<td><%= highestExemplarNumber %></td>
 		<td><%= exemplarsInStock %></td>
 		<td><%= exemplarsLent %></td>
+		<td><%= exemplarsNeeded %></td>
 		<td><%= exemplarsToBuy %></td>
 		<td>
 		<a class="btn btn-info btn-xs" href="index.php?section=Schbas|Booklist&action=2&ID=<%= id %>" title="Bucheinstellungen">
@@ -85,10 +86,11 @@
 				<th>ISBN</th>
 				<th>Preis</th>
 				<th>Bundle</th>
-				<th>letzte Inventarnummer</th>
+				<th>letzte Inv-Nummer</th>
 				<th>Auf Lager</th>
 				<th>Verliehen</th>
 				<th>Benötigt</th>
+				<th>Fehlend</th>
 				<th>Optionen</th>
 			</tr>
 		</thead>
@@ -104,5 +106,11 @@
 
 <script src="{$path_js}/administrator/Schbas/Booklist/show-booklist.js">
 </script>
+
+{/block}
+
+{block name=style_include append}
+
+<link rel="stylesheet" type="text/css" href="{$path_css}/administrator/Schbas/Booklist/show-booklist.css">
 
 {/block}

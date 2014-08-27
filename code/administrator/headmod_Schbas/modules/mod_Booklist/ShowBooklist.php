@@ -271,7 +271,10 @@ class ShowBooklist extends Booklist {
 
 	/**
 	 * Calculates the amount of book-exemplars needed
-	 * It doesnt consider if the user already has the book
+	 * The amount needs to be calculated by two methods; The senior grades
+	 * have an additional pool of books they need to lend, called
+	 * 'special_course'
+	 * @todo   It doesnt consider if the user already has the book
 	 * @param  Paginator $paginator doctrines paginator containing the books
 	 * @return array                book-ids as the key with the values being
 	 *                              the amount of book-exemplars needed
@@ -340,7 +343,8 @@ class ShowBooklist extends Booklist {
 					u.religion LIKE :subject OR
 					u.foreign_language LIKE :subject
 				)');
-			$query->setParameter('subject', '%' . $book->getSubject() . '%');
+			$query->setParameter('subject', '%' . $book->getSubject() . '%')
+				->setParameter('bookId', $book-getId());
 			foreach($gradelevels as $key => $gradelevel) {
 				$query->setParameter(($key + 1), $gradelevel);
 			}
@@ -358,10 +362,17 @@ class ShowBooklist extends Booklist {
 		else {
 			//user not in senior grades and booksubject not in list
 			$query = $this->_entityManager->createQuery($baseQuery);
+			$query->setParameter('bookId', $book->getId());
 			foreach($gradelevels as $key => $gradelevel) {
 				$query->setParameter(($key + 1), $gradelevel);
 			}
 			$res = $query->getSingleScalarResult();
+			if($book->getId() == 8) {
+				ob_start();
+				var_dump($res);
+				$result = ob_get_clean();
+				$this->_logger->log("Stuff: " . $result, 'Notice', Null, false);
+			}
 			if(!empty($res)) {
 				return (int)$res;
 			}
@@ -376,6 +387,9 @@ class ShowBooklist extends Booklist {
 
 	/**
 	 * Calculates the book-exemplars needed for the given book for upper grades
+	 * This method calculates the amount for users in senior grades. They are
+	 * choosing their subjects, so the standard pool of booksubjects does not
+	 * apply to them. They have an additional pool called 'special_course'.
 	 * @param  array  $gradelevels The gradelevels of the book. Only give the
 	 *                             gradelevels of the upper grades, else the
 	 *                             calculation will be wrong.
@@ -397,7 +411,8 @@ class ShowBooklist extends Booklist {
 							u.foreign_language LIKE :subject
 						)
 			');
-			$query->setParameter('subject', '%' . $book->getSubject() . '%');
+			$query->setParameter('subject', '%' . $book->getSubject() . '%')
+				->setParameter('bookId', $book-getId());
 			foreach($gradelevels as $key => $gradelevel) {
 				$query->setParameter(($key + 1), $gradelevel);
 			}
@@ -436,13 +451,13 @@ class ShowBooklist extends Booklist {
 			$glAr[] = '?' . (string)($i + 1);
 		}
 		$glQuery = implode(', ', $glAr);
-		return 'SELECT COUNT(u.id) FROM \Babesk\ORM\SystemUsers u
+		return "SELECT COUNT(u.id) FROM \Babesk\ORM\SystemUsers u
 					JOIN u.usersInGradesAndSchoolyears uigs
 					JOIN uigs.schoolyear s
-					JOIN uigs.grade g
-					WHERE g.gradelevel IN(' . $glQuery . ')
-						 AND s.active = 1
-		';
+					JOIN uigs.grade g WITH g.gradelevel IN(${glQuery})
+					LEFT JOIN u.selfpayingBooks b WITH b.id = :bookId
+					WHERE s.active = 1 AND b.id IS NULL
+		";
 	}
 
 	/**
@@ -455,8 +470,8 @@ class ShowBooklist extends Booklist {
 	 */
 	protected function bookSubjectIsListedCheck($subject, $isSpecialCourse) {
 
-		if(empty($this->_allReligions) ||
-			empty($this->_allForeignLanguages) ||
+		if(empty($this->_allReligions) &&
+			empty($this->_allForeignLanguages) &&
 			empty($this->_allSpecialCourses)
 		) {
 			$this->bookSubjectIsListedCacheFill();
@@ -498,32 +513,10 @@ class ShowBooklist extends Booklist {
 
 		$toBuy = array();
 		foreach ($bookData as $bookId => $data) {
-			$res = (
-				- $data['exemplarsInStock'] +
-				(
-					$data['exemplarsNeeded'] -
-					$this->bookExemplarsSelfboughtByUsersGet($bookId)
-				)
-			);
+			$res = ( - $data['exemplarsInStock'] + $data['exemplarsNeeded'] );
 			$toBuy[$bookId]['exemplarsToBuy'] = ($res > 0) ? $res : 0 ;
 		}
 		return $toBuy;
-	}
-
-	/**
-	 * Fetches the amount of selfbought exemplars of the book by the bookId
-	 * @param  int    $bid The Id of the book
-	 * @return int         The result
-	 */
-	protected function bookExemplarsSelfboughtByUsersGet($bid) {
-
-		$res = $this->_entityManager->createQuery(
-				'SELECT COUNT(u.id) FROM \Babesk\ORM\SystemUsers u
-					WHERE ?1 MEMBER OF u.selfpayingBooks
-			')->setParameter(1, $bid)
-			->getSingleScalarResult();
-
-		return (int)$res;
 	}
 
 	/**
@@ -575,15 +568,17 @@ class ShowBooklist extends Booklist {
 
 	/**
 	 * Combines two multi-dimensional arrays
+	 * The first array defines what keys in the first dimension will be used
 	 * Combines something like
 	 *     [ '1' => ['A' => '5', 'B' => '6'],
-	 *         '2' => ['A' => '9', 'B' => '3'] ]
+	 *       '2' => ['A' => '9', 'B' => '3'] ]
 	 *     and
 	 *     [ '1' => ['F' => '8']
-	 *         '2' => ['F' => '4'] ]
+	 *       '2' => ['F' => '4']
+	 *       '3' => ['F' => '6'] ]
 	 *     to
 	 *     [ '1' => ['A' => '5', 'B' => '6', 'F' => '8'],
-	 *         '2' => ['A' => '9', 'B' => '3', 'F' => '4'] ]
+	 *       '2' => ['A' => '9', 'B' => '3', 'F' => '4'] ]
 	 * @param  array  $ar1 The first array
 	 * @param  array  $ar2 The second array
 	 * @return array       The combined array

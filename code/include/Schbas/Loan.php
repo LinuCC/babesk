@@ -49,7 +49,7 @@ class Loan {
 	/**
 	 * Returns an array of gradelevels associated with the given isbnIdentifier
 	 * @param  string $ident The identifier (like '69' or '05')
-	 * @return array         The array of gradelevels
+	 * @return array         The array of gradelevels or false if none found
 	 */
 	public function isbnIdent2Gradelevel($ident) {
 
