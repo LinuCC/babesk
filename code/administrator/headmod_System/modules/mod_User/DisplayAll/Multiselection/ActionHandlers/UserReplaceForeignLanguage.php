@@ -31,7 +31,7 @@ class UserReplaceForeignLanguage extends Action {
 
 		require_once PATH_INCLUDE . '/orm-entities/SystemUsers.php';
 		$users = $this->_entityManager
-			->getRepository('\Babesk\ORM\SystemUsers')
+			->getRepository('BabeskBabesk:SystemUsers')
 			->findById($userIds);
 		foreach($users as $user) {
 			$user->setForeignLanguage($languages);

@@ -775,7 +775,7 @@ class User extends System {
 	// 	$ids = $_POST['userIds'];
 	// 	$query = $this->_entityManager->createQueryBuilder()
 	// 		->select('u')
-	// 		->from('Babesk\ORM\SystemUsers', 'u');
+	// 		->from('Babesk:SystemUsers', 'u');
 
 	// 	foreach($ids as $ind => $id) {
 	// 		$query->andWhere("u.ID = :id{$ind}");
@@ -787,7 +787,7 @@ class User extends System {
 		require_once PATH_INCLUDE . '/orm-entities/SystemGlobalSettings.php';
 
 		$course = $this->_entityManager
-			->getRepository('Babesk\ORM\SystemGlobalSettings')
+			->getRepository('Babesk:SystemGlobalSettings')
 			->findOneByName('special_course');
 
 		if(empty($course)) {
@@ -818,7 +818,7 @@ class User extends System {
 
 		require_once PATH_INCLUDE . '/orm-entities/SystemUsers.php';
 		$users = $this->_entityManager->getRepository(
-			'Babesk\ORM\SystemUsers'
+			'Babesk:SystemUsers'
 		);
 		$courseStr = $users
 			->findOneById($_POST['userId'])

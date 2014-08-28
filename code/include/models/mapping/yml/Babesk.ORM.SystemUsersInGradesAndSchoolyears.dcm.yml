@@ -1,7 +1,13 @@
 Babesk\ORM\SystemUsersInGradesAndSchoolyears:
     type: entity
     table: SystemUsersInGradesAndSchoolyears
-    id: {  }
+    id:
+        user:
+            associationKey: true
+        grade:
+            associationKey: true
+        schoolyear:
+            associationKey: true
     manyToOne:
         user:
             targetEntity: Babesk\ORM\SystemUsers

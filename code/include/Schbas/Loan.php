@@ -2,8 +2,6 @@
 
 namespace Babesk\Schbas;
 
-require_once PATH_INCLUDE . '/orm-entities/SchbasBooks.php';
-
 /**
  * Contains operations useful for the loan-process of Schbas
  */
@@ -116,7 +114,7 @@ class Loan {
 		$bookQuery = $this->_entityManager
 			->createQueryBuilder()
 			->select(array('b.class', 'b.price'))
-			->from('\Babesk\ORM\SchbasBooks', 'b')
+			->from('Babesk:SchbasBooks', 'b')
 			->where('b.class IN (:classes)')
 			->setParameter('classes', $classes)
 			->getQuery();

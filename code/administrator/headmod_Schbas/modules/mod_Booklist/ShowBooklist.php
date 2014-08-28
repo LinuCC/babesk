@@ -2,12 +2,6 @@
 
 require_once 'Booklist.php';
 
-require_once PATH_INCLUDE . '/orm-entities/SystemUsers.php';
-require_once PATH_INCLUDE . '/orm-entities/SystemGrades.php';
-require_once PATH_INCLUDE . '/orm-entities/SystemSchoolyears.php';
-require_once PATH_INCLUDE . '/orm-entities/' .
-	'SystemUsersInGradesAndSchoolyears.php';
-
 class ShowBooklist extends Booklist {
 
 	/////////////////////////////////////////////////////////////////////
@@ -140,8 +134,6 @@ class ShowBooklist extends Booklist {
 	 */
 	protected function booksInventoryDataGet($paginator) {
 
-		require_once PATH_INCLUDE . '/orm-entities/SchbasBooks.php';
-
 		try {
 			$booksData = $this->booksHighestInventoryNumberGet($paginator);
 			$booksData = $this->bookArrayMerge(
@@ -181,7 +173,7 @@ class ShowBooklist extends Booklist {
 
 		$invNums = array();
 		$query = $this->_entityManager->createQuery(
-			'SELECT MAX(i.exemplar) FROM \Babesk\ORM\SchbasInventory i
+			'SELECT MAX(i.exemplar) FROM Babesk:SchbasInventory i
 				JOIN i.book b
 				WHERE b.id = :id
 		');
@@ -210,7 +202,7 @@ class ShowBooklist extends Booklist {
 
 		$booksLent = array();
 		$query = $this->_entityManager->createQuery(
-			'SELECT COUNT(l) FROM \Babesk\ORM\SchbasBooks b
+			'SELECT COUNT(l) FROM Babesk:SchbasBooks b
 				JOIN b.exemplars e
 				JOIN e.lending l
 				WHERE b.id = :id
@@ -236,7 +228,7 @@ class ShowBooklist extends Booklist {
 
 		$booksInventory = array();
 		$query = $this->_entityManager->createQuery(
-			'SELECT COUNT(e.id) FROM \Babesk\ORM\SchbasBooks b
+			'SELECT COUNT(e.id) FROM Babesk:SchbasBooks b
 				JOIN b.exemplars e
 				WHERE b.id = :id
 		');
@@ -451,7 +443,7 @@ class ShowBooklist extends Booklist {
 			$glAr[] = '?' . (string)($i + 1);
 		}
 		$glQuery = implode(', ', $glAr);
-		return "SELECT COUNT(u.id) FROM \Babesk\ORM\SystemUsers u
+		return "SELECT COUNT(u.id) FROM Babesk:SystemUsers u
 					JOIN u.usersInGradesAndSchoolyears uigs
 					JOIN uigs.schoolyear s
 					JOIN uigs.grade g WITH g.gradelevel IN(${glQuery})
@@ -492,7 +484,7 @@ class ShowBooklist extends Booklist {
 	protected function bookSubjectIsListedCacheFill() {
 
 		$globalSettings = $this->_entityManager
-			->getRepository('\Babesk\ORM\SystemGlobalSettings');
+			->getRepository('Babesk:SystemGlobalSettings');
 		$rel = $globalSettings->findOneByName('religion')->getValue();
 		$this->_allReligions = explode('|', $rel);
 		$lan = $globalSettings->findOneByName('foreign_language')->getValue();
@@ -525,9 +517,8 @@ class ShowBooklist extends Booklist {
 	 */
 	protected function specialCourseTriggerGet() {
 
-		require_once PATH_INCLUDE . '/orm-entities/SystemGlobalSettings.php';
 		$trigger = $this->_entityManager
-			->getRepository('\Babesk\ORM\SystemGlobalSettings')
+			->getRepository('Babesk:SystemGlobalSettings')
 			->findOneByName('special_course_trigger');
 
 		if(empty($trigger)) {

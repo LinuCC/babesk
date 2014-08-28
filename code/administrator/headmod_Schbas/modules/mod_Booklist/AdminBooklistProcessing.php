@@ -1,7 +1,5 @@
 <?php
 
-require_once PATH_INCLUDE . '/orm-entities/SchbasBooks.php';
-
 class AdminBooklistProcessing {
 	function __construct($BookInterface) {
 

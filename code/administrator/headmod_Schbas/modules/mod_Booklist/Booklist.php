@@ -2,8 +2,6 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ADMIN . '/headmod_Schbas/Schbas.php';
-require_once PATH_INCLUDE . '/orm-entities/SchbasBooks.php';
-require_once PATH_INCLUDE . '/orm-entities/SystemSchoolSubjects.php';
 
 class Booklist extends Schbas {
 
