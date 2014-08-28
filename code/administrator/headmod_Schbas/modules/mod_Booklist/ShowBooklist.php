@@ -359,12 +359,6 @@ class ShowBooklist extends Booklist {
 				$query->setParameter(($key + 1), $gradelevel);
 			}
 			$res = $query->getSingleScalarResult();
-			if($book->getId() == 8) {
-				ob_start();
-				var_dump($res);
-				$result = ob_get_clean();
-				$this->_logger->log("Stuff: " . $result, 'Notice', Null, false);
-			}
 			if(!empty($res)) {
 				return (int)$res;
 			}

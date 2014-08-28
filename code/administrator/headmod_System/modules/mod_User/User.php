@@ -784,8 +784,6 @@ class User extends System {
 
 	protected function getAllSpecialCourses() {
 
-		require_once PATH_INCLUDE . '/orm-entities/SystemGlobalSettings.php';
-
 		$course = $this->_entityManager
 			->getRepository('Babesk:SystemGlobalSettings')
 			->findOneByName('special_course');
@@ -816,7 +814,6 @@ class User extends System {
 
 	protected function setSpecialCourse() {
 
-		require_once PATH_INCLUDE . '/orm-entities/SystemUsers.php';
 		$users = $this->_entityManager->getRepository(
 			'Babesk:SystemUsers'
 		);

@@ -2,7 +2,6 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ADMIN . '/headmod_Babesk/modules/mod_Recharge/Recharge.php';
-require_once PATH_INCLUDE . '/orm-entities/SystemUsers.php';
 
 class RechargeCard extends Recharge {
 
@@ -57,7 +56,7 @@ class RechargeCard extends Recharge {
 
 		$queryBuilder = $this->_entityManager->createQueryBuilder()
 			->select('u.forename, u.name, u.username, u.cardnumber')
-			->from('\Babesk\ORM\SystemUsers', 'u');
+			->from('Babesk:SystemUsers', 'u');
 		if(!empty($filter)) {
 			$queryBuilder->where(
 					'u.username LIKE :filter OR u.cardnumber LIKE :filter'

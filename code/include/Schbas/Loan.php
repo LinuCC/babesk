@@ -187,10 +187,8 @@ class Loan {
 
 	protected function bookSubjectFilterArrayGet() {
 
-		require_once PATH_INCLUDE . '/orm-entities/SystemGlobalSettings.php';
-		require_once PATH_INCLUDE . '/orm-entities/SystemUsers.php';
 		$gsRepo = $this->_entityManager->getRepository(
-			'\\Babesk\\ORM\\SystemGlobalSettings'
+			'Babesk:SystemGlobalSettings'
 		);
 		$lang   = $gsRepo->findOneByName('foreign_language')->getValue();
 		$rel    = $gsRepo->findOneByName('religion')->getValue();

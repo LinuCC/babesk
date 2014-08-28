@@ -22,7 +22,6 @@ class UserReplaceCourse extends Action {
 
 	protected function coursesApply($courses, $userIds) {
 
-		require_once PATH_INCLUDE . '/orm-entities/SystemUsers.php';
 		$users = $this->_entityManager
 			->getRepository('Babesk:SystemUsers')
 			->findById($userIds);

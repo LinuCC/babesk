@@ -132,6 +132,7 @@ class LoanSystem extends Schbas {
 		require_once PATH_ACCESS . '/LoanManager.php';
 		$lm = new LoanManager();
 		$loanbooks = $lm->getLoanByUID($_SESSION['uid'], Null);
+		var_dump($loanbooks[0]);
 
 		$this->_smarty->assign('loanbooks', $loanbooks);
 		$this->_smarty->assign('feeNormal', $feeNormal);
