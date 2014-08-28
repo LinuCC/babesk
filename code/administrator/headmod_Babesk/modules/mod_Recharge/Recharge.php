@@ -218,6 +218,9 @@ class Recharge extends Babesk {
 			$this->_pdo->commit();
 		}
 		else {
+			$this->_interface->backlink(
+				'administrator|Babesk|Recharge|RechargeCard'
+			);
 			$this->_interface->dieError(_g('The given amount to recharge added to the Credits is more than the Maximum Amount of Credits allowed for the Users Pricegroup!'));
 		}
 

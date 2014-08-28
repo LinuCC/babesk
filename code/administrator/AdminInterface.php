@@ -29,9 +29,7 @@ class AdminInterface extends GeneralInterface {
 	public function dieError ($msg) {
 
 		$this->smarty->append('_userErrorOutput', $msg);
-		$this->smarty->display(PATH_SMARTY_TPL . '/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5(
-			$_SERVER['REQUEST_URI']));
-		die();
+		$this->dieDisplay();
 	}
 
 	/**
@@ -54,9 +52,7 @@ class AdminInterface extends GeneralInterface {
 	 */
 	public function dieMsg ($msg) {
 		$this->smarty->assign('_userMsgOutput', $msg);
-		$this->smarty->display(PATH_SMARTY_TPL . '/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5(
-			$_SERVER['REQUEST_URI']));
-		die();
+		$this->dieDisplay();
 	}
 
 	/**
@@ -65,9 +61,7 @@ class AdminInterface extends GeneralInterface {
 	 */
 	public function dieSuccess($msg) {
 		$this->smarty->assign('_userSuccessOutput', $msg);
-		$this->smarty->display(PATH_SMARTY_TPL . '/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5(
-			$_SERVER['REQUEST_URI']));
-		die();
+		$this->dieDisplay();
 	}
 
 	public function showError ($msg) {
@@ -93,6 +87,7 @@ class AdminInterface extends GeneralInterface {
 
 		$this->smarty->display(PATH_SMARTY_TPL . '/administrator/message.tpl', md5($_SERVER['REQUEST_URI']), md5(
 			$_SERVER['REQUEST_URI']));
+		die();
 	}
 
 	/**
