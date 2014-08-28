@@ -1,0 +1,33 @@
+Babesk\ORM\SchbasLending:
+    type: entity
+    table: SchbasLending
+    id:
+        lendDate:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            id: true
+            column: lend_date
+    manyToOne:
+        user:
+            targetEntity: Babesk\ORM\SystemUsers
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        inventory:
+            targetEntity: Babesk\ORM\SchbasInventory
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inventory_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -2,7 +2,6 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ADMIN . '/headmod_System/System.php';
-require_once PATH_INCLUDE . '/orm-entities/SystemGlobalSettings.php';
 
 class ForeignLanguage extends System {
 
@@ -75,7 +74,7 @@ class ForeignLanguage extends System {
 
 		$languages = array();
 		$languagesString = $this->_entityManager->getRepository(
-				'\\Babesk\\ORM\\SystemGlobalSettings'
+				'Babesk:SystemGlobalSettings'
 			)->findOneByName('foreign_language')->getValue();
 		if(!empty($languagesString)) {
 			$languages = explode('|', $languagesString);
@@ -95,7 +94,7 @@ class ForeignLanguage extends System {
 		$string = implode('|', $data['foreignLanguages']);
 		//Upload foreign languages
 		$setting = $this->_entityManager->getRepository(
-				'\\Babesk\\ORM\\SystemGlobalSettings'
+				'Babesk:SystemGlobalSettings'
 			)->findOneByName('foreign_language')
 			->setValue($string);
 		$this->_entityManager->persist($setting);

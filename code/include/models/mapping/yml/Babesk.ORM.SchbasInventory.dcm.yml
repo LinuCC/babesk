@@ -1,0 +1,57 @@
+Babesk\ORM\SchbasInventory:
+    type: entity
+    table: SchbasInventory
+    id:
+        id:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        yearOfPurchase:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            column: year_of_purchase
+        exemplar:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+    manyToOne:
+        book:
+            targetEntity: Babesk\ORM\SchbasBooks
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                book_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    oneToMany:
+        lending:
+            targetEntity: Babesk\ORM\SchbasLending
+            cascade: {  }
+            mappedBy: inventory
+            inversedBy: null
+            orphanRemoval: false
+            orderBy: null
+    manyToMany:
+        usersLent:
+            targetEntity: Babesk\ORM\SystemUsers
+            cascade: {  }
+            mappedBy: booksLent
+            inversedBy: null
+            joinTable: {  }
+            orderBy: null
+    lifecycleCallbacks: {  }

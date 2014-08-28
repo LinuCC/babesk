@@ -1,0 +1,39 @@
+Babesk\ORM\SystemSchoolyears:
+    type: entity
+    table: SystemSchoolyears
+    id:
+        id:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            id: true
+            column: ID
+            generator:
+                strategy: IDENTITY
+    fields:
+        label:
+            type: string
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        active:
+            type: boolean
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+    oneToMany:
+        usersInGradesAndSchoolyears:
+            targetEntity: Babesk\ORM\SystemUsersInGradesAndSchoolyears
+            cascade: {  }
+            mappedBy: schoolyear
+            inversedBy: null
+            orphanRemoval: false
+            orderBy: null
+    lifecycleCallbacks: {  }

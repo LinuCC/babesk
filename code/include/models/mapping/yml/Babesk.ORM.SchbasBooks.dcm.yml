@@ -1,0 +1,91 @@
+Babesk\ORM\SchbasBooks:
+    type: entity
+    table: SchbasBooks
+    id:
+        id:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        title:
+            type: string
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        author:
+            type: string
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        publisher:
+            type: string
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        isbn:
+            type: string
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        class:
+            type: string
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        bundle:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        price:
+            type: float
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+    manyToOne:
+        subject:
+            targetEntity: Babesk\ORM\SystemSchoolSubjects
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                subjectId:
+                    referencedColumnName: id
+            orphanRemoval: false
+    oneToMany:
+        exemplars:
+            targetEntity: Babesk\ORM\SchbasInventory
+            cascade: {  }
+            mappedBy: book
+            inversedBy: null
+            orphanRemoval: false
+            orderBy: null
+    manyToMany:
+        selfpayingUsers:
+            targetEntity: Babesk\ORM\SystemUsers
+            cascade: {  }
+            mappedBy: selfpayingBooks
+            inversedBy: null
+            joinTable: {  }
+            orderBy: null
+    lifecycleCallbacks: {  }

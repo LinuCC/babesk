@@ -1,0 +1,5 @@
+Babesk\ORM\SchbasSelfpayer:
+    type: entity
+    table: SchbasSelfpayer
+    id: {  }
+    lifecycleCallbacks: {  }

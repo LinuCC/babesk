@@ -1,0 +1,33 @@
+Babesk\ORM\SystemUsersInGradesAndSchoolyears:
+    type: entity
+    table: SystemUsersInGradesAndSchoolyears
+    id: {  }
+    manyToOne:
+        user:
+            targetEntity: Babesk\ORM\SystemUsers
+            cascade: {  }
+            mappedBy: null
+            inversedBy: usersInGradesAndSchoolyears
+            joinColumns:
+                userId:
+                    referencedColumnName: ID
+            orphanRemoval: false
+        grade:
+            targetEntity: Babesk\ORM\SystemGrades
+            cascade: {  }
+            mappedBy: null
+            inversedBy: usersInGradesAndSchoolyears
+            joinColumns:
+                gradeId:
+                    referencedColumnName: ID
+            orphanRemoval: false
+        schoolyear:
+            targetEntity: Babesk\ORM\SystemSchoolyears
+            cascade: {  }
+            mappedBy: null
+            inversedBy: usersInGradesAndSchoolyears
+            joinColumns:
+                schoolyearId:
+                    referencedColumnName: ID
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -71,9 +71,12 @@ class DBConnect {
 
 		try {
 			require_once PATH_3RD_PARTY . '/doctrine-orm/vendor/autoload.php';
-			$config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(
-					array(PATH_INCLUDE . '/orm-entities'), true
+			$config = Doctrine\ORM\Tools\Setup::createYAMLMetadataConfiguration(
+					array(PATH_INCLUDE . '/models/mapping/yml'), true
 			);
+			$config->setProxyDir(PATH_INCLUDE . '/models/Proxies');
+			$config->setProxyNamespace('Babesk\\Proxies');
+			$config->addEntityNamespace('Babesk', 'Babesk\ORM');
 			$conn = array(
 				'driver' => 'pdo_mysql',
 				'dbname' => $this->_databaseName,
@@ -81,6 +84,10 @@ class DBConnect {
 				'password' => $this->_password,
 				'host' => $this->_host
 			);
+			$loader = new \Doctrine\Common\ClassLoader(
+				'Babesk', PATH_INCLUDE . '/models/Entities'
+			);
+			$loader->register();
 			$entityManager =  Doctrine\ORM\EntityManager::create(
 				$conn, $config
 			);

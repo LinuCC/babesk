@@ -48,3 +48,7 @@ templates_c
 ##########################
 databaseValues.php
 tmpFiles
+
+#Backups#
+#########
+*~
