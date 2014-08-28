@@ -58,7 +58,6 @@ class Recharge extends Babesk {
 
 		parent::entryPoint($dataContainer);
 		parent::initSmartyVariables();
-		$this->_interface = $dataContainer->getInterface();
 	}
 
 	/********************************************************************
