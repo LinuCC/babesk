@@ -1,22 +1,27 @@
 {extends file=$inventoryParent}{block name=content}
-<table width=100%>
+<table>
 <tr><th align='center'>{$navbar}</th></tr>
 </table>
-<table>
+<table class="table table-striped table-responsive table-hover">
 	<thead>
-		<tr bgcolor='#33CFF'>
-			<th align='center'>ID</th>
-			<th align='center'>Buchcode</th>
+		<tr>
+			<th>ID</th>
+			<th>Buchcode</th>
+			<th>Optionen</th>
 		</tr>
 	</thead>
 	<tbody>
 	{foreach $bookcodes as $bookcode}
-		<tr bgcolor='#FFC33'>
-			<td align="center">{$bookcode.id}</td>
-			<td align="center">{$bookcode.code}</td>
-			<td align="center" bgcolor='#FFD99'>
-			<form action="index.php?section=Schbas|Inventory&action=2&ID={$bookcode.id}" method="post"><input type='submit' value='bearbeiten'></form>
-			<form action="index.php?section=Schbas|Inventory&action=3&ID={$bookcode.id}" method="post"><input type='submit' value='löschen'></form>
+		<tr>
+			<td>{$bookcode.id}</td>
+			<td>{$bookcode.code}</td>
+			<td>
+				<form class="pull-left" action="index.php?section=Schbas|Inventory&action=2&ID={$bookcode.id}" method="post">
+					<input type='submit' class="btn btn-default btn-xs" value='bearbeiten'>
+				</form>
+				<form action="index.php?section=Schbas|Inventory&action=3&ID={$bookcode.id}" method="post">
+					<input type='submit' class="btn btn-danger btn-xs" value='löschen'>
+				</form>
 			</td>
 		</tr>
 	{/foreach}
