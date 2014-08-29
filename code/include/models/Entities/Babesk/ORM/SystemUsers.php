@@ -701,4 +701,32 @@ class SystemUsers
     {
         return $this->selfpayingBooks;
     }
+    /**
+     * @var \Babesk\ORM\BabeskPriceGroups
+     */
+    private $priceGroup;
+
+
+    /**
+     * Set priceGroup
+     *
+     * @param \Babesk\ORM\BabeskPriceGroups $priceGroup
+     * @return SystemUsers
+     */
+    public function setPriceGroup(\Babesk\ORM\BabeskPriceGroups $priceGroup = null)
+    {
+        $this->priceGroup = $priceGroup;
+
+        return $this;
+    }
+
+    /**
+     * Get priceGroup
+     *
+     * @return \Babesk\ORM\BabeskPriceGroups 
+     */
+    public function getPriceGroup()
+    {
+        return $this->priceGroup;
+    }
 }

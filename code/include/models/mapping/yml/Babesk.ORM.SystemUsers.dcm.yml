@@ -91,13 +91,6 @@ Babesk\ORM\SystemUsers:
             unique: false
             nullable: false
             precision: 0
-        gid:
-            type: integer
-            scale: 0
-            length: null
-            unique: false
-            nullable: false
-            precision: 0
         credit:
             type: float
             scale: 0
@@ -221,4 +214,12 @@ Babesk\ORM\SystemUsers:
             targetEntity: Babesk\ORM\BabeskCards
             mappedBy: user
             orphanRemoval: false
+    manyToOne:
+        priceGroup:
+            targetEntity: Babesk\ORM\BabeskPriceGroups
+            inversedBy: users
+            orphanRemoval: false
+            joinColumns:
+                GID:
+                    referencedColumnName: ID
     lifecycleCallbacks: {  }
