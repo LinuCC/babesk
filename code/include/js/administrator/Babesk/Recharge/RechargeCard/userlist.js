@@ -21,6 +21,11 @@ $(document).ready(function() {
 
 	$('#credits-change-form').on('submit', creditsChangeApply);
 
+	$('#credits-change-input').enterKey(function(event) {
+		event.preventDefault();
+		$('#credits-change-form').submit();
+	});
+
 	$('#credits-change-modal').on('shown.bs.modal', function(event) {
 		$(this).find('input#credits-change-input').focus().select();
 	});
@@ -29,7 +34,12 @@ $(document).ready(function() {
 
 	$('#credits-change-modal').on('hidden.bs.modal', function(event) {
 		$('#filter').focus().select();
+		$('#credits-add-input').val('');
 	});
+
+	$('button.preset-credit-change').on('click', creditChangeByPreset);
+
+	$('input#credits-add-input').enterKey(creditAddToByInput);
 
 	function dataFetch() {
 
@@ -166,4 +176,28 @@ $(document).ready(function() {
 			}
 		}
 	};
+
+	function creditChangeByPreset(event) {
+
+		event.preventDefault();
+		var $input = $('input#credits-change-input');
+		var amount = parseInt($(this).text());
+		var prevAmount = parseFloat($input.val().replace(",", "."));
+		$input.val((prevAmount + amount).toFixed(2));
+
+	};
+
+	function creditAddToByInput(event) {
+
+		//Dont let the enter-keypress bubble up to the form, so that the modal dont
+		//closes
+		//event.stopPropagation();
+		event.preventDefault();
+		var $input = $('input#credits-change-input');
+		var addAmount = parseFloat($(this).val().replace(",", "."));
+		var changeAmount = parseFloat($input.val().replace(",", "."));
+		console.log((changeAmount + addAmount).toFixed(2));
+		$input.val((changeAmount + addAmount).toFixed(2));
+		$input.focus();
+	}
 });

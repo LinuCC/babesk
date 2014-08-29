@@ -47,18 +47,55 @@
 					<label for="credits-change-input">
 						Neues Guthaben von <span class="username"></span>:
 					</label>
-					<div class="input-group">
-						<div class="input-group-addon">
-							<span class="icon icon-euro"></span>
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group-addon">
+								<span class="icon icon-euro"></span>
+							</div>
+							<input type="text" id="credits-change-input" class="form-control"
+								placeholder="Guthaben eingeben..." />
+							<div class="input-group-addon">
+								Vorher: <span class="credits-before"></span>
+							</div>
 						</div>
-						<input type="text" id="credits-change-input" class="form-control"
-							placeholder="Guthaben eingeben..." />
-						<div class="input-group-addon">
-							Vorher: <span class="credits-before"></span>
+					</div>
+					<div class="form-group row">
+						<div class="col-sm-12">
+							<label for="credits-add-input">
+								Optional: Obrigen Wert verändern
+							</label>
 						</div>
+						<div class="col-sm-12 col-md-7">
+							<span class="input-group">
+								<div class="input-group-addon">
+									<span class="icon icon-plus"></span>
+								</div>
+								<input type="text" id="credits-add-input" class="form-control"
+									placeholder="Guthaben zu addieren hier eingeben">
+							</span>
+						</div>
+						<div class="col-sm-12 col-md-5">
+							<div class="btn-group pull-right">
+								<button class="btn btn-default preset-credit-change">
+									+5€
+								</button>
+								<button class="btn btn-default preset-credit-change">
+									+10€
+								</button>
+								<button class="btn btn-default preset-credit-change">
+									+20€
+								</button>
+							</div>
+						</div>
+						<div class="clearfix"></div>
 					</div>
 				</div>
 				<div class="modal-footer">
+					<button type="button" class="btn btn-default pull-left"
+						data-toggle="popover" data-container="body"
+						title="Hilfe zur Guthabeneingabe" data-content="In diesem Popup können sie das Guthaben des ausgewählten Benutzers ändern. Es ist angepasst, um mit der Tastatur gut bedienbar zu sein. Das obere Feld enthält das neue Guthaben des Benutzers. Darunter befindet sich ein Feld, in das man einen manuellen zu addierenden Betrag eingeben kann. Um statt das Guthaben direkt einzugeben etwas hinzuzuaddieren, drücken sie einmal 'Tab', geben den Betrag ein, und dann Enter. Falls der Betrag dem gewünschten entspricht, speichert ein weiteres Enter das Guthaben ab.">
+						Hilfe
+					</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">
 						Abbrechen
 					</button>
@@ -77,6 +114,7 @@
 <div class="alert alert-info">
 	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 	<strong>Benutzerauswahl</strong> Sie können die Benutzer, nachdem sie sie gesucht haben, entweder in der Tabelle anklicken, oder mit Shift und einer Zahl (zB Shift + 1) einen Benutzer anwählen. Dies funktioniert nur mit der Zahlenreihe über den Buchstaben.
+	Nachdem erfolgreich ein Guthaben aufgeladen wurde, können sie sofort wieder anfangen den nächsten Nutzer zu suchen.
 </div>
 
 <div class="row">
