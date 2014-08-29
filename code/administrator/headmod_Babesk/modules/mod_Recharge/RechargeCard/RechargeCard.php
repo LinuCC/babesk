@@ -19,6 +19,9 @@ class RechargeCard extends Recharge {
 		if(isset($_POST['filter'])) {
 			$this->userdataAjaxSend();
 		}
+		else if(isset($_POST['userId'], $_POST['credits'])) {
+			$this->creditsChange($_POST['userId'], $_POST['credits']);
+		}
 		else {
 			$this->displayTpl('userlist.tpl');
 		}
@@ -47,23 +50,26 @@ class RechargeCard extends Recharge {
 			$query, $fetchJoinCollection = true
 		);
 		$users = array();
-		foreach($paginator as $page) {
-			$userdata = $page[0];
-			$user = array(
-				'forename' => $page[0]['forename'],
-				'name' => $page[0]['name'],
-				'username' => $page[0]['username'],
+		if(count($paginator)) {
+			foreach($paginator as $page) {
+				$user = $page[0];
 				//Doctrines array-hydration treats foreign keys different
-				'cardnumber' => $page['cardnumber'],
-			);
-			$users[] = $user;
+				$user['cardnumber'] = $page['cardnumber'];
+				$users[] = $user;
+			}
 			$pagecount = ceil((int) count($paginator) / $this->_usersPerPage);
 			$pagecount = ($pagecount != 0) ? $pagecount : 1;
+			die(json_encode(array(
+				'users' => $users,
+				'pagecount' => $pagecount
+			)));
 		}
-		die(json_encode(array(
-			'users' => $users,
-			'pagecount' => $pagecount
-		)));
+		else {
+			http_response_code(204);
+			die(json_encode(array(
+				'message' => 'Keine Einträge gefunden!'
+			)));
+		}
 	}
 
 	private function userdataQueryCreate($filter, $pagenum) {
@@ -71,20 +77,57 @@ class RechargeCard extends Recharge {
 		//"partial": different notation because the Paginator cant use the
 		//standard u.id, u.name...
 		$queryBuilder = $this->_entityManager->createQueryBuilder()
-			->select('partial u.{id, forename, name, username}, c.cardnumber')
+			->select(
+				'partial u.{id, forename, name, username, credit}, ' .
+				'c.cardnumber'
+			)
 			->from('Babesk:SystemUsers', 'u')
 			->leftJoin('u.cards', 'c');
 		if(!empty($filter)) {
 			$queryBuilder->where(
-					'u.username LIKE :filter OR u.cardnumber LIKE :filter'
+					'u.username LIKE :filter OR c.cardnumber LIKE :filter'
 				)->setParameter('filter', "%${filter}%");
 		}
-		$queryBuilder->setFirstResult($pagenum * $this->_usersPerPage)
+		$queryBuilder->setFirstResult(($pagenum - 1) * $this->_usersPerPage)
 			->setMaxResults($this->_usersPerPage);
 
 		$query = $queryBuilder->getQuery();
 		$query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 		return $query;
+	}
+
+	private function creditsChange($userId, $credits) {
+
+		try {
+			$user = $this->_entityManager->getRepository('Babesk:SystemUsers')
+				->findOneById($userId);
+			if(!isset($user)) {
+				throw new Exception('User not found!');
+			}
+			$maxCredits = $user->getPriceGroup()->getMaxCredit();
+			if($credits <= $maxCredits) {
+				$user->setCredit($credits);
+				$this->_entityManager->persist($user);
+				$this->_entityManager->flush();
+				die(json_encode(array(
+					'userId' => $userId, 'credits' => $credits
+				)));
+			}
+			else {
+				http_response_code(500);
+				die(json_encode(array(
+					'message' => "Die eingegebenen ${credits} € " .
+						"übersteigen den maximalen Wert der Preisgruppe des " .
+						"Nutzers von ${maxCredits} €."
+				)));
+			}
+
+		} catch (Exception $e) {
+			$this->_logger->log('Error updating the credits of an user',
+				'Moderate', Null, json_encode(array('uid' => $userId,
+					'credits' => $credits, 'msg' => $e->getMessage())));
+			http_response_code(500);
+		}
 	}
 
 	/////////////////////////////////////////////////////////////////////
