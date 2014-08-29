@@ -184,7 +184,7 @@ $(document).ready(function() {
 		var amount = parseInt($(this).text());
 		var prevAmount = parseFloat($input.val().replace(",", "."));
 		$input.val((prevAmount + amount).toFixed(2));
-
+		$input.focus();
 	};
 
 	function creditAddToByInput(event) {
