@@ -1,0 +1,1 @@
+ALTER TABLE `BabeskCards` ADD INDEX(`UID`);
