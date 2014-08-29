@@ -107,6 +107,11 @@ class SystemUsers
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
+    private $cards;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
     private $groups;
 
     /**
@@ -125,6 +130,7 @@ class SystemUsers
     public function __construct()
     {
         $this->usersInGradesAndSchoolyears = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cards = new \Doctrine\Common\Collections\ArrayCollection();
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->lentBooks = new \Doctrine\Common\Collections\ArrayCollection();
         $this->selfpayingBooks = new \Doctrine\Common\Collections\ArrayCollection();
@@ -133,7 +139,7 @@ class SystemUsers
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -156,7 +162,7 @@ class SystemUsers
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -179,7 +185,7 @@ class SystemUsers
     /**
      * Get forename
      *
-     * @return string 
+     * @return string
      */
     public function getForename()
     {
@@ -202,7 +208,7 @@ class SystemUsers
     /**
      * Get username
      *
-     * @return string 
+     * @return string
      */
     public function getUsername()
     {
@@ -225,7 +231,7 @@ class SystemUsers
     /**
      * Get password
      *
-     * @return string 
+     * @return string
      */
     public function getPassword()
     {
@@ -248,7 +254,7 @@ class SystemUsers
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -271,7 +277,7 @@ class SystemUsers
     /**
      * Get telephone
      *
-     * @return string 
+     * @return string
      */
     public function getTelephone()
     {
@@ -294,7 +300,7 @@ class SystemUsers
     /**
      * Get birthday
      *
-     * @return string 
+     * @return string
      */
     public function getBirthday()
     {
@@ -317,7 +323,7 @@ class SystemUsers
     /**
      * Get last_login
      *
-     * @return string 
+     * @return string
      */
     public function getLastLogin()
     {
@@ -340,7 +346,7 @@ class SystemUsers
     /**
      * Get login_tries
      *
-     * @return integer 
+     * @return integer
      */
     public function getLoginTries()
     {
@@ -363,7 +369,7 @@ class SystemUsers
     /**
      * Get first_passwd
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getFirstPasswd()
     {
@@ -386,7 +392,7 @@ class SystemUsers
     /**
      * Get locked
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getLocked()
     {
@@ -409,7 +415,7 @@ class SystemUsers
     /**
      * Get gid
      *
-     * @return integer 
+     * @return integer
      */
     public function getGid()
     {
@@ -432,7 +438,7 @@ class SystemUsers
     /**
      * Get credit
      *
-     * @return float 
+     * @return float
      */
     public function getCredit()
     {
@@ -455,7 +461,7 @@ class SystemUsers
     /**
      * Get soli
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getSoli()
     {
@@ -478,7 +484,7 @@ class SystemUsers
     /**
      * Get religion
      *
-     * @return string 
+     * @return string
      */
     public function getReligion()
     {
@@ -501,7 +507,7 @@ class SystemUsers
     /**
      * Get foreign_language
      *
-     * @return string 
+     * @return string
      */
     public function getForeignLanguage()
     {
@@ -524,7 +530,7 @@ class SystemUsers
     /**
      * Get special_course
      *
-     * @return string 
+     * @return string
      */
     public function getSpecialCourse()
     {
@@ -557,11 +563,44 @@ class SystemUsers
     /**
      * Get usersInGradesAndSchoolyears
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getUsersInGradesAndSchoolyears()
     {
         return $this->usersInGradesAndSchoolyears;
+    }
+
+    /**
+     * Add cards
+     *
+     * @param \Babesk\ORM\BabeskCards $cards
+     * @return SystemUsers
+     */
+    public function addCard(\Babesk\ORM\BabeskCards $cards)
+    {
+        $this->cards[] = $cards;
+
+        return $this;
+    }
+
+    /**
+     * Remove cards
+     *
+     * @param \Babesk\ORM\BabeskCards $cards
+     */
+    public function removeCard(\Babesk\ORM\BabeskCards $cards)
+    {
+        $this->cards->removeElement($cards);
+    }
+
+    /**
+     * Get cards
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCards()
+    {
+        return $this->cards;
     }
 
     /**
@@ -590,7 +629,7 @@ class SystemUsers
     /**
      * Get groups
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getGroups()
     {
@@ -623,7 +662,7 @@ class SystemUsers
     /**
      * Get lentBooks
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getLentBooks()
     {
@@ -656,7 +695,7 @@ class SystemUsers
     /**
      * Get selfpayingBooks
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getSelfpayingBooks()
     {

@@ -217,4 +217,8 @@ Babesk\ORM\SystemUsers:
             inversedBy: null
             orphanRemoval: false
             orderBy: null
+        cards:
+            targetEntity: Babesk\ORM\BabeskCards
+            mappedBy: user
+            orphanRemoval: false
     lifecycleCallbacks: {  }
