@@ -41,18 +41,8 @@
 				</span>
 			</span>
 		</div>
-		<div class="col-sm-12 col-md-6 col-lg-5">
-			<ul id="page-select" class="pagination">
-				<li><a href="#">1</a></li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">1</a></li>
-			</ul>
+		<div class="col-sm-12 col-md-6 col-lg-5 col-lg-offset-2">
+			<div id="page-select" class="pull-right"></div>
 		</div>
 	</div>
 </div>
@@ -66,6 +56,10 @@
 
 
 {block name=js_include append}
+
+<script type="text/javascript"
+	src="{$path_js}/paginator/jquery.bootpag.min.js">
+</script>
 
 <script type="text/javascript"
 	src="{$path_js}/administrator/Babesk/Recharge/RechargeCard/userlist.js">
