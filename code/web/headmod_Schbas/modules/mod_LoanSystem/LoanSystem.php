@@ -132,7 +132,11 @@ class LoanSystem extends Schbas {
 		require_once PATH_ACCESS . '/LoanManager.php';
 		$lm = new LoanManager();
 		$loanbooks = $lm->getLoanByUID($_SESSION['uid'], Null);
-		var_dump($loanbooks[0]);
+		/**
+		 * @todo  Following line returns a different result! This function
+		 *        needs to be fixed.
+		 */
+		//$loanbooks = $loanHelper->loanBooksGet($_SESSION['uid']);
 
 		$this->_smarty->assign('loanbooks', $loanbooks);
 		$this->_smarty->assign('feeNormal', $feeNormal);
