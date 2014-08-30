@@ -1,0 +1,31 @@
+Babesk\ORM\SchbasAccounting:
+    type: entity
+    table: SchbasAccounting
+    id:
+        user:
+            associationKey: true
+    fields:
+        payedAmount:
+            type: decimal
+            scale: 2
+            precision: 4
+            nullable: false
+        amountToPay:
+            type: decimal
+            scale: 2
+            precision: 4
+            nullable: false
+    oneToOne:
+        user:
+            inversedBy: schbasAccounting
+            targetEntity: Babesk\ORM\SystemUsers
+            joinColumn:
+                name: UID
+                referencedColumnName: ID
+    manyToOne:
+        loanChoice:
+            inversedBy: schbasAccounting
+            targetEntity: Babesk\ORM\SchbasLoanChoices
+            joinColumn:
+                name: loanChoiceId
+                referencedColumnName: ID

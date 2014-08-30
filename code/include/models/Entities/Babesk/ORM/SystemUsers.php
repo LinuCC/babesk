@@ -729,4 +729,32 @@ class SystemUsers
     {
         return $this->priceGroup;
     }
+    /**
+     * @var \Babesk\ORM\SchbasAccounting
+     */
+    private $schbasAccounting;
+
+
+    /**
+     * Set schbasAccounting
+     *
+     * @param \Babesk\ORM\SchbasAccounting $schbasAccounting
+     * @return SystemUsers
+     */
+    public function setSchbasAccounting(\Babesk\ORM\SchbasAccounting $schbasAccounting = null)
+    {
+        $this->schbasAccounting = $schbasAccounting;
+
+        return $this;
+    }
+
+    /**
+     * Get schbasAccounting
+     *
+     * @return \Babesk\ORM\SchbasAccounting 
+     */
+    public function getSchbasAccounting()
+    {
+        return $this->schbasAccounting;
+    }
 }

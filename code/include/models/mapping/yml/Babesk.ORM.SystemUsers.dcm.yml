@@ -222,4 +222,8 @@ Babesk\ORM\SystemUsers:
             joinColumns:
                 GID:
                     referencedColumnName: ID
+    oneToOne:
+        schbasAccounting:
+            targetEntity: Babesk\ORM\SchbasAccounting
+            mappedBy: user
     lifecycleCallbacks: {  }

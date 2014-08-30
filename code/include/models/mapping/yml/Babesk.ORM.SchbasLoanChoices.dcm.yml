@@ -1,0 +1,22 @@
+Babesk\ORM\SchbasLoanChoices:
+    type: entity
+    table: SchbasLoanChoices
+    id:
+        id:
+            type: integer
+            length: 11
+            column: ID
+            nullable: false
+    fields:
+        name:
+            type: string
+            length: 255
+            nullable: false
+        abbreviation:
+            type: string
+            length: 8
+            nullable: false
+    oneToMany:
+        schbasAccounting:
+            mappedBy: loanChoice
+            targetEntity: Babesk\ORM\SchbasAccounting
