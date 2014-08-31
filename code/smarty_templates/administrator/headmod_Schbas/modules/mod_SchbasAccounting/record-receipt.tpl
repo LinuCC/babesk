@@ -47,13 +47,13 @@
 				<td class="loan-choice-type">
 					<%
 						var col = '';
-						if(users[i].loanChoiceAbbreviation == 'nl') {
+						if(users[i].loanChoiceAbbreviation == 'lr') {
 							col = 'text-primary';
 						}
 						else if(users[i].loanChoiceAbbreviation == 'ls') {
 							col = 'text-success';
 						}
-						else if(users[i].loanChoiceAbbreviation == 'lr') {
+						else if(users[i].loanChoiceAbbreviation == 'nl') {
 							col = 'text-danger';
 						}
 					%>

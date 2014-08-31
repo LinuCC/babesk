@@ -1,5 +1,5 @@
 INSERT INTO `SchbasLoanChoices` (`name`, `abbreviation`) VALUES
 	('Normal', 'ln'),
-	('Reduzierter Preis', 'nl'),
+	('Reduzierter Preis', 'lr'),
 	('Von Zahlung befreit', 'ls'),
-	('Keine Teilnahme', 'lr');
+	('Keine Teilnahme', 'nl');

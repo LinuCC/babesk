@@ -1,11 +1,11 @@
 {extends file=$loanParent}{block name=content}
 
 <script language="javascript" type="text/javascript">
-<!-- 
+<!--
 //influenced by www.tizag.com
 function ajaxFunction(){
 	var ajax;
-	
+
 	try{
 		//others
 		ajax = new XMLHttpRequest();
@@ -26,29 +26,29 @@ function ajaxFunction(){
 
 	ajax.onreadystatechange = function(){
 		if(ajax.readyState == 4){
-		
+
 			var barcodeField = document.getElementById('barcode');
 			barcodeField.value = '';
-			
+
 			var ajaxDisplay = document.getElementById('booklist');
 			ajaxDisplay.innerHTML = ajax.responseText;
-			
-			
+
+
 		}
 	}
-	
+
 	var barcode = document.getElementById('barcode').value;
 	var queryString = "inventarnr=" + encodeURIComponent(barcode) + "&card_ID={$cardid}&uid={$uid}&ajax=1";
 	ajax.open("GET", "http://{$adress}" + queryString, true);
-	
-	ajax.send(null); 
+
+	ajax.send(null);
 }
 
 //-->
 </script>
 
 <script language="javascript" type="text/javascript">
-<!-- 
+<!--
 //influenced by http://tommwilson.com
 function enter_pressed(e){
 var keycode;
@@ -61,12 +61,11 @@ return (keycode == 13);
 //-->
 </script>
 
-<div align="center"><h2>Ausleihliste f&uuml;r: {$fullname}</h2></div>
-<hr>
+<h3 class="module-header">Ausleihliste f&uuml;r: {$fullname}</h3>
 <h3>{$alert}</h3>
 <hr>
 <form name='barcode_scan' onsubmit='return false;'>
-<b>Bitte Barcode eingeben:</b> 
+<b>Bitte Barcode eingeben:</b>
 <input type='text' id='barcode' onKeyPress='if(enter_pressed(event)) ajaxFunction() '/> <br>
 </form>
 <hr>
