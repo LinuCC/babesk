@@ -38,7 +38,7 @@ EnableSubmit = function(val)
 	<legend>Finanzen verwalten</legend>
 	<ul class="submodulelinkList">
 		<li>
-			<a href="index.php?section=Schbas|SchbasAccounting&action=1">
+			<a href="index.php?module=administrator|Schbas|SchbasAccounting|RecordReceipt">
 				Geldeingang erfassen
 			</a>
 		</li>

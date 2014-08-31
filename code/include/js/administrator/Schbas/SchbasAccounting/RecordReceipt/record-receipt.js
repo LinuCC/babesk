@@ -1,6 +1,8 @@
 $(document).ready(function() {
 
 	var activePage = 1;
+	//Contains if the page should only show users with an missing (unpaid) amount
+	var showOnlyMissing = false;
 	var charCodeToSelector = {
 		33: 1, 34: 2, 167: 3, 36: 4, 37: 5, 38: 6, 47: 7, 40: 8, 41: 9, 61: 0
 	};
@@ -19,7 +21,7 @@ $(document).ready(function() {
 
 	$('table#user-table').on('click', 'tbody tr', userClicked);
 
-	$('#credits-change-form').on('submit', creditsChangeApply);
+	$('#credits-change-form').on('submit', paidAmountChange);
 
 	$('#credits-change-input').enterKey(function(event) {
 		event.preventDefault();
@@ -31,13 +33,16 @@ $(document).ready(function() {
 	});
 
 	$('#credits-change-modal').on('hidden.bs.modal', function(event) {
-		$('#filter').focus().select();
-		$('#credits-add-input').val('');
+		$('input#filter').focus().select();
 	});
+
+	$('#credits-change-modal').on('keypress', payFullAmount);
 
 	$('body').on('keypress', executeSelectorKey);
 
 	$('button.preset-credit-change').on('click', creditChangeByPreset);
+
+	$('button#show-missing-amount-only').on('click', showMissingOnlyToggle);
 
 	$('input#credits-add-input').enterKey(creditAddToByInput);
 
@@ -45,21 +50,28 @@ $(document).ready(function() {
 
 		var filter = $('#filter').val();
 		$.postJSON(
-			'index.php?module=administrator|Babesk|Recharge|RechargeCard',
+			'index.php?module=administrator|Schbas|SchbasAccounting|RecordReceipt',
 			{
 				'filter': filter,
-				'activePage': activePage
+				'activePage': activePage,
+				'showOnlyMissing': showOnlyMissing
 			},
 			success
 		);
 
 		function success(res, textStatus, jqXHR) {
+			console.log(res);
 			if(jqXHR.status == 200) {
-				tableFill(res.users);
-				pageSelectorUpdate(res.pagecount);
+				if(typeof res.value !== 'undefined' && res.value == 'error') {
+					toastr.error('Ein Fehler ist aufgetreten!');
+				}
+				else {
+					tableFill(res.users);
+					pageSelectorUpdate(res.pagecount);
+				}
 			}
 			else if(jqXHR.status == 204) {
-				toastr.error('Keinen Eintrag gefunden!');
+				toastr.error('Keinen Benutzer gefunden!');
 				$('#filter').focus().select();
 			}
 			else {
@@ -98,47 +110,71 @@ $(document).ready(function() {
 		var $modal = $('#credits-change-modal');
 		var userId = $row.data('user-id');
 		var username = $row.children('td.username').text();
-		var credits = parseFloat($row.children('td.credits').text());
+		var paid = parseFloat($row.children('td.payment-payed').text());
+		var toPay = parseFloat($row.children('td.payment-to-pay').text());
 		$modal.find('.username').html(username);
-		$modal.find('.credits-before').html(credits.toFixed(2) + '€');
+		$modal.find('.credits-before').html(toPay.toFixed(2) + '€');
 		var $input = $modal.find('input#credits-change-input');
-		$input.val(credits.toFixed(2));
+		$input.val(paid.toFixed(2));
 		$input.data('user-id', userId);
 		$('#credits-change-modal').modal();
 	};
 
-	function creditsChangeApply(event) {
+	function paidAmountChange(event) {
 
 		event.preventDefault();
 		var $modal = $('#credits-change-modal');
 		var $input = $modal.find('input#credits-change-input');
-		var credits = $input.val().replace(",", ".");
+		var amount = $input.val().replace(",", ".");
 		var userId = $input.data('user-id');
 
 		$.ajax({
 			'type': 'POST',
-			'url': 'index.php?module=administrator|Babesk|Recharge|RechargeCard',
+			'url': 'index.php?module=administrator|Schbas|SchbasAccounting|\
+				RecordReceipt',
 			'data': {
 				"userId": userId,
-				"credits": credits
+				"amount": amount
 			},
 			'success': success,
 			'error': error,
 			'dataType': 'json'
 		});
 
+		//$.postJSON(
+		//	'index.php?module=administrator|Babesk|Recharge|RechargeCard',
+		//	{
+		//		"userId": userId,
+		//		"credits": credits
+		//	},
+		//	success
+		//);
+
 		function success(res) {
 
-			$('table#user-table tbody')
-				.find('tr[data-user-id=' + res.userId + ']')
-				.find('td.credits')
-				.html(parseFloat(res.credits).toFixed(2) + ' €');
-			toastr.success('Guthaben erfolgreich verändert.');
+			var $row = $('table#user-table tbody')
+				.find('tr[data-user-id=' + res.userId + ']');
+			$row.find('td.payment-payed')
+				.html(parseFloat(res.paid).toFixed(2) + ' €');
+			$textCont = $row.find('td.payment-missing span')
+			$textCont.html(parseFloat(res.missing).toFixed(2) + ' €');
+			var col = '';
+			if(res.missing > 0) {
+				col = 'text-warning';
+			} else if(res.missing == 0) {
+				col = 'text-success';
+			} else {
+				col = 'text-danger';
+				$textCont.prepend('Überschuss!');
+			}
+			$textCont.removeClass().addClass(col);
+			toastr.success('Zahlungsbetrag erfolgreich verändert.');
 			$modal.modal('hide');
 		};
 
 		function error(jqXHR) {
 
+			console.log(jqXHR);
 			if(jqXHR.status == 500) {
 				if(typeof jqXHR.responseJSON !== 'undefined' &&
 					typeof jqXHR.responseJSON.message !== 'undefined') {
@@ -190,5 +226,31 @@ $(document).ready(function() {
 		console.log((changeAmount + addAmount).toFixed(2));
 		$input.val((changeAmount + addAmount).toFixed(2));
 		$input.focus();
+	};
+
+	function showMissingOnlyToggle(event) {
+
+		var $button = $(event.target);
+		if($button.hasClass('active')) {
+			$button.removeClass('active');
+			showOnlyMissing = false;
+			dataFetch();
+		}
+		else {
+			$button.addClass('active');
+			showOnlyMissing = true;
+			dataFetch();
+		}
+	};
+
+	function payFullAmount(event) {
+
+		if(event.key == '+') {
+			event.preventDefault();
+			var toPay = parseFloat(
+				$('#credits-change-modal').find('span.credits-before').text()
+				).toFixed(2);
+			$('input#credits-change-input').val(toPay);
+		}
 	}
 });

@@ -8,7 +8,10 @@
 			<th>Vorname</th>
 			<th>Nachname</th>
 			<th>Benutzername</th>
-			<th>Guthaben</th>
+			<th>Fehlend</th>
+			<th>Bezahlt</th>
+			<th>Soll</th>
+			<th>Typ</th>
 			<th>Selektor</th>
 		</tr>
 	</thead>
@@ -19,7 +22,45 @@
 				<td class="forename"> <%= users[i].forename %> </td>
 				<td class="name"> <%= users[i].name %> </td>
 				<td class="username"> <%= users[i].username %> </td>
-				<td class="credits"> <%= users[i].credit.toFixed(2) %> € </td>
+				<td class="payment-missing">
+					<% users[i].missingAmount = parseFloat(users[i].missingAmount); %>
+					<% if(users[i].missingAmount > 0) { %>
+						<span class="text-warning">
+							<%= users[i].missingAmount.toFixed(2) %> €
+						</span>
+					<% } else if(users[i].missingAmount == 0) { %>
+						<span class="text-success">
+							<%= users[i].missingAmount.toFixed(2) %> €
+						</span>
+					<% } else { %>
+						<span class="text-danger">Überschuss!
+							<%= users[i].missingAmount.toFixed(2) %> €
+						</span>
+					<% } %>
+				</td>
+				<td class="payment-payed">
+					<%= parseFloat(users[i].payedAmount).toFixed(2) %> €
+				</td>
+				<td class="payment-to-pay">
+					<%= parseFloat(users[i].amountToPay).toFixed(2) %> €
+				</td>
+				<td class="loan-choice-type">
+					<%
+						var col = '';
+						if(users[i].loanChoiceAbbreviation == 'nl') {
+							col = 'text-primary';
+						}
+						else if(users[i].loanChoiceAbbreviation == 'ls') {
+							col = 'text-success';
+						}
+						else if(users[i].loanChoiceAbbreviation == 'lr') {
+							col = 'text-danger';
+						}
+					%>
+					<span class="<%= col %>">
+						<%= users[i].loanChoice %>
+					</span>
+				</td>
 				<td class="selector" data-selector="<%= (i + 1) % 10 %>">
 					<a class="btn btn-default btn-xs">Shift + <%= (i + 1) % 10 %></a>
 				</td>
@@ -55,7 +96,7 @@
 							<input type="text" id="credits-change-input" class="form-control"
 								placeholder="Guthaben eingeben..." />
 							<div class="input-group-addon">
-								Vorher: <span class="credits-before"></span>
+								Zu zahlen: <span class="credits-before"></span>
 							</div>
 						</div>
 					</div>
@@ -93,7 +134,7 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default pull-left"
 						data-toggle="popover" data-container="body"
-						title="Hilfe zur Guthabeneingabe" data-content="In diesem Popup können sie das Guthaben des ausgewählten Benutzers ändern. Es ist angepasst, um mit der Tastatur gut bedienbar zu sein. Das obere Feld enthält das neue Guthaben des Benutzers. Darunter befindet sich ein Feld, in das man einen manuellen zu addierenden Betrag eingeben kann. Um statt das Guthaben direkt einzugeben etwas hinzuzuaddieren, drücken sie einmal 'Tab', geben den Betrag ein, und dann Enter. Falls der Betrag dem gewünschten entspricht, speichert ein weiteres Enter das Guthaben ab.">
+						title="Hilfe zur Guthabeneingabe" data-content="In diesem Popup können sie den Geldeingang des ausgewählten Benutzers ändern. Es ist angepasst, um mit der Tastatur gut bedienbar zu sein. Das obere Feld enthält die Zahlung des Benutzers. Darunter befindet sich ein Feld, in das man einen manuellen zu addierenden Betrag eingeben kann. Um statt die Zahlung direkt einzugeben etwas hinzuzuaddieren, drücken sie einmal 'Tab', geben den Betrag ein, und dann Enter. Falls der Betrag dem gewünschten entspricht, speichert ein weiteres Enter die Zahlung ab. Mit der Plus-Taste (+) wird der Soll-Betrag direkt in das Zahlungsfeld übernommen.">
 						Hilfe
 					</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">
@@ -111,7 +152,7 @@
 
 {block name=filling_content}
 
-<h3 class="module-header">Karte aufladen</h3>
+<h3 class="module-header">Geldeingänge erfassen</h3>
 
 <div class="alert alert-info">
 	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -121,26 +162,34 @@
 
 <div class="row">
 	<div class="center-block">
-		<div class="col-sm-12 col-md-6 col-lg-5 text-center">
-			<span class="input-group filter-container">
-				<input id="filter" type="text" class="form-control"
-					placeholder="Suchen (Benutzername oder Kartennummer)"
-					title="{t}Search (Enter to commit){/t}" autofocus />
-				<span class="input-group-btn">
-					<button id="search-submit" class="btn btn-default">
-						<span class="icon icon-search"></span>
-					</button>
+		<div class="col-sm-12 col-md-5 col-lg-7">
+			<div class="col-md-12 col-lg-8">
+				<span class="input-group filter-container">
+					<input id="filter" type="text" class="form-control"
+						placeholder="Suchen (Benutzername oder Kartennummer)"
+						title="{t}Search (Enter to commit){/t}" autofocus />
+					<span class="input-group-btn">
+						<button id="search-submit" class="btn btn-default">
+							<span class="icon icon-search"></span>
+						</button>
+					</span>
 				</span>
-			</span>
+			</div>
+			<div class="col-md-12 col-lg-4">
+				<button id="show-missing-amount-only" class="btn btn-default">
+					Nur Fehlend anzeigen
+				</button>
+			</div>
 		</div>
-		<div class="col-sm-12 col-md-6 col-lg-5 col-lg-offset-2">
+		<div class="col-sm-12 col-md-7 col-lg-5">
 			<div id="page-select" class="pull-right"></div>
 		</div>
 	</div>
 </div>
 
 <div>
-	<table id="user-table" class="table table-striped table-responsive table-hover">
+	<table id="user-table"
+		class="table table-striped table-responsive table-hover">
 	</table>
 </div>
 
@@ -154,7 +203,7 @@
 </script>
 
 <script type="text/javascript"
-	src="{$path_js}/administrator/Babesk/Recharge/RechargeCard/userlist.js">
+	src="{$path_js}/administrator/Schbas/SchbasAccounting/RecordReceipt/record-receipt.js">
 </script>
 
 {/block}

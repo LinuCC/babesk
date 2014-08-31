@@ -40,7 +40,6 @@ class RechargeCard extends Recharge {
 	private function userdataAjaxSend() {
 
 		$this->userdataFetch($_POST['filter'], $_POST['activePage']);
-		die(json_encode('yay!'));
 	}
 
 	private function userdataFetch($filter, $pagenum) {
