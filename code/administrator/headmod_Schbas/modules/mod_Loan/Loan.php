@@ -24,30 +24,32 @@ class Loan extends Schbas {
 		$LoanInterface = new AdminLoanInterface($this->relPath);
 		$LoanProcessing = new AdminLoanProcessing($LoanInterface);
 
-		if(isset($_GET['wacken'])) {
-			if(isset($_POST['barcode']) && isset($_POST['userId'])) {
-				$this->bookLoanToUserByBarcode('KU 2006 12 1 / 39', 1267);
-			}
-			else {
-				$this->loanDisplay("0000000001");
-			}
-			die();
+		if(isset($_POST['barcode']) && isset($_POST['userId'])) {
+			$this->bookLoanToUserByBarcode(
+				$_POST['barcode'], $_POST['userId']
+			);
 		}
-
-		if ('GET' == $_SERVER['REQUEST_METHOD'] && isset($_GET['inventarnr'])) {
-			if (!$LoanProcessing->LoanBook(urldecode($_GET['inventarnr']),$_GET['uid'])) {
-				$LoanInterface->LoanEmpty();
-			} else {
-				$LoanProcessing->LoanAjax($_GET['card_ID']);
-			}
+		else if(isset($_POST['card_ID'])) {
+			$this->loanDisplay($_POST['card_ID']);
 		}
-		else if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['card_ID'])) {
-			$LoanProcessing->Loan($_POST['card_ID']);
-		}
-		else{
-			// Scan the card-id
+		else {
 			$this->displayTpl('form.tpl');
 		}
+
+		//if ('GET' == $_SERVER['REQUEST_METHOD'] && isset($_GET['inventarnr'])) {
+		//	if (!$LoanProcessing->LoanBook(urldecode($_GET['inventarnr']),$_GET['uid'])) {
+		//		$LoanInterface->LoanEmpty();
+		//	} else {
+		//		$LoanProcessing->LoanAjax($_GET['card_ID']);
+		//	}
+		//}
+		//else if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['card_ID'])) {
+		//	$LoanProcessing->Loan($_POST['card_ID']);
+		//}
+		//else{
+		//	// Scan the card-id
+		//	$this->displayTpl('form.tpl');
+		//}
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -76,6 +78,7 @@ class Loan extends Schbas {
 		$booksLent = $this->booksStillLendByUserGet($user);
 		$booksSelfpaid = $user->getSelfpayingBooks();
 		$booksToLoan = $loanHelper->loanBooksGet($user->getId());
+
 		$this->_smarty->assign('user', $user);
 		$this->_smarty->assign('formSubmitted', $formSubmitted);
 		$this->_smarty->assign('userPaid', $userPaid);
@@ -258,7 +261,7 @@ class Loan extends Schbas {
 			$lending->setInventory($exemplar);
 			$lending->setLendDate(new \DateTime());
 			$this->_entityManager->persist($lending);
-			//$this->_entityManager->flush();
+			$this->_entityManager->flush();
 
 		} catch (Exception $e) {
 			$this->_logger->log('Error loaning a book-exemplar to a user',

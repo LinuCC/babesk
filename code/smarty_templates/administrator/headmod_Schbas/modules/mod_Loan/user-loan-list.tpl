@@ -29,7 +29,7 @@
 					Der Benutzer hat nicht genug für die Bücher bezahlt!
 				</li>
 			{/if}
-			{if $userSelfpayer}
+			{if !$userSelfpayer}
 				<li class="list-group-item list-group-item-success">
 					<span class="icon icon-checkmark pull-left"></span>
 					Der Benutzer kauft nicht alle Bücher selber ein.
@@ -50,7 +50,7 @@
 		{if count($booksLent) == 0}
 			<li class="list-group-item list-group-item-success">
 				<span class="icon icon-checkmark pull-left"></span>
-				Der Benutzer besitzt keine der ausgeleiten Bücher mehr.
+				Der Benutzer besitzt keine der ausgeliehenen Bücher mehr.
 			</li>
 		{else}
 			<li class="list-group-item list-group-item-warning">
@@ -109,7 +109,7 @@
 				<span class="icon icon-Schbas"></span>
 			</span>
 			<input type="text" id="book-barcode" class="form-control"
-				placeholder="Buchcode hier einscannen" />
+				placeholder="Buchcode hier einscannen" autofocus />
 			<span class="input-group-btn">
 				<button id="book-barcode-submit" class="btn btn-default">
 					Buch ausgeben
@@ -172,6 +172,7 @@ $(document).ready(function(){
 
 	function barcodeSubmit() {
 		var barcode = $('input#book-barcode').val();
+		console.log(barcode);
 		var userId = $('#user-id').val();
 		$.ajax({
 			'type': 'POST',
@@ -193,10 +194,12 @@ $(document).ready(function(){
 			$row.children('td')
 				.first()
 				.prepend('<span class="icon icon-success"></span>');
+			$('#book-barcode').focus().select();
 		}
 
 		function error(jqXHR) {
 
+			console.log(jqXHR.responseText);
 			if(jqXHR.status == 500) {
 				if(typeof jqXHR.responseJSON !== 'undefined' &&
 					typeof jqXHR.responseJSON.message !== 'undefined') {
@@ -210,6 +213,7 @@ $(document).ready(function(){
 				toastr.error('Konnte das Buch nicht ausleihen. Ein genereller Fehler \
 					ist aufgetreten', 'Fehler (' + jqXHR.status + ') beim Ausleihen');
 			}
+			$('#book-barcode').focus().select();
 		}
 	};
 });

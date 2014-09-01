@@ -264,7 +264,11 @@ class Loan {
 						"special_course", "special_course_trigger"
 					)
 		')->fetchAll(\PDO::FETCH_KEY_PAIR);
+		//Split all settings that are string-lists into arrays
 		foreach($settings as $key => $setting) {
+			if($key == 'special_course_trigger') {
+				continue;
+			}
 			$settings[$key] = explode('|', $setting);
 		}
 		//Get values for user which booktypes he needs to lend
