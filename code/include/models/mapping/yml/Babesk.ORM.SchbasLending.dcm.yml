@@ -2,14 +2,18 @@ Babesk\ORM\SchbasLending:
     type: entity
     table: SchbasLending
     id:
+        user:
+            associationKey: true
+        inventory:
+            associationKey: true
+    fields:
         lendDate:
-            type: datetime
+            type: date
             scale: 0
             length: null
             unique: false
             nullable: false
             precision: 0
-            id: true
             column: lend_date
     manyToOne:
         user:
@@ -19,7 +23,7 @@ Babesk\ORM\SchbasLending:
             inversedBy: null
             joinColumns:
                 user_id:
-                    referencedColumnName: id
+                    referencedColumnName: ID
             orphanRemoval: false
         inventory:
             targetEntity: Babesk\ORM\SchbasInventory

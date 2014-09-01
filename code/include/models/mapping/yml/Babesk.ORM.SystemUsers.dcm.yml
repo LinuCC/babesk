@@ -152,7 +152,7 @@ Babesk\ORM\SystemUsers:
                         columnDefinition: null
                         referencedColumnName: ID
             orderBy: null
-        lentBooks:
+        bookLending:
             targetEntity: Babesk\ORM\SchbasInventory
             cascade: {  }
             mappedBy: null

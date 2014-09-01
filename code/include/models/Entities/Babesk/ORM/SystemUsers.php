@@ -723,7 +723,7 @@ class SystemUsers
     /**
      * Get priceGroup
      *
-     * @return \Babesk\ORM\BabeskPriceGroups 
+     * @return \Babesk\ORM\BabeskPriceGroups
      */
     public function getPriceGroup()
     {
@@ -751,10 +751,48 @@ class SystemUsers
     /**
      * Get schbasAccounting
      *
-     * @return \Babesk\ORM\SchbasAccounting 
+     * @return \Babesk\ORM\SchbasAccounting
      */
     public function getSchbasAccounting()
     {
         return $this->schbasAccounting;
+    }
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $bookLending;
+
+    /**
+     * Add bookLending
+     *
+     * @param \Babesk\ORM\SchbasInventory $bookLending
+     * @return SystemUsers
+     */
+    public function addBookLending(\Babesk\ORM\SchbasInventory $bookLending)
+    {
+        $this->bookLending[] = $bookLending;
+
+        return $this;
+    }
+
+    /**
+     * Remove bookLending
+     *
+     * @param \Babesk\ORM\SchbasInventory $bookLending
+     */
+    public function removeBookLending(\Babesk\ORM\SchbasInventory $bookLending)
+    {
+        $this->bookLending->removeElement($bookLending);
+    }
+
+    /**
+     * Get bookLending
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBookLending()
+    {
+        return $this->bookLending;
     }
 }

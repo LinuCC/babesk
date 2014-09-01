@@ -110,11 +110,17 @@ hr {
 	border: none;
 }
 
+#body-wrapper {
+	padding-left: 250px;
+}
+
 .sidebar {
 	position: fixed;
+	margin-left: -250px;
+	left: 250px;
+	width: 250px;
 	top: 50px;
 	bottom: 0;
-	left: 0;
 	padding: 0;
 	z-index: 1000;
 	display: block;
@@ -122,7 +128,6 @@ hr {
 	background-color: #333;
 	border-right: 1px solid #151515;
 	box-shadow: 2px 0px 2px #666;
-	width: 250px;
 }
 
 #sidebar-module-selection {
@@ -184,7 +189,6 @@ hr {
 	/*position: relative;*/
 	margin-top: 60px;
 	padding: 0px;
-	margin-left: 251px;
 }
 
 

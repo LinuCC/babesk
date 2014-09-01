@@ -33,7 +33,7 @@ Babesk\ORM\SchbasInventory:
             targetEntity: Babesk\ORM\SchbasBooks
             cascade: {  }
             mappedBy: null
-            inversedBy: null
+            inversedBy: exemplars
             joinColumns:
                 book_id:
                     referencedColumnName: id
@@ -50,7 +50,7 @@ Babesk\ORM\SchbasInventory:
         usersLent:
             targetEntity: Babesk\ORM\SystemUsers
             cascade: {  }
-            mappedBy: booksLent
+            mappedBy: bookLending
             inversedBy: null
             joinTable: {  }
             orderBy: null
