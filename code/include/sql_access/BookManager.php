@@ -136,6 +136,9 @@ class BookManager extends TableManager{
 				'11'=>'12,92,13',
 				'12'=>'12,92,13');
 		require_once PATH_ACCESS . '/DBConnect.php';
+		if(empty($classAssign[$class])) {
+			return array();
+		}
 		$query = sql_prev_inj(sprintf(
 			"SELECT b.*, ss.abbreviation AS subject FROM %s b
 				LEFT JOIN `SystemSchoolSubjects` ss ON ss.ID = b.subjectId

@@ -207,6 +207,11 @@ class Loan {
 			$this->_logger->log('User missing an active gradelevel',
 				'Notice', Null, json_encode(array('uid' => $userId)));
 		}
+		if(empty($this->_gradelevelIsbnIdentAssoc[$gradelevel])) {
+			$this->_logger->log('Not found bookclasses for gradelevel',
+				'Notice', Null, json_encode(array('uid' => $userId)));
+			return array();
+		}
 		$classes = $this->_gradelevelIsbnIdentAssoc[$gradelevel];
 		$classesStr = '"' . implode('", "', $classes) . '"';
 		$stmt = $this->_pdo->prepare(
