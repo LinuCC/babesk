@@ -321,8 +321,7 @@
 					<span class="input-group-addon"><span class="icon icon-credit"></span></span>
 					<input id="cardnumber" name="cardnumber" class="form-control"
 						type="text" placeholder="{t}Cardnumber{/t}" maxlength="10"
-						minlength="10" digits="true" value="{$cardnumber}"
-						title="{t}Cardnumber{/t}" />
+						minlength="10"  value="{$cardnumber}" title="{t}Cardnumber{/t}" />
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 form-group">
