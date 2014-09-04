@@ -100,9 +100,11 @@ class Logger {
 				':additionalData' => $additionalData));
 
 		} catch (PDOException $e) {
+			$e_message = $e->getMessage();
 			error_log(
-				"BaBeSK: Could not log an Error with Severity '%severity'" .
-				"and Category '%category'. Message: '%message'"
+				"BaBeSK: Could not log an Error with Severity '$severity'" .
+				"and Category '$category'. Message: '$e_message'." .
+				"Logmessage: '$message'. Additional Data: '$additionalData'."
 			);
 			return false;
 		}
