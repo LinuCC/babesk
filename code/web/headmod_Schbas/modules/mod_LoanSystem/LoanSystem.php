@@ -138,6 +138,20 @@ class LoanSystem extends Schbas {
 		 */
 		//$loanbooks = $loanHelper->loanBooksGet($_SESSION['uid']);
 
+		//If user is selfpayer, show the entries to him
+		$stmt = $this->_pdo->prepare(
+			'SELECT BID FROM SchbasSelfpayer WHERE UID = :userId
+		');
+		$stmt->execute(array('userId' => $_SESSION['uid']));
+		$selfbuy = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+		if(count($selfbuy)) {
+			foreach($loanbooks as &$book) {
+				if(in_array($book['id'], $selfbuy)) {
+					$book['selected'] = true;
+				}
+			}
+		}
+
 		$this->_smarty->assign('loanbooks', $loanbooks);
 		$this->_smarty->assign('feeNormal', $feeNormal);
 		$this->_smarty->assign('feeReduced', $feeReduced);
