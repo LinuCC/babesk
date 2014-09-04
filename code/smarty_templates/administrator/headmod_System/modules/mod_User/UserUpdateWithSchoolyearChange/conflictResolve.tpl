@@ -107,6 +107,11 @@
 	};
 </script>
 
-<script src="../smarty/templates/administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/conflictResolve.js" type="text/javascript"></script>
+
+{/block}
+
+{block name=js_include append}
+
+<script src="{$path_js}/administrator/System/User/UserUpdateWithSchoolyearChange/conflictResolve.js" type="text/javascript"></script>
 
 {/block}

@@ -9,6 +9,8 @@ $(document).ready(function() {
 	});
 
 	$("button.conflictAnswerYes").on('click', function(event) {
+
+		event.preventDefault();
 		var button = $(event.target);
 		var parent = button.parent();
 		parent.children("button").remove();
@@ -19,6 +21,8 @@ $(document).ready(function() {
 	});
 
 	$("button.conflictAnswerNo").on('click', function(event) {
+
+		event.preventDefault();
 		var button = $(event.target);
 		var parent = button.parent();
 		parent.children("button").remove();
@@ -28,7 +32,13 @@ $(document).ready(function() {
 		else {
 			parent.append('<div id="lol"></div>');
 			//Finding similar usernames is not implemented yet
-			alert("Dann korrigieren sie den Fehler bitte in der CSV-Datei und laden die CSV-Datei nochmals hoch.");
+			var uid = prompt("Dann korrigieren sie den Fehler bitte in der CSV-Datei und laden die CSV-Datei nochmals hoch oder geben sie die Nutzerid hier ein:");
+			if(uid) {
+				parent.append("<input type='hidden' value='correctedUserId' name='"
+				 + "conflict[" + button.attr("conflictId") + "][status]' />");
+				parent.append("<input type='hidden' value='" + uid + "' name='"
+				 + "conflict[" + button.attr("conflictId") + "][correctedUserId]' />");
+			}
 		}
 	});
 
