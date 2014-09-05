@@ -19,6 +19,7 @@ class SchbasSettings extends Schbas {
 	public function execute($dataContainer) {
 
 		defined('_AEXEC') or die('Access denied');
+		parent::entryPoint($dataContainer);
 
 		require_once 'AdminSchbasSettingsInterface.php';
 		require_once 'AdminSchbasSettingsProcessing.php';
@@ -262,6 +263,12 @@ class SchbasSettings extends Schbas {
 		// get booklist
 		$booklist = $booklistManager->getBooksByClass($gradelevel);
 
+		require_once PATH_INCLUDE . '/Schbas/Loan.php';
+		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
+		list($feeNormal, $feeReduced) = $loanHelper
+			->loanPriceOfAllBooksOfGradelevelCalculate($gradelevel);
+
+
 		$books = '<table border="0" bordercolor="#FFFFFF" style="background-color:#FFFFFF" width="100%" cellpadding="0" cellspacing="1">
 				<tr style="font-weight:bold; text-align:center;"><th>Fach</th><th>Titel</th><th>Verlag</th><th>ISBN-Nr.</th><th>Preis</th></tr>';
 
@@ -275,9 +282,6 @@ class SchbasSettings extends Schbas {
 		$books = str_replace('ä', '&auml;', $books);
 		$books = str_replace('é', '&eacute;', $books);
 
-		//get loan fees
-		$feeNormal = TableMng::query("SELECT fee_normal FROM SchbasFee WHERE grade=".$gradelevel);
-		$feeReduced = TableMng::query("SELECT fee_reduced FROM SchbasFee WHERE grade=".$gradelevel);
 
 		//get bank account
 		$bank_account =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='bank_details'");
@@ -286,8 +290,8 @@ class SchbasSettings extends Schbas {
 		//textOne[0]['title'] wird nicht ausgegeben, unter admin darauf hinweisen!
 		$pageTwo = $books.'<br/>'.$textOne[0]['text'].'<br/><br/>'.
 				'<table style="border:solid" width="75%" cellpadding="2" cellspacing="2">
-				<tr><td>Leihgeb&uuml;hr: </td><td>'.$feeNormal[0]['fee_normal'].' Euro</td></tr>
-						<tr><td>(3 und mehr schulpflichtige Kinder:</td><td>'.$feeReduced[0]['fee_reduced'].' Euro)</td></tr>
+				<tr><td>Leihgeb&uuml;hr: </td><td>'.$feeNormal.' Euro</td></tr>
+						<tr><td>(3 und mehr schulpflichtige Kinder:</td><td>'.$feeReduced.' Euro)</td></tr>
 								<tr><td>Kontoinhaber:</td><td>'.$bank_account[0].'</td></tr>
 								<tr><td>Kontonummer:</td><td>'.$bank_account[1].'</td></tr>
 								<tr><td>Bankleitzahl:</td><td>'.$bank_account[2].'</td></tr>
