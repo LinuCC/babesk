@@ -76,7 +76,7 @@ class MessageAuthor extends Messages {
 		$data = array();
 
 		try {
-			$data = TableMng::query('SELECT `ID`, `name` FROM Groups;');
+			$data = TableMng::query('SELECT `ID`, `name` FROM MessageGroups;');
 
 		} catch (MySQLVoidDataException $e) {
 			return array();
