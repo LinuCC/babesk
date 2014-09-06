@@ -2,14 +2,14 @@
 <html>
 <head>
 	<title>BaBeSK Login</title>
-	<link rel="stylesheet" href="{$path_css}/bootstrap-theme.min.css" 
+	<link rel="stylesheet" href="{$path_css}/bootstrap-theme.min.css"
 		type="text/css" />
-	<link rel="stylesheet" href="{$path_css}/bootstrap.min.css" 
+	<link rel="stylesheet" href="{$path_css}/bootstrap.min.css"
 		type="text/css" />
-	<link rel="stylesheet" href="{$path_css}/iconfonts/iconfonts.css" 
+	<link rel="stylesheet" href="{$path_css}/iconfonts/iconfonts.css"
 		type="text/css" />
 	<link rel="stylesheet" href="{$path_css}/toastr.min.css" type="text/css" />
-	<link rel="stylesheet" href="{$path_smarty_tpl}/administrator/css/general.css" 
+	<link rel="stylesheet" href="{$path_smarty_tpl}/administrator/css/general.css"
 		type="text/css" />
 	<link rel="shortcut icon" href="adminicon.ico" />
 </head>
@@ -30,13 +30,15 @@
 					Benutzername
 				</label>
 				<div class="col-sm-7">
-					<input id="username" type="text" name="Username" />
+					<input id="username" class="form-control" type="text"
+						name="Username" autofocus />
 				</div>
 			</div>
 			<div class="form-group">
 				<label for="password" class="col-sm-5 control-label">Passwort</label>
 				<div class="col-sm-7">
-					<input id="password" type="password" name="Password" />
+					<input id="password" class="form-control" type="password"
+						name="Password" />
 				</div>
 			</div>
 		</fieldset>

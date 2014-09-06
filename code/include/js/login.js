@@ -6,6 +6,9 @@ $(document).ready(function() {
 		$('#login-confirm').on('click', function(ev) {
 			run();
 		});
+		$('#password-inp').enterKey(function(ev) {
+			run();
+		});
 
 		function run() {
 			$.ajax({
@@ -49,7 +52,7 @@ $(document).ready(function() {
 		}
 
 		function onError(data) {
-			toastr['error']('Schinken', 'Barsch');
+			toastr['error']('Fehler beim einloggen', 'Barsch');
 		}
 	};
 

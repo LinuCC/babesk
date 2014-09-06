@@ -5,7 +5,7 @@
 			<div class="panel bg-fit panel-primary">
 				<div class="panel-body">
 				{$error}
-						<input id="username-inp" name="login" type="text" class="form-control input-lg" placeholder="{t}Username{/t}">
+						<input id="username-inp" name="login" type="text" class="form-control input-lg" placeholder="{t}Username{/t}" autofocus>
 						<input id="password-inp" name="password" type="password" class="form-control input-lg" placeholder="{t}Password{/t}">
 						<button type="button" id="login-confirm" type="button"
 							class="btn btn-primary btn-lg">
@@ -38,15 +38,5 @@
 {/block}
 
 {block name="js_include" append}
-	<script type="text/javascript">
-		$(document).ready(function() {
-			$('input[name=login]').keypress(function(event){
-					if (event.which == '13') {
-						event.preventDefault();
-					}
-				}
-			);
-		});
-	</script>
 	<script type="text/javascript" src="{$path_js}/login.js"></script>
 {/block}
