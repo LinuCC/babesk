@@ -117,6 +117,7 @@ class RecordReceipt extends \SchbasAccounting {
 				$user['loanChoice'] = $page['loanChoice'];
 				$user['loanChoiceAbbreviation'] =
 					$page['loanChoiceAbbreviation'];
+				$user['activeGrade'] = $page['activeGrade'];
 				$users[] = $user;
 			}
 			$pagecount = ceil((int) count($paginator) / $this->_usersPerPage);
@@ -141,17 +142,23 @@ class RecordReceipt extends \SchbasAccounting {
 				'partial u.{id, forename, name, username}, c.cardnumber, ' .
 				'a.payedAmount, a.amountToPay, lc.name AS loanChoice, ' .
 				'lc.abbreviation AS loanChoiceAbbreviation, ' .
-				'a.amountToPay - a.payedAmount AS missingAmount'
+				'a.amountToPay - a.payedAmount AS missingAmount, ' .
+				'CONCAT(g.gradelevel, g.label) AS activeGrade'
 			)->from('Babesk:SystemUsers', 'u')
 			->join('u.schbasAccounting', 'a')
 			->leftJoin('u.cards', 'c')
-			->join('a.loanChoice', 'lc');
+			->leftJoin('u.usersInGradesAndSchoolyears', 'uigs')
+			->leftJoin('uigs.schoolyear', 's', 'WITH', ' s.active = 1')
+			->leftJoin('uigs.grade', 'g')
+			->join('a.loanChoice', 'lc')
+			->andWhere('uigs.grade IS NULL OR s.id IS NOT NULL');
 		if($showOnlyMissing) {
 			$queryBuilder->having('missingAmount > 0');
 		}
 		if(!empty($filter)) {
 			$queryBuilder->andWhere(
-					'u.username LIKE :filter OR c.cardnumber LIKE :filter'
+					'u.username LIKE :filter OR c.cardnumber LIKE :filter
+						OR CONCAT(g.gradelevel, g.label) LIKE :filter'
 				)->setParameter('filter', "%${filter}%");
 		}
 		$queryBuilder->setFirstResult(($pagenum - 1) * $this->_usersPerPage)

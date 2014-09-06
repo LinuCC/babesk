@@ -8,6 +8,7 @@
 			<th>Vorname</th>
 			<th>Nachname</th>
 			<th>Benutzername</th>
+			<th>Klasse</th>
 			<th>Fehlend</th>
 			<th>Bezahlt</th>
 			<th>Soll</th>
@@ -22,6 +23,7 @@
 				<td class="forename"> <%= users[i].forename %> </td>
 				<td class="name"> <%= users[i].name %> </td>
 				<td class="username"> <%= users[i].username %> </td>
+				<td class="active-grade"> <%= users[i].activeGrade %> </td>
 				<td class="payment-missing">
 					<% users[i].missingAmount = parseFloat(users[i].missingAmount); %>
 					<% if(users[i].missingAmount > 0) { %>
@@ -82,7 +84,7 @@
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"
 						aria-hidden="true">&times;</button>
-					<h4 class="modal-title">Guthaben verändern</h4>
+					<h4 class="modal-title">Zahlung registrieren</h4>
 				</div>
 				<div class="modal-body">
 					<label for="credits-change-input">
@@ -134,7 +136,7 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default pull-left"
 						data-toggle="popover" data-container="body"
-						title="Hilfe zur Guthabeneingabe" data-content="In diesem Popup können sie den Geldeingang des ausgewählten Benutzers ändern. Es ist angepasst, um mit der Tastatur gut bedienbar zu sein. Das obere Feld enthält die Zahlung des Benutzers. Darunter befindet sich ein Feld, in das man einen manuellen zu addierenden Betrag eingeben kann. Um statt die Zahlung direkt einzugeben etwas hinzuzuaddieren, drücken sie einmal 'Tab', geben den Betrag ein, und dann Enter. Falls der Betrag dem gewünschten entspricht, speichert ein weiteres Enter die Zahlung ab. Mit der Plus-Taste (+) wird der Soll-Betrag direkt in das Zahlungsfeld übernommen.">
+						title="Hilfe zur Zahlungseingabe" data-content="In diesem Popup können sie den Geldeingang des ausgewählten Benutzers ändern. Es ist angepasst, um mit der Tastatur gut bedienbar zu sein. Das obere Feld enthält die Zahlung des Benutzers. Darunter befindet sich ein Feld, in das man einen manuellen zu addierenden Betrag eingeben kann. Um statt die Zahlung direkt einzugeben etwas hinzuzuaddieren, drücken sie einmal 'Tab', geben den Betrag ein, und dann Enter. Falls der Betrag dem gewünschten entspricht, speichert ein weiteres Enter die Zahlung ab. Mit der Plus-Taste (+) wird der Soll-Betrag direkt in das Zahlungsfeld übernommen.">
 						Hilfe
 					</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">
@@ -155,9 +157,15 @@
 <h3 class="module-header">Geldeingänge erfassen</h3>
 
 <div class="alert alert-info">
-	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-	<strong>Benutzerauswahl</strong> Sie können die Benutzer, nachdem sie sie gesucht haben, entweder in der Tabelle anklicken, oder mit Shift und einer Zahl (zB Shift + 1) einen Benutzer anwählen. Dies funktioniert nur mit der Zahlenreihe über den Buchstaben.
-	Nachdem erfolgreich ein Guthaben aufgeladen wurde, können sie sofort wieder anfangen den nächsten Nutzer zu suchen.
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+		&times;
+	</button>
+	<strong>Benutzerauswahl</strong>
+	Sie können die Benutzer, nachdem sie sie
+	gesucht haben, entweder in der Tabelle anklicken, oder mit Shift und einer
+	Zahl (zB Shift + 1) einen Benutzer anwählen. Dies funktioniert nur mit der
+	Zahlenreihe über den Buchstaben. Nachdem erfolgreich ein Zahlung registriert
+	wurde, können sie sofort wieder anfangen den nächsten Nutzer zu suchen.
 </div>
 
 <div class="row">
@@ -166,7 +174,7 @@
 			<div class="col-md-12 col-lg-8">
 				<span class="input-group filter-container">
 					<input id="filter" type="text" class="form-control"
-						placeholder="Suchen (Benutzername oder Kartennummer)"
+						placeholder="Suchen (Benutzername/Kartennummer/Klasse)"
 						title="{t}Search (Enter to commit){/t}" autofocus />
 					<span class="input-group-btn">
 						<button id="search-submit" class="btn btn-default">
