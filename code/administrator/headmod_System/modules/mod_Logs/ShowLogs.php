@@ -61,6 +61,7 @@ class ShowLogs extends \administrator\System\Logs {
 					INNER JOIN SystemLogSeverities ls ON ls.ID = l.severityId
 						$filterSevStr
 					{$filterStr}
+					ORDER BY l.date DESC
 					LIMIT :startLog, :logsPerPage";
 		try {
 			$stmt = $this->_pdo->prepare($query);
