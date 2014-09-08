@@ -297,6 +297,12 @@ class Loan {
 		$coursesToRemove = array_diff(
 			$settings['special_course'], $userSettings['special_course']
 		);
+		//special_course can contain the same keys as religions, like RE
+		//Make sure that the user gets the RE-Book even if he is RE in
+		//special_course, but not in religion
+		$religionsToRemove = array_diff(
+			$religionsToRemove, $userSettings['special_course']
+		);
 		//Remove books with the unneeded booktypes
 		$filteredBooks = array();
 		foreach($books as $book) {

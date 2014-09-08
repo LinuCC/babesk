@@ -69,6 +69,11 @@ class LoanManager extends TableManager{
 		$user_course = explode('|', $details['special_course']);
 		$course = array_diff($course, $user_course);
 
+		//special_course can contain the same keys as religions, like RE
+		//Make sure that the user gets the RE-Book even if he is RE in
+		//special_course, but not in religion
+		$reli = array_diff($reli, $user_course);
+
 		$regex ='/[^0-9]/'; //keep only numbers in class assign
 		$sct = intval($globalSettingsManager->valueGet("special_course_trigger"));
 
