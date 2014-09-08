@@ -16,8 +16,14 @@ $(document).ready(function() {
 		maxVisible: 9
 	}).on('page', activePageChange);
 
-	$('#filter').enterKey(dataFetch);
-	$('#search-submit').on('click', dataFetch);
+	$('#filter').enterKey(function(ev) {
+		activePage = 1;
+		dataFetch();
+	});
+	$('#search-submit').on('click', function(ev) {
+		activePage = 1;
+		dataFetch();
+	});
 
 	$('table#user-table').on('click', 'tbody tr', userClicked);
 

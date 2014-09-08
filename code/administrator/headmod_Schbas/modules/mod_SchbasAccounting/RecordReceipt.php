@@ -145,12 +145,12 @@ class RecordReceipt extends \SchbasAccounting {
 				'a.amountToPay - a.payedAmount AS missingAmount, ' .
 				'CONCAT(g.gradelevel, g.label) AS activeGrade'
 			)->from('Babesk:SystemUsers', 'u')
-			->join('u.schbasAccounting', 'a')
+			->leftJoin('u.schbasAccounting', 'a')
 			->leftJoin('u.cards', 'c')
 			->leftJoin('u.usersInGradesAndSchoolyears', 'uigs')
 			->leftJoin('uigs.schoolyear', 's', 'WITH', ' s.active = 1')
 			->leftJoin('uigs.grade', 'g')
-			->join('a.loanChoice', 'lc')
+			->leftJoin('a.loanChoice', 'lc')
 			->andWhere('uigs.grade IS NULL OR s.id IS NOT NULL');
 		if($showOnlyMissing) {
 			$queryBuilder->having('missingAmount > 0');

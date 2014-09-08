@@ -60,7 +60,11 @@
 						}
 					%>
 					<span class="<%= col %>">
-						<%= users[i].loanChoice %>
+						<% if(users[i].loanChoice) { %>
+							<%= users[i].loanChoice %>
+						<% } else { %>
+							<p class="text-muted">Antrag nicht erfasst</p>
+						<% } %>
 					</span>
 				</td>
 				<td class="selector" data-selector="<%= (i + 1) % 10 %>">
