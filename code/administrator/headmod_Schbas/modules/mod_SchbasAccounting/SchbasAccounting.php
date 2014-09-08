@@ -380,7 +380,11 @@ class SchbasAccounting extends Schbas {
 	}
 
 	private function getStudentIDsOfClass($gradeId){
-		$ids = TableMng::query("SELECT userId FROM SystemUsersInGradesAndSchoolyears WHERE gradeId='$gradeId'");
+		$ids = TableMng::query("SELECT userId
+			FROM SystemUsersInGradesAndSchoolyears uigs
+			JOIN SystemSchoolyears s ON uigs.schoolyearId = s.ID
+			WHERE gradeId='$gradeId' AND s.active = true
+		");
 		$nr = count($ids);
 		$studentIDs;
 		for($i=0;$i<$nr;$i++){
