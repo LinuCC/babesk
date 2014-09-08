@@ -85,7 +85,8 @@
 			</div>
 		</div>
 
-		<div id="body-wrapper">
+		<div id="body-wrapper"
+			{if !isset($_GET["hide_sidebar"])}class="show-sidebar"{/if}>
 			{*-----------------------------------------------------
 			 * The sidebar-navigation
 			 *}
