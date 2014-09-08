@@ -135,7 +135,7 @@ class SchbasAccounting extends Schbas {
 			if ($result[0]['COUNT(*)']!="0") {
 				die('dupe');
 			}
-			if(is_numeric($uid) && in_array($loanChoice, $haystack,$true)) {
+			if(is_numeric($uid) && in_array($loanChoice, $haystack, true)) {
 				try {
 
                     $loanbooks = array();
@@ -177,7 +177,7 @@ class SchbasAccounting extends Schbas {
 					if (!isset($amountToPay)) $amountToPay="0.00";
 					$query = sprintf(
 						"INSERT INTO SchbasAccounting
-							(`UID`,`loanChoice`,`payedAmount`,`amountToPay`)
+							(`UID`,`loanChoiceId`,`payedAmount`,`amountToPay`)
 							VALUES ('%s',(
 									SELECT ID FROM SchbasLoanChoices
 										WHERE abbreviation = '%s'
@@ -185,6 +185,7 @@ class SchbasAccounting extends Schbas {
 							,$uid,$loanChoice,"0.00",$amountToPay);
 
 					TableMng::query($query);
+					die('success');
 				} catch (Exception $e) {
 					var_dump($e->getMessage());
 				}

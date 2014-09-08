@@ -24,9 +24,12 @@ function sendUserReturnedBarcode(barcode) {
 			else if(data == 'dupe') {
 				toastr.error(unescape('Formular wurde bereits eingescannt. Bei %C4nderungen bitte zuerst l%F6schen!'));
 			}
-			else {
+			else if(data == 'success') {
 				toastr.success('Einscannen erfolgreich!');
 				location.reload();
+			}
+			else {
+				toastr.error(data, 'Unbekannter Fehler!');
 			}
 		},
 		error: function(data) {
