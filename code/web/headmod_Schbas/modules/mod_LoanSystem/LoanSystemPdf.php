@@ -239,7 +239,7 @@ class LoanSystemPdf {
 		'vpadding' => 'auto',
 		'fgcolor' => array(0,0,0),
 		'bgcolor' => false, //array(255,255,255),
-		'text' => false,
+		'text' => true,
 		'font' => 'helvetica',
 		'fontsize' => 8,
 		'stretchtext' => 4
