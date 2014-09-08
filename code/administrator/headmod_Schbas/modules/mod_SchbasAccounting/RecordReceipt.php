@@ -70,7 +70,10 @@ class RecordReceipt extends \SchbasAccounting {
 		$showOnlyMissing = ($_POST['showOnlyMissing'] == 'true')
 			? true : false;
 		$data = $this->userdataFetch(
-			$_POST['filter'], $_POST['activePage'], $showOnlyMissing
+			$_POST['filter'],
+			$_POST['filterForColumns'],
+			$_POST['activePage'],
+			$showOnlyMissing
 		);
 		if(count($data['users'])) {
 			die(json_encode(array(
@@ -94,10 +97,12 @@ class RecordReceipt extends \SchbasAccounting {
 	 *                             'pagecount' => <pagecount>
 	 *                         ]
 	 */
-	private function userdataFetch($filter, $pagenum, $showOnlyMissing) {
+	private function userdataFetch(
+		$filter, $filterForCol, $pagenum, $showOnlyMissing
+	) {
 
 		$query = $this->userdataQueryCreate(
-			$filter, $pagenum, $showOnlyMissing
+			$filter, $filterForCol, $pagenum, $showOnlyMissing
 		);
 		$paginator = new \Doctrine\ORM\Tools\Pagination\Paginator(
 			$query, $fetchJoinCollection = true
@@ -135,7 +140,9 @@ class RecordReceipt extends \SchbasAccounting {
 	 * @param  string $pagenum The number of page requested
 	 * @return Query           A doctrine query object for fetching the users
 	 */
-	private function userdataQueryCreate($filter, $pagenum, $showOnlyMissing) {
+	private function userdataQueryCreate(
+		$filter, $filterForCol, $pagenum, $showOnlyMissing
+	) {
 
 		$queryBuilder = $this->_entityManager->createQueryBuilder()
 			->select(
@@ -155,11 +162,20 @@ class RecordReceipt extends \SchbasAccounting {
 		if($showOnlyMissing) {
 			$queryBuilder->having('missingAmount > 0');
 		}
-		if(!empty($filter)) {
-			$queryBuilder->andWhere(
-					'u.username LIKE :filter OR c.cardnumber LIKE :filter
-						OR CONCAT(g.gradelevel, g.label) LIKE :filter'
-				)->setParameter('filter', "%${filter}%");
+		if(!empty($filter) && !empty($filterForCol)) {
+			$filters = array();
+			if(in_array('cardnumber', $filterForCol)) {
+				$filters[] = 'c.cardnumber LIKE :filter';
+			}
+			if(in_array('grade', $filterForCol)) {
+				$filters[] = 'CONCAT(g.gradelevel, g.label) LIKE :filter';
+			}
+			if(in_array('username', $filterForCol)) {
+				$filters[] = 'u.username LIKE :filter';
+			}
+			$str = implode(' OR ', $filters);
+			$queryBuilder->andWhere($str);
+			$queryBuilder->setParameter('filter', "%${filter}%");
 		}
 		$queryBuilder->setFirstResult(($pagenum - 1) * $this->_usersPerPage)
 			->setMaxResults($this->_usersPerPage);

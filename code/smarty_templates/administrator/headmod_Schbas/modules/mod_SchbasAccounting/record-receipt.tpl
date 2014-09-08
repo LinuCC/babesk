@@ -175,22 +175,32 @@
 <div class="row">
 	<div class="center-block">
 		<div class="col-sm-12 col-md-5 col-lg-7">
-			<div class="col-md-12 col-lg-8">
-				<span class="input-group filter-container">
-					<input id="filter" type="text" class="form-control"
-						placeholder="Suchen (Benutzername/Kartennummer/Klasse)"
-						title="{t}Search (Enter to commit){/t}" autofocus />
-					<span class="input-group-btn">
-						<button id="search-submit" class="btn btn-default">
-							<span class="icon icon-search"></span>
-						</button>
+			<div class="row">
+				<div class="col-md-12 col-lg-8">
+					<span class="input-group filter-container">
+						<span class="input-group-btn">
+							<select id="search-select-menu" class="dropdown-menu pull-right"
+								role="menu" multiple="multiple">
+								<option value="cardnumber" selected>Kartennummer</option>
+								<option value="username" selected>Benutzername</option>
+								<option value="grade" selected>Klasse</option>
+							</select>
+						</span>
+						<input id="filter" type="text" class="form-control"
+							placeholder="Suchen (Benutzername/Kartennummer/Klasse)"
+							title="{t}Search (Enter to commit){/t}" autofocus />
+						<span class="input-group-btn">
+							<button id="search-submit" class="btn btn-default">
+								<span class="icon icon-search"></span>
+							</button>
+						</span>
 					</span>
-				</span>
-			</div>
-			<div class="col-md-12 col-lg-4">
-				<button id="show-missing-amount-only" class="btn btn-default">
-					Nur Fehlend anzeigen
-				</button>
+				</div>
+				<div class="col-md-12 col-lg-4">
+					<button id="show-missing-amount-only" class="btn btn-default">
+						Nur Fehlend anzeigen
+					</button>
+				</div>
 			</div>
 		</div>
 		<div class="col-sm-12 col-md-7 col-lg-5">
@@ -207,12 +217,17 @@
 
 {/block}
 
+{block name=style_include append}
+<link rel="stylesheet" href="{$path_css}/bootstrap-multiselect.css" type="text/css" />
+{/block}
 
 {block name=js_include append}
 
 <script type="text/javascript"
 	src="{$path_js}/paginator/jquery.bootpag.min.js">
 </script>
+
+<script type="text/javascript" src="{$path_js}/bootstrap-multiselect.min.js"></script>
 
 <script type="text/javascript"
 	src="{$path_js}/administrator/Schbas/SchbasAccounting/RecordReceipt/record-receipt.js">

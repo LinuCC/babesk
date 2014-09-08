@@ -16,6 +16,14 @@ $(document).ready(function() {
 		maxVisible: 9
 	}).on('page', activePageChange);
 
+	$('#search-select-menu').multiselect({
+		buttonContainer: '<div class="btn-group" />',
+		includeSelectAllOption: true,
+		buttonWidth: 150,
+		selectAllText: 'Alle auswählen',
+		numberDisplayed: 1
+	});
+
 	$('#filter').enterKey(function(ev) {
 		activePage = 1;
 		dataFetch();
@@ -59,6 +67,7 @@ $(document).ready(function() {
 			'index.php?module=administrator|Schbas|SchbasAccounting|RecordReceipt',
 			{
 				'filter': filter,
+				'filterForColumns': columnsToSearchSelectedGet(),
 				'activePage': activePage,
 				'showOnlyMissing': showOnlyMissing
 			},
@@ -258,5 +267,15 @@ $(document).ready(function() {
 				).toFixed(2);
 			$('input#credits-change-input').val(toPay);
 		}
+	}
+
+	function columnsToSearchSelectedGet() {
+		var filterForColumns = $('#search-select-menu').val();
+		//Handle select-all checkbox; we do not need to know it is selected
+		var pos = $.inArray('multiselect-all', filterForColumns);
+		if(pos > -1) {
+			filterForColumns.splice(pos, 1);
+		}
+		return filterForColumns;
 	}
 });
