@@ -180,11 +180,9 @@
 				</div>
 			</div>
 
-			<div class="container-fluid">
-				<div class="row">
-
-					<div id="main_wrapper" class="">
-
+			<div id="main_wrapper" class="">
+				<div class="container-fluid">
+					<div class="row">
 						<div id="content">
 							<noscript>
 								<div class="panel panel-danger">
@@ -307,8 +305,10 @@
 						<div class="clearfix"></div>
 					</div>
 				</div>
-				{block name="content"}
-				{/block}
+				<div class="container">
+					{block name="content"}
+					{/block}
+				</div>
 			</div>
 		</div>
 

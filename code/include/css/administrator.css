@@ -111,6 +111,14 @@ hr {
 }
 
 #body-wrapper {
+	padding-left: 0px;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+
+#body-wrapper.show-sidebar {
 	padding-left: 250px;
 }
 
@@ -118,7 +126,7 @@ hr {
 	position: fixed;
 	margin-left: -250px;
 	left: 250px;
-	width: 250px;
+	width: 0;
 	top: 50px;
 	bottom: 0;
 	padding: 0;
@@ -128,6 +136,14 @@ hr {
 	background-color: #333;
 	border-right: 1px solid #151515;
 	box-shadow: 2px 0px 2px #666;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+
+#body-wrapper.show-sidebar .sidebar {
+	width: 250px;
 }
 
 #sidebar-module-selection {
@@ -188,7 +204,13 @@ hr {
 #main_wrapper {
 	/*position: relative;*/
 	margin-top: 60px;
-	padding: 0px;
+	padding: 2px;
+	width: 100%;
+}
+
+#body-wrapper.show-sidebar #main_wrapper {
+	position: : absolute;
+	margin-right: -250px;
 }
 
 
