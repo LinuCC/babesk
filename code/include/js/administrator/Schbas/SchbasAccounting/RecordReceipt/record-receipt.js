@@ -1,6 +1,7 @@
 $(document).ready(function() {
 
 	var activePage = 1;
+	var sortColumn = '';
 	//Contains if the page should only show users with an missing (unpaid) amount
 	var showOnlyMissing = false;
 	var charCodeToSelector = {
@@ -28,6 +29,7 @@ $(document).ready(function() {
 		activePage = 1;
 		dataFetch();
 	});
+
 	$('#search-submit').on('click', function(ev) {
 		activePage = 1;
 		dataFetch();
@@ -60,14 +62,26 @@ $(document).ready(function() {
 
 	$('input#credits-add-input').enterKey(creditAddToByInput);
 
+	$('#user-table').on('click', 'a#name-table-head', function(ev) {
+		sortColumn = (sortColumn == '') ? 'name' : '';
+		dataFetch();
+	});
+
+	$('#user-table').on('click', 'a#grade-table-head', function(ev) {
+		sortColumn = (sortColumn == '') ? 'grade' : '';
+		dataFetch();
+	});
+
 	function dataFetch() {
 
 		var filter = $('#filter').val();
+		console.log(sortColumn);
 		$.postJSON(
 			'index.php?module=administrator|Schbas|SchbasAccounting|RecordReceipt',
 			{
 				'filter': filter,
 				'filterForColumns': columnsToSearchSelectedGet(),
+				'sortColumn': sortColumn,
 				'activePage': activePage,
 				'showOnlyMissing': showOnlyMissing
 			},

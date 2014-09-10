@@ -6,9 +6,9 @@
 		<tr>
 			<th>Kartennummer</th>
 			<th>Vorname</th>
-			<th>Nachname</th>
+			<th><a id="name-table-head">Nachname</a></th>
 			<th>Benutzername</th>
-			<th>Klasse</th>
+			<th><a id="grade-table-head">Klasse</a></th>
 			<th>Fehlend</th>
 			<th>Bezahlt</th>
 			<th>Soll</th>

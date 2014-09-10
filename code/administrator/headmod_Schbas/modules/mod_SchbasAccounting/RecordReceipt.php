@@ -72,6 +72,7 @@ class RecordReceipt extends \SchbasAccounting {
 		$data = $this->userdataFetch(
 			$_POST['filter'],
 			$_POST['filterForColumns'],
+			$_POST['sortColumn'],
 			$_POST['activePage'],
 			$showOnlyMissing
 		);
@@ -98,11 +99,11 @@ class RecordReceipt extends \SchbasAccounting {
 	 *                         ]
 	 */
 	private function userdataFetch(
-		$filter, $filterForCol, $pagenum, $showOnlyMissing
+		$filter, $filterForCol, $sortColumn, $pagenum, $showOnlyMissing
 	) {
 
 		$query = $this->userdataQueryCreate(
-			$filter, $filterForCol, $pagenum, $showOnlyMissing
+			$filter, $filterForCol, $sortColumn, $pagenum, $showOnlyMissing
 		);
 		$paginator = new \Doctrine\ORM\Tools\Pagination\Paginator(
 			$query, $fetchJoinCollection = true
@@ -141,7 +142,7 @@ class RecordReceipt extends \SchbasAccounting {
 	 * @return Query           A doctrine query object for fetching the users
 	 */
 	private function userdataQueryCreate(
-		$filter, $filterForCol, $pagenum, $showOnlyMissing
+		$filter, $filterForCol, $sortColumn, $pagenum, $showOnlyMissing
 	) {
 
 		$queryBuilder = $this->_entityManager->createQueryBuilder()
@@ -176,6 +177,19 @@ class RecordReceipt extends \SchbasAccounting {
 			$str = implode(' OR ', $filters);
 			$queryBuilder->andWhere($str);
 			$queryBuilder->setParameter('filter', "%${filter}%");
+		}
+		$this->_logger->log($sortColumn);
+		if(!empty($sortColumn)) {
+			if($sortColumn == 'grade') {
+				$queryBuilder->orderBy('activeGrade');
+			}
+			else if($sortColumn == 'name') {
+				$queryBuilder->orderBy('u.name');
+			}
+			else {
+				$this->_logger->log('Unknown column to sort for',
+					'Notice', Null, json_encode(array('col' => $sortColumn)));
+			}
 		}
 		$queryBuilder->setFirstResult(($pagenum - 1) * $this->_usersPerPage)
 			->setMaxResults($this->_usersPerPage);
