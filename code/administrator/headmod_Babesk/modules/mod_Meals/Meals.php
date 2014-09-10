@@ -28,7 +28,9 @@ class Meals extends Babesk {
 		require_once 'AdminMealInterface.php';
 
 		$mealInterface = new AdminMealInterface($this->relPath);
-		$mealProcessing = new AdminMealProcessing($mealInterface);
+		$mealProcessing = new AdminMealProcessing(
+			$mealInterface, $dataContainer
+		);
 
 		parent::entryPoint($dataContainer);
 		parent::initSmartyVariables();

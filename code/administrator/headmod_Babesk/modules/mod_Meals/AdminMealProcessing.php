@@ -1,13 +1,14 @@
 <?php
 
 class AdminMealProcessing {
-	public function __construct ($mealInterface) {
+	public function __construct ($mealInterface, $dataContainer) {
 		require_once PATH_ACCESS . '/MealManager.php';
 		require_once PATH_ACCESS . '/OrderManager.php';
 
 		$this->mealManager = new MealManager();
 		$this->orderManager = new OrderManager();
 		$this->mealInterface = $mealInterface;
+		$this->_pdo = $dataContainer->getPdo();
 
 		$this->msg = array(
 			//create meal
@@ -135,12 +136,16 @@ class AdminMealProcessing {
 	function ShowMeals () {
 
 		try {
-			$meals = $this->mealManager->getTableData();
+			//$meals = $this->mealManager->getTableData();
+			$meals = $this->_pdo->query(
+				'SELECT m.*, pc.name AS priceClassName FROM BabeskMeals m
+					INNER JOIN BabeskPriceClasses pc ON pc.ID = m.price_class
+			')->fetchAll();
 		} catch (MySQLVoidDataException $e) {
 			$this->mealInterface->dieError($this->msg['err_no_meals']);
 		}
-		foreach ($meals as & $meal) {
-			$meal['date'] = formatDate($meal['date']);
+		foreach ($meals as $key => $meal) {
+			$meals[$key]['date'] = formatDate($meal['date']);
 		}
 		$this->mealInterface->ShowMeals($meals);
 	}

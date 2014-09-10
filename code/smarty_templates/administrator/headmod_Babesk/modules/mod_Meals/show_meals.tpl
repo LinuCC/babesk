@@ -18,7 +18,7 @@
 				<td>{$meal.ID}</td>
 				<td>{$meal.name}</td>
 				<td>{$meal.description}</td>
-				<td>{$meal.price_class}</td>
+				<td>{$meal.priceClassName}</td>
 				<td>{$meal.date}</td>
 				<td>{$meal.max_orders}</td>
 				<td>
