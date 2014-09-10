@@ -3,6 +3,7 @@
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ADMIN . '/headmod_Schbas/Schbas.php';
 require_once PATH_INCLUDE . '/Schbas/Loan.php';
+require_once PATH_INCLUDE . '/Schbas/Book.php';
 
 class Loan extends Schbas {
 
@@ -205,8 +206,10 @@ class Loan extends Schbas {
 	 */
 	private function exemplarByBarcodeGet($barcodeStr) {
 
-		$barcodeStr = $this->barcodeNormalize($barcodeStr);
-		$barcode = $this->barcodeParseToArray($barcodeStr);
+		$bookHelper = new \Babesk\Schbas\Book($this->_dataContainer);
+		$barcode = $bookHelper->barcodeParseToArray($barcodeStr);
+		//$barcodeStr = $this->barcodeNormalize($barcodeStr);
+		//$barcode = $this->barcodeParseToArray($barcodeStr);
 		//Delimiter not used in Query
 		unset($barcode['delimiter']);
 		$query = $this->_entityManager->createQuery(
@@ -225,29 +228,6 @@ class Loan extends Schbas {
 			return false;
 		}
 		return $lent;
-	}
-
-	private function barcodeParseToArray($barcode) {
-
-		$barcodeAr = array();
-		list(
-				$barcodeAr['subject'],
-				$barcodeAr['purchaseYear'],
-				$barcodeAr['class'],
-				$barcodeAr['bundle'],
-				$barcodeAr['delimiter'],
-				$barcodeAr['exemplar']
-			) = explode(' ', $barcode);
-		return $barcodeAr;
-	}
-
-	private function barcodeNormalize($barcode) {
-
-		$barcode = str_replace("-", "/", $barcode);
-		//add space after / when it's missing
-		$barcode = preg_replace("/\/([0-9])/", "/ $1", $barcode);
-		$barcode = str_replace("  ", " ", $barcode);
-		return $barcode;
 	}
 
 	private function bookLoanToUserToDb($exemplar, $userId) {
