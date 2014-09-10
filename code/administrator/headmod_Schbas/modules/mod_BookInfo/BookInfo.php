@@ -2,39 +2,107 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ADMIN . '/headmod_Schbas/Schbas.php';
+require_once PATH_INCLUDE . '/Schbas/Book.php';
 
 class BookInfo extends Schbas {
 
-	////////////////////////////////////////////////////////////////////////////////
-	//Attributes
-
-	////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
 	//Constructor
+	/////////////////////////////////////////////////////////////////////
+
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
 	}
 
-	////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
 	//Methods
+	/////////////////////////////////////////////////////////////////////
+
 	public function execute($dataContainer) {
-		//no direct access
-		defined('_AEXEC') or die("Access denied");
 
-		require_once 'AdminBookInfoProcessing.php';
-		require_once 'AdminBookInfoInterface.php';
-
-		$BookInfoInterface = new AdminBookInfoInterface($this->relPath);
-		$BookInfoProcessing = new AdminBookInfoProcessing($BookInfoInterface);
+		$this->entryPoint($dataContainer);
 
 		if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['barcode'])) {
-			$uid = $BookInfoProcessing->GetUser($_POST['barcode']);
-			$userData = $BookInfoProcessing->GetUserData($uid);
-			$bookData = $BookInfoProcessing->GetBookData($_POST['barcode']);
-			$BookInfoInterface->ShowBookInfo($userData,$bookData);
+			$this->bookinfoShow($_POST['barcode']);
 		}
 		else{
-			$BookInfoInterface->BookId();
+			$this->displayTpl('form.tpl');
 		}
+	}
+
+	/////////////////////////////////////////////////////////////////////
+	//Implements
+	/////////////////////////////////////////////////////////////////////
+
+	protected function entryPoint($dataContainer) {
+
+		parent::entryPoint($dataContainer);
+		$this->initSmartyVariables();
+	}
+
+	private function bookinfoShow($barcodeStr) {
+
+		$invData = $this->dataFetch($barcodeStr);
+		if(!empty($invData)) {
+			$potentialUsers = $invData->getUsersLent();
+			if(count($potentialUsers)) {
+				//Current db-Structure only allows book lent to only one user
+				$user = $potentialUsers->first();
+				//Query made sure to just load the active grade
+				$grade = $user->getUsersInGradesAndSchoolyears()
+					->first()
+					->getGrade();
+				$this->bookinfoTemplateGenerate($invData, $user, $grade);
+			}
+			else {
+				$this->_interface->dieError(
+					'Dieses Buch ist keinem Benutzer ausgeliehen.'
+				);
+			}
+		}
+		else {
+			$this->_interface->dieError('Dieses Buch ist nicht im System.');
+		}
+	}
+
+	private function dataFetch($barcodeStr) {
+
+		$bookHelper = new \Babesk\Schbas\Book($this->_dataContainer);
+		$barcode = $bookHelper->barcodeParseToArray($barcodeStr);
+		unset($barcode['delimiter']); //Not used in query
+		$query = $this->_entityManager->createQuery(
+			'SELECT i, b, s, u, uigs FROM Babesk:SchbasInventory i
+				INNER JOIN i.book b
+					WITH b.class = :class AND b.bundle = :bundle
+				INNER JOIN b.subject s
+					WITH s.abbreviation = :subject
+				LEFT JOIN i.usersLent u
+				LEFT JOIN u.usersInGradesAndSchoolyears uigs
+				LEFT JOIN uigs.schoolyear sy WITH sy.active = 1
+				LEFT JOIN uigs.grade g
+				WHERE i.yearOfPurchase = :purchaseYear
+					AND i.exemplar = :exemplar
+					AND sy.id != 0
+		')->setParameters($barcode);
+		return $query->getOneOrNullResult();
+	}
+
+	private function bookinfoTemplateGenerate($exemplar, $user, $grade) {
+
+		$book = $exemplar->getBook();
+		$gradeStr = $grade->getGradelevel() . $grade->getLabel();
+		$this->_smarty->assign('userID', $user->getId());
+		$this->_smarty->assign('name', $user->getName());
+		$this->_smarty->assign('forename', $user->getForename());
+		$this->_smarty->assign('class', $gradeStr);
+		$this->_smarty->assign('locked', $user->getLocked());
+		$this->_smarty->assign('bookID', $book->getId());
+		$this->_smarty->assign('subject', $book->getSubject()->getName());
+		$this->_smarty->assign('class', $book->getClass());
+		$this->_smarty->assign('title', $book->getTitle());
+		$this->_smarty->assign('author', $book->getAuthor());
+		$this->_smarty->assign('publisher', $book->getPublisher());
+		$this->displayTpl('result.tpl');
 	}
 }
 
