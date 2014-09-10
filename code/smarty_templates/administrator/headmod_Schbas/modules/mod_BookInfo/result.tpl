@@ -1,4 +1,4 @@
-{extends file=$checkoutParent}{block name=content}
+{extends file=$base_path}{block name=content}
 
 <h3 class="module-header">Informationen zum Exemplar</h3>
 

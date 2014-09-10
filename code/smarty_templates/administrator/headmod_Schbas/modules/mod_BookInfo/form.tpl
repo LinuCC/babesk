@@ -1,4 +1,4 @@
-{extends file=$checkoutParent}{block name=content}
+{extends file=$base_path}{block name=content}
 <h3 class="module-header">Buchinformationen</h3>
 <h3>Bitte Buch Scannen</h3>
 <form class="form-horizontal" action="index.php?section=Schbas|BookInfo&amp;{$sid}" method="post">
