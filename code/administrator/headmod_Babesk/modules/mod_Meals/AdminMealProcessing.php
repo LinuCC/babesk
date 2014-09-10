@@ -62,9 +62,17 @@ class AdminMealProcessing {
 			$description = $_POST['description'];
 			$price_class = $_POST['price_class'];
 			$max_orders = $_POST['max_orders'];
-			$date_ar = array("day"	 => $_POST['Date_Day'], "month"	 => $_POST['Date_Month'], "year"	 => $_POST[
-				'Date_Year']
-			);
+			if(!empty($_POST['meal-date'])) {
+				$date = new DateTime($_POST['meal-date']);
+				$dateStr = $date->format('Y-m-d');
+			}
+			else {
+				$this->mealInterface->dieError('Kein Datum angegeben.');
+			}
+
+			//$date_ar = array("day"	 => $_POST['Date_Day'], "month"	 => $_POST['Date_Month'], "year"	 => $_POST[
+			//	'Date_Year']
+			//);
 
 			try {
 
@@ -80,18 +88,27 @@ class AdminMealProcessing {
 			}
 
 			//convert the date for MySQL-Server
-			$date_conv = $date_ar["year"] . "-" . $date_ar["month"] . "-" . $date_ar["day"];
+			//$date_conv = $date_ar["year"] . "-" . $date_ar["month"] . "-" . $date_ar["day"];
 
-            //check if weekday is saturday or sunday
-            if (date('N', strtotime($date_conv)) > 5) $this->mealInterface->dieError(gettext("Mealdate at weekend not valid!"));
+			//check if weekday is saturday or sunday
+			if ($date->format('N') > 5) {
+				$this->mealInterface->dieError(
+					gettext("Mealdate at weekend not valid!")
+				);
+			}
 
 			//and add the meal
 			try {
 
-				$this->mealManager->addMeal($name, $description, $date_conv, $price_class, $max_orders);
+				$this->mealManager->addMeal(
+					$name, $description, $dateStr, $price_class, $max_orders
+				);
 			} catch (Exception $e) {
 				$this->mealInterface->dieError($this->msg['err_add_meal'] . $e->getMessage());
 			}
+			$this->mealInterface->backlink(
+				'administrator|Babesk|Meals&action=1'
+			);
 			$this->mealInterface->dieMsg($this->msg['fin_add_meal']);
 		}
 		else {
