@@ -5,7 +5,7 @@ class AdminRetourProcessing {
 	var $messages = array();
 	private $RetourInterface;
 
-	function __construct($RetourInterface) {
+	function __construct($RetourInterface, $dataContainer) {
 
 
 		require_once PATH_ACCESS . '/CardManager.php';
@@ -24,6 +24,8 @@ class AdminRetourProcessing {
 							'err_get_user_by_card' => 'Kein Benutzer gefunden!',
 							'err_card_id' => 'Die Karten-ID ist fehlerhaft!',
 							'err_usr_locked' =>'Der Benutzer ist gesperrt!');
+		$this->_logger = $dataContainer->getLogger();
+		$this->_entityManager = $dataContainer->getEntityManager();
 	}
 
 	/**
@@ -59,24 +61,32 @@ class AdminRetourProcessing {
 	 * Ausleihtabelle per Ajax anzeigen
 	 */
 	function RetourTableDataAjax($card_id) {
-		$uid = $this->GetUser($card_id);
-		$loanbooks = $this->loanManager->getLoanlistByUID($uid);
 
-		foreach ($loanbooks as $loanbook){
-			$invData = $this->inventoryManager->getInvDataByID($loanbook['inventory_id']);
-			$bookdata = $this->bookManager->getBookDataByID($invData['book_id']);
-			$datatmp = array_merge($loanbook, $invData, $bookdata);
-			$data[] = $datatmp;
-			//$datatmp = null;
+		try {
+			$uid = $this->GetUser($card_id);
+			$loanbooks = $this->loanManager->getLoanlistByUID($uid);
 
-		}
-		$class = $this->userManager->getUserDetails($uid);
-		$class = $class['class'];
-		$fullname = $this->userManager->getForename($uid)." ".$this->userManager->getName($uid)." (".$class.")";
-		if (!isset($data)) {
-			$this->RetourInterface->showMsg($fullname." hat keine B&uuml;cher ausgeliehen!");
-		} else {
-			$this->RetourInterface->ShowRetourBooksAjax($data,$card_id,$uid,$fullname);
+			foreach ($loanbooks as $loanbook){
+				$invData = $this->inventoryManager->getInvDataByID($loanbook['inventory_id']);
+				$bookdata = $this->bookManager->getBookDataByID($invData['book_id']);
+				$datatmp = array_merge($loanbook, $invData, $bookdata);
+				$data[] = $datatmp;
+				//$datatmp = null;
+			}
+			$class = $this->fetchUserDetails($uid);
+			$class = $class['class'];
+			$fullname = $this->userManager->getForename($uid)." ".$this->userManager->getName($uid)." (".$class.")";
+			if (!isset($data)) {
+				$this->RetourInterface->showMsg($fullname." hat keine B&uuml;cher ausgeliehen!");
+			} else {
+				$this->RetourInterface->ShowRetourBooksAjax($data,$card_id,$uid,$fullname);
+			}
+
+		} catch (Exception $e) {
+			$this->_logger->log('Error in Ajax of Schbas Retour',
+				'Moderate', Null, json_encode(array(
+					'msg' => $e->getMessage())));
+			$this->RetourInterface->showMsg('Ein Fehler ist aufgetreten.');
 		}
 	}
 

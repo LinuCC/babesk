@@ -6,7 +6,7 @@
 <form name='barcode_scan' onsubmit='return false;' />
 	<div class="form-group">
 		<label for="barcode">Inventarnummer</label>
-		<input type='text' id='barcode' class="form-control" onKeyPress='if(enter_pressed(event)){ ajaxFunction(); }'/> <br />
+		<input type='text' id='barcode' class="form-control"/> <br />
 	</div>
 </form>
 
@@ -42,22 +42,14 @@
 </div>
 {/block}
 
-{block name=js_include}
+{block name=js_include append}
 
 <script language="javascript" type="text/javascript">
-<!--
-//influenced by http://tommwilson.com
-function enter_pressed(e){
-var keycode;
-if (window.event) keycode = window.event.keyCode;
-else if (e) keycode = e.which;
-else return false;
-return (keycode == 13);
-}
-//-->
-</script>
 
-<script language="javascript" type="text/javascript">
+$('#barcode').enterKey(function(ev) {
+	ajaxFunction();
+});
+
 <!--
 //Browser Support Code
 function ajaxFunction(){
