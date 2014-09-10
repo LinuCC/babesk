@@ -80,6 +80,14 @@ class Loan extends Schbas {
 		$booksSelfpaid = $user->getSelfpayingBooks();
 		$booksToLoan = $loanHelper->loanBooksGet($user->getId());
 
+		foreach($booksToLoan as $key => $loan) {
+			foreach($booksSelfpaid as $selfpaid) {
+				if($loan['id'] == $selfpaid->getId()) {
+					unset($booksToLoan[$key]);
+				}
+			}
+		}
+
 		$this->_smarty->assign('user', $user);
 		$this->_smarty->assign('formSubmitted', $formSubmitted);
 		$this->_smarty->assign('userPaid', $userPaid);
