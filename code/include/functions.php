@@ -166,10 +166,7 @@ function navBar($showPage, $table,$headmod, $mod, $action,$filter) {
 	$query = sql_prev_inj(sprintf('SELECT COUNT(*) AS total FROM %s', $table));
 	$result = $db->query($query);
 	if (!$result) {
-		/**
-		 * @todo Proper Errorhandling here, not this: (wouldnt even execute)
-		 * throw DB_QUERY_ERROR.$db->error;
-		 */
+		throw new Exception('Fehler: Nichts gefunden!');
 	}
 
 	$row = $result->fetch_array(MYSQLI_ASSOC);

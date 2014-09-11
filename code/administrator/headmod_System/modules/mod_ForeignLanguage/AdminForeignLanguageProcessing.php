@@ -88,7 +88,7 @@ class AdminForeignLanguageProcessing {
 		}
 		$foreignLanguages = $globalSettingsManager->getForeignLanguages();
 		$foreignLanguages_exploded = explode("|", $foreignLanguages);
-		$navbar = navBar($showPage, 'users', 'System', 'ForeignLanguage', '3',$filter);
+		$navbar = navBar($showPage, 'SystemUsers', 'System', 'ForeignLanguage', '3',$filter);
 		$this->ForeignLanguageInterface->ShowUsers($users,$foreignLanguages_exploded,$navbar);
 	}
 
