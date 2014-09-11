@@ -67,24 +67,32 @@ class BookInfo extends Schbas {
 
 	private function dataFetch($barcodeStr) {
 
-		$bookHelper = new \Babesk\Schbas\Book($this->_dataContainer);
-		$barcode = $bookHelper->barcodeParseToArray($barcodeStr);
-		unset($barcode['delimiter']); //Not used in query
-		$query = $this->_entityManager->createQuery(
-			'SELECT i, b, s, u, uigs FROM Babesk:SchbasInventory i
-				INNER JOIN i.book b
-					WITH b.class = :class AND b.bundle = :bundle
-				INNER JOIN b.subject s
-					WITH s.abbreviation = :subject
-				LEFT JOIN i.usersLent u
-				LEFT JOIN u.usersInGradesAndSchoolyears uigs
-				LEFT JOIN uigs.schoolyear sy WITH sy.active = 1
-				LEFT JOIN uigs.grade g
-				WHERE i.yearOfPurchase = :purchaseYear
-					AND i.exemplar = :exemplar
-					AND sy.id != 0
-		')->setParameters($barcode);
-		return $query->getOneOrNullResult();
+		try {
+			$bookHelper = new \Babesk\Schbas\Book($this->_dataContainer);
+			$barcode = $bookHelper->barcodeParseToArray($barcodeStr);
+			unset($barcode['delimiter']); //Not used in query
+			$query = $this->_entityManager->createQuery(
+				'SELECT i, b, s, u, uigs FROM Babesk:SchbasInventory i
+					INNER JOIN i.book b
+						WITH b.class = :class AND b.bundle = :bundle
+					INNER JOIN b.subject s
+						WITH s.abbreviation = :subject
+					LEFT JOIN i.usersLent u
+					LEFT JOIN u.usersInGradesAndSchoolyears uigs
+					LEFT JOIN uigs.schoolyear sy WITH sy.active = 1
+					LEFT JOIN uigs.grade g
+					WHERE i.yearOfPurchase = :purchaseYear
+						AND i.exemplar = :exemplar
+						AND (sy.id != 0 OR sy.id IS NULL)
+			')->setParameters($barcode);
+			return $query->getOneOrNullResult();
+
+		} catch (Exception $e) {
+			$this->_logger->log('Error fetching the bookinfo', 'Notice',
+				Null, json_encode(array('barcode' => $barcode,
+					'msg' => $e->getMessage(), 'type' => get_class($e))));
+			$this->_interface->dieError('Fehler beim Abrufen des Buches.');
+		}
 	}
 
 	private function bookinfoTemplateGenerate($exemplar, $user, $grade) {
