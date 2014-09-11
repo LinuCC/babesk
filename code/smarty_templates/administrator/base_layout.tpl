@@ -236,6 +236,38 @@
 											</div>
 										</div>
 									{/if}
+									{if $_userWarningOutput}
+										<div class="col-md-8 col-md-offset-2 message-container">
+											<div class="panel panel-warning">
+												<div class="panel-heading">
+													<div class="panel-title">
+														<h3 class="icon-container col-xs-2 col-sm-1">
+															<span class="icon icon-info"></span>
+														</h3>
+														<span class="col-xs-10 col-sm-11">
+															Warnung
+														</span>
+														<div class="clearfix"></div>
+													</div>
+												</div>
+												<div class="panel-body">
+														{if is_array($_userWarningOutput)}
+															{foreach $_userWarningOutput as $msg}
+																<div>{$msg}</div>
+															{/foreach}
+														{else}
+															{$_userWarningOutput}
+														{/if}
+												</div>
+
+												<a class="btn btn-primary pull-right"
+													href="{if $backlink}{$backlink}
+														{else}javascript: history.go(-1){/if}">
+													{t}back{/t}
+												</a>
+											</div>
+										</div>
+									{/if}
 									{if $_userMsgOutput}
 										<div class="col-md-8 col-md-offset-2 message-container">
 											<div class="panel panel-info">

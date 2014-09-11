@@ -109,10 +109,10 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 		$this->schoolyearSelectedCheckInput();
 
 		if($this->schoolyearAlreadyUsedCheck($_POST['schoolyear'])) {
-			$this->_interface->showError(_g('This schoolyear was already ' .
-				'used! Please select one that was not used yet.'));
-			$this->schoolyearSelectDisplay();
-			die();
+			$this->_interface->showWarning(
+				'Dieses Schuljahr wird bereits benutzt! Fahren sie nur fort,' .
+				'wenn sie wirklich sicher sind.'
+			);
 		}
 
 		$_SESSION['UserUpdateWithSchoolyearChange']['switchType'] = $_POST['switchType'];
