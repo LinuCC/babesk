@@ -221,7 +221,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 				return (int)$data;
 			}
 			else {
-				throw Exception('globalSettings-Entry not existing!');
+				throw \Exception('globalSettings-Entry not existing!');
 			}
 
 		} catch (\PDOException $e) {
