@@ -260,21 +260,28 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 
 	private function csvOnlyResolve($conflict) {
 
+		$data = array(
+			'origUserId' => 0,
+			'forename' => $conflict['forename'],
+			'name' => $conflict['name'],
+			'newUsername' => $conflict['newUsername'],
+			'newTelephone' => $conflict['newTelephone'],
+			'newEmail' => $conflict['newEmail'],
+			'gradelevel' => $conflict['newGradelevel'],
+			'gradelabel' => $conflict['newGradelabel'],
+			'birthday' => $conflict['birthday'],
+		);
+		if(empty($conflict['birthday'])) {
+			$conflict['birthday'] = NULL;
+		}
 		if($conflict['status'] == 'confirmed') {
-			if(empty($conflict['birthday'])) {
-				$conflict['birthday'] = NULL;
-			}
-			$data = array(
-				'origUserId' => 0,
-				'forename' => $conflict['forename'],
-				'name' => $conflict['name'],
-				'newUsername' => $conflict['newUsername'],
-				'newTelephone' => $conflict['newTelephone'],
-				'newEmail' => $conflict['newEmail'],
-				'gradelevel' => $conflict['newGradelevel'],
-				'gradelabel' => $conflict['newGradelabel'],
-				'birthday' => $conflict['birthday'],
+			$this->userSolveStmt->execute($data);
+			$this->conflictResolveStmt->execute(
+				array(':id' => $conflict['conflictId'])
 			);
+		}
+		else if($conflict['status'] == 'correctedUserId') {
+			$data['origUserId'] = $conflict['correctedUserId'];
 			$this->userSolveStmt->execute($data);
 			$this->conflictResolveStmt->execute(
 				array(':id' => $conflict['conflictId'])
