@@ -113,7 +113,7 @@
 {block name=filling_content}
 <div class="row">
 	<div class="center-block">
-		<div class="col-sm-4 col-md-3 text-center">
+		<div class="col-sm-12 col-md-3 text-center">
 			<span class="input-group filter-container">
 				<span class="input-group-btn">
 					<select id="search-select-menu" class="dropdown-menu pull-right"
@@ -130,7 +130,7 @@
 				</span>
 			</span>
 		</div>
-		<div class="col-sm-8 col-md-6 text-center">
+		<div class="col-sm-12 col-md-6 text-center">
 			<ul id="page-select" class="pagination">
 			</ul>
 		</div>
