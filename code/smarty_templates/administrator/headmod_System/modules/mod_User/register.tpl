@@ -255,7 +255,7 @@
 			<div class="col-xs-12 col-md-6 form-group">
 				<div class="input-group">
 					<span class="input-group-addon"><span class="icon icon-credit"></span></span>
-					<input id="cardnumber" name="cardnumber" class="form-control" type="text" placeholder="{t}Cardnumber{/t}" maxlength="10" minlength="10" digits="true" />
+					<input id="cardnumber" name="cardnumber" class="form-control" type="text" placeholder="{t}Cardnumber{/t}" maxlength="10" minlength="10"/>
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 form-group">
