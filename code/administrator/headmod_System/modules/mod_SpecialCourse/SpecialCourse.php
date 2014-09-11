@@ -52,7 +52,7 @@ class SpecialCourse extends System {
 							try {
 								$userID = $this->userManager->getUserID($_POST['user_search']);
 							} catch (Exception $e) {
-								$this->userInterface->dieError("Benutzer nicht gefunden!");
+								$SpecialCourseInterface->dieError("Benutzer nicht gefunden!");
 							}
 
 						}

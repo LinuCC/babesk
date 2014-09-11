@@ -52,6 +52,22 @@ class User extends System {
 			$this->setSpecialCourse();
 			die();
 		}
+		else if(isset($_GET['getAllForeignLanguages'])) {
+			$this->getAllForeignLanguages();
+			die();
+		}
+		else if(isset($_GET['setForeignLanguage'])) {
+			$this->setForeignLanguage();
+			die();
+		}
+		else if(isset($_GET['getAllReligions'])) {
+			$this->getAllReligions();
+			die();
+		}
+		else if(isset($_GET['setReligion'])) {
+			$this->setReligion();
+			die();
+		}
 
 		$execReq = $dataContainer->getExecutionCommand()->pathGet();
 		if($this->submoduleCountGet($execReq)) {
@@ -854,6 +870,157 @@ class User extends System {
 		$this->_entityManager->flush();
 		$this->_interface->dieAjax(
 			'success', 'Der Oberstufenkurs wurde erfolgreich verändert'
+		);
+	}
+
+
+	protected function getAllForeignLanguages() {
+
+		$course = $this->_entityManager
+			->getRepository('Babesk:SystemGlobalSettings')
+			->findOneByName('foreign_language');
+
+		if(empty($course)) {
+			$this->_logger->log('Global Setting foreign_language does not exist',
+				'Notice', Null);
+			$this->_interface->dieAjax(
+				'info', 'Es wurden keine Fremdsprachen gefunden.'
+			);
+		}
+		else {
+			$courseStr = $course->getValue();
+			if(!empty($courseStr)) {
+				$courses = explode('|', $courseStr);
+				$this->_interface->dieAjax('success', $courses);
+			}
+			else {
+				$this->_logger->log('Error fetching global setting foreign_language',
+					'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+				$this->_interface->dieAjax(
+					'error',
+					'Ein Fehler ist beim Abrufen aller Fremdsprachen aufgetreten'
+				);
+			}
+		}
+	}
+
+	protected function setForeignLanguage() {
+
+		$users = $this->_entityManager->getRepository(
+			'Babesk:SystemUsers'
+		);
+		$courseStr = $users
+			->findOneById($_POST['userId'])
+			->getForeignLanguage();
+		$newStatus = ($_POST['inForeignLanguage'] == 'true') ? true : false;
+		$hasCourse = strpos($courseStr, $_POST['foreignLanguage']) !== false;
+		if($newStatus && !$hasCourse) {
+			//Add course
+			if(!empty($courseStr)) {
+				$courseStr .= '|';   //Add delimiter if not void
+			}
+			$courseStr .= $_POST['foreignLanguage'];
+		}
+		else if(!$newStatus && $hasCourse) {
+			//delete course
+			//Delimiter can be in two different places or not there, just try
+			//all possibilities...
+			$courseStr = str_replace(
+				$_POST['foreignLanguage'] . '|', '', $courseStr
+			);
+			$courseStr = str_replace(
+				'|' . $_POST['foreignLanguage'], '', $courseStr
+			);
+			$courseStr = str_replace(
+				$_POST['foreignLanguage'], '', $courseStr
+			);
+		}
+		else {
+			//Nothing to change
+			$this->_interface->dieAjax('info', 'Nothing changed');
+		}
+
+		$user = $users->findOneById($_POST['userId'])
+			->setForeignLanguage($courseStr);
+		$this->_entityManager->persist($user);
+		$this->_entityManager->flush();
+		$this->_interface->dieAjax(
+			'success', 'Die Fremdsprache wurde erfolgreich verändert'
+		);
+	}
+
+	protected function getAllReligions() {
+
+		$course = $this->_entityManager
+			->getRepository('Babesk:SystemGlobalSettings')
+			->findOneByName('religion');
+
+		if(empty($course)) {
+			$this->_logger->log('Global Setting religion does not exist',
+				'Notice', Null);
+			$this->_interface->dieAjax(
+				'info', 'Es wurden keine Oberstufenkurse gefunden.'
+			);
+		}
+		else {
+			$courseStr = $course->getValue();
+			if(!empty($courseStr)) {
+				$courses = explode('|', $courseStr);
+				$this->_interface->dieAjax('success', $courses);
+			}
+			else {
+				$this->_logger->log('Error fetching global setting religion',
+					'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+				$this->_interface->dieAjax(
+					'error',
+					'Ein Fehler ist beim Abrufen aller Oberstufenkurse aufgetreten'
+				);
+			}
+		}
+	}
+
+	protected function setReligion() {
+
+		$users = $this->_entityManager->getRepository(
+			'Babesk:SystemUsers'
+		);
+		$courseStr = $users
+			->findOneById($_POST['userId'])
+			->getReligion();
+		$newStatus = ($_POST['inReligion'] == 'true') ? true : false;
+		$hasCourse = strpos($courseStr, $_POST['religion']) !== false;
+		if($newStatus && !$hasCourse) {
+			//Add course
+			if(!empty($courseStr)) {
+				$courseStr .= '|';   //Add delimiter if not void
+			}
+			$courseStr .= $_POST['religion'];
+		}
+		else if(!$newStatus && $hasCourse) {
+			//delete course
+			//Delimiter can be in two different places or not there, just try
+			//all possibilities...
+			$courseStr = str_replace(
+				$_POST['religion'] . '|', '', $courseStr
+			);
+			$courseStr = str_replace(
+				'|' . $_POST['religion'], '', $courseStr
+			);
+			$courseStr = str_replace(
+				$_POST['religion'], '', $courseStr
+			);
+		}
+		else {
+			//Nothing to change
+			$this->_interface->dieAjax('info', 'Nothing changed');
+		}
+
+		$user = $users->findOneById($_POST['userId'])
+			->setReligion($courseStr);
+		$this->_entityManager->persist($user);
+		$this->_entityManager->flush();
+		$this->_interface->dieAjax(
+			'success', 'Die Religion wurde erfolgreich verändert'
 		);
 	}
 

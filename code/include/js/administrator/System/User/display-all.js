@@ -123,6 +123,8 @@ $(document).ready(function() {
 		var sortMethod = 'ASC';
 		//All special_course s
 		var specialCourses = [];
+		var foreignLanguages = [];
+		var religions = [];
 
 		columnsToShowSetByCookies();
 		$('#search-select-menu').multiselect({
@@ -232,6 +234,48 @@ $(document).ready(function() {
 			});
 		});
 
+		$('#user-table').on('click', '.foreign-language-checkbox', function(ev) {
+			var $checkbox = $(ev.target);
+			console.log($checkbox.prop('checked'));
+			$.postJSON(
+				'index.php?module=administrator|System|User|DisplayAll&setForeignLanguage',
+				{
+					'inForeignLanguage': $checkbox.prop('checked'),
+					'foreignLanguage': $checkbox.attr('foreignLanguage'),
+					'userId': $checkbox.closest('tr').attr('userid')
+				},
+				function(res) {
+					console.log(res);
+					if(res['state'] == 'error') {
+						toastr.error(res['data']);
+					}
+					if(res['value'] == 'error') {
+						toastr.error(res['message']);
+					}
+				}
+			);
+		});
+		$('#user-table').on('click', '.religion-checkbox', function(ev) {
+			var $checkbox = $(ev.target);
+			console.log($checkbox.prop('checked'));
+			$.postJSON(
+				'index.php?module=administrator|System|User|DisplayAll&setReligion',
+				{
+					'inReligion': $checkbox.prop('checked'),
+					'religion': $checkbox.attr('religion'),
+					'userId': $checkbox.closest('tr').attr('userid')
+				},
+				function(res) {
+					console.log(res);
+					if(res['state'] == 'error') {
+						toastr.error(res['data']);
+					}
+					if(res['value'] == 'error') {
+						toastr.error(res['message']);
+					}
+				}
+			);
+		});
 		$('#user-table').on('click', '.special-course-checkbox', function(ev) {
 			var $checkbox = $(ev.target);
 			console.log($checkbox.prop('checked'));
@@ -464,6 +508,12 @@ $(document).ready(function() {
 			if(!specialCourses.length) {
 				getAllSpecialCourses();
 			}
+			if(!religions.length) {
+				getAllReligions();
+			}
+			if(!foreignLanguages.length) {
+				getAllForeignLanguages();
+			}
 
 			if(pagenum == undefined) {
 				pagenum = activePage;
@@ -541,10 +591,18 @@ $(document).ready(function() {
 			// var columnHeader = selectedColumnLabelsGet();
 			var headRow = '<tr><th><input id="user-checkbox-global" type="checkbox" /></th>';
 			var specialCoursePos = -1;
+			var religionPos = -1;
+			var foreignLanguagePos = -1;
 			if(userData.length != 0){
 				$.each(userData[0], function(index, columnName) {
 					if(index == 'special_course') {
 						specialCoursePos = index;
+					}
+					if(index == 'foreign_language') {
+						foreignLanguagePos = index;
+					}
+					if(index == 'religion') {
+						religionPos = index;
 					}
 					var respectiveColumnEntryArr = $.grep(columns, function(el) {
 							return index == el.name;
@@ -575,6 +633,12 @@ $(document).ready(function() {
 					$.each(user, function(colIndex, column) {
 						if(colIndex == specialCoursePos) {
 							column = special_course(column);
+						}
+						if(colIndex == foreignLanguagePos) {
+							column = foreign_language(column);
+						}
+						if(colIndex == religionPos) {
+							column = religion(column);
 						}
 						row += '<td>' + column + '</td>';
 					});
@@ -628,6 +692,94 @@ $(document).ready(function() {
 				function(res) {
 					if(res['state'] == 'success') {
 						specialCourses = res['data'];
+					}
+					else {
+						toastr[res['state']](res['data']);
+					}
+				}
+			);
+			jQuery.ajaxSetup({async:true});
+		}
+		/**
+		 * Allows direct editing of the foreign languages
+		 * @todo  HOTFIX - rework display-all and make it better!
+		 */
+		function foreign_language(langStr) {
+			var languages = langStr.split("|");
+			var newLangStr = '';
+			var $langSel = $(
+				'<span class="foreign-language-selector"><div></div>\
+					<input type="checkbox" class="foreign-language-checkbox"></span>'
+			);
+			var $checkedLangSel = $langSel.clone();
+			$checkedLangSel.find('input').attr('checked', true);
+			$.each(foreignLanguages, function(ind, el) {
+				if($.inArray(el, languages) != -1) {
+					var $content = $checkedLangSel.clone();
+				}
+				else {
+					var $content = $langSel.clone();
+				}
+				$content.find('input').attr('foreignlanguage', el);
+				$content.find('div').html(el);
+				newLangStr += $content.outerHtml();
+			});
+			return newLangStr;
+		}
+
+		function getAllForeignLanguages() {
+			jQuery.ajaxSetup({async:false});
+			$.postJSON(
+				'index.php?module=administrator|System|User\
+					&getAllForeignLanguages',
+				{},
+				function(res) {
+					if(res['state'] == 'success') {
+						foreignLanguages = res['data'];
+					}
+					else {
+						toastr[res['state']](res['data']);
+					}
+				}
+			);
+			jQuery.ajaxSetup({async:true});
+		}
+		/**
+		 * Allows direct editing of the religions
+		 * @todo  HOTFIX - rework display-all and make it better!
+		 */
+		function religion(religionStr) {
+			var givenReligions = religionStr.split("|");
+			var newReligionStr = '';
+			var $religionSel = $(
+				'<span class="religion-selector"><div></div>\
+					<input type="checkbox" class="religion-checkbox"></span>'
+			);
+			var $checkedReligionSel = $religionSel.clone();
+			$checkedReligionSel.find('input').attr('checked', true);
+			$.each(religions, function(ind, el) {
+				if($.inArray(el, givenReligions) != -1) {
+					var $content = $checkedReligionSel.clone();
+				}
+				else {
+					var $content = $religionSel.clone();
+				}
+				$content.find('input').attr('religion', el);
+				$content.find('div').html(el);
+				newReligionStr += $content.outerHtml();
+			});
+			return newReligionStr;
+		}
+
+		function getAllReligions() {
+			jQuery.ajaxSetup({async:false});
+			$.postJSON(
+				'index.php?module=administrator|System|User\
+					&getAllReligions',
+				{},
+				function(res) {
+					if(res['state'] == 'success') {
+						religions = res['data'];
 					}
 					else {
 						toastr[res['state']](res['data']);

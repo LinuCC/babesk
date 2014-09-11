@@ -31,3 +31,17 @@ table#user-table.table-hover > tbody > tr:hover > td {
 	border-right: 1px solid #BBB;
 	margin-left: -1px;
 }
+.religion-selector {
+	display: inline-block;
+	padding: 0 3px;
+	border-left: 1px solid #BBB;
+	border-right: 1px solid #BBB;
+	margin-left: -1px;
+}
+.foreign-language-selector {
+	display: inline-block;
+	padding: 0 3px;
+	border-left: 1px solid #BBB;
+	border-right: 1px solid #BBB;
+	margin-left: -1px;
+}
