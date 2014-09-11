@@ -1,0 +1,1 @@
+ALTER TABLE KuwasysClassteachers ADD email varchar(255) NOT NULL DEFAULT '';
