@@ -457,14 +457,15 @@ class UserDisplayAllQueryCreator {
 
 	protected function activeGradeQuery() {
 
-		$this->usersInGradesAndSchoolyearsQuery();
 		if(!$this->_activeGradeQueryDone) {
 			$this->addSelectStatement(
 				'CONCAT(ga.gradelevel, "-", ga.label) AS `activeGrade`'
 			);
 			$this->addJoinStatement('
-				LEFT JOIN SystemGrades ga ON ga.ID = uigs.gradeId
-					AND uigs.schoolyearId = @activeSchoolyear
+				LEFT JOIN SystemUsersInGradesAndSchoolyears uigsag
+					ON uigsag.schoolyearId = @activeSchoolyear
+					AND uigsag.userId = u.ID
+				LEFT JOIN SystemGrades ga ON ga.ID = uigsag.gradeId
 			');
 			$this->addGroupStatement('ga.`gradelevel`');
 			$this->_activeGradeQueryDone = true;
