@@ -24,21 +24,22 @@
 					Der Benutzer hat für die Buchausleihe bezahlt.
 				</li>
 			{else}
-				<li class="list-group-item list-group-item-danger">
-					<span class="icon icon-error pull-left"></span>
-					Der Benutzer hat nicht genug für die Bücher bezahlt!
-				</li>
-			{/if}
-			{if !$userSelfpayer}
-				<li class="list-group-item list-group-item-success">
-					<span class="icon icon-checkmark pull-left"></span>
-					Der Benutzer kauft nicht alle Bücher selber ein.
-				</li>
-			{else}
-				<li class="list-group-item list-group-item-danger">
-					<span class="icon icon-error pull-left"></span>
-					Der Benutzer kauft alle Bücher selber ein!
-				</li>
+				{if $loanChoice == 'ls'}
+					<li class="list-group-item list-group-item-warning">
+						<span class="icon icon-info pull-left"></span>
+						Der Benutzer ist Selbsteinkäufer!
+					</li>
+				{else if $loanChoice == 'nl'}
+					<li class="list-group-item list-group-item-warning">
+						<span class="icon icon-info pull-left"></span>
+						Keine Teilnahme des Benutzers!
+					</li>
+				{else}
+					<li class="list-group-item list-group-item-danger">
+						<span class="icon icon-error pull-left"></span>
+						Der Benutzer hat nicht genug für die Bücher bezahlt!
+					</li>
+				{/if}
 			{/if}
 		{else}
 			<li class="list-group-item list-group-item-danger">

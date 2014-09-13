@@ -68,9 +68,13 @@ class Loan extends Schbas {
 		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
 		$user = $this->userByCardnumberGet($cardnumber);
 		$formSubmitted = $this->userFormSubmittedCheck($user);
+		$loanChoice = false;
 		if($user->getSchbasAccounting() !== Null) {
 			$userPaid = $this->userPaidForLoanCheck($user);
 			$userSelfpayer = $this->selfpayerCheck($user);
+			$loanChoice = $user->getSchbasAccounting()
+				->getLoanChoice()
+				->getAbbreviation();
 		}
 		else {
 			$userPaid = false;
@@ -90,6 +94,7 @@ class Loan extends Schbas {
 
 		$this->_smarty->assign('user', $user);
 		$this->_smarty->assign('formSubmitted', $formSubmitted);
+		$this->_smarty->assign('loanChoice', $loanChoice);
 		$this->_smarty->assign('userPaid', $userPaid);
 		$this->_smarty->assign('userSelfpayer', $userSelfpayer);
 		$this->_smarty->assign('booksLent', $booksLent);
@@ -147,7 +152,7 @@ class Loan extends Schbas {
 		$abbr = $user->getSchbasAccounting()
 			->getLoanChoice()
 			->getAbbreviation();
-		return $abbr == 'nl';
+		return $abbr == 'ls';
 	}
 
 	private function booksStillLendByUserGet($user) {
