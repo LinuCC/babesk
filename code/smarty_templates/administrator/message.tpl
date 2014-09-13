@@ -1,4 +1,4 @@
-{extends file=$inh_path} {block name=content}
+{extends file=$base_path} {block name=content}
 
 {if $message && $message != ''}{$message}{/if}
 
