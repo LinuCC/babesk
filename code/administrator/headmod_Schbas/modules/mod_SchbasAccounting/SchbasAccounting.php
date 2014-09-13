@@ -19,6 +19,7 @@ class SchbasAccounting extends Schbas {
 	public function execute($dataContainer) {
 		//no direct access
 		defined('_AEXEC') or die("Access denied");
+		$this->entryPoint($dataContainer);
 
 		require_once 'SchbasAccountingInterface.php';
 		require_once PATH_ACCESS.'/LoanManager.php';
@@ -26,7 +27,7 @@ class SchbasAccounting extends Schbas {
 		$this->SchbasAccountingInterface = new SchbasAccountingInterface($this->relPath);
 		$this->lm = new LoanManager();
 
-        $this->_pdo = $dataContainer->getPdo();
+		$this->_pdo = $dataContainer->getPdo();
 
 
 
@@ -46,9 +47,9 @@ class SchbasAccounting extends Schbas {
 				case 'sendReminder':
 					$this->sendReminder();
 					break;
-                case 'deleteAll':
-                    $this->deleteAll();
-                    break;
+				case 'deleteAll':
+					$this->deleteAll();
+					break;
 				case 'remember':
 					$this->remember();
 					break;
@@ -135,41 +136,57 @@ class SchbasAccounting extends Schbas {
 			if ($result[0]['COUNT(*)']!="0") {
 				die('dupe');
 			}
+			//Check if the user is in an active Grade
+			$user = $this->_entityManager->find('Babesk:SystemUsers', $uid);
+			$count = $this->_entityManager->createQuery(
+				'SELECT COUNT(u) FROM Babesk:SystemUsers u
+					JOIN u.usersInGradesAndSchoolyears uigs
+					JOIN uigs.schoolyear s WITH s.active = 1
+					WHERE u.id = :userId
+			')->setParameter('userId', $uid)
+				->getSingleScalarResult();
+			if(!$count) {
+				die('noActiveGrade');
+			}
 			if(is_numeric($uid) && in_array($loanChoice, $haystack, true)) {
 				try {
 
-                    $loanbooks = array();
+					$loanbooks = array();
 
-                    require_once PATH_ACCESS . '/LoanManager.php';
-                    $lm = new LoanManager();
-                    $loanbooks = $lm->getLoanByUID($uid, false);
-                    $loanbooksSelfBuy = TableMng::query("SELECT BID FROM SchbasSelfpayer WHERE UID=".$uid);
-                    $loanbooksSelfBuy = array_map('current',$loanbooksSelfBuy);
+					require_once PATH_ACCESS . '/LoanManager.php';
+					require_once PATH_INCLUDE . '/Schbas/Loan.php';
+					$lm = new LoanManager();
+					$loanHelper = new \Babesk\Schbas\Loan(
+						$this->_dataContainer
+					);
+					$loanbooks = $loanHelper->loanBooksGet($uid);
+					$loanbooksSelfBuy = TableMng::query("SELECT BID FROM SchbasSelfpayer WHERE UID=".$uid);
+					$loanbooksSelfBuy = array_map('current',$loanbooksSelfBuy);
 
-                    $checkedBooks = array();
-                    $feeNormal = 0.00;
-                    $oneYear = array("05","06","07","08","09","10");
-                    $twoYears = array(56,67,78,89,"90",12,13);
-                    $threeYears = array(79,91);
-                    $fourYears = array(69,92);
-                    foreach ($loanbooks as $book) {
-                        if (!in_array($book['id'],$loanbooksSelfBuy)) {
-                            if(in_array($book['class'],$oneYear)) $feeNormal += $book['price'];
-                            if(in_array($book['class'],$twoYears)) $feeNormal += $book['price']/2;
-                            if(in_array($book['class'],$threeYears)) $feeNormal += $book['price']/3;
-                            if(in_array($book['class'],$fourYears)) $feeNormal += $book['price']/4;
-                        }
-                    }
+					$checkedBooks = array();
+					$feeNormal = 0.00;
+					$oneYear = array("05","06","07","08","09","10");
+					$twoYears = array(56,67,78,89,"90",12,13);
+					$threeYears = array(79,91);
+					$fourYears = array(69,92);
+					foreach ($loanbooks as $book) {
+						if (!in_array($book['id'],$loanbooksSelfBuy)) {
+							if(in_array($book['class'],$oneYear)) $feeNormal += $book['price'];
+							if(in_array($book['class'],$twoYears)) $feeNormal += $book['price']/2;
+							if(in_array($book['class'],$threeYears)) $feeNormal += $book['price']/3;
+							if(in_array($book['class'],$fourYears)) $feeNormal += $book['price']/4;
+						}
+					}
 
 
-                    //get loan fees
-                    //gesamtausleihpreis dritteln
-                    $feeNormal /=3;
+					//get loan fees
+					//gesamtausleihpreis dritteln
+					$feeNormal /=3;
 
-                    //für reduzierten Preis vom gedrittelten preis 20% abziehen
-                    $feeReduced = $feeNormal * 0.8;
-                    $feeNormal = number_format( round($feeNormal,0) , 2, ',','.'); //preise auf volle
-                    $feeReduced = number_format( round($feeReduced,0) , 2, ',','.');//betraege runden
+					//für reduzierten Preis vom gedrittelten preis 20% abziehen
+					$feeReduced = $feeNormal * 0.8;
+					$feeNormal = number_format( round($feeNormal,0) , 2, ',','.'); //preise auf volle
+					$feeReduced = number_format( round($feeReduced,0) , 2, ',','.');//betraege runden
 				//	$grade = TableMng::query(sprintf("SELECT g.gradelevel FROM jointusersingrade as juig, SystemGrades as g WHERE juig.GradeID=g.ID and juig.UserID='%s'",$uid));
 
 					if ($loanChoice=="ln")	$amountToPay = $feeNormal;
@@ -552,16 +569,16 @@ class SchbasAccounting extends Schbas {
 
 	}
 
-    private function deleteAll()
-    {
-        try {
-            $stmt = $this->_pdo->query('TRUNCATE TABLE schbas_accounting');
-            $stmt->execute();
-            $this->SchbasAccountingInterface->dieSuccess('Tabelle Buchhaltung erfolgreich geleert!');
-        } catch (PDOException $e) {
-            $this->SchbasAccountingInterface->dieError('Konnte die Tabelle Buchhaltung nicht leeren!');
-        }
+	private function deleteAll()
+	{
+		try {
+			$stmt = $this->_pdo->query('TRUNCATE TABLE schbas_accounting');
+			$stmt->execute();
+			$this->SchbasAccountingInterface->dieSuccess('Tabelle Buchhaltung erfolgreich geleert!');
+		} catch (PDOException $e) {
+			$this->SchbasAccountingInterface->dieError('Konnte die Tabelle Buchhaltung nicht leeren!');
+		}
 
-    }
+	}
 }
 ?>

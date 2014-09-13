@@ -182,7 +182,8 @@ class Loan {
 
 		$this->_pdo = $dataContainer->getPdo();
 		$this->_entityManager = $dataContainer->getEntityManager();
-		$this->_logger = $dataContainer->getLogger();
+		$this->_logger = clone($dataContainer->getLogger());
+		$this->_logger->categorySet('Babesk/Schbas/Loan');
 	}
 
 	protected function bookSubjectFilterArrayGet() {
@@ -206,6 +207,7 @@ class Loan {
 		if(empty($gradelevel)) {
 			$this->_logger->log('User missing an active gradelevel',
 				'Notice', Null, json_encode(array('uid' => $userId)));
+
 		}
 		if(empty($this->_gradelevelIsbnIdentAssoc[$gradelevel])) {
 			$this->_logger->log('Not found bookclasses for gradelevel',
