@@ -246,10 +246,16 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 			$found = false;
 			foreach($content as $csvUser) {
 				if($dbUser['forename'] == $csvUser['forename'] &&
-					$dbUser['name'] == $csvUser['name'] &&
-					strtotime($dbUser['birthday']) ===
-						strtotime($csvUser['birthday'])
-					) {
+					$dbUser['name'] == $csvUser['name'] && (
+						(
+							empty($dbUser['birthday']) &&
+							empty($csvUser['birthday'])
+						) || (
+							strtotime($dbUser['birthday']) ===
+							strtotime($csvUser['birthday'])
+						)
+					)
+				) {
 					//user is in both the csv and database
 					$entry = array('db' => $dbUser, 'csv' => $csvUser);
 					$this->_usersInBoth[] = $entry;
@@ -263,23 +269,46 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 			}
 		}
 
-		//Indexing for faster searches
-		$dbUserForenames = \ArrayFunctions::arrayColumn($dbUsers, 'forename');
-		$dbUserSurnames = \ArrayFunctions::arrayColumn($dbUsers, 'name');
-		$dbUserBirthdays = \ArrayFunctions::arrayColumn($dbUsers, 'birthday');
-		foreach ($dbUserBirthdays as &$birthday) {
-			$birthday = strtotime($birthday);
+		foreach($dbUsers as &$dbUser) {
+			$dbUser['birthdayTs'] = (!empty($dbUser['birthday'])) ?
+				strtotime($dbUser['birthday']) : false;
 		}
 
-		foreach($content as $index => $user) {
-			//Check if users are in csv but not in database
-			if(!in_array($user['forename'], $dbUserForenames, true) ||
-				!in_array($user['name'], $dbUserSurnames, true) ||
-				!in_array(strtotime($user['birthday']), $dbUserBirthdays, true)
+		foreach($content as $index => $csvUser) {
+			$csvBirthdayTs = (!empty($csvUser['birthday'])) ?
+				strtotime($csvUser['birthday']) : false;
+			$hit = false;
+			foreach($dbUsers as $dbUser) {
+				if($dbUser['name'] == $csvUser['name'] &&
+					$dbUser['forename'] == $csvUser['forename'] &&
+					$dbUser['birthdayTs'] === $csvBirthdayTs
 				) {
-				$this->_usersInCsv[] = $user;
+					$hit = true;
+					break;
+				}
+			}
+			if(!$hit) {
+				$this->_usersInCsv[] = $csvUser;
 			}
 		}
+
+		//Indexing for faster searches
+		//$dbUserForenames = \ArrayFunctions::arrayColumn($dbUsers, 'forename');
+		//$dbUserSurnames = \ArrayFunctions::arrayColumn($dbUsers, 'name');
+		//$dbUserBirthdays = \ArrayFunctions::arrayColumn($dbUsers, 'birthday');
+		//foreach ($dbUserBirthdays as &$birthday) {
+		//	$birthday = strtotime($birthday);
+		//}
+
+		//foreach($content as $index => $user) {
+		//	//Check if users are in csv but not in database
+		//	if(!in_array($user['forename'], $dbUserForenames, true) ||
+		//		!in_array($user['name'], $dbUserSurnames, true) ||
+		//		!in_array(strtotime($user['birthday']), $dbUserBirthdays, true)
+		//		) {
+		//		$this->_usersInCsv[] = $user;
+		//	}
+		//}
 	}
 
 	/**

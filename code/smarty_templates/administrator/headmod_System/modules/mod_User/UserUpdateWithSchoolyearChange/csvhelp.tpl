@@ -1,4 +1,4 @@
-{extends file=$inh_path}{block name=content}
+{extends file=$base_path}{block name=content}
 
 <h2 class="module-header">{t}Help for formatting the csv-file to update users{/t}</h2>
 
