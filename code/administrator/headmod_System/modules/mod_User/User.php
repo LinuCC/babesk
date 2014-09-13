@@ -973,7 +973,7 @@ class User extends System {
 					'Notice', Null, json_encode(array('msg' => $e->getMessage())));
 				$this->_interface->dieAjax(
 					'error',
-					'Ein Fehler ist beim Abrufen aller Oberstufenkurse aufgetreten'
+					'Ein Fehler ist beim Abrufen aller Religionen aufgetreten'
 				);
 			}
 		}
