@@ -394,9 +394,12 @@ class Classes extends Kuwasys {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'DELETE c.*, uic.*
+				'DELETE c.*, uicc.*, cic.*
 				FROM KuwasysClasses c
-				LEFT JOIN KuwasysUsersInClasses uic ON c.ID = uic.ClassID
+				LEFT JOIN KuwasysUsersInClassesAndCategories uicc
+					ON c.ID = uicc.ClassID
+				LEFT JOIN KuwasysClassesInCategories cic
+					ON c.ID = cic.classId
 				WHERE c.ID = :id');
 
 			$stmt->execute(array(':id' => $_GET['ID']));
