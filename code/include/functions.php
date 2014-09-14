@@ -110,7 +110,7 @@ function inputcheck($str, $regex_str, $name_str = 'Input',
 			$regex_str = '/\A^[^\,\;\+\~]{2,30}\z/';
 			break;
 		case 'password':
-			$regex_str = '/\A^[a-zA-Z0-9 _öäü\-\.]{4,20}\z/';
+			$regex_str = '/\A^[a-zA-Z0-9 _öäü\-\.]{4,32}\z/';
 			break;
 		case 'card_id':
 			$regex_str = '/\A^[a-z0-9]{10}\z/';
