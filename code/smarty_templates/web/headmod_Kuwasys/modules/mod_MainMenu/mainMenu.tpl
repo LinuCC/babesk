@@ -38,6 +38,11 @@
 									{elseif $class.status == 'waiting'}label-default
 									{else}label-default{/if}
 									">{$class.translatedStatus}</span>
+								{if $class.isOptional}
+									<span class="label label-info pull-right">
+										offenes Ganztagsangebot
+									</span>
+								{/if}
 						</p>
 						<p class="list-group-item-text">
 							<p class="quotebox quoted">{$class.description}</p>
@@ -74,4 +79,13 @@
 {block name='style_include' append}
 <link rel="stylesheet" href="{$path_css}/web/Kuwasys/main.css"
 type="text/css" />
+
+<style type="text/css">
+
+	.category-panel div.panel-body .list-group span.label.pull-right {
+		margin-left: 2px;
+	}
+
+</style>
+
 {/block}

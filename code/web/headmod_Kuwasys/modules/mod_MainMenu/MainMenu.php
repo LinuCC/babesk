@@ -58,41 +58,44 @@ class MainMenu extends Kuwasys {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'SELECT cu.translatedName AS unitname, c.*,
+				'SELECT cc.translatedName AS categoryName, c.*,
 					uics.translatedName AS translatedStatus,
 					uics.name AS statusName, uics.name AS status,
-					cu.ID AS unitId
+					cc.ID AS categoryId
 				FROM KuwasysClasses c
 				JOIN KuwasysUsersInClassesAndCategories uicc
 					ON uicc.ClassID = c.ID
 				JOIN KuwasysClassesInCategories cic ON cic.classId = c.ID
-				JOIN KuwasysClassCategories cu ON cu.ID = cic.categoryId
+				JOIN KuwasysClassCategories cc ON cc.ID = cic.categoryId
 				JOIN KuwasysUsersInClassStatuses uics
 					ON uicc.statusId = uics.ID
-				WHERE uicc.UserID = :userId AND c.schoolyearId = @activeSchoolyear
-				ORDER BY cu.ID, uicc.statusId
+				WHERE uicc.UserID = :userId
+					AND c.schoolyearId = @activeSchoolyear
+					-- Dont show days of classes that the user didnt apply for
+					AND cc.ID = uicc.categoryId
+				ORDER BY cc.ID, uicc.statusId
 				-- The ID of the ClassUnits states the Order of the Units');
 
 			$stmt->execute(array('userId' => $_SESSION['uid']));
 
 			$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-			$units = array();
+			$categories = array();
 			foreach($data as $row) {
-				if(isset($units[$row['unitId']]['classes'])) {
-					$classes = $units[$row['unitId']]['classes'];
+				if(isset($categories[$row['categoryId']]['classes'])) {
+					$classes = $categories[$row['categoryId']]['classes'];
 					$classes[] = $row;
 				}
 				else {
 					$classes = array($row);
 				}
-				$units[$row['unitId']] = array(
-					'name' => $row['unitname'],
-					'id' => $row['unitId'],
+				$categories[$row['categoryId']] = array(
+					'name' => $row['categoryName'],
+					'id' => $row['categoryId'],
 					'classes' => $classes
 				);
 			}
-			return $units;
+			return $categories;
 
 		} catch (Exception $e) {
 			$this->_interface->dieError(_g('Could not fetch your Classes!'));
