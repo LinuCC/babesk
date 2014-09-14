@@ -20,6 +20,7 @@ class ChangePresetPassword extends Settings {
 	//Methods
 	public function execute($dataContainer) {
 
+		$this->entryPoint($dataContainer);
 		$this->init($dataContainer);
 		$this->actionDetermine();
 	}
@@ -68,8 +69,10 @@ class ChangePresetPassword extends Settings {
 	private function dialogChangePasswordShow() {
 		$onFirstLoginChangeEmail = $this->emailChangeOnFirstLoginGet();
 		$emailChangeForced = $this->emailChangeOnFirstLoginForcedGet();
+		$userEmail = $this->userEmailGet();
 		$this->_smarty->assign('onFirstLoginChangeEmail', $onFirstLoginChangeEmail);
 		$this->_smarty->assign('emailChangeForced', $emailChangeForced);
+		$this->_smarty->assign('userEmail', $userEmail);
 		$this->_smarty->display($this->_smartyPath . 'changePasswordDialog.tpl');
 	}
 
@@ -148,6 +151,22 @@ class ChangePresetPassword extends Settings {
 			$this->_interface->DieError('Datenbankfehler: Konnte nicht herausfinden ob die Email für einen ErstLogin benötigt wird');
 		}
 		return($email != '0');
+	}
+
+	private function userEmailGet() {
+
+		try {
+			$stmt = $this->_pdo->prepare(
+				'SELECT email FROM SystemUsers WHERE ID = :userId'
+			);
+			$stmt->execute(array('userId' => $_SESSION['uid']));
+			return $stmt->fetchColumn();
+
+		} catch (\Exception $e) {
+			$this->_logger->log('Error fetching email for user', 'Notice',
+				Null, json_encode(array('msg' => $e->getMessage())));
+			return '';
+		}
 	}
 
 	private function emailSet($email) {
