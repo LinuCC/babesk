@@ -218,14 +218,13 @@ class Classes extends Kuwasys {
 				'INSERT INTO KuwasysClasses (label, description, maxRegistration,
 					registrationEnabled, unitId, schoolyearId)
 				VALUES (:label, :description, :maxRegistration,
-					:registrationEnabled, :unitId, :schoolyearId)');
+					:registrationEnabled, :schoolyearId)');
 
 			$stmt->execute(array(
 				':label' => $_POST['label'],
 				':description' => $_POST['description'],
 				':maxRegistration' => $_POST['maxRegistration'],
 				':registrationEnabled' => $_POST['allowRegistration'],
-				':unitId' => $_POST['classunit'],
 				':schoolyearId' => $_POST['schoolyear'],
 			));
 
@@ -272,10 +271,11 @@ class Classes extends Kuwasys {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'UPDATE KuwasysClasses SET label = :label, description = :description,
+				'UPDATE KuwasysClasses SET label = :label,
+					description = :description,
 					maxRegistration = :maxRegistration,
 					registrationEnabled = :registrationEnabled,
-					unitId = :unitId, schoolyearId = :schoolyearId
+					schoolyearId = :schoolyearId
 					WHERE ID = :id');
 
 			$stmt->execute(array(
@@ -283,7 +283,6 @@ class Classes extends Kuwasys {
 				':description' => $_POST['description'],
 				':maxRegistration' => $_POST['maxRegistration'],
 				':registrationEnabled' => $_POST['allowRegistration'],
-				':unitId' => $_POST['classunit'],
 				':schoolyearId' => $_POST['schoolyear'],
 				':id' => $_GET['ID'],
 			));

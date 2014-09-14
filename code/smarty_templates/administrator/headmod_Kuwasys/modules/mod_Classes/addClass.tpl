@@ -63,8 +63,17 @@
 					<option value='{$classunit.ID}'>{$classunit.translatedName}</option>
 					{/foreach}
 				</select>
+				<span class="input-group-btn">
+					<button class="additional-category btn btn-default"
+						type="button" data-toggle="tooltip" title="Weiterer Zeitpunkt">
+						<span class="icon icon-plus"></span>
+					</button>
+				</span>
 			</div>
 		</div>
+	</div>
+
+	<div class="row">
 		<div class="col-sm-6 form-group">
 			<div class="input-column" data-toggle="tooltip"
 			data-title="Schüler können sich nur dann anmelden wenn sowohl kursspezifische Registrierungen als auch die globalen Kursregistrierungen aktiviert sind." >
