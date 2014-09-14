@@ -67,7 +67,7 @@ class Review extends \administrator\Kuwasys\Classes\CsvImport {
 		try {
 			$stmt = $this->_pdo->query(
 				'SELECT ID, CONCAT(forename, " ", name) AS name
-				FROM classTeacher WHERE 1'
+				FROM KuwasysClassteachers WHERE 1'
 			);
 			return $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);
 
@@ -161,12 +161,11 @@ class Review extends \administrator\Kuwasys\Classes\CsvImport {
 			);
 		}
 		else {
-			$simCt = $this->mostSimilarClassteacherGet($classteacherName);
+			$simCt = $this->mostSimilarClassteachersGet($classteacherName);
 			if($simCt) {
 				$data[] = array(
-					'ID' => $simCt['ID'],
+					'similar' => $simCt,
 					'displayOptions' => true,
-					'name' => $simCt['name'],
 					'origName' => $classteacherName
 				);
 			}
@@ -189,7 +188,27 @@ class Review extends \administrator\Kuwasys\Classes\CsvImport {
 	 *                          similar classteacher or false on error
 	 *                          <classteacherId>, <classteacherName>
 	 */
-	private function mostSimilarClassteacherGet($toSearch) {
+	private function mostSimilarClassteachersGet($toSearch) {
+
+		$maxAmount = 8;
+
+		$similar = array();
+		if(count($this->_classteachers)) {
+			foreach($this->_classteachers as $ctId => $ctName) {
+				$lev = levenshtein($toSearch, $ctName);
+				$similar[$ctId] = $lev;
+			}
+			asort($similar);
+			$similar = array_slice($similar, 0, $maxAmount, true);
+			//Overwrite lev with the classteacher-names
+			foreach($similar as $ctId => $lev) {
+				$similar[$ctId] = $this->_classteachers[$ctId];
+			}
+			return $similar;
+		}
+		else {
+			return false;
+		}
 
 		$bestDist = 99999;
 		$mostSim = array('ID' => 0, 'name' => '');

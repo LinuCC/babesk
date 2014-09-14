@@ -29,7 +29,14 @@
 				{foreach $classes as $class}
 					{if $class.isOptional}
 						<tr>
-							<td>{$class.label}</td>
+							<td>
+								<p>{$class.label}</p>
+								<button type="button" class="btn btn-info"
+									data-toggle="popover" title="{$class.classteacher}"
+									data-content="{$class.description}">
+									Informationen
+								</button>
+							</td>
 							{foreach $classCategories as $classCategory}
 								{* Check if user has applied for this class and category *}
 								{$classId = $class.ID}{$categoryId = $classCategory.ID}

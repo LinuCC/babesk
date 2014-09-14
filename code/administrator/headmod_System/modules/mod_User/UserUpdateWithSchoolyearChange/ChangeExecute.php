@@ -20,25 +20,32 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 	public function execute($dataContainer) {
 
 		$this->entryPoint($dataContainer);
-		if($this->conflictsSolvedCheck()) {
-			$this->_existingGrades = $this->gradesFetch();
-			$this->_pdo->beginTransaction();
-			$this->userChangesCommit();
-			$this->usersNewCommit();
-			$this->schoolyearNewSwitchTo();
-			$this->_pdo->commit();
-			$this->_interface->backlink('administrator|System|User');
-			$this->_interface->dieSuccess(_g(
-				'The userdata were changed successfully.'
-			));
-		}
-		else {
-			$this->_interface->backlink(
-				'administrator|System|User|UserUpdateWithSchoolyearChange' .
-				'|SessionMenu'
-			);
-			$this->_interface->dieError(_g('Please resolve the conflicts ' .
-				'before comitting the changes'));
+		try {
+			if($this->conflictsSolvedCheck()) {
+				$this->_existingGrades = $this->gradesFetch();
+				$this->_pdo->beginTransaction();
+				$this->userChangesCommit();
+				$this->usersNewCommit();
+				$this->schoolyearNewSwitchTo();
+				$this->_pdo->commit();
+				$this->_interface->backlink('administrator|System|User');
+				$this->_interface->dieSuccess(_g(
+					'The userdata were changed successfully.'
+				));
+			}
+			else {
+				$this->_interface->backlink(
+					'administrator|System|User|UserUpdateWithSchoolyearChange'.
+					'|SessionMenu'
+				);
+				$this->_interface->dieError(_g('Please resolve the ' .
+					'conflicts before comitting the changes'));
+			}
+
+		} catch (Exception $e) {
+			$this->_pdo->rollback();
+			$this->_logger->log('Error executing UserUpdate-Changes',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
 		}
 	}
 
@@ -98,6 +105,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 			$this->_pdo->query($queryUsers);
 
 		} catch (\PDOException $e) {
+			$this->_pdo->rollback();
 			$this->_logger->log('Could not commit the user Changes',
 				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
 			$this->_interface->dieError(_g(

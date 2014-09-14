@@ -55,18 +55,25 @@ class ImportExecute extends \administrator\Kuwasys\Classes\CsvImport {
 
 		$classQuery = 'INSERT INTO `KuwasysClasses`
 			(label, description, maxRegistration, registrationEnabled,
-				unitId, schoolyearId)
+				schoolyearId)
 			VALUES (
 				' . $this->_pdo->quote($class['name']) . ',
 				' . $this->_pdo->quote($class['description']) . ',
 				' . $this->_pdo->quote((int)$class['maxRegistration']) . ',
 				' . $this->_pdo->quote((int)$class['registrationEnabled']) . ',
-				' . $this->_pdo->quote($class['classUnit']) . ',
 				@activeSchoolyear);
 			SELECT LAST_INSERT_ID() INTO @newClassId;';
 
 		$classQuery .= $this->classteacherQueryGenerate(
 			$class['classteacher']);
+
+		$catQuery = 'INSERT INTO `KuwasysClassesInCategories`
+			(classId, categoryId) VALUES (
+				@newClassId,
+				' . $this->_pdo->quote($class['classUnit']) . '
+			);
+		';
+		$classQuery .= $catQuery;
 
 		return $classQuery;
 	}
@@ -106,7 +113,7 @@ class ImportExecute extends \administrator\Kuwasys\Classes\CsvImport {
 		$forename = (count($names) == 2) ? $names[0] : '';
 		$surname = (count($names) == 2) ? $names[1] : $names[0];
 
-		$query .= 'INSERT INTO classTeacher (forename, name)
+		$query .= 'INSERT INTO KuwasysClassteachers (forename, name)
 			VALUES ('
 				. $this->_pdo->quote($forename) . ', '
 				. $this->_pdo->quote($surname) . ');
@@ -126,6 +133,30 @@ class ImportExecute extends \administrator\Kuwasys\Classes\CsvImport {
 			);
 			$this->_interface->dieError(_g('Could not execute the Query!'));
 		}
+	}
+
+	/**
+	 * For later ;)
+	 */
+	private function classesUpload($classes) {
+
+		$cStmt = $this->_pdo->prepare(
+			'INSERT INTO `KuwasysClasses` (
+				label, description, maxRegistration, registrationEnabled,
+				schoolyearId
+			) VALUES (
+				:name, :description, :maxRegistration, :registrationEnabled,
+				@activeSchoolyear
+			)
+		');
+		$cticStmt = $this->_pdo->prepare(
+			'INSERT INTO `KuwasysClassteachersInClasses` (
+				ClassTeacherID, ClassID
+			) VALUES (:classteacherId, :newClassId)
+		');
+		$ctStmt = $this->_pdo->prepare(
+			'INSERT INTO `KuwasysClass'
+		);
 	}
 
 	/////////////////////////////////////////////////////////////////////

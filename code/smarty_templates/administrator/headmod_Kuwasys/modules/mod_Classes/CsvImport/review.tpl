@@ -5,7 +5,7 @@
 {if count($classes)}
 <form action="index.php?module=administrator|Kuwasys|Classes|CsvImport|ImportExecute"
 	method="post">
-	<table class="dataTable">
+	<table class="table">
 		{$tempId = 1}
 		{foreach $classes as $class}
 		<tr>
@@ -33,7 +33,7 @@
 					{if $ct.displayOptions == 1}
 						{* Classteacher was not found, show alternative Options to User *}
 						{if !empty($ct.origName)}
-							(Eingabe: "{$ct.origName}")<br />
+							<b>(Eingabe: "{$ct.origName}")</b><br />
 							<input type="hidden" value="{$ct.origName|escape}"
 									name="classes[{$tempId}][classteacher][{$ctKey}][name]" >
 						{/if}
@@ -43,11 +43,14 @@
 						<input type="radio"
 							name="classes[{$tempId}][classteacher][{$ctKey}][ID]"
 							value="0" >Kein Kursleiter<br />
-						{if $ct.name}
-							<input type="radio"
-								name="classes[{$tempId}][classteacher][{$ctKey}][ID]"
-								value="{$ct.ID}">
-								{$ct.name}
+						{if $ct.similar}
+							{foreach $ct.similar as $ctSimId => $ctSimName}
+								<input type="radio"
+									name="classes[{$tempId}][classteacher][{$ctKey}][ID]"
+									value="{$ctSimId}">
+									{$ctSimName}
+									<br>
+							{/foreach}
 						{/if}
 					{else}
 						{* Classteacher was found, just show him *}

@@ -1,5 +1,9 @@
 $(document).ready(function() {
 
+	$(document).on('keyup', null, 'ctrl+shift+n', function() {
+		$("button#YesToAllConflicts").click();
+	});
+
 	$("button#YesToAllConflicts").on('click', function(event) {
 		event.preventDefault();
 		$.each($('#conflictForm').find('button.conflictAnswerYes'),
