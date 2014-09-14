@@ -1,38 +1,89 @@
 {extends file=$inh_path}{block name=content}
 
-<h2>Kursliste</h2>
+{$hasOpenClasses = false}
+{foreach $classes as $class}
+	{if $class.isOptional}{$hasOpenClasses = true}{/if}
+{/foreach}
+
+{if $hasOpenClasses}
+	<h3>offene Ganztagsangebote</h3>
+
+	<div id="open-class-container">
+		<table id="open-class-table" class="table table-hover table-striped
+			table-condensed table-bordered">
+			<thead>
+				<tr>
+					<th>Titel</th>
+					{foreach $classCategories as $classCategory}
+						<th>
+							{$classCategory.translatedName}
+						</th>
+					{/foreach}
+				</tr>
+			</thead>
+			<tbody>
+				{foreach $classes as $class}
+					{if $class.isOptional}
+						<tr>
+							<td>{$class.label}</td>
+							{foreach $classCategories as $classCategory}
+								{* Check if user has applied for this class and category *}
+								{$classId = $class.ID}{$categoryId = $classCategory.ID}
+								{$applianceData = $classAppliance.$classId.$categoryId}
+								{$applied = $applianceData.hasApplied}
+								<td class="open-class-selector" data-class="{$class.ID}"
+									data-category="{$classCategory.ID}"
+									data-apply="{if $applied}true{else}false{/if}">
+									<span class="label
+										{if $applied}label-success{else}label-default{/if}">
+										{if $applied}Teilnahme{else}keine Teilnahme{/if}
+									</span>
+									<button class="apply-button btn btn-default">
+										{if $applied}nicht teilnehmen{else}Teilnehmen{/if}
+									</button>
+								</td>
+							{/foreach}
+						</tr>
+					{/if}
+				{/foreach}
+			</tbody>
+		</table>
+	</div>
+{/if}
+
+<h3>Kursliste</h3>
 
 <div id="selector-container">
-	{foreach $classUnits as $classUnit}
+	{foreach $classCategories as $classCategory}
 		<div class="panel panel-primary bg-fit unit-panel"
-		unitId="{$classUnit.ID}">
+		unitId="{$classCategory.ID}">
 			<div class="panel-heading">
 				<div class="panel-title">
 					<button type="button"
 						class="btn btn-sm btn-default expand-button-content"
 						data-toggle="collapse" data-parent=""
-						href="#unit-accordion-body_{$classUnit.ID}"
-						{if $classUnit.votedCount}disabled{/if}>
+						href="#unit-accordion-body_{$classCategory.ID}"
+						{if $classCategory.votedCount}disabled{/if}>
 						<div class="icon icon-plus"></div>
 					</button>
-					{$classUnit.translatedName}
-					{if $classUnit.votedCount}
+					{$classCategory.translatedName}
+					{if $classCategory.votedCount}
 						<span class="label label-info pull-right">bereits gewählt</span>
 					{/if}
 				</div>
 			</div>
-			<div id="unit-accordion-body_{$classUnit.ID}" class="unit-container-body collapse">
+			<div id="unit-accordion-body_{$classCategory.ID}" class="unit-container-body collapse">
 				<div class="panel-body">
-					<div class="panel-group unit-container" id="unitAccordion_{$classUnit.ID}">
+					<div class="panel-group unit-container" id="unitAccordion_{$classCategory.ID}">
 						{foreach $classes as $class}
-							{if $class.unitId == $classUnit.ID}
+							{if $class.unitId == $classCategory.ID && $class.isOptional == 0}
 								<div classId="{$class.ID}"
 									class="panel panel-default class-container">
 									<div class="panel-heading">
 										<div class="col-xs-7 col-sm-8 col-md-9">
 											<button type="button" class="btn btn-sm btn-default expand-button-content"
 												data-toggle="collapse"
-												data-parent="#unitAccordion_{$classUnit.ID}"
+												data-parent="#unitAccordion_{$classCategory.ID}"
 												href="#class-accordion-body_{$class.ID}">
 												<div class="icon icon-plus"></div>
 											</button>
@@ -41,8 +92,10 @@
 													{if !$class.registrationEnabled}
 														<span class="label label-danger">deaktiviert</span>
 													{/if}
-													{if $classUnit.votedCount}
-														<span class="label label-info">bereits am Tag gewählt</span>
+													{if $classCategory.votedCount}
+														<span class="label label-info">
+															bereits am Tag gewählt
+														</span>
 													{/if}
 
 											</h4>
@@ -52,13 +105,13 @@
 													<button type="button" classId="{$class.ID}"
 													category="request1"
 													class="btn btn-sm btn-success to-primary
-													{if !$class.registrationEnabled || $classUnit.votedCount}disabled{/if}">
+													{if !$class.registrationEnabled || $classCategory.votedCount}disabled{/if}">
 														Erstwahl
 													</button>
 													<button type="button" classId="{$class.ID}"
 													category="request2"
 													class="btn btn-sm btn-info to-secondary
-													{if !$class.registrationEnabled || $classUnit.votedCount}disabled{/if}">
+													{if !$class.registrationEnabled || $classCategory.votedCount}disabled{/if}">
 														Zweitwahl
 													</button>
 													<button type="button" classId="{$class.ID}"
@@ -141,5 +194,8 @@ $(document).ready(function() {
 
 {block name="style_include" append}
 <link rel="stylesheet" href="{$path_css}/web/Kuwasys/main.css"
+type="text/css" />
+
+<link rel="stylesheet" href="{$path_css}/web/Kuwasys/ClassList/classlist.css"
 type="text/css" />
 {/block}

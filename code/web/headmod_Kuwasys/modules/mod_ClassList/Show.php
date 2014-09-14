@@ -39,8 +39,10 @@ class Show extends \web\Kuwasys\ClassList {
 			if($regEnabled) {
 				$classes = $this->classesFetch();
 				$units = $this->unitsFetch();
-				$this->_smarty->assign('classUnits', $units);
+				$classAppliance = $this->appliancesFetch();
+				$this->_smarty->assign('classCategories', $units);
 				$this->_smarty->assign('classes', $classes);
+				$this->_smarty->assign('classAppliance', $classAppliance);
 				$this->displayTpl('classList.tpl');
 			}
 			else {
@@ -79,8 +81,10 @@ class Show extends \web\Kuwasys\ClassList {
 			$res = $this->_pdo->query(
 				'SELECT c.*, GROUP_CONCAT(
 						DISTINCT ct.forename, " ", ct.name SEPARATOR ", "
-					) AS classteacher
+					) AS classteacher, cic.categoryId AS unitId
 					FROM KuwasysClasses c
+					JOIN KuwasysClassesInCategories cic
+						ON cic.classId = c.ID
 					LEFT JOIN KuwasysClassteachersInClasses ctic
 						ON ctic.ClassID = c.ID
 					LEFT JOIN KuwasysClassteachers ct ON ct.ID = ctic.ClassTeacherID
@@ -105,15 +109,18 @@ class Show extends \web\Kuwasys\ClassList {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'SELECT cc.*, COUNT(voted.unitId) AS votedCount
+				'SELECT cc.*, COUNT(voted.categoryId) AS votedCount
 				FROM KuwasysClassCategories cc
 					-- If the user has voted on this category already
-					LEFT JOIN (SELECT c.unitId AS unitId FROM KuwasysClasses c
-						INNER JOIN KuwasysUsersInClasses uic ON
+					LEFT JOIN (SELECT cic.categoryId FROM KuwasysClasses c
+						INNER JOIN KuwasysClassesInCategories cic
+							ON cic.classId = c.ID
+						INNER JOIN KuwasysUsersInClassesAndCategories uic ON
 							uic.ClassID = c.ID AND
 							uic.UserID = ? AND
 							c.schoolyearId = @activeSchoolyear
-					) voted ON voted.unitId = cc.ID
+						WHERE c.isOptional = 0
+					) voted ON voted.categoryId = cc.ID
 					GROUP BY cc.ID
 					ORDER BY cc.ID
 			');
@@ -125,6 +132,38 @@ class Show extends \web\Kuwasys\ClassList {
 			$this->_logger->log('Error fetching the units to display',
 				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
 			throw $e;
+		}
+	}
+
+	private function appliancesFetch() {
+
+		try {
+			$stmt = $this->_pdo->prepare(
+				'SELECT c.ID AS classId, COUNT(*) AS hasApplied,
+					uics.name AS statusName, uicc.categoryId AS categoryId
+				FROM KuwasysUsersInClassesAndCategories uicc
+				INNER JOIN KuwasysClasses c ON c.ID = uicc.ClassID
+				INNER JOIN SystemSchoolyears sy
+					ON sy.ID = c.schoolyearId AND sy.active = 1
+				INNER JOIN KuwasysUsersInClassStatuses uics
+					ON uics.ID = uicc.statusId
+				WHERE uicc.userId = :userId
+				GROUP BY c.ID, uicc.categoryId
+			');
+			$stmt->execute(array('userId' => $_SESSION['uid']));
+			$res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+			$appliedAr = array();
+			if(count($res)) {
+				//We want classId and then categoryId to be the Index
+				foreach($res as $row) {
+					$appliedAr[$row['classId']][$row['categoryId']] = $row;
+				}
+			}
+			return $appliedAr;
+
+		} catch (Exception $e) {
+			$this->_logger->log('Could not fetch already existing appliances',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
 		}
 	}
 

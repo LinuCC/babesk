@@ -36,20 +36,19 @@ class UserSelectionsApply extends \web\Kuwasys\ClassList {
 	public function execute($dataContainer) {
 
 		$this->entryPoint($dataContainer);
-		if(empty($_POST['choices'])) {
-			$this->_interface->dieError(_g('No choices made!'));
-		}
-		$choices = $_POST['choices'];
+		$choices = (!empty($_POST['choices'])) ? $_POST['choices'] : array();
+		$openClassChoices = (!empty($_POST['openClassChoices'])) ?
+			$_POST['openClassChoices'] : array();
 		$this->_selClassIds = $this->classIdsOfChoicesGet($choices);
 
 		try {
-			$err = $this->inputCheck($choices);
+			$err = $this->inputCheck($choices, $openClassChoices);
 		} catch (\Exception $e) {
 			$this->_interface->dieError(_g('Error checking the input data!'));
 		}
-
 		if(empty($err)) {
 			$this->choicesUpload($choices);
+			$this->openClassChoicesHandle($openClassChoices);
 			$this->_interface->addButton(
 				_g('Back to main menu'),
 				'index.php?module=web|Kuwasys',
@@ -115,14 +114,16 @@ class UserSelectionsApply extends \web\Kuwasys\ClassList {
 	 * @param  array  $choices The choices the user has made
 	 * @return string          A void string on no error, else the errormessage
 	 */
-	private function inputCheck($choices) {
+	private function inputCheck($choices, $openClassChoices) {
 
 		$error = '';
 
 		if(!$this->somethingSelectedCheck($choices)) {
-			$error = _g(
-				'You did not make any selection. Nothing will be changed.'
-			);
+			//Only check for openClasses, we dont need the other inputchecks
+			return '';
+			//$error = _g(
+			//	'You did not make any selection. Nothing will be changed.'
+			//);
 		}
 		else if(!$this->multipleSelectionsOfSameClassCheck($choices)) {
 			$error = _g(
@@ -245,16 +246,23 @@ class UserSelectionsApply extends \web\Kuwasys\ClassList {
 		try {
 			$res = $this->_pdo->query(
 				"SELECT COUNT(*) FROM KuwasysClasses c
-					INNER JOIN KuwasysUsersInClasses uic ON uic.ClassID = c.ID
+					INNER JOIN KuwasysUsersInClassesAndCategories uic
+						ON uic.ClassID = c.ID AND uic.UserID = {$userId}
+					INNER JOIN KuwasysClassesInCategories cic
+						ON cic.classId = c.ID
 					INNER JOIN (
-							SELECT DISTINCT unitId
-								FROM KuwasysClasses c WHERE ({$searchStr})
-						) ui
-					WHERE ui.unitId = c.unitId AND uic.UserID = {$userId}
-						AND c.schoolyearId = @activeSchoolyear"
+							SELECT DISTINCT cic.categoryId
+							FROM KuwasysClasses c
+							INNER JOIN KuwasysClassesInCategories cic
+								ON cic.classId = c.ID
+							WHERE ({$searchStr})
+						) ci
+					WHERE ci.categoryId = cic.categoryId
+						AND c.schoolyearId = @activeSchoolyear
+						AND c.isOptional = 0"
 			);
 			$count = $res->fetchColumn();
-			return (!(bool)$count);
+			return !$count;
 
 		} catch (\PDOException $e) {
 			$this->_logger->log('Error checking if classes where already ' .
@@ -298,30 +306,166 @@ class UserSelectionsApply extends \web\Kuwasys\ClassList {
 	private function choicesUpload($choices) {
 
 		try {
+			//Assumes that the classes only have one Category
 			$stmt = $this->_pdo->prepare(
-				'INSERT INTO `KuwasysUsersInClasses` (UserID, ClassID, statusId)
-					VALUES (?, ?, (
+				'INSERT INTO `KuwasysUsersInClassesAndCategories`
+					(UserID, ClassID, statusId, categoryId)
+					VALUES (:userId, :classId, (
 						SELECT ID FROM KuwasysUsersInClassStatuses uics
-							WHERE uics.name = ?
-					))'
+							WHERE uics.name = :statusName
+					), (
+						SELECT categoryId FROM KuwasysClassesInCategories cic
+						WHERE cic.classId = :classId
+					)
+				)'
 			);
 
 			$this->_pdo->beginTransaction();
 			foreach($choices as $unit) {
 				foreach($unit as $statusName => $classId) {
-					$stmt->execute(
-						array($_SESSION['uid'], $classId, $statusName)
-					);
+					$stmt->execute(array(
+						'userId' => $_SESSION['uid'],
+						'classId' => $classId,
+						'statusName' => $statusName
+					));
 				}
 			}
 			$this->_pdo->commit();
 
 		} catch (\PDOException $e) {
+			$this->_pdo->rollback();
 			$this->_logger->log('Error uploading the user-choices',
 				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
 			$this->_interface->dieError(_g('Could not commit your choices!'));
 		}
 	}
+
+	/*====================================
+	=            Open Classes            =
+	====================================*/
+
+	private function openClassChoicesHandle($choices) {
+
+		try {
+			list($toAdd, $toDelete) = $this->openClassChoicesDelta(
+				$choices
+			);
+			if(count($toAdd)) {
+				$this->openClassChoicesAdd($toAdd);
+			}
+			if(count($toDelete)) {
+				$this->openClassChoicesDelete($toDelete);
+			}
+
+		} catch (\Exception $e) {
+			$this->_logger->log('Could not handle the openClass Choices',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieError(
+				'Konnte die offenen Ganztagsangebote nicht hinzufügen.'
+			);
+		}
+	}
+
+	private function openClassChoicesDelta($choices) {
+
+		$existingChoices = $this->openClassChoicesGet();
+		$choicesToAdd = $choices;
+		$choicesToDelete = array();
+		foreach($choicesToAdd as $classId => $categories) {
+			foreach($categories as $catKey => $category) {
+				if(
+					!empty($existingChoices[$classId]) &&
+					in_array($category, $existingChoices[$classId])
+				) {
+					unset($choicesToAdd[$classId][$catKey]);
+					if(empty($choicesToAdd[$classId])) {
+						unset($choicesToAdd[$classId]);
+					}
+				}
+			}
+		}
+		foreach($existingChoices as $classId => $categories) {
+			foreach($categories as $categoryId) {
+				if(
+					!empty($choices[$classId]) &&
+					in_array($categoryId, $choices[$classId])
+				) {
+					continue;
+				}
+				else {
+					$choicesToDelete[$classId][] = $categoryId;
+				}
+			}
+		}
+		return array($choicesToAdd, $choicesToDelete);
+	}
+
+	private function openClassChoicesGet() {
+
+		try {
+			$stmt = $this->_pdo->prepare(
+				'SELECT c.ID AS classId, uicc.categoryId AS categoryId
+				FROM KuwasysUsersInClassesAndCategories uicc
+				INNER JOIN KuwasysClasses c ON c.ID = uicc.ClassID
+				WHERE c.isOptional = 1 AND uicc.userId = :userId
+			');
+			$stmt->execute(array('userId' => $_SESSION['uid']));
+			$res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+			$data = array();
+			foreach($res as $row) {
+				$data[$row['classId']][] = $row['categoryId'];
+			}
+			return $data;
+
+		} catch (\Exception $e) {
+			$this->_logger->log('Error fetching the openClasses for a user',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			throw $e;
+		}
+	}
+
+	private function openClassChoicesAdd($choices) {
+
+		$stmt = $this->_pdo->prepare(
+			'INSERT INTO KuwasysUsersInClassesAndCategories
+				(UserID, ClassID, statusId, categoryId) VALUES
+				(:userId, :classId, (
+					SELECT ID FROM KuwasysUsersInClassStatuses
+						WHERE name = "active"
+				), :categoryId)
+		');
+		foreach($choices as $classId => $categoryIds) {
+			foreach($categoryIds as $categoryId) {
+				$stmt->execute(array(
+					'userId' => $_SESSION['uid'],
+					'classId' => $classId,
+					'categoryId' => $categoryId
+				));
+			}
+		}
+	}
+
+	private function openClassChoicesDelete($choices) {
+
+		$stmt = $this->_pdo->prepare(
+			'DELETE FROM KuwasysUsersInClassesAndCategories
+				WHERE UserID = :userId AND ClassID = :classId
+					AND categoryId = :categoryId
+		');
+		foreach($choices as $classId => $categoryIds) {
+			foreach($categoryIds as $categoryId) {
+				$stmt->execute(array(
+					'userId' => $_SESSION['uid'],
+					'classId' => $classId,
+					'categoryId' => $categoryId
+				));
+			}
+		}
+	}
+
+	/*-----  End of Open Classes  ------*/
+
+
 
 	/////////////////////////////////////////////////////////////////////
 	//Attributes

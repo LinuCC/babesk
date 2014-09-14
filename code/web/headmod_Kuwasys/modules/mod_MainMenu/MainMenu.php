@@ -63,11 +63,14 @@ class MainMenu extends Kuwasys {
 					uics.name AS statusName, uics.name AS status,
 					cu.ID AS unitId
 				FROM KuwasysClasses c
-				JOIN KuwasysUsersInClasses uic ON uic.ClassID = c.ID
-				JOIN KuwasysClassCategories cu ON c.unitId = cu.ID
-				JOIN KuwasysUsersInClassStatuses uics ON uic.statusId = uics.ID
-				WHERE uic.UserID = :userId AND c.schoolyearId = @activeSchoolyear
-				ORDER BY cu.ID, uic.statusId
+				JOIN KuwasysUsersInClassesAndCategories uicc
+					ON uicc.ClassID = c.ID
+				JOIN KuwasysClassesInCategories cic ON cic.classId = c.ID
+				JOIN KuwasysClassCategories cu ON cu.ID = cic.categoryId
+				JOIN KuwasysUsersInClassStatuses uics
+					ON uicc.statusId = uics.ID
+				WHERE uicc.UserID = :userId AND c.schoolyearId = @activeSchoolyear
+				ORDER BY cu.ID, uicc.statusId
 				-- The ID of the ClassUnits states the Order of the Units');
 
 			$stmt->execute(array('userId' => $_SESSION['uid']));

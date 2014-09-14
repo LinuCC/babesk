@@ -58,6 +58,25 @@ $(document).ready(function() {
 					html('').addClass('icon-plus');
 		});
 
+		$('table#open-class-table button.apply-button').on('click', function(ev) {
+			var $button = $(ev.target);
+			var $selector = $button.closest('td.open-class-selector');
+			console.log($selector);
+			var $label = $selector.find('span.label');
+			$label.toggleClass('label-default label-success');
+			if($label.hasClass('label-success')) {
+				$label.html('Teilnahme');
+				var buttonWidth = $button.css('width');
+				$button.html('nicht teilnehmen');
+				$selector.attr('data-apply', true);
+			}
+			else {
+				$label.html('keine Teilnahme');
+				$button.html('Teilnehmen');
+				$selector.attr('data-apply', false);
+			}
+		});
+
 		function classContainer($classContainer) {
 
 			var that = this;
@@ -132,12 +151,24 @@ $(document).ready(function() {
 
 			function selectedAnything(inp) {
 
-				if(inp.length > 0) {
-					return true;
-				}
-				else {
-					toastr['error']('Du hast nichts ausgewählt!', 'Inkorrekte Eingabe');
-				}
+				//Even when nothing was selected the open courses could be deleted
+				return true;
+
+				//if(inp.length > 0) {
+				//	return true;
+				//}
+				//else {
+				//	//Check if at least open classes where selected
+				//	var openClassAppliances = $(
+				//		'#open-class-table td.open-class-selector[data-apply="true"]'
+				//	);
+				//	if(openClassAppliances.length) {
+				//		return true;
+				//	}
+				//	else {
+				//		toastr['error']('Du hast nichts ausgewählt!', 'Inkorrekte Eingabe');
+				//	}
+				//}
 			}
 
 			/*
@@ -222,23 +253,32 @@ $(document).ready(function() {
 			});
 			console.log(selections);
 
+			var openClassSelections = {};
+			var $openClassFields = $('#open-class-table td.open-class-selector');
+			$.each($openClassFields, function(ind, el) {
+				var $td = $(el);
+				if($td.attr('data-apply') == 'true') {
+					var classId = $td.data('class');
+					if(classId in openClassSelections) {
+						openClassSelections[classId].push($td.data('category'));
+					}
+					else {
+						openClassSelections[classId] = [$td.data('category')];
+					}
+				}
+			});
+
 			$.ajax({
 				'type': 'post',
 				'url': 'index.php?module=web|Kuwasys|ClassList|UserSelectionsApply',
+				'dataType': 'json',
 				'data': {
 					'choices': selections,
+					'openClassChoices': openClassSelections,
 					'ajax': true
 				},
 				'success': function(data) {
 					console.log(data);
-					try {
-						data = JSON.parse(data);
-					} catch(e) {
-						toastr['error'](
-							'Konnte die Serverantwort nicht parsen!',
-							'Verbindungsfehler'
-						);
-					}
 					if(data.val == 'success') {
 						toastr['success'](data.msg, 'Erfolgreich angemeldet!');
 						$('#content').html(
@@ -264,7 +304,7 @@ $(document).ready(function() {
 						'Ein Fehler ist beim Verbinden mit dem Server aufgetreten!',
 						'Verbindungsfehler'
 					);
-				}
+				},
 			});
 		};
 	};
