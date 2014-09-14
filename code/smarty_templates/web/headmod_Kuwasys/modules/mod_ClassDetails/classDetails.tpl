@@ -37,7 +37,7 @@
 	<a class="btn btn-default" href="index.php?module=web|Kuwasys">
 		{t}back{/t}
 	</a>
-	<form class="pull-right" action="index.php?section=Kuwasys|ClassDetails&action=deRegisterClassConfirmation&classId={$class.ID}" method="post">
+	<form class="pull-right" action="index.php?section=Kuwasys|ClassDetails&action=deRegisterClassConfirmation&classId={$class.ID}&categoryId={$class.categoryId}" method="post">
 		<input class="btn btn-danger" type="submit" value="Von dem Kurs abmelden">
 	</form>
 	{else}

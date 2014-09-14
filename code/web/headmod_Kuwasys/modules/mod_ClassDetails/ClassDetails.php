@@ -79,18 +79,19 @@ class ClassDetails extends Kuwasys {
 	 * @param  int    $userId  The id of the user
 	 * @param  int    $classId The id of the class
 	 */
-	private function deleteJointUsersInClass($userId, $classId) {
+	private function deleteJointUsersInClass($userId, $classId, $categoryId) {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'DELETE FROM KuwasysUsersInClasses
-					WHERE UserID = ? AND ClassID = ?'
+				'DELETE FROM KuwasysUsersInClassesAndCategories
+					WHERE UserID = ? AND ClassID = ? AND categoryId = ?'
 			);
-			$stmt->execute(array($userId, $classId));
+			$stmt->execute(array($userId, $classId, $categoryId));
 
 		} catch(\PDOException $e) {
 			$this->_logger->log('error deleting userInClass-Connection',
 				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->setBacklink('index.php?module=web|Kuwasys');
 			$this->_interface->dieError(
 				'Could not remove you from the class!'
 			);
@@ -108,11 +109,10 @@ class ClassDetails extends Kuwasys {
 		try {
 			$stmt = $this->_pdo->prepare(
 				'SELECT c.*, uics.name, uics.translatedName AS status,
-					c.registrationEnabled,
 					GROUP_CONCAT(
 						DISTINCT CONCAT(ct.forename, " ", ct.name)
 						SEPARATOR ", "
-					) AS classteacherName
+					) AS classteacherName, uicc.categoryId AS categoryId
 					FROM KuwasysClasses c
 						INNER JOIN KuwasysUsersInClassesAndCategories uicc
 							ON uicc.ClassID = c.ID AND uicc.categoryId = ?
@@ -184,7 +184,9 @@ class ClassDetails extends Kuwasys {
 			$_GET['classId'], $_GET['categoryId']
 		);
 		$this->deRegisterAllowedCheck($class);
-		$this->deleteJointUsersInClass($_SESSION['uid'], $class['ID']);
+		$this->deleteJointUsersInClass(
+			$_SESSION['uid'], $class['ID'], $class['categoryId']
+		);
 		$this->_interface->setBacklink('index.php?module=web|Kuwasys');
 		$this->_interface->dieSuccess(sprintf('Sie wurden erfolgreich vom Kurs %s abgemeldet.', $class ['label']));
 	}
@@ -204,13 +206,6 @@ class ClassDetails extends Kuwasys {
 		else if(!$this->getIsClassRegistrationGloballyEnabled()) {
 			$this->_interface->setBacklink('index.php?module=web|Kuwasys');
 			$this->_interface->dieError('Kursan- und abmeldungen sind momentan gesperrt!');
-		}
-		else if(!isset($_POST['yes'])) {
-			$this->_interface->setBacklink('index.php?module=web|Kuwasys');
-			$this->_interface->dieMessage(
-				sprintf('Sie wurden nicht vom Kurs %s abgemeldet',
-					$class ['label'])
-			);
 		}
 		else {
 			return true;

@@ -8,9 +8,12 @@
 			</div>
 		</div>
 		<div class="panel-body">
-		<form action="index.php?section=Kuwasys|ClassDetails&amp;action=deRegisterClass&amp;classId={$class.ID}" method="post">
+		<form action="index.php?section=Kuwasys|ClassDetails&amp;action=deRegisterClass&amp;classId={$class.ID}&amp;categoryId={$class.categoryId}" method="post">
 			<input class="btn btn-danger" type="submit" name="yes" value="Ja, ich möchte mich vom Kurs abmelden">
-			<input class="btn btn-primary pull-right" type="submit" name="no" value="Nein, ich möchte mich nicht vom Kurs abmelden">
+			<a href="index.php?module=web|Kuwasys" class="btn btn-primary pull-right"
+				>
+				Nein, ich möchte mich nicht vom Kurs abmelden
+				</a>
 		</form>
 		</div>
 	</div>
