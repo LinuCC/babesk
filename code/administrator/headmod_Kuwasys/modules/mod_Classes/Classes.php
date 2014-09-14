@@ -504,33 +504,39 @@ class Classes extends Kuwasys {
 
 		try {
 			$subQueryCountUsers = '(SELECT Count(*)
-					FROM KuwasysUsersInClasses uic
+					FROM KuwasysUsersInClassesAndCategories uic
 					JOIN SystemUsers ON SystemUsers.ID = uic.UserID
-					WHERE uic.statusId = (SELECT ID FROM KuwasysUsersInClassStatuses
-						WHERE name="%s") AND c.ID = uic.ClassID
+					WHERE uic.statusId = (
+							SELECT ID FROM KuwasysUsersInClassStatuses
+							WHERE name="%s"
+						)
+						AND c.ID = uic.ClassID
+						AND uic.categoryId = cu.ID
 					)
 				';
 
 			$stmt = $this->_pdo->prepare(
 				'SELECT c.*, sy.label As schoolyearLabel,
-					cu.translatedName AS unitTranslatedName,
-					GROUP_CONCAT(DISTINCT ct.name SEPARATOR "; ") AS classteacherName,
+					GROUP_CONCAT(cu.translatedName) AS unitTranslatedName,
+					(SELECT GROUP_CONCAT(
+							CONCAT(ct.forename, " ", ct.name) SEPARATOR "; "
+						)
+						FROM KuwasysClassteachers ct
+						JOIN KuwasysClassteachersInClasses ctic
+							ON ct.ID = ctic.ClassTeacherID
+						WHERE c.ID = ctic.ClassID
+						GROUP BY c.ID
+					) AS classteacherName,
 					'. sprintf ($subQueryCountUsers, 'active') . ' AS activeCount,
 					'. sprintf ($subQueryCountUsers, 'waiting') . ' AS waitingCount,
 					'. sprintf ($subQueryCountUsers, 'request1') . ' AS request1Count,
 					'. sprintf ($subQueryCountUsers, 'request2') . ' AS request2Count
 				FROM KuwasysClasses c
 				LEFT JOIN SystemSchoolyears sy ON c.schoolyearId = sy.ID
-				LEFT JOIN KuwasysClassCategories cu ON c.unitId = cu.ID
-				LEFT JOIN (
-						SELECT ctic.ClassID AS classId,
-							CONCAT(ct.forename, " ", ct.name) AS name
-						FROM KuwasysClassteachers ct
-						JOIN KuwasysClassteachersInClasses ctic
-							ON ct.ID = ctic.ClassTeacherID
-					) ct ON c.ID = ct.classId
+				LEFT JOIN KuwasysClassesInCategories cic ON cic.classId = c.ID
+				LEFT JOIN KuwasysClassCategories cu ON cu.ID = cic.categoryId
 				WHERE sy.ID = :schoolyearId
-				GROUP BY c.ID');
+				GROUP BY c.ID, cu.ID');
 
 			$stmt->execute(array('schoolyearId' => $schoolyearId));
 
