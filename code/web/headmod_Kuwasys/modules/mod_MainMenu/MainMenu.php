@@ -135,17 +135,17 @@ class MainMenu extends Kuwasys {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'DELETE uic FROM KuwasysUsersInClasses uic
-					INNER JOIN KuwasysClasses c ON c.ID = uic.ClassID
+				'DELETE uicc FROM KuwasysUsersInClassesAndCategories uicc
+					INNER JOIN KuwasysClasses c ON c.ID = uicc.ClassID
 					WHERE c.schoolyearId = @activeSchoolyear AND
-					uic.statusId IN(
+					uicc.statusId IN(
 							(SELECT ID FROM KuwasysUsersInClassStatuses
 								WHERE name="request1"),
 							(SELECT ID FROM KuwasysUsersInClassStatuses
 								WHERE name="request2")
 						) AND
-					c.unitId = ? AND
-					uic.UserID = ?
+					uicc.categoryId = ? AND
+					uicc.UserID = ?
 			');
 			$stmt->execute(array($catId, $userId));
 

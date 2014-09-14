@@ -7,6 +7,10 @@
 
 {if $hasOpenClasses}
 	<h3>offene Ganztagsangebote</h3>
+	<p class="alert alert-info">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		Offene Ganztagsangebote sind optional und können unabhängig von den normalen Kursangeboten gewählt werden. Bitte achte darauf, dass sich die Ganztagsangebote nicht mit von dir gewählten Kursen überschneiden.
+	</p>
 
 	<div id="open-class-container">
 		<table id="open-class-table" class="table table-hover table-striped

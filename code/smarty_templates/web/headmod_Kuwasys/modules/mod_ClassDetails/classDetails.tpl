@@ -10,13 +10,22 @@
 					{else}<b>Fehler - ein falscher Statuseintrag! Wenden sie sich an den Administrator!</b>
 					{/if}
 				</div>
+				{if $class.isOptional}
+					<span class="label label-info pull-right">
+						offenes Ganztagsangebot
+					</span>
+				{/if}
 			</div>
 			<div class="clearfix"></div>
 		</div>
 		<div class="panel-body">
 			<h4>
 				<span class="label label-default label-lg">
-					{$class.classteacherName}
+					{if !empty($class.classteacherName)}
+						{$class.classteacherName}
+					{else}
+						Kein Kursleiter bekannt
+					{/if}
 				</span>
 			</h4>
 			<div class="quotebox quoted">
@@ -37,5 +46,20 @@
 </div>
 
 
+
+{/block}
+
+{block name='style_include' append}
+<link rel="stylesheet" href="{$path_css}/web/Kuwasys/main.css"
+type="text/css" />
+
+<style type="text/css">
+
+	div.panel div.panel-title .label.pull-right {
+		margin-left: 2px;
+	}
+	}
+
+</style>
 
 {/block}

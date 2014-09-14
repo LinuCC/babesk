@@ -2,13 +2,8 @@
 
 <div>
 	<h3>Übersicht über die gewählten Kurse</h3>
-		<div id="no-selections-info" class="panel panel-primary"
-		{if count($classes)}hidden="hidden"{/if}>
-			<div class="panel-heading">
-				<div class="panel-title">
-					Keine Kurse wurden ausgewählt.
-				</div>
-			</div>
+		<div class="alert alert-info">
+			Keine Kurse wurden ausgewählt.
 		</div>
 	{foreach $classes as $category}
 		<div class="panel panel-primary bg-fit category-panel">
@@ -22,14 +17,12 @@
 					{if $class.registrationEnabled}
 					<a class="list-group-item class-container"
 						classId="{$class.ID}" statusname="{$class.statusName}"
-						href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}">
+						href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}&categoryId={$class.categoryId}">
 					{else}
 					<li class="list-group-item" classId="{$class.ID}">
 					{/if}
 
-						<p class="list-group-item-heading" classId="{$class.ID}"
-							href="index.php?section=Kuwasys|ClassDetails&classId={$class.ID}"
-							>
+						<p class="list-group-item-heading" classId="{$class.ID}">
 								{$class.label}
 								<span class="label pull-right
 									{if $class.status == 'request1'}label-primary

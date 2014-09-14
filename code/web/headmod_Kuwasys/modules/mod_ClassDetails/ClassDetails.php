@@ -103,7 +103,7 @@ class ClassDetails extends Kuwasys {
 	 *                         details
 	 * @return array           The classdata
 	 */
-	private function detailsOfChosenClassGet($classId) {
+	private function detailsOfChosenClassGet($classId, $categoryId) {
 
 		try {
 			$stmt = $this->_pdo->prepare(
@@ -114,20 +114,20 @@ class ClassDetails extends Kuwasys {
 						SEPARATOR ", "
 					) AS classteacherName
 					FROM KuwasysClasses c
-						INNER JOIN KuwasysUsersInClasses uic
-							ON uic.ClassID = c.ID
+						INNER JOIN KuwasysUsersInClassesAndCategories uicc
+							ON uicc.ClassID = c.ID AND uicc.categoryId = ?
 						INNER JOIN KuwasysUsersInClassStatuses uics
-							ON uics.Id = uic.statusId
-						INNER JOIN KuwasysClassteachersInClasses ctic
+							ON uics.Id = uicc.statusId
+						LEFT JOIN KuwasysClassteachersInClasses ctic
 							ON ctic.ClassID = c.ID
-						INNER JOIN KuwasysClassteachers ct
+						LEFT JOIN KuwasysClassteachers ct
 							ON ct.ID = ctic.ClassTeacherID
-					WHERE uic.userId = ? AND uic.classId = ?
+					WHERE uicc.userId = ? AND uicc.classId = ?
 						AND c.schoolyearId = @activeSchoolyear
 					GROUP BY c.ID
 				'
 			);
-			$stmt->execute(array($_SESSION['uid'], $classId));
+			$stmt->execute(array($categoryId, $_SESSION['uid'], $classId));
 			$data = $stmt->fetch(\PDO::FETCH_ASSOC);
 			return $data;
 
@@ -146,7 +146,9 @@ class ClassDetails extends Kuwasys {
 	private function showClassDetails() {
 
 		try {
-			$data = $this->detailsOfChosenClassGet($_GET['classId']);
+			$data = $this->detailsOfChosenClassGet(
+				$_GET['classId'], $_GET['categoryId']
+			);
 			$this->_smarty->assign('class', $data);
 			$this->displayTpl('classDetails.tpl');
 
@@ -164,8 +166,9 @@ class ClassDetails extends Kuwasys {
 	 */
 	private function showConfirmationDeRegisterClass() {
 
-		$classId = $_GET['classId'];
-		$class = $this->detailsOfChosenClassGet($classId);
+		$class = $this->detailsOfChosenClassGet(
+			$_GET['classId'], $_GET['categoryId']
+		);
 		$this->_smarty->assign('class', $class);
 		$this->_smarty->display(
 			$this->_smartyPath . 'deRegisterClassConfirmation.tpl'
@@ -177,7 +180,9 @@ class ClassDetails extends Kuwasys {
 	 */
 	private function deRegisterUserFromClass() {
 
-		$class = $this->detailsOfChosenClassGet($_GET['classId']);
+		$class = $this->detailsOfChosenClassGet(
+			$_GET['classId'], $_GET['categoryId']
+		);
 		$this->deRegisterAllowedCheck($class);
 		$this->deleteJointUsersInClass($_SESSION['uid'], $class['ID']);
 		$this->_interface->setBacklink('index.php?module=web|Kuwasys');

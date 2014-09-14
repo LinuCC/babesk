@@ -431,7 +431,7 @@ class UserSelectionsApply extends \web\Kuwasys\ClassList {
 				(UserID, ClassID, statusId, categoryId) VALUES
 				(:userId, :classId, (
 					SELECT ID FROM KuwasysUsersInClassStatuses
-						WHERE name = "active"
+						WHERE name = "request1"
 				), :categoryId)
 		');
 		foreach($choices as $classId => $categoryIds) {
