@@ -93,7 +93,8 @@ class Recharge extends Babesk {
 			$maxRechargeAmount = sprintf('%01.2f', $maxRechargeAmount);
 
 			$isSoliRecharge = $this->userHasValidSoliCoupon(
-				$userId, date('Y-m-d'));
+				$userId, date('Y-m-d')
+			);
 
 			$this->_smarty->assign('max_amount', $maxRechargeAmount);
 			$this->_smarty->assign('uid', $userId);
@@ -116,10 +117,12 @@ class Recharge extends Babesk {
 	protected function userIdGetByCardId($cardId) {
 
 		try {
-			$stmt = $this->_pdo->prepare('SELECT UID FROM BabeskCards
-				WHERE cardnumber = :cardnumber');
+			$stmt = $this->_pdo->prepare(
+				'SELECT UID FROM BabeskCards WHERE cardnumber = :cardnumber'
+			);
 
 			$stmt->execute(array('cardnumber' => $cardId));
+			return $stmt->fetchColumn();
 
 		} catch (PDOException $e) {
 			$this->_interface->dieError(
@@ -141,17 +144,19 @@ class Recharge extends Babesk {
 	protected function isUseraccountUnlockedCheck($userId) {
 
 		try {
-			$stmt = $this->_pdo->prepare('SELECT locked FROM SystemUsers
-				WHERE ID = :userId');
+			$stmt = $this->_pdo->prepare(
+				'SELECT locked FROM SystemUsers WHERE ID = :userId'
+			);
 
 			$stmt->execute(array('userId' => $userId));
+			$data = $stmt->fetchColumn();
 
 		} catch (PDOException $e) {
 			$this->_interface->dieError(_g('Could not check if the ' .
 				'Useraccount of User-ID %1$s is locked or not', $userId));
 		}
 
-		if(($data = $stmt->fetchColumn()) === false) {
+		if($data === false) {
 			$this->_interface->dieError(_g('Could not check if the ' .
 				'Useraccount of User-ID %1$s is locked or not. Could ' .
 				'not find the User!', $userId));
@@ -185,7 +190,10 @@ class Recharge extends Babesk {
 				'Credits for the User with the ID %1$s', $userId));
 		}
 
-		if($data = $stmt->fetch()) {
+		$data = $stmt->fetch();
+		var_dump($data);
+		var_dump($userId);
+		if($data) {
 			return $data['maxCredits'] - $data['credits'];
 		}
 		else {
