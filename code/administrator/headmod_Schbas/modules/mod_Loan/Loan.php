@@ -195,9 +195,12 @@ class Loan extends Schbas {
 			}
 			else {
 				http_response_code(500);
+				//Exemplar should not be lent to two users at the same time
+				$user = $exemplar->getUsersLent()->first();
 				die(json_encode(array(
-					'message' => 'Dieses Exemplar ist im System bereits ' .
-						'verliehen!'
+					'message' => 'Dieses Exemplar ist im System bereits an ' .
+					$user->getForename() . ' ' . $user->getName() .
+					' verliehen!'
 				)));
 			}
 		}
