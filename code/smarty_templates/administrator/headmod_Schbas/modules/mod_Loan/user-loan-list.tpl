@@ -191,6 +191,9 @@ $(document).ready(function(){
 
 			console.log(res);
 			var $row = $('table tr[data-book-id="' + res.bookId + '"]');
+			toastr.success(
+				'Das Buch "' + res.title + '" wurde erfolgreich verliehen'
+			);
 			$row.addClass('bg-success text-success');
 			$row.children('td')
 				.first()

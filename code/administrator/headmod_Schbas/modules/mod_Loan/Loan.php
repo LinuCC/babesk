@@ -182,7 +182,8 @@ class Loan extends Schbas {
 				if($this->bookLoanToUserToDb($exemplar, $userId)) {
 					die(json_encode(array(
 						'bookId' => $exemplar->getBook()->getId(),
-						'exemplarId' => $exemplar->getId()
+						'exemplarId' => $exemplar->getId(),
+						'title' => $exemplar->getBook()->getTitle()
 					)));
 				}
 				else {
