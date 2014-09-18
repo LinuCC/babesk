@@ -170,6 +170,9 @@ class Loan {
 			$books = $this->optionalBooksNotNeededByUserRemove(
 				$userId, $notLendBooks
 			);
+			if(!empty($books)) {
+				$books = $this->selfpaidBooksOfUserSubtract($userId, $books);
+			}
 		}
 		return $books;
 	}
@@ -320,6 +323,45 @@ class Loan {
 			}
 		}
 		return $filteredBooks;
+	}
+
+	/**
+	 * Fetches the book-ids the user buys by himself
+	 * @param  int    $userId The ID of the user
+	 * @return array          An array of book-ids
+	 */
+	protected function selfpaidBooksByUserGet($userId) {
+
+		try {
+			$stmt = $this->_pdo->prepare(
+				'SELECT BID FROM SchbasSelfpayer WHERE UID = :userId
+			');
+			$stmt->execute(array('userId' => $userId));
+			return $stmt->fetchAll(\PDO::FETCH_COLUMN);
+
+		} catch (Exception $e) {
+			$this->_logger->log('Error fetching the selfpaid books by user',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			throw $e;
+		}
+	}
+
+	/**
+	 * Subtracts the books the user buys himself from the given booklist
+	 * @param  int    $userId The ID of the user to fetch the selfpaid books
+	 * @param  array  $books  The array of books to subtract from
+	 * @return array          The resulting array of books that has been
+	 *                        subtracted
+	 */
+	protected function selfpaidBooksOfUserSubtract($userId, $books) {
+
+		$selfpaidBooks = $this->selfpaidBooksByUserGet($userId);
+		foreach($books as $key => $book) {
+			if(in_array($book['id'], $selfpaidBooks)) {
+				unset($books[$key]);
+			}
+		}
+		return $books;
 	}
 
 
