@@ -1,0 +1,40 @@
+Babesk\ORM\SystemLog:
+    type: entity
+    table: SystemLogs
+    repositoryClass: Repository\Log
+    id:
+        id:
+            type: integer
+            length: 11
+            id: true
+            column: ID
+            generator:
+                strategy: IDENTITY
+    fields:
+        message:
+            type: string
+            nullable: false
+        date:
+            type: datetime
+            nullable: false
+        data:
+            type: string
+            nullable: false
+            column: additionalData
+    manyToOne:
+        severity:
+            targetEntity: Babesk\ORM\SystemLogSeverity
+            inversedBy: logs
+            cascade:
+                - persist
+            joinColumns:
+                severityId:
+                    referencedColumnName: ID
+        category:
+            targetEntity: Babesk\ORM\SystemLogCategory
+            inversedBy: logs
+            cascade:
+                - persist
+            joinColumns:
+                categoryId:
+                    referencedColumnName: ID

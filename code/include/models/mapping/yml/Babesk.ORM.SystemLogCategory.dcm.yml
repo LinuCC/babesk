@@ -1,0 +1,23 @@
+Babesk\ORM\SystemLogCategory:
+    type: entity
+    table: SystemLogCategories
+    id:
+        id:
+            type: integer
+            length: 11
+            nullable: false
+            id: true
+            column: ID
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            length: 255
+            nullable: false
+    oneToMany:
+        logs:
+            targetEntity: Babesk\ORM\SystemLog
+            mappedBy: category
+            cascade:
+                - persist
