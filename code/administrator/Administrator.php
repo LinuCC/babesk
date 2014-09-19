@@ -107,6 +107,7 @@ class Administrator {
 				json_encode(array(
 					'command' => $execCom->pathGet(),
 					'userId' => $_SESSION['UID'],
+					'exceptionType' => get_class($e),
 					'msg' => $e->getMessage()
 			)));
 
