@@ -1,6 +1,7 @@
 Babesk\ORM\SystemUsers:
     type: entity
     table: SystemUsers
+    repositoryClass: Repository\User
     id:
         id:
             type: integer

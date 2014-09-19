@@ -88,6 +88,10 @@ class DBConnect {
 				'Babesk', PATH_INCLUDE . '/models/Entities'
 			);
 			$loader->register();
+			$loader = new \Doctrine\Common\ClassLoader(
+				'Repository', PATH_INCLUDE . '/models'
+			);
+			$loader->register();
 			$entityManager =  Doctrine\ORM\EntityManager::create(
 				$conn, $config
 			);
