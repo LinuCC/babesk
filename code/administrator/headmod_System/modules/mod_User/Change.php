@@ -89,7 +89,15 @@ class Change extends \User
 
 		$cards = $this->_entityManager->getRepository('Babesk:BabeskCards')
 			->findByCardnumber($cardnumber);
-		if(count($cards) > 0) {
+		if(count($cards) == 0) {
+			return;
+		}
+		else if(
+			count($cards) == 1 && $cards[0]->getUid() == $this->_userId
+		) {
+			return;
+		}
+		else {
 			die(json_encode(array(
 				'value' => 'error',
 				'message' => 'Die Kartennummer existiert im System bereits!'
