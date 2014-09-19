@@ -41,6 +41,14 @@ class GeneralInterface {
 		echo $msg . '<br>';
 	}
 
+	public function flashError($msg) {
+		echo 'ERROR: ' . $msg . '<br>';
+	}
+
+	public function flashMessage($msg) {
+		echo $msg . '<br>';
+	}
+
 	public function dieDisplay () {
 		die();
 	}

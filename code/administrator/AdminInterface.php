@@ -80,6 +80,29 @@ class AdminInterface extends GeneralInterface {
 		$this->smarty->append('_userSuccessOutput', $msg);
 	}
 
+	public function flashDanger($msg, $title = '') {
+		$this->smarty->append('_flashDanger', array(
+			'msg' => $msg, 'title' => $title
+		));
+	}
+
+	public function flashWarning($msg, $title = '') {
+		$this->smarty->append('_flashWarning', array(
+			'msg' => $msg, 'title' => $title
+		));
+	}
+
+	public function flashInfo($msg, $title = '') {
+		$this->smarty->append('_flashInfo', array(
+			'msg' => $msg, 'title' => $title
+		));
+	}
+
+	public function flashSuccess($msg, $title = '') {
+		$this->smarty->append('_flashSuccess', array(
+			'msg' => $msg, 'title' => $title
+		));
+	}
 	/**
 	 * dies and displays all messages which were used by showError and showMsg
 	 */

@@ -84,7 +84,6 @@ class CardInfo extends System {
 			try {
 				$user = $card->getUser();
 				$user->getForename(); //Force loading of user-proxy to Entity
-
 			} catch (Doctrine\ORM\EntityNotFoundException $e) {
 				$this->_logger->log('Card exists, but linked user not!',
 					'Moderate', Null, json_encode(array(
@@ -93,9 +92,15 @@ class CardInfo extends System {
 					'Karte an einen nicht-existenten Benutzer vergeben!'
 				);
 			}
-			$grade = $this->_entityManager
-				->getRepository('Babesk:SystemUsers')
-				->getActiveGradeByUser($user);
+			try {
+				$grade = $this->_entityManager
+					->getRepository('Babesk:SystemUsers')
+					->getActiveGradeByUser($user);
+			} catch (\Doctrine\ORM\NonUniqueResultException $e) {
+				$this->_interface->flashDanger(
+					'Benutzer hat mehrere aktive Klassen!'
+				);
+			}
 			$this->cardinfoRender($card, $user, $grade);
 		}
 		else {
