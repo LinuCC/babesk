@@ -33,6 +33,7 @@ class CardInfo extends System {
 		$cardInfoProcessing = new AdminCardInfoProcessing($cardInfoInterface);
 
 		if ('POST' == $_SERVER['REQUEST_METHOD'] && isset($_POST['card_ID'])) {
+			$this->cardinfoDisplay($_POST['card_ID']);
 			$uid = $cardInfoProcessing->CheckCard($_POST['card_ID']);
 			$userData = $this->getUserData($uid);
 			$this->_smarty->assign('cardID', $_POST['card_ID']);
@@ -75,6 +76,41 @@ class CardInfo extends System {
 		}
 	}
 
+	private function cardinfoDisplay($cardnumber) {
+
+		$card = $this->_entityManager->getRepository('Babesk:BabeskCards')
+			->findOneByCardnumber($cardnumber);
+		if($card) {
+			try {
+				$user = $card->getUser();
+				$user->getForename(); //Force loading of user-proxy to Entity
+
+			} catch (Doctrine\ORM\EntityNotFoundException $e) {
+				$this->_logger->log('Card exists, but linked user not!',
+					'Moderate', Null, json_encode(array(
+						'cardnumber' => $cardnumber)));
+				$this->_interface->dieError(
+					'Karte an einen nicht-existenten Benutzer vergeben!'
+				);
+			}
+			$grade = $this->_entityManager
+				->getRepository('Babesk:SystemUsers')
+				->getActiveGradeByUser($user);
+			$this->cardinfoRender($card, $user, $grade);
+		}
+		else {
+			$this->_interface->dieError('Karte ist nicht vergeben.');
+		}
+		die();
+	}
+
+	private function cardinfoRender($card, $user, $grade) {
+
+		$this->_smarty->assign('card', $card);
+		$this->_smarty->assign('user', $user);
+		$this->_smarty->assign('grade', $grade);
+		$this->displayTpl('result.tpl');
+	}
 }
 
 ?>
