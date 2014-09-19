@@ -47,11 +47,13 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 				`KuwasysTemporaryRequestsAssign` (
 					`userId` int(11) unsigned NOT NULL,
 					`classId` int(11) unsigned NOT NULL,
+					`categoryId` int(11) unsigned NOT NULL,
 					`statusId` int(11) unsigned NOT NULL,
 					`origUserId` int(11) unsigned NOT NULL,
 					`origClassId` int(11) unsigned NOT NULL,
+					`origCategoryId` int(11) unsigned NOT NULL,
 					`origStatusId` int(11) unsigned NOT NULL,
-					PRIMARY KEY(`userId`, `classId`)
+					PRIMARY KEY(`userId`, `classId`, `categoryId`)
 				);');
 
 		} catch (PDOException $e) {
@@ -116,29 +118,35 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 
 		try {
 			$res = $this->_pdo->query(
-				'SELECT uic.statusId AS statusId, uic.ClassID AS classId,
-					uic.UserID AS userId, c.maxRegistration AS maxRegistration,
-					c.unitId AS unitId
-				FROM KuwasysUsersInClasses uic
-				JOIN KuwasysClasses c ON uic.ClassID = c.ID
+				'SELECT uicc.statusId AS statusId, uicc.ClassID AS classId,
+					uicc.UserID AS userId, cic.categoryId AS categoryId,
+					c.maxRegistration AS maxRegistration,
+					c.isOptional AS isOptional
+				FROM KuwasysUsersInClassesAndCategories uicc
+				INNER JOIN KuwasysClasses c ON uicc.ClassID = c.ID
+				INNER JOIN KuwasysClassesInCategories cic
+					ON cic.classId = c.ID AND uicc.categoryId = cic.categoryId
 				WHERE c.schoolyearId = @activeSchoolyear
 					AND (
-						uic.statusId = (
+						uicc.statusId = (
 							SELECT ID FROM KuwasysUsersInClassStatuses
 								WHERE name="request1"
 						) OR
-						uic.statusId = (
+						uicc.statusId = (
 							SELECT ID FROM KuwasysUsersInClassStatuses
 								WHERE name="request2"
 						)
 					)
-				ORDER BY uic.statusId
+				ORDER BY uicc.statusId
 			');
 
 			return $res->fetchAll(\PDO::FETCH_ASSOC);
 
 		} catch (\PDOException $e) {
-			$res->closeCursor();
+			if($res) {
+				$res->closeCursor();
+			}
+			var_dump($e->getMessage());
 			$this->_logger->log('Error fetching the requests',
 				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
 			$this->_interface->dieError(_g('Could not fetch the requests!'));
@@ -152,9 +160,12 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 	 *         "<statusId>" => [
 	 *             "<classId>" => [
 	 *                 "maxRegistration" => "<max Registrations of class>",
-	 *                 "unitId" => "<unit of class>",
+	 *                 "categoryId" => "<category of class>",
 	 *                 "users" => [
-	 *                     "<index>" => "<userId>"
+	 *                     "<index>" => [
+	 *                         "userId" => "<userId>",
+	 *                         "categoryId" => "<categoryId>"
+	 *                     ]
 	 *                 ]
 	 *             ]
 	 *         ]
@@ -164,12 +175,18 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 		$sorted = array();
 
 		foreach($requests as $request) {
-			$sorted[(int)$request['statusId']][(int)$request['classId']]
-				['users'][] = (int)$request['userId'];
-			$sorted[(int)$request['statusId']][(int)$request['classId']]
-				['maxRegistration'] = (int)$request['maxRegistration'];
-			$sorted[(int)$request['statusId']][(int)$request['classId']]
-				['unitId'] = (int)$request['unitId'];
+			$statusId = (int)$request['statusId'];
+			$classId = (int)$request['classId'];
+			$userId = (int)$request['userId'];
+			$maxRegistration = (int)$request['maxRegistration'];
+			$categoryId = (int)$request['categoryId'];
+			$isOptional = (bool)$request['isOptional'];
+			//$sorted[$statusId][$classId]['users'][] = $userId;
+			$sorted[$statusId][$classId]['users'][] = array(
+				'userId' => $userId, 'categoryId' => $categoryId
+			);
+			$sorted[$statusId][$classId]['maxRegistration'] = $maxRegistration;
+			$sorted[$statusId][$classId]['isOptional'] = $isOptional;
 		}
 
 		return $sorted;
@@ -183,7 +200,7 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 	 *         "<statusId>" => [
 	 *             "<classId>" => [
 	 *                 "maxRegistration" => "<max Registrations of class>",
-	 *                 "unitId" => "<unit of class>",
+	 *                 "categoryId" => "<category of class>",
 	 *                 "users" => [
 	 *                     "<index>" => "<userId>"
 	 *                 ]
@@ -202,8 +219,8 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 					shuffle($reqByClass['users']);
 				}
 				$this->assign(
-					$statusId, $reqByClass['maxRegistration'], $classId,
-					$reqByClass['unitId'], $reqByClass['users']
+					$statusId, $reqByClass['maxRegistration'],
+					$reqByClass['isOptional'], $classId, $reqByClass['users']
 				);
 			}
 		}
@@ -213,73 +230,74 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 	 * Assigns users to classes
 	 */
 	private function assign(
-		$status, $maxRegistration, $class, $classUnit, $requests
+		$status, $maxRegistration, $isOptional, $class, $requests
 	) {
 
 		if(!isset($this->_classCount[$class])) {
 			$this->_classCount[$class] = 0;
 		}
-
-		foreach($requests as $userId) {
-
-			if(isset($this->_toadd[$userId][$classUnit])) {
-				//An assignment already exists on this classUnit for this
+		foreach($requests as $request) {
+			$userId = $request['userId'];
+			$category = $request['categoryId'];
+			if(isset($this->_toadd[$userId][$category]) && !$isOptional) {
+				//An assignment already exists on this category for this
 				//user, check its status
 				$activeClassId = $this->classesIncludeStatus(
-					$this->_toadd[$userId][$classUnit], 'active'
+					$this->_toadd[$userId][$category], 'active'
 				);
 				$waitingClassId = $this->classesIncludeStatus(
-					$this->_toadd[$userId][$classUnit], 'waiting'
+					$this->_toadd[$userId][$category], 'waiting'
 				);
 				if($this->_classCount[$class] >= $maxRegistration) {
 					//class is full, add user as waiting or remove if he found
 					//something better already
 					$newStatus = ($activeClassId !== false) ? 0 :
 						array_search('waiting', $this->_status);
-					$this->_toadd[$userId][$classUnit][$class]['newStatus'] =
+					$this->_toadd[$userId][$category][$class]['newStatus'] =
 						$newStatus;
-					$this->_toadd[$userId][$classUnit][$class]['origStatus'] =
+					$this->_toadd[$userId][$category][$class]['origStatus'] =
 						$status;
 				}
 				else if($activeClassId !== false) {
 					//user already got another class on this day, he does
 					//not need another one
-					$this->_toadd[$userId][$classUnit][$class]
+					$this->_toadd[$userId][$category][$class]
 						['newStatus'] = 0;
-					$this->_toadd[$userId][$classUnit][$class]
+					$this->_toadd[$userId][$category][$class]
 						['origStatus'] = $status;
 				}
 				else if($waitingClassId !== false) {
 					//user already waits for one class
-					$this->waitingEntriesRemove($userId, $classUnit);
-					$this->_toadd[$userId][$classUnit][$class]['newStatus'] =
+					$this->waitingEntriesRemove($userId, $category);
+					$this->_toadd[$userId][$category][$class]['newStatus'] =
 						array_search('active', $this->_status);
-					$this->_toadd[$userId][$classUnit][$class]['origStatus'] =
+					$this->_toadd[$userId][$category][$class]['origStatus'] =
 						$status;
 					$this->classCountIncrement($class);
 				}
 				else {
-					//user has no assignments in this classunit yet
-					$this->_toadd[$userId][$classUnit][$class]['newStatus'] =
+					//user has no assignments in this category yet
+					$this->_toadd[$userId][$category][$class]['newStatus'] =
 						array_search('active', $this->_status);
-					$this->_toadd[$userId][$classUnit][$class]['origStatus'] =
+					$this->_toadd[$userId][$category][$class]['origStatus'] =
 						$status;
 				}
 			}
 			else {
-				//No assignment exists for this user and classunit yet
+				//No assignment exists for this user and category yet or the
+				//class is optional
 				if($this->_classCount[$class] >= $maxRegistration) {
 					//class is full, add user as waiting or remove if he found
 					//something better already
-					$this->_toadd[$userId][$classUnit][$class]['newStatus'] =
+					$this->_toadd[$userId][$category][$class]['newStatus'] =
 						array_search('waiting', $this->_status);
-					$this->_toadd[$userId][$classUnit][$class]['origStatus'] =
+					$this->_toadd[$userId][$category][$class]['origStatus'] =
 						$status;
 				}
 				else {
-					$this->_toadd[$userId][$classUnit][$class]['newStatus'] =
+					$this->_toadd[$userId][$category][$class]['newStatus'] =
 						array_search('active', $this->_status);
-					$this->_toadd[$userId][$classUnit][$class]['origStatus'] =
+					$this->_toadd[$userId][$category][$class]['origStatus'] =
 						$status;
 					$this->classCountIncrement($class);
 				}
@@ -290,13 +308,13 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 	/**
 	 * remove all already added waiting entries of user at day
 	 */
-	private function waitingEntriesRemove($userId, $unitId) {
+	private function waitingEntriesRemove($userId, $categoryId) {
 
 		while(
 			($waitingClassId = $this->classesIncludeStatus(
-				$this->_toadd[$userId][$unitId], 'waiting')) !== false
+				$this->_toadd[$userId][$categoryId], 'waiting')) !== false
 		) {
-			$this->_toadd[$userId][$unitId][$waitingClassId]['newStatus'] = 0;
+			$this->_toadd[$userId][$categoryId][$waitingClassId]['newStatus'] = 0;
 		}
 	}
 
@@ -342,19 +360,25 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 		try {
 			$stmt = $this->_pdo->prepare(
 				'INSERT INTO KuwasysTemporaryRequestsAssign
-					(`userId`, `classId`, `statusId`, `origUserId`,
-					`origClassId`, `origStatusId`)
+					(
+						`userId`, `classId`, `categoryId`, `statusId`,
+						`origUserId`, `origClassId`, `origCategoryId`,
+						`origStatusId`
+					)
 				VALUES
-					(:userId, :classId, :statusId, :userId, :classId,
-						:origStatusId);'
-			);
+					(
+						:userId, :classId, :categoryId, :statusId, :userId,
+						:classId, :categoryId, :origStatusId
+					);
+			');
 
-			foreach($this->_toadd as $userId => $units) {
-				foreach($units as $unitId => $classes) {
+			foreach($this->_toadd as $userId => $categories) {
+				foreach($categories as $categoryId => $classes) {
 					foreach($classes as $classId => $statusData) {
 						$stmt->execute(array(
 							'userId' => $userId,
 							'classId' => $classId,
+							'categoryId' => $categoryId,
 							'statusId' => $statusData['newStatus'],
 							'origStatusId' => $statusData['origStatus']
 						));
@@ -375,7 +399,7 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 
 	/**
 	 * The Requests to add to the temporary table
-	 * @var array  "<userId>" => ["<unitId>" => ["<classId>" =>
+	 * @var array  "<userId>" => ["<categoryId>" => ["<classId>" =>
 	 *            ["<statusData>" => ["newStatus" => "<newStatusId>",
 	 *             "origStatus" => "<originalStatusId>"
 	 *            ]]]]
