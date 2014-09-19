@@ -63,17 +63,12 @@ class Change extends \User
 			// 	$_POST, self::$registerRules);
 
 			//validate the elements
-			if($validatedData = $gump->run($_POST)) {
-				return;   //Everything fine
-			}
-			else {
+			if(!$gump->run($_POST)) {
 				die(json_encode(array(
 					'value' => 'error',
 					'message' => $gump->get_readable_string_errors(false)
-					)));
+				)));
 			}
-
-
 		} catch(\Exception $e) {
 			$this->_logger->log('error checking input',
 				'Moderate', Null, json_encode(array(
@@ -82,6 +77,22 @@ class Change extends \User
 			die(json_encode(array(
 				'value' => 'error',
 				'message' => array('Konnte die Eingaben nicht überprüfen!')
+			)));
+		}
+
+		if(!empty($_POST['cardnumber'])) {
+			$this->cardnumberDuplicatedCheck($_POST['cardnumber']);
+		}
+	}
+
+	private function cardnumberDuplicatedCheck($cardnumber) {
+
+		$cards = $this->_entityManager->getRepository('Babesk:BabeskCards')
+			->findByCardnumber($cardnumber);
+		if(count($cards) > 0) {
+			die(json_encode(array(
+				'value' => 'error',
+				'message' => 'Die Kartennummer existiert im System bereits!'
 			)));
 		}
 	}
@@ -396,9 +407,9 @@ class Change extends \User
 	 */
 	protected function cardChange() {
 
+		$existingCard = $this->cardOfUserFetch($this->_userId);
 		if(!empty($_POST['cardnumber'])) {
 			$query = '';
-			$existingCard = $this->cardOfUserFetch($this->_userId);
 
 			if(!$existingCard) {
 				$query = 'INSERT INTO BabeskCards (cardnumber, UID)
@@ -421,7 +432,19 @@ class Change extends \User
 			}
 		}
 		else {
-			return;
+			if($existingCard) {
+				$stmt = $this->_pdo->prepare(
+					'DELETE FROM BabeskCards
+					WHERE cardnumber = :cardnumber AND UID = :userId
+				');
+				$stmt->execute(array(
+					'userId' => $this->_userId,
+					'cardnumber' => $existingCard['cardnumber']
+				));
+			}
+			else {
+				return;
+			}
 		}
 	}
 

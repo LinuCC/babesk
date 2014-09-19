@@ -242,7 +242,23 @@ class User extends System {
 				'value' => 'inputError',
 				'message' => array('Konnte die Eingaben nicht überprüfen!'))));
 		}
+		if(!empty($_POST['cardnumber'])) {
+			$this->cardnumberDuplicatedCheck($_POST['cardnumber']);
+		}
 	}
+
+	private function cardnumberDuplicatedCheck($cardnumber) {
+
+		$cards = $this->_entityManager->getRepository('Babesk:BabeskCards')
+			->findByCardnumber($cardnumber);
+		if(count($cards) > 0) {
+			die(json_encode(array(
+				'value' => 'error',
+				'message' => 'Die Kartennummer existiert im System bereits!'
+			)));
+		}
+	}
+
 
 	/**
 	 * Registers a new user by the data given as post-variables
