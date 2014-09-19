@@ -418,7 +418,9 @@ class UserDisplayAllQueryCreator {
 	protected function cardsQuery() {
 
 		if(!$this->_cardsQueryDone) {
-			$this->addSelectStatement('BabeskCards.cardnumber AS cardnumber');
+			$this->addSelectStatement(
+				'BabeskCards.cardnumber AS `cardnumber`'
+			);
 			$this->addJoinStatement('LEFT JOIN
 				(SELECT UID, cardnumber FROM BabeskCards) BabeskCards
 				ON BabeskCards.UID = u.ID');
