@@ -36,12 +36,13 @@ $(document).ready(function() {
 	 * Fetches the table-data from the server and refills the tables
 	 * @param  {int}    classId The id of the class
 	 */
-	var fetch = function(classId) {
+	var fetch = function(classId, categoryId) {
 
 		$.postJSON(
 			'index.php?module=administrator|Kuwasys|KuwasysUsers|AssignUsersToClasses|ClassdetailsGet',
 			{
-				'classId': classId
+				'classId': classId,
+				'categoryId': categoryId
 			},
 			function(res) {
 				tablesClear();
@@ -107,7 +108,7 @@ $(document).ready(function() {
 
 				if(res.value == 'success') {
 					toastr['success'](res.message);
-					fetch(classId);
+					fetch(classId, categoryId);
 				}
 				else if(res.value == 'error') {
 					toastr['error'](res.message);
@@ -129,7 +130,7 @@ $(document).ready(function() {
 			function(res) {
 				if(res.value == 'success') {
 					toastr['success'](res.message);
-					fetch(classId);
+					fetch(classId, categoryId);
 				}
 				else if(res.value == 'error') {
 					toastr['error'](res.message);
@@ -152,7 +153,7 @@ $(document).ready(function() {
 
 				if(res.value == 'success') {
 					toastr['success'](res.message);
-					fetch(classId);
+					fetch(classId, categoryId);
 				}
 				else if(res.value == 'error') {
 					toastr['error'](res.message);
@@ -162,5 +163,5 @@ $(document).ready(function() {
 	};
 
 
-	fetch(classId);
+	fetch(classId, categoryId);
 });

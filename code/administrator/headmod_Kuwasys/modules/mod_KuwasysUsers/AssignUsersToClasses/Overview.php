@@ -41,7 +41,7 @@ class Overview extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses 
 						SELECT COUNT(*) FROM KuwasysTemporaryRequestsAssign rad
 						WHERE ra.classId = rad.classId AND (rad.statusId = 0 OR rad.statusId = 2)
 					) AS usercount, c.label AS classlabel,
-					c.ID AS classId
+					c.ID AS classId, ra.categoryId AS categoryId
 				FROM KuwasysTemporaryRequestsAssign ra
 				INNER JOIN KuwasysClasses c ON ra.classId = c.ID
 				INNER JOIN KuwasysClassCategories cu ON cu.ID = ra.categoryId

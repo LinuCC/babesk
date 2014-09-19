@@ -15,7 +15,7 @@
 		<td>{$class.usercount}</td>
 		<td>{$class.weekday}</td>
 		<td>
-			<a class="btn btn-info btn-xs" href="index.php?module=administrator|Kuwasys|KuwasysUsers|AssignUsersToClasses|Classdetails&amp;classId={$class.classId}" class="displayDetails">
+			<a class="btn btn-info btn-xs" href="index.php?module=administrator|Kuwasys|KuwasysUsers|AssignUsersToClasses|Classdetails&amp;classId={$class.classId}&amp;categoryId={$class.categoryId}" class="displayDetails">
 				Details
 			</a>
 		</td>

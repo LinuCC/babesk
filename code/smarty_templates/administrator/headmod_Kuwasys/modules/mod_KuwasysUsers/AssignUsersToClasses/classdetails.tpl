@@ -211,6 +211,7 @@
 
 <script type="text/javascript">
 	var classId = {$classId};
+	var categoryId = {$categoryId};
 </script>
 
 <script src="{$path_js}/jquery-ui-1.10.4.only-autocomplete.min.js"> </script>

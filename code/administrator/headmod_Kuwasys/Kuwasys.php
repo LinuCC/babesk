@@ -40,8 +40,9 @@ class Kuwasys extends Module {
 	protected function classGet($classId) {
 
 		try {
-			$stmt = $this->_pdo->prepare('SELECT * FROM KuwasysClasses
-				WHERE ID = :classId');
+			$stmt = $this->_pdo->prepare(
+				'SELECT * FROM KuwasysClasses WHERE ID = :classId'
+			);
 
 			$stmt->execute(array('classId' => $classId));
 			return $stmt->fetch();

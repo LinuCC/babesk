@@ -31,6 +31,7 @@ class Classdetails extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClas
 			$this->_interface->dieError(_g('Error while fetching the data!'));
 		}
 		$this->_smarty->assign('classId', $_GET['classId']);
+		$this->_smarty->assign('categoryId', $_GET['categoryId']);
 		$this->_smarty->assign('class', $class);
 		$this->_smarty->assign('classes', $classes);
 		$this->displayTpl('classdetails.tpl');
@@ -50,8 +51,10 @@ class Classdetails extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClas
 	private function classesGetAllOfActiveSchoolyear() {
 
 		try {
-			$classes = $this->_pdo->query('SELECT * FROM KuwasysClasses
-				WHERE schoolyearId = @activeSchoolyear');
+			$classes = $this->_pdo->query(
+				'SELECT * FROM KuwasysClasses
+				WHERE schoolyearId = @activeSchoolyear'
+			);
 
 			return $classes;
 
