@@ -142,14 +142,11 @@
 		<!-- Password -->
 		<div class="row">
 			<div class="col-xs-12 col-md-6">
-				<div class="input-group form-group">
-					<span class="input-group-addon"><span class="icon icon-lock"></span></span>
-					<span class="form-control">
+				<div class="form-group">
 						<label for="password-switch">{t}use preset password{/t}</label>
 						<input type="checkbox" id="password-switch" name="password-switch"
 						data-on-text="Ja" data-off-text="Nein" data-size="small"
 						data-on-color="info" data-off-color="warning" checked/>
-					</span>
 				</div>
 			</div>
 		</div>

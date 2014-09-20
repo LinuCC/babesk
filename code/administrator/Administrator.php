@@ -251,7 +251,6 @@ class Administrator {
 			$this->_acl->accessControlInit($_SESSION['UID']);
 
 		} catch(AclException $e) {
-			var_dump($e->getMessage());
 			if($e->getCode() == 104) {
 				$this->_smarty->assign('status',
 					'Account hat keine Admin-Berechtigung');
