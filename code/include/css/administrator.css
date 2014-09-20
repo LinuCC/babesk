@@ -39,11 +39,24 @@ hr {
 	color: #AAE;
 }
 
-.container-fluid {
-	margin-right: auto;
-	margin-left: auto;
-	padding-left: 15px;
-	padding-right: 15px;
+#body-wrapper.show-sidebar > #main_wrapper > .container {
+	width: auto;
+}
+
+@media (min-width: 1018px) {
+	#body-wrapper.show-sidebar > #main_wrapper > .container {
+		width: 750px;
+	}
+}
+@media (min-width: 1242px) {
+	#body-wrapper.show-sidebar > #main_wrapper > .container {
+		width: 970px;
+	}
+}
+@media (min-width: 1450px) {
+	#body-wrapper.show-sidebar > #main_wrapper > .container {
+		width: 1170px;
+	}
 }
 
 #navigation {
