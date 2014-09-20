@@ -226,7 +226,12 @@ class Administrator {
 				'Notice', null, json_encode(array(
 					'userId' => $_SESSION['UID']))
 			);
-			$this->_adminInterface->dieError(_g('Error Accessing the Admin-Layer; Either the Module does not exist, or you dont have the rights to access it!'));
+			$this->_smarty->assign('status',
+				'Account hat keine Admin-Berechtigung');
+			$this->_smarty->display(
+				PATH_SMARTY_TPL . '/administrator/login.tpl'
+			);
+			die();
 		}
 	}
 
