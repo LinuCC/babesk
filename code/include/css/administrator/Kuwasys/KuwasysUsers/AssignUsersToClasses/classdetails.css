@@ -1,3 +1,18 @@
 table td.options {
 	width: 80px;
 }
+
+table td.other-requests {
+	padding: 2px !important;
+	margin: 0;
+}
+
+
+table td.other-requests .list-group {
+	padding: 0;
+	margin: 0;
+}
+
+table td.other-requests .list-group a.list-group-item {
+	padding: 5px 15px;
+}

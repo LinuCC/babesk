@@ -7,26 +7,40 @@
 		<td><%= username %></td>
 		<td><%= grade %></td>
 		<td><%= origStatusname %></td>
-		<td>
-			<% if(otherClassId) { %>
-				<a href="index.php?module=administrator|Kuwasys|KuwasysUsers|AssignUsersToClasses|Classdetails&classId=<%= otherClassId %>">
-				<%= otherClassLabel %>
+		<td class="other-requests">
+			<% if(otherRequests.length) { %>
+				<div class="list-group">
+					<% for(var i = 0; i < otherRequests.length; i++) { %>
+						<a class="list-group-item
+							<% if(otherRequests[i].statusname == 'active') { %>
+								list-group-item-success
+							<% } else if(otherRequests[i].statusname == 'removed'){ %>
+								list-group-item-danger
+							<% } else if(otherRequests[i].statusname == 'waiting'){ %>
+								list-group-item-warning
+							<% } %>
+						"
+							href="index.php?module=administrator|Kuwasys|KuwasysUsers|AssignUsersToClasses|Classdetails&classId=<%= otherRequests[i].classId %>&categoryId=<%= otherRequests[i].categoryId %>">
+							<%= otherRequests[i].label %>
+						</a>
+					<% } %>
+				</div>
 			<% } else { %>
-				---
 			<% } %>
-			</a>
 		</td>
 		<td class="options">
-			<button data-toggle="modal" href="#moveStatusDialog"
-				class="btn btn-xs btn-info moveStatus" userid="<%= userId %>"
-				title="Status verändern">
-				<span class="icon icon-edit"></span>
-			</button>
-			<button data-toggle="modal" href="#moveClassDialog"
-				class="btn btn-xs btn-info moveClass" userid="<%= userId %>"
-				title="Zu Kurs verschieben">
-				<span class="icon icon-move"></span>
-			</button>
+			<div class="btn-group">
+				<button data-toggle="modal" href="#moveStatusDialog"
+					class="btn btn-xs btn-info moveStatus" userid="<%= userId %>"
+					title="Status verändern">
+					<span class="icon icon-edit"></span>
+				</button>
+				<button data-toggle="modal" href="#moveClassDialog"
+					class="btn btn-xs btn-info moveClass" userid="<%= userId %>"
+					title="Zu Kurs verschieben">
+					<span class="icon icon-move"></span>
+				</button>
+			</div>
 		</td>
 	</tr>
 </script>
@@ -140,8 +154,8 @@
 					</span>
 					<select name="class" id="inputClass" class="form-control">
 						{foreach $classes as $class}
-							<option value="{$class.ID}">
-								{$class.label}
+							<option value='{ldelim}"classId":{$class.ID},"categoryId":{$class.categoryId}{rdelim}'>
+								{$class.label} ({$class.categoryName})
 							</option>
 						{/foreach}
 					</select>
@@ -165,9 +179,10 @@
 
 {block name="content"}
 
-<h2 class="module-header">
+<h3 class="module-header">
 	{t}Classdetails of Class{/t} {$class.label}
-</h2>
+	<span>({$class.categoryName})</span>
+</h3>
 
 <a class="btn btn-default pull-right" data-toggle="modal"
 	href='#addUserDialog'>

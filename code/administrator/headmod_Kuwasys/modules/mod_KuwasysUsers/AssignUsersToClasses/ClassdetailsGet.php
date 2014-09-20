@@ -25,8 +25,11 @@ class ClassdetailsGet extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToC
 			$data = $this->temporaryAssignmentsRequestsOfClassGet(
 				$_POST['classId'], $_POST['categoryId']
 			);
+			$data = $this->requestsAtSameCategoryForRequestsAppend($data);
 
 		} catch(PDOException $e) {
+			$this->_logger->log('Error fetching the user-assignments',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
 			die(json_encode(array('value' => 'error',
 				'message' => _g('Could not fetch the User-Assignments') . $e->getMessage())));
 		}
@@ -54,31 +57,11 @@ class ClassdetailsGet extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToC
 			$stmt = $this->_pdo->prepare(
 				'SELECT IF(ra.statusId <> 0, uics.name, "removed") statusname,
 					ra.statusId AS statusId, ra.classId AS classId,
-					ra.userId AS userId, ra.*, c.*, g.*, uigsy.*,
+					ra.userId AS userId, ra.categoryId AS categoryId,
 					IF(origuics.ID, origuics.translatedName, "N/A")
 						AS origStatusname,
 					CONCAT(u.forename, " ", u.name) AS username,
-					CONCAT(g.gradelevel, "-", g.label) AS grade,
-					(SELECT c2.ID FROM KuwasysClasses c2
-						INNER JOIN KuwasysTemporaryRequestsAssign ra2
-							ON ra2.classId = c2.ID
-						INNER JOIN KuwasysClassesInCategories cic2
-							ON cic2.classId = c2.ID
-								AND cic2.categoryId = :categoryId
-						WHERE ra2.userId = ra.userId
-							AND ra2.classId <> ra.classId
-							AND c2.isOptional = 0
-					) AS otherClassId,
-				(SELECT c2.label FROM KuwasysClasses c2
-					INNER JOIN KuwasysTemporaryRequestsAssign ra2
-						ON ra2.classId = c2.ID
-					INNER JOIN KuwasysClassesInCategories cic2
-						ON cic2.classId = c2.ID
-							AND cic2.categoryId = :categoryId
-					WHERE ra2.userId = ra.userId
-						AND ra2.classId <> ra.classId
-						AND c2.isOptional = 0
-				) AS otherClassLabel
+					CONCAT(g.gradelevel, "-", g.label) AS grade
 				FROM KuwasysTemporaryRequestsAssign ra
 				INNER JOIN SystemUsers u ON ra.userId = u.ID
 				LEFT JOIN SystemUsersInGradesAndSchoolyears uigsy
@@ -106,7 +89,41 @@ class ClassdetailsGet extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToC
 				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
 			http_response_code(500);
 		}
+	}
 
+	/**
+	 * Adds the other requests the user is in to the request
+	 * @param  array  $requests The requests to display
+	 * @return array            The requests with more data
+	 */
+	protected function requestsAtSameCategoryForRequestsAppend($requests) {
+
+		$stmt = $this->_pdo->prepare(
+			'SELECT c.ID AS classId, c.label AS label,
+				cic.categoryId AS categoryId,
+				IF(ra.statusId <> 0, uics.name, "removed") AS statusname
+			FROM KuwasysClasses c
+			INNER JOIN KuwasysTemporaryRequestsAssign ra
+				ON ra.classId = c.ID
+			INNER JOIN KuwasysClassesInCategories cic
+				ON cic.classId = c.ID
+					AND cic.categoryId = :categoryId
+			LEFT JOIN KuwasysUsersInClassStatuses uics
+				ON ra.statusId = uics.ID
+			WHERE ra.userId = :userId AND ra.classId <> :classId
+		');
+		foreach($requests as &$status) {
+			foreach($status as &$request) {
+				$stmt->execute(array(
+					'categoryId' => $request['categoryId'],
+					'userId' => $request['userId'],
+					'classId' => $request['classId']
+				));
+				$otherRequests = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+				$request['otherRequests'] = $otherRequests;
+			}
+		}
+		return $requests;
 	}
 
 	/////////////////////////////////////////////////////////////////////

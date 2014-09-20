@@ -239,14 +239,20 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 		foreach($requests as $request) {
 			$userId = $request['userId'];
 			$category = $request['categoryId'];
-			if(isset($this->_toadd[$userId][$category]) && !$isOptional) {
+			if(
+				count($this->nonOptionalToAddGetAt($userId, $category)) &&
+				!$isOptional
+			) {
 				//An assignment already exists on this category for this
 				//user, check its status
+				$nonOptionals = $this->nonOptionalToAddGetAt(
+					$userId, $category
+				);
 				$activeClassId = $this->classesIncludeStatus(
-					$this->_toadd[$userId][$category], 'active'
+					$nonOptionals, 'active'
 				);
 				$waitingClassId = $this->classesIncludeStatus(
-					$this->_toadd[$userId][$category], 'waiting'
+					$nonOptionals, 'waiting'
 				);
 				if($this->_classCount[$class] >= $maxRegistration) {
 					//class is full, add user as waiting or remove if he found
@@ -257,6 +263,8 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 						$newStatus;
 					$this->_toadd[$userId][$category][$class]['origStatus'] =
 						$status;
+					$this->_toadd[$userId][$category][$class]['isOptional'] =
+						$isOptional;
 				}
 				else if($activeClassId !== false) {
 					//user already got another class on this day, he does
@@ -265,6 +273,8 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 						['newStatus'] = 0;
 					$this->_toadd[$userId][$category][$class]
 						['origStatus'] = $status;
+					$this->_toadd[$userId][$category][$class]
+						['isOptional'] = $isOptional;
 				}
 				else if($waitingClassId !== false) {
 					//user already waits for one class
@@ -273,6 +283,8 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 						array_search('active', $this->_status);
 					$this->_toadd[$userId][$category][$class]['origStatus'] =
 						$status;
+					$this->_toadd[$userId][$category][$class]['isOptional'] =
+						$isOptional;
 					$this->classCountIncrement($class);
 				}
 				else {
@@ -281,6 +293,8 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 						array_search('active', $this->_status);
 					$this->_toadd[$userId][$category][$class]['origStatus'] =
 						$status;
+					$this->_toadd[$userId][$category][$class]['isOptional'] =
+						$isOptional;
 				}
 			}
 			else {
@@ -293,12 +307,16 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 						array_search('waiting', $this->_status);
 					$this->_toadd[$userId][$category][$class]['origStatus'] =
 						$status;
+					$this->_toadd[$userId][$category][$class]['isOptional'] =
+						$isOptional;
 				}
 				else {
 					$this->_toadd[$userId][$category][$class]['newStatus'] =
 						array_search('active', $this->_status);
 					$this->_toadd[$userId][$category][$class]['origStatus'] =
 						$status;
+					$this->_toadd[$userId][$category][$class]['isOptional'] =
+						$isOptional;
 					$this->classCountIncrement($class);
 				}
 			}
@@ -393,6 +411,20 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 		}
 	}
 
+	private function nonOptionalToAddGetAt($userId, $categoryId) {
+
+		$res = array();
+		if(!empty($this->_toadd[$userId][$categoryId])) {
+			$classes = $this->_toadd[$userId][$categoryId];
+			foreach($classes as $class) {
+				if(!$class['isOptional']) {
+					$res[] = $class;
+				}
+			}
+		}
+		return $res;
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
@@ -401,7 +433,8 @@ class Reset extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClasses {
 	 * The Requests to add to the temporary table
 	 * @var array  "<userId>" => ["<categoryId>" => ["<classId>" =>
 	 *            ["<statusData>" => ["newStatus" => "<newStatusId>",
-	 *             "origStatus" => "<originalStatusId>"
+	 *             "origStatus" => "<originalStatusId>",
+	 *             "isOptional" => "<isOptional>"
 	 *            ]]]]
 	 */
 	private $_toadd;

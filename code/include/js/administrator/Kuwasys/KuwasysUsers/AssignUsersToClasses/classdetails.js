@@ -12,10 +12,16 @@ $(document).ready(function() {
 
 	$('#moveClassDialogSubmit').on('click', function(ev) {
 		$('#moveClassDialog').modal('hide');
+		console.log($('select[name=class] option:selected').val());
+		var newClass = JSON.parse($('select[name=class] option:selected').val());
+		if(!newClass) {
+			toastr.error('Ein Fehler ist beim parsen des neuen Kurses aufgetreten');
+			return false;
+		}
 		changeClass(
 			$('#moveClassDialog').attr('userid'),
 			classId,
-			$('select[name=class] option:selected').val()
+			newClass
 		);
 	});
 
@@ -45,6 +51,7 @@ $(document).ready(function() {
 				'categoryId': categoryId
 			},
 			function(res) {
+				console.log(res);
 				tablesClear();
 				tablesFill(res);
 			}
@@ -118,14 +125,15 @@ $(document).ready(function() {
 	};
 
 
-	var changeClass = function(userId, classId, newClassId) {
+	var changeClass = function(userId, classId, newClass) {
 
 		$.postJSON(
 			'index.php?module=administrator|Kuwasys|KuwasysUsers|AssignUsersToClasses|ChangeClassOfUser',
 			{
 				'userId': userId,
 				'classId': classId,
-				'newClassId': newClassId,
+				'newClassId': newClass.classId,
+				'newClassCategoryId': newClass.categoryId
 			},
 			function(res) {
 				if(res.value == 'success') {

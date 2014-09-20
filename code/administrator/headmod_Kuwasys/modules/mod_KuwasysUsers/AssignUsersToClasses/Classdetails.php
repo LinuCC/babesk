@@ -22,7 +22,9 @@ class Classdetails extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClas
 		parent::entryPoint($dataContainer);
 
 		try {
-			$class = $this->classGet($_GET['classId']);
+			$class = $this->classWithCategoryGet(
+				$_GET['classId'], $_GET['categoryId']
+			);
 			$classes = $this->classesGetAllOfActiveSchoolyear();
 
 		} catch (PDOException $e) {
@@ -42,6 +44,37 @@ class Classdetails extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClas
 	/////////////////////////////////////////////////////////////////////
 
 	/**
+	 * Fetches a Class from the Database
+	 *
+	 * @param  int    $classId The ID of the Class to fetch
+	 * @return array           The Class-Data
+	 */
+	protected function classWithCategoryGet($classId, $categoryId) {
+
+		try {
+			$stmt = $this->_pdo->prepare(
+				'SELECT c.*, cc.translatedName AS categoryName
+				FROM KuwasysClasses c
+				INNER JOIN KuwasysClassesInCategories cic
+					ON cic.classId = c.ID
+				INNER JOIN KuwasysClassCategories cc
+					ON cic.categoryId = cc.ID
+				WHERE c.ID = :classId AND cic.categoryId = :categoryId
+			');
+			$stmt->execute(array(
+				'classId' => $classId, 'categoryId' => $categoryId
+			));
+			return $stmt->fetch();
+
+		} catch (PDOException $e) {
+			$msg = "Could not fetch the Class with Id $classId.";
+			$this->_logger->log(__METHOD__ . ": $msg", 'Moderate', NULL,
+				json_encode(array('error' => $e->getMessage())));
+			throw new PDOException($msg, 0, $e);
+		}
+	}
+
+	/**
 	 * Fetches all Classes that are in the active Schoolyear
 	 *
 	 * Dies displaying a Message on Error
@@ -52,8 +85,14 @@ class Classdetails extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClas
 
 		try {
 			$classes = $this->_pdo->query(
-				'SELECT * FROM KuwasysClasses
-				WHERE schoolyearId = @activeSchoolyear'
+				'SELECT c.*, ca.translatedName AS categoryName,
+					ca.ID AS categoryId
+				FROM KuwasysClasses c
+				INNER JOIN KuwasysClassesInCategories cic
+					ON cic.classId = c.ID
+				INNER JOIN KuwasysClassCategories ca
+					ON ca.ID = cic.categoryId
+				WHERE c.schoolyearId = @activeSchoolyear'
 			);
 
 			return $classes;

@@ -21,8 +21,12 @@ class ChangeClassOfUser extends \administrator\Kuwasys\KuwasysUsers\AssignUsersT
 
 		parent::entryPoint($dataContainer);
 
+		die(json_encode(array('value' => 'error',
+			'message' => json_encode($_POST)
+		)));
 		$this->classChange(
-			$_POST['userId'], $_POST['classId'], $_POST['newClassId']
+			$_POST['userId'], $_POST['classId'], $_POST['newClassId'],
+			$_POST['newClassCategoryId']
 		);
 		die(json_encode(array('value' => 'success',
 			'message' => _g('The User was successfully moved.'))));
@@ -32,17 +36,20 @@ class ChangeClassOfUser extends \administrator\Kuwasys\KuwasysUsers\AssignUsersT
 	//Implements
 	/////////////////////////////////////////////////////////////////////
 
-	private function classChange($userId, $classId, $newClassId) {
+	private function classChange(
+		$userId, $classId, $newClassId, $newCategoryId
+	) {
 
 		try {
 			$stmt = $this->_pdo->prepare('UPDATE KuwasysTemporaryRequestsAssign
-				SET classId = :newClassId
+				SET classId = :newClassId, categoryId = :newCategoryId
 				WHERE userId = :userId AND classId = :classId');
 
 			$stmt->execute(array(
 				'userId' => $userId,
 				'classId' => $classId,
-				'newClassId' => $newClassId
+				'newClassId' => $newClassId,
+				'newCategoryId' => $newCategoryId
 			));
 
 		} catch (\PDOException $e) {
