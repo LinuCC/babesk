@@ -17,6 +17,10 @@ $(document).ready(function() {
 			$passwordSwitch.bootstrapSwitch('state'), false
 		);
 
+		$('#password-options-container').on('change', function(ev) {
+			passwordOptionOnChange();
+		});
+
 		$('.group-identifier').on('click', function(ev) {
 			$(this).toggleClass('label-default label-success active');
 		});
@@ -105,6 +109,50 @@ $(document).ready(function() {
 			}
 		};
 
+		function passwordOptionIdGetChecked() {
+
+			var $checked = $('#password-options-container input:checked');
+			return $checked.attr('id');
+		}
+
+		function passwordOptionOnChange() {
+
+			var id = passwordOptionIdGetChecked();
+			if(id == 'password-option-preset') {
+				passwordManualInputFieldsClear();
+				passwordManualInputFieldsHide();
+			}
+			else if(id == 'password-option-birthday') {
+				passwordManualInputFieldsClear();
+				passwordManualInputFieldsHide();
+			}
+			else if(id == 'password-option-manual') {
+				passwordManualInputFieldsClear();
+				passwordManualInputFieldsShow();
+			}
+			$fields = $('#password, #password-repeat');
+		}
+
+		function passwordManualInputFieldsClear() {
+
+			$fields = $('#password, #password-repeat');
+			$fields.val('');
+		}
+
+		function passwordManualInputFieldsShow() {
+
+			$fields = $('#password, #password-repeat');
+			$fields.closest('.form-group').show();
+			$fields.prop('disabled', false);
+		}
+		function passwordManualInputFieldsHide() {
+
+			$fields = $('#password, #password-repeat');
+			$('span[for="password"],span[for="password-repeat"]').remove();
+			$fields.closest('.form-group').removeClass('has-error');
+			$fields.closest('.form-group').hide();
+			$fields.prop('disabled', true);
+		}
 
 		/*==========  Validation  ==========*/
 
@@ -150,6 +198,7 @@ $(document).ready(function() {
 
 		function upload() {
 
+			$('#form-submit').button('loading');
 			var groups = [];
 			$('#usergroups .group-identifier.active').each(function (i, el) {
 				groups.push($(el).attr('groupId'));
@@ -162,6 +211,16 @@ $(document).ready(function() {
 				});
 			});
 
+			var presetPasswordToggle = false;
+			var pwId = passwordOptionIdGetChecked();
+			if(pwId == 'password-option-preset') {
+				presetPasswordToggle = true;
+			}
+			else if(pwId == 'password-option-birthday') {
+				var birthday = $('#birthday').val();
+				$('#password, #password-repeat').val(birthday);
+			}
+
 			$.ajax({
 				type: 'POST',
 				url: 'index.php?module=administrator|System|User|Register',
@@ -169,7 +228,7 @@ $(document).ready(function() {
 					'forename': $('#forename').val(),
 					'lastname': $('#lastname').val(),
 					'username': $('#username').val(),
-					'presetPasswordToggle': $passwordSwitch.bootstrapSwitch('state'),
+					'presetPasswordToggle': presetPasswordToggle,
 					'password': $('#password').val(),
 					'email': $('#email').val(),
 					'telephone': $('#telephone').val(),
@@ -187,20 +246,25 @@ $(document).ready(function() {
 						data = JSON.parse(data);
 					} catch(e) {
 						toastr['error']('Konnte die Serverantwort nicht parsen');
+						$('#form-submit').button('error');
 						return;
 					}
 					if(data.value == 'success') {
 						toastr['success'](data.message);
+						$('#form-submit').button('complete');
 					}
 					else if(data.value == 'error') {
 						toastr['error'](data.message);
+						$('#form-submit').button('error');
 					}
 					else {
 						toastr['error']('Konnte die Serverantwort nicht lesen');
+						$('#form-submit').button('error');
 					}
 				},
 				error: function(data) {
 					toastr['error']('Nope!');
+					$('#form-submit').button('error');
 				}
 			});
 		};

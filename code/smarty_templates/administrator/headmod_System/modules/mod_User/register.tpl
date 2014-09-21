@@ -150,6 +150,31 @@
 				</div>
 			</div>
 		</div>
+		<div class="row form-group">
+			<label class="col-sm-2 btn-group-label">
+				Passwortart
+			</label>
+			<div class="col-sm-10">
+				<div id="password-options-container" class="btn-group"
+					data-toggle="buttons">
+					<label class="btn btn-default active">
+						<input type="radio" name="password-options"
+							id="password-option-preset" checked>
+							Voreingestelltes Password
+					</label>
+					<label class="btn btn-default">
+						<input type="radio" name="password-options"
+							id="password-option-birthday">
+							Geburtstag
+					</label>
+					<label class="btn btn-default">
+						<input type="radio" name="password-options"
+							id="password-option-manual">
+							Manuell
+					</label>
+				</div>
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-xs-12 col-md-6 form-group">
 				<div class="input-group">
@@ -295,7 +320,9 @@
 			</div>
 		</div>
 	</fieldset>
-	<input type="submit" value="{t}Submit{/t}" class="btn btn-primary" />
+	<input type="submit" id="form-submit" value="{t}Submit{/t}"
+		class="btn btn-primary" data-loading-text="Lade..."
+		data-complete-text="Fertig!" data-error-text="Fehler" />
 	<a class="btn btn-default pull-right"
 	href="index.php?module=administrator|System|User">
 		{t}Cancel{/t}
