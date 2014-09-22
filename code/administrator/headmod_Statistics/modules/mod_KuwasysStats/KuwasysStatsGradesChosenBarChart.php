@@ -34,14 +34,17 @@ class KuwasysStatsGradesChosenBarChart extends StatisticsBarChart {
 			FROM SystemGrades g
 				INNER JOIN SystemUsersInGradesAndSchoolyears uigs ON uigs.gradeId = g.ID
 					AND uigs.schoolyearId = @activeSchoolyear
-				INNER JOIN KuwasysUsersInClasses uic ON uic.statusId = (
-					SELECT ID
-					FROM KuwasysUsersInClassStatuses
-					WHERE name="active"
-				) AND uic.userId = uigs.userId
-				INNER JOIN class c ON c.ID = uic.ClassID
+				INNER JOIN KuwasysUsersInClassesAndCategories uicc
+					ON uicc.statusId = (
+						SELECT ID
+						FROM KuwasysUsersInClassStatuses
+						WHERE name="active"
+				) AND uicc.userId = uigs.userId
+				INNER JOIN KuwasysClasses c ON c.ID = uicc.ClassID
 					AND c.schoolyearId = @activeSchoolyear
+					AND c.isOptional = 0
 				GROUP BY g.ID
+				ORDER BY g.gradelevel, g.label
 			');
 	}
 

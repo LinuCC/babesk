@@ -43,19 +43,22 @@ class KuwasysStatsSchooltypeSchoolyearChosenBarChart
 				LEFT JOIN SystemSchooltypes st ON g.schooltypeId = st.ID
 				-- Fetch how many classes the user has chosen
 				INNER JOIN (
-					SELECT COUNT(*) AS classesChosen, uigs.gradeId AS GradeID
+					SELECT COUNT(*) AS classesChosen, uigs.gradeId AS gradeId
 					FROM SystemUsersInGradesAndSchoolyears uigs
-						INNER JOIN KuwasysUsersInClasses uic
-							ON uigs.userId = uic.UserID
+						INNER JOIN KuwasysUsersInClassesAndCategories uicc
+							ON uigs.userId = uicc.UserID
+						INNER JOIN KuwasysClasses c
+							ON c.ID = uicc.ClassID
+							AND c.isOptional = 0
 						-- Check for interesting status
 						INNER JOIN (
 							SELECT ID
 							FROM KuwasysUsersInClassStatuses
 							WHERE name="active"
-							) status ON status.ID = uic.statusId
+							) status ON status.ID = uicc.statusId
 					WHERE uigs.schoolyearId = @activeSchoolyear
-					GROUP BY uic.UserID
-					) userChosen ON userChosen.GradeID = g.ID
+					GROUP BY uicc.UserID
+					) userChosen ON userChosen.gradeId = g.ID
 			GROUP BY st.ID, g.gradelevel, userChosen.classesChosen');
 	}
 

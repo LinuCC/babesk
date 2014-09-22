@@ -37,17 +37,18 @@ class KuwasysStatsUsersChosenBySchoolyearBarChart extends StatisticsBarChart {
 			'SELECT COUNT(*) AS userCount, uniqueUsersPerSchoolyear.id AS id,
 			uniqueUsersPerSchoolyear.label AS label
 			FROM
-			(SELECT sy.ID AS id, uic.UserID as userId, sy.label AS label
+			(SELECT sy.ID AS id, uicc.UserID as userId, sy.label AS label
 				FROM SystemSchoolyears sy
-				INNER JOIN KuwasysUsersInClasses uic
-				INNER JOIN class c ON c.ID = uic.ClassID
+				INNER JOIN KuwasysUsersInClassesAndCategories uicc
+				INNER JOIN KuwasysClasses c ON c.ID = uicc.ClassID
 					AND c.schoolyearId = sy.ID
+					AND c.isOptional = 0
 				WHERE
-					uic.statusId = (
+					uicc.statusId = (
 						SELECT ID FROM KuwasysUsersInClassStatuses uics
 						WHERE name = "active"
 					)
-				GROUP BY uic.userId, sy.ID
+				GROUP BY uicc.userId, sy.ID
 				) uniqueUsersPerSchoolyear
 			GROUP BY uniqueUsersPerSchoolyear.id');
 	}

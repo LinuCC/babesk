@@ -44,10 +44,13 @@ class ApplyChanges extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClas
 	protected function usersInClassJointDeleteByNewAssignments() {
 
 		try {
-			$this->_pdo->exec('DELETE uic.* FROM KuwasysUsersInClasses uic
+			$this->_pdo->exec('DELETE uic.*
+				FROM KuwasysUsersInClassesAndCategories uic
 				JOIN KuwasysTemporaryRequestsAssign ra
 					ON uic.ClassID = ra.origClassId
-						AND uic.userId = ra.origUserId');
+						AND uic.userId = ra.origUserId
+						AND uic.categoryId = ra.origCategoryId
+			');
 
 		} catch (PDOException $e) {
 			$this->_interface->dieError(
@@ -64,9 +67,9 @@ class ApplyChanges extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClas
 	protected function newAssignmentsAddToJoints() {
 
 		try {
-			$this->_pdo->exec('INSERT INTO KuwasysUsersInClasses
-				(UserID, ClassID, statusId)
-				SELECT userId, classId, statusId
+			$this->_pdo->exec('INSERT INTO KuwasysUsersInClassesAndCategories
+				(UserID, ClassID, statusId, categoryId)
+				SELECT userId, classId, statusId, categoryId
 					FROM KuwasysTemporaryRequestsAssign re
 					WHERE statusId <> 0');
 
