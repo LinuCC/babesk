@@ -149,6 +149,25 @@ class CctClass {
 	}
 
 	/**
+	 * Returns the unitName of this class
+	 *
+	 * @return string The name of the unit of this class
+	 */
+	public function getUnitTranslatedName() {
+		return $this->_unitTranslatedName;
+	}
+
+	/**
+	 * Sets the translated unitname of this class
+	 *
+	 * @param string $unitTranslatedName The name of the unit of this class
+	 */
+	public function setUnitTranslatedName($unitTranslatedName) {
+		$this->_unitTranslatedName = $unitTranslatedName;
+		return $this;
+	}
+
+	/**
 	 * Checks if this class has an Classteacher
 	 */
 	public function hasClassteacher ($classteacherFullname) {
@@ -194,6 +213,7 @@ class CctClass {
 	protected $_label;
 	protected $_id;
 	protected $_unitName;
+	protected $_unitTranslatedName;
 
 }
 

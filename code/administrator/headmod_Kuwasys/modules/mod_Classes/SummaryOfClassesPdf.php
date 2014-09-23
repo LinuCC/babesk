@@ -9,7 +9,7 @@ class SummaryOfClassesPdf {
 	//Constructor
 	/////////////////////////////////////////////////////////////////////
 
-	public static function init ($interface) {
+	public static function init($interface) {
 		self::$_interface = $interface;
 	}
 
@@ -29,30 +29,33 @@ class SummaryOfClassesPdf {
 
 	/**
 	 * Fetches the data needed to create the Tables from the Database
-	 * @param $classIds array () an array of Ids of classes to fetch
+	 * @param $classIds array() an array of Ids of classes to fetch
 	 */
-	protected static function dataFetch () {
+	protected static function dataFetch() {
 		$query = 'SELECT CONCAT(u.forename, " ", u.name) AS userFullname,
 				u.telephone AS telephone, u.ID AS userId,
 				c.label AS classLabel, c.ID AS classId,
 				CONCAT(g.gradelevel, g.label) AS grade,
 				CONCAT(ct.forename, " ", ct.name) AS classteacherFullname,
-				cu.name as unitName
+				cu.name AS categoryName,
+				cu.translatedName AS translatedCategoryName
 			FROM KuwasysClasses c
-				JOIN KuwasysUsersInClasses uic ON uic.ClassID = c.ID
-				JOIN SystemUsers u ON uic.UserID = u.ID
+				INNER JOIN KuwasysUsersInClassesAndCategories uicc
+					ON uicc.ClassID = c.ID
+				INNER JOIN SystemUsers u ON uicc.UserID = u.ID
+				INNER JOIN KuwasysClassesInCategories cic ON cic.classId = c.ID
 				LEFT JOIN SystemUsersInGradesAndSchoolyears uigs
 					ON uigs.UserID = u.ID
 				LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 				LEFT JOIN KuwasysClassteachersInClasses ctic ON ctic.ClassID = c.ID
 				LEFT JOIN KuwasysClassteachers ct
 					ON ctic.ClassTeacherID = ct.ID
-				LEFT JOIN KuwasysClassCategories cu ON cu.ID = c.unitId
-			WHERE  uic.statusId = (SELECT ID FROM KuwasysUsersInClassStatuses WHERE KuwasysUsersInClassStatuses.name="active")
+				LEFT JOIN KuwasysClassCategories cu ON cu.ID = cic.categoryId
+			WHERE  uicc.statusId = (SELECT ID FROM KuwasysUsersInClassStatuses WHERE KuwasysUsersInClassStatuses.name="active")
 				AND uigs.schoolyearId = @activeSchoolyear
 				AND c.schoolyearId = @activeSchoolyear;';
 		try {
-			$data = TableMng::query ($query);
+			$data = TableMng::query($query);
 		} catch (Exception $e) {
 			self::$_interface->dieError ('Konnte die benötigten Daten nicht abrufen. Fehler:' . $e->getMessage ());
 		}
@@ -79,7 +82,10 @@ class SummaryOfClassesPdf {
 				$class->addClassteacher ($row ['classteacherFullname']);
 			}
 			if (!$class->hasUnitName ()) {
-				$class->setUnitName ($row ['unitName']);
+				$class->setUnitName ($row ['categoryName']);
+				$class->setUnitTranslatedName (
+					$row ['translatedCategoryName']
+				);
 			}
 		}
 	}
@@ -159,71 +165,79 @@ class CctContent {
 		$setup = $sheet->getPageSetup();
 		//Fit the whole Sheet onto one page
 		$setup->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
-		$setup->setFitToWidth (1);
-		$setup->setFitToHeight (1);
-		$sheet->setTitle ('KursID ' . $class->getId ());
+		$setup->setFitToWidth(1);
+		$setup->setFitToHeight(1);
+		//Only max of 31 chars in title allowed
+		$unitName = $class->getUnitTranslatedName();
+		$labelShortened = substr(
+			$class->getLabel(), 0, 31 - (strlen($unitName) + 1)
+		);
+		if($labelShortened === false) {
+			$labelShortened = $class->getLabel();
+		}
+		$sheet->setTitle("$labelShortened $unitName");
 	}
 
-	protected static function headFill (&$sheet, $class) {
-		$sheet->mergeCells ('A1:Z1');
-		$headline = sprintf ('Teilnehmerliste: %s; Kursleiter: %s', $class->getLabel (), $class->getClassteacherString ());
-		$sheet->getCell ('A1')->setValue ($headline);
-		$sheet->getStyle ('A1')->getFont ()->setBold (true)->setSize (15);
+	protected static function headFill(&$sheet, $class) {
+		$sheet->mergeCells('A1:Z1');
+		$headline = sprintf('Teilnehmerliste: %s; %s; Kursleiter: %s', $class->getLabel(), $class->getUnitTranslatedName(), $class->getClassteacherString());
+		$sheet->getCell('A1')->setValue($headline);
+		$sheet->getStyle('A1')->getFont()->setBold(true)->setSize(12);
 	}
 
-	protected static function mainHeadFill (&$sheet, $class) {
-		$sheet->getCell ('A3')->setValue ('Schülername');
-		$sheet->getCell ('B3')->setValue ('Klasse');
-		$sheet->getStyle ('B3')->applyFromArray (self::$rotateStyle);
-		$sheet->getCell ('C3')->setValue ('Telefonnummer');
-		$sheet->getCell ('D3')->setValue ('Datum   x=Anwesend   -=Abwesend   E=Entschuldigt F=Ferien/Frei');
-		$sheet->mergeCells ('A3:A4');
-		$sheet->mergeCells ('B3:B4');
-		$sheet->mergeCells ('C3:C4');
-		$sheet->mergeCells ('D3:Z3');
+	protected static function mainHeadFill(&$sheet, $class) {
+		$sheet->getCell('A3')->setValue('Schülername');
+		$sheet->getCell('B3')->setValue('Klasse');
+		$sheet->getStyle('B3')->applyFromArray(self::$rotateStyle);
+		$sheet->getCell('C3')->setValue('Telefonnummer');
+		$sheet->getCell('D3')->setValue('Datum   x=Anwesend   -=Abwesend   E=Entschuldigt F=Ferien/Frei');
+		$sheet->mergeCells('A3:A4');
+		$sheet->mergeCells('B3:B4');
+		$sheet->mergeCells('C3:C4');
+		$sheet->mergeCells('D3:Z3');
 	}
 
-	protected static function mainFill (&$sheet, $class) {
+	protected static function mainFill(&$sheet, $class) {
 		$userRowCount = 0;
-		foreach ($class->getUsers () as $user) {
+		foreach($class->getUsers() as $user) {
 			$userRowCount ++;
 			$rowNum = $userRowCount + 4;
-			$sheet->getCell ('A' . $rowNum)->setValue ($user ['userFullname']);
-			$sheet->getCell ('B' . $rowNum)->setValue ($user ['grade']);
-			$sheet->getCell ('C' . $rowNum)->setValue ($user ['telephone']);
-			for ($i = 3; $i < 26; $i++) {
-				$char = self::getCharAtNum ($i);
-				$sheet->getCell ($char . $rowNum)->setValue (' ');
+			$sheet->getCell('A' . $rowNum)->setValue($user['userFullname']);
+			$sheet->getCell('B' . $rowNum)->setValue($user['grade']);
+			$sheet->getCell('C' . $rowNum)->setValue($user['telephone']);
+			for($i = 3; $i < 26; $i++) {
+				$char = self::getCharAtNum($i);
+				$sheet->getCell($char . $rowNum)->setValue(' ');
 			}
-			// $sheet->getRowDimension ($rowNum)->setRowHeight ();
+			// $sheet->getRowDimension($rowNum)->setRowHeight();
 		}
 	}
 
-	protected static function styleSet (&$sheet, $class) {
-		$maxRow = $sheet->getHighestRow ();
-		$maxColumn = $sheet->getHighestColumn ();
-		for ($i = 0; $i <= $maxRow; $i++) {
-			$sheet->getRowDimension ($i)->setRowHeight (20);
+	protected static function styleSet(&$sheet, $class) {
+		$maxRow = $sheet->getHighestRow();
+		$maxColumn = $sheet->getHighestColumn();
+		for($i = 0; $i <= $maxRow; $i++) {
+			$sheet->getRowDimension($i)->setRowHeight(20);
 		}
-		$sheet->getRowDimension (1)->setRowHeight (40);
-		// $sheet->getRowDimension (2)->setRowHeight ();
-		// $sheet->getRowDimension (3)->setRowHeight (30);
-		$sheet->getRowDimension (4)->setRowHeight (35);
-		$sheet->getColumnDimension ('A')->setWidth (25);
-		$sheet->getColumnDimension ('B')->setWidth (4,5);
-		$sheet->getColumnDimension ('C')->setWidth (18);
-		for ($i = 3; $i < 26; $i++) {
-			$char = self::getCharAtNum ($i);
-			$sheet->getColumnDimension ($char)->setWidth (3);
+		$sheet->getRowDimension(1)->setRowHeight(40);
+		// $sheet->getRowDimension(2)->setRowHeight();
+		// $sheet->getRowDimension(3)->setRowHeight(30);
+		$sheet->getRowDimension(4)->setRowHeight(35);
+		$sheet->getColumnDimension('A')->setWidth(25);
+		$sheet->getColumnDimension('B')->setWidth(4,5);
+		$sheet->getColumnDimension('C')->setWidth(18);
+		for($i = 3; $i < 26; $i++) {
+			$char = self::getCharAtNum($i);
+			$sheet->getColumnDimension($char)->setWidth(3);
 		}
-		$sheet->getStyle ('A3:Z' . $maxRow)->getBorders()->
+		$sheet->getStyle('A3:Z' . $maxRow)->getBorders()->
 			getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-		// $sheet->getStyle ('D4:Z' . $maxRow)->getBorders()->
+		// $sheet->getStyle('D4:Z' . $maxRow)->getBorders()->
 			// getAllBorders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
 	}
 
-	// protected static function occurDaysSet (&$sheet, $class) {
-	// 	switch ($class->getUnitName ()) {
+	// protected static function occurDaysSet(&$sheet, $class) {
+	// 	switch($class->getUnitName()) {
 	// 		case 'monday':
 	// 			$start = strtotime(date(self::$firstMon));
 	// 			break;
@@ -237,11 +251,11 @@ class CctContent {
 	// 			$start = strtotime(date(self::$firstMon) . "+3 day");
 	// 			break;
 	// 	}
-	// 	for ($i = 0; $i < 23; $i++) {
-	// 		$ts = strtotime (date ('Y-m-d', $start) . sprintf('+%s week', $i));
-	// 		$cell = self::getCharAtNum ($i + 3) . '4';
-	// 		$sheet->getCell ($cell)->setValueExplicit (date ('d.m', $ts), PHPExcel_Cell_DataType::TYPE_STRING);
-	// 		$sheet->getStyle ($cell)->applyFromArray (self::$rotateStyle);
+	// 	for($i = 0; $i < 23; $i++) {
+	// 		$ts = strtotime(date('Y-m-d', $start) . sprintf('+%s week', $i));
+	// 		$cell = self::getCharAtNum($i + 3) . '4';
+	// 		$sheet->getCell($cell)->setValueExplicit(date('d.m', $ts), PHPExcel_Cell_DataType::TYPE_STRING);
+	// 		$sheet->getStyle($cell)->applyFromArray(self::$rotateStyle);
 	// 	}
 	// }
 
@@ -287,19 +301,19 @@ class CctContent {
 		return $occurences;
 	}
 
-	protected static $rotateStyle = array (
-		'alignment' => array (
+	protected static $rotateStyle = array(
+		'alignment' => array(
 			'rotation' => 90,
 			)
 		);
 
 
 
-	public static function getCharAtNum ($number) {
+	public static function getCharAtNum($number) {
 		return self::$numchar [$number % 51];
 	}
 
-	protected static $numchar = array (
+	protected static $numchar = array(
 		0 => 'A',
 		1 => 'B',
 		2 => 'C',
