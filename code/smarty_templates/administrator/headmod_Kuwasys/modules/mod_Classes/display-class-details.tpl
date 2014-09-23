@@ -3,8 +3,9 @@
 
 {block name=popup_dialogs}
 
-<div classId="{$class.ID}" id="add-user-modal" class="modal fade" tabindex="-1"
-	role="dialog" aria-hidden="true" >
+<div classId="{$class.ID}" data-category-id="{$class.categoryId}"
+	id="add-user-modal" class="modal fade" tabindex="-1" role="dialog"
+	aria-hidden="true" >
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">

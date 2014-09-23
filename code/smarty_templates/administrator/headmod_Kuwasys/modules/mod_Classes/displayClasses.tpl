@@ -53,13 +53,13 @@
 						data-title="Kursdetails anzeigen">
 						<span class="icon icon-listelements"></span>
 					</a>
-					<a href="index.php?module=administrator|Kuwasys|Classes|ChangeClass&amp;ID={$class.ID}"
+					<a href="index.php?module=administrator|Kuwasys|Classes|ChangeClass&amp;ID={$class.ID}&amp;categoryId={$class.categoryId}"
 						data-toggle="tooltip" class="btn btn-default btn-xs"
 						data-title="Kurs bearbeiten">
 						<span class="icon icon-businesscard"></span>
 					</a>
 					<a href="index.php?module=administrator|Kuwasys|Classes|DeleteClass&amp;ID={$class.ID}"
-						data-toggle="tooltip"
+						data-toggle="tooltip" disabled
 						class="btn btn-danger btn-xs" data-title="Kurs löschen">
 						<span class="icon icon-error"></span>
 					</a>

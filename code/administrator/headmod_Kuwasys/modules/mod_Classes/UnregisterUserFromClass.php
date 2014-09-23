@@ -56,7 +56,7 @@ class UnregisterUserFromClass extends \Classes {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				'DELETE FROM KuwasysUsersInClasses WHERE ID = ?'
+				'DELETE FROM KuwasysUsersInClassesAndCategories WHERE ID = ?'
 			);
 			$stmt->execute(array($id));
 			return (boolean) $stmt->rowCount();

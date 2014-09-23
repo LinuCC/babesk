@@ -39,6 +39,9 @@ class Classes extends Kuwasys {
 
 		$this->entryPoint($dataContainer);
 
+		if(isset($_GET['addUserToClass'])) {
+			$this->addUserToClass();
+		}
 		$execReq = $dataContainer->getExecutionCommand()->pathGet();
 		if($this->submoduleCountGet($execReq)) {
 			$this->submoduleExecuteAsMethod($execReq);
@@ -519,6 +522,7 @@ class Classes extends Kuwasys {
 
 			$stmt = $this->_pdo->prepare(
 				'SELECT c.*, sy.label As schoolyearLabel,
+					cu.ID AS categoryId,
 					GROUP_CONCAT(cu.translatedName) AS unitTranslatedName,
 					(SELECT GROUP_CONCAT(
 							CONCAT(ct.forename, " ", ct.name) SEPARATOR "; "
@@ -577,10 +581,10 @@ class Classes extends Kuwasys {
 		}
 
 		$subQueryCountUsers = '(SELECT Count(*)
-				FROM KuwasysUsersInClasses uic
-				JOIN SystemUsers ON SystemUsers.ID = uic.UserID
-				WHERE uic.statusId = (SELECT ID FROM KuwasysUsersInClassStatuses
-					WHERE name="%s") AND c.ID = uic.ClassID
+				FROM KuwasysUsersInClassesAndCategories uicc
+				JOIN SystemUsers ON SystemUsers.ID = uicc.UserID
+				WHERE uicc.statusId = (SELECT ID FROM KuwasysUsersInClassStatuses
+					WHERE name="%s") AND c.ID = uicc.ClassID
 				)
 			';
 
@@ -596,7 +600,8 @@ class Classes extends Kuwasys {
 					'. sprintf ($subQueryCountUsers, 'request2') . ' AS request2Count
 				FROM KuwasysClasses c
 				LEFT JOIN SystemSchoolyears sy ON c.schoolyearId = sy.ID
-				LEFT JOIN KuwasysClassCategories cc ON c.unitId = cc.ID
+				LEFT JOIN KuwasysClassesInCategories cic ON cic.classId = c.ID
+				LEFT JOIN KuwasysClassCategories cc ON cc.ID = cic.categoryId
 				LEFT JOIN (
 						SELECT ctic.ClassID AS classId,
 							CONCAT(ct.forename, " ", ct.name) AS name
@@ -622,6 +627,8 @@ class Classes extends Kuwasys {
 
 
 		} catch (Exception $e) {
+			$this->_logger->log('Error fetching the classes', 'Notice', Null,
+				json_encode(array('msg' => $e->getMessage())));
 			$this->_interface->dieError(_g('Could not fetch the Class(es)!'));
 		}
 	}
@@ -632,10 +639,12 @@ class Classes extends Kuwasys {
 			$this->_interface->dieError('Keine ID angegeben!');
 		}
 
-		$class = $this->classesGetWithAdditionalReadableData($_GET['ID']);
+		$class = $this->classesGetWithAdditionalReadableData(
+			$_GET['ID'], $_GET['categoryId']
+		);
 		$users = $this->usersByClassIdGet($_GET['ID']);
 		$users = $this->assignClassesOfSameClassunitToUsers(
-			$users, $class['unitId']
+			$users, $class['categoryId']
 		);
 		$statuses = $this->statusesGetAll();
 		$this->_smarty->assign('class', $class);
@@ -659,10 +668,12 @@ class Classes extends Kuwasys {
 				'SELECT u.*, g.gradename AS gradename,
 					uics.translatedName AS statusTranslated,
 					uics.ID AS statusId,
-					uic.ID as jointId
+					uicc.ID as jointId
 				FROM SystemUsers u
-				JOIN KuwasysUsersInClasses uic ON u.ID = uic.UserID
-				JOIN KuwasysUsersInClassStatuses uics ON uic.statusId = uics.ID
+				JOIN KuwasysUsersInClassesAndCategories uicc
+					ON u.ID = uicc.UserID
+				JOIN KuwasysUsersInClassStatuses uics
+					ON uicc.statusId = uics.ID
 				LEFT JOIN (
 						SELECT CONCAT(gradelevel, "-", label) AS gradename,
 							uigs.UserID AS userId
@@ -671,7 +682,7 @@ class Classes extends Kuwasys {
 							uigs.gradeId = g.ID
 						WHERE uigs.schoolyearId = @activeSchoolyear
 					) g ON g.userId = u.ID
-				WHERE uic.ClassID = :id'
+				WHERE uicc.ClassID = :id'
 			);
 
 			$stmt->execute(array(':id' => $classId));
@@ -694,7 +705,7 @@ class Classes extends Kuwasys {
 
 		$userIdString = $this->idStringGetFromUsers($users);
 		if(!empty($userIdString)) {
-			$userIdPart = "uic.UserID IN($userIdString) AND";
+			$userIdPart = "uicc.UserID IN($userIdString) AND";
 		}
 		else {
 			$userIdPart = '';
@@ -702,9 +713,10 @@ class Classes extends Kuwasys {
 
 		try {
 			$stmt = $this->_pdo->prepare(
-				"SELECT c.*, uic.UserID AS userId FROM KuwasysClasses c
-				JOIN KuwasysUsersInClasses uic ON c.ID = uic.ClassID
-				WHERE $userIdPart c.unitId = :unitId
+				"SELECT c.*, uicc.UserID AS userId FROM KuwasysClasses c
+				JOIN KuwasysUsersInClassesAndCategories uicc
+					ON c.ID = uicc.ClassID
+				WHERE $userIdPart uicc.categoryId = :unitId
 					AND c.ID <> :classId
 					AND c.schoolyearId = @activeSchoolyear"
 			);
@@ -918,6 +930,37 @@ class Classes extends Kuwasys {
 
 		$this->_interface->dieError(
 			'Dieses Modul ist noch in Überarbeitung...');
+	}
+
+	protected function addUserToClass() {
+
+		$username = $_POST['username'];
+		$statusId = $_POST['statusId'];
+		$classId = $_POST['classId'];
+		$categoryId = $_POST['categoryId'];
+		try {
+			$user = $this->_entityManager->getRepository('Babesk:SystemUsers')
+				->findOneByUsername($username);
+			$stmt = $this->_pdo->prepare(
+				'INSERT INTO KuwasysUsersInClassesAndCategories
+					(ClassID, UserID, statusId, categoryId) VALUES
+					(:classId, :userId, :statusId, :categoryId)
+			');
+			$stmt->execute(array(
+				'classId' => $classId,
+				'userId' => $user->getId(),
+				'statusId' => $statusId,
+				'categoryId' => $categoryId
+			));
+
+		} catch (Exception $e) {
+			$this->_logger->log('Error adding the user to the class',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			die(json_encode(array('value' => 'error',
+				'message' => 'Fehler beim hinzufügen des Benutzers.')));
+		}
+		die(json_encode(array('value' => 'success',
+			'message' => 'Der Benutzer wurde erfolgreich hinzugefügt.')));
 	}
 
 	/////////////////////////////////////////////////////////////////////

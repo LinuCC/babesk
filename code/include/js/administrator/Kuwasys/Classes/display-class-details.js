@@ -25,11 +25,12 @@ $(document).ready(function() {
 		$('#add-user-submit').on('click', function(ev) {
 			$.ajax({
 				type: 'POST',
-				url: 'index.php?module=administrator|Kuwasys|KuwasysUsers|AddUserToClass',
+				url: 'index.php?module=administrator|Kuwasys|Classes&addUserToClass',
 				data: {
 					'username': $('#username').val(),
 					'statusId': $('#add-user-modal select[name="status"]').val(),
-					'classId': $('#add-user-modal').attr('classId')
+					'classId': $('#add-user-modal').attr('classId'),
+					'categoryId': $('#add-user-modal').attr('data-category-id')
 				},
 
 				success: function(data) {
