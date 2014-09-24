@@ -112,7 +112,8 @@ class KuwasysUsers extends Kuwasys {
 		$gradeId = $_GET['gradeId'];
 		$query = "SELECT u.ID as userId
 			FROM SystemUsers u
-				JOIN SystemUsersInGradesAndSchoolyears uigsy ON uigsy.UserID = u.ID
+				JOIN SystemUsersInGradesAndSchoolyears uigsy
+					ON uigsy.UserID = u.ID
 			WHERE uigsy.schoolyearId = @activeSchoolyear AND
 				uigsy.gradeId = {$gradeId}
 			";
@@ -128,9 +129,7 @@ class KuwasysUsers extends Kuwasys {
 			$userIds [] = $row ['userId'];
 		}
 		KuwasysUsersCreateParticipationConfirmationPdf::init ($this->_interface);
-		KuwasysUsersCreateParticipationConfirmationPdf::execute ($userIds);
-
-		$this->_interface->dieError('Modul wird momentan überarbeitet...');
+		KuwasysUsersCreateParticipationConfirmationPdf::execute ($gradeId, $userIds);
 	}
 
 	/**==========================================**

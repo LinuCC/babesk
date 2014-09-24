@@ -10,8 +10,11 @@ class KuwasysUsersCreateParticipationConfirmationPdf {
 		self::$_interface = $interface;
 	}
 
-	public static function execute ($userIds) {
-		$data = self::dataFetch ($userIds);
+	public static function execute ($gradeId, $userIds) {
+		if(!count($userIds)) {
+			self::$_interface->dieError('Keine Benutzer in dieser Klasse.');
+		}
+		$data = self::dataFetch ($gradeId, $userIds);
 		self::usersFill ($data);
 		$pdfPaths = self::pdfCreate ();
 		self::pdfCombineAndOut ($pdfPaths);
@@ -21,10 +24,10 @@ class KuwasysUsersCreateParticipationConfirmationPdf {
 	//Implements
 	/////////////////////////////////////////////////////////////////////
 
-	protected static function dataFetch ($userIds) {
+	protected static function dataFetch ($gradeId, $userIds) {
 		$whereQuery = '';
 		foreach ($userIds as $uid) {
-			$whereQuery .= sprintf ('u.ID = "%s" OR ', $uid);
+			$whereQuery .= sprintf ('u.ID = %s OR ', $uid);
 		}
 		$whereQuery = rtrim($whereQuery, 'OR ');
 		$query = sprintf(
@@ -35,20 +38,28 @@ class KuwasysUsersCreateParticipationConfirmationPdf {
 				cu.name AS unitName, cu.translatedName AS unitTranslatedName,
 				uics.translatedName AS statusTranslatedName,
 				CONCAT(g.gradelevel, g.label) AS gradeName,
-				IF(c.ID, CONCAT(u.ID, "-", c.ID), CONCAT(u.ID, "-")) AS grouper
+				IF(
+					c.ID, CONCAT(u.ID, "-", c.ID, "-", cu.ID),
+					CONCAT(u.ID, "-")
+				) AS grouper
 			FROM SystemUsers u
-				JOIN SystemUsersInGradesAndSchoolyears uigs ON uigs.userId = u.ID
-				JOIN SystemSchoolyears sy ON sy.ID = uigs.SchoolYearID
-				INNER JOIN KuwasysUsersInClasses uic ON u.ID = uic.UserID
-				LEFT JOIN KuwasysUsersInClassStatuses uics ON uics.ID = uic.statusId
-				LEFT JOIN KuwasysClasses c ON c.ID = uic.ClassID AND c.schoolyearId = @activeSchoolyear
+				INNER JOIN SystemUsersInGradesAndSchoolyears uigs
+					ON uigs.userId = u.ID AND uigs.gradeId = %s
+				INNER JOIN SystemSchoolyears sy ON sy.ID = uigs.schoolyearId
+				LEFT JOIN KuwasysUsersInClassesAndCategories uicc
+					ON u.ID = uicc.UserID
+				LEFT JOIN KuwasysUsersInClassStatuses uics ON uics.ID = uicc.statusId
+				LEFT JOIN KuwasysClasses c
+					ON c.ID = uicc.ClassID
+					AND c.schoolyearId = @activeSchoolyear
+				LEFT JOIN KuwasysClassesInCategories cic ON cic.classId = c.ID
 				LEFT JOIN SystemGrades g ON g.ID = uigs.gradeId
-				LEFT JOIN KuwasysClassCategories cu ON c.unitId = cu.ID
-			WHERE (%s)
-				AND uigs.schoolyearId = @activeSchoolyear
-				AND uics.name = "active"
+				LEFT JOIN KuwasysClassCategories cu ON cic.categoryId = cu.ID
+			WHERE uigs.schoolyearId = @activeSchoolyear
+				AND (uics.ID IS NULL OR uics.name = "active")
 				GROUP BY grouper
-			;', $whereQuery);
+				ORDER BY cu.ID
+			;', $gradeId);
 
 		try {
 			$data = TableMng::query ($query);
