@@ -95,9 +95,14 @@
 			</a>
 		</li>
 		<li>
+			<a href="index.php?module=administrator|Kuwasys|Classes|GradeOverview">
+				Klassenübersichten erstellen
+			</a>
+		</li>
+		<li>
 			<a id="class-summary-create" data-toggle="modal" href="#"
 				data-target="#class-summary-modal">
-					{t}Create Class-Summaries{/t}
+					Kursübersichten erstellen
 			</a>
 		</li>
 		<li>
