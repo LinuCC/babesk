@@ -57,6 +57,7 @@ class KuwasysUsersCreateParticipationConfirmationPdf {
 				LEFT JOIN KuwasysClassCategories cu ON cic.categoryId = cu.ID
 			WHERE uigs.schoolyearId = @activeSchoolyear
 				AND (uics.ID IS NULL OR uics.name = "active")
+				AND (uicc.UserID IS NULL OR uicc.categoryId = cic.categoryId)
 				GROUP BY grouper
 				ORDER BY cu.ID
 			;', $gradeId);
