@@ -29,6 +29,17 @@ class KuwasysStats extends Statistics {
 
 		$this->entryPoint($dataContainer);
 
+		if(
+			isset($_POST['chartName']) &&
+			$_POST['chartName'] == 'votesPerCategoryPerSchooltypeAndGrade'
+		) {
+			$mod = new \ModuleExecutionCommand(
+					'root/administrator/Statistics/KuwasysStats/' .
+					'VotesPerCategoryPerSchooltypeAndGrade'
+				);
+			$this->_acl->moduleExecute($mod, $this->_dataContainer);
+			die();
+		}
 					// $this->test2();
 		if(isset($_GET['action'])) {
 			switch($_GET['action']) {

@@ -34,6 +34,9 @@
 		<option value="byUsersChosenInSchooltypeAndYeargroup">
 			Anzahl Wahlen in Schultypen und Jahrgängen
 		</option>
+		<option value="votesPerCategoryPerSchooltypeAndGrade">
+			Schülerwahlen gruppiert in Tagen pro Klasse
+		</option>
 	</select>
 	<input type="submit" value="Statistik anzeigen" />
 </form>

@@ -35,7 +35,7 @@ class VotesPerCategoryPerSchooltypeAndGrade extends \KuwasysStats {
 		$stmt = $this->_pdo->query(
 			'SELECT COUNT(*) countOfVotes, votedCategoryCount,
 				CONCAT(g.gradelevel, g.label) AS gradeName,
-				ss.name AS schooltypeName
+				ss.name AS schooltypeName, userId
 			FROM (
 				SELECT userId, gradeId, COUNT(*) AS votedCategoryCount
 				FROM (
@@ -47,6 +47,12 @@ class VotesPerCategoryPerSchooltypeAndGrade extends \KuwasysStats {
 						AND uigs.schoolyearId = @activeSchoolyear
 					INNER JOIN KuwasysUsersInClassesAndCategories uicc
 						ON uicc.UserID = u.ID
+					INNER JOIN KuwasysUsersInClassStatuses uics
+						ON uics.ID = uicc.statusId
+						AND uics.name = "active"
+					INNER JOIN KuwasysClasses c
+						ON c.schoolyearId = @activeSchoolyear
+						AND c.ID = uicc.classId
 					GROUP BY uicc.categoryId, u.ID
 				) uc
 				GROUP BY uc.userId
