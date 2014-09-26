@@ -86,7 +86,7 @@
 		</div>
 
 		<div id="body-wrapper"
-			{if !isset($_GET["hide_sidebar"])}class="show-sidebar"{/if}>
+			{if !isset($smarty.get.hideSidebar)}class="show-sidebar"{/if}>
 			{*-----------------------------------------------------
 			 * The sidebar-navigation
 			 *}
