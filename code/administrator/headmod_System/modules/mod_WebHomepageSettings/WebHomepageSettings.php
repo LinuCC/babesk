@@ -28,12 +28,12 @@ class WebHomepageSettings extends System {
 				case 'helptext':
 					$this->helptext ();
 				break;
-                case 'maintenance':
-                    $this->maintenance ();
-                    break;
-                case 'setmaintenance':
-                    $this->setMaintenance();
-                    break;
+				case 'maintenance':
+					$this->maintenance ();
+					break;
+				case 'setmaintenance':
+					$this->setMaintenance();
+					break;
 				default:
 					die ('wrong action-value');
 					break;
@@ -52,6 +52,8 @@ class WebHomepageSettings extends System {
 	protected function entry($dataContainer) {
 
 		defined('_AEXEC') or die("Access denied");
+		parent::entryPoint($dataContainer);
+		$this->initSmartyVariables();
 
 		$this->_interface = new WebHomepageSettingsInterface (
 			$this->relPath, $dataContainer->getSmarty());
@@ -100,34 +102,49 @@ class WebHomepageSettings extends System {
 		}
 	}
 
-    protected function maintenance() {
-        $this->_interface->maintenance ($this->_globalSettingsMng->valueGet(GlobalSettings::ISSITEUNDERMAINTENANCE));
-    }
+	protected function maintenance() {
 
-    /**
-     * Settings for maintenance in web, before the user logged in
-     */
-    protected function setMaintenance () {
+		$entry = $this->_entityManager->getRepository(
+				'Babesk:SystemGlobalSettings'
+			)->findOneByName('siteIsUnderMaintenance');
+		if($entry) {
+			$val = $entry->getValue();
+		}
+		else {
+			// Global Setting does not exist; create it
+			$setting = new \Babesk\ORM\SystemGlobalSettings();
+			$setting->setName('siteIsUnderMaintenance');
+			$setting->setValue(0);
+			$this->_entityManager->persist($setting);
+			$this->_entityManager->flush();
+			$val = $setting->getValue();
+		}
 
-        if (isset ($_POST['maintenance'])) {
-            try {
-            $this->_globalSettingsMng->valueSet (
-                GlobalSettings::ISSITEUNDERMAINTENANCE, 1);
-                $this->_interface->dieSuccess ('Wartungsmodus aktiviert');
-        } catch (Exception $e) {
-            $this->_interface->dieSuccess ('Konnte den Wartungsmodus nicht ändern');
-        }
-        }
-        else {
-            try {
-                $this->_globalSettingsMng->valueSet (
-                    GlobalSettings::ISSITEUNDERMAINTENANCE, 0);
-                $this->_interface->dieSuccess  ('Wartungsmodus deaktiviert');
-            } catch (Exception $e) {
-                $this->_interface->dieSuccess  ('Konnte den Wartungsmodus nicht ändern');
-            }
-        }
-    }
+		$this->_smarty->assign('maintenance', $val);
+		$this->displayTpl('maintenance.tpl');
+		//$this->_interface->maintenance($val);
+	}
+
+	/**
+	 * Settings for maintenance in web, before the user logged in
+	 */
+	protected function setMaintenance () {
+
+		$value = (isset($_POST['maintenance'])) ? 1 : 0;
+		try {
+			$setting = $this->_entityManager->getRepository(
+					'Babesk:SystemGlobalSettings'
+				)->findOneByName('siteIsUnderMaintenance');
+			$setting->setValue($value);
+			$this->_entityManager->flush();
+
+		} catch (Exception $e) {
+			$this->_interface->dieError(
+				'Konnte den Wartungsmodus nicht ändern'
+			);
+		}
+		$this->_interface->dieSuccess('Wartungsmodus erfolgreich verändert.');
+	}
 
 	/**
 	 * Settings for helptext in web, before the user logged in

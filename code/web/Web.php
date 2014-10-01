@@ -47,6 +47,7 @@ class Web {
 
 	public function mainRoutine() {
 
+		$this->checkForMaintenance();
 		$this->handleLogin();
 		$this->handleRedirect();
 		$this->initUserdata();
@@ -453,6 +454,20 @@ class Web {
 			clone($this->_logger));
 
 		return $dataContainer;
+	}
+
+	private function checkForMaintenance() {
+
+		$settings = $this->_entityManager->getRepository(
+				'Babesk:SystemGlobalSettings'
+			)->findOneByName('siteIsUnderMaintenance');
+		if($settings) {
+			$this->_interface->setBacklink(false);
+			$this->_interface->dieMessage(
+				'Die Seite wird momentan überarbeitet. Versuche es später ' .
+				'nochmal!'
+			);
+		}
 	}
 
 	///////////////////////////////////////////////////////////////////////

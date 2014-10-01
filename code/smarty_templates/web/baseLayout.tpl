@@ -173,11 +173,12 @@
 								</div>
 							</div>
 
-							<a class="btn btn-primary pull-right"
-								href="{if $backlink}{$backlink}
-									{else}javascript: history.go(-1){/if}">
-								{t}back{/t}
-							</a>
+							{if $backlink}
+								<a class="btn btn-primary pull-right"
+									href="{$backlink}">
+									{t}back{/t}
+								</a>
+							{/if}
 						</div>
 					</div>
 				{/if}
@@ -205,11 +206,12 @@
 									{/if}
 							</div>
 
-							<a class="btn btn-primary pull-right"
-								href="{if $backlink}{$backlink}
-									{else}javascript: history.go(-1){/if}">
-								{t}back{/t}
-							</a>
+							{if $backlink}
+								<a class="btn btn-primary pull-right"
+									href="{$backlink}">
+									{t}back{/t}
+								</a>
+							{/if}
 						</div>
 					</div>
 				{/if}
@@ -237,11 +239,12 @@
 								{/if}
 							</div>
 
-							<a class="btn btn-primary pull-right"
-								href="{if $backlink}{$backlink}
-									{else}javascript: history.go(-1){/if}">
-								{t}back{/t}
-							</a>
+							{if $backlink}
+								<a class="btn btn-primary pull-right"
+									href="{$backlink}">
+									{t}back{/t}
+								</a>
+							{/if}
 						</div>
 					</div>
 				{/if}

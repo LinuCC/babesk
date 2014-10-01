@@ -237,7 +237,7 @@ class WebInterface {
 	 * A link back, usable for example if the program dies with an error
 	 * @var string
 	 */
-	protected $_backlink;
+	protected $_backlink = 'javascript: history.go(-1)';
 
 	protected $_buttonlinks;
 
