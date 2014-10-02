@@ -462,11 +462,13 @@ class Web {
 				'Babesk:SystemGlobalSettings'
 			)->findOneByName('siteIsUnderMaintenance');
 		if($settings) {
-			$this->_interface->setBacklink(false);
-			$this->_interface->dieMessage(
-				'Die Seite wird momentan überarbeitet. Versuche es später ' .
-				'nochmal!'
-			);
+			if($settings->getValue() == 1) {
+				$this->_interface->setBacklink(false);
+				$this->_interface->dieMessage(
+					'Die Seite wird momentan überarbeitet. Versuche es ' .
+					'später nochmal!'
+				);
+			}
 		}
 	}
 
