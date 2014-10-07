@@ -19,6 +19,7 @@
 	color: #EEEEEE;
 }
 
+#navigation.navbar-inverse .navbar-nav > li > p,
 #navigation.navbar-inverse .navbar-nav > li > a {
 	color: #EEEEEE;
 }
