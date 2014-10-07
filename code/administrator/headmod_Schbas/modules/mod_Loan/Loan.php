@@ -80,7 +80,7 @@ class Loan extends Schbas {
 			$userPaid = false;
 			$userSelfpayer = false;
 		}
-		$booksLent = $this->booksStillLendByUserGet($user);
+		$exemplarsLent = $this->exemplarsStillLendByUserGet($user);
 		$booksSelfpaid = $user->getSelfpayingBooks();
 		$booksToLoan = $loanHelper->loanBooksGet($user->getId());
 
@@ -97,7 +97,7 @@ class Loan extends Schbas {
 		$this->_smarty->assign('loanChoice', $loanChoice);
 		$this->_smarty->assign('userPaid', $userPaid);
 		$this->_smarty->assign('userSelfpayer', $userSelfpayer);
-		$this->_smarty->assign('booksLent', $booksLent);
+		$this->_smarty->assign('exemplarsLent', $exemplarsLent);
 		$this->_smarty->assign('booksSelfpaid', $booksSelfpaid);
 		$this->_smarty->assign('booksToLoan', $booksToLoan);
 		$this->displayTpl('user-loan-list.tpl');
@@ -155,16 +155,17 @@ class Loan extends Schbas {
 		return $abbr == 'ls';
 	}
 
-	private function booksStillLendByUserGet($user) {
+	private function exemplarsStillLendByUserGet($user) {
 
-		$books = $this->_entityManager->createQuery(
-			'SELECT b FROM Babesk:SchbasBooks b
-				INNER JOIN b.exemplars i
+		$exemplars = $this->_entityManager->createQuery(
+			'SELECT i FROM Babesk:SchbasInventory i
+				INNER JOIN i.book b
 				INNER JOIN i.usersLent u
 				WHERE u.id = :userId
+				ORDER BY b.subject
 		')->setParameter('userId', $user->getId())
 			->getResult();
-		return $books;
+		return $exemplars;
 	}
 
 	private function booksSelfpaidByUserGet($user) {

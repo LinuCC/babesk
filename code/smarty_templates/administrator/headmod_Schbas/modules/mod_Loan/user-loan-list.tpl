@@ -48,7 +48,7 @@
 			</li>
 		{/if}
 
-		{if count($booksLent) == 0}
+		{if count($exemplarsLent) == 0}
 			<li class="list-group-item list-group-item-success">
 				<span class="icon icon-checkmark pull-left"></span>
 				Der Benutzer besitzt keine der ausgeliehenen Bücher mehr.
@@ -56,14 +56,37 @@
 		{else}
 			<li class="list-group-item list-group-item-warning">
 				<span class="icon icon-info pull-left"></span>
-				Dem Benutzer sind noch folgende Bücher ausgeliehen:
-				<ul class="lent-books-list">
-					{foreach $booksLent as $book}
-						<li>
-							{$book->getTitle()}
-						</li>
-					{/foreach}
-				</ul>
+				Dem Benutzer sind noch Bücher ausgeliehen
+				<a href="#" class="btn btn-xs btn-default pull-right"
+					data-toggle="collapse" data-target="#lent-exemplars-table">
+					Tabelle anzeigen / verstecken
+				</a>
+				<table id="lent-exemplars-table"
+					class="table table-condensed collapse">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Exemplarnummer</th>
+							<th>Fach</th>
+						</tr>
+					</thead>
+					<tbody>
+						{foreach $exemplarsLent as $exemplar}
+							{$book = $exemplar->getBook()}
+							<tr>
+								<td>
+									{$book->getTitle()}
+								</td>
+								<td>
+									{$exemplar->getExemplar()}
+								</td>
+								<td>
+									{$book->getSubject()->getName()}
+								</td>
+							</tr>
+						{/foreach}
+					</tbody>
+				</table>
 			</li>
 		{/if}
 		{if count($booksSelfpaid) == 0}
@@ -138,6 +161,14 @@
 		font-size: 24px;
 		margin-top: -3px;
 		margin-right: 10px;
+	}
+
+	/*
+	 * Bootstraps .in displays elements as a block, this would not stretch the
+	 * table, but we want it to
+	 */
+	#lent-exemplars-table.in {
+		display: table !important;
 	}
 
 	table tbody span.icon {
