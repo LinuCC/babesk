@@ -140,6 +140,7 @@
 		</div>
 
 		<!-- Password -->
+		<!--
 		<div class="row">
 			<div class="col-xs-12 col-md-6">
 				<div class="form-group">
@@ -150,6 +151,7 @@
 				</div>
 			</div>
 		</div>
+		-->
 		<div class="row form-group">
 			<label class="col-sm-2 btn-group-label">
 				Passwortart

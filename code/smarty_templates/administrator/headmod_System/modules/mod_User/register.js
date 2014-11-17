@@ -5,17 +5,8 @@ $(document).ready(function() {
 	function registerUser() {
 
 		$('#issoli').bootstrapSwitch();
-		$passwordSwitch = $('input#password-switch');
-		$passwordSwitch.bootstrapSwitch();
-		$passwordSwitch.on('switchChange.bootstrapSwitch', function(ev, data) {
-			//Change disable-status of password-fields depending on toggle
-			customPasswordCheckDisabled(data, true);
-		});
-
-		// Make a first test so that the password-fields are in correct state
-		customPasswordCheckDisabled(
-			$passwordSwitch.bootstrapSwitch('state'), false
-		);
+		//Initialize the correct display of passwords
+		passwordOptionOnChange();
 
 		$('#password-options-container').on('change', function(ev) {
 			passwordOptionOnChange();
