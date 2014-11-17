@@ -159,6 +159,56 @@ hr {
 	width: 250px;
 }
 
+button.sidebar-toggle {
+	position: absolute;
+	top: 50px;
+	left: 0px;
+	padding: 0;
+	margin: 0 !important;
+	color: #EEE;
+	background-color: #555;
+	font-size: 16px;
+	font-weight: normal;
+	white-space: nowrap;
+	text-align: center;
+	vertical-align: middle;
+	background-image: none;
+	border: 1px solid #000;
+	border-left: none;
+	border-bottom-right-radius: 10px;
+	height: 26px;
+	line-height: 26px;
+	width: 30px;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+
+#body-wrapper.show-sidebar button.sidebar-toggle {
+	left: 250px;
+}
+
+button.sidebar-toggle span {
+	display: inline-block;
+	-webkit-transition: all .3s ease-in-out;
+	-moz-transition: all .3s ease-in-out;
+	-o-transition: all .3s ease-in-out;
+	transition: all .3s ease-in-out;
+}
+
+#body-wrapper.show-sidebar button.sidebar-toggle span {
+	-webkit-transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	transform: rotate(180deg);
+	transition: all .3s ease-in-out;
+}
+
+button.sidebar-toggle:hover span {
+	color: #fd3;
+}
+
 #sidebar-module-selection {
 }
 

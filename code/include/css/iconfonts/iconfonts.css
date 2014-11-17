@@ -31,6 +31,7 @@
 	font-size: 16px;
 }
 
+
 .icon-Babesk:before {
 	content: "\e601";
 }
@@ -153,6 +154,15 @@
 }
 .icon-checkmark:before {
 	content: "\e62a";
+}
+.icon-enter:before {
+	content: "\e629";
+}
+.icon-exit:before {
+	content: "\e62b";
+}
+.icon-play:before {
+	content: "\e62c";
 }
 .icon-Settings:before {
 	content: "\e607";

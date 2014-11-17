@@ -97,7 +97,7 @@
 			},
 			"properties": {
 				"id": 850,
-				"order": 5,
+				"order": 6,
 				"prevSize": 32,
 				"code": 58885,
 				"name": "Fits",
@@ -118,7 +118,7 @@
 			},
 			"properties": {
 				"id": 1355,
-				"order": 6,
+				"order": 7,
 				"prevSize": 32,
 				"code": 58886,
 				"name": "Messages",
@@ -139,7 +139,7 @@
 			},
 			"properties": {
 				"id": 906,
-				"order": 8,
+				"order": 9,
 				"prevSize": 32,
 				"code": 58880,
 				"name": "error",
@@ -160,7 +160,7 @@
 			},
 			"properties": {
 				"id": 1050,
-				"order": 9,
+				"order": 10,
 				"prevSize": 32,
 				"code": 58888,
 				"name": "darthvader",
@@ -181,7 +181,7 @@
 			},
 			"properties": {
 				"id": 3,
-				"order": 10,
+				"order": 11,
 				"prevSize": 32,
 				"code": 58889,
 				"name": "plus",
@@ -202,7 +202,7 @@
 			},
 			"properties": {
 				"id": 17,
-				"order": 11,
+				"order": 12,
 				"prevSize": 32,
 				"code": 58890,
 				"name": "minus",
@@ -223,7 +223,7 @@
 			},
 			"properties": {
 				"id": 907,
-				"order": 1,
+				"order": 42,
 				"prevSize": 32,
 				"code": 58891,
 				"name": "success",
@@ -885,7 +885,7 @@
 			},
 			"properties": {
 				"id": 254,
-				"order": 4,
+				"order": 5,
 				"prevSize": 32,
 				"code": 58922,
 				"name": "checkmark",
@@ -893,6 +893,78 @@
 			},
 			"setIdx": 1,
 			"iconIdx": 254
+		},
+		{
+			"icon": {
+				"paths": [
+					"M384 512h-320v-128h320v-128l192 192-192 192zM1024 0v832l-384 192v-192h-384v-256h64v192h320v-576l256-128h-576v256h-64v-320z"
+				],
+				"tags": [
+					"enter",
+					"sign in",
+					"log in",
+					"login"
+				],
+				"grid": 16
+			},
+			"properties": {
+				"id": 259,
+				"order": 43,
+				"prevSize": 32,
+				"code": 58921,
+				"name": "enter",
+				"ligatures": ""
+			},
+			"setIdx": 1,
+			"iconIdx": 259
+		},
+		{
+			"icon": {
+				"paths": [
+					"M768 640v-128h-320v-128h320v-128l192 192zM704 576v256h-320v192l-384-192v-832h704v320h-64v-256h-512l256 128v576h256v-192z"
+				],
+				"tags": [
+					"exit",
+					"sign out",
+					"log out",
+					"quit",
+					"close",
+					"logout"
+				],
+				"grid": 16
+			},
+			"properties": {
+				"id": 260,
+				"order": 44,
+				"prevSize": 32,
+				"code": 58923,
+				"name": "exit",
+				"ligatures": ""
+			},
+			"setIdx": 1,
+			"iconIdx": 260
+		},
+		{
+			"icon": {
+				"paths": [
+					"M192 128l640 384-640 384z"
+				],
+				"tags": [
+					"play",
+					"media control",
+					"audio"
+				],
+				"grid": 16
+			},
+			"properties": {
+				"id": 266,
+				"order": 45,
+				"prevSize": 32,
+				"code": 58924,
+				"name": "play"
+			},
+			"setIdx": 1,
+			"iconIdx": 266
 		},
 		{
 			"icon": {
@@ -909,7 +981,7 @@
 			},
 			"properties": {
 				"id": 42,
-				"order": 7,
+				"order": 8,
 				"prevSize": 40,
 				"code": 58887,
 				"name": "Settings",
@@ -956,6 +1028,8 @@
 		"showGrid": true,
 		"showGlyphs": true,
 		"showQuickUse": true,
-		"search": ""
+		"search": "",
+		"showQuickUse2": true,
+		"showSVGs": true
 	}
 }
