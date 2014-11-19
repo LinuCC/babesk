@@ -1,4 +1,4 @@
-{extends file=$checkoutParent}{block name=content}
+{extends file=$base_path}{block name=content}
 
 <div align="center"><h3>Ersatzkarte ausstellen</h3></div> <br>
 

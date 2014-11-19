@@ -1,4 +1,4 @@
-{extends file=$checkoutParent}{block name=content}
+{extends file=$base_path}{block name=content}
 <h3>Benutzername eingeben</h3>
 <form action="index.php?section=Gnissel|GChangeCard" method="post">
 	<fieldset>
