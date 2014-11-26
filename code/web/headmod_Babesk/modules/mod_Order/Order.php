@@ -35,8 +35,7 @@ class Order extends Babesk {
 		$smarty = $dataContainer->getSmarty();
 		$this->_interface = $dataContainer->getInterface();
 
-		parent::entryPoint($dataContainer);
-		parent::moduleTemplatePathSet();
+		$this->entryPoint($dataContainer);
 
 		if (isset($_GET['order'])) {
 			$this->mealOrderEntry();
@@ -52,6 +51,16 @@ class Order extends Babesk {
 				$this->_interface->dieError('Ein Fehler ist beim abrufen der Mahlzeiten aufgetreten! <br />' . $e->getMessage());
 			}
 		}
+	}
+
+	////////////////////////////////////////////////////////////////////////
+	//Implements
+	////////////////////////////////////////////////////////////////////////
+
+	protected function entryPoint($dataContainer) {
+
+		Module::entryPoint($dataContainer);
+		parent::moduleTemplatePathSet();
 	}
 
 	/**
@@ -121,6 +130,9 @@ class Order extends Babesk {
 	protected function mealOrder() {
 
 		try {
+			$this->_interface->setBacklink(
+				'index.php?module=web|Babesk|Order'
+			);
 			$this->mealOrderValuesInit();
 
 			if($this->mealorderAllowedCheck()) {
@@ -163,6 +175,13 @@ class Order extends Babesk {
 
 		$enddate = $this->orderEnddateGet();
 		$orderEnd = strtotime($enddate, strtotime($this->_meal['date']));
+
+		if($this->userAlreadyHasOrderedWithPriceclassAtDateCheck()) {
+			$this->_interface->dieMessage(
+				'Du kannst an einem Tag nicht mehrere Mahlzeiten der ' .
+				'gleichen Preisklasse bestellen.'
+			);
+		}
 
 		if(($max = $this->maxCountOfOrdersPerDayPerUserGet()) !== false) {
 
@@ -463,6 +482,31 @@ class Order extends Babesk {
 			WHERE o.UID = '$userId' AND m.date = '$date'");
 
 		return $row['count'];
+	}
+
+	/**
+	 * Check if the user already ordered a meal with same priceclass and date
+	 * @return true if he did, false if not
+	 */
+	protected function userAlreadyHasOrderedWithPriceclassAtDateCheck() {
+
+		$stmt = $this->_pdo->prepare(
+			'SELECT COUNT(*) FROM BabeskOrders o
+				INNER JOIN BabeskMeals m ON m.ID = o.MID
+				INNER JOIN SystemUsers u ON u.ID = :userId
+				INNER JOIN BabeskPriceClasses pc
+					ON m.price_class = pc.pc_ID AND pc.GID = u.GID
+				WHERE m.date = :mealDate
+					AND m.price_class = :priceClass
+					AND o.UID = u.ID
+		');
+		$stmt->execute(array(
+			'userId' => $_SESSION['uid'],
+			'mealDate' => $this->_meal['date'],
+			'priceClass' => $this->_meal['price_class']
+		));
+		$count = $stmt->fetch(PDO::FETCH_COLUMN);
+		return $count > 0;
 	}
 
 	////////////////////////////////////////////////////////////////////////
