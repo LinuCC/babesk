@@ -136,10 +136,16 @@ class Review extends \administrator\Kuwasys\Classes\CsvImport {
 	 */
 	private function csvDataCheck($csvContent) {
 
-		if(!isset($csvContent[0]['classteacher'],
+		if(!isset(
+			$csvContent[0]['name'],
+			$csvContent[0]['classteacher'],
 			$csvContent[0]['day'],
-			$csvContent[0]['name'])) {
-			$this->_interface->dieError(_g('The CSV-File uploaded has not all columns it needs to have. Please upload a CSV-File with all columns!'));
+			$csvContent[0]['isOptional']
+		)) {
+			$this->_interface->dieError(
+				_g('The CSV-File uploaded has not all columns it needs to have. ' .
+				'Please upload a CSV-File with all columns!')
+			);
 		}
 	}
 
