@@ -160,7 +160,7 @@ hr {
 }
 
 button.sidebar-toggle {
-	position: absolute;
+	position: fixed;
 	top: 50px;
 	left: 0px;
 	padding: 0;

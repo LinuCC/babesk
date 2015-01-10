@@ -374,7 +374,7 @@
 			<script type="text/javascript" src="{$path_js}/administrator/main.js"></script>
 			<script type="text/javascript" src="{$path_js}/json2.min.js"></script>
 			<script type="text/javascript" src="{$path_js}/custom-base.js"></script>
-
+			<script type="text/javascript" src="{$path_js}/react/react.min.js"></script>
 		{/block}
 
 		{if $enableDeprecatedLayout}
