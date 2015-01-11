@@ -1,0 +1,54 @@
+Babesk\ORM\KuwasysClasses:
+    type: entity
+    table: KuwasysClasses
+    id:
+        id:
+            type: integer
+            id: true
+            column: ID
+            generator:
+                strategy: IDENTITY
+    fields:
+        label:
+            type: string
+            length: 255
+        description:
+            type: string
+            length: 1024
+        maxRegistration:
+            type: integer
+            length: 5
+        registrationEnabled:
+            type: boolean
+        isOptional:
+            type: boolean
+    manyToOne:
+        schoolyear:
+            targetEntity: Babesk\ORM\SystemSchoolyears
+            inversedBy: classes
+            orphanRemoval: false
+    manyToMany:
+        categories:
+            targetEntity: Babesk\ORM\KuwasysClassCategories
+            joinTable:
+                name: KuwasysClassesInCategories
+                joinColumns:
+                    -
+                        name: classId
+                        referencedColumnName: ID
+                inverseJoinColumns:
+                    -
+                        name: categoryId
+                        referencedColumnName: ID
+        classteachers:
+            targetEntity: Babesk\ORM\KuwasysClassteachers
+            joinTable:
+                name: KuwasysClassteachersInClasses
+                joinColumns:
+                    -
+                        name: ClassID
+                        referencedColumnName: ID
+                inverseJoinColumns:
+                    -
+                        name: ClassTeacherID
+                        referencedColumnName: ID

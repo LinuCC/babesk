@@ -6,8 +6,6 @@ Babesk\ORM\SchbasInventory:
             type: integer
             scale: 0
             length: null
-            unique: false
-            nullable: false
             precision: 0
             id: true
             generator:
@@ -17,16 +15,12 @@ Babesk\ORM\SchbasInventory:
             type: integer
             scale: 0
             length: null
-            unique: false
-            nullable: false
             precision: 0
             column: year_of_purchase
         exemplar:
             type: integer
             scale: 0
             length: null
-            unique: false
-            nullable: false
             precision: 0
     manyToOne:
         book:

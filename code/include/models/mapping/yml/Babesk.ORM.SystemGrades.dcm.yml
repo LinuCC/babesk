@@ -6,8 +6,6 @@ Babesk\ORM\SystemGrades:
             type: integer
             scale: 0
             length: null
-            unique: false
-            nullable: false
             precision: 0
             id: true
             column: ID
@@ -18,15 +16,11 @@ Babesk\ORM\SystemGrades:
             type: string
             scale: 0
             length: null
-            unique: false
-            nullable: false
             precision: 0
         gradelevel:
             type: integer
             scale: 0
             length: null
-            unique: false
-            nullable: false
             precision: 0
     manyToOne:
         schooltype:

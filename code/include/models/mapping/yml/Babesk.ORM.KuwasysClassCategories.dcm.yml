@@ -1,0 +1,21 @@
+Babesk\ORM\KuwasysClassCategories:
+    type: entity
+    table: KuwasysClassCategories
+    id:
+        id:
+            type: integer
+            id: true
+            column: ID
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            length: 128
+        translatedName:
+            type: string
+            length: 255
+    manyToMany:
+        classes:
+            targetEntity: Babesk\ORM\KuwasysClasses
+            mappedBy: categories

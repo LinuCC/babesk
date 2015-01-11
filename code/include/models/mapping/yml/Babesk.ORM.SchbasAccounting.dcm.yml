@@ -9,12 +9,10 @@ Babesk\ORM\SchbasAccounting:
             type: decimal
             scale: 2
             precision: 4
-            nullable: false
         amountToPay:
             type: decimal
             scale: 2
             precision: 4
-            nullable: false
     oneToOne:
         user:
             inversedBy: schbasAccounting

@@ -6,8 +6,6 @@ Babesk\ORM\SchbasBooks:
             type: integer
             scale: 0
             length: null
-            unique: false
-            nullable: false
             precision: 0
             id: true
             generator:
@@ -17,50 +15,36 @@ Babesk\ORM\SchbasBooks:
             type: string
             scale: 0
             length: null
-            unique: false
-            nullable: false
             precision: 0
         author:
             type: string
             scale: 0
             length: null
-            unique: false
-            nullable: false
             precision: 0
         publisher:
             type: string
             scale: 0
             length: null
-            unique: false
-            nullable: false
             precision: 0
         isbn:
             type: string
             scale: 0
             length: null
-            unique: false
-            nullable: false
             precision: 0
         class:
             type: string
             scale: 0
             length: null
-            unique: false
-            nullable: false
             precision: 0
         bundle:
             type: integer
             scale: 0
             length: null
-            unique: false
-            nullable: false
             precision: 0
         price:
             type: float
             scale: 0
             length: null
-            unique: false
-            nullable: false
             precision: 0
     manyToOne:
         subject:

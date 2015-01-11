@@ -5,7 +5,6 @@ Babesk\ORM\SystemLogCategory:
         id:
             type: integer
             length: 11
-            nullable: false
             id: true
             column: ID
             generator:
@@ -14,7 +13,6 @@ Babesk\ORM\SystemLogCategory:
         name:
             type: string
             length: 255
-            nullable: false
     oneToMany:
         logs:
             targetEntity: Babesk\ORM\SystemLog

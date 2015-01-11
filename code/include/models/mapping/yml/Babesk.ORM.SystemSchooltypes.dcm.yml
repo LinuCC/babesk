@@ -6,8 +6,6 @@ Babesk\ORM\SystemSchooltypes:
             type: integer
             scale: 0
             length: null
-            unique: false
-            nullable: false
             precision: 0
             id: true
             column: ID
@@ -18,14 +16,10 @@ Babesk\ORM\SystemSchooltypes:
             type: string
             scale: 0
             length: null
-            unique: false
-            nullable: false
             precision: 0
         token:
             type: string
             scale: 0
             length: null
-            unique: false
-            nullable: false
             precision: 0
     lifecycleCallbacks: {  }

@@ -6,8 +6,6 @@ Babesk\ORM\BabeskCards:
             type: integer
             scale: 0
             length: 20
-            unique: false
-            nullable: false
             precision: 0
             id: true
             generator:
@@ -16,19 +14,15 @@ Babesk\ORM\BabeskCards:
         cardnumber:
             type: string
             length: 10
-            nullable: false
         UID:
             type: integer
             length: 11
-            nullable: false
         changed_cardID:
             type: integer
             length: 2
-            nullable: false
         lost:
             type: boolean
             length: 1
-            nullable: false
     manyToOne:
         user:
             targetEntity: Babesk\ORM\SystemUsers

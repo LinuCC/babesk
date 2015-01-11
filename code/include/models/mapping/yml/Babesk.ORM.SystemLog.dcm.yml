@@ -13,13 +13,10 @@ Babesk\ORM\SystemLog:
     fields:
         message:
             type: string
-            nullable: false
         date:
             type: datetime
-            nullable: false
         data:
             type: string
-            nullable: false
             column: additionalData
     manyToOne:
         severity:

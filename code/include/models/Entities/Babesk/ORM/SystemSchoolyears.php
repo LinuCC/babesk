@@ -125,4 +125,42 @@ class SystemSchoolyears
     {
         return $this->usersInGradesAndSchoolyears;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $classes;
+
+
+    /**
+     * Add classes
+     *
+     * @param \Babesk\ORM\KuwasysClasses $classes
+     * @return SystemSchoolyears
+     */
+    public function addClass(\Babesk\ORM\KuwasysClasses $classes)
+    {
+        $this->classes[] = $classes;
+
+        return $this;
+    }
+
+    /**
+     * Remove classes
+     *
+     * @param \Babesk\ORM\KuwasysClasses $classes
+     */
+    public function removeClass(\Babesk\ORM\KuwasysClasses $classes)
+    {
+        $this->classes->removeElement($classes);
+    }
+
+    /**
+     * Get classes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getClasses()
+    {
+        return $this->classes;
+    }
 }
