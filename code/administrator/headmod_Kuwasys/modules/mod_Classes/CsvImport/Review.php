@@ -120,6 +120,8 @@ class Review extends \administrator\Kuwasys\Classes\CsvImport {
 			$newRow['registrationEnabled'] =
 				(isset($row['registrationEnabled'])) ?
 				$row['registrationEnabled'] : null;
+			$newRow['isOptional'] = (isset($row['isOptional'])) ?
+				$row['isOptional'] : null;
 			$newData[] = $newRow;
 		}
 
@@ -237,30 +239,67 @@ class Review extends \administrator\Kuwasys\Classes\CsvImport {
 
 	private function classUnitEntryHandle($csvRow, &$newRow) {
 
-		$classunits = $this->classunitsGetAllKeyValue();
+		$classCategoriesExisting = $this->_entityManager
+			->getRepository('Babesk:KuwasysClassCategories')
+			->findAll();
+		$catsToAdd = explode(',', $csvRow['day']);
 
-		$cuId = array_search($csvRow['day'], $classunits);
-
-		if($cuId !== false && $cuId !== NULL) {
-			// Classunit found
-			$newRow['classUnit'] = array(
-				'ID' => $cuId, 'name' => $csvRow['day']);
+		if(!count($catsToAdd)) {
+			$this->_interface->dieError(
+				'Kein Tag bei einem der Kurse angegeben!'
+			);
 		}
-		else {
-			// Classunit not found, suggest one
-			$similar = array('ID' => 0, 'dist' => 36767);
 
-			foreach($classunits as $cuId => $cuName) {
-				$dist = levenshtein($csvRow['day'], $cuName);
+		/**
+		 * The Categories that will be assigned to the class
+		 * @var array
+		 * [
+		 *     {
+		 *         'ID' => '<cuId>',
+		 *         'name' => '<cuName or suggested name if not found>',
+		 *         'originalName' => '<cuOriginalName'
+		 *     }
+		 * ]
+		 */
+		$categories = array();
 
-				if($dist < $similar['dist']) {
-					$similar = array(
-						'ID' => $cuId, 'dist' => $dist,
-						'name' => $cuName, 'origName' => $csvRow['day']);
+		foreach($catsToAdd as $catToAdd) {
+			$categoryFound = false;
+			foreach($classCategoriesExisting as $catExisting) {
+				if($catExisting->getTranslatedName() == $catToAdd) {
+					$categories[] = array(
+						'ID' => $catExisting->getId(),
+						'name' => $catExisting->getTranslatedName(),
+						'originalName' => $catToAdd
+					);
+					$categoryFound = true;
+					break;
 				}
 			}
-			$newRow['classUnitOption'] = $similar;
+			if(!$categoryFound) {
+				//ClassCategory not found, suggest
+				$similar = array('ID' => 0, 'dist' => 36767);
+				foreach($classCategoriesExisting as $catExisting) {
+					$dist = levenshtein(
+						$catToAdd, $catExisting->getTranslatedName()
+					);
+					if($dist < $similar['dist']) {
+						$similar = array(
+							'ID' => $catExisting->getId(),
+							'name' => $catExisting->getTranslatedName(),
+							'dist' => $dist
+						);
+					}
+				}
+				$categories[] = array(
+					'ID' => $similar['ID'],
+					'name' => $similar['name'],
+					'originalName' => $catToAdd
+				);
+			}
 		}
+
+		$newRow['categories'] = $categories;
 	}
 
 	/////////////////////////////////////////////////////////////////////

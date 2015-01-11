@@ -20,144 +20,100 @@ class ImportExecute extends \administrator\Kuwasys\Classes\CsvImport {
 			parent::entryPoint($dataContainer);
 
 			$this->importData();
-			$query = $this->queryGenerate();
-			$this->queryExecute($query);
+			// $query = $this->queryGenerate();
+			// $this->queryExecute($query);
+			$this->_interface->backlink('administrator|Kuwasys|Classes');
 			$this->_interface->dieSuccess(
-				_g('The Classes were successfully imported.'));
+				_g('The Classes were successfully imported.')
+			);
 	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
 
+	/**
+	 * Imports the data of the classes
+	 */
 	private function importData() {
 
 		if(!empty($_POST['classes'])) {
-			$this->_classes = $_POST['classes'];
+			$classes = $_POST['classes'];
 		}
 		else {
 			$this->_interface->dieError(_g('No classes given.'));
 		}
-	}
 
-	private function queryGenerate() {
+		$activeSchoolyear = $this->_entityManager
+			->getRepository('Babesk:SystemSchoolyears')
+			->findOneByActive(true);
 
-		$query = '';
-
-		foreach($this->_classes as $class) {
-			$query .= $this->classQueryGenerate($class);
-		}
-
-		return $query;
-	}
-
-	private function classQueryGenerate($class) {
-
-		$classQuery = 'INSERT INTO `KuwasysClasses`
-			(label, description, maxRegistration, registrationEnabled,
-				schoolyearId)
-			VALUES (
-				' . $this->_pdo->quote($class['name']) . ',
-				' . $this->_pdo->quote($class['description']) . ',
-				' . $this->_pdo->quote((int)$class['maxRegistration']) . ',
-				' . $this->_pdo->quote((int)$class['registrationEnabled']) . ',
-				@activeSchoolyear);
-			SELECT LAST_INSERT_ID() INTO @newClassId;';
-
-		$classQuery .= $this->classteacherQueryGenerate(
-			$class['classteacher']);
-
-		$catQuery = 'INSERT INTO `KuwasysClassesInCategories`
-			(classId, categoryId) VALUES (
-				@newClassId,
-				' . $this->_pdo->quote($class['classUnit']) . '
+		foreach($classes as $classAr) {
+			$classToAdd = new \Babesk\ORM\KuwasysClasses();
+			$classToAdd->setLabel($classAr['name'])
+				->setDescription($classAr['description'])
+				->setMaxRegistration($classAr['maxRegistration'])
+				->setRegistrationEnabled($classAr['registrationEnabled'])
+				->setSchoolyear($activeSchoolyear)
+				->setIsOptional($classAr['isOptional']);
+			//Add the classes
+			$this->classteachersToClassAdd(
+				$classToAdd, $classAr['classteacher']
 			);
-		';
-		$classQuery .= $catQuery;
-
-		return $classQuery;
-	}
-
-	private function classteacherQueryGenerate($classteachers) {
-
-		$query = '';
-
-		foreach($classteachers as &$ct) {
-			if($ct['ID'] == 'CREATE_NEW') {
-				$query .= $this->newClassteacherQueryGenerate($ct);
-				$query .= 'INSERT INTO KuwasysClassteachersInClasses
-					(ClassTeacherID, ClassID) VALUES (@newCtId, @newClassId);';
+			//Add the categories
+			foreach($classAr['categories'] as $categoryId) {
+				$category = $this->_entityManager->getReference(
+					'Babesk:KuwasysClassCategories', $categoryId
+				);
+				$classToAdd->addCategory($category);
 			}
-			else if($ct['ID'] !== 0) {
-				$query .= 'INSERT INTO KuwasysClassteachersInClasses
-					(ClassTeacherID, ClassID) VALUES (
-						' . $this->_pdo->quote($ct['ID']) . ', @newClassId);';
-			}
-			else {
-				// Class should not have any Classteacher
-				return '';
-			}
+			$this->_entityManager->persist($classToAdd);
 		}
-
-		return $query;
-	}
-
-	private function newClassteacherQueryGenerate($classteacher) {
-
-		$query = '';
-
-		$classteacher['name'] = trim($classteacher['name']);
-		// If a new Classteacher should be created
-		$names = explode(' ', $classteacher['name'], 2);
-		//If there was no space in the Classteachername, only add surname
-		$forename = (count($names) == 2) ? $names[0] : '';
-		$surname = (count($names) == 2) ? $names[1] : $names[0];
-
-		$query .= 'INSERT INTO KuwasysClassteachers (forename, name)
-			VALUES ('
-				. $this->_pdo->quote($forename) . ', '
-				. $this->_pdo->quote($surname) . ');
-			SELECT LAST_INSERT_ID() INTO @newCtId;';
-
-		return $query;
-	}
-
-	private function queryExecute($query) {
-
-		try {
-			$stmt = $this->_pdo->exec($query);
-
-		} catch (\PDOException $e) {
-			$this->_logger->log('Could not execute the Query!', 'Notice',
-				Null, json_encode(array('error' => $e->getMessage()))
-			);
-			$this->_interface->dieError(_g('Could not execute the Query!'));
-		}
+		$this->_entityManager->flush();
 	}
 
 	/**
-	 * For later ;)
+	 * Adds the classteachers given in the array to the ORM-Object $class
+	 * @param  Object $class              The Object representing the class
+	 * @param  array  $classteachersArray The array containing the information
+	 *                                    about the classteachers to be added
+	 *                                    to $class
 	 */
-	private function classesUpload($classes) {
+	private function classteachersToClassAdd($class, $classteachersArray) {
 
-		$cStmt = $this->_pdo->prepare(
-			'INSERT INTO `KuwasysClasses` (
-				label, description, maxRegistration, registrationEnabled,
-				schoolyearId
-			) VALUES (
-				:name, :description, :maxRegistration, :registrationEnabled,
-				@activeSchoolyear
-			)
-		');
-		$cticStmt = $this->_pdo->prepare(
-			'INSERT INTO `KuwasysClassteachersInClasses` (
-				ClassTeacherID, ClassID
-			) VALUES (:classteacherId, :newClassId)
-		');
-		$ctStmt = $this->_pdo->prepare(
-			'INSERT INTO `KuwasysClass'
-		);
+		foreach($classteachersArray as $ct) {
+			$ctId = $ct['ID'];
+			if($ctId == 'CREATE_NEW') {
+				//Create a new classteacher
+				$classteacher = new \Babesk\ORM\KuwasysClassteachers();
+				$ct['name'] = trim($ct['name']);
+				$names = explode(' ', $ct['name'], 2);
+				//If there was no space in the Classteachername, only add
+				//surname
+				$forename = (count($names) == 2) ? $names[0] : '';
+				$surname = end($names);
+				$classteacher->setName($surname)
+					->setForename($forename)
+					->setAddress('')
+					->setTelephone('')
+					->setEmail('');
+				$class->addClassteacher($classteacher);
+				$this->_entityManager->persist($classteacher);
+			}
+			else if($ctId !== 0) {
+				//Classteacher already exists, add him
+				$classteacher = $this->_entityManager->find(
+					'Babesk:KuwasysClassteachers', $ctId
+				);
+				$class->addClassteacher($classteacher);
+			}
+			else {
+				//No classteacher assigned to class
+			}
+		}
 	}
+
+
 
 	/////////////////////////////////////////////////////////////////////
 	//Attributes

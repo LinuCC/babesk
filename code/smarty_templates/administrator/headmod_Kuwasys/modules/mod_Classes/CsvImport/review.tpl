@@ -8,7 +8,7 @@
 	<table class="table">
 		{$tempId = 1}
 		{foreach $classes as $class}
-		<tr>
+		<tr style="background-color: #fff">
 			<th>
 				{t}Name{/t}
 			</th>
@@ -21,6 +21,8 @@
 				value="{$class.maxRegistration}">
 			<input type="hidden" name="classes[{$tempId}][registrationEnabled]"
 				value="{$class.registrationEnabled}">
+			<input type="hidden" name="classes[{$tempId}][isOptional]"
+				value="{$class.isOptional}">
 		</tr>
 
 		<tr>
@@ -68,24 +70,18 @@
 		<tr>
 			<td>
 				{t}Day{/t}
-				{if $class.classUnitOption.origName}
-				<br />(Eingabe: "{$class.classUnitOption.origName}")
-				{/if}
-			</th>
+			</td>
 			<td>
-				{if $class.classUnit}
-					{$class.classUnit.name}
-					<input type="hidden" name="classes[{$tempId}][classUnit]"
-						value="{$class.classUnit.ID}">
-				{else}
-					<input type="radio" name="classes[{$tempId}][classUnit]"
-						value="0" checked >Kein Tag<br />
-					{if $class.classUnitOption.ID}
-					<input type="radio" name="classes[{$tempId}][classUnit]"
-						value="{$class.classUnitOption.ID}">
-						{$class.classUnitOption.name}
-					{/if}
-				{/if}
+				{foreach name=cats from=$class.categories item=category}
+					<p>
+						{$category.name}
+						{if $category.name != $category.originalName}
+							(Eingabe: <b>{$category.originalName}</b>)
+						{/if}
+					</p>
+					<input type="hidden" name="classes[{$tempId}][categories][]"
+						value="{$category.ID}">
+				{/foreach}
 			</td>
 		</tr>
 		{$tempId = $tempId + 1}
