@@ -28,6 +28,7 @@
 			<th>Aktive Teilnehmer</th>
 			<th>Wartende Teilnehmer</th>
 			<th>Wünschende Teilnehmer</th>
+			<th>Ist Optional?</th>
 			<th>Maximale Registrierungen</th>
 			<th>Veranstaltungstag</th>
 			<th>Optionen</th>
@@ -42,6 +43,7 @@
 			<td>{$class.activeCount}</td>
 			<td>{$class.waitingCount}</td>
 			<td>{$class.request1Count + $class.request2Count}</td>
+			<td>{if $class.isOptional == 0}nein{else}ja{/if}</td>
 			<td>{$class.maxRegistration}</td>
 			<td>{$class.unitTranslatedName}</td>
 			<td>

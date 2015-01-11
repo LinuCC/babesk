@@ -91,7 +91,7 @@
 	<ul class="submodulelinkList">
 		<li>
 			<a href="index.php?module=administrator|Kuwasys|Classes|CsvImport|FileUploadForm">
-					{t}Import Classes with a CSV-File{/t}
+					{t}Import Classes{/t}
 			</a>
 		</li>
 		<li>

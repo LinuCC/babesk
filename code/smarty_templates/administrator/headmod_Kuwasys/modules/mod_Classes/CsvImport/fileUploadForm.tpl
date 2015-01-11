@@ -13,10 +13,10 @@
 <fieldset class="smallContainer">
 	<legend>{t}Help:{/t}</legend>
 	<p>
-		Hier können sie Kurse mithilfe einer CSV-Datei importieren.<br />
-		Diese lassen sich zum Beispiel von Microsoft Excel exportieren.<br />
+		Hier können sie Kurse mithilfe einer Spreadsheet-Datei importieren.<br />
+		Die können zum Beispiel in Microsoft Excel erstellt werden.
 		Die erste Zeile besteht dabei aus den Namen der Spalten, danach repräsentiert jede Zeile einen Kurs.<br />
-		Die Benennung der Spalten sieht wie folgt aus (Groß- und Kleinschreibung sowie Leerzeichen wichtig!):<br />
+		Die Benennung der Spalten sieht wie folgt aus:<br>
 		<table class="table">
 			<tbody>
 				<tr>
@@ -72,13 +72,75 @@
 				</tr>
 			</tbody>
 		</table>
-		Beim Exportieren mithilfe ihres Programms achten sie bitte darauf, dass als Separator das Semicolon (";") benutzt wird.<br />
-		Allerdings dürfen die jeweiligen Felder selber keine Semikolons enthalten!<br />
-		Eine richtige CSV-Datei würde zum Beispiel so aussehen:
-		<fieldset class="blockyField">
-			name;description;maxRegistration;classteacher;day<br />
-			Wir machen Wacken;Dies ist eine Beschreibung;25;Frank Elstner;Montag
-		</fieldset>
+		<p>
+			<div class="alert alert-info"><b>Die richtige Schreibweise</b> der ersten Zeile ist sehr wichtig, da die Datei sonst nicht gelesen werden kann.
+			Achten sie also bitte auf Groß- und Kleinschreibung sowie darauf dass keine Leerzeichen davor oder dahinter sind!</div>
+			Eine richtige Spreadsheet-Datei würde zum Beispiel so aussehen:
+		</p>
+		<table class="table table-bordered">
+			<tbody>
+				<tr>
+					<td>
+						name
+					</td>
+					<td>
+						description
+					</td>
+					<td>
+						maxRegistration
+					</td>
+					<td>
+						classteacher
+					</td>
+					<td>
+						day
+					</td>
+					<td>
+						isOptional
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Schiffe Bauen
+					</td>
+					<td>
+						Hier bauen wir Schiffe!
+					</td>
+					<td>
+						25
+					</td>
+					<td>
+						Max Mustermann
+					</td>
+					<td>
+						Montag, Dienstag
+					</td>
+					<td>
+						0
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Angeln
+					</td>
+					<td>
+						Hier kann man angeln...
+					</td>
+					<td>
+						10
+					</td>
+					<td>
+						Andrea Schiffmacher, Hans Horst
+					</td>
+					<td>
+						Mittwoch
+					</td>
+					<td>
+						1
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</p>
 </fieldset>
 

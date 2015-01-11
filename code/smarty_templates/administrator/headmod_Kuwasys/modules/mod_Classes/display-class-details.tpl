@@ -167,6 +167,11 @@
 				<td>{if $class.registrationEnabled}<b>Ja</b>{else}<b>Nein</b>{/if}
 				</td>
 			</tr>
+			<tr>
+				<th>Ist Optional:</th>
+				<td>{if $class.isOptional}Ja{else}Nein{/if}
+				</td>
+			</tr>
 			<tr class="class-category" categoryid="{$class.categoryId}">
 				<th>Veranstaltungstag:</th>
 				<td>{if
