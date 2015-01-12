@@ -49,7 +49,7 @@ class ImportExecute extends \administrator\Kuwasys\Classes\CsvImport {
 			->findOneByActive(true);
 
 		foreach($classes as $classAr) {
-			$classToAdd = new \Babesk\ORM\Class();
+			$classToAdd = new \Babesk\ORM\KuwasysClass();
 			$classToAdd->setLabel($classAr['name'])
 				->setDescription($classAr['description'])
 				->setMaxRegistration($classAr['maxRegistration'])
@@ -63,7 +63,7 @@ class ImportExecute extends \administrator\Kuwasys\Classes\CsvImport {
 			//Add the categories
 			foreach($classAr['categories'] as $categoryId) {
 				$category = $this->_entityManager->getReference(
-					'Babesk:KuwasysClassCategories', $categoryId
+					'Babesk:ClassCategory', $categoryId
 				);
 				$classToAdd->addCategory($category);
 			}
@@ -85,7 +85,7 @@ class ImportExecute extends \administrator\Kuwasys\Classes\CsvImport {
 			$ctId = $ct['ID'];
 			if($ctId == 'CREATE_NEW') {
 				//Create a new classteacher
-				$classteacher = new \Babesk\ORM\KuwasysClassteachers();
+				$classteacher = new \Babesk\ORM\Classteacher();
 				$ct['name'] = trim($ct['name']);
 				$names = explode(' ', $ct['name'], 2);
 				//If there was no space in the Classteachername, only add
@@ -103,7 +103,7 @@ class ImportExecute extends \administrator\Kuwasys\Classes\CsvImport {
 			else if($ctId !== 0) {
 				//Classteacher already exists, add him
 				$classteacher = $this->_entityManager->find(
-					'Babesk:KuwasysClassteachers', $ctId
+					'Babesk:Classteacher', $ctId
 				);
 				$class->addClassteacher($classteacher);
 			}

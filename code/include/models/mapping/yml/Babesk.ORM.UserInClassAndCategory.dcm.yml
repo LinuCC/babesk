@@ -17,7 +17,7 @@ Babesk\ORM\UserInClassAndCategory:
                 UserID:
                     referencedColumnName: ID
         class:
-            targetEntity: Babesk\ORM\Class
+            targetEntity: Babesk\ORM\KuwasysClass
             inversedBy:
             joinColumns:
                 ClassID:

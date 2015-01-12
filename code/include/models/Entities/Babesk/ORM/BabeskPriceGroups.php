@@ -24,6 +24,18 @@ class BabeskPriceGroups
      */
     private $max_credit;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $users;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -79,18 +91,6 @@ class BabeskPriceGroups
     public function getMaxCredit()
     {
         return $this->max_credit;
-    }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $users;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

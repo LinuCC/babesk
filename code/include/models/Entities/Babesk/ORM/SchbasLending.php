@@ -54,7 +54,7 @@ class SchbasLending
      * @param \Babesk\ORM\SystemUsers $user
      * @return SchbasLending
      */
-    public function setUser(\Babesk\ORM\SystemUsers $user = null)
+    public function setUser(\Babesk\ORM\SystemUsers $user)
     {
         $this->user = $user;
 
@@ -77,7 +77,7 @@ class SchbasLending
      * @param \Babesk\ORM\SchbasInventory $inventory
      * @return SchbasLending
      */
-    public function setInventory(\Babesk\ORM\SchbasInventory $inventory = null)
+    public function setInventory(\Babesk\ORM\SchbasInventory $inventory)
     {
         $this->inventory = $inventory;
 

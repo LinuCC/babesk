@@ -10,11 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 class SchbasAccounting
 {
     /**
-     * @var integer
-     */
-    private $UID;
-
-    /**
      * @var string
      */
     private $payedAmount;
@@ -29,16 +24,11 @@ class SchbasAccounting
      */
     private $user;
 
-
     /**
-     * Get UID
-     *
-     * @return integer 
+     * @var \Babesk\ORM\SchbasLoanChoices
      */
-    public function getUID()
-    {
-        return $this->UID;
-    }
+    private $loanChoice;
+
 
     /**
      * Set payedAmount
@@ -92,7 +82,7 @@ class SchbasAccounting
      * @param \Babesk\ORM\SystemUsers $user
      * @return SchbasAccounting
      */
-    public function setUser(\Babesk\ORM\SystemUsers $user = null)
+    public function setUser(\Babesk\ORM\SystemUsers $user)
     {
         $this->user = $user;
 
@@ -108,39 +98,6 @@ class SchbasAccounting
     {
         return $this->user;
     }
-
-    /**
-     * Set UID
-     *
-     * @param \Babesk\ORM\SystemUsers $uID
-     * @return SchbasAccounting
-     */
-    public function setUID(\Babesk\ORM\SystemUsers $uID)
-    {
-        $this->UID = $uID;
-
-        return $this;
-    }
-    /**
-     * @var integer
-     */
-    private $id;
-
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-    /**
-     * @var \Babesk\ORM\SchbasLoanChoices
-     */
-    private $loanChoice;
-
 
     /**
      * Set loanChoice

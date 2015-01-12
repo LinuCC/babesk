@@ -180,10 +180,10 @@ class Classteacher
     /**
      * Add classes
      *
-     * @param \Babesk\ORM\Class $classes
+     * @param \Babesk\ORM\KuwasysClass $classes
      * @return Classteacher
      */
-    public function addClass(\Babesk\ORM\Class $classes)
+    public function addClass(\Babesk\ORM\KuwasysClass $classes)
     {
         $this->classes[] = $classes;
 
@@ -193,29 +193,9 @@ class Classteacher
     /**
      * Remove classes
      *
-     * @param \Babesk\ORM\Class $classes
+     * @param \Babesk\ORM\KuwasysClass $classes
      */
-    public function removeClass(\Babesk\ORM\Class $classes)
-    {
-        $this->classes->removeElement($classes);
-    }
-
-    /**
-     * Get classes
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getClasses()
-    {
-        return $this->classes;
-    }
-
-    /**
-     * Remove classes
-     *
-     * @param \Babesk\ORM\Class $classes
-     */
-    public function removeClass(\Babesk\ORM\Class $classes)
+    public function removeClass(\Babesk\ORM\KuwasysClass $classes)
     {
         $this->classes->removeElement($classes);
     }

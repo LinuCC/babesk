@@ -31,7 +31,7 @@ class SystemUsersInGradesAndSchoolyears
      * @param \Babesk\ORM\SystemUsers $user
      * @return SystemUsersInGradesAndSchoolyears
      */
-    public function setUser(\Babesk\ORM\SystemUsers $user = null)
+    public function setUser(\Babesk\ORM\SystemUsers $user)
     {
         $this->user = $user;
 
@@ -54,7 +54,7 @@ class SystemUsersInGradesAndSchoolyears
      * @param \Babesk\ORM\SystemGrades $grade
      * @return SystemUsersInGradesAndSchoolyears
      */
-    public function setGrade(\Babesk\ORM\SystemGrades $grade = null)
+    public function setGrade(\Babesk\ORM\SystemGrades $grade)
     {
         $this->grade = $grade;
 
@@ -77,7 +77,7 @@ class SystemUsersInGradesAndSchoolyears
      * @param \Babesk\ORM\SystemSchoolyears $schoolyear
      * @return SystemUsersInGradesAndSchoolyears
      */
-    public function setSchoolyear(\Babesk\ORM\SystemSchoolyears $schoolyear = null)
+    public function setSchoolyear(\Babesk\ORM\SystemSchoolyears $schoolyear)
     {
         $this->schoolyear = $schoolyear;
 

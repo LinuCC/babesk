@@ -20,7 +20,7 @@ class UserInClassAndCategory
     private $user;
 
     /**
-     * @var \Babesk\ORM\KuwasysClasses
+     * @var \Babesk\ORM\KuwasysClass
      */
     private $class;
 
@@ -30,7 +30,7 @@ class UserInClassAndCategory
     private $status;
 
     /**
-     * @var \Babesk\ORM\KuwasysClassCategories
+     * @var \Babesk\ORM\ClassCategory
      */
     private $category;
 
@@ -71,10 +71,10 @@ class UserInClassAndCategory
     /**
      * Set class
      *
-     * @param \Babesk\ORM\KuwasysClasses $class
+     * @param \Babesk\ORM\KuwasysClass $class
      * @return UserInClassAndCategory
      */
-    public function setClass(\Babesk\ORM\KuwasysClasses $class = null)
+    public function setClass(\Babesk\ORM\KuwasysClass $class = null)
     {
         $this->class = $class;
 
@@ -84,7 +84,7 @@ class UserInClassAndCategory
     /**
      * Get class
      *
-     * @return \Babesk\ORM\KuwasysClasses 
+     * @return \Babesk\ORM\KuwasysClass 
      */
     public function getClass()
     {
@@ -117,10 +117,10 @@ class UserInClassAndCategory
     /**
      * Set category
      *
-     * @param \Babesk\ORM\KuwasysClassCategories $category
+     * @param \Babesk\ORM\ClassCategory $category
      * @return UserInClassAndCategory
      */
-    public function setCategory(\Babesk\ORM\KuwasysClassCategories $category = null)
+    public function setCategory(\Babesk\ORM\ClassCategory $category = null)
     {
         $this->category = $category;
 
@@ -130,7 +130,7 @@ class UserInClassAndCategory
     /**
      * Get category
      *
-     * @return \Babesk\ORM\KuwasysClassCategories 
+     * @return \Babesk\ORM\ClassCategory 
      */
     public function getCategory()
     {

@@ -135,10 +135,10 @@ class ClassCategory
     /**
      * Add classes
      *
-     * @param \Babesk\ORM\Class $classes
+     * @param \Babesk\ORM\KuwasysClass $classes
      * @return ClassCategory
      */
-    public function addClass(\Babesk\ORM\Class $classes)
+    public function addClass(\Babesk\ORM\KuwasysClass $classes)
     {
         $this->classes[] = $classes;
 
@@ -148,9 +148,9 @@ class ClassCategory
     /**
      * Remove classes
      *
-     * @param \Babesk\ORM\Class $classes
+     * @param \Babesk\ORM\KuwasysClass $classes
      */
-    public function removeClass(\Babesk\ORM\Class $classes)
+    public function removeClass(\Babesk\ORM\KuwasysClass $classes)
     {
         $this->classes->removeElement($classes);
     }

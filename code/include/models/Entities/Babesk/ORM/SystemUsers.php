@@ -70,11 +70,6 @@ class SystemUsers
     private $locked;
 
     /**
-     * @var integer
-     */
-    private $gid;
-
-    /**
      * @var float
      */
     private $credit;
@@ -100,6 +95,11 @@ class SystemUsers
     private $special_course;
 
     /**
+     * @var \Babesk\ORM\SchbasAccounting
+     */
+    private $schbasAccounting;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $usersInGradesAndSchoolyears;
@@ -107,7 +107,17 @@ class SystemUsers
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
+    private $usersInClassesAndCategories;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
     private $cards;
+
+    /**
+     * @var \Babesk\ORM\BabeskPriceGroups
+     */
+    private $priceGroup;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -117,7 +127,7 @@ class SystemUsers
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $lentBooks;
+    private $bookLending;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -130,16 +140,17 @@ class SystemUsers
     public function __construct()
     {
         $this->usersInGradesAndSchoolyears = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->usersInClassesAndCategories = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cards = new \Doctrine\Common\Collections\ArrayCollection();
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->lentBooks = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->bookLending = new \Doctrine\Common\Collections\ArrayCollection();
         $this->selfpayingBooks = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
      * Get id
      *
-     * @return integer
+     * @return integer 
      */
     public function getId()
     {
@@ -162,7 +173,7 @@ class SystemUsers
     /**
      * Get name
      *
-     * @return string
+     * @return string 
      */
     public function getName()
     {
@@ -185,7 +196,7 @@ class SystemUsers
     /**
      * Get forename
      *
-     * @return string
+     * @return string 
      */
     public function getForename()
     {
@@ -208,7 +219,7 @@ class SystemUsers
     /**
      * Get username
      *
-     * @return string
+     * @return string 
      */
     public function getUsername()
     {
@@ -231,7 +242,7 @@ class SystemUsers
     /**
      * Get password
      *
-     * @return string
+     * @return string 
      */
     public function getPassword()
     {
@@ -254,7 +265,7 @@ class SystemUsers
     /**
      * Get email
      *
-     * @return string
+     * @return string 
      */
     public function getEmail()
     {
@@ -277,7 +288,7 @@ class SystemUsers
     /**
      * Get telephone
      *
-     * @return string
+     * @return string 
      */
     public function getTelephone()
     {
@@ -300,7 +311,7 @@ class SystemUsers
     /**
      * Get birthday
      *
-     * @return string
+     * @return string 
      */
     public function getBirthday()
     {
@@ -323,7 +334,7 @@ class SystemUsers
     /**
      * Get last_login
      *
-     * @return string
+     * @return string 
      */
     public function getLastLogin()
     {
@@ -346,7 +357,7 @@ class SystemUsers
     /**
      * Get login_tries
      *
-     * @return integer
+     * @return integer 
      */
     public function getLoginTries()
     {
@@ -369,7 +380,7 @@ class SystemUsers
     /**
      * Get first_passwd
      *
-     * @return boolean
+     * @return boolean 
      */
     public function getFirstPasswd()
     {
@@ -392,34 +403,11 @@ class SystemUsers
     /**
      * Get locked
      *
-     * @return boolean
+     * @return boolean 
      */
     public function getLocked()
     {
         return $this->locked;
-    }
-
-    /**
-     * Set gid
-     *
-     * @param integer $gid
-     * @return SystemUsers
-     */
-    public function setGid($gid)
-    {
-        $this->gid = $gid;
-
-        return $this;
-    }
-
-    /**
-     * Get gid
-     *
-     * @return integer
-     */
-    public function getGid()
-    {
-        return $this->gid;
     }
 
     /**
@@ -438,7 +426,7 @@ class SystemUsers
     /**
      * Get credit
      *
-     * @return float
+     * @return float 
      */
     public function getCredit()
     {
@@ -461,7 +449,7 @@ class SystemUsers
     /**
      * Get soli
      *
-     * @return boolean
+     * @return boolean 
      */
     public function getSoli()
     {
@@ -484,7 +472,7 @@ class SystemUsers
     /**
      * Get religion
      *
-     * @return string
+     * @return string 
      */
     public function getReligion()
     {
@@ -507,7 +495,7 @@ class SystemUsers
     /**
      * Get foreign_language
      *
-     * @return string
+     * @return string 
      */
     public function getForeignLanguage()
     {
@@ -530,11 +518,34 @@ class SystemUsers
     /**
      * Get special_course
      *
-     * @return string
+     * @return string 
      */
     public function getSpecialCourse()
     {
         return $this->special_course;
+    }
+
+    /**
+     * Set schbasAccounting
+     *
+     * @param \Babesk\ORM\SchbasAccounting $schbasAccounting
+     * @return SystemUsers
+     */
+    public function setSchbasAccounting(\Babesk\ORM\SchbasAccounting $schbasAccounting = null)
+    {
+        $this->schbasAccounting = $schbasAccounting;
+
+        return $this;
+    }
+
+    /**
+     * Get schbasAccounting
+     *
+     * @return \Babesk\ORM\SchbasAccounting 
+     */
+    public function getSchbasAccounting()
+    {
+        return $this->schbasAccounting;
     }
 
     /**
@@ -563,243 +574,12 @@ class SystemUsers
     /**
      * Get usersInGradesAndSchoolyears
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Doctrine\Common\Collections\Collection 
      */
     public function getUsersInGradesAndSchoolyears()
     {
         return $this->usersInGradesAndSchoolyears;
     }
-
-    /**
-     * Add cards
-     *
-     * @param \Babesk\ORM\BabeskCards $cards
-     * @return SystemUsers
-     */
-    public function addCard(\Babesk\ORM\BabeskCards $cards)
-    {
-        $this->cards[] = $cards;
-
-        return $this;
-    }
-
-    /**
-     * Remove cards
-     *
-     * @param \Babesk\ORM\BabeskCards $cards
-     */
-    public function removeCard(\Babesk\ORM\BabeskCards $cards)
-    {
-        $this->cards->removeElement($cards);
-    }
-
-    /**
-     * Get cards
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCards()
-    {
-        return $this->cards;
-    }
-
-    /**
-     * Add groups
-     *
-     * @param \Babesk\ORM\SystemGroups $groups
-     * @return SystemUsers
-     */
-    public function addGroup(\Babesk\ORM\SystemGroups $groups)
-    {
-        $this->groups[] = $groups;
-
-        return $this;
-    }
-
-    /**
-     * Remove groups
-     *
-     * @param \Babesk\ORM\SystemGroups $groups
-     */
-    public function removeGroup(\Babesk\ORM\SystemGroups $groups)
-    {
-        $this->groups->removeElement($groups);
-    }
-
-    /**
-     * Get groups
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getGroups()
-    {
-        return $this->groups;
-    }
-
-    /**
-     * Add lentBooks
-     *
-     * @param \Babesk\ORM\SchbasInventory $lentBooks
-     * @return SystemUsers
-     */
-    public function addLentBook(\Babesk\ORM\SchbasInventory $lentBooks)
-    {
-        $this->lentBooks[] = $lentBooks;
-
-        return $this;
-    }
-
-    /**
-     * Remove lentBooks
-     *
-     * @param \Babesk\ORM\SchbasInventory $lentBooks
-     */
-    public function removeLentBook(\Babesk\ORM\SchbasInventory $lentBooks)
-    {
-        $this->lentBooks->removeElement($lentBooks);
-    }
-
-    /**
-     * Get lentBooks
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getLentBooks()
-    {
-        return $this->lentBooks;
-    }
-
-    /**
-     * Add selfpayingBooks
-     *
-     * @param \Babesk\ORM\SchbasBooks $selfpayingBooks
-     * @return SystemUsers
-     */
-    public function addSelfpayingBook(\Babesk\ORM\SchbasBooks $selfpayingBooks)
-    {
-        $this->selfpayingBooks[] = $selfpayingBooks;
-
-        return $this;
-    }
-
-    /**
-     * Remove selfpayingBooks
-     *
-     * @param \Babesk\ORM\SchbasBooks $selfpayingBooks
-     */
-    public function removeSelfpayingBook(\Babesk\ORM\SchbasBooks $selfpayingBooks)
-    {
-        $this->selfpayingBooks->removeElement($selfpayingBooks);
-    }
-
-    /**
-     * Get selfpayingBooks
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSelfpayingBooks()
-    {
-        return $this->selfpayingBooks;
-    }
-    /**
-     * @var \Babesk\ORM\BabeskPriceGroups
-     */
-    private $priceGroup;
-
-
-    /**
-     * Set priceGroup
-     *
-     * @param \Babesk\ORM\BabeskPriceGroups $priceGroup
-     * @return SystemUsers
-     */
-    public function setPriceGroup(\Babesk\ORM\BabeskPriceGroups $priceGroup = null)
-    {
-        $this->priceGroup = $priceGroup;
-
-        return $this;
-    }
-
-    /**
-     * Get priceGroup
-     *
-     * @return \Babesk\ORM\BabeskPriceGroups
-     */
-    public function getPriceGroup()
-    {
-        return $this->priceGroup;
-    }
-    /**
-     * @var \Babesk\ORM\SchbasAccounting
-     */
-    private $schbasAccounting;
-
-
-    /**
-     * Set schbasAccounting
-     *
-     * @param \Babesk\ORM\SchbasAccounting $schbasAccounting
-     * @return SystemUsers
-     */
-    public function setSchbasAccounting(\Babesk\ORM\SchbasAccounting $schbasAccounting = null)
-    {
-        $this->schbasAccounting = $schbasAccounting;
-
-        return $this;
-    }
-
-    /**
-     * Get schbasAccounting
-     *
-     * @return \Babesk\ORM\SchbasAccounting
-     */
-    public function getSchbasAccounting()
-    {
-        return $this->schbasAccounting;
-    }
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $bookLending;
-
-    /**
-     * Add bookLending
-     *
-     * @param \Babesk\ORM\SchbasInventory $bookLending
-     * @return SystemUsers
-     */
-    public function addBookLending(\Babesk\ORM\SchbasInventory $bookLending)
-    {
-        $this->bookLending[] = $bookLending;
-
-        return $this;
-    }
-
-    /**
-     * Remove bookLending
-     *
-     * @param \Babesk\ORM\SchbasInventory $bookLending
-     */
-    public function removeBookLending(\Babesk\ORM\SchbasInventory $bookLending)
-    {
-        $this->bookLending->removeElement($bookLending);
-    }
-
-    /**
-     * Get bookLending
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getBookLending()
-    {
-        return $this->bookLending;
-    }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $usersInClassesAndCategories;
-
 
     /**
      * Add usersInClassesAndCategories
@@ -832,5 +612,160 @@ class SystemUsers
     public function getUsersInClassesAndCategories()
     {
         return $this->usersInClassesAndCategories;
+    }
+
+    /**
+     * Add cards
+     *
+     * @param \Babesk\ORM\BabeskCards $cards
+     * @return SystemUsers
+     */
+    public function addCard(\Babesk\ORM\BabeskCards $cards)
+    {
+        $this->cards[] = $cards;
+
+        return $this;
+    }
+
+    /**
+     * Remove cards
+     *
+     * @param \Babesk\ORM\BabeskCards $cards
+     */
+    public function removeCard(\Babesk\ORM\BabeskCards $cards)
+    {
+        $this->cards->removeElement($cards);
+    }
+
+    /**
+     * Get cards
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCards()
+    {
+        return $this->cards;
+    }
+
+    /**
+     * Set priceGroup
+     *
+     * @param \Babesk\ORM\BabeskPriceGroups $priceGroup
+     * @return SystemUsers
+     */
+    public function setPriceGroup(\Babesk\ORM\BabeskPriceGroups $priceGroup = null)
+    {
+        $this->priceGroup = $priceGroup;
+
+        return $this;
+    }
+
+    /**
+     * Get priceGroup
+     *
+     * @return \Babesk\ORM\BabeskPriceGroups 
+     */
+    public function getPriceGroup()
+    {
+        return $this->priceGroup;
+    }
+
+    /**
+     * Add groups
+     *
+     * @param \Babesk\ORM\SystemGroups $groups
+     * @return SystemUsers
+     */
+    public function addGroup(\Babesk\ORM\SystemGroups $groups)
+    {
+        $this->groups[] = $groups;
+
+        return $this;
+    }
+
+    /**
+     * Remove groups
+     *
+     * @param \Babesk\ORM\SystemGroups $groups
+     */
+    public function removeGroup(\Babesk\ORM\SystemGroups $groups)
+    {
+        $this->groups->removeElement($groups);
+    }
+
+    /**
+     * Get groups
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
+    /**
+     * Add bookLending
+     *
+     * @param \Babesk\ORM\SchbasInventory $bookLending
+     * @return SystemUsers
+     */
+    public function addBookLending(\Babesk\ORM\SchbasInventory $bookLending)
+    {
+        $this->bookLending[] = $bookLending;
+
+        return $this;
+    }
+
+    /**
+     * Remove bookLending
+     *
+     * @param \Babesk\ORM\SchbasInventory $bookLending
+     */
+    public function removeBookLending(\Babesk\ORM\SchbasInventory $bookLending)
+    {
+        $this->bookLending->removeElement($bookLending);
+    }
+
+    /**
+     * Get bookLending
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBookLending()
+    {
+        return $this->bookLending;
+    }
+
+    /**
+     * Add selfpayingBooks
+     *
+     * @param \Babesk\ORM\SchbasBooks $selfpayingBooks
+     * @return SystemUsers
+     */
+    public function addSelfpayingBook(\Babesk\ORM\SchbasBooks $selfpayingBooks)
+    {
+        $this->selfpayingBooks[] = $selfpayingBooks;
+
+        return $this;
+    }
+
+    /**
+     * Remove selfpayingBooks
+     *
+     * @param \Babesk\ORM\SchbasBooks $selfpayingBooks
+     */
+    public function removeSelfpayingBook(\Babesk\ORM\SchbasBooks $selfpayingBooks)
+    {
+        $this->selfpayingBooks->removeElement($selfpayingBooks);
+    }
+
+    /**
+     * Get selfpayingBooks
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSelfpayingBooks()
+    {
+        return $this->selfpayingBooks;
     }
 }

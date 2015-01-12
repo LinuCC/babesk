@@ -27,14 +27,14 @@ class SystemSchoolyears
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $usersInGradesAndSchoolyears;
+    private $classes;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->usersInGradesAndSchoolyears = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->classes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -94,50 +94,12 @@ class SystemSchoolyears
     }
 
     /**
-     * Add usersInGradesAndSchoolyears
-     *
-     * @param \Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears
-     * @return SystemSchoolyears
-     */
-    public function addUsersInGradesAndSchoolyear(\Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears)
-    {
-        $this->usersInGradesAndSchoolyears[] = $usersInGradesAndSchoolyears;
-
-        return $this;
-    }
-
-    /**
-     * Remove usersInGradesAndSchoolyears
-     *
-     * @param \Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears
-     */
-    public function removeUsersInGradesAndSchoolyear(\Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears)
-    {
-        $this->usersInGradesAndSchoolyears->removeElement($usersInGradesAndSchoolyears);
-    }
-
-    /**
-     * Get usersInGradesAndSchoolyears
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getUsersInGradesAndSchoolyears()
-    {
-        return $this->usersInGradesAndSchoolyears;
-    }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $classes;
-
-
-    /**
      * Add classes
      *
-     * @param \Babesk\ORM\KuwasysClasses $classes
+     * @param \Babesk\ORM\KuwasysClass $classes
      * @return SystemSchoolyears
      */
-    public function addClass(\Babesk\ORM\KuwasysClasses $classes)
+    public function addClass(\Babesk\ORM\KuwasysClass $classes)
     {
         $this->classes[] = $classes;
 
@@ -147,9 +109,9 @@ class SystemSchoolyears
     /**
      * Remove classes
      *
-     * @param \Babesk\ORM\KuwasysClasses $classes
+     * @param \Babesk\ORM\KuwasysClass $classes
      */
-    public function removeClass(\Babesk\ORM\KuwasysClasses $classes)
+    public function removeClass(\Babesk\ORM\KuwasysClass $classes)
     {
         $this->classes->removeElement($classes);
     }

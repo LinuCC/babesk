@@ -34,6 +34,11 @@ class BabeskCards
      */
     private $lost;
 
+    /**
+     * @var \Babesk\ORM\SystemUsers
+     */
+    private $user;
+
 
     /**
      * Get ID
@@ -136,11 +141,6 @@ class BabeskCards
     {
         return $this->lost;
     }
-    /**
-     * @var \Babesk\ORM\SystemUsers
-     */
-    private $user;
-
 
     /**
      * Set user

@@ -5,9 +5,9 @@ namespace Babesk\ORM;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * KuwasysClasses
+ * KuwasysClass
  */
-class KuwasysClasses
+class KuwasysClass
 {
     /**
      * @var integer
@@ -40,10 +40,34 @@ class KuwasysClasses
     private $isOptional;
 
     /**
-     * @var string
+     * @var \Doctrine\Common\Collections\Collection
      */
-    private $manyToOne;
+    private $usersInClassesAndCategories;
 
+    /**
+     * @var \Babesk\ORM\SystemSchoolyears
+     */
+    private $schoolyear;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $categories;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $classteachers;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->usersInClassesAndCategories = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->classteachers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -59,7 +83,7 @@ class KuwasysClasses
      * Set label
      *
      * @param string $label
-     * @return KuwasysClasses
+     * @return KuwasysClass
      */
     public function setLabel($label)
     {
@@ -82,7 +106,7 @@ class KuwasysClasses
      * Set description
      *
      * @param string $description
-     * @return KuwasysClasses
+     * @return KuwasysClass
      */
     public function setDescription($description)
     {
@@ -105,7 +129,7 @@ class KuwasysClasses
      * Set maxRegistration
      *
      * @param integer $maxRegistration
-     * @return KuwasysClasses
+     * @return KuwasysClass
      */
     public function setMaxRegistration($maxRegistration)
     {
@@ -128,7 +152,7 @@ class KuwasysClasses
      * Set registrationEnabled
      *
      * @param boolean $registrationEnabled
-     * @return KuwasysClasses
+     * @return KuwasysClass
      */
     public function setRegistrationEnabled($registrationEnabled)
     {
@@ -151,7 +175,7 @@ class KuwasysClasses
      * Set isOptional
      *
      * @param boolean $isOptional
-     * @return KuwasysClasses
+     * @return KuwasysClass
      */
     public function setIsOptional($isOptional)
     {
@@ -171,149 +195,10 @@ class KuwasysClasses
     }
 
     /**
-     * Set manyToOne
-     *
-     * @param string $manyToOne
-     * @return KuwasysClasses
-     */
-    public function setManyToOne($manyToOne)
-    {
-        $this->manyToOne = $manyToOne;
-
-        return $this;
-    }
-
-    /**
-     * Get manyToOne
-     *
-     * @return string 
-     */
-    public function getManyToOne()
-    {
-        return $this->manyToOne;
-    }
-    /**
-     * @var \Babesk\ORM\SystemSchoolyears
-     */
-    private $schoolyear;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $categories;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Set schoolyear
-     *
-     * @param \Babesk\ORM\SystemSchoolyears $schoolyear
-     * @return KuwasysClasses
-     */
-    public function setSchoolyear(\Babesk\ORM\SystemSchoolyears $schoolyear = null)
-    {
-        $this->schoolyear = $schoolyear;
-
-        return $this;
-    }
-
-    /**
-     * Get schoolyear
-     *
-     * @return \Babesk\ORM\SystemSchoolyears 
-     */
-    public function getSchoolyear()
-    {
-        return $this->schoolyear;
-    }
-
-    /**
-     * Add categories
-     *
-     * @param \Babesk\ORM\KuwasysClassCategories $categories
-     * @return KuwasysClasses
-     */
-    public function addCategory(\Babesk\ORM\KuwasysClassCategories $categories)
-    {
-        $this->categories[] = $categories;
-
-        return $this;
-    }
-
-    /**
-     * Remove categories
-     *
-     * @param \Babesk\ORM\KuwasysClassCategories $categories
-     */
-    public function removeCategory(\Babesk\ORM\KuwasysClassCategories $categories)
-    {
-        $this->categories->removeElement($categories);
-    }
-
-    /**
-     * Get categories
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getCategories()
-    {
-        return $this->categories;
-    }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $classteachers;
-
-
-    /**
-     * Add classteachers
-     *
-     * @param \Babesk\ORM\KuwasysClassteachers $classteachers
-     * @return KuwasysClasses
-     */
-    public function addClassteacher(\Babesk\ORM\KuwasysClassteachers $classteachers)
-    {
-        $this->classteachers[] = $classteachers;
-
-        return $this;
-    }
-
-    /**
-     * Remove classteachers
-     *
-     * @param \Babesk\ORM\KuwasysClassteachers $classteachers
-     */
-    public function removeClassteacher(\Babesk\ORM\KuwasysClassteachers $classteachers)
-    {
-        $this->classteachers->removeElement($classteachers);
-    }
-
-    /**
-     * Get classteachers
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getClassteachers()
-    {
-        return $this->classteachers;
-    }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $usersInClassesAndCategories;
-
-
-    /**
      * Add usersInClassesAndCategories
      *
      * @param \Babesk\ORM\UserInClassAndCategory $usersInClassesAndCategories
-     * @return KuwasysClasses
+     * @return KuwasysClass
      */
     public function addUsersInClassesAndCategory(\Babesk\ORM\UserInClassAndCategory $usersInClassesAndCategories)
     {
@@ -340,5 +225,94 @@ class KuwasysClasses
     public function getUsersInClassesAndCategories()
     {
         return $this->usersInClassesAndCategories;
+    }
+
+    /**
+     * Set schoolyear
+     *
+     * @param \Babesk\ORM\SystemSchoolyears $schoolyear
+     * @return KuwasysClass
+     */
+    public function setSchoolyear(\Babesk\ORM\SystemSchoolyears $schoolyear = null)
+    {
+        $this->schoolyear = $schoolyear;
+
+        return $this;
+    }
+
+    /**
+     * Get schoolyear
+     *
+     * @return \Babesk\ORM\SystemSchoolyears 
+     */
+    public function getSchoolyear()
+    {
+        return $this->schoolyear;
+    }
+
+    /**
+     * Add categories
+     *
+     * @param \Babesk\ORM\ClassCategory $categories
+     * @return KuwasysClass
+     */
+    public function addCategory(\Babesk\ORM\ClassCategory $categories)
+    {
+        $this->categories[] = $categories;
+
+        return $this;
+    }
+
+    /**
+     * Remove categories
+     *
+     * @param \Babesk\ORM\ClassCategory $categories
+     */
+    public function removeCategory(\Babesk\ORM\ClassCategory $categories)
+    {
+        $this->categories->removeElement($categories);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * Add classteachers
+     *
+     * @param \Babesk\ORM\Classteacher $classteachers
+     * @return KuwasysClass
+     */
+    public function addClassteacher(\Babesk\ORM\Classteacher $classteachers)
+    {
+        $this->classteachers[] = $classteachers;
+
+        return $this;
+    }
+
+    /**
+     * Remove classteachers
+     *
+     * @param \Babesk\ORM\Classteacher $classteachers
+     */
+    public function removeClassteacher(\Babesk\ORM\Classteacher $classteachers)
+    {
+        $this->classteachers->removeElement($classteachers);
+    }
+
+    /**
+     * Get classteachers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getClassteachers()
+    {
+        return $this->classteachers;
     }
 }
