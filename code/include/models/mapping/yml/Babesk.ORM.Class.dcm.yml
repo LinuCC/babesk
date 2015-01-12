@@ -47,7 +47,7 @@ Babesk\ORM\Class:
                         name: categoryId
                         referencedColumnName: ID
         classteachers:
-            targetEntity: Babesk\ORM\KuwasysClassteachers
+            targetEntity: Babesk\ORM\Classteacher
             joinTable:
                 name: KuwasysClassteachersInClasses
                 joinColumns:
