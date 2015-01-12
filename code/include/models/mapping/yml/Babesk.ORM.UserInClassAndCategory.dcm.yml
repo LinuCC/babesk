@@ -29,7 +29,7 @@ Babesk\ORM\UserInClassAndCategory:
                 statusId:
                     referencedColumnName: ID
         category:
-            targetEntity: Babesk\ORM\KuwasysClassCategories
+            targetEntity: Babesk\ORM\ClassCategory
             inversedBy:
             joinColumns:
                 categoryId:

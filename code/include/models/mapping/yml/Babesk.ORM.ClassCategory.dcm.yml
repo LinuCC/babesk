@@ -1,4 +1,4 @@
-Babesk\ORM\KuwasysClassCategories:
+Babesk\ORM\ClassCategory:
     type: entity
     table: KuwasysClassCategories
     id:

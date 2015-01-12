@@ -209,4 +209,24 @@ class Classteacher
     {
         return $this->classes;
     }
+
+    /**
+     * Remove classes
+     *
+     * @param \Babesk\ORM\Class $classes
+     */
+    public function removeClass(\Babesk\ORM\Class $classes)
+    {
+        $this->classes->removeElement($classes);
+    }
+
+    /**
+     * Get classes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getClasses()
+    {
+        return $this->classes;
+    }
 }

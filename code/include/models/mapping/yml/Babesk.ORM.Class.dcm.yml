@@ -35,7 +35,7 @@ Babesk\ORM\Class:
             mappedBy: class
     manyToMany:
         categories:
-            targetEntity: Babesk\ORM\KuwasysClassCategories
+            targetEntity: Babesk\ORM\ClassCategory
             joinTable:
                 name: KuwasysClassesInCategories
                 joinColumns:
