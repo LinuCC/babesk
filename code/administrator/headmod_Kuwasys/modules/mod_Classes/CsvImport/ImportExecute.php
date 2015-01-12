@@ -49,7 +49,7 @@ class ImportExecute extends \administrator\Kuwasys\Classes\CsvImport {
 			->findOneByActive(true);
 
 		foreach($classes as $classAr) {
-			$classToAdd = new \Babesk\ORM\KuwasysClasses();
+			$classToAdd = new \Babesk\ORM\Class();
 			$classToAdd->setLabel($classAr['name'])
 				->setDescription($classAr['description'])
 				->setMaxRegistration($classAr['maxRegistration'])

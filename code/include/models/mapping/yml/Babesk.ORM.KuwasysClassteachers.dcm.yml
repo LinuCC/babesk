@@ -27,5 +27,5 @@ Babesk\ORM\KuwasysClassteachers:
             length: 255
     manyToMany:
         classes:
-            targetEntity: Babesk\ORM\KuwasysClasses
+            targetEntity: Babesk\ORM\Class
             mappedBy: classteachers

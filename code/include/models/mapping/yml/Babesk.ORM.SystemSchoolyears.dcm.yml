@@ -31,6 +31,6 @@ Babesk\ORM\SystemSchoolyears:
             orderBy: null
     oneToMany:
         classes:
-            targetEntity: Babesk\ORM\KuwasysClasses
+            targetEntity: Babesk\ORM\Class
             mappedBy: schoolyear
     lifecycleCallbacks: {  }

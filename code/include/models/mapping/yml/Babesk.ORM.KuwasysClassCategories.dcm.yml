@@ -21,5 +21,5 @@ Babesk\ORM\KuwasysClassCategories:
             mappedBy: category
     manyToMany:
         classes:
-            targetEntity: Babesk\ORM\KuwasysClasses
+            targetEntity: Babesk\ORM\Class
             mappedBy: categories
