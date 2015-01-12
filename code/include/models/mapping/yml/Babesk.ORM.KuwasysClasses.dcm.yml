@@ -29,6 +29,10 @@ Babesk\ORM\KuwasysClasses:
             joinColumns:
                 schoolyearId:
                     referencedColumnName: ID
+    oneToMany:
+        usersInClassesAndCategories:
+            targetEntity: Babesk\ORM\UserInClassAndCategory
+            mappedBy: class
     manyToMany:
         categories:
             targetEntity: Babesk\ORM\KuwasysClassCategories

@@ -1,0 +1,36 @@
+Babesk\ORM\UserInClassAndCategory:
+    type: entity
+    table: KuwasysUsersInClassesAndCategories
+    id:
+        id:
+            type: integer
+            length: 11
+            id: true
+            column: ID
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        user:
+            targetEntity: Babesk\ORM\SystemUsers
+            inversedBy:
+            joinColumns:
+                UserID:
+                    referencedColumnName: ID
+        class:
+            targetEntity: Babesk\ORM\KuwasysClasses
+            inversedBy:
+            joinColumns:
+                ClassID:
+                    referencedColumnName: ID
+        status:
+            targetEntity: Babesk\ORM\UserInClassStatus
+            inversedBy:
+            joinColumns:
+                statusId:
+                    referencedColumnName: ID
+        category:
+            targetEntity: Babesk\ORM\KuwasysClassCategories
+            inversedBy:
+            joinColumns:
+                categoryId:
+                    referencedColumnName: ID

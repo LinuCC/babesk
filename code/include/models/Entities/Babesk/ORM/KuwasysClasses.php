@@ -303,4 +303,42 @@ class KuwasysClasses
     {
         return $this->classteachers;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $usersInClassesAndCategories;
+
+
+    /**
+     * Add usersInClassesAndCategories
+     *
+     * @param \Babesk\ORM\UserInClassAndCategory $usersInClassesAndCategories
+     * @return KuwasysClasses
+     */
+    public function addUsersInClassesAndCategory(\Babesk\ORM\UserInClassAndCategory $usersInClassesAndCategories)
+    {
+        $this->usersInClassesAndCategories[] = $usersInClassesAndCategories;
+
+        return $this;
+    }
+
+    /**
+     * Remove usersInClassesAndCategories
+     *
+     * @param \Babesk\ORM\UserInClassAndCategory $usersInClassesAndCategories
+     */
+    public function removeUsersInClassesAndCategory(\Babesk\ORM\UserInClassAndCategory $usersInClassesAndCategories)
+    {
+        $this->usersInClassesAndCategories->removeElement($usersInClassesAndCategories);
+    }
+
+    /**
+     * Get usersInClassesAndCategories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUsersInClassesAndCategories()
+    {
+        return $this->usersInClassesAndCategories;
+    }
 }

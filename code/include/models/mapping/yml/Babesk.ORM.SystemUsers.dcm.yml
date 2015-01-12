@@ -140,6 +140,9 @@ Babesk\ORM\SystemUsers:
             mappedBy: user
             inversedBy: null
             orderBy: null
+        usersInClassesAndCategories:
+            targetEntity: Babesk\ORM\UserInClassAndCategory
+            mappedBy: user
         cards:
             targetEntity: Babesk\ORM\BabeskCards
             mappedBy: user

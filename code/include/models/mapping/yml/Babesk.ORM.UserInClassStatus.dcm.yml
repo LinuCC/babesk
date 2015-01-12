@@ -1,25 +1,22 @@
-Babesk\ORM\KuwasysClassCategories:
+Babesk\ORM\UserInClassStatus:
     type: entity
-    table: KuwasysClassCategories
+    table: KuwasysUsersInClassStatuses
     id:
         id:
             type: integer
+            length: 11
             id: true
-            column: ID
+            column: id
             generator:
                 strategy: IDENTITY
     fields:
         name:
             type: string
-            length: 128
+            length: 64
         translatedName:
             type: string
             length: 255
     oneToMany:
         usersInClassesAndCategories:
             targetEntity: Babesk\ORM\UserInClassAndCategory
-            mappedBy: category
-    manyToMany:
-        classes:
-            targetEntity: Babesk\ORM\KuwasysClasses
-            mappedBy: categories
+            mappedBy: status

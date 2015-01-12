@@ -5,9 +5,9 @@ namespace Babesk\ORM;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * KuwasysClassCategories
+ * UserInClassStatus
  */
-class KuwasysClassCategories
+class UserInClassStatus
 {
     /**
      * @var integer
@@ -27,14 +27,14 @@ class KuwasysClassCategories
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $classes;
+    private $usersInClassesAndCategories;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->classes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->usersInClassesAndCategories = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -51,7 +51,7 @@ class KuwasysClassCategories
      * Set name
      *
      * @param string $name
-     * @return KuwasysClassCategories
+     * @return UserInClassStatus
      */
     public function setName($name)
     {
@@ -74,7 +74,7 @@ class KuwasysClassCategories
      * Set translatedName
      *
      * @param string $translatedName
-     * @return KuwasysClassCategories
+     * @return UserInClassStatus
      */
     public function setTranslatedName($translatedName)
     {
@@ -94,48 +94,10 @@ class KuwasysClassCategories
     }
 
     /**
-     * Add classes
-     *
-     * @param \Babesk\ORM\KuwasysClasses $classes
-     * @return KuwasysClassCategories
-     */
-    public function addClass(\Babesk\ORM\KuwasysClasses $classes)
-    {
-        $this->classes[] = $classes;
-
-        return $this;
-    }
-
-    /**
-     * Remove classes
-     *
-     * @param \Babesk\ORM\KuwasysClasses $classes
-     */
-    public function removeClass(\Babesk\ORM\KuwasysClasses $classes)
-    {
-        $this->classes->removeElement($classes);
-    }
-
-    /**
-     * Get classes
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getClasses()
-    {
-        return $this->classes;
-    }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $usersInClassesAndCategories;
-
-
-    /**
      * Add usersInClassesAndCategories
      *
      * @param \Babesk\ORM\UserInClassAndCategory $usersInClassesAndCategories
-     * @return KuwasysClassCategories
+     * @return UserInClassStatus
      */
     public function addUsersInClassesAndCategory(\Babesk\ORM\UserInClassAndCategory $usersInClassesAndCategories)
     {
