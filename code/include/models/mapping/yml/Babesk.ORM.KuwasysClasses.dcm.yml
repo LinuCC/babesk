@@ -26,7 +26,6 @@ Babesk\ORM\KuwasysClasses:
         schoolyear:
             targetEntity: Babesk\ORM\SystemSchoolyears
             inversedBy: classes
-            orphanRemoval: false
             joinColumns:
                 schoolyearId:
                     referencedColumnName: ID

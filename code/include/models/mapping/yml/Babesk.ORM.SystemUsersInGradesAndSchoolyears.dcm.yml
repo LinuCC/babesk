@@ -17,7 +17,6 @@ Babesk\ORM\SystemUsersInGradesAndSchoolyears:
             joinColumns:
                 userId:
                     referencedColumnName: ID
-            orphanRemoval: false
         grade:
             targetEntity: Babesk\ORM\SystemGrades
             cascade: {  }
@@ -26,7 +25,6 @@ Babesk\ORM\SystemUsersInGradesAndSchoolyears:
             joinColumns:
                 gradeId:
                     referencedColumnName: ID
-            orphanRemoval: false
         schoolyear:
             targetEntity: Babesk\ORM\SystemSchoolyears
             cascade: {  }
@@ -35,5 +33,4 @@ Babesk\ORM\SystemUsersInGradesAndSchoolyears:
             joinColumns:
                 schoolyearId:
                     referencedColumnName: ID
-            orphanRemoval: false
     lifecycleCallbacks: {  }

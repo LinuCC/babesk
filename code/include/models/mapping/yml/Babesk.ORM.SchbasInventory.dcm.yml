@@ -31,14 +31,12 @@ Babesk\ORM\SchbasInventory:
             joinColumns:
                 book_id:
                     referencedColumnName: id
-            orphanRemoval: false
     oneToMany:
         lending:
             targetEntity: Babesk\ORM\SchbasLending
             cascade: {  }
             mappedBy: inventory
             inversedBy: null
-            orphanRemoval: false
             orderBy: null
     manyToMany:
         usersLent:

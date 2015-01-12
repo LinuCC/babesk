@@ -22,7 +22,6 @@ Babesk\ORM\SchbasLending:
             joinColumns:
                 user_id:
                     referencedColumnName: ID
-            orphanRemoval: false
         inventory:
             targetEntity: Babesk\ORM\SchbasInventory
             cascade: {  }
@@ -31,5 +30,4 @@ Babesk\ORM\SchbasLending:
             joinColumns:
                 inventory_id:
                     referencedColumnName: id
-            orphanRemoval: false
     lifecycleCallbacks: {  }

@@ -139,17 +139,14 @@ Babesk\ORM\SystemUsers:
             cascade: {  }
             mappedBy: user
             inversedBy: null
-            orphanRemoval: false
             orderBy: null
         cards:
             targetEntity: Babesk\ORM\BabeskCards
             mappedBy: user
-            orphanRemoval: false
     manyToOne:
         priceGroup:
             targetEntity: Babesk\ORM\BabeskPriceGroups
             inversedBy: users
-            orphanRemoval: false
             joinColumns:
                 GID:
                     referencedColumnName: ID

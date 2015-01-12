@@ -55,14 +55,12 @@ Babesk\ORM\SchbasBooks:
             joinColumns:
                 subjectId:
                     referencedColumnName: id
-            orphanRemoval: false
     oneToMany:
         exemplars:
             targetEntity: Babesk\ORM\SchbasInventory
             cascade: {  }
             mappedBy: book
             inversedBy: null
-            orphanRemoval: false
             orderBy: null
     manyToMany:
         selfpayingUsers:

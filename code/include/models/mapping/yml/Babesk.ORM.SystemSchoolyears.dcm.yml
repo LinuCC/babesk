@@ -28,11 +28,9 @@ Babesk\ORM\SystemSchoolyears:
             cascade: {  }
             mappedBy: schoolyear
             inversedBy: null
-            orphanRemoval: false
             orderBy: null
     oneToMany:
         classes:
             targetEntity: Babesk\ORM\KuwasysClasses
             mappedBy: schoolyear
-            orphanRemoval: false
     lifecycleCallbacks: {  }

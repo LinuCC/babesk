@@ -31,13 +31,11 @@ Babesk\ORM\SystemGrades:
             joinColumns:
                 schooltypeId:
                     referencedColumnName: ID
-            orphanRemoval: false
     oneToMany:
         usersInGradesAndSchoolyears:
             targetEntity: Babesk\ORM\SystemUsersInGradesAndSchoolyears
             cascade: {  }
             mappedBy: grade
             inversedBy: null
-            orphanRemoval: false
             orderBy: null
     lifecycleCallbacks: {  }
