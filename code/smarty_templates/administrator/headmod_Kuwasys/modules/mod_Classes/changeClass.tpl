@@ -85,6 +85,15 @@
 					</select>
 				</div>
 			</div>
+			<div class="col-xs-12 col-md-6 form-group">
+				<label for="isOptional">
+					Ist Optional?
+				</label>
+				<input type="checkbox" id="isOptional"
+					name="isOptional" data-on-text="Ja" data-off-text="Nein"
+					data-on-color="info" data-off-color="default" data-size="small"
+					{if $class->getIsOptional()}checked="checked"{/if}>
+			</div>
 		</div>
 	</fieldset>
 	<input type="submit" class="btn btn-primary" value="Kurs verändern">

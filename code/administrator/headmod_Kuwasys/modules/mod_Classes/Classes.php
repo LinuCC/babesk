@@ -182,7 +182,12 @@ class Classes extends Kuwasys {
 				_g('Schoolyear-ID')
 			),
 			'allowRegistration' => array(
-				'boolean',
+				'required|boolean',
+				'',
+				_g('Allow registration')
+			),
+			'isOptional' => array(
+				'required|boolean',
 				'',
 				_g('Allow registration')
 			)
@@ -250,6 +255,8 @@ class Classes extends Kuwasys {
 		if(isset($_POST['label'], $_POST['description'])) {
 			$_POST['allowRegistration'] =
 				(isset($_POST['allowRegistration'])) ? 1 : 0;
+			$_POST['isOptional'] =
+				(isset($_POST['isOptional'])) ? 1 : 0;
 			$this->classInputCheck();
 			$this->changeClassUpload();
 			$this->_interface->dieSuccess(
@@ -276,6 +283,7 @@ class Classes extends Kuwasys {
 				->setDescription($_POST['description'])
 				->setMaxRegistration($_POST['maxRegistration'])
 				->setRegistrationEnabled($_POST['allowRegistration'])
+				->setIsOptional($_POST['isOptional'])
 				->setSchoolyear($schoolyear);
 			$oldCategories = $class->getCategories();
 			foreach($class->getCategories() as $oldCategory) {
