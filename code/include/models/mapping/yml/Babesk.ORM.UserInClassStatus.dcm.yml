@@ -6,7 +6,7 @@ Babesk\ORM\UserInClassStatus:
             type: integer
             length: 11
             id: true
-            column: id
+            column: ID
             generator:
                 strategy: IDENTITY
     fields:

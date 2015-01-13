@@ -12,25 +12,25 @@ Babesk\ORM\UserInClassAndCategory:
     manyToOne:
         user:
             targetEntity: Babesk\ORM\SystemUsers
-            inversedBy:
+            inversedBy: usersInClassesAndCategories
             joinColumns:
                 UserID:
                     referencedColumnName: ID
         class:
             targetEntity: Babesk\ORM\KuwasysClass
-            inversedBy:
+            inversedBy: usersInClassesAndCategories
             joinColumns:
                 ClassID:
                     referencedColumnName: ID
         status:
             targetEntity: Babesk\ORM\UserInClassStatus
-            inversedBy:
+            inversedBy: usersInClassesAndCategories
             joinColumns:
                 statusId:
                     referencedColumnName: ID
         category:
             targetEntity: Babesk\ORM\ClassCategory
-            inversedBy:
+            inversedBy: usersInClassesAndCategories
             joinColumns:
                 categoryId:
                     referencedColumnName: ID
