@@ -88,8 +88,7 @@
 						data-title="Kursdetails anzeigen">
 						<span class="icon icon-listelements"></span>
 					</a>
-					{*TODO: categoryId in link benötigt oder kann wech?*}
-					<a href="index.php?module=administrator|Kuwasys|Classes|ChangeClass&amp;ID={$class->getId()}{*&amp;categoryId={$class->getcategoryId}*}"
+					<a href="index.php?module=administrator|Kuwasys|Classes|ChangeClass&amp;ID={$class->getId()}"
 						data-toggle="tooltip" class="btn btn-default btn-xs"
 						data-title="Kurs bearbeiten">
 						<span class="icon icon-businesscard"></span>

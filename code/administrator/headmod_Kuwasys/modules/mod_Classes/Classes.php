@@ -176,12 +176,7 @@ class Classes extends Kuwasys {
 				'',
 				_g('Max Amount of Registrations for this Class')
 			),
-			'classunit' => array(
-				'required|numeric',
-				'',
-				_g('Classunit')
-			),
-			'schoolyear' => array(
+			'schoolyearId' => array(
 				'required|numeric',
 				'',
 				_g('Schoolyear-ID')
@@ -273,22 +268,29 @@ class Classes extends Kuwasys {
 	protected function changeClassUpload() {
 
 		try {
-			$stmt = $this->_pdo->prepare(
-				'UPDATE KuwasysClasses SET label = :label,
-					description = :description,
-					maxRegistration = :maxRegistration,
-					registrationEnabled = :registrationEnabled,
-					schoolyearId = :schoolyearId
-					WHERE ID = :id');
-
-			$stmt->execute(array(
-				':label' => $_POST['label'],
-				':description' => $_POST['description'],
-				':maxRegistration' => $_POST['maxRegistration'],
-				':registrationEnabled' => $_POST['allowRegistration'],
-				':schoolyearId' => $_POST['schoolyear'],
-				':id' => $_GET['ID'],
-			));
+			$class = $this->_em->getReference('DM:KuwasysClass', $_GET['ID']);
+			$schoolyear = $this->_em->getReference(
+				'DM:SystemSchoolyears', $_POST['schoolyearId']
+			);
+			$class->setLabel($_POST['label'])
+				->setDescription($_POST['description'])
+				->setMaxRegistration($_POST['maxRegistration'])
+				->setRegistrationEnabled($_POST['allowRegistration'])
+				->setSchoolyear($schoolyear);
+			$oldCategories = $class->getCategories();
+			foreach($class->getCategories() as $oldCategory) {
+				$class->removeCategory($oldCategory);
+			}
+			if(count($_POST['categories'])) {
+				foreach($_POST['categories'] as $newCategoryId) {
+					$newCategory = $this->_em->getReference(
+						'DM:ClassCategory', $newCategoryId
+					);
+					$class->addCategory($newCategory);
+				}
+			}
+			$this->_em->persist($class);
+			$this->_em->flush();
 
 		} catch (Exception $e) {
 			$this->_interface->dieError(_g("Could not change the Class with the ID {$_GET[ID]}!"));
@@ -301,13 +303,22 @@ class Classes extends Kuwasys {
 	protected function changeClassDisplay() {
 
 		try {
-			$this->_smarty->assign('schoolyears', $this->schoolyearsGetAll());
-			$this->_smarty->assign('classunits', $this->classunitsGetAll());
-			$this->_smarty->assign('class', $this->classGet($_GET['ID']));
+			$this->_smarty->assign(
+				'schoolyears',
+				$this->_em->getRepository('DM:SystemSchoolyears')->findAll()
+			);
+			$this->_smarty->assign(
+				'categories',
+				$this->_em->getRepository('DM:ClassCategory')->findAll()
+			);
+			$this->_smarty->assign(
+				'class', $this->_em->find('DM:KuwasysClass', $_GET['ID'])
+			);
 			$this->_smarty->display(
-				$this->_smartyModuleTemplatesPath . 'changeClass.tpl');
+				$this->_smartyModuleTemplatesPath . 'changeClass.tpl'
+			);
 
-		} catch (PDOException $e) {
+		} catch (Exception $e) {
 			$this->_logger->log(__METHOD__ . ': ' . $e->getMessage(),
 				'Moderate');
 			$this->_interface->dieError(_g('Could not fetch the data!'));
