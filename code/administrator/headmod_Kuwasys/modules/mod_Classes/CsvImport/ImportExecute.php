@@ -44,7 +44,7 @@ class ImportExecute extends \administrator\Kuwasys\Classes\CsvImport {
 			$this->_interface->dieError(_g('No classes given.'));
 		}
 
-		$activeSchoolyear = $this->_entityManager
+		$activeSchoolyear = $this->_em
 			->getRepository('Babesk:SystemSchoolyears')
 			->findOneByActive(true);
 
@@ -62,14 +62,14 @@ class ImportExecute extends \administrator\Kuwasys\Classes\CsvImport {
 			);
 			//Add the categories
 			foreach($classAr['categories'] as $categoryId) {
-				$category = $this->_entityManager->getReference(
+				$category = $this->_em->getReference(
 					'Babesk:ClassCategory', $categoryId
 				);
 				$classToAdd->addCategory($category);
 			}
-			$this->_entityManager->persist($classToAdd);
+			$this->_em->persist($classToAdd);
 		}
-		$this->_entityManager->flush();
+		$this->_em->flush();
 	}
 
 	/**
@@ -98,11 +98,11 @@ class ImportExecute extends \administrator\Kuwasys\Classes\CsvImport {
 					->setTelephone('')
 					->setEmail('');
 				$class->addClassteacher($classteacher);
-				$this->_entityManager->persist($classteacher);
+				$this->_em->persist($classteacher);
 			}
 			else if($ctId !== 0) {
 				//Classteacher already exists, add him
-				$classteacher = $this->_entityManager->find(
+				$classteacher = $this->_em->find(
 					'Babesk:Classteacher', $ctId
 				);
 				$class->addClassteacher($classteacher);

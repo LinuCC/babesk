@@ -22,14 +22,14 @@ class UserReplaceReligion extends Action {
 
 	protected function religionApply($religion, $userIds) {
 
-		$users = $this->_entityManager
+		$users = $this->_em
 			->getRepository('Babesk:SystemUsers')
 			->findById($userIds);
 		foreach($users as $user) {
 			$user->setReligion($religion);
-			$this->_entityManager->persist($user);
+			$this->_em->persist($user);
 		}
-		$this->_entityManager->flush();
+		$this->_em->flush();
 	}
 }
 

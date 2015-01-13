@@ -105,7 +105,7 @@ class Loan extends Schbas {
 
 	private function userByCardnumberGet($cardnumber) {
 
-		$card = $this->_entityManager->getRepository('Babesk:BabeskCards')
+		$card = $this->_em->getRepository('Babesk:BabeskCards')
 			->findOneByCardnumber($cardnumber);
 		if($card) {
 			if(!$card->getLost()) {
@@ -157,7 +157,7 @@ class Loan extends Schbas {
 
 	private function exemplarsStillLendByUserGet($user) {
 
-		$exemplars = $this->_entityManager->createQuery(
+		$exemplars = $this->_em->createQuery(
 			'SELECT i FROM Babesk:SchbasInventory i
 				INNER JOIN i.book b
 				INNER JOIN i.usersLent u
@@ -230,7 +230,7 @@ class Loan extends Schbas {
 		//$barcode = $this->barcodeParseToArray($barcodeStr);
 		//Delimiter not used in Query
 		unset($barcode['delimiter']);
-		$query = $this->_entityManager->createQuery(
+		$query = $this->_em->createQuery(
 			'SELECT i, b FROM Babesk:SchbasInventory i
 				INNER JOIN i.book b
 					WITH b.class = :class AND b.bundle = :bundle
@@ -252,14 +252,14 @@ class Loan extends Schbas {
 
 		try {
 			$lending = new \Babesk\ORM\SchbasLending();
-			$user = $this->_entityManager->find(
+			$user = $this->_em->find(
 				'Babesk:SystemUsers', $userId
 			);
 			$lending->setUser($user);
 			$lending->setInventory($exemplar);
 			$lending->setLendDate(new \DateTime());
-			$this->_entityManager->persist($lending);
-			$this->_entityManager->flush();
+			$this->_em->persist($lending);
+			$this->_em->flush();
 
 		} catch (Exception $e) {
 			$this->_logger->log('Error loaning a book-exemplar to a user',

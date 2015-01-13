@@ -82,7 +82,7 @@ class LoanSystem extends Schbas {
 
 	private function showMainMenu() {
 
-		$schbasYear = $this->_entityManager->getRepository(
+		$schbasYear = $this->_em->getRepository(
 			'Babesk:SystemGlobalSettings'
 		)->findOneByName('schbas_year')->getValue();
 		//$schbasYear = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbas_year'");

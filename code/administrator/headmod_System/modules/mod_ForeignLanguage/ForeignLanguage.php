@@ -73,7 +73,7 @@ class ForeignLanguage extends System {
 	private function editDisplay() {
 
 		$languages = array();
-		$languagesString = $this->_entityManager->getRepository(
+		$languagesString = $this->_em->getRepository(
 				'Babesk:SystemGlobalSettings'
 			)->findOneByName('foreign_language')->getValue();
 		if(!empty($languagesString)) {
@@ -93,12 +93,12 @@ class ForeignLanguage extends System {
 		}
 		$string = implode('|', $data['foreignLanguages']);
 		//Upload foreign languages
-		$setting = $this->_entityManager->getRepository(
+		$setting = $this->_em->getRepository(
 				'Babesk:SystemGlobalSettings'
 			)->findOneByName('foreign_language')
 			->setValue($string);
-		$this->_entityManager->persist($setting);
-		$this->_entityManager->flush();
+		$this->_em->persist($setting);
+		$this->_em->flush();
 		$this->_interface->dieSuccess(
 			'Die Fremdsprachen wurden erfolgreich verändert'
 		);

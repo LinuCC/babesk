@@ -29,14 +29,14 @@ class UserReplaceForeignLanguage extends Action {
 	 */
 	protected function languageApply($languages, $userIds) {
 
-		$users = $this->_entityManager
+		$users = $this->_em
 			->getRepository('Babesk:SystemUsers')
 			->findById($userIds);
 		foreach($users as $user) {
 			$user->setForeignLanguage($languages);
-			$this->_entityManager->persist($user);
+			$this->_em->persist($user);
 		}
-		$this->_entityManager->flush();
+		$this->_em->flush();
 	}
 }
 

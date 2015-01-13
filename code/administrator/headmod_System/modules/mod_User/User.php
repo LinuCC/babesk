@@ -249,7 +249,7 @@ class User extends System {
 
 	private function cardnumberDuplicatedCheck($cardnumber) {
 
-		$cards = $this->_entityManager->getRepository('Babesk:BabeskCards')
+		$cards = $this->_em->getRepository('Babesk:BabeskCards')
 			->findByCardnumber($cardnumber);
 		if(count($cards) > 0) {
 			die(json_encode(array(
@@ -805,7 +805,7 @@ class User extends System {
 	// protected function showSpecialCourseEdit() {
 
 	// 	$ids = $_POST['userIds'];
-	// 	$query = $this->_entityManager->createQueryBuilder()
+	// 	$query = $this->_em->createQueryBuilder()
 	// 		->select('u')
 	// 		->from('Babesk:SystemUsers', 'u');
 
@@ -816,7 +816,7 @@ class User extends System {
 
 	protected function getAllSpecialCourses() {
 
-		$course = $this->_entityManager
+		$course = $this->_em
 			->getRepository('Babesk:SystemGlobalSettings')
 			->findOneByName('special_course');
 
@@ -846,7 +846,7 @@ class User extends System {
 
 	protected function setSpecialCourse() {
 
-		$users = $this->_entityManager->getRepository(
+		$users = $this->_em->getRepository(
 			'Babesk:SystemUsers'
 		);
 		$courseStr = $users
@@ -882,8 +882,8 @@ class User extends System {
 
 		$user = $users->findOneById($_POST['userId'])
 			->setSpecialCourse($courseStr);
-		$this->_entityManager->persist($user);
-		$this->_entityManager->flush();
+		$this->_em->persist($user);
+		$this->_em->flush();
 		$this->_interface->dieAjax(
 			'success', 'Der Oberstufenkurs wurde erfolgreich verändert'
 		);
@@ -892,7 +892,7 @@ class User extends System {
 
 	protected function getAllForeignLanguages() {
 
-		$course = $this->_entityManager
+		$course = $this->_em
 			->getRepository('Babesk:SystemGlobalSettings')
 			->findOneByName('foreign_language');
 
@@ -922,7 +922,7 @@ class User extends System {
 
 	protected function setForeignLanguage() {
 
-		$users = $this->_entityManager->getRepository(
+		$users = $this->_em->getRepository(
 			'Babesk:SystemUsers'
 		);
 		$courseStr = $users
@@ -958,8 +958,8 @@ class User extends System {
 
 		$user = $users->findOneById($_POST['userId'])
 			->setForeignLanguage($courseStr);
-		$this->_entityManager->persist($user);
-		$this->_entityManager->flush();
+		$this->_em->persist($user);
+		$this->_em->flush();
 		$this->_interface->dieAjax(
 			'success', 'Die Fremdsprache wurde erfolgreich verändert'
 		);
@@ -967,7 +967,7 @@ class User extends System {
 
 	protected function getAllReligions() {
 
-		$course = $this->_entityManager
+		$course = $this->_em
 			->getRepository('Babesk:SystemGlobalSettings')
 			->findOneByName('religion');
 
@@ -997,7 +997,7 @@ class User extends System {
 
 	protected function setReligion() {
 
-		$users = $this->_entityManager->getRepository(
+		$users = $this->_em->getRepository(
 			'Babesk:SystemUsers'
 		);
 		$courseStr = $users
@@ -1033,8 +1033,8 @@ class User extends System {
 
 		$user = $users->findOneById($_POST['userId'])
 			->setReligion($courseStr);
-		$this->_entityManager->persist($user);
-		$this->_entityManager->flush();
+		$this->_em->persist($user);
+		$this->_em->flush();
 		$this->_interface->dieAjax(
 			'success', 'Die Religion wurde erfolgreich verändert'
 		);

@@ -104,7 +104,7 @@ class WebHomepageSettings extends System {
 
 	protected function maintenance() {
 
-		$entry = $this->_entityManager->getRepository(
+		$entry = $this->_em->getRepository(
 				'Babesk:SystemGlobalSettings'
 			)->findOneByName('siteIsUnderMaintenance');
 		if($entry) {
@@ -115,8 +115,8 @@ class WebHomepageSettings extends System {
 			$setting = new \Babesk\ORM\SystemGlobalSettings();
 			$setting->setName('siteIsUnderMaintenance');
 			$setting->setValue(0);
-			$this->_entityManager->persist($setting);
-			$this->_entityManager->flush();
+			$this->_em->persist($setting);
+			$this->_em->flush();
 			$val = $setting->getValue();
 		}
 
@@ -132,11 +132,11 @@ class WebHomepageSettings extends System {
 
 		$value = (isset($_POST['maintenance'])) ? 1 : 0;
 		try {
-			$setting = $this->_entityManager->getRepository(
+			$setting = $this->_em->getRepository(
 					'Babesk:SystemGlobalSettings'
 				)->findOneByName('siteIsUnderMaintenance');
 			$setting->setValue($value);
-			$this->_entityManager->flush();
+			$this->_em->flush();
 
 		} catch (Exception $e) {
 			$this->_interface->dieError(

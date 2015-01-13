@@ -87,7 +87,7 @@ class Change extends \User
 
 	private function cardnumberDuplicatedCheck($cardnumber) {
 
-		$cards = $this->_entityManager->getRepository('Babesk:BabeskCards')
+		$cards = $this->_em->getRepository('Babesk:BabeskCards')
 			->findByCardnumber($cardnumber);
 		if(count($cards) == 0) {
 			return;

@@ -111,7 +111,7 @@ class Loan {
 	public function loanPriceOfAllBooksOfGradelevelCalculate($gradelevel) {
 
 		$classes = $this->_gradelevelIsbnIdentAssoc[$gradelevel];
-		$bookQuery = $this->_entityManager
+		$bookQuery = $this->_em
 			->createQueryBuilder()
 			->select(array('b.class', 'b.price'))
 			->from('Babesk:SchbasBooks', 'b')
@@ -184,14 +184,14 @@ class Loan {
 	protected function entryPoint($dataContainer) {
 
 		$this->_pdo = $dataContainer->getPdo();
-		$this->_entityManager = $dataContainer->getEntityManager();
+		$this->_em = $dataContainer->getEntityManager();
 		$this->_logger = clone($dataContainer->getLogger());
 		$this->_logger->categorySet('Babesk/Schbas/Loan');
 	}
 
 	protected function bookSubjectFilterArrayGet() {
 
-		$gsRepo = $this->_entityManager->getRepository(
+		$gsRepo = $this->_em->getRepository(
 			'Babesk:SystemGlobalSettings'
 		);
 		$lang   = $gsRepo->findOneByName('foreign_language')->getValue();
@@ -403,7 +403,7 @@ class Loan {
 	);
 
 	protected $_pdo;
-	protected $_entityManager;
+	protected $_em;
 	protected $_logger;
 }
 

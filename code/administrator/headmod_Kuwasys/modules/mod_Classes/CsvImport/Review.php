@@ -239,7 +239,7 @@ class Review extends \administrator\Kuwasys\Classes\CsvImport {
 
 	private function classUnitEntryHandle($csvRow, &$newRow) {
 
-		$classCategoriesExisting = $this->_entityManager
+		$classCategoriesExisting = $this->_em
 			->getRepository('Babesk:ClassCategory')
 			->findAll();
 		$catsToAdd = explode(',', $csvRow['day']);

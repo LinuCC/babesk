@@ -104,7 +104,7 @@ class Web {
 			$connector = new DBConnect();
 			$connector->initDatabaseFromXML();
 			$this->_pdo = $connector->getPdo();
-			$this->_entityManager = $connector->getDoctrineEntityManager();
+			$this->_em = $connector->getDoctrineEntityManager();
 			$this->_pdo->query('SET @activeSchoolyear :=
 				(SELECT ID FROM SystemSchoolyears WHERE active = "1");');
 
@@ -450,7 +450,7 @@ class Web {
 			clone($this->_interface),
 			clone($this->_acl),
 			$this->_pdo,
-			$this->_entityManager,
+			$this->_em,
 			clone($this->_logger));
 
 		return $dataContainer;
@@ -458,7 +458,7 @@ class Web {
 
 	private function checkForMaintenance() {
 
-		$settings = $this->_entityManager->getRepository(
+		$settings = $this->_em->getRepository(
 				'Babesk:SystemGlobalSettings'
 			)->findOneByName('siteIsUnderMaintenance');
 		if($settings) {
@@ -490,7 +490,7 @@ class Web {
 
 	private $_pdo;
 
-	private $_entityManager;
+	private $_em;
 
 	private $_smarty;
 

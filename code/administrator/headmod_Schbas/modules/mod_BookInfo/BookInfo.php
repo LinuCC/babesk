@@ -71,7 +71,7 @@ class BookInfo extends Schbas {
 			$bookHelper = new \Babesk\Schbas\Book($this->_dataContainer);
 			$barcode = $bookHelper->barcodeParseToArray($barcodeStr);
 			unset($barcode['delimiter']); //Not used in query
-			$query = $this->_entityManager->createQuery(
+			$query = $this->_em->createQuery(
 				'SELECT i, b, s, u, uigs FROM Babesk:SchbasInventory i
 					INNER JOIN i.book b
 						WITH b.class = :class AND b.bundle = :bundle

@@ -50,7 +50,7 @@ class GChangeCard extends Gnissel {
 
 	protected function changeCardShow() {
 
-		$userRepo = $this->_entityManager->getRepository('Babesk:SystemUsers');
+		$userRepo = $this->_em->getRepository('Babesk:SystemUsers');
 		$user = $userRepo->findOneByUsername($_POST['username']);
 		$grade = $userRepo->getActiveGradeByUser($user);
 		if($user) {
@@ -79,7 +79,7 @@ class GChangeCard extends Gnissel {
 	 */
 	protected function changeCard() {
 
-		$userRepo = $this->_entityManager->getRepository('Babesk:SystemUsers');
+		$userRepo = $this->_em->getRepository('Babesk:SystemUsers');
 		$user = $userRepo->findOneById($_POST['uid']);
 		if(!$user) {
 			$this->_interface->dieError(
@@ -94,8 +94,8 @@ class GChangeCard extends Gnissel {
 			$newCardnumber = $_POST['newCard'];
 			$this->changeCardCheckInput($oldCardnumber, $newCardnumber);
 			$existingCard->setCardnumber($newCardnumber);
-			$this->_entityManager->persist($existingCard);
-			$this->_entityManager->flush();
+			$this->_em->persist($existingCard);
+			$this->_em->flush();
 			$this->_interface->dieSuccess(
 				"Die Kartennummer wurde erfolgreich von '$oldCardnumber' auf" .
 				" '$newCardnumber' geändert."
@@ -131,7 +131,7 @@ class GChangeCard extends Gnissel {
 				'alten. Es wurde nichts verändert.'
 			);
 		}
-		$newCardExists = $this->_entityManager
+		$newCardExists = $this->_em
 			->getRepository('Babesk:BabeskCards')
 			->findByCardnumber($newCardnumber);
 		if($newCardExists) {

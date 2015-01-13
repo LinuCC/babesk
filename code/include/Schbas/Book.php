@@ -43,7 +43,7 @@ class Book {
 	protected function entryPoint($dataContainer) {
 
 		$this->_pdo = $dataContainer->getPdo();
-		$this->_entityManager = $dataContainer->getEntityManager();
+		$this->_em = $dataContainer->getEntityManager();
 		$this->_logger = $dataContainer->getLogger();
 	}
 
@@ -61,6 +61,6 @@ class Book {
 	/////////////////////////////////////////////////////////////////////
 
 	protected $_pdo;
-	protected $_entityManager;
+	protected $_em;
 	protected $_logger;
 }

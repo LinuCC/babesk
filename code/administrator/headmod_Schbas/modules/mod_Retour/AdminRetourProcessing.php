@@ -25,7 +25,7 @@ class AdminRetourProcessing {
 							'err_card_id' => 'Die Karten-ID ist fehlerhaft!',
 							'err_usr_locked' =>'Der Benutzer ist gesperrt!');
 		$this->_logger = $dataContainer->getLogger();
-		$this->_entityManager = $dataContainer->getEntityManager();
+		$this->_em = $dataContainer->getEntityManager();
 	}
 
 	/**

@@ -78,7 +78,7 @@ class CardInfo extends System {
 
 	private function cardinfoDisplay($cardnumber) {
 
-		$card = $this->_entityManager->getRepository('Babesk:BabeskCards')
+		$card = $this->_em->getRepository('Babesk:BabeskCards')
 			->findOneByCardnumber($cardnumber);
 		if($card) {
 			try {
@@ -93,7 +93,7 @@ class CardInfo extends System {
 				);
 			}
 			try {
-				$grade = $this->_entityManager
+				$grade = $this->_em
 					->getRepository('Babesk:SystemUsers')
 					->getActiveGradeByUser($user);
 			} catch (\Doctrine\ORM\NonUniqueResultException $e) {

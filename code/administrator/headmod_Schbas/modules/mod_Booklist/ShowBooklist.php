@@ -48,7 +48,7 @@ class ShowBooklist extends Booklist {
 	 */
 	protected function booklistQueryGet() {
 
-		$query = $this->_entityManager->createQueryBuilder()
+		$query = $this->_em->createQueryBuilder()
 			->select(array('b, s'))
 			->from('Babesk\ORM\SchbasBooks', 'b')
 			->leftJoin('b.subject', 's');
@@ -172,7 +172,7 @@ class ShowBooklist extends Booklist {
 	protected function booksHighestInventoryNumberGet($paginator) {
 
 		$invNums = array();
-		$query = $this->_entityManager->createQuery(
+		$query = $this->_em->createQuery(
 			'SELECT MAX(i.exemplar) FROM Babesk:SchbasInventory i
 				JOIN i.book b
 				WHERE b.id = :id
@@ -201,7 +201,7 @@ class ShowBooklist extends Booklist {
 	protected function bookExemplarsLentGet($paginator) {
 
 		$booksLent = array();
-		$query = $this->_entityManager->createQuery(
+		$query = $this->_em->createQuery(
 			'SELECT COUNT(l) FROM Babesk:SchbasBooks b
 				JOIN b.exemplars e
 				JOIN e.lending l
@@ -227,7 +227,7 @@ class ShowBooklist extends Booklist {
 	protected function bookExemplarCountGet($paginator) {
 
 		$booksInventory = array();
-		$query = $this->_entityManager->createQuery(
+		$query = $this->_em->createQuery(
 			'SELECT COUNT(e.id) FROM Babesk:SchbasBooks b
 				JOIN b.exemplars e
 				WHERE b.id = :id
@@ -329,7 +329,7 @@ class ShowBooklist extends Booklist {
 		$baseQuery = $this->bookExemplarsNeededBaseQueryCreate($gradelevels);
 		if($this->bookSubjectIsListedCheck($book->getSubject(), false)) {
 			//user not in senior grades and booksubject in list
-			$query = $this->_entityManager->createQuery(
+			$query = $this->_em->createQuery(
 				$baseQuery . ' AND
 				(
 					u.religion LIKE :subject OR
@@ -353,7 +353,7 @@ class ShowBooklist extends Booklist {
 		}
 		else {
 			//user not in senior grades and booksubject not in list
-			$query = $this->_entityManager->createQuery($baseQuery);
+			$query = $this->_em->createQuery($baseQuery);
 			$query->setParameter('bookId', $book->getId());
 			foreach($gradelevels as $key => $gradelevel) {
 				$query->setParameter(($key + 1), $gradelevel);
@@ -390,7 +390,7 @@ class ShowBooklist extends Booklist {
 
 		$baseQuery = $this->bookExemplarsNeededBaseQueryCreate($gradelevels);
 		if($this->bookSubjectIsListedCheck($book->getSubject(), true)) {
-			$query = $this->_entityManager->createQuery(
+			$query = $this->_em->createQuery(
 				$baseQuery . ' AND (
 							u.special_course LIKE :subject OR
 							u.religion LIKE :subject OR
@@ -477,7 +477,7 @@ class ShowBooklist extends Booklist {
 	 */
 	protected function bookSubjectIsListedCacheFill() {
 
-		$globalSettings = $this->_entityManager
+		$globalSettings = $this->_em
 			->getRepository('Babesk:SystemGlobalSettings');
 		$rel = $globalSettings->findOneByName('religion')->getValue();
 		$this->_allReligions = explode('|', $rel);
@@ -511,7 +511,7 @@ class ShowBooklist extends Booklist {
 	 */
 	protected function specialCourseTriggerGet() {
 
-		$trigger = $this->_entityManager
+		$trigger = $this->_em
 			->getRepository('Babesk:SystemGlobalSettings')
 			->findOneByName('special_course_trigger');
 

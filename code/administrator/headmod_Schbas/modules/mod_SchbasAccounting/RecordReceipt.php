@@ -28,7 +28,7 @@ class RecordReceipt extends \SchbasAccounting {
 		$this->entryPoint($dataContainer);
 
 		try {
-			$this->_entityManager->createQuery(
+			$this->_em->createQuery(
 				'SELECT a FROM Babesk:SchbasAccounting a'
 			)->getResult();
 
@@ -145,7 +145,7 @@ class RecordReceipt extends \SchbasAccounting {
 		$filter, $filterForCol, $sortColumn, $pagenum, $showOnlyMissing
 	) {
 
-		$queryBuilder = $this->_entityManager->createQueryBuilder()
+		$queryBuilder = $this->_em->createQueryBuilder()
 			->select(
 				'partial u.{id, forename, name, username}, c.cardnumber, ' .
 				'a.payedAmount, a.amountToPay, lc.name AS loanChoice, ' .
@@ -202,7 +202,7 @@ class RecordReceipt extends \SchbasAccounting {
 	private function paidAmountChange($userId, $amount) {
 
 		try {
-			$user = $this->_entityManager->getRepository('Babesk:SystemUsers')
+			$user = $this->_em->getRepository('Babesk:SystemUsers')
 				->findOneById($userId);
 			if(!isset($user)) {
 				throw new Exception('User not found!');
@@ -211,8 +211,8 @@ class RecordReceipt extends \SchbasAccounting {
 			$paid = $user->getSchbasAccounting()->getPayedAmount();
 			$toPay = $user->getSchbasAccounting()->getAmountToPay();
 			$missing = $toPay - $paid;
-			$this->_entityManager->persist($user);
-			$this->_entityManager->flush();
+			$this->_em->persist($user);
+			$this->_em->flush();
 			die(json_encode(array(
 				'userId' => $userId, 'paid' => $paid, 'missing' => $missing
 			)));
