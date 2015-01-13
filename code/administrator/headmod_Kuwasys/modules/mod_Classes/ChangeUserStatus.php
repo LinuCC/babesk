@@ -56,8 +56,11 @@ class ChangeUserStatus extends \Classes {
 			$stmt = $this->_pdo->prepare(
 				'SELECT c.ID, c.label FROM KuwasysClasses c
 					INNER JOIN SystemSchoolyears sy ON sy.ID = c.schoolyearId
-					INNER JOIN KuwasysClassCategories cc ON cc.ID = c.unitId
-					WHERE sy.ID = ? AND c.unitId = ?
+					INNER JOIN KuwasysClassesInCategories cic
+						ON cic.classId = c.ID
+					INNER JOIN KuwasysClassCategories cc
+						ON cc.ID = cic.categoryId
+					WHERE sy.ID = ? AND cic.categoryId = ?
 			');
 			$stmt->execute(
 				array($_POST['schoolyearId'], $_POST['categoryId'])
@@ -80,81 +83,22 @@ class ChangeUserStatus extends \Classes {
 	 */
 	private function statusChange() {
 
-		if(!$_POST['switchClass']) {
-			$changed = $this->joinChange();
+		$link = $this->_em
+			->find('DM:UserInClassAndCategory', $_POST['joinId']);
+		$doSwitchClass = $_POST['switchClass'] != 'false';
+		$status = $this->_em
+			->getReference('DM:UserInClassStatus', $_POST['statusId']);
+		$link->setStatus($status);
+		if($doSwitchClass) {
+			$class = $this->_em
+				->getReference('DM:KuwasysClass', $_POST['classId']);
+			$link->setClass($class);
 		}
-		else {
-			$changed = $this->joinWithClassChange();
-		}
-		if($changed) {
-			$this->_interface->dieAjax(
-				'success', 'Der Status wurde erfolgreich verändert.'
-			);
-		}
-		else {
-			$this->_logger->log(
-				'error changing the usersInClass-entry; Nothing changed',
-				'Notice', Null, json_encode(array(
-						'joinId' => $_POST['joinId']
-			)));
-			$this->_interface->dieAjax(
-				'error', 'Nichts wurde verändert.'
-			);
-		}
-	}
-
-	/**
-	 * Changes the status of the user-class link in the database
-	 * @return bool   true if a row was changed, false if not
-	 */
-	private function joinChange() {
-
-		try {
-			$stmt = $this->_pdo->prepare(
-				'UPDATE KuwasysUsersInClasses uic
-					SET statusId = ?
-					WHERE ID = ?
-			');
-			$stmt->execute(array($_POST['statusId'], $_POST['joinId']));
-			return (boolean) $stmt->rowCount();
-
-		} catch (\PDOException $e) {
-			$this->_logger->log('error changing the status',
-				'Moderate', Null, json_encode(array(
-					'msg' => $e->getMessage()
-			)));
-			$this->_interface->dieAjax(
-				'error', 'Fehler beim Verändern des Statuses'
-			);
-		}
-	}
-
-	/**
-	 * Changes the status and class of the user-class link
-	 * @return bool   true if a row was changed, false if not
-	 */
-	private function joinWithClassChange() {
-
-		try {
-			$stmt = $this->_pdo->prepare(
-				'UPDATE KuwasysUsersInClasses uic
-					SET statusId = ?, ClassID = ?
-					WHERE ID = ?
-			');
-			$stmt->execute(
-				array($_POST['statusId'], $_POST['classId'], $_POST['joinId'])
-			);
-			return (boolean) $stmt->rowCount();
-
-		} catch (\PDOException $e) {
-			$this->_logger->log('error changing the status and class',
-				'Moderate', Null, json_encode(array(
-					'msg' => $e->getMessage()
-			)));
-			$this->_interface->dieAjax(
-				'error', 'Fehler beim Verändern des Statuses'
-			);
-		}
+		$this->_em->persist($link);
+		$this->_em->flush();
+		$this->_interface->dieAjax(
+			'success', 'Der Status wurde erfolgreich verändert.'
+		);
 	}
 
 	/////////////////////////////////////////////////////////////////////

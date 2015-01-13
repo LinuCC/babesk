@@ -3,7 +3,7 @@
 
 {block name=popup_dialogs}
 
-<div classId="{$class.ID}" data-category-id="{$class.categoryId}"
+<div classId="{$class->getID()}" {*data-category-id="{$class.categoryId}"*}
 	id="add-user-modal" class="modal fade" tabindex="-1" role="dialog"
 	aria-hidden="true" >
 	<div class="modal-dialog">
@@ -28,7 +28,7 @@
 							class="form-control" placeholder="Benutzername suchen..." />
 					</div>
 					<div class="form-group input-group" data-toggle="tooltip"
-						title="Benutzername">
+						title="Status">
 						<span class="input-group-addon">
 							<span class="icon icon-businesscard"></span>
 						</span>
@@ -37,6 +37,19 @@
 							<option value="{$status.ID}" >
 								{$status.translatedName}
 							</option>
+							{/foreach}
+						</select>
+					</div>
+					<div class="form-group input-group" data-toggle="tooltip"
+						title="Kategorie">
+						<span class="input-group-addon">
+							<span class="icon icon-clock"></span>
+						</span>
+						<select name="category" class="form-control">
+							{foreach $class->getCategories() as $category}
+								<option value="{$category->getID()}">
+									{$category->getTranslatedName()}
+								</option>
 							{/foreach}
 						</select>
 					</div>
@@ -54,7 +67,7 @@
 	</div>
 </div>
 
-<div classId="{$class.ID}" id="change-user-modal" class="modal fade"
+<div classId="{$class->getID()}" id="change-user-modal" class="modal fade"
 	tabindex="-1" role="dialog" aria-hidden="true" >
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -82,13 +95,11 @@
 							{/foreach}
 						</select>
 					</div>
-					<div class="form-group">
 						<label>In einen anderen Kurs verschieben?</label>
 						<input type="checkbox" id="change-user-move-class-switch"
 						name="change-user-move-class-switch"
 						data-on-text="Ja" data-off-text="Nein"
 						data-on-color="info" data-off-color="default"/>
-					</div>
 					<div id="change-user-move-class-selector-container" hidden="true">
 						<div class="form-group input-group" data-toggle="tooltip" title="Kurs zu dem der Benutzer verschoben werden soll">
 							<span class="input-group-addon">
@@ -122,60 +133,96 @@
 
 {block name="filling_content"}
 
-<h2 class='module-header'>Details des Kurses "{$class.label}"</h2>
+<h2 class='module-header'>Details des Kurses "{$class->getLabel()}"</h2>
 
 <div class="container">
 	<div class="col-lg-8 col-lg-offset-2">
 		<table class="table table-responsive">
 			<tr>
 				<th>ID:</th>
-				<td>{$class.ID}</td>
+				<td>{$class->getID()}</td>
 			</tr>
 			<tr>
 				<th>Name:</th>
-				<td>{$class.label}</td>
+				<td>{$class->getLabel()}</td>
 			</tr>
 			<tr>
 				<th>Beschreibung:</th>
-				<td>{$class.description}</td>
+				<td>{$class->getDescription()}</td>
 			</tr>
-			<tr class="class-schoolyear" schoolyearid="{$class.schoolyearId}">
+			<tr class="class-schoolyear"
+				schoolyearid="{$class->getSchoolyear()->getID()}">
 				<th>Schuljahr:</th>
-				<td>{$class.schoolyearLabel}</td>
+				<td>{$class->getSchoolyear()->getLabel()}</td>
 			</tr>
 			<tr>
 				<th>Maximale Registrierungen:</th>
-				<td>{$class.maxRegistration}</td>
+				<td>{$class->getMaxRegistration()}</td>
 			</tr>
 			<tr>
 				<th>Aktiv:</th>
-				<td>{if
-					isset($class.activeCount)}{$class.activeCount}{else}---{/if}</td>
+				<td>
+					{$activeUserChoicesCount = 0}
+					{foreach $class->getUsersInClassesAndCategories() as $userChoice}
+						{if $userChoice->getStatus()->getName() == "active"}
+							{$activeUserChoicesCount = $activeUserChoicesCount + 1}
+						{/if}
+					{/foreach}
+					{if $activeUserChoicesCount}{$activeUserChoicesCount}{else}---{/if}
+				</td>
 			</tr>
 			<tr>
 				<th>Wartend:</th>
-				<td>{if isset($class.waitingCount)} {$class.waitingCount}
-					{else}---{/if}</td>
+				<td>
+					{$waitingUserChoicesCount = 0}
+					{foreach $class->getUsersInClassesAndCategories() as $userChoice}
+						{if $userChoice->getStatus()->getName() == "waiting"}
+							{$waitingUserChoicesCount = $waitingUserChoicesCount + 1}
+						{/if}
+					{/foreach}
+					{if $waitingUserChoicesCount}{$waitingUserChoicesCount}{else}---{/if}
+				</td>
 			</tr>
 			<tr>
 				<th>Wunsch:</th>
-				<td>{if (isset($class.request1Count) || isset($class.request2Count))} {$class.request1Count + $class.request2Count}
-					{else}---{/if}</td>
+				<td>
+					{$requestingUserChoicesCount = 0}
+					{foreach $class->getUsersInClassesAndCategories() as $userChoice}
+						{if $userChoice->getStatus()->getName() == "request1" ||
+								$userChoice->getStatus()->getName() == "request2"}
+							{$requestingUserChoicesCount = $requestingUserChoicesCount + 1}
+						{/if}
+					{/foreach}
+					{if $requestingUserChoicesCount}
+						{$requestingUserChoicesCount}
+					{else}
+						---
+					{/if}
+				</td>
 			</tr>
 			<tr>
 				<th>Schüler-Registrierungen erlaubt:</th>
-				<td>{if $class.registrationEnabled}<b>Ja</b>{else}<b>Nein</b>{/if}
+				<td>
+					{if $class->getRegistrationEnabled()}
+						<b>Ja</b>
+					{else}
+						<b>Nein</b>
+					{/if}
 				</td>
 			</tr>
 			<tr>
 				<th>Ist Optional:</th>
-				<td>{if $class.isOptional}Ja{else}Nein{/if}
+				<td>{if $class->getIsOptional()}Ja{else}Nein{/if}
 				</td>
 			</tr>
-			<tr class="class-category" categoryid="{$class.categoryId}">
+			{* TODO: categoryid not useful anymore since there possibly are multiple categories (its just for not many classes) *}
+			<tr class="class-category" categoryid="{$class->getCategories()->first()->getID()}">
 				<th>Veranstaltungstag:</th>
-				<td>{if
-					$class.unitTranslatedName}{$class.unitTranslatedName}{else}---{/if}</td>
+				<td>
+					{foreach from=$class->getCategories() item=category name=catLoop}
+						{$category->getTranslatedName()}{if $smarty.foreach.catLoop.last != true}, {/if}
+					{/foreach}
+				</td>
 			</tr>
 		</table>
 	</div>
@@ -187,6 +234,131 @@
 	{t}Assign a User to this Class{/t}
 </button>
 
+<table class="table table-striped table-responsive">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Klasse</th>
+			<th>Email-Adresse</th>
+			<th>Telefonnummer</th>
+			<th>Kategorie</th>
+			<th>Art der Kurswahl</th>
+			<th>Kurse desselben Tages</th>
+			<th>Optionen</th>
+		</tr>
+	</thead>
+	<tbody>
+		{if isset($users) && count($users)}
+		{foreach $users as $user}
+
+			{* The first link has to be written in the same row for better
+			 * user-experience
+			 *}
+			{$userClassLink = $user->getUsersInClassesAndCategories()->first()}
+			{$rowsOfSamePerson = count($user->getUsersInClassesAndCategories())}
+
+			<tr joinId="{$userClassLink->getID()}" >
+				<td class="username" rowspan="{$rowsOfSamePerson}">
+				<!-- Link to UserDetails -->
+				<a href="index.php?module=administrator|System|User|DisplayChange&amp;ID={$user->getID()}">
+					{$user->getForename()} {$user->getName()}
+				</a>
+				</td>
+				{$grade = $user->getUsersInGradesAndSchoolyears()->first()->getGrade()}
+				<td rowspan="{$rowsOfSamePerson}">
+					{$grade->getGradelevel()} {$grade->getLabel()}
+				</td>
+				<td rowspan="{$rowsOfSamePerson}">{$user->getEmail()}</td>
+				<td rowspan="{$rowsOfSamePerson}">{$user->getTelephone()}</td>
+				{* Following is the first row of the possible multi-row data.
+				 * The user can vote for multiple days at the same time, so we need
+				 * to differ those votes.
+				 *}
+				<td>
+					{$userClassLink->getCategory()->getTranslatedName()}
+				</td>
+				{$status = $userClassLink->getStatus()}
+				<td class="user-status" statusid="{$status->getID()}" >
+					{if $status->getTranslatedName()}
+						{$status->getTranslatedName()}
+					{else}Fehler!{/if}
+				</td>
+				<td>
+					{*
+					<ul class="other-classes-container">
+						{foreach $user->classesOfSameDay as $cKey => $otherClass}
+							<li>
+								<a href="index.php?module=administrator|Kuwasys|Classes|DisplayClassDetails&amp;ID={$otherClass.ID}">
+									{$otherClass.label}
+								</a>
+							</li>
+						{/foreach}
+					</ul>
+					*}
+					disabled
+				</td>
+				<td class="user-actions">
+					<div class="btn-group">
+						<button class="btn btn-default btn-xs change-user"
+						joinId="{$userClassLink->getID()}">
+							ändern
+						</button>
+						<button class="btn btn-danger btn-xs unregister-user"
+						joinId="{$userClassLink->getID()}">
+							Abmelden
+						</button>
+					</div>
+				</td>
+			</tr>
+			{if count($user->getUsersInClassesAndCategories())}
+				{foreach from=$user->getUsersInClassesAndCategories()
+					item=userClassLink name=linkLoop}
+					{if $smarty.foreach.linkLoop.first}{continue}{/if}
+
+					<tr joinId="{$userClassLink->getID()}">
+						<td>
+							{$userClassLink->getCategory()->getTranslatedName()}
+						</td>
+						{$status = $userClassLink->getStatus()}
+						<td class="user-status" statusid="{$status->getID()}">
+							{if $status->getTranslatedName()}
+								{$status->getTranslatedName()}
+							{else}Fehler!{/if}
+						</td>
+						<td>
+							{*
+							<ul class="other-classes-container">
+								{foreach $user->classesOfSameDay as $cKey => $otherClass}
+									<li>
+										<a href="index.php?module=administrator|Kuwasys|Classes|DisplayClassDetails&amp;ID={$otherClass.ID}">
+											{$otherClass.label}
+										</a>
+									</li>
+								{/foreach}
+							</ul>
+							*}
+							disabled
+						</td>
+						<td class="user-actions">
+							<div class="btn-group">
+								<button class="btn btn-default btn-xs change-user"
+								joinId="{$userClassLink->getID()}">
+									ändern
+								</button>
+								<button class="btn btn-danger btn-xs unregister-user"
+								joinId="{$userClassLink->getID()}">
+									Abmelden
+								</button>
+							</div>
+						</td>
+					</tr>
+				{/foreach}
+			{/if}
+		{/foreach}
+		{/if}
+	</tbody>
+</table>
+{*
 <table class="table table-striped table-responsive">
 	<thead>
 		<tr>
@@ -245,7 +417,7 @@
 		{/if}
 	</tbody>
 </table>
-
+*}
 
 {/block}
 

@@ -553,100 +553,39 @@ class Classes extends Kuwasys {
 		return $classes;
 	}
 
-	/**
-	 * Fetches one/all Classes from the Database and linked data
-	 *
-	 * Dies displaying a Message on Error
-	 *
-	 * @param  $classId If Set, only the Data for the Class will be fetched -
-	 * else all classes will be fetched
-	 * @return array The Classes
-	 */
-	protected function classesGetWithAdditionalReadableData(
-		$classId = false, $filterBySchoolyear = false) {
-
-		$whereStr = '';
-
-		if($classId) {
-			$whereStr = 'WHERE c.ID = :id';
-		}
-		else if($filterBySchoolyear) {
-			$whereStr = 'WHERE sy.ID = :id';
-		}
-
-		$subQueryCountUsers = '(SELECT Count(*)
-				FROM KuwasysUsersInClassesAndCategories uicc
-				JOIN SystemUsers ON SystemUsers.ID = uicc.UserID
-				WHERE uicc.statusId = (SELECT ID FROM KuwasysUsersInClassStatuses
-					WHERE name="%s") AND c.ID = uicc.ClassID
-				)
-			';
-
-		try {
-			$stmt = $this->_pdo->prepare(
-				'SELECT c.*, cc.translatedName AS unitTranslatedName,
-					sy.ID AS schoolyearId, sy.label AS schoolyearLabel,
-					cc.ID AS categoryId,
-					GROUP_CONCAT(DISTINCT ct.name SEPARATOR "; ") AS classteacherName,
-					'. sprintf ($subQueryCountUsers, 'active') . ' AS activeCount,
-					'. sprintf ($subQueryCountUsers, 'waiting') . ' AS waitingCount,
-					'. sprintf ($subQueryCountUsers, 'request1') . ' AS request1Count,
-					'. sprintf ($subQueryCountUsers, 'request2') . ' AS request2Count
-				FROM KuwasysClasses c
-				LEFT JOIN SystemSchoolyears sy ON c.schoolyearId = sy.ID
-				LEFT JOIN KuwasysClassesInCategories cic ON cic.classId = c.ID
-				LEFT JOIN KuwasysClassCategories cc ON cc.ID = cic.categoryId
-				LEFT JOIN (
-						SELECT ctic.ClassID AS classId,
-							CONCAT(ct.forename, " ", ct.name) AS name
-						FROM KuwasysClassteachers ct
-						JOIN KuwasysClassteachersInClasses ctic
-							ON ct.ID = ctic.ClassTeacherID
-					) ct ON c.ID = ct.classId
-				' . $whereStr . '
-				GROUP BY c.ID');
-
-			if($classId !== false) {
-				$stmt->execute(array(':id' => $classId));
-				return $stmt->fetch();
-			}
-			else if($filterBySchoolyear !== false) {
-				$stmt->execute(array(':id' => $filterBySchoolyear));
-				return $stmt->fetch();
-			}
-			else {
-				$stmt->execute();
-				return $stmt->fetchAll();
-			}
-
-
-		} catch (Exception $e) {
-			$this->_logger->log('Error fetching the classes', 'Notice', Null,
-				json_encode(array('msg' => $e->getMessage())));
-			$this->_interface->dieError(_g('Could not fetch the Class(es)!'));
-		}
-	}
-
 	protected function submoduleDisplayClassDetailsExecute() {
 
 		if(!isset($_GET['ID'])) {
 			$this->_interface->dieError('Keine ID angegeben!');
 		}
 
-		$class = $this->classesGetWithAdditionalReadableData(
-			$_GET['ID'], $_GET['categoryId']
-		);
-		$users = $this->usersByClassIdGet($_GET['ID']);
-		$users = $this->assignClassesOfSameClassunitToUsers(
-			$users, $class['categoryId']
-		);
-		$statuses = $this->statusesGetAll();
-		$this->_smarty->assign('class', $class);
-		$this->_smarty->assign('users', $users);
-		$this->_smarty->assign('statuses', $statuses);
-		$this->_smarty->display(
-			$this->_smartyModuleTemplatesPath . 'display-class-details.tpl'
-		);
+		$query = $this->_em->createQuery(
+			"SELECT c, uicc, ct, cc, ucc
+			FROM DM:KuwasysClass c
+			INNER JOIN c.usersInClassesAndCategories uicc
+			LEFT JOIN c.classteachers ct
+			LEFT JOIN uicc.category ucc
+			LEFT JOIN c.categories cc
+			WHERE c = :class
+		");
+		$class = $this->_em->getReference('DM:KuwasysClass', $_GET['ID']);
+		$query->setParameter('class', $class);
+		$class = $query->getOneOrNullResult();
+		if($class) {
+			$users = $this->usersByClassIdGet($_GET['ID']);
+			$statuses = $this->statusesGetAll();
+			$this->_smarty->assign('class', $class);
+			$this->_smarty->assign('users', $users);
+			$this->_smarty->assign('statuses', $statuses);
+			$this->_smarty->display(
+				$this->_smartyModuleTemplatesPath . 'display-class-details.tpl'
+			);
+		}
+		else {
+			$this->_interface->dieError('Fehler beim Laden der Klasse.');
+			$this->_logger->log('Error fetching the class', 'Notice', Null,
+				json_encode(array('classId' => $_GET['ID'])));
+		}
 	}
 
 	/**
@@ -657,76 +596,21 @@ class Classes extends Kuwasys {
 	 */
 	protected function usersByClassIdGet($classId) {
 
-		try {
-			$stmt = $this->_pdo->prepare(
-				'SELECT u.*, g.gradename AS gradename,
-					uics.translatedName AS statusTranslated,
-					uics.ID AS statusId,
-					uicc.ID as jointId
-				FROM SystemUsers u
-				JOIN KuwasysUsersInClassesAndCategories uicc
-					ON u.ID = uicc.UserID
-				JOIN KuwasysUsersInClassStatuses uics
-					ON uicc.statusId = uics.ID
-				LEFT JOIN (
-						SELECT CONCAT(gradelevel, "-", label) AS gradename,
-							uigs.UserID AS userId
-						FROM SystemGrades g
-						JOIN SystemUsersInGradesAndSchoolyears uigs ON
-							uigs.gradeId = g.ID
-						WHERE uigs.schoolyearId = @activeSchoolyear
-					) g ON g.userId = u.ID
-				WHERE uicc.ClassID = :id'
-			);
-
-			$stmt->execute(array(':id' => $classId));
-			return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-		} catch (Exception $e) {
-			$this->_interface->dieError(
-				_g('Could not fetch the Users by Class') . $e->getMessage());
-		}
-	}
-
-	/**
-	 * Fetches the Classes that has the UnitId and one of the User in it
-	 *
-	 * @param  string $userIds The User-IDs of the User
-	 * @param  string $unitId The Unit-ID of the Class
-	 * @return array          Returns the Classes
-	 */
-	protected function assignClassesOfSameClassunitToUsers($users, $unitId) {
-
-		$userIdString = $this->idStringGetFromUsers($users);
-		if(!empty($userIdString)) {
-			$userIdPart = "uicc.UserID IN($userIdString) AND";
-		}
-		else {
-			$userIdPart = '';
-		}
-
-		try {
-			$stmt = $this->_pdo->prepare(
-				"SELECT c.*, uicc.UserID AS userId FROM KuwasysClasses c
-				JOIN KuwasysUsersInClassesAndCategories uicc
-					ON c.ID = uicc.ClassID
-				WHERE $userIdPart uicc.categoryId = :unitId
-					AND c.ID <> :classId
-					AND c.schoolyearId = @activeSchoolyear"
-			);
-
-			$stmt->execute(
-				array(':unitId' => $unitId, ':classId' => $_GET['ID']));
-
-			while($row = $stmt->fetch()) {
-				$users = $this->classOfSameDayAssignToUser($row, $users);
-			}
-			return $users;
-
-		} catch (Exception $e) {
-			$this->_interface->dieError(
-				_g('Could not fetch the Classes of the User at the same day') . $e->getMessage());
-		}
+		$class = $this->_em->getReference('DM:KuwasysClass', $classId);
+		$query = $this->_em->createQuery(
+			'SELECT u, uicc, c, status, category, uigs, g
+			FROM DM:SystemUsers u
+			INNER JOIN u.usersInClassesAndCategories uicc
+			INNER JOIN uicc.class c WITH c = :class
+			INNER JOIN uicc.status status
+			INNER JOIN uicc.category category
+			INNER JOIN u.usersInGradesAndSchoolyears uigs
+			INNER JOIN uigs.schoolyear sy WITH sy.active = 1
+			INNER JOIN uigs.grade g
+		');
+		$query->setParameter('class', $class);
+		$users = $query->getResult();
+		return $users;
 	}
 
 	/**

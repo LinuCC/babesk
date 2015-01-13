@@ -16,3 +16,8 @@ ul.other-classes-container li {
 		min-width: 160px;
 	}
 }
+
+/* Silly bug with bootstrap-switch */
+.bootstrap-switch-container {
+	height: 30px;
+}

@@ -30,7 +30,7 @@ $(document).ready(function() {
 					'username': $('#username').val(),
 					'statusId': $('#add-user-modal select[name="status"]').val(),
 					'classId': $('#add-user-modal').attr('classId'),
-					'categoryId': $('#add-user-modal').attr('data-category-id')
+					'categoryId': $('#add-user-modal select[name="category"]').val()
 				},
 
 				success: function(data) {
@@ -164,7 +164,7 @@ $(document).ready(function() {
 					if(res.state == 'success') {
 						$row = $('table tr[joinId="' + joinId + '"]');
 						if(switchClass) {
-							$row.fadeOut();
+							$row.addClass("text-muted");
 						}
 						else {
 							var $statusField = $row.find('td.user-status');
@@ -177,6 +177,7 @@ $(document).ready(function() {
 						}
 						$modal.modal('hide');
 						toastr['success'](res.data);
+						toastr['info']("Seite neu laden um aktualisierte Tabelle zu erhalten.");
 					}
 					else {
 						toastr['error'](res.data);
