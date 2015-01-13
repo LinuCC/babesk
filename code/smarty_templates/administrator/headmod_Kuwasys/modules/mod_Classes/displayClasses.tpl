@@ -36,31 +36,65 @@
 	</thead>
 	<tbody>
 		{foreach $classes as $class}
-		<tr>
-			<td>{$class.ID}</td>
-			<td>{$class.label}</td>
-			<td>{$class.classteacherName}</td>
-			<td>{$class.activeCount}</td>
-			<td>{$class.waitingCount}</td>
-			<td>{$class.request1Count + $class.request2Count}</td>
-			<td>{if $class.isOptional == 0}nein{else}ja{/if}</td>
-			<td>{$class.maxRegistration}</td>
-			<td>{$class.unitTranslatedName}</td>
+		<tr {if $class->getIsOptional()}class="info"{/if}>
+			<td>{$class->getID()}</td>
+			<td>{$class->getLabel()}</td>
 			<td>
-				<div id='option{$class.ID}'>
+				{foreach $class->getClassteachers() as $classteacher}
+					<p>{$classteacher->getForename()} {$classteacher->getName()}</p>
+				{/foreach}
+			</td>
+			<td>
+				{$activeUserChoicesCount = 0}
+				{foreach $class->getUsersInClassesAndCategories() as $userChoice}
+					{if $userChoice->getStatus()->getName() == "active"}
+						{$activeUserChoicesCount = $activeUserChoicesCount + 1}
+					{/if}
+				{/foreach}
+				{$activeUserChoicesCount}
+			</td>
+			<td>
+				{$waitingUserChoicesCount = 0}
+				{foreach $class->getUsersInClassesAndCategories() as $userChoice}
+					{if $userChoice->getStatus()->getName() == "waiting"}
+						{$waitingUserChoicesCount = $waitingUserChoicesCount + 1}
+					{/if}
+				{/foreach}
+				{$waitingUserChoicesCount}
+			</td>
+			<td>
+				{$requestingUserChoicesCount = 0}
+				{foreach $class->getUsersInClassesAndCategories() as $userChoice}
+					{if $userChoice->getStatus()->getName() == "request1" ||
+							$userChoice->getStatus()->getName() == "request2"}
+						{$requestingUserChoicesCount = $requestingUserChoicesCount + 1}
+					{/if}
+				{/foreach}
+				{$requestingUserChoicesCount}
+			</td>
+			<td>{if $class->getIsOptional() == 0}nein{else}ja{/if}</td>
+			<td>{$class->getMaxRegistration()}</td>
+			<td>
+				{foreach $class->getCategories() as $category}
+					<p>{$category->getTranslatedName()}</p>
+				{/foreach}
+			</td>
+			<td>
+				<div id='option{$class->getId()}'>
 
 				</div>
-				<div id='optionButtons{$class.ID}' class="option-buttons">
-					<a href="index.php?module=administrator|Kuwasys|Classes|DisplayClassDetails&amp;ID={$class.ID}" data-toggle="tooltip"class="btn btn-info btn-xs"
+				<div id='optionButtons{$class->getId()}' class="option-buttons">
+					<a href="index.php?module=administrator|Kuwasys|Classes|DisplayClassDetails&amp;ID={$class->getId()}" data-toggle="tooltip"class="btn btn-info btn-xs"
 						data-title="Kursdetails anzeigen">
 						<span class="icon icon-listelements"></span>
 					</a>
-					<a href="index.php?module=administrator|Kuwasys|Classes|ChangeClass&amp;ID={$class.ID}&amp;categoryId={$class.categoryId}"
+					{*TODO: categoryId in link benötigt oder kann wech?*}
+					<a href="index.php?module=administrator|Kuwasys|Classes|ChangeClass&amp;ID={$class->getId()}{*&amp;categoryId={$class->getcategoryId}*}"
 						data-toggle="tooltip" class="btn btn-default btn-xs"
 						data-title="Kurs bearbeiten">
 						<span class="icon icon-businesscard"></span>
 					</a>
-					<a href="index.php?module=administrator|Kuwasys|Classes|DeleteClass&amp;ID={$class.ID}"
+					<a href="index.php?module=administrator|Kuwasys|Classes|DeleteClass&amp;ID={$class->getId()}"
 						data-toggle="tooltip" disabled
 						class="btn btn-danger btn-xs" data-title="Kurs löschen">
 						<span class="icon icon-error"></span>

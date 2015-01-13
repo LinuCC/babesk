@@ -503,52 +503,26 @@ class Classes extends Kuwasys {
 	 * Fetches all Classes with additional Data that are in the Schoolyear
 	 *
 	 * @param  int    $schoolyearId The ID of the Schoolyear
-	 * @return array                The Fetched Classes
 	 */
 	protected function classesGetAllBySchoolyearId($schoolyearId) {
 
+		$schoolyear = $this->_entityManager->getReference(
+			'Babesk:SystemSchoolyears', $schoolyearId
+		);
 		try {
-			$subQueryCountUsers = '(SELECT Count(*)
-					FROM KuwasysUsersInClassesAndCategories uic
-					JOIN SystemUsers ON SystemUsers.ID = uic.UserID
-					WHERE uic.statusId = (
-							SELECT ID FROM KuwasysUsersInClassStatuses
-							WHERE name="%s"
-						)
-						AND c.ID = uic.ClassID
-						AND uic.categoryId = cu.ID
-					)
-				';
+			$query = $this->_entityManager->createQuery(
+				"SELECT c, uicc, ct, cc, ucc
+				FROM Babesk:KuwasysClass c
+				INNER JOIN c.usersInClassesAndCategories uicc
+				LEFT JOIN c.classteachers ct
+				LEFT JOIN uicc.category ucc
+				LEFT JOIN c.categories cc
+				WHERE c.schoolyear = :schoolyear
+			");
+			$query->setParameter('schoolyear', $schoolyear);
+			$classes = $query->getResult();
 
-			$stmt = $this->_pdo->prepare(
-				'SELECT c.*, sy.label As schoolyearLabel,
-					cu.ID AS categoryId,
-					GROUP_CONCAT(cu.translatedName) AS unitTranslatedName,
-					(SELECT GROUP_CONCAT(
-							CONCAT(ct.forename, " ", ct.name) SEPARATOR "; "
-						)
-						FROM KuwasysClassteachers ct
-						JOIN KuwasysClassteachersInClasses ctic
-							ON ct.ID = ctic.ClassTeacherID
-						WHERE c.ID = ctic.ClassID
-						GROUP BY c.ID
-					) AS classteacherName,
-					'. sprintf ($subQueryCountUsers, 'active') . ' AS activeCount,
-					'. sprintf ($subQueryCountUsers, 'waiting') . ' AS waitingCount,
-					'. sprintf ($subQueryCountUsers, 'request1') . ' AS request1Count,
-					'. sprintf ($subQueryCountUsers, 'request2') . ' AS request2Count
-				FROM KuwasysClasses c
-				LEFT JOIN SystemSchoolyears sy ON c.schoolyearId = sy.ID
-				LEFT JOIN KuwasysClassesInCategories cic ON cic.classId = c.ID
-				LEFT JOIN KuwasysClassCategories cu ON cu.ID = cic.categoryId
-				WHERE sy.ID = :schoolyearId
-				GROUP BY c.ID, cu.ID');
-
-			$stmt->execute(array('schoolyearId' => $schoolyearId));
-
-			return $stmt->fetchAll();
-
-		} catch (PDOException $e) {
+		} catch (Exception $e) {
 			$this->_logger->log('error fetching the classes by schoolyearId',
 				'Notice', Null, json_encode(array(
 					'msg' => $e->getMessage(),
@@ -557,6 +531,7 @@ class Classes extends Kuwasys {
 				_g('Could not fetch the Classes by SchoolyearId $1%s',
 					$schoolyearId));
 		}
+		return $classes;
 	}
 
 	/**
