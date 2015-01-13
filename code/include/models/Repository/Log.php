@@ -7,13 +7,13 @@ class Log extends \Doctrine\ORM\EntityRepository {
 	public function log($msg, $severityStr, $categoryStr, $data) {
 
 		$log = new \Babesk\ORM\SystemLog();
-		$severity = $this->_em->getRepository('Babesk:SystemLogSeverity')
+		$severity = $this->_em->getRepository('DM:SystemLogSeverity')
 			->findOneByName($severityStr);
 		if(!$severity) {
 			$severity = new \Babesk\ORM\SystemLogSeverity();
 			$severity->setName($severityStr);
 		}
-		$category = $this->_em->getRepository('Babesk:SystemLogCategory')
+		$category = $this->_em->getRepository('DM:SystemLogCategory')
 			->findOneByName($categoryStr);
 		if(!$category) {
 			$category = new \Babesk\ORM\SystemLogCategory();

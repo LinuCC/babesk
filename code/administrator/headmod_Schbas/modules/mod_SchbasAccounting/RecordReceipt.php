@@ -29,7 +29,7 @@ class RecordReceipt extends \SchbasAccounting {
 
 		try {
 			$this->_em->createQuery(
-				'SELECT a FROM Babesk:SchbasAccounting a'
+				'SELECT a FROM DM:SchbasAccounting a'
 			)->getResult();
 
 		} catch(\Exception $e) {
@@ -152,7 +152,7 @@ class RecordReceipt extends \SchbasAccounting {
 				'lc.abbreviation AS loanChoiceAbbreviation, ' .
 				'a.amountToPay - a.payedAmount AS missingAmount, ' .
 				'CONCAT(g.gradelevel, g.label) AS activeGrade'
-			)->from('Babesk:SystemUsers', 'u')
+			)->from('DM:SystemUsers', 'u')
 			->leftJoin('u.schbasAccounting', 'a')
 			->leftJoin('u.cards', 'c')
 			->leftJoin('u.usersInGradesAndSchoolyears', 'uigs')
@@ -202,7 +202,7 @@ class RecordReceipt extends \SchbasAccounting {
 	private function paidAmountChange($userId, $amount) {
 
 		try {
-			$user = $this->_em->getRepository('Babesk:SystemUsers')
+			$user = $this->_em->getRepository('DM:SystemUsers')
 				->findOneById($userId);
 			if(!isset($user)) {
 				throw new Exception('User not found!');

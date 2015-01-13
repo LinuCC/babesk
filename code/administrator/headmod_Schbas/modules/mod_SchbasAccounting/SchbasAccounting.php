@@ -137,9 +137,9 @@ class SchbasAccounting extends Schbas {
 				die('dupe');
 			}
 			//Check if the user is in an active Grade
-			$user = $this->_em->find('Babesk:SystemUsers', $uid);
+			$user = $this->_em->find('DM:SystemUsers', $uid);
 			$count = $this->_em->createQuery(
-				'SELECT COUNT(u) FROM Babesk:SystemUsers u
+				'SELECT COUNT(u) FROM DM:SystemUsers u
 					JOIN u.usersInGradesAndSchoolyears uigs
 					JOIN uigs.schoolyear s WITH s.active = 1
 					WHERE u.id = :userId

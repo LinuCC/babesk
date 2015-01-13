@@ -45,7 +45,7 @@ class ImportExecute extends \administrator\Kuwasys\Classes\CsvImport {
 		}
 
 		$activeSchoolyear = $this->_em
-			->getRepository('Babesk:SystemSchoolyears')
+			->getRepository('DM:SystemSchoolyears')
 			->findOneByActive(true);
 
 		foreach($classes as $classAr) {
@@ -63,7 +63,7 @@ class ImportExecute extends \administrator\Kuwasys\Classes\CsvImport {
 			//Add the categories
 			foreach($classAr['categories'] as $categoryId) {
 				$category = $this->_em->getReference(
-					'Babesk:ClassCategory', $categoryId
+					'DM:ClassCategory', $categoryId
 				);
 				$classToAdd->addCategory($category);
 			}
@@ -103,7 +103,7 @@ class ImportExecute extends \administrator\Kuwasys\Classes\CsvImport {
 			else if($ctId !== 0) {
 				//Classteacher already exists, add him
 				$classteacher = $this->_em->find(
-					'Babesk:Classteacher', $ctId
+					'DM:Classteacher', $ctId
 				);
 				$class->addClassteacher($classteacher);
 			}

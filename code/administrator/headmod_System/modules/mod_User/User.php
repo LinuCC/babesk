@@ -249,7 +249,7 @@ class User extends System {
 
 	private function cardnumberDuplicatedCheck($cardnumber) {
 
-		$cards = $this->_em->getRepository('Babesk:BabeskCards')
+		$cards = $this->_em->getRepository('DM:BabeskCards')
 			->findByCardnumber($cardnumber);
 		if(count($cards) > 0) {
 			die(json_encode(array(
@@ -807,7 +807,7 @@ class User extends System {
 	// 	$ids = $_POST['userIds'];
 	// 	$query = $this->_em->createQueryBuilder()
 	// 		->select('u')
-	// 		->from('Babesk:SystemUsers', 'u');
+	// 		->from('DM:SystemUsers', 'u');
 
 	// 	foreach($ids as $ind => $id) {
 	// 		$query->andWhere("u.ID = :id{$ind}");
@@ -817,7 +817,7 @@ class User extends System {
 	protected function getAllSpecialCourses() {
 
 		$course = $this->_em
-			->getRepository('Babesk:SystemGlobalSettings')
+			->getRepository('DM:SystemGlobalSettings')
 			->findOneByName('special_course');
 
 		if(empty($course)) {
@@ -847,7 +847,7 @@ class User extends System {
 	protected function setSpecialCourse() {
 
 		$users = $this->_em->getRepository(
-			'Babesk:SystemUsers'
+			'DM:SystemUsers'
 		);
 		$courseStr = $users
 			->findOneById($_POST['userId'])
@@ -893,7 +893,7 @@ class User extends System {
 	protected function getAllForeignLanguages() {
 
 		$course = $this->_em
-			->getRepository('Babesk:SystemGlobalSettings')
+			->getRepository('DM:SystemGlobalSettings')
 			->findOneByName('foreign_language');
 
 		if(empty($course)) {
@@ -923,7 +923,7 @@ class User extends System {
 	protected function setForeignLanguage() {
 
 		$users = $this->_em->getRepository(
-			'Babesk:SystemUsers'
+			'DM:SystemUsers'
 		);
 		$courseStr = $users
 			->findOneById($_POST['userId'])
@@ -968,7 +968,7 @@ class User extends System {
 	protected function getAllReligions() {
 
 		$course = $this->_em
-			->getRepository('Babesk:SystemGlobalSettings')
+			->getRepository('DM:SystemGlobalSettings')
 			->findOneByName('religion');
 
 		if(empty($course)) {
@@ -998,7 +998,7 @@ class User extends System {
 	protected function setReligion() {
 
 		$users = $this->_em->getRepository(
-			'Babesk:SystemUsers'
+			'DM:SystemUsers'
 		);
 		$courseStr = $users
 			->findOneById($_POST['userId'])

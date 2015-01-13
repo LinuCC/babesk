@@ -72,7 +72,7 @@ class BookInfo extends Schbas {
 			$barcode = $bookHelper->barcodeParseToArray($barcodeStr);
 			unset($barcode['delimiter']); //Not used in query
 			$query = $this->_em->createQuery(
-				'SELECT i, b, s, u, uigs FROM Babesk:SchbasInventory i
+				'SELECT i, b, s, u, uigs FROM DM:SchbasInventory i
 					INNER JOIN i.book b
 						WITH b.class = :class AND b.bundle = :bundle
 					INNER JOIN b.subject s

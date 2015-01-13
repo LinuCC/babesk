@@ -30,7 +30,7 @@ class UserReplaceForeignLanguage extends Action {
 	protected function languageApply($languages, $userIds) {
 
 		$users = $this->_em
-			->getRepository('Babesk:SystemUsers')
+			->getRepository('DM:SystemUsers')
 			->findById($userIds);
 		foreach($users as $user) {
 			$user->setForeignLanguage($languages);

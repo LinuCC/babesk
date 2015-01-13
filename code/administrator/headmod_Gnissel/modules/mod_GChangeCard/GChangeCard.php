@@ -50,7 +50,7 @@ class GChangeCard extends Gnissel {
 
 	protected function changeCardShow() {
 
-		$userRepo = $this->_em->getRepository('Babesk:SystemUsers');
+		$userRepo = $this->_em->getRepository('DM:SystemUsers');
 		$user = $userRepo->findOneByUsername($_POST['username']);
 		$grade = $userRepo->getActiveGradeByUser($user);
 		if($user) {
@@ -79,7 +79,7 @@ class GChangeCard extends Gnissel {
 	 */
 	protected function changeCard() {
 
-		$userRepo = $this->_em->getRepository('Babesk:SystemUsers');
+		$userRepo = $this->_em->getRepository('DM:SystemUsers');
 		$user = $userRepo->findOneById($_POST['uid']);
 		if(!$user) {
 			$this->_interface->dieError(
@@ -132,7 +132,7 @@ class GChangeCard extends Gnissel {
 			);
 		}
 		$newCardExists = $this->_em
-			->getRepository('Babesk:BabeskCards')
+			->getRepository('DM:BabeskCards')
 			->findByCardnumber($newCardnumber);
 		if($newCardExists) {
 			$this->_interface->dieError(

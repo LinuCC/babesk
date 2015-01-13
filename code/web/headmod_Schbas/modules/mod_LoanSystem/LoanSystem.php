@@ -83,7 +83,7 @@ class LoanSystem extends Schbas {
 	private function showMainMenu() {
 
 		$schbasYear = $this->_em->getRepository(
-			'Babesk:SystemGlobalSettings'
+			'DM:SystemGlobalSettings'
 		)->findOneByName('schbas_year')->getValue();
 		//$schbasYear = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbas_year'");
 		//get gradeValue ("Klassenstufe")

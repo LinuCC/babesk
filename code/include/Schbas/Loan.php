@@ -114,7 +114,7 @@ class Loan {
 		$bookQuery = $this->_em
 			->createQueryBuilder()
 			->select(array('b.class', 'b.price'))
-			->from('Babesk:SchbasBooks', 'b')
+			->from('DM:SchbasBooks', 'b')
 			->where('b.class IN (:classes)')
 			->setParameter('classes', $classes)
 			->getQuery();
@@ -192,7 +192,7 @@ class Loan {
 	protected function bookSubjectFilterArrayGet() {
 
 		$gsRepo = $this->_em->getRepository(
-			'Babesk:SystemGlobalSettings'
+			'DM:SystemGlobalSettings'
 		);
 		$lang   = $gsRepo->findOneByName('foreign_language')->getValue();
 		$rel    = $gsRepo->findOneByName('religion')->getValue();

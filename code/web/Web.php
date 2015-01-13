@@ -459,7 +459,7 @@ class Web {
 	private function checkForMaintenance() {
 
 		$settings = $this->_em->getRepository(
-				'Babesk:SystemGlobalSettings'
+				'DM:SystemGlobalSettings'
 			)->findOneByName('siteIsUnderMaintenance');
 		if($settings) {
 			if($settings->getValue() == 1) {

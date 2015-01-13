@@ -507,12 +507,12 @@ class Classes extends Kuwasys {
 	protected function classesGetAllBySchoolyearId($schoolyearId) {
 
 		$schoolyear = $this->_em->getReference(
-			'Babesk:SystemSchoolyears', $schoolyearId
+			'DM:SystemSchoolyears', $schoolyearId
 		);
 		try {
 			$query = $this->_em->createQuery(
 				"SELECT c, uicc, ct, cc, ucc
-				FROM Babesk:KuwasysClass c
+				FROM DM:KuwasysClass c
 				INNER JOIN c.usersInClassesAndCategories uicc
 				LEFT JOIN c.classteachers ct
 				LEFT JOIN uicc.category ucc
@@ -914,7 +914,7 @@ class Classes extends Kuwasys {
 		$classId = $_POST['classId'];
 		$categoryId = $_POST['categoryId'];
 		try {
-			$user = $this->_em->getRepository('Babesk:SystemUsers')
+			$user = $this->_em->getRepository('DM:SystemUsers')
 				->findOneByUsername($username);
 			$stmt = $this->_pdo->prepare(
 				'INSERT INTO KuwasysUsersInClassesAndCategories

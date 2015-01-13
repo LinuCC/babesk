@@ -74,7 +74,7 @@ class ForeignLanguage extends System {
 
 		$languages = array();
 		$languagesString = $this->_em->getRepository(
-				'Babesk:SystemGlobalSettings'
+				'DM:SystemGlobalSettings'
 			)->findOneByName('foreign_language')->getValue();
 		if(!empty($languagesString)) {
 			$languages = explode('|', $languagesString);
@@ -94,7 +94,7 @@ class ForeignLanguage extends System {
 		$string = implode('|', $data['foreignLanguages']);
 		//Upload foreign languages
 		$setting = $this->_em->getRepository(
-				'Babesk:SystemGlobalSettings'
+				'DM:SystemGlobalSettings'
 			)->findOneByName('foreign_language')
 			->setValue($string);
 		$this->_em->persist($setting);

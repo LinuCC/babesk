@@ -76,7 +76,7 @@ class DBConnect {
 			);
 			$config->setProxyDir(PATH_INCLUDE . '/models/Proxies');
 			$config->setProxyNamespace('Babesk\\Proxies');
-			$config->addEntityNamespace('Babesk', 'Babesk\ORM');
+			$config->addEntityNamespace('DM', 'Babesk\ORM');
 			$conn = array(
 				'driver' => 'pdo_mysql',
 				'dbname' => $this->_databaseName,

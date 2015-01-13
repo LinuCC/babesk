@@ -23,7 +23,7 @@ class UserReplaceCourse extends Action {
 	protected function coursesApply($courses, $userIds) {
 
 		$users = $this->_em
-			->getRepository('Babesk:SystemUsers')
+			->getRepository('DM:SystemUsers')
 			->findById($userIds);
 		foreach($users as $user) {
 			$user->setSpecialCourse($courses);

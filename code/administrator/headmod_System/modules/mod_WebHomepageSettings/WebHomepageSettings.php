@@ -105,7 +105,7 @@ class WebHomepageSettings extends System {
 	protected function maintenance() {
 
 		$entry = $this->_em->getRepository(
-				'Babesk:SystemGlobalSettings'
+				'DM:SystemGlobalSettings'
 			)->findOneByName('siteIsUnderMaintenance');
 		if($entry) {
 			$val = $entry->getValue();
@@ -133,7 +133,7 @@ class WebHomepageSettings extends System {
 		$value = (isset($_POST['maintenance'])) ? 1 : 0;
 		try {
 			$setting = $this->_em->getRepository(
-					'Babesk:SystemGlobalSettings'
+					'DM:SystemGlobalSettings'
 				)->findOneByName('siteIsUnderMaintenance');
 			$setting->setValue($value);
 			$this->_em->flush();

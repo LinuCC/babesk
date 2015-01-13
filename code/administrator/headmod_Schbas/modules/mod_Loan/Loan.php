@@ -105,7 +105,7 @@ class Loan extends Schbas {
 
 	private function userByCardnumberGet($cardnumber) {
 
-		$card = $this->_em->getRepository('Babesk:BabeskCards')
+		$card = $this->_em->getRepository('DM:BabeskCards')
 			->findOneByCardnumber($cardnumber);
 		if($card) {
 			if(!$card->getLost()) {
@@ -158,7 +158,7 @@ class Loan extends Schbas {
 	private function exemplarsStillLendByUserGet($user) {
 
 		$exemplars = $this->_em->createQuery(
-			'SELECT i FROM Babesk:SchbasInventory i
+			'SELECT i FROM DM:SchbasInventory i
 				INNER JOIN i.book b
 				INNER JOIN i.usersLent u
 				WHERE u.id = :userId
@@ -231,7 +231,7 @@ class Loan extends Schbas {
 		//Delimiter not used in Query
 		unset($barcode['delimiter']);
 		$query = $this->_em->createQuery(
-			'SELECT i, b FROM Babesk:SchbasInventory i
+			'SELECT i, b FROM DM:SchbasInventory i
 				INNER JOIN i.book b
 					WITH b.class = :class AND b.bundle = :bundle
 				INNER JOIN b.subject s
@@ -253,7 +253,7 @@ class Loan extends Schbas {
 		try {
 			$lending = new \Babesk\ORM\SchbasLending();
 			$user = $this->_em->find(
-				'Babesk:SystemUsers', $userId
+				'DM:SystemUsers', $userId
 			);
 			$lending->setUser($user);
 			$lending->setInventory($exemplar);

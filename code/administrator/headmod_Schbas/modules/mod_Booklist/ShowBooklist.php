@@ -173,7 +173,7 @@ class ShowBooklist extends Booklist {
 
 		$invNums = array();
 		$query = $this->_em->createQuery(
-			'SELECT MAX(i.exemplar) FROM Babesk:SchbasInventory i
+			'SELECT MAX(i.exemplar) FROM DM:SchbasInventory i
 				JOIN i.book b
 				WHERE b.id = :id
 		');
@@ -202,7 +202,7 @@ class ShowBooklist extends Booklist {
 
 		$booksLent = array();
 		$query = $this->_em->createQuery(
-			'SELECT COUNT(l) FROM Babesk:SchbasBooks b
+			'SELECT COUNT(l) FROM DM:SchbasBooks b
 				JOIN b.exemplars e
 				JOIN e.lending l
 				WHERE b.id = :id
@@ -228,7 +228,7 @@ class ShowBooklist extends Booklist {
 
 		$booksInventory = array();
 		$query = $this->_em->createQuery(
-			'SELECT COUNT(e.id) FROM Babesk:SchbasBooks b
+			'SELECT COUNT(e.id) FROM DM:SchbasBooks b
 				JOIN b.exemplars e
 				WHERE b.id = :id
 		');
@@ -437,7 +437,7 @@ class ShowBooklist extends Booklist {
 			$glAr[] = '?' . (string)($i + 1);
 		}
 		$glQuery = implode(', ', $glAr);
-		return "SELECT COUNT(u.id) FROM Babesk:SystemUsers u
+		return "SELECT COUNT(u.id) FROM DM:SystemUsers u
 					JOIN u.usersInGradesAndSchoolyears uigs
 					JOIN uigs.schoolyear s
 					JOIN uigs.grade g WITH g.gradelevel IN(${glQuery})
@@ -478,7 +478,7 @@ class ShowBooklist extends Booklist {
 	protected function bookSubjectIsListedCacheFill() {
 
 		$globalSettings = $this->_em
-			->getRepository('Babesk:SystemGlobalSettings');
+			->getRepository('DM:SystemGlobalSettings');
 		$rel = $globalSettings->findOneByName('religion')->getValue();
 		$this->_allReligions = explode('|', $rel);
 		$lan = $globalSettings->findOneByName('foreign_language')->getValue();
@@ -512,7 +512,7 @@ class ShowBooklist extends Booklist {
 	protected function specialCourseTriggerGet() {
 
 		$trigger = $this->_em
-			->getRepository('Babesk:SystemGlobalSettings')
+			->getRepository('DM:SystemGlobalSettings')
 			->findOneByName('special_course_trigger');
 
 		if(empty($trigger)) {

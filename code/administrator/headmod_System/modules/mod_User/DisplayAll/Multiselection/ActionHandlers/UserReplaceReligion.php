@@ -23,7 +23,7 @@ class UserReplaceReligion extends Action {
 	protected function religionApply($religion, $userIds) {
 
 		$users = $this->_em
-			->getRepository('Babesk:SystemUsers')
+			->getRepository('DM:SystemUsers')
 			->findById($userIds);
 		foreach($users as $user) {
 			$user->setReligion($religion);
