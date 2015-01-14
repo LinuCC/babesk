@@ -4,6 +4,7 @@ namespace administrator\System\User\UserUpdateWithSchoolyearChange;
 
 require_once 'UserUpdateWithSchoolyearChange.php';
 require_once PATH_INCLUDE . '/CsvReader.php';
+require_once PATH_INCLUDE . '/SpreadsheetImporter.php';
 
 /**
  * Imports Csv-Data and puts them in temporary tables allowing to update users
@@ -99,7 +100,7 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 	 */
 	private function csvParse($filepath) {
 
-		$content = $this->csvContentGet($filepath);
+		$content = $this->fileContentGet($filepath);
 		$this->csvCheck($content);
 		$this->userExistenceCompare($content);
 		$this->gradeConflictsCreate();
@@ -122,23 +123,26 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 	}
 
 	/**
-	 * Extracts the content from the csvfile
-	 * @param  String $filepath The path to the csv-file
-	 * @return array            The content of the csv-file
+	 * Extracts the content from the file
+	 * @param  String $filepath The path to the file
+	 * @return array            The content of the file
 	 */
-	private function csvContentGet($filepath) {
+	private function fileContentGet($filepath) {
 
-		try {
-			$reader = new \CsvReader($filepath, $this->_delimiter);
-			$content = $reader->getContents();
-			return $content;
-
-		} catch(\Exception $e) {
-			$this->_logger->log('Error while parsing the csvfile', 'Notice',
-				NULL, json_encode(array('msg' => $e->getMessage())));
-			$this->_smarty->assign('backlink', 'index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange|CsvImport');
-			$this->_interface->dieError(_g('An error occured while parsing ' .
-				'the csvfile: %1$s', $e->getMessage()));
+		if(!empty($_FILES['csvFile']['tmp_name'])) {
+			$fileWithExtension = $_FILES['csvFile']['tmp_name']  . '.' .
+				pathinfo($_FILES['csvFile']['name'], PATHINFO_EXTENSION);
+			rename($_FILES['csvFile']['tmp_name'], $fileWithExtension);
+			$reader = new \SpreadsheetImporter($fileWithExtension);
+			$reader->openFile();
+			$reader->parseFile();
+			return $reader->getContent();
+		}
+		else {
+			$this->_logger->log(__METHOD__ . ': Could not find uploaded file',
+				'Notice', Null);
+			$this->_interface->dieError('Konnte die hochgeladene Datei ' .
+				'nicht finden');
 		}
 	}
 

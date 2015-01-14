@@ -1,0 +1,40 @@
+<?php
+
+namespace administrator\System\User\UserUpdateWithSchoolyearChange;
+
+require_once 'UserUpdateWithSchoolyearChange.php';
+
+class ChangesList extends \administrator\System\User\UserUpdateWithSchoolyearChange {
+
+	/////////////////////////////////////////////////////////////////////
+	//Methods
+	/////////////////////////////////////////////////////////////////////
+
+	public function execute($dataContainer) {
+
+		$this->entryPoint($dataContainer);
+		$this->changesDisplay();
+	}
+
+	/////////////////////////////////////////////////////////////////////
+	//Implements
+	/////////////////////////////////////////////////////////////////////
+
+	protected function entryPoint($dataContainer) {
+
+		parent::entryPoint($dataContainer);
+	}
+
+	protected function changesDisplay() {
+
+		$this->_interface->dieMsg('Noch nicht implementiert.');
+	}
+
+	/////////////////////////////////////////////////////////////////////
+	//Attributes
+	/////////////////////////////////////////////////////////////////////
+
+}
+
+
+?>
