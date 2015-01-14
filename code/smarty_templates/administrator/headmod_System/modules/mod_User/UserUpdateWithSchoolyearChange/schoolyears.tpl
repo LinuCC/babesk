@@ -6,12 +6,12 @@
 <form class="form-horizontal" action="" method="post">
 	<div class="form-group" data-toggle="tooltip"
 		title="{t}Please select a schoolyear to switch to when changes get applied:{/t}">
-		<div class="col-md-2">
+		<div class="col-xs-4 col-lg-2">
 			<label for="schoolyear" class="control-label">
 				Schuljahr
 			</label>
 		</div>
-		<div class="col-md-10 ">
+		<div class="col-xs-8 col-lg-10">
 			<div class="input-group">
 				<span class="input-group-addon">
 					<span class="icon icon-counter"></span>
@@ -26,12 +26,12 @@
 	</div>
 
 	<div class="form-group" data-toggle="tooltip" title="{t}When full-year switch get selected, it will be assumed that the normal behaviour is that the users move one gradelevel up.{/t}">
-		<div class="col-md-2">
+		<div class="col-xs-4 col-lg-2">
 			<label for="switchType" class="control-label">
 				Schuljahreswechseltyp
 			</label>
 		</div>
-		<div class="col-md-10">
+		<div class="col-xs-8 col-lg-10">
 			<div class="input-group">
 			<span class="input-group-addon">
 				<span class="icon icon-refresh"></span>
@@ -47,12 +47,12 @@
 
 	<div class="form-group" data-toggle="tooltip"
 		title="Die Nutzergruppe, die neuen Benutzern zugewiesen wird">
-		<div class="col-md-2">
+		<div class="col-xs-4 col-lg-2">
 			<label for="usergroup" class="control-label">
 				Gruppe neuer Nutzer
 			</label>
 		</div>
-		<div class="col-md-10">
+		<div class="col-xs-8 col-lg-10">
 			{if count($usergroups)}
 				<div class="input-group">
 					<span class="input-group-addon">
@@ -78,8 +78,13 @@
 	</div>
 
 	<input id="submit" type="submit" class="btn btn-default"
-		name="schoolyearSelected" value="{t}continue{/t}"
-	/>
+		name="schoolyearSelected" value="{t}continue{/t}">
+	<a href="#" class="btn btn-default pull-right" data-toggle="popover"
+		title="Schuljahr" data-content="Wenn dass Schuljahr noch nicht existiert, können sie es <a href='index.php?module=administrator|System|Schoolyear&amp;action=addSchoolYear'> hier </a> erstellen." data-html="true" data-placement="left">
+		Neues Schuljahr existiert noch nicht?
+	</a>
+
+
 </form>
 {else}
 {t}There is no schoolyear you can switch to. Please add a schoolyear and then try again.{/t}
