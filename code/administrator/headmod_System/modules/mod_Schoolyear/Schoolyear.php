@@ -193,6 +193,7 @@ class Schoolyear extends System {
 
 	protected function deleteSchoolYear() {
 
+		$this->_interface->backlink('administrator|System|Schoolyear');
 		if(isset($_POST['dialogConfirmed'])) {
 			$this->deleteSchoolYearInDatabase();
 			$this->_interface->dieMsg(_g('The Schoolyear was successfully deleted'));
@@ -201,7 +202,14 @@ class Schoolyear extends System {
 			$this->_interface->dieMsg(_g('The Schoolyear was not deleted'));
 		}
 		else {
-			$this->_interface->displayDeleteSchoolYearConfirmation($this->getSchoolYear());
+			$sy = $this->_em->find('DM:SystemSchoolyears', $_GET['ID']);
+			if($sy) {
+				$this->_interface->displayDeleteSchoolYearConfirmation($sy);
+			}
+			else {
+				$this->_interface->dieMsg('Dieses Schuljahr wurde bereits ' .
+					' gelöscht.');
+			}
 		}
 	}
 
