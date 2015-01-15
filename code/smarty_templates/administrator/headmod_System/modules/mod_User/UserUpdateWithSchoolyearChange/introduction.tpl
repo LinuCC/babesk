@@ -4,10 +4,9 @@
 
 <div class="panel panel-default">
 	<div class="panel-body">
-		{t condense=yes}
-			Here you can change the schoolyear and at the same time update the
-			grades of the users with a csv-file.
-		{/t}
+		Hier können sie das Schuljahr wechseln und dabei die Schülerdaten aktualisieren.<br>
+		Der Prozess benötigt eine Datei mit den aktuellen Schülerdaten (Vorname, Nachname, Klasse, vielleicht noch weitere).<br>
+		Der Aufbau der Datei ist <a href="index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange|NewSession">hier</a> beschrieben.
 	</div>
 </div>
 
@@ -23,7 +22,7 @@
 	</form>
 	<form action="index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange|NewSession" method="post" >
 		<input type="submit" class="btn btn-default pull-left"
-			value="{t}Csv-file help{/t}" name="csvHelp" style="margin-left: 20px">
+			value="Hilfe zur Datei" name="csvHelp" style="margin-left: 20px">
 	</form>
 	<a href="index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange" class="btn btn-default pull-right">
 		Abbrechen

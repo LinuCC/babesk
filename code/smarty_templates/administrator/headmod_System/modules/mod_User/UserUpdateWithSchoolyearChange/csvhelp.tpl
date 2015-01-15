@@ -4,53 +4,125 @@
 
 <p>
 
-	{t}Use the semicolon (;) as a separator. Make sure the csv-file contains the following columns:{/t}
-	<table class="dataTable">
-		<tr>
-			<td>forename</td>
-			<td>{t}The forename of the user{/t}</td>
-		</tr>
-		<tr>
-			<td>name</td>
-			<td>{t}The lastname of the user{/t}</td>
-		</tr>
-		<tr>
-			<td>grade</td>
-			<td>{t}The grade the user should be switched to{/t}</td>
-		</tr>
+<fieldset>
+	<legend>Übersicht</legend>
+	Sie können die Nutzer mithilfe einer Spreadsheet-Datei importieren.
+	Dies können beispielsweise in Microsoft Excel erstellt werden.
+	Der Inhalt der Zellen in der ersten Zeile bestimmt, welche Daten in dieser Spalte stehen.
+	Jede darauf folgende Reihe enthält Daten zu jeweils einem Schüler.
+</fieldset>
+
+<fieldset>
+	<legend>Benennung der Spalten</legend>
+	<table class="table">
+		<tbody>
+			<tr>
+				<td>
+					forename
+				</td>
+				<td>
+					Der Vorname des Benutzers (Notwendig)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					name
+				</td>
+				<td>
+					Der Nachname des Benutzers (Notwendig)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					grade
+				</td>
+				<td>
+					Die Klasse, in die der Schüler im neuen Schuljahr geht (Notwendig)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					birthday
+				</td>
+				<td>
+					Der Geburtstag des Benutzers. Optional, aber wenn Benutzer bereits Geburtstage zugewiesen bekommen haben, sind sie nötig, da daran der Benutzer erkannt wird!
+				</td>
+			</tr>
+			<tr>
+				<td>
+					telephone
+				</td>
+				<td>
+					Die Telefonnummer des Benutzers.
+					Existiert der Nutzer bereits, wird die bestehende Telefonnummer damit überschrieben.(optional)
+				</td>
+			</tr>
+			<tr>
+				<td>
+					username
+				</td>
+				<td>
+					Der neue Nutzername des Nutzers.
+					Existiert der Nutzer bereits, wird der bestehende Benutzername damit überschrieben. (optional)
+				</td>
+			</tr>
+		</tbody>
 	</table>
-	<br />
-	<p>{t}Additionally, following columns can be added:{/t}</p>
-	<table class="dataTable">
-		<tr>
-			<td>birthday</td>
-			<td>
-				{t}Neccessary if the birthdays of the users are already in the program!{/t}
-				{t}The birthday of the user. Used to distinguish users with the same forename and name.{/t}
-			</td>
-		</tr>
-		<tr>
-			<td>telephone</td>
-			<td>{t}The new telephone-number of the user. When this column exists, the old entries will be overridden, even if the new telephone-number is void!{/t}</td>
-		</tr>
-		<tr>
-			<td>username</td>
-			<td>{t}The new username of the user. When this column exists, the old entries will be overridden, even if the new username is void!{/t}</td>
-		</tr>
+</fieldset>
+
+<fieldset>
+	<legend>Beispiel</legend>
+	<table class="table table-bordered">
+		<tbody>
+			<tr>
+				<td>
+					forename
+				</td>
+				<td>
+					name
+				</td>
+				<td>
+					grade
+				</td>
+				<td>
+					birthday
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Hans
+				</td>
+				<td>
+					Mustermann
+				</td>
+				<td>
+					7b
+				</td>
+				<td>
+					12.3.1987
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Peter
+				</td>
+				<td>
+					Müller
+				</td>
+				<td>
+					10c
+				</td>
+				<td>
+					9.1.2001
+				</td>
+			</tr>
+		</tbody>
 	</table>
-	<br />
-	<p>{t}Example of a csv-file:{/t}</p>
-	<p class="example-container">
-		forename;name;grade;birthday;telephone;username<br />
-		Hans;Mustermann;7b;12.3.1987;0573/12389;hans.mustermann<br />
-		Peter;Müller;8k;27.9.1985;;peterchen<br />
-	</p>
-	<p>{t}Another example:{/t}</p>
-	<p class="example-container">
-		forename;name;grade<br />
-		Hans;Mustermann;7b<br />
-		Peter;Müller;8k<br />
-	</p>
-</p>
+</fieldset>
+
+<a href="index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange|NewSession"
+	class="btn btn-default pull-right">
+	Zurück
+</a>
 
 {/block}
