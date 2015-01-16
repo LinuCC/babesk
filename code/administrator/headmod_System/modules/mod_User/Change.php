@@ -110,7 +110,10 @@ class Change extends \User
 	 */
 	protected function inputParse() {
 
-		if(isBlank($_POST['pricegroupId'])) { $_POST['pricegroupId'] = 0; }
+		if(!isset($_POST['pricegroupId']) ||
+			isBlank($_POST['pricegroupId'])) {
+			$_POST['pricegroupId'] = 0;
+		}
 
 		$_POST['isSoli'] = (isset($_POST['isSoli']) &&
 			$_POST['isSoli'] == 'true') ? 1 : 0;

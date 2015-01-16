@@ -164,8 +164,14 @@ $(document).ready(function() {
 					'gradeId': $(el).find('.grade-selector option:selected').val()
 				});
 			});
-			var isoBirthday = Date.parse($('#birthday').val())
-				.toString('yyyy-MM-dd');
+			if($('#birthday').val() != '') {
+				var isoBirthday = Date.parse($('#birthday').val())
+					.toString('yyyy-MM-dd');
+			}
+			else {
+				var isoBirthday = '';
+			}
+
 
 			$.ajax({
 				type: 'POST',
