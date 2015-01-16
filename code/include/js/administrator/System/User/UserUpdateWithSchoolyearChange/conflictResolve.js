@@ -39,6 +39,12 @@ $(document).ready(function() {
 				'[correctedUserId]" class="form-control"></select></div>');
 			$listItem.append($userSelectContainer);
 			var username = $listItem.find('span.forename').text() + '.' + $listItem.find('span.surname').text();
+			$userSelectContainer.find('select')
+				.prop('disabled', true)
+				.append(
+					'<option class="placeholder" value="" disabled selected>' +
+					'Lade...</option>'
+				);
 			$.ajax({
 				'type': 'GET',
 				'url': 'index.php?module=administrator|System|User|SearchForSimilarUsers',
@@ -51,9 +57,11 @@ $(document).ready(function() {
 					var $select = $userSelectContainer.find('select');
 					$.each(users, function(userId, user) {
 						$select.append(
-							'<option name="' + userId + '">' + user + '</option>'
+							'<option value="' + userId + '">' + user + '</option>'
 						);
 					});
+					$select.find('option.placeholder').remove();
+					$select.prop('disabled', false);
 					$listItem.append("<input type='hidden' value='correctedUserId' " +
 						"name='conflict[" + button.attr("conflictId") + "][status]' />");
 				},
