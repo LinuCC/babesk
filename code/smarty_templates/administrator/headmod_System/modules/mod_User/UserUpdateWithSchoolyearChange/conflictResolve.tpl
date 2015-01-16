@@ -49,7 +49,7 @@
 						{t}No{/t}
 					</button>
 					</div>
-					{t escape=no forename=$conflict.forename name=$conflict.name birthday=$conflict.birthday newGrade=$conflict.newGrade}The user <span class="highlighted">"%1 %2"</span> (birthday: <span class="highlighted">"%3"</span>), that will be in grade <span class="highlighted">"%3"</span>, is new. Is that correct?{/t}
+					{t escape=no forename=$conflict.forename name=$conflict.name birthday=$conflict.birthday newGrade=$conflict.newGrade}The user <span class="highlighted">"<span class="forename">%1</span> <span class="surname">%2</span>"</span> (birthday: <span class="highlighted">"%3"</span>), that will be in grade <span class="highlighted">"%3"</span>, is new. Is that correct?{/t}
 					<br />
 				{/if}
 				{if $conflict.type == "DbOnlyConflict"}
@@ -63,7 +63,7 @@
 						{t}No{/t}
 					</button>
 					</div>
-					{t escape=no forename=$conflict.forename name=$conflict.name birthday=$conflict.birthday}The user <span class="highlighted">"%1 %2"</span> (birthday: <span class="highlighted">"%3"</span>) is not in the upcoming schoolyear. Is that correct?{/t}<br />
+					{t escape=no forename=$conflict.forename name=$conflict.name birthday=$conflict.birthday}The user <span class="highlighted">"<span class="forename">%1</span> <span class="surname">%2</span>"</span> (birthday: <span class="highlighted">"%3"</span>) is not in the upcoming schoolyear. Is that correct?{/t}<br />
 				{/if}
 				{if $conflict.type == "GradelevelConflict"}
 					<div class="btn-group">
@@ -81,7 +81,7 @@
 						{t}No{/t}
 					</button>
 					</div>
-					{t escape=no forename=$conflict.forename name=$conflict.name birthday=$conflict.birthday origGrade=$conflict.origGrade newGrade=$conflict.newGrade}The grade of the user <span class="highlighted">"%1 %2"</span> (birthday: <span class="highlighted">"%3"</span>) changed from "%4" to "%5". Is that correct?{/t}<br />
+					{t escape=no forename=$conflict.forename name=$conflict.name birthday=$conflict.birthday origGrade=$conflict.origGrade newGrade=$conflict.newGrade}The grade of the user <span class="highlighted">"<span class="forename">%1</span> <span class="surname">%2</span>"</span> (birthday: <span class="highlighted">"%3"</span>) changed from "%4" to "%5". Is that correct?{/t}<br />
 
 				{/if}
 			</li>

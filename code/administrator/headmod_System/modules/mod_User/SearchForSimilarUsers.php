@@ -48,7 +48,7 @@ class SearchForSimilarUsers extends \User {
 
 	protected function search($username, $userLimit, $onlyActiveSchoolyear) {
 
-		$query = 'SELECT u.ID AS userId, u.username AS username
+		$query = 'SELECT u.ID AS userId, CONCAT(u.username, " (", u.birthday, ")") AS username
 				FROM SystemUsers u ';
 		if($onlyActiveSchoolyear) {
 			$query .= 'INNER JOIN SystemUsersInGradesAndSchoolyears uigs
@@ -70,7 +70,6 @@ class SearchForSimilarUsers extends \User {
 					'limit' => $userLimit, 'msg' => $e->getMessage())));
 			throw $e;
 		}
-		var_dump($users);
 		return $users;
 	}
 

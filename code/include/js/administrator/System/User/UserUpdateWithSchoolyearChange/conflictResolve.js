@@ -28,23 +28,44 @@ $(document).ready(function() {
 
 		event.preventDefault();
 		var button = $(event.target);
-		var parent = button.parent();
-		parent.children("button").remove();
+		var $listItem = button.closest(".list-group-item");
+		$listItem.children("button").remove();
 		if(button.attr("conflictType") == "GradelevelConflict") {
-			newGradeInput(parent, button.attr("conflictId"));
+			newGradeInput($listItem, button.attr("conflictId"));
 		}
 		else {
-			parent.append('<div id="lol"></div>');
-			//Finding similar usernames is not implemented yet
-			var uid = prompt("Dann korrigieren sie den Fehler bitte in der CSV-Datei und laden die CSV-Datei nochmals hoch oder geben sie die Nutzerid hier ein:");
-			if(uid) {
-				parent.append("<input type='hidden' value='correctedUserId' name='"
-				 + "conflict[" + button.attr("conflictId") + "][status]' />");
-				parent.append("<input type='hidden' value='" + uid + "' name='"
-				 + "conflict[" + button.attr("conflictId") + "][correctedUserId]' />");
-			}
+			//$listItem.append('<div><select></div>');
+			var $userSelectContainer = $('<div class="">Alternative auswählen:<select name="conflict[' + button.attr("conflictId") + ']' +
+				'[correctedUserId]" class="form-control"></select></div>');
+			$listItem.append($userSelectContainer);
+			var username = $listItem.find('span.forename').text() + '.' + $listItem.find('span.surname').text();
+			$.ajax({
+				'type': 'GET',
+				'url': 'index.php?module=administrator|System|User|SearchForSimilarUsers',
+				'data': {
+					'username': username,
+					'userLimit': 15
+				},
+				'success': function(users, status, jqXHR) {
+					console.log(users);
+					var $select = $userSelectContainer.find('select');
+					$.each(users, function(userId, user) {
+						$select.append(
+							'<option name="' + userId + '">' + user + '</option>'
+						);
+					});
+					$listItem.append("<input type='hidden' value='correctedUserId' " +
+						"name='conflict[" + button.attr("conflictId") + "][status]' />");
+				},
+				'error': function(data, status, jqXHR) {
+					console.log(data);
+					toastr.error('Ein Fehler ist aufgetreten.');
+				},
+				dataType: 'json'
+			});
 		}
 	});
+
 
 	function newGradeInput(parent, conflictId) {
 		parent.append('<p id="gradeHint">' + translations.newGradeInput + '</p>');
