@@ -49,7 +49,16 @@
 						{t}No{/t}
 					</button>
 					</div>
-					{t escape=no forename=$conflict.forename name=$conflict.name birthday=$conflict.birthday newGrade=$conflict.newGrade}The user <span class="highlighted">"<span class="forename">%1</span> <span class="surname">%2</span>"</span> (birthday: <span class="highlighted">"%3"</span>), that will be in grade <span class="highlighted">"%3"</span>, is new. Is that correct?{/t}
+					Der Nutzer
+					<span class="highlighted">
+						<span class="forename">{$conflict.forename}</span>
+						<span class="surname">{$conflict.name}</span>
+					</span>
+					(Geburtstag: <span class="highlighted">{$conflict.birthday}</span>),
+					der in der Klasse
+					<span class="highlighted">"{$conflict.newGrade}"</span>
+					sein wird, ist neu.
+					Ist das korrekt?
 					<br />
 				{/if}
 				{if $conflict.type == "DbOnlyConflict"}
@@ -63,7 +72,14 @@
 						{t}No{/t}
 					</button>
 					</div>
-					{t escape=no forename=$conflict.forename name=$conflict.name birthday=$conflict.birthday}The user <span class="highlighted">"<span class="forename">%1</span> <span class="surname">%2</span>"</span> (birthday: <span class="highlighted">"%3"</span>) is not in the upcoming schoolyear. Is that correct?{/t}<br />
+					Der Nutzer
+					<span class="highlighted">
+						<span class="forename">{$conflict.forename}</span>
+						<span class="surname">{$conflict.name}</span>
+					</span>
+					(Geburtstag: <span class="highlighted">{$conflict.birthday}</span>),
+					ist nicht im neuen Schuljahr.
+					Ist das korrekt?
 				{/if}
 				{if $conflict.type == "GradelevelConflict"}
 					<div class="btn-group">
@@ -81,8 +97,19 @@
 						{t}No{/t}
 					</button>
 					</div>
-					{t escape=no forename=$conflict.forename name=$conflict.name birthday=$conflict.birthday origGrade=$conflict.origGrade newGrade=$conflict.newGrade}The grade of the user <span class="highlighted">"<span class="forename">%1</span> <span class="surname">%2</span>"</span> (birthday: <span class="highlighted">"%3"</span>) changed from "%4" to "%5". Is that correct?{/t}<br />
-
+					Die Klasse des Nutzers
+					<span class="highlighted">
+						<span class="forename">{$conflict.forename}</span>
+						<span class="surname">{$conflict.name}</span>
+					</span>
+					(Geburtstag: <span class="highlighted">{$conflict.birthday}</span>),
+					hat sich von
+					<span class="highlighted">"{$conflict.origGrade}"</span>
+					zu
+					<span class="highlighted">"{$conflict.newGrade}"</span>
+					verändert.
+					Ist das korrekt?
+					<br>
 				{/if}
 			</li>
 
