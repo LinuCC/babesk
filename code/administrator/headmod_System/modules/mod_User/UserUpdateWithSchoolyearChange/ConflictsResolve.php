@@ -102,7 +102,18 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 		$this->resolveSqlStatementsPrepare();
 
 		foreach($conflicts as $conflict) {
-			$this->resolveByConflictType($conflict);
+			if($conflict['isSolved']) {
+				$this->_interface->backlink('administrator|System|User' .
+					'|UserUpdateWithSchoolyearChange|SessionMenu');
+				$this->_interface->dieError(
+					'Mindestens ein Konflikt wurde bereits behoben! Bitte ' .
+					'gehen sie zurück und starten sie nochmal die Konflikte' .
+					'lösen Funktion.'
+				);
+			}
+			else {
+				$this->resolveByConflictType($conflict);
+			}
 		}
 
 		$this->conflictResolveFormDisplay();
@@ -211,6 +222,7 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 					tu.newTelephone AS newTelephone,
 					tu.newEmail AS newEmail,
 					tc.type AS type,
+					tc.solved AS isSolved,
 					IFNULL(u.forename, tu.forename) AS forename,
 					IFNULL(u.name, tu.name) AS name,
 					g.gradelevel AS origGradelevel,
