@@ -203,7 +203,7 @@ class Login {
 			);
 			$updateStmt->execute(array($lost - 1, $this->_userId));
 			//TableMng::query(sprintf("UPDATE cards SET lost=%s WHERE UID = %s", $lost-1, $this->_userId));
-			$this->interface->showError("Deine LeG-Card wurde gefunden und kann im GNISSEL-Raum abgeholt werden.");
+			$this->dieShowLoginForm("Deine LeG-Card wurde gefunden und kann im GNISSEL-Raum abgeholt werden.",false);
 		}
 	}
 
