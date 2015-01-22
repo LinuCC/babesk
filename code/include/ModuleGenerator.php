@@ -93,6 +93,12 @@ class ModuleGenerator {
 			$standardNamespaced = str_replace(
 				'/', '\\', $command->pathGetWithoutRoot()
 			) . '\\' . $classname;
+			//Standard Namespace of Module without directory
+			//Prefix/ModuleClass
+			//There should be no namespace with the same path!
+			$withoutDirNamespaced = str_replace(
+				'/', '\\', $command->pathGetWithoutRoot()
+			);
 			if(class_exists($classname)) {
 				$module = new $classname($this->_name, $this->_name, $subPath);
 				$module->initAndExecute($dataContainer);
@@ -103,6 +109,13 @@ class ModuleGenerator {
 				);
 				$module->initAndExecute($dataContainer);
 			}
+			else if(class_exists($withoutDirNamespaced)) {
+				$module = new $withoutDirNamespaced(
+					$this->_name, $this->_name, $subPath
+				);
+				$module->initAndExecute($dataContainer);
+			}
+			//Last resort, check for older usage of namespaces
 			else if(
 				$classname = $this->namespacedClassToExecuteCheck($command)
 			) {
