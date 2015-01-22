@@ -88,14 +88,24 @@ class ModuleGenerator {
 			array_pop($executablePathPieces); //Remove class-File
 			$subPathPart = implode('/', $executablePathPieces);
 			$subPath = "/$subPathPart/";
-
-			if(class_exists($classname = $this->_name)) {
+			$classname = $this->_name;
+			//New namespace standard Prefix/ModuleNamespace/ModuleClass
+			$standardNamespaced = str_replace(
+				'/', '\\', $command->pathGetWithoutRoot()
+			) . '\\' . $classname;
+			if(class_exists($classname)) {
 				$module = new $classname($this->_name, $this->_name, $subPath);
 				$module->initAndExecute($dataContainer);
 			}
-			else if($classname = $this->namespacedClassToExecuteCheck(
-				$command)) {
-
+			else if(class_exists($standardNamespaced)) {
+				$module = new $standardNamespaced(
+					$this->_name, $this->_name, $subPath
+				);
+				$module->initAndExecute($dataContainer);
+			}
+			else if(
+				$classname = $this->namespacedClassToExecuteCheck($command)
+			) {
 				$module = new $classname($this->_name, $this->_name, $subPath);
 				$module->initAndExecute($dataContainer);
 			}
@@ -239,6 +249,10 @@ class ModuleGenerator {
 	 * "web\Babesk\Order\Accept","web\Babesk\Accept", "web\Accept"
 	 * (with the last element being the classname, not part of the namespace
 	 * itself)
+	 *
+	 * @deprecated Because the name of the namespace clashes with the name of
+	 *             the class. Instead of Prefix/Module and Prefix/Module.php
+	 *             use Prefix/Module and Prefix/Module/Module.php
 	 *
 	 * @param  object $command ModuleExecutionCommand
 	 * @return string          the string containing the namespaced Path to
