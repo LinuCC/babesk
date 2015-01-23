@@ -1,0 +1,23 @@
+Babesk\ORM\ElawaDefaultMeetingRoom:
+    type: entity
+    table: ElawaDefaultMeetingRooms
+    id:
+        id:
+            type: integer
+            unique: true
+            id: true
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        room:
+            targetEntity: Babesk\ORM\SystemRoom
+            inversedBy: defaultMeetingRooms
+        host:
+            targetEntity: Babesk\ORM\SystemUsers
+            #inversedBy:
+            joinColumns:
+                hostId:
+                    referencedColumnName: ID
+        category:
+            targetEntity: Babesk\ORM\ElawaCategory
+            inversedBy: defaultMeetingRooms

@@ -768,4 +768,80 @@ class SystemUsers
     {
         return $this->selfpayingBooks;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $elawaMeetingsVisiting;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $elawaMeetingsHosting;
+
+
+    /**
+     * Add elawaMeetingsVisiting
+     *
+     * @param \Babesk\ORM\ElawaMeeting $elawaMeetingsVisiting
+     * @return SystemUsers
+     */
+    public function addElawaMeetingsVisiting(\Babesk\ORM\ElawaMeeting $elawaMeetingsVisiting)
+    {
+        $this->elawaMeetingsVisiting[] = $elawaMeetingsVisiting;
+
+        return $this;
+    }
+
+    /**
+     * Remove elawaMeetingsVisiting
+     *
+     * @param \Babesk\ORM\ElawaMeeting $elawaMeetingsVisiting
+     */
+    public function removeElawaMeetingsVisiting(\Babesk\ORM\ElawaMeeting $elawaMeetingsVisiting)
+    {
+        $this->elawaMeetingsVisiting->removeElement($elawaMeetingsVisiting);
+    }
+
+    /**
+     * Get elawaMeetingsVisiting
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getElawaMeetingsVisiting()
+    {
+        return $this->elawaMeetingsVisiting;
+    }
+
+    /**
+     * Add elawaMeetingsHosting
+     *
+     * @param \Babesk\ORM\ElawaMeeting $elawaMeetingsHosting
+     * @return SystemUsers
+     */
+    public function addElawaMeetingsHosting(\Babesk\ORM\ElawaMeeting $elawaMeetingsHosting)
+    {
+        $this->elawaMeetingsHosting[] = $elawaMeetingsHosting;
+
+        return $this;
+    }
+
+    /**
+     * Remove elawaMeetingsHosting
+     *
+     * @param \Babesk\ORM\ElawaMeeting $elawaMeetingsHosting
+     */
+    public function removeElawaMeetingsHosting(\Babesk\ORM\ElawaMeeting $elawaMeetingsHosting)
+    {
+        $this->elawaMeetingsHosting->removeElement($elawaMeetingsHosting);
+    }
+
+    /**
+     * Get elawaMeetingsHosting
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getElawaMeetingsHosting()
+    {
+        return $this->elawaMeetingsHosting;
+    }
 }

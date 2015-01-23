@@ -146,6 +146,12 @@ Babesk\ORM\SystemUsers:
         cards:
             targetEntity: Babesk\ORM\BabeskCards
             mappedBy: user
+        elawaMeetingsVisiting:
+            targetEntity: Babesk\ORM\ElawaMeeting
+            mappedBy: visitor
+        elawaMeetingsHosting:
+            targetEntity: Babesk\ORM\ElawaMeeting
+            mappedBy: host
     manyToOne:
         priceGroup:
             targetEntity: Babesk\ORM\BabeskPriceGroups
