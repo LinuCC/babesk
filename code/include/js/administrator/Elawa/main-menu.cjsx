@@ -1,7 +1,24 @@
 $(document).ready ->
 
   changeSelections = ($btnSwitch, state) ->
-    alert 'ToDo'
+    onSuccess = (data, statusText, jqXHR)->
+      val = if data == 'true' then 'freigegeben' else 'nicht freigegeben';
+      if jqXHR.status == 204
+        toastr.success "Die Wahlen sind nun #{val}",
+          'Wahl-Erlaubnis erfolgreich verändert'
+      else if jqXHR.status == 201
+        toastr.info "Es wurde nichts verändert, die Wahlen sind #{val}",
+          'Die Wahlen sind bereits so gesetzt'
+
+    $.ajax
+      type: 'POST'
+      url: 'index.php?module=administrator|Elawa|SetSelectionsEnabled'
+      data:
+        areSelectionsEnabled: state
+      success: onSuccess
+      error: (jqXHR, textStatus, errorThrown)->
+        toastr.error 'Ein Fehler ist beim Bearbeiten aufgetreten.'
+        console.log jqXHR
 
   displaySelectHostGroup = ->
     hosts = ["abc", "cde", "zdf"]

@@ -64,10 +64,10 @@ class SystemUsers extends \Babesk\ORM\SystemUsers implements \Doctrine\ORM\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'id', 'name', 'forename', 'username', 'password', 'email', 'telephone', 'birthday', 'last_login', 'login_tries', 'first_passwd', 'locked', 'credit', 'soli', 'religion', 'foreign_language', 'special_course', 'schbasAccounting', 'usersInGradesAndSchoolyears', 'usersInClassesAndCategories', 'cards', 'priceGroup', 'groups', 'bookLending', 'selfpayingBooks');
+            return array('__isInitialized__', 'id', 'name', 'forename', 'username', 'password', 'email', 'telephone', 'birthday', 'last_login', 'login_tries', 'first_passwd', 'locked', 'credit', 'soli', 'religion', 'foreign_language', 'special_course', 'schbasAccounting', 'usersInGradesAndSchoolyears', 'usersInClassesAndCategories', 'cards', 'priceGroup', 'groups', 'bookLending', 'selfpayingBooks', 'elawaMeetingsVisiting', 'elawaMeetingsHosting');
         }
 
-        return array('__isInitialized__', 'id', 'name', 'forename', 'username', 'password', 'email', 'telephone', 'birthday', 'last_login', 'login_tries', 'first_passwd', 'locked', 'credit', 'soli', 'religion', 'foreign_language', 'special_course', 'schbasAccounting', 'usersInGradesAndSchoolyears', 'usersInClassesAndCategories', 'cards', 'priceGroup', 'groups', 'bookLending', 'selfpayingBooks');
+        return array('__isInitialized__', 'id', 'name', 'forename', 'username', 'password', 'email', 'telephone', 'birthday', 'last_login', 'login_tries', 'first_passwd', 'locked', 'credit', 'soli', 'religion', 'foreign_language', 'special_course', 'schbasAccounting', 'usersInGradesAndSchoolyears', 'usersInClassesAndCategories', 'cards', 'priceGroup', 'groups', 'bookLending', 'selfpayingBooks', 'elawaMeetingsVisiting', 'elawaMeetingsHosting');
     }
 
     /**
@@ -780,6 +780,72 @@ class SystemUsers extends \Babesk\ORM\SystemUsers implements \Doctrine\ORM\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSelfpayingBooks', array());
 
         return parent::getSelfpayingBooks();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addElawaMeetingsVisiting(\Babesk\ORM\ElawaMeeting $elawaMeetingsVisiting)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addElawaMeetingsVisiting', array($elawaMeetingsVisiting));
+
+        return parent::addElawaMeetingsVisiting($elawaMeetingsVisiting);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeElawaMeetingsVisiting(\Babesk\ORM\ElawaMeeting $elawaMeetingsVisiting)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeElawaMeetingsVisiting', array($elawaMeetingsVisiting));
+
+        return parent::removeElawaMeetingsVisiting($elawaMeetingsVisiting);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getElawaMeetingsVisiting()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getElawaMeetingsVisiting', array());
+
+        return parent::getElawaMeetingsVisiting();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addElawaMeetingsHosting(\Babesk\ORM\ElawaMeeting $elawaMeetingsHosting)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addElawaMeetingsHosting', array($elawaMeetingsHosting));
+
+        return parent::addElawaMeetingsHosting($elawaMeetingsHosting);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeElawaMeetingsHosting(\Babesk\ORM\ElawaMeeting $elawaMeetingsHosting)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeElawaMeetingsHosting', array($elawaMeetingsHosting));
+
+        return parent::removeElawaMeetingsHosting($elawaMeetingsHosting);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getElawaMeetingsHosting()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getElawaMeetingsHosting', array());
+
+        return parent::getElawaMeetingsHosting();
     }
 
 }

@@ -2,7 +2,28 @@
 $(document).ready(function() {
   var $selectionsSwitch, changeSelections, displaySelectHostGroup;
   changeSelections = function($btnSwitch, state) {
-    return alert('ToDo');
+    var onSuccess;
+    onSuccess = function(data, statusText, jqXHR) {
+      var val;
+      val = data === 'true' ? 'freigegeben' : 'nicht freigegeben';
+      if (jqXHR.status === 204) {
+        return toastr.success("Die Wahlen sind nun " + val, 'Wahl-Erlaubnis erfolgreich verändert');
+      } else if (jqXHR.status === 201) {
+        return toastr.info("Es wurde nichts verändert, die Wahlen sind " + val, 'Die Wahlen sind bereits so gesetzt');
+      }
+    };
+    return $.ajax({
+      type: 'POST',
+      url: 'index.php?module=administrator|Elawa|SetSelectionsEnabled',
+      data: {
+        areSelectionsEnabled: state
+      },
+      success: onSuccess,
+      error: function(jqXHR, textStatus, errorThrown) {
+        toastr.error('Ein Fehler ist beim Bearbeiten aufgetreten.');
+        return console.log(jqXHR);
+      }
+    });
   };
   displaySelectHostGroup = function() {
     var form, hosts;
