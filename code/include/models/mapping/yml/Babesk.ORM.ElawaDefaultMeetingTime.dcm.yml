@@ -17,3 +17,6 @@ Babesk\ORM\ElawaDefaultMeetingTime:
         category:
             targetEntity: Babesk\ORM\ElawaCategory
             inversedBy: defaultMeetingTimes
+            joinColumns:
+                categoryId:
+                    referencedColumnName: id

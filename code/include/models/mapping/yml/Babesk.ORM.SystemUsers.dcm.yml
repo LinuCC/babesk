@@ -136,10 +136,7 @@ Babesk\ORM\SystemUsers:
     oneToMany:
         usersInGradesAndSchoolyears:
             targetEntity: Babesk\ORM\SystemUsersInGradesAndSchoolyears
-            cascade: {  }
             mappedBy: user
-            inversedBy: null
-            orderBy: null
         usersInClassesAndCategories:
             targetEntity: Babesk\ORM\UserInClassAndCategory
             mappedBy: user

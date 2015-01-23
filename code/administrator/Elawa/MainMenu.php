@@ -24,6 +24,7 @@ class MainMenu extends Elawa {
 
 		parent::entryPoint($dataContainer);
 		parent::moduleTemplatePathSet();
+		$stuff = $this->_em->getRepository('DM:ElawaMeeting')->findAll();
 	}
 
 	private function display() {

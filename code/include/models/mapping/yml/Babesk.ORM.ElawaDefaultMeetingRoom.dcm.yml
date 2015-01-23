@@ -12,6 +12,9 @@ Babesk\ORM\ElawaDefaultMeetingRoom:
         room:
             targetEntity: Babesk\ORM\SystemRoom
             inversedBy: defaultMeetingRooms
+            joinColumns:
+                roomId:
+                    referencedColumnName: id
         host:
             targetEntity: Babesk\ORM\SystemUsers
             #inversedBy:
@@ -21,3 +24,6 @@ Babesk\ORM\ElawaDefaultMeetingRoom:
         category:
             targetEntity: Babesk\ORM\ElawaCategory
             inversedBy: defaultMeetingRooms
+            joinColumns:
+                categoryId:
+                    referencedColumnName: id

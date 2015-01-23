@@ -20,8 +20,11 @@ class Elawa extends \Module {
 	//Methods
 	/////////////////////////////////////////////////////////////////////
 
-	public function execute ($dataContainer) {
-		//function not needed, javascript is doing everything
+	public function execute($dataContainer) {
+		$defaultMod = new \ModuleExecutionCommand(
+			'root/administrator/Elawa/MainMenu'
+		);
+		$dataContainer->getAcl()->moduleExecute($defaultMod, $dataContainer);
 	}
 
 }

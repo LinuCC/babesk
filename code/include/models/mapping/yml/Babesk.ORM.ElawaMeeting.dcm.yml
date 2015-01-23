@@ -31,5 +31,11 @@ Babesk\ORM\ElawaMeeting:
         category:
             targetEntity: Babesk\ORM\ElawaCategory
             inversedBy: meetings
+            joinColumns:
+                categoryId:
+                    referencedColumnName: id
         room:
             targetEntity: Babesk\ORM\SystemRoom
+            joinColumns:
+                roomId:
+                    referencedColumnName: id
