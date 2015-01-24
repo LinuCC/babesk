@@ -19,6 +19,15 @@ class ChangeDisableds extends \administrator\Elawa\Meetings\Meetings {
 			);
 			$this->sendHostMeetingData($host);
 		}
+		else if(isset($_POST['meetingId'])) {
+			$meeting = $this->_em->getReference(
+				'DM:ElawaMeeting', $_POST['meetingId']
+			);
+			$isDisabled = $_POST['isDisabled'] == 'true';
+			$meeting->setIsDisabled($isDisabled);
+			$this->_em->persist($meeting);
+			$this->_em->flush();
+		}
 		else {
 			$hosts = $this->getHosts();
 			$this->_smarty->assign('hosts', $hosts);

@@ -12,6 +12,11 @@
 	</select>
 </div>
 
+<table id="meeting-statuses" class="table table-responsive table-striped">
+	<thead></thead>
+	<tbody></tbody>
+</table>
+
 {/block}
 
 {block name=style_include append}
