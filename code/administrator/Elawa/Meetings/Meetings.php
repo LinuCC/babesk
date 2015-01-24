@@ -12,19 +12,13 @@ class Meetings extends \administrator\Elawa\Elawa {
 
 	public function execute($dataContainer) {
 
-		$this->entryPoint($dataContainer);
+		parent::entryPoint($dataContainer);
 		$this->displayTpl('menu.tpl');
 	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
-
-	protected function entryPoint($dataContainer) {
-
-		parent::entryPoint($dataContainer);
-		parent::moduleTemplatePathSet();
-	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Attributes

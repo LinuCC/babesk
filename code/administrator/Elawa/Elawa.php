@@ -27,6 +27,15 @@ class Elawa extends \Module {
 		$dataContainer->getAcl()->moduleExecute($defaultMod, $dataContainer);
 	}
 
+	/////////////////////////////////////////////////////////////////////
+	//Implements
+	/////////////////////////////////////////////////////////////////////
+
+	protected function entryPoint($dataContainer) {
+
+		parent::entryPoint($dataContainer);
+		parent::moduleTemplatePathSet();
+	}
 }
 
 ?>
