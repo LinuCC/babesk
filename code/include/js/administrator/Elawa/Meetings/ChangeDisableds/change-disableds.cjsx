@@ -38,9 +38,30 @@ $(document).ready ->
         $headRow.append "<th class='length'>Länge</th>"
         for index, category of categories
           $headRow.append "<th class='category' data-name='#{category}'>
-            #{category}</th>
+              #{category}
+              <input type='checkbox' class='global-category-switch'
+                data-category='#{category}' checked>
+            </th>
           "
         $thead.append $headRow
+        $globalSwitches = $(
+          'table#meeting-statuses > thead > tr >
+          th.category > input.global-category-switch'
+        )
+        $globalSwitches.bootstrapSwitch
+            size: 'mini'
+            onText: 'AN'
+            onColor: 'primary'
+            offText: 'PAUSE'
+            offColor: 'danger'
+        $globalSwitches.on 'switchChange.bootstrapSwitch', (event, status)->
+          $globalSwitch = $(this)
+          category = $globalSwitch.data 'category'
+          $switches = $(
+            "table#meeting-statuses > tbody > tr >
+            td.category[data-name='#{category}'] input"
+          )
+          $switches.bootstrapSwitch 'state', status, false
 
       #Each row has the time and length as attributes so that same entries
       #with different categories can be shown together

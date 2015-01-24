@@ -41,15 +41,30 @@ $(document).ready(function() {
         return categories;
       };
       setTableHeaders = function(categories) {
-        var $headRow, category, index;
+        var $globalSwitches, $headRow, category, index;
         $headRow = $('<tr></tr>');
         $headRow.append("<th class='time'>Zeit</th>");
         $headRow.append("<th class='length'>Länge</th>");
         for (index in categories) {
           category = categories[index];
-          $headRow.append("<th class='category' data-name='" + category + "'> " + category + "</th>");
+          $headRow.append("<th class='category' data-name='" + category + "'> " + category + " <input type='checkbox' class='global-category-switch' data-category='" + category + "' checked> </th>");
         }
-        return $thead.append($headRow);
+        $thead.append($headRow);
+        $globalSwitches = $('table#meeting-statuses > thead > tr > th.category > input.global-category-switch');
+        $globalSwitches.bootstrapSwitch({
+          size: 'mini',
+          onText: 'AN',
+          onColor: 'primary',
+          offText: 'PAUSE',
+          offColor: 'danger'
+        });
+        return $globalSwitches.on('switchChange.bootstrapSwitch', function(event, status) {
+          var $globalSwitch, $switches;
+          $globalSwitch = $(this);
+          category = $globalSwitch.data('category');
+          $switches = $("table#meeting-statuses > tbody > tr > td.category[data-name='" + category + "'] input");
+          return $switches.bootstrapSwitch('state', status, false);
+        });
       };
       fillTableBody = function(categories, data) {
         var $row, $toggle, category, index, val, _i, _len, _results;
