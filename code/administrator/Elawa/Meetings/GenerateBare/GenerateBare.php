@@ -12,7 +12,7 @@ class GenerateBare extends \administrator\Elawa\Meetings\Meetings {
 
 	public function execute($dataContainer) {
 
-		$this->entryPoint($dataContainer);
+		parent::entryPoint($dataContainer);
 		$numDeleted = $this->clearMeetings();
 		$numCreated = $this->generate();
 		$this->_interface->dieSuccess(
@@ -25,12 +25,6 @@ class GenerateBare extends \administrator\Elawa\Meetings\Meetings {
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
-
-	protected function entryPoint($dataContainer) {
-
-		parent::entryPoint($dataContainer);
-		parent::moduleTemplatePathSet();
-	}
 
 	/**
 	 * Removes all existing meetings.

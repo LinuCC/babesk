@@ -1,0 +1,27 @@
+{extends file=$inh_path}{block name=content}
+
+<h3 class="module-header">Pausen der Sprechzeiten</h3>
+
+<div class="text-center">
+	<select id="hosts-select">
+		{foreach $hosts as $host}
+			<option value="{$host->getId()}">
+				{$host->getForename()} {$host->getName()}
+			</option>
+		{/foreach}
+	</select>
+</div>
+
+{/block}
+
+{block name=style_include append}
+<link rel="stylesheet" href="{$path_css}/bootstrap-multiselect.css" type="text/css" />
+<link rel="stylesheet" href="{$path_css}/bootstrap-switch.min.css" type="text/css" />
+{/block}
+
+
+{block name=js_include append}
+<script type="text/javascript" src="{$path_js}/bootstrap-switch.min.js"></script>
+<script type="text/javascript" src="{$path_js}/bootstrap-multiselect.min.js"></script>
+<script type="text/javascript" src="{$path_js}/administrator/Elawa/Meetings/ChangeDisableds/change-disableds.js"></script>
+{/block}
