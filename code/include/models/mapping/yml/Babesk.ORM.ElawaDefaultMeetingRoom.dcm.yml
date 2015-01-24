@@ -17,7 +17,7 @@ Babesk\ORM\ElawaDefaultMeetingRoom:
                     referencedColumnName: id
         host:
             targetEntity: Babesk\ORM\SystemUsers
-            #inversedBy:
+            inversedBy: elawaDefaultMeetingRooms
             joinColumns:
                 hostId:
                     referencedColumnName: ID

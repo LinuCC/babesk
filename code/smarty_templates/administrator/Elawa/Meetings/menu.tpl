@@ -7,7 +7,7 @@
 	<ul class="submodulelinkList">
 		<li>
 			<a href="index.php?module=administrator|Elawa|Meetings|GenerateBare">
-				Blanke Sprechtag-Wahlen genieren
+				Blanke Sprechtag-Wahlen generieren
 			</a>
 		</li>
 		<li>

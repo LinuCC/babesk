@@ -844,4 +844,42 @@ class SystemUsers
     {
         return $this->elawaMeetingsHosting;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $elawaDefaultMeetingRooms;
+
+
+    /**
+     * Add elawaDefaultMeetingRooms
+     *
+     * @param \Babesk\ORM\ElawaDefaultMeetingRoom $elawaDefaultMeetingRooms
+     * @return SystemUsers
+     */
+    public function addElawaDefaultMeetingRoom(\Babesk\ORM\ElawaDefaultMeetingRoom $elawaDefaultMeetingRooms)
+    {
+        $this->elawaDefaultMeetingRooms[] = $elawaDefaultMeetingRooms;
+
+        return $this;
+    }
+
+    /**
+     * Remove elawaDefaultMeetingRooms
+     *
+     * @param \Babesk\ORM\ElawaDefaultMeetingRoom $elawaDefaultMeetingRooms
+     */
+    public function removeElawaDefaultMeetingRoom(\Babesk\ORM\ElawaDefaultMeetingRoom $elawaDefaultMeetingRooms)
+    {
+        $this->elawaDefaultMeetingRooms->removeElement($elawaDefaultMeetingRooms);
+    }
+
+    /**
+     * Get elawaDefaultMeetingRooms
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getElawaDefaultMeetingRooms()
+    {
+        return $this->elawaDefaultMeetingRooms;
+    }
 }

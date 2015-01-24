@@ -149,6 +149,9 @@ Babesk\ORM\SystemUsers:
         elawaMeetingsHosting:
             targetEntity: Babesk\ORM\ElawaMeeting
             mappedBy: host
+        elawaDefaultMeetingRooms:
+            targetEntity: Babesk\ORM\ElawaDefaultMeetingRoom
+            mappedBy: host
     manyToOne:
         priceGroup:
             targetEntity: Babesk\ORM\BabeskPriceGroups

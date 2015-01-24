@@ -64,10 +64,10 @@ class SystemUsers extends \Babesk\ORM\SystemUsers implements \Doctrine\ORM\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'id', 'name', 'forename', 'username', 'password', 'email', 'telephone', 'birthday', 'last_login', 'login_tries', 'first_passwd', 'locked', 'credit', 'soli', 'religion', 'foreign_language', 'special_course', 'schbasAccounting', 'usersInGradesAndSchoolyears', 'usersInClassesAndCategories', 'cards', 'priceGroup', 'groups', 'bookLending', 'selfpayingBooks', 'elawaMeetingsVisiting', 'elawaMeetingsHosting');
+            return array('__isInitialized__', 'id', 'name', 'forename', 'username', 'password', 'email', 'telephone', 'birthday', 'last_login', 'login_tries', 'first_passwd', 'locked', 'credit', 'soli', 'religion', 'foreign_language', 'special_course', 'schbasAccounting', 'usersInGradesAndSchoolyears', 'usersInClassesAndCategories', 'cards', 'priceGroup', 'groups', 'bookLending', 'selfpayingBooks', 'elawaMeetingsVisiting', 'elawaMeetingsHosting', 'elawaDefaultMeetingRooms');
         }
 
-        return array('__isInitialized__', 'id', 'name', 'forename', 'username', 'password', 'email', 'telephone', 'birthday', 'last_login', 'login_tries', 'first_passwd', 'locked', 'credit', 'soli', 'religion', 'foreign_language', 'special_course', 'schbasAccounting', 'usersInGradesAndSchoolyears', 'usersInClassesAndCategories', 'cards', 'priceGroup', 'groups', 'bookLending', 'selfpayingBooks', 'elawaMeetingsVisiting', 'elawaMeetingsHosting');
+        return array('__isInitialized__', 'id', 'name', 'forename', 'username', 'password', 'email', 'telephone', 'birthday', 'last_login', 'login_tries', 'first_passwd', 'locked', 'credit', 'soli', 'religion', 'foreign_language', 'special_course', 'schbasAccounting', 'usersInGradesAndSchoolyears', 'usersInClassesAndCategories', 'cards', 'priceGroup', 'groups', 'bookLending', 'selfpayingBooks', 'elawaMeetingsVisiting', 'elawaMeetingsHosting', 'elawaDefaultMeetingRooms');
     }
 
     /**
@@ -846,6 +846,39 @@ class SystemUsers extends \Babesk\ORM\SystemUsers implements \Doctrine\ORM\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getElawaMeetingsHosting', array());
 
         return parent::getElawaMeetingsHosting();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addElawaDefaultMeetingRoom(\Babesk\ORM\ElawaDefaultMeetingRoom $elawaDefaultMeetingRooms)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addElawaDefaultMeetingRoom', array($elawaDefaultMeetingRooms));
+
+        return parent::addElawaDefaultMeetingRoom($elawaDefaultMeetingRooms);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeElawaDefaultMeetingRoom(\Babesk\ORM\ElawaDefaultMeetingRoom $elawaDefaultMeetingRooms)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeElawaDefaultMeetingRoom', array($elawaDefaultMeetingRooms));
+
+        return parent::removeElawaDefaultMeetingRoom($elawaDefaultMeetingRooms);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getElawaDefaultMeetingRooms()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getElawaDefaultMeetingRooms', array());
+
+        return parent::getElawaDefaultMeetingRooms();
     }
 
 }
