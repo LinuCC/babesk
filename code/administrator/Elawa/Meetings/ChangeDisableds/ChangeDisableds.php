@@ -62,6 +62,7 @@ class ChangeDisableds extends \administrator\Elawa\Meetings\Meetings {
 			'SELECT m, c FROM DM:ElawaMeeting m
 			INNER JOIN m.category c
 			WHERE m.host = :host
+			ORDER BY m.time ASC
 		');
 		$query->setParameter('host', $host);
 		$meetings = $query->getResult();
