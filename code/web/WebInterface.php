@@ -48,6 +48,16 @@ class WebInterface {
 	}
 
 	/**
+	 * A backlink that only needs the Modulepath
+	 * @param  string $backlink The backlink in form of the Modulepath,
+	 * starting with the subprogram (web or administrator). The delimiter is
+	 * the pipe ('|')
+	 */
+	public function moduleBacklink($backlink) {
+		$this->_backlink = 'index.php?module=' . $backlink;
+	}
+
+	/**
 	 * If ajax-responses are enabled or not
 	 * @return bool true if it is enabled, false if not
 	 */
