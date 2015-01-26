@@ -16,9 +16,14 @@ class Selection extends \web\Elawa\Elawa {
 		if(isset($_POST['meetingId'])) {
 			$this->registerSelection($_POST['meetingId']);
 		}
-		else {
-			$host = $this->_em->getReference('DM:SystemUsers', 4);
+		else if(isset($_GET['hostId'])) {
+			$host = $this->_em->getReference(
+				'DM:SystemUsers', $_GET['hostId']
+			);
 			$this->displaySelection($host);
+		}
+		else {
+			$this->displayHostSelection();
 		}
 	}
 
@@ -92,6 +97,21 @@ class Selection extends \web\Elawa\Elawa {
 				'Da war wohl jemand schneller.'
 			);
 		}
+	}
+
+	/**
+	 * Displays a list of hosts to choose from
+	 */
+	protected function displayHostSelection() {
+
+		$query = $this->_em->createQuery(
+			'SELECT u FROM DM:SystemUsers u
+			INNER JOIN u.elawaMeetingsHosting h
+			ORDER BY u.name
+		');
+		$hosts = $query->getResult();
+		$this->_smarty->assign('hosts', $hosts);
+		$this->displayTpl('host_selection.tpl');
 	}
 
 	/////////////////////////////////////////////////////////////////////

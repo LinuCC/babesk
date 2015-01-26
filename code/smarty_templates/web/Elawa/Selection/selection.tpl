@@ -26,8 +26,14 @@
 
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			Hier können sie die Sprechzeiten von {$host->getForename()} {$host->getName()} auswählen.
-			Nachdem sie die korrekte Sprechzeit ausgewählt haben, gehen sie bitte auf "Anmeldung bestätigen".
+			<p>Hier können sie eine Sprechzeit von {$host->getForename()} {$host->getName()} auswählen, um daran teilzunehmen.
+			Nachdem sie die gewünschte Sprechzeit ausgewählt haben, gehen sie bitte auf "Anmeldung bestätigen".
+			</p>
+			<b class="text-danger">Bitte beachten sie:</b>
+			<p>Sie können pro Lehrer nur eine Sprechzeit auswählen.</p>
+			<p>
+				Anmeldungen sind bindend! Sie können gewählte Sprechzeiten nicht mehr ändern.
+			</p>
 		</div>
 		<div class="panel-body">
 			<table id="selection-table" class="table table-responsive table-striped">

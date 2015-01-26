@@ -49,7 +49,7 @@
 		{/if}
 	</div>
 	<div class="panel-footer">
-		<a href="" class="btn btn-primary pull-right">
+		<a href="index.php?module=web|Elawa|Selection" class="btn btn-primary pull-right">
 			Neue Sprechzeit wählen
 		</a>
 		<div class="clearfix"></div>
