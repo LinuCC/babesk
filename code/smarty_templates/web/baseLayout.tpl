@@ -17,6 +17,7 @@
 		<link rel="stylesheet" href="{$path_css}/bootstrap.min.css" type="text/css" />
 		<link rel="stylesheet" href="{$path_css}/web.css" type="text/css" />
 		<link rel="stylesheet" href="{$path_css}/iconfonts/iconfonts.css" type="text/css" />
+		<link rel="stylesheet" href="{$path_css}/font-awesome.min.css" type="text/css" />
 		<link rel="stylesheet" href="{$path_css}/toastr.min.css" type="text/css" />
 		{/block}
 
@@ -74,7 +75,7 @@
 									<li>
 										<a href="index.php?module=web|Settings">
 											{t}Settings{/t}
-											<span class="icon-Settings"></span>
+											<span class="fa fa-cog"></span>
 										</a>
 									</li>
 									<li>
@@ -117,7 +118,9 @@
 						{/if}
 						{if $activeHeadmodule == $module->getName()}active{/if}">
 						<div> <!-- Correctly wrap with smaller devices with extra div -->
-							<div class="icon-{$module->getName()} icon"></div>
+							<div>
+								<i class="fa fa-{$module->getName()}"></i>
+							</div>
 								{$path = $moduleGenMan->modulePathGet($module)}
 								{_g("modulepath_$path")}
 						</div>
