@@ -13,17 +13,24 @@ class Selection extends \web\Elawa\Elawa {
 	public function execute($dataContainer) {
 
 		parent::entryPoint($dataContainer);
-		if(isset($_POST['meetingId'])) {
-			$this->registerSelection($_POST['meetingId']);
-		}
-		else if(isset($_GET['hostId'])) {
-			$host = $this->_em->getReference(
-				'DM:SystemUsers', $_GET['hostId']
-			);
-			$this->displaySelection($host);
+		if($this->checkIsSelectionGloballyEnabled()) {
+			if(isset($_POST['meetingId'])) {
+				$this->registerSelection($_POST['meetingId']);
+			}
+			else if(isset($_GET['hostId'])) {
+				$host = $this->_em->getReference(
+					'DM:SystemUsers', $_GET['hostId']
+				);
+				$this->displaySelection($host);
+			}
+			else {
+				$this->displayHostSelection();
+			}
 		}
 		else {
-			$this->displayHostSelection();
+			$this->_interface->dieError(
+				'Die Wahlen finden momentan nicht statt.'
+			);
 		}
 	}
 
@@ -112,6 +119,21 @@ class Selection extends \web\Elawa\Elawa {
 		$hosts = $query->getResult();
 		$this->_smarty->assign('hosts', $hosts);
 		$this->displayTpl('host_selection.tpl');
+	}
+
+	/**
+	 * Checks if the selections are globally enabled
+	 * @return boolean Returns true if selections are enabled, else false
+	 */
+	protected function checkIsSelectionGloballyEnabled() {
+
+		$enabledRow = $this->_em->getRepository('DM:SystemGlobalSettings')
+			->findOneByName('elawaSelectionsEnabled');
+		if($enabledRow) {
+			if($enabledRow->getValue() != '0') {
+				return true;
+			}
+		}
 	}
 
 	/////////////////////////////////////////////////////////////////////
