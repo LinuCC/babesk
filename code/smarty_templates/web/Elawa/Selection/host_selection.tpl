@@ -8,10 +8,16 @@
 	</div>
 	<div class="panel-body">
 		<div class="list-group">
-			{foreach $hosts as $host}
-				<a href="index.php?module=web|Elawa|Selection&amp;hostId={$host->getId()}" class="list-group-item">
-					{$host->getName()},
-					{$host->getForename()}
+			{foreach $hosts as $hostData}
+				<a {if $hostData.selectable}href="index.php?module=web|Elawa|Selection&amp;hostId={$hostData.host->getId()}"{/if}
+				class="list-group-item {if !$hostData.selectable}disabled{/if}">
+					{$hostData.host->getName()},
+					{$hostData.host->getForename()}
+					{if !empty($hostData.statusText)}
+						<span class="badge">
+							{$hostData.statusText}
+						</span>
+					{/if}
 				</a>
 			{/foreach}
 		</div>

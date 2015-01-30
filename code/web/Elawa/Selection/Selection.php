@@ -111,13 +111,45 @@ class Selection extends \web\Elawa\Elawa {
 	 */
 	protected function displayHostSelection() {
 
-		$query = $this->_em->createQuery(
+		$userSelf = $this->_em->getReference(
+			'DM:SystemUsers', $_SESSION['uid']
+		);
+		$hostsQuery = $this->_em->createQuery(
 			'SELECT u FROM DM:SystemUsers u
 			INNER JOIN u.elawaMeetingsHosting h
 			ORDER BY u.name
 		');
-		$hosts = $query->getResult();
-		$this->_smarty->assign('hosts', $hosts);
+		$hosts = $hostsQuery->getResult();
+		//Get all hosts for which the user already has made a selection
+		$votedHostsQuery = $this->_em->createQuery(
+			'SELECT m FROM DM:ElawaMeeting m
+			WHERE m.visitor = :user
+			GROUP BY m.host
+		');
+		$votedHostsQuery->setParameter('user', $userSelf);
+		$meetingsOfVotedHosts = $votedHostsQuery->getResult();
+		$hostsAr = array();
+		foreach($hosts as $host) {
+			$status = "";
+			$selectable = true;
+			if($host == $userSelf) {
+				$status = "Du selbst";
+				$selectable = false;
+			}
+			foreach($meetingsOfVotedHosts as $meetingOfVotedHost) {
+				if($host == $meetingOfVotedHost->getHost()) {
+					$status = "Bereits Termin gewählt";
+					$selectable = false;
+				}
+				continue;
+			}
+			$hostsAr[] = array(
+				'statusText' => $status,
+				'selectable' => $selectable,
+				'host' => $host
+			);
+		}
+		$this->_smarty->assign('hosts', $hostsAr);
 		$this->displayTpl('host_selection.tpl');
 	}
 
