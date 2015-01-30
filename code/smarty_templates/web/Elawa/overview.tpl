@@ -43,7 +43,7 @@
 				</tbody>
 			</table>
 		{else}
-			<div class="alert-info">
+			<div class="alert alert-info">
 				Bisher keine Sprechzeiten gewählt.
 			</div>
 		{/if}
