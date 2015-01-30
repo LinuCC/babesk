@@ -77,7 +77,7 @@
 															id="meetingId-{$meeting->getId()}"
 															class="meetings" value="{$meeting->getId()}">
 													</label>
-													<label class="btn btn-primary meeting-status-button">
+													<label class="btn btn-success meeting-status-button">
 														<span class="status-text">Frei</span>
 													</label>
 												</div>
@@ -98,6 +98,7 @@
 			<a href="index.php?module=web|Elawa" class="btn btn-danger">Abbrechen</a>
 			<input type="submit" id="selection-submit"
 				class="btn btn-default pull-right" value="Anmeldung bestätigen">
+			<div class="clearfix"></div>
 		</div>
 </div>
 </form>
