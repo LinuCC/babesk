@@ -57,7 +57,7 @@ class Selection extends \web\Elawa\Elawa {
 		');
 		$query->setParameter('meeting', $meeting);
 		$meeting = $query->getOneOrNullResult();
-		$this->_interface->moduleBacklink('web|Elawa|Selection');
+		$this->_interface->moduleBacklink('web|Elawa');
 		if(!$meeting) {
 			$this->_interface->dieError('Diese Sprechzeit existiert nicht!');
 		}
