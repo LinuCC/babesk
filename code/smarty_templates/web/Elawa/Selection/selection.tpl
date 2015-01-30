@@ -22,7 +22,8 @@
 {/foreach}
 {$ignore = ksort($categories)}
 
-<form action="index.php?module=web|Elawa|Selection" method="post">
+<form id="selection-form" action="index.php?module=web|Elawa|Selection"
+  method="post">
 
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -69,13 +70,17 @@
 													Vergeben
 												</label>
 											{else}
-												<label for="meetingId-{$meeting->getId()}"
-													class="btn btn-success meeting-status-button">
-													<span class="status-text">Frei</span>
-													<input type="radio" name="meetingId"
-														id="meetingId-{$meeting->getId()}"
-														class="meetings" value="{$meeting->getId()}">
-												</label>
+												<div class="btn-group btn-toggle">
+													<label class="btn btn-default meeting-status-button">
+														<span class="status-text">anmelden</span>
+														<input type="radio" name="meetingId"
+															id="meetingId-{$meeting->getId()}"
+															class="meetings" value="{$meeting->getId()}">
+													</label>
+													<label class="btn btn-primary meeting-status-button">
+														<span class="status-text">Frei</span>
+													</label>
+												</div>
 											{/if}
 										</td>
 									{else}
@@ -91,13 +96,14 @@
 		</div>
 		<div class="panel-footer">
 			<a href="index.php?module=web|Elawa" class="btn btn-danger">Abbrechen</a>
-			<input type="submit" class="btn btn-default pull-right"
-				value="Anmeldung bestätigen">
+			<input type="submit" id="selection-submit"
+				class="btn btn-default pull-right" value="Anmeldung bestätigen">
 		</div>
 </div>
 </form>
 {/block}
 
 {block name=js_include append}
+<script type="text/javascript" src="{$path_js}/bootbox.min.js"></script>
 <script type="text/javascript" src="{$path_js}/web/Elawa/Selection/selection.js"></script>
 {/block}
