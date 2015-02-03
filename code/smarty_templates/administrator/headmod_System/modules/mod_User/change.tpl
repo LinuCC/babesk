@@ -353,7 +353,7 @@
 						<select class="form-control" id="pricegroupId" name="pricegroupId"
 						title="{t}Pricegroup{/t}">
 							<option value="">Keine</option>
-							{html_options options=$pricegroups selected="1"}
+							{html_options options=$pricegroups selected="{$user.GID}"}
 						</select>
 					{/if}
 				</div>
