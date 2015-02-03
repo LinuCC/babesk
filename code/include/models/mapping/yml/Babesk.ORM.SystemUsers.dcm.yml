@@ -99,7 +99,7 @@ Babesk\ORM\SystemUsers:
                         columnDefinition: null
                         referencedColumnName: id
         selfpayingBooks:
-            targetEntity: Babesk\ORM\SchbasBooks
+            targetEntity: Babesk\ORM\SchbasBook
             joinTable:
                 name: SchbasSelfpayer
                 schema: null

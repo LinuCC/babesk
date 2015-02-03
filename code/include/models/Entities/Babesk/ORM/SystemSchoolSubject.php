@@ -96,10 +96,10 @@ class SystemSchoolSubject
     /**
      * Add books
      *
-     * @param \Babesk\ORM\SchbasBooks $books
+     * @param \Babesk\ORM\SchbasBook $books
      * @return SystemSchoolSubject
      */
-    public function addBook(\Babesk\ORM\SchbasBooks $books)
+    public function addBook(\Babesk\ORM\SchbasBook $books)
     {
         $this->books[] = $books;
 
@@ -109,9 +109,9 @@ class SystemSchoolSubject
     /**
      * Remove books
      *
-     * @param \Babesk\ORM\SchbasBooks $books
+     * @param \Babesk\ORM\SchbasBook $books
      */
-    public function removeBook(\Babesk\ORM\SchbasBooks $books)
+    public function removeBook(\Babesk\ORM\SchbasBook $books)
     {
         $this->books->removeElement($books);
     }

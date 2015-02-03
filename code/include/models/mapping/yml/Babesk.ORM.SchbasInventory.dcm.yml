@@ -18,7 +18,7 @@ Babesk\ORM\SchbasInventory:
             precision: 11
     manyToOne:
         book:
-            targetEntity: Babesk\ORM\SchbasBooks
+            targetEntity: Babesk\ORM\SchbasBook
             inversedBy: exemplars
             joinColumns:
                 book_id:

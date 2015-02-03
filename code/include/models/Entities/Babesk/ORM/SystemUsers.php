@@ -856,10 +856,10 @@ class SystemUsers
     /**
      * Add selfpayingBooks
      *
-     * @param \Babesk\ORM\SchbasBooks $selfpayingBooks
+     * @param \Babesk\ORM\SchbasBook $selfpayingBooks
      * @return SystemUsers
      */
-    public function addSelfpayingBook(\Babesk\ORM\SchbasBooks $selfpayingBooks)
+    public function addSelfpayingBook(\Babesk\ORM\SchbasBook $selfpayingBooks)
     {
         $this->selfpayingBooks[] = $selfpayingBooks;
 
@@ -869,9 +869,9 @@ class SystemUsers
     /**
      * Remove selfpayingBooks
      *
-     * @param \Babesk\ORM\SchbasBooks $selfpayingBooks
+     * @param \Babesk\ORM\SchbasBook $selfpayingBooks
      */
-    public function removeSelfpayingBook(\Babesk\ORM\SchbasBooks $selfpayingBooks)
+    public function removeSelfpayingBook(\Babesk\ORM\SchbasBook $selfpayingBooks)
     {
         $this->selfpayingBooks->removeElement($selfpayingBooks);
     }

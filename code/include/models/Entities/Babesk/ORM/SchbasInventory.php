@@ -30,7 +30,7 @@ class SchbasInventory
     private $lending;
 
     /**
-     * @var \Babesk\ORM\SchbasBooks
+     * @var \Babesk\ORM\SchbasBook
      */
     private $book;
 
@@ -140,10 +140,10 @@ class SchbasInventory
     /**
      * Set book
      *
-     * @param \Babesk\ORM\SchbasBooks $book
+     * @param \Babesk\ORM\SchbasBook $book
      * @return SchbasInventory
      */
-    public function setBook(\Babesk\ORM\SchbasBooks $book = null)
+    public function setBook(\Babesk\ORM\SchbasBook $book = null)
     {
         $this->book = $book;
 
@@ -153,7 +153,7 @@ class SchbasInventory
     /**
      * Get book
      *
-     * @return \Babesk\ORM\SchbasBooks 
+     * @return \Babesk\ORM\SchbasBook 
      */
     public function getBook()
     {

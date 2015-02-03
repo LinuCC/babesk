@@ -5,9 +5,9 @@ namespace Babesk\ORM;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SchbasBooks
+ * SchbasBook
  */
-class SchbasBooks
+class SchbasBook
 {
     /**
      * @var integer
@@ -87,7 +87,7 @@ class SchbasBooks
      * Set title
      *
      * @param string $title
-     * @return SchbasBooks
+     * @return SchbasBook
      */
     public function setTitle($title)
     {
@@ -110,7 +110,7 @@ class SchbasBooks
      * Set author
      *
      * @param string $author
-     * @return SchbasBooks
+     * @return SchbasBook
      */
     public function setAuthor($author)
     {
@@ -133,7 +133,7 @@ class SchbasBooks
      * Set publisher
      *
      * @param string $publisher
-     * @return SchbasBooks
+     * @return SchbasBook
      */
     public function setPublisher($publisher)
     {
@@ -156,7 +156,7 @@ class SchbasBooks
      * Set isbn
      *
      * @param string $isbn
-     * @return SchbasBooks
+     * @return SchbasBook
      */
     public function setIsbn($isbn)
     {
@@ -179,7 +179,7 @@ class SchbasBooks
      * Set class
      *
      * @param string $class
-     * @return SchbasBooks
+     * @return SchbasBook
      */
     public function setClass($class)
     {
@@ -202,7 +202,7 @@ class SchbasBooks
      * Set bundle
      *
      * @param integer $bundle
-     * @return SchbasBooks
+     * @return SchbasBook
      */
     public function setBundle($bundle)
     {
@@ -225,7 +225,7 @@ class SchbasBooks
      * Set price
      *
      * @param float $price
-     * @return SchbasBooks
+     * @return SchbasBook
      */
     public function setPrice($price)
     {
@@ -248,7 +248,7 @@ class SchbasBooks
      * Add exemplars
      *
      * @param \Babesk\ORM\SchbasInventory $exemplars
-     * @return SchbasBooks
+     * @return SchbasBook
      */
     public function addExemplar(\Babesk\ORM\SchbasInventory $exemplars)
     {
@@ -281,7 +281,7 @@ class SchbasBooks
      * Set subject
      *
      * @param \Babesk\ORM\SystemSchoolSubject $subject
-     * @return SchbasBooks
+     * @return SchbasBook
      */
     public function setSubject(\Babesk\ORM\SystemSchoolSubject $subject = null)
     {
@@ -304,7 +304,7 @@ class SchbasBooks
      * Add selfpayingUsers
      *
      * @param \Babesk\ORM\SystemUsers $selfpayingUsers
-     * @return SchbasBooks
+     * @return SchbasBook
      */
     public function addSelfpayingUser(\Babesk\ORM\SystemUsers $selfpayingUsers)
     {

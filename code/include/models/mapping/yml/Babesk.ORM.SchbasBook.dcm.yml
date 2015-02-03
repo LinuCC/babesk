@@ -1,4 +1,4 @@
-Babesk\ORM\SchbasBooks:
+Babesk\ORM\SchbasBook:
     type: entity
     table: SchbasBooks
     id:

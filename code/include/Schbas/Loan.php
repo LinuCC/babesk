@@ -114,7 +114,7 @@ class Loan {
 		$bookQuery = $this->_em
 			->createQueryBuilder()
 			->select(array('b.class', 'b.price'))
-			->from('DM:SchbasBooks', 'b')
+			->from('DM:SchbasBook', 'b')
 			->where('b.class IN (:classes)')
 			->setParameter('classes', $classes)
 			->getQuery();

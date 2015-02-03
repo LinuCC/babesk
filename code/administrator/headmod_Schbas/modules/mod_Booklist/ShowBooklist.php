@@ -50,7 +50,7 @@ class ShowBooklist extends Booklist {
 
 		$query = $this->_em->createQueryBuilder()
 			->select(array('b, s'))
-			->from('Babesk\ORM\SchbasBooks', 'b')
+			->from('Babesk\ORM\SchbasBook', 'b')
 			->leftJoin('b.subject', 's');
 		if(isset($_POST['filterFor']) && !isBlank($_POST['filterFor'])) {
 			$query->where('b.title LIKE :filterVar')
@@ -202,7 +202,7 @@ class ShowBooklist extends Booklist {
 
 		$booksLent = array();
 		$query = $this->_em->createQuery(
-			'SELECT COUNT(l) FROM DM:SchbasBooks b
+			'SELECT COUNT(l) FROM DM:SchbasBook b
 				JOIN b.exemplars e
 				JOIN e.lending l
 				WHERE b.id = :id
@@ -228,7 +228,7 @@ class ShowBooklist extends Booklist {
 
 		$booksInventory = array();
 		$query = $this->_em->createQuery(
-			'SELECT COUNT(e.id) FROM DM:SchbasBooks b
+			'SELECT COUNT(e.id) FROM DM:SchbasBook b
 				JOIN b.exemplars e
 				WHERE b.id = :id
 		');

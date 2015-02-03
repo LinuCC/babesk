@@ -17,6 +17,6 @@ Babesk\ORM\SystemSchoolSubject:
             length: 255
     oneToMany:
         books:
-            targetEntity: Babesk\ORM\SchbasBooks
+            targetEntity: Babesk\ORM\SchbasBook
             mappedBy: subject
     lifecycleCallbacks: {  }
