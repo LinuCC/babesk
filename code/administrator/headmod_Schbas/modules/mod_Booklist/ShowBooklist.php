@@ -537,6 +537,9 @@ class ShowBooklist extends Booklist {
 
 		$lowerGrades = array();
 		$upperGrades = array();
+		if(!$gradelevels) {
+			return array(0, 0);
+		}
 		foreach($gradelevels as $gl) {
 			if($gl < $trigger) {
 				$lowerGrades[] = $gl;
