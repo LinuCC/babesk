@@ -5,10 +5,8 @@ Babesk\ORM\SystemUsers:
     id:
         id:
             type: integer
-            scale: 0
-            length: null
             unique: true
-            precision: 0
+            precision: 11
             id: true
             column: ID
             generator:
@@ -16,59 +14,54 @@ Babesk\ORM\SystemUsers:
     fields:
         name:
             type: string
-            length: null
+            length: 64
         forename:
             type: string
-            length: null
+            length: 64
         username:
             type: string
-            length: null
+            length: 64
         password:
             type: string
-            length: null
+            length: 100
         email:
             type: string
-            length: null
+            length: 64
         telephone:
             type: string
-            length: null
+            length: 64
         birthday:
             type: string
-            length: null
+            length: 11
         last_login:
             type: string
-            length: null
+            length: 11
         login_tries:
             type: integer
-            scale: 0
-            length: null
-            precision: 0
+            precision: 5
         first_passwd:
             type: boolean
         locked:
             type: boolean
         credit:
             type: float
-            scale: 0
-            precision: 0
+            scale: 2
+            precision: 6
         soli:
             type: boolean
         religion:
             type: string
-            length: null
+            length: 3
         foreign_language:
             type: string
-            length: null
+            length: 30
         special_course:
             type: string
             scale: 0
-            length: null
+            length: 30
     manyToMany:
         groups:
             targetEntity: Babesk\ORM\SystemGroups
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
             joinTable:
                 name: SystemUsersInGroups
                 schema: null
@@ -86,12 +79,8 @@ Babesk\ORM\SystemUsers:
                         onDelete: null
                         columnDefinition: null
                         referencedColumnName: ID
-            orderBy: null
         bookLending:
             targetEntity: Babesk\ORM\SchbasInventory
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
             joinTable:
                 name: SchbasLending
                 schema: null
@@ -109,12 +98,8 @@ Babesk\ORM\SystemUsers:
                         onDelete: null
                         columnDefinition: null
                         referencedColumnName: id
-            orderBy: null
         selfpayingBooks:
             targetEntity: Babesk\ORM\SchbasBooks
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
             joinTable:
                 name: SchbasSelfpayer
                 schema: null
@@ -132,7 +117,6 @@ Babesk\ORM\SystemUsers:
                         onDelete: null
                         columnDefinition: null
                         referencedColumnName: id
-            orderBy: null
     oneToMany:
         usersInGradesAndSchoolyears:
             targetEntity: Babesk\ORM\SystemUsersInGradesAndSchoolyears

@@ -4,29 +4,21 @@ Babesk\ORM\SchbasInventory:
     id:
         id:
             type: integer
-            scale: 0
-            length: null
-            precision: 0
+            precision: 11
             id: true
             generator:
                 strategy: IDENTITY
     fields:
         yearOfPurchase:
             type: integer
-            scale: 0
-            length: null
-            precision: 0
+            precision: 4
             column: year_of_purchase
         exemplar:
             type: integer
-            scale: 0
-            length: null
-            precision: 0
+            precision: 11
     manyToOne:
         book:
             targetEntity: Babesk\ORM\SchbasBooks
-            cascade: {  }
-            mappedBy: null
             inversedBy: exemplars
             joinColumns:
                 book_id:
@@ -34,16 +26,9 @@ Babesk\ORM\SchbasInventory:
     oneToMany:
         lending:
             targetEntity: Babesk\ORM\SchbasLending
-            cascade: {  }
             mappedBy: inventory
-            inversedBy: null
-            orderBy: null
     manyToMany:
         usersLent:
             targetEntity: Babesk\ORM\SystemUsers
-            cascade: {  }
             mappedBy: bookLending
-            inversedBy: null
-            joinTable: {  }
-            orderBy: null
     lifecycleCallbacks: {  }

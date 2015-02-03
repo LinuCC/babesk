@@ -9,14 +9,10 @@ Babesk\ORM\SchbasLending:
     fields:
         lendDate:
             type: date
-            scale: 0
-            length: null
-            precision: 0
             column: lend_date
     manyToOne:
         user:
             targetEntity: Babesk\ORM\SystemUsers
-            cascade: {  }
             mappedBy: null
             inversedBy: null
             joinColumns:
@@ -24,7 +20,6 @@ Babesk\ORM\SchbasLending:
                     referencedColumnName: ID
         inventory:
             targetEntity: Babesk\ORM\SchbasInventory
-            cascade: {  }
             mappedBy: null
             inversedBy: null
             joinColumns:

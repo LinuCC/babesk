@@ -80,4 +80,49 @@ class SystemSchoolSubjects
     {
         return $this->name;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $books;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->books = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add books
+     *
+     * @param \Babesk\ORM\SchbasBooks $books
+     * @return SystemSchoolSubjects
+     */
+    public function addBook(\Babesk\ORM\SchbasBooks $books)
+    {
+        $this->books[] = $books;
+
+        return $this;
+    }
+
+    /**
+     * Remove books
+     *
+     * @param \Babesk\ORM\SchbasBooks $books
+     */
+    public function removeBook(\Babesk\ORM\SchbasBooks $books)
+    {
+        $this->books->removeElement($books);
+    }
+
+    /**
+     * Get books
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBooks()
+    {
+        return $this->books;
+    }
 }

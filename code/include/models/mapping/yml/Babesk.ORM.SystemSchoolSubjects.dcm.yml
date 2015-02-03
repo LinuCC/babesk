@@ -4,21 +4,19 @@ Babesk\ORM\SystemSchoolSubjects:
     id:
         id:
             type: integer
-            scale: 0
-            length: null
-            precision: 0
+            precision: 11
             id: true
             generator:
                 strategy: IDENTITY
     fields:
         abbreviation:
             type: string
-            scale: 0
-            length: null
-            precision: 0
+            length: 8
         name:
             type: string
-            scale: 0
-            length: null
-            precision: 0
+            length: 255
+    oneToMany:
+        books:
+            targetEntity: Babesk\ORM\SchbasBooks
+            mappedBy: subject
     lifecycleCallbacks: {  }
