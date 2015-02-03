@@ -6,6 +6,9 @@ require_once PATH_ADMIN . '/Elawa/Elawa.php';
 require_once PATH_INCLUDE .'/pdf/tcpdf/config/lang/ger.php';
 require_once PATH_INCLUDE . '/pdf/tcpdf/tcpdf.php';
 
+/**
+ * Generates pdf-files containing an overview of meetings for the hosts
+ */
 class GenerateHostPdf extends \administrator\Elawa\Elawa {
 
 	/////////////////////////////////////////////////////////////////////
@@ -22,6 +25,9 @@ class GenerateHostPdf extends \administrator\Elawa\Elawa {
 	//Implements
 	/////////////////////////////////////////////////////////////////////
 
+	/**
+	 * Generates the PDFs and provides the download
+	 */
 	protected function generate() {
 
 		$hosts = $this->fetchHosts();
@@ -32,6 +38,10 @@ class GenerateHostPdf extends \administrator\Elawa\Elawa {
 		$this->provideDownload();
 	}
 
+	/**
+	 * Fetches all users that are hosts of meetings
+	 * @return array of \Babesk\ORM\SystemUsers
+	 */
 	protected function fetchHosts() {
 
 		$query = $this->_em->createQuery(
@@ -47,6 +57,13 @@ class GenerateHostPdf extends \administrator\Elawa\Elawa {
 		return $hosts;
 	}
 
+	/**
+	 * Fetches the meetings and some related data of a host
+	 * Uses a prepare-Query and caches the statement, so calling it multiple
+	 * times is not that bad.
+	 * @param  \Babesk\ORM\SystemUsers $host
+	 * @return array       The meetings
+	 */
 	protected function fetchMeetingsForHost($host) {
 
 		if(!$this->_meetingQueryStmt) {
@@ -66,6 +83,10 @@ class GenerateHostPdf extends \administrator\Elawa\Elawa {
 		return $meetings;
 	}
 
+	/**
+	 * Fetches all existing Elawa Categories and returns them
+	 * @return array of \Babesk\ORM\ElawaCategory
+	 */
 	protected function fetchCategories() {
 
 		$categories = $this->_em->getRepository('DM:ElawaCategory')
@@ -73,6 +94,10 @@ class GenerateHostPdf extends \administrator\Elawa\Elawa {
 		return $categories;
 	}
 
+	/**
+	 * Generates the PDF for a host and saves it locally
+	 * @param  \Babesk\ORM\SystemUsers $host for the pdf
+	 */
 	private function generatePdf($host) {
 
 		$meetings = $this->fetchMeetingsForHost($host);
@@ -114,6 +139,9 @@ class GenerateHostPdf extends \administrator\Elawa\Elawa {
 		$pdf->setTextShadow($this->_textShadowStyle);
 	}
 
+	/**
+	 * Generates the content for the pdf
+	 */
 	private function pdfContentGenerate($pdf, $host, $meetings) {
 
 		foreach($this->_categories as $category) {
@@ -136,6 +164,9 @@ class GenerateHostPdf extends \administrator\Elawa\Elawa {
 		}
 	}
 
+	/**
+	 * Saves the pdf locally in the temp folder
+	 */
 	private function pdfOutput($pdf, $host) {
 
 		$sysTempDir = sys_get_temp_dir();
@@ -149,6 +180,9 @@ class GenerateHostPdf extends \administrator\Elawa\Elawa {
 		$pdf->output("{$this->_pdfTempDir}/$name", 'F');
 	}
 
+	/**
+	 * Combines the locally saved pdfs to a zip and provides it as a download
+	 */
 	private function provideDownload() {
 
 		$zip = new \ZipArchive();
