@@ -23,7 +23,7 @@ Babesk\ORM\SchbasAccounting:
     manyToOne:
         loanChoice:
             inversedBy: schbasAccounting
-            targetEntity: Babesk\ORM\SchbasLoanChoices
+            targetEntity: Babesk\ORM\SchbasLoanChoice
             joinColumn:
                 name: loanChoiceId
                 referencedColumnName: ID

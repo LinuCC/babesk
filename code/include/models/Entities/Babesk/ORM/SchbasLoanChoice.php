@@ -5,9 +5,9 @@ namespace Babesk\ORM;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SchbasLoanChoices
+ * SchbasLoanChoice
  */
-class SchbasLoanChoices
+class SchbasLoanChoice
 {
     /**
      * @var integer
@@ -41,7 +41,7 @@ class SchbasLoanChoices
      * Set id
      *
      * @param integer $id
-     * @return SchbasLoanChoices
+     * @return SchbasLoanChoice
      */
     public function setId($id)
     {
@@ -64,7 +64,7 @@ class SchbasLoanChoices
      * Set name
      *
      * @param string $name
-     * @return SchbasLoanChoices
+     * @return SchbasLoanChoice
      */
     public function setName($name)
     {
@@ -87,7 +87,7 @@ class SchbasLoanChoices
      * Set abbreviation
      *
      * @param string $abbreviation
-     * @return SchbasLoanChoices
+     * @return SchbasLoanChoice
      */
     public function setAbbreviation($abbreviation)
     {
@@ -110,7 +110,7 @@ class SchbasLoanChoices
      * Add schbasAccounting
      *
      * @param \Babesk\ORM\SchbasAccounting $schbasAccounting
-     * @return SchbasLoanChoices
+     * @return SchbasLoanChoice
      */
     public function addSchbasAccounting(\Babesk\ORM\SchbasAccounting $schbasAccounting)
     {

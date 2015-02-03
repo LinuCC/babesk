@@ -25,7 +25,7 @@ class SchbasAccounting
     private $user;
 
     /**
-     * @var \Babesk\ORM\SchbasLoanChoices
+     * @var \Babesk\ORM\SchbasLoanChoice
      */
     private $loanChoice;
 
@@ -102,10 +102,10 @@ class SchbasAccounting
     /**
      * Set loanChoice
      *
-     * @param \Babesk\ORM\SchbasLoanChoices $loanChoice
+     * @param \Babesk\ORM\SchbasLoanChoice $loanChoice
      * @return SchbasAccounting
      */
-    public function setLoanChoice(\Babesk\ORM\SchbasLoanChoices $loanChoice = null)
+    public function setLoanChoice(\Babesk\ORM\SchbasLoanChoice $loanChoice = null)
     {
         $this->loanChoice = $loanChoice;
 
@@ -115,7 +115,7 @@ class SchbasAccounting
     /**
      * Get loanChoice
      *
-     * @return \Babesk\ORM\SchbasLoanChoices 
+     * @return \Babesk\ORM\SchbasLoanChoice 
      */
     public function getLoanChoice()
     {
