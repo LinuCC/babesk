@@ -5,9 +5,9 @@ namespace Babesk\ORM;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SystemSchoolSubjects
+ * SystemSchoolSubject
  */
-class SystemSchoolSubjects
+class SystemSchoolSubject
 {
     /**
      * @var integer
@@ -24,6 +24,18 @@ class SystemSchoolSubjects
      */
     private $name;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $books;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->books = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -39,7 +51,7 @@ class SystemSchoolSubjects
      * Set abbreviation
      *
      * @param string $abbreviation
-     * @return SystemSchoolSubjects
+     * @return SystemSchoolSubject
      */
     public function setAbbreviation($abbreviation)
     {
@@ -62,7 +74,7 @@ class SystemSchoolSubjects
      * Set name
      *
      * @param string $name
-     * @return SystemSchoolSubjects
+     * @return SystemSchoolSubject
      */
     public function setName($name)
     {
@@ -80,24 +92,12 @@ class SystemSchoolSubjects
     {
         return $this->name;
     }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $books;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->books = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Add books
      *
      * @param \Babesk\ORM\SchbasBooks $books
-     * @return SystemSchoolSubjects
+     * @return SystemSchoolSubject
      */
     public function addBook(\Babesk\ORM\SchbasBooks $books)
     {

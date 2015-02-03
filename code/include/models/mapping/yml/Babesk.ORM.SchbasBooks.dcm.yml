@@ -33,7 +33,7 @@ Babesk\ORM\SchbasBooks:
             scale: 2
     manyToOne:
         subject:
-            targetEntity: Babesk\ORM\SystemSchoolSubjects
+            targetEntity: Babesk\ORM\SystemSchoolSubject
             inversedBy: books
             joinColumns:
                 subjectId:

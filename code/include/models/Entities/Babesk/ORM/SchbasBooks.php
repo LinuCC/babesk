@@ -55,7 +55,7 @@ class SchbasBooks
     private $exemplars;
 
     /**
-     * @var \Babesk\ORM\SystemSchoolSubjects
+     * @var \Babesk\ORM\SystemSchoolSubject
      */
     private $subject;
 
@@ -280,10 +280,10 @@ class SchbasBooks
     /**
      * Set subject
      *
-     * @param \Babesk\ORM\SystemSchoolSubjects $subject
+     * @param \Babesk\ORM\SystemSchoolSubject $subject
      * @return SchbasBooks
      */
-    public function setSubject(\Babesk\ORM\SystemSchoolSubjects $subject = null)
+    public function setSubject(\Babesk\ORM\SystemSchoolSubject $subject = null)
     {
         $this->subject = $subject;
 
@@ -293,7 +293,7 @@ class SchbasBooks
     /**
      * Get subject
      *
-     * @return \Babesk\ORM\SystemSchoolSubjects 
+     * @return \Babesk\ORM\SystemSchoolSubject 
      */
     public function getSubject()
     {

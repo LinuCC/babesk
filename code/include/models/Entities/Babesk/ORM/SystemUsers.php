@@ -115,6 +115,21 @@ class SystemUsers
     private $cards;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $elawaMeetingsVisiting;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $elawaMeetingsHosting;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $elawaDefaultMeetingRooms;
+
+    /**
      * @var \Babesk\ORM\BabeskPriceGroups
      */
     private $priceGroup;
@@ -142,6 +157,9 @@ class SystemUsers
         $this->usersInGradesAndSchoolyears = new \Doctrine\Common\Collections\ArrayCollection();
         $this->usersInClassesAndCategories = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cards = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->elawaMeetingsVisiting = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->elawaMeetingsHosting = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->elawaDefaultMeetingRooms = new \Doctrine\Common\Collections\ArrayCollection();
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->bookLending = new \Doctrine\Common\Collections\ArrayCollection();
         $this->selfpayingBooks = new \Doctrine\Common\Collections\ArrayCollection();
@@ -648,6 +666,105 @@ class SystemUsers
     }
 
     /**
+     * Add elawaMeetingsVisiting
+     *
+     * @param \Babesk\ORM\ElawaMeeting $elawaMeetingsVisiting
+     * @return SystemUsers
+     */
+    public function addElawaMeetingsVisiting(\Babesk\ORM\ElawaMeeting $elawaMeetingsVisiting)
+    {
+        $this->elawaMeetingsVisiting[] = $elawaMeetingsVisiting;
+
+        return $this;
+    }
+
+    /**
+     * Remove elawaMeetingsVisiting
+     *
+     * @param \Babesk\ORM\ElawaMeeting $elawaMeetingsVisiting
+     */
+    public function removeElawaMeetingsVisiting(\Babesk\ORM\ElawaMeeting $elawaMeetingsVisiting)
+    {
+        $this->elawaMeetingsVisiting->removeElement($elawaMeetingsVisiting);
+    }
+
+    /**
+     * Get elawaMeetingsVisiting
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getElawaMeetingsVisiting()
+    {
+        return $this->elawaMeetingsVisiting;
+    }
+
+    /**
+     * Add elawaMeetingsHosting
+     *
+     * @param \Babesk\ORM\ElawaMeeting $elawaMeetingsHosting
+     * @return SystemUsers
+     */
+    public function addElawaMeetingsHosting(\Babesk\ORM\ElawaMeeting $elawaMeetingsHosting)
+    {
+        $this->elawaMeetingsHosting[] = $elawaMeetingsHosting;
+
+        return $this;
+    }
+
+    /**
+     * Remove elawaMeetingsHosting
+     *
+     * @param \Babesk\ORM\ElawaMeeting $elawaMeetingsHosting
+     */
+    public function removeElawaMeetingsHosting(\Babesk\ORM\ElawaMeeting $elawaMeetingsHosting)
+    {
+        $this->elawaMeetingsHosting->removeElement($elawaMeetingsHosting);
+    }
+
+    /**
+     * Get elawaMeetingsHosting
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getElawaMeetingsHosting()
+    {
+        return $this->elawaMeetingsHosting;
+    }
+
+    /**
+     * Add elawaDefaultMeetingRooms
+     *
+     * @param \Babesk\ORM\ElawaDefaultMeetingRoom $elawaDefaultMeetingRooms
+     * @return SystemUsers
+     */
+    public function addElawaDefaultMeetingRoom(\Babesk\ORM\ElawaDefaultMeetingRoom $elawaDefaultMeetingRooms)
+    {
+        $this->elawaDefaultMeetingRooms[] = $elawaDefaultMeetingRooms;
+
+        return $this;
+    }
+
+    /**
+     * Remove elawaDefaultMeetingRooms
+     *
+     * @param \Babesk\ORM\ElawaDefaultMeetingRoom $elawaDefaultMeetingRooms
+     */
+    public function removeElawaDefaultMeetingRoom(\Babesk\ORM\ElawaDefaultMeetingRoom $elawaDefaultMeetingRooms)
+    {
+        $this->elawaDefaultMeetingRooms->removeElement($elawaDefaultMeetingRooms);
+    }
+
+    /**
+     * Get elawaDefaultMeetingRooms
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getElawaDefaultMeetingRooms()
+    {
+        return $this->elawaDefaultMeetingRooms;
+    }
+
+    /**
      * Set priceGroup
      *
      * @param \Babesk\ORM\BabeskPriceGroups $priceGroup
@@ -767,119 +884,5 @@ class SystemUsers
     public function getSelfpayingBooks()
     {
         return $this->selfpayingBooks;
-    }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $elawaMeetingsVisiting;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $elawaMeetingsHosting;
-
-
-    /**
-     * Add elawaMeetingsVisiting
-     *
-     * @param \Babesk\ORM\ElawaMeeting $elawaMeetingsVisiting
-     * @return SystemUsers
-     */
-    public function addElawaMeetingsVisiting(\Babesk\ORM\ElawaMeeting $elawaMeetingsVisiting)
-    {
-        $this->elawaMeetingsVisiting[] = $elawaMeetingsVisiting;
-
-        return $this;
-    }
-
-    /**
-     * Remove elawaMeetingsVisiting
-     *
-     * @param \Babesk\ORM\ElawaMeeting $elawaMeetingsVisiting
-     */
-    public function removeElawaMeetingsVisiting(\Babesk\ORM\ElawaMeeting $elawaMeetingsVisiting)
-    {
-        $this->elawaMeetingsVisiting->removeElement($elawaMeetingsVisiting);
-    }
-
-    /**
-     * Get elawaMeetingsVisiting
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getElawaMeetingsVisiting()
-    {
-        return $this->elawaMeetingsVisiting;
-    }
-
-    /**
-     * Add elawaMeetingsHosting
-     *
-     * @param \Babesk\ORM\ElawaMeeting $elawaMeetingsHosting
-     * @return SystemUsers
-     */
-    public function addElawaMeetingsHosting(\Babesk\ORM\ElawaMeeting $elawaMeetingsHosting)
-    {
-        $this->elawaMeetingsHosting[] = $elawaMeetingsHosting;
-
-        return $this;
-    }
-
-    /**
-     * Remove elawaMeetingsHosting
-     *
-     * @param \Babesk\ORM\ElawaMeeting $elawaMeetingsHosting
-     */
-    public function removeElawaMeetingsHosting(\Babesk\ORM\ElawaMeeting $elawaMeetingsHosting)
-    {
-        $this->elawaMeetingsHosting->removeElement($elawaMeetingsHosting);
-    }
-
-    /**
-     * Get elawaMeetingsHosting
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getElawaMeetingsHosting()
-    {
-        return $this->elawaMeetingsHosting;
-    }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $elawaDefaultMeetingRooms;
-
-
-    /**
-     * Add elawaDefaultMeetingRooms
-     *
-     * @param \Babesk\ORM\ElawaDefaultMeetingRoom $elawaDefaultMeetingRooms
-     * @return SystemUsers
-     */
-    public function addElawaDefaultMeetingRoom(\Babesk\ORM\ElawaDefaultMeetingRoom $elawaDefaultMeetingRooms)
-    {
-        $this->elawaDefaultMeetingRooms[] = $elawaDefaultMeetingRooms;
-
-        return $this;
-    }
-
-    /**
-     * Remove elawaDefaultMeetingRooms
-     *
-     * @param \Babesk\ORM\ElawaDefaultMeetingRoom $elawaDefaultMeetingRooms
-     */
-    public function removeElawaDefaultMeetingRoom(\Babesk\ORM\ElawaDefaultMeetingRoom $elawaDefaultMeetingRooms)
-    {
-        $this->elawaDefaultMeetingRooms->removeElement($elawaDefaultMeetingRooms);
-    }
-
-    /**
-     * Get elawaDefaultMeetingRooms
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getElawaDefaultMeetingRooms()
-    {
-        return $this->elawaDefaultMeetingRooms;
     }
 }
