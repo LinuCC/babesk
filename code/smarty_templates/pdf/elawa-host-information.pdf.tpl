@@ -21,10 +21,16 @@
 						{$firstColMeetings = array_slice($meetings, 0, 20)}
 						{foreach $firstColMeetings as $meeting}
 							<tr>
-								<td width="55">
+								<td width="55"
+									{if $meeting.isDisabled}style="background-color: grey"{/if}
+								>
 									<b>{substr_replace($meeting.meetingTime, '', 5)}</b>
 								</td>
-								<td width="260">{$meeting.userForename} {$meeting.userName}</td>
+								<td width="260"
+									{if $meeting.isDisabled}style="background-color: grey"{/if}
+								>
+									{$meeting.userForename} {$meeting.userName}
+								</td>
 							</tr>
 							{$meetingsDisplayedCounter = $meetingsDisplayedCounter + 1}
 						{/foreach}
@@ -42,14 +48,18 @@
 						{*The others go on the right side*}
 						{$secondColMeetings = array_slice($meetings, 20)}
 						{foreach $secondColMeetings as $meeting}
-							{if $category->getId() == $meeting.categoryId}
-								<tr>
-									<td width="55">
-									<b>{substr_replace($meeting.meetingTime, '', 5)}</b>
-									</td>
-									<td width="260">{$meeting.userForename} {$meeting.userName}</td>
-								</tr>
-							{/if}
+							<tr>
+								<td width="55"
+									{if $meeting.isDisabled}style="background-color: grey"{/if}
+								>
+								<b>{substr_replace($meeting.meetingTime, '', 5)}</b>
+								</td>
+								<td width="260"
+									{if $meeting.isDisabled}style="background-color: grey"{/if}
+								>
+									{$meeting.userForename} {$meeting.userName}
+								</td>
+							</tr>
 							{$meetingsDisplayedCounter = $meetingsDisplayedCounter + 1}
 						{/foreach}
 					</tbody>

@@ -53,7 +53,7 @@ class GenerateHostPdf extends \administrator\Elawa\Elawa {
 			$this->_meetingQueryStmt = $this->_em->getConnection()->prepare(
 				'SELECT u.forename AS userForename, u.name AS userName,
 					m.time AS meetingTime, m.categoryId AS categoryId,
-					r.name AS roomName
+					m.isDisabled AS isDisabled, r.name AS roomName
 				FROM ElawaMeetings m
 				LEFT JOIN SystemUsers u ON u.ID = m.visitorId
 				LEFT JOIN SystemRooms r ON r.id = m.roomId
