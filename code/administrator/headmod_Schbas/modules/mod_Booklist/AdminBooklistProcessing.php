@@ -237,51 +237,6 @@ class AdminBooklistProcessing {
 	}
 
 	/**
-	 * Show template for adding an entry in Book list.
-	 */
-	function AddEntry() {
-		$this->BookInterface->ShowAddEntry();
-	}
-
-	/**
-	 * Adds an entry into Book list.
-	 * @param $barcode
-	 */
-	function AddEntryFin($subject, $class, $title, $author, $publisher, $isbn, $price, $bundle) {
-		require_once PATH_ACCESS . '/BookManager.php';
-		$bookManager = new BookManager();
-		$price = str_replace (",", ".", $price );
-		try {
-			$search = $bookManager->searchEntry(
-				'subjectId = (SELECT ID FROM SystemSchoolSubjects WHERE abbreviation = ' . $subject . ')' .
-				' AND class=' . $class .
-				' AND bundle=' . $bundle
-			);
-		}catch (Exception $e){
-			$search = 0;
-		}
-		if($search) {
-			$this->BookInterface->dieError($this->messages['error']['duplicate']);
-		} else {
-			try {
-				$subjectId = TableMng::query(
-					'SELECT ID FROM `SystemSchoolSubjects`
-						WHERE abbreviation = "%s"
-					', $subject
-				);
-				$bookManager->addEntry('subjectId',$subjectId,'class', $class,'title', $title,'author', $author,'publisher', $publisher,'isbn', $isbn, 'price', $price,'bundle', $bundle);
-			}catch (Exception $e) {
-				$this->logs
-				->log('ADMIN', 'MODERATE',
-						sprintf('Error while getting Data from MySQL:%s in %s', $e->getMessage(), __METHOD__));
-				$this->BookInterface->dieError($this->messages['error']['get_data_failed']);
-			}
-		}
-
-		$this->BookInterface->showAddEntryFin($subject, $class, $title, $author, $publisher, $isbn, $price, $bundle);
-	}
-
-	/**
 	 * Shows the template for confirmation of an delete request.
 	 * @param $id
 	 */
