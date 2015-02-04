@@ -113,6 +113,12 @@
   color: #4F6719;
 }
 
+.page-header .date {
+  text-align: center;
+  font-size: 0.9em;
+  color: #4F6719;
+}
+
 .page-header a {
   border-radius: 5px;
   text-align: center;
@@ -204,11 +210,11 @@
   top: -30px;
 }
 
-#footer .modules {
+#footer .left-col {
   text-align: left;
 }
 
-#footer .contact {
+#footer .center-col {
   text-align: center;
 }
 
@@ -246,10 +252,6 @@
   position: relative;
   padding-top: 10px; }
 
-.post > h3.title span.date {
-  position: absolute;
-  right: 0;
-  font-size: 0.9em; }
 
 .post > .more {
   margin: 10px 0;

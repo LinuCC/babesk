@@ -1,4 +1,9 @@
 <div class="page-header container">
+  {% if page.date %}
+    <div class="date">
+      <span>{{ page.date | date_to_long_string }}</span>
+    </div>
+  {% endif %}
   <h1>{{ page.title }}</h1>
   {% if page.tagline %}
     <h4>{{ page.tagline }}</h4>
@@ -8,9 +13,6 @@
 <div class="container">
   <div id="content" class="row post-full">
     <div class="col-xs-12">
-      <div class="date">
-        <span>{{ page.date | date_to_long_string }}</span>
-      </div>
       <div class="content">
         {{ content }}
       </div>
