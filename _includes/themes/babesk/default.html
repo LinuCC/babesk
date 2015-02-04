@@ -17,7 +17,7 @@
     <link href="{{ ASSET_PATH }}/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
     <!-- Sticky Footer -->
     <link href="{{ ASSET_PATH }}/bootstrap/css/bs-sticky-footer.css" rel="stylesheet">
-    
+
     <!-- Custom styles -->
     <link href="{{ ASSET_PATH }}/css/style.css?body=1" rel="stylesheet" type="text/css" media="all">
 
@@ -44,7 +44,8 @@
 
   <body>
     <div id="wrap">
-      <nav class="navbar navbar-default" role="navigation">
+      <nav id="navigation" class="navbar navbar-default navbar-inverse"
+        role="navigation">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#jb-navbar-collapse">
@@ -73,17 +74,50 @@
       </nav>
 
       <div class="container">
+        <h2 class="program-title">
+          {{ site.tagline }}
+        </h2>
+      </div>
+
+      <div id="icon-menu" class="container">
+      </div>
+
+      <div id="content" class="container">
         {{ content }}
       </div>
 
     </div>
 
     <div id="footer">
-      <div class="container">
-        <p>&copy; {{ site.time | date: '%Y' }} {{ site.author.name }}
-          with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
-          and <a href="http://twitter.github.com/bootstrap/" target="_blank">Twitter Bootstrap</a>
-        </p>
+      <div id="content-footer-conn">
+        <div class="footer-heading"></div>
+      </div>
+      <div class="container footer-text">
+        <div class="col-sm-4 col-xs-12">
+        </div>
+        <div class="col-sm-4 col-xs-12">
+        </div>
+        <div class="col-sm-4 col-xs-12">
+          <div class="footer-heading">
+            Various stuff
+          </div>
+          <p>
+            BaBeSK and all its modules are licensed under the GNU GPLv3
+          </p>
+          <p>
+            Website &copy; {{ site.time | date: '%Y' }} {{ site.author.name }}
+          </p>
+          <p>
+            With help from
+            <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">
+              Jekyll Bootstrap
+            </a>
+            and
+            <a href="http://twitter.github.com/bootstrap/" target="_blank">
+              Twitter Bootstrap
+            </a>
+          </p>
+        </div>
       </div>
     </div>
 
