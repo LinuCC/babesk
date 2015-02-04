@@ -182,47 +182,6 @@ class AdminBooklistProcessing {
 	}
 
 	/**
-	 * Edits an entry in book list.
-	 * Function to show the template.
-	 */
-
-	function editBook($id) {
-
-		require_once PATH_ACCESS . '/BookManager.php';
-		$bookManager = new BookManager();
-
-		try {
-			$bookData = $bookManager->getBookDataByID($id);
-		} catch (Exception $e) {
-			$this->BookInterface->dieError($this->messages['error']['uid_get_param'] . $e->getMessage());
-		}
-
-		$this->BookInterface->ShowChangeBook($bookData);
-	}
-
-	/**
-	 * Edits an entry in book list.
-	 * Changes the MySQL entry
-	 */
-
-	function changeBook($id, $subject, $class, $title, $author, $publisher, $isbn, $price, $bundle) {
-		require_once PATH_ACCESS . '/BookManager.php';
-		$bookManager = new BookManager();
-		$price = str_replace (",", ".", $price );
-		$subjectId = TableMng::query(
-			"SELECT ID FROM `SystemSchoolSubjects`
-				WHERE abbreviation = '{$subject}'
-		");
-		$subjectId = $subjectId[0]['ID'];
-		try {
-			$bookManager->editBook($id, $subjectId, $class, $title, $author, $publisher, $isbn, $price, $bundle);
-		} catch (Exception $e) {
-			$this->BookInterface->dieError($this->messages['error']['change'] . $e->getMessage());
-		}
-		$this->BookInterface->ShowChangeBookFin($id, $subject, $class, $title, $author, $publisher, $isbn, $price, $bundle);
-	}
-
-	/**
 	 * Returns the book ID by a given ISBN
 	 */
 	function getBookIdByISBN($isbn_search) {

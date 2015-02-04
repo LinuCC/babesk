@@ -31,6 +31,8 @@ class Booklist extends Schbas {
 			$action = $_GET['action'];
 			switch ($action) {
 				case 2: //edit a book
+					$this->editBook();
+					die();
 					if (isset ($_POST['isbn_search'])) {
 						$bookID = $BookProcessing->getBookIdByISBN($_POST['isbn_search']);
 						$BookProcessing->editBook($bookID);
@@ -42,7 +44,7 @@ class Booklist extends Schbas {
 					}
 					break;
 				case 3: //delete an entry
-					$this->deleteBook($BookProcessing);
+					$this->deleteBook();
 					break;
 				case 4: //add an entry
 					$this->addBook();
@@ -73,6 +75,67 @@ class Booklist extends Schbas {
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
+
+	private function editBook() {
+
+		if(isset($_POST['title'])) {
+			$this->editBookUpload();
+		}
+		else if(isset($_GET['ID'])) {
+			$book = $this->_em->getReference('DM:SchbasBook', $_GET['ID']);
+			$query = $this->_em->createQuery(
+				'SELECT b, s FROM DM:SchbasBook b
+				LEFT JOIN b.subject s
+				WHERE b = :book
+			');
+			$query->setParameter('book', $book);
+			$book = $query->getOneOrNullResult();
+			$this->_smarty->assign('book', $book);
+			$this->displayTpl('change_book.tpl');
+		}
+		else if(isset($_POST['isbn_search'])) {
+			$book = $this->_em->getRepository('DM:SchbasBook')
+				->findOneByIsbn($_POST['isbn_search']);
+			$this->_smarty->assign('book', $book);
+			$this->displayTpl('change_book.tpl');
+		}
+	}
+
+	private function editBookUpload() {
+
+		$_POST['price'] = str_replace(',', '.', $_POST['price']);
+		$book = $this->_em->find('DM:SchbasBook', $_GET['ID']);
+		if(!$book) {
+			$this->_interface->dieError('Buch nicht gefunden.');
+		}
+		$book->setTitle($_POST['title'])
+			->setClass($_POST['class'])
+			->setAuthor($_POST['author'])
+			->setPublisher($_POST['publisher'])
+			->setIsbn($_POST['isbn'])
+			->setPrice($_POST['price'])
+			->setBundle($_POST['bundle']);
+		if(!empty($_POST['subject'])) {
+			$subject = $this->_em->getRepository('DM:SystemSchoolSubject')
+				->findOneByName($_POST['subject']);
+			if($subject) {
+				$book->setSubject($subject);
+			}
+			else {
+				$this->_interface->dieError(
+					"Konnte das Fach $_POST[subject] nicht finden."
+				);
+			}
+		}
+		else {
+			$book->setSubject();
+		}
+		$this->_em->persist($book);
+		$this->_em->flush();
+		$this->_interface->dieSuccess(
+			"Das Buch {$book->getTitle()} wurde erfolgreich verändert."
+		);
+	}
 
 	private function addBook() {
 
@@ -134,7 +197,7 @@ class Booklist extends Schbas {
 		}
 	}
 
-	private function deleteBook($BookProcessing) {
+	private function deleteBook() {
 
 		if(isset($_POST['barcode'])) {
 			//Delete the book by barcode

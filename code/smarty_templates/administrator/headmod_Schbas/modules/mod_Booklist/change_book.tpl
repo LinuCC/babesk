@@ -1,20 +1,143 @@
-{extends file=$booklistParent}{block name=content}
+{extends file=$inh_path}{block name=content}
 
-<form action="index.php?section=Schbas|Booklist&action=2&ID={$bookdata.id}"
-	method="post">
-	<fieldset>
-		<legend>Buchdaten</legend>
-		<label>ID des Exemplars: {$bookdata.id}</label><br> <br> 
-		<label>Fach: <input type="text" name="subject" maxlength="3" value="{$bookdata.subject}"/></label> <br> <br> 
-		<label>Klasse: <input type="text" name="class" maxlength="2" value="{$bookdata.class}"/></label><br> <br> 
-		<label>Titel: <input type="text" name="title" maxlength="50" value="{$bookdata.title}"/></label><br> <br> 
-		<label>Autor: <input type="text" name="author" maxlength="30" value="{$bookdata.author}"/></label><br> <br> 
-		<label>Verlag:<input type="text" name="publisher" maxlength="30" value="{$bookdata.publisher}"/></label><br> <br> 
-		<label>ISBN: <input type="text" name="isbn" maxlength="20" value="{$bookdata.isbn}"/></label><br> <br> 
-		<label>Preis: <input type="text" name="price" maxlength="5" value="{$bookdata.price}"/></label><br> <br>
-		<label>Bundle: <input type="text" name="bundle" maxlength="1" value="{$bookdata.bundle}"/></label><br> <br> 
-	</fieldset>
-	<input id="submit" type="submit" value="Abschicken" />
+<h3 class="module-header">Buch ändern</h3>
+
+<form action="index.php?section=Schbas|Booklist&amp;action=2&amp;ID={$book->getId()}"
+	class="form-horizontal" method="post">
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="row form-group">
+				<label class="col-sm-3 control-label">Fach</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<span class="input-group-addon">
+							<span class="fa fa-fw fa-pencil"></span>
+						</span>
+						<input type="text" name="subject"
+							{if $book->getSubject()}
+								value="{$book->getSubject()->getName()}"
+							{/if}
+							class="form-control" maxlength="3">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="row form-group">
+				<label class="col-sm-3 control-label">Klasse</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<span class="input-group-addon">
+							<span class="fa fa-fw fa-folder"></span>
+						</span>
+						<input type="text" name="class" value="{$book->getClass()}"
+							class="form-control" maxlength="2">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="row form-group">
+				<label class="col-sm-3 control-label">Titel</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<span class="input-group-addon">
+							<span class="fa fa-fw fa-book"></span>
+						</span>
+						<input type="text" name="title" value="{$book->getTitle()}"
+							class="form-control" maxlength="50">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="row form-group">
+				<label class="col-sm-3 control-label">Author</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<span class="input-group-addon">
+							<span class="fa fa-fw fa-male"></span>
+						</span>
+						<input type="text" name="author" value="{$book->getAuthor()}"
+							class="form-control" maxlength="30">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="row form-group">
+				<label class="col-sm-3 control-label">Verlag</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<span class="input-group-addon">
+							<span class="fa fa-fw fa-newspaper-o"></span>
+						</span>
+						<input type="text" name="publisher" value="{$book->getPublisher()}"
+							class="form-control" maxlength="30">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="row form-group">
+				<label class="col-sm-3 control-label">ISBN</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<span class="input-group-addon">
+							<span class="fa fa-fw fa-tags"></span>
+						</span>
+						<input type="text" name="isbn" value="{$book->getIsbn()}"
+							class="form-control" maxlength="17">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="row form-group">
+				<label class="col-sm-3 control-label">Preis</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<span class="input-group-addon">
+							<span class="fa fa-fw fa-money"></span>
+						</span>
+						<input type="text" name="price"
+							value="{number_format($book->getPrice(), 2, '.', '')}"
+							class="form-control" maxlength="5">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="row form-group">
+				<label class="col-sm-3 control-label">Bundle</label>
+				<div class="col-sm-9">
+					<div class="input-group">
+						<span class="input-group-addon">
+							<span class="fa fa-fw fa-bookmark"></span>
+						</span>
+						<input type="text" name="bundle" value="{$book->getBundle()}"
+							class="form-control" maxlength="1">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="row form-group">
+				<div class="col-sm-offset-3 col-sm-9">
+					<input id="submit" type="submit" class="btn btn-primary"
+						value="Ändern">
+				</div>
+			</div>
+		</div>
+	</div>
 </form>
 
 {/block}
