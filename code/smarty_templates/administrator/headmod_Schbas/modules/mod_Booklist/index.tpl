@@ -10,10 +10,10 @@
 		<li><a href="index.php?module=administrator|Schbas|Booklist|ShowBooklist">
 			B&uuml;cherliste
 		</a></li>
-		<li><a href="index.php?section=Schbas|Booklist&action={$action['add_book']}">
+		<li><a href="index.php?section=Schbas|Booklist&action=4">
 			B&uuml;cher hinzuf&uuml;gen
 		</a></li>
-		<li><a href="index.php?section=Schbas|Booklist&action={$action['del_book']}">
+		<li><a href="index.php?section=Schbas|Booklist&action=6">
 			Buch mit ISBN-Nummer l&ouml;schen
 		</a></li>
 	</ul>

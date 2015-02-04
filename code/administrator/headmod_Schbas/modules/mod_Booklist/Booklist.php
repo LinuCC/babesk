@@ -42,35 +42,10 @@ class Booklist extends Schbas {
 					}
 					break;
 				case 3: //delete an entry
-
-					if (isset($_POST['barcode'])) {
-						try {
-
-							$BookProcessing->DeleteEntry($BookProcessing->GetIDFromBarcode($_POST['barcode']));
-						} catch (Exception $e) {
-						}
-					}
-					else if (isset($_POST['delete'])) {
-						$BookProcessing->DeleteEntry($_GET['ID']);
-					} else if (isset($_POST['not_delete'])) {
-						$BookInterface->ShowSelectionFunctionality($action_arr);
-					} else {
-
-						if (!$BookProcessing->isInvForBook($_GET['ID'])){
-							$BookProcessing->DeleteConfirmation($_GET['ID']);
-						}else{
-							$BookInterface->dieError("Es ist noch Inventar zu diesem Buch vorhanden! Bitte l&ouml;schen Sie dies zuerst!");
-						}
-					}
+					$this->deleteBook($BookProcessing);
 					break;
 				case 4: //add an entry
 					$this->addBook();
-					die();
-					if (!isset($_POST['title'])) {
-						$BookProcessing->AddEntry();
-					} else {
-						$BookProcessing->AddEntryFin($_POST['subject'], $_POST['class'],$_POST['title'],$_POST['author'],$_POST['publisher'],$_POST['isbn'],$_POST['price'],$_POST['bundle']);
-					}
 					break;
 				case 5: //filter
 					$BookProcessing->ShowBooklist("search", $_POST['search']);
@@ -155,6 +130,79 @@ class Booklist extends Schbas {
 				", der Klasse $_POST[class] und dem Bundle $_POST[bundle] " .
 				"namens {$duplicateBook->getTitle()} und der ISBN " .
 				"{$duplicateBook->getIsbn()}"
+			);
+		}
+	}
+
+	private function deleteBook($BookProcessing) {
+
+		if(isset($_POST['barcode'])) {
+			//Delete the book by barcode
+			$book = $this->_em->getRepository('DM:SchbasBook')
+				->findOneByIsbn($_POST['barcode']);
+			$this->deleteBookFromDatabase($book);
+		}
+		else if(isset($_POST['delete'])) {
+			//Delete the book
+			$book = $this->_em->getReference('DM:SchbasBook', $_GET['ID']);
+			$this->deleteBookFromDatabase($book);
+		}
+		else {
+			$this->deleteBookConfirmation();
+		}
+	}
+
+	private function deleteBookConfirmation() {
+
+		if(isset($_GET['ID'])) {
+			$book = $this->_em->find('DM:SchbasBook', $_GET['ID']);
+			if($book) {
+				$hasInventory = count($book->getExemplars()) > 0;
+				$this->_smarty->assign('hasInventory', $hasInventory);
+				$this->_smarty->assign('book', $book);
+				$this->displayTpl('deletion_confirm.tpl');
+			}
+			else {
+				$this->_interface->dieError(
+					'Das Buch konnte nicht gefunden werden.'
+				);
+			}
+		}
+		else {
+			$this->_interface->dieError(
+				'Buch-ID nicht angegeben?!'
+			);
+		}
+	}
+
+	private function deleteBookFromDatabase($book) {
+
+		$query = $this->_em->createQuery(
+			'SELECT b, e, l FROM DM:SchbasBook b
+			LEFT JOIN b.exemplars e
+			LEFT JOIN e.lending l
+			WHERE b = :book
+		');
+		$query->setParameter('book', $book);
+		$book = $query->getOneOrNullResult();
+		if($book) {
+			//delete exemplars and its lending-statuses connected to the books
+			foreach($book->getExemplars() as $exemplar) {
+				foreach($exemplar->getLending() as $lending) {
+					$this->_em->remove($lending);
+				}
+				$this->_em->remove($exemplar);
+			}
+			$this->_em->remove($book);
+			$this->_em->flush();
+			$this->_interface->backlink('administrator|Schbas|Booklist');
+			$this->_interface->dieSuccess(
+				"Das Buch {$book->getTitle()} wurde erfolgreich gelöscht."
+			);
+		}
+		else {
+			$this->_interface->dieError(
+				'Das zu löschende Buch konnte nicht gefunden werden.'
 			);
 		}
 	}

@@ -64,10 +64,10 @@ class SystemUsers extends \Babesk\ORM\SystemUsers implements \Doctrine\ORM\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'id', 'name', 'forename', 'username', 'password', 'email', 'telephone', 'birthday', 'last_login', 'login_tries', 'first_passwd', 'locked', 'credit', 'soli', 'religion', 'foreign_language', 'special_course', 'schbasAccounting', 'usersInGradesAndSchoolyears', 'usersInClassesAndCategories', 'cards', 'priceGroup', 'groups', 'bookLending', 'selfpayingBooks', 'elawaMeetingsVisiting', 'elawaMeetingsHosting', 'elawaDefaultMeetingRooms');
+            return array('__isInitialized__', 'id', 'name', 'forename', 'username', 'password', 'email', 'telephone', 'birthday', 'last_login', 'login_tries', 'first_passwd', 'locked', 'credit', 'soli', 'religion', 'foreign_language', 'special_course', 'schbasAccounting', 'usersInGradesAndSchoolyears', 'usersInClassesAndCategories', 'cards', 'elawaMeetingsVisiting', 'elawaMeetingsHosting', 'elawaDefaultMeetingRooms', 'priceGroup', 'groups', 'bookLending', 'selfpayingBooks');
         }
 
-        return array('__isInitialized__', 'id', 'name', 'forename', 'username', 'password', 'email', 'telephone', 'birthday', 'last_login', 'login_tries', 'first_passwd', 'locked', 'credit', 'soli', 'religion', 'foreign_language', 'special_course', 'schbasAccounting', 'usersInGradesAndSchoolyears', 'usersInClassesAndCategories', 'cards', 'priceGroup', 'groups', 'bookLending', 'selfpayingBooks', 'elawaMeetingsVisiting', 'elawaMeetingsHosting', 'elawaDefaultMeetingRooms');
+        return array('__isInitialized__', 'id', 'name', 'forename', 'username', 'password', 'email', 'telephone', 'birthday', 'last_login', 'login_tries', 'first_passwd', 'locked', 'credit', 'soli', 'religion', 'foreign_language', 'special_course', 'schbasAccounting', 'usersInGradesAndSchoolyears', 'usersInClassesAndCategories', 'cards', 'elawaMeetingsVisiting', 'elawaMeetingsHosting', 'elawaDefaultMeetingRooms', 'priceGroup', 'groups', 'bookLending', 'selfpayingBooks');
     }
 
     /**
@@ -664,127 +664,6 @@ class SystemUsers extends \Babesk\ORM\SystemUsers implements \Doctrine\ORM\Proxy
     /**
      * {@inheritDoc}
      */
-    public function setPriceGroup(\Babesk\ORM\BabeskPriceGroups $priceGroup = NULL)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPriceGroup', array($priceGroup));
-
-        return parent::setPriceGroup($priceGroup);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getPriceGroup()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPriceGroup', array());
-
-        return parent::getPriceGroup();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function addGroup(\Babesk\ORM\SystemGroups $groups)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addGroup', array($groups));
-
-        return parent::addGroup($groups);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function removeGroup(\Babesk\ORM\SystemGroups $groups)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeGroup', array($groups));
-
-        return parent::removeGroup($groups);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getGroups()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGroups', array());
-
-        return parent::getGroups();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function addBookLending(\Babesk\ORM\SchbasInventory $bookLending)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addBookLending', array($bookLending));
-
-        return parent::addBookLending($bookLending);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function removeBookLending(\Babesk\ORM\SchbasInventory $bookLending)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeBookLending', array($bookLending));
-
-        return parent::removeBookLending($bookLending);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getBookLending()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getBookLending', array());
-
-        return parent::getBookLending();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function addSelfpayingBook(\Babesk\ORM\SchbasBooks $selfpayingBooks)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addSelfpayingBook', array($selfpayingBooks));
-
-        return parent::addSelfpayingBook($selfpayingBooks);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function removeSelfpayingBook(\Babesk\ORM\SchbasBooks $selfpayingBooks)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeSelfpayingBook', array($selfpayingBooks));
-
-        return parent::removeSelfpayingBook($selfpayingBooks);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getSelfpayingBooks()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSelfpayingBooks', array());
-
-        return parent::getSelfpayingBooks();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function addElawaMeetingsVisiting(\Babesk\ORM\ElawaMeeting $elawaMeetingsVisiting)
     {
 
@@ -879,6 +758,127 @@ class SystemUsers extends \Babesk\ORM\SystemUsers implements \Doctrine\ORM\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getElawaDefaultMeetingRooms', array());
 
         return parent::getElawaDefaultMeetingRooms();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setPriceGroup(\Babesk\ORM\BabeskPriceGroups $priceGroup = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPriceGroup', array($priceGroup));
+
+        return parent::setPriceGroup($priceGroup);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPriceGroup()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPriceGroup', array());
+
+        return parent::getPriceGroup();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addGroup(\Babesk\ORM\SystemGroups $groups)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addGroup', array($groups));
+
+        return parent::addGroup($groups);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeGroup(\Babesk\ORM\SystemGroups $groups)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeGroup', array($groups));
+
+        return parent::removeGroup($groups);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getGroups()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGroups', array());
+
+        return parent::getGroups();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addBookLending(\Babesk\ORM\SchbasInventory $bookLending)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addBookLending', array($bookLending));
+
+        return parent::addBookLending($bookLending);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeBookLending(\Babesk\ORM\SchbasInventory $bookLending)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeBookLending', array($bookLending));
+
+        return parent::removeBookLending($bookLending);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getBookLending()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getBookLending', array());
+
+        return parent::getBookLending();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addSelfpayingBook(\Babesk\ORM\SchbasBook $selfpayingBooks)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addSelfpayingBook', array($selfpayingBooks));
+
+        return parent::addSelfpayingBook($selfpayingBooks);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeSelfpayingBook(\Babesk\ORM\SchbasBook $selfpayingBooks)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeSelfpayingBook', array($selfpayingBooks));
+
+        return parent::removeSelfpayingBook($selfpayingBooks);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSelfpayingBooks()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSelfpayingBooks', array());
+
+        return parent::getSelfpayingBooks();
     }
 
 }
