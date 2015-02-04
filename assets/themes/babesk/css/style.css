@@ -13,6 +13,10 @@
 /*.navbar .nav {
   float: right; }*/
 
+#wrap {
+  min-height: 50%;
+}
+
 .program-title {
   margin-bottom: 20px;
   text-align: center;
@@ -78,26 +82,49 @@
   color: #AADD33;
 }
 
-#icon-menu {
+.page-header {
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
+  border-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
   padding: 10px 0;
   background-color: #AADD33;
   box-shadow: 0px 0px 8px #222222;
 }
 
-#icon-menu a {
+.page-header h1,
+.page-header h2,
+.page-header h3,
+.page-header h4,
+.page-header h5 {
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.page-header h1,
+.page-header h2,
+.page-header h3 {
+}
+
+.page-header h4,
+.page-header h5 {
+  color: #4F6719;
+}
+
+.page-header a {
   border-radius: 5px;
   text-align: center;
   color: #404040;
   padding: 10px;
 }
 
-#icon-menu a:focus {
+.page-header a:focus {
   text-decoration: none;
 }
 
-#icon-menu a:hover i.fa {
+.page-header a:hover i.fa {
   text-decoration: none;
   text-shadow: 1px 1px 0px #5F7729;
   /* Should overwrite active color, so make it important*/
@@ -106,16 +133,16 @@
   transition-duration: 0.2s;
 }
 
-#icon-menu a.active i.fa {
+.page-header a.active i.fa {
   color: #F95C67;
   text-shadow: 1px 1px 0px #5F7729;
 }
 
-#icon-menu a:hover {
+.page-header a:hover {
   text-decoration: none;
 }
 
-#icon-menu .fa {
+.page-header .fa {
   font-size: 64px;
 }
 
@@ -146,7 +173,7 @@
 #footer {
   background-color: #666464;
   padding-bottom: 20px;
-  min-height: 400px;
+  min-height: 300px;
   color: #FFFFFF;
   text-shadow: 1px 1px 0px #3D3D3D;
   margin-top: 5px;
