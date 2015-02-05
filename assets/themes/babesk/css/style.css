@@ -247,6 +247,18 @@
   margin-bottom: 2em;
 }
 
+a {
+  color: #6633DD;
+}
+
+a:hover {
+  color: #6633DD;
+}
+
+hr {
+  border-bottom: 1px solid #AD3;
+}
+
 /* posts index */
 .post > h3.title {
   position: relative;
