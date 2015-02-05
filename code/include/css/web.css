@@ -6,13 +6,11 @@
 }
 
 #navigation {
-	background-image: -webkit-gradient(linear, left 0%, left 100%, from(#807D7D), to(#666464));
-	background-image: -webkit-linear-gradient(top, #807D7D 0%, #666464, 100%);
-	background-image: -moz-linear-gradient(top, #807D7D 0%, #666464 100%);
-	background-image: linear-gradient(to bottom, #807D7D 0%, #666464 100%);
-	background-repeat: repeat-x;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff807D7D', endColorstr='#ff666464', GradientType=0);
+	background: #666;
 	color: #BFBBBB;
+	border: none;
+	border-bottom: 10px solid #AD3;
+	border-radius: 0;
 }
 
 #navigation.navbar-inverse .navbar-brand {
@@ -39,21 +37,22 @@
 #navigation.navbar-inverse .navbar-nav > .open > a,
 #navigation.navbar-inverse .navbar-nav > .open > a:hover,
 #navigation.navbar-inverse .navbar-nav > .open > a:focus {
-	background-image: -webkit-gradient(linear, left 0%, left 100%, from(#666464), to(#515050));
-	background-image: -webkit-linear-gradient(top, #666464, 0%, #515050, 100%);
-	background-image: -moz-linear-gradient(top, #666464 0%, #515050 100%);
-	background-image: linear-gradient(to bottom, #666464 0%, #515050 100%);
-	background-repeat: repeat-x;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff666464', endColorstr='#ff666464', GradientType=0);
+	background: #4D4D4D;
 	color: #FFFFFF;
 }
 
 #navigation.navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
 	color: #EEEEEE;
+	border-top: 1px solid #666;
+	border-bottom: 1px solid #666;
 }
 
-#navigation.navbar-inverse .navbar-nav .open .dropdown-menu > li > a:hover {
+#navigation.navbar-inverse .navbar-nav .open .dropdown-menu > li > a:hover,
+#navigation.navbar-inverse .navbar-nav .open .dropdown-menu > li > a:focus {
 	color: #FFFFFF;
+	background: #444;
+	border-top: 1px solid #333;
+	border-bottom: 1px solid #333;
 }
 
 #navigation.navbar-inverse .dropdown-menu > li > p {
@@ -114,7 +113,7 @@
 
 #content {
 	/*border: 1px solid #33dea2;*/
-	background-color: #F5F4AC;
+	background-color: #FEFFCC;
 	border-bottom-right-radius: 10px;
 	border-bottom-left-radius: 10px;
 	padding: 20px;
