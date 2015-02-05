@@ -259,6 +259,11 @@ hr {
   border-bottom: 1px solid #AD3;
 }
 
+#content {
+  font-size: 1.2em;
+  padding: 40px 70px;
+}
+
 /* posts index */
 .post > h3.title {
   position: relative;
