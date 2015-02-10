@@ -597,6 +597,8 @@ class Classes extends Kuwasys {
 	protected function usersByClassIdGet($classId) {
 
 		$class = $this->_em->getReference('DM:KuwasysClass', $classId);
+		//Do not attempt to query sy.active = 1 for uigs.schoolyear,
+		//it breaks the result somehow
 		$query = $this->_em->createQuery(
 			'SELECT u, uicc, c, status, category, uigs, g
 			FROM DM:SystemUsers u
@@ -605,7 +607,7 @@ class Classes extends Kuwasys {
 			INNER JOIN uicc.status status
 			INNER JOIN uicc.category category
 			INNER JOIN u.usersInGradesAndSchoolyears uigs
-			INNER JOIN uigs.schoolyear sy WITH sy.active = 1
+			INNER JOIN uigs.schoolyear sy
 			INNER JOIN uigs.grade g
 		');
 		$query->setParameter('class', $class);

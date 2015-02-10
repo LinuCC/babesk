@@ -266,7 +266,11 @@
 				</td>
 				{$grade = $user->getUsersInGradesAndSchoolyears()->first()->getGrade()}
 				<td rowspan="{$rowsOfSamePerson}">
+				{if $grade}
 					{$grade->getGradelevel()} {$grade->getLabel()}
+				{else}
+					---
+				{/if}
 				</td>
 				<td rowspan="{$rowsOfSamePerson}">{$user->getEmail()}</td>
 				<td rowspan="{$rowsOfSamePerson}">{$user->getTelephone()}</td>
