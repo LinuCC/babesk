@@ -894,8 +894,8 @@ class QueryBuilder
      */
     public function andWhere($where)
     {
-        $where = $this->getDQLPart('where');
         $args  = func_get_args();
+        $where = $this->getDQLPart('where');
 
         if ($where instanceof Expr\Andx) {
             $where->addMultiple($args);
@@ -927,8 +927,8 @@ class QueryBuilder
      */
     public function orWhere($where)
     {
-        $where = $this->getDqlPart('where');
         $args  = func_get_args();
+        $where = $this->getDqlPart('where');
 
         if ($where instanceof Expr\Orx) {
             $where->addMultiple($args);
@@ -1007,8 +1007,8 @@ class QueryBuilder
      */
     public function andHaving($having)
     {
-        $having = $this->getDqlPart('having');
         $args   = func_get_args();
+        $having = $this->getDqlPart('having');
 
         if ($having instanceof Expr\Andx) {
             $having->addMultiple($args);
@@ -1030,8 +1030,8 @@ class QueryBuilder
      */
     public function orHaving($having)
     {
-        $having = $this->getDqlPart('having');
         $args   = func_get_args();
+        $having = $this->getDqlPart('having');
 
         if ($having instanceof Expr\Orx) {
             $having->addMultiple($args);
@@ -1087,7 +1087,8 @@ class QueryBuilder
      */
     public function addCriteria(Criteria $criteria)
     {
-        $visitor = new QueryExpressionVisitor();
+        $rootAlias = $this->getRootAlias();
+        $visitor = new QueryExpressionVisitor($rootAlias);
 
         if ($whereExpression = $criteria->getWhereExpression()) {
             $this->andWhere($visitor->dispatch($whereExpression));
@@ -1098,7 +1099,7 @@ class QueryBuilder
 
         if ($criteria->getOrderings()) {
             foreach ($criteria->getOrderings() as $sort => $order) {
-                $this->addOrderBy($sort, $order);
+                $this->addOrderBy($rootAlias . '.' . $sort, $order);
             }
         }
 

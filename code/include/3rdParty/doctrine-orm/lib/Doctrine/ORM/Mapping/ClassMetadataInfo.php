@@ -866,7 +866,11 @@ class ClassMetadataInfo implements ClassMetadata
     public function newInstance()
     {
         if ($this->_prototype === null) {
-            $this->_prototype = unserialize(sprintf('O:%d:"%s":0:{}', strlen($this->name), $this->name));
+            if (PHP_VERSION_ID === 50429 || PHP_VERSION_ID === 50513 || PHP_VERSION_ID >= 50600) {
+                $this->_prototype = $this->reflClass->newInstanceWithoutConstructor();
+            } else {
+                $this->_prototype = unserialize(sprintf('O:%d:"%s":0:{}', strlen($this->name), $this->name));
+            }
         }
 
         return clone $this->_prototype;
@@ -1031,9 +1035,14 @@ class ClassMetadataInfo implements ClassMetadata
      */
     public function isIdentifier($fieldName)
     {
+        if ( ! $this->identifier) {
+            return false;
+        }
+
         if ( ! $this->isIdentifierComposite) {
             return $fieldName === $this->identifier[0];
         }
+
         return in_array($fieldName, $this->identifier);
     }
 
@@ -2483,6 +2492,10 @@ class ClassMetadataInfo implements ClassMetadata
      */
     public function addLifecycleCallback($callback, $event)
     {
+        if(isset($this->lifecycleCallbacks[$event]) && in_array($callback, $this->lifecycleCallbacks[$event])) {
+            return;
+        }
+
         $this->lifecycleCallbacks[$event][] = $callback;
     }
 
@@ -2790,8 +2803,12 @@ class ClassMetadataInfo implements ClassMetadata
      */
     public function setSequenceGeneratorDefinition(array $definition)
     {
-        if (isset($definition['name']) && $definition['name'] == '`') {
-            $definition['name']   = trim($definition['name'], '`');
+        if ( ! isset($definition['sequenceName'])) {
+            throw MappingException::missingSequenceName($this->name);
+        }
+
+        if ($definition['sequenceName'][0] == '`') {
+            $definition['sequenceName']   = trim($definition['sequenceName'], '`');
             $definition['quoted'] = true;
         }
 
