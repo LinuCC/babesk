@@ -155,9 +155,7 @@ class ClassDetails extends Kuwasys {
 		} catch(\PDOException $e) {
 			$this->_logger->log('Error fetching the class-details',
 				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
-			$this->_interface->dieError(_g(
-				'Could not display the class-details!')
-			);
+			$this->_interface->dieError("Fehler beim Laden der Klasse");
 		}
 	}
 

@@ -562,7 +562,7 @@ class Classes extends Kuwasys {
 		$query = $this->_em->createQuery(
 			"SELECT c, uicc, ct, cc, ucc
 			FROM DM:KuwasysClass c
-			INNER JOIN c.usersInClassesAndCategories uicc
+			LEFT JOIN c.usersInClassesAndCategories uicc
 			LEFT JOIN c.classteachers ct
 			LEFT JOIN uicc.category ucc
 			LEFT JOIN c.categories cc
