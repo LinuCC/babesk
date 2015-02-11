@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-	//classId defined in actual tpl
+	//classId and categoryId defined in actual tpl
 
 	$('#moveStatusDialogSubmit').on('click', function(ev) {
 		$('#moveStatusDialog').modal('hide');
@@ -155,6 +155,7 @@ $(document).ready(function() {
 			{
 				'username': username,
 				'classId': classId,
+				'categoryId': categoryId,
 				'statusname': statusname,
 			},
 			function(res) {

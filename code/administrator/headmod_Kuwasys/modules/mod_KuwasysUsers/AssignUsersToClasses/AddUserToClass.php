@@ -23,8 +23,9 @@ class AddUserToClass extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToCl
 
 		$userId = $this->userIdGetByUsername($_POST['username']);
 		$statusId = $this->statusIdGetByName($_POST['statusname']);
-		$this->userAssignToClass($userId, $_POST['classId'], $statusId);
-
+		$this->userAssignToClass(
+			$userId, $_POST['classId'], $_POST['categoryId'], $statusId
+		);
 
 		die(json_encode(array('value' => 'success',
 			'message' => _g('The User was successfully added'))));
@@ -42,17 +43,22 @@ class AddUserToClass extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToCl
 	 * @param  int    $statusId The ID of the Status
 	 * @throws PDOException If Things didnt work out
 	 */
-	private function userAssignToClass($userId, $classId, $statusId) {
+	private function userAssignToClass(
+		$userId, $classId, $categoryId, $statusId
+	) {
 
 		try {
 			$stmt = $this->_pdo->prepare(
 				'INSERT INTO KuwasysTemporaryRequestsAssign
-				(userId, classId, statusId, origUserId, origClassId, origStatusId) VALUES
-				(:userId, :classId, :statusId, 0, 0, 0)');
+				(userId, classId, categoryId, statusId, origUserId,
+					origClassId, origCategoryId, origStatusId)
+				VALUES
+				(:userId, :classId, :categoryId, :statusId, 0, 0, 0, 0)');
 
 			$stmt->execute(array(
 				'userId' => $userId,
 				'classId' => $classId,
+				'categoryId' => $categoryId,
 				'statusId' => $statusId,
 			));
 
