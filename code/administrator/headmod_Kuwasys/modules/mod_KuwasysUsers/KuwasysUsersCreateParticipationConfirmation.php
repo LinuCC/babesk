@@ -44,9 +44,9 @@ class KuwasysUsersCreateParticipationConfirmationPdf {
 				) AS grouper
 			FROM SystemUsers u
 				INNER JOIN SystemUsersInGradesAndSchoolyears uigs
-					ON uigs.userId = u.ID AND uigs.gradeId = %s
+					ON uigs.userId = u.ID
 				INNER JOIN SystemSchoolyears sy ON sy.ID = uigs.schoolyearId
-				LEFT JOIN KuwasysUsersInClassesAndCategories uicc
+				INNER JOIN KuwasysUsersInClassesAndCategories uicc
 					ON u.ID = uicc.UserID
 				LEFT JOIN KuwasysUsersInClassStatuses uics ON uics.ID = uicc.statusId
 				LEFT JOIN KuwasysClasses c
@@ -59,7 +59,7 @@ class KuwasysUsersCreateParticipationConfirmationPdf {
 				AND (uics.ID IS NULL OR uics.name = "active")
 				AND (uicc.UserID IS NULL OR uicc.categoryId = cic.categoryId)
 				GROUP BY grouper
-				ORDER BY cu.ID
+				ORDER BY g.gradelevel, g.label, cu.ID
 			;', $gradeId);
 
 		try {
@@ -102,7 +102,7 @@ class KuwasysUsersCreateParticipationConfirmationPdf {
 	protected static function pdfCreate () {
 		require_once PATH_INCLUDE . '/pdf/HtmlToPdfImporter.php';
 		$pdfPaths = array ();
-		$confTemplatePath = PATH_INCLUDE . '/pdf/printTemplates/KuwasysParticipationConfirmation.html';
+		$confTemplatePath = PATH_INCLUDE . '/pdf/printTemplates/printTemplateTest.html';
 		if(!file_exists($confTemplatePath))
 			$this->_interface->dieError($this->_languageManager->getText('errorPdfHtmlTemplateMissing') . $confTemplatePath);
 		foreach (self::$_users as $user) {
