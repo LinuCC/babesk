@@ -109,27 +109,31 @@ class KuwasysUsers extends Kuwasys {
 		 */
 		require_once 'KuwasysUsersCreateParticipationConfirmation.php';
 
-		$gradeId = $_GET['gradeId'];
-		$query = "SELECT u.ID as userId
-			FROM SystemUsers u
-				JOIN SystemUsersInGradesAndSchoolyears uigsy
-					ON uigsy.UserID = u.ID
-			WHERE uigsy.schoolyearId = @activeSchoolyear AND
-				uigsy.gradeId = {$gradeId}
-			";
-		try {
-			$data = TableMng::query ($query);
-		} catch (MySQLVoidDataException $e) {
-			$this->_interface->dieError ('Es wurden keine Schüler gefunden, für die man die Dokumente hätte erstellen können');
-		} catch (Exception $e) {
-			$this->_interface->dieError ('konnte die Daten der Schüler nicht abrufen' . $e->getMessage ());
-		}
-		$userIds = array ();
-		foreach ($data as $row) {
-			$userIds [] = $row ['userId'];
-		}
+		// $gradeId = $_GET['gradeId'];
+		// $query = "SELECT u.ID as userId
+		// 	FROM SystemUsers u
+		// 		JOIN SystemUsersInGradesAndSchoolyears uigsy
+		// 			ON uigsy.UserID = u.ID
+		// 	WHERE uigsy.schoolyearId = @activeSchoolyear AND
+		// 		uigsy.gradeId = {$gradeId}
+		// 	";
+		// try {
+		// 	$data = TableMng::query ($query);
+		// } catch (MySQLVoidDataException $e) {
+		// 	$this->_interface->dieError ('Es wurden keine Schüler gefunden, für die man die Dokumente hätte erstellen können');
+		// } catch (Exception $e) {
+		// 	$this->_interface->dieError ('konnte die Daten der Schüler nicht abrufen' . $e->getMessage ());
+		// }
+		// $userIds = array ();
+		// foreach ($data as $row) {
+		// 	$userIds [] = $row ['userId'];
+		// }
+		// KuwasysUsersCreateParticipationConfirmationPdf::init ($this->_interface);
+		// KuwasysUsersCreateParticipationConfirmationPdf::execute ($gradeId, $userIds);
 		KuwasysUsersCreateParticipationConfirmationPdf::init ($this->_interface);
-		KuwasysUsersCreateParticipationConfirmationPdf::execute ($gradeId, $userIds);
+		KuwasysUsersCreateParticipationConfirmationPdf::execute (
+			null, array()
+		);
 	}
 
 	/**==========================================**

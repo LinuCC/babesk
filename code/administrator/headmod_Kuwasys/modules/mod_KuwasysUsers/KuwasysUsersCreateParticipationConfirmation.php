@@ -11,13 +11,20 @@ class KuwasysUsersCreateParticipationConfirmationPdf {
 	}
 
 	public static function execute ($gradeId, $userIds) {
-		if(!count($userIds)) {
-			self::$_interface->dieError('Keine Benutzer in dieser Klasse.');
-		}
+		// if(!count($userIds)) {
+		// 	self::$_interface->dieError('Keine Benutzer in dieser Klasse.');
+		// }
 		$data = self::dataFetch ($gradeId, $userIds);
-		self::usersFill ($data);
-		$pdfPaths = self::pdfCreate ();
-		self::pdfCombineAndOut ($pdfPaths);
+		if(count($data)) {
+			self::usersFill ($data);
+			$pdfPaths = self::pdfCreate ();
+			self::pdfCombineAndOut ($pdfPaths);
+		}
+		else {
+			self::$_interface->dieMsg(
+				'Keine Anmeldungen, die ausgedruckt werden können.'
+			);
+		}
 	}
 
 	/////////////////////////////////////////////////////////////////////

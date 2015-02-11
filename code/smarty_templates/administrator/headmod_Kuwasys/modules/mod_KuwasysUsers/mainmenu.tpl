@@ -16,6 +16,8 @@
 					Teilnahmebestätigungen
 				</h4>
 			</div>
+			Teilnahmebestätigungen erstellen?
+			<!--
 			<div class="modal-body">
 				<p>
 					Bitte wählen sie die Klasse für die sie die Teilnahmebestätigungen erstellen wollen
@@ -31,6 +33,7 @@
 					</select>
 				</span>
 			</div>
+			-->
 			<div class="modal-footer">
 				<button class="btn btn-default" data-dismiss="modal">
 					Abbrechen
