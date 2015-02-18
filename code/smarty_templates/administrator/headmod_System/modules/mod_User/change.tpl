@@ -373,23 +373,50 @@
 		{t}Cancel{/t}
 	</a>
 </form>
+
+<div id="additional-settings">
+</div>
 {/block}
 
 
 {block name="style_include" append}
-<link rel="stylesheet" href="{$path_css}/administrator/System/User/register.css" type="text/css" />
+<link rel="stylesheet" href="{$path_css}/administrator/System/User/register.css"
+	type="text/css" />
 <link rel="stylesheet" href="{$path_css}/datepicker3.css" type="text/css" />
-<link rel="stylesheet" href="{$path_css}/bootstrap-switch.min.css" type="text/css" />
+<link rel="stylesheet" href="{$path_css}/bootstrap-switch.min.css"
+	type="text/css" />
+<link rel="stylesheet" href="{$path_css}/bootstrap-multiselect.css"
+	type="text/css" />
 {/block}
 
 
 {block name="js_include" append}
-<script type="text/javascript" src="{$path_js}/datepicker/bootstrap-datepicker.min.js"></script>
-<script type="text/javascript" src="{$path_js}/datejs/date.min.js"></script>
-<script type="text/javascript" src="{$path_js}/datepicker/locales/bootstrap-datepicker.de.js"></script>
-<script type="text/javascript" src="{$path_js}/bootstrap-switch.min.js"></script>
-<script type="text/javascript" src="{$path_js}/jquery-validate/jquery.validate.min.js"></script>
-<script type="text/javascript" src="{$path_js}/jquery-validate/localization/messages_de.js"></script>
-<script type="text/javascript" src="{$path_js}/bootbox.min.js"></script>
-<script type="text/javascript" src="{$path_smarty_tpl}/administrator/headmod_System/modules/mod_User/change.js"></script>
+<script type="text/javascript"
+	src="{$path_js}/datepicker/bootstrap-datepicker.min.js">
+</script>
+<script type="text/javascript" src="{$path_js}/datejs/date.min.js">
+</script>
+<script type="text/javascript"
+	src="{$path_js}/datepicker/locales/bootstrap-datepicker.de.js">
+</script>
+<script type="text/javascript" src="{$path_js}/bootstrap-switch.min.js">
+</script>
+<script type="text/javascript"
+	src="{$path_js}/jquery-validate/jquery.validate.min.js">
+</script>
+<script type="text/javascript"
+	src="{$path_js}/jquery-validate/localization/messages_de.js">
+</script>
+<script type="text/javascript" src="{$path_js}/bootbox.min.js">
+</script>
+<script type="text/javascript" src="{$path_js}/react/react-with-addons.js">
+</script>
+<script type="text/javascript" src="{$path_js}/bootstrap-multiselect.min.js">
+</script>
+<script type="text/javascript"
+	src="{$path_js}/administrator/System/User/change-user.js">
+</script>
+<script type="text/javascript"
+	src="{$path_smarty_tpl}/administrator/headmod_System/modules/mod_User/change.js">
+</script>
 {/block}
