@@ -420,6 +420,6 @@
 	src="{$path_js}/dist/administrator/System/User/main.js">
 </script>
 <script type="text/javascript"
-	src="{$path_smarty_tpl}/administrator/headmod_System/modules/mod_User/change.js">
+	src="{$path_js}/administrator/System/User/change.js">
 </script>
 {/block}

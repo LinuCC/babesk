@@ -141,7 +141,7 @@
 	</p>
 {/if}
 
-<script type="text/JavaScript" src="../smarty/templates/web/headmod_Messages/searchUser.js"></script>
+<script type="text/JavaScript" src="{$path_js}/web/Messages/searchUser.js"></script>
 
 {literal}
 <script type="text/JavaScript">

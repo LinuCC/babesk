@@ -346,5 +346,5 @@
 <script type="text/javascript" src="{$path_js}/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="{$path_js}/jquery-validate/jquery.validate.min.js"></script>
 <script type="text/javascript" src="{$path_js}/bootbox.min.js"></script>
-<script type="text/javascript" src="{$path_smarty_tpl}/administrator/headmod_System/modules/mod_User/register.js"></script>
+<script type="text/javascript" src="{$path_js}/administrator/System/User/register.js"></script>
 {/block}

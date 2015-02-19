@@ -48,13 +48,10 @@
 {block name="js_include" append}
 <script src="{$path_js}/jstree/jquery.jstree.js">
 </script>
-<script src="{$path_smarty_tpl}/administrator/headmod_System/modules/
-	mod_GroupSettings/righttree.js">
+<script src="{$path_js}/administrator/System/GroupSettings/righttree.js">
 </script>
-<script src="{$path_smarty_tpl}/administrator/headmod_System/modules/
-	mod_GroupSettings/grouptree.js">
+<script src="{$path_js}/administrator/System/GroupSettings/grouptree.js">
 </script>
-<script src="{$path_smarty_tpl}/administrator/headmod_System/modules/
-	mod_GroupSettings/main.js">
+<script src="{$path_js}/administrator/System/GroupSettings/main.js">
 </script>
 {/block}

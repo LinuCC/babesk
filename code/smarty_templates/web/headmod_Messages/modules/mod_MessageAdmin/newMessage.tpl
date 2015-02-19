@@ -83,6 +83,6 @@ fieldset {
 	<input id="submit" onclick="submit()" type="submit" value="Absenden" />
 </form>
 
-<script type="text/JavaScript" src="../smarty/templates/web/headmod_Messages/searchUser.js"></script>
-<script type="text/JavaScript" src="../smarty/templates/web/headmod_Messages/modules/mod_MessageAdmin/newMessageBinds.js"></script>
+<script type="text/JavaScript" src="{$path_js}/web/Messages/searchUser.js"></script>
+<script type="text/JavaScript" src="{$path_js}/web/Messages/MessageAdmin/newMessageBinds.js"></script>
 {/block}
