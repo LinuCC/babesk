@@ -54,3 +54,7 @@ tmpFiles
 *~
 
 .floo*
+
+#NodeJS#
+########
+node_modules/
