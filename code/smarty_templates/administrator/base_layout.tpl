@@ -21,18 +21,6 @@
 		<link rel="stylesheet" href="{$path_css}/toastr.min.css" type="text/css" />
 		{/block}
 
-		{$enableDeprecatedLayout = isset($smarty.get.old_layout)}
-
-		{if $enableDeprecatedLayout}
-		<link rel="stylesheet"
-			href="{$path_js}/jquery-ui-smoothness.css"
-			type="text/css"
-		/>
-		<link rel="stylesheet"
-			href="{$path_smarty_tpl}/administrator/css/general.css"
-			type="text/css" />
-		{/if}
-
 		<link rel="shortcut icon" href="adminicon.ico" />
 		<title>{$title|default:'BaBeSK'}</title>
 	</head>
@@ -377,10 +365,5 @@
 			<script type="text/javascript" src="{$path_js}/custom-base.js"></script>
 			<script type="text/javascript" src="{$path_js}/react/react.min.js"></script>
 		{/block}
-
-		{if $enableDeprecatedLayout}
-			<script type="text/javascript" src="{$path_js}/jquery-ui.min.js"></script>
-			<script type="text/javascript" src="{$path_smarty_tpl}/administrator/administratorFunctions.js"></script>
-		{/if}
 	</body>
 </html>
