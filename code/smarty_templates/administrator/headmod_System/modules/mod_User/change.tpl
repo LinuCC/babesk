@@ -242,7 +242,7 @@
 								<a class="btn btn-default btn-xs expand"
 								data-toggle="collapse"
 								data-target="#group-childs-list-for-{$group->getId()}">
-									<span class="icon icon-minus"></span>
+									<span class="fa fa-minus"></span>
 								</a>
 
 								<ol id="group-childs-list-for-{$group->getId()}"

@@ -66,7 +66,7 @@
 				<span class="input-group-btn">
 					<button class="additional-category btn btn-default"
 						type="button" data-toggle="tooltip" title="Weiterer Zeitpunkt">
-						<span class="icon icon-plus"></span>
+						<span class="fa fa-plus"></span>
 					</button>
 				</span>
 			</div>

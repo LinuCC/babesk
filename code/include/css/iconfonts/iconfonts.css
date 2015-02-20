@@ -32,12 +32,6 @@
 }
 
 
-.icon-plus:before {
-	content: "\e609";
-}
-.icon-minus:before {
-	content: "\e60a";
-}
 .icon-success:before {
 	content: "\e60b";
 }

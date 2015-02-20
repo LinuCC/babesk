@@ -38,24 +38,24 @@ $(document).ready(function() {
 
 		$('[id^="unit-accordion-body_"]').on('show.bs.collapse', function(ev) {
 			if(!$(ev.target).hasClass('class-container-body')) {
-				$(this).parent().find('.icon:first').removeClass('icon-plus').
-						html('').addClass('icon-minus');
+				$(this).parent().find('.fa:first').removeClass('fa-plus').
+						html('').addClass('fa-minus');
 			}
 		});
 		$('[id^="unit-accordion-body_"]').on('hide.bs.collapse', function(ev) {
 			if(!$(ev.target).hasClass('class-container-body')) {
-				$(this).parent().find('.icon:first').removeClass('icon-minus').
-					html('').addClass('icon-plus');
+				$(this).parent().find('.fa:first').removeClass('fa-minus').
+					html('').addClass('fa-plus');
 			}
 		});
 
 		$('[id^="class-accordion-body_"]').on('show.bs.collapse', function(ev) {
-				$(this).parent().find('.icon:first').removeClass('icon-plus').
-					html('').addClass('icon-minus');
+				$(this).parent().find('.fa:first').removeClass('fa-plus').
+					html('').addClass('fa-minus');
 		});
 		$('[id^="class-accordion-body_"]').on('hide.bs.collapse', function(ev) {
-				$(this).parent().find('.icon:first').removeClass('icon-minus').
-					html('').addClass('icon-plus');
+				$(this).parent().find('.fa:first').removeClass('fa-minus').
+					html('').addClass('fa-plus');
 		});
 
 		$('table#open-class-table button.apply-button').on('click', function(ev) {

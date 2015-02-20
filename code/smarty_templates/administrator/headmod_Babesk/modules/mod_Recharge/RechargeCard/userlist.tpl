@@ -68,7 +68,7 @@
 						<div class="col-sm-12 col-md-7">
 							<span class="input-group">
 								<div class="input-group-addon">
-									<span class="icon icon-plus"></span>
+									<span class="fa fa-plus"></span>
 								</div>
 								<input type="text" id="credits-add-input" class="form-control"
 									placeholder="Guthaben zu addieren hier eingeben">

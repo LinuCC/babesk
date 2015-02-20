@@ -24,7 +24,7 @@ $(document).ready(function() {
 		});
 
 		$('#usergroups .expand').on('click', function(ev) {
-			$(this).children('.icon').toggleClass('icon-plus icon-minus');
+			$(this).children('.fa').toggleClass('fa-plus fa-minus');
 		});
 
 		$('#grade-schoolyears').on('click', '.grade-schoolyear-remove',

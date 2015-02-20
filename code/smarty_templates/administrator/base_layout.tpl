@@ -121,7 +121,7 @@
 										<div class="text-icon-spacer">
 												<span class="fa fa-{$headmodule->getName()} fa-fw module-icon"></span>
 												{_g('modulepath_'|cat:$hModulepath)}
-												<span class="toggle-icon icon icon-plus pull-right">
+												<span class="toggle-icon fa fa-plus pull-right">
 												</span>
 												<span class="clearfix"></span>
 										</div>
@@ -145,7 +145,7 @@
 						<li>
 							<a href="#" data-toggle="collapse" data-target="#headmod-submenu-1" class="collapsed sidebar-folder">
 								<span>Custom folder</span>
-								<span class="toggle-icon icon icon-plus pull-right"></span>
+								<span class="toggle-icon fa fa-plus pull-right"></span>
 							</a>
 							<ul id="headmod-submenu-1" class="nav collapse">
 								<li>
@@ -154,7 +154,7 @@
 								<li>
 									<a href="#" data-toggle="collapse" data-target="#headmod-submenu-3" class="collapsed sidebar-folder">
 										<span>Custom nested folder</span>
-										<span class="toggle-icon icon icon-plus pull-right"></span>
+										<span class="toggle-icon fa fa-plus pull-right"></span>
 									</a>
 									<ul id="headmod-submenu-3" class="nav collapse">
 										<li>

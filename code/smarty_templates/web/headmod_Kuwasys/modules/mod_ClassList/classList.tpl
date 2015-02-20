@@ -75,7 +75,7 @@
 						data-toggle="collapse" data-parent=""
 						href="#unit-accordion-body_{$classCategory.ID}"
 						{if $classCategory.votedCount}disabled{/if}>
-						<div class="icon icon-plus"></div>
+						<div class="fa fa-plus"></div>
 					</button>
 					{$classCategory.translatedName}
 					{if $classCategory.votedCount}
@@ -96,7 +96,7 @@
 												data-toggle="collapse"
 												data-parent="#unitAccordion_{$classCategory.ID}"
 												href="#class-accordion-body_{$class.ID}">
-												<div class="icon icon-plus"></div>
+												<div class="fa fa-plus"></div>
 											</button>
 											<h4 class="panel-title">
 												{$class.label}
@@ -127,7 +127,7 @@
 													</button>
 													<button type="button" classId="{$class.ID}"
 													class="btn btn-sm btn-danger disabled to-disabled">
-														<div class="fa fa-minus icon-btn-sm"></div>
+														<i class="fa fa-minus"></i>
 													</button>
 												</div>
 										</div>
