@@ -1,5 +1,5 @@
 {extends file=$mealParent}{block name=content}
-<script type="text/javascript" src="{$path_js}/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="{$path_js}/vendor/ckeditor/ckeditor.js"></script>
 <center><h3>Speiseplan Infotexte</h3></center>
 <form action="index.php?module=administrator|Babesk|Meals|EditMenuInfotexts"
 	method="post" onsubmit="submit()">

@@ -1,5 +1,5 @@
 {extends file=$base_path}{block name=content}
-<script type="text/javascript" src="{$path_js}/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="{$path_js}/vendor/ckeditor/ckeditor.js"></script>
 
 <h3>Hilfetext bearbeiten:</h3>
 

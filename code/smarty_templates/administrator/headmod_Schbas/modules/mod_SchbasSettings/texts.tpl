@@ -1,5 +1,5 @@
 {extends file=$schbasSettingsParent}{block name=content}
-<script type="text/javascript" src="{$path_js}/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="{$path_js}/vendor/ckeditor/ckeditor.js"></script>
 <script type="text/javascript"
 		src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
 </script>
