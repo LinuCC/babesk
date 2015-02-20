@@ -27,7 +27,7 @@
 						<span class="icon icon-businesscard"></span>
 					</a>
 					<button class="btn btn-danger btn-xs delete-grade" data-toggle="tooltip" title="Klasse löschen" gradeid="{$grade.ID}">
-						<span class="icon icon-error"></span>
+						<span class="fa fa-trash-o"></span>
 					</button>
 				</div>
 			</td>

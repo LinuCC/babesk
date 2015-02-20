@@ -156,7 +156,7 @@
 							<div class="panel-heading">
 								<div class="panel-title">
 									<h3 class="icon-container col-xs-2 col-sm-1">
-										<span class="icon-error icon"></span>
+										<span class="fa fa-exclamation-triangle"></span>
 									</h3>
 									<span class="col-xs-10 col-sm-11">
 										{t}Sorry! An error occured. We could not handle your request.{/t}
@@ -310,7 +310,7 @@
 							for bugs and feature requests.
 						</p>
 						<p style="font-size: 10px; position:relative; top: 50px">
-							Also, <a href="#" onclick="javascript: toastr.info('<div class=&quot;icon-darthvader icon&quot; style=&quot;font-size:48px&quot;></div>', 'A wild Vader appeared!')">spam.</a>
+							Also, <a href="#" onclick="javascript: toastr.info('<div class=&quot;fa fa-gamepad&quot; style=&quot;font-size:48px&quot;></div>', 'A wild Gamepad appeared!')">spam.</a>
 						</p>
 						</div>
 					</div>

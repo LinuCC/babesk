@@ -23,7 +23,7 @@
 				<div class="col-sm-10">
 					{if $user->getLocked()}
 						<span class="text-danger">
-							<span class="icon icon-error"></span>
+							<span class="fa fa-exclamation-triangle"></span>
 							Ja
 						</span>
 					{else}

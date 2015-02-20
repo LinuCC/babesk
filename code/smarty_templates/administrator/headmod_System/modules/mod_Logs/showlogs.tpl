@@ -85,7 +85,7 @@
 		<span class="input-group severity-select-container" data-toggle="tooltip"
 			title="Nach Gewichtung filtern" >
 			<span class="input-group-addon">
-				<span class="icon icon-error"></span>
+				<span class="fa fa-exclamation-triangle"></span>
 			</span>
 			<select id="severity-select" class="form-control">
 			</select>

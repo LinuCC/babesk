@@ -40,7 +40,7 @@
 				<a class="btn btn-xs btn-danger"
 					href="index.php?module=administrator|System|Schoolyear&amp;action=deleteSchoolYear&amp;ID={$schoolYear.ID}"
 					data-toggle="tooltip" title="Schuljahr löschen">
-					<span class="icon icon-error"></span>
+					<span class="fa fa-trash-o"></span>
 				</a>
 				{if !($schoolYear.active)}
 					<a class="btn btn-xs btn-info"

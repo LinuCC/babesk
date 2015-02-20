@@ -25,7 +25,7 @@
 			</a>
 			<a class="btn btn-xs btn-danger user-action-delete" href="#"
 				title="Nutzer löschen">
-				<span class="icon icon-error"></span>
+				<span class="fa fa-trash-o"></span>
 			</a>
 		</div>
 	</td>

@@ -30,7 +30,7 @@
 				</a>
 				<button type="button"
 					class="btn btn-danger btn-xs delete-classteacher">
-					<span class="icon icon-error"></span>
+					<span class="fa fa-trash-o"></span>
 				</button>
 			</td>
 		</tr>

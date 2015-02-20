@@ -22,7 +22,7 @@
 				<span class="icon icon-Settings"></span>
 		</a>
 		<a class="btn btn-danger btn-xs" href="index.php?section=Schbas|Booklist&action=3&ID=<%= id %>" title="Buch löschen">
-			<span class="icon icon-error"></span>
+			<span class="fa fa-trash-o"></span>
 		</a>
 		</td>
 	</tr>

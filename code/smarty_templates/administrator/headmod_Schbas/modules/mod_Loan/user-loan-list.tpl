@@ -36,14 +36,14 @@
 					</li>
 				{else}
 					<li class="list-group-item list-group-item-danger">
-						<span class="icon icon-error pull-left"></span>
+						<span class="fa fa-exclamation-triangle pull-left"></span>
 						Der Benutzer hat nicht genug für die Bücher bezahlt!
 					</li>
 				{/if}
 			{/if}
 		{else}
 			<li class="list-group-item list-group-item-danger">
-				<span class="icon icon-error pull-left"></span>
+				<span class="fa fa-exclamation-triangle pull-left"></span>
 				Das Formular zur Buchausleihe wurde noch nicht abgegeben!
 			</li>
 		{/if}

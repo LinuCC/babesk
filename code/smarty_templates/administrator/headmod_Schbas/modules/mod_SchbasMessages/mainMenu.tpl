@@ -18,7 +18,7 @@
 			<td>{$template.text}</td>
 			<td>
 				<a class="btn btn-danger btn-xs" title="Vorlage löschen" data-toggle="tooltip" href="index.php?section=Schbas|SchbasMessages&amp;action=deleteTemplate&amp;id={$template.ID}">
-					<span class="icon icon-error" ></span>
+					<span class="fa fa-trash-o" ></span>
 				</a>
 			</td>
 		</tr>

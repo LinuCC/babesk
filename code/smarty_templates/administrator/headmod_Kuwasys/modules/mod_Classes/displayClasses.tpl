@@ -96,7 +96,7 @@
 					<a href="index.php?module=administrator|Kuwasys|Classes|DeleteClass&amp;ID={$class->getId()}"
 						data-toggle="tooltip" disabled
 						class="btn btn-danger btn-xs" data-title="Kurs löschen">
-						<span class="icon icon-error"></span>
+						<span class="fa fa-trash-o"></span>
 					</a>
 				</div>
 			</td>

@@ -101,7 +101,7 @@
 		</select>
 		<span class="input-group-btn">
 			<a class="btn btn-danger grade-schoolyear-remove">
-				<span class="icon icon-error"></span>
+				<span class="fa fa-trash-o"></span>
 				Verbindung löschen...
 			</a>
 		</span>

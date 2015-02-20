@@ -127,7 +127,7 @@
 													</button>
 													<button type="button" classId="{$class.ID}"
 													class="btn btn-sm btn-danger disabled to-disabled">
-														<div class="icon-error icon icon-btn-sm"></div>
+														<div class="fa fa-minus icon-btn-sm"></div>
 													</button>
 												</div>
 										</div>
