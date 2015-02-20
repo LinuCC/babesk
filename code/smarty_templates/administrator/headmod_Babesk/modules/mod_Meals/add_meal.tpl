@@ -69,7 +69,7 @@
 
 {block name=js_include append}
 
-<script type="text/javascript" src="{$path_js}/datepicker/bootstrap-datepicker.min.js">
+<script type="text/javascript" src="{$path_js}/vendor/datepicker/bootstrap-datepicker.min.js">
 </script>
 
 <script type="text/javascript">

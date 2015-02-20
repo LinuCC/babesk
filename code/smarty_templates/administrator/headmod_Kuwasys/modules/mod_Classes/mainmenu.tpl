@@ -121,9 +121,9 @@
 
 
 {block name="js_include" append}
-<script type="text/javascript" src="{$path_js}/datepicker/bootstrap-datepicker.min.js"></script>
-<script type="text/javascript" src="{$path_js}/datejs/date.min.js"></script>
-<script type="text/javascript" src="{$path_js}/datepicker/locales/bootstrap-datepicker.de.js"></script>
+<script type="text/javascript" src="{$path_js}/vendor/datepicker/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" src="{$path_js}/vendor/datejs/date.min.js"></script>
+<script type="text/javascript" src="{$path_js}/vendor/datepicker/locales/bootstrap-datepicker.de.js"></script>
 <script type="text/javascript">
 
 $(document).ready(function() {

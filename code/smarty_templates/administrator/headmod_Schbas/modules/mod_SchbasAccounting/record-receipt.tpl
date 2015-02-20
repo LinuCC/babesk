@@ -224,7 +224,7 @@
 {block name=js_include append}
 
 <script type="text/javascript"
-	src="{$path_js}/paginator/jquery.bootpag.min.js">
+	src="{$path_js}/vendor/paginator/jquery.bootpag.min.js">
 </script>
 
 <script type="text/javascript" src="{$path_js}/vendor/bootstrap-multiselect.min.js"></script>

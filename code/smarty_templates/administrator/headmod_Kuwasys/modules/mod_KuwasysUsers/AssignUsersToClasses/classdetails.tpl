@@ -217,7 +217,7 @@
 {block name=style_include append}
 
 <link rel="stylesheet" href="{$path_css}/administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/classdetails.css" type="text/css" />
-<link rel="stylesheet" href="{$path_js}/jquery-ui-smoothness.css" type="text/css" />
+<link rel="stylesheet" href="{$path_css}/jquery-ui-smoothness.css" type="text/css" />
 
 {/block}
 

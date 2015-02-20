@@ -392,24 +392,24 @@
 
 {block name="js_include" append}
 <script type="text/javascript"
-	src="{$path_js}/datepicker/bootstrap-datepicker.min.js">
+	src="{$path_js}/vendor/datepicker/bootstrap-datepicker.min.js">
 </script>
-<script type="text/javascript" src="{$path_js}/datejs/date.min.js">
+<script type="text/javascript" src="{$path_js}/vendor/datejs/date.min.js">
 </script>
 <script type="text/javascript"
-	src="{$path_js}/datepicker/locales/bootstrap-datepicker.de.js">
+	src="{$path_js}/vendor/datepicker/locales/bootstrap-datepicker.de.js">
 </script>
 <script type="text/javascript" src="{$path_js}/vendor/bootstrap-switch.min.js">
 </script>
 <script type="text/javascript"
-	src="{$path_js}/jquery-validate/jquery.validate.min.js">
+	src="{$path_js}/vendor/jquery-validate/jquery.validate.min.js">
 </script>
 <script type="text/javascript"
-	src="{$path_js}/jquery-validate/localization/messages_de.js">
+	src="{$path_js}/vendor/jquery-validate/localization/messages_de.js">
 </script>
 <script type="text/javascript" src="{$path_js}/vendor/bootbox.min.js">
 </script>
-<script type="text/javascript" src="{$path_js}/react/react-with-addons.js">
+<script type="text/javascript" src="{$path_js}/vendor/react/react-with-addons.js">
 </script>
 <script type="text/javascript" src="{$path_js}/vendor/bootstrap-multiselect.min.js">
 </script>

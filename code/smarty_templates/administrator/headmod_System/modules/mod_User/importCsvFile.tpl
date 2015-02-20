@@ -57,6 +57,13 @@
 <script src="../include/js/CsvFileUploader.js"></script>
 <script type="text/javascript">
 
+3 matches in 1 file
+
+
+Searching 15020 files for "jquery-validate" (case sensitive)
+<script src="../include/js/CsvFileUploader.js"></script>
+<script type="text/javascript">
+
 $(document).ready(function() {
 	var uploader = new CsvFileUploader();
 	$('.accordion').accordion({

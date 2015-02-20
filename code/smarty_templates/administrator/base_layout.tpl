@@ -364,7 +364,6 @@
 			</script>
 			<script type="text/javascript" src="{$path_js}/vendor/json2.min.js"></script>
 			<script type="text/javascript" src="{$path_js}/custom-base.js"></script>
-			<script type="text/javascript" src="{$path_js}/react/react.min.js"></script>
 		{/block}
 	</body>
 </html>
