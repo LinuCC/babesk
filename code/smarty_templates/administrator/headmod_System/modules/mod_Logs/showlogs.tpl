@@ -129,5 +129,5 @@
 
 {block name=js_include append}
 <script type="text/javascript" src="{$path_js}/administrator/System/Logs/showlogs.js"></script>
-<script type="text/javascript" src="{$path_js}/bootbox.min.js"></script>
+<script type="text/javascript" src="{$path_js}/vendor/bootbox.min.js"></script>
 {/block}

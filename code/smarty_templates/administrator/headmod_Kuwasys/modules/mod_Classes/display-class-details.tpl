@@ -442,8 +442,8 @@
 </script>
 
 <script type="text/javascript" src="{$path_js}/jquery-ui-1.10.4.only-autocomplete.min.js"></script>
-<script type="text/javascript" src="{$path_js}/bootbox.min.js"></script>
+<script type="text/javascript" src="{$path_js}/vendor/bootbox.min.js"></script>
 <script type="text/javascript" src="{$path_js}/administrator/Kuwasys/Classes/display-class-details.js"></script>
-<script type="text/javascript" src="{$path_js}/bootstrap-switch.min.js"></script>
+<script type="text/javascript" src="{$path_js}/vendor/bootstrap-switch.min.js"></script>
 
 {/block}

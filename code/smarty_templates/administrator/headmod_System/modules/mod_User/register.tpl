@@ -343,8 +343,8 @@
 {block name="js_include" append}
 <script type="text/javascript" src="{$path_js}/datepicker/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="{$path_js}/datepicker/locales/bootstrap-datepicker.de.js"></script>
-<script type="text/javascript" src="{$path_js}/bootstrap-switch.min.js"></script>
+<script type="text/javascript" src="{$path_js}/vendor/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="{$path_js}/jquery-validate/jquery.validate.min.js"></script>
-<script type="text/javascript" src="{$path_js}/bootbox.min.js"></script>
+<script type="text/javascript" src="{$path_js}/vendor/bootbox.min.js"></script>
 <script type="text/javascript" src="{$path_js}/administrator/System/User/register.js"></script>
 {/block}

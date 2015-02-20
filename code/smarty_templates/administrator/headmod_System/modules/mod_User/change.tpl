@@ -399,7 +399,7 @@
 <script type="text/javascript"
 	src="{$path_js}/datepicker/locales/bootstrap-datepicker.de.js">
 </script>
-<script type="text/javascript" src="{$path_js}/bootstrap-switch.min.js">
+<script type="text/javascript" src="{$path_js}/vendor/bootstrap-switch.min.js">
 </script>
 <script type="text/javascript"
 	src="{$path_js}/jquery-validate/jquery.validate.min.js">
@@ -407,11 +407,11 @@
 <script type="text/javascript"
 	src="{$path_js}/jquery-validate/localization/messages_de.js">
 </script>
-<script type="text/javascript" src="{$path_js}/bootbox.min.js">
+<script type="text/javascript" src="{$path_js}/vendor/bootbox.min.js">
 </script>
 <script type="text/javascript" src="{$path_js}/react/react-with-addons.js">
 </script>
-<script type="text/javascript" src="{$path_js}/bootstrap-multiselect.min.js">
+<script type="text/javascript" src="{$path_js}/vendor/bootstrap-multiselect.min.js">
 </script>
 <script type="text/javascript"
 	src="{$path_js}/administrator/System/User/change-user.js">

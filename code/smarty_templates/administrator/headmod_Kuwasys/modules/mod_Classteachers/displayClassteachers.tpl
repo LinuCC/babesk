@@ -64,7 +64,7 @@ table ul.list-group li.list-group-item {
 
 {block name=js_include append}
 
-<script type="text/javascript" src="{$path_js}/bootbox.min.js"></script>
+<script type="text/javascript" src="{$path_js}/vendor/bootbox.min.js"></script>
 <script type="text/javascript" src="{$path_js}/administrator/Kuwasys/Classteachers/display-classteachers.js"></script>
 
 {/block}

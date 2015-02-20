@@ -43,6 +43,6 @@
 
 <script src="{$path_js}/administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/mainmenu.js">
 </script>
-<script type="text/javascript" src="{$path_js}/bootbox.min.js"></script>
+<script type="text/javascript" src="{$path_js}/vendor/bootbox.min.js"></script>
 
 {/block}

@@ -52,7 +52,7 @@
 
 
 {block name=js_include append}
-<script type="text/javascript" src="{$path_js}/bootstrap-switch.min.js"></script>
+<script type="text/javascript" src="{$path_js}/vendor/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="{$path_js}/administrator/Elawa/main-menu.js"></script>
-<script type="text/javascript" src="{$path_js}/bootbox.min.js"></script>
+<script type="text/javascript" src="{$path_js}/vendor/bootbox.min.js"></script>
 {/block}

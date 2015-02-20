@@ -355,8 +355,8 @@
 
 		{block name="js_include"}
 			<script type="text/javascript" src="{$path_js}/jquery.min.js"></script>
-			<script type="text/javascript" src="{$path_js}/jquery.cookie.js"></script>
-			<script type="text/javascript" src="{$path_js}/bootstrap.min.js"></script>
+			<script type="text/javascript" src="{$path_js}/vendor/bootstrap.min.js">
+			</script>
 			<script type="text/javascript" src="{$path_js}/toastr.min.js"></script>
 			<script type="text/javascript" src="{$path_js}/administrator/main.js"></script>
 			<script type="text/javascript" src="{$path_js}/json2.min.js"></script>
