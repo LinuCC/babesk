@@ -26,12 +26,12 @@
 			{else}
 				{if $loanChoice == 'ls'}
 					<li class="list-group-item list-group-item-warning">
-						<span class="icon icon-info pull-left"></span>
+						<span class="fa fa-info-circle pull-left"></span>
 						Der Benutzer ist Selbsteinkäufer!
 					</li>
 				{else if $loanChoice == 'nl'}
 					<li class="list-group-item list-group-item-warning">
-						<span class="icon icon-info pull-left"></span>
+						<span class="fa fa-info-circle pull-left"></span>
 						Keine Teilnahme des Benutzers!
 					</li>
 				{else}
@@ -55,7 +55,7 @@
 			</li>
 		{else}
 			<li class="list-group-item list-group-item-warning">
-				<span class="icon icon-info pull-left"></span>
+				<span class="fa fa-info-circle pull-left"></span>
 				Dem Benutzer sind noch Bücher ausgeliehen
 				<a href="#" class="btn btn-xs btn-default pull-right"
 					data-toggle="collapse" data-target="#lent-exemplars-table">
@@ -96,7 +96,7 @@
 			</li>
 		{else}
 			<li class="list-group-item list-group-item-info">
-				<span class="icon icon-info pull-left"></span>
+				<span class="fa fa-info-circle pull-left"></span>
 				Der Benutzer kauft folgende Bücher selber ein:
 				<ul class="selfbuy-books-list">
 					{foreach $booksSelfpaid as $book}
@@ -228,7 +228,7 @@ $(document).ready(function(){
 			$row.addClass('bg-success text-success');
 			$row.children('td')
 				.first()
-				.prepend('<span class="icon icon-success"></span>');
+				.prepend('<span class="fa fa-check"></span>');
 			$('#book-barcode').focus().select();
 		}
 

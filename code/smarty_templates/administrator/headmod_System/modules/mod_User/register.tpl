@@ -22,7 +22,7 @@
 					<div class="form-group">
 						<div class="input-group">
 							<div class="input-group-addon">
-								<span class="icon icon-calendar"></span>
+								<span class="fa fa-calendar fa-fw"></span>
 							</div>
 							<div class="input-group-addon">
 								Schuljahr:
@@ -43,7 +43,7 @@
 					<div class="form-group">
 						<div class="input-group">
 							<div class="input-group-addon">
-								<span class="icon icon-friends"></span>
+								<span class="fa fa-users"></span>
 							</div>
 							<div class="input-group-addon">
 								Klasse:
@@ -77,7 +77,7 @@
 <script type="text/template" id="grade-schoolyear-snippet">
 	<div class="input-group form-group">
 		<span class="input-group-addon">
-			<span class="icon icon-calendar"></span>
+			<span class="fa fa-calendar fa-fw"></span>
 		</span>
 		<span name="schoolyearid" class="input-group-addon">
 			Im Schuljahr
@@ -119,13 +119,13 @@
 		<div class="row">
 			<div class="col-xs-12 col-md-6 form-group">
 				<div class="input-group">
-					<span class="input-group-addon"><span class="icon icon-businesscard"></span></span>
+					<span class="input-group-addon"><span class="fa fa-newspaper-o"></span></span>
 					<input name="forename" id="forename" class="form-control" type="text" placeholder="{t}Forename{/t}" required minlength="3" />
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 form-group">
 				<div class="input-group">
-					<span class="input-group-addon"><span class="icon icon-businesscard"></span></span>
+					<span class="input-group-addon"><span class="fa fa-newspaper-o"></span></span>
 					<input name="lastname" id="lastname" class="form-control" type="text" placeholder="{t}Lastname{/t}" required minlength="3" />
 				</div>
 			</div>
@@ -133,7 +133,7 @@
 		<div class="row">
 			<div class="col-xs-12 col-md-6 form-group">
 				<div class="input-group">
-					<span class="input-group-addon"><span class="icon icon-user"></span></span>
+					<span class="input-group-addon"><span class="fa fa-user"></span></span>
 					<input name="username" id="username" class="form-control" type="text" placeholder="{t}Username{/t}" required minlength="3" />
 				</div>
 			</div>
@@ -180,13 +180,13 @@
 		<div class="row">
 			<div class="col-xs-12 col-md-6 form-group">
 				<div class="input-group">
-					<span class="input-group-addon"><span class="icon icon-lock"></span></span>
+					<span class="input-group-addon"><span class="fa fa-lock"></span></span>
 					<input name="password" id="password" class="form-control" type="password" placeholder="{t}Password{/t}" disabled required/>
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 form-group">
 				<div class="input-group">
-					<span class="input-group-addon"><span class="icon icon-lock"></span></span>
+					<span class="input-group-addon"><span class="fa fa-lock"></span></span>
 					<input name="password-repeat" id="password-repeat" class="form-control"
 					type="password" placeholder="{t}Repeat password{/t}"
 					disabled required />
@@ -198,13 +198,13 @@
 		<div class="row">
 			<div class="col-xs-12 col-md-6 form-group">
 				<div class="input-group">
-					<span class="input-group-addon"><span class="icon icon-email"></span></span>
+					<span class="input-group-addon"><span class="fa fa-envelope-o"></span></span>
 					<input name="email" id="email" class="form-control" type="text" placeholder="{t}Email-address{/t}" email="true" />
 				</div>
 			</div>
 			<div class="col-xs-12 col-md-6 form-group">
 				<div class="input-group">
-					<span class="input-group-addon"><span class="icon icon-phone"></span></span>
+					<span class="input-group-addon"><span class="fa fa-phone fa-fw"></span></span>
 					<input name="telephone" id="telephone" class="form-control" type="text" placeholder="{t}Telephone-number{/t}" />
 				</div>
 			</div>
@@ -212,7 +212,7 @@
 		<div class="row">
 			<div class="col-xs-12 col-md-6 form-group">
 				<div class="input-group">
-					<span class="input-group-addon"><span class="icon icon-calendar"></span></span>
+					<span class="input-group-addon"><span class="fa fa-calendar fa-fw"></span></span>
 					<input name="birthday" id="birthday" class="form-control" type="text" placeholder="{t}Birthday{/t}" data-provide="datepicker" data-date-format="dd.mm.yyyy" data-date-language="de" date required />
 				</div>
 			</div>
@@ -278,7 +278,7 @@
 		<div class="row">
 			<div class="col-xs-12 col-md-6 form-group">
 				<div class="input-group">
-					<span class="input-group-addon"><span class="icon icon-credit"></span></span>
+					<span class="input-group-addon"><span class="fa fa-credit-card"></span></span>
 					<input id="cardnumber" name="cardnumber" class="form-control" type="text" placeholder="{t}Cardnumber{/t}" maxlength="10" minlength="10"/>
 				</div>
 			</div>
@@ -298,7 +298,7 @@
 			<div class="col-xs-12 col-md-6 form-group">
 				<div class="input-group">
 					<span class="input-group-addon">
-						<span class="icon icon-users"></span>
+						<span class="fa fa-users"></span>
 					</span>
 					<label for="pricegroup" class="input-group-addon">
 						{t}Pricegroup{/t}
@@ -316,7 +316,7 @@
 			</div>
 			<div class="col-xs-12 col-md-6 form-group">
 				<div class="input-group">
-					<span class="input-group-addon"><span class="icon icon-euro"></span></span>
+					<span class="input-group-addon"><span class="fa fa-eur"></span></span>
 					<input id="credits" name="credits" class="form-control" type="text" placeholder="{t}Credits{/t}" maxlength="5" number="true" />
 				</div>
 			</div>

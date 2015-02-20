@@ -63,7 +63,7 @@
 				<div class="input-group form-group" data-toggle="tooltip"
 					title="Benutzername">
 					<div class="input-group-addon">
-						<span class="icon icon-user"></span>
+						<span class="fa fa-user"></span>
 					</div>
 					<input type="text" name="username" id="inputUsername" class="form-control" placeholder="Benutzername">
 				</div>

@@ -26,7 +26,7 @@
 		<div class="input-group form-group col-sm-6" data-toggle="tooltip"
 				title="Schultyp">
 		<span class="input-group-addon">
-			<span class="icon icon-calendar"></span>
+			<span class="fa fa-calendar fa-fw"></span>
 		</span>
 		<select class="form-control" name='schooltype' size='1'>
 			<option value='0'> Kein Schultyp </option>

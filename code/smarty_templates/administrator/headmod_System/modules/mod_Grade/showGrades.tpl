@@ -24,7 +24,7 @@
 					<a class="btn btn-info btn-xs" data-toggle="tooltip"
 						title="Klasse ändern"
 						href="index.php?module=administrator|System|Grade|ChangeGrade&amp;ID={$grade.ID}">
-						<span class="icon icon-businesscard"></span>
+						<span class="fa fa-newspaper-o"></span>
 					</a>
 					<button class="btn btn-danger btn-xs delete-grade" data-toggle="tooltip" title="Klasse löschen" gradeid="{$grade.ID}">
 						<span class="fa fa-trash-o"></span>

@@ -50,7 +50,7 @@
 					<div class="form-group">
 						<div class="input-group">
 							<div class="input-group-addon">
-								<span class="icon icon-euro"></span>
+								<span class="fa fa-eur"></span>
 							</div>
 							<input type="text" id="credits-change-input" class="form-control"
 								placeholder="Guthaben eingeben..." />

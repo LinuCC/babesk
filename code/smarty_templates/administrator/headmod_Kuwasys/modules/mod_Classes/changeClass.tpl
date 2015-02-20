@@ -9,7 +9,7 @@
 			<div class="col-xs-12 col-md-6 form-group">
 				<div class="input-group">
 					<span class="input-group-addon">
-						<span class="icon icon-businesscard"></span>
+						<span class="fa fa-newspaper-o"></span>
 					</span>
 					<input type="text" name="label" class="form-control"
 						value="{$class->getLabel()}" data-toggle="tooltip"
@@ -43,7 +43,7 @@
 			<div class="col-xs-12 col-md-6 form-group">
 				<div class="input-group">
 					<span class="input-group-addon">
-						<span class="icon icon-calendar"></span>
+						<span class="fa fa-calendar fa-fw"></span>
 					</span>
 					<select name="schoolyearId" class="form-control"
 						data-toggle="tooltip" title="Schuljahr">
@@ -71,7 +71,7 @@
 			<div class="col-xs-12 col-md-6 form-group">
 				<div class="input-group">
 					<span class="input-group-addon">
-						<span class="icon icon-clock"></span>
+						<span class="fa fa-clock-o"></span>
 					</span>
 					<select id="category-select" class="form-control"
 						multiple="multiple">

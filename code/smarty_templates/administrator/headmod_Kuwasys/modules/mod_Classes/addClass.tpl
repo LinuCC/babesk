@@ -7,7 +7,7 @@
 
 	<div class="form-group input-group" data-toggle="tooltip" title="Kursname">
 		<span class="input-group-addon">
-			<span class="icon icon-businesscard"></span>
+			<span class="fa fa-newspaper-o"></span>
 		</span>
 		<input class="form-control" type="text" name="label"
 			placeholder="Kursname" required />
@@ -36,7 +36,7 @@
 			<div class="form-group input-group"
 				data-toggle="tooltip" title="Zu welchem Schuljahr der Kurs gehört">
 				<span class="input-group-addon">
-					<span class="icon icon-calendar"></span>
+					<span class="fa fa-calendar fa-fw"></span>
 				</span>
 				<select class="form-control" name='schoolyear' size='1'>
 					{foreach $schoolyears as $schoolyear}
@@ -56,7 +56,7 @@
 			<div class="form-group input-group"
 				data-toggle="tooltip" title="Der Veranstaltungszeitpunkt des Kurses">
 				<span class="input-group-addon">
-					<span class="icon icon-clock"></span>
+					<span class="fa fa-clock-o"></span>
 				</span>
 				<select class="form-control" name='classunit' size='1'>
 					{foreach $classunits as $classunit}

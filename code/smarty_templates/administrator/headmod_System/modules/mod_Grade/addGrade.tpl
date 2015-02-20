@@ -23,7 +23,7 @@
 	<div class="row">
 		<div class="input-group form-group col-sm-6">
 		<span class="input-group-addon">
-			<span class="icon icon-calendar"></span>
+			<span class="fa fa-calendar fa-fw"></span>
 		</span>
 		<select class="form-control" name='schooltype' size='1'>
 			{foreach $schooltypes as $schooltype}

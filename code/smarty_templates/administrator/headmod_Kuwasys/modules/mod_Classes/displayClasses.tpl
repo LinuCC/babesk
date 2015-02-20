@@ -91,7 +91,7 @@
 					<a href="index.php?module=administrator|Kuwasys|Classes|ChangeClass&amp;ID={$class->getId()}"
 						data-toggle="tooltip" class="btn btn-default btn-xs"
 						data-title="Kurs bearbeiten">
-						<span class="icon icon-businesscard"></span>
+						<span class="fa fa-newspaper-o"></span>
 					</a>
 					<a href="index.php?module=administrator|Kuwasys|Classes|DeleteClass&amp;ID={$class->getId()}"
 						data-toggle="tooltip" disabled

@@ -56,7 +56,7 @@
 			{if count($usergroups)}
 				<div class="input-group">
 					<span class="input-group-addon">
-						<span class="icon icon-user"></span>
+						<span class="fa fa-user"></span>
 					</span>
 					<select name="usergroup" class="form-control">
 						<option value="0" class="option" selected="selected">

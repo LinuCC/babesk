@@ -22,7 +22,7 @@
 					<div class="form-group input-group" data-toggle="tooltip"
 						title="Benutzername">
 						<span class="input-group-addon">
-							<span class="icon icon-user"></span>
+							<span class="fa fa-user"></span>
 						</span>
 						<input type="text" name="username" id="username"
 							class="form-control" placeholder="Benutzername suchen..." />
@@ -30,7 +30,7 @@
 					<div class="form-group input-group" data-toggle="tooltip"
 						title="Status">
 						<span class="input-group-addon">
-							<span class="icon icon-businesscard"></span>
+							<span class="fa fa-newspaper-o"></span>
 						</span>
 						<select name="status" class="form-control">
 							{foreach $statuses as $status}
@@ -43,7 +43,7 @@
 					<div class="form-group input-group" data-toggle="tooltip"
 						title="Kategorie">
 						<span class="input-group-addon">
-							<span class="icon icon-clock"></span>
+							<span class="fa fa-clock-o"></span>
 						</span>
 						<select name="category" class="form-control">
 							{foreach $class->getCategories() as $category}
@@ -85,7 +85,7 @@
 					<div class="form-group input-group" data-toggle="tooltip"
 						title="Status des Benutzers">
 						<span class="input-group-addon">
-							<span class="icon icon-businesscard"></span>
+							<span class="fa fa-newspaper-o"></span>
 						</span>
 						<select name="status" class="form-control">
 							{foreach $statuses as $status}

@@ -191,7 +191,7 @@
 							<div class="panel-heading">
 								<div class="panel-title">
 									<h3 class="icon-container col-xs-2 col-sm-1">
-										<span class="icon icon-info"></span>
+										<span class="fa fa-info-circle"></span>
 									</h3>
 									<span class="col-xs-10 col-sm-11">
 										{t}Information{/t}
@@ -224,7 +224,7 @@
 							<div class="panel-heading">
 								<div class="panel-title">
 									<h3 class="icon-container col-xs-2 col-sm-1">
-										<span class="icon icon-success"></span>
+										<span class="fa fa-check"></span>
 									</h3>
 									<span class="col-xs-10 col-sm-11">
 										{t}Success!{/t}

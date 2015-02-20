@@ -10,7 +10,7 @@
 				<div class="col-sm-12">
 					<div class="input-group" data-toggle="tooltip" title="Religion auswählen">
 						<span class="input-group-addon">
-							<span class="icon icon-user"></span>
+							<span class="fa fa-user"></span>
 						</span>
 						<select name="religion" class="form-control">
 							{foreach $religions as $rel}

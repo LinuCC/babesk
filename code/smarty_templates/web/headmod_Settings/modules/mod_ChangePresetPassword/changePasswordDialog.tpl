@@ -13,7 +13,7 @@
 		<div class="col-sm-10">
 			<div class="input-group">
 				<div class="input-group-addon">
-					<span class="icon icon-lock"></span>
+					<span class="fa fa-lock"></span>
 				</div>
 				<input type='password' id="password" class="form-control"
 					name='newPassword'>
@@ -27,7 +27,7 @@
 		<div class="col-sm-10">
 			<div class="input-group">
 				<div class="input-group-addon">
-					<span class="icon icon-lock"></span>
+					<span class="fa fa-lock"></span>
 				</div>
 				<input type='password' id="password-repeat" class="form-control"
 					name='newPasswordRepeat'>
@@ -42,7 +42,7 @@
 			<div class="col-sm-10">
 				<div class="input-group">
 					<div class="input-group-addon">
-						<span class="icon icon-email"></span>
+						<span class="fa fa-envelope-o"></span>
 					</div>
 					<input type='text' id="email" class="form-control" name='newEmail'
 						value="{$userEmail}">
