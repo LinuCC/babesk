@@ -1,2 +1,2 @@
 require './lib/test'
-require '../../../../bootstrap-switch.min.js'
+require '../../../../vendor/bootstrap-switch.min.js'
