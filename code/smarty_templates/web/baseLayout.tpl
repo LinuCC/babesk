@@ -318,11 +318,14 @@
 
 
 		{block name="js_include"}
-			<script type="text/javascript" src="{$path_js}/jquery.min.js"></script>
+			<script type="text/javascript" src="{$path_js}/vendor/jquery.min.js">
+			</script>
 			<script type="text/javascript" src="{$path_js}/vendor/bootstrap.min.js">
 			</script>
-			<script type="text/javascript" src="{$path_js}/toastr.min.js"></script>
-			<script type="text/javascript" src="{$path_js}/json2.min.js"></script>
+			<script type="text/javascript" src="{$path_js}/vendor/toastr.min.js">
+			</script>
+			<script type="text/javascript" src="{$path_js}/vendor/json2.min.js">
+			</script>
 			<script type="text/javascript" src="{$path_js}/custom-base.js"></script>
 		{literal}
 			<script type="text/javascript">

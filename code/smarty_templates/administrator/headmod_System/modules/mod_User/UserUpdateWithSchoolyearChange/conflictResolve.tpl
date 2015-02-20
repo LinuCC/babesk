@@ -152,7 +152,7 @@
 
 <script src="{$path_js}/administrator/System/User/UserUpdateWithSchoolyearChange/conflictResolve.js" type="text/javascript">
 </script>
-<script src="{$path_js}/jquery.hotkeys.min.js" type="text/javascript">
+<script src="{$path_js}/vendor/jquery.hotkeys.min.js" type="text/javascript">
 </script>
 
 {/block}

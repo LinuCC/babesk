@@ -229,7 +229,8 @@
 	var categoryId = {$categoryId};
 </script>
 
-<script src="{$path_js}/jquery-ui-1.10.4.only-autocomplete.min.js"> </script>
+<script src="{$path_js}/vendor/jquery-ui-1.10.4.only-autocomplete.min.js">
+</script>
 <script src="{$path_js}/administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/classdetails.js">
 </script>
 
