@@ -33,12 +33,12 @@
 				<button data-toggle="modal" href="#moveStatusDialog"
 					class="btn btn-xs btn-info moveStatus" userid="<%= userId %>"
 					title="Status verändern">
-					<span class="icon icon-edit"></span>
+					<span class="fa fa-pencil fa-fw"></span>
 				</button>
 				<button data-toggle="modal" href="#moveClassDialog"
 					class="btn btn-xs btn-info moveClass" userid="<%= userId %>"
 					title="Zu Kurs verschieben">
-					<span class="icon icon-move"></span>
+					<span class="fa fa-arrows"></span>
 				</button>
 			</div>
 		</td>
@@ -70,7 +70,7 @@
 				<div class="input-group form-group" data-toggle="tooltip"
 					title="Status">
 					<span class="input-group-addon">
-						<span class="icon icon-clipboard"></span>
+						<span class="fa fa-clipboard fa-fw"></span>
 					</span>
 					<select name="status" id="inputStatus" class="form-control">
 						<option value="active" >
@@ -109,7 +109,7 @@
 			<div class="modal-body">
 				<div class="input-group form-group" data-toggle="tooltip" title="Neuer Status">
 					<span class="input-group-addon">
-						<span class="icon icon-clipboard"></span>
+						<span class="fa fa-clipboard fa-fw"></span>
 					</span>
 					<select name="status" id="inputStatus" class="form-control">
 						<option value="active" >
@@ -150,7 +150,7 @@
 				<div class="input-group form-group" data-toggle="tooltip"
 					title="Neuer Kurs">
 					<span class="input-group-addon">
-						<span class="icon icon-listelements"></span>
+						<span class="fa fa-th-list fa-fw"></span>
 					</span>
 					<select name="class" id="inputClass" class="form-control">
 						{foreach $classes as $class}

@@ -12,11 +12,9 @@
 		{/if}
 
 		{block name="style_include"}
-		<!-- <link rel="stylesheet" href="{$path_smarty_tpl}/web/css/general.css" type="text/css" /> -->
 		<link rel="stylesheet" href="{$path_css}/bootstrap-theme.min.css" type="text/css" />
 		<link rel="stylesheet" href="{$path_css}/bootstrap.min.css" type="text/css" />
 		<link rel="stylesheet" href="{$path_css}/administrator.css" type="text/css" />
-		<link rel="stylesheet" href="{$path_css}/iconfonts/iconfonts.css" type="text/css" />
 		<link rel="stylesheet" href="{$path_css}/font-awesome.min.css" type="text/css" />
 		<link rel="stylesheet" href="{$path_css}/toastr.min.css" type="text/css" />
 		{/block}
@@ -54,7 +52,7 @@
 							<button class="btn btn-dark navbar-btn btn-sm sidebar-toggle"
 								data-toggle="tooltip" data-placement="bottom"
 								title="Seitennavigation togglen">
-								<span class="icon icon-listelements"></span>
+								<span class="fa fa-th-list fa-fw"></span>
 							</button>
 						</li>
 						-->
@@ -80,7 +78,7 @@
 			<button class="sidebar-toggle"
 				data-toggle="tooltip" data-placement="bottom"
 				title="Seitennavigation togglen">
-					<span class="icon icon-play"></span>
+					<span class="fa fa-chevron-circle-right"></span>
 			</button>
 			{*-----------------------------------------------------
 			 * The sidebar-navigation

@@ -9,7 +9,7 @@
 			<div class="input-group form-group col-sm-3" data-toggle="tooltip"
 			title="Fremdsprache">
 				<span class="input-group-addon">
-					<span class="icon icon-clipboard"></span>
+					<span class="fa fa-clipboard fa-fw"></span>
 				</span>
 				<input type="text" name="foreignLanguages[]" class="form-control"
 				value="{$foreignLanguage}" />
@@ -18,7 +18,7 @@
 		<div class="input-group form-group col-sm-3" data-toggle="tooltip"
 		title="Neue Fremdsprache hinzufügen">
 			<span class="input-group-addon">
-				<span class="icon icon-clipboard"></span>
+				<span class="fa fa-clipboard fa-fw"></span>
 			</span>
 			<input type="text" name="foreignLanguages[]" class="form-control"
 			value="" size="2" />

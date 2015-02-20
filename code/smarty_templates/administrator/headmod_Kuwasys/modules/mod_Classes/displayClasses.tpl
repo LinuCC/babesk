@@ -86,7 +86,7 @@
 				<div id='optionButtons{$class->getId()}' class="option-buttons">
 					<a href="index.php?module=administrator|Kuwasys|Classes|DisplayClassDetails&amp;ID={$class->getId()}" data-toggle="tooltip"class="btn btn-info btn-xs"
 						data-title="Kursdetails anzeigen">
-						<span class="icon icon-listelements"></span>
+						<span class="fa fa-th-list fa-fw"></span>
 					</a>
 					<a href="index.php?module=administrator|Kuwasys|Classes|ChangeClass&amp;ID={$class->getId()}"
 						data-toggle="tooltip" class="btn btn-default btn-xs"

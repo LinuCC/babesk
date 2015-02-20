@@ -26,7 +26,7 @@
 			<td>
 				<a class="btn btn-info btn-xs"
 					href="index.php?module=administrator|Kuwasys|Classteachers|Change&amp;ID={$classteacher.ID}">
-					<span class="icon icon-edit"></span>
+					<span class="fa fa-pencil fa-fw"></span>
 				</a>
 				<button type="button"
 					class="btn btn-danger btn-xs delete-classteacher">

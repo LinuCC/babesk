@@ -12,7 +12,7 @@
 				<div class="form-group">
 					<div class="input-group">
 						<div class="input-group-addon">
-							<span class="icon icon-search"></span>
+							<span class="fa fa-search fa-fw"></span>
 						</div>
 						<input id="search" class="form-control" type="text" name="search"
 							value="{$searchterm}" />

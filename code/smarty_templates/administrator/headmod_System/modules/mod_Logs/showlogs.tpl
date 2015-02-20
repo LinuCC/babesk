@@ -65,7 +65,7 @@
 		<span class="input-group filter-container" data-toggle="tooltip"
 			title="{t}Search (Enter to commit){/t}" >
 			<span class="input-group-addon">
-				<span class="icon icon-search"></span>
+				<span class="fa fa-search fa-fw"></span>
 			</span>
 			<input id="filter" type="text" class="form-control"
 				placeholder="{t}Search...{/t}" />
@@ -75,7 +75,7 @@
 		<span class="input-group category-select-container" data-toggle="tooltip"
 			title="Nach Kategorie filtern" >
 			<span class="input-group-addon">
-				<span class="icon icon-listelements"></span>
+				<span class="fa fa-th-list fa-fw"></span>
 			</span>
 			<select id="category-select" class="form-control">
 			</select>

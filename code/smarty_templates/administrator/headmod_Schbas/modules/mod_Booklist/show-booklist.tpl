@@ -51,7 +51,7 @@
 			<span class="input-group filter-container"
 				title="{t}Search (Enter to commit){/t}" >
 				<span class="input-group-addon">
-					<span class="icon icon-search"></span>
+					<span class="fa fa-search fa-fw"></span>
 				</span>
 				<input id="filter" type="text" class="form-control"
 					placeholder="{t}Search...{/t}" />

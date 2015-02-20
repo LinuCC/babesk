@@ -137,8 +137,8 @@ $(document).ready(function() {
       return updateStatuses();
     },
     templates: {
-      filter: '<li class="multiselect-item filter"><div class="input-group"> <span class="input-group-addon"><i class="icon icon-search"> </i></span><input class="form-control multiselect-search" type="text"> </div></li>',
-      filterClearBtn: '<span class="input-group-btn"> <button class="btn btn-default multiselect-clear-filter" type="button"> <i class="icon icon-edit"></i></button></span>'
+      filter: '<li class="multiselect-item filter"><div class="input-group"> <span class="input-group-addon"><i class="fa fa-search fa-fw"> </i></span><input class="form-control multiselect-search" type="text"> </div></li>',
+      filterClearBtn: '<span class="input-group-btn"> <button class="btn btn-default multiselect-clear-filter" type="button"> <i class="fa fa-pencil"></i></button></span>'
     }
   });
   return updateStatuses();

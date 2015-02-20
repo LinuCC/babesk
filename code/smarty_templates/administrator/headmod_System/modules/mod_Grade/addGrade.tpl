@@ -7,14 +7,14 @@
 	<div class="row">
 		<div class="input-group form-group col-sm-6">
 			<span class="input-group-addon">
-				<span class="icon icon-counter"></span>
+				<span class="fa fa-sliders fa-fw"></span>
 			</span>
 			<input type="text" name="gradelevel" placeholder="Jahrgangsstufe"
 				class="form-control">
 		</div>
 		<div class="input-group form-group col-sm-6">
 			<span class="input-group-addon">
-				<span class="icon icon-bookmark"></span>
+				<span class="fa fa-bookmark fa-fw"></span>
 			</span>
 			<input type="text" name="gradelabel" placeholder="Label"
 				class="form-control">

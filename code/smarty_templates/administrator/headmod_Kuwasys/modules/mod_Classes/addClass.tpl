@@ -15,7 +15,7 @@
 	<div class="form-group input-group" data-toggle="tooltip"
 		title="Kursbeschreibung">
 		<span class="input-group-addon">
-			<span class="icon icon-clipboard"></span>
+			<span class="fa fa-clipboard fa-fw"></span>
 		</span>
 		<textarea class="form-control" type="text" name="description"
 			placeholder="Kursbeschreibung" rows="3" required></textarea>
@@ -26,7 +26,7 @@
 			<div class="form-group input-group" data-toggle="tooltip"
 				title="Maximale Registrierungen">
 				<span class="input-group-addon">
-					<span class="icon icon-listelements"></span>
+					<span class="fa fa-th-list fa-fw"></span>
 				</span>
 				<input class="form-control" type="text" name="maxRegistration"
 					placeholder="maximale Registrierungen" required />

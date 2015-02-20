@@ -103,7 +103,7 @@
 					<div id="change-user-move-class-selector-container" hidden="true">
 						<div class="form-group input-group" data-toggle="tooltip" title="Kurs zu dem der Benutzer verschoben werden soll">
 							<span class="input-group-addon">
-								<span class="icon icon-listelements"></span>
+								<span class="fa fa-th-list fa-fw"></span>
 							</span>
 							<select name="classes" class="form-control">
 							</select>

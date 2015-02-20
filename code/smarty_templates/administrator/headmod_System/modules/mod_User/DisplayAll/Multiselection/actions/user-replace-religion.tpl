@@ -24,7 +24,7 @@
 				<button id="action-user-replace-religion-submit" type="button"
 					class="btn btn-warning multiselection-action-submit"
 					data-toggle="tooltip" title="Religionen verändern">
-						<span class="icon icon-edit"></span>
+						<span class="fa fa-pencil fa-fw"></span>
 				</button>
 			</div>
 		</div>

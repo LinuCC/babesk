@@ -12,7 +12,7 @@
 	<ul class="list-group checklist">
 		{if $formSubmitted}
 			<li class="list-group-item list-group-item-success">
-				<span class="icon icon-checkmark pull-left"></span>
+				<span class="fa fa-check fa-fw pull-left"></span>
 				Das Formular zur Buchausleihe wurde abgegeben.
 			</li>
 			{*
@@ -20,7 +20,7 @@
 			 *}
 			{if $userPaid}
 				<li class="list-group-item list-group-item-success">
-					<span class="icon icon-checkmark pull-left"></span>
+					<span class="fa fa-check fa-fw pull-left"></span>
 					Der Benutzer hat für die Buchausleihe bezahlt.
 				</li>
 			{else}
@@ -50,7 +50,7 @@
 
 		{if count($exemplarsLent) == 0}
 			<li class="list-group-item list-group-item-success">
-				<span class="icon icon-checkmark pull-left"></span>
+				<span class="fa fa-check fa-fw pull-left"></span>
 				Der Benutzer besitzt keine der ausgeliehenen Bücher mehr.
 			</li>
 		{else}
@@ -91,7 +91,7 @@
 		{/if}
 		{if count($booksSelfpaid) == 0}
 			<li class="list-group-item list-group-item-success">
-				<span class="icon icon-checkmark pull-left"></span>
+				<span class="fa fa-check fa-fw pull-left"></span>
 				Der Benutzer kauft keine Bücher selber ein.
 			</li>
 		{else}

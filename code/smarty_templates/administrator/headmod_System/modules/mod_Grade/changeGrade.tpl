@@ -8,7 +8,7 @@
 		<div class="input-group form-group col-sm-6" data-toggle="tooltip"
 				title="Jahrgangsstufe">
 			<span class="input-group-addon">
-				<span class="icon icon-counter"></span>
+				<span class="fa fa-sliders fa-fw"></span>
 			</span>
 			<input type="text" name="gradelevel" placeholder="Jahrgangsstufe"
 				class="form-control" value="{$grade.gradelevel}">
@@ -16,7 +16,7 @@
 		<div class="input-group form-group col-sm-6" data-toggle="tooltip"
 				title="Label">
 			<span class="input-group-addon">
-				<span class="icon icon-bookmark"></span>
+				<span class="fa fa-bookmark fa-fw"></span>
 			</span>
 			<input type="text" name="gradelabel" placeholder="Label"
 				class="form-control" value="{$grade.label}">

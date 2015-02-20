@@ -14,7 +14,7 @@
 		<div class="col-xs-8 col-lg-10">
 			<div class="input-group">
 				<span class="input-group-addon">
-					<span class="icon icon-counter"></span>
+					<span class="fa fa-sliders fa-fw"></span>
 				</span>
 				<select id="schoolyear" class="form-control" name="schoolyear">
 					{foreach $schoolyears as $key => $sy}
@@ -34,7 +34,7 @@
 		<div class="col-xs-8 col-lg-10">
 			<div class="input-group">
 			<span class="input-group-addon">
-				<span class="icon icon-refresh"></span>
+				<span class="fa fa-refresh"></span>
 			</span>
 			<select id="switchType" class="form-control" name="switchType">
 				{foreach $switchTypes as $key => $st}

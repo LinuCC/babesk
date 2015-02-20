@@ -9,7 +9,7 @@
 					<div class="col-sm-12">
 						<div class="input-group btn-group">
 							<span class="input-group-addon">
-								<span class="icon icon-clipboard"></span>
+								<span class="fa fa-clipboard fa-fw"></span>
 							</span>
 							<select name="foreign_languages" class="multiselect"
 							data-toggle="tooltip" title="Fremdsprachen auswählen" multiple="multiple">
@@ -24,7 +24,7 @@
 						<button id="action-user-replace-forLan-submit" type="button"
 							class="btn btn-warning multiselection-action-submit"
 							data-toggle="tooltip" title="Fremdsprache verändern">
-								<span class="icon icon-edit"></span>
+								<span class="fa fa-pencil fa-fw"></span>
 						</button>
 					</div>
 		</div>

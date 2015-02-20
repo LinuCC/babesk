@@ -35,7 +35,7 @@
 				<a class="btn btn-xs btn-default"
 					href="index.php?module=administrator|System|Schoolyear&amp;action=changeSchoolYear&amp;ID={$schoolYear.ID}"
 					data-toggle="tooltip" title="Schuljahr bearbeiten">
-					<span class="icon icon-edit"></span>
+					<span class="fa fa-pencil fa-fw"></span>
 				</a>
 				<a class="btn btn-xs btn-danger"
 					href="index.php?module=administrator|System|Schoolyear&amp;action=deleteSchoolYear&amp;ID={$schoolYear.ID}"
@@ -46,7 +46,7 @@
 					<a class="btn btn-xs btn-info"
 						href="index.php?module=administrator|System|Schoolyear&amp;action=activateSchoolYear&amp;ID={$schoolYear.ID}"
 						data-toggle="tooltip" title="Schuljahr aktivieren">
-						<span class="icon icon-refresh"></span>
+						<span class="fa fa-refresh"></span>
 					</a>
 				{/if}
 			</td>

@@ -125,7 +125,7 @@
 					title="{t}Search (Enter to commit){/t}" />
 				<span class="input-group-btn">
 					<button id="search-submit" class="btn btn-default">
-						<span class="icon icon-search"></span>
+						<span class="fa fa-search fa-fw"></span>
 					</button>
 				</span>
 			</span>

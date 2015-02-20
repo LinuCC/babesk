@@ -16,7 +16,6 @@
 		<link rel="stylesheet" href="{$path_css}/bootstrap-theme.min.css" type="text/css" />
 		<link rel="stylesheet" href="{$path_css}/bootstrap.min.css" type="text/css" />
 		<link rel="stylesheet" href="{$path_css}/web.css" type="text/css" />
-		<link rel="stylesheet" href="{$path_css}/iconfonts/iconfonts.css" type="text/css" />
 		<link rel="stylesheet" href="{$path_css}/font-awesome.min.css" type="text/css" />
 		<link rel="stylesheet" href="{$path_css}/toastr.min.css" type="text/css" />
 		{/block}

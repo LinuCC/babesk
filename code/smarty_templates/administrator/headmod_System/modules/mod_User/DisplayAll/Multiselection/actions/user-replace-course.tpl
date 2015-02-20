@@ -11,7 +11,7 @@
 				<div class="col-sm-12">
 					<div class="input-group btn-group">
 						<span class="input-group-addon">
-							<span class="icon icon-clipboard"></span>
+							<span class="fa fa-clipboard fa-fw"></span>
 						</span>
 						<select name="courses" class="multiselect"
 						data-toggle="tooltip" title="Kurs auswählen" multiple="multiple">
@@ -26,7 +26,7 @@
 					<button id="action-user-replace-course-submit" type="button"
 						class="btn btn-warning multiselection-action-submit"
 						data-toggle="tooltip" title="Kurse verändern">
-							<span class="icon icon-edit"></span>
+							<span class="fa fa-pencil fa-fw"></span>
 					</button>
 				</div>
 	</div>

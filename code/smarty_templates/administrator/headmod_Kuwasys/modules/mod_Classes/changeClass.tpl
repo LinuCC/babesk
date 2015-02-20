@@ -19,7 +19,7 @@
 			<div class="col-xs-12 col-md-6 form-group">
 				<div class="input-group">
 					<span class="input-group-addon">
-						<span class="icon icon-counter"></span>
+						<span class="fa fa-sliders fa-fw"></span>
 					</span>
 					<input type="text" name="maxRegistration" class="form-control"
 						value="{$class->getMaxRegistration()}" data-toggle="tooltip"
@@ -31,7 +31,7 @@
 			<div class="col-xs-12 form-group">
 				<div class="input-group">
 					<span class="input-group-addon">
-						<span class="icon icon-clipboard"></span>
+						<span class="fa fa-clipboard fa-fw"></span>
 					</span>
 					<textarea name="description" class="form-control" maxlength="1024"
 						rows="4" data-toggle="tooltip" title="Beschreibung"
