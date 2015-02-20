@@ -19,7 +19,7 @@
 		<td><%= exemplarsToBuy %></td>
 		<td>
 		<a class="btn btn-info btn-xs" href="index.php?section=Schbas|Booklist&action=2&ID=<%= id %>" title="Bucheinstellungen">
-				<span class="icon icon-Settings"></span>
+				<span class="fa fa-cog"></span>
 		</a>
 		<a class="btn btn-danger btn-xs" href="index.php?section=Schbas|Booklist&action=3&ID=<%= id %>" title="Buch löschen">
 			<span class="fa fa-trash-o"></span>
@@ -65,7 +65,7 @@
 				<div class="input-group books-per-page-container pull-right"
 					title="{t}Rows per page{/t}" >
 					<span class="input-group-addon">
-						<span class="icon icon-Settings"></span>
+						<span class="fa fa-cog"></span>
 					</span>
 					<input id="books-per-page" type="text" maxlength="3" class="form-control"
 						value="10" />

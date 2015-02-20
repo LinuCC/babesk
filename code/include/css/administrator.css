@@ -113,11 +113,6 @@ hr {
 	color: #AADD33;
 }
 
-#navigation .icon-Settings {
-	position: relative;
-	top: 2px;
-}
-
 #dropdown-user {
 	background-color: #6C6A6A;
 	border: none;
@@ -485,4 +480,35 @@ body.modal-open,
 .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
 	background-color: #A1DDE6;
 	background-image: none;
+}
+
+.fa-Schbas:before {
+	content: "\f02d";
+}
+.fa-Messages:before {
+	content: "\f0e0";
+}
+.fa-PVau:before {
+	content: "\f017";
+}
+.fa-Fits:before {
+	content: "\f108";
+}
+.fa-Babesk:before {
+	content: "\f0f5";
+}
+.fa-Kuwasys:before {
+	content: "\f1e3";
+}
+.fa-Elawa:before {
+	content: "\f073";
+}
+.fa-Statistics:before {
+	content: "\f080";
+}
+.fa-Gnissel:before {
+	content: "\f1ae";
+}
+.fa-System:before {
+	content: "\f187";
 }

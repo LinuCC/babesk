@@ -21,7 +21,7 @@
 			<a class="btn btn-xs btn-info user-action-settings"
 				href="index.php?module=administrator|System|User|DisplayChange&ID=<%= ID %>" title="Nutzereinstellungen"
 				>
-				<span class="icon icon-Settings"></span>
+				<span class="fa fa-cog"></span>
 			</a>
 			<a class="btn btn-xs btn-danger user-action-delete" href="#"
 				title="Nutzer löschen">
@@ -148,7 +148,7 @@
 				<div class="input-group users-per-page-container pull-right"
 					title="{t}Rows per page{/t}" >
 					<span class="input-group-addon">
-						<span class="icon icon-Settings"></span>
+						<span class="fa fa-cog"></span>
 					</span>
 					<input id="users-per-page" type="text" maxlength="3" class="form-control"
 						value="10" />

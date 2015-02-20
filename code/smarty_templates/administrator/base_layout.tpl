@@ -119,7 +119,7 @@
 									data-target="#sidebar-module-{str_replace('/', '_', $hModulepath)}" data-parent="#sidebar-base-nav"
 									class="sidebar-folder">
 										<div class="text-icon-spacer">
-												<span class="icon icon-{$headmodule->getName()} module-icon"></span>
+												<span class="fa fa-{$headmodule->getName()} fa-fw module-icon"></span>
 												{_g('modulepath_'|cat:$hModulepath)}
 												<span class="toggle-icon icon icon-plus pull-right">
 												</span>

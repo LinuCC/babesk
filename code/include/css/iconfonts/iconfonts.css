@@ -32,30 +32,6 @@
 }
 
 
-.icon-Babesk:before {
-	content: "\e601";
-}
-.icon-Kuwasys:before {
-	content: "\e602";
-}
-.icon-Schbas:before {
-	content: "\e603";
-}
-.icon-PVau:before {
-	content: "\e604";
-}
-.icon-Fits:before {
-	content: "\e605";
-}
-.icon-Messages:before {
-	content: "\e606";
-}
-.icon-error:before {
-	content: "\e600";
-}
-.icon-darthvader:before {
-	content: "\e608";
-}
 .icon-plus:before {
 	content: "\e609";
 }
@@ -163,7 +139,4 @@
 }
 .icon-play:before {
 	content: "\e62c";
-}
-.icon-Settings:before {
-	content: "\e607";
 }

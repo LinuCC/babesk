@@ -41,13 +41,6 @@ fieldset#grade-schoolyears legend {
 	box-shadow: 0 0 10px #ffffff;
 }
 
-fieldset#grade-schoolyears .btn-danger .icon-error {
-	position: relative;
-	top: 2px;
-	color: #ffffff;
-	text-align: center;
-}
-
 #presetpassword-selector input {
 	margin: 12px;
 }

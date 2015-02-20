@@ -97,7 +97,7 @@
 		<div class="input-group logs-per-page-container pull-right"
 			title="{t}Rows per page{/t}" data-toggle="tooltip" >
 			<span class="input-group-addon">
-				<span class="icon icon-Settings"></span>
+				<span class="fa fa-cog"></span>
 			</span>
 			<input id="logs-per-page" type="text" maxlength="3"
 			class="form-control" value="10" />

@@ -130,7 +130,7 @@
 	<div class="panel-footer">
 		<div class="input-group">
 			<span class="input-group-addon">
-				<span class="icon icon-Schbas"></span>
+				<span class="fa fa-barcode"></span>
 			</span>
 			<input type="text" id="book-barcode" class="form-control"
 				placeholder="Buchcode hier einscannen" autofocus />
@@ -157,7 +157,7 @@
 
 <style type="text/css">
 
-	ul.checklist span.icon {
+	ul.checklist span.fa {
 		font-size: 24px;
 		margin-top: -3px;
 		margin-right: 10px;
