@@ -6,10 +6,8 @@
 		type="text/css" />
 	<link rel="stylesheet" href="{$path_css}/bootstrap.min.css"
 		type="text/css" />
-	<link rel="stylesheet" href="{$path_css}/iconfonts/iconfonts.css"
-		type="text/css" />
 	<link rel="stylesheet" href="{$path_css}/toastr.min.css" type="text/css" />
-	<link rel="stylesheet" href="{$path_smarty_tpl}/administrator/css/general.css"
+	<link rel="stylesheet" href="{$path_css}/administrator/login.css"
 		type="text/css" />
 	<link rel="shortcut icon" href="adminicon.ico" />
 </head>

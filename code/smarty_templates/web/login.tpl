@@ -34,7 +34,7 @@
 {block name="footer_actions"}{/block}
 
 {block name="style_include" append}
-	<link rel="stylesheet" href="{$path_css}/login.css" type="text/css" />
+	<link rel="stylesheet" href="{$path_css}/web/login.css" type="text/css" />
 {/block}
 
 {block name="js_include" append}

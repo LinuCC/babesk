@@ -12,7 +12,6 @@
 		{/if}
 
 		{block name="style_include"}
-		<!-- <link rel="stylesheet" href="{$path_smarty_tpl}/web/css/general.css" type="text/css" /> -->
 		<link rel="stylesheet" href="{$path_css}/bootstrap-theme.min.css" type="text/css" />
 		<link rel="stylesheet" href="{$path_css}/bootstrap.min.css" type="text/css" />
 		<link rel="stylesheet" href="{$path_css}/web.css" type="text/css" />
