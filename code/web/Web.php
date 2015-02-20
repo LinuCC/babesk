@@ -364,7 +364,6 @@ class Web {
 		// $this->_smarty->assign('moduleroot', $this->_acl->getModuleroot());
 		$this->_smarty->assign(
 			'moduleGenMan', $this->_acl->moduleGeneratorManagerGet());
-		$this->footerImagePath();
 		if ($this->_moduleExecutionParser->load()) {
 			$this->executeModule();
 		}
@@ -373,68 +372,6 @@ class Web {
 
 			$this->_smarty->assign('birthday',$birthday);
 			$this->_smarty->display(PATH_SMARTY_TPL . '/web/main_menu.tpl');
-		}
-	}
-
-	/**
-	 * Loads the Path to the Footer-Image, so that it is not that buggy anymore
-	 *
-	 * Sets a Smarty-Variable when a background-Image is found
-	 */
-	private function footerImagePath() {
-
-		$path = '';
-		$modpath = '';
-
-		if($this->_moduleExecutionParser->load()) {
-			$moduleCommand =
-				$this->_moduleExecutionParser->executionCommandGet();
-			$modpath = $moduleCommand->pathGet();
-			$modpath = preg_replace('/.*?\/web\//', '', $modpath);
-		}
-
-		if(!empty($modpath)) {
-			$path = $this->footerImagePathLoadByModulepath($modpath);
-		}
-
-		if(empty($path)) {
-			$path = "{$this->_imagepathPrefix}defaultImage.png";
-			if(file_exists($path)) {
-				$this->_smarty->assign('footerBackground', $path);
-			}
-		}
-		else {
-			$this->_smarty->assign('footerBackground', $path);
-		}
-	}
-
-	/**
-	 * Loads the Path of the Footer-Image by the Module-Path given
-	 *
-	 * @param  string $modpath The Path of the Module
-	 * @return string          The Path to the Image to display or false if no
-	 * Image by Modulepath found
-	 */
-	private function footerImagePathLoadByModulepath($modpath) {
-
-		$filename = str_replace('/', '_', $modpath) . '_footer.png';
-		//Relative Path form this is different than the path from Smarty
-		$path = $this->_imagepathPrefix . $filename;
-
-		if(file_exists($path)) {
-			return $path;
-		}
-		else {
-			$mods = explode('_', $modpath);
-			array_pop($mods);
-
-			if(count($mods) > 1) {
-				$nModPath = implode('_', $mods);
-				return $this->footerImagePathLoadByModulepath($nModPath);
-			}
-			else {
-				return false;
-			}
 		}
 	}
 
