@@ -98,7 +98,6 @@ _g("modulepath_root/administrator/System/EmailConfiguration");
 _g("modulepath_root/administrator/System/CardInfo");
 _g("modulepath_root/administrator/System/Logs");
 _g("modulepath_root/administrator/System/Groups");
-_g("modulepath_root/administrator/System/Admin");
 _g("modulepath_root/administrator/System/Help");
 _g("modulepath_root/administrator/System/SpecialCourse");
 _g("modulepath_root/administrator/System/ForeignLanguage");
