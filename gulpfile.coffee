@@ -1,5 +1,6 @@
 gulp = require 'gulp'
 
+concat = require 'gulp-concat'
 watchify = require 'gulp-watchify'
 uglify = require 'gulp-uglify'
 streamify = require 'gulp-streamify'
@@ -14,6 +15,16 @@ bundlePaths =
   src: [
     'code/include/js/modules/**/*.js'
     '!code/include/js/modules/**/lib/**'
+  ]
+  dest: 'code/include/js/dist'
+
+baseBundlePaths =
+  src: [
+    'code/include/js/vendor/jquery.min.js'
+    'code/include/js/vendor/bootstrap.min.js'
+    'code/include/js/vendor/toastr.min.js'
+    'code/include/js/vendor/json2.min.js'
+    'code/include/js/custom-base.js'
   ]
   dest: 'code/include/js/dist'
 
@@ -48,6 +59,16 @@ gulp.task 'cjsx-watch', ->
     .pipe gulp.dest('./code/include/js')
 
 gulp.task 'watchify', ['enable-watch-mode', 'browserify']
+
+# Concatenate the most used files into one file that always gets served
+# Do not do this with Browserify yet because the components used are not
+# CommonJS-compliant
+gulp.task 'base-bundle', ->
+  gulp.src baseBundlePaths.src
+    .pipe concat('base-bundle.js')
+    .pipe streamify(uglify())
+    .pipe gulp.dest(baseBundlePaths.dest)
+
 
 # Compile & Watch: Coffeescript to Javascript, bundle and uglify it
 gulp.task 'watch', -> runSequence 'cjsx', ['cjsx-watch', 'watchify']

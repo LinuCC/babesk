@@ -5,6 +5,7 @@
     "coffee-script": "^1.9.1",
     "gulp": "^3.8.11",
     "gulp-cjsx": "^2.0.0",
+    "gulp-concat": "^2.5.2",
     "gulp-header": "^1.2.2",
     "gulp-plumber": "^0.6.6",
     "gulp-streamify": "0.0.5",

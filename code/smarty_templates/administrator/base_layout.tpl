@@ -354,16 +354,10 @@
 		{/block}
 
 		{block name="js_include"}
-			<script type="text/javascript" src="{$path_js}/vendor/jquery.min.js">
-			</script>
-			<script type="text/javascript" src="{$path_js}/vendor/bootstrap.min.js">
-			</script>
-			<script type="text/javascript" src="{$path_js}/vendor/toastr.min.js">
+			<script type="text/javascript" src="{$path_js}/dist/base-bundle.js">
 			</script>
 			<script type="text/javascript" src="{$path_js}/administrator/main.js">
 			</script>
-			<script type="text/javascript" src="{$path_js}/vendor/json2.min.js"></script>
-			<script type="text/javascript" src="{$path_js}/custom-base.js"></script>
 		{/block}
 	</body>
 </html>
