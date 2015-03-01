@@ -16,7 +16,7 @@
 			<td>{$template.text}</td>
 			<td>
 				<a href="index.php?section=Messages|MessageTemplate&amp;action=deleteTemplate&amp;id={$template.ID}">
-					<img src="../smarty/templates/web/images/delete.png" alt="löschen">
+					<img src="../include/res/images/delete.png" alt="löschen">
 				</a>
 			</td>
 		</tr>

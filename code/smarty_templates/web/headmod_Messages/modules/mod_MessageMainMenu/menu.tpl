@@ -86,7 +86,7 @@
 			</a>
 			{/if}
 			<a href="index.php?section=Messages|MessageMainMenu&amp;action=deleteMessage&amp;ID={$message.ID}">
-				<img src="../smarty/templates/web/images/delete.png">
+				<img src="../include/res/images/delete.png">
 			</a>
 			<a href="index.php?section=Messages|MessageAdmin&amp;action=showMessage&amp;ID={$message.ID}">
 				Details...

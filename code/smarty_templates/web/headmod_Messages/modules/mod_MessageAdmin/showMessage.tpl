@@ -76,7 +76,7 @@
 		</td>
 		<td>
 			<a id="{$receiver->id}" class="removeReceiver" href="">
-				<img src="../smarty/templates/web/images/delete.png" />
+				<img src="../include/res/images/delete.png" />
 			</a>
 			{if $shouldReturn}
 			<a id="{$receiver->id}" class="toReturned" href="">
@@ -124,7 +124,7 @@
 			<td>{$manager->name}</td>
 			<td>
 				<a id="{$manager->id}" class="removeManager" href="">
-					<img src="../smarty/templates/web/images/delete.png">
+					<img src="../include/res/images/delete.png">
 				</a>
 			</td>
 		</tr>

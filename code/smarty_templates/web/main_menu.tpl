@@ -14,8 +14,11 @@
 </div>
 
 
-{if $birthday == $smarty.now|date_format:"%m-%d"}
-<img src="../smarty/templates/web/images/birthday.jpg" class="center" /><br>
-Fotograf: Will Clayton Lizenz: CC BY 2.0<br>
+{if $birthday != $smarty.now|date_format:"%m-%d"}
+<div class="text-center">
+	<img src="../include/res/images/birthday.jpg" /><br>
+	<span>Fotograf: Will Clayton</span>
+	<span>Lizenz: CC BY 2.0</span>
+</div>
 {/if}
 {/block}

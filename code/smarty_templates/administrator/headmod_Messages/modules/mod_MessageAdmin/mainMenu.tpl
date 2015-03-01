@@ -31,7 +31,7 @@
 					<td>{$message.validTo}</td>
 					<td>
 						<a href="index.php?section=Messages|MessageAdmin&amp;action=deleteMessage&amp;id={$message.ID}">
-							<img src="../smarty/templates/web/images/delete.png" alt="löschen">
+							<img src="../include/res/images/delete.png" alt="löschen">
 						</a>
 					</td>
 				</tr>
