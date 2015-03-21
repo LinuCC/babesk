@@ -332,4 +332,42 @@ class SchbasBook
     {
         return $this->selfpayingUsers;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $usersShouldLend;
+
+
+    /**
+     * Add usersShouldLend
+     *
+     * @param \Babesk\ORM\SchbasUserShouldLendBook $usersShouldLend
+     * @return SchbasBook
+     */
+    public function addUsersShouldLend(\Babesk\ORM\SchbasUserShouldLendBook $usersShouldLend)
+    {
+        $this->usersShouldLend[] = $usersShouldLend;
+
+        return $this;
+    }
+
+    /**
+     * Remove usersShouldLend
+     *
+     * @param \Babesk\ORM\SchbasUserShouldLendBook $usersShouldLend
+     */
+    public function removeUsersShouldLend(\Babesk\ORM\SchbasUserShouldLendBook $usersShouldLend)
+    {
+        $this->usersShouldLend->removeElement($usersShouldLend);
+    }
+
+    /**
+     * Get usersShouldLend
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUsersShouldLend()
+    {
+        return $this->usersShouldLend;
+    }
 }

@@ -125,4 +125,80 @@ class SystemSchoolyears
     {
         return $this->classes;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $usersInGradesAndSchoolyears;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $usersShouldLendBooks;
+
+
+    /**
+     * Add usersInGradesAndSchoolyears
+     *
+     * @param \Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears
+     * @return SystemSchoolyears
+     */
+    public function addUsersInGradesAndSchoolyear(\Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears)
+    {
+        $this->usersInGradesAndSchoolyears[] = $usersInGradesAndSchoolyears;
+
+        return $this;
+    }
+
+    /**
+     * Remove usersInGradesAndSchoolyears
+     *
+     * @param \Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears
+     */
+    public function removeUsersInGradesAndSchoolyear(\Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears)
+    {
+        $this->usersInGradesAndSchoolyears->removeElement($usersInGradesAndSchoolyears);
+    }
+
+    /**
+     * Get usersInGradesAndSchoolyears
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUsersInGradesAndSchoolyears()
+    {
+        return $this->usersInGradesAndSchoolyears;
+    }
+
+    /**
+     * Add usersShouldLendBooks
+     *
+     * @param \Babesk\ORM\SchbasUserShouldLendBook $usersShouldLendBooks
+     * @return SystemSchoolyears
+     */
+    public function addUsersShouldLendBook(\Babesk\ORM\SchbasUserShouldLendBook $usersShouldLendBooks)
+    {
+        $this->usersShouldLendBooks[] = $usersShouldLendBooks;
+
+        return $this;
+    }
+
+    /**
+     * Remove usersShouldLendBooks
+     *
+     * @param \Babesk\ORM\SchbasUserShouldLendBook $usersShouldLendBooks
+     */
+    public function removeUsersShouldLendBook(\Babesk\ORM\SchbasUserShouldLendBook $usersShouldLendBooks)
+    {
+        $this->usersShouldLendBooks->removeElement($usersShouldLendBooks);
+    }
+
+    /**
+     * Get usersShouldLendBooks
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUsersShouldLendBooks()
+    {
+        return $this->usersShouldLendBooks;
+    }
 }

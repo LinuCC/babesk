@@ -136,6 +136,9 @@ Babesk\ORM\SystemUsers:
         elawaDefaultMeetingRooms:
             targetEntity: Babesk\ORM\ElawaDefaultMeetingRoom
             mappedBy: host
+        booksToLend:
+            targetEntity: Babesk\ORM\SchbasUserShouldLendBook
+            mappedBy: user
     manyToOne:
         priceGroup:
             targetEntity: Babesk\ORM\BabeskPriceGroups

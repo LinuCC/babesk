@@ -29,8 +29,10 @@ Babesk\ORM\SystemSchoolyears:
             mappedBy: schoolyear
             inversedBy: null
             orderBy: null
-    oneToMany:
         classes:
             targetEntity: Babesk\ORM\KuwasysClass
+            mappedBy: schoolyear
+        usersShouldLendBooks:
+            targetEntity: Babesk\ORM\SchbasUserShouldLendBook
             mappedBy: schoolyear
     lifecycleCallbacks: {  }

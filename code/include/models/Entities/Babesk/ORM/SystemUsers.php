@@ -885,4 +885,42 @@ class SystemUsers
     {
         return $this->selfpayingBooks;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $booksToLend;
+
+
+    /**
+     * Add booksToLend
+     *
+     * @param \Babesk\ORM\SchbasUserShouldLendBook $booksToLend
+     * @return SystemUsers
+     */
+    public function addBooksToLend(\Babesk\ORM\SchbasUserShouldLendBook $booksToLend)
+    {
+        $this->booksToLend[] = $booksToLend;
+
+        return $this;
+    }
+
+    /**
+     * Remove booksToLend
+     *
+     * @param \Babesk\ORM\SchbasUserShouldLendBook $booksToLend
+     */
+    public function removeBooksToLend(\Babesk\ORM\SchbasUserShouldLendBook $booksToLend)
+    {
+        $this->booksToLend->removeElement($booksToLend);
+    }
+
+    /**
+     * Get booksToLend
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBooksToLend()
+    {
+        return $this->booksToLend;
+    }
 }
