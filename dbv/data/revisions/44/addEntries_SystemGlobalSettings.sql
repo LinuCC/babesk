@@ -1,4 +1,4 @@
-INSERT INTO `global_settings`
+INSERT INTO `SystemGlobalSettings`
 	(name, value) VALUES
 	-- All existing foreign languages of SchoolSubjects
 	('foreign_language', '')
