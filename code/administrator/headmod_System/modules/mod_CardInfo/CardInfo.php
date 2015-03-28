@@ -58,7 +58,7 @@ class CardInfo extends System {
 			$stmt = $this->_pdo->prepare(
 				'SELECT u.*, CONCAT(g.gradelevel, g.label) AS class
 					FROM SystemUsers u
-					LEFT JOIN SystemAttendants uigs
+					LEFT JOIN SystemAttendances uigs
 						ON uigs.userId = u.ID
 						AND uigs.schoolyearId = @activeSchoolyear
 					LEFT JOIN SystemGrades g ON g.ID = uigs.gradeId

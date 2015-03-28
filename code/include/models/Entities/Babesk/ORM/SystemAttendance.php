@@ -5,9 +5,9 @@ namespace Babesk\ORM;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SystemAttendant
+ * SystemAttendance
  */
-class SystemAttendant
+class SystemAttendance
 {
     /**
      * @var integer
@@ -34,7 +34,7 @@ class SystemAttendant
      * Set id
      *
      * @param integer $id
-     * @return SystemAttendant
+     * @return SystemAttendance
      */
     public function setId($id)
     {
@@ -57,7 +57,7 @@ class SystemAttendant
      * Set user
      *
      * @param \Babesk\ORM\SystemUsers $user
-     * @return SystemAttendant
+     * @return SystemAttendance
      */
     public function setUser(\Babesk\ORM\SystemUsers $user = null)
     {
@@ -80,7 +80,7 @@ class SystemAttendant
      * Set grade
      *
      * @param \Babesk\ORM\SystemGrades $grade
-     * @return SystemAttendant
+     * @return SystemAttendance
      */
     public function setGrade(\Babesk\ORM\SystemGrades $grade = null)
     {
@@ -103,7 +103,7 @@ class SystemAttendant
      * Set schoolyear
      *
      * @param \Babesk\ORM\SystemSchoolyears $schoolyear
-     * @return SystemAttendant
+     * @return SystemAttendance
      */
     public function setSchoolyear(\Babesk\ORM\SystemSchoolyears $schoolyear = null)
     {

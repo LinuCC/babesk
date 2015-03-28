@@ -155,7 +155,7 @@ class RecordReceipt extends \SchbasAccounting {
 			)->from('DM:SystemUsers', 'u')
 			->leftJoin('u.schbasAccounting', 'a')
 			->leftJoin('u.cards', 'c')
-			->leftJoin('u.attendants', 'uigs')
+			->leftJoin('u.attendances', 'uigs')
 			->leftJoin('uigs.schoolyear', 's', 'WITH', ' s.active = 1')
 			->leftJoin('uigs.grade', 'g')
 			->leftJoin('a.loanChoice', 'lc')

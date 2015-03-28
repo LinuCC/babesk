@@ -160,7 +160,7 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 
 		try {
 			$stmt = $this->_pdo->prepare('SELECT COUNT(*)
-				FROM SystemAttendants WHERE schoolyearId = ?');
+				FROM SystemAttendances WHERE schoolyearId = ?');
 			$stmt->execute(array($schoolyearId));
 			return (bool)(int)$stmt->fetchColumn();
 

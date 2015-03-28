@@ -81,7 +81,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 		$this->usersToChangeCheckGrades();
 
 		try {
-			$queryJoints = 'INSERT INTO SystemAttendants (
+			$queryJoints = 'INSERT INTO SystemAttendances (
 					userId, gradeId, schoolyearId
 				) SELECT su.origUserId, g.ID,
 					(SELECT value FROM SystemGlobalSettings
@@ -177,7 +177,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 				VALUES (?, ?, IFNULL(?, CONCAT(forename, ".", name)), "", IFNULL(?, ""), IFNULL(?, ""), "", 0, 0, 0, 0, ?)'
 			);
 			$stmtg = $this->_pdo->prepare(
-				'INSERT INTO SystemAttendants (
+				'INSERT INTO SystemAttendances (
 					userId, gradeId, schoolyearId
 				) VALUES (? ,?, (SELECT value FROM SystemGlobalSettings
 					WHERE name =

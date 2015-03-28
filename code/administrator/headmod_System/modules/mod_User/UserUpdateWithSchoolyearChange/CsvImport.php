@@ -326,7 +326,7 @@ class CsvImport extends \administrator\System\User\UserUpdateWithSchoolyearChang
 				'SELECT u.ID AS userId, u.forename AS forename, u.name AS name,
 					u.birthday AS birthday, g.gradelevel AS gradelevel
 				FROM SystemUsers u
-					JOIN SystemAttendants uigs ON u.ID = uigs.userId
+					JOIN SystemAttendances uigs ON u.ID = uigs.userId
 					JOIN SystemGrades g ON g.ID = uigs.gradeId
 				WHERE uigs.schoolyearId = @activeSchoolyear'
 			);

@@ -49,7 +49,7 @@ class BookInfo extends Schbas {
 				//Current db-Structure only allows book lent to only one user
 				$user = $potentialUsers->first();
 				//Query made sure to just load the active grade
-				$grade = $user->getAttendants()
+				$grade = $user->getAttendances()
 					->first()
 					->getGrade();
 				$this->bookinfoTemplateGenerate($invData, $user, $grade);
@@ -78,7 +78,7 @@ class BookInfo extends Schbas {
 					INNER JOIN b.subject s
 						WITH s.abbreviation = :subject
 					LEFT JOIN i.usersLent u
-					LEFT JOIN u.attendants uigs
+					LEFT JOIN u.attendances uigs
 					LEFT JOIN uigs.schoolyear sy WITH sy.active = 1
 					LEFT JOIN uigs.grade g
 					WHERE i.yearOfPurchase = :purchaseYear

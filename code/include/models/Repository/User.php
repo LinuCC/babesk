@@ -9,7 +9,7 @@ class User extends \Doctrine\ORM\EntityRepository {
 		try {
 			$query = $this->_em->createQuery(
 				'SELECT g, uigs, sy FROM DM:SystemGrades g
-				INNER JOIN g.attendants uigs
+				INNER JOIN g.attendances uigs
 				INNER JOIN uigs.schoolyear sy WITH sy.active = 1
 				WHERE uigs.user = :user
 			');

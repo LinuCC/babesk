@@ -12,7 +12,7 @@ class MessageFunctions {
 			'SELECT u.ID AS userId,
 				CONCAT(u.forename, " ", u.name) AS userFullname
 			FROM SystemUsers u
-				JOIN SystemAttendants uigs ON u.ID = uigs.userId
+				JOIN SystemAttendances uigs ON u.ID = uigs.userId
 			WHERE uigs.schoolyearId = @activeSchoolyear');
 		return $users;
 	}

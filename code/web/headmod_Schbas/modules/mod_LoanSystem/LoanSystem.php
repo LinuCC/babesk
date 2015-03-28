@@ -90,7 +90,7 @@ class LoanSystem extends Schbas {
 		//$gradelevel = TableMng::query(
 		//	"SELECT gradelevel FROM SystemGrades
 		//		WHERE id = (
-		//			SELECT gradeID from SystemAttendants
+		//			SELECT gradeID from SystemAttendances
 		//				WHERE schoolyearId = (
 		//					SELECT ID from SystemSchoolyears WHERE active=1
 		//				)
@@ -99,7 +99,7 @@ class LoanSystem extends Schbas {
 		//");
 		$gradelevelStmt = $this->_pdo->prepare(
 			"SELECT gradelevel FROM SystemGrades g
-				LEFT JOIN SystemAttendants uigs
+				LEFT JOIN SystemAttendances uigs
 					ON uigs.gradeId = g.ID
 				WHERE uigs.userId = ? AND uigs.schoolyearId = @activeSchoolyear
 		");
@@ -216,7 +216,7 @@ class LoanSystem extends Schbas {
 	private function showFormPdf() {
 
 		//get gradelevel ("Klassenstufe")
-		$gradelevel = TableMng::query("SELECT gradelevel FROM SystemGrades WHERE id=(SELECT gradeID from SystemAttendants WHERE schoolyearId=(SELECT ID from SystemSchoolyears WHERE active=1) AND UserID='".$_SESSION['uid']."')");
+		$gradelevel = TableMng::query("SELECT gradelevel FROM SystemGrades WHERE id=(SELECT gradeID from SystemAttendances WHERE schoolyearId=(SELECT ID from SystemSchoolyears WHERE active=1) AND UserID='".$_SESSION['uid']."')");
 				$gradelevel[0]['gradelevel'] = strval(intval($gradelevel[0]['gradelevel'])+1);
 
 		$schbasYear = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbas_year'");
@@ -317,8 +317,9 @@ class LoanSystem extends Schbas {
 		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
 
 		//get gradelevel ("Klassenstufe")
-		$gradelevel = TableMng::query("SELECT gradelevel FROM SystemGrades WHERE id=(SELECT gradeID from SystemAttendants WHERE schoolyearId=(SELECT ID from SystemSchoolyears WHERE active=1) AND UserID='".$_SESSION['uid']."')");
+		$gradelevel = TableMng::query("SELECT gradelevel FROM SystemGrades WHERE id=(SELECT gradeID from SystemAttendances WHERE schoolyearId=(SELECT ID from SystemSchoolyears WHERE active=1) AND UserID='".$_SESSION['uid']."')");
 				$gradelevel[0]['gradelevel'] = strval(intval($gradelevel[0]['gradelevel'])+1);
+
 
 		// get cover letter ("Anschreiben")
 		$coverLetter = TableMng::query("SELECT title, text FROM SchbasTexts WHERE description='coverLetter'");

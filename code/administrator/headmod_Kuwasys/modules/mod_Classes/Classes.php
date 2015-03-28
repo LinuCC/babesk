@@ -606,7 +606,7 @@ class Classes extends Kuwasys {
 			INNER JOIN uicc.class c WITH c = :class
 			INNER JOIN uicc.status status
 			INNER JOIN uicc.category category
-			INNER JOIN u.attendants uigs
+			INNER JOIN u.attendances uigs
 			INNER JOIN uigs.schoolyear sy
 			INNER JOIN uigs.grade g
 		');

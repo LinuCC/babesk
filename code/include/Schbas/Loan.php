@@ -200,7 +200,7 @@ class Loan {
 			$userQuery = $this->_em->createQuery(
 				'SELECT partial u.{id}, uigs, partial g.{id, gradelevel}
 				FROM DM:SystemUsers u
-				INNER JOIN u.attendants uigs
+				INNER JOIN u.attendances uigs
 				INNER JOIN uigs.schoolyear sy WITH sy.active = true
 				INNER JOIN uigs.grade g
 			');
@@ -228,7 +228,7 @@ class Loan {
 
 		foreach($books as $book) {
 			foreach($users as $user) {
-				$grade = $user->getAttendants()
+				$grade = $user->getAttendances()
 					->first()
 					->getGrade();
 				if(!$grade) {

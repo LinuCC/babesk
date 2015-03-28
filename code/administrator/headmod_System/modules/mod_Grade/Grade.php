@@ -199,7 +199,7 @@ class Grade extends System {
 	protected function deleteLinkedItems($gradeId) {
 
 		try {
-			TableMng::query("DELETE FROM SystemAttendants
+			TableMng::query("DELETE FROM SystemAttendances
 				WHERE gradeId = $gradeId");
 
 		} catch (Exception $e) {

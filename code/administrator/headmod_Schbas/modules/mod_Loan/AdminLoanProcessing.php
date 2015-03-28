@@ -49,7 +49,7 @@ class AdminLoanProcessing {
 		$schoolyearID = $schoolyearDesired[0]['ID'];
 		$gradeID = TableMng::query(sprintf(
 			'SELECT GradeID
-				FROM SystemAttendants
+				FROM SystemAttendances
 				WHERE UserID = "%s" AND schoolyearID ="%s"',
 				$uid,$schoolyearID)
 		);
@@ -210,7 +210,7 @@ class AdminLoanProcessing {
 			$userDetails = TableMng::query(sprintf(
 				'SELECT u.*,
 				(SELECT CONCAT(g.gradelevel, g.label) AS class
-					FROM SystemAttendants uigs
+					FROM SystemAttendances uigs
 					LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS class

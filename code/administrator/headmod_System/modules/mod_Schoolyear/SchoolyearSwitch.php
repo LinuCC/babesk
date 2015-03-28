@@ -98,7 +98,7 @@ class SchoolyearSwitch {
 		$toUpgrade = TableMng::query(
 			'SELECT uigs.*, g.gradelevel AS currentGradelevel,
 				g.label AS gradelabel
-			FROM SystemAttendants uigs
+			FROM SystemAttendances uigs
 			JOIN SystemGrades g ON uigs.gradeId = g.ID
 			WHERE uigs.schoolyearId = @activeSchoolyear');
 
@@ -181,7 +181,7 @@ class SchoolyearSwitch {
 	protected function usersNewGradelevelAndSchoolyearsUpload($toUpload) {
 
 		$stmt = TableMng::getDb()->prepare(
-			'INSERT INTO SystemAttendants
+			'INSERT INTO SystemAttendances
 				(userId, gradeId, schoolyearId) VALUES (?, ?, ?)');
 
 		foreach($toUpload as $newJoin) {

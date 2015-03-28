@@ -50,7 +50,7 @@ class KuwasysUsersCreateParticipationConfirmationPdf {
 					CONCAT(u.ID, "-")
 				) AS grouper
 			FROM SystemUsers u
-				INNER JOIN SystemAttendants uigs
+				INNER JOIN SystemAttendances uigs
 					ON uigs.userId = u.ID
 				INNER JOIN SystemSchoolyears sy ON sy.ID = uigs.schoolyearId
 				INNER JOIN KuwasysUsersInClassesAndCategories uicc

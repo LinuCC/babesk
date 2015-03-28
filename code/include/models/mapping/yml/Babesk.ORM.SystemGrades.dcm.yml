@@ -21,6 +21,6 @@ Babesk\ORM\SystemGrades:
                 schooltypeId:
                     referencedColumnName: ID
     oneToMany:
-        attendants:
-            targetEntity: Babesk\ORM\SystemAttendant
+        attendances:
+            targetEntity: Babesk\ORM\SystemAttendance
             mappedBy: grade

@@ -438,7 +438,7 @@ class ShowBooklist extends Booklist {
 		}
 		$glQuery = implode(', ', $glAr);
 		return "SELECT COUNT(u.id) FROM DM:SystemUsers u
-					JOIN u.attendants uigs
+					JOIN u.attendances uigs
 					JOIN uigs.schoolyear s
 					JOIN uigs.grade g WITH g.gradelevel IN(${glQuery})
 					LEFT JOIN u.selfpayingBooks b WITH b.id = :bookId

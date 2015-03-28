@@ -351,7 +351,7 @@ class User extends System {
 
 		if(!empty($_POST['schoolyearAndGradeData'])) {
 			$stmt = $this->_pdo->prepare(
-				'INSERT INTO SystemAttendants (
+				'INSERT INTO SystemAttendances (
 						userId, gradeId, schoolyearId
 					) VALUES (
 						:userId, :gradeId, :schoolyearId
@@ -554,7 +554,7 @@ class User extends System {
 			$data = TableMng::query(
 				'SELECT u.*,
 				(SELECT CONCAT(g.gradelevel, g.label) AS KuwasysClasses
-					FROM SystemAttendants uigs
+					FROM SystemAttendances uigs
 					LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS KuwasysClasses
@@ -665,7 +665,7 @@ class User extends System {
 
 		$stmt = $this->_pdo->prepare(
 			'SELECT gradeId, schoolyearId
-				FROM SystemAttendants
+				FROM SystemAttendances
 				WHERE userId = ?
 		');
 		$stmt->execute(array($uid));
@@ -719,7 +719,7 @@ class User extends System {
 
 		$schoolyears = TableMng::query(
 			"SELECT ID, label AS name, (
-				SELECT COUNT(*) AS count FROM SystemAttendants uigs
+				SELECT COUNT(*) AS count FROM SystemAttendances uigs
 				WHERE sy.ID = uigs.schoolyearId AND uigs.userId = $userId
 			) AS isUserIn
 			FROM SystemSchoolyears sy
@@ -783,7 +783,7 @@ class User extends System {
 			$data = array();
 			$stmt = $this->_pdo->prepare('SELECT u.username AS username
 				FROM SystemUsers u
-				JOIN SystemAttendants uigs ON u.ID = uigs.userId
+				JOIN SystemAttendances uigs ON u.ID = uigs.userId
 				WHERE uigs.schoolyearId = @activeSchoolyear
 					AND u.username LIKE :name
 				LIMIT 0, 10');

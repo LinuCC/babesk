@@ -118,8 +118,8 @@ Babesk\ORM\SystemUsers:
                         columnDefinition: null
                         referencedColumnName: id
     oneToMany:
-        attendants:
-            targetEntity: Babesk\ORM\SystemAttendant
+        attendances:
+            targetEntity: Babesk\ORM\SystemAttendance
             mappedBy: user
         usersInClassesAndCategories:
             targetEntity: Babesk\ORM\UserInClassAndCategory

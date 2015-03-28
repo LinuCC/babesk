@@ -39,7 +39,7 @@ class Fmenu extends Fits {
 			$userDetails = TableMng::querySingleEntry(sprintf(
 				'SELECT u.*,
 				(SELECT CONCAT(g.gradelevel, g.label) AS class
-					FROM SystemAttendants uigs
+					FROM SystemAttendances uigs
 					LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 					WHERE uigs.userId = u.ID AND
 						uigs.schoolyearId = @activeSchoolyear) AS class

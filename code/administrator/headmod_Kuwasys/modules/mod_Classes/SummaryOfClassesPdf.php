@@ -44,7 +44,7 @@ class SummaryOfClassesPdf {
 					ON uicc.ClassID = c.ID
 				INNER JOIN SystemUsers u ON uicc.UserID = u.ID
 				INNER JOIN KuwasysClassesInCategories cic ON cic.classId = c.ID
-				LEFT JOIN SystemAttendants uigs
+				LEFT JOIN SystemAttendances uigs
 					ON uigs.UserID = u.ID
 				LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
 				LEFT JOIN KuwasysClassteachersInClasses ctic ON ctic.ClassID = c.ID

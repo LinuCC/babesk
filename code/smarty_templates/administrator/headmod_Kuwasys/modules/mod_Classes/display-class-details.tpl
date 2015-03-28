@@ -264,7 +264,7 @@
 					{$user->getForename()} {$user->getName()}
 				</a>
 				</td>
-				{$grade = $user->getAttendants()->first()->getGrade()}
+				{$grade = $user->getAttendances()->first()->getGrade()}
 				<td rowspan="{$rowsOfSamePerson}">
 				{if $grade}
 					{$grade->getGradelevel()} {$grade->getLabel()}

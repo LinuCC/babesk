@@ -13,8 +13,8 @@ Babesk\ORM\SystemSchoolyears:
         active:
             type: boolean
     oneToMany:
-        attendants:
-            targetEntity: Babesk\ORM\SystemAttendant
+        attendances:
+            targetEntity: Babesk\ORM\SystemAttendance
             mappedBy: schoolyear
         classes:
             targetEntity: Babesk\ORM\KuwasysClass

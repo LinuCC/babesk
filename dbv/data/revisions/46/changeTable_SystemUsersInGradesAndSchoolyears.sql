@@ -1,6 +1,6 @@
-RENAME TABLE `SystemUsersInGradesAndSchoolyears` TO `SystemAttendants`;
+RENAME TABLE `SystemUsersInGradesAndSchoolyears` TO `SystemAttendances`;
 
-ALTER TABLE `SystemAttendants` DROP PRIMARY KEY;
+ALTER TABLE `SystemAttendances` DROP PRIMARY KEY;
 
-ALTER TABLE `SystemAttendants`
+ALTER TABLE `SystemAttendances`
 	ADD COLUMN `id` int(11) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT;

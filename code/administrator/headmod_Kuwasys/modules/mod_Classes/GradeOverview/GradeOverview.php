@@ -68,7 +68,7 @@ class GradeOverview extends \Classes {
 					ON uics.ID = uicc.statusId
 					AND uics.name = "active"
 				INNER JOIN SystemUsers u ON u.ID = uicc.UserID
-				INNER JOIN SystemAttendants uigs
+				INNER JOIN SystemAttendances uigs
 					ON uigs.userId = u.ID
 					AND uigs.schoolyearId = @activeSchoolyear
 				INNER JOIN SystemGrades g ON g.Id = uigs.gradeId

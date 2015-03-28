@@ -27,7 +27,7 @@ class SystemGrades
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $attendants;
+    private $attendances;
 
     /**
      * @var \Babesk\ORM\SystemSchooltypes
@@ -39,7 +39,7 @@ class SystemGrades
      */
     public function __construct()
     {
-        $this->attendants = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->attendances = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -112,36 +112,36 @@ class SystemGrades
     }
 
     /**
-     * Add attendants
+     * Add attendances
      *
-     * @param \Babesk\ORM\SystemAttendant $attendants
+     * @param \Babesk\ORM\SystemAttendance $attendances
      * @return SystemGrades
      */
-    public function addAttendant(\Babesk\ORM\SystemAttendant $attendants)
+    public function addAttendance(\Babesk\ORM\SystemAttendance $attendances)
     {
-        $this->attendants[] = $attendants;
+        $this->attendances[] = $attendances;
 
         return $this;
     }
 
     /**
-     * Remove attendants
+     * Remove attendances
      *
-     * @param \Babesk\ORM\SystemAttendant $attendants
+     * @param \Babesk\ORM\SystemAttendance $attendances
      */
-    public function removeAttendant(\Babesk\ORM\SystemAttendant $attendants)
+    public function removeAttendance(\Babesk\ORM\SystemAttendance $attendances)
     {
-        $this->attendants->removeElement($attendants);
+        $this->attendances->removeElement($attendances);
     }
 
     /**
-     * Get attendants
+     * Get attendances
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getAttendants()
+    public function getAttendances()
     {
-        return $this->attendants;
+        return $this->attendances;
     }
 
     /**
