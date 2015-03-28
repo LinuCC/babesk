@@ -186,9 +186,10 @@ class Loan {
 
 	/**
 	 * Calculates the books the users should lend.
-	 * @todo  Check for existing assignments for the schoolyear
+	 * @param  bool   $isNextYear If true, it will be assumed that all users
+	 *                            move one grade up
 	 */
-	public function loanBooksCalculate() {
+	public function loanBooksCalculate($isNextYear) {
 
 		$preparationSchoolyear = $this->schbasPreparationSchoolyearGet();
 		if(!$preparationSchoolyear) {
@@ -235,6 +236,7 @@ class Loan {
 					continue;
 				}
 				$gradelevel = $grade->getGradelevel();
+				$gradelevel += ($isNextYear) ? 1 : 0;
 				if(!empty($this->_gradelevelIsbnIdentAssoc[$gradelevel])) {
 					$validClasses =
 						$this->_gradelevelIsbnIdentAssoc[$gradelevel];
