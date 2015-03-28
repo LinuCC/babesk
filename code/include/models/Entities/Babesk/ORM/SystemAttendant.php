@@ -5,10 +5,15 @@ namespace Babesk\ORM;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SystemUsersInGradesAndSchoolyears
+ * SystemAttendant
  */
-class SystemUsersInGradesAndSchoolyears
+class SystemAttendant
 {
+    /**
+     * @var integer
+     */
+    private $id;
+
     /**
      * @var \Babesk\ORM\SystemUsers
      */
@@ -26,12 +31,35 @@ class SystemUsersInGradesAndSchoolyears
 
 
     /**
+     * Set id
+     *
+     * @param integer $id
+     * @return SystemAttendant
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * Set user
      *
      * @param \Babesk\ORM\SystemUsers $user
-     * @return SystemUsersInGradesAndSchoolyears
+     * @return SystemAttendant
      */
-    public function setUser(\Babesk\ORM\SystemUsers $user)
+    public function setUser(\Babesk\ORM\SystemUsers $user = null)
     {
         $this->user = $user;
 
@@ -52,9 +80,9 @@ class SystemUsersInGradesAndSchoolyears
      * Set grade
      *
      * @param \Babesk\ORM\SystemGrades $grade
-     * @return SystemUsersInGradesAndSchoolyears
+     * @return SystemAttendant
      */
-    public function setGrade(\Babesk\ORM\SystemGrades $grade)
+    public function setGrade(\Babesk\ORM\SystemGrades $grade = null)
     {
         $this->grade = $grade;
 
@@ -75,9 +103,9 @@ class SystemUsersInGradesAndSchoolyears
      * Set schoolyear
      *
      * @param \Babesk\ORM\SystemSchoolyears $schoolyear
-     * @return SystemUsersInGradesAndSchoolyears
+     * @return SystemAttendant
      */
-    public function setSchoolyear(\Babesk\ORM\SystemSchoolyears $schoolyear)
+    public function setSchoolyear(\Babesk\ORM\SystemSchoolyears $schoolyear = null)
     {
         $this->schoolyear = $schoolyear;
 

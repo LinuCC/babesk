@@ -42,7 +42,7 @@ class VotesPerCategoryPerSchooltypeAndGrade extends \KuwasysStats {
 					SELECT u.ID AS userId, uicc.categoryId AS categoryId,
 						uigs.gradeId AS gradeId
 					FROM SystemUsers u
-					INNER JOIN SystemUsersInGradesAndSchoolyears uigs
+					INNER JOIN SystemAttendants uigs
 						ON uigs.userId = u.ID
 						AND uigs.schoolyearId = @activeSchoolyear
 					INNER JOIN KuwasysUsersInClassesAndCategories uicc

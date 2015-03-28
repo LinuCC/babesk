@@ -55,6 +55,11 @@ class SchbasBook
     private $exemplars;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $usersShouldLend;
+
+    /**
      * @var \Babesk\ORM\SystemSchoolSubject
      */
     private $subject;
@@ -70,6 +75,7 @@ class SchbasBook
     public function __construct()
     {
         $this->exemplars = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->usersShouldLend = new \Doctrine\Common\Collections\ArrayCollection();
         $this->selfpayingUsers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -278,6 +284,39 @@ class SchbasBook
     }
 
     /**
+     * Add usersShouldLend
+     *
+     * @param \Babesk\ORM\SchbasUserShouldLendBook $usersShouldLend
+     * @return SchbasBook
+     */
+    public function addUsersShouldLend(\Babesk\ORM\SchbasUserShouldLendBook $usersShouldLend)
+    {
+        $this->usersShouldLend[] = $usersShouldLend;
+
+        return $this;
+    }
+
+    /**
+     * Remove usersShouldLend
+     *
+     * @param \Babesk\ORM\SchbasUserShouldLendBook $usersShouldLend
+     */
+    public function removeUsersShouldLend(\Babesk\ORM\SchbasUserShouldLendBook $usersShouldLend)
+    {
+        $this->usersShouldLend->removeElement($usersShouldLend);
+    }
+
+    /**
+     * Get usersShouldLend
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUsersShouldLend()
+    {
+        return $this->usersShouldLend;
+    }
+
+    /**
      * Set subject
      *
      * @param \Babesk\ORM\SystemSchoolSubject $subject
@@ -331,43 +370,5 @@ class SchbasBook
     public function getSelfpayingUsers()
     {
         return $this->selfpayingUsers;
-    }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $usersShouldLend;
-
-
-    /**
-     * Add usersShouldLend
-     *
-     * @param \Babesk\ORM\SchbasUserShouldLendBook $usersShouldLend
-     * @return SchbasBook
-     */
-    public function addUsersShouldLend(\Babesk\ORM\SchbasUserShouldLendBook $usersShouldLend)
-    {
-        $this->usersShouldLend[] = $usersShouldLend;
-
-        return $this;
-    }
-
-    /**
-     * Remove usersShouldLend
-     *
-     * @param \Babesk\ORM\SchbasUserShouldLendBook $usersShouldLend
-     */
-    public function removeUsersShouldLend(\Babesk\ORM\SchbasUserShouldLendBook $usersShouldLend)
-    {
-        $this->usersShouldLend->removeElement($usersShouldLend);
-    }
-
-    /**
-     * Get usersShouldLend
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getUsersShouldLend()
-    {
-        return $this->usersShouldLend;
     }
 }

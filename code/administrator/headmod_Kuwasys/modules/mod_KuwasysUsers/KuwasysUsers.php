@@ -112,7 +112,7 @@ class KuwasysUsers extends Kuwasys {
 		// $gradeId = $_GET['gradeId'];
 		// $query = "SELECT u.ID as userId
 		// 	FROM SystemUsers u
-		// 		JOIN SystemUsersInGradesAndSchoolyears uigsy
+		// 		JOIN SystemAttendants uigsy
 		// 			ON uigsy.UserID = u.ID
 		// 	WHERE uigsy.schoolyearId = @activeSchoolyear AND
 		// 		uigsy.gradeId = {$gradeId}

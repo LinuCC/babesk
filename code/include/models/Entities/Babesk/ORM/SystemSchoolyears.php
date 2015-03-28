@@ -27,14 +27,39 @@ class SystemSchoolyears
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
+    private $attendants;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
     private $classes;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $usersShouldLendBooks;
 
     /**
      * Constructor
      */
     public function __construct()
     {
+        $this->attendants = new \Doctrine\Common\Collections\ArrayCollection();
         $this->classes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->usersShouldLendBooks = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set id
+     *
+     * @param integer $id
+     * @return SystemSchoolyears
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -94,6 +119,39 @@ class SystemSchoolyears
     }
 
     /**
+     * Add attendants
+     *
+     * @param \Babesk\ORM\SystemAttendant $attendants
+     * @return SystemSchoolyears
+     */
+    public function addAttendant(\Babesk\ORM\SystemAttendant $attendants)
+    {
+        $this->attendants[] = $attendants;
+
+        return $this;
+    }
+
+    /**
+     * Remove attendants
+     *
+     * @param \Babesk\ORM\SystemAttendant $attendants
+     */
+    public function removeAttendant(\Babesk\ORM\SystemAttendant $attendants)
+    {
+        $this->attendants->removeElement($attendants);
+    }
+
+    /**
+     * Get attendants
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAttendants()
+    {
+        return $this->attendants;
+    }
+
+    /**
      * Add classes
      *
      * @param \Babesk\ORM\KuwasysClass $classes
@@ -124,49 +182,6 @@ class SystemSchoolyears
     public function getClasses()
     {
         return $this->classes;
-    }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $usersInGradesAndSchoolyears;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $usersShouldLendBooks;
-
-
-    /**
-     * Add usersInGradesAndSchoolyears
-     *
-     * @param \Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears
-     * @return SystemSchoolyears
-     */
-    public function addUsersInGradesAndSchoolyear(\Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears)
-    {
-        $this->usersInGradesAndSchoolyears[] = $usersInGradesAndSchoolyears;
-
-        return $this;
-    }
-
-    /**
-     * Remove usersInGradesAndSchoolyears
-     *
-     * @param \Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears
-     */
-    public function removeUsersInGradesAndSchoolyear(\Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears)
-    {
-        $this->usersInGradesAndSchoolyears->removeElement($usersInGradesAndSchoolyears);
-    }
-
-    /**
-     * Get usersInGradesAndSchoolyears
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getUsersInGradesAndSchoolyears()
-    {
-        return $this->usersInGradesAndSchoolyears;
     }
 
     /**

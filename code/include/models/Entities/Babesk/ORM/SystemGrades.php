@@ -27,7 +27,7 @@ class SystemGrades
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $usersInGradesAndSchoolyears;
+    private $attendants;
 
     /**
      * @var \Babesk\ORM\SystemSchooltypes
@@ -39,7 +39,20 @@ class SystemGrades
      */
     public function __construct()
     {
-        $this->usersInGradesAndSchoolyears = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->attendants = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set id
+     *
+     * @param integer $id
+     * @return SystemGrades
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -99,36 +112,36 @@ class SystemGrades
     }
 
     /**
-     * Add usersInGradesAndSchoolyears
+     * Add attendants
      *
-     * @param \Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears
+     * @param \Babesk\ORM\SystemAttendant $attendants
      * @return SystemGrades
      */
-    public function addUsersInGradesAndSchoolyear(\Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears)
+    public function addAttendant(\Babesk\ORM\SystemAttendant $attendants)
     {
-        $this->usersInGradesAndSchoolyears[] = $usersInGradesAndSchoolyears;
+        $this->attendants[] = $attendants;
 
         return $this;
     }
 
     /**
-     * Remove usersInGradesAndSchoolyears
+     * Remove attendants
      *
-     * @param \Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears
+     * @param \Babesk\ORM\SystemAttendant $attendants
      */
-    public function removeUsersInGradesAndSchoolyear(\Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears)
+    public function removeAttendant(\Babesk\ORM\SystemAttendant $attendants)
     {
-        $this->usersInGradesAndSchoolyears->removeElement($usersInGradesAndSchoolyears);
+        $this->attendants->removeElement($attendants);
     }
 
     /**
-     * Get usersInGradesAndSchoolyears
+     * Get attendants
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getUsersInGradesAndSchoolyears()
+    public function getAttendants()
     {
-        return $this->usersInGradesAndSchoolyears;
+        return $this->attendants;
     }
 
     /**

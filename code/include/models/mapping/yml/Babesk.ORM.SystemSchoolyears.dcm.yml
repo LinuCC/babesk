@@ -4,35 +4,21 @@ Babesk\ORM\SystemSchoolyears:
     id:
         id:
             type: integer
-            scale: 0
-            length: null
-            precision: 0
             id: true
+            precision: 11
             column: ID
-            generator:
-                strategy: IDENTITY
     fields:
         label:
             type: string
-            scale: 0
-            length: null
-            precision: 0
         active:
             type: boolean
-            scale: 0
-            length: null
-            precision: 0
     oneToMany:
-        usersInGradesAndSchoolyears:
-            targetEntity: Babesk\ORM\SystemUsersInGradesAndSchoolyears
-            cascade: {  }
+        attendants:
+            targetEntity: Babesk\ORM\SystemAttendant
             mappedBy: schoolyear
-            inversedBy: null
-            orderBy: null
         classes:
             targetEntity: Babesk\ORM\KuwasysClass
             mappedBy: schoolyear
         usersShouldLendBooks:
             targetEntity: Babesk\ORM\SchbasUserShouldLendBook
             mappedBy: schoolyear
-    lifecycleCallbacks: {  }

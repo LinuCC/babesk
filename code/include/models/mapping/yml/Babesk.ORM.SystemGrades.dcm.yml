@@ -4,38 +4,23 @@ Babesk\ORM\SystemGrades:
     id:
         id:
             type: integer
-            scale: 0
-            length: null
-            precision: 0
+            precision: 11
             id: true
             column: ID
-            generator:
-                strategy: IDENTITY
     fields:
         label:
             type: string
-            scale: 0
-            length: null
-            precision: 0
         gradelevel:
             type: integer
-            scale: 0
-            length: null
-            precision: 0
+            precision: 11
     manyToOne:
         schooltype:
             targetEntity: Babesk\ORM\SystemSchooltypes
-            cascade: {  }
-            mappedBy: null
             inversedBy: null
             joinColumns:
                 schooltypeId:
                     referencedColumnName: ID
     oneToMany:
-        usersInGradesAndSchoolyears:
-            targetEntity: Babesk\ORM\SystemUsersInGradesAndSchoolyears
-            cascade: {  }
+        attendants:
+            targetEntity: Babesk\ORM\SystemAttendant
             mappedBy: grade
-            inversedBy: null
-            orderBy: null
-    lifecycleCallbacks: {  }

@@ -51,7 +51,7 @@ class SearchForSimilarUsers extends \User {
 		$query = 'SELECT u.ID AS userId, CONCAT(u.username, " (", u.birthday, ")") AS username
 				FROM SystemUsers u ';
 		if($onlyActiveSchoolyear) {
-			$query .= 'INNER JOIN SystemUsersInGradesAndSchoolyears uigs
+			$query .= 'INNER JOIN SystemAttendants uigs
 				ON u.ID = uigs.userId
 				WHERE uigs.schoolyearId = @activeSchoolyear ';
 		}

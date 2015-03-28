@@ -102,7 +102,7 @@ class SystemUsers
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $usersInGradesAndSchoolyears;
+    private $attendants;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -130,6 +130,11 @@ class SystemUsers
     private $elawaDefaultMeetingRooms;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $booksToLend;
+
+    /**
      * @var \Babesk\ORM\BabeskPriceGroups
      */
     private $priceGroup;
@@ -154,12 +159,13 @@ class SystemUsers
      */
     public function __construct()
     {
-        $this->usersInGradesAndSchoolyears = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->attendants = new \Doctrine\Common\Collections\ArrayCollection();
         $this->usersInClassesAndCategories = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cards = new \Doctrine\Common\Collections\ArrayCollection();
         $this->elawaMeetingsVisiting = new \Doctrine\Common\Collections\ArrayCollection();
         $this->elawaMeetingsHosting = new \Doctrine\Common\Collections\ArrayCollection();
         $this->elawaDefaultMeetingRooms = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->booksToLend = new \Doctrine\Common\Collections\ArrayCollection();
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->bookLending = new \Doctrine\Common\Collections\ArrayCollection();
         $this->selfpayingBooks = new \Doctrine\Common\Collections\ArrayCollection();
@@ -567,36 +573,36 @@ class SystemUsers
     }
 
     /**
-     * Add usersInGradesAndSchoolyears
+     * Add attendants
      *
-     * @param \Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears
+     * @param \Babesk\ORM\SystemAttendant $attendants
      * @return SystemUsers
      */
-    public function addUsersInGradesAndSchoolyear(\Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears)
+    public function addAttendant(\Babesk\ORM\SystemAttendant $attendants)
     {
-        $this->usersInGradesAndSchoolyears[] = $usersInGradesAndSchoolyears;
+        $this->attendants[] = $attendants;
 
         return $this;
     }
 
     /**
-     * Remove usersInGradesAndSchoolyears
+     * Remove attendants
      *
-     * @param \Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears
+     * @param \Babesk\ORM\SystemAttendant $attendants
      */
-    public function removeUsersInGradesAndSchoolyear(\Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears)
+    public function removeAttendant(\Babesk\ORM\SystemAttendant $attendants)
     {
-        $this->usersInGradesAndSchoolyears->removeElement($usersInGradesAndSchoolyears);
+        $this->attendants->removeElement($attendants);
     }
 
     /**
-     * Get usersInGradesAndSchoolyears
+     * Get attendants
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getUsersInGradesAndSchoolyears()
+    public function getAttendants()
     {
-        return $this->usersInGradesAndSchoolyears;
+        return $this->attendants;
     }
 
     /**
@@ -765,6 +771,39 @@ class SystemUsers
     }
 
     /**
+     * Add booksToLend
+     *
+     * @param \Babesk\ORM\SchbasUserShouldLendBook $booksToLend
+     * @return SystemUsers
+     */
+    public function addBooksToLend(\Babesk\ORM\SchbasUserShouldLendBook $booksToLend)
+    {
+        $this->booksToLend[] = $booksToLend;
+
+        return $this;
+    }
+
+    /**
+     * Remove booksToLend
+     *
+     * @param \Babesk\ORM\SchbasUserShouldLendBook $booksToLend
+     */
+    public function removeBooksToLend(\Babesk\ORM\SchbasUserShouldLendBook $booksToLend)
+    {
+        $this->booksToLend->removeElement($booksToLend);
+    }
+
+    /**
+     * Get booksToLend
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBooksToLend()
+    {
+        return $this->booksToLend;
+    }
+
+    /**
      * Set priceGroup
      *
      * @param \Babesk\ORM\BabeskPriceGroups $priceGroup
@@ -884,43 +923,5 @@ class SystemUsers
     public function getSelfpayingBooks()
     {
         return $this->selfpayingBooks;
-    }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $booksToLend;
-
-
-    /**
-     * Add booksToLend
-     *
-     * @param \Babesk\ORM\SchbasUserShouldLendBook $booksToLend
-     * @return SystemUsers
-     */
-    public function addBooksToLend(\Babesk\ORM\SchbasUserShouldLendBook $booksToLend)
-    {
-        $this->booksToLend[] = $booksToLend;
-
-        return $this;
-    }
-
-    /**
-     * Remove booksToLend
-     *
-     * @param \Babesk\ORM\SchbasUserShouldLendBook $booksToLend
-     */
-    public function removeBooksToLend(\Babesk\ORM\SchbasUserShouldLendBook $booksToLend)
-    {
-        $this->booksToLend->removeElement($booksToLend);
-    }
-
-    /**
-     * Get booksToLend
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getBooksToLend()
-    {
-        return $this->booksToLend;
     }
 }

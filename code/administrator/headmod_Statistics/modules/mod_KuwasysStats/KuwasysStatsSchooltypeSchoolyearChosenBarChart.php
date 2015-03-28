@@ -44,7 +44,7 @@ class KuwasysStatsSchooltypeSchoolyearChosenBarChart
 				-- Fetch how many classes the user has chosen
 				INNER JOIN (
 					SELECT COUNT(*) AS classesChosen, uigs.gradeId AS gradeId
-					FROM SystemUsersInGradesAndSchoolyears uigs
+					FROM SystemAttendants uigs
 						INNER JOIN KuwasysUsersInClassesAndCategories uicc
 							ON uigs.userId = uicc.UserID
 						INNER JOIN KuwasysClasses c

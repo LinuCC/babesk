@@ -207,7 +207,7 @@ class MessageMainMenu extends Messages {
 				FROM SystemUsers u
 				JOIN MessageReceivers mr ON mr.userId = u.ID
 				JOIN MessageMessages m ON mr.messageId = m.ID AND m.ID = ?
-				LEFT JOIN SystemUsersInGradesAndSchoolyears uigs ON
+				LEFT JOIN SystemAttendants uigs ON
 					uigs.userId = u.ID AND
 					uigs.schoolyearId = @activeSchoolyear
 				LEFT JOIN SystemGrades g ON g.ID = uigs.gradeId

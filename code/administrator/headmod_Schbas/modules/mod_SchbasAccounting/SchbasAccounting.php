@@ -219,7 +219,7 @@ class SchbasAccounting extends Schbas {
 	private function showUsers () {
 		$schoolyearDesired = TableMng::query('SELECT ID FROM SystemSchoolyears WHERE active = 1');
 		$schoolyearID = $schoolyearDesired[0]['ID'];
-		$gradeID = TableMng::query("SELECT DISTINCT gradeID FROM SystemUsersInGradesAndSchoolyears WHERE schoolyearID = $schoolyearID");
+		$gradeID = TableMng::query("SELECT DISTINCT gradeID FROM SystemAttendants WHERE schoolyearID = $schoolyearID");
 		foreach ($gradeID as $grade){
 			$ID = $grade['gradeID'];
 			$SaveTheCows = TableMng::query("SELECT * FROM SystemGrades WHERE ID = $ID");
@@ -256,7 +256,7 @@ class SchbasAccounting extends Schbas {
 
 	private function addGradeLabelToUsers ($users) {
 
-		$jointsUsersInGrade = TableMng::query('SELECT * FROM SystemUsersInGradesAndSchoolyears');
+		$jointsUsersInGrade = TableMng::query('SELECT * FROM SystemAttendants');
 		$grades = TableMng::query('SELECT * FROM SystemGrades');
 		if (isset($users) && count ($users) && isset($jointsUsersInGrade) && count ($jointsUsersInGrade)) {
 			foreach ($users as & $user) {
@@ -369,7 +369,7 @@ class SchbasAccounting extends Schbas {
 			try{
 				$schoolyearDesired = TableMng::query('SELECT ID FROM SystemSchoolyears WHERE active = 1');
 				$schoolyearID = $schoolyearDesired[0]['ID'];
-				$gradeID = TableMng::query(sprintf("SELECT GradeID FROM SystemUsersInGradesAndSchoolyears WHERE UserID = '$id' AND schoolyearID = $schoolyearID"));
+				$gradeID = TableMng::query(sprintf("SELECT GradeID FROM SystemAttendants WHERE UserID = '$id' AND schoolyearID = $schoolyearID"));
 				$gradeIDtemp = (int)$gradeID[0]['GradeID'];
 				$gradelevel = TableMng::query(sprintf("SELECT gradelevel FROM SystemGrades WHERE ID = $gradeIDtemp"));
 				$grade = $gradelevel[0]['gradelevel'];
@@ -398,7 +398,7 @@ class SchbasAccounting extends Schbas {
 
 	private function getStudentIDsOfClass($gradeId){
 		$ids = TableMng::query("SELECT userId
-			FROM SystemUsersInGradesAndSchoolyears uigs
+			FROM SystemAttendants uigs
 			JOIN SystemSchoolyears s ON uigs.schoolyearId = s.ID
 			WHERE gradeId='$gradeId' AND s.active = true
 		");

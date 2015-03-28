@@ -36,7 +36,7 @@ class AssignUsersInClassParticipationConfirmation
 				CONCAT(g.gradelevel, g.label) AS gradeName,
 				IF(c.ID, CONCAT(u.ID, "-", c.ID), CONCAT(u.ID, "-")) AS grouper
 			FROM SystemUsers u
-				JOIN SystemUsersInGradesAndSchoolyears uigs ON uigs.userId = u.ID
+				JOIN SystemAttendants uigs ON uigs.userId = u.ID
 				JOIN SystemSchoolyears sy ON sy.ID = uigs.SchoolYearID
 				JOIN KuwasysTemporaryRequestsAssign uic
 					ON u.ID = uic.userId AND (

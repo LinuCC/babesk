@@ -118,8 +118,8 @@ Babesk\ORM\SystemUsers:
                         columnDefinition: null
                         referencedColumnName: id
     oneToMany:
-        usersInGradesAndSchoolyears:
-            targetEntity: Babesk\ORM\SystemUsersInGradesAndSchoolyears
+        attendants:
+            targetEntity: Babesk\ORM\SystemAttendant
             mappedBy: user
         usersInClassesAndCategories:
             targetEntity: Babesk\ORM\UserInClassAndCategory
@@ -150,4 +150,3 @@ Babesk\ORM\SystemUsers:
         schbasAccounting:
             targetEntity: Babesk\ORM\SchbasAccounting
             mappedBy: user
-    lifecycleCallbacks: {  }

@@ -48,6 +48,7 @@ templates_c
 ##########################
 databaseValues.php
 tmpFiles
+/code/include/models/Proxies/*.php
 
 #Backups#
 #########

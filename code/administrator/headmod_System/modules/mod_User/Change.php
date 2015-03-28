@@ -250,7 +250,7 @@ class Change extends \User
 
 		if(count($requestedRows)) {
 			$addStmt = $this->_pdo->prepare(
-				'INSERT INTO SystemUsersInGradesAndSchoolyears
+				'INSERT INTO SystemAttendants
 					(userId, gradeId, schoolyearId) VALUES (?, ?, ?)
 			');
 			foreach($requestedRows as $requestedRow) {
@@ -265,7 +265,7 @@ class Change extends \User
 		}
 		if(count($existingRows)) {
 			$deleteStmt = $this->_pdo->prepare(
-				'DELETE FROM SystemUsersInGradesAndSchoolyears
+				'DELETE FROM SystemAttendants
 					WHERE userId = ? AND gradeId = ? AND schoolyearId = ?;
 			');
 			foreach($existingRows as $existingRow) {

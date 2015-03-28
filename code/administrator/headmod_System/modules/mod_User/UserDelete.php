@@ -79,7 +79,7 @@ class UserDelete {
 			LEFT JOIN (
 					SELECT g.gradelevel AS gradelevel, g.label AS label,
 						uigs.userId AS userId
-					FROM SystemUsersInGradesAndSchoolyears uigs
+					FROM SystemAttendants uigs
 					JOIN SystemGrades g ON uigs.gradeId = g.ID
 					WHERE uigs.schoolyearId = @activeSchoolyear
 				) g ON g.userId = u.ID
@@ -128,8 +128,8 @@ class UserDelete {
 			$querys .= "DELETE FROM KuwasysUsersInClasses WHERE UserID = $uid;";
 		}
 		if(count(TableMng::query(
-			'SHOW TABLES LIKE "SystemUsersInGradesAndSchoolyears";'))) {
-			$querys .= "DELETE FROM SystemUsersInGradesAndSchoolyears
+			'SHOW TABLES LIKE "SystemAttendants";'))) {
+			$querys .= "DELETE FROM SystemAttendants
 				WHERE userId = $uid;";
 		}
 		if(count(TableMng::query(

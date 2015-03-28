@@ -464,7 +464,7 @@ class UserDisplayAllQueryCreator {
 				'CONCAT(ga.gradelevel, "-", ga.label) AS `activeGrade`'
 			);
 			$this->addJoinStatement('
-				LEFT JOIN SystemUsersInGradesAndSchoolyears uigsag
+				LEFT JOIN SystemAttendants uigsag
 					ON uigsag.schoolyearId = @activeSchoolyear
 					AND uigsag.userId = u.ID
 				LEFT JOIN SystemGrades ga ON ga.ID = uigsag.gradeId
@@ -502,7 +502,7 @@ class UserDisplayAllQueryCreator {
 
 		if(!$this->_usersInGradesAndSchoolyearsQueryDone) {
 			$this->addJoinStatement('
-				LEFT JOIN SystemUsersInGradesAndSchoolyears uigs
+				LEFT JOIN SystemAttendants uigs
 					ON uigs.userId = u.ID
 			');
 			$this->_usersInGradesAndSchoolyearsQueryDone = true;
