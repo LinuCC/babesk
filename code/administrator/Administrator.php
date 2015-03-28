@@ -49,15 +49,6 @@ class Administrator {
 		catch(MySQLConnectionException $e) {
 			die('Sorry, could not connect to the database.');
 		}
-		$this->test();
-	}
-
-	public function test() {
-
-		require_once PATH_INCLUDE . '/Schbas/Loan.php';
-		$loan = new \Babesk\Schbas\Loan($this->dataContainerCreate());
-		$loan->loanBooksCalculate();
-		die('schinken');
 	}
 
 	////////////////////////////////////////////////////////////////////////
