@@ -200,7 +200,7 @@ class Loan {
 			$userQuery = $this->_em->createQuery(
 				'SELECT partial u.{id}, uigs, partial g.{id, gradelevel}
 				FROM DM:SystemUsers u
-				INNER JOIN u.usersInGradesAndSchoolyears uigs
+				INNER JOIN u.attendants uigs
 				INNER JOIN uigs.schoolyear sy WITH sy.active = true
 				INNER JOIN uigs.grade g
 			');
@@ -228,14 +228,10 @@ class Loan {
 
 		foreach($books as $book) {
 			foreach($users as $user) {
-				$grade = $user->getUsersInGradesAndSchoolyears()
+				$grade = $user->getAttendants()
 					->first()
 					->getGrade();
 				if(!$grade) {
-					var_dump($user->getId());
-					var_dump(count($user->getUsersInGradesAndSchoolyears()));
-					var_dump($grade);
-					die();
 					continue;
 				}
 				$gradelevel = $grade->getGradelevel();
@@ -254,30 +250,6 @@ class Loan {
 		}
 
 		$this->_em->flush();
-
-		// foreach($books as $book) {
-		// 	foreach($users as $user) {
-		// 		$validClasses =
-		// 			$this->_gradelevelIsbnIdentAssoc[$user['gradelevel']];
-		// 		if(!$validClasses) {
-		// 			continue;
-		// 		}
-		// 		if(in_array($book['class'], $validClasses)) {
-		// 			$entry = new \Babesk\ORM\SchbasUserShouldLendBook();
-		// 			$userObj = $this->_em->getReference(
-		// 				'DM:SystemUsers', $user['id']
-		// 			);
-		// 			$bookObj = $this->_em->getReference(
-		// 				'DM:SchbasBook', $book['id']
-		// 			);
-		// 			$entry->setUser($userObj);
-		// 			$entry->setBook($bookObj);
-		// 			$entry->setSchoolyear($preparationSchoolyear);
-		// 			$this->_em->persist($entry);
-		// 		}
-		// 	}
-		// }
-		// $this->_em->flush();
 	}
 
 	/////////////////////////////////////////////////////////////////////
