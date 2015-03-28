@@ -49,6 +49,90 @@ class Administrator {
 		catch(MySQLConnectionException $e) {
 			die('Sorry, could not connect to the database.');
 		}
+		$this->test();
+	}
+
+	public function test() {
+
+		// Test a bug with doctrine
+
+		// $query = $this->_em->createQuery(
+		// 	'SELECT l, inv
+		// 	FROM DM:SchbasLending l
+		// 	INNER JOIN l.inventory inv
+		// ');
+		// $query->setHint(
+		// 	\Doctrine\ORM\Query::HINT_FORCE_PARTIAL_LOAD, true
+		// );
+		// $lendings = $query->getResult();
+		// $counter = 0;
+		// echo('LendingCount: ' . count($lendings) . '<br>');
+		// // foreach($lendings as $user) {
+		// 	$lendings = $lendings;
+		// 	if(isset($lendings)) {
+		// 		foreach($lendings as $lending) {
+		// 			$counter++;
+		// 			if(isset($lending)) {
+		// 				$inventory = $lending->getInventory();
+		// 				if(!isset($inventory)) {
+		// 					echo($counter . '<br>');
+		// 					die('Null in Inventory');
+		// 				}
+		// 			}
+		// 			else {
+		// 				die('Null in lending');
+		// 			}
+		// 		}
+		// 	}
+		// 	else {
+		// 		die('Null in lending-||ARRAY||');
+		// 	}
+		// // }
+		// die('All clear');
+
+
+
+		$query = $this->_em->createQuery(
+			'SELECT uigs, sy
+			FROM DM:SystemUsersInGradesAndSchoolyears uigs
+			INNER JOIN uigs.schoolyear sy
+		');
+		$query->setHint(
+			\Doctrine\ORM\Query::HINT_FORCE_PARTIAL_LOAD, true
+		);
+		$users = $query->getResult();
+		$counter = 0;
+		echo('Usercount: ' . count($users) . '<br>');
+		// foreach($users as $user) {
+			$uigss = $users;
+			if(isset($uigss)) {
+				foreach($uigss as $uigs) {
+					$counter++;
+					if(isset($uigs)) {
+						$sy = $uigs->getSchoolyear();
+						if(!isset($sy)) {
+							echo($counter . '<br>');
+							die('Null in SY');
+						}
+					}
+					else {
+						die('Null in uigs');
+					}
+				}
+			}
+			else {
+				die('Null in uigs-||ARRAY||');
+			}
+		// }
+		die('All clear');
+
+		// ---
+
+
+		require_once PATH_INCLUDE . '/Schbas/Loan.php';
+		$loan = new \Babesk\Schbas\Loan($this->dataContainerCreate());
+		$loan->loanBooksCalculate();
+		die('schinken');
 	}
 
 	////////////////////////////////////////////////////////////////////////

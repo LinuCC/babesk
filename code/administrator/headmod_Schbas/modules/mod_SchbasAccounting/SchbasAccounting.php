@@ -140,7 +140,7 @@ class SchbasAccounting extends Schbas {
 			$user = $this->_em->find('DM:SystemUsers', $uid);
 			$count = $this->_em->createQuery(
 				'SELECT COUNT(u) FROM DM:SystemUsers u
-					JOIN u.usersInGradesAndSchoolyears uigs
+					JOIN u.attendants uigs
 					JOIN uigs.schoolyear s WITH s.active = 1
 					WHERE u.id = :userId
 			')->setParameter('userId', $uid)

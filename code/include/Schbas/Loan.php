@@ -36,6 +36,7 @@ class Loan {
 	 */
 	public function gradelevel2IsbnIdent($gradelevel) {
 
+		die('Möglicherweise veraltete Funktion, überarbeiten.');
 		if(!empty($this->_gradelevelIsbnIdentAssoc[$gradelevel])) {
 			return $this->_gradelevelIsbnIdentAssoc[$gradelevel];
 		}
@@ -51,6 +52,7 @@ class Loan {
 	 */
 	public function isbnIdent2Gradelevel($ident) {
 
+		die('Möglicherweise veraltete Funktion, überarbeiten.');
 		$gradelevels = array();
 		//Extract possible gradelevels
 		foreach($this->_gradelevelIsbnIdentAssoc as $gradelevel => $idents) {
@@ -74,6 +76,7 @@ class Loan {
 	 */
 	public function bookLoanPriceCalculate($flatPrice, $class) {
 
+		die('Möglicherweise veraltete Funktion, überarbeiten.');
 		if(isset($this->_classToPriceFactor[$class])) {
 			$factor = $this->_classToPriceFactor[$class];
 			$loanPrice = $flatPrice / $factor / 3;
@@ -92,6 +95,7 @@ class Loan {
 	 */
 	public function bookReducedLoanPriceCalculate($flatPrice, $class) {
 
+		die('Möglicherweise veraltete Funktion, überarbeiten.');
 		if(isset($this->_classToPriceFactor[$class])) {
 			$factor = $this->_classToPriceFactor[$class];
 			$loanPrice = $flatPrice / $factor / 3 * 0.8;
@@ -110,6 +114,7 @@ class Loan {
 	 */
 	public function loanPriceOfAllBooksOfGradelevelCalculate($gradelevel) {
 
+		die('Möglicherweise veraltete Funktion, überarbeiten.');
 		$classes = $this->_gradelevelIsbnIdentAssoc[$gradelevel];
 		$bookQuery = $this->_em
 			->createQueryBuilder()
@@ -144,6 +149,7 @@ class Loan {
 	 */
 	public function loanPriceOfAllBooksOfUserCalculate($userId) {
 
+		die('Möglicherweise veraltete Funktion, überarbeiten.');
 		$books = $this->loanBooksGet($userId);
 		$feeNormal = 0.00;
 		$feeReduced = 0.00;
@@ -164,6 +170,7 @@ class Loan {
 
 	public function loanBooksGet($userId) {
 
+		die('Möglicherweise veraltete Funktion, überarbeiten.');
 		$books = array();
 		$notLendBooks = $this->booksNotLendToUserByHisGradelevelGet($userId);
 		if(!empty($notLendBooks)) {
@@ -177,9 +184,126 @@ class Loan {
 		return $books;
 	}
 
+	/**
+	 * Calculates the books the users should lend.
+	 * @todo  Check for existing assignments for the schoolyear
+	 */
+	public function loanBooksCalculate() {
+
+		$preparationSchoolyear = $this->schbasPreparationSchoolyearGet();
+		if(!$preparationSchoolyear) {
+			$this->_logger->log('Vorbereitungsschuljahr nicht gesetzt.');
+			return false;
+		}
+		// Fetch the users
+		try {
+			$userQuery = $this->_em->createQuery(
+				'SELECT partial u.{id}, uigs, partial g.{id, gradelevel}
+				FROM DM:SystemUsers u
+				INNER JOIN u.usersInGradesAndSchoolyears uigs
+				INNER JOIN uigs.schoolyear sy WITH sy.active = true
+				INNER JOIN uigs.grade g
+			');
+			//Silly doctrine, dont lazy-load oneToOne-entries automatically
+			$userQuery->setHint(
+				\Doctrine\ORM\Query::HINT_FORCE_PARTIAL_LOAD, true
+			);
+			$users = $userQuery->getResult();
+		} catch (\Doctrine\ORM\Query\QueryException $e) {
+			$this->_logger->log('Could not fetch the users');
+			return false;
+		}
+		// Fetch the books
+		try {
+			$bookQuery = $this->_em->createQuery(
+				'SELECT partial b.{id, class} FROM DM:SchbasBook b'
+			);
+			$books = $bookQuery->getResult();
+		} catch (\Doctrine\ORM\Query\QueryException $e) {
+			$this->_logger->log('Could not fetch the books');
+			return false;
+		}
+		// Create new entries
+		$entries = array();
+
+		foreach($books as $book) {
+			foreach($users as $user) {
+				$grade = $user->getUsersInGradesAndSchoolyears()
+					->first()
+					->getGrade();
+				if(!$grade) {
+					var_dump($user->getId());
+					var_dump(count($user->getUsersInGradesAndSchoolyears()));
+					var_dump($grade);
+					die();
+					continue;
+				}
+				$gradelevel = $grade->getGradelevel();
+				if(!empty($this->_gradelevelIsbnIdentAssoc[$gradelevel])) {
+					$validClasses =
+						$this->_gradelevelIsbnIdentAssoc[$gradelevel];
+					if(in_array($book->getClass(), $validClasses)) {
+						$entry = new \Babesk\ORM\SchbasUserShouldLendBook();
+						$entry->setUser($user);
+						$entry->setBook($book);
+						$entry->setSchoolyear($preparationSchoolyear);
+						$this->_em->persist($entry);
+					}
+				}
+			}
+		}
+
+		$this->_em->flush();
+
+		// foreach($books as $book) {
+		// 	foreach($users as $user) {
+		// 		$validClasses =
+		// 			$this->_gradelevelIsbnIdentAssoc[$user['gradelevel']];
+		// 		if(!$validClasses) {
+		// 			continue;
+		// 		}
+		// 		if(in_array($book['class'], $validClasses)) {
+		// 			$entry = new \Babesk\ORM\SchbasUserShouldLendBook();
+		// 			$userObj = $this->_em->getReference(
+		// 				'DM:SystemUsers', $user['id']
+		// 			);
+		// 			$bookObj = $this->_em->getReference(
+		// 				'DM:SchbasBook', $book['id']
+		// 			);
+		// 			$entry->setUser($userObj);
+		// 			$entry->setBook($bookObj);
+		// 			$entry->setSchoolyear($preparationSchoolyear);
+		// 			$this->_em->persist($entry);
+		// 		}
+		// 	}
+		// }
+		// $this->_em->flush();
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Returns the schoolyear for which schbas is getting prepared
+	 * @return \Babesk\ORM\SystemSchoolyears on success or a false value
+	 */
+	protected function schbasPreparationSchoolyearGet() {
+
+		$sySetting = $this->_em->getRepository('DM:SystemGlobalSettings')
+			->findOneByName('schbasPreparationSchoolyearId');
+		//Add entry if not existing
+		if(!$sySetting) {
+			$sySetting = new \Babesk\ORM\SystemGlobalSettings();
+			$sySetting->setName('schbasPreparationSchoolyearId');
+			$sySetting->setValue('');
+			$this->_em->persist($sySetting);
+			$this->_em->flush();
+		}
+		$syEntry = $this->_em->getRepository('DM:SystemSchoolyears')
+			->findOneById($sySetting->getValue());
+		return $syEntry;
+	}
 
 	protected function entryPoint($dataContainer) {
 
