@@ -1,0 +1,103 @@
+Rename path web/headmod_Schbas for #12
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch schbas-rework
+# Changes to be committed:
+#	renamed:    code/smarty_templates/web/headmod_Schbas/modules/mod_LoanSystem/lastGrade.tpl -> code/smarty_templates/web/Schbas/LoanSystem/lastGrade.tpl
+#	renamed:    code/smarty_templates/web/headmod_Schbas/modules/mod_LoanSystem/loanList.tpl -> code/smarty_templates/web/Schbas/LoanSystem/loanList.tpl
+#	renamed:    code/smarty_templates/web/headmod_Schbas/modules/mod_LoanSystem/loanSystem.tpl.old -> code/smarty_templates/web/Schbas/LoanSystem/loanSystem.tpl.old
+#	renamed:    code/smarty_templates/web/headmod_Schbas/modules/mod_LoanSystem/menu.tpl -> code/smarty_templates/web/Schbas/LoanSystem/menu.tpl
+#	renamed:    code/smarty_templates/web/headmod_Schbas/modules/mod_LoanSystem/saved.tpl -> code/smarty_templates/web/Schbas/LoanSystem/saved.tpl
+#	renamed:    code/web/headmod_Schbas/modules/mod_LoanSystem/LoanSystem.php -> code/web/Schbas/LoanSystem/LoanSystem.php
+#	renamed:    code/web/headmod_Schbas/modules/mod_LoanSystem/LoanSystemPdf.php -> code/web/Schbas/LoanSystem/LoanSystemPdf.php
+#	renamed:    code/web/headmod_Schbas/Schbas.php -> code/web/Schbas/Schbas.php
+#	new file:   dbv/data/revisions/47/renameModulePaths_WebSchbas.sql
+#
+# ------------------------ >8 ------------------------
+# Do not touch the line above.
+# Everything below will be removed.
+diff --git a/code/smarty_templates/web/headmod_Schbas/modules/mod_LoanSystem/lastGrade.tpl b/code/smarty_templates/web/Schbas/LoanSystem/lastGrade.tpl
+similarity index 100%
+rename from code/smarty_templates/web/headmod_Schbas/modules/mod_LoanSystem/lastGrade.tpl
+rename to code/smarty_templates/web/Schbas/LoanSystem/lastGrade.tpl
+diff --git a/code/smarty_templates/web/headmod_Schbas/modules/mod_LoanSystem/loanList.tpl b/code/smarty_templates/web/Schbas/LoanSystem/loanList.tpl
+similarity index 100%
+rename from code/smarty_templates/web/headmod_Schbas/modules/mod_LoanSystem/loanList.tpl
+rename to code/smarty_templates/web/Schbas/LoanSystem/loanList.tpl
+diff --git a/code/smarty_templates/web/headmod_Schbas/modules/mod_LoanSystem/loanSystem.tpl.old b/code/smarty_templates/web/Schbas/LoanSystem/loanSystem.tpl.old
+similarity index 100%
+rename from code/smarty_templates/web/headmod_Schbas/modules/mod_LoanSystem/loanSystem.tpl.old
+rename to code/smarty_templates/web/Schbas/LoanSystem/loanSystem.tpl.old
+diff --git a/code/smarty_templates/web/headmod_Schbas/modules/mod_LoanSystem/menu.tpl b/code/smarty_templates/web/Schbas/LoanSystem/menu.tpl
+similarity index 100%
+rename from code/smarty_templates/web/headmod_Schbas/modules/mod_LoanSystem/menu.tpl
+rename to code/smarty_templates/web/Schbas/LoanSystem/menu.tpl
+diff --git a/code/smarty_templates/web/headmod_Schbas/modules/mod_LoanSystem/saved.tpl b/code/smarty_templates/web/Schbas/LoanSystem/saved.tpl
+similarity index 100%
+rename from code/smarty_templates/web/headmod_Schbas/modules/mod_LoanSystem/saved.tpl
+rename to code/smarty_templates/web/Schbas/LoanSystem/saved.tpl
+diff --git a/code/web/headmod_Schbas/modules/mod_LoanSystem/LoanSystem.php b/code/web/Schbas/LoanSystem/LoanSystem.php
+similarity index 99%
+rename from code/web/headmod_Schbas/modules/mod_LoanSystem/LoanSystem.php
+rename to code/web/Schbas/LoanSystem/LoanSystem.php
+index e4ce419..91c7068 100644
+--- a/code/web/headmod_Schbas/modules/mod_LoanSystem/LoanSystem.php
++++ b/code/web/Schbas/LoanSystem/LoanSystem.php
+@@ -3,7 +3,7 @@
+ require_once PATH_INCLUDE . '/Module.php';
+ require_once PATH_INCLUDE . '/Schbas/Loan.php';
+ require_once PATH_WEB . '/WebInterface.php';
+-require_once PATH_WEB . '/headmod_Schbas/Schbas.php';
++require_once PATH_WEB . '/Schbas/Schbas.php';
+ 
+ class LoanSystem extends Schbas {
+ 
+diff --git a/code/web/headmod_Schbas/modules/mod_LoanSystem/LoanSystemPdf.php b/code/web/Schbas/LoanSystem/LoanSystemPdf.php
+similarity index 98%
+rename from code/web/headmod_Schbas/modules/mod_LoanSystem/LoanSystemPdf.php
+rename to code/web/Schbas/LoanSystem/LoanSystemPdf.php
+index 45b68a0..746bf3c 100644
+--- a/code/web/headmod_Schbas/modules/mod_LoanSystem/LoanSystemPdf.php
++++ b/code/web/Schbas/LoanSystem/LoanSystemPdf.php
+@@ -94,7 +94,7 @@ class LoanSystemPdf {
+ 	 */
+ 	protected function pdfMetadataSet() {
+ 
+-		$logoPath = '../../../../web/headmod_Messages/modules/mod_MessageMainMenu/logo.jpg';
++		$logoPath = '../../../../web/Messages/MessageMainMenu/logo.jpg';
+ 		$headerText = sprintf("Schulbuchausleihe 1.0\nJahrgang: %s", $this->_gradeLevel);
+ 
+ 		$this->docInformationSet('LeG Uelzen');
+diff --git a/code/web/headmod_Schbas/Schbas.php b/code/web/Schbas/Schbas.php
+similarity index 100%
+rename from code/web/headmod_Schbas/Schbas.php
+rename to code/web/Schbas/Schbas.php
+diff --git a/dbv/data/revisions/47/renameModulePaths_WebSchbas.sql b/dbv/data/revisions/47/renameModulePaths_WebSchbas.sql
+new file mode 100644
+index 0000000..3d6f6ff
+--- /dev/null
++++ b/dbv/data/revisions/47/renameModulePaths_WebSchbas.sql
+@@ -0,0 +1,22 @@
++-- Schbas
++SELECT 0 INTO @moduleId;
++CALL moduleGetByPath(
++	'Schbas',
++	'root/web/Schbas',
++	@moduleId
++);
++UPDATE `SystemModules`
++	SET `executablePath` = "web/Schbas/Schbas.php"
++	WHERE `ID` = @moduleId;
++
++-- LoanSystem
++SELECT 0 INTO @moduleId;
++CALL moduleGetByPath(
++	'LoanSystem',
++	'root/web/Schbas/LoanSystem',
++	@moduleId
++);
++UPDATE `SystemModules`
++	SET `executablePath` =
++		"web/Schbas/LoanSystem/LoanSystem.php"
++	WHERE `ID` = @moduleId;
+\ No newline at end of file

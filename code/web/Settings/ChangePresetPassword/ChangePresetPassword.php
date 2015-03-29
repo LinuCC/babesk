@@ -1,6 +1,6 @@
 <?php
 
-require_once PATH_WEB . '/headmod_Settings/Settings.php';
+require_once PATH_WEB . '/Settings/Settings.php';
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_WEB . '/WebInterface.php';
