@@ -1,7 +1,7 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
-require_once PATH_ADMIN . '/headmod_Babesk/Babesk.php';
+require_once PATH_ADMIN . '/Babesk/Babesk.php';
 
 class Recharge extends Babesk {
 
