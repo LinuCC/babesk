@@ -1,7 +1,7 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
-require_once PATH_ADMIN . '/headmod_Schbas/Schbas.php';
+require_once PATH_ADMIN . '/Schbas/Schbas.php';
 
 class SchbasAccounting extends Schbas {
 
