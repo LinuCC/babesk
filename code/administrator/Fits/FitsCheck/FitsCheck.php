@@ -1,7 +1,7 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
-require_once PATH_ADMIN . '/headmod_Fits/Fits.php';
+require_once PATH_ADMIN . '/Fits/Fits.php';
 
 class FitsCheck extends Fits {
 
