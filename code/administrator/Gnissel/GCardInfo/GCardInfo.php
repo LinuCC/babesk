@@ -1,7 +1,7 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
-require_once PATH_ADMIN . '/headmod_Gnissel/Gnissel.php';
+require_once PATH_ADMIN . '/Gnissel/Gnissel.php';
 
 class GCardInfo extends Gnissel {
 
