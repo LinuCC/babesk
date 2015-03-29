@@ -1,17 +1,15 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
-require_once PATH_ADMIN . '/headmod_Statistics/Statistics.php';
-defined('PATH_STATISTICS_CHART')
-OR define('PATH_STATISTICS_CHART', realpath(dirname(__FILE__) . '/../..'));
+require_once PATH_ADMIN . '/Statistics/Statistics.php';
 
+defined('PATH_STATISTICS_CHART')
+	OR define('PATH_STATISTICS_CHART', realpath(dirname(__FILE__) . '/../..'));
 
 /**
- * Analyzes data of the headmodule Message and puts them out as statistics
- *
- * @author Mirek Hancl <mirek@hancl.de>
+ * Analyzes data of the headmodule Kuwasys and puts them out as statistics
  */
-class MessageStats extends Statistics {
+class KuwasysStats extends Statistics {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -31,7 +29,18 @@ class MessageStats extends Statistics {
 
 		$this->entryPoint($dataContainer);
 
-
+		if(
+			isset($_POST['chartName']) &&
+			$_POST['chartName'] == 'votesPerCategoryPerSchooltypeAndGrade'
+		) {
+			$mod = new \ModuleExecutionCommand(
+					'root/administrator/Statistics/KuwasysStats/' .
+					'VotesPerCategoryPerSchooltypeAndGrade'
+				);
+			$this->_acl->moduleExecute($mod, $this->_dataContainer);
+			die();
+		}
+					// $this->test2();
 		if(isset($_GET['action'])) {
 			switch($_GET['action']) {
 				case 'chooseChart':
@@ -55,7 +64,7 @@ class MessageStats extends Statistics {
 
 	protected function entryPoint($dataContainer) {
 
-		defined('_AEXEC') or die("Access denied");
+		parent::entryPoint($dataContainer);
 
 		$this->_smarty = $dataContainer->getSmarty();
 		$this->_interface = $dataContainer->getInterface();
@@ -83,9 +92,33 @@ class MessageStats extends Statistics {
 		require_once PATH_3RD_PARTY . '/pChart/pImage.class.php';
 
 		switch ($switch) {
-			case 'savedCopiesByTeachers':
-				require_once 'MessageStatSavedCopiesByTeacher.php';
-				$chart = new MessageStatSavedCopiesByTeacher();
+			case 'gradesChosen':
+				require_once 'KuwasysStatsGradesChosenBarChart.php';
+				$chart = new KuwasysStatsGradesChosenBarChart();
+				break;
+			case 'gradelevelsChosen':
+				require_once 'KuwasysStatsGradelevelsChosenBarChart.php';
+				$chart = new KuwasysStatsGradelevelsChosenBarChart();
+				break;
+			case 'usersChosenInSchoolyears':
+				require_once 'KuwasysStatsUsersChosenBySchoolyearBarChart.php';
+				$chart = new KuwasysStatsUsersChosenBySchoolyearBarChart();
+				break;
+			case 'classesChosenInSchoolyears':
+				require_once
+					'KuwasysStatsClassesChosenBySchoolyearBarChart.php';
+				$chart =
+					new KuwasysStatsClassesChosenBySchoolyearBarChart();
+				break;
+			case 'byUsersChosenInSchooltypeAndYeargroup':
+				require_once
+					'KuwasysStatsSchooltypeSchoolyearChosenBarChart.php';
+				$chart = new KuwasysStatsSchooltypeSchoolyearChosenBarChart();
+				break;
+			case 'allUsersInSchooltypes':
+				require_once
+					'KuwasysStatsUsersChosenStackedBarChart.php';
+				$chart = new KuwasysStatsUsersChosenStackedBarChart();
 				break;
 			default:
 				die('Wrong Chart-Switch given');
@@ -109,7 +142,9 @@ class MessageStats extends Statistics {
 			$chart->imageDisplay();
 
 		} catch (Exception $e) {
-			$this->_interface->dieError('Konnte die Statistik nicht auswerten');
+			$this->_logger->log('Error analyzing the statistics',
+				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
+			$this->_interface->dieError(_g('Error analyzing the statistics!'));
 		}
 	}
 

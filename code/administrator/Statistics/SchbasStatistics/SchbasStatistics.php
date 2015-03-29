@@ -1,7 +1,7 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
-require_once PATH_ADMIN . '/headmod_Statistics/Statistics.php';
+require_once PATH_ADMIN . '/Statistics/Statistics.php';
 require_once PATH_INCLUDE . '/pdf/GeneralPdf.php';
 
 class SchbasStatistics extends Statistics {
