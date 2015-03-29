@@ -1,9 +1,9 @@
 {extends file=$inh_path}{block name=content}
-<div style="float:left">{html_iframe src="headmod_Fits/modules/mod_Quiz/embed.php?uid={$uid}" height=400 width=450}
+<div style="float:left">{html_iframe src="Fits/Quiz/embed.php?uid={$uid}" height=400 width=450}
 </div>
 <div style="height:400px">
-Du hast etwas nicht korrekt beantwortet!<br>
-F&uuml;hre den Test nochmal durch!
+W&auml;hle links das Quiz "F&uuml;hrerschein f&uuml;r IT-Systeme" aus und spiele es durch.
+Gib am Ende das angezeigte Kennwort in das untere Feld ein und klicke auf Senden.
 <form action="index.php?section=Fits|Quiz" method="post">
     <fieldset>
       <label for="passwd">Kennwort:</label>
