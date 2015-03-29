@@ -1,7 +1,7 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
-require_once PATH_WEB . '/headmod_Pvau/Pvau.php';
+require_once PATH_WEB . '/Pvau/Pvau.php';
 
 class Pvp extends Pvau {
 
