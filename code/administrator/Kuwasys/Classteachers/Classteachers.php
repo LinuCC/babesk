@@ -2,7 +2,7 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/gump.php';
-require_once PATH_ADMIN . '/headmod_Kuwasys/Kuwasys.php';
+require_once PATH_ADMIN . '/Kuwasys/Kuwasys.php';
 
 /**
  * Allows the User to change Classteacher-data
