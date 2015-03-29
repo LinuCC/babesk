@@ -2,7 +2,7 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ACCESS . '/GlobalSettingsManager.php';
-require_once PATH_WEB . '/headmod_Kuwasys/Kuwasys.php';
+require_once PATH_WEB . '/Kuwasys/Kuwasys.php';
 
 class ClassDetails extends Kuwasys {
 

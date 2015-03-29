@@ -3,7 +3,7 @@
 namespace web\Kuwasys;
 
 require_once PATH_INCLUDE . '/Module.php';
-require_once PATH_WEB . '/headmod_Kuwasys/Kuwasys.php';
+require_once PATH_WEB . '/Kuwasys/Kuwasys.php';
 
 class ClassList extends \Kuwasys {
 
