@@ -2,7 +2,7 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once 'MessageAdminInterface.php';
-require_once PATH_ADMIN . '/headmod_Messages/Messages.php';
+require_once PATH_ADMIN . '/Messages/Messages.php';
 
 class MessageAdmin extends Messages {
 
