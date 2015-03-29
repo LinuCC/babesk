@@ -1,8 +1,8 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
-require_once PATH_WEB . '/headmod_Messages/MessageFunctions.php';
-require_once PATH_WEB . '/headmod_Messages/Messages.php';
+require_once PATH_WEB . '/Messages/MessageFunctions.php';
+require_once PATH_WEB . '/Messages/Messages.php';
 
 class MessageAdmin extends Messages {
 	/////////////////////////////////////////////////////////////////////
