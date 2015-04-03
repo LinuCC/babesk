@@ -10,6 +10,7 @@ watch = require 'gulp-watch'
 plumber = require 'gulp-plumber'
 header = require 'gulp-header'
 
+# Only bundle files with browserify that are in the subfolder modules.
 bundlePaths =
   src: [
     'code/include/js/modules/**/*.js'
