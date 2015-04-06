@@ -37,6 +37,8 @@ gulp.task 'browserify', watchify((watchify)->
   return gulp.src bundlePaths.src
     .pipe watchify(
       watch: watching
+      # Browserifys baseDir is in code/include/js/modules
+      paths: ['./']
     )
     .pipe streamify(uglify())
     .pipe gulp.dest(bundlePaths.dest)
