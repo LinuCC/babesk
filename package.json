@@ -2,6 +2,8 @@
   "name": "babesk",
   "version": "2.0.0alpha",
   "devDependencies": {
+    "react": "^0.13.1",
+    "react-bootstrap": "^0.20.1",
     "coffee-script": "^1.9.1",
     "gulp": "^3.8.11",
     "gulp-cjsx": "^2.0.0",
