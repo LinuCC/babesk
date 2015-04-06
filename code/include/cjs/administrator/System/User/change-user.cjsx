@@ -1,3 +1,5 @@
+classnames = require 'classnames'
+
 ClassMultiSelectOption = React.createClass(
   render: ->
     <option value={@props.classData.id} >
@@ -86,7 +88,7 @@ Box = React.createClass(
         <ul className="list-group form-horizontal">
           {this.props.data.map(
             (lineData)->
-              className = React.addons.classSet(
+              className = classnames(
                 "list-group-item": true,
                 "list-group-item-success": lineData.schoolyear.isActive
               )
