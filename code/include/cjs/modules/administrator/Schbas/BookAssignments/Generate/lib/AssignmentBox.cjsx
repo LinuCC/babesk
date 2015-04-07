@@ -11,9 +11,12 @@ AssignmentBox = React.createClass(
     return {
       existingAssignmentsAction: 'add-to-existing'
       addGradelevelToUsers: true
+      isLoading: false
     }
 
   handleSubmit: (event)->
+    @setState(isLoading: true)
+    that = @
     $.ajax
       type: 'POST'
       url: 'index.php?module=administrator|Schbas|BookAssignments|Generate'
@@ -21,10 +24,15 @@ AssignmentBox = React.createClass(
         data: @state
       dataType: 'json'
       success: (data, statusText, jqXHR)->
+        that.setState(isLoading: false)
         toastr.success 'Die Zuweisungen wurden erfolgreich generiert.'
       error: (jqXHR, statusText, errorThrown)->
-        toastr.error 'Ein Fehler ist bei der Bearbeitung aufgetreten.'
-        console.log jqXHR
+        that.setState(isLoading: false)
+        if jqXHR.status is 500
+          toastr.error jqXHR.responseText, 'Ein Fehler ist aufgetreten.'
+        else
+          console.log jqXHR
+          toastr.error 'Ein Fehler ist aufgetreten.'
 
   handleExistingAssignmentsAction: (event)->
     @setState(existingAssignmentsAction: event.target.value)
@@ -54,7 +62,8 @@ AssignmentBox = React.createClass(
       </div>
       <AssignmentsTable entries={@props.data.bookAssignmentsForGrades} />
       <div className='panel-footer'>
-        <ActionFooter handleSubmit={@handleSubmit} />
+        <ActionFooter handleSubmit={@handleSubmit}
+          isLoading={@state.isLoading} />
       </div>
     </div>
 )
@@ -121,7 +130,7 @@ AssignmentsTable = React.createClass(
           @props.entries.map(
             (entry)->
               <AssignmentsTableGradeEntry gradelevel={entry.gradelevel}
-                books={entry.books} />
+                books={entry.books} key={entry.gradelevel} />
             , @
           )
         }
@@ -139,17 +148,23 @@ AssignmentsTableGradeEntry = React.createClass(
     # React needs a single point of entrance for the DOM, so we just use
     # tbody to group the rows of a gradelevel together
     <tbody>
-      <tr>
+      <tr key={firstBook.id}>
         <td rowSpan={@props.books.length}>{@props.gradelevel}</td>
         <td>
-          <a href={"#{showBookLink}&id=#{firstBook.id}"}>{firstBook.name}</a>
+          <a href={"#{showBookLink}&id=#{firstBook.id}"}>
+            {firstBook.name}
+          </a>
         </td>
       </tr>
       {
         restBooks.map(
           (book)->
-            <tr>
-              <td><a href={book.link}>{book.name}</a></td>
+            <tr key={book.id}>
+              <td>
+                <a href={"#{showBookLink}&id=#{book.id}"}>
+                  {book.name}
+                </a>
+              </td>
             </tr>
           , @
         )
@@ -159,10 +174,12 @@ AssignmentsTableGradeEntry = React.createClass(
 
 ActionFooter = React.createClass(
   render: ->
+    isLoading = @props.isLoading
     <div>
       <Button className='pull-right' bsStyle='primary'
-        onClick={@props.handleSubmit}>
-        Zuweisungen generieren
+        onClick={@props.handleSubmit if !isLoading}
+        disabled={isLoading}>
+        {if not isLoading then 'Zuweisungen generieren' else 'Lade...'}
       </Button>
       <Button className='pull-left' bsStyle='default'
         href='index.php?module=administrator|Schbas|BookAssignments'>

@@ -219,7 +219,7 @@ class Loan {
 			);
 			$books = $bookQuery->getResult();
 		} catch (\Doctrine\ORM\Query\QueryException $e) {
-			$this->_logger->log('Could not fetch the books');
+			$this->_logger->log('Could not fetch the books', 'error');
 			return false;
 		}
 		// Create new entries
@@ -250,6 +250,7 @@ class Loan {
 		}
 
 		$this->_em->flush();
+		return true;
 	}
 
 	/**

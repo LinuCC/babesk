@@ -19,7 +19,6 @@ $.ajax({
   data: 'overview-infos',
   dataType: 'json',
   success: function(data, statusText, jqXHR) {
-    console.log(data);
     if ((data.value != null) && data.value === 'error') {
       toastr.error('Konnte die Daten nicht abrufen');
       return;

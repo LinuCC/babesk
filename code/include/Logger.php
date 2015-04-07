@@ -99,7 +99,7 @@ class Logger {
 
 		$opt['sev'] = (isset($opt['sev'])) ? $opt['sev'] : 'notice';
 		$opt['cat'] = (isset($opt['cat'])) ? $opt['cat'] : Null;
-		$opt['moreStr'] = (isset($opt['moreStr'])) ? $opt['moreStr'] : Null;
+		$opt['moreStr'] = (isset($opt['moreStr'])) ? $opt['moreStr'] : '';
 		if(isset($opt['moreJson'])) {
 			$opt['moreStr'] = json_encode($opt['moreJson']);
 		}

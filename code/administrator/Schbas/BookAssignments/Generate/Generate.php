@@ -22,7 +22,7 @@ class Generate extends \administrator\Schbas\BookAssignments\BookAssignments {
 			$this->overviewInfosSend();
 		}
 		else if(isset($_POST['data'])) {
-
+			$this->assignmentsCreate($_POST['data']);
 		}
 		else {
 			$this->displayTpl('main.tpl');
@@ -39,6 +39,22 @@ class Generate extends \administrator\Schbas\BookAssignments\BookAssignments {
 		parent::moduleTemplatePathSet();
 	}
 
+
+	/*==========  Overview-infos  ==========*/
+
+	/**
+	 * Sends infos about the automatic assignments to the client
+	 * Dies with a json-string
+	 * {
+	 *     'schoolyear': '<schoolyearName>',
+	 *     'assignmentsForSchoolyearExist': <boolean>,
+	 *     'bookAssignmentsForGrades': [
+	 *         [ { 'gradelevel': '<gradelevel>',
+	 *             'books':      [{'id': '<bookId>', 'name': '<bookName>'}]
+	 *         } ]
+	 *     ]
+	 * }
+	 */
 	protected function overviewInfosSend() {
 
 		$loanBookMan = new \Babesk\Schbas\Loan($this->_dataContainer);
@@ -54,17 +70,35 @@ class Generate extends \administrator\Schbas\BookAssignments\BookAssignments {
 		)));
 	}
 
+	/**
+	 * Checks if assignments for a schoolyear exist
+	 * @param  DM:Object $schoolyear The schoolyear-entry to check for
+	 * @return bool                  true if assignments exist, else false
+	 */
 	protected function assignmentsForSchoolyearExistCheck($schoolyear) {
 
-		$query = $this->_em->createQuery(
-			'SELECT COUNT(usb) FROM DM:SchbasUserShouldLendBook usb
-				WHERE usb.schoolyear = :schoolyear
-		');
-		$query->setParameter('schoolyear', $schoolyear);
-		$res = $query->getOneOrNullResult();
-		return !empty($res);
+		try {
+			$query = $this->_em->createQuery(
+				'SELECT COUNT(usb) FROM DM:SchbasUserShouldLendBook usb
+					WHERE usb.schoolyear = :schoolyear
+			');
+			$query->setParameter('schoolyear', $schoolyear);
+			$res = $query->getOneOrNullResult();
+			return !empty($res);
+
+		} catch(\Exception $e) {
+			$this->_logger->logO('Could not check for existing assignments ' .
+				'in a schoolyear', ['sev' => 'error',
+					'moreJson' => ['syId' => $schoolyear->getId()]
+			]);
+			return false;
+		}
 	}
 
+	/**
+	 * Fetches which books are assigned to which gradelevels
+	 * @return array of gradelevels that contain the books
+	 */
 	protected function booksAssignedToGradelevelsGet() {
 
 		$loanBookMan = new \Babesk\Schbas\Loan($this->_dataContainer);
@@ -93,6 +127,73 @@ class Generate extends \administrator\Schbas\BookAssignments\BookAssignments {
 			);
 		}
 		return $booksInGradelevelsWithoutKeys;
+	}
+
+
+	/*==========  Automatic Assignments  ==========*/
+
+	/**
+	 * Automatically create the assignments.
+	 * Dies with json.
+	 *
+	 * @param  array  $data An array containing options:
+	 *                      {
+	 *                          'existingAssignmentsAction': '<action>',
+	 *                          'addGradelevelToUsers': '<gradelevelIncrease?>'
+	 *                      }
+	 */
+	protected function assignmentsCreate($data) {
+
+		if(
+			empty($data) || !isset($data['existingAssignmentsAction']) ||
+			!isset($data['addGradelevelToUsers'])
+		) {
+			$this->_logger->logO('missing parameters for ' . __METHOD__,
+				['sev' => 'warning']);
+		}
+
+		$loanBookMan = new \Babesk\Schbas\Loan($this->_dataContainer);
+		$sy = $loanBookMan->schbasPreparationSchoolyearGet();
+		$assignmentsExist = $this->assignmentsForSchoolyearExistCheck($sy);
+		if(
+			$assignmentsExist &&
+			$data['existingAssignmentsAction'] == 'delete-existing'
+		) {
+			$this->deleteExistingAssignmentsForSchoolyear($sy);
+		}
+		$res = $loanBookMan->loanBooksCalculate($data['addGradelevelToUsers']);
+		if($res) {
+			dieJson('Die Zuweisungen wurden erfolgreich erstellt.');
+		}
+		else {
+			$this->_logger->log('Could not create the assignments', 'error');
+			http_response_code(500);
+			dieJson('Konnte die Zuweisungen nicht erstellen!');
+		}
+	}
+
+	/**
+	 * Delete all existing assignments with the schoolyear.
+	 * @param  Object $schoolyear The schoolyear in which the assignments to
+	 *                            delete are.
+	 */
+	protected function deleteExistingAssignmentsForSchoolyear($schoolyear) {
+
+		try {
+			$query = $this->_em->createQuery(
+				'DELETE FROM DM:SchbasUserShouldLendBook usb
+					WHERE usb.schoolyear = :schoolyear
+			');
+			$query->setParameter('schoolyear', $schoolyear);
+			$query->getResult();
+
+		} catch(Exception $e) {
+			$this->_logger->logO('Could not delete existing assignments for ' .
+				'a schoolyear', ['sev' => 'error',
+					'moreJson' => ['msg' => $e->getMessage()]]);
+			http_response_code(500);
+			die('Konnte die existierenden Zuweisungen nicht löschen.');
+		}
 	}
 
 	/////////////////////////////////////////////////////////////////////

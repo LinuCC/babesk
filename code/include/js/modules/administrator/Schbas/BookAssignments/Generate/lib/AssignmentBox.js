@@ -20,10 +20,16 @@ AssignmentBox = React.createClass({
   getInitialState: function() {
     return {
       existingAssignmentsAction: 'add-to-existing',
-      addGradelevelToUsers: true
+      addGradelevelToUsers: true,
+      isLoading: false
     };
   },
   handleSubmit: function(event) {
+    var that;
+    this.setState({
+      isLoading: true
+    });
+    that = this;
     return $.ajax({
       type: 'POST',
       url: 'index.php?module=administrator|Schbas|BookAssignments|Generate',
@@ -32,11 +38,21 @@ AssignmentBox = React.createClass({
       },
       dataType: 'json',
       success: function(data, statusText, jqXHR) {
+        that.setState({
+          isLoading: false
+        });
         return toastr.success('Die Zuweisungen wurden erfolgreich generiert.');
       },
       error: function(jqXHR, statusText, errorThrown) {
-        toastr.error('Ein Fehler ist bei der Bearbeitung aufgetreten.');
-        return console.log(jqXHR);
+        that.setState({
+          isLoading: false
+        });
+        if (jqXHR.status === 500) {
+          return toastr.error(jqXHR.responseText, 'Ein Fehler ist aufgetreten.');
+        } else {
+          console.log(jqXHR);
+          return toastr.error('Ein Fehler ist aufgetreten.');
+        }
       }
     });
   },
@@ -75,7 +91,8 @@ AssignmentBox = React.createClass({
     }), React.createElement("div", {
       "className": 'panel-footer'
     }, React.createElement(ActionFooter, {
-      "handleSubmit": this.handleSubmit
+      "handleSubmit": this.handleSubmit,
+      "isLoading": this.state.isLoading
     })));
   }
 });
@@ -135,7 +152,8 @@ AssignmentsTable = React.createClass({
     }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Klassenstufe"), React.createElement("th", null, "B\u00fccher"))), React.createElement("tbody", null, this.props.entries.map(function(entry) {
       return React.createElement(AssignmentsTableGradeEntry, {
         "gradelevel": entry.gradelevel,
-        "books": entry.books
+        "books": entry.books,
+        "key": entry.gradelevel
       });
     }, this)));
   }
@@ -149,13 +167,17 @@ AssignmentsTableGradeEntry = React.createClass({
     if (restBooks == null) {
       restBooks = [];
     }
-    return React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", {
+    return React.createElement("tbody", null, React.createElement("tr", {
+      "key": firstBook.id
+    }, React.createElement("td", {
       "rowSpan": this.props.books.length
     }, this.props.gradelevel), React.createElement("td", null, React.createElement("a", {
       "href": "" + showBookLink + "&id=" + firstBook.id
     }, firstBook.name))), restBooks.map(function(book) {
-      return React.createElement("tr", null, React.createElement("td", null, React.createElement("a", {
-        "href": book.link
+      return React.createElement("tr", {
+        "key": book.id
+      }, React.createElement("td", null, React.createElement("a", {
+        "href": "" + showBookLink + "&id=" + book.id
       }, book.name)));
     }, this));
   }
@@ -163,11 +185,14 @@ AssignmentsTableGradeEntry = React.createClass({
 
 ActionFooter = React.createClass({
   render: function() {
+    var isLoading;
+    isLoading = this.props.isLoading;
     return React.createElement("div", null, React.createElement(Button, {
       "className": 'pull-right',
       "bsStyle": 'primary',
-      "onClick": this.props.handleSubmit
-    }, "Zuweisungen generieren"), React.createElement(Button, {
+      "onClick": (!isLoading ? this.props.handleSubmit : void 0),
+      "disabled": isLoading
+    }, (!isLoading ? 'Zuweisungen generieren' : 'Lade...')), React.createElement(Button, {
       "className": 'pull-left',
       "bsStyle": 'default',
       "href": 'index.php?module=administrator|Schbas|BookAssignments'

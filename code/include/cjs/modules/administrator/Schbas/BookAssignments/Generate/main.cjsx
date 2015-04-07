@@ -14,7 +14,6 @@ $.ajax
   data: 'overview-infos'
   dataType: 'json'
   success: (data, statusText, jqXHR)->
-    console.log data
     if data.value? and data.value is 'error'
       toastr.error 'Konnte die Daten nicht abrufen'
       return
