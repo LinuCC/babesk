@@ -27,7 +27,9 @@ AssignmentBox = React.createClass({
     return $.ajax({
       type: 'POST',
       url: 'index.php?module=administrator|Schbas|BookAssignments|Generate',
-      data: this.state,
+      data: {
+        data: this.state
+      },
       dataType: 'json',
       success: function(data, statusText, jqXHR) {
         return toastr.success('Die Zuweisungen wurden erfolgreich generiert.');
@@ -55,7 +57,7 @@ AssignmentBox = React.createClass({
       "className": "panel-heading"
     }, React.createElement("h3", {
       "className": "panel-title"
-    }, "Automatische Zuweisungen der Buchausleihen")), React.createElement("ul", {
+    }, "Automatische Zuweisungen der Buchausleihen (", this.props.data.schoolyear, ")")), React.createElement("ul", {
       "className": "list-group checklist"
     }, React.createElement(AssignmentSchoolyearsLine, {
       "assignmentsExist": this.props.data.assignmentsForSchoolyearExist,
@@ -141,7 +143,8 @@ AssignmentsTable = React.createClass({
 
 AssignmentsTableGradeEntry = React.createClass({
   render: function() {
-    var firstBook, restBooks, _ref;
+    var firstBook, restBooks, showBookLink, _ref;
+    showBookLink = 'index.php?module=administrator|Schbas|ShowBook';
     _ref = this.props.books, firstBook = _ref[0], restBooks = 2 <= _ref.length ? __slice.call(_ref, 1) : [];
     if (restBooks == null) {
       restBooks = [];
@@ -149,7 +152,7 @@ AssignmentsTableGradeEntry = React.createClass({
     return React.createElement("tbody", null, React.createElement("tr", null, React.createElement("td", {
       "rowSpan": this.props.books.length
     }, this.props.gradelevel), React.createElement("td", null, React.createElement("a", {
-      "href": firstBook.link
+      "href": "" + showBookLink + "&id=" + firstBook.id
     }, firstBook.name))), restBooks.map(function(book) {
       return React.createElement("tr", null, React.createElement("td", null, React.createElement("a", {
         "href": book.link

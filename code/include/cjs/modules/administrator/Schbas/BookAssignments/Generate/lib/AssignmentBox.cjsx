@@ -17,7 +17,8 @@ AssignmentBox = React.createClass(
     $.ajax
       type: 'POST'
       url: 'index.php?module=administrator|Schbas|BookAssignments|Generate'
-      data: @state
+      data:
+        data: @state
       dataType: 'json'
       success: (data, statusText, jqXHR)->
         toastr.success 'Die Zuweisungen wurden erfolgreich generiert.'
@@ -35,7 +36,7 @@ AssignmentBox = React.createClass(
     <div className="panel panel-default">
       <div className="panel-heading">
         <h3 className="panel-title">
-          Automatische Zuweisungen der Buchausleihen
+          Automatische Zuweisungen der Buchausleihen ({@props.data.schoolyear})
         </h3>
       </div>
       <ul className="list-group checklist">
@@ -130,6 +131,7 @@ AssignmentsTable = React.createClass(
 
 AssignmentsTableGradeEntry = React.createClass(
   render: ->
+    showBookLink = 'index.php?module=administrator|Schbas|ShowBook'
     # Gradelevel-column spans multiple rows, only needs to be defined for the
     # first row
     [firstBook, restBooks...] = @props.books
@@ -139,7 +141,9 @@ AssignmentsTableGradeEntry = React.createClass(
     <tbody>
       <tr>
         <td rowSpan={@props.books.length}>{@props.gradelevel}</td>
-        <td><a href={firstBook.link}>{firstBook.name}</a></td>
+        <td>
+          <a href={"#{showBookLink}&id=#{firstBook.id}"}>{firstBook.name}</a>
+        </td>
       </tr>
       {
         restBooks.map(

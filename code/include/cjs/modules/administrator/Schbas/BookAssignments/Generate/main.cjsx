@@ -2,65 +2,24 @@ React = require 'react'
 React.Bootstrap = require 'react-bootstrap'
 AssignmentBox = require('./lib/AssignmentBox.js').AssignmentBox
 
-DATA = {
-  assignmentsForSchoolyearExist: false,
-  bookAssignmentsForGrades: [
-    {
-      gradelevel: 7,
-      books: [
-        {
-          name: "Französisch 7",
-          link: "index.php?module=administrator|Schbas|ShowBook&id=234"
-        }
-      ]
-    },
-    {
-      gradelevel: 8,
-      books: [
-        {
-          name: "Französisch 8",
-          link: "index.php?module=administrator|Schbas|ShowBook&id=134"
-        },
-        {
-          name: "Latein 8",
-          link: "index.php?module=administrator|Schbas|ShowBook&id=244"
-        },
-        {
-          name: "Chemie 8/9",
-          link: "index.php?module=administrator|Schbas|ShowBook&id=256"
-        },
-      ]
-    },
-    {
-      gradelevel: 9,
-      books: [
-        {
-          name: "Französisch 8",
-          link: "index.php?module=administrator|Schbas|ShowBook&id=134"
-        },
-        {
-          name: "Latein 8",
-          link: "index.php?module=administrator|Schbas|ShowBook&id=244"
-        },
-        {
-          name: "Chemie 8/9",
-          link: "index.php?module=administrator|Schbas|ShowBook&id=256"
-        },
-      ]
-    }
-  ]
-}
+renderAssignmentBox = (overviewData)->
+  React.render(
+    <AssignmentBox data={overviewData} />
+    $('#entry')[0]
+  )
 
 $.ajax
   type: 'GET'
   url: 'index.php?module=administrator|Schbas|BookAssignments|Generate'
-  data: 'general-information'
+  data: 'overview-infos'
   dataType: 'json'
   success: (data, statusText, jqXHR)->
-    DATA = data
-    React.render(
-      <AssignmentBox data={DATA} />
-      $('#entry')[0]
-    )
+    console.log data
+    if data.value? and data.value is 'error'
+      toastr.error 'Konnte die Daten nicht abrufen'
+      return
+    renderAssignmentBox(data)
+
   error: (jqXHR, statusText, errorThrown)->
+    console.log jqXHR
     toastr.error 'Konnte die Daten nicht abrufen'

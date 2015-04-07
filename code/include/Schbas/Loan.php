@@ -36,7 +36,6 @@ class Loan {
 	 */
 	public function gradelevel2IsbnIdent($gradelevel) {
 
-		die('Möglicherweise veraltete Funktion, überarbeiten.');
 		if(!empty($this->_gradelevelIsbnIdentAssoc[$gradelevel])) {
 			return $this->_gradelevelIsbnIdentAssoc[$gradelevel];
 		}
@@ -52,7 +51,6 @@ class Loan {
 	 */
 	public function isbnIdent2Gradelevel($ident) {
 
-		die('Möglicherweise veraltete Funktion, überarbeiten.');
 		$gradelevels = array();
 		//Extract possible gradelevels
 		foreach($this->_gradelevelIsbnIdentAssoc as $gradelevel => $idents) {
@@ -254,15 +252,11 @@ class Loan {
 		$this->_em->flush();
 	}
 
-	/////////////////////////////////////////////////////////////////////
-	//Implements
-	/////////////////////////////////////////////////////////////////////
-
 	/**
 	 * Returns the schoolyear for which schbas is getting prepared
 	 * @return \Babesk\ORM\SystemSchoolyears on success or a false value
 	 */
-	protected function schbasPreparationSchoolyearGet() {
+	public function schbasPreparationSchoolyearGet() {
 
 		$sySetting = $this->_em->getRepository('DM:SystemGlobalSettings')
 			->findOneByName('schbasPreparationSchoolyearId');
@@ -278,6 +272,26 @@ class Loan {
 			->findOneById($sySetting->getValue());
 		return $syEntry;
 	}
+
+	public function booksAssignedToGradelevelsGet() {
+
+		$books = $this->_em->getRepository('DM:SchbasBook')
+			->findAll();
+		$booksInGradelevels = array();
+		foreach($books as $book) {
+			$gradelevels = $this->isbnIdent2Gradelevel($book->getClass());
+			$booksInGradelevels[] = array(
+				'book' => $book,
+				'gradelevels' => $gradelevels
+			);
+		}
+		return $booksInGradelevels;
+	}
+
+
+	/////////////////////////////////////////////////////////////////////
+	//Implements
+	/////////////////////////////////////////////////////////////////////
 
 	protected function entryPoint($dataContainer) {
 
@@ -318,7 +332,7 @@ class Loan {
 		$classes = $this->_gradelevelIsbnIdentAssoc[$gradelevel];
 		$classesStr = '"' . implode('", "', $classes) . '"';
 		$stmt = $this->_pdo->prepare(
-			"SELECT b.*, ss.abbreviation AS subject FROM SchbasBooks b
+			"SELECT b.*, ss.abbreviation AS subject FROM SchbasBook b
 				LEFT JOIN SystemSchoolSubjects ss ON ss.ID = b.subjectId
 				LEFT JOIN (
 					SELECT book_id
