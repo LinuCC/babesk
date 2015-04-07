@@ -230,4 +230,11 @@ function require_all ($path) {
 	}
 }
 
+/**
+ * Shortcut for the die(json_encode()) method
+ */
+function dieJson($data) {
+	die(json_encode($data));
+}
+
 ?>
