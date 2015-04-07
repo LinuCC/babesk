@@ -263,7 +263,7 @@ class Loan extends Schbas {
 
 		} catch (Exception $e) {
 			$this->_logger->log('Error loaning a book-exemplar to a user',
-				'Moderate', Null, json_encode(array(
+				'error', Null, json_encode(array(
 					'msg' => $e->getMessage())));
 			return false;
 		}

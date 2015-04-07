@@ -49,7 +49,7 @@ class Kuwasys extends Module {
 
 		} catch (PDOException $e) {
 			$msg = "Could not fetch the Class with Id $classId.";
-			$this->_logger->log(__METHOD__ . ": $msg", 'Moderate', NULL,
+			$this->_logger->log(__METHOD__ . ": $msg", 'error', NULL,
 				json_encode(array('error' => $e->getMessage())));
 			throw new PDOException($msg, 0, $e);
 		}

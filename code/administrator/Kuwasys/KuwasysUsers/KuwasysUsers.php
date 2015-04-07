@@ -93,7 +93,7 @@ class KuwasysUsers extends Kuwasys {
 
 		} catch (PDOException $e) {
 			$msg = 'Could not fetch all Grades.';
-			$this->_logger->log(__METHOD__ . ": $msg", 'Moderate', NULL,
+			$this->_logger->log(__METHOD__ . ": $msg", 'error', NULL,
 				json_encode(array('error' => $e->getMessage())));
 			throw new PDOException($msg, 0, $e);
 		}

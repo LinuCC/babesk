@@ -97,7 +97,7 @@ class Login {
 		} catch (Exception $e) {
 			$this->_logger->log(
 				'Error while fetching the userId at userlogin!',
-				'Moderate', Null,
+				'error', Null,
 				json_encode(array('msg' => $e->getMessage())));
 			$this->dieShowLoginForm(_g('Error while logging you in!'), true);
 		}

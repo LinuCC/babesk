@@ -224,7 +224,7 @@ class Grade extends System {
 			return $stmt->fetch();
 
 		} catch (PDOException $e) {
-			$this->_logger->log('Could not fetch the Grade', 'Moderate', NULL,
+			$this->_logger->log('Could not fetch the Grade', 'error', NULL,
 				json_encode(array('error' => $e->getMessage())));
 			$this->_interface->dieError(_g('Could not fetch the Grade'));
 		}
@@ -269,7 +269,7 @@ class Grade extends System {
 				$schooltypeId, $_GET['ID']));
 
 		} catch (PDOException $e) {
-			$this->_logger->log('Error changing a Grade', 'Moderate', Null,
+			$this->_logger->log('Error changing a Grade', 'error', Null,
 				json_encode(array('error' => $e->getMessage())));
 			$this->_interface->dieError(_g('Could not change the Grade!'));
 		}

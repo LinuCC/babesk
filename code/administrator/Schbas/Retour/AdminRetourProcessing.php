@@ -84,7 +84,7 @@ class AdminRetourProcessing {
 
 		} catch (Exception $e) {
 			$this->_logger->log('Error in Ajax of Schbas Retour',
-				'Moderate', Null, json_encode(array(
+				'error', Null, json_encode(array(
 					'msg' => $e->getMessage())));
 			$this->RetourInterface->showMsg('Ein Fehler ist aufgetreten.');
 		}

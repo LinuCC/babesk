@@ -219,7 +219,7 @@ class RecordReceipt extends \SchbasAccounting {
 
 		} catch(Exception $e) {
 			$this->_logger->log('Error updating the paid amount of an user',
-				'Moderate', Null, json_encode(array('uid' => $userId,
+				'error', Null, json_encode(array('uid' => $userId,
 					'amount' => $amount, 'msg' => $e->getMessage())));
 			http_response_code(500);
 		}

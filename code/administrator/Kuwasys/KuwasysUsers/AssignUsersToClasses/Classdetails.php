@@ -29,7 +29,7 @@ class Classdetails extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClas
 
 		} catch (PDOException $e) {
 			$this->_logger->log('Could not fetch the data of class' .
-				"$_GET[classId] in " . __METHOD__, 'Moderate');
+				"$_GET[classId] in " . __METHOD__, 'error');
 			$this->_interface->dieError(_g('Error while fetching the data!'));
 		}
 		$this->_smarty->assign('classId', $_GET['classId']);
@@ -68,7 +68,7 @@ class Classdetails extends \administrator\Kuwasys\KuwasysUsers\AssignUsersToClas
 
 		} catch (PDOException $e) {
 			$msg = "Could not fetch the Class with Id $classId.";
-			$this->_logger->log(__METHOD__ . ": $msg", 'Moderate', NULL,
+			$this->_logger->log(__METHOD__ . ": $msg", 'error', NULL,
 				json_encode(array('error' => $e->getMessage())));
 			throw new PDOException($msg, 0, $e);
 		}

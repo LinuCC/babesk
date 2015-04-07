@@ -328,7 +328,7 @@ class Classes extends Kuwasys {
 
 		} catch (Exception $e) {
 			$this->_logger->log(__METHOD__ . ': ' . $e->getMessage(),
-				'Moderate');
+				'error');
 			$this->_interface->dieError(_g('Could not fetch the data!'));
 		}
 	}
@@ -368,7 +368,7 @@ class Classes extends Kuwasys {
 
 		} catch (PDOException $e) {
 			$this->_logger->log("Error fetching Class with Id $_GET[ID] " .
-				'in ' . __METHOD__, 'Moderate');
+				'in ' . __METHOD__, 'error');
 			$this->_interface->dieError(_g('Could not fetch the data!'));
 		}
 	}

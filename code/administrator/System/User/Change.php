@@ -71,7 +71,7 @@ class Change extends \User
 			}
 		} catch(\Exception $e) {
 			$this->_logger->log('error checking input',
-				'Moderate', Null, json_encode(array(
+				'error', Null, json_encode(array(
 					'message' => $e->getMessage()
 			)));
 			die(json_encode(array(
@@ -148,7 +148,7 @@ class Change extends \User
 		} catch (\PDOException $e) {
 			$this->_pdo->rollback();
 			$this->_logger->log(
-				'error uploading an user-change', 'Moderate', Null,
+				'error uploading an user-change', 'error', Null,
 				json_encode(array('message' => $e->getMessage()))
 			);
 			die(json_encode(array(

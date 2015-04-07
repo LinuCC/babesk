@@ -126,7 +126,7 @@ class ModuleGeneratorManager {
 
 		} catch (PDOException $e) {
 			$msg = "Error adding the new module.";
-			$this->_logger->log($msg, 'Moderate', NULL,
+			$this->_logger->log($msg, 'error', NULL,
 				json_encode(array('error' => $e->getMessage())));
 			throw new Exception($msg, 0, $e);
 		}
@@ -148,7 +148,7 @@ class ModuleGeneratorManager {
 
 		} catch (PDOException $e) {
 			$msg = "Could not remove the Module '$module->getId()' with all links.";
-			$this->_logger->log($msg, 'Moderate', NULL,
+			$this->_logger->log($msg, 'error', NULL,
 				json_encode(array('error' => $e->getMessage()))
 			);
 			throw new Exception($msg, 0, $e);

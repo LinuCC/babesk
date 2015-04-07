@@ -86,7 +86,7 @@ class CardInfo extends System {
 				$user->getForename(); //Force loading of user-proxy to Entity
 			} catch (Doctrine\ORM\EntityNotFoundException $e) {
 				$this->_logger->log('Card exists, but linked user not!',
-					'Moderate', Null, json_encode(array(
+					'error', Null, json_encode(array(
 						'cardnumber' => $cardnumber)));
 				$this->_interface->dieError(
 					'Karte an einen nicht-existenten Benutzer vergeben!'

@@ -90,7 +90,7 @@ class ShowLogs extends \administrator\System\Logs {
 
 		} catch (\PDOException $e) {
 			$this->_logger->log('error fetching the logs',
-				'Moderate', Null, json_encode(array(
+				'error', Null, json_encode(array(
 					'msg' => $e->getMessage(), 'query' => $query)));
 			$this->_interface->dieAjax(
 				'error', 'Konnte die Logs nicht abrufen'
@@ -109,7 +109,7 @@ class ShowLogs extends \administrator\System\Logs {
 
 		} catch (\PDOException $e) {
 			$this->_logger->log('error counting the logs',
-				'Moderate', Null, json_encode(array('msg' => $e->getMessage())));
+				'error', Null, json_encode(array('msg' => $e->getMessage())));
 			$this->_interface->dieAjax(
 				'error', 'Konnte die Logs nicht zählen'
 			);
