@@ -94,32 +94,26 @@ class Loan {
 		}
 	}
 
-	/**
-	 * Calculates loan-price of all books for users of the given gradelevel
-	 * @param  int    $gradelevel The gradelevel
-	 * @return array              Contains the normal fee and the reduced fee
-	 *                            Structure: [<normalFee>, <reducedFee>]
-	 */
-	public function loanPriceOfAllBooksOfGradelevelCalculate($gradelevel) {
+	public function loanPriceOfAllBookAssignmentsForUserCalculate($user) {
 
-		die('Möglicherweise veraltete Funktion, überarbeiten.');
-		$classes = $this->_gradelevelIsbnIdentAssoc[$gradelevel];
-		$bookQuery = $this->_em
-			->createQueryBuilder()
-			->select(array('b.class', 'b.price'))
-			->from('DM:SchbasBook', 'b')
-			->where('b.class IN (:classes)')
-			->setParameter('classes', $classes)
-			->getQuery();
-		$books = $bookQuery->getArrayResult();
+		$schoolyear = $this->schbasPreparationSchoolyearGet();
+		$query = $this->_em->createQuery(
+			'SELECT usb, b FROM DM:SchbasUserShouldLendBook usb
+			INNER JOIN usb.book b
+			WHERE usb.schoolyear = :schoolyear AND usb.user = :user
+		');
+		$query->setParameter('schoolyear', $schoolyear);
+		$query->setParameter('user', $user);
+		$assignments = $query->getResult();
 		$feeNormal = 0.00;
 		$feeReduced = 0.00;
-		foreach($books as $book) {
+		foreach($assignments as $assignment) {
+			$book = $assignment->getBook();
 			$normalPrice = $this->bookLoanPriceCalculate(
-				$book['price'], $book['class']
+				$book->getPrice(), $book->getClass()
 			);
 			$reducedPrice = $this->bookReducedLoanPriceCalculate(
-				$book['price'], $book['class']
+				$book->getPrice(), $book->getClass()
 			);
 			$feeNormal += $normalPrice;
 			$feeReduced += $reducedPrice;

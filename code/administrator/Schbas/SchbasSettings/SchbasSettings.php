@@ -264,10 +264,11 @@ class SchbasSettings extends Schbas {
 		$booklist = $booklistManager->getBooksByClass($gradelevel);
 
 		require_once PATH_INCLUDE . '/Schbas/Loan.php';
-		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
-		list($feeNormal, $feeReduced) = $loanHelper
-			->loanPriceOfAllBooksOfGradelevelCalculate($gradelevel);
 
+		// We dont have a user so we cant really calculate the correct amount
+		// (also, we dont need to). Just put in some example values
+		$feeNormal = 123.45;
+		$feeReduced = 12.34;
 
 		$books = '<table border="0" bordercolor="#FFFFFF" style="background-color:#FFFFFF" width="100%" cellpadding="0" cellspacing="1">
 				<tr style="font-weight:bold; text-align:center;"><th>Fach</th><th>Titel</th><th>Verlag</th><th>ISBN-Nr.</th><th>Preis</th></tr>';
