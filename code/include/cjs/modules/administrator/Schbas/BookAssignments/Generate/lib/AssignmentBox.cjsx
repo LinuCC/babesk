@@ -4,7 +4,8 @@ Input = React.Bootstrap.Input
 Table = React.Bootstrap.Table
 Button = React.Bootstrap.Button
 classnames = require 'classnames'
-StatusIcon = require('lib/StatusIcon.js').StatusIcon
+StatusIcon = require('lib/StatusIcon').StatusIcon
+LoadingIcon = require('lib/LoadingIcon').LoadingIcon
 
 AssignmentBox = React.createClass(
   getInitialState: ->
@@ -179,7 +180,11 @@ ActionFooter = React.createClass(
       <Button className='pull-right' bsStyle='primary'
         onClick={@props.handleSubmit if !isLoading}
         disabled={isLoading}>
-        {if not isLoading then 'Zuweisungen generieren' else 'Lade...'}
+        {
+          if not isLoading
+            'Zuweisungen generieren'
+          else <span><LoadingIcon /> Lade...</span>
+        }
       </Button>
       <Button className='pull-left' bsStyle='default'
         href='index.php?module=administrator|Schbas|BookAssignments'>
