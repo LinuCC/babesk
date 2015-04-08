@@ -97,10 +97,19 @@ class Loan {
 	public function loanPriceOfAllBookAssignmentsForUserCalculate($user) {
 
 		$schoolyear = $this->schbasPreparationSchoolyearGet();
+		// We want all entries where the book has _not_ been lend
+		// and will _not_ be bought by the user himself, so we check for null
 		$query = $this->_em->createQuery(
 			'SELECT usb, b FROM DM:SchbasUserShouldLendBook usb
 			INNER JOIN usb.book b
-			WHERE usb.schoolyear = :schoolyear AND usb.user = :user
+			INNER JOIN usb.user u
+			LEFT JOIN u.bookLending l
+			LEFT JOIN l.book bLend WITH bLend = b
+			LEFT JOIN u.selfpayingBooks sb WITH sb = b
+			WHERE usb.schoolyear = :schoolyear
+				AND usb.user = :user
+				AND bLend IS NULL
+				AND sb IS NULL
 		');
 		$query->setParameter('schoolyear', $schoolyear);
 		$query->setParameter('user', $user);
