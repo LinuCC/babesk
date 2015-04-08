@@ -197,7 +197,10 @@ class Loan {
 		// Fetch the users
 		try {
 			$userQuery = $this->_em->createQuery(
-				'SELECT partial u.{id}, uigs, partial g.{id, gradelevel}
+				'SELECT partial u.{
+						id, religion, foreign_language, special_course
+					},
+					uigs, partial g.{id, gradelevel}
 				FROM DM:SystemUsers u
 				INNER JOIN u.attendances uigs
 				INNER JOIN uigs.schoolyear sy WITH sy.active = true
@@ -222,23 +225,57 @@ class Loan {
 			$this->_logger->log('Could not fetch the books', 'error');
 			return false;
 		}
+
+		// Init the filter-array
+		// It filters the books based on their subject.
+		// The filter-list define the special subjects to which the user must
+		// explicitly attend, else books of this subject will not be assigned
+		// to the user.
+		list($lang, $rel, $course) = $this->bookSubjectFilterArrayGet();
+		$filterWithCourse = array_merge($lang, $rel, $course);
+		$filter = array_merge($lang, $rel);
+		$triggerObj = $this->_em->getRepository('DM:SystemGlobalSettings')
+			->findOneByName('special_course_trigger');
+		$courseTrigger = (int)$triggerObj->getValue();
+
 		// Create new entries
 		$entries = array();
 
-		foreach($books as $book) {
-			foreach($users as $user) {
-				$grade = $user->getAttendances()
-					->first()
-					->getGrade();
-				if(!$grade) {
-					continue;
-				}
-				$gradelevel = $grade->getGradelevel();
-				$gradelevel += ($isNextYear) ? 1 : 0;
-				if(!empty($this->_gradelevelIsbnIdentAssoc[$gradelevel])) {
+		foreach($users as $user) {
+			$grade = $user->getAttendances()
+				->first()
+				->getGrade();
+			if(!$grade) {
+				continue;
+			}
+			$gradelevel = $grade->getGradelevel();
+			$gradelevel += ($isNextYear) ? 1 : 0;
+			$userSubjects = array_merge(
+				explode('|', $user->getReligion()),
+				explode('|', $user->getForeignLanguage())
+			);
+			if($courseTrigger >= $gradelevel) {
+				$userSubjects = array_merge(
+					$userSubjects,
+					explode('|', $user->getSpecialCourse())
+				);
+			}
+			if(!empty($this->_gradelevelIsbnIdentAssoc[$gradelevel])) {
+				foreach($books as $book) {
 					$validClasses =
 						$this->_gradelevelIsbnIdentAssoc[$gradelevel];
-					if(in_array($book->getClass(), $validClasses)) {
+					if(
+						in_array($book->getClass(), $validClasses) &&
+						(
+							// Filter the non-needed books
+							(
+								$courseTrigger >= $gradelevel &&
+								!in_array($book->getClass(), $filterWithCourse)
+							) || (
+								!in_array($book->getClass(), $filter)
+							)
+						)
+					) {
 						$entry = new \Babesk\ORM\SchbasUserShouldLendBook();
 						$entry->setUser($user);
 						$entry->setBook($book);
@@ -248,7 +285,6 @@ class Loan {
 				}
 			}
 		}
-
 		$this->_em->flush();
 		return true;
 	}
@@ -310,6 +346,10 @@ class Loan {
 		$lang   = $gsRepo->findOneByName('foreign_language')->getValue();
 		$rel    = $gsRepo->findOneByName('religion')->getValue();
 		$course = $gsRepo->findOneByName('special_course')->getValue();
+		$langAr = explode('|', $lang);
+		$relAr = explode('|', $rel);
+		$courseAr = explode('|', $course);
+		return [$langAr, $relAr, $courseAr];
 	}
 
 	/**
@@ -476,7 +516,6 @@ class Loan {
 		}
 		return $books;
 	}
-
 
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
