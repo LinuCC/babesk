@@ -114,14 +114,15 @@ class LoanSystem extends Schbas {
 			);
 		}
 		$gradelevel = strval(intval($gradelevel)+1);
-		// Filter f�r Abijahrgang
+		// Filter fuer Abijahrgang
 
 		if($gradelevel=="13") $this->_smarty->display($this->_smartyPath . 'lastGrade.tpl');;
 		;
 
 		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
-		$fees = $loanHelper->loanPriceOfAllBooksOfUserCalculate(
-			$_SESSION['uid']
+		$user = $this->_em->getReference('DM:SystemUsers', $_SESSION['uid']);
+		$fees = $loanHelper->loanPriceOfAllBookAssignmentsForUserCalculate(
+			$user
 		);
 		list($feeNormal, $feeReduced) = $fees;
 
@@ -250,8 +251,9 @@ class LoanSystem extends Schbas {
 		//get loan fees
 
 		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
-		$fees = $loanHelper->loanPriceOfAllBooksOfUserCalculate(
-			$_SESSION['uid']
+		$user = $this->_em->getReference('DM:SystemUsers', $_SESSION['uid']);
+		$fees = $loanHelper->loanPriceOfAllBookAssignmentsForUserCalculate(
+			$user
 		);
 		list($feeNormal, $feeReduced) = $fees;
 
@@ -335,7 +337,8 @@ class LoanSystem extends Schbas {
 
 		// get booklist
 		//$booklist = $booklistManager->getBooksByClass($gradelevel[0]['gradelevel']);
-		$booklist = $loanHelper->loanBooksGet($_SESSION['uid']);
+		$user = $this->_em->getReference('DM:SystemUsers', $_SESSION['uid']);
+		$booklist = $loanHelper->loanBooksGet($user);
 
 		$books = '<table border="0" bordercolor="#FFFFFF" style="background-color:#FFFFFF" width="100%" cellpadding="0" cellspacing="1">
 				<tr style="font-weight:bold; text-align:center;"><th>Fach</th><th>Titel</th><th>Verlag</th><th>ISBN-Nr.</th><th>Preis</th></tr>';
@@ -343,15 +346,18 @@ class LoanSystem extends Schbas {
 		//$bookPrices = 0;
 		foreach ($booklist as $book) {
 			//$bookPrices += $book['price'];
-			$books.= '<tr><td>'.$book['subject'].'</td><td>'.$book['title'].'</td><td>'.$book['publisher'].'</td><td>'.$book['isbn'].'</td><td align="right">'.$book['price'].' &euro;</td></tr>';
+			$books .= '<tr><td>'.$book->getSubject()->getName().'</td><td>'.$book->getTitle().'</td><td>'.$book->getPublisher().'</td><td>'.$book->getIsbn().'</td><td align="right">'.$book->getPrice().' &euro;</td></tr>';
 		}
 		//$books .= '<tr><td></td><td></td><td></td><td style="font-weight:bold; text-align:center;">Summe:</td><td align="right">'.$bookPrices.' &euro;</td></tr>';
 		$books .= '</table>';
 		$books = str_replace('ä', '&auml;', $books);
 		$books = str_replace('é', '&eacute;', $books);
 
-		$fees = $loanHelper->loanPriceOfAllBooksOfUserCalculate(
-			$_SESSION['uid']
+
+
+		$user = $this->_em->getReference('DM:SystemUsers', $_SESSION['uid']);
+		$fees = $loanHelper->loanPriceOfAllBookAssignmentsForUserCalculate(
+			$user
 		);
 		list($feeNormal, $feeReduced) = $fees;
 

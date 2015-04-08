@@ -96,28 +96,10 @@ class Loan {
 
 	public function loanPriceOfAllBookAssignmentsForUserCalculate($user) {
 
-		$schoolyear = $this->schbasPreparationSchoolyearGet();
-		// We want all entries where the book has _not_ been lend
-		// and will _not_ be bought by the user himself, so we check for null
-		$query = $this->_em->createQuery(
-			'SELECT usb, b FROM DM:SchbasUserShouldLendBook usb
-			INNER JOIN usb.book b
-			INNER JOIN usb.user u
-			LEFT JOIN u.bookLending l
-			LEFT JOIN l.book bLend WITH bLend = b
-			LEFT JOIN u.selfpayingBooks sb WITH sb = b
-			WHERE usb.schoolyear = :schoolyear
-				AND usb.user = :user
-				AND bLend IS NULL
-				AND sb IS NULL
-		');
-		$query->setParameter('schoolyear', $schoolyear);
-		$query->setParameter('user', $user);
-		$assignments = $query->getResult();
+		$books = $this->loanBooksGet($user);
 		$feeNormal = 0.00;
 		$feeReduced = 0.00;
-		foreach($assignments as $assignment) {
-			$book = $assignment->getBook();
+		foreach($books as $book) {
 			$normalPrice = $this->bookLoanPriceCalculate(
 				$book->getPrice(), $book->getClass()
 			);
@@ -133,46 +115,41 @@ class Loan {
 	}
 
 	/**
-	 * Calculates loan-price of all books the given user has to lend
-	 * @param  int    $userId     The Id of the user
-	 * @return array              Contains the normal fee and the reduced fee
-	 *                            Structure: [<normalFee>, <reducedFee>]
+	 * Fetches the books the user should lend but has not done so yet
+	 * Filters out the books the user has already lent and those that the user
+	 * will buy by himself.
+	 *
+	 * @param  Object $user The \Babesk\ORM\SystemUsers object
+	 * @return array        An array of Doctrine-Objects representing the books
 	 */
-	public function loanPriceOfAllBooksOfUserCalculate($userId) {
+	public function loanBooksGet($user) {
 
-		die('Möglicherweise veraltete Funktion, überarbeiten.');
-		$books = $this->loanBooksGet($userId);
-		$feeNormal = 0.00;
-		$feeReduced = 0.00;
-		foreach($books as $book) {
-			$normalPrice = $this->bookLoanPriceCalculate(
-				$book['price'], $book['class']
-			);
-			$reducedPrice = $this->bookReducedLoanPriceCalculate(
-				$book['price'], $book['class']
-			);
-			$feeNormal += $normalPrice;
-			$feeReduced += $reducedPrice;
+		try {
+			$schoolyear = $this->schbasPreparationSchoolyearGet();
+			// We want all entries where the book has _not_ been lend
+			// and will _not_ be bought by the user himself, so we check for
+			// null
+			$query = $this->_em->createQuery(
+				'SELECT b, usb FROM DM:SchbasBook b
+				INNER JOIN b.usersShouldLend usb
+				INNER JOIN usb.user u
+				LEFT JOIN u.bookLending l
+				LEFT JOIN l.book bLend WITH bLend = b
+				LEFT JOIN u.selfpayingBooks sb WITH sb = b
+				WHERE usb.schoolyear = :schoolyear
+					AND usb.user = :user
+					AND bLend IS NULL
+					AND sb IS NULL
+			');
+			$query->setParameter('schoolyear', $schoolyear);
+			$query->setParameter('user', $user);
+			$books = $query->getResult();
+			return $books;
+
+		} catch (Exception $e) {
+			$this->_logger->log('Could not fetch the loanBooks',
+				['sev' => 'error', 'moreJson' => $e->getMessage()]);
 		}
-		$feeNormal = round($feeNormal);
-		$feeReduced = round($feeReduced);
-		return array($feeNormal, $feeReduced);
-	}
-
-	public function loanBooksGet($userId) {
-
-		die('Möglicherweise veraltete Funktion, überarbeiten.');
-		$books = array();
-		$notLendBooks = $this->booksNotLendToUserByHisGradelevelGet($userId);
-		if(!empty($notLendBooks)) {
-			$books = $this->optionalBooksNotNeededByUserRemove(
-				$userId, $notLendBooks
-			);
-			if(!empty($books)) {
-				$books = $this->selfpaidBooksOfUserSubtract($userId, $books);
-			}
-		}
-		return $books;
 	}
 
 	/**

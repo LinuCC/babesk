@@ -130,6 +130,7 @@ class SchbasAccounting extends Schbas {
 			$uid = $barcodeArray[0];
 			$loanChoice = $barcodeArray[1];
 			$haystack = array('nl','ln','lr','ls');
+			$user = $this->_em->getReference('DM:SystemUsers', $uid);
 
 			$query = sprintf("SELECT COUNT(*) FROM SchbasAccounting WHERE `UID`='%s'",$uid);
 			$result=TableMng::query($query);
@@ -159,7 +160,7 @@ class SchbasAccounting extends Schbas {
 					$loanHelper = new \Babesk\Schbas\Loan(
 						$this->_dataContainer
 					);
-					$loanbooks = $loanHelper->loanBooksGet($uid);
+					$loanbooks = $loanHelper->loanBooksGet($user);
 					$loanbooksSelfBuy = TableMng::query("SELECT BID FROM SchbasSelfpayer WHERE UID=".$uid);
 					$loanbooksSelfBuy = array_map('current',$loanbooksSelfBuy);
 
@@ -170,11 +171,11 @@ class SchbasAccounting extends Schbas {
 					$threeYears = array(79,91);
 					$fourYears = array(69,92);
 					foreach ($loanbooks as $book) {
-						if (!in_array($book['id'],$loanbooksSelfBuy)) {
-							if(in_array($book['class'],$oneYear)) $feeNormal += $book['price'];
-							if(in_array($book['class'],$twoYears)) $feeNormal += $book['price']/2;
-							if(in_array($book['class'],$threeYears)) $feeNormal += $book['price']/3;
-							if(in_array($book['class'],$fourYears)) $feeNormal += $book['price']/4;
+						if (!in_array($book->getId(),$loanbooksSelfBuy)) {
+							if(in_array($book->getClass(),$oneYear)) $feeNormal += $book->getPrice();
+							if(in_array($book->getClass(),$twoYears)) $feeNormal += $book->getPrice()/2;
+							if(in_array($book->getClass(),$threeYears)) $feeNormal += $book->getPrice()/3;
+							if(in_array($book->getClass(),$fourYears)) $feeNormal += $book->getPrice()/4;
 						}
 					}
 

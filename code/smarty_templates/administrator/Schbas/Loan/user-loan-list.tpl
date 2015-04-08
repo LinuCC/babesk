@@ -120,9 +120,9 @@
 		</thead>
 		<tbody>
 			{foreach $booksToLoan as $book}
-				<tr data-book-id="{$book.id}">
-					<td>{$book.title}</td>
-					<td>{$book.publisher}</td>
+				<tr data-book-id="{$book->getId()}">
+					<td>{$book->getTitle()}</td>
+					<td>{$book->getPublisher()}</td>
 				</tr>
 			{/foreach}
 		</tbody>
