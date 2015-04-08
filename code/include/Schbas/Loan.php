@@ -21,14 +21,6 @@ class Loan {
 	/////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Returns the count of needed inventory of a book
-	 * @return int
-	 */
-	public function bookInventoryNeededGet($bookId) {
-
-	}
-
-	/**
 	 * Returns an array of possible isbn-identifiers for the given gradelevel
 	 * @param  int    $gradelevel The Gradelevel
 	 * @return array              The array of possible isbn-identifiers of the
@@ -74,7 +66,6 @@ class Loan {
 	 */
 	public function bookLoanPriceCalculate($flatPrice, $class) {
 
-		die('Möglicherweise veraltete Funktion, überarbeiten.');
 		if(isset($this->_classToPriceFactor[$class])) {
 			$factor = $this->_classToPriceFactor[$class];
 			$loanPrice = $flatPrice / $factor / 3;
@@ -93,7 +84,6 @@ class Loan {
 	 */
 	public function bookReducedLoanPriceCalculate($flatPrice, $class) {
 
-		die('Möglicherweise veraltete Funktion, überarbeiten.');
 		if(isset($this->_classToPriceFactor[$class])) {
 			$factor = $this->_classToPriceFactor[$class];
 			$loanPrice = $flatPrice / $factor / 3 * 0.8;
@@ -400,10 +390,10 @@ class Loan {
 
 		$stmt = $this->_pdo->prepare(
 			'SELECT g.gradelevel FROM SystemUsers u
-				INNER JOIN SystemUsersInGradesAndSchoolyears uigs
-					ON uigs.userId = u.ID
-				INNER JOIN SystemGrades g ON g.ID = uigs.gradeId
-				WHERE uigs.schoolyearId = @activeSchoolyear
+				INNER JOIN SystemAttendances a
+					ON a.userId = u.ID
+				INNER JOIN SystemGrades g ON g.ID = a.gradeId
+				WHERE a.schoolyearId = @activeSchoolyear
 					AND u.ID = :userId
 		');
 		$stmt->execute(array('userId' => $userId));
