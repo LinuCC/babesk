@@ -112,9 +112,9 @@ class Administrator {
 			)));
 
 			if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+				http_response_code(500);
 				//It was an Ajax-Call, dont show the whole Website
-				die(json_encode(array('value' => 'error',
-					'message' => 'Konnte das Modul nicht ausführen!')));
+				die('Konnte das Modul nicht ausführen!');
 			}
 			else {
 				$this->_adminInterface->dieError(
