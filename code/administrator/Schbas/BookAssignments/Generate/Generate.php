@@ -83,8 +83,10 @@ class Generate extends \administrator\Schbas\BookAssignments\BookAssignments {
 					WHERE usb.schoolyear = :schoolyear
 			');
 			$query->setParameter('schoolyear', $schoolyear);
-			$res = $query->getOneOrNullResult();
-			return !empty($res);
+			$res = $query->getOneOrNullResult(
+				\Doctrine\ORM\Query::HYDRATE_SINGLE_SCALAR
+			);
+			return (int)$res > 0;
 
 		} catch(\Exception $e) {
 			$this->_logger->logO('Could not check for existing assignments ' .
