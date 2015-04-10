@@ -131,8 +131,12 @@ class LoanSystem extends Schbas {
 		 *        Babesk\Schbas\Loan. Switch to that function instead
 		 */
 		require_once PATH_ACCESS . '/LoanManager.php';
+		require_once PATH_INCLUDE . '/Schbas/Loan.php';
+		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
 		$lm = new LoanManager();
 		$loanbooks = $lm->getLoanByUID($_SESSION['uid'], Null);
+		$user = $this->_em->getReference('DM:SystemUsers', $_SESSION['uid']);
+		$loanbooksTest = $loanHelper->loanBooksGet($user);
 		/**
 		 * @todo  Following line returns a different result! This function
 		 *        needs to be fixed.
@@ -154,6 +158,7 @@ class LoanSystem extends Schbas {
 		}
 
 		$this->_smarty->assign('loanbooks', $loanbooks);
+		$this->_smarty->assign('loanbooksTest', $loanbooksTest);
 		$this->_smarty->assign('feeNormal', $feeNormal);
 		$this->_smarty->assign('feeReduced', $feeReduced);
 		$this->_smarty->assign('schbasYear', $schbasYear);

@@ -2,20 +2,20 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ADMIN . '/Schbas/Schbas.php';
+require_once PATH_INCLUDE . '/Schbas/Loan.php';
 
 class SchbasAccounting extends Schbas {
 
-	////////////////////////////////////////////////////////////////////////////////
-	//Attributes
-
-	////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
 	//Constructor
-	public function __construct($name, $display_name, $path) {
-		parent::__construct($name, $display_name, $path);
-	}
+	/////////////////////////////////////////////////////////////////////
 
-	////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
 	//Methods
+	/////////////////////////////////////////////////////////////////////
+
+
+
 	public function execute($dataContainer) {
 		//no direct access
 		defined('_AEXEC') or die("Access denied");
@@ -89,6 +89,16 @@ class SchbasAccounting extends Schbas {
 			$listOfClassesRebmemer = $this->getListOfClasses("rebmemer2");
 			$this->SchbasAccountingInterface->MainMenu($listOfClasses, $listOfClassesRebmemer);
 		}
+	}
+
+	/////////////////////////////////////////////////////////////////////
+	//Implements
+	/////////////////////////////////////////////////////////////////////
+
+	protected function entryPoint($dataContainer) {
+
+		parent::entryPoint($dataContainer);
+		$this->_loanHelper = new \Babesk\Schbas\Loan($dataContainer);
 	}
 
 	/**
@@ -448,53 +458,9 @@ class SchbasAccounting extends Schbas {
 	}
 
 	private function getBooksOfStudentIdRebmemer($studentId, $class){
-		$books = $this->lm->getLoanByUID($studentId, false);
-		$loanbooksSelfBuy = TableMng::query("SELECT BID FROM SchbasSelfpayer WHERE UID=".$studentId);
-		$loanbooksSelfBuy = array_map('current',$loanbooksSelfBuy);
-		$checkedBooks = array();
-		foreach ($books as $book) {
-			if (!in_array($book['id'],$loanbooksSelfBuy)) $checkedBooks[] = $book;
-
-		}
-
-		$booklist = "";
-		foreach ($checkedBooks as $book) {
-			$booklist .= "<li>".$book["title"];
-		}
-// 		$books = TableMng::query("SELECT inventory_id FROM SchbasLending WHERE user_id='".$studentId."'");
-// 		$booklist = "";
-// 		if (!empty($books)) {
-// 		// format class to right format (in table int(7) is string(2)"07" )
-// 		if ($class < 10)
-// 			$class = "0".$class;
 
 
-// 		for($i=0;$i<count($books); $i++){
-// 			$bookIDs[] = $books[$i]["inventory_id"];
-// 		}
-
-// 		$should = TableMng::query("SELECT id FROM SchbasBooks WHERE class='".$class."'");
-
-// 		for ($i=0; $i<count($should); $i++){
-// 			$shouldIDs[] = $should[$i]["id"];
-// 		}
-
-// 		$bookIDs1 = array_diff($shouldIDs, $bookIDs);
-
-// 		// FINDING THE NAMES
-
-// 		for ($i=0;$i<count($bookIDs1);$i++){
-// 			$bookName = TableMng::query("SELECT title FROM SchbasBooks WHERE id='$bookIDs1[$i]'");
-// 			//var_dump($bookName);echo "<br>";
-// 			$bookName = $bookName[0]["title"];
-// 			if ($i==0){
-// 				$booklist = $bookName;
-// 			}else{
-// 				$booklist .= "</br>".$bookName;
-// 			}
-// 		}
-// 		}
-		return $booklist;
+		return $books;
 	}
 
 
@@ -558,10 +524,12 @@ class SchbasAccounting extends Schbas {
 			$studentIDs = $this->getStudentIDsOfClass($classId);
 
 			$nrOfStudentIDs = count($studentIDs);	// excluded from for loop to increase speed.... (dont like it? channge it...)
-			for($i=0; $i<$nrOfStudentIDs; $i++){
-				$name[] = $this->getNameOfStudentId($studentIDs[$i]);
-				$forename[] = $this->getForenameOfStudentId($studentIDs[$i]);
-				$books[] = $this->getBooksOfStudentIDRebmemer($studentIDs[$i],$classNamelevel);
+			$name = $forename = $books = [];
+			foreach($studentIDs as $userId) {
+				$user = $this->_em->getReference('DM:SystemUsers', $userId);
+				$name[] = $this->getNameOfStudentId($userId);
+				$forename[] = $this->getForenameOfStudentId($userId);
+				$books[] = $this->_loanHelper->loanBooksGet($user);
 			}
 
 			$listOfClasses = $this->getListOfClasses("rebmemer2");
@@ -581,5 +549,10 @@ class SchbasAccounting extends Schbas {
 		}
 
 	}
+
+
+	/////////////////////////////////////////////////////////////////////
+	//Attributes
+	/////////////////////////////////////////////////////////////////////
 }
 ?>

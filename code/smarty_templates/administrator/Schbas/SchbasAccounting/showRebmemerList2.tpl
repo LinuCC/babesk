@@ -21,7 +21,11 @@
 	<tr>
 		<td align="left">{$name[$i]}</td>
 		<td align="left">{$forename[$i]}</td>
-		<td align="left">{$books[$i]}</td>
+		<td align="left">
+			{foreach $books[$i] as $book}
+				<li>{$book->getTitle()}</li>
+			{/foreach}
+		</td>
 	</tr>
 	{/for}
 </table>

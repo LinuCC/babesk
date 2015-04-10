@@ -4,6 +4,7 @@ namespace administrator\Schbas\BookAssignments\Generate;
 
 require_once PATH_ADMIN .  '/Schbas/BookAssignments/BookAssignments.php';
 require_once PATH_INCLUDE . '/Schbas/Loan.php';
+require_once PATH_INCLUDE . '/Schbas/ShouldLendGeneration.php';
 
 class Generate extends \administrator\Schbas\BookAssignments\BookAssignments {
 
@@ -155,6 +156,9 @@ class Generate extends \administrator\Schbas\BookAssignments\BookAssignments {
 		}
 
 		$loanBookMan = new \Babesk\Schbas\Loan($this->_dataContainer);
+		$loanGenerator = new \Babesk\Schbas\ShouldLendGeneration(
+			$this->_dataContainer
+		);
 		$sy = $loanBookMan->schbasPreparationSchoolyearGet();
 		$assignmentsExist = $this->assignmentsForSchoolyearExistCheck($sy);
 		if(
@@ -163,7 +167,8 @@ class Generate extends \administrator\Schbas\BookAssignments\BookAssignments {
 		) {
 			$this->deleteExistingAssignmentsForSchoolyear($sy);
 		}
-		$res = $loanBookMan->loanBooksCalculate($data['addGradelevelToUsers']);
+		$addGradelevel = ($data['addGradelevelToUsers'] != 'false');
+		$res = $loanGenerator->generate($addGradelevel);
 		if($res) {
 			dieJson('Die Zuweisungen wurden erfolgreich erstellt.');
 		}

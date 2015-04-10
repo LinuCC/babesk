@@ -145,30 +145,55 @@ class Loan {
 	 * Filters out the books the user has already lent and those that the user
 	 * will buy by himself.
 	 *
-	 * @param  Object $user The \Babesk\ORM\SystemUsers object
+	 * @param  Object $user    The \Babesk\ORM\SystemUsers object
+	 * @param  Array  $options An array of options. Values can include:
+	 *                         'schoolyear' => Returns the books the user has
+	 *                             to lend for this specific schoolyear.
+	 *                             Default is the schbasPreparationSchoolyear.
 	 * @return array        An array of Doctrine-Objects representing the books
 	 */
-	public function loanBooksGet($user) {
+	public function loanBooksGet($user, array $opt = Null) {
 
 		try {
-			$schoolyear = $this->schbasPreparationSchoolyearGet();
+			$schoolyear = (isset($opt['schoolyear'])) ?
+				$opt['schoolyear'] : $this->schbasPreparationSchoolyearGet();
+			// Default to subtracting the selfpaid books
+			$subtractSelfpay = (!empty($opt['ignoreSelfpay']));
 			// We want all entries where the book has _not_ been lend
 			// and will _not_ be bought by the user himself, so we check for
 			// null
-			$query = $this->_em->createQuery(
-				'SELECT b, usb FROM DM:SchbasBook b
-				INNER JOIN b.usersShouldLend usb
-				INNER JOIN usb.user u
-				LEFT JOIN u.bookLending l
-				LEFT JOIN l.book bLend WITH bLend = b
-				LEFT JOIN u.selfpayingBooks sb WITH sb = b
-				WHERE usb.schoolyear = :schoolyear
-					AND usb.user = :user
-					AND bLend IS NULL
-					AND sb IS NULL
-			');
-			$query->setParameter('schoolyear', $schoolyear);
-			$query->setParameter('user', $user);
+			$qb = $this->_em->createQueryBuilder()
+				->select(['b', 'usb'])
+				->from('DM:SchbasBook', 'b')
+				->innerJoin('b.usersShouldLend', 'usb')
+				->innerJoin('usb.user', 'u')
+				->leftJoin('u.bookLending', 'l')
+				->leftJoin('l.book', 'bLend', 'WITH', 'bLend = b');
+			if($subtractSelfpay) {
+				$qb->leftJoin('u.selfpayingBooks', 'sb', 'WITH', 'sb = b');
+			}
+			$qb->where('usb.schoolyear = :schoolyear')
+				->andWhere('usb.user = :user')
+				->andWhere('bLend IS NULL');
+			if($subtractSelfpay) {
+				$qb->andWhere('sb IS NULL');
+			}
+			$qb->setParameter('schoolyear', $schoolyear);
+			$qb->setParameter('user', $user);
+
+			$query = $qb->getQuery();
+			// $query = $this->_em->createQuery(
+			// 	'SELECT b, usb FROM DM:SchbasBook b
+			// 	INNER JOIN b.usersShouldLend usb
+			// 	INNER JOIN usb.user u
+			// 	LEFT JOIN u.bookLending l
+			// 	LEFT JOIN l.book bLend WITH bLend = b
+			// 	LEFT JOIN u.selfpayingBooks sb WITH sb = b
+			// 	WHERE usb.schoolyear = :schoolyear
+			// 		AND usb.user = :user
+			// 		AND bLend IS NULL
+			// 		AND sb IS NULL
+			// ');
 			$books = $query->getResult();
 			return $books;
 
@@ -176,113 +201,6 @@ class Loan {
 			$this->_logger->log('Could not fetch the loanBooks',
 				['sev' => 'error', 'moreJson' => $e->getMessage()]);
 		}
-	}
-
-	/**
-	 * Calculates the books the users should lend.
-	 * @param  bool   $isNextYear If true, it will be assumed that all users
-	 *                            move one grade up
-	 */
-	public function loanBooksCalculate($isNextYear) {
-
-		$preparationSchoolyear = $this->schbasPreparationSchoolyearGet();
-		if(!$preparationSchoolyear) {
-			$this->_logger->log('Vorbereitungsschuljahr nicht gesetzt.');
-			return false;
-		}
-		// Fetch the users
-		try {
-			$userQuery = $this->_em->createQuery(
-				'SELECT partial u.{
-						id, religion, foreign_language, special_course
-					},
-					uigs, partial g.{id, gradelevel}
-				FROM DM:SystemUsers u
-				INNER JOIN u.attendances uigs
-				INNER JOIN uigs.schoolyear sy WITH sy.active = true
-				INNER JOIN uigs.grade g
-			');
-			//Silly doctrine, dont lazy-load oneToOne-entries automatically
-			$userQuery->setHint(
-				\Doctrine\ORM\Query::HINT_FORCE_PARTIAL_LOAD, true
-			);
-			$users = $userQuery->getResult();
-		} catch (\Doctrine\ORM\Query\QueryException $e) {
-			$this->_logger->log('Could not fetch the users');
-			return false;
-		}
-		// Fetch the books
-		try {
-			$bookQuery = $this->_em->createQuery(
-				'SELECT partial b.{id, class} FROM DM:SchbasBook b'
-			);
-			$books = $bookQuery->getResult();
-		} catch (\Doctrine\ORM\Query\QueryException $e) {
-			$this->_logger->log('Could not fetch the books', 'error');
-			return false;
-		}
-
-		// Init the filter-array
-		// It filters the books based on their subject.
-		// The filter-list define the special subjects to which the user must
-		// explicitly attend, else books of this subject will not be assigned
-		// to the user.
-		list($lang, $rel, $course) = $this->bookSubjectFilterArrayGet();
-		$filterWithCourse = array_merge($lang, $rel, $course);
-		$filter = array_merge($lang, $rel);
-		$triggerObj = $this->_em->getRepository('DM:SystemGlobalSettings')
-			->findOneByName('special_course_trigger');
-		$courseTrigger = (int)$triggerObj->getValue();
-
-		// Create new entries
-		$entries = array();
-
-		foreach($users as $user) {
-			$grade = $user->getAttendances()
-				->first()
-				->getGrade();
-			if(!$grade) {
-				continue;
-			}
-			$gradelevel = $grade->getGradelevel();
-			$gradelevel += ($isNextYear) ? 1 : 0;
-			$userSubjects = array_merge(
-				explode('|', $user->getReligion()),
-				explode('|', $user->getForeignLanguage())
-			);
-			if($courseTrigger >= $gradelevel) {
-				$userSubjects = array_merge(
-					$userSubjects,
-					explode('|', $user->getSpecialCourse())
-				);
-			}
-			if(!empty($this->_gradelevelIsbnIdentAssoc[$gradelevel])) {
-				foreach($books as $book) {
-					$validClasses =
-						$this->_gradelevelIsbnIdentAssoc[$gradelevel];
-					if(
-						in_array($book->getClass(), $validClasses) &&
-						(
-							// Filter the non-needed books
-							(
-								$courseTrigger >= $gradelevel &&
-								!in_array($book->getClass(), $filterWithCourse)
-							) || (
-								!in_array($book->getClass(), $filter)
-							)
-						)
-					) {
-						$entry = new \Babesk\ORM\SchbasUserShouldLendBook();
-						$entry->setUser($user);
-						$entry->setBook($book);
-						$entry->setSchoolyear($preparationSchoolyear);
-						$this->_em->persist($entry);
-					}
-				}
-			}
-		}
-		$this->_em->flush();
-		return true;
 	}
 
 	/**
@@ -321,20 +239,7 @@ class Loan {
 		return $booksInGradelevels;
 	}
 
-
-	/////////////////////////////////////////////////////////////////////
-	//Implements
-	/////////////////////////////////////////////////////////////////////
-
-	protected function entryPoint($dataContainer) {
-
-		$this->_pdo = $dataContainer->getPdo();
-		$this->_em = $dataContainer->getEntityManager();
-		$this->_logger = clone($dataContainer->getLogger());
-		$this->_logger->categorySet('Babesk/Schbas/Loan');
-	}
-
-	protected function bookSubjectFilterArrayGet() {
+	public function bookSubjectFilterArrayGet() {
 
 		$gsRepo = $this->_em->getRepository(
 			'DM:SystemGlobalSettings'
@@ -347,6 +252,21 @@ class Loan {
 		$courseAr = explode('|', $course);
 		return [$langAr, $relAr, $courseAr];
 	}
+
+
+	/////////////////////////////////////////////////////////////////////
+	//Implements
+	/////////////////////////////////////////////////////////////////////
+
+	protected function entryPoint($dataContainer) {
+
+		$this->_pdo = $dataContainer->getPdo();
+		$this->_em = $dataContainer->getEntityManager();
+		$this->_dataContainer = $dataContainer;
+		$this->_logger = clone($dataContainer->getLogger());
+		$this->_logger->categorySet('Babesk/Schbas/Loan');
+	}
+
 
 	/**
 	 * Returns the users gradelevel of the grade being in the active schoolyear
@@ -408,6 +328,7 @@ class Loan {
 	protected $_pdo;
 	protected $_em;
 	protected $_logger;
+	protected $_dataContainer;
 }
 
 ?>
