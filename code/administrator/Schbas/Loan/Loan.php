@@ -19,12 +19,6 @@ class Loan extends Schbas {
 
 		$this->entryPoint($dataContainer);
 
-		require_once 'AdminLoanInterface.php';
-		require_once 'AdminLoanProcessing.php';
-
-		$LoanInterface = new AdminLoanInterface($this->relPath);
-		$LoanProcessing = new AdminLoanProcessing($LoanInterface);
-
 		if(isset($_POST['barcode']) && isset($_POST['userId'])) {
 			$this->bookLoanToUserByBarcode(
 				$_POST['barcode'], $_POST['userId']
