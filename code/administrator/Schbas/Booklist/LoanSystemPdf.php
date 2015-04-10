@@ -13,7 +13,7 @@ class LoanSystemPdf {
 		$this->_page1Title = $page1Title;
 		$this->_page1Text = $page1Text;
 		$this->_gradeLevel = $gradelevel;
-		
+
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -59,7 +59,7 @@ class LoanSystemPdf {
 		$this->_pdf->AddPage();
 		$this->contentPrint($this->_page1Title,$this->_page1Text);
 		}
-	
+
 
 	/**
 	 * Closes the PDF and outputs it to the User, who can download it
@@ -169,7 +169,7 @@ class LoanSystemPdf {
 		$this->_pdf->writeHTMLCell(0, 0, '', '', $content, 0, 1, 0, true, '',
 			true);
 
-		
+
 		$this->_pdf->Ln();
 	}
 
@@ -195,7 +195,7 @@ class LoanSystemPdf {
 		return sprintf('%s',$this->_uid);
 	}
 
-	
+
 
 	/////////////////////////////////////////////////////////////////////
 	//Attributes

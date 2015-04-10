@@ -15,32 +15,6 @@ class BookManager extends TableManager{
 	}
 
 	/**
-	 * Sorts the booklist it gets from MySQL-table and returns them
-	 * Enter description here ...
-	 */
-	function getBooklistSorted($pagePointer, $orderBy) {
-		require_once PATH_ACCESS . '/DBConnect.php';
-		require_once PATH_ACCESS . '/InventoryManager.php';
-		$inventoryManager = new InventoryManager();
-		$res_array = array();
-		$query = sql_prev_inj(sprintf('SELECT * FROM %s ORDER BY `%s` LIMIT %s,10', $this->tablename,$orderBy,$pagePointer));
-		$result = $this->db->query($query);
-		if (!$result) {
-			/**
-			 * @todo Proper Errorhandling here, not this: (wouldnt even execute)
-			 * throw DB_QUERY_ERROR.$this->db->error;
-			 */
-		}
-		while($buffer = $result->fetch_assoc())
-			$res_array[] = $buffer;
-		foreach ($res_array as &$book){
-			$book['lastNumber'] = $inventoryManager->getHighestNumberByBookId($book['id']);
-		}
-
-		return $res_array;
-	}
-
-	/**
 	 * Gives the informations about a book by ID.
 	 *
 	 *

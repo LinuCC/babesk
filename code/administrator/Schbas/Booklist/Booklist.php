@@ -17,11 +17,13 @@ class Booklist extends Schbas {
 		require_once 'AdminBooklistInterface.php';
 		require_once 'AdminBooklistProcessing.php';
 
-		$BookInterface = new AdminBooklistInterface($this->relPath);
-		$BookProcessing = new AdminBooklistProcessing($BookInterface);
-
 		parent::entryPoint($dataContainer);
 		parent::moduleTemplatePathSet();
+
+		$BookInterface = new AdminBooklistInterface($this->relPath);
+		$BookProcessing = new AdminBooklistProcessing(
+			$this->_dataContainer, $BookInterface
+		);
 
 		$action_arr = array('show_booklist' => 1,
 							'add_book' => 4,

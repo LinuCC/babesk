@@ -58,6 +58,32 @@ class Loan {
 		}
 	}
 
+	public function booksInGradelevelToLoanGet($gradelevel) {
+
+		$classes = $this->gradelevel2IsbnIdent($gradelevel);
+		if($classes) {
+			try {
+				$query = $this->_em->createQuery(
+					'SELECT b, s FROM DM:SchbasBook b
+					LEFT JOIN b.subject s
+					WHERE b.class IN (:classes)
+				');
+				$query->setParameter('classes', $classes);
+				$books = $query->getResult();
+				return $books;
+			}
+			catch(Exception $e) {
+				$this->_logger->logO('Could not fetch the books to loan in ' .
+					'gradelevel', ['sev' => 'error', 'moreJson' =>
+						$e->getMessage()]);
+			}
+		}
+		else {
+			return array();
+		}
+	}
+
+
 	/**
 	 * Calculates the loan-price of a book by its full price and its class
 	 * @param  float  $flatPrice The full price of the book

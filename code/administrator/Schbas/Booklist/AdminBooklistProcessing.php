@@ -1,98 +1,71 @@
 <?php
 
-class AdminBooklistProcessing {
-	function __construct($BookInterface) {
+use Doctrine\Common\Collections\ArrayCollection;
 
+class AdminBooklistProcessing {
+
+
+	function __construct($dataContainer, $BookInterface) {
+
+		$this->_dataContainer = $dataContainer;
 		$this->BookInterface = $BookInterface;
 		$this->messages = array(
 				'error' => array('no_books' => 'Keine B&uuml;cher gefunden.','notFound' => 'Buch nicht gefunden!'));
 	}
 
-	var $messages = array();
+	public $messages = array();
 	private $bookInterface;
-
-	/**
-	 * Shows booklist
-	 * @param $filter
-	 */
-	function OLDShowBooklist($option, $filter) {
-
-		require_once PATH_ACCESS . '/BookManager.php';
-		require_once PATH_ACCESS . '/UserManager.php';
-
-		$booklistManager = new BookManager();
-		$userManager = new UserManager();
-
-		try {
-			isset($_GET['sitePointer'])?$showPage = $_GET['sitePointer'] + 0:$showPage = 1;
-			$nextPointer = $showPage*10-10;
-			if ($option == "filter"){
-				$booklist = $booklistManager->getBooklistSorted($nextPointer, $filter);
-			}elseif ($option == "search"){
-				try {
-					$class = $userManager->getClassByUsername($filter);
-					$booklist = $booklistManager->getBooksByClass($class);
-				} catch (Exception $e) {
-					$booklist = $e->getMessage();
-				}
-				if ($booklist == 'MySQL returned no data!'){
-					try {
-						$booklist = $booklistManager->getBooksByClass($filter);
-					} catch (Exception $e) {
-						$this->BookInterface->dieError("Keine Eintr&auml;ge gefunden!");
-					}
-				}
-			}
-		} catch (Exception $e) {
-			$this->logs
-			->log('ADMIN', 'MODERATE',
-					sprintf('Error while getting Data from MySQL:%s in %s', $e->getMessage(), __METHOD__));
-			$this->booklistInterface->dieError($this->messages['error']['get_data_failed']);
-		}
-		$navbar = navBar($showPage, 'schbas_books', 'Schbas', 'Booklist', '1',$filter);
-		$this->BookInterface->ShowBooklist($booklist,$navbar);
-	}
 
 	/**
 	 * Show list of books which students can keep for next schoolyear, ordered by schoolyear.
 	 */
-	 function showBooksForNextYear() {
+	function showBooksForNextYear() {
 
-	 	require_once 'AdminBooklistInterface.php';
-	 	if (isset($_POST['grade'])) {
-	 		require_once PATH_ACCESS . '/BookManager.php';
-	 		$booklistManager = new BookManager();
-	 		$booklist_act = $booklistManager->getBooksByClass($_POST['grade']);
-	 		$booklist_nxt = $booklistManager->getBooksByClass($_POST['grade']+1);
+		require_once 'AdminBooklistInterface.php';
+		if (isset($_POST['grade'])) {
+			require_once PATH_INCLUDE . '/Schbas/Loan.php';
+			require_once PATH_ACCESS . '/BookManager.php';
 
-
-	 		$booklistFNY = array();
-	 		$booklistFNY = array_map("unserialize", array_intersect($this->serialize_array_values($booklist_act),$this->serialize_array_values($booklist_nxt)));
-
-	 		$this->showPdf($booklistFNY);
-	 	}
-	 	else {
-	 		$this->BookInterface->ShowSelectionForBooksToKeep();
-	 	}
-
-
+			$gradelevel = $_POST['grade'];
+			$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
+			$booksThisYear = $loanHelper->booksInGradelevelToLoanGet(
+				$gradelevel
+			);
+			$booksNextYear = $loanHelper->booksInGradelevelToLoanGet(
+				$gradelevel + 1
+			);
+			//Use ArrayCollection for filter() and contains()
+			$booksThisYear = new ArrayCollection($booksThisYear);
+			$booksNextYear = new ArrayCollection($booksNextYear);
+			// Only books that are both in this gradelevel and next gradelevel
+			// will be displayed
+			$books = $booksThisYear->filter(
+				function($book) use ($booksNextYear) {
+					return $booksNextYear->contains($book);
+				}
+			);
+			$this->showPdf($books->toArray());
+		}
+		else {
+			$this->BookInterface->ShowSelectionForBooksToKeep();
+		}
 	}
 
-        /**
+	/**
 	 * Show list of books by topics.
 	 */
-	 function showBooksByTopic() {
+	function showBooksByTopic() {
 
-	 	require_once 'AdminBooklistInterface.php';
-	 	if (isset($_POST['topic'])) {
-	 		require_once PATH_ACCESS . '/BookManager.php';
-	 		$booklistManager = new BookManager();
-	 		$booklist = $booklistManager->getBooksByTopic($_POST['topic']);
-	 		$this->showPdfFT($booklist);
-	 	}
-	 	else {
-	 		$this->BookInterface->ShowSelectionForBooksByTopic();
-	 	}
+		require_once 'AdminBooklistInterface.php';
+		if (isset($_POST['topic'])) {
+			require_once PATH_ACCESS . '/BookManager.php';
+			$booklistManager = new BookManager();
+			$booklist = $booklistManager->getBooksByTopic($_POST['topic']);
+			$this->showPdfFT($booklist);
+		}
+		else {
+			$this->BookInterface->ShowSelectionForBooksByTopic();
+		}
 	}
 
 	function serialize_array_values($arr){
@@ -105,12 +78,12 @@ class AdminBooklistProcessing {
 	}
 
 	private function showPdf($booklist) {
-			$books = '<table border="0" bordercolor="#FFFFFF" style="background-color:#FFFFFF" width="100%" cellpadding="0" cellspacing="1">
+		$books = '<table border="0" bordercolor="#FFFFFF" style="background-color:#FFFFFF" width="100%" cellpadding="0" cellspacing="1">
 
-				<tr style="font-weight:bold; text-align:center;"><th>Fach</th><th>Titel</th><th>Verlag</th><th>ISBN-Nr.</th><th>Preis</th></tr>';
+			<tr style="font-weight:bold; text-align:center;"><th>Fach</th><th>Titel</th><th>Verlag</th><th>ISBN-Nr.</th><th>Preis</th></tr>';
 		foreach ($booklist as $book) {
 			// $bookPrices += $book['price'];
-			$books.= '<tr><td>'.$book["subject"].'</td><td>'.$book["title"].'</td><td>'.$book["publisher"].'</td><td>'.$book["isbn"].'</td><td align="right">'.$book["price"].' &euro;</td></tr>';
+			$books .= '<tr><td>' . $book->getSubject()->getName() . '</td><td>' . $book->getTitle() . '</td><td>' . $book->getPublisher() . '</td><td>' . $book->getIsbn() . '</td><td align="right">' . $book->getPrice() . ' &euro;</td></tr>';
 		}
 		//$books .= '<tr><td></td><td></td><td></td><td style="font-weight:bold; text-align:center;">Summe:</td><td align="right">'.$bookPrices.' &euro;</td></tr>';
 		$books .= '</table>';

@@ -239,11 +239,13 @@ class SchbasSettings extends Schbas {
 
 	private function showPdf() {
 		require_once PATH_ACCESS. '/BookManager.php';
+		require_once PATH_INCLUDE . '/Schbas/Loan.php';
+
+		$booklistManager = new BookManager();
+		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
 
 		//get cover letter date
 		$letter_date =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDateCoverLetter'");
-
-		$booklistManager = new BookManager();
 
 		//get gradelevel ("Klassenstufe")
 		$gradelevel = $_POST['gradelabel'];
@@ -261,7 +263,7 @@ class SchbasSettings extends Schbas {
 		$textThree = TableMng::query("SELECT title, text FROM SchbasTexts WHERE description='textThree".$gradelevel."'");
 
 		// get booklist
-		$booklist = $booklistManager->getBooksByClass($gradelevel);
+		$booklist = $loanHelper->booksInGradelevelToLoanGet($gradelevel);
 
 		require_once PATH_INCLUDE . '/Schbas/Loan.php';
 
@@ -276,7 +278,7 @@ class SchbasSettings extends Schbas {
 	//	$bookPrices = 0;
 		foreach ($booklist as $book) {
 			// $bookPrices += $book['price'];
-			$books.= '<tr><td>'.$book['subject'].'</td><td>'.$book['title'].'</td><td>'.$book['publisher'].'</td><td>'.$book['isbn'].'</td><td align="right">'.$book['price'].' &euro;</td></tr>';
+			$books .= '<tr><td>' . $book->getSubject()->getName() . '</td><td>' . $book->getTitle() . '</td><td>' . $book->getPublisher() . '</td><td>' . $book->getIsbn() . '</td><td align="right">' . $book->getPrice() . ' &euro;</td></tr>';
 		}
 		//$books .= '<tr><td></td><td></td><td></td><td style="font-weight:bold; text-align:center;">Summe:</td><td align="right">'.$bookPrices.' &euro;</td></tr>';
 		$books .= '</table>';
