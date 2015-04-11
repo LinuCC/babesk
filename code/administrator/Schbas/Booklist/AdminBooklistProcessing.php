@@ -8,6 +8,7 @@ class AdminBooklistProcessing {
 	function __construct($dataContainer, $BookInterface) {
 
 		$this->_dataContainer = $dataContainer;
+		$this->_em = $dataContainer->getEntityManager();
 		$this->BookInterface = $BookInterface;
 		$this->messages = array(
 				'error' => array('no_books' => 'Keine B&uuml;cher gefunden.','notFound' => 'Buch nicht gefunden!'));
@@ -58,10 +59,17 @@ class AdminBooklistProcessing {
 
 		require_once 'AdminBooklistInterface.php';
 		if (isset($_POST['topic'])) {
-			require_once PATH_ACCESS . '/BookManager.php';
-			$booklistManager = new BookManager();
-			$booklist = $booklistManager->getBooksByTopic($_POST['topic']);
-			$this->showPdfFT($booklist);
+			$query = $this->_em->createQuery(
+				'SELECT b FROM DM:SchbasBook b
+				INNER JOIN b.subject s WITH s.abbreviation = :topic
+			');
+			$query->setParameter('topic', $_POST['topic']);
+			$books = $query->getResult();
+			$this->showPdfFT($books);
+			// require_once PATH_ACCESS . '/BookManager.php';
+			// $booklistManager = new BookManager();
+			// $booklist = $booklistManager->getBooksByTopic($_POST['topic']);
+			// $this->showPdfFT($booklist);
 		}
 		else {
 			$this->BookInterface->ShowSelectionForBooksByTopic();
@@ -93,38 +101,38 @@ class AdminBooklistProcessing {
 	}
 
 
-        private function showPdfFT($booklist) {
-            require_once 'LoanSystemPdf.php';
-			$books = '<table border="0" bordercolor="#FFFFFF" style="background-color:#FFFFFF" width="100%" cellpadding="0" cellspacing="1">
+	private function showPdfFT($booklist) {
 
-				<tr style="font-weight:bold; text-align:center;"><th>Klasse</th><th>Titel</th><th>Verlag</th><th>ISBN-Nr.</th><th>Preis</th></tr>';
-		 $classAssign = array(
-				'5'=>'05,56',			// hier mit assoziativem array
-										// arbeiten, in der wertzuw.
-				'6'=>'56,06,69,67',		// alle kombinationen auflisten
-								// sql-abfrage:
-				'7'=>'78,07,69,79,67',	// SELECT * FROM `schbas_books` WHERE `class` IN (werte-array pro klasse)
-				'8'=>'78,08,69,79,89',
-				'9'=>'90,91,09,92,69,79,89',
-				'10'=>'90,91,10,92',
-				'11'=>'12,92,13',
-				'12'=>'12,92,13');
+		require_once 'LoanSystemPdf.php';
+		$books = '<table border="0" bordercolor="#FFFFFF" style="background-color:#FFFFFF" width="100%" cellpadding="0" cellspacing="1">
 
-                        foreach ($booklist as $book) {
-                               $classKey="";
-                            foreach ($classAssign as $key => $value) {
-                               if (strpos($value,$book["class"]) !== false) $classKey.=$key."/";
-                            }
-
-
-                    $classKey = rtrim($classKey, "/");
-			$books.= '<tr><td>'.$classKey.'</td><td>'.$book["title"].'</td><td>'.$book["publisher"].'</td><td>'.$book["isbn"].'</td><td align="right">'.$book["price"].' &euro;</td></tr>';
+		<tr style="font-weight:bold; text-align:center;"><th>Klasse</th><th>Titel</th><th>Verlag</th><th>ISBN-Nr.</th><th>Preis</th></tr>';
+		$classAssign = array(
+			'5'=>'05,56',			// hier mit assoziativem array
+			// arbeiten, in der wertzuw.
+			'6'=>'56,06,69,67',		// alle kombinationen auflisten
+			// sql-abfrage:
+			'7'=>'78,07,69,79,67',	// SELECT * FROM `schbas_books` WHERE `class` IN (werte-array pro klasse)
+			'8'=>'78,08,69,79,89',
+			'9'=>'90,91,09,92,69,79,89',
+			'10'=>'90,91,10,92',
+			'11'=>'12,92,13',
+			'12'=>'12,92,13'
+		);
+		foreach ($booklist as $book) {
+			$classKey="";
+			foreach ($classAssign as $key => $value) {
+				if (strpos($value,$book->getClass()) !== false) {
+					$classKey.=$key."/";
+				}
+			}
+			$classKey = rtrim($classKey, "/");
+			$books.= '<tr><td>'.$classKey.'</td><td>'.$book->getTitle().'</td><td>'.$book->getPublisher().'</td><td>'.$book->getIsbn().'</td><td align="right">'.$book->getPrice().' &euro;</td></tr>';
 		}
-
 		$books .= '</table>';
 		$books = str_replace('ä', '&auml;', $books);
 		$books = str_replace('é', '&eacute;', $books);
-                try {
+		try {
 			$pdfCreator = new LoanSystemPdf("Lehrb&uuml;cher f&uuml;r Fach ".($_POST['topic']),$books,"");
 			$pdfCreator->create();
 			$pdfCreator->output("Buchliste_Fach_".$_POST['topic']);
@@ -132,8 +140,6 @@ class AdminBooklistProcessing {
 		} catch (Exception $e) {
 			$this->_interface->DieError('Konnte das PDF nicht erstellen!');
 		}
-
-
 	}
 
 

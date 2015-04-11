@@ -91,27 +91,5 @@ class BookManager extends TableManager{
 	function editBook($id, $subjectId, $class, $title, $author, $publisher, $isbn, $price, $bundle){
 		parent::alterEntry($id, 'subjectId', $subjectId, 'class', $class, 'title', $title, 'author', $author, 'publisher', $publisher, 'isbn', $isbn, 'price', $price, 'bundle', $bundle);
 	}
-
-        function getBooksByTopic($topic) {
-            require_once PATH_ACCESS . '/DBConnect.php';
-		$query = sql_prev_inj(sprintf(
-			'SELECT * FROM %s WHERE subjectId = (
-					SELECT ID FROM SystemSchoolSubjects
-						WHERE abbreviation = "%s"
-				) ORDER BY `class`',
-			$this->tablename, $topic
-		));
-
-                $result = $this->db->query($query);
-		if (!$result) {
-			die(_g('Error occured while fetching the books by topic'));
-		}
-		$res_array = NULL;
-		while($buffer = $result->fetch_assoc())
-			$res_array[] = $buffer;
-		return $res_array;
-
-        }
-
 }
 ?>
