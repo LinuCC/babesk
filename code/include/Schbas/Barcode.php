@@ -66,7 +66,7 @@ class Barcode {
 		return true;
 	}
 
-	public function getMatchingInventory($em) {
+	public function getMatchingBookExemplar($em) {
 
 		$query = $em->createQuery(
 			'SELECT i FROM DM:SchbasInventory i

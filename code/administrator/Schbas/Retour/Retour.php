@@ -163,7 +163,7 @@ class Retour extends Schbas {
 			$barcode = \Babesk\Schbas\Barcode::createByBarcodeString(
 				$inventarnr
 			);
-			$inventory = $barcode->getMatchingInventory($this->_em);
+			$inventory = $barcode->getMatchingBookExemplar($this->_em);
 			if(!$inventory) { return false; }
 			try {
 				$this->_em->remove($inventory);
