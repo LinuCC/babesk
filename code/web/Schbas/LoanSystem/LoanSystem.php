@@ -128,49 +128,30 @@ class LoanSystem extends Schbas {
 		);
 		list($feeNormal, $feeReduced) = $fees;
 
-		$loanbooksTest = $loanHelper->loanBooksGet($user);
-		$selfpayingBooks = $this->_em->createQuery(
-			'SELECT b FROM SchbasBook b
+		$loanbooksTest = $loanHelper->loanBooksGet(
+			$user, ['ignoreSelfpay' => true]
+		);
+		$query = $this->_em->createQuery(
+			'SELECT b FROM DM:SchbasBook b
 			INNER JOIN b.selfpayingUsers u WITH u = :user
 		');
-		$loanbooksColl = new \Doctrine\Common\Collections\ArrayCollection(
-
-		);
-		foreach($selfpayingBooks as $book) {
-
+		$query->setParameter('user', $user);
+		$selfpayingBooks = $query->getResult();
+		// [ {
+		//     'book': '<book>',
+		//     'selfpaying': '<boolean>'
+		// } ]
+		$booksWithSelfpayingStatus = array();
+		$selfpayingBooksColl = new ArrayCollection($selfpayingBooks);
+		foreach($loanbooksTest as $book) {
+			$isSelfpaying = $selfpayingBooksColl->contains($book);
+			$booksWithSelfpayingStatus[] = [
+				'book' => $book,
+				'selfpaying' => $isSelfpaying
+			];
 		}
 
-		/**
-		 * @todo  getLoanByUID will be replaced by a function in
-		 *        Babesk\Schbas\Loan. Switch to that function instead
-		 */
-		require_once PATH_ACCESS . '/LoanManager.php';
-		require_once PATH_INCLUDE . '/Schbas/Loan.php';
-		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
-		$lm = new LoanManager();
-		$loanbooks = $lm->getLoanByUID($_SESSION['uid'], Null);
-		/**
-		 * @todo  Following line returns a different result! This function
-		 *        needs to be fixed.
-		 */
-		//$loanbooks = $loanHelper->loanBooksGet($_SESSION['uid']);
-
-		//If user is selfpayer, show the entries to him
-		$stmt = $this->_pdo->prepare(
-			'SELECT BID FROM SchbasSelfpayer WHERE UID = :userId
-		');
-		$stmt->execute(array('userId' => $_SESSION['uid']));
-		$selfbuy = $stmt->fetchAll(\PDO::FETCH_COLUMN);
-		if(count($selfbuy)) {
-			foreach($loanbooks as &$book) {
-				if(in_array($book['id'], $selfbuy)) {
-					$book['selected'] = true;
-				}
-			}
-		}
-
-		$this->_smarty->assign('loanbooks', $loanbooks);
-		$this->_smarty->assign('loanbooksTest', $loanbooksTest);
+		$this->_smarty->assign('booksWithStatus', $booksWithSelfpayingStatus);
 		$this->_smarty->assign('feeNormal', $feeNormal);
 		$this->_smarty->assign('feeReduced', $feeReduced);
 		$this->_smarty->assign('schbasYear', $schbasYear);

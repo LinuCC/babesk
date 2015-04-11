@@ -46,28 +46,21 @@
 		<div class="col-md-8 col-md-offset-2">
 			<p>Folgende B&uuml;cher werden f&uuml;r das kommende Schuljahr ben&ouml;tigt. Sie k&ouml;nnen in der Liste angeklickt werden, wenn sie selbst angeschafft werden. Bei der Buchausgabe werden sie dann nicht ausgegeben.</p>
 			<fieldset>
-			<div class="col-md-6">
-			<legend>Liste der Bücher</legend>
-				{foreach from=$loanbooks item=book}
-					<input type="checkbox" name="bookID[]" value="{$book.id}"
-						{if $book.selected}checked{/if}>
-					<span class="booklist-heading">{$book.subject}: {$book.title} </span>
-					<p class="booklist-details">
-						({$book.author}, {$book.publisher}. ISBN: {$book.isbn}. {$book.price} &euro;)
-					</p>
+				{foreach from=$booksWithStatus item=bookWithStatus}
+					{$book = $bookWithStatus.book}
+					{$isSelfpaying = $bookWithStatus.selfpaying}
+					<div class="form-group">
+						<input type="checkbox" id="bookselector-{$book->getId()}"
+							class="fancy-check" name="bookID[]" value="{$book->getId()}"
+							{if $isSelfpaying}checked{/if}>
+						<label for="bookselector-{$book->getId()}">
+							<span class="booklist-heading">{$book->getSubject()->getName()}: {$book->getTitle()} </span>
+						</label>
+						<p class="help-block">
+							({$book->getAuthor()}, {$book->getPublisher()}. ISBN: {$book->getIsbn()}. {$book->getPrice()} &euro;)
+						</p>
+					</div>
 				{/foreach}
-				</div>
-				<hr>
-				<div class="col-md-6">
-				{foreach from=$loanbooksTest item=book}
-					<input type="checkbox" name="bookID[]" value="{$book->getId()}"
-						{if true}checked{/if}>
-					<span class="booklist-heading">{$book->getSubject()->getName()}: {$book->getTitle()} </span>
-					<p class="booklist-details">
-						({$book->getAuthor()}, {$book->getPublisher()}. ISBN: {$book->getIsbn()}. {$book->getPrice()} &euro;)
-					</p>
-				{/foreach}
-				</div>
 			</fieldset>
 			<input class="btn btn-primary pull-right" type="submit" value="Selbstk&auml;ufe abspeichern" />
 		</div>
