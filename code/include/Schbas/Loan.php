@@ -150,6 +150,9 @@ class Loan {
 	 *                         'schoolyear' => Returns the books the user has
 	 *                             to lend for this specific schoolyear.
 	 *                             Default is the schbasPreparationSchoolyear.
+	 *                         'ignoreSelfpay' => Books that would get filtered
+	 *                             because the user is buying them for himself
+	 *                             will be included.
 	 * @return array        An array of Doctrine-Objects representing the books
 	 */
 	public function loanBooksGet($user, array $opt = Null) {
@@ -158,7 +161,7 @@ class Loan {
 			$schoolyear = (isset($opt['schoolyear'])) ?
 				$opt['schoolyear'] : $this->schbasPreparationSchoolyearGet();
 			// Default to subtracting the selfpaid books
-			$subtractSelfpay = (!empty($opt['ignoreSelfpay']));
+			$subtractSelfpay = (empty($opt['ignoreSelfpay']));
 			// We want all entries where the book has _not_ been lend
 			// and will _not_ be bought by the user himself, so we check for
 			// null
@@ -170,7 +173,13 @@ class Loan {
 				->leftJoin('u.bookLending', 'l')
 				->leftJoin('l.book', 'bLend', 'WITH', 'bLend = b');
 			if($subtractSelfpay) {
-				$qb->leftJoin('u.selfpayingBooks', 'sb', 'WITH', 'sb = b');
+				// Use selfpayingBookEntities because its a left join and
+				// doctrines many-to-many would join all entries of the first
+				// table and parse the WITH to filter the _second_ table, not
+				// the first, resulting in unnecessary rows generated.
+				$qb->leftJoin(
+					'u.selfpayingBookEntities', 'sbe', 'WITH', 'sbe.book = b'
+				)->leftJoin('sbe.book', 'sb');
 			}
 			$qb->where('usb.schoolyear = :schoolyear')
 				->andWhere('usb.user = :user')
@@ -182,18 +191,6 @@ class Loan {
 			$qb->setParameter('user', $user);
 
 			$query = $qb->getQuery();
-			// $query = $this->_em->createQuery(
-			// 	'SELECT b, usb FROM DM:SchbasBook b
-			// 	INNER JOIN b.usersShouldLend usb
-			// 	INNER JOIN usb.user u
-			// 	LEFT JOIN u.bookLending l
-			// 	LEFT JOIN l.book bLend WITH bLend = b
-			// 	LEFT JOIN u.selfpayingBooks sb WITH sb = b
-			// 	WHERE usb.schoolyear = :schoolyear
-			// 		AND usb.user = :user
-			// 		AND bLend IS NULL
-			// 		AND sb IS NULL
-			// ');
 			$books = $query->getResult();
 			return $books;
 

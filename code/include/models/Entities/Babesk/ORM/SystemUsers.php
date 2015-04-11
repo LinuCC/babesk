@@ -924,4 +924,42 @@ class SystemUsers
     {
         return $this->selfpayingBooks;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $selfpayingBookEntities;
+
+
+    /**
+     * Add selfpayingBookEntities
+     *
+     * @param \Babesk\ORM\SchbasSelfpayer $selfpayingBookEntities
+     * @return SystemUsers
+     */
+    public function addSelfpayingBookEntity(\Babesk\ORM\SchbasSelfpayer $selfpayingBookEntities)
+    {
+        $this->selfpayingBookEntities[] = $selfpayingBookEntities;
+
+        return $this;
+    }
+
+    /**
+     * Remove selfpayingBookEntities
+     *
+     * @param \Babesk\ORM\SchbasSelfpayer $selfpayingBookEntities
+     */
+    public function removeSelfpayingBookEntity(\Babesk\ORM\SchbasSelfpayer $selfpayingBookEntities)
+    {
+        $this->selfpayingBookEntities->removeElement($selfpayingBookEntities);
+    }
+
+    /**
+     * Get selfpayingBookEntities
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSelfpayingBookEntities()
+    {
+        return $this->selfpayingBookEntities;
+    }
 }

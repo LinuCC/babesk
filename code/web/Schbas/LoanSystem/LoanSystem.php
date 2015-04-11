@@ -1,5 +1,7 @@
 <?php
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/Schbas/Loan.php';
 require_once PATH_WEB . '/WebInterface.php';
@@ -85,6 +87,7 @@ class LoanSystem extends Schbas {
 		$schbasYear = $this->_em->getRepository(
 			'DM:SystemGlobalSettings'
 		)->findOneByName('schbas_year')->getValue();
+		$user = $this->_em->getReference('DM:SystemUsers', $_SESSION['uid']);
 		//$schbasYear = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbas_year'");
 		//get gradeValue ("Klassenstufe")
 		//$gradelevel = TableMng::query(
@@ -120,11 +123,22 @@ class LoanSystem extends Schbas {
 		;
 
 		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
-		$user = $this->_em->getReference('DM:SystemUsers', $_SESSION['uid']);
 		$fees = $loanHelper->loanPriceOfAllBookAssignmentsForUserCalculate(
 			$user
 		);
 		list($feeNormal, $feeReduced) = $fees;
+
+		$loanbooksTest = $loanHelper->loanBooksGet($user);
+		$selfpayingBooks = $this->_em->createQuery(
+			'SELECT b FROM SchbasBook b
+			INNER JOIN b.selfpayingUsers u WITH u = :user
+		');
+		$loanbooksColl = new \Doctrine\Common\Collections\ArrayCollection(
+
+		);
+		foreach($selfpayingBooks as $book) {
+
+		}
 
 		/**
 		 * @todo  getLoanByUID will be replaced by a function in
@@ -135,8 +149,6 @@ class LoanSystem extends Schbas {
 		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
 		$lm = new LoanManager();
 		$loanbooks = $lm->getLoanByUID($_SESSION['uid'], Null);
-		$user = $this->_em->getReference('DM:SystemUsers', $_SESSION['uid']);
-		$loanbooksTest = $loanHelper->loanBooksGet($user);
 		/**
 		 * @todo  Following line returns a different result! This function
 		 *        needs to be fixed.

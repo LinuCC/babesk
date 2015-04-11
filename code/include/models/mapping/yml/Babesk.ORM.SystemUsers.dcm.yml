@@ -139,6 +139,9 @@ Babesk\ORM\SystemUsers:
         booksToLend:
             targetEntity: Babesk\ORM\SchbasUserShouldLendBook
             mappedBy: user
+        selfpayingBookEntities:
+            targetEntity: Babesk\ORM\SchbasSelfpayer
+            mappedBy: user
     manyToOne:
         priceGroup:
             targetEntity: Babesk\ORM\BabeskPriceGroups
