@@ -23,8 +23,6 @@ class Retour extends Schbas {
 
 		$this->entryPoint($dataContainer);
 
-		require_once 'AdminRetourInterface.php';
-
 		require_once PATH_ACCESS . '/CardManager.php';
 		require_once PATH_ACCESS . '/UserManager.php';
 		require_once PATH_ACCESS . '/LoanManager.php';

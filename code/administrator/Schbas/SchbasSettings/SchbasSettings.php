@@ -22,10 +22,8 @@ class SchbasSettings extends Schbas {
 		parent::entryPoint($dataContainer);
 
 		require_once 'AdminSchbasSettingsInterface.php';
-		require_once 'AdminSchbasSettingsProcessing.php';
 
 		$SchbasSettingsInterface = new AdminSchbasSettingsInterface($this->relPath);
-		$SchbasSettingsProcessing = new AdminSchbasSettingsProcessing($SchbasSettingsInterface);
 
 		if (!isset($_GET['action']))
 			$SchbasSettingsInterface->InitialMenu();
@@ -33,9 +31,6 @@ class SchbasSettings extends Schbas {
 			switch ($_GET['action']){
 				case 'editBankAccount':
 					$this->editBankAccount();
-					break;
-				case '2':
-					$SchbasSettingsInterface->LoanSettings($SchbasSettingsProcessing->getLoanSettings(),false);
 					break;
 				case '3':
 					$SchbasSettingsInterface->RetourSettings();

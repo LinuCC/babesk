@@ -9,9 +9,6 @@
 			<a href="index.php?section=Schbas|SchbasSettings&amp;action=editBankAccount">Bankverbindung</a>
 		</li>
 		<li>
-			<a href="index.php?section=Schbas|SchbasSettings&amp;action=2">Ausleihgebühren</a>
-		</li>
-		<li>
 			<a href="index.php?section=Schbas|SchbasSettings&amp;action=3">Termine</a>
 		</li>
 	</ul>
