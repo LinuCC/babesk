@@ -54,7 +54,9 @@
 							class="fancy-check" name="bookID[]" value="{$book->getId()}"
 							{if $isSelfpaying}checked{/if}>
 						<label for="bookselector-{$book->getId()}">
-							<span class="booklist-heading">{$book->getSubject()->getName()}: {$book->getTitle()} </span>
+							<span class="booklist-heading">
+								{$book->getSubject()->getName()}: {$book->getTitle()}
+							</span>
 						</label>
 						<p class="help-block">
 							({$book->getAuthor()}, {$book->getPublisher()}. ISBN: {$book->getIsbn()}. {$book->getPrice()} &euro;)

@@ -9,12 +9,18 @@
 		</thead>
 		<tbody>
 			{foreach $data as $retourbook}
+				{$exemplar = $retourbook->getExemplars()->first()}
 			<tr>
-				<td>{$retourbook.title}</td>
-				<td>{$retourbook.author}</td>
-				<td>{$retourbook.publisher}</td>
+				<td>{$retourbook->getTitle()}</td>
+				<td>{$retourbook->getAuthor()}</td>
+				<td>{$retourbook->getPublisher()}</td>
 				<td>
-					{$retourbook.subject} {$retourbook.year_of_purchase} {$retourbook.class} {$retourbook.bundle} / {$retourbook.exemplar}
+					{$retourbook->getSubject()->getAbbreviation()}
+					{$exemplar->getYearOfPurchase()}
+					{$retourbook->getClass()}
+					{$retourbook->getBundle()}
+					/
+					{$exemplar->getExemplar()}
 				</td>
 			</tr>
 			{/foreach}
