@@ -140,24 +140,27 @@ class SchbasAccounting extends Schbas {
 			$uid = $barcodeArray[0];
 			$loanChoice = $barcodeArray[1];
 			$haystack = array('nl','ln','lr','ls');
-			$user = $this->_em->getReference('DM:SystemUsers', $uid);
+			$user = $this->_em->find('DM:SystemUsers', $uid);
 
-			$query = sprintf("SELECT COUNT(*) FROM SchbasAccounting WHERE `UID`='%s'",$uid);
-			$result=TableMng::query($query);
-			if ($result[0]['COUNT(*)']!="0") {
-				die('dupe');
+			$accounting = $this->_em->getRepository('DM:SchbasAccounting')
+				->findOneByUser($user);
+			if ($accounting) {
+				http_response_code(409);
+				die('Der Antrag für diesen Benutzer wurde bereits ' .
+					'eingescannt. Bitte löschen sie ihn manuell, um ihn neu ' .
+					'hinzuzufügen.');
 			}
 			//Check if the user is in an active Grade
-			$user = $this->_em->find('DM:SystemUsers', $uid);
 			$count = $this->_em->createQuery(
 				'SELECT COUNT(u) FROM DM:SystemUsers u
 					JOIN u.attendances uigs
 					JOIN uigs.schoolyear s WITH s.active = 1
-					WHERE u.id = :userId
-			')->setParameter('userId', $uid)
+					WHERE u = :user
+			')->setParameter('user', $user)
 				->getSingleScalarResult();
 			if(!$count) {
-				die('noActiveGrade');
+				http_response_code(400);
+				die('Der Benutzer ist im aktiven Schuljahr in keiner Klasse');
 			}
 			if(is_numeric($uid) && in_array($loanChoice, $haystack, true)) {
 				try {

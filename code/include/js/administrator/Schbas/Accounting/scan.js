@@ -21,9 +21,6 @@ function sendUserReturnedBarcode(barcode) {
 			else if(data == 'notValid') {
 				toastr.error('Der Barcode enthält inkorrekte Zeichen');
 			}
-			else if(data == 'dupe') {
-				toastr.error(unescape('Formular wurde bereits eingescannt. Bei %C4nderungen bitte zuerst l%F6schen!'));
-			}
 			else if(data == 'noActiveGrade') {
 				toastr.error('Benutzer ist nicht im aktuellen Schuljahr!');
 			}
@@ -36,8 +33,12 @@ function sendUserReturnedBarcode(barcode) {
 				console.log(data);
 			}
 		},
-		error: function(data) {
-			toastr.error('Ein Fehler ist beim Senden des Barcodes aufgetreten!');
+		error: function(jqXHR, statusText, errorThrown) {
+			var msg = "";
+			if(jqXHR.responseText) {
+				msg = jqXHR.responseText;
+			}
+			toastr.error(msg, 'Ein Fehler ist aufgetreten!');
 		}
 	});
 }
