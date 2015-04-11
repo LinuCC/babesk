@@ -94,37 +94,5 @@ class InventoryManager extends TableManager{
 		return $result['id'];
 		}
 	}
-
-	/**
-	 * Gets the book id by the inventory id.
-	 */
-	function getBookIDByInvID($inv_id) {
-		$query = sql_prev_inj(sprintf('SELECT book_id FROM %s WHERE id=%s', $this->tablename, $inv_id));
-		$result = $this->db->query($query);
-		if (!$result) {
-			/**
-			 * @todo Proper Errorhandling here, not this: (wouldnt even execute)
-			 * throw DB_QUERY_ERROR.$this->db->error;
-			 */
-		}
-		while($buffer = $result->fetch_assoc())
-			$book_id = $buffer['book_id'];
-		return $book_id;
-	}
-
-	function getHighestNumberByBookId($book_id) {
-		$query = sql_prev_inj(sprintf('SELECT MAX(`exemplar`) AS number FROM `%s` WHERE book_id=%s', $this->tablename, $book_id));
-		$result = $this->db->query($query);
-		if (!$result) {
-			/**
-			 * @todo Proper Errorhandling here, not this: (wouldnt even execute)
-			 * throw DB_QUERY_ERROR.$this->db->error;
-			 */
-		}
-		while($buffer = $result->fetch_assoc()){
-			$exemplar = $buffer['number'];
-			return $exemplar;
-		}
-	}
 }
 ?>
