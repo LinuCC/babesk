@@ -75,6 +75,8 @@ _g("modulepath_root/administrator/Schbas/Retour");
 _g("modulepath_root/administrator/Schbas/Loan");
 _g("modulepath_root/administrator/Schbas/Inventory");
 _g("modulepath_root/administrator/Schbas/Booklist");
+_g("modulepath_root/administrator/Schbas/BookAssignments");
+_g("modulepath_root/administrator/Schbas/Dashboard");
 _g("modulepath_root/administrator/Messages");
 _g("modulepath_root/administrator/Messages/MessageAdmin");
 _g("modulepath_root/administrator/Messages/MessageTemplate");

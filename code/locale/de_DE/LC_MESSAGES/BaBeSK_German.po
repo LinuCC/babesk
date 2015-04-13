@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: BaBeSK 1.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-27 21:56+0100\n"
-"PO-Revision-Date: 2015-01-27 22:01+0100\n"
+"POT-Creation-Date: 2015-04-13 20:19+0100\n"
+"PO-Revision-Date: 2015-04-13 20:20+0100\n"
 "Last-Translator: Pascal Ernst <pascal.cc.ernst@gmail.com>\n"
 "Language-Team: Mirek Hancl <mirek@hancl.de>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.7.3\n"
+"X-Generator: Poedit 1.7.5\n"
 "X-Poedit-KeywordsList: _g;_;gettext;gettext_noop\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -85,8 +85,8 @@ msgstr "Mehr:"
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:326
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:329
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:464
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:55
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:75
+#: ../../../administrator/System/User/UserCsvImport.php:55
+#: ../../../administrator/System/User/UserCsvImport.php:75
 #: ../../../web/Login.php:115
 msgid "Username"
 msgstr "Benutzername"
@@ -94,8 +94,8 @@ msgstr "Benutzername"
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:56
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:335
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:470
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:58
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:78
+#: ../../../administrator/System/User/UserCsvImport.php:58
+#: ../../../administrator/System/User/UserCsvImport.php:78
 #: ../../../web/Login.php:116
 msgid "Password"
 msgstr "Passwort"
@@ -196,14 +196,14 @@ msgstr ""
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:149
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:158
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:611
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:430
+#: ../../../administrator/Babesk/Recharge/Recharge.php:430
 msgid "Yes"
 msgstr "Ja"
 
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:143
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:152
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:161
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:430
+#: ../../../administrator/Babesk/Recharge/Recharge.php:430
 msgid "No"
 msgstr "Nein"
 
@@ -470,9 +470,9 @@ msgstr "Zum Benutzer hinzufügen"
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:314
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:317
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:458
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:152
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:53
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:69
+#: ../../../administrator/Kuwasys/Classteachers/Classteachers.php:152
+#: ../../../administrator/System/User/UserCsvImport.php:53
+#: ../../../administrator/System/User/UserCsvImport.php:69
 msgid "Forename"
 msgstr "Vorname"
 
@@ -512,8 +512,8 @@ msgstr "Telefonnummer"
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:353
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:356
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:482
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:56
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:76
+#: ../../../administrator/System/User/UserCsvImport.php:56
+#: ../../../administrator/System/User/UserCsvImport.php:76
 msgid "Birthday"
 msgstr "Geburtstag"
 
@@ -551,9 +551,9 @@ msgstr "Keine Preisgruppe existiert"
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:383
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:386
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:500
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:61
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:82
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:97
+#: ../../../administrator/System/User/UserCsvImport.php:61
+#: ../../../administrator/System/User/UserCsvImport.php:82
+#: ../../../administrator/System/User/UserCsvImport.php:97
 msgid "Credits"
 msgstr "Guthaben"
 
@@ -831,7 +831,7 @@ msgid "Classteacher"
 msgstr "Kursleiter"
 
 #: ../../../include/3rdParty/smarty-gettext/smarty.c:656
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:471
+#: ../../../administrator/Babesk/Recharge/Recharge.php:471
 msgid "Day"
 msgstr "Tag"
 
@@ -881,6 +881,491 @@ msgstr "Einen Benutzer den Kursen zuordnen"
 msgid "The session is invalid, please login again"
 msgstr "Die Sitzung ist abgelaufen, bitte logge dich nochmal ein."
 
+#: ../../../administrator/Babesk/Checkout/AdminCheckoutProcessing.php:77
+#, php-format
+msgid "Could not find the User by Cardnumber %1$s"
+msgstr "Konnte den Nutzer anhand der Kartennummer \"%1$s\" nicht finden"
+
+#: ../../../administrator/Babesk/Meals/AdminMealProcessing.php:97
+msgid "Mealdate at weekend not valid!"
+msgstr "Mahlzeitendatum wurde am Wochenende gewählt, ist nicht korrekt!"
+
+#: ../../../administrator/Babesk/Meals/Meals.php:94
+msgid ""
+"The value for the maximum amount of orders per Day for a User was "
+"successfully changed"
+msgstr ""
+"Der Wert für die Maximale Anzahl an Bestellung pro Tag für die Benutzer "
+"wurden erfolgreich geändet"
+
+#: ../../../administrator/Babesk/Meals/Meals.php:112
+msgid "Maximum number of orders per day"
+msgstr "Maximale Anzahl an Bestellungen pro Tag"
+
+#: ../../../administrator/Babesk/Meals/Meals.php:142
+msgid "Could not change the Max Amount of Orders per day per User."
+msgstr "Konnte die Maximale Anzahl an Bestellungen pro Tag nicht ändern."
+
+#: ../../../administrator/Babesk/Meals/Meals.php:212
+msgid "An Error occured while fetching the infotexts!"
+msgstr "Ein Fehler ist beim Abrufen der Infotexte aufgetreten!"
+
+#: ../../../administrator/Babesk/Meals/Meals.php:249
+msgid "The Infotexts where successfully changed!"
+msgstr "Die Infotexte wurden erfolgreich geändert"
+
+#: ../../../administrator/Babesk/Meals/Meals.php:291
+#: ../../../administrator/Babesk/Meals/Meals.php:313
+msgid "Could not change the Infotext!"
+msgstr "Konnte die Infotexte nicht verändern!"
+
+#: ../../../administrator/Babesk/Recharge/Recharge.php:105
+msgid "Useraccount is locked!"
+msgstr "Der Benutzeraccount ist gesperrt!"
+
+#: ../../../administrator/Babesk/Recharge/Recharge.php:129
+#, php-format
+msgid "Could not fetch the User by Card-ID %1$s"
+msgstr "Konnte den Benutzer anhand der KartenID %1$s nicht abrufen!"
+
+#: ../../../administrator/Babesk/Recharge/Recharge.php:155
+#, php-format
+msgid "Could not check if the Useraccount of User-ID %1$s is locked or not"
+msgstr ""
+"Konnte nicht überprüfen ob der Benutzeraccount des Benutzers mit der ID %1$s "
+"geschlossen ist oder nicht"
+
+#: ../../../administrator/Babesk/Recharge/Recharge.php:160
+#, php-format
+msgid ""
+"Could not check if the Useraccount of User-ID %1$s is locked or not. Could "
+"not find the User!"
+msgstr ""
+"Konnte nicht überprüfen ob der Benutzeraccount des Benutzers mit der ID %1$s "
+"geschlossen ist oder nicht: Konnte den Benutzer nicht finden!"
+
+#: ../../../administrator/Babesk/Recharge/Recharge.php:189
+#, php-format
+msgid "Could not fetch the Max Credits for the User with the ID %1$s"
+msgstr ""
+"Konnte das maximale Guthaben des Benutzers mit der ID %1$s nicht abrufen"
+
+#: ../../../administrator/Babesk/Recharge/Recharge.php:200
+#, php-format
+msgid ""
+"Could not fetch the Max Credits for the User with the ID %1$s; It looks like "
+"the User is not in any Pricegroup?"
+msgstr ""
+"Konnte nicht das Maximale Guthaben für den Nutzer mit der ID \"%1$s\" "
+"abrufen; Es sieht so aus als währe der Nutzer in keiner Preisklasse"
+
+#: ../../../administrator/Babesk/Recharge/Recharge.php:231
+msgid ""
+"The given amount to recharge added to the Credits is more than the Maximum "
+"Amount of Credits allowed for the Users Pricegroup!"
+msgstr ""
+"Die Aufladung des Guthabens um so viel Geld würde das Maximale Guthaben für "
+"diese Preisgruppe übersteigen!"
+
+#: ../../../administrator/Babesk/Recharge/Recharge.php:254
+msgid "Could not upload the recharge of the credits!"
+msgstr "Konnte die Aufladung nicht hochladen!"
+
+#: ../../../administrator/Babesk/Recharge/Recharge.php:287
+msgid "Could not track the Recharge!"
+msgstr "Konnte die Aufladung nicht loggen!"
+
+#: ../../../administrator/Babesk/Recharge/Recharge.php:307
+msgid "Username not found!"
+msgstr "Benutzername nicht gefunden!"
+
+#: ../../../administrator/Babesk/Recharge/Recharge.php:338
+msgid "Sum:"
+msgstr "Summe:"
+
+#: ../../../administrator/Babesk/Recharge/Recharge.php:340
+#, php-format
+msgid "Balance-Print for the days from %1$s to %2$s"
+msgstr "Rechnung für die Tage vom %1$s bis zum %2$s"
+
+#: ../../../administrator/Babesk/Recharge/Recharge.php:374
+msgid "Could not parse the given Interval"
+msgstr "Konne die gegebene Zeitspanne nicht nutzen!!"
+
+#: ../../../administrator/Babesk/Recharge/Recharge.php:408
+msgid "Could not fetch the Recharges!"
+msgstr "Konnte die Aufladungen nicht abrufen!"
+
+#: ../../../administrator/Babesk/Recharge/Recharge.php:472
+msgid "Week"
+msgstr "Woche"
+
+#: ../../../administrator/Babesk/Recharge/Recharge.php:473
+msgid "Month"
+msgstr "Monat"
+
+#: ../../../administrator/Babesk/Recharge/Recharge.php:474
+msgid "Year"
+msgstr "Jahr"
+
+#: ../../../administrator/Babesk/Recharge/Recharge.php:505
+msgid "Could not check if the User is Soli or not."
+msgstr ""
+"Konnte nicht überprüfen ob der Benutzer Teilhabepaketberechtigt ist oder "
+"nicht"
+
+#: ../../../administrator/Babesk/Soli/Soli.php:113
+msgid "The Settings were successfully changed"
+msgstr "Die Einstellungen wurden erfolgreich geändert"
+
+#: ../../../administrator/Babesk/Soli/Soli.php:161
+msgid "Could not fetch the Data!"
+msgstr "Konnte die Daten nicht abrufen!"
+
+#: ../../../administrator/Babesk/Soli/Soli.php:246
+msgid "Could not initialize the Soliprice!"
+msgstr "Konnte den Solipreis nicht setzen!"
+
+#: ../../../administrator/Babesk/Soli/Soli.php:268
+msgid "Could not change the Soliprice!"
+msgstr "Konnte den SoliPreis nicht verändern!"
+
+#: ../../../administrator/Babesk/Soli/Soli.php:290
+msgid "Could not Initialize the isSolipriceEnabled-Variable"
+msgstr "Konnte nicht den Solipreis-aktiviert Status setzen"
+
+#: ../../../administrator/Babesk/Soli/Soli.php:315
+msgid "Could not set if the Soliprice is enabled or not"
+msgstr "Konnte den Solipreis-Aktiviert Status nicht setzen"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:98
+msgid "The Class was successfully added."
+msgstr "Der Kurs wurde erfolgreich hinzugefügt"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:118
+#: ../../../administrator/Kuwasys/Classes/Classes.php:136
+msgid "Could not fetch the Schoolyears!"
+msgstr "Konnte die Schuljahre nicht abrufen!"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:153
+msgid "Could not fetch the Classunits!"
+msgstr "Konnte die Kurseinheiten nicht abrufen!"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:167
+msgid "Classname"
+msgstr "Kursname"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:172
+msgid "Classdescription"
+msgstr "Kursbeschreibung"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:177
+msgid "Max Amount of Registrations for this Class"
+msgstr "Maximale Anzahl der Registrierungen für diesen Kurs"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:182
+msgid "Schoolyear-ID"
+msgstr "Schuljahres-ID"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:187
+#: ../../../administrator/Kuwasys/Classes/Classes.php:192
+msgid "Allow registration"
+msgstr "Registrierung erlauben"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:235
+msgid "Could not add the new Class!"
+msgstr "Konnte den neuen Kurs nicht hinzufügen!"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:263
+msgid "The Class was successfully changed."
+msgstr "Der Kurs wurde erfolgreich geändert."
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:332
+#: ../../../administrator/Kuwasys/Classes/Classes.php:372
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:80
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/SessionMenu.php:69
+msgid "Could not fetch the data!"
+msgstr "Konnte die Daten nicht abrufen!"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:345
+msgid "The Class was not deleted."
+msgstr "Der Kurs wurde nicht gelöscht"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:366
+msgid "Class to delete not found!"
+msgstr "Der zu löschende Kurs wurde nicht gefunden!"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:385
+msgid "Class-ID"
+msgstr "Kurs-ID"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:406
+msgid "The Class was successfully deleted"
+msgstr "Der Kurs wurde erfolgreich gelöscht"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:429
+msgid "Could not delete the Class!"
+msgstr "Der Kurs konnte nicht gelöscht werden!"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:482
+msgid "Could not fetch the active Schoolyear!"
+msgstr "Konnte die Kurse des aktiven Schuljahres nicht abrufen"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:513
+msgid "There is no active Schoolyear set!"
+msgstr "Kein aktives Schuljahr wurde gesetzt!"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:550
+#, php-format
+msgid "Could not fetch the Classes by SchoolyearId $1%s"
+msgstr "Konnte die Klassen anhand der SchuljahrId %1$s nicht abrufen!"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:633
+msgid "Error fetching the Statuses!"
+msgstr "Konnte die Statuse nicht abrufen"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:686
+msgid "The Global Classregistration was successfully changed."
+msgstr "Die Kursregistrationen wurde erfolgreich verändert."
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:713
+msgid "Could not change the Global Classregistration!"
+msgstr "Konnte die Kursregistrationen nicht verändern!"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:733
+msgid "Could not change the individual classregistrations!"
+msgstr "Konnte die Kursregistrationen der jeweiligen Kurse nicht verändern!"
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:770
+msgid "Could not check whether the global Classregistration isenabled or not."
+msgstr ""
+"Konnte nicht herausfinden ob der \"ist Kursregistration erlaubt\"-Schalter "
+"aktiviert ist oder nicht."
+
+#: ../../../administrator/Kuwasys/Classes/Classes.php:789
+msgid "Could not add the Global Classregistration setting!"
+msgstr "Konnte den \"ist Kursregistration erlaubt\"-Schalter nicht hinzufügen!"
+
+#: ../../../administrator/Kuwasys/Classes/CsvImport/ImportExecute.php:27
+msgid "The Classes were successfully imported."
+msgstr "Die Kurse wurden erfolgreich importiert."
+
+#: ../../../administrator/Kuwasys/Classes/CsvImport/ImportExecute.php:44
+msgid "No classes given."
+msgstr "Keine Kurse gegeben."
+
+#: ../../../administrator/Kuwasys/Classes/CsvImport/Review.php:53
+msgid "Could not find uploaded file"
+msgstr "Konnte die hochgeladene Datei nicht finden"
+
+#: ../../../administrator/Kuwasys/Classes/CsvImport/Review.php:78
+msgid "Could not fetch the Classteachers."
+msgstr "Konnte die Kursleiter nicht abrufen!"
+
+#: ../../../administrator/Kuwasys/Classes/CsvImport/Review.php:96
+msgid "Could not fetch the days."
+msgstr "Konnte die Tage nicht abrufen!"
+
+#: ../../../administrator/Kuwasys/Classes/CsvImport/Review.php:148
+msgid ""
+"The CSV-File uploaded has not all columns it needs to have. Please upload a "
+"CSV-File with all columns!"
+msgstr ""
+"Die hochgeladene CSV-Dateil hat nicht alle Spalten die sie haben sollte. "
+"Bitte laden sie eine CSV-Datei mit allen nötigen Spalten hoch!"
+
+#: ../../../administrator/Kuwasys/Classteachers/Classteachers.php:115
+msgid "Could not fetch the Classes of the Active Schoolyear"
+msgstr "Konnte nicht die Kurse des aktiven Schuljahres abrufen"
+
+#: ../../../administrator/Kuwasys/Classteachers/Classteachers.php:136
+msgid "The Classteacher was successfully added."
+msgstr "Der Kurslehrer wurde erfolgreich hinzugefügt"
+
+#: ../../../administrator/Kuwasys/Classteachers/Classteachers.php:157
+#: ../../../administrator/System/User/UserCsvImport.php:54
+#: ../../../administrator/System/User/UserCsvImport.php:73
+msgid "Surname"
+msgstr "Nachname"
+
+#: ../../../administrator/Kuwasys/Classteachers/Classteachers.php:162
+msgid "Address"
+msgstr "Adresse"
+
+#: ../../../administrator/Kuwasys/Classteachers/Classteachers.php:167
+msgid "Telephone Number"
+msgstr "Telefonnummer"
+
+#: ../../../administrator/Kuwasys/Classteachers/Classteachers.php:190
+msgid ""
+"You cant choose that the Classteacher has No Classes AND select classes!"
+msgstr ""
+"Sie können nicht wählen dass der Kursleiter gleichzeitig \"keine Kurse\" hat "
+"und dabei Kurse auswählen!"
+
+#: ../../../administrator/Kuwasys/Classteachers/Classteachers.php:217
+msgid "Could not add the Classteacher!"
+msgstr "Konnte den Kursleiter nicht hinzufügen!"
+
+#: ../../../administrator/Kuwasys/Classteachers/Classteachers.php:244
+msgid "Could not add the Classes to the Classteacher!"
+msgstr "Konnte die Kurse des Kursleiters nicht hinzufügen!"
+
+#: ../../../administrator/Kuwasys/Classteachers/Classteachers.php:262
+msgid "No ID given!"
+msgstr "Keine ID gegeben!"
+
+#: ../../../administrator/Kuwasys/Classteachers/Classteachers.php:280
+msgid "The Classteacher was successfully changed."
+msgstr "Der Kursleiter wurde erfolgreich verändert."
+
+#: ../../../administrator/Kuwasys/Classteachers/Classteachers.php:309
+msgid "Could not change the Classteacher!"
+msgstr "Konnte den Kursleiter nicht verändern!"
+
+#: ../../../administrator/Kuwasys/Classteachers/Classteachers.php:330
+msgid "Could not change the Classes of the Classteacher!"
+msgstr "Konnte die Kurse des Kursleiters nicht verändern!"
+
+#: ../../../administrator/Kuwasys/Classteachers/Classteachers.php:436
+msgid "Could not fetch the Classes of the Classteacher!"
+msgstr "Konnte die Kurse des Kursleiters nicht abrufen!"
+
+#: ../../../administrator/Kuwasys/Classteachers/Classteachers.php:452
+msgid "The Classteacher was successfully deleted!"
+msgstr "Der Kursleiter wurde erfolgreich gelöscht."
+
+#: ../../../administrator/Kuwasys/Classteachers/Classteachers.php:455
+msgid "Id is not set!"
+msgstr "Die ID wurde nicht gesetzt!"
+
+#: ../../../administrator/Kuwasys/Classteachers/Classteachers.php:477
+msgid "Could not delete the Classteacher!"
+msgstr "Konnte den Kursleiter nicht löschen!"
+
+#: ../../../administrator/Kuwasys/Classteachers/Classteachers.php:518
+msgid "Could not fetch the Classteachers"
+msgstr "Konnte die Kursleiter nicht abrufen!"
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/AddUserToClass.php:31
+msgid "The User was successfully added"
+msgstr "Der Benutzer wurde erfolgreich hinzugefügt"
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/AddUserToClass.php:67
+msgid "Could not add the User to the Class"
+msgstr "Konnte den Benutzer nicht zu dem Kurs zuweisen!"
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/ApplyChanges.php:31
+msgid "The users were successfully assigned to their respective classes!"
+msgstr "Die Benutzer wurden erfolgreich ihren Kursen zugewiesen."
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/ApplyChanges.php:57
+msgid "Could not delete the old Joints!"
+msgstr "Die alten Zuweisungen konnte nicht gelöscht werden!"
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/ApplyChanges.php:77
+msgid "Could not add the new Joints!"
+msgstr "Konnte die neuen Zuweisungen nicht hinzufügen!"
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/AssignUsersToClasses.php:48
+#: ../../../administrator/Kuwasys/KuwasysUsers/KuwasysUsers.php:170
+msgid "Could not check if the UsersToClasses-Table exists!"
+msgstr "Konnte nicht überprüfen ob die Benutzer-In-Kurse-Tabelle existiert!"
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/ChangeClassOfUser.php:32
+msgid "The User was successfully moved."
+msgstr "Der Benutzer wurde erfolgreich verschoben."
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/ChangeClassOfUser.php:57
+msgid "Could not move the User to the other Class!"
+msgstr "Konnte die Benutzer nicht zu dem anderen Kurs verschieben!"
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/ChangeStatusOfUser.php:30
+msgid "Could not fetch the Status"
+msgstr "Konnte den Status nicht abrufen!"
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/ChangeStatusOfUser.php:36
+msgid "The Status of the User was successfully changed"
+msgstr "Der Status des Nutzers wurde erfolgreich geändert."
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/ChangeStatusOfUser.php:64
+#: ../../../administrator/Kuwasys/KuwasysUsers/KuwasysUsers.php:208
+msgid "Could not change the Status of the User"
+msgstr "Konnte den Status des Nutzers nicht verändern!"
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/Classdetails.php:33
+msgid "Error while fetching the data!"
+msgstr "Ein Fehler ist beim Abrufen der Daten aufgetreten!"
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/Classdetails.php:102
+msgid "Could not fetch all classes of the active schoolyear"
+msgstr "Konnte nicht alle Kurse des aktiven Schuljahres abrufen"
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/ClassdetailsGet.php:34
+msgid "Could not fetch the User-Assignments"
+msgstr "Konnte die Benutzerzuweisungen nicht abrufen!"
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/Overview.php:55
+msgid "Could not fetch the Temporary Assignments!"
+msgstr "Konnte die temporären Zuweisungen nicht abrufen!"
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/Reset.php:31
+msgid ""
+"The Data was successfully Assigned. You can now go back and view and edit "
+"the temporary changes"
+msgstr ""
+"Die Daten wurden erfolgreich zugewiesen. Sie können jetzt zurückgehen und "
+"die temporären Veränderungen einsehen und bearbeiten."
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/Reset.php:61
+msgid "Could not create the UsersToClasses-Table!"
+msgstr "Konnte die Benuter-in-Kurse-Tabelle nicht erstellen!"
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/Reset.php:77
+msgid "Could not delete the UsersToClasses-Table!"
+msgstr "Konnte den die Benutzer-in-Kurs-Tabelle nicht löschen!"
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/Reset.php:109
+msgid "Could not fetch the status"
+msgstr "Konnte den Status nicht abrufen"
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/Reset.php:152
+msgid "Could not fetch the requests!"
+msgstr "Konnte die Anfragen nicht abrufen!"
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/AssignUsersToClasses/Reset.php:410
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/ChangeExecute.php:71
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:173
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:202
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/CsvImport.php:530
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/CsvImport.php:583
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/CsvImport.php:610
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/CsvImport.php:642
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/CsvImport.php:648
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/CsvImport.php:677
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/CsvImport.php:683
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/CsvImport.php:711
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/NewSession.php:193
+msgid "Could not upload the data!"
+msgstr "Konnte die Daten nicht hochladen!"
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/KuwasysUsers.php:277
+msgid "Could not newly assign the User to the Class!"
+msgstr "Konnte den Benutzer nicht neu zu dem Kurs hinzufügen!"
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/KuwasysUsers.php:281
+msgid "The User was successfully assigned to the Class."
+msgstr "Der Benutzer wurde erfolgreich der Klasse zugewiesen."
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/KuwasysUsers.php:304
+msgid "No User found by the Username!"
+msgstr "Keinen Benutzer bei seinem Benutzernamen gefunden!"
+
+#: ../../../administrator/Kuwasys/KuwasysUsers/KuwasysUsers.php:310
+msgid "Error while fetching the User from the Database!"
+msgstr ""
+"Ein Fehler ist beim Abrufen der Benutzer von der Datenbank aufgetreten!"
+
 #: ../../../administrator/Login.php:116 ../../../web/Login.php:95
 #: ../../../web/Login.php:177 ../../../web/Login.php:181
 msgid "User not found or incorrect password"
@@ -890,560 +1375,75 @@ msgstr "Benutzer nicht gefunden oder inkorrektes Passwort"
 msgid "Please fill out the form completely."
 msgstr "Bitte fülle das Formular komplett aus."
 
-#: ../../../administrator/headmod_Babesk/modules/mod_Checkout/AdminCheckoutProcessing.php:77
-#, php-format
-msgid "Could not find the User by Cardnumber %1$s"
-msgstr "Konnte den Nutzer anhand der Kartennummer \"%1$s\" nicht finden"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Meals/AdminMealProcessing.php:97
-msgid "Mealdate at weekend not valid!"
-msgstr "Mahlzeitendatum wurde am Wochenende gewählt, ist nicht korrekt!"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Meals/Meals.php:94
-msgid ""
-"The value for the maximum amount of orders per Day for a User was "
-"successfully changed"
-msgstr ""
-"Der Wert für die Maximale Anzahl an Bestellung pro Tag für die Benutzer "
-"wurden erfolgreich geändet"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Meals/Meals.php:112
-msgid "Maximum number of orders per day"
-msgstr "Maximale Anzahl an Bestellungen pro Tag"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Meals/Meals.php:142
-msgid "Could not change the Max Amount of Orders per day per User."
-msgstr "Konnte die Maximale Anzahl an Bestellungen pro Tag nicht ändern."
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Meals/Meals.php:212
-msgid "An Error occured while fetching the infotexts!"
-msgstr "Ein Fehler ist beim Abrufen der Infotexte aufgetreten!"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Meals/Meals.php:249
-msgid "The Infotexts where successfully changed!"
-msgstr "Die Infotexte wurden erfolgreich geändert"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Meals/Meals.php:291
-#: ../../../administrator/headmod_Babesk/modules/mod_Meals/Meals.php:313
-msgid "Could not change the Infotext!"
-msgstr "Konnte die Infotexte nicht verändern!"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:105
-msgid "Useraccount is locked!"
-msgstr "Der Benutzeraccount ist gesperrt!"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:129
-#, php-format
-msgid "Could not fetch the User by Card-ID %1$s"
-msgstr "Konnte den Benutzer anhand der KartenID %1$s nicht abrufen!"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:155
-#, php-format
-msgid "Could not check if the Useraccount of User-ID %1$s is locked or not"
-msgstr ""
-"Konnte nicht überprüfen ob der Benutzeraccount des Benutzers mit der ID %1$s "
-"geschlossen ist oder nicht"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:160
-#, php-format
-msgid ""
-"Could not check if the Useraccount of User-ID %1$s is locked or not. Could "
-"not find the User!"
-msgstr ""
-"Konnte nicht überprüfen ob der Benutzeraccount des Benutzers mit der ID %1$s "
-"geschlossen ist oder nicht: Konnte den Benutzer nicht finden!"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:189
-#, php-format
-msgid "Could not fetch the Max Credits for the User with the ID %1$s"
-msgstr ""
-"Konnte das maximale Guthaben des Benutzers mit der ID %1$s nicht abrufen"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:200
-#, php-format
-msgid ""
-"Could not fetch the Max Credits for the User with the ID %1$s; It looks like "
-"the User is not in any Pricegroup?"
-msgstr ""
-"Konnte nicht das Maximale Guthaben für den Nutzer mit der ID \"%1$s\" "
-"abrufen; Es sieht so aus als währe der Nutzer in keiner Preisklasse"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:231
-msgid ""
-"The given amount to recharge added to the Credits is more than the Maximum "
-"Amount of Credits allowed for the Users Pricegroup!"
-msgstr ""
-"Die Aufladung des Guthabens um so viel Geld würde das Maximale Guthaben für "
-"diese Preisgruppe übersteigen!"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:254
-msgid "Could not upload the recharge of the credits!"
-msgstr "Konnte die Aufladung nicht hochladen!"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:287
-msgid "Could not track the Recharge!"
-msgstr "Konnte die Aufladung nicht loggen!"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:307
-msgid "Username not found!"
-msgstr "Benutzername nicht gefunden!"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:338
-msgid "Sum:"
-msgstr "Summe:"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:340
-#, php-format
-msgid "Balance-Print for the days from %1$s to %2$s"
-msgstr "Rechnung für die Tage vom %1$s bis zum %2$s"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:374
-msgid "Could not parse the given Interval"
-msgstr "Konne die gegebene Zeitspanne nicht nutzen!!"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:408
-msgid "Could not fetch the Recharges!"
-msgstr "Konnte die Aufladungen nicht abrufen!"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:472
-msgid "Week"
-msgstr "Woche"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:473
-msgid "Month"
-msgstr "Monat"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:474
-msgid "Year"
-msgstr "Jahr"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Recharge/Recharge.php:505
-msgid "Could not check if the User is Soli or not."
-msgstr ""
-"Konnte nicht überprüfen ob der Benutzer Teilhabepaketberechtigt ist oder "
-"nicht"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Soli/Soli.php:113
-msgid "The Settings were successfully changed"
-msgstr "Die Einstellungen wurden erfolgreich geändert"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Soli/Soli.php:161
-msgid "Could not fetch the Data!"
-msgstr "Konnte die Daten nicht abrufen!"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Soli/Soli.php:246
-msgid "Could not initialize the Soliprice!"
-msgstr "Konnte den Solipreis nicht setzen!"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Soli/Soli.php:268
-msgid "Could not change the Soliprice!"
-msgstr "Konnte den SoliPreis nicht verändern!"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Soli/Soli.php:290
-msgid "Could not Initialize the isSolipriceEnabled-Variable"
-msgstr "Konnte nicht den Solipreis-aktiviert Status setzen"
-
-#: ../../../administrator/headmod_Babesk/modules/mod_Soli/Soli.php:315
-msgid "Could not set if the Soliprice is enabled or not"
-msgstr "Konnte den Solipreis-Aktiviert Status nicht setzen"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:98
-msgid "The Class was successfully added."
-msgstr "Der Kurs wurde erfolgreich hinzugefügt"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:118
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:136
-msgid "Could not fetch the Schoolyears!"
-msgstr "Konnte die Schuljahre nicht abrufen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:153
-msgid "Could not fetch the Classunits!"
-msgstr "Konnte die Kurseinheiten nicht abrufen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:167
-msgid "Classname"
-msgstr "Kursname"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:172
-msgid "Classdescription"
-msgstr "Kursbeschreibung"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:177
-msgid "Max Amount of Registrations for this Class"
-msgstr "Maximale Anzahl der Registrierungen für diesen Kurs"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:182
-msgid "Schoolyear-ID"
-msgstr "Schuljahres-ID"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:187
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:192
-msgid "Allow registration"
-msgstr "Registrierung erlauben"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:235
-msgid "Could not add the new Class!"
-msgstr "Konnte den neuen Kurs nicht hinzufügen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:263
-msgid "The Class was successfully changed."
-msgstr "Der Kurs wurde erfolgreich geändert."
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:332
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:372
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:80
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/SessionMenu.php:69
-msgid "Could not fetch the data!"
-msgstr "Konnte die Daten nicht abrufen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:345
-msgid "The Class was not deleted."
-msgstr "Der Kurs wurde nicht gelöscht"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:366
-msgid "Class to delete not found!"
-msgstr "Der zu löschende Kurs wurde nicht gefunden!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:385
-msgid "Class-ID"
-msgstr "Kurs-ID"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:406
-msgid "The Class was successfully deleted"
-msgstr "Der Kurs wurde erfolgreich gelöscht"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:429
-msgid "Could not delete the Class!"
-msgstr "Der Kurs konnte nicht gelöscht werden!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:482
-msgid "Could not fetch the active Schoolyear!"
-msgstr "Konnte die Kurse des aktiven Schuljahres nicht abrufen"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:513
-msgid "There is no active Schoolyear set!"
-msgstr "Kein aktives Schuljahr wurde gesetzt!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:550
-#, php-format
-msgid "Could not fetch the Classes by SchoolyearId $1%s"
-msgstr "Konnte die Klassen anhand der SchuljahrId %1$s nicht abrufen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:631
-msgid "Error fetching the Statuses!"
-msgstr "Konnte die Statuse nicht abrufen"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:684
-msgid "The Global Classregistration was successfully changed."
-msgstr "Die Kursregistrationen wurde erfolgreich verändert."
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:711
-msgid "Could not change the Global Classregistration!"
-msgstr "Konnte die Kursregistrationen nicht verändern!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:731
-msgid "Could not change the individual classregistrations!"
-msgstr "Konnte die Kursregistrationen der jeweiligen Kurse nicht verändern!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:768
-msgid "Could not check whether the global Classregistration isenabled or not."
-msgstr ""
-"Konnte nicht herausfinden ob der \"ist Kursregistration erlaubt\"-Schalter "
-"aktiviert ist oder nicht."
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/Classes.php:787
-msgid "Could not add the Global Classregistration setting!"
-msgstr "Konnte den \"ist Kursregistration erlaubt\"-Schalter nicht hinzufügen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/CsvImport/ImportExecute.php:27
-msgid "The Classes were successfully imported."
-msgstr "Die Kurse wurden erfolgreich importiert."
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/CsvImport/ImportExecute.php:44
-msgid "No classes given."
-msgstr "Keine Kurse gegeben."
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/CsvImport/Review.php:53
-msgid "Could not find uploaded file"
-msgstr "Konnte die hochgeladene Datei nicht finden"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/CsvImport/Review.php:78
-msgid "Could not fetch the Classteachers."
-msgstr "Konnte die Kursleiter nicht abrufen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/CsvImport/Review.php:96
-msgid "Could not fetch the days."
-msgstr "Konnte die Tage nicht abrufen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classes/CsvImport/Review.php:148
-msgid ""
-"The CSV-File uploaded has not all columns it needs to have. Please upload a "
-"CSV-File with all columns!"
-msgstr ""
-"Die hochgeladene CSV-Dateil hat nicht alle Spalten die sie haben sollte. "
-"Bitte laden sie eine CSV-Datei mit allen nötigen Spalten hoch!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:115
-msgid "Could not fetch the Classes of the Active Schoolyear"
-msgstr "Konnte nicht die Kurse des aktiven Schuljahres abrufen"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:136
-msgid "The Classteacher was successfully added."
-msgstr "Der Kurslehrer wurde erfolgreich hinzugefügt"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:157
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:54
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:73
-msgid "Surname"
-msgstr "Nachname"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:162
-msgid "Address"
-msgstr "Adresse"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:167
-msgid "Telephone Number"
-msgstr "Telefonnummer"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:190
-msgid ""
-"You cant choose that the Classteacher has No Classes AND select classes!"
-msgstr ""
-"Sie können nicht wählen dass der Kursleiter gleichzeitig \"keine Kurse\" hat "
-"und dabei Kurse auswählen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:217
-msgid "Could not add the Classteacher!"
-msgstr "Konnte den Kursleiter nicht hinzufügen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:244
-msgid "Could not add the Classes to the Classteacher!"
-msgstr "Konnte die Kurse des Kursleiters nicht hinzufügen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:262
-msgid "No ID given!"
-msgstr "Keine ID gegeben!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:280
-msgid "The Classteacher was successfully changed."
-msgstr "Der Kursleiter wurde erfolgreich verändert."
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:309
-msgid "Could not change the Classteacher!"
-msgstr "Konnte den Kursleiter nicht verändern!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:330
-msgid "Could not change the Classes of the Classteacher!"
-msgstr "Konnte die Kurse des Kursleiters nicht verändern!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:436
-msgid "Could not fetch the Classes of the Classteacher!"
-msgstr "Konnte die Kurse des Kursleiters nicht abrufen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:452
-msgid "The Classteacher was successfully deleted!"
-msgstr "Der Kursleiter wurde erfolgreich gelöscht."
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:455
-msgid "Id is not set!"
-msgstr "Die ID wurde nicht gesetzt!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:477
-msgid "Could not delete the Classteacher!"
-msgstr "Konnte den Kursleiter nicht löschen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_Classteachers/Classteachers.php:518
-msgid "Could not fetch the Classteachers"
-msgstr "Konnte die Kursleiter nicht abrufen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/AddUserToClass.php:30
-msgid "The User was successfully added"
-msgstr "Der Benutzer wurde erfolgreich hinzugefügt"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/AddUserToClass.php:61
-msgid "Could not add the User to the Class"
-msgstr "Konnte den Benutzer nicht zu dem Kurs zuweisen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/ApplyChanges.php:31
-msgid "The users were successfully assigned to their respective classes!"
-msgstr "Die Benutzer wurden erfolgreich ihren Kursen zugewiesen."
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/ApplyChanges.php:57
-msgid "Could not delete the old Joints!"
-msgstr "Die alten Zuweisungen konnte nicht gelöscht werden!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/ApplyChanges.php:77
-msgid "Could not add the new Joints!"
-msgstr "Konnte die neuen Zuweisungen nicht hinzufügen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/AssignUsersToClasses.php:48
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:166
-msgid "Could not check if the UsersToClasses-Table exists!"
-msgstr "Konnte nicht überprüfen ob die Benutzer-In-Kurse-Tabelle existiert!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/ChangeClassOfUser.php:32
-msgid "The User was successfully moved."
-msgstr "Der Benutzer wurde erfolgreich verschoben."
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/ChangeClassOfUser.php:57
-msgid "Could not move the User to the other Class!"
-msgstr "Konnte die Benutzer nicht zu dem anderen Kurs verschieben!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/ChangeStatusOfUser.php:30
-msgid "Could not fetch the Status"
-msgstr "Konnte den Status nicht abrufen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/ChangeStatusOfUser.php:36
-msgid "The Status of the User was successfully changed"
-msgstr "Der Status des Nutzers wurde erfolgreich geändert."
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/ChangeStatusOfUser.php:64
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:204
-msgid "Could not change the Status of the User"
-msgstr "Konnte den Status des Nutzers nicht verändern!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/Classdetails.php:33
-msgid "Error while fetching the data!"
-msgstr "Ein Fehler ist beim Abrufen der Daten aufgetreten!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/Classdetails.php:102
-msgid "Could not fetch all classes of the active schoolyear"
-msgstr "Konnte nicht alle Kurse des aktiven Schuljahres abrufen"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/ClassdetailsGet.php:34
-msgid "Could not fetch the User-Assignments"
-msgstr "Konnte die Benutzerzuweisungen nicht abrufen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/Overview.php:55
-msgid "Could not fetch the Temporary Assignments!"
-msgstr "Konnte die temporären Zuweisungen nicht abrufen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/Reset.php:31
-msgid ""
-"The Data was successfully Assigned. You can now go back and view and edit "
-"the temporary changes"
-msgstr ""
-"Die Daten wurden erfolgreich zugewiesen. Sie können jetzt zurückgehen und "
-"die temporären Veränderungen einsehen und bearbeiten."
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/Reset.php:61
-msgid "Could not create the UsersToClasses-Table!"
-msgstr "Konnte die Benuter-in-Kurse-Tabelle nicht erstellen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/Reset.php:77
-msgid "Could not delete the UsersToClasses-Table!"
-msgstr "Konnte den die Benutzer-in-Kurs-Tabelle nicht löschen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/Reset.php:109
-msgid "Could not fetch the status"
-msgstr "Konnte den Status nicht abrufen"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/Reset.php:152
-msgid "Could not fetch the requests!"
-msgstr "Konnte die Anfragen nicht abrufen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/AssignUsersToClasses/Reset.php:410
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:71
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:173
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:202
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:530
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:583
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:610
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:642
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:648
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:677
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:683
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:711
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:193
-msgid "Could not upload the data!"
-msgstr "Konnte die Daten nicht hochladen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:273
-msgid "Could not newly assign the User to the Class!"
-msgstr "Konnte den Benutzer nicht neu zu dem Kurs hinzufügen!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:277
-msgid "The User was successfully assigned to the Class."
-msgstr "Der Benutzer wurde erfolgreich der Klasse zugewiesen."
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:300
-msgid "No User found by the Username!"
-msgstr "Keinen Benutzer bei seinem Benutzernamen gefunden!"
-
-#: ../../../administrator/headmod_Kuwasys/modules/mod_KuwasysUsers/KuwasysUsers.php:306
-msgid "Error while fetching the User from the Database!"
-msgstr ""
-"Ein Fehler ist beim Abrufen der Benutzer von der Datenbank aufgetreten!"
-
-#: ../../../administrator/headmod_Statistics/modules/mod_KuwasysStats/KuwasysStats.php:147
+#: ../../../administrator/Statistics/KuwasysStats/KuwasysStats.php:147
 msgid "Error analyzing the statistics!"
 msgstr "Ein Fehler ist beim analysieren der Statistiken aufgetreten!"
 
-#: ../../../administrator/headmod_Statistics/modules/mod_KuwasysStats/KuwasysStatsUsersChosenStackedBarChart.php:127
+#: ../../../administrator/Statistics/KuwasysStats/KuwasysStatsUsersChosenStackedBarChart.php:127
 msgid "No ST"
 msgstr "Kein ST"
 
-#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:50
+#: ../../../administrator/System/Grade/Grade.php:50
 msgid "wrong action-value!"
 msgstr "Falsche action-value!"
 
-#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:77
+#: ../../../administrator/System/Grade/Grade.php:77
 #, php-format
 msgid "Grade \"%1$s-%2$s\" was successfully added"
 msgstr "Die Klasse \"%1$s-%2$s\" wurde erfolgreich hinzugefügt"
 
-#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:98
+#: ../../../administrator/System/Grade/Grade.php:98
 msgid "Gradelabel"
 msgstr "Klassenbezeichnung"
 
-#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:100
+#: ../../../administrator/System/Grade/Grade.php:100
 msgid "Gradelevel"
 msgstr "Klassenjahrgang"
 
-#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:102
+#: ../../../administrator/System/Grade/Grade.php:102
 msgid "Schooltype"
 msgstr "Schultyp"
 
-#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:126
+#: ../../../administrator/System/Grade/Grade.php:126
 #, php-format
 msgid "Error adding the Grade \"%1$s-%2$s\""
 msgstr "Konnte die Klasse \"%1$s-%2$s\" nicht hinzufügen!"
 
-#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:154
+#: ../../../administrator/System/Grade/Grade.php:154
 msgid "Could not fetch the Grades"
 msgstr "Konnte die Klassen nicht abrufen"
 
-#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:157
+#: ../../../administrator/System/Grade/Grade.php:157
 msgid "No Grades found"
 msgstr "Keine Klassen gefunden"
 
-#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:173
+#: ../../../administrator/System/Grade/Grade.php:173
 msgid "The Grade was successfully deleted"
 msgstr "Die Klasse wurde erfolgreich gelöscht"
 
-#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:188
+#: ../../../administrator/System/Grade/Grade.php:188
 #, php-format
 msgid "Error deleting the Grade with the ID %1$s!"
 msgstr "Konnte die Klasse mit der ID %1$s nicht löschen!"
 
-#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:206
+#: ../../../administrator/System/Grade/Grade.php:206
 #, php-format
 msgid "Could not delete the Joins of the GradeId \"%1$s\""
 msgstr "Konnte die Verbindungen zur KlassenID \"%1$s\" nicht löschen!"
 
-#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:229
+#: ../../../administrator/System/Grade/Grade.php:229
 msgid "Could not fetch the Grade"
 msgstr "Konnte die Klasse nicht abrufen!"
 
-#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:247
+#: ../../../administrator/System/Grade/Grade.php:247
 msgid "The Grade was successfully changed"
 msgstr "Die Klasse wurde erfolgreich verändert"
 
-#: ../../../administrator/headmod_System/modules/mod_Grade/Grade.php:274
+#: ../../../administrator/System/Grade/Grade.php:274
 msgid "Could not change the Grade!"
 msgstr "Konnte die Klasse nicht verändern!"
 
-#: ../../../administrator/headmod_System/modules/mod_GroupSettings/GroupSettings.php:650
+#: ../../../administrator/System/GroupSettings/GroupSettings.php:650
 msgid ""
 "The Module is deactivated! You need to activate it first in the "
 "ModuleSettings."
@@ -1451,17 +1451,17 @@ msgstr ""
 "Das Modul ist deaktiviert! Sie müssen es zuer in den Moduleinstellungen "
 "aktivieren"
 
-#: ../../../administrator/headmod_System/modules/mod_ModuleSettings/ModuleSettings.php:255
+#: ../../../administrator/System/ModuleSettings/ModuleSettings.php:255
 msgid "Could not remove the Module from the Database!"
 msgstr "Kontne das Modul nicht von der Datenbank löschen!"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:46
+#: ../../../administrator/System/Schoolyear/Schoolyear.php:46
 msgid "Wrong action-value!"
 msgstr "Falsche action-value!"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:83
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:104
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:279
+#: ../../../administrator/System/Schoolyear/Schoolyear.php:83
+#: ../../../administrator/System/Schoolyear/Schoolyear.php:104
+#: ../../../administrator/System/Schoolyear/Schoolyear.php:279
 msgid ""
 "An active schoolyear already exists! Please add the schoolyear without it "
 "being active and then activate it in the menu."
@@ -1469,75 +1469,75 @@ msgstr ""
 "Ein aktives Schuljahr existiert bereits! Bitte aktivieren sie das Schuljahr "
 "erst nach dem Hinzufügen."
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:90
+#: ../../../administrator/System/Schoolyear/Schoolyear.php:90
 msgid "The Schoolyear was added successfully"
 msgstr "Das Schuljahr wurde erfolgreich hinzugefügt"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:134
+#: ../../../administrator/System/Schoolyear/Schoolyear.php:134
 msgid "Could not check if an active schoolyear already exists"
 msgstr ""
 "Konnte nicht überprüfen ob ein aktiviertes Schuljahr bereits existiert!"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:142
+#: ../../../administrator/System/Schoolyear/Schoolyear.php:142
 msgid "Name of Schoolyear"
 msgstr "Name des Schuljahres"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:164
+#: ../../../administrator/System/Schoolyear/Schoolyear.php:164
 msgid "Could not add the Schoolyear"
 msgstr "Konnte das Schuljahr nicht hinzufügen"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:185
+#: ../../../administrator/System/Schoolyear/Schoolyear.php:185
 msgid "Error Fetching the Schoolyears!"
 msgstr "Konnte die Schuljahre nicht abrufen"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:199
+#: ../../../administrator/System/Schoolyear/Schoolyear.php:199
 msgid "The Schoolyear was successfully deleted"
 msgstr "Das Schuljahr wurde erfolgreich gelöscht"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:202
+#: ../../../administrator/System/Schoolyear/Schoolyear.php:202
 msgid "The Schoolyear was not deleted"
 msgstr "Das Schuljahr wurde nicht gelöscht"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:222
+#: ../../../administrator/System/Schoolyear/Schoolyear.php:222
 msgid "Could not delete the Schoolyear!"
 msgstr "Konnte das Schuljahr nicht löschen!"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:230
+#: ../../../administrator/System/Schoolyear/Schoolyear.php:230
 msgid "The Schoolyear was successfully activated"
 msgstr "Das Schuljahr wurde erfolgreich aktiviert"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:264
+#: ../../../administrator/System/Schoolyear/Schoolyear.php:264
 msgid "Could not fetch the Schoolyear from the Database"
 msgstr "Kontne das Schuljahr nicht von der Datenbank abrufen"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:285
+#: ../../../administrator/System/Schoolyear/Schoolyear.php:285
 msgid "The Schoolyear was successfully changed"
 msgstr "Das Schuljahr wurde erfolgreich verändert"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:308
+#: ../../../administrator/System/Schoolyear/Schoolyear.php:308
 msgid "Could not change the Schoolyear"
 msgstr "Konnte das Schuljahr nicht verändern"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/Schoolyear.php:341
+#: ../../../administrator/System/Schoolyear/Schoolyear.php:341
 msgid "No schoolyear selected!"
 msgstr "Kein Schuljahr ausgewählt!"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/SchoolyearInterface.php:34
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/SchoolyearInterface.php:76
+#: ../../../administrator/System/Schoolyear/SchoolyearInterface.php:34
+#: ../../../administrator/System/Schoolyear/SchoolyearInterface.php:76
 msgid "Name of the Schoolyear"
 msgstr "Name des Schuljahres"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/SchoolyearInterface.php:39
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/SchoolyearInterface.php:82
+#: ../../../administrator/System/Schoolyear/SchoolyearInterface.php:39
+#: ../../../administrator/System/Schoolyear/SchoolyearInterface.php:82
 msgid "Is the Schoolyear active"
 msgstr "Ob das Schuljahr aktiv ist"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/SchoolyearInterface.php:44
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/SchoolyearInterface.php:45
+#: ../../../administrator/System/Schoolyear/SchoolyearInterface.php:44
+#: ../../../administrator/System/Schoolyear/SchoolyearInterface.php:45
 msgid "Add an Schoolyear"
 msgstr "Ein Schuljahr hinzufügen"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/SchoolyearInterface.php:59
+#: ../../../administrator/System/Schoolyear/SchoolyearInterface.php:59
 #, php-format
 msgid ""
 "Do you really want to activate the Schoolyear \"%1$s\"? The other activated "
@@ -1546,23 +1546,23 @@ msgstr ""
 "Wollen sie wirklich das Schuljahr \"%1$s\" aktivieren? Das andere aktive "
 "Schuljahr wird deaktiviert"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/SchoolyearInterface.php:62
+#: ../../../administrator/System/Schoolyear/SchoolyearInterface.php:62
 msgid "Yes, I want to activate the Schoolyear"
 msgstr "Ja, ich will das Schuljahr aktivieren"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/SchoolyearInterface.php:64
+#: ../../../administrator/System/Schoolyear/SchoolyearInterface.php:64
 msgid "No, I do not want to activate the Schoolyear"
 msgstr "Nein, ich will das Schuljahr nicht aktivieren"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/SchoolyearInterface.php:91
+#: ../../../administrator/System/Schoolyear/SchoolyearInterface.php:91
 msgid "Change the Schoolyear"
 msgstr "Das Schuljahr verändern"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/SchoolyearInterface.php:92
+#: ../../../administrator/System/Schoolyear/SchoolyearInterface.php:92
 msgid "Change Schoolyear"
 msgstr "Schuljahr verändern"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/SchoolyearInterface.php:99
+#: ../../../administrator/System/Schoolyear/SchoolyearInterface.php:99
 #, php-format
 msgid ""
 "Do you really want to delete the Schoolyear \"%s\"? WARNING: Problems will "
@@ -1571,28 +1571,28 @@ msgstr ""
 "Wollen sie wirklich das Schuljahr \"%s\" löschen? WARNUNG: Fehler werden "
 "auftreten wenn sie dies tuen! Nicht alle Teile des Systems unterstützen dies!"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/SchoolyearInterface.php:101
+#: ../../../administrator/System/Schoolyear/SchoolyearInterface.php:101
 msgid "Yes, I want to break the System and delete the Schoolyear"
 msgstr "Ja, ich will das System zerstören und das Schuljahr löschen"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/SchoolyearInterface.php:102
+#: ../../../administrator/System/Schoolyear/SchoolyearInterface.php:102
 msgid "No, I do not want to break the System and delete the Schoolyear"
 msgstr ""
 "Nein, ich will das System nicht zerstören und das Schuljahr nicht löschen"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/SchoolyearSwitch.php:30
+#: ../../../administrator/System/Schoolyear/SchoolyearSwitch.php:30
 msgid "Successfully switched the Schoolyear!"
 msgstr "Erfolgreich zu dem Schuljahr gewechselt!"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/SchoolyearSwitch.php:35
+#: ../../../administrator/System/Schoolyear/SchoolyearSwitch.php:35
 msgid "Could not switch the Schoolyear!"
 msgstr "Konnte nicht zu dem Schuljahr wechseln!"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/SchoolyearSwitch.php:200
+#: ../../../administrator/System/Schoolyear/SchoolyearSwitch.php:200
 msgid "Could not add Users to their new Grade and Schoolyear!"
 msgstr "Konnte die Benutzer nicht zu ihrer Klasse und Schuljahre hinzufügen!"
 
-#: ../../../administrator/headmod_System/modules/mod_Schoolyear/SchoolyearSwitch.php:205
+#: ../../../administrator/System/Schoolyear/SchoolyearSwitch.php:205
 #, php-format
 msgid ""
 "Grade %1$s-%2$s could not be found! You should add it to the Grades to allow "
@@ -1601,93 +1601,93 @@ msgstr ""
 "Klasse %1$s-%2$s konnte nicht gefunden werden! Sie sollten diese Klasse "
 "hinzufügen damit Benutzer dahin verschieben werden können"
 
-#: ../../../administrator/headmod_System/modules/mod_User/Change.php:155
+#: ../../../administrator/System/User/Change.php:155
 msgid "Error changing the user."
 msgstr "Fehler beim Verändern eines Benutzers."
 
-#: ../../../administrator/headmod_System/modules/mod_User/DisplayChange.php:23
+#: ../../../administrator/System/User/DisplayChange.php:23
 msgid "Missing id of the user!"
 msgstr "Id des Nutzers fehlt!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/ResetAllUserPasswords/ResetAllUserPasswords.php:43
+#: ../../../administrator/System/User/ResetAllUserPasswords/ResetAllUserPasswords.php:43
 msgid "Please set the preset password before reseting the users passwords."
 msgstr ""
 "Bitte setzen sie das voreingestellte Passwort bevor sie die Passwörter der "
 "Benutzer zurücksetzen."
 
-#: ../../../administrator/headmod_System/modules/mod_User/ResetAllUserPasswords/ResetAllUserPasswords.php:47
+#: ../../../administrator/System/User/ResetAllUserPasswords/ResetAllUserPasswords.php:47
 msgid "The passwords were successfully resetted to the preset password."
 msgstr ""
 "Die Passwörter wurden erfolgreich zu dem voreingestellten Passwort "
 "zurückgesetzt."
 
-#: ../../../administrator/headmod_System/modules/mod_User/User.php:425
+#: ../../../administrator/System/User/User.php:425
 msgid "Could not check if first Password on Login is enabled!"
 msgstr ""
 "Konnte nicht überprüfen ob das passwort beim ersten Login verändert werden "
 "soll!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/User.php:533
+#: ../../../administrator/System/User/User.php:533
 msgid "Could not remove the special characters!"
 msgstr "Konnte die Spezialzeichen nicht entfernen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/User.php:537
+#: ../../../administrator/System/User/User.php:537
 msgid "The special characters were successfully removed!"
 msgstr "Die Sonderzeichen wurden erfolgreich entfernt!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/User.php:586
+#: ../../../administrator/System/User/User.php:586
 msgid "Could not fetch the Classes!"
 msgstr "Konnte die Kurse nicht abrufen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/User.php:604
+#: ../../../administrator/System/User/User.php:604
 msgid "Could not fetch the User-in-Class-Statuses!"
 msgstr "Konnte die Benutzer-In-Klasse-Status nicht ändern!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/User.php:643
+#: ../../../administrator/System/User/User.php:643
 msgid "Could not fetch the Classes of the User"
 msgstr "Konnte die Kurse des Benutzers nicht abrufen"
 
-#: ../../../administrator/headmod_System/modules/mod_User/User.php:714
+#: ../../../administrator/System/User/User.php:714
 msgid "Error fetching the Usergroups"
 msgstr "Konnte die Benutzergruppen nicht abrufen"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:57
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:77
+#: ../../../administrator/System/User/UserCsvImport.php:57
+#: ../../../administrator/System/User/UserCsvImport.php:77
 msgid "Email-Address"
 msgstr "Email-Adresse"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:59
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:79
+#: ../../../administrator/System/User/UserCsvImport.php:59
+#: ../../../administrator/System/User/UserCsvImport.php:79
 msgid "Schoolyear"
 msgstr "Schuljahr"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:60
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:80
+#: ../../../administrator/System/User/UserCsvImport.php:60
+#: ../../../administrator/System/User/UserCsvImport.php:80
 msgid "Grade"
 msgstr "Klasse"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:62
+#: ../../../administrator/System/User/UserCsvImport.php:62
 msgid "PricegroupId"
 msgstr "Preisgruppen-ID"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:63
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:84
+#: ../../../administrator/System/User/UserCsvImport.php:63
+#: ../../../administrator/System/User/UserCsvImport.php:84
 msgid "is Soli"
 msgstr "ist Soli"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:93
+#: ../../../administrator/System/User/UserCsvImport.php:93
 msgid "Babesk is deactivated!"
 msgstr "Babesk ist deaktiviert!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:95
+#: ../../../administrator/System/User/UserCsvImport.php:95
 msgid "Pricegroups"
 msgstr "Preisgruppen"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:99
+#: ../../../administrator/System/User/UserCsvImport.php:99
 msgid "Soli"
 msgstr "Soli"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:192
+#: ../../../administrator/System/User/UserCsvImport.php:192
 #, php-format
 msgid ""
 "Could not add the Schoolyear and the Grade to the User \"%1$s\" \"%2$s\""
@@ -1695,7 +1695,7 @@ msgstr ""
 "Konnte das Schuljahr und die Klasse nicht zu dem Benutzer \"%1$s\" \"%2$s\" "
 "hinzufügen"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:197
+#: ../../../administrator/System/User/UserCsvImport.php:197
 #, php-format
 msgid ""
 "The User \"%1$s %2$s\" has a Grade, but no Schoolyear defined! Define a "
@@ -1704,86 +1704,86 @@ msgstr ""
 "Der Benutzer \"%1$s %2$s\" hat eine Klasse, aber kein Schuljahr definiert! "
 "Definieren sie ein Schuljahr mit Klasse für Benutzer!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:315
+#: ../../../administrator/System/User/UserCsvImport.php:315
 msgid "Multiple Grades with gradelevel \"0\" found!"
 msgstr "Mehrere Klassen mit Jahrgang \"0\" gefunden!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:319
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:324
+#: ../../../administrator/System/User/UserCsvImport.php:319
+#: ../../../administrator/System/User/UserCsvImport.php:324
 msgid "Could not find the ID of the \"NoGrade\"-Grade"
 msgstr "Konnte die ID der \"KeineKlasse\"-Kasse nicht finden!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:355
+#: ../../../administrator/System/User/UserCsvImport.php:355
 #, php-format
 msgid "Could not find the Pricegroup %1$s!"
 msgstr "Konnte die Preisgruppen \"%1$s\" nicht finden!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserCsvImport.php:406
+#: ../../../administrator/System/User/UserCsvImport.php:406
 #, php-format
 msgid "Could not find the Usergroup by Path \"%1$s\""
 msgstr "Konnte die Nutzergruppe anhand des Pfads \"%1$s\" nicht finden"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:33
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/ChangeExecute.php:33
 msgid "The userdata were changed successfully."
 msgstr "Die Benutzerdaten wurden erfolgreich verändert."
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:41
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/ChangeExecute.php:41
 msgid "Please resolve the conflicts before comitting the changes"
 msgstr "Bitte lösen sie die Konflikte bevor sie die Veränderungen durchführen"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:112
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/ChangeExecute.php:112
 msgid "Could not upload the userchanges!"
 msgstr "Konnte die Benutzerveränderungen nicht hochladen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:155
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/ChangeExecute.php:155
 msgid "Could not fetch the grades!"
 msgstr "Konnte die Klassen nicht abrufen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:212
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/ChangeExecute.php:212
 msgid "Could not commit the new users!"
 msgstr "Konnte die neuen Benutzer nicht hochladen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:239
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/ChangeExecute.php:239
 msgid "Could not get the group for the new users!"
 msgstr "Konnte die Gruppe für die neuen Nutzer nicht abrufen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:296
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/ChangeExecute.php:296
 msgid "Could not add the grade!"
 msgstr "Konnte die Klasse nicht hinzufügen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:319
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:343
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/ChangeExecute.php:319
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/ChangeExecute.php:343
 msgid "Could not fetch the new users!"
 msgstr "Konnte die neuen Nutzer nicht abrufen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ChangeExecute.php:365
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/ChangeExecute.php:365
 msgid "Could not switch to the new Schoolyear!"
 msgstr "Konnte nicht zu dem neuen Schuljahr wechseln!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:97
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:97
 msgid "Please answer the questions given to resolve the conflicts."
 msgstr "Bitte beantworten sie die Fragen um die Konflikte zu lösen."
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:145
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:256
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:145
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:256
 msgid "Error fetching the data!"
 msgstr "Ein Fehler ist beim Abrufen der Daten aufgetreten!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:196
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:196
 msgid "Wrong type?!"
 msgstr "Falscher Typ?!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:269
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:303
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:330
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:269
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:303
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/ConflictsResolve.php:330
 msgid "Not implemented yet!"
 msgstr "Noch nicht implementiert!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:39
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/CsvImport.php:39
 msgid "Missing Session-Variable! Please begin again."
 msgstr "Die Session-Variable fehlt! Bitte fangen sie von vorne an."
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:183
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/CsvImport.php:183
 #, php-format
 msgid ""
 "An error occured while importing the csv-file. The file is missing the "
@@ -1792,7 +1792,7 @@ msgstr ""
 "Ein Fehler ist beim Importieren der CSV-Datei aufgetreten. Es fehlt die "
 "Spalte \"%1$s\"!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:233
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/CsvImport.php:233
 #, php-format
 msgid ""
 "Errors occured while importing the csv-file. Please correct them and try "
@@ -1801,49 +1801,49 @@ msgstr ""
 "Es sind Fehler beim Importieren der CSV-Datei aufgetreten. Bitte korrigieren "
 "sie diese und versuchen sie es nochmal.<br />%1$s"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:337
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/CsvImport.php:337
 msgid "Could not fetch the users!"
 msgstr "Konnte die Benutzer nicht abrufen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/CsvImport.php:432
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/CsvImport.php:432
 msgid "Could not fetch the conflict scope from server!"
 msgstr "Konnte den Konfliktbereich nicht vom Server abrufen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:48
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/NewSession.php:48
 msgid "Full year"
 msgstr "Schuljahr"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:48
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/NewSession.php:48
 msgid "Half year"
 msgstr "Halbjahr"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:72
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/NewSession.php:72
 msgid "Could not fetch the schoolyears!"
 msgstr "Konnte die Schuljahre nicht abrufen!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:98
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/NewSession.php:98
 msgid "Could not load the user-groups. Adding new users to groups is disabled!"
 msgstr ""
 "Konnte die Benutzergruppen nicht laden. Neue Nutzer zu Gruppen hinzufügen "
 "ist deaktiviert!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:150
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/NewSession.php:150
 msgid "Could not initialize the process!"
 msgstr "Konnte den Prozess nicht initialisieren!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:171
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/NewSession.php:171
 msgid "Could not check if the schoolyear has already been used"
 msgstr "Konnte nicht überprüfen ob das Schuljahr bereits benutzt wurde"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:208
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/NewSession.php:208
 msgid "Wrong type of switch-type of schoolyear!"
 msgstr "Falscher Wechsel-Typ des Schuljahres!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:213
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/NewSession.php:213
 msgid "The Schoolyear with this Id does not exist!"
 msgstr "Ein Schuljahr mit dieser Id existiert nicht!"
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/NewSession.php:217
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/NewSession.php:217
 msgid ""
 "The formular was not filled out completely. Please correct your mistakes and "
 "try again."
@@ -1851,19 +1851,29 @@ msgstr ""
 "Das Formular wurde nicht vollständig ausgefüllt. Bitte korrigieren sie ihre "
 "Fehler und versuchen sie es nochmal."
 
-#: ../../../administrator/headmod_System/modules/mod_User/UserUpdateWithSchoolyearChange/UserUpdateWithSchoolyearChange.php:42
+#: ../../../administrator/System/User/UserUpdateWithSchoolyearChange/UserUpdateWithSchoolyearChange.php:42
 msgid "Could not check if this has done before!"
 msgstr "Konnte nicht überprüfen ob dies bereits vorher getan wurde!"
 
-#: ../../../include/3rdParty/smarty/templates_c/11322d38134ef91069c8f161f09401dab3ff0b5b.file.menu.tpl.php:190
-#: ../../../include/3rdParty/smarty/templates_c/27b07b26a02cdfc115515ebfb6531fc46d02dcca.file.baseLayout.tpl.php:184
-#: ../../../include/3rdParty/smarty/templates_c/4a3351376d6694985459ed15bc152b5e3b926af7.file.main_menu.tpl.php:191
-#: ../../../include/3rdParty/smarty/templates_c/5c57eecb20fd3b1529c88ff3214b8c0b49981120.file.menu.tpl.php:190
-#: ../../../include/3rdParty/smarty/templates_c/7b76a6814826d0b04898f2ffdbbe857d0213eb52.file.overview.tpl.php:190
-#: ../../../include/3rdParty/smarty/templates_c/cde66171dfd78dce48d57bfb167a8f9448a2b41b.file.host_selection.tpl.php:190
-#: ../../../include/3rdParty/smarty/templates_c/d17faa2f5ca0380617be0637d532a424a85addce.file.Pvp.tpl.php:190
-#: ../../../include/3rdParty/smarty/templates_c/d27b952bcdad3b5375d76bc7f01b0feee7208c6b.file.selection.tpl.php:190
-#: ../../../include/3rdParty/smarty/templates_c/d5d1c872eea1c5b59744c3f6eb0391f22970387d.file.menu.tpl.php:190
+#: ../../../include/3rdParty/smarty/templates_c/102e7f56697c60865138c5a2b8cf9e06637b67dc.file.order.tpl.php:186
+#: ../../../include/3rdParty/smarty/templates_c/10e59f74335efff25530507b384e321a46ac68e4.file.mainMenu.tpl.php:186
+#: ../../../include/3rdParty/smarty/templates_c/11322d38134ef91069c8f161f09401dab3ff0b5b.file.menu.tpl.php:186
+#: ../../../include/3rdParty/smarty/templates_c/120dadabd95f8dbd718e83e48121657b6d0686d3.file.menu.tpl.php:186
+#: ../../../include/3rdParty/smarty/templates_c/27b07b26a02cdfc115515ebfb6531fc46d02dcca.file.baseLayout.tpl.php:180
+#: ../../../include/3rdParty/smarty/templates_c/3532b0fbcb36a2f29d6b2ce01aa222d6b2575a78.file.saved.tpl.php:186
+#: ../../../include/3rdParty/smarty/templates_c/400466a52421bf3e2ba651252c216b45cdc68f15.file.Pvp.tpl.php:186
+#: ../../../include/3rdParty/smarty/templates_c/42dffccf31af1cface57628b7219f6b1ae3fedbe.file.changeEmailDialog.tpl.php:186
+#: ../../../include/3rdParty/smarty/templates_c/4a3351376d6694985459ed15bc152b5e3b926af7.file.main_menu.tpl.php:187
+#: ../../../include/3rdParty/smarty/templates_c/5c57eecb20fd3b1529c88ff3214b8c0b49981120.file.menu.tpl.php:186
+#: ../../../include/3rdParty/smarty/templates_c/7b76a6814826d0b04898f2ffdbbe857d0213eb52.file.overview.tpl.php:186
+#: ../../../include/3rdParty/smarty/templates_c/852742fa0313b455e97d6563fb705be47999e5e7.file.menu.tpl.php:200
+#: ../../../include/3rdParty/smarty/templates_c/98792aabcda63b306302e0e42dd47e4b6ed29052.file.menu.tpl.php:186
+#: ../../../include/3rdParty/smarty/templates_c/bb672767d9ca4c3a617adf67cc286eaf0f726d5a.file.changePasswordDialog.tpl.php:186
+#: ../../../include/3rdParty/smarty/templates_c/cde66171dfd78dce48d57bfb167a8f9448a2b41b.file.host_selection.tpl.php:186
+#: ../../../include/3rdParty/smarty/templates_c/d17faa2f5ca0380617be0637d532a424a85addce.file.Pvp.tpl.php:186
+#: ../../../include/3rdParty/smarty/templates_c/d27b952bcdad3b5375d76bc7f01b0feee7208c6b.file.selection.tpl.php:186
+#: ../../../include/3rdParty/smarty/templates_c/d4c7a7acd872fcf6883502e35094ebc376950145.file.newMessage.tpl.php:187
+#: ../../../include/3rdParty/smarty/templates_c/d8dff07d1cffa61575ba0f426ea7d17e1ec32b73.file.menu.tpl.php:186
 msgid "modulepath_"
 msgstr "NOT USED"
 
@@ -2173,156 +2183,152 @@ msgid "modulepath_root/administrator/Schbas/Booklist"
 msgstr "Bücherliste"
 
 #: ../../../include/modulepathNames.php:78
+msgid "modulepath_root/administrator/Schbas/BookAssignments"
+msgstr "Schulbuchzuweisungen"
+
+#: ../../../include/modulepathNames.php:79
+msgid "modulepath_root/administrator/Schbas/Dashboard"
+msgstr "Dashboard"
+
+#: ../../../include/modulepathNames.php:80
 msgid "modulepath_root/administrator/Messages"
 msgstr "Nachrichten"
 
-#: ../../../include/modulepathNames.php:79
+#: ../../../include/modulepathNames.php:81
 msgid "modulepath_root/administrator/Messages/MessageAdmin"
 msgstr "Nachrichteneinstellungen"
 
-#: ../../../include/modulepathNames.php:80
+#: ../../../include/modulepathNames.php:82
 msgid "modulepath_root/administrator/Messages/MessageTemplate"
 msgstr "Nachrichtenvorlagen"
 
-#: ../../../include/modulepathNames.php:81
+#: ../../../include/modulepathNames.php:83
 msgid "modulepath_root/administrator/Messages/MessageAuthor"
 msgstr "Nachrichtenautor"
 
-#: ../../../include/modulepathNames.php:82
+#: ../../../include/modulepathNames.php:84
 msgid "modulepath_root/administrator/Fits"
 msgstr "Führerschein für IT-Systeme"
 
-#: ../../../include/modulepathNames.php:83
+#: ../../../include/modulepathNames.php:85
 msgid "modulepath_root/administrator/Fits/FitsSettins"
 msgstr "FITS Einstellungen"
 
-#: ../../../include/modulepathNames.php:84
+#: ../../../include/modulepathNames.php:86
 msgid "modulepath_root/administrator/Fits/FitsCheck"
 msgstr "FITS überprüfen"
 
-#: ../../../include/modulepathNames.php:85
+#: ../../../include/modulepathNames.php:87
 msgid "modulepath_root/administrator/Babesk"
 msgstr "Bargeldloses Bestellsystem"
 
-#: ../../../include/modulepathNames.php:86
+#: ../../../include/modulepathNames.php:88
 msgid "modulepath_root/administrator/Babesk/Soli"
 msgstr "Teilhabepaket"
 
-#: ../../../include/modulepathNames.php:87
+#: ../../../include/modulepathNames.php:89
 msgid "modulepath_root/administrator/Babesk/Recharge"
 msgstr "Karte aufladen"
 
-#: ../../../include/modulepathNames.php:88
+#: ../../../include/modulepathNames.php:90
 msgid "modulepath_root/administrator/Babesk/Priceclass"
 msgstr "Preisklasseneinstellung"
 
-#: ../../../include/modulepathNames.php:89
+#: ../../../include/modulepathNames.php:91
 msgid "modulepath_root/administrator/Babesk/Menu"
 msgstr "Menü"
 
-#: ../../../include/modulepathNames.php:90
+#: ../../../include/modulepathNames.php:92
 msgid "modulepath_root/administrator/Babesk/Meals"
 msgstr "Mahlzeiteinstellung"
 
-#: ../../../include/modulepathNames.php:91
+#: ../../../include/modulepathNames.php:93
 msgid "modulepath_root/administrator/Babesk/Checkout"
 msgstr "Ausgabe"
 
-#: ../../../include/modulepathNames.php:92
+#: ../../../include/modulepathNames.php:94
 msgid "modulepath_root/administrator/System"
 msgstr "Systemeinstellungen"
 
-#: ../../../include/modulepathNames.php:93
+#: ../../../include/modulepathNames.php:95
 msgid "modulepath_root/administrator/System/Schooltype"
 msgstr "Schultyp"
 
-#: ../../../include/modulepathNames.php:94
+#: ../../../include/modulepathNames.php:96
 msgid "modulepath_root/administrator/System/CardChange"
 msgstr "Kartenwechsel"
 
-#: ../../../include/modulepathNames.php:95
+#: ../../../include/modulepathNames.php:97
 msgid "modulepath_root/administrator/System/WebHomepageSettings"
 msgstr "Webseiteneinstellung"
 
-#: ../../../include/modulepathNames.php:96
+#: ../../../include/modulepathNames.php:98
 msgid "modulepath_root/administrator/System/PresetPassword"
 msgstr "Voreingestelltes Passwort"
 
-#: ../../../include/modulepathNames.php:97
+#: ../../../include/modulepathNames.php:99
 msgid "modulepath_root/administrator/System/EmailConfiguration"
 msgstr "Emaildaten-Konfiguration"
 
-#: ../../../include/modulepathNames.php:98
+#: ../../../include/modulepathNames.php:100
 msgid "modulepath_root/administrator/System/CardInfo"
 msgstr "Karteninformationen"
 
-#: ../../../include/modulepathNames.php:99
+#: ../../../include/modulepathNames.php:101
 msgid "modulepath_root/administrator/System/Logs"
 msgstr "Logeinstellungen"
 
-#: ../../../include/modulepathNames.php:100
+#: ../../../include/modulepathNames.php:102
 msgid "modulepath_root/administrator/System/Groups"
 msgstr "Preisgruppen"
 
-#: ../../../include/modulepathNames.php:101
-msgid "modulepath_root/administrator/System/Admin"
-msgstr "Administratoreinstellungen"
-
-#: ../../../include/modulepathNames.php:102
+#: ../../../include/modulepathNames.php:103
 msgid "modulepath_root/administrator/System/Help"
 msgstr "Hilfeeinstellungen"
 
-#: ../../../include/modulepathNames.php:103
+#: ../../../include/modulepathNames.php:104
 msgid "modulepath_root/administrator/System/SpecialCourse"
 msgstr "Oberstufenkurse"
 
-#: ../../../include/modulepathNames.php:104
+#: ../../../include/modulepathNames.php:105
 msgid "modulepath_root/administrator/System/ForeignLanguage"
 msgstr "Fremdsprachen"
 
-#: ../../../include/modulepathNames.php:105
+#: ../../../include/modulepathNames.php:106
 msgid "modulepath_root/administrator/System/Religion"
 msgstr "Religionseinstellungen"
 
-#: ../../../include/modulepathNames.php:106
+#: ../../../include/modulepathNames.php:107
 msgid "modulepath_root/administrator/System/User"
 msgstr "Benutzereinstellungen"
 
-#: ../../../include/modulepathNames.php:107
+#: ../../../include/modulepathNames.php:108
 msgid "modulepath_root/administrator/System/Grade"
 msgstr "Klassen"
 
-#: ../../../include/modulepathNames.php:108
+#: ../../../include/modulepathNames.php:109
 msgid "root/administrator/Babesk/Checkout"
 msgstr "Ausgabe"
 
-#: ../../../include/modulepathNames.php:109
+#: ../../../include/modulepathNames.php:110
 msgid "modulepath_root/administrator/Babesk/BabeskTimeSettings"
 msgstr "Zeiteinstellungen"
 
-#: ../../../include/modulepathNames.php:110
+#: ../../../include/modulepathNames.php:111
 msgid "modulepath_root/administrator/Fits/FitsSettings"
 msgstr "FITS Einstellungen"
 
-#: ../../../include/modulepathNames.php:111
+#: ../../../include/modulepathNames.php:112
 msgid "modulepath_root/administrator/System/GroupSettings"
 msgstr "Benutzergruppen"
 
-#: ../../../include/modulepathNames.php:112
+#: ../../../include/modulepathNames.php:113
 msgid "modulepath_root/administrator/System/ModuleSettings"
 msgstr "Moduleinstellungen"
 
-#: ../../../include/modulepathNames.php:113
+#: ../../../include/modulepathNames.php:114
 msgid "modulepath_root/administrator/System/Schoolyear"
 msgstr "Schuljahr"
-
-#: ../../../include/sql_access/BookManager.php:150
-msgid "Error occured while fetching the books by class"
-msgstr "Ein Fehler ist beim Abrufen der Bücher nach Klassen aufgetreten"
-
-#: ../../../include/sql_access/BookManager.php:170
-msgid "Error occured while fetching the books by topic"
-msgstr "Ein Fehler ist beim Abrufen der Bücher nach Thema aufgetreten"
 
 #: ../../../include/sql_access/MealManager.php:80
 msgid "Error occured while fetching the meals"
@@ -2331,6 +2337,110 @@ msgstr "Ein Fehler ist beim Abrufen der Mahlzeiten aufgetreten"
 #: ../../../include/sql_access/MealManager.php:107
 msgid "Error occured while fetching the meal-ids at date"
 msgstr "Ein Fehler ist beim Abrufen der Mahlzeiten am Datum aufgetreten"
+
+#: ../../../web/Babesk/Cancel/Cancel.php:267
+#: ../../../web/Babesk/Order/MealsForOrderDisplayer.php:296
+#: ../../../web/Babesk/Order/Order.php:327
+msgid "Could not check if the Soliprice is enabled!"
+msgstr "Konnte nicht überprüfen ob der Teilhabepaket-Preis aktiviert ist!"
+
+#: ../../../web/Help/Help.php:28
+msgid "The helptext is void"
+msgstr "Der Hilfetext ist leer"
+
+#: ../../../web/Help/Help.php:60
+msgid "Could not fetch the helptext."
+msgstr "Konnte den Hilfetext nicht abrufen."
+
+#: ../../../web/Kuwasys/ClassDetails/ClassDetails.php:58
+#: ../../../web/Kuwasys/ClassList/UserSelectionsApply.php:88
+msgid "Go to Main menu"
+msgstr "Zum Hauptmenü"
+
+#: ../../../web/Kuwasys/ClassDetails/ClassDetails.php:138
+msgid "Could not fetch the class-details!"
+msgstr "Konnte die Kursdetails nicht abrufen!"
+
+#: ../../../web/Kuwasys/ClassList/Show.php:50
+msgid "Registrations are not allowed for the moment!"
+msgstr "Kursregistrierungen sind momentan nicht erlaubt!"
+
+#: ../../../web/Kuwasys/ClassList/Show.php:54
+msgid "Could not display the list!"
+msgstr "Konnte die Liste nicht anzeigen!"
+
+#: ../../../web/Kuwasys/ClassList/UserSelectionsApply.php:47
+msgid "Error checking the input data!"
+msgstr "Ein Fehler ist beim überprüfen der eingegebenen Daten aufgetreten!"
+
+#: ../../../web/Kuwasys/ClassList/UserSelectionsApply.php:53
+#: ../../../web/Kuwasys/ClassList/UserSelectionsApply.php:136
+msgid "Back to main menu"
+msgstr "Zum Hauptmenü"
+
+#: ../../../web/Kuwasys/ClassList/UserSelectionsApply.php:58
+msgid ""
+"Your choices where added. You can see your registrations in the main menu."
+msgstr ""
+"Deine Wahlen wurden hinzugefügt. Du kannst die Registrationen im Hauptmenü "
+"einsehen."
+
+#: ../../../web/Kuwasys/ClassList/UserSelectionsApply.php:130
+msgid ""
+"You can only select a class as either primary or secondary, not both at once!"
+msgstr ""
+"Du kannst einen Kurs nur als Primärwunsch oder Sekundärwunsche auswählen, "
+"nicht beides gleichzeitig!"
+
+#: ../../../web/Kuwasys/ClassList/UserSelectionsApply.php:141
+msgid ""
+"You have selected a class at a day at which you have already selected "
+"classes. Please undo your choices and then try again if you want to change "
+"them!"
+msgstr ""
+"Du hast einen Kurs an einem Tag gewählt an dem du dich bereits für einen "
+"Kurs registriert hast. Bitte mache deine Wahlen im Hauptmenü rückgängig und "
+"versuche nochmal dich für die jetzt gewählten Kurse zu registrieren wenn du "
+"sie verändern willst!"
+
+#: ../../../web/Kuwasys/ClassList/UserSelectionsApply.php:148
+msgid "Classregistrations are disabled!"
+msgstr "Kursregistrierungen sind deaktiviert!"
+
+#: ../../../web/Kuwasys/ClassList/UserSelectionsApply.php:153
+msgid "One or more classes you have chosen are not enabled!"
+msgstr "Eine oder mehrere Kurse die du gewählt hast sind gesperrt!"
+
+#: ../../../web/Kuwasys/ClassList/UserSelectionsApply.php:159
+msgid ""
+"For a specific day you did not chose a primary request, but you did chose a "
+"secondary request. If you only have one request at this day, please select "
+"the class as a primary request."
+msgstr ""
+"Du hast an einem Tag keinen Primärwunsch, aber einen Sekundärwunsch "
+"ausgewählt. Wenn du nur einen Wunsch für diesen Tag hast, wähle den Kurs "
+"bitte als Erstwunsch."
+
+#: ../../../web/Kuwasys/ClassList/UserSelectionsApply.php:339
+msgid "Could not commit your choices!"
+msgstr "Konnte deine Wahlen nicht hochladen!"
+
+#: ../../../web/Kuwasys/MainMenu/MainMenu.php:101
+msgid "Could not fetch your Classes!"
+msgstr "Konnte deine Kurse nicht abrufen!"
+
+#: ../../../web/Kuwasys/MainMenu/MainMenu.php:123
+msgid "You were not unregistered from any classes."
+msgstr "Du wurdest von keinem Kurs abgemeldet."
+
+#: ../../../web/Kuwasys/MainMenu/MainMenu.php:128
+#, php-format
+msgid "Unregistered you from %1$s classes."
+msgstr "Du wurdest von %1$s Kursen abgemeldet."
+
+#: ../../../web/Kuwasys/MainMenu/MainMenu.php:158
+msgid "Could not unregister you from your classes!"
+msgstr "Konnte dich nicht von deinen Kursen abmelden!"
 
 #: ../../../web/Login.php:102
 msgid "Error while logging you in!"
@@ -2358,113 +2468,17 @@ msgstr "Konnte das Modul nicht ausführen!"
 msgid "You have no access to web!"
 msgstr "Du hast keine Berechtigung für das Web-Modul!"
 
-#: ../../../web/headmod_Babesk/modules/mod_Cancel/Cancel.php:267
-#: ../../../web/headmod_Babesk/modules/mod_Order/MealsForOrderDisplayer.php:296
-#: ../../../web/headmod_Babesk/modules/mod_Order/Order.php:327
-msgid "Could not check if the Soliprice is enabled!"
-msgstr "Konnte nicht überprüfen ob der Teilhabepaket-Preis aktiviert ist!"
+#~ msgid "modulepath_root/administrator/System/Admin"
+#~ msgstr "Administratoreinstellungen"
 
-#: ../../../web/headmod_Help/Help.php:28
-msgid "The helptext is void"
-msgstr "Der Hilfetext ist leer"
+#~ msgid "Error occured while fetching the books by class"
+#~ msgstr "Ein Fehler ist beim Abrufen der Bücher nach Klassen aufgetreten"
 
-#: ../../../web/headmod_Help/Help.php:60
-msgid "Could not fetch the helptext."
-msgstr "Konnte den Hilfetext nicht abrufen."
+#~ msgid "Error occured while fetching the books by topic"
+#~ msgstr "Ein Fehler ist beim Abrufen der Bücher nach Thema aufgetreten"
 
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassDetails/ClassDetails.php:58
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:88
-msgid "Go to Main menu"
-msgstr "Zum Hauptmenü"
-
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassDetails/ClassDetails.php:138
-msgid "Could not fetch the class-details!"
-msgstr "Konnte die Kursdetails nicht abrufen!"
-
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassDetails/ClassDetails.php:159
-msgid "Could not display the class-details!"
-msgstr "Konnte die Kursdetails nicht anzeigen!"
-
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/Show.php:50
-msgid "Registrations are not allowed for the moment!"
-msgstr "Kursregistrierungen sind momentan nicht erlaubt!"
-
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/Show.php:54
-msgid "Could not display the list!"
-msgstr "Konnte die Liste nicht anzeigen!"
-
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:47
-msgid "Error checking the input data!"
-msgstr "Ein Fehler ist beim überprüfen der eingegebenen Daten aufgetreten!"
-
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:53
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:136
-msgid "Back to main menu"
-msgstr "Zum Hauptmenü"
-
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:58
-msgid ""
-"Your choices where added. You can see your registrations in the main menu."
-msgstr ""
-"Deine Wahlen wurden hinzugefügt. Du kannst die Registrationen im Hauptmenü "
-"einsehen."
-
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:130
-msgid ""
-"You can only select a class as either primary or secondary, not both at once!"
-msgstr ""
-"Du kannst einen Kurs nur als Primärwunsch oder Sekundärwunsche auswählen, "
-"nicht beides gleichzeitig!"
-
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:141
-msgid ""
-"You have selected a class at a day at which you have already selected "
-"classes. Please undo your choices and then try again if you want to change "
-"them!"
-msgstr ""
-"Du hast einen Kurs an einem Tag gewählt an dem du dich bereits für einen "
-"Kurs registriert hast. Bitte mache deine Wahlen im Hauptmenü rückgängig und "
-"versuche nochmal dich für die jetzt gewählten Kurse zu registrieren wenn du "
-"sie verändern willst!"
-
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:148
-msgid "Classregistrations are disabled!"
-msgstr "Kursregistrierungen sind deaktiviert!"
-
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:153
-msgid "One or more classes you have chosen are not enabled!"
-msgstr "Eine oder mehrere Kurse die du gewählt hast sind gesperrt!"
-
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:159
-msgid ""
-"For a specific day you did not chose a primary request, but you did chose a "
-"secondary request. If you only have one request at this day, please select "
-"the class as a primary request."
-msgstr ""
-"Du hast an einem Tag keinen Primärwunsch, aber einen Sekundärwunsch "
-"ausgewählt. Wenn du nur einen Wunsch für diesen Tag hast, wähle den Kurs "
-"bitte als Erstwunsch."
-
-#: ../../../web/headmod_Kuwasys/modules/mod_ClassList/UserSelectionsApply.php:339
-msgid "Could not commit your choices!"
-msgstr "Konnte deine Wahlen nicht hochladen!"
-
-#: ../../../web/headmod_Kuwasys/modules/mod_MainMenu/MainMenu.php:101
-msgid "Could not fetch your Classes!"
-msgstr "Konnte deine Kurse nicht abrufen!"
-
-#: ../../../web/headmod_Kuwasys/modules/mod_MainMenu/MainMenu.php:123
-msgid "You were not unregistered from any classes."
-msgstr "Du wurdest von keinem Kurs abgemeldet."
-
-#: ../../../web/headmod_Kuwasys/modules/mod_MainMenu/MainMenu.php:128
-#, php-format
-msgid "Unregistered you from %1$s classes."
-msgstr "Du wurdest von %1$s Kursen abgemeldet."
-
-#: ../../../web/headmod_Kuwasys/modules/mod_MainMenu/MainMenu.php:158
-msgid "Could not unregister you from your classes!"
-msgstr "Konnte dich nicht von deinen Kursen abmelden!"
+#~ msgid "Could not display the class-details!"
+#~ msgstr "Konnte die Kursdetails nicht anzeigen!"
 
 #~ msgid "Classunit"
 #~ msgstr "Kurseinheiten"
