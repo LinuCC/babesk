@@ -95,11 +95,16 @@ PreparationPanel = React.createClass({
     return bootbox.confirm('Wollen sie den Rückmeldeformular-Status wirklich verändern?', (function(_this) {
       return function(res) {
         if (res) {
-          _this.setState({
-            schbasClaimStatus: status
+          return $.get('index.php?module=administrator|Schbas|Dashboard|Preparation|SchbasClaimStatus', {
+            newStatus: status
+          }).done(function(res) {
+            return _this.setState({
+              schbasClaimStatus: status
+            });
+          }).fail(function(jqxhr) {
+            return toastr.error(jqxhr.responseText, 'Fehler');
           });
         }
-        return toastr.error('Leider noch nicht implementiert');
       };
     })(this));
   },

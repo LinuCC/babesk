@@ -76,8 +76,15 @@ PreparationPanel = React.createClass(
     bootbox.confirm(
       'Wollen sie den Rückmeldeformular-Status wirklich verändern?'
       (res)=>
-        if res then @setState(schbasClaimStatus: status)
-        toastr.error 'Leider noch nicht implementiert'
+        if res
+          $.get(
+            'index.php?module=administrator|Schbas|Dashboard|Preparation|\
+            SchbasClaimStatus',
+            {newStatus: status}
+          ).done (res)=>
+              @setState(schbasClaimStatus: status)
+            .fail (jqxhr)->
+              toastr.error jqxhr.responseText, 'Fehler'
     )
 
   render: ->
