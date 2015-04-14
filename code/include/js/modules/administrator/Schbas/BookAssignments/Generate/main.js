@@ -5,7 +5,7 @@ React = require('react');
 
 React.Bootstrap = require('react-bootstrap');
 
-AssignmentBox = require('./lib/AssignmentBox.js').AssignmentBox;
+AssignmentBox = require('./lib/AssignmentBox.js');
 
 renderAssignmentBox = function(overviewData) {
   return React.render(React.createElement(AssignmentBox, {

@@ -1,6 +1,6 @@
 React = require 'react'
 React.Bootstrap = require 'react-bootstrap'
-AssignmentBox = require('./lib/AssignmentBox.js').AssignmentBox
+AssignmentBox = require('./lib/AssignmentBox.js')
 
 renderAssignmentBox = (overviewData)->
   React.render(

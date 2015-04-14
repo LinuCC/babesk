@@ -204,4 +204,4 @@ ActionFooter = React.createClass({
   }
 });
 
-exports.AssignmentBox = AssignmentBox;
+module.exports = AssignmentBox;
