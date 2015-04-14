@@ -8,7 +8,7 @@ INSERT INTO SystemGroupModuleRights (groupId, moduleId)
 	VALUES (3, @newModuleId);
 
 CALL moduleAddNewByPath(
-	"Preparation", 1, 1,
+	"Preparation", 1, 0,
 	"administrator/Schbas/Dashboard/Preparation/Preparation.php",
 	"Dashboard", "root/administrator/Schbas/Dashboard",
 	@newModuleId
@@ -17,7 +17,7 @@ INSERT INTO SystemGroupModuleRights (groupId, moduleId)
 	VALUES (3, @newModuleId);
 
 CALL moduleAddNewByPath(
-	"AssignmentsController", 1, 1,
+	"AssignmentsController", 1, 0,
 	"administrator/Schbas/Dashboard/Preparation/AssignmentsController.php",
 	"Preparation", "root/administrator/Schbas/Dashboard/Preparation",
 	@newModuleId
@@ -26,7 +26,7 @@ CALL moduleAddNewByPath(
 INSERT INTO SystemGroupModuleRights (groupId, moduleId)
 	VALUES (3, @newModuleId);
 	CALL moduleAddNewByPath(
-	"ClaimForm", 1, 1,
+	"ClaimForm", 1, 0,
 	"administrator/Schbas/Dashboard/Preparation/ClaimForm.php",
 	"Preparation", "root/administrator/Schbas/Dashboard/Preparation",
 	@newModuleId
@@ -35,7 +35,7 @@ INSERT INTO SystemGroupModuleRights (groupId, moduleId)
 	VALUES (3, @newModuleId);
 
 CALL moduleAddNewByPath(
-	"Deadlines", 1, 1,
+	"Deadlines", 1, 0,
 	"administrator/Schbas/Dashboard/Preparation/Deadlines.php",
 	"Preparation", "root/administrator/Schbas/Dashboard/Preparation",
 	@newModuleId
@@ -44,7 +44,7 @@ INSERT INTO SystemGroupModuleRights (groupId, moduleId)
 	VALUES (3, @newModuleId);
 
 CALL moduleAddNewByPath(
-	"SchbasClaimStatus", 1, 1,
+	"SchbasClaimStatus", 1, 0,
 	"administrator/Schbas/Dashboard/Preparation/SchbasClaimStatus.php",
 	"Preparation", "root/administrator/Schbas/Dashboard/Preparation",
 	@newModuleId
@@ -53,7 +53,7 @@ INSERT INTO SystemGroupModuleRights (groupId, moduleId)
 	VALUES (3, @newModuleId);
 
 CALL moduleAddNewByPath(
-	"Schoolyear", 1, 1,
+	"Schoolyear", 1, 0,
 	"administrator/Schbas/Dashboard/Preparation/Schoolyear.php",
 	"Preparation", "root/administrator/Schbas/Dashboard/Preparation",
 	@newModuleId
