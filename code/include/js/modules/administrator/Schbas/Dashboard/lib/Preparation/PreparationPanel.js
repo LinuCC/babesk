@@ -89,7 +89,26 @@ PreparationPanel = React.createClass({
     return window.location = 'index.php?module=administrator|Schbas|BookAssignments|Generate';
   },
   handleDeleteAssignments: function() {
-    toastr.error('Löschen ist noch nicht implementiert');
+    return bootbox.confirm("Wollen sie die Buchzuweisungen für das Jahr " + this.state.prepSchoolyear.active.name + " wirklich löschen?", (function(_this) {
+      return function(res) {
+        if (res) {
+          return bootbox.confirm('Wirklich wirklich??', function(res) {
+            if (res) {
+              return $.get('index.php?module=administrator|Schbas|BookAssignments|Delete', {
+                schoolyearId: _this.state.prepSchoolyear.active.id
+              }).done(function(res) {
+                _this.setState(function(prevState, props) {
+                  return prevState.prepSchoolyear.active.entriesExist = false;
+                });
+                return toastr.success(res, 'Erfolgreich');
+              }).fail(function(jqxhr) {
+                return toastr.error(jqxhr.responseText, 'Fehler');
+              });
+            }
+          });
+        }
+      };
+    })(this));
   },
   handleSchbasClaimStatusChanged: function(status) {
     return bootbox.confirm('Wollen sie den Rückmeldeformular-Status wirklich verändern?', (function(_this) {

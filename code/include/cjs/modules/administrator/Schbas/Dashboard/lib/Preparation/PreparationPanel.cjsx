@@ -69,8 +69,22 @@ PreparationPanel = React.createClass(
       Generate'
 
   handleDeleteAssignments: ->
-    toastr.error 'Löschen ist noch nicht implementiert'
-    return
+    bootbox.confirm(
+      "Wollen sie die Buchzuweisungen für das Jahr \
+      #{@state.prepSchoolyear.active.name} wirklich löschen?"
+      (res)=>
+        if res then bootbox.confirm 'Wirklich wirklich??', (res)=>
+          if res
+            $.get(
+              'index.php?module=administrator|Schbas|BookAssignments|Delete'
+              {schoolyearId: @state.prepSchoolyear.active.id}
+            ).done (res)=>
+                @setState (prevState, props)->
+                  return prevState.prepSchoolyear.active.entriesExist = false
+                toastr.success res, 'Erfolgreich'
+              .fail (jqxhr)->
+                toastr.error jqxhr.responseText, 'Fehler'
+    )
 
   handleSchbasClaimStatusChanged: (status)->
     bootbox.confirm(
