@@ -10,11 +10,6 @@ Button = React.Bootstrap.Button;
 classnames = require('classnames');
 
 CheckboxButton = React.createClass({
-  getInitialState: function() {
-    return {
-      isChecked: false
-    };
-  },
   getDefaultProps: function() {
     return {
       offText: '',
@@ -27,26 +22,23 @@ CheckboxButton = React.createClass({
     };
   },
   onClick: function() {
-    if (this.props.onClick()) {
-      return this.setState({
-        isChecked: !this.state.isChecked
-      });
-    }
+    return this.props.onChange(!this.props.checked);
   },
   render: function() {
     var bsStyle, iconClasses;
-    bsStyle = this.state.isChecked ? this.props.onStyle : this.props.offStyle;
+    bsStyle = this.props.checked ? this.props.onStyle : this.props.offStyle;
     iconClasses = classnames({
       'fa fa-fw': true,
-      'fa-square-o': !this.state.isChecked,
-      'fa-check-square-o': this.state.isChecked
+      'fa-square-o': !this.props.checked,
+      'fa-check-square-o': this.props.checked
     });
     return React.createElement(Button, {
       "bsStyle": bsStyle,
-      "onClick": this.onClick
+      "onClick": this.onClick,
+      "active": this.props.checked
     }, React.createElement("i", {
       "className": iconClasses
-    }), "\u00a0", (this.state.isChecked ? this.props.onText : this.props.offText), this.props.children);
+    }), "\u00a0", (this.props.checked ? this.props.onText : this.props.offText), this.props.children);
   }
 });
 

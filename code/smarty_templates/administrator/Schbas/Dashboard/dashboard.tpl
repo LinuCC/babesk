@@ -29,6 +29,9 @@
 {block name=js_include append}
 
 <script type="text/javascript"
+	src="{$path_js}/vendor/bootbox.min.js">
+</script>
+<script type="text/javascript"
 	src="{$path_js}/dist/administrator/Schbas/Dashboard/main.js">
 </script>
 

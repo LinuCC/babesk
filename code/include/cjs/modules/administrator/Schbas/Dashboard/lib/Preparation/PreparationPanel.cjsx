@@ -8,37 +8,56 @@ ButtonToolbar = React.Bootstrap.ButtonToolbar
 PrepSchoolyear = require './PrepSchoolyear'
 AssignmentController = require './AssignmentController'
 SchbasClaimStatus = require './SchbasClaimStatus'
+Deadlines = require './Deadlines'
 
 PreparationPanel = React.createClass(
   getInitialState: ->
     return {
       prepSchoolyear:
         active:
-          id: 7
-          name: "14/15"
-          entriesExist: true
-        alternatives: [
-          {
-            id: 4
-            name: "15/16"
-            entriesExist: false
-          }
-          {
-            id: 5
-            name: "12/13"
-            entriesExist: true
-          }
-          {
-            id: 6
-            name: "13/14"
-            entriesExist: true
-          }
-        ]
+          id: 0
+          name: "???"
+          entriesExist: false
+        alternatives: []
+      schbasClaimStatus: false
     }
 
+  componentDidMount: ->
+    $.getJSON 'index.php?module=administrator|Schbas|Dashboard|Preparation'
+      .done (res)=> if @isMounted() then @setState(res)
+      .fail (jqxhr)->
+        toastr.error jqxhr.responseText, 'Fehler beim Abrufen der Daten'
+
   handleSchoolyearChange: (schoolyearId)->
-    toastr.error 'Wechseln des Schuljahres ist noch nicht implementiert'
-    console.log schoolyearId
+    bootbox.confirm(
+      'Wollen sie das Vorbereitungs-Schuljahr wirklich wechseln?'
+      (res)=>
+        if res
+          $.get(
+            'index.php?module=administrator|Schbas|Dashboard|Preparation|\
+            Schoolyear',
+            {schoolyearId: schoolyearId, action: 'change'}
+          ).done (res)=>
+              # put the active into alternatives and the alternative with the
+              # schoolyearId into active
+              prepSy = @state.prepSchoolyear
+              oldActive = prepSy.active
+              newActive = prepSy.alternatives.filter (sy)->
+                sy.id is schoolyearId
+              if newActive.length is 1
+                prepSy.active = newActive[0]
+              else
+                toastr.error 'Fehler beim Wechseln des Schuljahres'
+                return false
+              prepSy.alternatives.push oldActive
+              # Remove the now active alternative from alternatives
+              prepSy.alternatives = prepSy.alternatives.filter(
+                (sy)-> sy.id isnt schoolyearId
+              )
+              @setState(prepSchoolyear: prepSy)
+            .fail (jqxhr)->
+              toastr.error jqxhr.responseText, 'Fehler'
+    )
 
   handleEditAssignments: ->
     toastr.error 'Editieren ist noch nicht implementiert'
@@ -53,21 +72,34 @@ PreparationPanel = React.createClass(
     toastr.error 'Löschen ist noch nicht implementiert'
     return
 
+  handleSchbasClaimStatusChanged: (status)->
+    bootbox.confirm(
+      'Wollen sie den Rückmeldeformular-Status wirklich verändern?'
+      (res)=>
+        if res then @setState(schbasClaimStatus: status)
+        toastr.error 'Leider noch nicht implementiert'
+    )
+
   render: ->
-    # Single buttons need to be wrapped with their own ButtonGroup
-    <ButtonGroup justified>
-      <PrepSchoolyear schoolyears={@state.prepSchoolyear}
-        handleSchoolyearChange={@handleSchoolyearChange}>
-      </PrepSchoolyear>
-      <ButtonGroup>
-        <SchbasClaimStatus />
+    <div>
+      {###Single buttons need to be wrapped with their own ButtonGroup###}
+      <ButtonGroup justified>
+        <PrepSchoolyear schoolyears={@state.prepSchoolyear}
+          handleSchoolyearChange={@handleSchoolyearChange}>
+        </PrepSchoolyear>
+        <AssignmentController prepSchoolyear={@state.prepSchoolyear.active}
+          handleEdit={@handleEditAssignments}
+          handleGenerate={@handleGenerateAssignments}
+          handleDelete={@handleDeleteAssignments}>
+        </AssignmentController>
+        <ButtonGroup>
+          <SchbasClaimStatus status={@state.schbasClaimStatus}
+            handleStatusChanged={@handleSchbasClaimStatusChanged} />
+        </ButtonGroup>
       </ButtonGroup>
-      <AssignmentController prepSchoolyear={@state.prepSchoolyear.active}
-        handleEdit={@handleEditAssignments}
-        handleGenerate={@handleGenerateAssignments}
-        handleDelete={@handleDeleteAssignments}>
-      </AssignmentController>
-    </ButtonGroup>
+      <hr />
+      <Deadlines />
+    </div>
 )
 
 

@@ -6,12 +6,17 @@ React = require('react');
 CheckboxButton = require('lib/CheckboxButton.js');
 
 SchbasClaimStatus = React.createClass({
+  handleStatusChanged: function(checked) {
+    return this.props.handleStatusChanged(checked);
+  },
   render: function() {
     return React.createElement(CheckboxButton, {
       "onText": 'Rückmeldeformular aktiv',
+      "checked": this.props.status,
       "offText": 'Rückmeldeformular deaktiv',
       "onStyle": 'primary',
-      "offStyle": 'warning'
+      "offStyle": 'warning',
+      "onChange": this.handleStatusChanged
     });
   }
 });

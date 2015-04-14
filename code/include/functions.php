@@ -237,4 +237,12 @@ function dieJson($data) {
 	die(json_encode($data));
 }
 
+/**
+ * Shortcut for http_response_code($statusCode); die($text);
+ */
+function dieHttp($text, $statusCode) {
+	http_response_code($statusCode);
+	die($text);
+}
+
 ?>

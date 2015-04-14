@@ -4,10 +4,6 @@ Button = React.Bootstrap.Button
 classnames = require 'classnames'
 
 CheckboxButton = React.createClass(
-  getInitialState: ->
-    return {
-      isChecked: false
-    }
   getDefaultProps: ->
     return {
       offText: ''
@@ -17,18 +13,17 @@ CheckboxButton = React.createClass(
       onClick: -> true
     }
   onClick: ->
-    if @props.onClick()
-      @setState(isChecked: not @state.isChecked)
+    @props.onChange(not @props.checked)
   render: ->
-    bsStyle = if @state.isChecked then @props.onStyle else @props.offStyle
+    bsStyle = if @props.checked then @props.onStyle else @props.offStyle
     iconClasses = classnames(
       'fa fa-fw': true
-      'fa-square-o': not @state.isChecked
-      'fa-check-square-o': @state.isChecked
+      'fa-square-o': not @props.checked
+      'fa-check-square-o': @props.checked
     )
-    <Button bsStyle={bsStyle} onClick={@onClick}>
+    <Button bsStyle={bsStyle} onClick={@onClick} active={@props.checked}>
       <i className={iconClasses}></i>&nbsp;
-      {if @state.isChecked then @props.onText else @props.offText}
+      {if @props.checked then @props.onText else @props.offText}
       {@props.children}
     </Button>
 )
