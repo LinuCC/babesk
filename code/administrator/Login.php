@@ -164,11 +164,11 @@ class Login {
 	protected function usernameNotDuplicatedCheck($username) {
 
 		if($this->usernameCountGet($username) > 1) {
-			$this->_logger->log('multiple users with same username found!',
-				'Problematic', Null, json_encode(array(
-					'username' => $username
-			)));
-			$this->loginShow('Error: multiple fitting users found');
+			$this->_logger->logO('multiple users with same username found!',
+				['sev' => 'crit', 'moreJson' => ['username' => $username]]);
+			$this->loginShow(
+				'Fehler: mehrere Benutzer mit diesem Benutzernamen gefunden'
+			);
 		}
 	}
 

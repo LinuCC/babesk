@@ -328,3 +328,129 @@ table.table td {
 .fa-Elawa:before {
 	content: "\f073";
 }
+
+/*********************
+ * Custom checkboxes *
+ *********************/
+
+/*
+ * Fancy checkbox
+ */
+
+/*Move he original checkbox out of the way */
+[type="checkbox"].fancy-check {
+  position: absolute;
+  left: -9999px;
+}
+/*Align the icon and the label text to same height using tabl-cell display*/
+/*If you change the font-size of the text, you may also want to do som padding or alignhment changes here*/
+.fancy-check ~ label >  span {
+  display: table-cell;
+  vertical-align: middle;
+  padding-left: 5px;
+}
+/*The label will contain the icon and the text, will grab the focus*/
+[type="checkbox"].fancy-check + label {
+  cursor: pointer;
+  display: table;
+}
+/*The icon container, set it to fixed size and font size, the padding is to align the border*/
+/*If you change the font-size of this icon, be sure to adjust the min-width as well*/
+[type="checkbox"].fancy-check + label:before {
+  font-family: 'FontAwesome';
+  display: inline-block;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  font-size: 22px;
+  min-width: 28px;
+  padding: 2px 0 0 3px;
+}
+/* toggle font awsome icon*/
+[type="checkbox"].fancy-check:checked + label:before {
+  content: "\f046";
+}
+[type="checkbox"].fancy-check:not(:checked) + label:before {
+  content: "\f096";
+}
+/*Do something on focus, in this case show dashed border*/
+[type="checkbox"].fancy-check:focus + label:before {
+  border: 1px dashed #777;
+}
+/*Do something on hover, in this case change the image color*/
+[type="checkbox"].fancy-check:hover + label:before {
+   color: #AD3;
+}
+
+/*
+ * Toggling Checkbox
+ */
+
+[type="checkbox"].toggle-check:not(:checked),
+[type="checkbox"].toggle-check:checked {
+  position: absolute;
+  left: -9999px;
+}
+[type="checkbox"].toggle-check:not(:checked) + label,
+[type="checkbox"].toggle-check:checked + label {
+  position: relative;
+  padding-left: 75px;
+  cursor: pointer;
+}
+[type="checkbox"].toggle-check:not(:checked) + label:before,
+[type="checkbox"].toggle-check:checked + label:before,
+[type="checkbox"].toggle-check:not(:checked) + label:after,
+[type="checkbox"].toggle-check:checked + label:after {
+  content: '';
+  position: absolute;
+}
+[type="checkbox"].toggle-check:not(:checked) + label:before,
+[type="checkbox"].toggle-check:checked + label:before {
+  left:0; top: -3px;
+  width: 65px; height: 30px;
+  background: #DDDDDD;
+  border-radius: 15px;
+  transition: background-color .2s;
+}
+[type="checkbox"].toggle-check:not(:checked) + label:after,
+[type="checkbox"].toggle-check:checked + label:after {
+  width: 20px; height: 20px;
+  transition: all .2s;
+  border-radius: 50%;
+  background: #7F8C9A;
+  top: 2px; left: 5px;
+}
+
+/* on checked */
+[type="checkbox"].toggle-check:checked + label:before {
+  background:#AD3;
+}
+[type="checkbox"].toggle-check:checked + label:after {
+  background: #E53542;
+  top: 2px; left: 40px;
+}
+
+[type="checkbox"].toggle-check:checked + label .ui,
+[type="checkbox"].toggle-check:not(:checked) + label .ui:before,
+[type="checkbox"].toggle-check:checked + label .ui:after {
+  position: absolute;
+  left: 6px;
+  width: 65px;
+  border-radius: 15px;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 22px;
+  transition: all .2s;
+}
+[type="checkbox"].toggle-check:not(:checked) + label .ui:before {
+  content: "nein";
+  left: 32px
+}
+[type="checkbox"].toggle-check:checked + label .ui:after {
+  content: "ja";
+  color: #E53542;
+}
+[type="checkbox"].toggle-check:focus + label:before {
+  border: 1px dashed #777;
+  box-sizing: border-box;
+  margin-top: -1px;
+}

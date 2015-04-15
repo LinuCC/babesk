@@ -31,7 +31,7 @@ class Elawa extends \Module {
 		$user = $this->_em->find('DM:SystemUsers', $_SESSION['uid']);
 		if(!$user) {
 			$this->_interface->dieError('Konnte die Daten nicht abrufen');
-			$this->_logger->log('Error fetching userdata', 'Moderate', Null,
+			$this->_logger->log('Error fetching userdata', 'error', Null,
 				json_encode(array('userId' => $_SESSION['uid'])));
 		}
 		$query = $this->_em->createQuery(

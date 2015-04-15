@@ -106,7 +106,7 @@ class Acl {
 
 		// Check for infinite loop
 		if($this->_executionTries > $this->_maxExecutionTries) {
-			$this->_logger->log('Too many module-Executions!', 'Moderate',
+			$this->_logger->log('Too many module-Executions!', 'error',
 				NULL, json_encode(array('modulepath' => $command->pathGet()))
 			);
 			throw new AclException('Too many ModuleExecutions!', 105);
@@ -121,7 +121,7 @@ class Acl {
 					$command, $dataContainer);
 			} catch (AclException $e) {
 				$this->_logger->log(__METHOD__ . ': ' .
-					'None of the Modules in Path found!','Moderate', NULL,
+					'None of the Modules in Path found!','error', NULL,
 					json_encode(array('path' => $command->pathGet()))
 				);
 				throw $e;
@@ -311,7 +311,7 @@ class Acl {
 		}
 		else {
 			$this->_logger->log("Module could not be loaded by path!",
-				'Moderate', NULL,
+				'error', NULL,
 				json_encode(array('path' => $moduleToExecutePath)));
 			return false;
 		}

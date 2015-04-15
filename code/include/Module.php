@@ -132,7 +132,7 @@ abstract class Module {
 			if(!file_exists($path)) {
 				$errorMsg .= ' File does not exist.';
 			}
-			$this->_logger->log($errorMsg, 'Moderate', 'Smarty',
+			$this->_logger->log($errorMsg, 'error', 'Smarty',
 				json_encode(array('path' => $path,
 					'error' => $e->getMessage())));
 			throw $e;

@@ -320,7 +320,7 @@ class Web {
 
 		} catch (AclException $e) {
 			$this->_logger->log('user is not in any group',
-				'Moderate', Null,
+				'error', Null,
 				json_encode(array('msg' => $e->getMessage())));
 			$this->_interface->dieError('Sie sind in keiner Gruppe und ' .
 				'haben daher keine Rechte! Wenden sie sich bitte an den ' .

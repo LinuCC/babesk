@@ -42,6 +42,12 @@ Babesk\ORM\SchbasBook:
         exemplars:
             targetEntity: Babesk\ORM\SchbasInventory
             mappedBy: book
+        usersShouldLend:
+            targetEntity: Babesk\ORM\SchbasUserShouldLendBook
+            mappedBy: book
+        selfpayingBookEntities:
+            targetEntity: Babesk\ORM\SchbasSelfpayer
+            mappedBy: book
     manyToMany:
         selfpayingUsers:
             targetEntity: Babesk\ORM\SystemUsers

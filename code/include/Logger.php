@@ -30,9 +30,28 @@ class Logger {
 	 * If the category is set with categorySet() and no category is given,
 	 * the function will use the preset Category.
 	 *
+	 * The log-severities should follow the syslog-standard.
+	 * Following log-severities should be used:
+	 *     debug   - Debugging level. logging for debugging only. Should not
+	 *               happen in production environments.
+	 *     info    - Informational. Normal events of interest.
+	 *     notice  - Notice. Normal but significant event has occurred, for
+	 *               example an unexpected event. Not an error, but could
+	 *               require attention.
+	 *     warning - Warning. An event has occurred that has the potential to
+	 *               cause an error, such as invalid parameters being passed to
+	 *               a function.
+	 *     error   - Error. An error condition has occurred, such as a failed
+	 *               system call. The system is still functioning.
+	 *     crit    - Critical. A critical condition exists.
+	 *     alert   - Alert. Immediate action is required to prevent the system
+	 *               from becoming unstable.
+	 *     emerg   - Panic. System does not work anymore, and action needs to
+	 *               be taken immediatly.
+	 *
 	 * @param  string $message        The message to log
 	 * @param  string $severity       The severity of the message. If not
-	 *                                given, the severity "Notice" is assumed
+	 *                                given, the severity "notice" is assumed
 	 * @param  string $category       The category of the message. If not
 	 *                                given and not preset with categorySet(),
 	 *                                the category "Undefined" is assumed
@@ -43,7 +62,7 @@ class Logger {
 	 */
 	public function log(
 		$message,
-		$severity = 'Notice',
+		$severity = 'notice',
 		$category = Null,
 		$additionalData = '') {
 
@@ -57,7 +76,36 @@ class Logger {
 		}
 
 		return $this->logUpload(
-			$message, $severity, $category, $additionalData);
+			$message, $severity, $category, $additionalData
+		);
+	}
+
+	/**
+	 * Like log(), but allows optional data as an array
+	 * @param  string $message The message to log
+	 * @param  array  $opt     The optional data for the log-entry.
+	 *                         Valid keys are:
+	 *                             'sev' - The severity,
+	 *                             'cat' - The category,
+	 *                             'moreJson' - additional data that will be
+	 *                                 encoded to json,
+	 *                             'moreStr' - additional data that will be
+	 *                                 directly written as a string
+	 *                             Please note that moreStr and moreJson should
+	 *                             not be used in the same call.
+	 * @return [type]          [description]
+	 */
+	public function logO($message, array $opt) {
+
+		$opt['sev'] = (isset($opt['sev'])) ? $opt['sev'] : 'notice';
+		$opt['cat'] = (isset($opt['cat'])) ? $opt['cat'] : Null;
+		$opt['moreStr'] = (isset($opt['moreStr'])) ? $opt['moreStr'] : '';
+		if(isset($opt['moreJson'])) {
+			$opt['moreStr'] = json_encode($opt['moreJson']);
+		}
+		$this->log(
+			$message, $opt['sev'], $opt['cat'], $opt['moreStr']
+		);
 	}
 
 	/**

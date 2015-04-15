@@ -118,8 +118,8 @@ Babesk\ORM\SystemUsers:
                         columnDefinition: null
                         referencedColumnName: id
     oneToMany:
-        usersInGradesAndSchoolyears:
-            targetEntity: Babesk\ORM\SystemUsersInGradesAndSchoolyears
+        attendances:
+            targetEntity: Babesk\ORM\SystemAttendance
             mappedBy: user
         usersInClassesAndCategories:
             targetEntity: Babesk\ORM\UserInClassAndCategory
@@ -136,6 +136,12 @@ Babesk\ORM\SystemUsers:
         elawaDefaultMeetingRooms:
             targetEntity: Babesk\ORM\ElawaDefaultMeetingRoom
             mappedBy: host
+        booksToLend:
+            targetEntity: Babesk\ORM\SchbasUserShouldLendBook
+            mappedBy: user
+        selfpayingBookEntities:
+            targetEntity: Babesk\ORM\SchbasSelfpayer
+            mappedBy: user
     manyToOne:
         priceGroup:
             targetEntity: Babesk\ORM\BabeskPriceGroups
@@ -147,4 +153,3 @@ Babesk\ORM\SystemUsers:
         schbasAccounting:
             targetEntity: Babesk\ORM\SchbasAccounting
             mappedBy: user
-    lifecycleCallbacks: {  }

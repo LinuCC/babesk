@@ -10,6 +10,7 @@ watch = require 'gulp-watch'
 plumber = require 'gulp-plumber'
 header = require 'gulp-header'
 
+# Only bundle files with browserify that are in the subfolder modules.
 bundlePaths =
   src: [
     'code/include/js/modules/**/*.js'
@@ -36,6 +37,8 @@ gulp.task 'browserify', watchify((watchify)->
   return gulp.src bundlePaths.src
     .pipe watchify(
       watch: watching
+      # Browserifys baseDir is in code/include/js/modules
+      paths: ['./']
     )
     .pipe streamify(uglify())
     .pipe gulp.dest(bundlePaths.dest)

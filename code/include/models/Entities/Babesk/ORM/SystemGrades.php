@@ -27,7 +27,7 @@ class SystemGrades
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $usersInGradesAndSchoolyears;
+    private $attendances;
 
     /**
      * @var \Babesk\ORM\SystemSchooltypes
@@ -39,7 +39,20 @@ class SystemGrades
      */
     public function __construct()
     {
-        $this->usersInGradesAndSchoolyears = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->attendances = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set id
+     *
+     * @param integer $id
+     * @return SystemGrades
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -99,36 +112,36 @@ class SystemGrades
     }
 
     /**
-     * Add usersInGradesAndSchoolyears
+     * Add attendances
      *
-     * @param \Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears
+     * @param \Babesk\ORM\SystemAttendance $attendances
      * @return SystemGrades
      */
-    public function addUsersInGradesAndSchoolyear(\Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears)
+    public function addAttendance(\Babesk\ORM\SystemAttendance $attendances)
     {
-        $this->usersInGradesAndSchoolyears[] = $usersInGradesAndSchoolyears;
+        $this->attendances[] = $attendances;
 
         return $this;
     }
 
     /**
-     * Remove usersInGradesAndSchoolyears
+     * Remove attendances
      *
-     * @param \Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears
+     * @param \Babesk\ORM\SystemAttendance $attendances
      */
-    public function removeUsersInGradesAndSchoolyear(\Babesk\ORM\SystemUsersInGradesAndSchoolyears $usersInGradesAndSchoolyears)
+    public function removeAttendance(\Babesk\ORM\SystemAttendance $attendances)
     {
-        $this->usersInGradesAndSchoolyears->removeElement($usersInGradesAndSchoolyears);
+        $this->attendances->removeElement($attendances);
     }
 
     /**
-     * Get usersInGradesAndSchoolyears
+     * Get attendances
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getUsersInGradesAndSchoolyears()
+    public function getAttendances()
     {
-        return $this->usersInGradesAndSchoolyears;
+        return $this->attendances;
     }
 
     /**
