@@ -82,7 +82,7 @@ class LoanSystemPdf {
 	 */
 	protected function pdfMetadataSet() {
 
-		$logoPath = '../../../../web/headmod_Messages/modules/mod_MessageMainMenu/logo.jpg';
+		$logoPath = '../../../res/images/logo.jpg';
 		$headerText = sprintf("Schulbuchausleihe 1.0\nJahrgang: %s", $this->_gradeLevel);
 
 		$this->docInformationSet('LeG Uelzen');

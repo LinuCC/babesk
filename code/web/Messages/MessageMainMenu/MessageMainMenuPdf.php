@@ -85,7 +85,7 @@ class MessageMainMenuPdf {
 	 */
 	protected function pdfMetadataSet() {
 
-		$logoPath = '../../../../web/Messages/MessageMainMenu/logo.jpg';
+		$logoPath = '../../../res/images/logo.jpg';
 		$headerText = sprintf("Formulargenerator 0.1\nKlasse: %s", $this->_class);
 
 		$this->docInformationSet('LeG Uelzen');

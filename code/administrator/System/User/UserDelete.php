@@ -196,7 +196,7 @@ class UserDelete {
 			$pdf->SetKeywords('');
 
 			// set default header data
-			$pdf->SetHeaderData('../../../../web/headmod_Messages/modules/mod_MessageMainMenu/logo.jpg', 15, 'LeG Uelzen', "Abmeldung von: ".$user['forename']." ".$user['name']."\nKlasse: ".$user['grade'], array(0,0,0), array(0,0,0));
+			$pdf->SetHeaderData('../../../res/images/logo.jpg', 15, 'LeG Uelzen', "Abmeldung von: ".$user['forename']." ".$user['name']."\nKlasse: ".$user['grade'], array(0,0,0), array(0,0,0));
 			$pdf->setFooterData($tc=array(0,0,0), $lc=array(0,0,0));
 
 			// set header and footer fonts
