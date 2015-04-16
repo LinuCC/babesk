@@ -7,7 +7,7 @@
 		</div>
 		<div class="panel-body">
 			<p>
-				Hallo! Starte, indem du ein Modul aus der oberen Leiste auswähltst.
+				Hallo! Starte, indem du ein Modul aus der oberen Leiste auswählst.
 			</p>
 		</div>
 	</div>
