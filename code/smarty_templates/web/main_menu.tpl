@@ -14,7 +14,7 @@
 </div>
 
 
-{if $birthday != $smarty.now|date_format:"%m-%d"}
+{if $birthday == $smarty.now|date_format:"%m-%d"}
 <div class="text-center">
 	<img src="../include/res/images/birthday.jpg" /><br>
 	<span>Fotograf: Will Clayton</span>
