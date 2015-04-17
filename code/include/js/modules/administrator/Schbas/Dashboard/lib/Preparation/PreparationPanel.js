@@ -83,7 +83,7 @@ PreparationPanel = React.createClass({
     })(this));
   },
   handleEditAssignments: function() {
-    return toastr.error('Editieren ist noch nicht implementiert');
+    return window.location = 'index.php?module=administrator|Schbas|BookAssignments|View';
   },
   handleGenerateAssignments: function() {
     return window.location = 'index.php?module=administrator|Schbas|BookAssignments|Generate';

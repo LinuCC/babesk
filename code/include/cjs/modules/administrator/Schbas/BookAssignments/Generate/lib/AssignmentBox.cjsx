@@ -11,35 +11,24 @@ AssignmentBox = React.createClass(
   getInitialState: ->
     return {
       existingAssignmentsAction: 'add-to-existing'
-      addGradelevelToUsers: true
       isLoading: false
     }
 
   handleSubmit: (event)->
     @setState(isLoading: true)
-    that = @
-    $.ajax
-      type: 'POST'
-      url: 'index.php?module=administrator|Schbas|BookAssignments|Generate'
-      data:
-        data: @state
-      dataType: 'json'
-      success: (data, statusText, jqXHR)->
-        that.setState(isLoading: false)
+    $.post(
+      'index.php?module=administrator|Schbas|BookAssignments|Generate'
+      data: @state
+    ).done (data)=>
+        @setState(isLoading: false)
         toastr.success 'Die Zuweisungen wurden erfolgreich generiert.'
-      error: (jqXHR, statusText, errorThrown)->
-        that.setState(isLoading: false)
-        if jqXHR.status is 500
-          toastr.error jqXHR.responseText, 'Ein Fehler ist aufgetreten.'
-        else
-          console.log jqXHR
-          toastr.error 'Ein Fehler ist aufgetreten.'
+      .fail (jqxhr)=>
+        @setState(isLoading: false)
+        console.log jqxhr
+        toastr.error 'Ein Fehler ist aufgetreten.'
 
   handleExistingAssignmentsAction: (event)->
     @setState(existingAssignmentsAction: event.target.value)
-
-  handleAddGradelevelChange: (event)->
-    @setState(addGradelevelToUsers: event.target.checked)
 
   render: ->
     <div className="panel panel-default">
@@ -53,8 +42,6 @@ AssignmentBox = React.createClass(
           assignmentsExist={@props.data.assignmentsForSchoolyearExist}
           handleExistingAssignmentsAction={@handleExistingAssignmentsAction}
           selectedValue={@state.existingAssignmentsAction} />
-        <AddGradelevelLine isChecked={@state.addGradelevelToUsers}
-          handleAddGradelevelChange={@handleAddGradelevelChange} />
       </ul>
       <div className="panel-heading">
         <i className="fa fa-list fa-fw fa-lg"></i>&nbsp;&nbsp;
@@ -99,20 +86,6 @@ AssignmentSchoolyearsLine = React.createClass(
         else
           <p>Keine Zuweisungen für dieses Schuljahr vorhanden.</p>
       }
-      <div className="clearfix"></div>
-    </li>
-)
-
-AddGradelevelLine = React.createClass(
-  render: ->
-    <li className='list-group-item'>
-      <i className="fa fa-3x fa-fw pull-left fa-question-circle"></i>
-      <p>
-        Steigen die Schüler währenddessen normalerweise eine Klassenstufe auf?
-        <Input type="checkbox" label="Ja, eine Stufe" standalone
-        onChange={@props.handleAddGradelevelChange} checked={@props.isChecked}>
-        </Input>
-      </p>
       <div className="clearfix"></div>
     </li>
 )

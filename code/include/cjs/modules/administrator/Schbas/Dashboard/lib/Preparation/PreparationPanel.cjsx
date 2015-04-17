@@ -60,9 +60,8 @@ PreparationPanel = React.createClass(
     )
 
   handleEditAssignments: ->
-    toastr.error 'Editieren ist noch nicht implementiert'
-    # window.location = 'index.php?module=administrator|Schbas|BookAssignments|\
-      # Edit'
+    window.location = 'index.php?module=administrator|Schbas|BookAssignments|\
+      View'
 
   handleGenerateAssignments: ->
     window.location = 'index.php?module=administrator|Schbas|BookAssignments|\

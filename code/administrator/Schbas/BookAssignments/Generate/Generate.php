@@ -148,8 +148,7 @@ class Generate extends \administrator\Schbas\BookAssignments\BookAssignments {
 	protected function assignmentsCreate($data) {
 
 		if(
-			empty($data) || !isset($data['existingAssignmentsAction']) ||
-			!isset($data['addGradelevelToUsers'])
+			empty($data) || !isset($data['existingAssignmentsAction'])
 		) {
 			$this->_logger->logO('missing parameters for ' . __METHOD__,
 				['sev' => 'warning']);
@@ -167,8 +166,7 @@ class Generate extends \administrator\Schbas\BookAssignments\BookAssignments {
 		) {
 			$this->deleteExistingAssignmentsForSchoolyear($sy);
 		}
-		$addGradelevel = ($data['addGradelevelToUsers'] != 'false');
-		$res = $loanGenerator->generate($addGradelevel);
+		$res = $loanGenerator->generate();
 		if($res) {
 			dieJson('Die Zuweisungen wurden erfolgreich erstellt.');
 		}

@@ -19,7 +19,11 @@ class BookAssignments extends \Schbas {
 	/////////////////////////////////////////////////////////////////////
 
 	public function execute($dataContainer) {
-		die('BookAssignments module');
+		$defaultMod = new \ModuleExecutionCommand(
+			'root/administrator/Schbas/Dashboard'
+		);
+		$dataContainer->getAcl()->moduleExecute($defaultMod,
+			$dataContainer);
 	}
 }
 ?>

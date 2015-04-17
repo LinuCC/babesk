@@ -28,12 +28,12 @@ class ShouldLendGeneration {
 	//Methods
 	/////////////////////////////////////////////////////////////////////
 
-	public function generate($isNextYear) {
+	public function generate() {
 
 		$this->generateInit();
 		$entries = [];
 		foreach($this->_users as $user) {
-			$gradelevel = $this->gradelevelCalc($user, $isNextYear);
+			$gradelevel = $this->gradelevelGet($user);
 			if(!$gradelevel) { continue; }
 			$subjects = $this->userSubjectsCalc($user, $gradelevel);
 			$classes = $this->_loanHelper->gradelevel2IsbnIdent(
@@ -93,9 +93,12 @@ class ShouldLendGeneration {
 					uigs, partial g.{id, gradelevel}
 				FROM DM:SystemUsers u
 				INNER JOIN u.attendances uigs
-				INNER JOIN uigs.schoolyear sy WITH sy.active = true
+				INNER JOIN uigs.schoolyear sy WITH sy = :schoolyear
 				INNER JOIN uigs.grade g
 			');
+			$userQuery->setParameter(
+				'schoolyear', $this->_preparationSchoolyear
+			);
 			//Silly doctrine, dont lazy-load oneToOne-entries automatically
 			$userQuery->setHint(
 				\Doctrine\ORM\Query::HINT_FORCE_PARTIAL_LOAD, true
@@ -147,7 +150,7 @@ class ShouldLendGeneration {
 		$this->_specialCourseTrigger = (int)$triggerObj->getValue();
 	}
 
-	protected function gradelevelCalc($user, $isNextYear) {
+	protected function gradelevelGet($user) {
 
 		$grade = $user->getAttendances()
 			->first()
@@ -156,7 +159,6 @@ class ShouldLendGeneration {
 			return false;
 		}
 		$gradelevel = $grade->getGradelevel();
-		$gradelevel += ($isNextYear) ? 1 : 0;
 		return $gradelevel;
 	}
 
