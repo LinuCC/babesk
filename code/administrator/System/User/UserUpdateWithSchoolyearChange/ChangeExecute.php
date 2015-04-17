@@ -26,7 +26,9 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 				$this->_pdo->beginTransaction();
 				$this->userChangesCommit();
 				$this->usersNewCommit();
-				$this->schoolyearNewSwitchTo();
+				// Dont switch the schoolyear automatically, the new schoolyear
+				// could be created ahead of time
+				// $this->schoolyearNewSwitchTo();
 				$this->_pdo->commit();
 				$this->_interface->backlink('administrator|System|User');
 				$this->_interface->dieSuccess(_g(
