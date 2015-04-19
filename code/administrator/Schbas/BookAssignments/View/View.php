@@ -80,7 +80,10 @@ class View extends \administrator\Schbas\BookAssignments\BookAssignments {
 			// given
 			$isActive = (
 				($schoolyearId && $schoolyear->getId() == $schoolyearId) ||
-				$schoolyear->getId() == $syPrepEntry->getValue()
+				(
+					!$schoolyearId &&
+					$schoolyear->getId() == $syPrepEntry->getValue()
+				)
 			);
 			$jsonData[] = [
 				'id' => $schoolyear->getId(),
@@ -104,6 +107,7 @@ class View extends \administrator\Schbas\BookAssignments\BookAssignments {
 			INNER JOIN SystemSchoolyears sy ON sy.ID = a.schoolyearId
 				AND sy.ID = :schoolyearId AND sy.ID = usb.schoolyearId
 			INNER JOIN SystemGrades g ON g.ID = a.gradeId
+			WHERE usb.schoolyearId = :schoolyearId
 			GROUP BY b.id, g.ID
 		');
 		$stmt->execute(['schoolyearId' => $schoolyearId]);

@@ -31,7 +31,8 @@ module.exports = React.createClass({
       "pullRight": true
     }, React.createElement(MenuItem, {
       "eventKey": 'delete',
-      "onClick": this.handleDelete
+      "onClick": this.handleDelete,
+      "key": 'delete'
     }, "Zuweisungen ", React.createElement("br", null), " entfernen")));
   }
 });

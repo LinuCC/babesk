@@ -31,7 +31,7 @@ class Delete extends \administrator\Schbas\BookAssignments\View\View {
 				);
 				die("Es wurden $count Zuweisungen gelöscht.");
 			}
-			catch(Exception $e) {
+			catch(\Exception $e) {
 				$this->_logger->logO('Could not delete book-assignments',
 					['sev' => 'error', 'moreJson' => ['entityId' => $entityId,
 						'bookId' => $bookId, 'msg' => $e->getMessage()]]);

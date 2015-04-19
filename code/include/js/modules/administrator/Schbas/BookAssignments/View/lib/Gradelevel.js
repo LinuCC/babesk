@@ -44,7 +44,8 @@ module.exports = React.createClass({
       "title": title
     }, React.createElement(MenuItem, {
       "eventKey": 'delete',
-      "onClick": this.handleDelete
+      "onClick": this.handleDelete,
+      "key": 'delete'
     }, "Zuweisungen entfernen"))), React.createElement("td", {
       "className": 'grade-cell'
     }, React.createElement("ul", null, this.props.data.grades.map((function(_this) {

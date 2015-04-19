@@ -10,95 +10,31 @@ Table = React.Bootstrap.Table;
 Book = require('./Book');
 
 module.exports = React.createClass({
-  getInitialState: function() {
+  getDefaultProps: function() {
     return {
-      schoolyears: [],
-      books: []
+      books: [],
+      handleGradelevelOfBookAssignmentsDelete: function() {
+        return {};
+      },
+      handleGradeOfBookAssignmentsDelete: function() {
+        return {};
+      },
+      handleBookAssignmentsDelete: function() {
+        return {};
+      }
     };
-  },
-  componentDidMount: function() {
-    return this.updateTable();
-  },
-  updateTable: function() {
-    return $.getJSON('index.php?module=administrator|Schbas|BookAssignments|View', {
-      'jsonData': true,
-      'schoolyearId': 5
-    }).done((function(_this) {
-      return function(res) {
-        if (_this.isMounted()) {
-          return _this.setState(res);
-        }
-      };
-    })(this)).fail(function(jqxhr) {
-      return toastr.error(jqxhr.responseText, 'Fehler');
-    });
-  },
-  deleteAssignments: function(data) {
-    return $.get('index.php?module=administrator|Schbas|BookAssignments|View|Delete', data).done((function(_this) {
-      return function(res) {
-        toastr.success(res, 'Erfolgreich gelöscht');
-        return _this.updateTable();
-      };
-    })(this)).fail(function(jqxhr) {
-      return toastr.error(jqxhr.responseText, 'Fehler');
-    });
-  },
-  handleGradelevelOfBookAssignmentsDelete: function(book, gradelevel) {
-    var that;
-    that = this;
-    return bootbox.confirm("Wollen sie alle Buchzuweisungen des Buchs " + book.name + " für den Jahrgang " + gradelevel + " wirklich löschen?", function(res) {
-      var data;
-      if (res) {
-        data = {
-          deleteEntity: 'gradelevel',
-          entityId: gradelevel,
-          bookId: book.id
-        };
-        return that.deleteAssignments(data);
-      }
-    });
-  },
-  handleGradeOfBookAssignmentsDelete: function(book, gradeId, gradeName) {
-    var that;
-    that = this;
-    return bootbox.confirm("Wollen sie alle Buchzuweisungen des Buchs " + book.name + " für die Klasse " + gradeName + " wirklich löschen?", function(res) {
-      var data;
-      if (res) {
-        data = {
-          deleteEntity: 'grade',
-          entityId: gradeId,
-          bookId: book.id
-        };
-        return that.deleteAssignments(data);
-      }
-    });
-  },
-  handleBookAssignmentsDelete: function(book, gradelevel) {
-    var that;
-    that = this;
-    return bootbox.confirm("Wollen sie alle Buchzuweisungen des Buchs " + book.name + " wirklich löschen?", function(res) {
-      var data;
-      if (res) {
-        data = {
-          deleteEntity: 'book',
-          entityId: book.id,
-          bookId: book.id
-        };
-        return that.deleteAssignments(data);
-      }
-    });
   },
   render: function() {
     return React.createElement(Table, {
       "bordered": true
-    }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Buch"), React.createElement("th", null, "Jahrgang"), React.createElement("th", null, "Klasse"))), this.state.books.map((function(_this) {
+    }, React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Buch"), React.createElement("th", null, "Jahrgang"), React.createElement("th", null, "Klasse"))), this.props.books.map((function(_this) {
       return function(book) {
         return React.createElement(Book, {
           "key": book.id,
           "data": book,
-          "handleGradelevelOfBookAssignmentsDelete": _this.handleGradelevelOfBookAssignmentsDelete,
-          "handleGradeOfBookAssignmentsDelete": _this.handleGradeOfBookAssignmentsDelete,
-          "handleBookAssignmentsDelete": _this.handleBookAssignmentsDelete
+          "handleGradelevelOfBookAssignmentsDelete": _this.props.handleGradelevelOfBookAssignmentsDelete,
+          "handleGradeOfBookAssignmentsDelete": _this.props.handleGradeOfBookAssignmentsDelete,
+          "handleBookAssignmentsDelete": _this.props.handleBookAssignmentsDelete
         });
       };
     })(this)));

@@ -18,7 +18,7 @@ module.exports = React.createClass(
     title.push <i>&nbsp;&nbsp;({@props.data.usersAssigned})</i>
     <li>
       <SplitButton bsStyle='default' title={title} pullRight>
-        <MenuItem eventKey='delete' onClick={@handleDelete}>
+        <MenuItem eventKey='delete' onClick={@handleDelete} key='delete'>
           Zuweisungen <br /> entfernen
         </MenuItem>
       </SplitButton>

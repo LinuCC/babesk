@@ -2,8 +2,6 @@
   "name": "babesk",
   "version": "2.0.0alpha",
   "devDependencies": {
-    "react": "^0.13.1",
-    "react-bootstrap": "^0.20.1",
     "coffee-script": "^1.9.1",
     "gulp": "^3.8.11",
     "gulp-cjsx": "^2.0.0",
@@ -15,6 +13,9 @@
     "gulp-util": "^3.0.3",
     "gulp-watch": "^4.1.1",
     "gulp-watchify": "^0.3.0",
-    "moment": "^2.10.2"
+    "moment": "^2.10.2",
+    "react": "^0.13.1",
+    "react-bootstrap": "^0.20.1",
+    "react-select": "^0.4.6"
   }
 }

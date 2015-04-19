@@ -27,7 +27,7 @@ module.exports = React.createClass(
     <tr>
       <td>
       <SplitButton bsStyle='default' title={title}>
-        <MenuItem eventKey='delete' onClick={@handleDelete}>
+        <MenuItem eventKey='delete' onClick={@handleDelete} key='delete'>
           Zuweisungen entfernen
         </MenuItem>
       </SplitButton>
@@ -38,7 +38,7 @@ module.exports = React.createClass(
           {
             @props.data.grades.map (grade)=>
               <Grade key={grade.id} gradelevel={@props.data.level} data={grade}
-                handleGradeDelete={@handleGradeDelete}>
+                handleGradeDelete={@handleGradeDelete} >
               </Grade>
           }
         </ul>
