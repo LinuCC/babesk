@@ -17,18 +17,12 @@ class Search extends \administrator\Schbas\Books\Books {
 	public function execute($dataContainer) {
 
 		$this->entryPoint($dataContainer);
-		$by = filter_input(INPUT_GET, 'searchBy');
-		if($by == 'title') {
-			$title = filter_input(INPUT_GET, 'title');
-			if($title) {
-				dieJson($this->searchByTitle($title, 20));
-			}
-			else {
-				dieHttp('Namens-parameter fehlt', 500);
-			}
+		$title = filter_input(INPUT_GET, 'title');
+		if($title) {
+			dieJson($this->searchByTitle($title, 20));
 		}
 		else {
-			dieHttp('Parameter zum Suchtyp fehlt', 500);
+			dieHttp('Such-parameter fehlt', 400);
 		}
 	}
 

@@ -54,7 +54,7 @@ module.exports = React.createClass(
       </ListGroupItem>
       {
         if @state.showDialog
-          <OptionAddAssignmentLine />
+          <OptionAddAssignmentLine schoolyear={selSchoolyear} />
       }
     </ListGroup>
 )

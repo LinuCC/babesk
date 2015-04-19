@@ -31,6 +31,20 @@ module.exports = React.createClass({
       selectedValue: 0
     };
   },
+  getDefaultProps: function() {
+    return {
+      schoolyear: {}
+    };
+  },
+  replaceKeys: function(data, keyLabelName, keyValueName) {
+    return data.map(function(entry) {
+      entry.label = entry[keyLabelName];
+      entry.value = entry[keyValueName];
+      delete entry[keyLabelName];
+      delete entry[keyValueName];
+      return entry;
+    });
+  },
   searchBooks: function(input, callback) {
     return setTimeout((function(_this) {
       return function() {
@@ -38,22 +52,39 @@ module.exports = React.createClass({
           return;
         }
         return $.getJSON('index.php?module=administrator|Schbas|Books|Search', {
-          searchBy: 'title',
           title: input
         }).done(function(data) {
           var selectData;
-          selectData = data.map(function(book) {
-            book.label = book.title;
-            book.value = book.id;
-            delete book.title;
-            delete book.id;
-            return book;
-          });
+          selectData = _this.replaceKeys(data, 'title', 'id');
           return callback(null, {
             options: selectData
           });
         }).fail(function(jqxhr) {
           return toastr.error(jqxhr.responseText, 'Fehler beim Buch-suchen');
+        });
+      };
+    })(this), 500);
+  },
+  searchUsers: function(input, callback) {
+    return setTimeout((function(_this) {
+      return function() {
+        if (!input.length) {
+          return;
+        }
+        if (_this.props.schoolyear.id == null) {
+          toastr.error('Kein Schuljahr ausgewählt');
+        }
+        return $.getJSON('index.php?module=administrator|System|Users|Search', {
+          username: input,
+          schoolyearId: _this.props.schoolyear.id
+        }).done(function(data) {
+          var selectData;
+          selectData = _this.replaceKeys(data, 'username', 'id');
+          return callback(null, {
+            options: selectData
+          });
+        }).fail(function(jqxhr) {
+          return toastr.error(jqxhr.responseText, 'Fehler beim User-suchen');
         });
       };
     })(this), 500);
@@ -79,13 +110,6 @@ module.exports = React.createClass({
     return React.createElement(ListGroupItem, null, React.createElement("form", {
       "className": 'form-horizontal'
     }, React.createElement(Input, {
-      "label": 'Buch',
-      "labelClassName": 'col-sm-2',
-      "wrapperClassName": 'col-sm-10'
-    }, React.createElement(ExtendedSelect, {
-      "asyncOptions": this.searchBooks,
-      "autoload": false
-    })), React.createElement(Input, {
       "type": 'select',
       "label": 'Hinzufügen zu',
       "labelClassName": 'col-sm-2',
@@ -105,25 +129,35 @@ module.exports = React.createClass({
       "key": 'gradelevel',
       "eventKey": 'gradelevel'
     }, "Klassenstufe")), React.createElement(Input, {
+      "label": 'Buch',
+      "labelClassName": 'col-sm-2',
+      "wrapperClassName": 'col-sm-10'
+    }, React.createElement(ExtendedSelect, {
+      "asyncOptions": this.searchBooks,
+      "autoload": false,
+      "name": 'add-assignment-book-search'
+    })), React.createElement(Input, {
       "label": typeLabel,
       "labelClassName": 'col-sm-2',
       "wrapperClassName": 'col-sm-10',
       "onChange": this.handleTypeSelect
     }, (this.state.selectedType === 'grade' ? React.createElement(ExtendedSelect, {
       "asyncOptions": this.searchBooks,
-      "autoload": false
+      "autoload": false,
+      "name": 'add-assignment-grade-search'
     }) : this.state.selectedType === 'gradelevel' ? React.createElement(ExtendedSelect, {
       "asyncOptions": this.searchBooks,
-      "autoload": false
+      "autoload": false,
+      "name": 'add-assignment-gradelevel-search'
     }) : this.state.selectedType === 'user' ? React.createElement(ExtendedSelect, {
-      "asyncOptions": this.searchBooks,
-      "autoload": false
-    }) : void 0)), React.createElement(Input, {
-      "type": 'submit',
-      "value": 'Buch hinzufügen',
+      "asyncOptions": this.searchUsers,
+      "autoload": false,
+      "name": 'add-assignment-users-search'
+    }) : void 0)), React.createElement(Button, {
       "bsStyle": 'primary',
-      "className": 'pull-right',
-      "wrapperClassName": 'col-xs-12'
+      "className": 'pull-right'
+    }, "Buch hinzuf\u00fcgen"), React.createElement("div", {
+      "className": 'clearfix'
     })));
   }
 });

@@ -68,6 +68,8 @@ module.exports = React.createClass({
           }, schoolyear.name);
         }
       };
-    })(this)))), (this.state.showDialog ? React.createElement(OptionAddAssignmentLine, null) : void 0));
+    })(this)))), (this.state.showDialog ? React.createElement(OptionAddAssignmentLine, {
+      "schoolyear": selSchoolyear
+    }) : void 0));
   }
 });

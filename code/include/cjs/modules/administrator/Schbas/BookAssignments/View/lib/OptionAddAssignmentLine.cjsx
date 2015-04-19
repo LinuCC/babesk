@@ -19,25 +19,51 @@ module.exports = React.createClass(
       selectedValue: 0
     }
 
+  getDefaultProps: ->
+    return {
+      schoolyear: {}
+    }
+
+  replaceKeys: (data, keyLabelName, keyValueName)->
+    # Replace the keys with label and value for the select-component
+    # Useful when the Rest-Api returns some other values
+    return data.map (entry)->
+      entry.label = entry[keyLabelName]
+      entry.value = entry[keyValueName]
+      delete entry[keyLabelName]
+      delete entry[keyValueName]
+      return entry
+
   searchBooks: (input, callback)->
     setTimeout( =>
       if not input.length then return
       $.getJSON(
         'index.php?module=administrator|Schbas|Books|Search'
-        {searchBy: 'title', title: input}
-      ).done (data)->
-          # Replace the keys title and id with label and value for the select
-          selectData = data.map (book)->
-            book.label = book.title
-            book.value = book.id
-            delete book.title
-            delete book.id
-            return book
+        {title: input}
+      ).done (data)=>
+          selectData = @replaceKeys data, 'title', 'id'
           callback(null,
             options: selectData
           )
         .fail (jqxhr)->
           toastr.error jqxhr.responseText, 'Fehler beim Buch-suchen'
+    , 500)
+
+  searchUsers: (input, callback)->
+    setTimeout( =>
+      if not input.length then return
+      if not @props.schoolyear.id?
+        toastr.error 'Kein Schuljahr ausgewählt'
+      $.getJSON(
+        'index.php?module=administrator|System|Users|Search'
+        {username: input, schoolyearId: @props.schoolyear.id}
+      ).done (data)=>
+          selectData = @replaceKeys data, 'username', 'id'
+          callback(null,
+            options: selectData
+          )
+        .fail (jqxhr)->
+          toastr.error jqxhr.responseText, 'Fehler beim User-suchen'
     , 500)
 
   handleTypeSelect: (event)->
@@ -51,11 +77,6 @@ module.exports = React.createClass(
     if @state.selectedType == 'gradelevel' then typeLabel = 'Klassenstufe'
     <ListGroupItem>
       <form className='form-horizontal'>
-        <Input label='Buch' labelClassName='col-sm-2'
-          wrapperClassName='col-sm-10'>
-          <ExtendedSelect asyncOptions={@searchBooks} autoload={false} >
-          </ExtendedSelect>
-        </Input>
         <Input type='select' label='Hinzufügen zu' labelClassName='col-sm-2'
           wrapperClassName='col-sm-10' onChange={@handleTypeSelect}
           value={@state.selectedType}>
@@ -65,23 +86,29 @@ module.exports = React.createClass(
             Klassenstufe
           </option>
         </Input>
+        <Input label='Buch' labelClassName='col-sm-2'
+          wrapperClassName='col-sm-10'>
+          <ExtendedSelect asyncOptions={@searchBooks} autoload={false}
+            name='add-assignment-book-search' />
+        </Input>
         <Input label={typeLabel} labelClassName='col-sm-2'
           wrapperClassName='col-sm-10' onChange={@handleTypeSelect}>
           {
             if @state.selectedType is 'grade'
-              <ExtendedSelect asyncOptions={@searchBooks} autoload={false} >
-              </ExtendedSelect>
+              <ExtendedSelect asyncOptions={@searchBooks} autoload={false}
+                name='add-assignment-grade-search' />
             else if @state.selectedType is 'gradelevel'
-              <ExtendedSelect asyncOptions={@searchBooks} autoload={false} >
-              </ExtendedSelect>
+              <ExtendedSelect asyncOptions={@searchBooks} autoload={false}
+                name='add-assignment-gradelevel-search' />
             else if @state.selectedType is 'user'
-              <ExtendedSelect asyncOptions={@searchBooks} autoload={false} >
-              </ExtendedSelect>
+              <ExtendedSelect asyncOptions={@searchUsers} autoload={false}
+                name='add-assignment-users-search' />
           }
         </Input>
-        <Button bsStyle='primary' className='pull-right' />
+        <Button bsStyle='primary' className='pull-right' >
           Buch hinzufügen
         </Button>
+        <div className='clearfix'></div>
       </form>
     </ListGroupItem>
 )
