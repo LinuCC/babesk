@@ -8,7 +8,7 @@ class AdminMenuInterface extends PublicDataInterface {
 	}
 
 	public function AdditionalHeader() {
-		$this->_smarty->display(PATH_SMARTY_TPL . '/publicData/headmod_Babesk/modules/mod_Menu/menu_header.tpl');
+		$this->_smarty->display(PATH_SMARTY_TPL . '/publicData/Babesk/Menu/menu_header.tpl');
 	}
 
 	public function Menu($infotext1, $infotext2, $meallistweeksorted, $weekdate) {
