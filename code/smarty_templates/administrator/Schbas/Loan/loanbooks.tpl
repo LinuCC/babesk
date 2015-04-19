@@ -1,4 +1,4 @@
-{extends file=$loanParent}{block name=content}
+{extends file=$inh_path}{block name=content}
 
 <script language="javascript" type="text/javascript">
 <!--

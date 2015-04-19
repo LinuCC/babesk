@@ -1,4 +1,4 @@
-{extends file=$loanParent}{block name=content}
+{extends file=$inh_path}{block name=content}
 <h3 class="module-header">Schulbuchausleihe</h3>
 <h3>Bitte Karte Scannen</h3>
 <form action="index.php?section=Schbas|Loan&amp;{$sid}" method="post"

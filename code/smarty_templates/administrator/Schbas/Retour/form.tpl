@@ -1,4 +1,4 @@
-{extends file=$retourParent}{block name=content}
+{extends file=$inh_path}{block name=content}
 <h3 class="module-header">Retour</h3>
 <h4>Bitte Karte scannen oder Benutzernamen eingeben</h4>
 <form action="index.php?section=Schbas|Retour&amp;{$sid}" method="post"

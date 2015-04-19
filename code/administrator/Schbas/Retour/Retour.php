@@ -73,7 +73,7 @@ class Retour extends Schbas {
 	protected function entryPoint($dataContainer) {
 
 		parent::entryPoint($dataContainer);
-		$this->initSmartyVariables();
+		$this->moduleTemplatePathSet();
 	}
 
 	/**

@@ -1,4 +1,4 @@
-{extends file=$retourParent}{block name=content}
+{extends file=$inh_path}{block name=content}
 
 
 <h2 class="module-header">Ausleihliste f&uuml;r: {$fullname}</h2>
