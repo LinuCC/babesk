@@ -1,6 +1,6 @@
 CALL moduleAddNewByPath(
-	"Users", 1, 0,
-	"administrator/System/Users/Users.php",
+	"Gradelevels", 1, 0,
+	"administrator/System/Gradelevels/Gradelevels.php",
 	"System", "root/administrator/System",
 	@newModuleId
 );
@@ -9,8 +9,8 @@ INSERT INTO SystemGroupModuleRights (groupId, moduleId)
 
 CALL moduleAddNewByPath(
 	"Search", 1, 0,
-	"administrator/System/Users/Search/Search.php",
-	"Users", "root/administrator/System/Users",
+	"administrator/System/Gradelevels/Search/Search.php",
+	"Gradelevels", "root/administrator/System/Gradelevels",
 	@newModuleId
 );
 INSERT INTO SystemGroupModuleRights (groupId, moduleId)

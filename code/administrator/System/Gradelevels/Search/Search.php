@@ -1,10 +1,10 @@
 <?php
 
-namespace administrator\System\Grades\Search;
+namespace administrator\System\Gradelevels\Search;
 
-require_once PATH_ADMIN . '/System/Grades/Grades.php';
+require_once PATH_ADMIN . '/System/Gradelevels/Gradelevels.php';
 
-class Search extends \administrator\System\Grades\Grades {
+class Search extends \administrator\System\Gradelevels\Gradelevels {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
@@ -17,9 +17,9 @@ class Search extends \administrator\System\Grades\Grades {
 	public function execute($dataContainer) {
 
 		$this->entryPoint($dataContainer);
-		$gradename = filter_input(INPUT_GET, 'gradename');
-		if($gradename) {
-			dieJson($this->searchByGradename($gradename, 20));
+		$gradelevel = filter_input(INPUT_GET, 'gradelevel');
+		if($gradelevel !== false) {
+			dieJson($this->searchGradelevel($gradelevel, 20));
 		}
 		else {
 			dieHttp('Such-parameter fehlt', 400);
@@ -30,36 +30,35 @@ class Search extends \administrator\System\Grades\Grades {
 	//Implements
 	/////////////////////////////////////////////////////////////////////
 
-	protected function searchByGradename($gradename, $entryCount) {
+	protected function searchGradelevel($gradelevel, $entryCount) {
 
 		try {
 			$query = $this->_em->createQuery(
 				'SELECT g FROM DM:SystemGrades g
-				WHERE CONCAT(g.gradelevel, g.label) LIKE :gradename
+				WHERE g.gradelevel LIKE :gradelevel
+				GROUP BY g.gradelevel
 			');
-			$query->setParameter('gradename', "%$gradename%");
+			$query->setParameter('gradelevel', "%$gradelevel%");
 			$query->setMaxResults($entryCount);
 			$grades = $query->getResult();
-			$gradeArray = [];
+			$gradelevelArray = [];
 			if(count($grades)) {
 				foreach($grades as $grade) {
-					$gradeArray[] = [
+					$gradelevelArray[] = [
 						'id' => $grade->getId(),
-						'gradename' => $grade->getGradelevel() .
-							$grade->getLabel()
+						'gradelevel' => $grade->getGradelevel()
 					];
 				}
 			}
-			return $gradeArray;
+			return $gradelevelArray;
 		}
 		catch(\Exception $e) {
-			$this->_logger->logO('Could not search the grades by gradename ', [
-				'sev' => 'error', 'moreJson' => ['gradename' => $gradename,
+			$this->_logger->logO('Could not search the gradelevels', [
+				'sev' => 'error', 'moreJson' => ['gradelevel' => $gradelevel,
 				'msg' => $e->getMessage()]]);
-			dieHttp('Konnte nicht nach der Klasse suchen', 500);
+			dieHttp('Konnte nicht nach der Klassenstufe suchen', 500);
 		}
 	}
-
 
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
