@@ -52,6 +52,9 @@ AssignmentsBox = React.createClass({
       return toastr.error(jqxhr.responseText, 'Fehler');
     });
   },
+  handleAssignmentsChanged: function() {
+    return this.updateData();
+  },
   handleChangeSchoolyear: function(schoolyearId) {
     var activeSyIndex, newActiveIndex, newSchoolyears;
     newSchoolyears = this.state.schoolyears;
@@ -121,7 +124,8 @@ AssignmentsBox = React.createClass({
       "header": title
     }, React.createElement(OptionsLine, {
       "schoolyears": this.state.schoolyears,
-      "handleChangeSchoolyear": this.handleChangeSchoolyear
+      "handleChangeSchoolyear": this.handleChangeSchoolyear,
+      "onAssignmentsChanged": this.handleAssignmentsChanged
     }), React.createElement(BooksToUsersAssignments, {
       "books": this.state.books,
       "handleGradelevelOfBookAssignmentsDelete": this.handleGradelevelOfBookAssignmentsDelete,

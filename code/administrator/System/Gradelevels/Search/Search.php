@@ -45,7 +45,6 @@ class Search extends \administrator\System\Gradelevels\Gradelevels {
 			if(count($grades)) {
 				foreach($grades as $grade) {
 					$gradelevelArray[] = [
-						'id' => $grade->getId(),
 						'gradelevel' => $grade->getGradelevel()
 					];
 				}

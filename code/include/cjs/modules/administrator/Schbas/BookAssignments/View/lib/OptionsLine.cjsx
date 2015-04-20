@@ -16,6 +16,7 @@ module.exports = React.createClass(
 
   getDefaultProps: ->
     return {
+      onAssignmentsChanged: -> {}
       handleChangeSchoolyear: -> {}
       schoolyears: []
     }
@@ -54,7 +55,8 @@ module.exports = React.createClass(
       </ListGroupItem>
       {
         if @state.showDialog
-          <OptionAddAssignmentLine schoolyear={selSchoolyear} />
+          <OptionAddAssignmentLine schoolyear={selSchoolyear}
+            onAssignmentsChanged={@props.onAssignmentsChanged} />
       }
     </ListGroup>
 )

@@ -26,15 +26,51 @@ ExtendedSelect = require('react-select');
 module.exports = React.createClass({
   getInitialState: function() {
     return {
-      selectedBook: 0,
+      selectedBook: {
+        value: 0,
+        label: ''
+      },
       selectedType: 'user',
-      selectedValue: 0
+      selectedValue: {
+        value: 0,
+        label: ''
+      }
     };
   },
   getDefaultProps: function() {
     return {
-      schoolyear: {}
+      schoolyear: {},
+      onAssignmentsChanged: function() {
+        return {};
+      }
     };
+  },
+  handleSubmit: function() {
+    if (!this.state.selectedBook.value) {
+      toastr.error('Bitte wählen sie ein Buch aus');
+      return;
+    }
+    if (!this.state.selectedValue.value) {
+      toastr.error('Bitte wählen sie einen Eintrag bei Benutzer/Klasse/Klassenstufe aus');
+      return;
+    }
+    if (!this.props.schoolyear.id) {
+      toastr.error('Kein Schuljahr ausgewählt');
+      return;
+    }
+    return $.post('index.php?module=administrator|Schbas|BookAssignments|Add', {
+      bookId: this.state.selectedBook.value,
+      entityType: this.state.selectedType,
+      entityId: this.state.selectedValue.value,
+      schoolyearId: this.props.schoolyear.id
+    }).done((function(_this) {
+      return function(data) {
+        toastr.success(data, 'Erfolgreich');
+        return _this.props.onAssignmentsChanged();
+      };
+    })(this)).fail(function(jqxhr) {
+      return toastr.error(jqxhr.responseText, 'Fehler beim Hinzufügen');
+    });
   },
   replaceKeys: function(data, keyLabelName, keyValueName) {
     return data.map(function(entry) {
@@ -89,11 +125,73 @@ module.exports = React.createClass({
       };
     })(this), 500);
   },
+  searchGrades: function(input, callback) {
+    return setTimeout((function(_this) {
+      return function() {
+        if (!input.length) {
+          return;
+        }
+        return $.getJSON('index.php?module=administrator|System|Grades|Search', {
+          gradename: input
+        }).done(function(data) {
+          var selectData;
+          selectData = _this.replaceKeys(data, 'gradename', 'id');
+          return callback(null, {
+            options: selectData
+          });
+        }).fail(function(jqxhr) {
+          return toastr.error(jqxhr.responseText, 'Fehler beim Klassen-suchen');
+        });
+      };
+    })(this), 500);
+  },
+  searchGradelevels: function(input, callback) {
+    return setTimeout((function(_this) {
+      return function() {
+        if (!input.length) {
+          return;
+        }
+        return $.getJSON('index.php?module=administrator|System|Gradelevels|Search', {
+          gradelevel: input
+        }).done(function(data) {
+          var selectData;
+          selectData = data.map(function(entry) {
+            entry.label = entry.gradelevel.toString();
+            entry.value = entry.gradelevel;
+            delete entry.gradelevel;
+            return entry;
+          });
+          return callback(null, {
+            options: selectData
+          });
+        }).fail(function(jqxhr) {
+          return toastr.error(jqxhr.responseText, 'Fehler beim Klassenstufen-suchen');
+        });
+      };
+    })(this), 500);
+  },
   handleTypeSelect: function(event) {
-    this.setState({
-      selectedType: event.target.value
+    return this.setState({
+      selectedType: event.target.value,
+      selectedValue: {
+        id: 0,
+        label: ''
+      }
     });
-    return console.log(event.target.value);
+  },
+  handleBookSelect: function(bookVal, bookData) {
+    var data;
+    data = bookData[0];
+    return this.setState({
+      selectedBook: data
+    });
+  },
+  handleEntityValueSelect: function(value, entityData) {
+    var data;
+    data = entityData[0];
+    return this.setState({
+      selectedValue: data
+    });
   },
   render: function() {
     var typeLabel;
@@ -135,27 +233,36 @@ module.exports = React.createClass({
     }, React.createElement(ExtendedSelect, {
       "asyncOptions": this.searchBooks,
       "autoload": false,
-      "name": 'add-assignment-book-search'
+      "name": 'add-assignment-book-search',
+      "value": this.state.selectedBook.label,
+      "onChange": this.handleBookSelect
     })), React.createElement(Input, {
       "label": typeLabel,
       "labelClassName": 'col-sm-2',
       "wrapperClassName": 'col-sm-10',
       "onChange": this.handleTypeSelect
     }, (this.state.selectedType === 'grade' ? React.createElement(ExtendedSelect, {
-      "asyncOptions": this.searchBooks,
+      "asyncOptions": this.searchGrades,
       "autoload": false,
-      "name": 'add-assignment-grade-search'
+      "name": 'add-assignment-grade-search',
+      "value": this.state.selectedValue.label,
+      "onChange": this.handleEntityValueSelect
     }) : this.state.selectedType === 'gradelevel' ? React.createElement(ExtendedSelect, {
-      "asyncOptions": this.searchBooks,
+      "asyncOptions": this.searchGradelevels,
       "autoload": false,
-      "name": 'add-assignment-gradelevel-search'
+      "name": 'add-assignment-gradelevel-search',
+      "value": this.state.selectedValue.label,
+      "onChange": this.handleEntityValueSelect
     }) : this.state.selectedType === 'user' ? React.createElement(ExtendedSelect, {
       "asyncOptions": this.searchUsers,
       "autoload": false,
-      "name": 'add-assignment-users-search'
+      "name": 'add-assignment-users-search',
+      "value": this.state.selectedValue.label,
+      "onChange": this.handleEntityValueSelect
     }) : void 0)), React.createElement(Button, {
       "bsStyle": 'primary',
-      "className": 'pull-right'
+      "className": 'pull-right',
+      "onClick": this.handleSubmit
     }, "Buch hinzuf\u00fcgen"), React.createElement("div", {
       "className": 'clearfix'
     })));

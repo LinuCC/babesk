@@ -33,6 +33,9 @@ AssignmentsBox = React.createClass(
       .fail (jqxhr)->
         toastr.error jqxhr.responseText, 'Fehler'
 
+  handleAssignmentsChanged: ->
+    @updateData()
+
   handleChangeSchoolyear: (schoolyearId)->
     newSchoolyears = @state.schoolyears
     activeSyIndex = newSchoolyears.map((e)-> return e.active).indexOf(true);
@@ -90,7 +93,8 @@ AssignmentsBox = React.createClass(
     title = <h4>Zuweisungen der Bücher an Nutzer</h4>
     <Panel className='panel-dashboard' header={title}>
       <OptionsLine schoolyears={@state.schoolyears}
-        handleChangeSchoolyear={@handleChangeSchoolyear}/>
+        handleChangeSchoolyear={@handleChangeSchoolyear}
+        onAssignmentsChanged={@handleAssignmentsChanged} />
       <BooksToUsersAssignments books={@state.books}
         handleGradelevelOfBookAssignmentsDelete={@handleGradelevelOfBookAssignmentsDelete}
         handleGradeOfBookAssignmentsDelete={@handleGradeOfBookAssignmentsDelete}

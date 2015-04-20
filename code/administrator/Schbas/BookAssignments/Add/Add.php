@@ -13,14 +13,10 @@ class Add extends \administrator\Schbas\BookAssignments\BookAssignments {
 	public function execute($dataContainer) {
 
 		parent::entryPoint($dataContainer);
-		var_dump($_POST);
-		var_dump($_GET);
 		$bookId = filter_input(INPUT_POST, 'bookId');
 		$entityType = filter_input(INPUT_POST, 'entityType');
 		$entityId = filter_input(INPUT_POST, 'entityId');
 		$schoolyearId = filter_input(INPUT_POST, 'schoolyearId');
-		var_dump($_POST);
-		var_dump($_GET);
 
 		if(
 			$bookId && $entityType && $entityId &&
@@ -51,22 +47,36 @@ class Add extends \administrator\Schbas\BookAssignments\BookAssignments {
 	protected function assignmentsToEntityAdd(
 		$bookId, $type, $id, $schoolyearId
 	) {
-		$book = $this->_em->getReference('DM:SchbasBook', '$bookId');
+		$book = $this->_em->getReference('DM:SchbasBook', $bookId);
 		$schoolyear = $this->_em->getReference(
 			'DM:SystemSchoolyears', $schoolyearId
 		);
 		try {
 			$users = $this->usersGetByEntity($type, $id, $schoolyear);
 			if($users) {
+				$addedCount = 0;
+				$jumpedCount = 0;
 				foreach($users as $user) {
+					$existingAssignments = $user->getBooksToLend();
+					foreach($existingAssignments as $assignment) {
+						$existingBook = $assignment->getBook();
+						if($existingBook == $book) {
+							$jumpedCount++;
+							continue 2;
+						}
+					}
 					$entry = new \Babesk\ORM\SchbasUserShouldLendBook();
 					$entry->setUser($user);
 					$entry->setBook($book);
 					$entry->setSchoolyear($schoolyear);
 					$this->_em->persist($entry);
+					$addedCount++;
 				}
 				$this->_em->flush();
-				die('Die Zuweisungen wurden erfolgreich hinzugefügt');
+				$usercount = count($users);
+				die("Die Zuweisungen wurden erfolgreich hinzugefügt.<br>" .
+					"<b>$addedCount</b> wurden hinzugefügt,<br>" .
+					"<b>$jumpedCount</b> wurden übersprungen");
 			}
 			else {
 				dieHttp('Konnte die Benutzer zum Hinzufügen nicht abrufen',
@@ -89,7 +99,10 @@ class Add extends \administrator\Schbas\BookAssignments\BookAssignments {
 		// Get all users to which the assignments should be added
 		$qb = $this->_em->createQueryBuilder()
 			->select('u')
-			->from('DM:SystemUsers', 'u');
+			->from('DM:SystemUsers', 'u')
+			->leftJoin(
+				'u.booksToLend', 'btl', 'WITH', 'btl.schoolyear = :schoolyear'
+			);
 		switch($type) {
 			case 'user':
 				$user = $this->_em->getReference('DM:SystemUsers', $id);
@@ -117,6 +130,7 @@ class Add extends \administrator\Schbas\BookAssignments\BookAssignments {
 			default:
 				return false;
 		}
+		$qb->setParameter('schoolyear', $schoolyear);
 		$query = $qb->getQuery();
 		$users = $query->getResult();
 		return $users;

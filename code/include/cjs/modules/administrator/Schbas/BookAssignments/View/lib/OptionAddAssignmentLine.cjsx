@@ -14,15 +14,43 @@ module.exports = React.createClass(
 
   getInitialState: ->
     return {
-      selectedBook: 0,
-      selectedType: 'user',
-      selectedValue: 0
+      selectedBook:
+        value: 0
+        label: ''
+      selectedType: 'user'
+      selectedValue:
+        value: 0
+        label: ''
     }
 
   getDefaultProps: ->
     return {
       schoolyear: {}
+      onAssignmentsChanged: -> {}
     }
+
+  handleSubmit: ->
+    if not @state.selectedBook.value
+      toastr.error 'Bitte wählen sie ein Buch aus'
+      return
+    if not @state.selectedValue.value
+      toastr.error 'Bitte wählen sie einen Eintrag bei Benutzer/Klasse/\
+        Klassenstufe aus'
+      return
+    if not @props.schoolyear.id
+      toastr.error 'Kein Schuljahr ausgewählt'
+      return
+    $.post(
+      'index.php?module=administrator|Schbas|BookAssignments|Add', {
+        bookId: @state.selectedBook.value
+        entityType: @state.selectedType
+        entityId: @state.selectedValue.value
+        schoolyearId: @props.schoolyear.id
+    }).done (data)=>
+        toastr.success data, 'Erfolgreich'
+        @props.onAssignmentsChanged()
+      .fail (jqxhr)->
+        toastr.error jqxhr.responseText, 'Fehler beim Hinzufügen'
 
   replaceKeys: (data, keyLabelName, keyValueName)->
     # Replace the keys with label and value for the select-component
@@ -66,9 +94,56 @@ module.exports = React.createClass(
           toastr.error jqxhr.responseText, 'Fehler beim User-suchen'
     , 500)
 
+  searchGrades: (input, callback)->
+    setTimeout( =>
+      if not input.length then return
+      $.getJSON(
+        'index.php?module=administrator|System|Grades|Search'
+        {gradename: input}
+      ).done (data)=>
+          selectData = @replaceKeys data, 'gradename', 'id'
+          callback(null,
+            options: selectData
+          )
+        .fail (jqxhr)->
+          toastr.error jqxhr.responseText, 'Fehler beim Klassen-suchen'
+    , 500)
+
+  searchGradelevels: (input, callback)->
+    setTimeout( =>
+      if not input.length then return
+      $.getJSON(
+        'index.php?module=administrator|System|Gradelevels|Search'
+        {gradelevel: input}
+      ).done (data)=>
+          selectData = data.map (entry)->
+            entry.label = entry.gradelevel.toString()
+            entry.value = entry.gradelevel
+            delete entry.gradelevel
+            return entry
+          callback(null,
+            options: selectData
+          )
+        .fail (jqxhr)->
+          toastr.error jqxhr.responseText, 'Fehler beim Klassenstufen-suchen'
+    , 500)
+
   handleTypeSelect: (event)->
-    @setState selectedType: event.target.value
-    console.log event.target.value
+    # The value-select gets changed, reset the value-data too
+    @setState(
+      selectedType: event.target.value
+      selectedValue:
+        id: 0
+        label: ''
+    )
+
+  handleBookSelect: (bookVal, bookData)->
+    data = bookData[0] # We dont have multiselection
+    @setState selectedBook: data
+
+  handleEntityValueSelect: (value, entityData)->
+    data = entityData[0]
+    @setState selectedValue: data
 
   render: ->
     typeLabel = ''
@@ -89,23 +164,31 @@ module.exports = React.createClass(
         <Input label='Buch' labelClassName='col-sm-2'
           wrapperClassName='col-sm-10'>
           <ExtendedSelect asyncOptions={@searchBooks} autoload={false}
-            name='add-assignment-book-search' />
+            name='add-assignment-book-search' value={@state.selectedBook.label}
+            onChange={@handleBookSelect} />
         </Input>
         <Input label={typeLabel} labelClassName='col-sm-2'
           wrapperClassName='col-sm-10' onChange={@handleTypeSelect}>
           {
             if @state.selectedType is 'grade'
-              <ExtendedSelect asyncOptions={@searchBooks} autoload={false}
-                name='add-assignment-grade-search' />
+              <ExtendedSelect asyncOptions={@searchGrades} autoload={false}
+                name='add-assignment-grade-search'
+                value={@state.selectedValue.label}
+                onChange={@handleEntityValueSelect} />
             else if @state.selectedType is 'gradelevel'
-              <ExtendedSelect asyncOptions={@searchBooks} autoload={false}
-                name='add-assignment-gradelevel-search' />
+              <ExtendedSelect asyncOptions={@searchGradelevels}
+                autoload={false} name='add-assignment-gradelevel-search'
+                value={@state.selectedValue.label}
+                onChange={@handleEntityValueSelect} />
             else if @state.selectedType is 'user'
               <ExtendedSelect asyncOptions={@searchUsers} autoload={false}
-                name='add-assignment-users-search' />
+                name='add-assignment-users-search'
+                value={@state.selectedValue.label}
+                onChange={@handleEntityValueSelect} />
           }
         </Input>
-        <Button bsStyle='primary' className='pull-right' >
+        <Button bsStyle='primary' className='pull-right'
+          onClick={@handleSubmit}>
           Buch hinzufügen
         </Button>
         <div className='clearfix'></div>

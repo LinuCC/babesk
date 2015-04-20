@@ -27,6 +27,9 @@ module.exports = React.createClass({
   },
   getDefaultProps: function() {
     return {
+      onAssignmentsChanged: function() {
+        return {};
+      },
       handleChangeSchoolyear: function() {
         return {};
       },
@@ -69,7 +72,8 @@ module.exports = React.createClass({
         }
       };
     })(this)))), (this.state.showDialog ? React.createElement(OptionAddAssignmentLine, {
-      "schoolyear": selSchoolyear
+      "schoolyear": selSchoolyear,
+      "onAssignmentsChanged": this.props.onAssignmentsChanged
     }) : void 0));
   }
 });
