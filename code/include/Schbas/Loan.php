@@ -1,6 +1,7 @@
 <?php
 
 namespace Babesk\Schbas;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Contains operations useful for the loan-process of Schbas
@@ -169,9 +170,7 @@ class Loan {
 				->select(['b', 'usb'])
 				->from('DM:SchbasBook', 'b')
 				->innerJoin('b.usersShouldLend', 'usb')
-				->innerJoin('usb.user', 'u')
-				->leftJoin('u.bookLending', 'l')
-				->leftJoin('l.book', 'bLend', 'WITH', 'bLend = b');
+				->innerJoin('usb.user', 'u');
 			if($subtractSelfpay) {
 				// Use selfpayingBookEntities because its a left join and
 				// doctrines many-to-many would join all entries of the first
@@ -182,8 +181,7 @@ class Loan {
 				)->leftJoin('sbe.book', 'sb');
 			}
 			$qb->where('usb.schoolyear = :schoolyear')
-				->andWhere('usb.user = :user')
-				->andWhere('bLend IS NULL');
+				->andWhere('usb.user = :user');
 			if($subtractSelfpay) {
 				$qb->andWhere('sb IS NULL');
 			}
@@ -192,6 +190,8 @@ class Loan {
 
 			$query = $qb->getQuery();
 			$books = $query->getResult();
+
+			$books = $this->loanBooksGetFilterAlreadyLentBooks($books, $user);
 			return $books;
 
 		} catch (Exception $e) {
@@ -264,7 +264,6 @@ class Loan {
 		$this->_logger->categorySet('Babesk/Schbas/Loan');
 	}
 
-
 	/**
 	 * Returns the users gradelevel of the grade being in the active schoolyear
 	 * @param  int    $userId The ID of the user
@@ -283,6 +282,25 @@ class Loan {
 		');
 		$stmt->execute(array('userId' => $userId));
 		return $stmt->fetchColumn();
+	}
+
+	protected function loanBooksGetFilterAlreadyLentBooks($books, $user) {
+
+		$query = $this->_em->createQuery(
+			'SELECT b FROM DM:SchbasBook b
+			INNER JOIN b.exemplars e
+			INNER JOIN e.lending l
+			WHERE l.user = :user
+		');
+		$query->setParameter('user', $user);
+		$bookCollection = new ArrayCollection($books);
+		$alreadyLendBooks = new ArrayCollection($query->getResult());
+		$filteredBooks = $bookCollection->filter(
+			function($book) use ($alreadyLendBooks) {
+				return !$alreadyLendBooks->contains($book);
+			}
+		);
+		return $filteredBooks;
 	}
 
 	/////////////////////////////////////////////////////////////////////
