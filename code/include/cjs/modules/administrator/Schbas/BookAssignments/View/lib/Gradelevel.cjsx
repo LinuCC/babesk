@@ -22,16 +22,15 @@ module.exports = React.createClass(
     for grade in @props.data.grades
       usersAssigned += parseInt grade.usersAssigned
     title = []
-    title.push <span>Jahrgang {@props.data.level}</span>
-    title.push <i>&nbsp;({usersAssigned})</i>
+    title.push <span>{@props.data.level}</span>
+    title.push <i className='user-count'>&nbsp;({usersAssigned})</i>
     <tr>
-      <td>
-      <SplitButton bsStyle='default' title={title}>
-        <MenuItem eventKey='delete' onClick={@handleDelete} key='delete'>
-          Zuweisungen entfernen
-        </MenuItem>
-      </SplitButton>
-
+      <td className='gradelevel-cell'>
+        <SplitButton bsStyle='default' title={title}>
+          <MenuItem eventKey='delete' onClick={@handleDelete} key='delete'>
+            Zuweisungen entfernen
+          </MenuItem>
+        </SplitButton>
       </td>
       <td className='grade-cell'>
         <ul>

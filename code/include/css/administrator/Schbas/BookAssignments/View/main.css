@@ -1,4 +1,5 @@
-td.grade-cell {
+td.grade-cell,
+td.gradelevel-cell {
 	padding: 0 !important;
 	width: 20%;
 }
@@ -14,29 +15,48 @@ td.grade-cell ul > li {
 	width: 100%;
 }
 
-td.grade-cell ul > li > .btn-group {
+td.grade-cell ul > li > .btn-group,
+td.gradelevel-cell .btn-group {
 	width: 100%;
 	margin: 0;
 }
-td.grade-cell ul > li > .btn-group > .btn {
+td.grade-cell ul > li > .btn-group > .btn,
+td.gradelevel-cell .btn-group > .btn {
 	border-radius: 0;
 	border: none;
 	border-bottom: 1px solid #CCC;
 }
 
-td.grade-cell ul > li > .btn-group > .btn:not(.dropdown-toggle) {
+td.grade-cell ul > li > .btn-group > .btn:not(.dropdown-toggle),
+td.gradelevel-cell .btn-group > .btn:not(.dropdown-toggle) {
 	min-width: 80%;
 }
 
-td.grade-cell ul > li:first-child > .btn-group > .btn {
-	margin-top: 1px;
+td.grade-cell ul > li:first-child > .btn-group > .btn,
+td.gradelevel-cell .btn-group > .btn {
+	margin-top: 2px;
+	border-top: none;
 }
 
 td.grade-cell ul > li:last-child > .btn-group > .btn {
 	border-bottom: none;
 }
 
-td.grade-cell ul > li > .btn-group > .btn.dropdown-toggle {
+
+tr:last-child td.gradelevel-cell > .btn-group > .btn {
+	border-bottom: none;
+}
+
+tr:nth-child(2) td.gradelevel-cell > .btn-group > .btn {
+	border-bottom: 1px solid #CCC;
+}
+
+td.grade-cell ul > li > .btn-group > .btn.dropdown-toggle,
+td.gradelevel-cell .btn-group > .btn.dropdown-toggle {
 	min-width: 20%;
 	border-left: 1px solid #CCC;
+}
+
+.btn i.user-count {
+	color: #777;
 }

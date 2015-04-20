@@ -14,8 +14,10 @@ module.exports = React.createClass(
 
   render: ->
     title = []
-    title.push <b>{@props.gradelevel}{@props.data.label}</b>
-    title.push <i>&nbsp;&nbsp;({@props.data.usersAssigned})</i>
+    title.push <span>{@props.gradelevel}{@props.data.label}</span>
+    title.push <i className='user-count'>
+        &nbsp;&nbsp;({@props.data.usersAssigned})
+      </i>
     <li>
       <SplitButton bsStyle='default' title={title} pullRight>
         <MenuItem eventKey='delete' onClick={@handleDelete} key='delete'>

@@ -37,9 +37,13 @@ module.exports = React.createClass({
       usersAssigned += parseInt(grade.usersAssigned);
     }
     title = [];
-    title.push(React.createElement("span", null, "Jahrgang ", this.props.data.level));
-    title.push(React.createElement("i", null, "\u00a0(", usersAssigned, ")"));
-    return React.createElement("tr", null, React.createElement("td", null, React.createElement(SplitButton, {
+    title.push(React.createElement("span", null, this.props.data.level));
+    title.push(React.createElement("i", {
+      "className": 'user-count'
+    }, "\u00a0(", usersAssigned, ")"));
+    return React.createElement("tr", null, React.createElement("td", {
+      "className": 'gradelevel-cell'
+    }, React.createElement(SplitButton, {
       "bsStyle": 'default',
       "title": title
     }, React.createElement(MenuItem, {

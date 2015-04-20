@@ -23,8 +23,10 @@ module.exports = React.createClass({
   render: function() {
     var title;
     title = [];
-    title.push(React.createElement("b", null, this.props.gradelevel, this.props.data.label));
-    title.push(React.createElement("i", null, "\u00a0\u00a0(", this.props.data.usersAssigned, ")"));
+    title.push(React.createElement("span", null, this.props.gradelevel, this.props.data.label));
+    title.push(React.createElement("i", {
+      "className": 'user-count'
+    }, "\u00a0\u00a0(", this.props.data.usersAssigned, ")"));
     return React.createElement("li", null, React.createElement(SplitButton, {
       "bsStyle": 'default',
       "title": title,
