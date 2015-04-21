@@ -16,11 +16,11 @@ moment = require('moment');
 DateTimePicker = require('react-widgets/lib/DateTimePicker');
 
 Deadlines = React.createClass({
-  handleTransferDeadlineChange: function(dateObj, dateStr) {
-    return this.props.onChange(dateStr, 'schbasDeadlineTransfer');
+  handleTransferDeadlineChange: function(date) {
+    return this.props.onChange(date.toISOString().substr(0, 10), 'schbasDeadlineTransfer');
   },
-  handleClaimDeadlineChange: function(dateObj, dateStr) {
-    return this.props.onChange(dateStr, 'schbasDeadlineClaim');
+  handleClaimDeadlineChange: function(date) {
+    return this.props.onChange(date.toISOString().substr(0, 10), 'schbasDeadlineClaim');
   },
   render: function() {
     return React.createElement("div", {
@@ -32,7 +32,7 @@ Deadlines = React.createClass({
       "labelClassName": 'col-md-3',
       "wrapperClassName": 'col-md-9'
     }, React.createElement(DateTimePicker, {
-      "format": 'yyyy-MM-dd',
+      "format": 'dd.MM.yyyy',
       "value": new Date(this.props.deadlines.schbasDeadlineTransfer),
       "time": false,
       "onChange": this.handleTransferDeadlineChange
@@ -43,7 +43,7 @@ Deadlines = React.createClass({
       "labelClassName": 'col-md-3',
       "wrapperClassName": 'col-md-9'
     }, React.createElement(DateTimePicker, {
-      "format": 'yyyy-MM-dd',
+      "format": 'dd.MM.yyyy',
       "value": new Date(this.props.deadlines.schbasDeadlineClaim),
       "time": false,
       "onChange": this.handleClaimDeadlineChange

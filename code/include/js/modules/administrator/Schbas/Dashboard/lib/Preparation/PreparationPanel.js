@@ -131,8 +131,24 @@ PreparationPanel = React.createClass({
       };
     })(this));
   },
-  handleDeadlineChanged: function(deadline, type) {
-    return toastr.error('Noch net drin :(');
+  handleDeadlineChanged: function(deadlineVal, type) {
+    return $.get('index.php?module=administrator|System|GlobalSettings|Change', {
+      name: type,
+      value: deadlineVal
+    }).done((function(_this) {
+      return function(res) {
+        var deadlines;
+        deadlines = _this.state.deadlines;
+        deadlines[type] = deadlineVal;
+        _this.setState({
+          deadlines: deadlines
+        });
+        console.log(_this.state);
+        return toastr.success(res, 'Erfolgreich');
+      };
+    })(this)).fail(function(jqxhr) {
+      return toastr.error(jqxhr.responseText, 'Fehler beim Ändern der Deadline');
+    });
   },
   render: function() {
     return React.createElement("div", null, ((function() {

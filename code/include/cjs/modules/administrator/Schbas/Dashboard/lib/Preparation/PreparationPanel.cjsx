@@ -98,13 +98,23 @@ PreparationPanel = React.createClass(
             SchbasClaimStatus',
             {newStatus: status}
           ).done (res)=>
-              @setState(schbasClaimStatus: status)
+              @setState schbasClaimStatus: status
             .fail (jqxhr)->
               toastr.error jqxhr.responseText, 'Fehler'
     )
 
-  handleDeadlineChanged: (deadline, type)->
-    toastr.error 'Noch net drin :('
+  handleDeadlineChanged: (deadlineVal, type)->
+    $.get(
+      'index.php?module=administrator|System|GlobalSettings|Change'
+      {name: type, value: deadlineVal}
+    ).done (res)=>
+        deadlines = @state.deadlines
+        deadlines[type] = deadlineVal
+        @setState deadlines: deadlines
+        console.log @state
+        toastr.success res, 'Erfolgreich'
+      .fail (jqxhr)->
+        toastr.error jqxhr.responseText, 'Fehler beim Ändern der Deadline'
 
   render: ->
     <div>
