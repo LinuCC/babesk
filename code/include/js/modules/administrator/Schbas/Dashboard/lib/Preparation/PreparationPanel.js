@@ -34,7 +34,11 @@ PreparationPanel = React.createClass({
         },
         alternatives: []
       },
-      schbasClaimStatus: false
+      schbasClaimStatus: false,
+      deadlines: {
+        schbasDeadlineTransfer: new Date('1999-01-01'),
+        schbasDeadlineClaim: new Date('1999-01-01')
+      }
     };
   },
   componentDidMount: function() {
@@ -127,6 +131,9 @@ PreparationPanel = React.createClass({
       };
     })(this));
   },
+  handleDeadlineChanged: function(deadline, type) {
+    return toastr.error('Noch net drin :(');
+  },
   render: function() {
     return React.createElement("div", null, ((function() {
 
@@ -144,7 +151,10 @@ PreparationPanel = React.createClass({
     }), React.createElement(ButtonGroup, null, React.createElement(SchbasClaimStatus, {
       "status": this.state.schbasClaimStatus,
       "handleStatusChanged": this.handleSchbasClaimStatusChanged
-    }))), React.createElement("hr", null), React.createElement(Deadlines, null));
+    }))), React.createElement("hr", null), React.createElement("legend", null, "Deadlines"), React.createElement(Deadlines, {
+      "deadlines": this.state.deadlines,
+      "onChange": this.handleDeadlineChanged
+    }));
   }
 });
 

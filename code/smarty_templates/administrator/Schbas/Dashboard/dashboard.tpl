@@ -26,6 +26,12 @@
 
 {/block}
 
+{block name=style_include append}
+
+<link rel="stylesheet" type="text/css" href="{$path_css}/react-widgets.css">
+
+{/block}
+
 {block name=js_include append}
 
 <script type="text/javascript"

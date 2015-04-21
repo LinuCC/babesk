@@ -498,6 +498,13 @@ body.modal-open,
 	background-image: none;
 }
 
+/**
+ * Make third-party React-Widgets use the same bg as bootstrap does
+ */
+.rw-widget .rw-input {
+	background-color: #FFF;
+}
+
 /*********************
  * Custom checkboxes *
  *********************/

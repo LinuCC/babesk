@@ -17,6 +17,8 @@ class Preparation extends \administrator\Schbas\Dashboard\Dashboard {
 	public function execute($dataContainer) {
 
 		$this->entryPoint($dataContainer);
+		$this->_settingsRepo = $this->_em
+			->getRepository('DM:SystemGlobalSettings');
 		$data = $this->fetchData();
 		dieJson($data);
 	}
@@ -31,14 +33,14 @@ class Preparation extends \administrator\Schbas\Dashboard\Dashboard {
 		$schbasClaimStatus = $this->fetchSchbasClaimStatus();
 		return [
 			'prepSchoolyear' => $prepSchoolyearData,
-			'schbasClaimStatus' => $schbasClaimStatus
+			'schbasClaimStatus' => $schbasClaimStatus,
+			'deadlines' => $this->fetchDeadlines()
 		];
 	}
 
 	protected function fetchPreparationSchoolyearData() {
 
-		$preparationSchoolyearId = $this->_em
-			->getRepository('DM:SystemGlobalSettings')
+		$preparationSchoolyearId = $this->_settingsRepo
 			->findOneByName('schbasPreparationSchoolyearId')
 			->getValue();
 		$stmt = $this->_em->getConnection()->prepare(
@@ -73,16 +75,29 @@ class Preparation extends \administrator\Schbas\Dashboard\Dashboard {
 
 	protected function fetchSchbasClaimStatus() {
 
-		$status = $this->_em->getRepository('DM:SystemGlobalSettings')
-			->findOneByName('isSchbasClaimEnabled')
+		$status = $this->_settingsRepo->findOneByName('isSchbasClaimEnabled')
 			->getValue();
 		return $status != 0;
+	}
+
+	protected function fetchDeadlines() {
+
+		$claim = $this->_settingsRepo->findOneByName('schbasDeadlineClaim');
+		$trans = $this->_settingsRepo->findOneByName('schbasDeadlineTransfer');
+		// Format to ISO-time
+		$claim = date('Y-m-d', strtotime($claim->getValue()));
+		$trans = date('Y-m-d', strtotime($trans->getValue()));
+		return [
+			'schbasDeadlineClaim' => $claim,
+			'schbasDeadlineTransfer' => $trans
+		];
 	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Attributes
 	/////////////////////////////////////////////////////////////////////
 
+	protected $_settingsRepo;
 }
 
 ?>

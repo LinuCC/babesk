@@ -20,6 +20,9 @@ PreparationPanel = React.createClass(
           entriesExist: false
         alternatives: []
       schbasClaimStatus: false
+      deadlines:
+        schbasDeadlineTransfer: new Date('1999-01-01')
+        schbasDeadlineClaim: new Date('1999-01-01')
     }
 
   componentDidMount: ->
@@ -100,6 +103,9 @@ PreparationPanel = React.createClass(
               toastr.error jqxhr.responseText, 'Fehler'
     )
 
+  handleDeadlineChanged: (deadline, type)->
+    toastr.error 'Noch net drin :('
+
   render: ->
     <div>
       {###Single buttons need to be wrapped with their own ButtonGroup###}
@@ -118,7 +124,9 @@ PreparationPanel = React.createClass(
         </ButtonGroup>
       </ButtonGroup>
       <hr />
-      <Deadlines />
+      <legend>Deadlines</legend>
+      <Deadlines deadlines={@state.deadlines}
+        onChange={@handleDeadlineChanged} />
     </div>
 )
 
