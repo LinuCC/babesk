@@ -97,8 +97,10 @@ class Retour extends Schbas {
 		}
 		$grade = $this->_em->getRepository('DM:SystemUsers')
 			->getActiveGradeByUser($user);
-		$userData = "{$user->getForename()} {$user->getName()} " .
-			"({$grade->getGradelevel()}{$grade->getLabel()})";
+		$userData = "{$user->getForename()} {$user->getName()} ";
+		if($grade) {
+			$userData .="({$grade->getGradelevel()}{$grade->getLabel()})";
+		}
 
 		$this->_smarty->assign('cardid', $card_id);
 		$this->_smarty->assign('uid', $uid);
