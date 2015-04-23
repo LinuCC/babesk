@@ -28,12 +28,17 @@ class RecordReceipt extends \SchbasAccounting {
 		$this->entryPoint($dataContainer);
 
 		try {
-			$this->_em->createQuery(
-				'SELECT a FROM DM:SchbasAccounting a'
-			)->getResult();
-
-		} catch(\Exception $e) {
-			die('NOPE: ' . $e->getMessage());
+			$count = $this->_em->createQuery(
+				'SELECT COUNT(a) FROM DM:SchbasAccounting a'
+			)->getSingleScalarResult();
+			if(!$count) {
+				$this->_interface->dieMsg('Es gibt keine Einträge.');
+			}
+		}
+		catch(\Exception $e) {
+			$this->_logger->logO('Could not check if accounting-entries exist',
+				['sev' => 'error', 'more' => $e->getMessage()]);
+			$this->_interface->dieError('Konnte die Einträge nicht checken');
 		}
 
 
