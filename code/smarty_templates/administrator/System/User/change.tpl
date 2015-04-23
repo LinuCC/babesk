@@ -409,13 +409,13 @@
 </script>
 <script type="text/javascript" src="{$path_js}/vendor/bootbox.min.js">
 </script>
-<script type="text/javascript" src="{$path_js}/vendor/react/react-with-addons.js">
-</script>
 <script type="text/javascript" src="{$path_js}/vendor/bootstrap-multiselect.min.js">
 </script>
+<!--
 <script type="text/javascript"
 	src="{$path_js}/administrator/System/User/change-user.js">
 </script>
+-->
 <script type="text/javascript"
 	src="{$path_js}/dist/administrator/System/User/main.js">
 </script>
