@@ -163,8 +163,10 @@ class Retour extends Schbas {
 			);
 			$inventory = $barcode->getMatchingBookExemplar($this->_em);
 			if(!$inventory) { return false; }
+			$lending = $inventory->getLending();
+			if(!$lending) { return false; }
 			try {
-				$this->_em->remove($inventory);
+				$this->_em->remove($lending->first());
 				$this->_em->flush();
 				return true;
 			}
