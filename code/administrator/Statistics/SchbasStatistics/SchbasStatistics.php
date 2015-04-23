@@ -1,6 +1,7 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_INCLUDE . '/Schbas/Loan.php';
 require_once PATH_ADMIN . '/Statistics/Statistics.php';
 require_once PATH_INCLUDE . '/pdf/GeneralPdf.php';
 
@@ -32,22 +33,27 @@ class SchbasStatistics extends Statistics {
 
 	protected function calculateData() {
 
+		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
+		$schoolyear = $loanHelper->schbasPreparationSchoolyearGet();
+		$schoolyearId = $schoolyear->getId();
 		$stmt = $this->_pdo->query(
-			'SELECT lc.name AS loanChoiceName, COUNT(*) AS count
+			"SELECT lc.name AS loanChoiceName, COUNT(*) AS count
 				FROM SchbasAccounting sa
 				INNER JOIN SchbasLoanChoices lc ON lc.ID = sa.loanChoiceId
+				WHERE sa.schoolyearId = $schoolyearId
 				GROUP BY loanChoiceId
-		');
+		");
 		$usercount = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
 		$stmt = $this->_pdo->query(
-			'SELECT lc.name AS loanChoiceName,
-					CONCAT(SUM(payedAmount), "€") AS payedAmount
+			"SELECT lc.name AS loanChoiceName,
+					CONCAT(SUM(payedAmount), '€') AS payedAmount
 				FROM SchbasAccounting sa
 				INNER JOIN SchbasLoanChoices lc ON lc.ID = sa.loanChoiceId
-				WHERE lc.abbreviation IN("ln", "lr")
+				WHERE lc.abbreviation IN('ln', 'lr')
+					AND sa.schoolyearId = $schoolyearId
 				GROUP BY loanChoiceId
-		');
+		");
 		$payedAmount = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
 		$data = array(

@@ -7,6 +7,8 @@ Babesk\ORM\SchbasAccounting:
             precision: 11
             unique: true
             id: true
+            generator:
+                strategy: IDENTITY
     fields:
         payedAmount:
             type: decimal
@@ -16,17 +18,22 @@ Babesk\ORM\SchbasAccounting:
             type: decimal
             scale: 2
             precision: 4
-    oneToOne:
+    manyToOne:
         user:
             inversedBy: schbasAccounting
             targetEntity: Babesk\ORM\SystemUsers
             joinColumn:
                 name: userId
                 referencedColumnName: ID
-    manyToOne:
         loanChoice:
             inversedBy: schbasAccounting
             targetEntity: Babesk\ORM\SchbasLoanChoice
             joinColumn:
                 name: loanChoiceId
+                referencedColumnName: ID
+        schoolyear:
+            inversedBy: schbasAccounting
+            targetEntity: Babesk\ORM\SystemSchoolyears
+            joinColumn:
+                name: schoolyearId
                 referencedColumnName: ID

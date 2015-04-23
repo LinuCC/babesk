@@ -962,4 +962,27 @@ class SystemUsers
     {
         return $this->selfpayingBookEntities;
     }
+
+    /**
+     * Add schbasAccounting
+     *
+     * @param \Babesk\ORM\SchbasAccounting $schbasAccounting
+     * @return SystemUsers
+     */
+    public function addSchbasAccounting(\Babesk\ORM\SchbasAccounting $schbasAccounting)
+    {
+        $this->schbasAccounting[] = $schbasAccounting;
+
+        return $this;
+    }
+
+    /**
+     * Remove schbasAccounting
+     *
+     * @param \Babesk\ORM\SchbasAccounting $schbasAccounting
+     */
+    public function removeSchbasAccounting(\Babesk\ORM\SchbasAccounting $schbasAccounting)
+    {
+        $this->schbasAccounting->removeElement($schbasAccounting);
+    }
 }

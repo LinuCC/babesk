@@ -45,19 +45,21 @@ class Loan extends Schbas {
 	private function loanDisplay($cardnumber) {
 
 		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
+		$prepSchoolyear = $loanHelper->schbasPreparationSchoolyearGet();
 		$user = $this->userByCardnumberGet($cardnumber);
-		$formSubmitted = $this->userFormSubmittedCheck($user);
 		$loanChoice = false;
-		if($user->getSchbasAccounting() !== Null) {
-			$userPaid = $this->userPaidForLoanCheck($user);
-			$userSelfpayer = $this->selfpayerCheck($user);
-			$loanChoice = $user->getSchbasAccounting()
-				->getLoanChoice()
-				->getAbbreviation();
+		$accounting = $this->_em->getRepository('DM:SchbasAccounting')
+			->findOneBy(['user' => $user, 'schoolyear' => $prepSchoolyear]);
+		if($accounting !== Null) {
+			$userPaid = $this->userPaidForLoanCheck($accounting);
+			$userSelfpayer = $this->selfpayerCheck($accounting);
+			$loanChoice = $accounting->getLoanChoice()->getAbbreviation();
+			$formSubmitted = true;
 		}
 		else {
 			$userPaid = false;
 			$userSelfpayer = false;
+			$formSubmitted = false;
 		}
 		$exemplarsLent = $this->exemplarsStillLendByUserGet($user);
 		$booksSelfpaid = $user->getSelfpayingBooks();
@@ -99,15 +101,8 @@ class Loan extends Schbas {
 		}
 	}
 
-	private function userFormSubmittedCheck($user) {
+	private function userPaidForLoanCheck($acc) {
 
-		$acc = $user->getSchbasAccounting();
-		return isset($acc);
-	}
-
-	private function userPaidForLoanCheck($user) {
-
-		$acc = $user->getSchbasAccounting();
 		$loanChoice = $acc->getLoanChoice();
 		return (
 			(
@@ -118,11 +113,9 @@ class Loan extends Schbas {
 		);
 	}
 
-	private function selfpayerCheck($user) {
+	private function selfpayerCheck($accounting) {
 
-		$abbr = $user->getSchbasAccounting()
-			->getLoanChoice()
-			->getAbbreviation();
+		$abbr = $accounting->getLoanChoice()->getAbbreviation();
 		return $abbr == 'ls';
 	}
 

@@ -22,3 +22,6 @@ Babesk\ORM\SystemSchoolyears:
         usersShouldLendBooks:
             targetEntity: Babesk\ORM\SchbasUserShouldLendBook
             mappedBy: schoolyear
+        schbasAccounting:
+            targetEntity: Babesk\ORM\SchbasAccounting
+            mappedBy: schoolyear

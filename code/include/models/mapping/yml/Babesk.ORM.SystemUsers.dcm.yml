@@ -142,6 +142,9 @@ Babesk\ORM\SystemUsers:
         selfpayingBookEntities:
             targetEntity: Babesk\ORM\SchbasSelfpayer
             mappedBy: user
+        schbasAccounting:
+            targetEntity: Babesk\ORM\SchbasAccounting
+            mappedBy: user
     manyToOne:
         priceGroup:
             targetEntity: Babesk\ORM\BabeskPriceGroups
@@ -149,7 +152,3 @@ Babesk\ORM\SystemUsers:
             joinColumns:
                 GID:
                     referencedColumnName: ID
-    oneToOne:
-        schbasAccounting:
-            targetEntity: Babesk\ORM\SchbasAccounting
-            mappedBy: user

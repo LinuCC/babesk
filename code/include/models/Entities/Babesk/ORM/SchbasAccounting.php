@@ -149,4 +149,32 @@ class SchbasAccounting
     {
         return $this->id;
     }
+    /**
+     * @var \Babesk\ORM\SystemSchoolyears
+     */
+    private $schoolyear;
+
+
+    /**
+     * Set schoolyear
+     *
+     * @param \Babesk\ORM\SystemSchoolyears $schoolyear
+     * @return SchbasAccounting
+     */
+    public function setSchoolyear(\Babesk\ORM\SystemSchoolyears $schoolyear = null)
+    {
+        $this->schoolyear = $schoolyear;
+
+        return $this;
+    }
+
+    /**
+     * Get schoolyear
+     *
+     * @return \Babesk\ORM\SystemSchoolyears 
+     */
+    public function getSchoolyear()
+    {
+        return $this->schoolyear;
+    }
 }

@@ -207,16 +207,21 @@ class RecordReceipt extends \SchbasAccounting {
 	private function paidAmountChange($userId, $amount) {
 
 		try {
+			require_once PATH_INCLUDE . '/Schbas/Loan.php';
+			$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
 			$user = $this->_em->getRepository('DM:SystemUsers')
 				->findOneById($userId);
+			$schoolyear = $loanHelper->schbasPreparationSchoolyearGet();
 			if(!isset($user)) {
 				throw new Exception('User not found!');
 			}
-			$user->getSchbasAccounting()->setPayedAmount($amount);
-			$paid = $user->getSchbasAccounting()->getPayedAmount();
-			$toPay = $user->getSchbasAccounting()->getAmountToPay();
+			$accounting = $this->_em->getRepository('DM:SchbasAccounting')
+				->findOneBy(['user' => $user, 'schoolyear' => $schoolyear]);
+			$accounting->setPayedAmount($amount);
+			$paid = $accounting->getPayedAmount();
+			$toPay = $accounting->getAmountToPay();
 			$missing = $toPay - $paid;
-			$this->_em->persist($user);
+			$this->_em->persist($accounting);
 			$this->_em->flush();
 			die(json_encode(array(
 				'userId' => $userId, 'paid' => $paid, 'missing' => $missing

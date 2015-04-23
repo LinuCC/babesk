@@ -216,4 +216,42 @@ class SystemSchoolyears
     {
         return $this->usersShouldLendBooks;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $schbasAccounting;
+
+
+    /**
+     * Add schbasAccounting
+     *
+     * @param \Babesk\ORM\SchbasAccounting $schbasAccounting
+     * @return SystemSchoolyears
+     */
+    public function addSchbasAccounting(\Babesk\ORM\SchbasAccounting $schbasAccounting)
+    {
+        $this->schbasAccounting[] = $schbasAccounting;
+
+        return $this;
+    }
+
+    /**
+     * Remove schbasAccounting
+     *
+     * @param \Babesk\ORM\SchbasAccounting $schbasAccounting
+     */
+    public function removeSchbasAccounting(\Babesk\ORM\SchbasAccounting $schbasAccounting)
+    {
+        $this->schbasAccounting->removeElement($schbasAccounting);
+    }
+
+    /**
+     * Get schbasAccounting
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSchbasAccounting()
+    {
+        return $this->schbasAccounting;
+    }
 }

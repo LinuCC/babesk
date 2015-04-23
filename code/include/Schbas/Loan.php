@@ -99,6 +99,9 @@ class Loan {
 			return $loanPrice;
 		}
 		else {
+			$this->_logger->logO('A book assigned to a user has no valid ' .
+				'class', ['sev' => 'error', 'moreJson' => ['userId' =>
+						$user->getId(), 'bookId' => $book->getId()]]);
 			throw new Exception('No book-class "' . $class . '" found.');
 		}
 	}
@@ -117,6 +120,9 @@ class Loan {
 			return $loanPrice;
 		}
 		else {
+			$this->_logger->logO('A book assigned to a user has no valid ' .
+				'class', ['sev' => 'error', 'moreJson' => ['userId' =>
+						$user->getId(), 'bookId' => $book->getId()]]);
 			throw new Exception('No book-class "' . $class . '" found.');
 		}
 	}
@@ -317,6 +323,14 @@ class Loan {
 		'11' => array('12', '92', '13'),
 		'12' => array('12', '92', '13')
 	);
+
+	protected $_isbnIdentSchoolyearRange = [
+		'05' => 1, '06' => 1, '07' => 1, '08' => 1, '09' => 1, '10' => 1,
+		'56' => 2, '67' => 2, '78' => 2, '89' => 2, '90' => 2, '12' => 2,
+			'13' => 2,
+		'79' => 3, '91' => 3,
+		'69' => 4, '92' => 4,
+	];
 
 	//Maps the book-classes to the pricefactor with which the flatPrice to
 	//divide. Corresponds to the amount of years the user is lend the book.
