@@ -2,8 +2,11 @@ Babesk\ORM\SchbasAccounting:
     type: entity
     table: SchbasAccounting
     id:
-        user:
-            associationKey: true
+        id:
+            type: integer
+            precision: 11
+            unique: true
+            id: true
     fields:
         payedAmount:
             type: decimal
@@ -18,7 +21,7 @@ Babesk\ORM\SchbasAccounting:
             inversedBy: schbasAccounting
             targetEntity: Babesk\ORM\SystemUsers
             joinColumn:
-                name: UID
+                name: userId
                 referencedColumnName: ID
     manyToOne:
         loanChoice:

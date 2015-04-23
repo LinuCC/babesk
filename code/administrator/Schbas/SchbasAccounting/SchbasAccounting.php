@@ -115,8 +115,14 @@ class SchbasAccounting extends Schbas {
 			TableMng::query("INSERT INTO MessageManagers (`ID`, `messageID`, `userId`) VALUES (NULL, '".$messageID."','".$author[0]['value']."')");
 			$usersToRemind = TableMng::query("SELECT * FROM SchbasAccounting WHERE payedAmount < amountToPay");
 			foreach ($usersToRemind as $user) {
-				TableMng::query("INSERT INTO MessageReceivers (`ID`, `messageID`, `userID`, `read`, `return`) VALUES (NULL, '".$messageID."', '".$user['UID']."', '0', 'noReturn');");
-
+				TableMng::query(
+					"INSERT INTO MessageReceivers
+					(`ID`, `messageID`, `userID`, `read`, `return`)
+					VALUES (
+						NULL, '$messageID', '".$user['userId']."',
+						'0', 'noReturn'
+					);
+				");
 			}
 		}
 		catch (Exception $e) {
@@ -207,13 +213,14 @@ class SchbasAccounting extends Schbas {
 					if ($loanChoice=="lr")	$amountToPay = $feeReduced;
 					if (!isset($amountToPay)) $amountToPay="0.00";
 					$query = sprintf(
-						"INSERT INTO SchbasAccounting
-							(`UID`,`loanChoiceId`,`payedAmount`,`amountToPay`)
-							VALUES ('%s',(
-									SELECT ID FROM SchbasLoanChoices
-										WHERE abbreviation = '%s'
-								) ,'%s','%s')"
-							,$uid,$loanChoice,"0.00",$amountToPay);
+						"INSERT INTO SchbasAccounting (
+							`userId`,`loanChoiceId`,`payedAmount`,`amountToPay`
+						)
+						VALUES ('%s',(
+								SELECT ID FROM SchbasLoanChoices
+									WHERE abbreviation = '%s'
+							) ,'%s','%s')"
+						,$uid,$loanChoice,"0.00",$amountToPay);
 
 					TableMng::query($query);
 					die('success');
@@ -298,7 +305,7 @@ class SchbasAccounting extends Schbas {
 	//	$fees = TableMng::query('SELECT * FROM SchbasFee', true);
 		foreach ($users as & $user) {
 			foreach ($payed as $pay) {
-				if ($pay['UID'] == $user['ID'])  {
+				if ($pay['userId'] == $user['ID'])  {
 					$user['payedAmount'] = $pay['payedAmount'];
 					$user['amountToPay'] = $pay['amountToPay'];
 					$user['loanChoice'] = $pay['loanChoice'];
@@ -318,7 +325,10 @@ class SchbasAccounting extends Schbas {
 	private function executePayment($UID, $payment){
 		$UID = str_replace("Payment", "", $UID);
 		try {
-			TableMng::query("UPDATE SchbasAccounting SET payedAmount=$payment WHERE UID=$UID");
+			TableMng::query(
+				"UPDATE SchbasAccounting
+					SET payedAmount = $payment WHERE userId = $UID
+			");
 			//die("UPDATE SchbasAccounting SET payedAmount=$payment WHERE 'UID'=$UID");
 		} catch (Exception $e) {
 			//die("UPDATE SchbasAccounting SET 'payedAmount'=$payment WHERE 'UID'=$UID".$e);
@@ -328,34 +338,47 @@ class SchbasAccounting extends Schbas {
 
 
 	function userRemoveByID() {
-		$uid = TableMng::getDb()->real_escape_string($_POST['UserID']);
-		$uidArray = explode(' ', $uid);
 
-		if(count($uidArray) == 2) {
+		$formDataStr = filter_input(INPUT_POST, 'UserID');
+		if(!$formDataStr) {
+			$this->SchbasAccountingInterface->dieError(
+				'Bitte auszutauschenden oder neuen Antrag einscannen!'
+			);
+		}
+		$formData = explode(' ', $formDataStr);
+		if(count($formData) != 2) {
+			$this->SchbasAccountingInterface->dieError(
+				'Bitte auszutauschenden oder neuen Antrag einscannen!'
+			);
+		}
 
-			$uid = $uidArray[0];
-
-			$query = sprintf("SELECT COUNT(*) FROM SchbasAccounting WHERE `UID`='%s'",$uid);
-			$result=TableMng::query($query);
-			if (!$result[0]['COUNT(*)']!="0") {
-				$this->SchbasAccountingInterface->dieError('Benutzer hat noch keinen Antrag abgegeben!');
-			}
-			if(is_numeric($uid)) {
-				try {
-					$query = sprintf("DELETE FROM SchbasAccounting WHERE `UID`='%s'",$uid);
-
-					TableMng::query($query);
+		list($userId, $loanChoice) = $formData;
+		if($userId && $loanChoice) {
+			$user = $this->_em->find('DM:SystemUsers', $userId);
+			if($user) {
+				$accounting = $this->_em->getRepository('DM:SchbasAccounting')
+					->findOneBy(['user' => $user]);
+				if($accounting) {
+					$this->_em->remove($accounting);
+					$this->_em->flush();
 					$this->SchbasAccountingInterface->showDeleteSuccess();
-				} catch (Exception $e) {
-					var_dump($e->getMessage());
+				}
+				else {
+					$this->SchbasAccountingInterface->dieError(
+						'Benutzer hat noch keinen Antrag abgegeben!'
+					);
 				}
 			}
 			else {
-				$this->SchbasAccountingInterface->dieError('Benutzer-ID nicht g&uuml;ltig');
+				$this->SchbasAccountingInterface->dieError(
+					'Benutzer-ID nicht gültig'
+				);
 			}
 		}
 		else {
-			$this->SchbasAccountingInterface->dieError('Bitte auszutauschenden oder neuen Antrag einscannen!');
+			$this->SchbasAccountingInterface->dieError(
+				'Bitte auszutauschenden oder neuen Antrag einscannen!'
+			);
 		}
 	}
 
