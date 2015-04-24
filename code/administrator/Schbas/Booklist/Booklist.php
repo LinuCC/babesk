@@ -159,9 +159,6 @@ class Booklist extends Schbas {
 				"Konnte das Fach $_POST[subject] nicht finden."
 			);
 		}
-		$this->addBookCheckDuplicate(
-			$subject, $_POST['class'], $_POST['bundle']
-		);
 		$book = new \Babesk\ORM\SchbasBook();
 		$book->setTitle($_POST['title'])
 			->setClass($_POST['class'])
@@ -177,26 +174,6 @@ class Booklist extends Schbas {
 		$this->_interface->dieSuccess(
 			"Das Buch $_POST[title] wurde erfolgreich hinzugefügt."
 		);
-	}
-
-	private function addBookCheckDuplicate($subject, $class, $bundle) {
-
-		$duplicateBook = $this->_em->getRepository('DM:SchbasBook')
-			->findOneBy(
-				array(
-					'subject' => $subject,
-					'class' => $class,
-					'bundle' => $bundle
-			)
-		);
-		if($duplicateBook) {
-			$this->_interface->dieError(
-				"Es gibt bereits ein Buch mit dem Fach {$subject->getName()}" .
-				", der Klasse $_POST[class] und dem Bundle $_POST[bundle] " .
-				"namens {$duplicateBook->getTitle()} und der ISBN " .
-				"{$duplicateBook->getIsbn()}"
-			);
-		}
 	}
 
 	private function deleteBook() {
