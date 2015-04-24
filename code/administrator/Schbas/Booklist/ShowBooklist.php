@@ -302,10 +302,9 @@ class ShowBooklist extends Booklist {
 					$lowerCount + $upperCount;
 			}
 			else {
-				$this->_logger->log(
-					'book to display is not assigned to a class',
-					'Notice', Null,
-					json_encode(array('id' => $book->getId())));
+				$this->_logger->logO('book to display is not assigned to a' .
+					'class', ['sev' => 'warning', 'moreJson' => ['id' =>
+						$book->getId()]]);
 				$booksNeeded[$book->getId()]['exemplarsNeeded'] = 0;
 			}
 		}

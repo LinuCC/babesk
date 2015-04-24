@@ -169,9 +169,8 @@ class Loan {
 				$opt['schoolyear'] : $this->schbasPreparationSchoolyearGet();
 			// Default to subtracting the selfpaid books
 			$subtractSelfpay = (empty($opt['ignoreSelfpay']));
-			// We want all entries where the book has _not_ been lend
-			// and will _not_ be bought by the user himself, so we check for
-			// null
+			// We want all entries where the book will _not_ be bought by the
+			// user himself, so we check for null
 			$qb = $this->_em->createQueryBuilder()
 				->select(['b', 'usb'])
 				->from('DM:SchbasBook', 'b')

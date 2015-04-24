@@ -53,55 +53,6 @@ class Delete extends \administrator\Schbas\BookAssignments\View\View {
 		parent::entryPoint($dataContainer);
 	}
 
-	// protected function assignmentsDeleteFor($delEntity, $bookId, $entityId) {
-
-	// 	$entityParam = false;
-	// 	$qb = $this->_em->createQueryBuilder()
-	// 		->delete('DM:SchbasUserShouldLendBook', 'usb');
-	// 	switch($delEntity) {
-	// 		case 'book':
-	// 			// We want to delete all assignments for the book, no filtering
-	// 			// necessary
-	// 			$entityParam = false;
-	// 			break;
-	// 		case 'gradelevel':
-	// 			$qb->innerJoin('usb.user', 'u')
-	// 				->innerJoin('u.attendances', 'a')
-	// 				->innerJoin('a.schoolyear', 's', 'WITH', 's.active = 1')
-	// 				->innerJoin(
-	// 					'a.grade', 'g', 'WITH', 'g.gradelevel = :entity'
-	// 				);
-	// 			$entityParam = $entityId;
-	// 			break;
-	// 		case 'grade':
-	// 			$grade = $this->_em->getReference(
-	// 				'DM:SystemGrades', $entityId
-	// 			);
-	// 			$qb->innerJoin('usb.user', 'u')
-	// 				->innerJoin('u.attendances', 'a')
-	// 				->innerJoin('a.schoolyear', 's', 's.active = 1')
-	// 				->innerJoin('a.grade', 'g');
-	// 			$qb->andWhere('g = :entity');
-	// 			$entityParam = $grade;
-	// 			break;
-	// 		case 'user':
-	// 			$user = $this->_em->getReference('DM:SystemUsers', $entityId);
-	// 			$qb->andWhere('usb.user = :entity');
-	// 			$entityParam = $user;
-	// 			break;
-	// 	}
-	// 	$book = $this->_em->getReference('DM:SchbasBook', $bookId);
-	// 	$qb->andWhere('usb.book = :book');
-	// 	$query = $qb->getQuery();
-	// 	var_dump($query->getSql());
-	// 	if($entityParam) {
-	// 		$query->setParameter('entity', $entityParam);
-	// 	}
-	// 	$query->setParameter('book', $book);
-	// 	$delCount = $query->getResult();
-	// 	return $delCount;
-	// }
-
 	protected function assignmentsDeleteFor($delEntity, $bookId, $entityId) {
 
 		// DQL does not support delete with joins, so select them first
