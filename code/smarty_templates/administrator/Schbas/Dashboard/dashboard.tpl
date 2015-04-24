@@ -13,6 +13,24 @@
 			</div>
 		</div>
 	</div>
+	<div class="col-sm-12 col-md-12 col-lg-6">
+		<div id="book-panel" class="panel panel-dashboard">
+			<div class="panel-heading">
+				<div class="panel-title">Bücher</div>
+			</div>
+			<div class="panel-body">
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-12 col-md-12 col-lg-6">
+		<div id="inventory-panel" class="panel panel-dashboard">
+			<div class="panel-heading">
+				<div class="panel-title">Exemplare</div>
+			</div>
+			<div class="panel-body">
+			</div>
+		</div>
+	</div>
 	<div class="col-sm-12 col-md-12 col-lg-12">
 		<div id="preparation-panel" class="panel panel-dashboard">
 			<div class="panel-heading">

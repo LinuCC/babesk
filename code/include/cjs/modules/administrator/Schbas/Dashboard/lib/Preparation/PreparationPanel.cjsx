@@ -1,10 +1,6 @@
 React = require 'react'
 React.Bootstrap = require 'react-bootstrap'
-Grid = React.Bootstrap.Grid
-Row = React.Bootstrap.Row
-Col = React.Bootstrap.Col
 ButtonGroup = React.Bootstrap.ButtonGroup
-ButtonToolbar = React.Bootstrap.ButtonToolbar
 PrepSchoolyear = require './PrepSchoolyear'
 AssignmentController = require './AssignmentController'
 SchbasClaimStatus = require './SchbasClaimStatus'
