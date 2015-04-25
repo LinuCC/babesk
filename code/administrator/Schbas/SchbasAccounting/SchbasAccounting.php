@@ -582,7 +582,7 @@ class SchbasAccounting extends Schbas {
 				$user = $this->_em->getReference('DM:SystemUsers', $userId);
 				$name[] = $this->getNameOfStudentId($userId);
 				$forename[] = $this->getForenameOfStudentId($userId);
-				$books[] = $this->_loanHelper->loanBooksGet($user);
+				$books[] = $this->_loanHelper->loanBooksOfUserGet($user);
 			}
 
 			$listOfClasses = $this->getListOfClasses("rebmemer2");

@@ -40,9 +40,14 @@
 
 {block name=filling_content}
 
-<div class="alert alert-warning alert-dismissable">
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-  <strong>Benötigte Bücher</strong> Die Anzahl der benötigten Bücher für das nächste Schuljahr kann inkorrekt sein. Um ein korrektes Ergebnis zu erhalten, müssen alle Bücher, die wieder verliehen werden können, als nicht verliehen gespeichert sein. Weiterhin müssen alle Selbstzahler korrekt eingetraten sein.
+<div class="alert alert-info alert-dismissable">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	<strong>Benötigte Bücher</strong>
+	Die Anzahl der benötigten Bücher für das nächste Schuljahr kann inkorrekt sein. Um ein korrektes Ergebnis zu erhalten, müssen alle Bücher, die wieder verliehen werden können, als nicht verliehen gespeichert sein. Weiterhin müssen alle Selbstzahler korrekt eingetraten sein.
+	Die Zahlen gelten für das Schbas-Vorbereitungsschuljahr, momentan also für
+	<span class="label label-info">
+		{$preparationSchoolyear->getLabel()}
+	</span>
 </div>
 
 <div class="row">
@@ -62,14 +67,14 @@
 			</ul>
 		</div>
 		<div class="col-sm-12 col-md-3 form-group">
-				<div class="input-group books-per-page-container pull-right"
-					title="{t}Rows per page{/t}" >
-					<span class="input-group-addon">
-						<span class="fa fa-cog"></span>
-					</span>
-					<input id="books-per-page" type="text" maxlength="3" class="form-control"
-						value="10" />
-				</div>
+			<div class="input-group books-per-page-container pull-right"
+				title="{t}Rows per page{/t}" >
+				<span class="input-group-addon">
+					<span class="fa fa-cog"></span>
+				</span>
+				<input id="books-per-page" type="text" maxlength="3"
+					class="form-control" value="10" />
+			</div>
 		</div>
 	</div>
 </div>

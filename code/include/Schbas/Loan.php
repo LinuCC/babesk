@@ -73,7 +73,7 @@ class Loan {
 				$books = $query->getResult();
 				return $books;
 			}
-			catch(Exception $e) {
+			catch(\Exception $e) {
 				$this->_logger->logO('Could not fetch the books to loan in ' .
 					'gradelevel', ['sev' => 'error', 'moreJson' =>
 						$e->getMessage()]);
@@ -102,7 +102,7 @@ class Loan {
 			$this->_logger->logO('A book assigned to a user has no valid ' .
 				'class', ['sev' => 'error', 'moreJson' => ['userId' =>
 						$user->getId(), 'bookId' => $book->getId()]]);
-			throw new Exception('No book-class "' . $class . '" found.');
+			throw new \Exception('No book-class "' . $class . '" found.');
 		}
 	}
 
@@ -123,13 +123,13 @@ class Loan {
 			$this->_logger->logO('A book assigned to a user has no valid ' .
 				'class', ['sev' => 'error', 'moreJson' => ['userId' =>
 						$user->getId(), 'bookId' => $book->getId()]]);
-			throw new Exception('No book-class "' . $class . '" found.');
+			throw new \Exception('No book-class "' . $class . '" found.');
 		}
 	}
 
 	public function loanPriceOfAllBookAssignmentsForUserCalculate($user) {
 
-		$books = $this->loanBooksGet($user);
+		$books = $this->loanBooksOfUserGet($user);
 		$feeNormal = 0.00;
 		$feeReduced = 0.00;
 		foreach($books as $book) {
@@ -162,7 +162,7 @@ class Loan {
 	 *                             will be included.
 	 * @return array        An array of Doctrine-Objects representing the books
 	 */
-	public function loanBooksGet($user, array $opt = Null) {
+	public function loanBooksOfUserGet($user, array $opt = Null) {
 
 		try {
 			$schoolyear = (isset($opt['schoolyear'])) ?
@@ -199,9 +199,31 @@ class Loan {
 			$books = $this->loanBooksGetFilterAlreadyLentBooks($books, $user);
 			return $books;
 
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			$this->_logger->log('Could not fetch the loanBooks',
 				['sev' => 'error', 'moreJson' => $e->getMessage()]);
+		}
+	}
+
+	public function amountOfInventoryAssignedToUsersGet($book) {
+
+		$schoolyear = $this->schbasPreparationSchoolyearGet();
+		try {
+			$query = $this->_em->createQuery(
+				'SELECT COUNT(usb) FROM DM:SchbasBook b
+				INNER JOIN b.usersShouldLend usb
+					WITH usb.schoolyear = :schoolyear
+				WHERE b = :book
+			');
+			$query->setParameter('book', $book);
+			$query->setParameter('schoolyear', $schoolyear);
+			return $query->getSingleScalarResult();
+		}
+		catch(\Exception $e) {
+			$this->_logger->logO('Error fetching amount of inventory ' .
+				'assigned to users', ['sev' => 'error', 'moreJson' => [
+					'bookId' => $book->getId(), 'msg' => $e->getMessage()]]);
+			return Null;
 		}
 	}
 

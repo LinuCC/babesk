@@ -128,7 +128,7 @@ class LoanSystem extends Schbas {
 		);
 		list($feeNormal, $feeReduced) = $fees;
 
-		$loanbooksTest = $loanHelper->loanBooksGet(
+		$loanbooksTest = $loanHelper->loanBooksOfUserGet(
 			$user, ['ignoreSelfpay' => true]
 		);
 		$query = $this->_em->createQuery(
@@ -336,7 +336,7 @@ class LoanSystem extends Schbas {
 		// get booklist
 		//$booklist = $booklistManager->getBooksByClass($gradelevel[0]['gradelevel']);
 		$user = $this->_em->getReference('DM:SystemUsers', $_SESSION['uid']);
-		$booklist = $loanHelper->loanBooksGet($user);
+		$booklist = $loanHelper->loanBooksOfUserGet($user);
 
 		$books = '<table border="0" bordercolor="#FFFFFF" style="background-color:#FFFFFF" width="100%" cellpadding="0" cellspacing="1">
 				<tr style="font-weight:bold; text-align:center;"><th>Fach</th><th>Titel</th><th>Verlag</th><th>ISBN-Nr.</th><th>Preis</th></tr>';

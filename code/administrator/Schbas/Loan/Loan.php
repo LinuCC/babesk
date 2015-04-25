@@ -63,7 +63,7 @@ class Loan extends Schbas {
 		}
 		$exemplarsLent = $this->exemplarsStillLendByUserGet($user);
 		$booksSelfpaid = $user->getSelfpayingBooks();
-		$booksToLoan = $loanHelper->loanBooksGet($user);
+		$booksToLoan = $loanHelper->loanBooksOfUserGet($user);
 
 		$this->_smarty->assign('user', $user);
 		$this->_smarty->assign('formSubmitted', $formSubmitted);

@@ -1,6 +1,7 @@
 <?php
 
 require_once 'Booklist.php';
+require_once PATH_INCLUDE . '/Schbas/Loan.php';
 
 class ShowBooklist extends Booklist {
 
@@ -15,6 +16,9 @@ class ShowBooklist extends Booklist {
 			$this->ajaxBooklist();
 		}
 		else {
+			$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
+			$schoolyear = $loanHelper->schbasPreparationSchoolyearGet();
+			$this->_smarty->assign('preparationSchoolyear', $schoolyear);
 			$this->displayTpl('show-booklist.tpl');
 		}
 	}
@@ -203,8 +207,8 @@ class ShowBooklist extends Booklist {
 		$booksLent = array();
 		$query = $this->_em->createQuery(
 			'SELECT COUNT(l) FROM DM:SchbasBook b
-				JOIN b.exemplars e
-				JOIN e.lending l
+				INNER JOIN b.exemplars e
+				INNER JOIN e.lending l
 				WHERE b.id = :id
 		');
 		foreach($paginator as $book) {
@@ -229,7 +233,7 @@ class ShowBooklist extends Booklist {
 		$booksInventory = array();
 		$query = $this->_em->createQuery(
 			'SELECT COUNT(e.id) FROM DM:SchbasBook b
-				JOIN b.exemplars e
+				INNER JOIN b.exemplars e
 				WHERE b.id = :id
 		');
 		foreach($paginator as $book) {
@@ -276,173 +280,14 @@ class ShowBooklist extends Booklist {
 	 */
 	protected function bookExemplarsNeededGet($paginator) {
 
-		require_once PATH_INCLUDE . '/Schbas/Loan.php';
 		$loan = new \Babesk\Schbas\Loan($this->_dataContainer);
 		$trigger = $this->specialCourseTriggerGet();
 		$booksNeeded = array();
 		foreach($paginator as $book) {
-			$lowerCount = 0;
-			$upperCount = 0;
-			$class = $book->getClass();
-			if(!empty($class)) {
-				$gradelevels = $loan->isbnIdent2Gradelevel($class);
-				list($lowerGrades, $upperGrades ) =
-					$this->gradelevelsSplitByTrigger($trigger, $gradelevels);
-				if(!empty($lowerGrades)) {
-					$lowerCount = $this->bookExemplarsNeededForLowerGradesGet(
-						$lowerGrades, $book
-					);
-				}
-				if(!empty($upperGrades)) {
-					$upperCount = $this->bookExemplarsNeededForUpperGradesGet(
-						$upperGrades, $book
-					);
-				}
-				$booksNeeded[$book->getId()]['exemplarsNeeded'] =
-					$lowerCount + $upperCount;
-			}
-			else {
-				$this->_logger->logO('book to display is not assigned to a' .
-					'class', ['sev' => 'warning', 'moreJson' => ['id' =>
-						$book->getId()]]);
-				$booksNeeded[$book->getId()]['exemplarsNeeded'] = 0;
-			}
+			$count = $loan->amountOfInventoryAssignedToUsersGet($book);
+			$booksNeeded[$book->getId()]['exemplarsNeeded'] = $count;
 		}
 		return $booksNeeded;
-	}
-
-	/**
-	 * Calculates the book-exemplars needed for the given book for lower grades
-	 * @param  array  $gradelevels The gradelevels of the book. Only give the
-	 *                             gradelevels of the lower grades, else the
-	 *                             calculation will be wrong.
-	 * @param  SchbasBook $book    The book to calculate with
-	 * @return int                 the count of book-exemplars of lower grades
-	 *                             needed
-	 */
-	protected function bookExemplarsNeededForLowerGradesGet(
-			$gradelevels,
-			$book
-		) {
-
-		$baseQuery = $this->bookExemplarsNeededBaseQueryCreate($gradelevels);
-		if($this->bookSubjectIsListedCheck($book->getSubject(), false)) {
-			//user not in senior grades and booksubject in list
-			$query = $this->_em->createQuery(
-				$baseQuery . ' AND
-				(
-					u.religion LIKE :subject OR
-					u.foreign_language LIKE :subject
-				)');
-			$query->setParameter('subject', '%' . $book->getSubject() . '%')
-				->setParameter('bookId', $book-getId());
-			foreach($gradelevels as $key => $gradelevel) {
-				$query->setParameter(($key + 1), $gradelevel);
-			}
-			$res = $query->getSingleScalarResult();
-			if(!empty($res)) {
-				return (int)$res;
-			}
-			else {
-				$this->_logger->log(
-					'Error fetching lower grades book exemplars',
-					'Notice', Null);
-				return 0;
-			}
-		}
-		else {
-			//user not in senior grades and booksubject not in list
-			$query = $this->_em->createQuery($baseQuery);
-			$query->setParameter('bookId', $book->getId());
-			foreach($gradelevels as $key => $gradelevel) {
-				$query->setParameter(($key + 1), $gradelevel);
-			}
-			$res = $query->getSingleScalarResult();
-			if(!empty($res)) {
-				return (int)$res;
-			}
-			else {
-				$this->_logger->log(
-					'Error fetching lower grades book exemplars',
-					'Notice', Null);
-				return 0;
-			}
-		}
-	}
-
-	/**
-	 * Calculates the book-exemplars needed for the given book for upper grades
-	 * This method calculates the amount for users in senior grades. They are
-	 * choosing their subjects, so the standard pool of booksubjects does not
-	 * apply to them. They have an additional pool called 'special_course'.
-	 * @param  array  $gradelevels The gradelevels of the book. Only give the
-	 *                             gradelevels of the upper grades, else the
-	 *                             calculation will be wrong.
-	 * @param  SchbasBook $book    The book to calculate with
-	 * @return int                 the count of book-exemplars of lower grades
-	 *                             needed
-	 */
-	protected function bookExemplarsNeededForUpperGradesGet(
-			$gradelevels,
-			$book
-		) {
-
-		$baseQuery = $this->bookExemplarsNeededBaseQueryCreate($gradelevels);
-		if($this->bookSubjectIsListedCheck($book->getSubject(), true)) {
-			$query = $this->_em->createQuery(
-				$baseQuery . ' AND (
-							u.special_course LIKE :subject OR
-							u.religion LIKE :subject OR
-							u.foreign_language LIKE :subject
-						)
-			');
-			$query->setParameter('subject', '%' . $book->getSubject() . '%')
-				->setParameter('bookId', $book-getId());
-			foreach($gradelevels as $key => $gradelevel) {
-				$query->setParameter(($key + 1), $gradelevel);
-			}
-			$res = $query->getSingleScalarResult();
-			if(!empty($res)) {
-				return (int)$res;
-			}
-			else {
-				$this->_logger->log(
-					'Error fetching upper grades book exemplars',
-					'Notice', Null);
-				return 0;
-			}
-		}
-		else {
-			//Book-subject is not listed in any of the subject-lists, so
-			//there should be no user having the books subject listed.
-			//This step right here is why you dont do put lists into strings
-			//to global settings when you could just create an additional table
-			return 0;
-		}
-	}
-
-	/**
-	 * Creates the basic query for counting the needed Book Exemplars
-	 * @param  array  $gradelevels An array of gradelevels that should be put
-	 *                             into the Query
-	 * @return string              The basic query to which one can append
-	 */
-	protected function bookExemplarsNeededBaseQueryCreate($gradelevels) {
-
-		$glAr = array();
-		//Used for the prepared-statement, because there can be a variable
-		//amount of gradelevels
-		for ($i = 0; $i < count($gradelevels); $i++) {
-			$glAr[] = '?' . (string)($i + 1);
-		}
-		$glQuery = implode(', ', $glAr);
-		return "SELECT COUNT(u.id) FROM DM:SystemUsers u
-					JOIN u.attendances uigs
-					JOIN uigs.schoolyear s
-					JOIN uigs.grade g WITH g.gradelevel IN(${glQuery})
-					LEFT JOIN u.selfpayingBooks b WITH b.id = :bookId
-					WHERE s.active = 1 AND b.id IS NULL
-		";
 	}
 
 	/**
