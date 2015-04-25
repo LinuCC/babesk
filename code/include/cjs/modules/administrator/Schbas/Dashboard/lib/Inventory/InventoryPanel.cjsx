@@ -3,6 +3,7 @@ Button = require 'react-bootstrap/lib/Button'
 Icon = require 'lib/FontAwesomeIcon'
 ButtonGroup = require 'react-bootstrap/lib/ButtonGroup'
 AddInventoryBox = require './AddInventoryBox'
+DeleteInventoryBox = require './DeleteInventoryBox'
 SolveDuplicatesBox = require './SolveDuplicatesBox'
 
 module.exports = React.createClass(
@@ -10,60 +11,12 @@ module.exports = React.createClass(
   getInitialState: ->
     return {
       showAddInventory: false
+      showEditDuplicates: false
+      showDeleteInventory: false
       newBarcodes: []
-      askDuplicates: false
+      deleteBarcodes: []
       askDuplicatesData: {}
     }
-
-  # We need to check the barcodes that they have only one unique book
-  # If not, we need to ask the user to what book the barcode should belong
-  checkForUniqueBarcodes: (booksWithBarcodes)->
-    duplicated = []
-    unique = []
-    # Input-Format: [
-    #     { id: <bookId>, title: <bookTitle>, barcodes: [ <barcodeStr> ] }
-    # ]
-    # Output-Format duplicated-array: [
-    #     { barcode: <barcodeStr>, books: [
-    #         {id: <bookId>, title:<bookTitle>}
-    #     ] }
-    # ]
-    booksWithBarcodes.map (book)->
-      book.barcodes.map (barcode)->
-        isDuplicated = false
-        booksWithBarcodes.map (compareBook)->
-          compareBook.barcodes.map (compareBarcode)->
-            if book.id isnt compareBook.id and barcode is compareBarcode
-              # Books are duplicated
-              isDuplicated = true
-              barcodeKey = lookupKeyOfObjectInArray(
-                duplicated, 'barcode', compareBarcode
-              )
-              if barcodeKey isnt false
-                # Barcode does exist in the duplicated-array
-                bookKey = lookupKeyOfObjectInArray(
-                  duplicated[barcodeKey]['books'], 'id', compareBook.id
-                )
-                if bookKey isnt false
-                  # Book already exists for barcode in duplicated, do nothing
-                else
-                  duplicated[barcodeKey]['books'].push(compareBook)
-              else
-                # Barcode does not exist in the duplicated-array
-                newBarcodeDuplication = {
-                  barcode: compareBarcode
-                  books: []
-                }
-                newBook = {id: book.id, title: book.title}
-                newCompareBook = {id: compareBook.id, title: compareBook.title}
-                newBarcodeDuplication.books.push newBook
-                newBarcodeDuplication.books.push newCompareBook
-                duplicated.push newBarcodeDuplication
-        if not isDuplicated
-          unique.push {
-            barcode: barcode
-            bookId: book.id
-          }
 
   handleAddInventoryClicked: ->
     @setState showAddInventory: true
@@ -78,7 +31,7 @@ module.exports = React.createClass(
           barcodes.duplicated = barcodes.duplicated.map (barcodeGroup)->
             barcodeGroup.assignedBookId = false
             return barcodeGroup
-          @setState {askDuplicatesData: barcodes, askDuplicates: true}
+          @setState {askDuplicatesData: barcodes, showEditDuplicates: true}
         else
           @uploadBarcodes barcodes.unique
     .fail (jqxhr)->
@@ -119,6 +72,37 @@ module.exports = React.createClass(
     askDuplicatesDataTmp['duplicated'][groupKey]['assignedBookId'] = bookId
     @setState askDuplicatesData: askDuplicatesDataTmp
 
+  handleDeleteInventoryClicked: ->
+    @setState showDeleteInventory: true
+
+  handleCancelDeleteInventoryClicked: ->
+    @setState showDeleteInventory: false
+
+  handleSubmitDeleteInventoryClicked: ->
+    bootbox.confirm(
+      'Wollen sie die Exemplare wirklich löschen?'
+      (res)=>
+        if res
+          $.post(
+            'index.php?module=administrator|Schbas|Inventory|Delete'
+            {barcodes: @state.deleteBarcodes}
+          ) .done (res)=>
+              toastr.success res, 'Erfolgreich gelöscht'
+              @setState deleteBarcodes: []
+            .fail (jqxhr)->
+              toastr.error jqxhr.responseText, 'Fehler beim Löschen'
+    )
+
+  handleDeleteBarcode: (barcode)->
+    barcodes = @state.deleteBarcodes
+    barcodes.push barcode
+    @setState deleteBarcodes: barcodes
+
+  handleDeleteBarcodeRemove: (barcodeIndex)->
+    barcodes = @state.deleteBarcodes
+    barcodes.splice barcodeIndex, 1
+    @setState deleteBarcodes: barcodes
+
   render: ->
     <div>
       {
@@ -127,11 +111,11 @@ module.exports = React.createClass(
             <ButtonGroup>
               <Button bsStyle='default'
                 onClick={@handleCancelAddInventoryClicked}>
-                <Icon name='trash-o' /> Hinzufügen abbrechen
+                <Icon name='times' /> Hinzufügen abbrechen
               </Button>
             </ButtonGroup>
             {
-              if @state.askDuplicates
+              if @state.showEditDuplicates
                 <ButtonGroup>
                   <Button bsStyle='primary'
                     disabled={
@@ -152,6 +136,22 @@ module.exports = React.createClass(
                 </ButtonGroup>
             }
           </ButtonGroup>
+        else if @state.showDeleteInventory
+          <ButtonGroup justified>
+            <ButtonGroup>
+              <Button bsStyle='default'
+                onClick={@handleCancelDeleteInventoryClicked}>
+                <Icon name='times' /> Löschen abbrechen
+              </Button>
+            </ButtonGroup>
+            <ButtonGroup>
+              <Button bsStyle='danger'
+                disabled={@state.deleteBarcodes.length is 0}
+                onClick={@handleSubmitDeleteInventoryClicked}>
+                <Icon name='trash-o' /> Löschen
+              </Button>
+            </ButtonGroup>
+          </ButtonGroup>
         else
           <ButtonGroup justified>
             <ButtonGroup>
@@ -159,11 +159,17 @@ module.exports = React.createClass(
                 Exemplare hinzufügen
               </Button>
             </ButtonGroup>
+            <ButtonGroup>
+              <Button bsStyle='default'
+                onClick={@handleDeleteInventoryClicked}>
+                Exemplare löschen
+              </Button>
+            </ButtonGroup>
           </ButtonGroup>
       }
       <hr />
       {
-        if @state.showAddInventory and @state.askDuplicates
+        if @state.showAddInventory and @state.showEditDuplicates
           <SolveDuplicatesBox uniqueBarcodes={@state.askDuplicatesData.unique}
             onSelectedBookChange={@handleDuplicateSelectedBookChange}
             barcodeGroups={@state.askDuplicatesData.duplicated} />
@@ -171,6 +177,10 @@ module.exports = React.createClass(
           <AddInventoryBox barcodes={@state.newBarcodes}
             onNewBarcode={@handleNewBarcode}
             onNewBarcodeRemove={@handleNewBarcodeRemove} />
+        else if @state.showDeleteInventory
+          <DeleteInventoryBox barcodes={@state.deleteBarcodes}
+            onDeleteBarcode={@handleDeleteBarcode}
+            onDeleteBarcodeRemove={@handleDeleteBarcodeRemove} />
       }
     </div>
 )

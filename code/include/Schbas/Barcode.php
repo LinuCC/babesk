@@ -69,7 +69,8 @@ class Barcode {
 	public function getMatchingBookExemplar($em) {
 
 		$query = $em->createQuery(
-			'SELECT i FROM DM:SchbasInventory i
+			'SELECT i, l FROM DM:SchbasInventory i
+			LEFT JOIN i.lending l
 			INNER JOIN i.book b WITH b.class = :class AND b.bundle = :bundle
 			INNER JOIN b.subject s WITH s.abbreviation = :subject
 			WHERE i.yearOfPurchase = :yearOfPurchase AND i.exemplar = :exemplar
