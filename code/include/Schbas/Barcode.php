@@ -82,6 +82,32 @@ class Barcode {
 		return $query->getOneOrNullResult();
 	}
 
+	public function getMatchingBooks($em) {
+
+		$query = $em->createQuery(
+			'SELECT b FROM DM:SchbasBook b
+			INNER JOIN b.subject s WITH s.abbreviation = :subject
+			WHERE b.class = :class AND b.bundle = :bundle
+		');
+		$query->setParameter('class', $this->_class)
+			->setParameter('bundle', $this->_bundle)
+			->setParameter('subject', $this->_subject);
+		return $query->getResult();
+	}
+
+	/**
+	 * Checks if the given barcode has the same book-data as this instance
+	 * @param  Barcode $compareBarcode The barcode to compare to
+	 * @return bool                    true if it has the same data, else false
+	 */
+	public function sameBookDataAs($compareBarcode) {
+		return (
+			$this_subject == $compareBarcode->getSubject() &&
+			$this->_class == $compareBarcode->getClass() &&
+			$this->_bundle == $compareBarcode->getBundle()
+		);
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////

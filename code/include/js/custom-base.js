@@ -82,6 +82,12 @@ $('body').popover({
 	selector: 'a[rel="popover"], [data-toggle="popover"]'
 });
 
+function lookupKeyOfObjectInArray(array, prop, value) {
+    for (var i = 0, len = array.length; i < len; i++)
+        if (array[i][prop] === value) return i;
+    return false;
+}
+
 // Simple JavaScript Templating
 // John Resig - http://ejohn.org/ - MIT Licensed
 // Client side template parser that uses &lt;?= #&gt; and &lt;? code ?&gt;

@@ -1,6 +1,7 @@
 <?php
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_INCLUDE . '/Schbas/Barcode.php';
 require_once PATH_ADMIN . '/Schbas/Schbas.php';
 
 class Inventory extends Schbas {
@@ -18,7 +19,7 @@ class Inventory extends Schbas {
 	//Methods
 	public function execute($dataContainer) {
 
-		defined('_AEXEC') or die('Access denied');
+		$this->entryPoint($dataContainer);
 
 		require_once 'AdminInventoryInterface.php';
 		require_once 'AdminInventoryProcessing.php';
@@ -88,8 +89,83 @@ class Inventory extends Schbas {
 					break;
 			}
 		} else {
+			// Check for Ajax-Requests
+			if(isset($_GET['getBooksForBarcodes'])) {
+				if(isset($_GET['barcodes']) && count($_GET['barcodes'])) {
+					$this->booksForBarcodesSend($_GET['barcodes']);
+				}
+			}
 			$inventoryInterface->ShowSelectionFunctionality($action_arr);
 		}
+	}
+
+	/**
+	 * Returns the barcodes and, if it fits to more than one book, the books
+	 * Dies with the following structure: {
+	 *     unique: [ {barcode: <barcodeString>, bookId: <bookId> } ],
+	 *     duplicated: [
+	 *         {
+	 *             books: [
+	 *                 {id: <bookId>, title: <bookTitle> }
+	 *             ],
+	 *             barcodes: [ <barcodeString> ]
+	 *         }
+	 *     ]
+	 *
+	 * }
+	 *
+	 * @param  array  $barcodes An array of strings representing barcodes
+	 */
+	protected function booksForBarcodesSend($barcodeStrings) {
+
+		$extractIdsFromBooks = function($book) {
+			return $book->getId();
+		};
+
+		$uniqueBarcodes = [];
+		$duplicatedBarcodes = [];
+		foreach($barcodeStrings as $barcodeStr) {
+			$barcode = new \Babesk\Schbas\Barcode();
+			if($barcode->initByBarcodeString($barcodeStr)) {
+				// SQL-Request for every barcode, dont request too many :P
+				$books = $barcode->getMatchingBooks($this->_em);
+				if(count($books) == 1) {
+					$uniqueBarcodes[] = [
+						'barcode' => $barcodeStr,
+						'bookId' => $books[0]->getId()
+					];
+				}
+				else {
+					// Make the combined book-ids the key of the array to group
+					// the duplicated barcodes
+					$bookIds = array_map($extractIdsFromBooks, $books);
+					asort($bookIds);
+					$key = implode('_', $bookIds);
+					if(!isset($duplicatedBarcodes[$key])) {
+						$duplicatedBarcodes[$key] = [
+							'books' => [],
+							'barcodes' => []
+						];
+						foreach($books as $book) {
+							$duplicatedBarcodes[$key]['books'][] = [
+								'id' => $book->getId(),
+								'title' => $book->getTitle()
+							];
+						}
+					}
+					$duplicatedBarcodes[$key]['barcodes'][] = $barcodeStr;
+				}
+			}
+			else {
+				dieHttp("Barcode '$barcodeStr' inkorrekt", 400);
+			}
+		}
+		// Remove the keys so that it is a json-array
+		$duplicatedBarcodes = array_values($duplicatedBarcodes);
+		dieJson( [
+			'unique' => $uniqueBarcodes,
+			'duplicated' => $duplicatedBarcodes
+		] );
 	}
 }
 
