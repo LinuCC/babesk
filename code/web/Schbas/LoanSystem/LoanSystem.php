@@ -223,8 +223,12 @@ class LoanSystem extends Schbas {
 
 		//get cover letter date
 		$letter_date =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDateCoverLetter'");
+		$letter_date = date('d.m.Y', strtotime($letter_date));
 
 		$schbasDeadlineClaim = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDeadlineClaim'");
+
+		$schbasDeadlineClaim = date('d.m.Y', strtotime($schbasDeadlineClaim));
+
 		$text = "</h4>Bitte ausgef&uuml;llt zur&uuml;ckgeben an die Klassen- bzw. Kursleitung des Lessing-Gymnasiums bis zum ".$schbasDeadlineClaim[0]['value']."!</h4>";
 
 		$text .= '<table border="1"><tr>';
@@ -256,6 +260,9 @@ class LoanSystem extends Schbas {
 		list($feeNormal, $feeReduced) = $fees;
 
 		$schbasDeadlineTransfer = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDeadlineTransfer'");
+		$schbasDeadlineTransfer = date(
+			'd.m.Y', strtotime($schbasDeadlineTransfer)
+		);
 		$feedback = "";
 		if ($_POST['loanChoice']=="noLoan") {
 			$feedback = "nl";
@@ -312,6 +319,7 @@ class LoanSystem extends Schbas {
 
 		//get cover letter date
 		$letter_date =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDateCoverLetter'");
+		$letter_date = date('d.m.Y', strtotime($letter_date));
 
 		$booklistManager = new BookManager();
 		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);

@@ -43,8 +43,8 @@ class SchbasSettings extends Schbas {
 				$SchbasSettingsInterface->LoanSettings($SchbasSettingsProcessing->getLoanSettings(),true);
 					break;
 				case '6':
-					$claim_date = $_POST['claim_Day'].".". $_POST['claim_Month'].".". $_POST['claim_Year'];
-				$transfer_date = $_POST['transfer_Day'].".". $_POST['transfer_Month'].".". $_POST['transfer_Year'];
+				$claim_date = $_POST['claim_Year']."-". $_POST['claim_Month']."-". $_POST['claim_Day'];
+				$transfer_date = $_POST['transfer_Year']."-". $_POST['transfer_Month']."-". $_POST['transfer_Day'];
 				TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", $claim_date,"schbasDeadlineClaim"));
 				TableMng::query(sprintf("UPDATE SystemGlobalSettings SET value = '%s' WHERE name = '%s'", $transfer_date,"schbasDeadlineTransfer"));
 					break;
@@ -241,6 +241,8 @@ class SchbasSettings extends Schbas {
 
 		//get cover letter date
 		$letter_date =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDateCoverLetter'");
+
+		$letter_date = date('d.m.Y', strtotime($letter_date));
 
 		//get gradelevel ("Klassenstufe")
 		$gradelevel = $_POST['gradelabel'];
