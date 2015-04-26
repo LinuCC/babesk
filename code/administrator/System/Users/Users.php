@@ -11,7 +11,30 @@ class Users extends \System {
 	/////////////////////////////////////////////////////////////////////
 
 	public function execute($dataContainer) {
-		die('System/Users');
+
+		$this->entryPoint($dataContainer);
+		$this->moduleTemplatePathSet();
+		$id = filter_input(INPUT_GET, 'id');
+		if($id) {
+			$this->displaySingleUser($id);
+		}
+		else {
+			die('System/Users');
+		}
 	}
+
+	/////////////////////////////////////////////////////////////////////
+	//Implements
+	/////////////////////////////////////////////////////////////////////
+
+	protected function displaySingleUser($id) {
+
+		$this->_smarty->assign('userId', $id);
+		$this->displayTpl('displaySingle.tpl');
+	}
+
+	/////////////////////////////////////////////////////////////////////
+	//Attributes
+	/////////////////////////////////////////////////////////////////////
 }
 ?>

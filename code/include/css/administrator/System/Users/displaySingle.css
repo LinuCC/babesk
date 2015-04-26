@@ -1,0 +1,59 @@
+
+div.user-header {
+	text-align: center;
+}
+
+div.user-header div.tabs {
+	display: inline-block;
+	text-align: center;
+}
+
+div.user-header div.tabs a {
+	width: 200px;
+	display: inline-block;
+	padding: 10px;
+	margin: 0;
+	font-size: 22px;
+	background-color: #AEEE00;
+	color: #333;
+	border: 1px solid #688E00;
+}
+
+div.user-header div.tabs a:focus {
+	outline: none;
+	text-decoration: none;
+	background-color: #33C9FF;
+}
+
+div.user-header div.tabs a:hover,
+div.user-header div.tabs a:active {
+	outline: none;
+	text-decoration: none;
+	background-color: #01B0F0;
+	transition: all 0.3s ease;
+}
+
+div.user-header div.tabs a span,
+div.user-header div.tabs a i {
+	text-decoration: none;
+}
+
+div.user-header div.tabs a:first-child {
+	border-bottom-left-radius: 20px;
+	border-top-left-radius: 20px;
+}
+
+
+div.user-header div.tabs a:last-child {
+	border-bottom-right-radius: 20px;
+	border-top-right-radius: 20px;
+}
+
+div.user-header div.tabs a:not(:last-child) {
+	border-right: 0;
+}
+
+
+div.user-header div.tabs a i.fa {
+	display: block;
+}
