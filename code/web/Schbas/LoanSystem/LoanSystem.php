@@ -41,7 +41,7 @@ class LoanSystem extends Schbas {
 						$this->showPdf();
 						break;
 					case 'showFormPdf':
-						$this->showFormPdf();
+						$this->showParticipationConfirmation();
 						break;
 					case 'loanShowBuy':
 						$this->saveSelfBuy();
@@ -212,106 +212,115 @@ class LoanSystem extends Schbas {
 		$this->_smarty->display($this->_smartyPath . 'saved.tpl');
 	}
 
-	private function showFormPdf() {
+	protected function preparationSchoolyearGet() {
 
-		//get gradelevel ("Klassenstufe")
-		$gradelevel = TableMng::query("SELECT gradelevel FROM SystemGrades WHERE id=(SELECT gradeID from SystemAttendances WHERE schoolyearId=(SELECT ID from SystemSchoolyears WHERE active=1) AND UserID='".$_SESSION['uid']."')");
-				$gradelevel[0]['gradelevel'] = strval(intval($gradelevel[0]['gradelevel'])+1);
+		$schoolyear = false;
+		$entry = $this->_em->getRepository('DM:SystemGlobalSettings')
+			->findOneByName('schbasPreparationSchoolyearId');
+		if($entry) {
+			$schoolyear = $this->_em->find(
+				'DM:SystemSchoolyears', $entry->getValue()
+			);
+		}
+		if(!$schoolyear) {
+			$this->_logger->logO('Could not fetch PreparationSchoolyear',
+				['sev' => 'error']);
+			$this->SchbasAccountingInterface->dieError('Ein Fehler ist ' .
+				'beim Abrufen des Vorbereitungs-Schuljahres aufgetreten.');
+		}
+		return $schoolyear;
+	}
 
-		$schbasYear = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbas_year'");
+	private function showParticipationConfirmation() {
 
-
-		//get cover letter date
-		$letter_date =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDateCoverLetter'");
-		$letter_date = date('d.m.Y', strtotime($letter_date[0]['value']));
-
-		$schbasDeadlineClaim = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDeadlineClaim'");
-
-		$schbasDeadlineClaim = date('d.m.Y', strtotime($schbasDeadlineClaim[0]['value']));
-
-		$text = "</h4>Bitte ausgef&uuml;llt zur&uuml;ckgeben an die Klassen- bzw. Kursleitung des Lessing-Gymnasiums bis zum ".$schbasDeadlineClaim."!</h4>";
-
-		$text .= '<table border="1"><tr>';
-		if (isset($_POST['eb_name']) && $_POST['eb_name']=="" || isset($_POST['eb_vorname']) && $_POST['eb_vorname']=="") $text .= "<td>Name, Vorname des/der Erziehungsberechtigten:<br><br><br><br><br><br></td>";
-		else $text .= "<td>Name, Vorname des/der Erziehungsberechtigten:<br/>".$_POST['eb_name'].", ".$_POST['eb_vorname']."</td>";
-		if (isset($_POST['eb_adress']) && $_POST['eb_adress']=="") $text .= "<td>Anschrift: </td>";
-		else $text .= "<td>Anschrift:<br/>".nl2br($_POST['eb_adress'])."</td>";
-		if (isset($_POST['eb_tel']) && $_POST['eb_tel']=="") $text .= "<td>Telefon:</td>";
-		else $text .= "<td>Telefon:<br/>".$_POST['eb_tel']."</td>";
-
-
-
-		$name =  TableMng::query("SELECT forename, name FROM SystemUsers WHERE ID = '".$_SESSION['uid']."'");
-
-		$text .= '</tr><tr><td colspan="2">Name, Vorname des Sch&uuml;lers / der Sch&uuml;lerin:<br>'.$name[0]['name'].", ".$name[0]['forename'].'</td>';
-		$text .= "<td><b>Jahrgangsstufe: ".$gradelevel[0]['gradelevel']."</b></td>";
-
-		$text .= "</tr></table>&nbsp;<br/><br/>";
-
-		$text .= "An der entgeltlichen Ausleihe von Lernmitteln im Schuljahr ".$schbasYear[0]['value']." ";
+		$settingsRepo = $this->_em->getRepository('DM:SystemGlobalSettings');
+		$user = $this->_em->find('DM:SystemUsers', $_SESSION['uid']);
+		$prepSchoolyear = $this->preparationSchoolyearGet();
+		$gradeQuery = $this->_em->createQuery(
+			'SELECT g FROM DM:SystemGrades g
+			INNER JOIN g.attendances a
+				WITH a.schoolyear = :schoolyear AND a.user = :user
+		');
+		$gradeQuery->setParameter('schoolyear', $prepSchoolyear);
+		$gradeQuery->setParameter('user', $user);
+		$grade = $gradeQuery->getOneOrNullResult();
+		if(!$grade) {
+			$this->_interface->dieError(
+				'Der Schüler ist nicht im nächsten Schuljahr eingetragen. ' .
+				'Bitte informieren sie die Schule.'
+			);
+		}
+		$schbasYear = $prepSchoolyear->getLabel();
+		$letterDateIso = $settingsRepo
+			->findOneByName('schbasDateCoverLetter')
+			->getValue();
+		$letterDate = date('d.m.Y', strtotime($letterDateIso));
+		$schbasDeadlineTransferIso = $settingsRepo
+			->findOneByName('schbasDeadlineTransfer')
+			->getValue();
+		$schbasDeadlineTransfer = date(
+			'd.m.Y', strtotime($schbasDeadlineTransferIso)
+		);
+		$schbasDeadlineClaimIso = $settingsRepo
+			->findOneByName('schbasDeadlineClaim')
+			->getValue();
+		$schbasDeadlineClaim = date(
+			'd.m.Y', strtotime($schbasDeadlineClaimIso)
+		);
+		$bankAccount = $settingsRepo->findOneByName('bank_details')
+			->getValue();
+		$bankData = explode('|', $bankAccount);
 
 		//get loan fees
-
 		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
-		$user = $this->_em->getReference('DM:SystemUsers', $_SESSION['uid']);
 		$fees = $loanHelper->loanPriceOfAllBookAssignmentsForUserCalculate(
 			$user
 		);
 		list($feeNormal, $feeReduced) = $fees;
 
-		$schbasDeadlineTransfer = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDeadlineTransfer'");
-		$schbasDeadlineTransfer = date(
-			'd.m.Y', strtotime($schbasDeadlineTransfer[0]['value'])
+		$feedback = '';
+		$loanChoice = filter_input(INPUT_POST, 'loanChoice');
+		$loanFee = filter_input(INPUT_POST, 'loanFee');
+		$siblings = filter_input(INPUT_POST, 'siblings');
+		$eb_name = filter_input(INPUT_POST, 'eb_name');
+		$eb_vorname = filter_input(INPUT_POST, 'eb_vorname');
+		$eb_adress = filter_input(INPUT_POST, 'eb_adress');
+		$eb_tel = filter_input(INPUT_POST, 'eb_tel');
+		if($loanChoice == 'noLoan') { $feedback = 'nl'; }
+		else if($loanFee == 'loanSoli') { $feedback = 'ls'; }
+		else if($loanFee == 'loanNormal') { $feedback = 'ln'; }
+		else if($loanFee == 'loanReduced') { $feedback = 'lr'; }
+
+		$this->_smarty->assign('user', $user);
+		$this->_smarty->assign('grade', $grade);
+		$this->_smarty->assign('schoolyear', $schbasYear);
+		$this->_smarty->assign('letterDate', $letterDate);
+		$this->_smarty->assign('schbasDeadlineClaim', $schbasDeadlineClaim);
+		$this->_smarty->assign('bankData', $bankData);
+		$this->_smarty->assign('feeNormal', $feeNormal);
+		$this->_smarty->assign('feeReduced', $feeReduced);
+		$this->_smarty->assign('loanFee', $loanFee);
+		$this->_smarty->assign('siblings', $siblings);
+		$this->_smarty->assign('loanChoice', $loanChoice);
+		$this->_smarty->assign('parentName', $eb_name);
+		$this->_smarty->assign('parentForename', $eb_vorname);
+		$this->_smarty->assign('parentAddress', $eb_adress);
+		$this->_smarty->assign('parentTelephone', $eb_tel);
+		$this->_smarty->assign(
+			'schbasDeadlineTransfer', $schbasDeadlineTransfer
 		);
-		$feedback = "";
-		if ($_POST['loanChoice']=="noLoan") {
-			$feedback = "nl";
-			$text .= "nehmen wir nicht teil. ";
-		}
-		else if (isset($_POST['loanFee']) && $_POST['loanFee']=="loanSoli") {
-				$feedback = "ls";
-				$text .= "nehmen wir teil und melden uns hiermit verbindlich zu den in Ihrem Schreiben vom ".$letter_date." genannten Bedingungen an.<br/>";
-				$text .= "Wir geh&ouml;ren zu dem von der Zahlung des Entgelts befreiten Personenkreis.<br/> Leistungsbescheid bzw. &auml;hnlicher Nachweis ist beigef&uuml;gt.";
-			}
-			else {
-			$text .= "nehmen wir teil und melden uns hiermit verbindlich zu den in Ihrem Schreiben vom ".$letter_date." genannten Bedingungen an.<br/>";
-			if (isset ($_POST['loanFee']) && $_POST['loanFee']=="loanNormal") {
-				$feedback = "ln";
-				$text .= "Der Betrag von ".$feeNormal." &euro; ";
-			}
-			else if (isset($_POST['loanFee']) && $_POST['loanFee']=="loanReduced") {
-				$feedback = "lr";
-				$text .= "Den Betrag von ".$feeReduced." &euro; (mehr als 2 schulpflichtigen Kinder) ";
-			}
-			$text .= " wird bis sp&auml;testens ".$schbasDeadlineTransfer." &uuml;berwiesen.<br/><br/>";
-			//get bank account details
-			$bank_account =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='bank_details'");
-			$bank_account = explode("|", $bank_account[0]['value']);
-
-			$username = TableMng::query("SELECT username FROM SystemUsers WHERE ID=".$_SESSION['uid']);
-
-			$text .= 	"<table style=\"border:solid\" width=\"75%\" cellpadding=\"2\" cellspacing=\"2\">
-				<tr><td>Kontoinhaber:</td><td>".$bank_account[0]."</td></tr>
-								<tr><td>Kontonummer:</td><td>".$bank_account[1]."</td></tr>
-								<tr><td>Bankleitzahl:</td><td>".$bank_account[2]."</td></tr>
-								<tr><td>Kreditinstitut:</td><td>".$bank_account[3]."</td></tr>
-								<tr><td>Verwendungszeck:</td><td>".$username[0]['username']." JG ".$gradelevel[0]['gradelevel']." SJ ".$schbasYear[0]['value']."</td></tr>
-
-					</table>";
-
-
-			$text .= "<br/><br/>Sollte der Betrag nicht fristgerecht eingehen, besteht kein Anspruch auf Teilnahme an der Ausleihe.<br/><br/>";
-
-			if (isset($_POST['loanFee']) && $_POST['loanFee']=="loanReduced") {
-				$text .= "<u>Weitere schulpflichtige Kinder im Haushalt (Schuljahr ".$schbasYear[0]['value']."):</u><br/><br/>";
-				if (isset($_POST['siblings']) && $_POST['siblings']=="") $text .= '<table style="border:solid" width="75%" cellpadding="2" cellspacing="2">
-						<tr><td>Name, Vorname, Schule jedes Kindes:<br/><br><br><br><br><br><br><br></td></tr></table>';
-				else $text .=	"<table style=\"border:solid\" width=\"75%\" cellpadding=\"2\" cellspacing=\"2\"><tr><td>Name, Vorname, Schule jedes Kindes:<br/>".nl2br($_POST['siblings'])."</td></tr></table>";
-			}
-		}
-
-		$text .= "<br><br><br><br><br><br><br>__________&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_______________________________<br>Ort, Datum &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unterschrift Erziehungsberechtigte/r bzw. vollj&auml;hriger Sch&uuml;ler";
-		$this->createPdf('Anmeldeformular',$text,'','','','',$gradelevel[0]['gradelevel'],true,$feedback,$_SESSION['uid']);
+		$content = $this->_smarty->fetch(
+			PATH_SMARTY_TPL . '/pdf/schbas-participation-confirmation.pdf.tpl'
+		);
+		$this->createPdf(
+			'Anmeldeformular',
+			$content,
+			'', '', '', '',
+			$grade->getGradelevel(),
+			true,
+			$feedback,
+			$_SESSION['uid']
+		);
 	}
 
 	private function showPdf() {
