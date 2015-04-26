@@ -223,13 +223,13 @@ class LoanSystem extends Schbas {
 
 		//get cover letter date
 		$letter_date =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDateCoverLetter'");
-		$letter_date = date('d.m.Y', strtotime($letter_date));
+		$letter_date = date('d.m.Y', strtotime($letter_date[0]['value']));
 
 		$schbasDeadlineClaim = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDeadlineClaim'");
 
-		$schbasDeadlineClaim = date('d.m.Y', strtotime($schbasDeadlineClaim));
+		$schbasDeadlineClaim = date('d.m.Y', strtotime($schbasDeadlineClaim[0]['value']));
 
-		$text = "</h4>Bitte ausgef&uuml;llt zur&uuml;ckgeben an die Klassen- bzw. Kursleitung des Lessing-Gymnasiums bis zum ".$schbasDeadlineClaim[0]['value']."!</h4>";
+		$text = "</h4>Bitte ausgef&uuml;llt zur&uuml;ckgeben an die Klassen- bzw. Kursleitung des Lessing-Gymnasiums bis zum ".$schbasDeadlineClaim."!</h4>";
 
 		$text .= '<table border="1"><tr>';
 		if (isset($_POST['eb_name']) && $_POST['eb_name']=="" || isset($_POST['eb_vorname']) && $_POST['eb_vorname']=="") $text .= "<td>Name, Vorname des/der Erziehungsberechtigten:<br><br><br><br><br><br></td>";
@@ -261,7 +261,7 @@ class LoanSystem extends Schbas {
 
 		$schbasDeadlineTransfer = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDeadlineTransfer'");
 		$schbasDeadlineTransfer = date(
-			'd.m.Y', strtotime($schbasDeadlineTransfer)
+			'd.m.Y', strtotime($schbasDeadlineTransfer[0]['value'])
 		);
 		$feedback = "";
 		if ($_POST['loanChoice']=="noLoan") {
@@ -270,11 +270,11 @@ class LoanSystem extends Schbas {
 		}
 		else if (isset($_POST['loanFee']) && $_POST['loanFee']=="loanSoli") {
 				$feedback = "ls";
-				$text .= "nehmen wir teil und melden uns hiermit verbindlich zu den in Ihrem Schreiben vom ".$letter_date[0]['value']." genannten Bedingungen an.<br/>";
+				$text .= "nehmen wir teil und melden uns hiermit verbindlich zu den in Ihrem Schreiben vom ".$letter_date." genannten Bedingungen an.<br/>";
 				$text .= "Wir geh&ouml;ren zu dem von der Zahlung des Entgelts befreiten Personenkreis.<br/> Leistungsbescheid bzw. &auml;hnlicher Nachweis ist beigef&uuml;gt.";
 			}
 			else {
-			$text .= "nehmen wir teil und melden uns hiermit verbindlich zu den in Ihrem Schreiben vom ".$letter_date[0]['value']." genannten Bedingungen an.<br/>";
+			$text .= "nehmen wir teil und melden uns hiermit verbindlich zu den in Ihrem Schreiben vom ".$letter_date." genannten Bedingungen an.<br/>";
 			if (isset ($_POST['loanFee']) && $_POST['loanFee']=="loanNormal") {
 				$feedback = "ln";
 				$text .= "Der Betrag von ".$feeNormal." &euro; ";
@@ -283,7 +283,7 @@ class LoanSystem extends Schbas {
 				$feedback = "lr";
 				$text .= "Den Betrag von ".$feeReduced." &euro; (mehr als 2 schulpflichtigen Kinder) ";
 			}
-			$text .= " wird bis sp&auml;testens ".$schbasDeadlineTransfer[0]['value']." &uuml;berwiesen.<br/><br/>";
+			$text .= " wird bis sp&auml;testens ".$schbasDeadlineTransfer." &uuml;berwiesen.<br/><br/>";
 			//get bank account details
 			$bank_account =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='bank_details'");
 			$bank_account = explode("|", $bank_account[0]['value']);
@@ -319,7 +319,7 @@ class LoanSystem extends Schbas {
 
 		//get cover letter date
 		$letter_date =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDateCoverLetter'");
-		$letter_date = date('d.m.Y', strtotime($letter_date));
+		$letter_date = date('d.m.Y', strtotime($letter_date[0]['value']));
 
 		$booklistManager = new BookManager();
 		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
@@ -387,7 +387,7 @@ class LoanSystem extends Schbas {
 
 		$pageThree = "<h3>".$textTwo[0]['title']."</h3>".$textTwo[0]['text']."<br/><h3>".$textThree[0]['title']."</h3>".$textThree[0]['text'];
 
-		$daterow = '<p style="text-align: right;">'.$letter_date[0]['value']."</p>";
+		$daterow = '<p style="text-align: right;">'.$letter_date."</p>";
 
 		$this->createPdf($coverLetter[0]['title'],$daterow.$coverLetter[0]['text'],"Lehrb&uuml;cher Jahrgang ".$gradelevel[0]['gradelevel'],$pageTwo,
 				'Weitere Informationen',$pageThree,$gradelevel[0]['gradelevel'],false,"",$_SESSION['uid']);

@@ -242,7 +242,7 @@ class SchbasSettings extends Schbas {
 		//get cover letter date
 		$letter_date =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDateCoverLetter'");
 
-		$letter_date = date('d.m.Y', strtotime($letter_date));
+		$letter_date = date('d.m.Y', strtotime($letter_date[0]['value']));
 
 		//get gradelevel ("Klassenstufe")
 		$gradelevel = $_POST['gradelabel'];
@@ -303,7 +303,7 @@ class SchbasSettings extends Schbas {
 
 		$pageThree = "<h3>".$textTwo[0]['title']."</h3>".$textTwo[0]['text']."<br/><h3>".$textThree[0]['title']."</h3>".$textThree[0]['text'];
 
-		$daterow = '<p style="text-align: right;">'.$letter_date[0]['value']."</p>";
+		$daterow = '<p style="text-align: right;">'.$letter_date."</p>";
 
 		$this->createPdf($coverLetter[0]['title'],$daterow.$coverLetter[0]['text'],"Lehrb&uuml;cher Jahrgang ".$gradelevel,$pageTwo,
 				'Weitere Informationen',$pageThree,$gradelevel,false,"","jahrgang_".$gradelevel);
