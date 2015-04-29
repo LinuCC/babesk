@@ -1,31 +1,25 @@
 <?php
 
+namespace Babesk\Schbas;
+
 require_once  PATH_INCLUDE .('/pdf/tcpdf/config/lang/ger.php');
 require_once PATH_INCLUDE . '/pdf/tcpdf/tcpdf.php';
 
-class LoanSystemPdf {
+class SchbasPdf {
+
 	/////////////////////////////////////////////////////////////////////
 	//Constructor
 	/////////////////////////////////////////////////////////////////////
 
-	public function __construct($page1Title,$page1Text,$page2Title,$page2Text,$page3Title,$page3Text,$gradeLevel,$msgReturn,$loanChoice,$uid) {
+	public function __construct($pdfIdent, $gradelevel = Null) {
 
-		$this->_page1Title = $page1Title;
-		$this->_page1Text = $page1Text;
-		$this->_page2Title = $page2Title;
-		$this->_page2Text = $page2Text;
-		$this->_page3Title = $page3Title;
-		$this->_page3Text = $page3Text;
-		$this->_gradeLevel = $gradeLevel;
-		$this->_msgReturn = $msgReturn;
-		$this->_loanChoice = $loanChoice;
-		$this->_uid = $uid;
+		$this->_gradelevel = $gradelevel;
+		$this->_pdfIdent = $pdfIdent;
 	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Methods
 	/////////////////////////////////////////////////////////////////////
-
 
 	/**
 	 * Returns the TCPDF-Object used by this class
@@ -48,29 +42,22 @@ class LoanSystemPdf {
 		return $this;
 	}
 
+
 	/**
 	 * Creates the PDF
 	 *
 	 * @return void
 	 */
-	public function create() {
+	public function create($content, $barcode = null) {
 
-		require_once  PATH_INCLUDE .'/pdf/tcpdf/config/lang/ger.php';
-		require_once PATH_INCLUDE . '/pdf/tcpdf/tcpdf.php';
+		$this->_barcode = $barcode;
 
 		// create new PDF document
-		$this->_pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT,
+		$this->_pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT,
 			PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		$this->pdfMetadataSet();
 		$this->_pdf->AddPage();
-		$this->contentPrint($this->_page1Title,$this->_page1Text);
-		if ($this->_page2Title!='') {
-		$this->_pdf->AddPage();
-		$this->contentPrint($this->_page2Title,$this->_page2Text);
-		if ($this->_page3Title!='') {
-		$this->_pdf->AddPage();
-		$this->contentPrint($this->_page3Title,$this->_page3Text);
-		}}
+		$this->contentPrint($content);
 	}
 
 	/**
@@ -79,7 +66,7 @@ class LoanSystemPdf {
 	 * @return void
 	 */
 	public function output() {
-		$pdfName = sprintf('schbas_%s.pdf', $this->_uid);
+		$pdfName = sprintf('schbas_%s.pdf', $this->_pdfIdent);
 		$this->_pdf->Output($pdfName, 'D');
 	}
 
@@ -95,7 +82,10 @@ class LoanSystemPdf {
 	protected function pdfMetadataSet() {
 
 		$logoPath = '../../../res/images/logo.jpg';
-		$headerText = sprintf("Schulbuchausleihe 1.0\nJahrgang: %s", $this->_gradeLevel);
+		$headerText = 'Schulbuchausleihe 1.0';
+		if($this->_gradelevel) {
+			$headerText .= "\nJahrgang: $this->_gradelevel";
+		}
 
 		$this->docInformationSet('LeG Uelzen');
 		$this->headerDetailsSet($logoPath, 'LeG Uelzen', $headerText);
@@ -174,14 +164,14 @@ class LoanSystemPdf {
 	 *
 	 * @return void
 	 */
-	protected function contentPrint($pageTitle,$pageText) {
+	protected function contentPrint($content) {
 
-		$content = sprintf($this->_contentStr, $pageTitle, $pageText);
 
-		$this->_pdf->writeHTMLCell(0, 0, '', '', $content, 0, 1, 0, true, '',
-			true);
+		$this->_pdf->writeHTMLCell(
+			0, 0, '', '', $content, 0, 1, 0, true, '', true
+		);
 
-		if($this->shouldBarcodePrint()) {
+		if($this->_barcode) {
 			$this->barcodePrint();
 		}
 		$this->_pdf->Ln();
@@ -194,20 +184,12 @@ class LoanSystemPdf {
 	 */
 	protected function barcodePrint() {
 
-		$barcodeCode = $this->barcodeCodeCreate();
-		$this->_pdf->write1DBarcode($barcodeCode, $this->_barcodeType, 150, 5,
-			'', 15, 0.4, $this->_barcodeStyle, 'N');
+		$this->_pdf->write1DBarcode(
+			$this->_barcode, $this->_barcodeType, 150, 5,
+			'', 15, 0.4, $this->_barcodeStyle, 'N'
+		);
 	}
 
-	/**
-	 * Creates the Code printed as a barcode
-	 *
-	 * @return string the code
-	 */
-	protected function barcodeCodeCreate() {
-
-		return sprintf('%s',$this->_uid);
-	}
 
 	/**
 	 * Checks if the Barcode should be printed onto the Pdf
@@ -239,11 +221,12 @@ class LoanSystemPdf {
 		'vpadding' => 'auto',
 		'fgcolor' => array(0,0,0),
 		'bgcolor' => false, //array(255,255,255),
-		'text' => false,
+		'text' => true,
 		'font' => 'helvetica',
 		'fontsize' => 8,
 		'stretchtext' => 4
-		);
+	);
+	protected $_barcodeType = 'C128';
 
 	/**
 	 * Defines the standard text-Shadow-Style
@@ -260,39 +243,14 @@ class LoanSystemPdf {
 		);
 
 	/**
-	 * The Structure of the Main-Body of the PDF
-	 *
-	 * @var string
-	 */
-	protected $_contentStr = '
-			<p align="center">
-				<h2>
-					%s
-				</h2>
-			</p>
-			<br />
-				%s
-			<br />';
-
-	/**
 	 * The TCPDF-Object used by this class
 	 *
 	 * @var TCPDF
 	 */
 	protected $_pdf;
 
-	protected $_page1Title;
-	protected $_page1Text;
-	protected $_page2Title;
-	protected $_page2Text;
-	protected $_page3Title;
-	protected $_page3Text;
-	protected $_gradeLevel;
-	protected $_msgReturn;
-	protected $_loanChoice;
-	protected $_uid;
+	protected $_barcode;
 
-	protected $_barcodeType = 'C128';
 }
 
 

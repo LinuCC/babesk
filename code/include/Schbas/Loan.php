@@ -160,6 +160,9 @@ class Loan {
 	 *                         'ignoreSelfpay' => Books that would get filtered
 	 *                             because the user is buying them for himself
 	 *                             will be included.
+	 *                         'ignoreAlreadyLend' => Books that would get
+	 *                             filtered because the user already has lend
+	 *                             them will be included.
 	 * @return array        An array of Doctrine-Objects representing the books
 	 */
 	public function loanBooksOfUserGet($user, array $opt = Null) {
@@ -169,6 +172,7 @@ class Loan {
 				$opt['schoolyear'] : $this->schbasPreparationSchoolyearGet();
 			// Default to subtracting the selfpaid books
 			$subtractSelfpay = (empty($opt['ignoreSelfpay']));
+			$ignoreAlreadyLend = (empty($opt['ignoreAlreadyLend']));
 			// We want all entries where the book will _not_ be bought by the
 			// user himself, so we check for null
 			$qb = $this->_em->createQueryBuilder()
@@ -196,7 +200,11 @@ class Loan {
 			$query = $qb->getQuery();
 			$books = $query->getResult();
 
-			$books = $this->loanBooksGetFilterAlreadyLentBooks($books, $user);
+			if(!$ignoreAlreadyLend) {
+				$books = $this->loanBooksGetFilterAlreadyLentBooks(
+					$books, $user
+				);
+			}
 			return $books;
 
 		} catch (\Exception $e) {

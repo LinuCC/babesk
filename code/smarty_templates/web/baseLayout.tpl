@@ -37,14 +37,19 @@
 					<a class="navbar-brand" href="index.php">BaBeSK</a>
 				</div>
 				<div class="navbar-collapse collapse">
-					<ul class="nav navbar-nav">
-						{block name="nav_home"}
-							<li>
-								<a href="index.php">{t}Home{/t}</a>
-							</li>
-						{/block}
-					</ul>
+
 					<ul class="nav navbar-nav navbar-right">
+						{if $babeskActivated && isset($credit)}
+							<li>
+								<p class="navbar-text" title="Dein Guthaben"
+									data-toggle="tooltip" data-placement="bottom">
+									<span class="highlighted">
+										<span class="icon icon-credit"></span>
+										{$credit} €
+									</span>
+								</p>
+							</li>
+						{/if}
 						{block name="nav_help_button"}
 							<li>
 								<form>
@@ -61,15 +66,6 @@
 									{$username} <b class="caret"></b>
 								</a>
 								<ul id="dropdown-user" class="dropdown-menu">
-									{if $babeskActivated && isset($credit)}
-										<li>
-											<p class="navbar-text">
-													<span class="highlighted">
-														Guthaben: {$credit} Euro
-													</span>
-											</p>
-										</li>
-									{/if}
 									<li>
 										<a href="index.php?module=web|Settings">
 											{t}Settings{/t}

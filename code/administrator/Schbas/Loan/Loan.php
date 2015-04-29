@@ -5,6 +5,8 @@ require_once PATH_ADMIN . '/Schbas/Schbas.php';
 require_once PATH_INCLUDE . '/Schbas/Loan.php';
 require_once PATH_INCLUDE . '/Schbas/Book.php';
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 class Loan extends Schbas {
 
 	/////////////////////////////////////////////////////////////////////
@@ -63,7 +65,26 @@ class Loan extends Schbas {
 		}
 		$exemplarsLent = $this->exemplarsStillLendByUserGet($user);
 		$booksSelfpaid = $user->getSelfpayingBooks();
-		$booksToLoan = $loanHelper->loanBooksOfUserGet($user);
+		$booksToLoan = $loanHelper->loanBooksOfUserGet(
+			$user, ['ignoreAlreadyLend']
+		);
+		$booksToLoanWithLent = [];
+		foreach($booksToLoan as $book) {
+			$alreadyLent = false;
+			foreach($exemplarsLent as $exemplar) {
+				if(
+					$book === $exemplar->getBook() &&
+					$book->getId() == $exemplar->getBook()->getId()
+				) {
+					$alreadyLent = true;
+					break;
+				}
+			}
+			$booksToLoanWithLent[] = [
+				'book' => $book,
+				'alreadyLent' => $alreadyLent
+			];
+		}
 
 		$this->_smarty->assign('user', $user);
 		$this->_smarty->assign('formSubmitted', $formSubmitted);
@@ -72,7 +93,7 @@ class Loan extends Schbas {
 		$this->_smarty->assign('userSelfpayer', $userSelfpayer);
 		$this->_smarty->assign('exemplarsLent', $exemplarsLent);
 		$this->_smarty->assign('booksSelfpaid', $booksSelfpaid);
-		$this->_smarty->assign('booksToLoan', $booksToLoan);
+		$this->_smarty->assign('booksToLoan', $booksToLoanWithLent);
 		$this->displayTpl('user-loan-list.tpl');
 	}
 

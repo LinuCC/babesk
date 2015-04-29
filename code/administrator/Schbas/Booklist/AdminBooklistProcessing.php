@@ -1,6 +1,7 @@
 <?php
 
 use Doctrine\Common\Collections\ArrayCollection;
+require_once PATH_INCLUDE . '/Schbas/SchbasPdf.php';
 
 class AdminBooklistProcessing {
 
@@ -86,6 +87,7 @@ class AdminBooklistProcessing {
 	}
 
 	private function showPdf($booklist) {
+		$title = "<h2 align='center'>Lehrb&uuml;cher, die f&uuml;r Jahrgang ".($_POST['grade']+1)." behalten werden k&ouml;nnen</h2>";
 		$books = '<table border="0" bordercolor="#FFFFFF" style="background-color:#FFFFFF" width="100%" cellpadding="0" cellspacing="1">
 
 			<tr style="font-weight:bold; text-align:center;"><th>Fach</th><th>Titel</th><th>Verlag</th><th>ISBN-Nr.</th><th>Preis</th></tr>';
@@ -97,13 +99,17 @@ class AdminBooklistProcessing {
 		$books .= '</table>';
 		$books = str_replace('ä', '&auml;', $books);
 		$books = str_replace('é', '&eacute;', $books);
-		$this->createPdf("Lehrb&uuml;cher, die f&uuml;r Jahrgang ".($_POST['grade']+1)." behalten werden k&ouml;nnen",$books);
+
+		$schbasPdf = new \Babesk\Schbas\SchbasPdf('pdf');
+		$schbasPdf->create($title . $books);
+		$schbasPdf->output();
 	}
 
 
 	private function showPdfFT($booklist) {
 
-		require_once 'LoanSystemPdf.php';
+		$title = "<h2 align='center'>Lehrb&uuml;cher f&uuml;r Fach " .
+			($_POST['topic']) . '</h2>';
 		$books = '<table border="0" bordercolor="#FFFFFF" style="background-color:#FFFFFF" width="100%" cellpadding="0" cellspacing="1">
 
 		<tr style="font-weight:bold; text-align:center;"><th>Klasse</th><th>Titel</th><th>Verlag</th><th>ISBN-Nr.</th><th>Preis</th></tr>';
@@ -133,29 +139,13 @@ class AdminBooklistProcessing {
 		$books = str_replace('ä', '&auml;', $books);
 		$books = str_replace('é', '&eacute;', $books);
 		try {
-			$pdfCreator = new LoanSystemPdf("Lehrb&uuml;cher f&uuml;r Fach ".($_POST['topic']),$books,"");
-			$pdfCreator->create();
-			$pdfCreator->output("Buchliste_Fach_".$_POST['topic']);
-
-		} catch (Exception $e) {
-			$this->_interface->DieError('Konnte das PDF nicht erstellen!');
+			$schbasPdf = new \Babesk\Schbas\SchbasPdf(
+				"Buchliste_Fach_".$_POST['topic']
+			);
+			$schbasPdf->create($title . $books);
+			$schbasPdf->output();
 		}
-	}
-
-
-	/**
-	 * Creates a PDF for the Participation Confirmation and returns its Path
-	 */
-	private function createPdf ($page1Title,$page1Text) {
-
-		require_once 'LoanSystemPdf.php';
-
-		try {
-			$pdfCreator = new LoanSystemPdf($page1Title,$page1Text,$_POST['grade']);
-			$pdfCreator->create();
-			$pdfCreator->output("Buchliste_Folgejahr_".$_POST['grade']);
-
-		} catch (Exception $e) {
+		catch(Exception $e) {
 			$this->_interface->DieError('Konnte das PDF nicht erstellen!');
 		}
 	}
