@@ -11,10 +11,10 @@ class SchbasPdf {
 	//Constructor
 	/////////////////////////////////////////////////////////////////////
 
-	public function __construct($userId, $gradelevel) {
+	public function __construct($pdfIdent, $gradelevel = Null) {
 
 		$this->_gradelevel = $gradelevel;
-		$this->_userId = $userId;
+		$this->_pdfIdent = $pdfIdent;
 	}
 
 	/////////////////////////////////////////////////////////////////////
@@ -66,7 +66,7 @@ class SchbasPdf {
 	 * @return void
 	 */
 	public function output() {
-		$pdfName = sprintf('schbas_%s.pdf', $this->_userId);
+		$pdfName = sprintf('schbas_%s.pdf', $this->_pdfIdent);
 		$this->_pdf->Output($pdfName, 'D');
 	}
 
@@ -82,9 +82,10 @@ class SchbasPdf {
 	protected function pdfMetadataSet() {
 
 		$logoPath = '../../../res/images/logo.jpg';
-		$headerText = sprintf(
-			"Schulbuchausleihe 1.0\nJahrgang: %s", $this->_gradelevel
-		);
+		$headerText = 'Schulbuchausleihe 1.0';
+		if($this->_gradelevel) {
+			$headerText .= "\nJahrgang: $this->_gradelevel";
+		}
 
 		$this->docInformationSet('LeG Uelzen');
 		$this->headerDetailsSet($logoPath, 'LeG Uelzen', $headerText);

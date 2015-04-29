@@ -10,7 +10,7 @@
 
 <div style="page-break-inside:avoid">
 	<h2 align="center">
-		Lehrbücher Jahrgang {$grade->getGradelevel()}
+		Lehrbücher Jahrgang {$gradelevel}
 	</h2>
 	<table border="0" bordercolor="#FFFFFF" style="background-color:#FFFFFF" width="100%" cellpadding="0" cellspacing="1">
 		<tr style="font-weight:bold; text-align:center;">

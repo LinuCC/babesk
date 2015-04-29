@@ -324,62 +324,11 @@ class LoanSystem extends Schbas {
 
 	private function showSchbasOverviewPdf() {
 
-		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
-		$settingsRepo = $this->_em->getRepository('DM:SystemGlobalSettings');
-		$infoRepo = $this->_em->getRepository('DM:SchbasText');
+		require_once PATH_INCLUDE . '/Schbas/LoanOverviewPdf.php';
+		$pdf = new \Babesk\Schbas\LoanOverviewPdf($this->_dataContainer);
 		$user = $this->_em->find('DM:SystemUsers', $_SESSION['uid']);
-		$prepSchoolyear = $this->preparationSchoolyearGet();
-		$gradeQuery = $this->_em->createQuery(
-			'SELECT g FROM DM:SystemGrades g
-			INNER JOIN g.attendances a
-				WITH a.schoolyear = :schoolyear AND a.user = :user
-		');
-		$gradeQuery->setParameter('schoolyear', $prepSchoolyear);
-		$gradeQuery->setParameter('user', $user);
-		$grade = $gradeQuery->getOneOrNullResult();
-		if(!$grade) {
-			$this->_interface->dieError(
-				'Der Schüler ist nicht im nächsten Schuljahr eingetragen. ' .
-				'Bitte informieren sie die Schule.'
-			);
-		}
-		$bankAccount = $settingsRepo->findOneByName('bank_details')
-			->getValue();
-		$bankData = explode('|', $bankAccount);
-		$letterDateIso = $settingsRepo
-			->findOneByName('schbasDateCoverLetter')
-			->getValue();
-		$letterDate = date('d.m.Y', strtotime($letterDateIso));
-		$fees = $loanHelper->loanPriceOfAllBookAssignmentsForUserCalculate(
-			$user
-		);
-		list($feeNormal, $feeReduced) = $fees;
-		$booklist = $loanHelper->loanBooksOfUserGet($user);
-
-		$textId = $grade->getGradelevel();
-		$coverLetter = $infoRepo->findOneByDescription('coverLetter');
-		$textOne = $infoRepo->findOneByDescription('textOne' . $textId);
-		$textTwo = $infoRepo->findOneByDescription('textTwo' . $textId);
-		$textThree = $infoRepo->findOneByDescription('textThree' . $textId);
-
-		$this->_smarty->assign('books', $booklist);
-		$this->_smarty->assign('grade', $grade);
-		$this->_smarty->assign('letterDate', $letterDate);
-		$this->_smarty->assign('coverLetter', $coverLetter);
-		$this->_smarty->assign('textOne', $textOne);
-		$this->_smarty->assign('textTwo', $textTwo);
-		$this->_smarty->assign('textThree', $textThree);
-		$this->_smarty->assign('bankData', $bankData);
-		$this->_smarty->assign('feeNormal', $feeNormal);
-		$this->_smarty->assign('feeReduced', $feeReduced);
-		$html = $this->_smarty->fetch(
-			PATH_SMARTY_TPL . '/pdf/schbas-loan-overview.pdf.tpl'
-		);
-		$schbasPdf = new \Babesk\Schbas\SchbasPdf(
-			$user->getId(), $grade->getGradelevel()
-		);
-		$schbasPdf->create($html);
-		$schbasPdf->output();
+		$pdf->setDataByUser($user);
+		$pdf->showSchbasOverviewPdf();
 	}
 }
 ?>
