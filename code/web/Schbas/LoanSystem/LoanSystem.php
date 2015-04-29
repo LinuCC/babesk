@@ -6,6 +6,7 @@ require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/Schbas/Loan.php';
 require_once PATH_WEB . '/WebInterface.php';
 require_once PATH_WEB . '/Schbas/Schbas.php';
+require_once PATH_INCLUDE . '/Schbas/SchbasPdf.php';
 
 class LoanSystem extends Schbas {
 
@@ -38,7 +39,7 @@ class LoanSystem extends Schbas {
 				$action=$_GET['action'];
 				switch ($action) {
 					case 'showPdf':
-						$this->showPdf();
+						$this->showSchbasOverviewPdf();
 						break;
 					case 'showFormPdf':
 						$this->showParticipationConfirmation();
@@ -312,111 +313,73 @@ class LoanSystem extends Schbas {
 		$content = $this->_smarty->fetch(
 			PATH_SMARTY_TPL . '/pdf/schbas-participation-confirmation.pdf.tpl'
 		);
-		$this->createPdf(
-			'Anmeldeformular',
-			$content,
-			'', '', '', '',
-			$grade->getGradelevel(),
-			true,
-			$feedback,
-			$_SESSION['uid']
+		$schbasPdf = new \Babesk\Schbas\SchbasPdf(
+			$user->getId(), $grade->getGradelevel()
 		);
+		$barcode = $user->getId() . ' ' . $feedback;
+		$schbasPdf->create($content, $barcode);
+		$schbasPdf->output();
+
 	}
 
-	private function showPdf() {
-		require_once PATH_ACCESS. '/BookManager.php';
+	private function showSchbasOverviewPdf() {
 
-		//get cover letter date
-		$letter_date =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbasDateCoverLetter'");
-		$letter_date = date('d.m.Y', strtotime($letter_date[0]['value']));
-
-		$booklistManager = new BookManager();
 		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
-
-		//get gradelevel ("Klassenstufe")
-		$gradelevel = TableMng::query("SELECT gradelevel FROM SystemGrades WHERE id=(SELECT gradeID from SystemAttendances WHERE schoolyearId=(SELECT ID from SystemSchoolyears WHERE active=1) AND UserID='".$_SESSION['uid']."')");
-				$gradelevel[0]['gradelevel'] = strval(intval($gradelevel[0]['gradelevel'])+1);
-
-
-		// get cover letter ("Anschreiben")
-		$coverLetter = TableMng::query("SELECT title, text FROM SchbasTexts WHERE description='coverLetter'");
-
-		// get first infotext
-		$textOne = TableMng::query("SELECT title, text FROM SchbasTexts WHERE description='textOne".$gradelevel[0]['gradelevel']."'");
-
-		// get second infotext
-		$textTwo = TableMng::query("SELECT title, text FROM SchbasTexts WHERE description='textTwo".$gradelevel[0]['gradelevel']."'");
-
-		// get third infotext
-		$textThree = TableMng::query("SELECT title, text FROM SchbasTexts WHERE description='textThree".$gradelevel[0]['gradelevel']."'");
-
-		// get booklist
-		//$booklist = $booklistManager->getBooksByClass($gradelevel[0]['gradelevel']);
-		$user = $this->_em->getReference('DM:SystemUsers', $_SESSION['uid']);
-		$booklist = $loanHelper->loanBooksOfUserGet($user);
-
-		$books = '<table border="0" bordercolor="#FFFFFF" style="background-color:#FFFFFF" width="100%" cellpadding="0" cellspacing="1">
-				<tr style="font-weight:bold; text-align:center;"><th>Fach</th><th>Titel</th><th>Verlag</th><th>ISBN-Nr.</th><th>Preis</th></tr>';
-
-		//$bookPrices = 0;
-		foreach ($booklist as $book) {
-			//$bookPrices += $book['price'];
-			$books .= '<tr><td>'.$book->getSubject()->getName().'</td><td>'.$book->getTitle().'</td><td>'.$book->getPublisher().'</td><td>'.$book->getIsbn().'</td><td align="right">'.$book->getPrice().' &euro;</td></tr>';
+		$settingsRepo = $this->_em->getRepository('DM:SystemGlobalSettings');
+		$infoRepo = $this->_em->getRepository('DM:SchbasText');
+		$user = $this->_em->find('DM:SystemUsers', $_SESSION['uid']);
+		$prepSchoolyear = $this->preparationSchoolyearGet();
+		$gradeQuery = $this->_em->createQuery(
+			'SELECT g FROM DM:SystemGrades g
+			INNER JOIN g.attendances a
+				WITH a.schoolyear = :schoolyear AND a.user = :user
+		');
+		$gradeQuery->setParameter('schoolyear', $prepSchoolyear);
+		$gradeQuery->setParameter('user', $user);
+		$grade = $gradeQuery->getOneOrNullResult();
+		if(!$grade) {
+			$this->_interface->dieError(
+				'Der Schüler ist nicht im nächsten Schuljahr eingetragen. ' .
+				'Bitte informieren sie die Schule.'
+			);
 		}
-		//$books .= '<tr><td></td><td></td><td></td><td style="font-weight:bold; text-align:center;">Summe:</td><td align="right">'.$bookPrices.' &euro;</td></tr>';
-		$books .= '</table>';
-		$books = str_replace('ä', '&auml;', $books);
-		$books = str_replace('é', '&eacute;', $books);
-
-
-
-		$user = $this->_em->getReference('DM:SystemUsers', $_SESSION['uid']);
+		$bankAccount = $settingsRepo->findOneByName('bank_details')
+			->getValue();
+		$bankData = explode('|', $bankAccount);
+		$letterDateIso = $settingsRepo
+			->findOneByName('schbasDateCoverLetter')
+			->getValue();
+		$letterDate = date('d.m.Y', strtotime($letterDateIso));
 		$fees = $loanHelper->loanPriceOfAllBookAssignmentsForUserCalculate(
 			$user
 		);
 		list($feeNormal, $feeReduced) = $fees;
+		$booklist = $loanHelper->loanBooksOfUserGet($user);
 
-		//get bank account
-		$bank_account =  TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='bank_details'");
-		$bank_account = explode("|", $bank_account[0]['value']);
+		$textId = $grade->getGradelevel();
+		$coverLetter = $infoRepo->findOneByDescription('coverLetter');
+		$textOne = $infoRepo->findOneByDescription('textOne' . $textId);
+		$textTwo = $infoRepo->findOneByDescription('textTwo' . $textId);
+		$textThree = $infoRepo->findOneByDescription('textThree' . $textId);
 
-		//textOne[0]['title'] wird nicht ausgegeben, unter admin darauf hinweisen!
-		$pageTwo = $books.'<br/>'.$textOne[0]['text'].'<br/><br/>'.
-				'<table style="border:solid" width="75%" cellpadding="2" cellspacing="2">
-				<tr><td>Leihgeb&uuml;hr: </td><td>'.$feeNormal.' Euro</td></tr>
-						<tr><td>(3 und mehr schulpflichtige Kinder:</td><td>'.$feeReduced.' Euro)</td></tr>
-								<tr><td>Kontoinhaber:</td><td>'.$bank_account[0].'</td></tr>
-								<tr><td>Kontonummer:</td><td>'.$bank_account[1].'</td></tr>
-								<tr><td>Bankleitzahl:</td><td>'.$bank_account[2].'</td></tr>
-								<tr><td>Kreditinstitut:</td><td>'.$bank_account[3].'</td></tr>
-								</table>';
-
-
-
-
-		$pageThree = "<h3>".$textTwo[0]['title']."</h3>".$textTwo[0]['text']."<br/><h3>".$textThree[0]['title']."</h3>".$textThree[0]['text'];
-
-		$daterow = '<p style="text-align: right;">'.$letter_date."</p>";
-
-		$this->createPdf($coverLetter[0]['title'],$daterow.$coverLetter[0]['text'],"Lehrb&uuml;cher Jahrgang ".$gradelevel[0]['gradelevel'],$pageTwo,
-				'Weitere Informationen',$pageThree,$gradelevel[0]['gradelevel'],false,"",$_SESSION['uid']);
-	}
-
-	/**
-	 * Creates a PDF for the Participation Confirmation and returns its Path
-	 */
-	private function createPdf ($page1Title,$page1Text,$page2Title,$page2Text,$page3Title,$page3Text,$gradeLevel,$msgReturn,$loanChoice,$uid) {
-
-		require_once 'LoanSystemPdf.php';
-
-		try {
-			$pdfCreator = new LoanSystemPdf($page1Title,$page1Text,$page2Title,$page2Text,$page3Title,$page3Text,$gradeLevel,$msgReturn,$loanChoice,$uid);
-			$pdfCreator->create();
-			$pdfCreator->output();
-
-		} catch (Exception $e) {
-			$this->_interface->DieError('Konnte das PDF nicht erstellen!');
-		}
+		$this->_smarty->assign('books', $booklist);
+		$this->_smarty->assign('grade', $grade);
+		$this->_smarty->assign('letterDate', $letterDate);
+		$this->_smarty->assign('coverLetter', $coverLetter);
+		$this->_smarty->assign('textOne', $textOne);
+		$this->_smarty->assign('textTwo', $textTwo);
+		$this->_smarty->assign('textThree', $textThree);
+		$this->_smarty->assign('bankData', $bankData);
+		$this->_smarty->assign('feeNormal', $feeNormal);
+		$this->_smarty->assign('feeReduced', $feeReduced);
+		$html = $this->_smarty->fetch(
+			PATH_SMARTY_TPL . '/pdf/schbas-loan-overview.pdf.tpl'
+		);
+		$schbasPdf = new \Babesk\Schbas\SchbasPdf(
+			$user->getId(), $grade->getGradelevel()
+		);
+		$schbasPdf->create($html);
+		$schbasPdf->output();
 	}
 }
 ?>
