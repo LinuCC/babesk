@@ -119,9 +119,20 @@
 			</tr>
 		</thead>
 		<tbody>
-			{foreach $booksToLoan as $book}
-				<tr data-book-id="{$book->getId()}">
-					<td>{$book->getTitle()}</td>
+			{foreach $booksToLoan as $bookData}
+				{$book = $bookData.book}
+				{$alreadyLent = $bookData.alreadyLent}
+				<tr data-book-id="{$book->getId()}"
+					{if $alreadyLent}class="bg-success text-success"{/if}>
+					<td>
+						{if $alreadyLent}
+							<span class="fa fa-check"></span>
+							<small class="label label-success">
+								bereits ausgeliehen
+							</small>&nbsp;
+						{/if}
+						{$book->getTitle()}
+					</td>
 					<td>{$book->getPublisher()}</td>
 				</tr>
 			{/foreach}
