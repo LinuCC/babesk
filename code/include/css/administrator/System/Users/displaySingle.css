@@ -1,6 +1,18 @@
 
 div.user-header {
 	text-align: center;
+	margin-bottom: 30px;
+}
+
+div.user-header h4 {
+	display: inline-block;
+	padding: 5px;
+	margin-bottom: 0;
+	border: 1px solid #688E00;
+	border-bottom: none;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	background-color: #C8EE5F;
 }
 
 div.user-header div.tabs {
@@ -9,9 +21,9 @@ div.user-header div.tabs {
 }
 
 div.user-header div.tabs a {
-	width: 200px;
+	width: 170px;
 	display: inline-block;
-	padding: 10px;
+	padding: 5px;
 	margin: 0;
 	font-size: 22px;
 	background-color: #AEEE00;
@@ -31,6 +43,14 @@ div.user-header div.tabs a:active {
 	text-decoration: none;
 	background-color: #01B0F0;
 	transition: all 0.3s ease;
+}
+
+
+div.user-header div.tabs a:hover i.fa,
+div.user-header div.tabs a:active i.fa {
+	transition: all 0.3s ease;
+	color: #E53542;
+	text-shadow: 0px 0px 3px #FFF, 0px 0px 3px #FFF;
 }
 
 div.user-header div.tabs a span,

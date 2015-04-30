@@ -14,9 +14,11 @@
     "gulp-watch": "^4.1.1",
     "gulp-watchify": "^0.3.0",
     "moment": "^2.10.2",
+    "nprogress": "^0.1.6",
     "react": "^0.13.1",
     "react-bootstrap": "^0.20.1",
     "react-select": "^0.4.6",
+    "react-toggle": "^1.2.1",
     "react-widgets": "^2.5.2"
   }
 }
