@@ -203,7 +203,7 @@ function _g($id)
 {
 	$func_args=func_get_args();
 
-//	return vsprintf(gettext($id), array_slice(func_get_args(), 1));
+//  return vsprintf(gettext($id), array_slice(func_get_args(), 1));
 	return vsprintf(gettext($id), array_slice($func_args, 1));
 
 }
@@ -243,6 +243,24 @@ function dieJson($data) {
 function dieHttp($text, $statusCode) {
 	http_response_code($statusCode);
 	die($text);
+}
+
+/**
+ * Parses the PUT-data of a request and returns then
+ * Since PHP has no inbuild way to parse PUT-Requests (like $_POST or $_GET)
+ * we need to manually parse them.
+ * @return array
+ */
+function parsePut() {
+	$putData = [];
+	if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
+		parse_str(file_get_contents("php://input"), $putData);
+		foreach ($putData as $key => $value) {
+			unset($putData[$key]);
+			$putData[str_replace('amp;', '', $key)] = $value;
+		}
+	}
+	return $putData;
 }
 
 ?>
