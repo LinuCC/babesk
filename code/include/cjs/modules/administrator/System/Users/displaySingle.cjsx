@@ -4,19 +4,31 @@ Icon = require 'lib/FontAwesomeIcon'
 Panel = require 'react-bootstrap/lib/Panel'
 Row = require 'react-bootstrap/lib/Row'
 Col = require 'react-bootstrap/lib/Col'
+Label = require 'react-bootstrap/lib/Label'
 NProgress = require 'nprogress'
 
 Settings = require './lib/DisplaySingle/Settings'
+
+confirmExit = ->
+  return 'Wollen sie die Seite wirklich verlassen? Sie haben Veränderungen\
+    gemacht, die noch nicht gespeichert wurden'
+
+noConfirmExit = ->
+  return false
 
 App = React.createClass(
 
   getInitialState: ->
     return {
       selected: 'settings'
+      settingsChanged: false
+      # Store the data for the settings-formular here so that non-committed
+      # changes to the user dont get displayed in overview
       formData: {
         user: {}
         groups: []
       }
+      user: {}
     }
 
   componentDidMount: ->
@@ -28,7 +40,10 @@ App = React.createClass(
       'index.php?module=administrator|System|Users'
       {id: window.userId, ajax: true}
     ) .done (res)=>
-        @setState formData: res
+        state = @state
+        state.formData = res
+        state.user = res.user
+        @setState state
         NProgress.done()
       .fail (jqxhr)->
         toastr.error jqxhr.responseText, 'Fehler beim Abrufen der Daten'
@@ -55,17 +70,31 @@ App = React.createClass(
       NProgress.done()
 
   handleUserChange: (dataName, data)->
-    dataToPatch = {}
-    dataToPatch[dataName] = data
-    dataToPatch['userId'] = @state.formData.user.id
-    @patchData(dataToPatch)
+    state = @state
+    if not state.settingsChanged
+      state.settingsChanged = true
+      window.onbeforeunload = confirmExit
+    state.formData.user[dataName] = data
+    @setState state
+    # dataToPatch = {}
+    # dataToPatch[dataName] = data
+    # dataToPatch['userId'] = @state.formData.user.id
+    # @patchData(dataToPatch)
 
   render: ->
     <div>
       <Row>
         <div className='user-header'>
           <div>
-            <h4>Pascal Ernst</h4>
+            <h4>
+              Pascal Ernst &nbsp;
+              {
+                if @state.user.locked
+                  <Label bsStyle='danger'>
+                    gesperrt
+                  </Label>
+              }
+            </h4>
           </div>
           <Row className='tabs'>
             <a href='#' onClick={@handleSelectedChange.bind(null, 'overview')}>
@@ -78,7 +107,7 @@ App = React.createClass(
               Statistiken
             </a>
             <a href='#' onClick={@handleSelectedChange.bind(null, 'settings')}>
-              <Icon name="cog" size="large" />
+              <Icon name="cog" size="large" spin={@state.settingsChanged} />
               Einstellungen
             </a>
           </Row>
@@ -90,7 +119,8 @@ App = React.createClass(
         else if @state.selected is 'statistics'
           <h3>Später :) </h3>
         else if @state.selected is 'settings'
-          <Settings {...@state.formData} onUserChange={@handleUserChange} />
+          <Settings {...@state.formData} onUserChange={@handleUserChange}
+            settingsChanged={@state.settingsChanged} />
         else
           <h3>Nichts ausgewählt...</h3>
       }

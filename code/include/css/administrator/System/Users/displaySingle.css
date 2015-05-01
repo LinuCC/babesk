@@ -15,6 +15,10 @@ div.user-header h4 {
 	background-color: #C8EE5F;
 }
 
+div.user-header h4 .label {
+	padding-bottom: 2px;
+}
+
 div.user-header div.tabs {
 	display: inline-block;
 	text-align: center;
