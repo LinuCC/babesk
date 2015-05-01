@@ -42,6 +42,13 @@ App = React.createClass({
   componentDidMount: function() {
     return this.updateData();
   },
+  componentDidUpdate: function() {
+    if (this.state.settingsChanged) {
+      return window.onbeforeunload = confirmExit;
+    } else {
+      return window.onbeforeunload = false;
+    }
+  },
   updateData: function() {
     NProgress.start();
     return $.getJSON('index.php?module=administrator|System|Users', {
@@ -52,7 +59,9 @@ App = React.createClass({
         var state;
         state = _this.state;
         state.formData = res;
+        state.settingsChanged = false;
         state.user = $.extend(true, {}, res.user);
+        console.log(state.user);
         _this.setState(state);
         return NProgress.done();
       };
@@ -61,8 +70,9 @@ App = React.createClass({
       return NProgress.done();
     });
   },
-  patchData: function(data) {
+  patchData: function(data, onSuccess) {
     data['patch'] = true;
+    data['userId'] = this.state.formData.user.id;
     NProgress.start();
     return $.ajax({
       method: 'POST',
@@ -70,6 +80,9 @@ App = React.createClass({
       data: data
     }).done((function(_this) {
       return function(res) {
+        if (onSuccess != null) {
+          onSuccess(res);
+        }
         _this.updateData();
         return NProgress.done();
       };
@@ -90,18 +103,29 @@ App = React.createClass({
   handleUserChange: function(dataName, data) {
     var state;
     state = this.state;
-    if (!state.settingsChanged) {
-      state.settingsChanged = true;
-      window.onbeforeunload = confirmExit;
-    }
+    state.settingsChanged = true;
     state['formData']['user'][dataName] = data;
-    console.log(state);
     return this.setState(state);
+  },
+  handleUserChangesSubmit: function() {
+    return this.patchData(this.state.formData.user, (function(_this) {
+      return function() {
+        return _this.setState({
+          settingsChanged: false
+        });
+      };
+    })(this));
+  },
+  handleUserChangesCancel: function() {
+    this.updateData();
+    return this.setState({
+      settingsChanged: false
+    });
   },
   render: function() {
     return React.createElement("div", null, React.createElement(Row, null, React.createElement("div", {
       "className": 'user-header'
-    }, React.createElement("div", null, React.createElement("h4", null, "Pascal Ernst", (this.state.user.locked ? React.createElement(Label, {
+    }, React.createElement("div", null, React.createElement("h4", null, "" + this.state.user.forename + " " + this.state.user.surname, (this.state.user.locked ? React.createElement(Label, {
       "bsStyle": 'danger'
     }, "gesperrt") : void 0))), React.createElement(Row, {
       "className": 'tabs'
@@ -131,13 +155,15 @@ App = React.createClass({
       "size": "large"
     }), "Einstellungen") : React.createElement("span", null, React.createElement("a", {
       "href": '#',
-      "className": 'bg-danger'
+      "className": 'bg-danger',
+      "onClick": this.handleUserChangesCancel
     }, React.createElement(Icon, {
       "name": "trash-o",
       "size": "large"
     }), "abbrechen"), React.createElement("a", {
       "href": '#',
-      "className": 'bg-info'
+      "className": 'bg-info',
+      "onClick": this.handleUserChangesSubmit
     }, React.createElement(Icon, {
       "name": "upload",
       "size": "large"

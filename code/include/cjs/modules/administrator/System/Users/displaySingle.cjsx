@@ -34,6 +34,12 @@ App = React.createClass(
   componentDidMount: ->
     @updateData()
 
+  componentDidUpdate: ->
+    if @state.settingsChanged
+      window.onbeforeunload = confirmExit
+    else
+      window.onbeforeunload = false
+
   updateData: ->
     NProgress.start()
     $.getJSON(
@@ -41,23 +47,29 @@ App = React.createClass(
       {id: window.userId, ajax: true}
     ) .done (res)=>
         state = @state
+        # Overwrite the formData, so set settingsChanged to false
         state.formData = res
+        state.settingsChanged = false
         # Clone the same data so that settings-changes dont affect the overview
         state.user = $.extend(true, {}, res.user)
+        console.log state.user
         @setState state
         NProgress.done()
       .fail (jqxhr)->
         toastr.error jqxhr.responseText, 'Fehler beim Abrufen der Daten'
         NProgress.done()
 
-  patchData: (data)->
+  patchData: (data, onSuccess)->
     data['patch'] = true
+    data['userId'] = @state.formData.user.id
     NProgress.start()
     $.ajax(
       method: 'POST'
       url: 'index.php?module=administrator|System|Users'
       data: data
     ) .done (res)=>
+        if onSuccess?
+          onSuccess(res)
         @updateData()
         NProgress.done()
       .fail (jqxhr)->
@@ -72,16 +84,16 @@ App = React.createClass(
 
   handleUserChange: (dataName, data)->
     state = @state
-    if not state.settingsChanged
-      state.settingsChanged = true
-      window.onbeforeunload = confirmExit
+    state.settingsChanged = true
     state['formData']['user'][dataName] = data
-    console.log state
     @setState state
-    # dataToPatch = {}
-    # dataToPatch[dataName] = data
-    # dataToPatch['userId'] = @state.formData.user.id
-    # @patchData(dataToPatch)
+
+  handleUserChangesSubmit: ->
+    @patchData(@state.formData.user, => @setState settingsChanged: false)
+
+  handleUserChangesCancel: ->
+    @updateData()
+    @setState settingsChanged: false
 
   render: ->
     <div>
@@ -89,7 +101,7 @@ App = React.createClass(
         <div className='user-header'>
           <div>
             <h4>
-              Pascal Ernst
+              {"#{@state.user.forename} #{@state.user.surname}"}
               {
                 if @state.user.locked
                   <Label bsStyle='danger'>
@@ -123,11 +135,13 @@ App = React.createClass(
                   </p>
                 else
                   <span>
-                    <a href='#' className='bg-danger'>
+                    <a href='#' className='bg-danger'
+                      onClick={@handleUserChangesCancel}>
                       <Icon name="trash-o" size="large" />
                       abbrechen
                     </a>
-                    <a href='#' className='bg-info'>
+                    <a href='#' className='bg-info'
+                      onClick={@handleUserChangesSubmit}>
                       <Icon name="upload" size="large" />
                       Änderungen speichern
                     </a>

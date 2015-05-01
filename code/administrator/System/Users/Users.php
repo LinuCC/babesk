@@ -121,14 +121,14 @@ class Users extends \System {
 
 	protected function updateSingleUser($user, $data) {
 
-		// {groups: [<groupIds>]}
+		// {activeGroups: [<groupIds>]}
 		// oder
-		// {groups: false} if user should not have any groups
-		if(isset($data['groups'])) {
-			if($data['groups']) {
+		// {activeGroups: false} if user should not have any groups
+		if(isset($data['activeGroups'])) {
+			if($data['activeGroups']) {
 				$groupIds = array_map(function($groupId) {
 					return filter_var($groupId, FILTER_VALIDATE_INT);
-				}, $data['groups']);
+				}, $data['activeGroups']);
 			}
 			else {
 				$groupIds = [];
