@@ -29,6 +29,18 @@ class SystemGroups
      */
     private $rgt;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $users;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -108,95 +120,6 @@ class SystemGroups
     {
         return $this->rgt;
     }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $targetEntity;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $mappedBy;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->targetEntity = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->mappedBy = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add targetEntity
-     *
-     * @param \Babesk\ORM\B $targetEntity
-     * @return SystemGroups
-     */
-    public function addTargetEntity(\Babesk\ORM\B $targetEntity)
-    {
-        $this->targetEntity[] = $targetEntity;
-
-        return $this;
-    }
-
-    /**
-     * Remove targetEntity
-     *
-     * @param \Babesk\ORM\B $targetEntity
-     */
-    public function removeTargetEntity(\Babesk\ORM\B $targetEntity)
-    {
-        $this->targetEntity->removeElement($targetEntity);
-    }
-
-    /**
-     * Get targetEntity
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getTargetEntity()
-    {
-        return $this->targetEntity;
-    }
-
-    /**
-     * Add mappedBy
-     *
-     * @param \Babesk\ORM\g $mappedBy
-     * @return SystemGroups
-     */
-    public function addMappedBy(\Babesk\ORM\g $mappedBy)
-    {
-        $this->mappedBy[] = $mappedBy;
-
-        return $this;
-    }
-
-    /**
-     * Remove mappedBy
-     *
-     * @param \Babesk\ORM\g $mappedBy
-     */
-    public function removeMappedBy(\Babesk\ORM\g $mappedBy)
-    {
-        $this->mappedBy->removeElement($mappedBy);
-    }
-
-    /**
-     * Get mappedBy
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getMappedBy()
-    {
-        return $this->mappedBy;
-    }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $users;
-
 
     /**
      * Add users

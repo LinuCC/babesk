@@ -14,7 +14,15 @@ module.exports = React.createClass(
     return {
       user: {}
       groups: []
+      onUserChange: (key, value)-> console.log [key, value]
     }
+
+  handleGroupChange: (selectedGroups)->
+    groups = selectedGroups.map (group)-> return group.id
+    # Void arrays will be wrongfully removed by PHP
+    if groups.length is 0 then groups = false
+    @props.onUserChange 'groups', groups
+
 
   render: ->
     console.log @props
@@ -64,8 +72,8 @@ module.exports = React.createClass(
             <Input label='Benutzergruppen'
               labelClassName='col-xs-2' wrapperClassName='col-xs-10'>
               <SelectList data={@props.groups} valueField='id'
-                value={@props.user.activeGroups}
-                textField='name' multiple />
+                value={@props.user.activeGroups} textField='name' multiple
+                onChange={@handleGroupChange} />
             </Input>
           </form>
         </Panel>

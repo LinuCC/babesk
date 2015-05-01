@@ -20,6 +20,9 @@ App = React.createClass(
     }
 
   componentDidMount: ->
+    @updateData()
+
+  updateData: ->
     NProgress.start()
     $.getJSON(
       'index.php?module=administrator|System|Users'
@@ -31,11 +34,31 @@ App = React.createClass(
         toastr.error jqxhr.responseText, 'Fehler beim Abrufen der Daten'
         NProgress.done()
 
+  patchData: (data)->
+    data['patch'] = true
+    NProgress.start()
+    $.ajax(
+      method: 'POST'
+      url: 'index.php?module=administrator|System|Users'
+      data: data
+    ) .done (res)=>
+        @updateData()
+        NProgress.done()
+      .fail (jqxhr)->
+        toastr.error jqxhr.responseText, 'Fehler beim Hochladen der Daten'
+        NProgress.done()
+
   handleSelectedChange: (value)->
     if value isnt @state.selected
       NProgress.start()
       @setState selected: value
       NProgress.done()
+
+  handleUserChange: (dataName, data)->
+    dataToPatch = {}
+    dataToPatch[dataName] = data
+    dataToPatch['userId'] = @state.formData.user.id
+    @patchData(dataToPatch)
 
   render: ->
     <div>
@@ -67,7 +90,7 @@ App = React.createClass(
         else if @state.selected is 'statistics'
           <h3>Später :) </h3>
         else if @state.selected is 'settings'
-          <Settings {...@state.formData} />
+          <Settings {...@state.formData} onUserChange={@handleUserChange} />
         else
           <h3>Nichts ausgewählt...</h3>
       }

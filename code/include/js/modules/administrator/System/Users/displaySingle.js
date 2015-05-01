@@ -28,6 +28,9 @@ App = React.createClass({
     };
   },
   componentDidMount: function() {
+    return this.updateData();
+  },
+  updateData: function() {
     NProgress.start();
     return $.getJSON('index.php?module=administrator|System|Users', {
       id: window.userId,
@@ -44,6 +47,23 @@ App = React.createClass({
       return NProgress.done();
     });
   },
+  patchData: function(data) {
+    data['patch'] = true;
+    NProgress.start();
+    return $.ajax({
+      method: 'POST',
+      url: 'index.php?module=administrator|System|Users',
+      data: data
+    }).done((function(_this) {
+      return function(res) {
+        _this.updateData();
+        return NProgress.done();
+      };
+    })(this)).fail(function(jqxhr) {
+      toastr.error(jqxhr.responseText, 'Fehler beim Hochladen der Daten');
+      return NProgress.done();
+    });
+  },
   handleSelectedChange: function(value) {
     if (value !== this.state.selected) {
       NProgress.start();
@@ -52,6 +72,13 @@ App = React.createClass({
       });
       return NProgress.done();
     }
+  },
+  handleUserChange: function(dataName, data) {
+    var dataToPatch;
+    dataToPatch = {};
+    dataToPatch[dataName] = data;
+    dataToPatch['userId'] = this.state.formData.user.id;
+    return this.patchData(dataToPatch);
   },
   render: function() {
     return React.createElement("div", null, React.createElement(Row, null, React.createElement("div", {
@@ -76,7 +103,9 @@ App = React.createClass({
     }, React.createElement(Icon, {
       "name": "cog",
       "size": "large"
-    }), "Einstellungen")))), (this.state.selected === 'overview' ? React.createElement("h3", null, "Sp\u00e4ter :) ") : this.state.selected === 'statistics' ? React.createElement("h3", null, "Sp\u00e4ter :) ") : this.state.selected === 'settings' ? React.createElement(Settings, React.__spread({}, this.state.formData)) : React.createElement("h3", null, "Nichts ausgew\u00e4hlt...")));
+    }), "Einstellungen")))), (this.state.selected === 'overview' ? React.createElement("h3", null, "Sp\u00e4ter :) ") : this.state.selected === 'statistics' ? React.createElement("h3", null, "Sp\u00e4ter :) ") : this.state.selected === 'settings' ? React.createElement(Settings, React.__spread({}, this.state.formData, {
+      "onUserChange": this.handleUserChange
+    })) : React.createElement("h3", null, "Nichts ausgew\u00e4hlt...")));
   }
 });
 

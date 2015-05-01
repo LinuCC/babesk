@@ -23,8 +23,21 @@ module.exports = React.createClass({
   getDefaultProps: function() {
     return {
       user: {},
-      groups: []
+      groups: [],
+      onUserChange: function(key, value) {
+        return console.log([key, value]);
+      }
     };
+  },
+  handleGroupChange: function(selectedGroups) {
+    var groups;
+    groups = selectedGroups.map(function(group) {
+      return group.id;
+    });
+    if (groups.length === 0) {
+      groups = false;
+    }
+    return this.props.onUserChange('groups', groups);
   },
   render: function() {
     var personalTitle, systemTitle;
@@ -124,7 +137,8 @@ module.exports = React.createClass({
       "valueField": 'id',
       "value": this.props.user.activeGroups,
       "textField": 'name',
-      "multiple": true
+      "multiple": true,
+      "onChange": this.handleGroupChange
     }))))));
   }
 });
