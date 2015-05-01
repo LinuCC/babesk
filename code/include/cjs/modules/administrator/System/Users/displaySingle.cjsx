@@ -42,7 +42,8 @@ App = React.createClass(
     ) .done (res)=>
         state = @state
         state.formData = res
-        state.user = res.user
+        # Clone the same data so that settings-changes dont affect the overview
+        state.user = $.extend(true, {}, res.user)
         @setState state
         NProgress.done()
       .fail (jqxhr)->
@@ -74,7 +75,8 @@ App = React.createClass(
     if not state.settingsChanged
       state.settingsChanged = true
       window.onbeforeunload = confirmExit
-    state.formData.user[dataName] = data
+    state['formData']['user'][dataName] = data
+    console.log state
     @setState state
     # dataToPatch = {}
     # dataToPatch[dataName] = data
@@ -87,7 +89,7 @@ App = React.createClass(
         <div className='user-header'>
           <div>
             <h4>
-              Pascal Ernst &nbsp;
+              Pascal Ernst
               {
                 if @state.user.locked
                   <Label bsStyle='danger'>
@@ -110,6 +112,27 @@ App = React.createClass(
               <Icon name="cog" size="large" spin={@state.settingsChanged} />
               Einstellungen
             </a>
+          </Row>
+          <Row className='submenu'>
+            {
+              if @state.selected is 'settings'
+                if not @state.settingsChanged
+                  <p>
+                    <Icon name="cog" size="large" />
+                    Einstellungen
+                  </p>
+                else
+                  <span>
+                    <a href='#' className='bg-danger'>
+                      <Icon name="trash-o" size="large" />
+                      abbrechen
+                    </a>
+                    <a href='#' className='bg-info'>
+                      <Icon name="upload" size="large" />
+                      Änderungen speichern
+                    </a>
+                  </span>
+            }
           </Row>
         </div>
       </Row>

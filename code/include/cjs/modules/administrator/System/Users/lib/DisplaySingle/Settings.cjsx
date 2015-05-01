@@ -5,7 +5,6 @@ Input = require 'react-bootstrap/lib/Input'
 Panel = require 'react-bootstrap/lib/Panel'
 Toggle = require 'react-toggle'
 Row = require 'react-bootstrap/lib/Row'
-Well = require 'react-bootstrap/lib/Well'
 Col = require 'react-bootstrap/lib/Col'
 SelectList = require 'react-widgets/lib/SelectList'
 
@@ -35,21 +34,6 @@ module.exports = React.createClass(
     personalTitle = <h4>Personendaten</h4>
     systemTitle = <h4>Systemdaten</h4>
     <div>
-      {
-        if @props.settingsChanged
-          <Row>
-            <Col xs={8} xsOffset={2} md={6} mdOffset={3}>
-              <Well>
-                <Button bsStyle='default'>
-                  Änderungen abbrechen
-                </Button>
-                <Button bsStyle='primary' className='pull-right'>
-                  Änderungen speichern
-                </Button>
-              </Well>
-            </Col>
-          </Row>
-      }
       <Row>
         <Col md={12} lg={6}>
           <Panel className='panel-dashboard' header={personalTitle}>

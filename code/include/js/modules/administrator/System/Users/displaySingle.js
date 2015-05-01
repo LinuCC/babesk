@@ -52,7 +52,7 @@ App = React.createClass({
         var state;
         state = _this.state;
         state.formData = res;
-        state.user = res.user;
+        state.user = $.extend(true, {}, res.user);
         _this.setState(state);
         return NProgress.done();
       };
@@ -94,13 +94,14 @@ App = React.createClass({
       state.settingsChanged = true;
       window.onbeforeunload = confirmExit;
     }
-    state.formData.user[dataName] = data;
+    state['formData']['user'][dataName] = data;
+    console.log(state);
     return this.setState(state);
   },
   render: function() {
     return React.createElement("div", null, React.createElement(Row, null, React.createElement("div", {
       "className": 'user-header'
-    }, React.createElement("div", null, React.createElement("h4", null, "Pascal Ernst \u00a0", (this.state.user.locked ? React.createElement(Label, {
+    }, React.createElement("div", null, React.createElement("h4", null, "Pascal Ernst", (this.state.user.locked ? React.createElement(Label, {
       "bsStyle": 'danger'
     }, "gesperrt") : void 0))), React.createElement(Row, {
       "className": 'tabs'
@@ -123,7 +124,24 @@ App = React.createClass({
       "name": "cog",
       "size": "large",
       "spin": this.state.settingsChanged
-    }), "Einstellungen")))), (this.state.selected === 'overview' ? React.createElement("h3", null, "Sp\u00e4ter :) ") : this.state.selected === 'statistics' ? React.createElement("h3", null, "Sp\u00e4ter :) ") : this.state.selected === 'settings' ? React.createElement(Settings, React.__spread({}, this.state.formData, {
+    }), "Einstellungen")), React.createElement(Row, {
+      "className": 'submenu'
+    }, (this.state.selected === 'settings' ? !this.state.settingsChanged ? React.createElement("p", null, React.createElement(Icon, {
+      "name": "cog",
+      "size": "large"
+    }), "Einstellungen") : React.createElement("span", null, React.createElement("a", {
+      "href": '#',
+      "className": 'bg-danger'
+    }, React.createElement(Icon, {
+      "name": "trash-o",
+      "size": "large"
+    }), "abbrechen"), React.createElement("a", {
+      "href": '#',
+      "className": 'bg-info'
+    }, React.createElement(Icon, {
+      "name": "upload",
+      "size": "large"
+    }), "\u00c4nderungen speichern")) : void 0)))), (this.state.selected === 'overview' ? React.createElement("h3", null, "Sp\u00e4ter :) ") : this.state.selected === 'statistics' ? React.createElement("h3", null, "Sp\u00e4ter :) ") : this.state.selected === 'settings' ? React.createElement(Settings, React.__spread({}, this.state.formData, {
       "onUserChange": this.handleUserChange,
       "settingsChanged": this.state.settingsChanged
     })) : React.createElement("h3", null, "Nichts ausgew\u00e4hlt...")));
