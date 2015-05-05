@@ -152,6 +152,9 @@ class ShowBooklist extends Booklist {
 			$booksData = $this->bookArrayMerge(
 				$booksData, $this->bookExemplarsNeededGet($paginator)
 			);
+			$booksData = $this->bookArrayMerge(
+				$booksData, $this->bookExemplarsSelfpayedGet($paginator)
+			);
 
 			$booksData = $this->bookArrayMerge(
 				$booksData, $this->bookExemplarsToBuyGet($booksData)
@@ -288,6 +291,37 @@ class ShowBooklist extends Booklist {
 			$booksNeeded[$book->getId()]['exemplarsNeeded'] = $count;
 		}
 		return $booksNeeded;
+	}
+
+	/**
+	 * Calculates the amount of book-exemplars that users buy for themselfes
+	 * @param  Paginator $paginator doctrines paginator containing the books
+	 * @return array                book-ids as the key with the values being
+	 *                              the amount of book-exemplars needed
+	 *                              '<bookId>' => [
+	 *                                  'exemplarsSelfpayed' =>
+	 *                                      '<exemplarCount>'
+	 *                              ]
+	 */
+	protected function bookExemplarsSelfpayedGet($paginator) {
+
+		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
+		$prepSchoolyear = $loanHelper->schbasPreparationSchoolyearGet();
+		$booksSelfpayed = [];
+		foreach($paginator as $book) {
+			$query = $this->_em->createQuery(
+				'SELECT COUNT(u) FROM DM:SchbasBook b
+				INNER JOIN b.selfpayingBookEntities sb
+				INNER JOIN sb.user u
+				INNER JOIN u.attendances a WITH a.schoolyear = :schoolyear
+				WHERE b = :book
+			');
+			$query->setParameter('schoolyear', $prepSchoolyear);
+			$query->setParameter('book', $book);
+			$count = $query->getSingleScalarResult();
+			$booksSelfpayed[$book->getId()]['exemplarsSelfpayed'] = $count;
+		}
+		return $booksSelfpayed;
 	}
 
 	/**
