@@ -17,14 +17,7 @@ class Users extends \System {
 		$this->moduleTemplatePathSet();
 		// We cant use PATCH in PHP, so use POST with an additional parameter
 		if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['patch'])) {
-			$userId = filter_input(INPUT_POST, 'userId');
-			if($userId) {
-				$user = $this->_em->getReference('DM:SystemUsers', $userId);
-				$this->updateSingleUser($user, $_POST);
-			}
-			else {
-				dieHttp('Keine Benutzer-ID übergeben.', 400);
-			}
+			$this->updateSingleUser();
 		}
 		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
 			$id = filter_input(INPUT_GET, 'id');
@@ -119,52 +112,17 @@ class Users extends \System {
 		return $groups;
 	}
 
-	protected function updateSingleUser($user, $data) {
+	protected function updateSingleUser() {
 
-		// {activeGroups: [<groupIds>]}
-		// oder
-		// {activeGroups: false} if user should not have any groups
-		if(isset($data['activeGroups'])) {
-			if($data['activeGroups']) {
-				$groupIds = array_map(function($groupId) {
-					return filter_var($groupId, FILTER_VALIDATE_INT);
-				}, $data['activeGroups']);
-			}
-			else {
-				$groupIds = [];
-			}
-			$query = $this->_em->createQuery(
-				'SELECT g FROM DM:SystemGroups g
-				INNER JOIN g.users u WITH u = :user
-			');
-			$query->setParameter('user', $user);
-			$existingGroups = $query->getResult();
-			if(count($existingGroups)) {
-				// Delete groups-assignments that are not in the given data
-				foreach($existingGroups as $existingGroup) {
-					if(!in_array($existingGroup->getId(), $groupIds)) {
-						$user->removeGroup($existingGroup);
-					}
-				}
-			}
-			if(count($groupIds)) {
-				// Add groups-assignments that are not existing
-				foreach($groupIds as $groupId) {
-					if(count($existingGroups)) {
-						foreach($existingGroups as $existingGroup) {
-							if($existingGroup->getId() == $groupId) {
-								continue 2;
-							}
-						}
-					}
-					$newGroup = $this->_em->getReference(
-						'DM:SystemGroups', $groupId
-					);
-					$user->addGroup($newGroup);
-				}
-			}
-			$this->_em->persist($user);
-			$this->_em->flush();
+		$userId = filter_input(INPUT_POST, 'userId');
+		if($userId) {
+			$user = $this->_em->getReference('DM:SystemUsers', $userId);
+			require_once 'PatchUser.php';
+			$patcher = new PatchUser($this->_dataContainer);
+			$patcher->patch($user, $_POST);
+		}
+		else {
+			dieHttp('Keine Benutzer-ID übergeben.', 400);
 		}
 	}
 
