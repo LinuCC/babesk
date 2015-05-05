@@ -42,49 +42,32 @@ class BookInfo extends Schbas {
 
 	private function bookinfoShow($barcodeStr) {
 
-		$invData = $this->dataFetch($barcodeStr);
+		$invData = $this->invDataFetch($barcodeStr);
 		if(!empty($invData)) {
-			$potentialUsers = $invData->getUsersLent();
-			if(count($potentialUsers)) {
-				//Current db-Structure only allows book lent to only one user
-				$user = $potentialUsers->first();
-				//Query made sure to just load the active grade
-				$grade = $user->getAttendances()
-					->first()
-					->getGrade();
-				$this->bookinfoTemplateGenerate($invData, $user, $grade);
-			}
-			else {
-				$this->_interface->dieError(
-					'Dieses Buch ist keinem Benutzer ausgeliehen.'
-				);
-			}
+			$this->bookinfoTemplateGenerate($invData);
 		}
 		else {
 			$this->_interface->dieError('Dieses Buch ist nicht im System.');
 		}
 	}
 
-	private function dataFetch($barcodeStr) {
+	private function invDataFetch($barcodeStr) {
 
 		try {
 			$bookHelper = new \Babesk\Schbas\Book($this->_dataContainer);
 			$barcode = $bookHelper->barcodeParseToArray($barcodeStr);
 			unset($barcode['delimiter']); //Not used in query
 			$query = $this->_em->createQuery(
-				'SELECT i, b, s, u, uigs FROM DM:SchbasInventory i
+				'SELECT i, b, s, u FROM DM:SchbasInventory i
 					INNER JOIN i.book b
 						WITH b.class = :class AND b.bundle = :bundle
 					INNER JOIN b.subject s
 						WITH s.abbreviation = :subject
 					LEFT JOIN i.usersLent u
-					LEFT JOIN u.attendances uigs
-					LEFT JOIN uigs.schoolyear sy WITH sy.active = 1
-					LEFT JOIN uigs.grade g
 					WHERE i.yearOfPurchase = :purchaseYear
 						AND i.exemplar = :exemplar
-						AND (sy.id != 0 OR sy.id IS NULL)
 			')->setParameters($barcode);
+
 			return $query->getOneOrNullResult();
 
 		} catch (Exception $e) {
@@ -95,21 +78,22 @@ class BookInfo extends Schbas {
 		}
 	}
 
-	private function bookinfoTemplateGenerate($exemplar, $user, $grade) {
+	private function bookinfoTemplateGenerate($exemplar) {
 
 		$book = $exemplar->getBook();
-		$gradeStr = $grade->getGradelevel() . $grade->getLabel();
-		$this->_smarty->assign('userID', $user->getId());
-		$this->_smarty->assign('name', $user->getName());
-		$this->_smarty->assign('forename', $user->getForename());
-		$this->_smarty->assign('class', $gradeStr);
-		$this->_smarty->assign('locked', $user->getLocked());
-		$this->_smarty->assign('bookID', $book->getId());
-		$this->_smarty->assign('subject', $book->getSubject()->getName());
-		$this->_smarty->assign('class', $book->getClass());
-		$this->_smarty->assign('title', $book->getTitle());
-		$this->_smarty->assign('author', $book->getAuthor());
-		$this->_smarty->assign('publisher', $book->getPublisher());
+		if(!$book) {
+			$this->_logger->logO('Book for exemplar not found', ['sev' => 'error', 'moreJson' => ['id' => $exemplar->getId()]]);
+			$this->_interface->dieError('Buch zum Exemplar nicht gefunden!');
+		}
+		$user = false;
+		if($exemplar->getUsersLent()) {
+			$user = $exemplar->getUsersLent()->first();
+			$activeGrade = $this->_em->getRepository('DM:SystemUsers')
+				->getActiveGradeByUser($user);
+		}
+		$this->_smarty->assign('activeGrade', $activeGrade);
+		$this->_smarty->assign('user', $user);
+		$this->_smarty->assign('book', $book);
 		$this->displayTpl('result.tpl');
 	}
 }
