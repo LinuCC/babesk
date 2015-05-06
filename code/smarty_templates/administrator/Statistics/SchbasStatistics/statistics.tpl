@@ -1,16 +1,35 @@
-{extends file=$base_path}{block name='content'}
+{extends file=$base_path}{block name=content}
 
-<h3 class="module-header">Schbas Statistiken</h3>
+<div class="row">
+  <div id="entry" class="col-xs-12">
+  </div>
+</div>
 
-<fieldset>
-	<legend>Aktionen</legend>
-	<ul class="submodulelinkList">
-		<li>
-			<a href="index.php?module=administrator|Statistics|SchbasStatistics&amp;action=pdf">
-				PDF erstellen
-			</a>
-		</li>
-	</ul>
-</fieldset>
+{/block}
+
+{block name="style_include" append}
+<link rel="stylesheet"
+  href="{$path_css}/administrator/System/Users/displaySingle.css"
+  type="text/css" />
+<link rel="stylesheet"
+  href="{$path_css}/nprogress.css"
+  type="text/css" />
+<link rel="stylesheet"
+  href="{$path_css}/react-widgets.css"
+  type="text/css" />
+<link rel="stylesheet"
+  href="{$path_css}/administrator/Schbas/BookAssignments/View/main.css"
+  type="text/css" />
+{/block}
+
+{block name=js_include append}
+
+<script type="text/javascript"
+  src="{$path_js}/vendor/bootbox.min.js">
+</script>
+<script type="text/javascript"
+  src="{$path_js}/dist/administrator/Statistics/SchbasStatistics/statistics.js"
+  >
+</script>
 
 {/block}

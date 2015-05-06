@@ -24,9 +24,6 @@
 	href="{$path_css}/react-select.css"
 	type="text/css" />
 <link rel="stylesheet"
-	href="{$path_css}/react-bootstrap-treeview.css"
-	type="text/css" />
-<link rel="stylesheet"
 	href="{$path_css}/administrator/Schbas/BookAssignments/View/main.css"
 	type="text/css" />
 {/block}
