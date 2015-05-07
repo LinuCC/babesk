@@ -17,6 +17,7 @@
 		<td><%= exemplarsLent %></td>
 		<td><%= exemplarsNeeded %></td>
 		<td><%= exemplarsToBuy %></td>
+		<td><%= exemplarsSelfpayed %></td>
 		<td>
 		<a class="btn btn-info btn-xs" href="index.php?section=Schbas|Booklist&action=2&ID=<%= id %>" title="Bucheinstellungen">
 				<span class="fa fa-cog"></span>
@@ -96,6 +97,7 @@
 				<th>Verliehen</th>
 				<th>Benötigt</th>
 				<th>Fehlend</th>
+				<th>Selbstzahler</th>
 				<th>Optionen</th>
 			</tr>
 		</thead>

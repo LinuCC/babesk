@@ -95,11 +95,6 @@ class SystemUsers
     private $special_course;
 
     /**
-     * @var \Babesk\ORM\SchbasAccounting
-     */
-    private $schbasAccounting;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $attendances;
@@ -135,6 +130,16 @@ class SystemUsers
     private $booksToLend;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $selfpayingBookEntities;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $schbasAccounting;
+
+    /**
      * @var \Babesk\ORM\BabeskPriceGroups
      */
     private $priceGroup;
@@ -166,6 +171,8 @@ class SystemUsers
         $this->elawaMeetingsHosting = new \Doctrine\Common\Collections\ArrayCollection();
         $this->elawaDefaultMeetingRooms = new \Doctrine\Common\Collections\ArrayCollection();
         $this->booksToLend = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->selfpayingBookEntities = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->schbasAccounting = new \Doctrine\Common\Collections\ArrayCollection();
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->bookLending = new \Doctrine\Common\Collections\ArrayCollection();
         $this->selfpayingBooks = new \Doctrine\Common\Collections\ArrayCollection();
@@ -550,29 +557,6 @@ class SystemUsers
     }
 
     /**
-     * Set schbasAccounting
-     *
-     * @param \Babesk\ORM\SchbasAccounting $schbasAccounting
-     * @return SystemUsers
-     */
-    public function setSchbasAccounting(\Babesk\ORM\SchbasAccounting $schbasAccounting = null)
-    {
-        $this->schbasAccounting = $schbasAccounting;
-
-        return $this;
-    }
-
-    /**
-     * Get schbasAccounting
-     *
-     * @return \Babesk\ORM\SchbasAccounting 
-     */
-    public function getSchbasAccounting()
-    {
-        return $this->schbasAccounting;
-    }
-
-    /**
      * Add attendances
      *
      * @param \Babesk\ORM\SystemAttendance $attendances
@@ -804,6 +788,72 @@ class SystemUsers
     }
 
     /**
+     * Add selfpayingBookEntities
+     *
+     * @param \Babesk\ORM\SchbasSelfpayer $selfpayingBookEntities
+     * @return SystemUsers
+     */
+    public function addSelfpayingBookEntity(\Babesk\ORM\SchbasSelfpayer $selfpayingBookEntities)
+    {
+        $this->selfpayingBookEntities[] = $selfpayingBookEntities;
+
+        return $this;
+    }
+
+    /**
+     * Remove selfpayingBookEntities
+     *
+     * @param \Babesk\ORM\SchbasSelfpayer $selfpayingBookEntities
+     */
+    public function removeSelfpayingBookEntity(\Babesk\ORM\SchbasSelfpayer $selfpayingBookEntities)
+    {
+        $this->selfpayingBookEntities->removeElement($selfpayingBookEntities);
+    }
+
+    /**
+     * Get selfpayingBookEntities
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSelfpayingBookEntities()
+    {
+        return $this->selfpayingBookEntities;
+    }
+
+    /**
+     * Add schbasAccounting
+     *
+     * @param \Babesk\ORM\SchbasAccounting $schbasAccounting
+     * @return SystemUsers
+     */
+    public function addSchbasAccounting(\Babesk\ORM\SchbasAccounting $schbasAccounting)
+    {
+        $this->schbasAccounting[] = $schbasAccounting;
+
+        return $this;
+    }
+
+    /**
+     * Remove schbasAccounting
+     *
+     * @param \Babesk\ORM\SchbasAccounting $schbasAccounting
+     */
+    public function removeSchbasAccounting(\Babesk\ORM\SchbasAccounting $schbasAccounting)
+    {
+        $this->schbasAccounting->removeElement($schbasAccounting);
+    }
+
+    /**
+     * Get schbasAccounting
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSchbasAccounting()
+    {
+        return $this->schbasAccounting;
+    }
+
+    /**
      * Set priceGroup
      *
      * @param \Babesk\ORM\BabeskPriceGroups $priceGroup
@@ -923,66 +973,5 @@ class SystemUsers
     public function getSelfpayingBooks()
     {
         return $this->selfpayingBooks;
-    }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $selfpayingBookEntities;
-
-
-    /**
-     * Add selfpayingBookEntities
-     *
-     * @param \Babesk\ORM\SchbasSelfpayer $selfpayingBookEntities
-     * @return SystemUsers
-     */
-    public function addSelfpayingBookEntity(\Babesk\ORM\SchbasSelfpayer $selfpayingBookEntities)
-    {
-        $this->selfpayingBookEntities[] = $selfpayingBookEntities;
-
-        return $this;
-    }
-
-    /**
-     * Remove selfpayingBookEntities
-     *
-     * @param \Babesk\ORM\SchbasSelfpayer $selfpayingBookEntities
-     */
-    public function removeSelfpayingBookEntity(\Babesk\ORM\SchbasSelfpayer $selfpayingBookEntities)
-    {
-        $this->selfpayingBookEntities->removeElement($selfpayingBookEntities);
-    }
-
-    /**
-     * Get selfpayingBookEntities
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getSelfpayingBookEntities()
-    {
-        return $this->selfpayingBookEntities;
-    }
-
-    /**
-     * Add schbasAccounting
-     *
-     * @param \Babesk\ORM\SchbasAccounting $schbasAccounting
-     * @return SystemUsers
-     */
-    public function addSchbasAccounting(\Babesk\ORM\SchbasAccounting $schbasAccounting)
-    {
-        $this->schbasAccounting[] = $schbasAccounting;
-
-        return $this;
-    }
-
-    /**
-     * Remove schbasAccounting
-     *
-     * @param \Babesk\ORM\SchbasAccounting $schbasAccounting
-     */
-    public function removeSchbasAccounting(\Babesk\ORM\SchbasAccounting $schbasAccounting)
-    {
-        $this->schbasAccounting->removeElement($schbasAccounting);
     }
 }

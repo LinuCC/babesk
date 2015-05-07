@@ -29,6 +29,18 @@ class SystemGroups
      */
     private $rgt;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $users;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -107,5 +119,38 @@ class SystemGroups
     public function getRgt()
     {
         return $this->rgt;
+    }
+
+    /**
+     * Add users
+     *
+     * @param \Babesk\ORM\SystemUsers $users
+     * @return SystemGroups
+     */
+    public function addUser(\Babesk\ORM\SystemUsers $users)
+    {
+        $this->users[] = $users;
+
+        return $this;
+    }
+
+    /**
+     * Remove users
+     *
+     * @param \Babesk\ORM\SystemUsers $users
+     */
+    public function removeUser(\Babesk\ORM\SystemUsers $users)
+    {
+        $this->users->removeElement($users);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUsers()
+    {
+        return $this->users;
     }
 }

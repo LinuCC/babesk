@@ -1,0 +1,144 @@
+
+div.user-header {
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+div.user-header h4 {
+	display: inline-block;
+	padding: 5px;
+	margin-bottom: 0;
+	border: 1px solid #688E00;
+	border-bottom: none;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	background-color: #C8EE5F;
+}
+
+div.user-header h4 .label {
+	padding-bottom: 2px;
+}
+
+div.user-header div.tabs {
+	text-align: center;
+}
+
+div.user-header div.tabs a {
+	width: 170px;
+	display: inline-block;
+	padding: 5px;
+	margin: 0;
+	font-size: 22px;
+	background-color: #AEEE00;
+	color: #333;
+	border: 1px solid #688E00;
+}
+
+div.user-header div.tabs a:focus {
+	outline: none;
+	text-decoration: none;
+	background-color: #33C9FF;
+}
+
+div.user-header div.tabs a:hover,
+div.user-header div.tabs a:active {
+	outline: none;
+	text-decoration: none;
+	background-color: #01B0F0;
+	transition: all 0.3s ease;
+}
+
+
+div.user-header div.tabs a:hover i.fa,
+div.user-header div.tabs a:active i.fa {
+	transition: all 0.3s ease;
+	color: #E53542;
+	text-shadow: 0px 0px 3px #FFF, 0px 0px 3px #FFF;
+}
+
+div.user-header div.tabs a span,
+div.user-header div.tabs a i {
+	text-decoration: none;
+}
+
+div.user-header div.tabs a:first-child {
+	border-bottom-left-radius: 20px;
+	border-top-left-radius: 20px;
+}
+
+
+div.user-header div.tabs a:last-child {
+	border-bottom-right-radius: 20px;
+	border-top-right-radius: 20px;
+}
+
+div.user-header div.tabs a:not(:last-child) {
+	border-right: 0;
+}
+
+div.user-header div.tabs a i.fa {
+	display: block;
+}
+
+
+
+div.user-header div.submenu {
+	text-align: center;
+}
+
+div.user-header div.submenu a,
+div.user-header div.submenu p {
+	min-width: 120px;
+	display: inline-block;
+	padding: 5px 10px;
+	margin: 0;
+	margin-top: -1px;
+	font-size: 14px;
+	color: #333;
+	border: 1px solid #999;
+}
+
+div.user-header div.submenu a:focus {
+	outline: none;
+	text-decoration: none;
+}
+
+div.user-header div.submenu a:hover {
+	outline: none;
+	text-decoration: none;
+	background-color: #01B0F0;
+	transition: all 0.3s ease;
+}
+
+div.user-header div.submenu p i.fa,
+div.user-header div.submenu a i.fa {
+	margin-right: 5px;
+}
+
+div.user-header div.submenu a:hover i.fa,
+div.user-header div.submenu a:focus i.fa,
+div.user-header div.submenu a:active i.fa {
+	transition: all 0.3s ease;
+	color: #E53542;
+	text-shadow: 0px 0px 3px #FFF, 0px 0px 3px #FFF;
+}
+
+div.user-header div.submenu a span,
+div.user-header div.submenu a i {
+	text-decoration: none;
+}
+
+div.user-header div.submenu p:first-child,
+div.user-header div.submenu a:first-child {
+	border-bottom-left-radius: 20px;
+}
+
+
+div.user-header div.submenu p:last-child,
+div.user-header div.submenu a:last-child {
+	border-bottom-right-radius: 20px;
+}
+
+div.user-header div.submenu a:not(:last-child) {
+	border-right: 0;
+}

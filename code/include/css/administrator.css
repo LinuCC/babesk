@@ -631,6 +631,14 @@ body.modal-open,
   margin-top: -1px;
 }
 
+/**
+ * React toggle
+ */
+
+div.form-group div.react-toggle {
+	margin-top: 6px;
+}
+
 /********************************
  * Custom Iconnames for modules *
  ********************************/

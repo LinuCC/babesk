@@ -26,4 +26,7 @@ Babesk\ORM\SystemGroups:
             scale: 0
             length: null
             precision: 0
-    lifecycleCallbacks: {  }
+    manyToMany:
+        users:
+            targetEntity: Babesk\ORM\SystemUsers
+            mappedBy: groups

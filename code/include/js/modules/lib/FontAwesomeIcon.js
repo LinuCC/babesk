@@ -12,7 +12,8 @@ module.exports = React.createClass({
       pullRight: false,
       pullLeft: false,
       name: false,
-      fixedWidth: false
+      fixedWidth: false,
+      spin: false
     };
   },
   render: function() {
@@ -21,7 +22,8 @@ module.exports = React.createClass({
       'fa': true,
       'pull-left': this.props.pullLeft,
       'pull-right': this.props.pullRight,
-      'fa-fw': this.props.fixedWidth
+      'fa-fw': this.props.fixedWidth,
+      'fa-spin': this.props.spin
     });
     if (this.props.size) {
       classes += " fa-" + this.props.size;

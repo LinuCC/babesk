@@ -65,8 +65,34 @@ class SchbasStatistics extends Statistics {
 
 	protected function outputPdf() {
 
+		$assistantsCost = filter_input(INPUT_GET, 'assistantsCost');
+		$toolsCost = filter_input(INPUT_GET, 'toolsCost');
+		if(isset($assistantsCost)) {
+			$assistantsCost = str_replace(',', '.', $assistantsCost);
+			$assistantsCost = money_format('%.2n', floatval($assistantsCost));
+		}
+		if(isset($toolsCost)) {
+			$toolsCost = str_replace(',', '.', $toolsCost);
+			$toolsCost = money_format('%.2n', floatval($toolsCost));
+		}
+		$otherCosts = [];
+		if(isset($_GET['otherCosts']) && count($_GET['otherCosts'])) {
+			$otherCosts = $_GET['otherCosts'];
+			$otherCosts = array_map(function($otherCost) {
+				$date = date('d.m.Y', strtotime($otherCost['date']));
+				$amount = money_format('%.2n', floatval($otherCost['amount']));
+				return [
+					'amount' => $amount,
+					'date' => $date,
+					'recipient' => $otherCost['recipient']
+				];
+			}, $_GET['otherCosts']);
+		}
 		$data = $this->calculateData();
 		$this->_smarty->assign('data', $data);
+		$this->_smarty->assign('assistantsCost', $assistantsCost);
+		$this->_smarty->assign('toolsCost', $toolsCost);
+		$this->_smarty->assign('otherCosts', $otherCosts);
 		$pdf = new GeneralPdf($this->_pdo);
 		$today = date('d.m.Y H:i');
 		$html = $this->_smarty->fetch(
