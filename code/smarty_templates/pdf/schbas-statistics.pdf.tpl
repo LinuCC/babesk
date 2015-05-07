@@ -57,7 +57,7 @@
 {/if}
 
 {if $otherCosts && count($otherCosts)}
-	<h3>Sonstige Ausagaben</h3>
+	<h3>Sonstige Ausgaben</h3>
 	<table>
 		<thead>
 			<tr>
