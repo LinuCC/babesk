@@ -27,6 +27,21 @@ class Inventory extends Schbas {
 		$inventoryInterface = new AdminInventoryInterface($this->relPath);
 		$inventoryProcessing = new AdminInventoryProcessing($inventoryInterface);
 
+		/**
+		 * @todo  Remove this in the future when the old methods of this class
+		 * are not used anymore
+		 */
+		if(isset($_GET['index'])) {
+			if(isset($_GET['ajax'])) {
+				$this->index();
+			}
+			else {
+				$this->indexPage();
+
+			}
+			die();
+		}
+
 		$action_arr = array('show_inventory' => 1,
 							'add_inventory' => 4,
 							'del_inventory' => 5);
@@ -166,6 +181,116 @@ class Inventory extends Schbas {
 			'unique' => $uniqueBarcodes,
 			'duplicated' => $duplicatedBarcodes
 		] );
+	}
+
+	/**
+	 * Send the basic HTML-page to the user
+	 */
+	protected function indexPage() {
+
+		$this->moduleTemplatePathSet();
+		$this->displayTpl('index.tpl');
+	}
+
+	/**
+	 * Show the inventory-list
+	 */
+	protected function index() {
+
+		$sort = filter_input(INPUT_GET, 'sort');
+		$filter = filter_input(INPUT_GET, 'filter');
+		$activePage = filter_input(INPUT_GET, 'activePage',
+			FILTER_VALIDATE_INT);
+		$entriesPerPage = filter_input(INPUT_GET, 'entriesPerPage',
+			FILTER_VALIDATE_INT);
+		$displayColumns = [];
+		if(isset($_GET['displayColumns']) && count($_GET['displayColumns'])) {
+			$displayColumns = array_map(function($columnString) {
+				return filter_var($columnString, FILTER_SANITIZE_STRING);
+			}, $_GET['displayColumns']);
+		}
+		if(
+			!isset($sort) || !isset($filter) || !isset($activePage) ||
+			!isset($entriesPerPage) || !count($displayColumns)
+		) {
+			dieHttp('Fehlende Parameter', 400);
+		}
+		else {
+			$this->sendIndex(
+				$sort, $filter, $activePage, $entriesPerPage, $displayColumns
+			);
+		}
+	}
+
+	protected function sendIndex(
+		$sort, $filter, $activePage, $entriesPerPage, $displayColumns
+	) {
+
+		$qb = $this->_em->createQueryBuilder()
+			->select(['i', 'b', 's'])
+			->from('DM:SchbasInventory', 'i')
+			->leftJoin('i.book', 'b')
+			->leftJoin('b.subject', 's')
+			->leftJoin('i.lending', 'l')
+			->leftJoin('l.user', 'u');
+		$rowCountQb = $this->_em
+			->createQueryBuilder()
+			->select('COUNT(i)')
+			->from('DM:SchbasInventory', 'i');
+		if(!empty($filter)) {
+			$this->sendIndexApplyFilter($filter, $qb);
+			$this->sendIndexApplyFilter($filter, $rowCountQb);
+		}
+		$qb->setFirstResult($activePage * $entriesPerPage)
+			->setMaxResults($entriesPerPage);
+		$result = $qb->getQuery()->getResult();
+		$rowCount = $rowCountQb->getQuery()->getSingleScalarResult();
+
+
+		$data = [];
+		foreach($result as $row) {
+			$rowData = [];
+			$rowData['id'] = $row->getId();
+			if($row->getLending() && count($row->getLending()) > 0) {
+				if(count($row->getLending()) > 1) {
+					$this->_logger->log('Inventory is lend multiple times!',
+						'warning');
+				}
+				$user = $row->getLending()->first()->getUser();
+				$rowData['lentUser'] = [
+					'id' => $user->getId(),
+					'username' => $user->getUsername()
+				];
+				$rowData['lentUserId'] = $user->getId();
+				$rowData['lentUserUsername'] = $user->getUsername();
+			}
+			if(!$row->getBook()) {
+				$this->_logger->logO('Book for inventory not found', ['sev' =>
+					'error', 'moreJson' => ['invId' => $row->getId()]]);
+				$rowData['barcode'] = 'Buch nicht gefunden!';
+			}
+			else {
+				$barcode = Babesk\Schbas\Barcode::createByInventory($row);
+				$rowData['barcode'] = $barcode->getAsString();
+				if($row->getBook()->getSubject()) {
+					$rowData['subject'] = $row->getBook()->
+						getSubject()->getName();
+				}
+			}
+			$data['data'][] = $rowData;
+		}
+		$data['pageCount'] = $rowCount;
+		dieJson($data);
+	}
+
+	protected function sendIndexApplyFilter($filter, $queryBuilder) {
+		$queryBuilder->where('i.yearOfPurchase LIKE :filter')
+			->orWhere('i.exemplar LIKE :filter')
+			// ->orWhere('b.title LIKE :filter')
+			// ->orWhere('s.name LIKE :filter')
+			// ->orWhere('u.username LIKE :filter')
+			// ->orWhere('s.abbreviation LIKE :filter')
+			->setParameter('filter', "%$filter%");
 	}
 }
 

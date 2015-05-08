@@ -19,6 +19,29 @@ class Barcode {
 		return $barcode;
 	}
 
+	/**
+	 * Creates the barcode by reading the data from the inventory-object
+	 * Note that it also reads from the book and subject of the $inventory, so
+	 * be sure to fetch those with a query beforehand if you dont want
+	 * additional queries to be executed.
+	 * @param  DM:SchbasInventory $inventory
+	 */
+	public static function createByInventory($inventory) {
+
+		$barcode = new Barcode();
+		$book = $inventory->getBook();
+		if(!$book) {
+			return false;
+		}
+		$barcode->_subject = $book->getSubject()->getAbbreviation();
+		$barcode->_class = $book->getClass();
+		$barcode->_bundle = $book->getBundle();
+		$barcode->_purchaseYear = $inventory->getYearOfPurchase();
+		$barcode->_exemplar = $inventory->getExemplar();
+		$barcode->_delimiter = '/';
+		return $barcode;
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//Methods
 	/////////////////////////////////////////////////////////////////////
@@ -45,6 +68,11 @@ class Barcode {
 
 	public function getExemplar() {
 		return $this->_exemplar;
+	}
+
+	public function getAsString() {
+		return "$this->_subject $this->_purchaseYear $this->_class " .
+			"$this->_bundle $this->_delimiter $this->_exemplar";
 	}
 
 

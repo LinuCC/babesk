@@ -1,20 +1,40 @@
-{extends file=$inventoryParent}{block name=content}
+{extends file=$inh_path}{block name=filling_content}
 
-<h3 class="module-header">Inventarmenü</h3>
+<div class="row">
+	<div id="entry" class="col-xs-12">
+	</div>
+</div>
 
-<fieldset>
-	<legend>Generell</legend>
-	<ul class="submodulelinkList">
-		<li>
-			<a href="index.php?section=Schbas|Inventory&action={$action['show_inventory']}">Inventarliste</a>
-		</li>
-		<li>
-			<a href="index.php?section=Schbas|Inventory&action={$action['add_inventory']}">Inventar hinzuf&uuml;gen</a>
-		</li>
-		<li>
-			<a href="index.php?section=Schbas|Inventory&action={$action['del_inventory']}">Inventar mit Barcode l&ouml;schen</a>
-		</li>
-	</ul>
-</fieldset>
+{/block}
+
+{block name="style_include" append}
+<link rel="stylesheet"
+	href="{$path_css}/administrator/System/Users/displaySingle.css"
+	type="text/css" />
+<link rel="stylesheet"
+	href="{$path_css}/nprogress.css"
+	type="text/css" />
+<link rel="stylesheet"
+	href="{$path_css}/react-widgets.css"
+	type="text/css" />
+<link rel="stylesheet"
+	href="{$path_css}/react-toggle.css"
+	type="text/css" />
+<link rel="stylesheet"
+	href="{$path_css}/react-select.css"
+	type="text/css" />
+<link rel="stylesheet"
+	href="{$path_css}/administrator/Schbas/BookAssignments/View/main.css"
+	type="text/css" />
+{/block}
+
+{block name=js_include append}
+
+<script type="text/javascript"
+	src="{$path_js}/vendor/bootbox.min.js">
+</script>
+<script type="text/javascript"
+	src="{$path_js}/dist/administrator/Schbas/Inventory/index.js">
+</script>
 
 {/block}
