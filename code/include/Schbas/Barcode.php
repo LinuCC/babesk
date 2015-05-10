@@ -30,7 +30,7 @@ class Barcode {
 
 		$barcode = new Barcode();
 		$book = $inventory->getBook();
-		if(!$book) {
+		if(!$book || !$book->getSubject()) {
 			return false;
 		}
 		$barcode->_subject = $book->getSubject()->getAbbreviation();

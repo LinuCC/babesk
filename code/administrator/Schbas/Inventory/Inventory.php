@@ -225,7 +225,7 @@ class Inventory extends Schbas {
 	protected function sendIndex(
 		$sort, $filter, $activePage, $entriesPerPage, $displayColumns
 	) {
-
+		$this->sendIndexCheckInput($entriesPerPage);
 		$qb = $this->_em->createQueryBuilder()
 			->select(['i', 'b', 's'])
 			->from('DM:SchbasInventory', 'i')
@@ -235,8 +235,12 @@ class Inventory extends Schbas {
 			->leftJoin('l.user', 'u');
 		$rowCountQb = $this->_em
 			->createQueryBuilder()
-			->select('COUNT(i)')
-			->from('DM:SchbasInventory', 'i');
+			->select('COUNT(DISTINCT i.id)')
+			->from('DM:SchbasInventory', 'i')
+			->leftJoin('i.book', 'b')
+			->leftJoin('b.subject', 's')
+			->leftJoin('i.lending', 'l')
+			->leftJoin('l.user', 'u');
 		if(!empty($filter)) {
 			$this->sendIndexApplyFilter($filter, $qb);
 			$this->sendIndexApplyFilter($filter, $rowCountQb);
@@ -264,29 +268,49 @@ class Inventory extends Schbas {
 				$rowData['lentUserId'] = $user->getId();
 				$rowData['lentUserUsername'] = $user->getUsername();
 			}
-			if(!$row->getBook()) {
+			if($row->getBook()) {
+				if($row->getBook()->getSubject()) {
+					$barcode = Babesk\Schbas\Barcode::createByInventory($row);
+					$rowData['barcode'] = ($barcode) ?
+						$barcode->getAsString() : '???';
+					$rowData['subject'] = $row->getBook()->
+						getSubject()->getName();
+				}
+				else {
+					$this->_logger->logO('Subject for inventory not found',
+						['sev' => 'error', 'moreJson' => ['invId' =>
+						$row->getId()]]);
+					$rowData['barcode'] = 'Fach nicht gefunden!';
+				}
+			}
+			else {
 				$this->_logger->logO('Book for inventory not found', ['sev' =>
 					'error', 'moreJson' => ['invId' => $row->getId()]]);
 				$rowData['barcode'] = 'Buch nicht gefunden!';
 			}
-			else {
-				$barcode = Babesk\Schbas\Barcode::createByInventory($row);
-				$rowData['barcode'] = $barcode->getAsString();
-				if($row->getBook()->getSubject()) {
-					$rowData['subject'] = $row->getBook()->
-						getSubject()->getName();
-				}
-			}
 			$data['data'][] = $rowData;
 		}
-		$data['pageCount'] = $rowCount;
+		$data['pageCount'] = $rowCount / $entriesPerPage;
 		dieJson($data);
+	}
+
+	protected function sendIndexCheckInput($entriesPerPage) {
+
+		if($entriesPerPage < 0 || $entriesPerPage > 1000) {
+			dieHttp('Inkorrekte Eingabe: Einträge pro Seite', 400);
+		}
 	}
 
 	protected function sendIndexApplyFilter($filter, $queryBuilder) {
 		$queryBuilder->where('i.yearOfPurchase LIKE :filter')
 			->orWhere('i.exemplar LIKE :filter')
-			// ->orWhere('b.title LIKE :filter')
+			->orWhere('i.yearOfPurchase LIKE :filter')
+			->orWhere('b.title LIKE :filter')
+			->orWhere('b.isbn LIKE :filter')
+			->orWhere('b.class LIKE :filter')
+			->orWhere('b.bundle LIKE :filter')
+			->orWhere('s.name LIKE :filter')
+			->orWhere('u.username LIKE :filter')
 			// ->orWhere('s.name LIKE :filter')
 			// ->orWhere('u.username LIKE :filter')
 			// ->orWhere('s.abbreviation LIKE :filter')

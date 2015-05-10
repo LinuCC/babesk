@@ -1,0 +1,1 @@
+ALTER TABLE `SchbasLending` ADD INDEX(`inventory_id`);
