@@ -46,7 +46,7 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 	}
 
 	/**
-	 * Fetches 20 conflicts that are to resolve
+	 * Fetches conflicts that are to resolve
 	 * Dies displaying a message on error
 	 * @return array  the conflicts
 	 */
@@ -60,7 +60,10 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 					IFNULL(u.name, tu.name) AS name,
 					IFNULL(tu.birthday, u.birthday) AS birthday,
 					CONCAT(g.gradelevel, "-", g.label) AS origGrade,
-					CONCAT(tu.gradelevel, "-", tu.label) AS newGrade
+					CONCAT(tu.gradelevel, "-", tu.label) AS newGrade,
+					tu.religion AS newReligion,
+					tu.foreign_language AS newForeignLanguage,
+					tu.special_course AS newSpecialCourse
 				FROM UserUpdateTempConflicts tc
 					LEFT JOIN UserUpdateTempUsers tu ON tu.ID = tc.tempUserId
 					LEFT JOIN SystemUsers u ON u.ID = tc.origUserId
@@ -156,11 +159,13 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 			$this->userSolveStmt = $this->_pdo->prepare(
 				'INSERT INTO UserUpdateTempSolvedUsers
 					(origUserId, forename, name, newUsername, newTelephone,
-						newEmail, gradelevel, gradelabel, birthday)
+						newEmail, gradelevel, gradelabel, birthday,
+						religion, foreign_language, special_course)
 					VALUES (
 						:origUserId, :forename, :name, :newUsername,
 						:newTelephone, :newEmail, :gradelevel, :gradelabel,
-						:birthday
+						:birthday, :religion, :foreign_language,
+						:special_course
 					)'
 			);
 			$this->conflictResolveStmt = $this->_pdo->prepare(
@@ -228,7 +233,10 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 					g.gradelevel AS origGradelevel,
 					g.label AS origGradelabel,
 					tu.gradelevel AS newGradelevel,
-					tu.label AS newGradelabel
+					tu.label AS newGradelabel,
+					tu.religion AS newReligion,
+					tu.foreign_language AS newForeignLanguage,
+					tu.special_course AS newSpecialCourse
 				FROM UserUpdateTempConflicts tc
 				LEFT JOIN UserUpdateTempUsers tu ON tu.ID = tc.tempUserId
 				LEFT JOIN SystemUsers u ON u.ID = tc.origUserId
@@ -282,6 +290,9 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 			'gradelevel' => $conflict['newGradelevel'],
 			'gradelabel' => $conflict['newGradelabel'],
 			'birthday' => $conflict['birthday'],
+			'religion' => $conflict['newReligion'],
+			'foreign_language' => $conflict['newForeignLanguage'],
+			'special_course' => $conflict['newSpecialCourse']
 		);
 		if(empty($conflict['birthday'])) {
 			$conflict['birthday'] = NULL;
@@ -319,7 +330,10 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 				'newEmail' => $conflict['newEmail'],
 				'gradelevel' => $conflict['newGradelevel'],
 				'gradelabel' => $conflict['newGradelabel'],
-				'birthday' => $conflict['birthday']
+				'birthday' => $conflict['birthday'],
+				'religion' => $conflict['newReligion'],
+				'foreign_language' => $conflict['newForeignLanguage'],
+				'special_course' => $conflict['newSpecialCourse']
 			);
 			$this->userSolveStmt->execute($data);
 			$this->conflictResolveStmt->execute(

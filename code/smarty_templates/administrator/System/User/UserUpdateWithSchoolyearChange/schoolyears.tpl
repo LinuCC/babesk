@@ -22,6 +22,11 @@
 					{/foreach}
 				</select>
 			</div>
+			<p class="help-block">
+				<b>Hinweis</b>: Das Schuljahr wird momentan nicht automatisch
+				gewechselt. Nachdem sie die Schülerveränderungen angewendet haben,
+				wechseln sie das Schuljahr bitte manuell.
+			</p>
 		</div>
 	</div>
 
