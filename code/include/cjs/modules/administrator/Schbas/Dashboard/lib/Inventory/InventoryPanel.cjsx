@@ -155,6 +155,12 @@ module.exports = React.createClass(
         else
           <ButtonGroup justified>
             <ButtonGroup>
+              <Button href='index.php?module=administrator|Schbas|Inventory'
+                bsStyle='default'>
+                Inventarliste
+              </Button>
+            </ButtonGroup>
+            <ButtonGroup>
               <Button bsStyle='default' onClick={@handleAddInventoryClicked}>
                 Exemplare hinzufügen
               </Button>

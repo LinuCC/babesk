@@ -193,6 +193,9 @@ module.exports = React.createClass({
     }), " L\u00f6schen"))) : React.createElement(ButtonGroup, {
       "justified": true
     }, React.createElement(ButtonGroup, null, React.createElement(Button, {
+      "href": 'index.php?module=administrator|Schbas|Inventory',
+      "bsStyle": 'default'
+    }, "Inventarliste")), React.createElement(ButtonGroup, null, React.createElement(Button, {
       "bsStyle": 'default',
       "onClick": this.handleAddInventoryClicked
     }, "Exemplare hinzuf\u00fcgen")), React.createElement(ButtonGroup, null, React.createElement(Button, {
