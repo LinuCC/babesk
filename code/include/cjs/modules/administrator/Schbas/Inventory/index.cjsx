@@ -8,6 +8,7 @@ Table = require 'react-bootstrap/lib/Table'
 Input = require 'react-bootstrap/lib/Input'
 NProgress = require 'nprogress'
 Paginator = require 'lib/Paginator'
+Select = require 'react-select'
 
 IndexBox = React.createClass(
 
@@ -16,8 +17,19 @@ IndexBox = React.createClass(
       activePage: 1
       entriesPerPage: 10
       pageCount: 1
-      columns: ['id', 'barcode', 'lentUser']
-      displayColumns: ['id', 'barcode', 'lentUser']
+      columns: [
+        'id', 'barcode', 'lentUser', 'bookTitle', 'bookIsbn', 'subjectName',
+        'bookAuthor'
+      ]
+      columnTranslations:
+        id: 'ID'
+        barcode: 'Barcode'
+        lentUser: 'Verliehen an'
+        bookTitle: 'Buchtitel'
+        bookAuthor: 'Buchauthor'
+        bookIsbn: 'ISBN'
+        subjectName: 'Fach'
+      displayColumns: ['barcode', 'lentUser']
       filter: ''
       sort: ''
       data: []
@@ -51,11 +63,19 @@ IndexBox = React.createClass(
     @setState(activePage: pagenum, @updateData)
 
   handleSearch: ->
-    console.log "res"
     @updateData()
 
   handleFilterChange: (event)->
     @setState filter: event.target.value
+
+  handleFilterKeyDown: (event)->
+    if event.key is 'Enter'
+      @handleSearch()
+
+  handleSelectedColumnsChange: (values)->
+    if values.indexOf('barcode') < 0
+      values.unshift 'barcode'
+    @setState displayColumns: values
 
   render: ->
     searchButton = <Button onClick={@handleSearch} >
@@ -65,7 +85,7 @@ IndexBox = React.createClass(
       <Row className='text-center'>
         <Col md={4}>
           <Input type='text' value={@state.filter}
-            onChange={@handleFilterChange}
+            onChange={@handleFilterChange} onKeyDown={@handleFilterKeyDown}
             buttonAfter={searchButton} />
         </Col>
         <Col md={4}>
@@ -73,15 +93,48 @@ IndexBox = React.createClass(
             onClick={@handleChangeActivePage} />
         </Col>
         <Col md={4}>
+          <ColumnDisplaySelect columnTranslations={@state.columnTranslations}
+            columns={@state.columns} onChange={@handleSelectedColumnsChange}
+            displayColumns={@state.displayColumns} />
         </Col>
       </Row>
       <Row>
         <Col xs={12}>
-          <InventoryTable dataRows={@state.data}
-            displayColumns={@state.displayColumns} />
+          <InventoryTable columnTranslations={@state.columnTranslations}
+            dataRows={@state.data} displayColumns={@state.displayColumns} />
         </Col>
       </Row>
     </Panel>
+)
+
+ColumnDisplaySelect = React.createClass(
+
+  propTypes:
+    columns: React.PropTypes.array,
+    columnTranslations: React.PropTypes.array,
+    onChange: React.PropTypes.func
+
+  getDefaultProps: ->
+    columns: []
+    columnTranslations: []
+    onChange: (values)-> console.log values
+
+  handleChange: (value)->
+    values = value.split ','
+    # Remove void string from array in case it exists
+    if values.indexOf('') > -1
+      pos = values.indexOf('')
+      values.splice pos, pos + 1
+    @props.onChange values
+
+  render: ->
+    possibleCols = @props.columns.map (col)=>
+      if @props.columnTranslations[col]?
+        return {label: @props.columnTranslations[col], value: col}
+      else
+        return {label: col, value: col}
+    <Select multi={true} placeholder='Spaltenanzeige' options={possibleCols}
+      onChange={@handleChange} value={@props.displayColumns} />
 )
 
 InventoryTable = React.createClass(
@@ -89,6 +142,7 @@ InventoryTable = React.createClass(
   getDefaultProps: ->
     return {
       displayColumns: ['id', 'barcode', 'lentUser']
+      columnTranslations: {}
       dataRows: []
     }
 
@@ -97,8 +151,12 @@ InventoryTable = React.createClass(
       <thead>
         <tr>
           {
-            @props.displayColumns.map (column, index)->
-              <th key={index}>{column}</th>
+            @props.displayColumns.map (column, index)=>
+              if @props.columnTranslations[column]?
+                columnName = @props.columnTranslations[column]
+              else
+                columnName = column
+              <th key={index}>{columnName}</th>
           }
         </tr>
       </thead>

@@ -6,17 +6,17 @@ require_once PATH_ADMIN . '/Schbas/Schbas.php';
 
 class Inventory extends Schbas {
 
-	////////////////////////////////////////////////////////////////////////////////
-	//Attributes
-
-	////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
 	//Constructor
+	/////////////////////////////////////////////////////////////////////
+
 	public function __construct($name, $display_name, $path) {
 		parent::__construct($name, $display_name, $path);
 	}
 
-	////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////
 	//Methods
+	/////////////////////////////////////////////////////////////////////
 	public function execute($dataContainer) {
 
 		$this->entryPoint($dataContainer);
@@ -113,6 +113,10 @@ class Inventory extends Schbas {
 			$inventoryInterface->ShowSelectionFunctionality($action_arr);
 		}
 	}
+
+	/////////////////////////////////////////////////////////////////////
+	//Implements
+	/////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Returns the barcodes and, if it fits to more than one book, the books
@@ -242,8 +246,8 @@ class Inventory extends Schbas {
 			->leftJoin('i.lending', 'l')
 			->leftJoin('l.user', 'u');
 		if(!empty($filter)) {
-			$this->sendIndexApplyFilter($filter, $qb);
-			$this->sendIndexApplyFilter($filter, $rowCountQb);
+			$this->sendIndexApplyFilter($filter, $qb, $displayColumns);
+			$this->sendIndexApplyFilter($filter, $rowCountQb, $displayColumns);
 		}
 		$qb->setFirstResult($activePage * $entriesPerPage)
 			->setMaxResults($entriesPerPage);
@@ -273,7 +277,7 @@ class Inventory extends Schbas {
 					$barcode = Babesk\Schbas\Barcode::createByInventory($row);
 					$rowData['barcode'] = ($barcode) ?
 						$barcode->getAsString() : '???';
-					$rowData['subject'] = $row->getBook()->
+					$rowData['subjectName'] = $row->getBook()->
 						getSubject()->getName();
 				}
 				else {
@@ -282,6 +286,9 @@ class Inventory extends Schbas {
 						$row->getId()]]);
 					$rowData['barcode'] = 'Fach nicht gefunden!';
 				}
+				$rowData['bookTitle'] = $row->getBook()->getTitle();
+				$rowData['bookIsbn'] = $row->getBook()->getIsbn();
+				$rowData['bookAuthor'] = $row->getBook()->getAuthor();
 			}
 			else {
 				$this->_logger->logO('Book for inventory not found', ['sev' =>
@@ -301,21 +308,38 @@ class Inventory extends Schbas {
 		}
 	}
 
-	protected function sendIndexApplyFilter($filter, $queryBuilder) {
-		$queryBuilder->where('i.yearOfPurchase LIKE :filter')
-			->orWhere('i.exemplar LIKE :filter')
-			->orWhere('i.yearOfPurchase LIKE :filter')
-			->orWhere('b.title LIKE :filter')
-			->orWhere('b.isbn LIKE :filter')
-			->orWhere('b.class LIKE :filter')
-			->orWhere('b.bundle LIKE :filter')
-			->orWhere('s.name LIKE :filter')
-			->orWhere('u.username LIKE :filter')
-			// ->orWhere('s.name LIKE :filter')
-			// ->orWhere('u.username LIKE :filter')
-			// ->orWhere('s.abbreviation LIKE :filter')
-			->setParameter('filter', "%$filter%");
+	protected function sendIndexApplyFilter(
+		$filter, $queryBuilder, $displayColumns
+	) {
+		if(in_array('barcode', $displayColumns)) {
+			$queryBuilder->where('i.yearOfPurchase LIKE :filter')
+				->orWhere('b.class LIKE :filter')
+				->orWhere('b.bundle LIKE :filter')
+				->orWhere('i.exemplar LIKE :filter')
+				->orWhere('s.abbreviation LIKE :filter');
+		}
+		if(in_array('lentUser', $displayColumns)) {
+			$queryBuilder->orWhere('u.username LIKE :filter');
+		}
+		if(in_array('bookTitle', $displayColumns)) {
+			$queryBuilder->orWhere('b.title LIKE :filter');
+		}
+		if(in_array('bookIsbn', $displayColumns)) {
+			$queryBuilder->orWhere('b.isbn LIKE :filter');
+		}
+		if(in_array('bookAuthor', $displayColumns)) {
+			$queryBuilder->orWhere('b.author LIKE :filter');
+		}
+		if(in_array('subjectName', $displayColumns)) {
+			$queryBuilder->orWhere('s.name LIKE :filter');
+		}
+		$queryBuilder->setParameter('filter', "%$filter%");
 	}
+
+	/////////////////////////////////////////////////////////////////////
+	//Attributes
+	/////////////////////////////////////////////////////////////////////
+
 }
 
 ?>
