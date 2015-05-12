@@ -82,6 +82,18 @@
 		</div>
 	</div>
 
+	<div class="form-group" data-toggle="tooltip"
+		title="Wenn aktiviert, generiert die Ausleihzuweisungen für neue Schüler automatisch">
+		<div class="col-xs-offset-4 col-xs-8 col-lg-offset-2 col-lg-10">
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" name="generate-lending-assignments" />
+					Schbas Ausleihzuweisungen generieren
+				</label>
+			</div>
+		</div>
+	</div>
+
 	<input id="submit" type="submit" class="btn btn-default"
 		name="schoolyearSelected" value="{t}continue{/t}">
 	<a href="#" class="btn btn-default pull-right" data-toggle="popover"

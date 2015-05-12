@@ -120,6 +120,10 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 		$this->schoolyearIdUpload($_POST['schoolyear']);
 		$groupId = (!empty($_POST['usergroup'])) ? $_POST['usergroup'] : 0;
 		$this->groupToAddNewUsersToSet($groupId);
+		$this->shouldGenerateSchbasAssignmentsSet(
+			isset($_POST['generate-lending-assignments'])
+		);
+		$this->_em->flush();
 
 		//Now execute the CsvImport-Module
 		$mod = new \ModuleExecutionCommand('root/administrator/System/' .
@@ -192,6 +196,23 @@ class NewSession extends \administrator\System\User\UserUpdateWithSchoolyearChan
 				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
 			$this->_interface->dieError(_g('Could not upload the data!'));
 		}
+	}
+
+	private function shouldGenerateSchbasAssignmentsSet($status) {
+
+		$schbasAssignmentsEntry = $this->_em
+			->getRepository('DM:SystemGlobalSettings')
+			->findOneByName(
+				'userUpdateWithSchoolyearChangeSchbasAssignmentsGenerate'
+			);
+		if(!$schbasAssignmentsEntry) {
+			$schbasAssignmentsEntry = new \Babesk\ORM\SystemGlobalSettings();
+			$schbasAssignmentsEntry->setName(
+				'userUpdateWithSchoolyearChangeSchbasAssignmentsGenerate'
+			);
+		}
+		$schbasAssignmentsEntry->setValue(($status) ? 1 : 0);
+		$this->_em->persist($schbasAssignmentsEntry);
 	}
 
 	/**

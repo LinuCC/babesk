@@ -20,6 +20,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 	public function execute($dataContainer) {
 
 		$this->entryPoint($dataContainer);
+		$this->_pdo = $this->_em->getConnection();
 		try {
 			if($this->conflictsSolvedCheck()) {
 				$this->_existingGrades = $this->gradesFetch();
@@ -201,6 +202,7 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 				(?, ?)'
 			);
 
+			$newUserIds = [];
 			foreach($users as $user) {
 				if(empty($user['birthday'])) {
 					$user['birthday'] = '';
@@ -213,9 +215,24 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 					$user['foreign_language'], $user['special_course']
 				));
 				$userId = $this->_pdo->lastInsertId();
+				$newUserIds[] = $userId;
 				$stmtg->execute(array($userId, $user['gradeId']));
 				if($groupId != 0) {
 					$stmtgroups->execute(array($userId, $groupId));
+				}
+			}
+			$schbasAssignmentsEntry = $this->_em
+				->getRepository('DM:SystemGlobalSettings')
+				->findOneByName(
+					'userUpdateWithSchoolyearChangeSchbasAssignmentsGenerate'
+				);
+			if(!$schbasAssignmentsEntry) {
+				$this->_logger->logO('schbas assignments entry not found', [
+					'sev' => 'warning']);
+			}
+			else {
+				if($schbasAssignmentsEntry->getValue()) {
+					$this->schbasAssignmentsGenerate($newUserIds);
 				}
 			}
 
@@ -251,6 +268,25 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 				json_encode(array('msg' => $e->getMessage())));
 			$this->_interface->dieError(_g('Could not get the group for the ' .
 				'new users!'));
+		}
+	}
+
+	private function schbasAssignmentsGenerate($userIds) {
+
+		require_once PATH_INCLUDE . '/Schbas/ShouldLendGeneration.php';
+		$syId = $this->_em->getRepository('DM:SystemGlobalSettings')
+			->getSetting('userUpdateWithSchoolyearChangeNewSchoolyearId');
+		$schoolyear = $this->_em->getReference('DM:SystemSchoolyears', $syId);
+		$generator = new \Babesk\Schbas\ShouldLendGeneration(
+			$this->_dataContainer
+		);
+		$users = array_map(function($userId) {
+			return $this->_em->getReference('DM:SystemUsers', $userId);
+		}, $userIds);
+		if(count($users)) {
+			$generator->generate(
+				['onlyForUsers' => $users, 'schoolyear' => $schoolyear]
+			);
 		}
 	}
 

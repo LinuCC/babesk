@@ -28,7 +28,27 @@ class ShouldLendGeneration {
 	//Methods
 	/////////////////////////////////////////////////////////////////////
 
-	public function generate() {
+	/**
+	 * Generates the ShouldLendAssignments
+	 * @param  array  $opt An array with optional options
+	 *                     'onlyForUsers': An array of DM:SystemUsers.
+	 *                         If given, will only generate the
+	 *                         assignments for these users.
+	 *                         If not, will generate for all users of the
+	 *                         current schbasPreparationSchoolyear.
+	 *                     'schoolyear': The DM:SystemSchoolyears for which to
+	 *                         generate the assignments. If nothing given, it
+	 *                         will generate for the schbasPrepSchoolyear.
+	 * @return bool   true on success
+	 */
+	public function generate(array $opt) {
+
+		if(isset($opt['onlyForUsers'])) {
+			$this->_users = $opt['onlyForUsers'];
+		}
+		if(isset($opt['schoolyear'])) {
+			$this->_schoolyear = $opt['schoolyear'];
+		}
 
 		$this->generateInit();
 		$entries = [];
@@ -64,8 +84,12 @@ class ShouldLendGeneration {
 
 	protected function generateInit() {
 
-		$this->preparationSchoolyearFetch();
-		$this->usersFetch();
+		if(!$this->_schoolyear) {
+			$this->preparationSchoolyearFetch();
+		}
+		if(!$this->_users) {
+			$this->usersFetch();
+		}
 		$this->booksFetch();
 		$this->filtersFetch();
 		$this->specialCourseTriggerFetch();
@@ -73,9 +97,9 @@ class ShouldLendGeneration {
 
 	protected function preparationSchoolyearFetch() {
 
-		$this->_preparationSchoolyear = $this->_loanHelper
+		$this->_schoolyear = $this->_loanHelper
 			->schbasPreparationSchoolyearGet();
-		if(!$this->_preparationSchoolyear) {
+		if(!$this->_schoolyear) {
 			$this->_logger->log(
 				'Vorbereitungsschuljahr nicht gesetzt.', 'error'
 			);
@@ -97,7 +121,7 @@ class ShouldLendGeneration {
 				INNER JOIN uigs.grade g
 			');
 			$userQuery->setParameter(
-				'schoolyear', $this->_preparationSchoolyear
+				'schoolyear', $this->_schoolyear
 			);
 			//Silly doctrine, dont lazy-load oneToOne-entries automatically
 			$userQuery->setHint(
@@ -219,7 +243,7 @@ class ShouldLendGeneration {
 		$entry = new \Babesk\ORM\SchbasUserShouldLendBook();
 		$entry->setUser($user);
 		$entry->setBook($book);
-		$entry->setSchoolyear($this->_preparationSchoolyear);
+		$entry->setSchoolyear($this->_schoolyear);
 		$this->_em->persist($entry);
 	}
 
@@ -233,7 +257,7 @@ class ShouldLendGeneration {
 
 	protected $_loanHelper;
 
-	protected $_preparationSchoolyear;
+	protected $_schoolyear;
 	protected $_users;
 	protected $_books;
 
