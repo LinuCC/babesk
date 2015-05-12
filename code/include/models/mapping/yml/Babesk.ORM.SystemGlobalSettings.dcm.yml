@@ -1,6 +1,7 @@
 Babesk\ORM\SystemGlobalSettings:
     type: entity
     table: SystemGlobalSettings
+    repositoryClass: Repository\GlobalSetting
     id:
         id:
             type: integer
