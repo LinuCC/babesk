@@ -345,6 +345,24 @@ div.quotebox, p.quotebox {
 	color: #176049;
 }
 
+.panel-chart {
+	border: none;
+}
+
+.panel-chart > .panel-heading {
+	background-image: none;
+	background-color: #FFF;
+	border-color: #FFF;
+	padding: 0;
+	text-align: center;
+}
+
+.panel-chart > .panel-heading {
+	/*font-weight: bold;*/
+	padding-top: 3px;
+	color: #777;
+}
+
 .class-container h4.panel-title {
 	display: inline;
 }
