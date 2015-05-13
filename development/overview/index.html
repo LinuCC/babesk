@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Übersicht - BaBeSK Dokumentation</title>
+  
+
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/highlight.css">
+
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+  <script src="../../js/theme.js"></script> 
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> BaBeSK Dokumentation</a>
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+      <ul class="current">
+    
+        
+            <li class="toctree-l1 ">
+                <a class="" href="../..">Übersicht</a>
+                
+            </li>
+        
+
+    
+        
+            <li class="toctree-l1 ">
+                <a class="" href="../../users/">Benutzeradmininistration</a>
+                
+            </li>
+        
+
+    
+        
+            <span>Module</span>
+            
+                <li class="toctree-l2 ">
+                    <a class="" href="../../modules/babesk/">Babesk: Bargeldloses Bestellsystem</a>
+                    
+                </li>
+            
+                <li class="toctree-l2 ">
+                    <a class="" href="../../modules/kuwasys/">Kuwasys: Kurswahlsystem</a>
+                    
+                </li>
+            
+                <li class="toctree-l2 ">
+                    <a class="" href="../../modules/schbas/">Schbas: Schulbuchausleihesystem</a>
+                    
+                </li>
+            
+        
+
+    
+        
+            <span>Entwicklung</span>
+            
+                <li class="toctree-l2 ">
+                    <a class="" href="../setup/">Entwicklungs-Umgebung aufsetzen</a>
+                    
+                </li>
+            
+                <li class="toctree-l2 current">
+                    <a class="current" href="./">Übersicht</a>
+                    
+                        <ul>
+                        
+                            <li class="toctree-l3"><a href="#struktur">Struktur</a></li>
+                            
+                        
+                            <li class="toctree-l3"><a href="#ordnerstruktur">Ordnerstruktur</a></li>
+                            
+                        
+                            <li class="toctree-l3"><a href="#beachtenswerte-dateien">Beachtenswerte Dateien</a></li>
+                            
+                        
+                        </ul>
+                    
+                </li>
+            
+        
+
+    
+</ul>
+
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">BaBeSK Dokumentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        <li>Entwicklung &raquo;</li>
+      
+    
+    <li>Übersicht</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="https://github.com/linucc/babesk" class="icon icon-github"> Edit on GitHub</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              <h1 id="struktur">Struktur</h1>
+<p>Das Projekt ist wie folgt strukturiert:</p>
+<ul>
+<li><strong>subprograms</strong>
+  "Unterprogramme", unterschiedlich aussehende Webseiten. Zum Beispiel "web"
+  oder "administrator". <em>subprograms</em> haben ein oder mehrere modules.</li>
+<li><strong>modules</strong>
+  Unterteilen das Programm in einzelne Funktionalitäten wie "Kurswahlsystem"
+  oder "Schulbuchausleihesystem". Können &amp; werden über die <em>subprograms</em> hinweg
+  dupliziert. So hat "web" ein <em>module</em> namens "Kuwasys" für
+  Schüleranmeldungen und "administrator" ein <em>module</em> namens "Kuwasys" um
+  diese zu verwalten.<br>
+  <em>modules</em> können wiederrum <em>modules</em> als Kinder haben, die die
+  Funktionalitäten nochmals unterteilen, zum Beispiel "Kurwahlen ansehen" oder
+  "Schüler hinzufügen".</li>
+</ul>
+<h1 id="ordnerstruktur">Ordnerstruktur</h1>
+<ul>
+<li><code>/code</code>
+  Enthält den eigentlichen Code des Programmes.</li>
+<li><code>/code/administrator</code>
+  Enthält alle PHP-Dateien für das subprogram administrator.</li>
+<li><code>/code/web</code>
+  Enthält alle PHP-Dateien für das subprogram web.</li>
+<li><code>/code/publicData</code>
+  Enthält alle PHP-Dateien für das subprogram publicData.
+  Wird benutzt für öffentliche Daten, erreichbar ohne vorherigem Login.</li>
+<li><code>/code/include</code>
+  Enthält Dateien die über die subprograms hinweg im ganzen Projekt benutzt
+  werden.</li>
+<li><code>/code/include/3rdParty</code>
+  PHP-Bibliotheken</li>
+<li><code>/code/include/&lt;ModuleName&gt;</code>
+  PHP-Klassen die zu einem Modul gehören und über mehrere Subprograms hinweg
+  genutzt werden.</li>
+<li><code>/code/include/models</code>
+  Enthält Daten zur Datenbank-Struktur für die <em>Doctrine2</em>-Bibliothek.</li>
+<li><code>/code/include/sql_access</code>
+  Größtenteils Wrapper-Klassen für SQL-Befehle. Wird nach und nach durch
+  Doctrine2 ersetzt.</li>
+<li><code>/code/include/tmpFiles</code>
+  Enthält temporär generierte Dateien. Kann/sollte regelmäßig gelöscht werden.</li>
+<li><code>/code/include/cjs</code>
+  Coffeescript-Dateien, die mithilfe von <em>gulp</em> zu Javascript-Dateien
+  konvertiert werden. Die JS-Dateien landen in <code>/code/include/js</code>.</li>
+<li><code>/code/include/cjs/modules</code>
+  Coffeescript-React-Dateien. Diese werden ebenfalls mithilfe von gulp
+  in Javascript übersetzt und mithilfe von <em>browserify</em> gebündelt.
+  Die JS-Dateien landen in <code>/code/include/js/dist</code>.</li>
+<li><code>/code/locale</code>
+  Enthält die Lokalisierungsdateien für Übersetzungen des Programmes.
+  Wird momentan nicht mehr weiter in das Programm integriert.</li>
+<li><strong>/code/smarty_templates</strong>
+  Enthält Html-Templates, die von der <em>Smarty</em>-Bibliothek geparst werden.</li>
+</ul>
+<h1 id="beachtenswerte-dateien">Beachtenswerte Dateien</h1>
+<ul>
+<li><code>/code/include/sql_access/databaseValues.orig.php</code>
+  Enthält die Daten für den Login zur Datenbank. Muss nach
+  "databaseValues.php" kopiert werden und diese dann ausgefüllt werden.</li>
+<li><code>/doctrine_update_entities.sh</code>
+  Bei Änderung der Datenbank-Struktur müssen die Daten in
+  <em>/code/include/models/mapping</em> angepasst werden.
+  Um diese Änderungen zu übernehmen, wird die Shell-Datei ausgeführt.</li>
+</ul>
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../setup/" class="btn btn-neutral" title="Entwicklungs-Umgebung aufsetzen"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+    <!-- Copyright etc -->
+    </p>
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        
+            <a href="https://github.com/linucc/babesk" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+        
+      <span><a href="../setup/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      <span style="margin-left: 15px"><a href="" style="color: #fcfcfc">Next &raquo;</a></span>
+    </span>
+</div>
+
+<!--
+MkDocs version  : 0.12.2
+Docs Build Date : 2015-05-13 16:09:26.964018
+-->
+</body>
+</html>
