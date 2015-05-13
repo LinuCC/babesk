@@ -27,7 +27,7 @@ module.exports = React.createClass(
         @setState res
         NProgress.done()
       .fail (jqxhr)->
-        toastr.error jqxhr.responseText, 'Fehler'
+        toastr.error jqxhr.responseText, 'Konnte Statistiken nicht abrufen'
         NProgress.done()
 
   render: ->
