@@ -101,7 +101,14 @@ class Administrator {
 				$execCom, $this->dataContainerCreate()
 			);
 
-		} catch (Exception $e) {
+		} catch(AclAccessDeniedException $e) {
+			if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+				dieHttp('Keine Berechtigung', 423);
+			}
+			else {
+				$this->_adminInterface->dieError('Keine Berechtigung!');
+			}
+		} catch(Exception $e) {
 			$this->_logger->log(
 				'Error executing a Module', 'Notice', Null,
 				json_encode(array(

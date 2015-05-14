@@ -128,7 +128,9 @@ class Acl {
 			}
 		}
 		else {
-			throw new AclException('Module-Access forbidden', 105);
+			throw new AclAccessDeniedException(
+				'Module-Access forbidden', 105
+			);
 		}
 	}
 
