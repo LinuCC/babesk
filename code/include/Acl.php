@@ -309,7 +309,10 @@ class Acl {
 		$module = $this->_moduleGenManager->moduleByPathGet($moduleToExecutePath);
 
 		if(!empty($module)) {
-			return ($module->isEnabled() && $module->userHasAccess());
+			if(!$module->isEnabled()) {
+				throw new AclModuleLockedException('Module locked');
+			}
+			return ($module->userHasAccess());
 		}
 		else {
 			$this->_logger->log("Module could not be loaded by path!",

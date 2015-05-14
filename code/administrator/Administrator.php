@@ -100,13 +100,19 @@ class Administrator {
 			$this->_acl->moduleExecute(
 				$execCom, $this->dataContainerCreate()
 			);
-
 		} catch(AclAccessDeniedException $e) {
 			if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-				dieHttp('Keine Berechtigung', 423);
+				dieHttp('Keine Berechtigung', 401);
 			}
 			else {
 				$this->_adminInterface->dieError('Keine Berechtigung!');
+			}
+		} catch(AclModuleLockedException $e) {
+			if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+				dieHttp('Modul gesperrt', 423);
+			}
+			else {
+				$this->_adminInterface->dieError('Modul gesperrt');
 			}
 		} catch(Exception $e) {
 			$this->_logger->log(
