@@ -35,13 +35,13 @@ module.exports = React.createClass({
         return NProgress.done();
       };
     })(this)).fail(function(jqxhr) {
-      toastr.error(jqxhr.responseText, 'Fehler');
+      toastr.error(jqxhr.responseText, 'Konnte Statistiken nicht abrufen');
       return NProgress.done();
     });
   },
   render: function() {
     return React.createElement(Row, null, React.createElement(Col, {
-      "smOffset": 4.,
+      "smOffset": 2.,
       "sm": 4.,
       "mdOffset": 3.,
       "md": 3.

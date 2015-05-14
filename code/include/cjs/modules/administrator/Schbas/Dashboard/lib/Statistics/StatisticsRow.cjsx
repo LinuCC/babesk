@@ -33,7 +33,7 @@ module.exports = React.createClass(
   render: ->
     # Extra div fixes issue for chart.js, should be fixed in 1.1
     <Row>
-      <Col smOffset={4} sm={4} mdOffset={3} md={3}>
+      <Col smOffset={2} sm={4} mdOffset={3} md={3}>
         <Panel className='panel-chart' header='Ausleihen pro Jahrgang'>
           <div>
             <DoughnutStatsChart values={@state.gradelevelLendStatistics} />
