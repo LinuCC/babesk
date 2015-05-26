@@ -73,8 +73,7 @@ class Search extends \administrator\System\Users\Schbas\Schbas {
 
 			$query = $qb->getQuery();
 			$users = $query->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-			echo '<pre>';
-			var_dump($users);
+			dieJson($users);
 
 		} catch(\Exception $e) {
 			$this->_logger->logO('Could not search for users',

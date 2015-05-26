@@ -18,7 +18,13 @@ $(document).ready(function() {
 		var button = $(event.target);
 		var parent = button.parent();
 		parent.children("button").remove();
-		parent.append(translations.answeredWithYes);
+		// If the user previously just checked if a user with the same name exists
+		// but now wants to revert his decision, we need to remove the
+		// select-thingie
+		parent.closest('.list-group-item')
+			.find("div.alternative-selection")
+			.remove();
+		parent.append(translations.answeredWithYes + '&nbsp;&nbsp;&nbsp;&nbsp;');
 		//append hidden input to know what was changed
 		parent.append("<input type='hidden' value='confirmed' name='"
 			 + "conflict[" + button.attr("conflictId") + "][status]' />");
@@ -35,8 +41,11 @@ $(document).ready(function() {
 		}
 		else {
 			//$listItem.append('<div><select></div>');
-			var $userSelectContainer = $('<div class="">Alternative auswählen:<select name="conflict[' + button.attr("conflictId") + ']' +
-				'[correctedUserId]" class="form-control"></select></div>');
+			var $userSelectContainer = $(
+				'<div class="alternative-selection">Alternative auswählen: '+
+				'<select name="conflict[' + button.attr("conflictId") + ']' +
+				'[correctedUserId]" class="form-control"></select></div>'
+			);
 			$listItem.append($userSelectContainer);
 			var username = $listItem.find('span.forename').text() + '.' + $listItem.find('span.surname').text();
 			$userSelectContainer.find('select')
