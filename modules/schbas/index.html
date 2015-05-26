@@ -85,6 +85,8 @@
                             
                                 <li><a class="toctree-l4" href="#optional">Optional</a></li>
                             
+                                <li><a class="toctree-l4" href="#ausleihzuweisungen">Ausleihzuweisungen</a></li>
+                            
                         
                         </ul>
                     
@@ -179,7 +181,8 @@ Dann werden die Benutzerdaten für dieses neue Schuljahr importiert.
 Am Ende setzt man das Schbas-Vorbereitungsjahr auf dieses neue Schuljahr.</p>
 <h3 id="2-ausleihen-zuweisen">2. Ausleihen zuweisen</h3>
 <p>Nun unter <code>Schbas Dashboard -&gt; Buchzuweisungen automatisch generieren</code> die
-Ausleihzuweisungen für das neue Schuljahr generieren.</p>
+Ausleihzuweisungen für das neue Schuljahr generieren.
+Siehe <a href="./#ausleihzuweisungen">Ausleihzuweisungen</a>.</p>
 <h3 id="3-antrage-erlauben-erfassen">3. Anträge erlauben &amp; erfassen</h3>
 <p>Damit die Schüler die Schulbuchausleiheformulare ausfüllen können, muss das
 Rückmeldeformular aktiviert werden (unter <code>Schbas-&gt;Dashboard</code>).
@@ -192,6 +195,28 @@ aktualisiert werden (zB um 5.Klässler mit aufzunehmen).
 Dabei ist darauf zu achten, dass neue Schüler auch Ausleihzuweisungen
 zugewiesen bekommen.</p>
 <h3 id="schbas-statistiken">Schbas Statistiken</h3>
+<h2 id="ausleihzuweisungen">Ausleihzuweisungen</h2>
+<p>Unter <code>Schbas Dashboard</code> im Panel <code>Vorbereitungen</code> gibt es einen
+Button wo entweder <code>Zuweisungen existieren</code> oder
+<code>noch keine Zuweisungen</code> steht.
+Wenn man dort klickt, kann man <code>Buchzuweisungen automatisch generieren</code>.
+Nun sieht man Optionen für die Zuweisungsgenerierung und eine Übersicht, welche
+Bücher welchen Klassenstufen automatisch zugewiesen werden würden.</p>
+<h3 id="existierende-zuweisungen-fur-das-schuljahr">Existierende Zuweisungen für das Schuljahr</h3>
+<p>Falls das Schuljahr, für die die Zuweisungen generiert werden sollen, bereits
+welche hat, wird nachgefragt was mit den bereits vorhandenen Zuweisungen
+gemacht werden soll.
+Hier ist meistens die Option "Lösche existierende Zuweisungen für dieses
+Schuljahr" sinnvoll, da man die bisherigen Ausleihzuweisungen des Schuljahres
+überschreibt.
+Die Option "Füge die automatisch generierten Zuweisungen hinzu" ist nur dann
+sinnvoll, wenn einzelne Zuweisungen vorher händisch erstellt wurden und diese
+nicht gelöscht werden sollen.</p>
+<p>Mit einem Klick auf <code>Zuweisungen generieren</code> werden die Ausleihzuweisungen
+dann generiert.
+Sie können unter
+<code>Schbas Dashboard: Vorbereitungen -&gt; Buchzuweisungen bearbeiten</code>
+nachträglich noch verändert werden.</p>
             </div>
           </div>
           <footer>
@@ -236,7 +261,7 @@ zugewiesen bekommen.</p>
 
 <!--
 MkDocs version  : 0.12.2
-Docs Build Date : 2015-05-13 16:09:26.953069
+Docs Build Date : 2015-05-26 16:43:32.768164
 -->
 </body>
 </html>
