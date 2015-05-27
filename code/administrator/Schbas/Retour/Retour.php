@@ -43,7 +43,7 @@ class Retour extends Schbas {
 		) {
 			try {
 				$res = $this->RetourBook(
-					urldecode($_GET['inventarnr']), $_GET['uid']
+					urldecode(trim($_GET['inventarnr'])), $_GET['uid']
 				);
 			} catch (Exception $e) {
 				$this->_logger->logO('Could not retour book',
