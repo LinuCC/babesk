@@ -18,12 +18,12 @@ $(document).ready(function() {
 		var button = $(event.target);
 		var parent = button.parent();
 		parent.children("button").remove();
-		// If the user previously just checked if a user with the same name exists
-		// but now wants to revert his decision, we need to remove the
+		// If the user previously just checked if a user with the same name
+		// exists but now wants to revert his decision, we need to remove the
 		// select-thingie
-		parent.closest('.list-group-item')
-			.find("div.alternative-selection")
-			.remove();
+		$listitem = parent.closest('.list-group-item');
+		$listitem.find("div.alternative-selection").remove();
+		$listitem.find("input[type='hidden']").remove();
 		parent.append(translations.answeredWithYes + '&nbsp;&nbsp;&nbsp;&nbsp;');
 		//append hidden input to know what was changed
 		parent.append("<input type='hidden' value='confirmed' name='"
