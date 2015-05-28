@@ -392,6 +392,9 @@
 
 {block name="js_include" append}
 <script type="text/javascript"
+	src="{$path_js}/vendor/moment-with-locales.min.js">
+</script>
+<script type="text/javascript"
 	src="{$path_js}/vendor/datepicker/bootstrap-datepicker.min.js">
 </script>
 <script type="text/javascript" src="{$path_js}/vendor/datejs/date.min.js">

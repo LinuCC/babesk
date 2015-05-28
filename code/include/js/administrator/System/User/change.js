@@ -165,8 +165,8 @@ $(document).ready(function() {
 				});
 			});
 			if($('#birthday').val() != '') {
-				var isoBirthday = Date.parse($('#birthday').val())
-					.toString('yyyy-MM-dd');
+				var isoBirthday = moment($('#birthday').val(), 'DD.MM.YYYY')
+					.format('YYYY-MM-DD');
 			}
 			else {
 				var isoBirthday = '';
