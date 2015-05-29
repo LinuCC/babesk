@@ -24,6 +24,7 @@ $(document).ready(function() {
 		$listitem = parent.closest('.list-group-item');
 		$listitem.find("div.alternative-selection").remove();
 		$listitem.find("input[type='hidden']").remove();
+		$listitem.find("div.data-radios").remove();
 		parent.append(translations.answeredWithYes + '&nbsp;&nbsp;&nbsp;&nbsp;');
 		//append hidden input to know what was changed
 		parent.append("<input type='hidden' value='confirmed' name='"
@@ -35,7 +36,7 @@ $(document).ready(function() {
 		event.preventDefault();
 		var button = $(event.target);
 		var $listItem = button.closest(".list-group-item");
-		$listItem.children("button").remove();
+		// $listItem.children("button").remove();
 		if(button.attr("conflictType") == "GradelevelConflict") {
 			newGradeInput($listItem, button.attr("conflictId"));
 		}
@@ -44,7 +45,7 @@ $(document).ready(function() {
 			var $userSelectContainer = $(
 				'<div class="alternative-selection">Alternative auswählen: '+
 				'<select name="conflict[' + button.attr("conflictId") + ']' +
-				'[correctedUserId]" class="form-control"></select></div>'
+				'[mergeSecondConflictId]" class="form-control"></select></div>'
 			);
 			$listItem.append($userSelectContainer);
 			var username = $listItem.find('span.forename').text() + '.' + $listItem.find('span.surname').text();
@@ -54,35 +55,63 @@ $(document).ready(function() {
 					'<option class="placeholder" value="" disabled selected>' +
 					'Lade...</option>'
 				);
+			if(button.attr('conflictType') === 'CsvOnlyConflict') {
+				mergeConflictType = 'DbOnlyConflict';
+			}
+			else if(button.attr('conflictType') === 'DbOnlyConflict') {
+				mergeConflictType = 'CsvOnlyConflict';
+			}
+			else {
+				toastr.error('Unbekannter Konflikttyp');
+				return;
+			}
 			$.ajax({
 				'type': 'GET',
-				'url': 'index.php?module=administrator|System|User|SearchForSimilarUsers',
+				'url': 'index.php?module=administrator|System|User|UserUpdateWithSchoolyearChange|SessionMenu|ConflictsResolve&search',
 				'data': {
 					'username': username,
-					'userLimit': 15
-				},
-				'success': function(users, status, jqXHR) {
-					console.log(users);
-					var $select = $userSelectContainer.find('select');
-					$.each(users, function(userId, user) {
-						$select.append(
-							'<option value="' + userId + '">' + user + '</option>'
-						);
-					});
-					$select.find('option.placeholder').remove();
-					$select.prop('disabled', false);
-					$listItem.append("<input type='hidden' value='correctedUserId' " +
-						"name='conflict[" + button.attr("conflictId") + "][status]' />");
-				},
-				'error': function(data, status, jqXHR) {
-					console.log(data);
-					toastr.error('Ein Fehler ist aufgetreten.');
+					conflictType: mergeConflictType
 				},
 				dataType: 'json'
-			});
+			})
+				.done(function(conflicts, status, jqXHR) {
+					if(jqXHR.status === 204) {
+						toastr.info('Keine ähnlichen Benutzer mit Konflikten gefunden.');
+						return;
+					}
+					var $select = $userSelectContainer.find('select');
+					$select.append(conflicts.map(function(conflict) {
+						return (
+							'<option value="' + conflict.id + '">' + conflict.label +
+							'</option>'
+						);
+					}));
+					$select.find('option.placeholder').remove();
+					$select.prop('disabled', false);
+					origUserIdent = $listItem.data('forename') + ' ' +
+						$listItem.data('name') + ' (' + $listItem.data('birthday') + ')';
+					// Select which data to use
+					$listItem.append(
+						'<div class="data-radios checkbox">' +
+						'<label><input type="radio" name="conflict['
+						+ button.attr('conflictId') +
+						'][conflictDataUseSelect]" value="original" checked /> ' +
+						'&nbsp;&nbsp;Benutze Daten: "'+  origUserIdent + '"</label><br>' +
+						'<label><input type="radio" name="conflict[' +
+						button.attr('conflictId') +
+						'][conflictDataUseSelect]" value="alternative" /> ' +
+						'&nbsp;&nbsp;Benutze Daten der Alternativen-Auswahl</label>' +
+						'</div>'
+					);
+					$listItem.append("<input type='hidden' value='mergeConflicts' " +
+						"name='conflict[" + button.attr("conflictId") + "][status]' />");
+				})
+				.fail(function(data, status, jqXHR) {
+					console.log(data);
+					toastr.error('Ein Fehler ist aufgetreten.');
+				});
 		}
 	});
-
 
 	function newGradeInput(parent, conflictId) {
 		parent.append('<p id="gradeHint">' + translations.newGradeInput + '</p>');

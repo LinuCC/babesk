@@ -37,7 +37,9 @@
 				<ul class="list-group">
 				{$listStarted = true}
 			{/if}
-			<li class="list-group-item">
+			<li class="list-group-item" data-forename="{$conflict.forename}"
+				data-name="{$conflict.name}"
+				data-birthday="{$conflict.birthday}">
 				{if $conflict.type == "CsvOnlyConflict"}
 					<div class="btn-group">
 					<button id="Yes_{$conflict.userId}_{$conflict.type}"
