@@ -108,9 +108,8 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 			$this->_interface->dieError(_g('Please answer the questions given to resolve the conflicts.'));
 		}
 
-		$conflicts = $this->conflictDataAddToIdArray($_POST['conflict']);
-
 		$this->resolveSqlStatementsPrepare();
+		$conflicts = $this->conflictDataAddToIdArray($_POST['conflict']);
 
 		foreach($conflicts as $conflict) {
 			if($conflict['isSolved']) {
@@ -210,21 +209,6 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 				WHERE tc.ID = :id
 			');
 
-		$this->conflictDataStmt = $conn->prepare(
-			'SELECT c.ID AS id, c.type AS type, c.solved AS solved,
-					u.ID AS userId, u.forename AS userForename,
-					u.name AS userName, u.newUsername AS userNewUsername,
-					u.newTelephone AS userNewTelephone,
-					u.newEmail AS userNewEmail, u.birthday AS userBirthday,
-					u.gradelevel AS userGradelevel, u.label AS userGradelabel,
-					u.religion AS userReligion,
-					u.foreign_language AS userForeignLanguage,
-					u.special_course AS userSpecialCourse
-				FROM UserUpdateTempConflicts c
-				LEFT JOIN UserUpdateTempUsers u ON u.ID = c.tempUserId
-				WHERE c.ID = :id
-		');
-
 		} catch (\PDOException $e) {
 			$this->_logger->log('Could not set the prepared statements',
 				'Notice', Null, json_encode(array('msg' => $e->getMessage())));
@@ -272,43 +256,14 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 	 */
 	private function conflictDataAddToIdArray(array $ids) {
 
-		$query = 'SELECT tc.ID as conflictId, tc.tempUserId AS tempUserId,
-					tc.origUserId AS origUserId,
-					tc.tempUserId AS tempUserId,
-					IFNULL(tu.birthday, u.birthday) AS birthday,
-					tu.newUsername AS newUsername,
-					tu.newTelephone AS newTelephone,
-					tu.newEmail AS newEmail,
-					tc.type AS type,
-					tc.solved AS isSolved,
-					IFNULL(u.forename, tu.forename) AS forename,
-					IFNULL(u.name, tu.name) AS name,
-					g.gradelevel AS origGradelevel,
-					g.label AS origGradelabel,
-					tu.gradelevel AS newGradelevel,
-					tu.label AS newGradelabel,
-					tu.religion AS newReligion,
-					tu.foreign_language AS newForeignLanguage,
-					tu.special_course AS newSpecialCourse
-				FROM UserUpdateTempConflicts tc
-				LEFT JOIN UserUpdateTempUsers tu ON tu.ID = tc.tempUserId
-				LEFT JOIN SystemUsers u ON u.ID = tc.origUserId
-				LEFT JOIN SystemAttendances uigs
-					ON u.ID = uigs.userId
-					AND uigs.schoolyearId = @activeSchoolyear
-				LEFT JOIN SystemGrades g ON uigs.gradeId = g.ID
-				WHERE tc.ID = ?';
-
 		try {
-			$stmt = $this->_pdo->prepare($query);
-
 			foreach($ids as $id => $stuff) {
-				$stmt->execute(array($id));
-				$res = $stmt->fetch(\PDO::FETCH_ASSOC);
+				$this->_conflictDataStmt->execute(['id' => $id]);
+				$res = $this->_conflictDataStmt->fetch(\PDO::FETCH_ASSOC);
 				$ids[$id] = array_merge($ids[$id], $res);
 			}
 
-			$stmt->closeCursor();
+			$this->_conflictDataStmt->closeCursor();
 			return $ids;
 
 		} catch (\PDOException $e) {
@@ -366,16 +321,6 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 			$this->_conflictResolveStmt->execute(
 				array(':id' => $conflict['conflictId'])
 			);
-		}
-		else if($conflict['status'] == 'correctedUserId') {
-			$data['origUserId'] = $conflict['correctedUserId'];
-			$this->_userSolveStmt->execute($data);
-			$this->_conflictResolveStmt->execute(
-				array(':id' => $conflict['conflictId'])
-			);
-		}
-		else if($conflict['status'] == 'correctedUsername') {
-			$this->_interface->dieError(_g('Not implemented yet!'));
 		}
 		else if($conflict['status'] == 'mergeConflicts') {
 			$conflictPost = $_POST['conflict'][$conflict['conflictId']];
@@ -435,28 +380,24 @@ class ConflictsResolve extends \administrator\System\User\UserUpdateWithSchoolye
 
 		$limit = 30;
 		if($type == 'CsvOnlyConflict') {
-			$query = 'SELECT c.ID as conflictId, u.birthday AS userBirthday,
-						CONCAT(u.forename, " ", u.name) AS username
-					FROM UserUpdateTempConflicts c
-					INNER JOIN UserUpdateTempUsers u ON u.ID = c.tempUserId
-					WHERE c.type = :conflictType
-					ORDER BY LEVENSHTEIN_RATIO(username, :username) DESC, u.ID
-					LIMIT :limit';
+			$joinQuery = 'INNER JOIN UserUpdateTempUsers u ' .
+				'ON u.ID = c.tempUserId';
 		}
 		else if($type == 'DbOnlyConflict') {
-			$query = 'SELECT c.ID as conflictId, u.birthday AS userBirthday,
-						CONCAT(u.forename, " ", u.name) AS username
-					FROM UserUpdateTempConflicts c
-					INNER JOIN SystemUsers u ON u.ID = c.origUserId
-					WHERE c.type = :conflictType
-					ORDER BY LEVENSHTEIN_RATIO(username, :username) DESC, u.ID
-					LIMIT :limit';
+			$joinQuery = 'INNER JOIN SystemUsers u ON u.ID = c.origUserId';
 		}
 		else {
 			$this->_logger->logO('Type not recognized', ['sev' => 'warning',
 				['moreJson'] => ['type' => $type]]);
 			$this->_interface->dieError('Ein Fehler ist aufgetreten');
 		}
+		$query = "SELECT c.ID as conflictId, u.birthday AS userBirthday,
+					CONCAT(u.forename, ' ', u.name) AS username
+				FROM UserUpdateTempConflicts c
+				$joinQuery
+				WHERE c.type = :conflictType
+				ORDER BY LEVENSHTEIN_RATIO(username, :username) DESC, u.ID
+				LIMIT :limit";
 		try {
 			$stmt = $this->_em->getConnection()->prepare($query);
 			$stmt->bindParam('conflictType', $type);
