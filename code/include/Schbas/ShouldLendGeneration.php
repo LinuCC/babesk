@@ -41,7 +41,7 @@ class ShouldLendGeneration {
 	 *                         will generate for the schbasPrepSchoolyear.
 	 * @return bool   true on success
 	 */
-	public function generate(array $opt) {
+	public function generate(array $opt = []) {
 
 		if(isset($opt['onlyForUsers'])) {
 			$this->_users = $opt['onlyForUsers'];
