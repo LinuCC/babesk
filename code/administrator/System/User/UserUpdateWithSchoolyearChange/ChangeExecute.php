@@ -99,7 +99,11 @@ class ChangeExecute extends \administrator\System\User\UserUpdateWithSchoolyearC
 			//Update user-entries if data is given
 			$queryUsers = 'UPDATE SystemUsers u
 				LEFT JOIN UserUpdateTempSolvedUsers su ON u.ID = su.origUserId
-				SET u.email = IFNULL(su.newEmail, u.email),
+				SET
+					u.forename = IFNULL(su.forename, u.forename),
+					u.name = IFNULL(su.name, u.name),
+					u.birthday = IFNULL(su.birthday, u.birthday),
+					u.email = IFNULL(su.newEmail, u.email),
 					u.telephone = IFNULL(su.newTelephone, u.telephone),
 					u.username = IFNULL(su.newUsername, u.username),
 					u.religion = IFNULL(su.religion, u.religion),
