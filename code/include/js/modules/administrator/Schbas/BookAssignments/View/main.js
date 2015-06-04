@@ -43,6 +43,16 @@ AssignmentsBox = React.createClass({
     });
   },
   deleteAssignments: function(data) {
+    var activeSy;
+    activeSy = $.grep(this.state.schoolyears, function(sy) {
+      return sy.active;
+    });
+    if (activeSy[0] != null) {
+      activeSy = activeSy[0];
+    }
+    data = $.extend(data, {
+      schoolyearId: activeSy.id
+    });
     return $.get('index.php?module=administrator|Schbas|BookAssignments|View|Delete', data).done((function(_this) {
       return function(res) {
         toastr.success(res, 'Erfolgreich gelöscht');

@@ -24,6 +24,9 @@ AssignmentsBox = React.createClass(
       .fail (jqxhr)-> toastr.error jqxhr.responseText, 'Fehler'
 
   deleteAssignments: (data)->
+    activeSy = $.grep @state.schoolyears, (sy)-> return sy.active
+    if activeSy[0]? then activeSy = activeSy[0]
+    data = $.extend data, {schoolyearId: activeSy.id}
     $.get(
       'index.php?module=administrator|Schbas|BookAssignments|View|Delete'
       data

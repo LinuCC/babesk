@@ -20,14 +20,14 @@ class Delete extends \administrator\Schbas\BookAssignments\View\View {
 		$delEntity = filter_input(INPUT_GET, 'deleteEntity');
 		$bookId = filter_input(INPUT_GET, 'bookId');
 		$entityId = filter_input(INPUT_GET, 'entityId');
+		$schoolyearId = filter_input(INPUT_GET, 'schoolyearId');
 		if(
-			$delEntity &&
-			in_array($delEntity, $this->_validDeleteEntities) &&
-			$entityId && $bookId
+			$delEntity && $entityId && $bookId && $schoolyearId &&
+			in_array($delEntity, $this->_validDeleteEntities)
 		) {
 			try {
 				$count = $this->assignmentsDeleteFor(
-					$delEntity, $bookId, $entityId
+					$delEntity, $bookId, $entityId, $schoolyearId
 				);
 				die("Es wurden $count Zuweisungen gelöscht.");
 			}
@@ -53,7 +53,14 @@ class Delete extends \administrator\Schbas\BookAssignments\View\View {
 		parent::entryPoint($dataContainer);
 	}
 
-	protected function assignmentsDeleteFor($delEntity, $bookId, $entityId) {
+	protected function assignmentsDeleteFor(
+		$delEntity, $bookId, $entityId, $schoolyearId
+	) {
+
+		$schoolyear = $this->_em->find('DM:SystemSchoolyears', $schoolyearId);
+		$book = $this->_em->find('DM:SchbasBook', $bookId);
+		if(!$schoolyear) { dieHttp('Schuljahr nicht gefunden', 400); }
+		if(!$book) { dieHttp('Buch nicht gefunden', 400); }
 
 		// DQL does not support delete with joins, so select them first
 		// and delete them after that
@@ -69,7 +76,7 @@ class Delete extends \administrator\Schbas\BookAssignments\View\View {
 			case 'gradelevel':
 				$qb->innerJoin('usb.user', 'u')
 					->innerJoin('u.attendances', 'a')
-					->innerJoin('a.schoolyear', 's', 'WITH', 's.active = 1')
+					->innerJoin('a.schoolyear', 's', 'WITH', 's = :schoolyear')
 					->innerJoin(
 						'a.grade', 'g', 'WITH', 'g.gradelevel = :gradelevel'
 					)->setParameter('gradelevel', $entityId);
@@ -80,9 +87,8 @@ class Delete extends \administrator\Schbas\BookAssignments\View\View {
 				);
 				$qb->innerJoin('usb.user', 'u')
 					->innerJoin('u.attendances', 'a')
-					->innerJoin('a.schoolyear', 's', 's.active = 1')
-					->innerJoin('a.grade', 'g');
-				$qb->andWhere('g = :grade');
+					->innerJoin('a.schoolyear', 's', 'WITH', 's = :schoolyear')
+					->innerJoin('a.grade', 'g', 'WITH', 'g = :grade');
 				$qb->setParameter('grade', $grade);
 				break;
 			case 'user':
@@ -91,8 +97,9 @@ class Delete extends \administrator\Schbas\BookAssignments\View\View {
 				$qb->setParameter('user', $user);
 				break;
 		}
-		$book = $this->_em->getReference('DM:SchbasBook', $bookId);
 		$qb->andWhere('usb.book = :book');
+		$qb->andWhere('usb.schoolyear = :schoolyear');
+		$qb->setParameter('schoolyear', $schoolyear);
 		$qb->setParameter('book', $book);
 		$query = $qb->getQuery();
 		$entries = $query->getResult();
@@ -100,6 +107,7 @@ class Delete extends \administrator\Schbas\BookAssignments\View\View {
 			$this->_em->remove($entry);
 		}
 		$this->_em->flush();
+		return count($entries);
 	}
 
 	/////////////////////////////////////////////////////////////////////
