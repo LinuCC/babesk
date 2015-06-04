@@ -192,7 +192,7 @@ class ShouldLendGeneration {
 			explode('|', $user->getReligion()),
 			explode('|', $user->getForeignLanguage())
 		);
-		if($this->_specialCourseTrigger >= $gradelevel) {
+		if($this->_specialCourseTrigger <= $gradelevel) {
 			$userSubjects = array_merge(
 				$userSubjects,
 				explode('|', $user->getSpecialCourse())
