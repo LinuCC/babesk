@@ -231,6 +231,7 @@ module.exports = React.createClass({
       "labelClassName": 'col-sm-2',
       "wrapperClassName": 'col-sm-10'
     }, React.createElement(ExtendedSelect, {
+      "key": 1.,
       "asyncOptions": this.searchBooks,
       "autoload": false,
       "name": 'add-assignment-book-search',
@@ -242,18 +243,21 @@ module.exports = React.createClass({
       "wrapperClassName": 'col-sm-10',
       "onChange": this.handleTypeSelect
     }, (this.state.selectedType === 'grade' ? React.createElement(ExtendedSelect, {
+      "key": 2.,
       "asyncOptions": this.searchGrades,
       "autoload": false,
       "name": 'add-assignment-grade-search',
       "value": this.state.selectedValue.label,
       "onChange": this.handleEntityValueSelect
     }) : this.state.selectedType === 'gradelevel' ? React.createElement(ExtendedSelect, {
+      "key": 3.,
       "asyncOptions": this.searchGradelevels,
       "autoload": false,
       "name": 'add-assignment-gradelevel-search',
       "value": this.state.selectedValue.label,
       "onChange": this.handleEntityValueSelect
     }) : this.state.selectedType === 'user' ? React.createElement(ExtendedSelect, {
+      "key": 4.,
       "asyncOptions": this.searchUsers,
       "autoload": false,
       "name": 'add-assignment-users-search',

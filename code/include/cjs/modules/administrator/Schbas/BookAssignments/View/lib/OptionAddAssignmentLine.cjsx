@@ -163,7 +163,7 @@ module.exports = React.createClass(
         </Input>
         <Input label='Buch' labelClassName='col-sm-2'
           wrapperClassName='col-sm-10'>
-          <ExtendedSelect asyncOptions={@searchBooks} autoload={false}
+          <ExtendedSelect key={1} asyncOptions={@searchBooks} autoload={false}
             name='add-assignment-book-search' value={@state.selectedBook.label}
             onChange={@handleBookSelect} />
         </Input>
@@ -171,17 +171,17 @@ module.exports = React.createClass(
           wrapperClassName='col-sm-10' onChange={@handleTypeSelect}>
           {
             if @state.selectedType is 'grade'
-              <ExtendedSelect asyncOptions={@searchGrades} autoload={false}
+              <ExtendedSelect key={2} asyncOptions={@searchGrades} autoload={false}
                 name='add-assignment-grade-search'
                 value={@state.selectedValue.label}
                 onChange={@handleEntityValueSelect} />
             else if @state.selectedType is 'gradelevel'
-              <ExtendedSelect asyncOptions={@searchGradelevels}
+              <ExtendedSelect key={3} asyncOptions={@searchGradelevels}
                 autoload={false} name='add-assignment-gradelevel-search'
                 value={@state.selectedValue.label}
                 onChange={@handleEntityValueSelect} />
             else if @state.selectedType is 'user'
-              <ExtendedSelect asyncOptions={@searchUsers} autoload={false}
+              <ExtendedSelect key={4} asyncOptions={@searchUsers} autoload={false}
                 name='add-assignment-users-search'
                 value={@state.selectedValue.label}
                 onChange={@handleEntityValueSelect} />
