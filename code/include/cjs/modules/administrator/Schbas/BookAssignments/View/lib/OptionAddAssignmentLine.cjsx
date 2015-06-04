@@ -136,6 +136,8 @@ module.exports = React.createClass(
         id: 0
         label: ''
     )
+    # Clear cache of react-select, there is no inbuild method atm
+    @refs.typeSelect._optionsCache = {}
 
   handleBookSelect: (bookVal, bookData)->
     data = bookData[0] # We dont have multiselection
@@ -171,17 +173,17 @@ module.exports = React.createClass(
           wrapperClassName='col-sm-10' onChange={@handleTypeSelect}>
           {
             if @state.selectedType is 'grade'
-              <ExtendedSelect key={2} asyncOptions={@searchGrades} autoload={false}
+              <ExtendedSelect ref='typeSelect' key={2} asyncOptions={@searchGrades} autoload={false}
                 name='add-assignment-grade-search'
                 value={@state.selectedValue.label}
                 onChange={@handleEntityValueSelect} />
             else if @state.selectedType is 'gradelevel'
-              <ExtendedSelect key={3} asyncOptions={@searchGradelevels}
+              <ExtendedSelect ref='typeSelect' key={3} asyncOptions={@searchGradelevels}
                 autoload={false} name='add-assignment-gradelevel-search'
                 value={@state.selectedValue.label}
                 onChange={@handleEntityValueSelect} />
             else if @state.selectedType is 'user'
-              <ExtendedSelect key={4} asyncOptions={@searchUsers} autoload={false}
+              <ExtendedSelect ref='typeSelect' key={4} asyncOptions={@searchUsers} autoload={false}
                 name='add-assignment-users-search'
                 value={@state.selectedValue.label}
                 onChange={@handleEntityValueSelect} />

@@ -171,13 +171,14 @@ module.exports = React.createClass({
     })(this), 500);
   },
   handleTypeSelect: function(event) {
-    return this.setState({
+    this.setState({
       selectedType: event.target.value,
       selectedValue: {
         id: 0,
         label: ''
       }
     });
+    return this.refs.typeSelect._optionsCache = {};
   },
   handleBookSelect: function(bookVal, bookData) {
     var data;
@@ -243,6 +244,7 @@ module.exports = React.createClass({
       "wrapperClassName": 'col-sm-10',
       "onChange": this.handleTypeSelect
     }, (this.state.selectedType === 'grade' ? React.createElement(ExtendedSelect, {
+      "ref": 'typeSelect',
       "key": 2.,
       "asyncOptions": this.searchGrades,
       "autoload": false,
@@ -250,6 +252,7 @@ module.exports = React.createClass({
       "value": this.state.selectedValue.label,
       "onChange": this.handleEntityValueSelect
     }) : this.state.selectedType === 'gradelevel' ? React.createElement(ExtendedSelect, {
+      "ref": 'typeSelect',
       "key": 3.,
       "asyncOptions": this.searchGradelevels,
       "autoload": false,
@@ -257,6 +260,7 @@ module.exports = React.createClass({
       "value": this.state.selectedValue.label,
       "onChange": this.handleEntityValueSelect
     }) : this.state.selectedType === 'user' ? React.createElement(ExtendedSelect, {
+      "ref": 'typeSelect',
       "key": 4.,
       "asyncOptions": this.searchUsers,
       "autoload": false,
