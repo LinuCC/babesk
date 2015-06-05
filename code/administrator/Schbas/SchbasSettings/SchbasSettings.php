@@ -21,6 +21,7 @@ class SchbasSettings extends Schbas {
 
 		defined('_AEXEC') or die('Access denied');
 		parent::entryPoint($dataContainer);
+		parent::moduleTemplatePathSet();
 
 		require_once 'AdminSchbasSettingsInterface.php';
 
@@ -129,13 +130,27 @@ class SchbasSettings extends Schbas {
 		if ($textThreeTitle == '') $textThreeTitle = '&nbsp;';
 		if ($textThreeText == '') $textThreeText = '&nbsp;';
 
+		$updateStmt = $this->_em->getConnection()->prepare(
+			'UPDATE SchbasTexts t SET t.title = :title, t.text = :text
+			WHERE description = :description
+		');
+
 		try {
-			TableMng::query('UPDATE SchbasTexts SET title="'.$textOneTitle.'",text="'.$textOneText.'" WHERE description="textOne'.$grade.'"',false);
-			TableMng::query('UPDATE SchbasTexts SET title="'.$textTwoTitle.'",text="'.$textTwoText.'" WHERE description="textTwo'.$grade.'"',false);
-			TableMng::query('UPDATE SchbasTexts SET title="'.$textThreeTitle.'",text="'.$textThreeText.'" WHERE description="textThree'.$grade.'"',false);
-			$SchbasSettingsInterface->SavingSuccess();
+			$updateStmt->execute([
+				'title' => $textOneTitle, 'text' => $textOneText,
+				'description' => 'textOne' . $grade
+			]);
+			$updateStmt->execute([
+				'title' => $textTwoTitle, 'text' => $textTwoText,
+				'description' => 'textTwo' . $grade
+			]);
+			$updateStmt->execute([
+				'title' => $textThreeTitle, 'text' => $textThreeText,
+				'description' => 'textThree' . $grade
+			]);
+			$this->displayTpl('saveSuccess.tpl');
 		} catch (Exception $e) {
-			$SchbasSettingsInterface->SavingFailed();
+			$this->displayTpl('saveFailed.tpl');
 		};
 	}
 
