@@ -3,6 +3,8 @@
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ADMIN . '/Schbas/Schbas.php';
 require_once PATH_INCLUDE . '/Schbas/Loan.php';
+require_once PATH_INCLUDE . '/pdf/GeneralPdf.php';
+
 
 class SchbasAccounting extends Schbas {
 
@@ -35,6 +37,9 @@ class SchbasAccounting extends Schbas {
 		if(isset($_GET['action'])) {
 			switch($_GET['action']) {
 
+				case 'bookOverview':
+					$this->bookOverview();
+					break;
 				case 'userSetReturnedFormByBarcode':
 					$this->SchbasAccountingInterface->Scan();
 					break;
@@ -77,6 +82,7 @@ class SchbasAccounting extends Schbas {
 					}else{
 						$this->showUsers();break;
 					}
+					break;
 				default:
 					die('Wrong action-value given');
 
@@ -87,7 +93,14 @@ class SchbasAccounting extends Schbas {
 
 			$listOfClasses = $this->getListOfClasses();
 			$listOfClassesRebmemer = $this->getListOfClasses("rebmemer2");
-			$this->SchbasAccountingInterface->MainMenu($listOfClasses, $listOfClassesRebmemer);
+			$grades = $this->_em->getRepository('DM:SystemGrades')
+				->findAll();
+			$this->_smarty->assign('listOfClasses', $listOfClasses);
+			$this->_smarty->assign(
+				'listOfClassesRebmemer', $listOfClassesRebmemer
+			);
+			$this->_smarty->assign('grades', $grades);
+			$this->displayTpl('menu.tpl');
 		}
 	}
 
@@ -98,6 +111,7 @@ class SchbasAccounting extends Schbas {
 	protected function entryPoint($dataContainer) {
 
 		parent::entryPoint($dataContainer);
+		parent::moduleTemplatePathSet();
 		$this->_loanHelper = new \Babesk\Schbas\Loan($dataContainer);
 	}
 
@@ -601,6 +615,69 @@ class SchbasAccounting extends Schbas {
 			$this->SchbasAccountingInterface->dieError('Konnte die Tabelle Buchhaltung nicht leeren!');
 		}
 
+	}
+
+	private function bookOverview() {
+
+		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
+		$schoolyear = $this->_em->getRepository('DM:SystemSchoolyears')
+			->findOneByActive(true);
+		$gradeId = filter_input(INPUT_POST, 'grade');
+		if(!$gradeId) {
+			$this->_interface->dieError('Keine Klasse übergeben');
+		}
+		$grade = $this->_em->find('DM:SystemGrades', $gradeId);
+		$query = $this->_em->createQuery(
+			'SELECT u FROM DM:SystemUsers u
+			INNER JOIN u.attendances a
+			INNER JOIN a.schoolyear s WITH s = :schoolyear
+			INNER JOIN a.grade g WITH g = :grade
+			ORDER BY u.name, u.forename
+		');
+		$query->setParameter('grade', $grade);
+		$query->setParameter('schoolyear', $schoolyear);
+		$users = $query->getResult();
+
+		// The only difference between the PDF for booksToReturn and
+		// booksToLoan is the title and the included books
+		$pdfTitle = '';
+		$syName = $schoolyear->getLabel();
+		$gradename = $grade->getGradelevel() . $grade->getLabel();
+		// [{ user: {<userdata>}, books: [{<bookdata>}] }]
+		$usersWithBooks = [];
+
+		if(isset($_POST['booksToReturn'])) {
+			$pdfTitle = "Abzugebende Bücher für $gradename ($syName)";
+			foreach($users as $user) {
+				$books = $loanHelper->lendBooksToReturnOfUserGet($user);
+				$usersWithBooks[] = [
+					'user' => $user,
+					'books' => $books
+				];
+			}
+		}
+		else if(isset($_POST['booksToLoan'])) {
+			$pdfTitle = "Noch auszuleihende Bücher für $gradename ($syName)";
+			foreach($users as $user) {
+				$books = $loanHelper->loanBooksOfUserGet(
+					$user, ['schoolyear' => $schoolyear]
+				);
+				$usersWithBooks[] = [
+					'user' => $user,
+					'books' => $books
+				];
+			}
+		}
+		$date = date('d.m.Y H:i:s');
+		$this->_smarty->assign('grade', $grade);
+		$this->_smarty->assign('date', $date);
+		$this->_smarty->assign('usersWithBooks', $usersWithBooks);
+		$pdfContent = $this->_smarty->fetch(
+			PATH_SMARTY_TPL . '/pdf/schbas-books-overview.pdf.tpl'
+		);
+		$pdf = new GeneralPdf($this->_pdo);
+		$pdf->create($pdfTitle, $pdfContent);
+		$pdf->output();
 	}
 
 

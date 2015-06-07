@@ -56,6 +56,33 @@ EnableSubmit = function(val)
 </fieldset>
 
 <fieldset>
+	<legend>Bücherübersichten</legend>
+	<form action="index.php?module=administrator|Schbas|SchbasAccounting&action=bookOverview" class="form-inline" method="post">
+		<div class="form-group">
+			<label class="control-label" for="book-overview-grades">Für:</label>
+			<select id="book-overview-grades" class="form-control" name="grade">
+				{foreach $grades as $grade}
+					<option value="{$grade->getId()}">
+						{$grade->getGradelevel()}{$grade->getLabel()}
+					</option>
+				{/foreach}
+			</select>
+		</div>
+		<div class="form-group">
+			<button type="submit" name="booksToReturn" class="btn btn-default">
+				Noch abzugebende Bücher
+			</button>
+		</div>
+		<div class="form-group">
+			<button type="submit" name="booksToLoan" class="btn btn-default">
+				Noch auszuleihende Bücher
+			</button>
+		</div>
+	</form>
+
+</fieldset>
+
+<fieldset>
 	<legend>Noch abzugebende B&uuml;cher</legend>
 	{hide}
 	<form action="index.php?section=Schbas|SchbasAccounting&action=remember" method="post">

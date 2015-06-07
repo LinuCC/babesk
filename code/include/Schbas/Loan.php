@@ -160,7 +160,7 @@ class Loan {
 	 *                         'ignoreSelfpay' => Books that would get filtered
 	 *                             because the user is buying them for himself
 	 *                             will be included.
-	 *                         'ignoreAlreadyLend' => Books that would get
+	 *                         'includeAlreadyLend' => Books that would get
 	 *                             filtered because the user already has lend
 	 *                             them will be included.
 	 * @return array        An array of Doctrine-Objects representing the books
@@ -172,7 +172,7 @@ class Loan {
 				$opt['schoolyear'] : $this->schbasPreparationSchoolyearGet();
 			// Default to subtracting the selfpaid books
 			$subtractSelfpay = (empty($opt['ignoreSelfpay']));
-			$ignoreAlreadyLend = (empty($opt['ignoreAlreadyLend']));
+			$includeAlreadyLend = (!empty($opt['includeAlreadyLend']));
 			// We want all entries where the book will _not_ be bought by the
 			// user himself, so we check for null
 			$qb = $this->_em->createQueryBuilder()
@@ -200,7 +200,7 @@ class Loan {
 			$query = $qb->getQuery();
 			$books = $query->getResult();
 
-			if(!$ignoreAlreadyLend) {
+			if(!$includeAlreadyLend) {
 				$books = $this->loanBooksGetFilterAlreadyLentBooks(
 					$books, $user
 				);
@@ -211,6 +211,35 @@ class Loan {
 			$this->_logger->log('Could not fetch the loanBooks',
 				['sev' => 'error', 'moreJson' => $e->getMessage()]);
 		}
+	}
+
+	public function lendBooksToReturnOfUserGet($user, $schoolyear = false) {
+
+		if(!$schoolyear) {
+			$schoolyear = $this->_em->getRepository('DM:SystemSchoolyears')
+				->findOneByActive(true);
+		}
+		$query = $this->_em->createQuery(
+			'SELECT b FROM DM:SchbasBook b
+			INNER JOIN b.exemplars e
+			INNER JOIN e.usersLent ul WITH ul = :user
+		');
+		$query->setParameter('user', $user);
+		$lendBooks = $query->getResult();
+		$shouldLendBooks = $this->loanBooksOfUserGet(
+			$user, ['includeAlreadyLend', 'schoolyear' => $schoolyear]
+		);
+		// $lendBooks - $shouldLendBooks = $booksToReturn
+		$booksToReturn = [];
+		foreach($lendBooks as $lendBook) {
+			foreach($shouldLendBooks as $shouldLendBook) {
+				if($lendBook->getId() == $shouldLendBook->getId()) {
+					continue 2;
+				}
+			}
+			$booksToReturn[] = $lendBook;
+		}
+		return $booksToReturn;
 	}
 
 	public function amountOfInventoryAssignedToUsersGet($book) {
