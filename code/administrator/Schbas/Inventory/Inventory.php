@@ -161,11 +161,10 @@ class Inventory extends Schbas {
 			$this->sendIndexApplyFilter($filter, $qb, $displayColumns);
 			$this->sendIndexApplyFilter($filter, $rowCountQb, $displayColumns);
 		}
-		$qb->setFirstResult($activePage * $entriesPerPage)
+		$qb->setFirstResult(($activePage - 1) * $entriesPerPage)
 			->setMaxResults($entriesPerPage);
 		$result = $qb->getQuery()->getResult();
 		$rowCount = $rowCountQb->getQuery()->getSingleScalarResult();
-
 
 		$data = [];
 		foreach($result as $row) {
@@ -209,7 +208,7 @@ class Inventory extends Schbas {
 			}
 			$data['data'][] = $rowData;
 		}
-		$data['pageCount'] = $rowCount / $entriesPerPage;
+		$data['pageCount'] = ceil($rowCount / $entriesPerPage);
 		dieJson($data);
 	}
 
@@ -244,6 +243,9 @@ class Inventory extends Schbas {
 		}
 		if(in_array('subjectName', $displayColumns)) {
 			$queryBuilder->orWhere('s.name LIKE :filter');
+		}
+		if(in_array('id', $displayColumns)) {
+			$queryBuilder->orWhere('i.id LIKE :filter');
 		}
 		$queryBuilder->setParameter('filter', "%$filter%");
 	}
