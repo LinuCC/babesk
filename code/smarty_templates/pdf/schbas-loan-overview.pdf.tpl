@@ -35,7 +35,7 @@
 					{$book->getIsbn()}
 				</td>
 				<td align="right">
-					{$book->getPrice()} €
+					{number_format($book->getPrice(), 2)} €
 				</td>
 			</tr>
 		{/foreach}
