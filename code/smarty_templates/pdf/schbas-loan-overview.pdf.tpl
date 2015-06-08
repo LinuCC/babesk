@@ -41,8 +41,6 @@
 		{/foreach}
 	</table>
 	<br>
-	{$textOne->getText()}
-	<br><br>
 	<table style="border:solid" width="75%" cellpadding="2" cellspacing="2">
 		<tr>
 			<td>Leihgebühr: </td>
