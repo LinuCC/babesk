@@ -31,7 +31,14 @@ class LoanSystem extends Schbas {
 
 		$schbasEnabled = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='isSchbasClaimEnabled'");
 		if ($schbasEnabled[0]['value']=="0") {
-			$this->showLoanList();
+			if(isset($_GET['action']) && $_GET['action'] == 'showPdf') {
+				// Allow downloading the overview-pdf even when schbas is not
+				// enabled at the moment
+				$this->showSchbasOverviewPdf();
+			}
+			else {
+				$this->showLoanList();
+			}
 		}
 		else {
 
