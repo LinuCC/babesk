@@ -201,7 +201,6 @@ class Loan {
 			$books = $query->getResult();
 
 			if(!$includeAlreadyLend) {
-				echo 'stuff';
 				$books = $this->loanBooksGetFilterAlreadyLentBooks(
 					$books, $user
 				);
