@@ -76,6 +76,12 @@
 	<h2 align="center">
 		Weitere Informationen
 	</h2>
+	{if $textOne->getText()}
+		<h3>
+			{$textOne->getTitle()}
+		</h3>
+		{$textOne->getText()}
+	{/if}
 	{if $textTwo->getText()}
 		<h3>
 			{$textTwo->getTitle()}

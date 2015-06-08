@@ -649,7 +649,9 @@ class SchbasAccounting extends Schbas {
 		if(isset($_POST['booksToReturn'])) {
 			$pdfTitle = "Abzugebende Bücher für $gradename ($syName)";
 			foreach($users as $user) {
-				$books = $loanHelper->lendBooksToReturnOfUserGet($user);
+				$books = $loanHelper->lendBooksToReturnOfUserGet(
+					$user, $schoolyear
+				);
 				$usersWithBooks[] = [
 					'user' => $user,
 					'books' => $books
