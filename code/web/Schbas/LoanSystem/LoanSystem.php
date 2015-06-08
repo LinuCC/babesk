@@ -190,14 +190,8 @@ class LoanSystem extends Schbas {
 			$data[] = $datatmp;
 
 		}
-		if (empty($data)) {
-			$this->_interface->dieError('Keine ausgeliehenen B&uuml;cher vorhanden!');
-		} else {
-			$this->_smarty->assign('data', $data);
-			$this->_smarty->display($this->_smartyPath . 'loanList.tpl');
-		}
-
-
+		$this->_smarty->assign('data', $data);
+		$this->_smarty->display($this->_smartyPath . 'loanList.tpl');
 	}
 
 	/**
