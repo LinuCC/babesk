@@ -252,10 +252,11 @@ class LoanSystem extends Schbas {
 			);
 		}
 		$schbasYear = $prepSchoolyear->getLabel();
-		$letterDateIso = $settingsRepo
-			->findOneByName('schbasDateCoverLetter')
-			->getValue();
-		$letterDate = date('d.m.Y', strtotime($letterDateIso));
+		// $letterDateIso = $settingsRepo
+		// 	->findOneByName('schbasDateCoverLetter')
+		// 	->getValue();
+		// $letterDate = date('d.m.Y', strtotime($letterDateIso));
+		$letterDate = date('d.m.Y');
 		$schbasDeadlineTransferIso = $settingsRepo
 			->findOneByName('schbasDeadlineTransfer')
 			->getValue();

@@ -50,10 +50,11 @@ class LoanOverviewPdf {
 		$bankAccount = $settingsRepo->findOneByName('bank_details')
 			->getValue();
 		$bankData = explode('|', $bankAccount);
-		$letterDateIso = $settingsRepo
-			->findOneByName('schbasDateCoverLetter')
-			->getValue();
-		$letterDate = date('d.m.Y', strtotime($letterDateIso));
+		// $letterDateIso = $settingsRepo
+		// 	->findOneByName('schbasDateCoverLetter')
+		// 	->getValue();
+		// $letterDate = date('d.m.Y', strtotime($letterDateIso));
+		$letterDate = date('d.m.Y');
 
 		list($feeNormal, $feeReduced) = $this->getFees();
 		$books = $this->getBooks();
