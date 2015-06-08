@@ -201,6 +201,7 @@ class Loan {
 			$books = $query->getResult();
 
 			if(!$includeAlreadyLend) {
+				echo 'stuff';
 				$books = $this->loanBooksGetFilterAlreadyLentBooks(
 					$books, $user
 				);
@@ -227,9 +228,9 @@ class Loan {
 		$query->setParameter('user', $user);
 		$lendBooks = $query->getResult();
 		$shouldLendBooks = $this->loanBooksOfUserGet(
-			$user, ['includeAlreadyLend', 'schoolyear' => $schoolyear]
+			$user, ['includeAlreadyLend' => true, 'schoolyear' => $schoolyear]
 		);
-		// $lendBooks - $shouldLendBooks = $booksToReturn
+		// lendBooks - shouldLendBooks = booksToReturn
 		$booksToReturn = [];
 		foreach($lendBooks as $lendBook) {
 			foreach($shouldLendBooks as $shouldLendBook) {
