@@ -40,7 +40,7 @@
 			</tr>
 		{/foreach}
 	</table>
-	<br>
+	<p></p>
 	<table style="border:solid" width="75%" cellpadding="2" cellspacing="2">
 		<tr>
 			<td>Leihgebühr: </td>
