@@ -5,7 +5,7 @@ namespace Babesk\Schbas;
 require_once PATH_INCLUDE . '/Schbas/SchbasPdf.php';
 require_once PATH_INCLUDE . '/Schbas/Loan.php';
 
-class LoanOverviewPdf {
+class LoanInfoPdf {
 
 	/////////////////////////////////////////////////////////////////////
 	//Constructor

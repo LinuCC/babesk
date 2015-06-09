@@ -2,7 +2,7 @@
 
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ADMIN . '/Schbas/Schbas.php';
-require_once PATH_INCLUDE . '/Schbas/LoanOverviewPdf.php';
+require_once PATH_INCLUDE . '/Schbas/LoanInfoPdf.php';
 
 class SchbasSettings extends Schbas {
 
@@ -250,7 +250,7 @@ class SchbasSettings extends Schbas {
 
 	private function showPdf() {
 
-		$pdf = new \Babesk\Schbas\LoanOverviewPdf($this->_dataContainer);
+		$pdf = new \Babesk\Schbas\LoanInfoPdf($this->_dataContainer);
 		$pdf->setDataByGradelevel($_POST['gradelabel']);
 		$pdf->showSchbasOverviewPdf();
 

@@ -326,8 +326,8 @@ class LoanSystem extends Schbas {
 
 	private function showSchbasOverviewPdf() {
 
-		require_once PATH_INCLUDE . '/Schbas/LoanOverviewPdf.php';
-		$pdf = new \Babesk\Schbas\LoanOverviewPdf($this->_dataContainer);
+		require_once PATH_INCLUDE . '/Schbas/LoanInfoPdf.php';
+		$pdf = new \Babesk\Schbas\LoanInfoPdf($this->_dataContainer);
 		$user = $this->_em->find('DM:SystemUsers', $_SESSION['uid']);
 		$pdf->setDataByUser($user);
 		$pdf->showSchbasOverviewPdf();
