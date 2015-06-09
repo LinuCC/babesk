@@ -29,8 +29,9 @@ class LoanSystem extends Schbas {
 
 		$this->init($dataContainer);
 
-		$schbasEnabled = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='isSchbasClaimEnabled'");
-		if ($schbasEnabled[0]['value']=="0") {
+		$schbasEnabled = $this->_em->getRepository('DM:SystemGlobalSettings')
+			->findOneByName('isSchbasClaimEnabled');
+		if($schbasEnabled->getValue() === '0') {
 			if(isset($_GET['action']) && $_GET['action'] == 'showPdf') {
 				// Allow downloading the overview-pdf even when schbas is not
 				// enabled at the moment
@@ -137,7 +138,7 @@ class LoanSystem extends Schbas {
 		list($feeNormal, $feeReduced) = $fees;
 
 		$loanbooksTest = $loanHelper->loanBooksOfUserGet(
-			$user, ['ignoreSelfpay' => true]
+			$user, ['includeSelfpay' => true]
 		);
 		$query = $this->_em->createQuery(
 			'SELECT b FROM DM:SchbasBook b

@@ -157,9 +157,9 @@ class Loan {
 	 *                         'schoolyear' => Returns the books the user has
 	 *                             to lend for this specific schoolyear.
 	 *                             Default is the schbasPreparationSchoolyear.
-	 *                         'ignoreSelfpay' => Books that would get filtered
-	 *                             because the user is buying them for himself
-	 *                             will be included.
+	 *                         'includeSelfpay' => Books that would get
+	 *                             filtered because the user is buying them
+	 *                             for himself will be included.
 	 *                         'includeAlreadyLend' => Books that would get
 	 *                             filtered because the user already has lend
 	 *                             them will be included.
@@ -171,7 +171,7 @@ class Loan {
 			$schoolyear = (isset($opt['schoolyear'])) ?
 				$opt['schoolyear'] : $this->schbasPreparationSchoolyearGet();
 			// Default to subtracting the selfpaid books
-			$subtractSelfpay = (empty($opt['ignoreSelfpay']));
+			$subtractSelfpay = (empty($opt['includeSelfpay']));
 			$includeAlreadyLend = (!empty($opt['includeAlreadyLend']));
 			// We want all entries where the book will _not_ be bought by the
 			// user himself, so we check for null
@@ -213,11 +213,18 @@ class Loan {
 		}
 	}
 
+	/**
+	 * Fetches books a user has lend and now has to return
+	 * @param  object  $user       the user for the books
+	 * @param  object  $schoolyear Optional; If given will calculate the books
+	 *                             to return for the given schoolyear. Default
+	 *                             is the schbasPreparationSchoolyear
+	 * @return array               An array of books
+	 */
 	public function lendBooksToReturnOfUserGet($user, $schoolyear = false) {
 
 		if(!$schoolyear) {
-			$schoolyear = $this->_em->getRepository('DM:SystemSchoolyears')
-				->findOneByActive(true);
+			$schoolyear = $this->schbasPreparationSchoolyearGet();
 		}
 		$query = $this->_em->createQuery(
 			'SELECT b FROM DM:SchbasBook b
