@@ -14,6 +14,11 @@
 					{/foreach}
 				</td>
 			</tr>
+		{foreachelse}
+			{* tcpdf would error out when a tbody has no tablerows *}
+			<tr>
+				<td>---</td>
+			</tr>
 		{/foreach}
 	</tbody>
 </table>
