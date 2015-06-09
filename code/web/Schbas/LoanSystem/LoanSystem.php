@@ -31,15 +31,16 @@ class LoanSystem extends Schbas {
 
 		$schbasEnabled = $this->_em->getRepository('DM:SystemGlobalSettings')
 			->findOneByName('isSchbasClaimEnabled');
+
+		if(
+			isset($_GET['action']) && $_GET['action'] == 'showLoanOverviewPdf'
+		) {
+			// Allow downloading the overview-pdf even when schbas is not
+			// enabled at the moment
+			$this->showLoanOverviewPdf();
+		}
 		if($schbasEnabled->getValue() === '0') {
-			if(isset($_GET['action']) && $_GET['action'] == 'showPdf') {
-				// Allow downloading the overview-pdf even when schbas is not
-				// enabled at the moment
-				$this->showSchbasOverviewPdf();
-			}
-			else {
-				$this->showLoanList();
-			}
+			$this->showLoanList();
 		}
 		else {
 
@@ -47,7 +48,7 @@ class LoanSystem extends Schbas {
 				$action=$_GET['action'];
 				switch ($action) {
 					case 'showPdf':
-						$this->showSchbasOverviewPdf();
+						$this->showSchbasInfoPdf();
 						break;
 					case 'showFormPdf':
 						$this->showParticipationConfirmation();
@@ -325,13 +326,21 @@ class LoanSystem extends Schbas {
 
 	}
 
-	private function showSchbasOverviewPdf() {
+	private function showSchbasInfoPdf() {
 
 		require_once PATH_INCLUDE . '/Schbas/LoanInfoPdf.php';
 		$pdf = new \Babesk\Schbas\LoanInfoPdf($this->_dataContainer);
 		$user = $this->_em->find('DM:SystemUsers', $_SESSION['uid']);
 		$pdf->setDataByUser($user);
-		$pdf->showSchbasOverviewPdf();
+		$pdf->showPdf();
+	}
+
+	private function showLoanOverviewPdf() {
+
+		require_once PATH_INCLUDE . '/Schbas/LoanOverviewPdf.php';
+		$pdf = new \Babesk\Schbas\LoanOverviewPdf($this->_dataContainer);
+		$user = $this->_em->find('DM:SystemUsers', $_SESSION['uid']);
+		$pdf->showPdf($user);
 	}
 }
 ?>

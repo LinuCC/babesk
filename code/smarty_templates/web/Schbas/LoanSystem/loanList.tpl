@@ -24,9 +24,9 @@
 	{/if}
 </div>
 
-<a href="index.php?module=web|Schbas|LoanSystem&amp;action=showPdf"
+<a href="index.php?module=web|Schbas|LoanSystem&amp;action=showLoanOverviewPdf"
 	class="btn btn-default">
-	Informationsschreiben herunterladen
+	Buchausleiheübersicht herunterladen
 </a>
 
 

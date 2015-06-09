@@ -33,7 +33,7 @@ class LoanInfoPdf {
 		$this->_gradelevel = $gradelevel;
 	}
 
-	public function showSchbasOverviewPdf() {
+	public function showPdf() {
 
 		if(!$this->_gradelevel && !$this->_user) {
 			die('Either gradelevel or user has to be set');
@@ -77,7 +77,7 @@ class LoanInfoPdf {
 		$this->_smarty->assign('feeNormal', $feeNormal);
 		$this->_smarty->assign('feeReduced', $feeReduced);
 		$html = $this->_smarty->fetch(
-			PATH_SMARTY_TPL . '/pdf/schbas-loan-overview.pdf.tpl'
+			PATH_SMARTY_TPL . '/pdf/schbas-loan-info.pdf.tpl'
 		);
 		$schbasPdf = new \Babesk\Schbas\SchbasPdf(
 			$userId, $this->_gradelevel

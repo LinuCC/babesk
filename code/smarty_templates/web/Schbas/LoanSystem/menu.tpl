@@ -21,6 +21,10 @@
 {if !$loanShowBuy && !$loanShowForm}
 	<br />
 	<p class="alert alert-info">Bitte wählen sie einen Menüpunkt aus.</p>
+	<a href="index.php?module=web|Schbas|LoanSystem&amp;action=showLoanOverviewPdf"
+		class="btn btn-default">
+		Buchausleiheübersicht herunterladen
+	</a>
 {/if}
 {*
  * This right here is legacy-code, only needed to submit the requests as

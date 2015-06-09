@@ -252,7 +252,7 @@ class SchbasSettings extends Schbas {
 
 		$pdf = new \Babesk\Schbas\LoanInfoPdf($this->_dataContainer);
 		$pdf->setDataByGradelevel($_POST['gradelabel']);
-		$pdf->showSchbasOverviewPdf();
+		$pdf->showPdf();
 
 	}
 }

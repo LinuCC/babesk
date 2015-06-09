@@ -173,8 +173,6 @@ class Loan {
 			// Default to subtracting the selfpaid books
 			$subtractSelfpay = (empty($opt['includeSelfpay']));
 			$includeAlreadyLend = (!empty($opt['includeAlreadyLend']));
-			// We want all entries where the book will _not_ be bought by the
-			// user himself, so we check for null
 			$qb = $this->_em->createQueryBuilder()
 				->select(['b', 'usb'])
 				->from('DM:SchbasBook', 'b')
@@ -192,6 +190,8 @@ class Loan {
 			$qb->where('usb.schoolyear = :schoolyear')
 				->andWhere('usb.user = :user');
 			if($subtractSelfpay) {
+				// We want all entries where the book will _not_ be bought by
+				// the user himself, so we check for null
 				$qb->andWhere('sb IS NULL');
 			}
 			$qb->setParameter('schoolyear', $schoolyear);
@@ -214,6 +214,23 @@ class Loan {
 	}
 
 	/**
+	 * Fetches all books the user has lend
+	 * @param  object $user The user
+	 * @return array        The books
+	 */
+	public function lendBooksOfUserGet($user) {
+
+		$query = $this->_em->createQuery(
+			'SELECT b FROM DM:SchbasBook b
+			INNER JOIN b.exemplars e
+			INNER JOIN e.usersLent ul WITH ul = :user
+		');
+		$query->setParameter('user', $user);
+		$lendBooks = $query->getResult();
+		return $lendBooks;
+	}
+
+	/**
 	 * Fetches books a user has lend and now has to return
 	 * @param  object  $user       the user for the books
 	 * @param  object  $schoolyear Optional; If given will calculate the books
@@ -226,13 +243,7 @@ class Loan {
 		if(!$schoolyear) {
 			$schoolyear = $this->schbasPreparationSchoolyearGet();
 		}
-		$query = $this->_em->createQuery(
-			'SELECT b FROM DM:SchbasBook b
-			INNER JOIN b.exemplars e
-			INNER JOIN e.usersLent ul WITH ul = :user
-		');
-		$query->setParameter('user', $user);
-		$lendBooks = $query->getResult();
+		$lendBooks = $this->lendBooksOfUserGet($user);
 		$shouldLendBooks = $this->loanBooksOfUserGet(
 			$user, ['includeAlreadyLend' => true, 'schoolyear' => $schoolyear]
 		);
@@ -247,6 +258,28 @@ class Loan {
 			$booksToReturn[] = $lendBook;
 		}
 		return $booksToReturn;
+	}
+
+	/**
+	 * Gets all books the user should lend but instead is buying them himself
+	 * @return array  An array of books
+	 */
+	public function selfboughtBooksOfUserGet($user, $schoolyear = false) {
+
+		if(!$schoolyear) {
+			$schoolyear = $this->schbasPreparationSchoolyearGet();
+		}
+		$query = $this->_em->createQuery(
+			'SELECT b FROM DM:SchbasBook b
+			INNER JOIN b.usersShouldLend usb
+				WITH usb.user = :user AND usb.schoolyear = :schoolyear
+			INNER JOIN usb.user u
+			INNER JOIN u.selfpayingBookEntities sbe WITH sbe.book = b
+		');
+		$query->setParameter('user', $user);
+		$query->setParameter('schoolyear', $schoolyear);
+		$books = $query->getResult();
+		return $books;
 	}
 
 	public function amountOfInventoryAssignedToUsersGet($book) {
