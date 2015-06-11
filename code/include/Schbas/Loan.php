@@ -129,7 +129,12 @@ class Loan {
 
 	public function loanPriceOfAllBookAssignmentsForUserCalculate($user) {
 
-		$books = $this->loanBooksOfUserGet($user);
+		// We want to calculate the price of even the already lend books,
+		// because the pricecalculation of the book itself already reflects
+		// how many years it will be lend
+		$books = $this->loanBooksOfUserGet(
+			$user, ['includeAlreadyLend' => true]
+		);
 		$feeNormal = 0.00;
 		$feeReduced = 0.00;
 		foreach($books as $book) {

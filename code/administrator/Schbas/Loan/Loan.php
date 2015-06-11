@@ -65,8 +65,9 @@ class Loan extends Schbas {
 		}
 		$exemplarsLent = $this->exemplarsStillLendByUserGet($user);
 		$booksSelfpaid = $user->getSelfpayingBooks();
+		// The books that are already lend to the user will be highlighted
 		$booksToLoan = $loanHelper->loanBooksOfUserGet(
-			$user, ['ignoreAlreadyLend']
+			$user, ['includeAlreadyLend' => true]
 		);
 		$booksToLoanWithLent = [];
 		foreach($booksToLoan as $book) {

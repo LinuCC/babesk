@@ -30,7 +30,7 @@ class LoanOverviewPdf {
 
 		$schoolyear = $this->_loanHelper->schbasPreparationSchoolyearGet();
 		$booksToLoan = $this->_loanHelper->loanBooksOfUserGet(
-			$user, ['schoolyear' => $schoolyear]
+			$user, ['schoolyear' => $schoolyear, 'includeAlreadyLend' => true]
 		);
 		$booksToBuy = $this->_loanHelper->selfboughtBooksOfUserGet(
 			$user, $schoolyear

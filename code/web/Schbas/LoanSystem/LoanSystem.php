@@ -139,7 +139,7 @@ class LoanSystem extends Schbas {
 		list($feeNormal, $feeReduced) = $fees;
 
 		$loanbooksTest = $loanHelper->loanBooksOfUserGet(
-			$user, ['includeSelfpay' => true]
+			$user, ['includeSelfpay' => true, 'includeAlreadyLend' => true]
 		);
 		$query = $this->_em->createQuery(
 			'SELECT b FROM DM:SchbasBook b

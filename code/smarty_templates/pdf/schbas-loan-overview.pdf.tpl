@@ -1,14 +1,16 @@
 <h2 align="center">
-	Ausleihübersichten für {$user->getForename()} {$user->getName()}
-	in {$schoolyear->getLabel()}
+	Übersicht der Leih- und Kaufexemplare
 </h2>
 <p align="center">
-	{$letterDate}
+	Für {$user->getForename()} {$user->getName()} in {$schoolyear->getLabel()}
+</p>
+<p align="center">
+	Erstellt am {$letterDate}
 </p>
 
 <div style="page-break-inside:avoid">
 	<h4 align="center">
-		Auszuleihende Bücher
+		Leihbücher
 	</h4>
 	<table cellpadding="0" cellspacing="1">
 		<thead>
@@ -46,7 +48,7 @@
 
 <div style="page-break-inside:avoid">
 	<h4 align="center">
-		Selbstzukaufende Bücher
+		Selbstkäufe
 	</h4>
 	<table cellpadding="0" cellspacing="1">
 		<thead>
@@ -82,7 +84,7 @@
 	</table>
 </div>
 
-<div style="page-break-inside:avoid">
+{* <div style="page-break-inside:avoid">
 	<h4 align="center">
 		Ausgeliehene Bücher
 	</h4>
@@ -118,4 +120,4 @@
 			{/foreach}
 		</tbody>
 	</table>
-</div>
+</div> *}

@@ -126,7 +126,9 @@ class LoanInfoPdf {
 	protected function getBooks() {
 
 		if($this->_user) {
-			return $this->_loanHelper->loanBooksOfUserGet($this->_user);
+			return $this->_loanHelper->loanBooksOfUserGet(
+				$this->_user, ['includeAlreadyLend' => true]
+			);
 		}
 		else {
 			return $this->_loanHelper->booksInGradelevelToLoanGet(
