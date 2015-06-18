@@ -359,6 +359,58 @@ class Loan {
 		return [$langAr, $relAr, $courseAr];
 	}
 
+	/**
+	 * Calculates the subjects of a user by accumulating the correct columns
+	 * @param  object $user       the user
+	 * @param  int    $gradelevel The gradelevel of the user
+	 * @return array              the subjects of the user as an array of
+	 *                            strings
+	 */
+	public function userSubjectsCalc($user, $gradelevel) {
+
+		$userSubjects = array_merge(
+			explode('|', $user->getReligion()),
+			explode('|', $user->getForeignLanguage())
+		);
+		$trigger = $this->_em->getRepository('DM:SystemGlobalSettings')
+			->findOneByName('special_course_trigger');
+		if($trigger->getValue() <= $gradelevel) {
+			$userSubjects = array_merge(
+				$userSubjects,
+				explode('|', $user->getSpecialCourse())
+			);
+		}
+		return $userSubjects;
+	}
+
+	public function findBookAssignmentsForUserBySubject(
+		$user, $subject, $schoolyear
+	) {
+
+		$books = $this->findBooksForUserBySubject(
+			$user, $subject, $schoolyear
+		);
+		if(!$books || !count($books)) { return false; }
+		$bookAssignments = $this->_em->getRepository(
+			'DM:SchbasUserShouldLendBook'
+		)->findBy(
+			['user' => $user, 'book' => $books, 'schoolyear' => $schoolyear]
+		);
+		return $bookAssignments;
+	}
+
+	public function findBooksForUserBySubject($user, $subject, $schoolyear) {
+
+		$userGrade = $this->_em->getRepository('DM:SystemUsers')
+			->getGradeByUserAndSchoolyear($user, $schoolyear);
+		if(!$userGrade) { return false; }
+		$possibleClasses = $this->_gradelevelIsbnIdentAssoc[
+			$userGrade->getGradelevel()
+		];
+		$books = $this->_em->getRepository('DM:SchbasBook')
+			->findBy(['subject' => $subject, 'class' => $possibleClasses]);
+		return $books;
+	}
 
 	/////////////////////////////////////////////////////////////////////
 	//Implements

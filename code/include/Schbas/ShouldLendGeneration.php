@@ -55,7 +55,9 @@ class ShouldLendGeneration {
 		foreach($this->_users as $user) {
 			$gradelevel = $this->gradelevelGet($user);
 			if(!$gradelevel) { continue; }
-			$subjects = $this->userSubjectsCalc($user, $gradelevel);
+			$subjects = $this->_loanHelper->userSubjectsCalc(
+				$user, $gradelevel
+			);
 			$classes = $this->_loanHelper->gradelevel2IsbnIdent(
 				$gradelevel
 			);
@@ -184,21 +186,6 @@ class ShouldLendGeneration {
 		}
 		$gradelevel = $grade->getGradelevel();
 		return $gradelevel;
-	}
-
-	protected function userSubjectsCalc($user, $gradelevel) {
-
-		$userSubjects = array_merge(
-			explode('|', $user->getReligion()),
-			explode('|', $user->getForeignLanguage())
-		);
-		if($this->_specialCourseTrigger <= $gradelevel) {
-			$userSubjects = array_merge(
-				$userSubjects,
-				explode('|', $user->getSpecialCourse())
-			);
-		}
-		return $userSubjects;
 	}
 
 	/**

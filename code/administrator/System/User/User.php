@@ -854,14 +854,16 @@ class User extends System {
 			->getSpecialCourse();
 		$newStatus = ($_POST['inCourse'] == 'true') ? true : false;
 		$hasCourse = strpos($courseStr, $_POST['specialCourse']) !== false;
-		if($newStatus && !$hasCourse) {
+		$shouldAdd = $newStatus && !$hasCourse;
+		$shouldDelete = !$newStatus && $hasCourse;
+		if($shouldAdd) {
 			//Add course
 			if(!empty($courseStr)) {
 				$courseStr .= '|';   //Add delimiter if not void
 			}
 			$courseStr .= $_POST['specialCourse'];
 		}
-		else if(!$newStatus && $hasCourse) {
+		else if($shouldDelete) {
 			//delete course
 			//Delimiter can be in two different places or not there, just try
 			//all possibilities...
@@ -884,6 +886,26 @@ class User extends System {
 			->setSpecialCourse($courseStr);
 		$this->_em->persist($user);
 		$this->_em->flush();
+
+		if($shouldAdd) {
+			// If required you can add book-assignments here when a subject
+			// gets added to a user
+		}
+		else if($shouldDelete) {
+			// Also delete the Book-assignment, if exists
+			$subject = $this->_em->getRepository('DM:SystemSchoolSubject')
+				->findOneByAbbreviation($_POST['specialCourse']);
+			$rmd = $this->removeBookAssignmentIfSubjectRemoved(
+				$user, $subject
+			);
+			if($rmd) {
+				$this->_interface->dieAjax(
+					'success', 'Der Oberstufenkurs wurde erfolgreich ' .
+					'verändert und das zugehoerige Buch entfernt.'
+				);
+			}
+		}
+
 		$this->_interface->dieAjax(
 			'success', 'Der Oberstufenkurs wurde erfolgreich verändert'
 		);
@@ -930,14 +952,16 @@ class User extends System {
 			->getForeignLanguage();
 		$newStatus = ($_POST['inForeignLanguage'] == 'true') ? true : false;
 		$hasCourse = strpos($courseStr, $_POST['foreignLanguage']) !== false;
-		if($newStatus && !$hasCourse) {
+		$shouldAdd = $newStatus && !$hasCourse;
+		$shouldDelete = !$newStatus && $hasCourse;
+		if($shouldAdd) {
 			//Add course
 			if(!empty($courseStr)) {
 				$courseStr .= '|';   //Add delimiter if not void
 			}
 			$courseStr .= $_POST['foreignLanguage'];
 		}
-		else if(!$newStatus && $hasCourse) {
+		else if($shouldDelete) {
 			//delete course
 			//Delimiter can be in two different places or not there, just try
 			//all possibilities...
@@ -960,6 +984,27 @@ class User extends System {
 			->setForeignLanguage($courseStr);
 		$this->_em->persist($user);
 		$this->_em->flush();
+
+
+		if($shouldAdd) {
+			// If required you can add book-assignments here when a subject
+			// gets added to a user
+		}
+		else if($shouldDelete) {
+			// Also delete the Book-assignment, if exists
+			$subject = $this->_em->getRepository('DM:SystemSchoolSubject')
+				->findOneByAbbreviation($_POST['foreignLanguage']);
+			$rmd = $this->removeBookAssignmentIfSubjectRemoved(
+				$user, $subject
+			);
+			if($rmd) {
+				$this->_interface->dieAjax(
+					'success', 'Die Fremdsprache wurde erfolgreich verändert' .
+					' und das zugehoerige Buch entfernt.'
+				);
+			}
+		}
+
 		$this->_interface->dieAjax(
 			'success', 'Die Fremdsprache wurde erfolgreich verändert'
 		);
@@ -997,48 +1042,111 @@ class User extends System {
 
 	protected function setReligion() {
 
-		$users = $this->_em->getRepository(
+		// inReligion is like checkbox checked/not checked
+		// religion is the name of the religion that is checked or not checked
+
+		$userRepo = $this->_em->getRepository(
 			'DM:SystemUsers'
 		);
-		$courseStr = $users
-			->findOneById($_POST['userId'])
-			->getReligion();
+		$courseStr = $userRepo->findOneById($_POST['userId'])->getReligion();
 		$newStatus = ($_POST['inReligion'] == 'true') ? true : false;
-		$hasCourse = strpos($courseStr, $_POST['religion']) !== false;
-		if($newStatus && !$hasCourse) {
+		$religionStr = $_POST['religion'];
+		$hasCourse = strpos($courseStr, $religionStr) !== false;
+		$shouldAdd = $newStatus && !$hasCourse;
+		$shouldDelete = !$newStatus && $hasCourse;
+		if($shouldAdd) {
 			//Add course
 			if(!empty($courseStr)) {
 				$courseStr .= '|';   //Add delimiter if not void
 			}
-			$courseStr .= $_POST['religion'];
+			$courseStr .= $religionStr;
 		}
-		else if(!$newStatus && $hasCourse) {
+		else if($shouldDelete) {
 			//delete course
 			//Delimiter can be in two different places or not there, just try
 			//all possibilities...
-			$courseStr = str_replace(
-				$_POST['religion'] . '|', '', $courseStr
-			);
-			$courseStr = str_replace(
-				'|' . $_POST['religion'], '', $courseStr
-			);
-			$courseStr = str_replace(
-				$_POST['religion'], '', $courseStr
-			);
+			$courseStr = str_replace($religionStr . '|', '', $courseStr);
+			$courseStr = str_replace('|' . $religionStr, '', $courseStr);
+			$courseStr = str_replace($religionStr, '', $courseStr);
 		}
 		else {
 			//Nothing to change
 			$this->_interface->dieAjax('info', 'Nothing changed');
 		}
 
-		$user = $users->findOneById($_POST['userId'])
+		$user = $userRepo->findOneById($_POST['userId'])
 			->setReligion($courseStr);
 		$this->_em->persist($user);
 		$this->_em->flush();
+
+
+		if($shouldAdd) {
+			// If required you can add book-assignments here when a subject
+			// gets added to a user
+		}
+		else if($shouldDelete) {
+			// Also delete the Book-assignment, if exists
+			$subject = $this->_em->getRepository('DM:SystemSchoolSubject')
+				->findOneByAbbreviation($religionStr);
+			$rmd = $this->removeBookAssignmentIfSubjectRemoved(
+				$user, $subject
+			);
+			if($rmd) {
+				$this->_interface->dieAjax(
+					'success', 'Die Religion wurde erfolgreich verändert ' .
+					'und das zugehoerige Buch entfernt.'
+				);
+			}
+		}
 		$this->_interface->dieAjax(
 			'success', 'Die Religion wurde erfolgreich verändert'
 		);
 	}
+
+	/**
+	 * Checks if the user has the subject. If not, remove the book-assignment
+	 * It calls the Db to check the subjects, so if you change the subject
+	 * beforehand make sure to commit those to the db.
+	 * It also calculates the correct book from the classes.
+	 *
+	 * This could be so much better. Sorry, future me...
+	 *
+	 * @param  object $user    The user of the book-assignment
+	 * @param  object $subject The subject of the book of the book-assignment.
+	 * @return bool            true if a bookAssignment was removed, else false
+	 */
+	protected function removeBookAssignmentIfSubjectRemoved($user, $subject) {
+
+		require_once PATH_INCLUDE . '/Schbas/Loan.php';
+		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
+		$schoolyear = $loanHelper->schbasPreparationSchoolyearGet();
+		$userGrade = $this->_em->getRepository('DM:SystemUsers')
+			->getGradeByUserAndSchoolyear($user, $schoolyear);
+		if(!$userGrade) { return false; }
+		$userSubjects = $loanHelper->userSubjectsCalc(
+			$user, $userGrade->getGradelevel()
+		);
+		if(!in_array($subject->getAbbreviation(), $userSubjects)) {
+			$bookAssignments = $loanHelper->
+				findBookAssignmentsForUserBySubject(
+					$user, $subject, $schoolyear
+				);
+			if($bookAssignments && count($bookAssignments)) {
+				foreach($bookAssignments as $bookAssignment) {
+					$this->_em->remove($bookAssignment);
+				}
+				$this->_em->flush();
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+	}
+
 
 	///////////////////////////////////////////////////////////////////////
 	//Attributes
