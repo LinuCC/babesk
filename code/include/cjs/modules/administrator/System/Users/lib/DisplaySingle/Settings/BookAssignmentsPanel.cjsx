@@ -7,6 +7,7 @@ Row = require 'react-bootstrap/lib/Row'
 Col = require 'react-bootstrap/lib/Col'
 Cookies = require 'js-cookie'
 NProgress = require 'nprogress'
+Icon = require 'lib/FontAwesomeIcon'
 
 module.exports = React.createClass(
 
@@ -68,6 +69,21 @@ module.exports = React.createClass(
                 Buchzuweisungen'
     )
 
+  handleRemoveBookAssignment: (bookAssignmentId, event)->
+    NProgress.start()
+    $.ajax(
+      method: 'POST'
+      url: 'index.php?module=administrator|Schbas|BookAssignments|Delete'
+      data:
+        bookAssignmentId: bookAssignmentId
+    ) .done (res)=>
+        NProgress.done()
+        @props.refresh()
+      .fail (jqxhr)->
+        NProgress.done()
+        toastr.error jqxhr.responseText, 'Fehler beim loeschen der \
+          Buchzuweisung'
+
   render: ->
     <Panel className='panel-dashboard' header={<h4>Buchzuweisungen</h4>}>
       <form className='form-horizontal'>
@@ -104,7 +120,16 @@ module.exports = React.createClass(
               if bookAssignment.schoolyear.id is @state.selectedSchoolyearId
                 <tr key={bookAssignment.id}>
                   <td>{bookAssignment.book.title}</td>
-                  <td></td>
+                  <td>
+                    <Button bsStyle='danger' bsSize='xsmall'
+                      onClick={
+                        @handleRemoveBookAssignment.bind(
+                          null, bookAssignment.id
+                        )
+                      }>
+                      <Icon name='trash-o' fixedWidth />
+                    </Button>
+                  </td>
                 </tr>
           }
         </tbody>

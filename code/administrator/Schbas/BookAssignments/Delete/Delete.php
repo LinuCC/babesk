@@ -17,12 +17,16 @@ class Delete extends \administrator\Schbas\BookAssignments\BookAssignments {
 	public function execute($dataContainer) {
 
 		$this->entryPoint($dataContainer);
-		$id = filter_input(INPUT_GET, 'schoolyearId');
-		if($id) {
+		$schoolyearId = filter_input(INPUT_GET, 'schoolyearId');
+		$bookAssignmentId = filter_input(INPUT_POST, 'bookAssignmentId');
+		if($schoolyearId) {
 			$schoolyear = $this->_em->getReference(
-				'DM:SystemSchoolyears', $id
+				'DM:SystemSchoolyears', $schoolyearId
 			);
 			$this->deleteAssignmentsOfSchoolyear($schoolyear);
+		}
+		else if($bookAssignmentId) {
+			$this->deleteSingleAssignment($bookAssignmentId);
 		}
 		else {
 			dieHttp('Fehlende Parameter', 400);
@@ -49,6 +53,26 @@ class Delete extends \administrator\Schbas\BookAssignments\BookAssignments {
 				['sev' => 'error', 'moreJson' => ['msg' => $e->getMessage(),
 					'id' => $schoolyear->getId()]]);
 			dieHttp('Konnte die Buchzuweisungen nicht löschen', 500);
+		}
+	}
+
+	protected function deleteSingleAssignment($bookAssignmentId) {
+
+		try {
+			$bookAssignment = $this->_em->find(
+				'DM:SchbasUserShouldLendBook', $bookAssignmentId
+			);
+			if(!$bookAssignment) {
+				dieHttp('Buchzuweisung nicht gefunden', 400);
+			}
+			$this->_em->remove($bookAssignment);
+			$this->_em->flush();
+			die('Buchzuweisung erfolgreich gelöscht.');
+
+		} catch(\Exception $e) {
+			$this->_logger->logO('Could not delete a single book-assignment',
+				['sev' => 'error', 'moreJson' => $e->getMessage()]);
+			dieHttp('Konnte die Buchzuweisung nicht löschen', 500);
 		}
 	}
 
