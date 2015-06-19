@@ -44,6 +44,7 @@ class ShouldLendGeneration {
 	public function generate(array $opt = []) {
 
 		if(isset($opt['onlyForUsers'])) {
+			$this->_isExternalUsers = true;
 			$this->_users = $opt['onlyForUsers'];
 		}
 		if(isset($opt['schoolyear'])) {
@@ -178,9 +179,23 @@ class ShouldLendGeneration {
 
 	protected function gradelevelGet($user) {
 
-		$grade = $user->getAttendances()
-			->first()
-			->getGrade();
+		if(!$this->_isExternalUsers) {
+			$grade = $user->getAttendances()
+				->first()
+				->getGrade();
+		}
+		else {
+			// When given external users, they may wont have hydrated the
+			// attendances like we do internally. We need to test for the
+			// schoolyears, too.
+			$attendances = $user->getAttendances();
+			foreach($attendances as $attendance) {
+				if($attendance->getSchoolyear() == $this->_schoolyear) {
+					$grade = $attendance->getGrade();
+					break;
+				}
+			}
+		}
 		if(!$grade) {
 			return false;
 		}
@@ -246,6 +261,7 @@ class ShouldLendGeneration {
 
 	protected $_schoolyear;
 	protected $_users;
+	protected $_isExternalUsers = false;
 	protected $_books;
 
 	/**

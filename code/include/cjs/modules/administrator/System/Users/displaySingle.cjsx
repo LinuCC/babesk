@@ -27,6 +27,7 @@ App = React.createClass(
       formData: {
         user: {}
         groups: []
+        schoolyears: []
       }
       user: {}
     }
@@ -52,7 +53,6 @@ App = React.createClass(
         state.settingsChanged = false
         # Clone the same data so that settings-changes dont affect the overview
         state.user = $.extend(true, {}, res.user)
-        console.log state.user
         @setState state
         NProgress.done()
       .fail (jqxhr)->
@@ -92,6 +92,10 @@ App = React.createClass(
     @patchData(@state.formData.user, => @setState settingsChanged: false)
 
   handleUserChangesCancel: ->
+    @updateData()
+    @setState settingsChanged: false
+
+  handleRefresh: ->
     @updateData()
     @setState settingsChanged: false
 
@@ -157,7 +161,7 @@ App = React.createClass(
           <h3>Später :) </h3>
         else if @state.selected is 'settings'
           <Settings {...@state.formData} onUserChange={@handleUserChange}
-            settingsChanged={@state.settingsChanged} />
+            settingsChanged={@state.settingsChanged} refresh={@handleRefresh}/>
         else
           <h3>Nichts ausgewählt...</h3>
       }

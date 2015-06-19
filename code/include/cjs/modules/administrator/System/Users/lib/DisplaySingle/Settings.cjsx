@@ -7,6 +7,7 @@ Toggle = require 'react-toggle'
 Row = require 'react-bootstrap/lib/Row'
 Col = require 'react-bootstrap/lib/Col'
 SelectList = require 'react-widgets/lib/SelectList'
+BookAssignmentsPanel = require './Settings/BookAssignmentsPanel'
 
 module.exports = React.createClass(
 
@@ -14,6 +15,7 @@ module.exports = React.createClass(
     return {
       user: {}
       groups: []
+      schoolyears: []
       settingsChanged: false
       onUserChange: (key, value)-> console.log [key, value]
     }
@@ -29,6 +31,9 @@ module.exports = React.createClass(
 
   handleAccountLockedChange: (event)->
     @props.onUserChange 'locked', event.target.checked
+
+  handleRefresh: ->
+    @props.refresh()
 
   render: ->
     console.log @props
@@ -91,21 +96,13 @@ module.exports = React.createClass(
             </form>
           </Panel>
         </Col>
+        <Col md={12} lg={12}>
+          <hr/>
+        </Col>
         <Col md={12} lg={6}>
-          <Panel className='panel-dashboard' header={<h4>Buchzuweisungen</h4>}>
-            <form className='form-horizontal'>
-              {
-                if @props.user.bookAssignments?
-                  @props.user.bookAssignments.map (bookAssignment)->
-                    return <p key={bookAssignment.id}>
-                      {bookAssignment.schoolyear.label} -
-                      {bookAssignment.book.title}
-                    </p>
-                else
-                  <p>Keine Buchausweisungen vorhanden.</p>
-              }
-            </form>
-          </Panel>
+          <BookAssignmentsPanel bookAssignments={@props.user.bookAssignments}
+            schoolyears={@props.schoolyears} userId={@props.user.id}
+            refresh={@handleRefresh} />
         </Col>
       </Row>
     </div>

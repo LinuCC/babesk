@@ -34,7 +34,8 @@ App = React.createClass({
       settingsChanged: false,
       formData: {
         user: {},
-        groups: []
+        groups: [],
+        schoolyears: []
       },
       user: {}
     };
@@ -61,7 +62,6 @@ App = React.createClass({
         state.formData = res;
         state.settingsChanged = false;
         state.user = $.extend(true, {}, res.user);
-        console.log(state.user);
         _this.setState(state);
         return NProgress.done();
       };
@@ -122,6 +122,12 @@ App = React.createClass({
       settingsChanged: false
     });
   },
+  handleRefresh: function() {
+    this.updateData();
+    return this.setState({
+      settingsChanged: false
+    });
+  },
   render: function() {
     return React.createElement("div", null, React.createElement(Row, null, React.createElement("div", {
       "className": 'user-header'
@@ -169,7 +175,8 @@ App = React.createClass({
       "size": "large"
     }), "\u00c4nderungen speichern")) : void 0)))), (this.state.selected === 'overview' ? React.createElement("h3", null, "Sp\u00e4ter :) ") : this.state.selected === 'statistics' ? React.createElement("h3", null, "Sp\u00e4ter :) ") : this.state.selected === 'settings' ? React.createElement(Settings, React.__spread({}, this.state.formData, {
       "onUserChange": this.handleUserChange,
-      "settingsChanged": this.state.settingsChanged
+      "settingsChanged": this.state.settingsChanged,
+      "refresh": this.handleRefresh
     })) : React.createElement("h3", null, "Nichts ausgew\u00e4hlt...")));
   }
 });

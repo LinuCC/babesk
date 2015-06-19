@@ -14,6 +14,7 @@
     "gulp-util": "^3.0.3",
     "gulp-watch": "^4.1.1",
     "gulp-watchify": "^0.3.0",
+    "js-cookie": "^1.5.1",
     "moment": "^2.10.2",
     "nprogress": "^0.1.6",
     "pleasejs": "^0.4.2",

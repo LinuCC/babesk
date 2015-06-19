@@ -22,6 +22,10 @@ class Generate extends \administrator\Schbas\BookAssignments\BookAssignments {
 		if(isset($_GET['overview-infos'])) {
 			$this->overviewInfosSend();
 		}
+		else if(isset($_POST['userId'])) {
+			$userId = filter_input(INPUT_POST, 'userId');
+			$this->assignmentsForSingleUserCreate($userId);
+		}
 		else if(isset($_POST['data'])) {
 			$this->assignmentsCreate($_POST['data']);
 		}
@@ -134,6 +138,37 @@ class Generate extends \administrator\Schbas\BookAssignments\BookAssignments {
 
 
 	/*==========  Automatic Assignments  ==========*/
+
+
+	protected function assignmentsForSingleUserCreate($userId) {
+
+		$user = $this->_em->find('DM:SystemUsers', $userId);
+		if(!$user) { dieJson('Benutzer nicht gefunden', 400); }
+		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
+		$loanGenerator = new \Babesk\Schbas\ShouldLendGeneration(
+			$this->_dataContainer
+		);
+		$schoolyear = $loanHelper->schbasPreparationSchoolyearGet();
+		$bookAssignments = $this->_em
+			->getRepository('DM:SchbasUserShouldLendBook')
+			->findBy(['user' => $user, 'schoolyear' => $schoolyear]);
+		if(count($bookAssignments)) {
+			foreach($bookAssignments as $bookAssignment) {
+				$this->_em->remove($bookAssignment);
+			}
+			$this->_em->flush();
+		}
+		$res = $loanGenerator->generate(
+			['onlyForUsers' => [$user], 'schoolyear' => $schoolyear]
+		);
+		if($res) {
+			die('Die Zuweisungen wurden erfolgreich erstellt.');
+		}
+		else {
+			$this->_logger->log('Could not create the assignments', 'error');
+			dieHttp('Konnte die Zuweisungen nicht erstellen!', 500);
+		}
+	}
 
 	/**
 	 * Automatically create the assignments.

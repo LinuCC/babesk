@@ -53,6 +53,7 @@ class Users extends \System {
 		$activeGroups = $this->getSingleUserActiveGroups($user);
 		$allGroups = $this->getSingleUserAllGroups();
 		$bookAssignments = $this->getSingleUserBookAssignments($user);
+		$schoolyears = $this->getSingleUserSchoolyears();
 		$userdata = [
 			'id' => $user->getId(),
 			'forename' => $user->getForename(),
@@ -72,7 +73,8 @@ class Users extends \System {
 		];
 		dieJson([
 			'user' => $userdata,
-			'groups' => $allGroups
+			'groups' => $allGroups,
+			'schoolyears' => $schoolyears
 		]);
 	}
 
@@ -133,6 +135,22 @@ class Users extends \System {
 			$this->_logger->logO('Could not fetch book-assignments for user',
 				['sev' => 'error', 'moreJson' => $e->getMessage()]);
 			dieHttp('Konnte Buchzuweisungen nicht abrufen', 500);
+		}
+	}
+
+	protected function getSingleUserSchoolyears() {
+
+		try {
+			$query = $this->_em->createQuery(
+				'SELECT s FROM DM:SystemSchoolyears s'
+			);
+			$res = $query->getResult(AbstractQuery::HYDRATE_ARRAY);
+			return $res;
+
+		} catch(\Exception $e) {
+			$this->_logger->logO('Could not fetch the schoolyears',
+				['sev' => 'error', 'moreJson' => $e->getMessage()]);
+			dieHttp('Konnte Schuljahre nicht abrufen', 500);
 		}
 	}
 
