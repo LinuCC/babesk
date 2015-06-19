@@ -52,6 +52,7 @@ class Users extends \System {
 		}
 		$activeGroups = $this->getSingleUserActiveGroups($user);
 		$allGroups = $this->getSingleUserAllGroups();
+		$bookAssignments = $this->getSingleUserBookAssignments($user);
 		$userdata = [
 			'id' => $user->getId(),
 			'forename' => $user->getForename(),
@@ -66,7 +67,8 @@ class Users extends \System {
 			'religion' => $user->getReligion(),
 			'foreignLanguage' => $user->getForeignLanguage(),
 			'specialCourse' => $user->getSpecialCourse(),
-			'activeGroups' => $activeGroups
+			'activeGroups' => $activeGroups,
+			'bookAssignments' => $bookAssignments
 		];
 		dieJson([
 			'user' => $userdata,
@@ -110,6 +112,28 @@ class Users extends \System {
 			dieHttp('Konnte die Gruppen nicht abrufen', 500);
 		}
 		return $groups;
+	}
+
+	protected function getSingleUserBookAssignments($user) {
+
+		try {
+			$query = $this->_em->createQuery(
+				'SELECT partial usb.{id}, partial b.{id, title},
+					partial sy.{id, label}
+				FROM DM:SchbasUserShouldLendBook usb
+				INNER JOIN usb.book b
+				INNER JOIN usb.schoolyear sy
+				WHERE usb.user = :user
+			');
+			$query->setParameter('user', $user);
+			$res = $query->getResult(AbstractQuery::HYDRATE_ARRAY);
+			return $res;
+
+		} catch(\Exception $e) {
+			$this->_logger->logO('Could not fetch book-assignments for user',
+				['sev' => 'error', 'moreJson' => $e->getMessage()]);
+			dieHttp('Konnte Buchzuweisungen nicht abrufen', 500);
+		}
 	}
 
 	protected function updateSingleUser() {

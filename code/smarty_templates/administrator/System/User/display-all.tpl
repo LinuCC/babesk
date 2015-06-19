@@ -23,6 +23,11 @@
 				>
 				<span class="fa fa-cog"></span>
 			</a>
+			<a class="btn btn-xs btn-default user-action-settings"
+				href="index.php?module=administrator|System|Users&id=<%= ID %>" title="Nutzerübersicht"
+				>
+				<span class="fa fa-eye"></span>
+			</a>
 			<a class="btn btn-xs btn-danger user-action-delete" href="#"
 				title="Nutzer löschen">
 				<span class="fa fa-trash-o"></span>

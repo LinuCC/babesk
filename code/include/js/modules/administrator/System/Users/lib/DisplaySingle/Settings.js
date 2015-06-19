@@ -48,6 +48,7 @@ module.exports = React.createClass({
   },
   render: function() {
     var personalTitle, systemTitle;
+    console.log(this.props);
     personalTitle = React.createElement("h4", null, "Personendaten");
     systemTitle = React.createElement("h4", null, "Systemdaten");
     return React.createElement("div", null, React.createElement(Row, null, React.createElement(Col, {
@@ -155,6 +156,18 @@ module.exports = React.createClass({
       "textField": 'name',
       "multiple": true,
       "onChange": this.handleGroupChange
-    })))))));
+    }))))), React.createElement(Col, {
+      "md": 12.,
+      "lg": 6.
+    }, React.createElement(Panel, {
+      "className": 'panel-dashboard',
+      "header": React.createElement("h4", null, "Buchzuweisungen")
+    }, React.createElement("form", {
+      "className": 'form-horizontal'
+    }, (this.props.user.bookAssignments != null ? this.props.user.bookAssignments.map(function(bookAssignment) {
+      return React.createElement("p", {
+        "key": bookAssignment.id
+      }, bookAssignment.schoolyear.label, " -", bookAssignment.book.title);
+    }) : React.createElement("p", null, "Keine Buchausweisungen vorhanden.")))))));
   }
 });

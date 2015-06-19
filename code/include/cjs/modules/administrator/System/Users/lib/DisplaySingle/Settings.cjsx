@@ -31,6 +31,7 @@ module.exports = React.createClass(
     @props.onUserChange 'locked', event.target.checked
 
   render: ->
+    console.log @props
     personalTitle = <h4>Personendaten</h4>
     systemTitle = <h4>Systemdaten</h4>
     <div>
@@ -87,6 +88,22 @@ module.exports = React.createClass(
                   value={@props.user.activeGroups} textField='name' multiple
                   onChange={@handleGroupChange} />
               </Input>
+            </form>
+          </Panel>
+        </Col>
+        <Col md={12} lg={6}>
+          <Panel className='panel-dashboard' header={<h4>Buchzuweisungen</h4>}>
+            <form className='form-horizontal'>
+              {
+                if @props.user.bookAssignments?
+                  @props.user.bookAssignments.map (bookAssignment)->
+                    return <p key={bookAssignment.id}>
+                      {bookAssignment.schoolyear.label} -
+                      {bookAssignment.book.title}
+                    </p>
+                else
+                  <p>Keine Buchausweisungen vorhanden.</p>
+              }
             </form>
           </Panel>
         </Col>
