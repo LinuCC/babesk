@@ -3,6 +3,7 @@
 namespace administrator\Schbas\SchbasAccounting;
 
 require_once PATH_INCLUDE . '/Module.php';
+require_once PATH_INCLUDE . '/Schbas/Loan.php';
 require_once 'SchbasAccounting.php';
 
 class RecordReceipt extends \SchbasAccounting {
@@ -81,9 +82,12 @@ class RecordReceipt extends \SchbasAccounting {
 			$_POST['activePage'],
 			$showOnlyMissing
 		);
+		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
+		$prepSchoolyear = $loanHelper->schbasPreparationSchoolyearGet();
 		if(count($data['users'])) {
 			die(json_encode(array(
-				'users' => $data['users'], 'pagecount' => $data['pagecount']
+				'users' => $data['users'], 'pagecount' => $data['pagecount'],
+				'schbasPreparationSchoolyear' => $prepSchoolyear->getLabel()
 			)));
 		}
 		else {
@@ -150,6 +154,8 @@ class RecordReceipt extends \SchbasAccounting {
 		$filter, $filterForCol, $sortColumn, $pagenum, $showOnlyMissing
 	) {
 
+		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
+		$prepSchoolyear = $loanHelper->schbasPreparationSchoolyearGet();
 		$queryBuilder = $this->_em->createQueryBuilder()
 			->select(
 				'partial u.{id, forename, name, username}, c.cardnumber, ' .
@@ -158,13 +164,16 @@ class RecordReceipt extends \SchbasAccounting {
 				'a.amountToPay - a.payedAmount AS missingAmount, ' .
 				'CONCAT(g.gradelevel, g.label) AS activeGrade'
 			)->from('DM:SystemUsers', 'u')
-			->leftJoin('u.schbasAccounting', 'a')
-			->leftJoin('u.cards', 'c')
+			->leftJoin(
+				'u.schbasAccounting', 'a',
+				'WITH', 'a.schoolyear = :prepSchoolyear'
+			)->leftJoin('u.cards', 'c')
 			->leftJoin('u.attendances', 'uigs')
 			->leftJoin('uigs.schoolyear', 's', 'WITH', ' s.active = 1')
 			->leftJoin('uigs.grade', 'g')
 			->leftJoin('a.loanChoice', 'lc')
 			->andWhere('uigs.grade IS NULL OR s.id IS NOT NULL');
+		$queryBuilder->setParameter('prepSchoolyear', $prepSchoolyear);
 		if($showOnlyMissing) {
 			$queryBuilder->having('missingAmount > 0');
 		}
@@ -207,7 +216,6 @@ class RecordReceipt extends \SchbasAccounting {
 	private function paidAmountChange($userId, $amount) {
 
 		try {
-			require_once PATH_INCLUDE . '/Schbas/Loan.php';
 			$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
 			$user = $this->_em->getRepository('DM:SystemUsers')
 				->findOneById($userId);

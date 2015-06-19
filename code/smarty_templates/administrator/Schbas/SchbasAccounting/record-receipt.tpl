@@ -158,7 +158,9 @@
 
 {block name=filling_content}
 
-<h3 class="module-header">Geldeingänge erfassen</h3>
+<h3 class="module-header">
+	Geldeingänge erfassen (<span id='prepSy'></span>)
+</h3>
 
 <div class="alert alert-info">
 	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">

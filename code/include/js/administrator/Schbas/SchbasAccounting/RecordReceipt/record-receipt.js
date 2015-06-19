@@ -97,6 +97,7 @@ $(document).ready(function() {
 				else {
 					tableFill(res.users);
 					pageSelectorUpdate(res.pagecount);
+					$('#prepSy').html(res.schbasPreparationSchoolyear);
 				}
 			}
 			else if(jqXHR.status == 204) {
