@@ -101,6 +101,11 @@ module.exports = React.createClass(
           </Input>
         </Col>
         <Col xs={2} md={6}>
+          <a className='btn btn-success pull-right' data-toggle='tooltip'
+            title='Zu Buchzuweisung hinzufuegen gehen...'
+            href='index.php?module=administrator|Schbas|BookAssignments|View'>
+            <Icon name='plus' fixedWidth />
+          </a>
           <Button bsStyle='default' className='pull-right'
             onClick={@handleBookAssignmentsGenerate}>
             Buchzuweisungen neu generieren

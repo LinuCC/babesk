@@ -135,7 +135,15 @@ module.exports = React.createClass({
     }))), React.createElement(Col, {
       "xs": 2.,
       "md": 6.
-    }, React.createElement(Button, {
+    }, React.createElement("a", {
+      "className": 'btn btn-success pull-right',
+      "data-toggle": 'tooltip',
+      "title": 'Zu Buchzuweisung hinzufuegen gehen...',
+      "href": 'index.php?module=administrator|Schbas|BookAssignments|View'
+    }, React.createElement(Icon, {
+      "name": 'plus',
+      "fixedWidth": true
+    })), React.createElement(Button, {
       "bsStyle": 'default',
       "className": 'pull-right',
       "onClick": this.handleBookAssignmentsGenerate
