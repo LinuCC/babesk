@@ -1,6 +1,7 @@
 BaBeSK
 ======
 
+For more docs than this Readme, visit the [project-page](http://linucc.github.io/babesk/).
 
 Requirements
 ------------
