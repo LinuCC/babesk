@@ -310,22 +310,6 @@ class Schoolyear extends System {
 	}
 
 	/**
-	 * User wants to switch to the next Schoolyear
-	 */
-	protected function submoduleSwitchSchoolyearExecute() {
-
-		if($this->execPathHasSubmoduleLevel(2, $this->_subExecPath)) {
-			$this->submoduleExecuteAsMethod(
-				$this->_subExecPath,
-				2,
-				'switchSchoolyear');
-		}
-		else {
-			$this->switchSchoolyearDisplaySchoolyearSettingsExecute();
-		}
-	}
-
-	/**
 	 * Gets and escapes the Schoolyear-ID the User selected
 	 *
 	 * Dies with an Error if the Variable was not found
@@ -342,21 +326,6 @@ class Schoolyear extends System {
 		}
 
 		return $_POST['schoolyearId'];
-	}
-
-	protected function switchSchoolyearUploadExecute() {
-
-		require_once 'SchoolyearSwitch.php';
-
-		$schoolyearId = $this->schoolyearInputVarGet();
-		$switcher = new SchoolyearSwitch($this->_interface);
-		$switcher->execute($schoolyearId);
-	}
-
-	protected function switchSchoolyearDisplaySchoolyearSettingsExecute() {
-
-		$schoolyears = $this->getAllSchoolYears();
-		$this->_interface->displaySwitchSchoolyearSettings($schoolyears);
 	}
 
 	/////////////////////////////////////////////////////////////////////
