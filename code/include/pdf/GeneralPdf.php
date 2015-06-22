@@ -44,10 +44,10 @@ class GeneralPdf {
 	 *
 	 * @return void
 	 */
-	public function create($title, $text) {
+	public function create($title, $content) {
 
 		$this->_title = $title;
-		$this->_text = $text;
+		$this->_content = $content;
 
 		require_once  PATH_INCLUDE .'/pdf/tcpdf/config/lang/ger.php';
 		require_once PATH_INCLUDE . '/pdf/tcpdf/tcpdf.php';
@@ -178,10 +178,9 @@ class GeneralPdf {
 	 */
 	protected function contentPrint() {
 
-		$content = sprintf($this->_contentStr, $this->_title, $this->_text);
-
-		$this->_pdf->writeHTMLCell(0, 0, '', '', $content, 0, 1, 0, true, '',
-			true);
+		$this->_pdf->writeHTMLCell(
+			0, 0, '', '', $this->_content, 0, 1, 0, true, '', true
+		);
 
 		$this->_pdf->Ln();
 	}
@@ -224,21 +223,6 @@ class GeneralPdf {
 		);
 
 	/**
-	 * The Structure of the Main-Body of the PDF
-	 *
-	 * @var string
-	 */
-	protected $_contentStr = '
-			<p align="center">
-				<h2>
-					%s
-				</h2>
-			</p>
-			<br />
-				%s
-			<br />';
-
-	/**
 	 * The TCPDF-Object used by this class
 	 *
 	 * @var TCPDF
@@ -255,7 +239,7 @@ class GeneralPdf {
 	 * The Text of the PDF-File
 	 * @var string
 	 */
-	protected $_text;
+	protected $_content;
 
 	/**
 	 * Allows for fetching various data from the Server

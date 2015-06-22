@@ -89,16 +89,18 @@ class SchbasStatistics extends Statistics {
 			}, $_GET['otherCosts']);
 		}
 		$data = $this->calculateData();
+		$today = date('d.m.Y H:i');
+		$title = "Schbas Statistik ($today)";
 		$this->_smarty->assign('data', $data);
 		$this->_smarty->assign('assistantsCost', $assistantsCost);
 		$this->_smarty->assign('toolsCost', $toolsCost);
 		$this->_smarty->assign('otherCosts', $otherCosts);
+		$this->_smarty->assign('title', $title);
 		$pdf = new GeneralPdf($this->_pdo);
-		$today = date('d.m.Y H:i');
 		$html = $this->_smarty->fetch(
 			PATH_SMARTY_TPL . '/pdf/schbas-statistics.pdf.tpl'
 		);
-		$pdf->create("Schbas Statistik ($today)", $html);
+		$pdf->create($title, $html);
 		$pdf->output();
 	}
 

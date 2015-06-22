@@ -674,6 +674,7 @@ class SchbasAccounting extends Schbas {
 		$this->_smarty->assign('grade', $grade);
 		$this->_smarty->assign('date', $date);
 		$this->_smarty->assign('usersWithBooks', $usersWithBooks);
+		$this->_smarty->assign('pdfTitle', $pdfTitle);
 		$pdfContent = $this->_smarty->fetch(
 			PATH_SMARTY_TPL . '/pdf/schbas-books-overview.pdf.tpl'
 		);

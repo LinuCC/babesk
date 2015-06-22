@@ -1,3 +1,9 @@
+<p align="center">
+	<h2>
+		{$pdfTitle}
+	</h2>
+</p>
+<br />
 <i align="center">{$date}</i><br>
 <table border="1" cellpadding="5">
 	<thead>

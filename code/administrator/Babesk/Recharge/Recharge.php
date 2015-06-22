@@ -337,12 +337,13 @@ class Recharge extends Babesk {
 		$sum = $this->rechargesSum($rechargesToPrint);
 		$table .= '<p></p><p></p><b>' . _g('Sum:') . ' ' . $sum . '</b>';
 
-		$name = _g('Balance-Print for the days from %1$s to %2$s',
+		$title = _g('Balance-Print for the days from %1$s to %2$s',
 			date('d.m.Y', $start), date('d.m.Y', $end - 1));
+		$html = "<p align='center'><h2>{$title}</h2></p><br />" . $table;
 
 		require_once PATH_INCLUDE . '/pdf/GeneralPdf.php';
 		$pdf = new GeneralPdf($this->_pdo);
-		$pdf->create($name, $table);
+		$pdf->create($title, $html);
 		$pdf->output();
 	}
 
@@ -362,7 +363,13 @@ class Recharge extends Babesk {
 					'end' => strtotime('+1 day', $midnight));
 				break;
 			case 'week':
+				return array('start' => strtotime('now', $midnight),
+					'end' => strtotime('+1 week', $midnight));
+				break;
 			case 'month':
+				return array('start' => strtotime('now', $midnight),
+					'end' => strtotime('+1 month', $midnight));
+				break;
 			case 'year':
 				$val = $_POST['interval'];
 				return array(

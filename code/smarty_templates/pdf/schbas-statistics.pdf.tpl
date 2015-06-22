@@ -2,6 +2,13 @@
 
 {$block = $data.usercount}
 
+<p align="center">
+	<h2>
+		{$title}
+	</h2>
+</p>
+<br />
+
 <h3>Teilnehmerzahlen</h3>
 <table>
 	<thead>
