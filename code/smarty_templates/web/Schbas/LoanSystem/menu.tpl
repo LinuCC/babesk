@@ -1,6 +1,6 @@
 {extends file=$inh_path}{block name=content}
 
-<h2>Schulbuchausleihsystem f&uuml;r das Schuljahr {$schbasYear}</h2>
+<h2>Schulbuchausleihsystem f&uuml;r das Schuljahr {$prepSchoolyear->getLabel()}</h2>
 {if $BaBeSkTerminal}
 	Hinweis: Schbas kann nicht am BaBeSK-Terminal <br>ge&ouml;ffnet werden!
 {else}
@@ -99,7 +99,7 @@
 				<p>
 					In diesem Bereich m&uuml;ssen Sie eine Auswahl treffen! Ihre Entscheidung erscheint im erstellten R&uuml;ckmeldedokument als Strichcode.<br/>
 				</p>
-					An der entgeltlichen Ausleihe von Lernmitteln im Schuljahr {$schbasYear}<br/>
+					An der entgeltlichen Ausleihe von Lernmitteln im Schuljahr {$prepSchoolyear->getLabel()}<br/>
 					<input type="radio" name="loanChoice" value="noLoan" id="radio1" required /> nehmen wir nicht teil<br />
 					<input type="radio" name="loanChoice" value="loan" id="radio2" checked/> nehmen wir teil und melden uns hiermit verbindlich zu den im oben abrufbaren Schreiben genannten Bedingungen an.
 				<div id="loan-amount-container" >
@@ -115,7 +115,7 @@
 				<div>
 					<p>Die Eingaben in diesem Bereich sind freiwillig. Sie werden direkt in das R&uuml;ckmeldedokument ausgegeben und nicht abgespeichert.
 					Entweder geben Sie diese Daten hier online oder nach dem Ausdrucken des erstellten R&uuml;ckmeldedokuments handschriftlich ein.<br/>
-					Weitere schulpflichtige Kinder im Haushalt (Schuljahr {$schbasYear}).<br/> Bitte pro Zeile den Namen, Vornamen und die Schule angeben, auf der das jeweilige Kind geht.</p>
+					Weitere schulpflichtige Kinder im Haushalt (Schuljahr {$prepSchoolyear->getLabel()}).<br/> Bitte pro Zeile den Namen, Vornamen und die Schule angeben, auf der das jeweilige Kind geht.</p>
 					<textarea name="siblings" rows=5 cols=80></textarea>
 				</div>
 			</fieldset>

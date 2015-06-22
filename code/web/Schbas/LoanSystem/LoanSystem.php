@@ -94,22 +94,8 @@ class LoanSystem extends Schbas {
 
 	private function showMainMenu() {
 
-		$schbasYear = $this->_em->getRepository(
-			'DM:SystemGlobalSettings'
-		)->findOneByName('schbas_year')->getValue();
+		$prepSchoolyear = $this->preparationSchoolyearGet();
 		$user = $this->_em->getReference('DM:SystemUsers', $_SESSION['uid']);
-		//$schbasYear = TableMng::query("SELECT value FROM SystemGlobalSettings WHERE name='schbas_year'");
-		//get gradeValue ("Klassenstufe")
-		//$gradelevel = TableMng::query(
-		//	"SELECT gradelevel FROM SystemGrades
-		//		WHERE id = (
-		//			SELECT gradeID from SystemAttendances
-		//				WHERE schoolyearId = (
-		//					SELECT ID from SystemSchoolyears WHERE active=1
-		//				)
-		//			AND UserID='".$_SESSION['uid']."'
-		//		)
-		//");
 		$gradelevelStmt = $this->_pdo->prepare(
 			"SELECT gradelevel FROM SystemGrades g
 				LEFT JOIN SystemAttendances uigs
@@ -164,7 +150,7 @@ class LoanSystem extends Schbas {
 		$this->_smarty->assign('booksWithStatus', $booksWithSelfpayingStatus);
 		$this->_smarty->assign('feeNormal', $feeNormal);
 		$this->_smarty->assign('feeReduced', $feeReduced);
-		$this->_smarty->assign('schbasYear', $schbasYear);
+		$this->_smarty->assign('prepSchoolyear', $prepSchoolyear);
 		$this->_smarty->assign('BaBeSkTerminal', $this->checkIsKioskMode());
 		$this->_smarty->assign('loanShowForm', isset($_POST['loanShowForm']));
 		$this->_smarty->assign('loanShowBuy', isset($_POST['loanShowBuy']));
@@ -254,7 +240,6 @@ class LoanSystem extends Schbas {
 				'Bitte informieren sie die Schule.'
 			);
 		}
-		$schbasYear = $prepSchoolyear->getLabel();
 		// $letterDateIso = $settingsRepo
 		// 	->findOneByName('schbasDateCoverLetter')
 		// 	->getValue();
@@ -298,7 +283,7 @@ class LoanSystem extends Schbas {
 
 		$this->_smarty->assign('user', $user);
 		$this->_smarty->assign('grade', $grade);
-		$this->_smarty->assign('schoolyear', $schbasYear);
+		$this->_smarty->assign('schoolyear', $prepSchoolyear->getLabel());
 		$this->_smarty->assign('letterDate', $letterDate);
 		$this->_smarty->assign('schbasDeadlineClaim', $schbasDeadlineClaim);
 		$this->_smarty->assign('bankData', $bankData);
