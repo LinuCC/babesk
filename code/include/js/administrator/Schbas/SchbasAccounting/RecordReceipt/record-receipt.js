@@ -264,11 +264,13 @@ $(document).ready(function() {
 		if($button.hasClass('active')) {
 			$button.removeClass('active');
 			showOnlyMissing = false;
+			activePage = 1;
 			dataFetch();
 		}
 		else {
 			$button.addClass('active');
 			showOnlyMissing = true;
+			activePage = 1;
 			dataFetch();
 		}
 	};
