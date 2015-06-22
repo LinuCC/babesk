@@ -1,0 +1,1 @@
+DELETE FROM SystemGlobalSettings WHERE name = "schbasDateCoverLetter";
