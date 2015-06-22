@@ -66,6 +66,36 @@
 					Existiert der Nutzer bereits, wird der bestehende Benutzername damit überschrieben. (optional)
 				</td>
 			</tr>
+			<tr>
+				<td>
+					religion
+				</td>
+				<td>
+					Die neuen Religionsfaecher des Benutzers. Optional.
+					Mehrere Faecher moeglich, mit Komma (",") abgetrennt.
+					Alte Faecher die hier nicht auftauchen werden entfernt.
+				</td>
+			</tr>
+			<tr>
+				<td>
+					special_course
+				</td>
+				<td>
+					Die neuen Oberstufenkurse des Benutzers. Optional.
+					Mehrere Faecher moeglich, mit Komma (",") abgetrennt.
+					Alte Faecher die hier nicht auftauchen werden entfernt.
+				</td>
+			</tr>
+			<tr>
+				<td>
+					foreign_language
+				</td>
+				<td>
+					Die neuen Fremdsprachenkurse des Benutzers. Optional.
+					Mehrere Faecher moeglich, mit Komma (",") abgetrennt.
+					Alte Faecher die hier nicht auftauchen werden entfernt.
+				</td>
+			</tr>
 		</tbody>
 	</table>
 </fieldset>
@@ -114,6 +144,83 @@
 				</td>
 				<td>
 					9.1.2001
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</fieldset>
+
+<fieldset>
+	<legend>Beispiel mit Schbas-Änderungen</legend>
+	<table class="table table-bordered">
+		<tbody>
+			<tr>
+				<td>
+					forename
+				</td>
+				<td>
+					name
+				</td>
+				<td>
+					grade
+				</td>
+				<td>
+					birthday
+				</td>
+				<td>
+					religion
+				</td>
+				<td>
+					foreign_language
+				</td>
+				<td>
+					special_course
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Hans
+				</td>
+				<td>
+					Mustermann
+				</td>
+				<td>
+					7b
+				</td>
+				<td>
+					12.3.1987
+				</td>
+				<td>
+
+				</td>
+				<td>
+
+				</td>
+				<td>
+					CH,PH
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Peter
+				</td>
+				<td>
+					Müller
+				</td>
+				<td>
+					10c
+				</td>
+				<td>
+					9.1.2001
+				</td>
+				<td>
+					WN
+				</td>
+				<td>
+					EN
+				</td>
+				<td>
+
 				</td>
 			</tr>
 		</tbody>
