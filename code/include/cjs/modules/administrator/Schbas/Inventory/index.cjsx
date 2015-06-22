@@ -158,6 +158,9 @@ InventoryTable = React.createClass(
                 columnName = column
               <th key={index}>{columnName}</th>
           }
+          <th>
+            Optionen
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -176,6 +179,12 @@ InventoryTable = React.createClass(
                       }
                     </td>
                 }
+                <td>
+                  <Button href="index.php?module=administrator|Schbas|\
+                    Inventory&id=#{row.id}" bsStyle='primary' bsSize='xsmall'>
+                    <Icon name='cog' /> Ändern
+                  </Button>
+                </td>
               </tr>
           }
       </tbody>

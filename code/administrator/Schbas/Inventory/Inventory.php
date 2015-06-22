@@ -18,8 +18,16 @@ class Inventory extends Schbas {
 				$this->booksForBarcodesSend($_GET['barcodes']);
 			}
 		}
-		if(isset($_GET['ajax'])) {
+		else if(isset($_GET['ajax'])) {
 			$this->index();
+		}
+		else if(isset($_GET['id']) && isset($_POST['exemplar'])) {
+			$id = filter_input(INPUT_GET, 'id');
+			$this->update($id, $_POST);
+		}
+		else if(isset($_GET['id'])) {
+			$id = filter_input(INPUT_GET, 'id');
+			$this->edit($id);
 		}
 		else {
 			$this->indexHtml();
@@ -29,6 +37,12 @@ class Inventory extends Schbas {
 	/////////////////////////////////////////////////////////////////////
 	//Implements
 	/////////////////////////////////////////////////////////////////////
+
+	protected function entryPoint($dataContainer) {
+
+		parent::entryPoint($dataContainer);
+		$this->moduleTemplatePathSet();
+	}
 
 	/**
 	 * Returns the barcodes and, if it fits to more than one book, the books
@@ -99,12 +113,13 @@ class Inventory extends Schbas {
 		] );
 	}
 
+	/*==========  index  ==========*/
+
 	/**
 	 * Send the basic HTML-page to the user
 	 */
 	protected function indexHtml() {
 
-		$this->moduleTemplatePathSet();
 		$this->displayTpl('index.tpl');
 	}
 
@@ -166,6 +181,55 @@ class Inventory extends Schbas {
 		$result = $qb->getQuery()->getResult();
 		$rowCount = $rowCountQb->getQuery()->getSingleScalarResult();
 
+		$data = $this->sendIndexCreateAnswerData(
+			$result, $rowCount, $entriesPerPage
+		);
+
+		dieJson($data);
+	}
+
+	protected function sendIndexCheckInput($entriesPerPage) {
+
+		if($entriesPerPage < 0 || $entriesPerPage > 1000) {
+			dieHttp('Inkorrekte Eingabe: Einträge pro Seite', 400);
+		}
+	}
+
+	protected function sendIndexApplyFilter(
+		$filter, $queryBuilder, $displayColumns
+	) {
+		if(in_array('barcode', $displayColumns)) {
+			$queryBuilder->where('i.yearOfPurchase LIKE :filter')
+				->orWhere('b.class LIKE :filter')
+				->orWhere('b.bundle LIKE :filter')
+				->orWhere('i.exemplar LIKE :filter')
+				->orWhere('s.abbreviation LIKE :filter');
+		}
+		if(in_array('lentUser', $displayColumns)) {
+			$queryBuilder->orWhere('u.username LIKE :filter');
+		}
+		if(in_array('bookTitle', $displayColumns)) {
+			$queryBuilder->orWhere('b.title LIKE :filter');
+		}
+		if(in_array('bookIsbn', $displayColumns)) {
+			$queryBuilder->orWhere('b.isbn LIKE :filter');
+		}
+		if(in_array('bookAuthor', $displayColumns)) {
+			$queryBuilder->orWhere('b.author LIKE :filter');
+		}
+		if(in_array('subjectName', $displayColumns)) {
+			$queryBuilder->orWhere('s.name LIKE :filter');
+		}
+		if(in_array('id', $displayColumns)) {
+			$queryBuilder->orWhere('i.id LIKE :filter');
+		}
+		$queryBuilder->setParameter('filter', "%$filter%");
+	}
+
+	protected function sendIndexCreateAnswerData(
+		$result, $rowCount, $entriesPerPage
+	) {
+
 		$data = [];
 		foreach($result as $row) {
 			$rowData = [];
@@ -209,45 +273,46 @@ class Inventory extends Schbas {
 			$data['data'][] = $rowData;
 		}
 		$data['pageCount'] = ceil($rowCount / $entriesPerPage);
-		dieJson($data);
+		return $data;
 	}
 
-	protected function sendIndexCheckInput($entriesPerPage) {
+	/*==========  edit  ==========*/
 
-		if($entriesPerPage < 0 || $entriesPerPage > 1000) {
-			dieHttp('Inkorrekte Eingabe: Einträge pro Seite', 400);
+	protected function edit($inventoryId) {
+
+		$qb = $this->_em->createQueryBuilder()
+			->select(['i', 'b', 's'])
+			->from('DM:SchbasInventory', 'i')
+			->leftJoin('i.book', 'b')
+			->leftJoin('b.subject', 's')
+			->leftJoin('i.lending', 'l')
+			->leftJoin('l.user', 'u');
+		$qb->where('i.id = :inventoryId');
+		$qb->setParameter('inventoryId', $inventoryId);
+		$inventory = $qb->getQuery()->getOneOrNullResult();
+		if(!$inventory) {
+			$this->_interface->dieMsg('Das Inventar wurde nicht gefunden.');
 		}
+		$this->_smarty->assign('inventory', $inventory);
+		$this->displayTpl('edit.tpl');
 	}
 
-	protected function sendIndexApplyFilter(
-		$filter, $queryBuilder, $displayColumns
-	) {
-		if(in_array('barcode', $displayColumns)) {
-			$queryBuilder->where('i.yearOfPurchase LIKE :filter')
-				->orWhere('b.class LIKE :filter')
-				->orWhere('b.bundle LIKE :filter')
-				->orWhere('i.exemplar LIKE :filter')
-				->orWhere('s.abbreviation LIKE :filter');
+	/*==========  update  ==========*/
+
+
+	protected function update($inventoryId, $data) {
+
+		$yearOfPurchase = $data['year-of-purchase'];
+		$exemplar = $data['exemplar'];
+		$inventory = $this->_em->find('DM:SchbasInventory', $inventoryId);
+		if(!$inventory) {
+			$this->_interface->dieError('Interface nicht gefunden');
 		}
-		if(in_array('lentUser', $displayColumns)) {
-			$queryBuilder->orWhere('u.username LIKE :filter');
-		}
-		if(in_array('bookTitle', $displayColumns)) {
-			$queryBuilder->orWhere('b.title LIKE :filter');
-		}
-		if(in_array('bookIsbn', $displayColumns)) {
-			$queryBuilder->orWhere('b.isbn LIKE :filter');
-		}
-		if(in_array('bookAuthor', $displayColumns)) {
-			$queryBuilder->orWhere('b.author LIKE :filter');
-		}
-		if(in_array('subjectName', $displayColumns)) {
-			$queryBuilder->orWhere('s.name LIKE :filter');
-		}
-		if(in_array('id', $displayColumns)) {
-			$queryBuilder->orWhere('i.id LIKE :filter');
-		}
-		$queryBuilder->setParameter('filter', "%$filter%");
+		$inventory->setYearOfPurchase($yearOfPurchase);
+		$inventory->setExemplar($exemplar);
+		$this->_em->persist($inventory);
+		$this->_em->flush();
+		$this->_interface->dieSuccess('Inventar erfolgreich verändert');
 	}
 
 	/////////////////////////////////////////////////////////////////////

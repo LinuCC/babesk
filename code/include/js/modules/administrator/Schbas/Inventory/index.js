@@ -211,13 +211,19 @@ InventoryTable = React.createClass({
           "key": index
         }, columnName);
       };
-    })(this)))), React.createElement("tbody", null, this.props.dataRows.map((function(_this) {
+    })(this)), React.createElement("th", null, "Optionen"))), React.createElement("tbody", null, this.props.dataRows.map((function(_this) {
       return function(row) {
         return React.createElement("tr", {
           "key": row.id
         }, _this.props.displayColumns.map(function(column) {
           return React.createElement("td", null, (row[column] != null ? column === 'lentUser' ? _this.renderLentUser(row[column]) : row[column] : void 0));
-        }));
+        }), React.createElement("td", null, React.createElement(Button, {
+          "href": "index.php?module=administrator|Schbas|Inventory&id=" + row.id,
+          "bsStyle": 'primary',
+          "bsSize": 'xsmall'
+        }, React.createElement(Icon, {
+          "name": 'cog'
+        }), " \u00c4ndern")));
       };
     })(this))));
   },
