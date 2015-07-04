@@ -4,6 +4,7 @@ $(document).ready(function() {
 	var sortColumn = '';
 	//Contains if the page should only show users with an missing (unpaid) amount
 	var showOnlyMissing = false;
+	var specialFilter = false;
 	var charCodeToSelector = {
 		33: 1, 34: 2, 167: 3, 36: 4, 37: 5, 38: 6, 47: 7, 40: 8, 41: 9, 61: 0
 	};
@@ -58,9 +59,9 @@ $(document).ready(function() {
 
 	$('button.preset-credit-change').on('click', creditChangeByPreset);
 
-	$('button#show-missing-amount-only').on('click', showMissingOnlyToggle);
-
 	$('input#credits-add-input').enterKey(creditAddToByInput);
+
+	$('.special-filter-item').on('click', specialFilterToggle);
 
 	$('#user-table').on('click', 'a#name-table-head', function(ev) {
 		sortColumn = (sortColumn == '') ? 'name' : '';
@@ -83,7 +84,7 @@ $(document).ready(function() {
 				'filterForColumns': columnsToSearchSelectedGet(),
 				'sortColumn': sortColumn,
 				'activePage': activePage,
-				'showOnlyMissing': showOnlyMissing
+				'specialFilter': specialFilter
 			},
 			success
 		);
@@ -102,6 +103,8 @@ $(document).ready(function() {
 			}
 			else if(jqXHR.status == 204) {
 				toastr.error('Keinen Benutzer gefunden!');
+				pageSelectorUpdate(0);
+				tableFill([]);
 				$('#filter').focus().select();
 			}
 			else {
@@ -258,21 +261,25 @@ $(document).ready(function() {
 		$input.focus();
 	};
 
-	function showMissingOnlyToggle(event) {
+	function specialFilterToggle(event) {
 
-		var $button = $(event.target);
-		if($button.hasClass('active')) {
-			$button.removeClass('active');
-			showOnlyMissing = false;
-			activePage = 1;
-			dataFetch();
+		function removeActiveFromFilters() {
+			$items = $('#special-filter-menu li.active');
+			$items.removeClass('active');
+		}
+
+		var $item = $(event.target);
+		var isActive = $item.parent('li').hasClass('active');
+		removeActiveFromFilters();
+		if(!isActive) {
+			$item.parent('li').addClass('active');
+			specialFilter = $item.data('name');
 		}
 		else {
-			$button.addClass('active');
-			showOnlyMissing = true;
-			activePage = 1;
-			dataFetch();
+			specialFilter = false;
 		}
+		activePage = 1;
+		dataFetch();
 	};
 
 	function payFullAmount(event) {

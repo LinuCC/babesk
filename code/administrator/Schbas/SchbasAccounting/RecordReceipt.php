@@ -73,14 +73,14 @@ class RecordReceipt extends \SchbasAccounting {
 	 */
 	private function userdataAjaxSend() {
 
-		$showOnlyMissing = ($_POST['showOnlyMissing'] == 'true')
-			? true : false;
+		$opt = [];
+		$opt['specialFilter'] = filter_input(INPUT_POST, 'specialFilter');
 		$data = $this->userdataFetch(
 			$_POST['filter'],
 			$_POST['filterForColumns'],
 			$_POST['sortColumn'],
 			$_POST['activePage'],
-			$showOnlyMissing
+			$opt
 		);
 		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
 		$prepSchoolyear = $loanHelper->schbasPreparationSchoolyearGet();
@@ -108,11 +108,11 @@ class RecordReceipt extends \SchbasAccounting {
 	 *                         ]
 	 */
 	private function userdataFetch(
-		$filter, $filterForCol, $sortColumn, $pagenum, $showOnlyMissing
+		$filter, $filterForCol, $sortColumn, $pagenum, array $options = []
 	) {
 
 		$query = $this->userdataQueryCreate(
-			$filter, $filterForCol, $sortColumn, $pagenum, $showOnlyMissing
+			$filter, $filterForCol, $sortColumn, $pagenum, $options
 		);
 		$paginator = new \Doctrine\ORM\Tools\Pagination\Paginator(
 			$query, $fetchJoinCollection = true
@@ -151,7 +151,7 @@ class RecordReceipt extends \SchbasAccounting {
 	 * @return Query           A doctrine query object for fetching the users
 	 */
 	private function userdataQueryCreate(
-		$filter, $filterForCol, $sortColumn, $pagenum, $showOnlyMissing
+		$filter, $filterForCol, $sortColumn, $pagenum, array $options = []
 	) {
 
 		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
@@ -161,6 +161,7 @@ class RecordReceipt extends \SchbasAccounting {
 				'partial u.{id, forename, name, username}, c.cardnumber, ' .
 				'a.payedAmount, a.amountToPay, lc.name AS loanChoice, ' .
 				'lc.abbreviation AS loanChoiceAbbreviation, ' .
+				'lc.id AS loanChoiceId, ' .
 				'a.amountToPay - a.payedAmount AS missingAmount, ' .
 				'CONCAT(g.gradelevel, g.label) AS activeGrade'
 			)->from('DM:SystemUsers', 'u')
@@ -174,8 +175,19 @@ class RecordReceipt extends \SchbasAccounting {
 			->leftJoin('a.loanChoice', 'lc')
 			->andWhere('uigs.grade IS NULL OR s.id IS NOT NULL');
 		$queryBuilder->setParameter('prepSchoolyear', $prepSchoolyear);
-		if($showOnlyMissing) {
-			$queryBuilder->having('missingAmount > 0');
+		if(isset($options['specialFilter'])) {
+			if($options['specialFilter'] == 'showMissingAmountOnly') {
+				$queryBuilder->having('missingAmount > 0');
+			}
+			else if($options['specialFilter'] == 'showMissingFormOnly') {
+				$queryBuilder->having('lc IS NULL');
+			}
+			else if($options['specialFilter'] == 'showSelfbuyerOnly') {
+				$queryBuilder->having('lc.abbreviation = \'nl\'');
+			}
+			else if($options['specialFilter'] == 'showNotPayingOnly') {
+				$queryBuilder->having('lc.abbreviation = \'ls\'');
+			}
 		}
 		if(!empty($filter) && !empty($filterForCol)) {
 			$filters = array();

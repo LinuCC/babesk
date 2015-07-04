@@ -306,7 +306,7 @@ class Inventory extends Schbas {
 		$exemplar = $data['exemplar'];
 		$inventory = $this->_em->find('DM:SchbasInventory', $inventoryId);
 		if(!$inventory) {
-			$this->_interface->dieError('Interface nicht gefunden');
+			$this->_interface->dieError('Inventar nicht gefunden');
 		}
 		$inventory->setYearOfPurchase($yearOfPurchase);
 		$inventory->setExemplar($exemplar);

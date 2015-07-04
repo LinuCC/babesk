@@ -199,9 +199,38 @@
 					</span>
 				</div>
 				<div class="col-md-12 col-lg-4">
-					<button id="show-missing-amount-only" class="btn btn-default">
-						Nur Fehlend anzeigen
-					</button>
+					<div class="btn-group">
+						<button type="button" class="btn btn-default dropdown-toggle"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Spezieller Filter <span class="caret"></span>
+						</button>
+						<ul id="special-filter-menu" class="dropdown-menu">
+							<li>
+								<a id="show-missing-amount-only" class="special-filter-item"
+									data-name="showMissingAmountOnly">
+									Nur fehlendes Geld
+								</a>
+							</li>
+							<li>
+								<a id="show-missing-form-only" class="special-filter-item"
+									data-name="showMissingFormOnly">
+									Nur fehlender Antrag
+								</a>
+							</li>
+							<li>
+								<a id="show-missing-amount-only" class="special-filter-item"
+									data-name="showSelfbuyerOnly">
+									Nur Selbstkäufer
+								</a>
+							</li>
+							<li>
+								<a id="show-missing-amount-only" class="special-filter-item"
+									data-name="showNotPayingOnly">
+									Nur Befreite
+								</a>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
