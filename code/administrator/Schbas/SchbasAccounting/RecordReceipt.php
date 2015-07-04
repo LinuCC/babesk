@@ -170,10 +170,10 @@ class RecordReceipt extends \SchbasAccounting {
 				'WITH', 'a.schoolyear = :prepSchoolyear'
 			)->leftJoin('u.cards', 'c')
 			->leftJoin('u.attendances', 'uigs')
-			->leftJoin('uigs.schoolyear', 's', 'WITH', ' s.active = 1')
+			->leftJoin('uigs.schoolyear', 's', 'WITH', ' s = :prepSchoolyear')
 			->leftJoin('uigs.grade', 'g')
 			->leftJoin('a.loanChoice', 'lc')
-			->andWhere('uigs.grade IS NULL OR s.id IS NOT NULL');
+			->andWhere('s.id IS NOT NULL');
 		$queryBuilder->setParameter('prepSchoolyear', $prepSchoolyear);
 		if(isset($options['specialFilter'])) {
 			if($options['specialFilter'] == 'showMissingAmountOnly') {
