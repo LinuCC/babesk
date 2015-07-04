@@ -5,6 +5,7 @@ namespace administrator\Schbas\SchbasAccounting;
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_INCLUDE . '/Schbas/Loan.php';
 require_once 'SchbasAccounting.php';
+require_once PATH_INCLUDE . '/pdf/GeneralPdf.php';
 
 class RecordReceipt extends \SchbasAccounting {
 
@@ -45,6 +46,9 @@ class RecordReceipt extends \SchbasAccounting {
 
 		if(isset($_POST['filter'])) {
 			$this->userdataAjaxSend();
+		}
+		else if(isset($_GET['pdf-title'])) {
+			$this->pdfSend();
 		}
 		else if(isset($_POST['userId'], $_POST['amount'])) {
 			$this->paidAmountChange($_POST['userId'], $_POST['amount']);
@@ -253,6 +257,33 @@ class RecordReceipt extends \SchbasAccounting {
 					'amount' => $amount, 'msg' => $e->getMessage())));
 			http_response_code(500);
 		}
+	}
+
+	/**
+	 * Sends a pdf with an overview over the fetched users to the client
+	 */
+	private function pdfSend() {
+
+		$pdfTitle = filter_input(INPUT_GET, 'pdf-title');
+		$opt = [];
+		$opt['specialFilter'] = filter_input(INPUT_GET, 'specialFilter');
+		// We want all users to be printed into the pdf
+		$this->_usersPerPage = 9999;
+		$data = $this->userdataFetch(
+			$_GET['filter'],
+			$_GET['filterForColumns'],
+			$_GET['sortColumn'],
+			$_GET['activePage'],
+			$opt
+		);
+		$this->_smarty->assign('title', $pdfTitle);
+		$this->_smarty->assign('users', $data['users']);
+		$html = $this->_smarty->fetch(
+			PATH_SMARTY_TPL . '/pdf/schbas-record-receipt-user-list.pdf.tpl'
+		);
+		$pdf = new \GeneralPdf($this->_pdo);
+		$pdf->create($pdfTitle, $html);
+		$pdf->output();
 	}
 
 	///////////////////////////////////////////////////////////////////////

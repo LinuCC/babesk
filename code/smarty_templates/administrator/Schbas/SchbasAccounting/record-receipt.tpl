@@ -246,6 +246,14 @@
 	</table>
 </div>
 
+<div class="row">
+	<div class="col-sm-12">
+		<button id="btn-print-pdf" class="btn btn-default">
+			PDF ausdrucken
+		</button>
+	</div>
+</div>
+
 {/block}
 
 {block name=style_include append}
@@ -256,6 +264,10 @@
 
 <script type="text/javascript"
 	src="{$path_js}/vendor/paginator/jquery.bootpag.min.js">
+</script>
+
+<script type="text/javascript"
+	src="{$path_js}/vendor/bootbox.min.js">
 </script>
 
 <script type="text/javascript" src="{$path_js}/vendor/bootstrap-multiselect.min.js"></script>

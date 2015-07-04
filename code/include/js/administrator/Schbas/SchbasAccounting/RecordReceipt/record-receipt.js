@@ -62,6 +62,7 @@ $(document).ready(function() {
 	$('input#credits-add-input').enterKey(creditAddToByInput);
 
 	$('.special-filter-item').on('click', specialFilterToggle);
+	$('#btn-print-pdf').on('click', printPdf);
 
 	$('#user-table').on('click', 'a#name-table-head', function(ev) {
 		sortColumn = (sortColumn == '') ? 'name' : '';
@@ -76,7 +77,6 @@ $(document).ready(function() {
 	function dataFetch() {
 
 		var filter = $('#filter').val();
-		console.log(sortColumn);
 		$.postJSON(
 			'index.php?module=administrator|Schbas|SchbasAccounting|RecordReceipt',
 			{
@@ -301,5 +301,32 @@ $(document).ready(function() {
 			filterForColumns.splice(pos, 1);
 		}
 		return filterForColumns;
+	}
+
+	function printPdf() {
+
+		bootbox.prompt({
+			title: "Bitte geben sie einen Titel für das Dokument an",
+			value: "Übersicht über die Geldeingänge",
+			callback: function(res) {
+				if(res !== null) {
+					var filter = $('#filter').val();
+					var params = $.param({
+						'filter': filter,
+						'filterForColumns': columnsToSearchSelectedGet(),
+						'sortColumn': sortColumn,
+						'activePage': activePage,
+						'specialFilter': specialFilter,
+						'pdf-title': res
+					});
+
+					window.open(
+						"index.php?module=administrator|Schbas|SchbasAccounting|\
+							RecordReceipt&" + params,
+						'_blank'
+					);
+				}
+			}
+		});
 	}
 });
