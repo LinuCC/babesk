@@ -249,7 +249,7 @@
 <div class="row">
 	<div class="col-sm-12">
 		<button id="btn-print-pdf" class="btn btn-default">
-			PDF ausdrucken
+			PDF herunterladen
 		</button>
 	</div>
 </div>
