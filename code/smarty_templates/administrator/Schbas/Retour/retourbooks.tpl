@@ -3,6 +3,79 @@
 
 <h2 class="module-header">Ausleihliste f&uuml;r: {$fullname}</h2>
 
+{if $user->getSchbasAccounting() && count($user->getSchbasAccounting())}
+	{$accounting = $user->getSchbasAccounting()->first()}
+	{if $accounting->getLoanChoice()}
+		{$loanChoiceName = $accounting->getLoanChoice()->getName()}
+	{/if}
+{/if}
+
+<div class="panel panel-default">
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					Ausleihstatus
+				</th>
+				<th>
+					Fehlend
+				</th>
+				<th>
+					Bezahlt
+				</th>
+				<th>
+					Soll
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					{if $accounting}
+						{if $loanChoiceName}
+							{$loanChoiceName}
+						{else}
+							???
+						{/if}
+					{else}
+						Antrag nicht erfasst
+					{/if}
+				</td>
+				<td>
+					{if $accounting}
+						{$missingClass = ''}
+						{$missing = $accounting->getAmountToPay() - $accounting->getPayedAmount()}
+						{if $missing == 0}
+							{$missingClass = 'text-success'}
+						{else}
+							{$missingClass = 'text-warning'}
+						{/if}
+						<span class="{$missingClass}">
+							{$missing} €
+						</span>
+					{else}
+						---
+					{/if}
+				</td>
+				<td>
+					{if $accounting}
+						{$accounting->getPayedAmount()} €
+					{else}
+						---
+					{/if}
+				</td>
+				<td>
+					{if $accounting}
+						{$accounting->getAmountToPay()} €
+					{else}
+						---
+					{/if}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
 <form name='barcode_scan' onsubmit='return false;' />
 	<div class="form-group">
 		<label for="barcode">Inventarnummer</label>

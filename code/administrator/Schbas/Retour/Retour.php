@@ -3,6 +3,7 @@
 require_once PATH_INCLUDE . '/Module.php';
 require_once PATH_ADMIN . '/Schbas/Schbas.php';
 require_once PATH_INCLUDE . '/Schbas/Barcode.php';
+require_once PATH_INCLUDE . '/Schbas/Loan.php';
 
 class Retour extends Schbas {
 
@@ -81,6 +82,8 @@ class Retour extends Schbas {
 	 */
 	function RetourTableData($card_id) {
 
+		$loanHelper = new \Babesk\Schbas\Loan($this->_dataContainer);
+		$prepSy = $loanHelper->schbasPreparationSchoolyearGet();
 		$uid = $this->GetUser($card_id);
 		$user = $this->_em->find('DM:SystemUsers', $uid);
 		$query = $this->_em->createQuery(
@@ -101,11 +104,24 @@ class Retour extends Schbas {
 		if($grade) {
 			$userData .="({$grade->getGradelevel()}{$grade->getLabel()})";
 		}
+		$accountingQb = $this->_em->createQueryBuilder()
+			->select('u, a, lc')
+			->from('DM:SystemUsers', 'u')
+			->leftJoin(
+				'u.schbasAccounting', 'a',
+				'WITH', 'a.schoolyear = :prepSchoolyear'
+			)
+			->leftJoin('a.loanChoice', 'lc')
+			->where('u = :user');
+		$accountingQb->setParameter('prepSchoolyear', $prepSy);
+		$accountingQb->setParameter('user', $user);
+		$user = $accountingQb->getQuery()->getOneOrNullResult();
 
 		$this->_smarty->assign('cardid', $card_id);
 		$this->_smarty->assign('uid', $uid);
 		$this->_smarty->assign('data', $loanbooks);
 		$this->_smarty->assign('fullname',$userData);
+		$this->_smarty->assign('user', $user);
 		$this->_smarty->assign(
 			'adress', ($_SERVER['HTTP_HOST']).$_SERVER['REQUEST_URI']
 		);
