@@ -79,7 +79,7 @@
 <form name='barcode_scan' onsubmit='return false;' />
 	<div class="form-group">
 		<label for="barcode">Inventarnummer</label>
-		<input type='text' id='barcode' class="form-control"/> <br />
+		<input type='text' id='barcode' class="form-control" autofocus/> <br />
 	</div>
 </form>
 
