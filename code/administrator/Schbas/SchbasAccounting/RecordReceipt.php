@@ -273,7 +273,7 @@ class RecordReceipt extends \SchbasAccounting {
 			$_GET['filter'],
 			$_GET['filterForColumns'],
 			$_GET['sortColumn'],
-			$_GET['activePage'],
+			1,
 			$opt
 		);
 		$this->_smarty->assign('title', $pdfTitle);
