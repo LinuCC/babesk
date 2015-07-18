@@ -80,7 +80,6 @@ class Barcode {
 
 		$barcode = $this->barcodeStringNormalize($barcode);
 		$elements = explode(' ', $barcode);
-		var_dump($elements);
 		if(count($elements) != 6) {
 			return false;
 		}
