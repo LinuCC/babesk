@@ -80,6 +80,7 @@ class Barcode {
 
 		$barcode = $this->barcodeStringNormalize($barcode);
 		$elements = explode(' ', $barcode);
+		var_dump($elements);
 		if(count($elements) != 6) {
 			return false;
 		}
@@ -143,6 +144,7 @@ class Barcode {
 
 	private function barcodeStringNormalize($barcode) {
 
+		$barcode = trim($barcode);
 		$barcode = str_replace("-", "/", $barcode);
 		//add space after / when it's missing
 		$barcode = preg_replace("/\/([0-9])/", "/ $1", $barcode);
