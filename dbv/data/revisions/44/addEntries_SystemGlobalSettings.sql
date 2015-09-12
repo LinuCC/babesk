@@ -1,13 +1,13 @@
 INSERT INTO `SystemGlobalSettings`
 	(name, value) VALUES
 	-- All existing foreign languages of SchoolSubjects
-	('foreign_language', '')
+	('foreign_language', ''),
 	-- All existing religions of SchoolSubjects
-	('religion', '')
+	('religion', ''),
 	-- All special courses
-	('special_course', '')
+	('special_course', ''),
 	-- Fits-specific values
-	('fits_key', '')
-	('fits_year', '')
-	('fits_all_classes', '')
+	('fits_key', ''),
+	('fits_year', ''),
+	('fits_all_classes', ''),
 	('fits_class', '');
