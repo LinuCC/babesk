@@ -69,7 +69,7 @@ class GeneralPdf {
 	 */
 	public function output() {
 		$pdfName = sprintf('%s_pdf.pdf', $this->_title);
-		$this->_pdf->Output($pdfName, 'I');
+		$this->_pdf->Output($pdfName, 'D');
 	}
 
 	/////////////////////////////////////////////////////////////////////
